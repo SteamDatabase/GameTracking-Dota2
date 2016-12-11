@@ -1,0 +1,416 @@
+/* DOTAHeroCard */
+
+@define expandDuration: 0.05s;
+@define contentBorderSize: 2px;
+@define contentBorderSizeNegative: -2px; /* = -1.0 * contentBorderSize */
+
+/* Adjust these constants to change the layout of the hero grid.
+   WARNING: if you adjust any of these, you must also adjust the other constants below according to their formulas!
+*/
+@define expandedScale: 1.0; /* When a card is expanded it should be at 1.0 scale so that text works correctly */
+@define defaultScale: 0.485; /* The scale of a card when it's not expanded */
+@define defaultScaleX: 0.32; /* We scale the x slightly smaller than the Y so that the card is a little less wide when not expanded */
+@define imageWidth: 71px;
+@define imageHeight: 94px;
+
+@define imageScale: 2.06; /* = expandedScale / defaultScale */
+@define cardWidth: 213px;
+@define cardHeight: 282px;
+@define imageDefaultScaleX: 3.0; /* = ( 1.0 - ( defaultScaleX / defaultScale ) ) * imageScale */
+@define hitSizePercent: 66.67%; /* = 1.0 / ( defaultScale + ( expandedScale - defaultScale ) * 2.0 ) */
+
+/* These values are calculated as ( 1.0 - hitSizePercent ) * defaultScale / expandedScale.
+   However, using that exact value ( 16.67% ) causes clipping issues, so I've rounded down to 15%. */
+@define translateFirstColumn: translateX( 13% );
+@define translateLastColumn: translateX( -13% );
+@define translateFirstRow: translateY( 16% ); 
+@define translateLastRow: translateY( -16% );
+
+@define defaultScale3d: scale3d( defaultScaleX, defaultScale, 1.0 );
+@define expandedScale3d: scale3d( expandedScale, expandedScale, 1.0 );
+@define heroPickexpandedScale3d: scale3d( .85, .85, 1.0 );
+@define imageDefaultScale3d: scale3d( imageDefaultScaleX, imageScale, 1.0 );
+@define imageExpandedScale3d: scale3d( imageScale, imageScale, 1.0 );
+
+
+DOTAHeroCard
+{
+    width: cardWidth;
+    height: cardHeight;
+}
+
+#Contents
+{
+	opacity: 0.0;
+
+    width: hitSizePercent;
+    height: hitSizePercent;
+
+	transform-origin: 50% 50%;
+    transform: defaultScale3d;
+
+    vertical-align: middle;
+    horizontal-align: center;
+
+	/*  hero card bevel.  looks meh.
+    border-top: contentBorderSize solid #99999944;
+	border-left: contentBorderSize solid #55555544;
+	border-right: contentBorderSize solid #55555544;
+	border-bottom: contentBorderSize solid #00000055;
+	*/
+
+    box-shadow: #000000aa -2px -3px 4px 4px;
+
+    transition-property: transform, box-shadow, opacity, saturation, wash-color;
+    transition-duration: expandDuration, expandDuration, 0.3s, 0.3s, 0.3s;
+	transition-timing-function: ease-in-out;
+}
+
+DOTAHeroCard.Showing #Contents
+{
+	opacity: 0.93;
+	saturation: 0.7;
+}
+
+DOTAHeroCard.Showing.Highlighted #Contents
+{
+	opacity: 1;
+	saturation: 1;
+}
+
+DOTAHeroCard.Showing.HeroCardDisabled #Contents
+{
+    /* fade out when filtered */
+    opacity: .2;
+	saturation: 0.0;
+	wash-color: #777777aa;
+}
+
+DOTAHeroCard.Showing:not(.HeroCardDisabled):hover #Contents
+{
+	opacity: 1.0;
+	saturation: 1.0;
+	wash-color: white;
+}
+
+.SearchingHeroes DOTAHeroCard.Showing #Contents
+{
+    opacity: .2;
+	saturation: 0.0;
+	wash-color: #777777aa;
+}
+
+.SearchingHeroes DOTAHeroCard.Showing.HeroCardDisabled #Contents
+{
+    opacity: .2;
+	saturation: 0.0;
+	wash-color: #777777aa;
+}
+
+.SearchingHeroes DOTAHeroCard.Showing.Highlighted #Contents
+{
+	brightness: 1.0;
+	saturation: 1;
+	opacity: 1;
+}
+
+#HitTarget
+{
+    width: 88%;
+    height: 79%;
+
+    transform: defaultScale3d;
+
+    vertical-align: middle;
+    horizontal-align: center;
+}
+
+
+.AspectRatio4x3 #HitTarget, .AspectRatio4x3 #Contents
+{
+	transform: scale3d( 0.32, 0.485, defaultScale );
+}
+
+.AspectRatio5x4 #HitTarget, .AspectRatio5x4 #Contents
+{
+	transform: scale3d( 0.29, 0.43, defaultScale );
+}
+
+
+#HitTarget
+{
+    /* Useful to enable for debugging 
+    border: 3px solid white;*/
+}
+
+DOTAHeroCard.Showing.Highlighted #Contents
+{
+    box-shadow: #00ffff44 -6px -6px 12px 12px;
+
+    animation-name: HeroCardHighlight;
+    animation-duration: 0.2s;
+
+	brightness: 2;
+}
+
+DOTAHeroCard.Showing.Highlighted:focus #Contents
+{
+    box-shadow: #00ffffcc -8px -8px 16px 16px;
+	brightness: 3;
+}
+
+DOTAHeroCard.Showing.Highlighted.Expanded #Contents
+{
+    box-shadow: #000000aa -2px -2px 4px 4px;
+}
+
+@keyframes 'HeroCardHighlight'
+{
+    0%
+    {
+	    pre-transform-scale2d: 1;
+    }
+    1%
+    {
+        z-index: 1;
+    }
+    50%
+    {
+	    pre-transform-scale2d: 1.25;
+    }				
+    99%
+    {
+        z-index: 0;
+    }
+    100%
+    {
+	    pre-transform-scale2d: 1;
+    }
+}
+
+
+@keyframes 'HeroCardSelected'
+{
+    0%
+    {
+	    brightness: 1;
+    }
+    50%
+    {
+	    brightness: 2;
+    }				
+    100%
+    {
+	    brightness: 1;
+    }
+}
+
+DOTAHeroCard.Showing.Expanded #Contents
+{
+    transform: expandedScale3d;
+	transition-duration: 0.18s;
+	
+	animation-name: HeroCardExpand;
+	animation-duration: 0.25s;
+	animation-timing-function: ease-in;
+}
+
+@keyframes 'HeroCardExpand'
+{
+	0%
+	{
+		pre-transform-scale2d: 1;
+	}
+	
+	50%
+	{
+		pre-transform-scale2d: 1.075;
+	}				
+				
+	100%
+	{
+		pre-transform-scale2d: 1;
+	}
+}
+
+
+DOTAHeroCard.Expanded:disabled #Contents
+{
+    transform: scale3d( 0.32, 0.485, defaultScale );
+	animation-name: none;
+	box-shadow: #00000000 0px 0px 0px 0px;
+}
+
+
+DOTAHeroCard:disabled #Contents
+{
+    transform: scale3d( 0.32, 0.485, defaultScale );
+	animation-name: none;
+	box-shadow: #00000000 0px 0px 0px 0px;
+}
+
+/* Apply a translate as well as the scale so the cards on the edges scale inwards */
+DOTAHeroCard.LastRow.Expanded #Contents     { transform: expandedScale3d translateLastRow; }
+DOTAHeroCard.LastColumn.Expanded #Contents  { transform: expandedScale3d translateLastColumn; }
+DOTAHeroCard.FirstRow.Expanded #Contents    { transform: expandedScale3d translateFirstRow; }
+DOTAHeroCard.FirstColumn.Expanded #Contents { transform: expandedScale3d translateFirstColumn; }
+DOTAHeroCard.LastColumn.LastRow.Expanded #Contents      { transform: expandedScale3d translateLastColumn translateLastRow; }
+DOTAHeroCard.FirstColumn.LastRow.Expanded #Contents     { transform: expandedScale3d translateFirstColumn translateLastRow; }
+DOTAHeroCard.LastColumn.FirstRow.Expanded #Contents     { transform: expandedScale3d translateLastColumn translateFirstRow; }
+DOTAHeroCard.FirstColumn.FirstRow.Expanded #Contents    { transform: expandedScale3d translateFirstColumn translateFirstRow; }
+
+DOTAHudPreGame DOTAHeroCard.FirstRow.Expanded #Contents    { transform: expandedScale3d  translateY( 117% ); }
+DOTAHudPreGame DOTAHeroCard.LastColumn.FirstRow.Expanded #Contents    { transform: expandedScale3d translateLastColumn translateY( 17% ); }
+DOTAHudPreGame DOTAHeroCard.FirstColumn.FirstRow.Expanded #Contents    { transform: expandedScale3d translateFirstColumn translateY( 17% ); }
+
+/* Apply a translate as well as the scale so the cards on the edges scale inwards */
+DOTAHeroCard.LastRow.Expanded:disabled #Contents     { transform: defaultScale3d; }
+DOTAHeroCard.LastColumn.Expanded:disabled #Contents  { transform: defaultScale3d; }
+DOTAHeroCard.FirstRow.Expanded:disabled #Contents    { transform: defaultScale3d; }
+DOTAHeroCard.FirstColumn.Expanded:disabled #Contents { transform: defaultScale3d; }
+DOTAHeroCard.LastColumn.LastRow.Expanded:disabled #Contents      { transform: defaultScale3d; }
+DOTAHeroCard.FirstColumn.LastRow.Expanded:disabled #Contents     { transform: defaultScale3d; }
+DOTAHeroCard.LastColumn.FirstRow.Expanded:disabled #Contents     { transform: defaultScale3d; }
+DOTAHeroCard.FirstColumn.FirstRow.Expanded:disabled #Contents    { transform: defaultScale3d; }
+
+
+#HeroImage
+{
+    width: imageWidth;
+    height: imageHeight;
+	
+	background-color: #000000de;
+
+    vertical-align: middle;
+    horizontal-align: center;
+
+    overflow: noclip;
+
+    transform: imageDefaultScale3d;
+
+    transition-property: transform;
+    transition-duration: expandDuration;
+	transition-timing-function: ease-in-out;
+}
+
+DOTAHeroCard.Showing.Expanded #HeroImage
+{
+    transform: imageExpandedScale3d;
+	transition-duration: 0.2s;
+}
+
+DOTAHeroCard.Showing.Expanded:disabled #HeroImage
+{
+	transform: imageDefaultScale3d;
+	border: 0px solid transparent;
+}
+
+/* Movie expands to fill the content area. */
+#HeroMovie
+{
+	border: 2px solid transparent;
+    width: 100%;
+    height: 100%;
+	
+	opacity: 0.0;
+	
+    transition-property: opacity;
+    transition-duration: 0.15s;
+	transition-timing-function: ease-in-out;
+}
+
+#HeroMovie DOTAHeroMovie
+{
+    width: 100%;
+    height: 100%;
+}
+
+DOTAHeroCard.Showing.Expanded #HeroMovie
+{
+	border: 2px solid black;
+  	opacity: 1.0;
+}
+
+
+DOTAHeroCard.Showing.Expanded:disabled #HeroMovie
+{
+	opacity: 0.0;
+}
+
+
+#HeroName
+{
+	background-color: #111111cc;
+    width: 100%;
+	min-height: 14%;
+    text-align: center;
+    vertical-align: bottom;
+    padding: 5px;
+    color: white;
+    text-shadow: 2px 2px 2px black;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+    opacity: 0.0;
+	font-size: 15px;
+
+    transition-property: opacity, background-color;
+    transition-duration: 0.3s;
+}
+
+DOTAHeroCard.Expanded #HeroName
+{
+    opacity: 1.0;
+}
+DOTAHeroCard.Expanded:disabled #HeroName
+{
+    opacity: 0.0;
+}
+
+DOTAAbilityImage
+{
+    width: fill-parent-flow( 1.0 );
+    height: width-percentage( 100% );
+    background-size: contain;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    margin: 0px 1px;
+    vertical-align: middle;
+}
+
+
+
+DOTAHudPreGame DOTAHeroCard
+{
+	width: 213px;
+	height: 213px;
+	margin-bottom: -44px;
+}
+
+DOTAHudPreGame DOTAHeroCard.Showing.Expanded 
+{
+	width: cardWidth;
+	height: cardHeight;
+	margin-bottom: -200px;
+	//border: 1px solid red;
+}
+
+DOTAHudPreGame DOTAHeroCard.Showing.Expanded #HitTarget
+{
+	z-index: 10;
+	margin-top: -36px;
+	height: 180px;
+
+}
+
+DOTAHudPreGame DOTAHeroCard.Showing.Expanded #Contents { transform: heroPickexpandedScale3d translateY( -30px ); }	
+DOTAHudPreGame DOTAHeroCard.FirstRow.Expanded #Contents    { transform: heroPickexpandedScale3d translateY( 2% ); }
+DOTAHudPreGame DOTAHeroCard.LastColumn.FirstRow.Expanded #Contents    { transform: heroPickexpandedScale3d translateLastColumn translateY( 2% ); }
+DOTAHudPreGame DOTAHeroCard.FirstColumn.FirstRow.Expanded #Contents    { transform: heroPickexpandedScale3d translateFirstColumn translateY( 2% ); }
+
+DOTAHudPreGame DOTAHeroCard.FirstColumn.Expanded #Contents     		   { transform: heroPickexpandedScale3d translateFirstColumn; }
+DOTAHudPreGame DOTAHeroCard.LastColumn.Expanded #Contents     			{ transform: heroPickexpandedScale3d translateLastColumn; }
+DOTAHudPreGame DOTAHeroCard.FirstColumn.LastRow.Expanded #Contents     { transform: heroPickexpandedScale3d translateFirstColumn translateY( -20% ); }
+DOTAHudPreGame DOTAHeroCard.LastColumn.LastRow.Expanded #Contents     { transform: heroPickexpandedScale3d translateLastColumn translateY( -20% ); }
+DOTAHudPreGame DOTAHeroCard.LastRow.Expanded #Contents     				{ transform: heroPickexpandedScale3d translateY( -20% ); }
+
+

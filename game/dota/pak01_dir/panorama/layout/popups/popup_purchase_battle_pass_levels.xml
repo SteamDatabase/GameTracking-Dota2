@@ -1,0 +1,148 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popups_shared.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_purchase_battle_pass_levels.vcss_c" />
+	</styles>
+
+	<script>
+		var UpdateAfterPurchaseLevels = function()
+		{
+			var nCurrentLevel = $.GetContextPanel().GetAttributeInt( "current_level", 0 );
+			var nPurchasedLevelAmount = $( '#LevelsTable' ).totalLevels;
+			$( '#AfterPurchaseLevel' ).text = nCurrentLevel + nPurchasedLevelAmount;
+			$( '#PurchaseButton' ).enabled = nPurchasedLevelAmount > 0;
+			$.GetContextPanel().SetHasClass( 'ShowAfterPurchaseLevel', nPurchasedLevelAmount > 0 );
+		}
+		
+		var UpdateActivateLevelsNextButton = function()
+		{
+			var bApplyLevels = $( '#ApplyLevelsButton' ).checked;
+			$( '#ApplyLevelsNextButton' ).text = bApplyLevels ? $.Localize( "#DOTA_ActivateLevels" ) : $.Localize( "#DOTA_SaveForLater" );;
+		}
+		
+		var OnActivateLevelsNextButton = function()
+		{
+			var bApplyLevels = $( '#ApplyLevelsButton' ).checked;
+			if ( bApplyLevels )
+			{
+				$.DispatchEvent( 'DOTAPurchaseBattlePassLevelsApplyLevels' );
+			}
+			else
+			{
+				$.DispatchEvent( 'DOTAPurchaseBattlePassLevelsClose' );
+			}
+		}
+		
+		$.Schedule( 0.0, function()
+		{
+			$.RegisterEventHandler( 'DOTAPurchaseEventLevelsTableQuantityChanged', $( '#LevelsTable' ), function( table ) { UpdateAfterPurchaseLevels(); } );
+
+			UpdateAfterPurchaseLevels();
+			UpdateActivateLevelsNextButton();
+		});
+		
+	</script>
+	
+	<PopupPurchaseBattlePassLevels class="PopupPanel Hidden" popupbackground="dim" oncancel="DOTAPurchaseBattlePassLevelsClose()">
+
+		<Panel id="Header" >
+			<DOTAScenePanel id="HeaderBackgroundAnimationRight" map="backgrounds/accept_popup_test" camera="shot_camera"/>
+			<DOTAScenePanel id="HeaderBackgroundAnimationLeft" map="backgrounds/accept_popup_test" camera="shot_camera"/>
+			<Panel id="HeaderTitleContainer" class="LeftRightFlow">
+				<Label class="PopupTitle" text="{s:screen_title}" />
+				<Panel class="FillWidth" />
+				<Button class="CloseButton" id="CancelButton" onactivate="DOTAPurchaseBattlePassLevelsClose()" />
+			</Panel>
+			<Panel id="ShieldBackgroundContainer">
+
+				<Panel class="FillWidth" />
+				
+				<Panel class="TopBottomFlow">
+					<Label id="CurrentLevelLabel" text="#DOTA_CurrentLevel" />
+					<Panel class="BattlePassShield">
+						<Label id="CurrentLevel" text="{d:r:current_level}" />
+					</Panel>
+				</Panel>
+						
+				<Panel id="EquationArrow"/>
+					
+				<Panel class="AfterPurchaseLevelsContainer">
+					<Label id="AfterPurchaseLabel" text="#DOTA_AfterPurchase" />
+					<Panel class="PurchaseShieldContainer">
+						<Panel class="ShieldBackground"/>
+						<Panel class="BattlePassShield" id="PurchaseShield">
+							<Label id="AfterPurchaseLevel" />
+						</Panel>
+					</Panel>
+				</Panel>
+
+				<Panel class="FillWidth" />
+
+			</Panel>
+		</Panel>
+
+		<Panel id="Screens">
+		
+			<Panel id="StartScreen" class="WizardScreen" screentitle="#DOTA_PurchaseBattlePassLevels">
+
+				<Panel class="WizardScreenContents" id="PurchaseScreenContents">
+				
+					<Label text="#DOTA_PurchaseBattlePassLevels_Question" class="SubHead"/>
+					
+					<DOTAPurchaseEventLevelsTable id="LevelsTable" />
+					
+				</Panel>
+
+				<Panel class="WizardButtons">
+					<TextButton id="PurchaseButton" class="PopupButton Green" text="#DOTA_Purchase_Popup_Purchase_Button" onactivate="DOTAPurchaseBattlePassLevelsMakePurchase()" />
+				</Panel>
+			</Panel>
+
+			<Panel id="PurchaseInProgressScreen" class="WizardScreen" disableclose="true" screentitle="#DOTA_PurchaseBattlePassLevels">
+				<Panel id="PurchaseInProgressContents">
+					<Label text="#DOTA_PurchaseInProgress_Title" />
+					<Panel class="Spinner" />
+				</Panel>
+			</Panel>
+
+			<Panel id="ApplyLevelsScreen" class="WizardScreen" screentitle="#DOTA_ActivateBattlePassLevels">
+				<Panel class="WizardScreenContents">
+					<Panel class="ApplyLevelsOptions">
+						<RadioButton id="ApplyLevelsButton" class="ApplyLevelsOption" group="apply_levels_radio_buttons" selected="true" onactivate="UpdateActivateLevelsNextButton()">
+							<Panel class="ApplyLevelOptionsContents">
+								<Label class="ApplyLevelOptionsTitle" text="#DOTA_ActivateLevelsImmediately_Title" />
+								<Label class="ApplyLevelOptionsDescription" text="#DOTA_ActivateLevelsImmediately_Description" />
+							</Panel>
+						</RadioButton>
+						<RadioButton id="SaveForLaterButton" class="ApplyLevelsOption" group="apply_levels_radio_buttons" onactivate="UpdateActivateLevelsNextButton()">
+							<Panel class="ApplyLevelOptionsContents">
+								<Label class="ApplyLevelOptionsTitle" text="#DOTA_SaveForLater_Title" />
+								<Label class="ApplyLevelOptionsDescription" text="#DOTA_SaveForLater_Description" />
+							</Panel>
+						</RadioButton>
+					</Panel>
+					
+				</Panel>
+
+				<Panel class="WizardButtons">
+					<TextButton id="ApplyLevelsNextButton" class="PopupButton" onactivate="OnActivateLevelsNextButton()" />
+				</Panel>
+			</Panel>
+
+			<Panel id="ApplyLevelsFailedScreen" class="WizardScreen" screentitle="#DOTA_ActivateBattlePassLevels">
+				<Panel class="WizardScreenContents" >
+					<Label text="#DOTA_ApplyLevelsFailedMessage" />
+				</Panel>
+
+				<Panel class="WizardButtons">
+					<TextButton class="PopupButton" text="#DOTA_Done" onactivate="DOTAPurchaseBattlePassLevelsClose()" />
+				</Panel>
+			</Panel>
+			
+		</Panel>
+		<Label id="PurchaseEndsLabel" text="#DOTA_TI6_BattlePass_EndDate_Purchase"/>
+		<Label id="PurchasePoolContribution" text="dota_spring2016_purchase_pool_contribution_levels" />
+		
+	</PopupPurchaseBattlePassLevels>
+</root>

@@ -1,0 +1,73 @@
+$upaxis Y
+
+$modelname "<ITEMTEST_REPLACE_MDLABSPATH>"
+
+$surfaceprop "default"
+
+// This attachment is required. 
+$attachment "attach_hitloc" "<ITEMTEST_REPLACE_ATTACHMENT0>" 0.00 0.00 0.00 rotate 0.00 0.00 0.00
+$attachment "attach_attack1" "<ITEMTEST_REPLACE_ATTACHMENT1>" 0.00 0.00 0.00 rotate 0.00 0.00 0.00
+$attachment "attach_attack2" "<ITEMTEST_REPLACE_ATTACHMENT2>" 0.00 0.00 0.00 rotate 0.00 0.00 0.00
+$attachment "attach_mouth" "<ITEMTEST_REPLACE_ATTACHMENT3>" 0.00 0.00 0.00 rotate 0.00 0.00 0.00
+
+$bodygroup "default"
+{
+       studio "<ITEMTEST_REPLACE_LOD0>"
+}
+
+<ITEMTEST_REPLACE_LOD1_OPTIONALBLOCK>
+
+$sequence ref "<ITEMTEST_REPLACE_LOD0>"
+$sequence sb_spawn "<ITEMTEST_REPLACE_ANIM0>" ACT_DOTA_SPAWN 1
+$sequence sb_idle "<ITEMTEST_REPLACE_ANIM1>" loop ACT_DOTA_IDLE 3
+$sequence sb_death "<ITEMTEST_REPLACE_ANIM2>" ACT_DOTA_DIE 1
+$sequence sb_stun "<ITEMTEST_REPLACE_ANIM3>" ACT_DOTA_DISABLED 1
+$sequence sb_flail "<ITEMTEST_REPLACE_ANIM4>" ACT_DOTA_FLAIL 1
+
+<ITEMTEST_COMMENT_IF_ANIM15>$sequence sb_run "<ITEMTEST_REPLACE_ANIM5>" LX loop ACT_DOTA_RUN 1
+<ITEMTEST_COMMENT_IF_NO_ANIM15>$sequence sb_runx "<ITEMTEST_REPLACE_ANIM5>" LX loop addlayer "sb_turns" ACT_DOTA_RUN 1
+
+<ITEMTEST_COMMENT_IF_ANIM15>$sequence sb_run_or "<ITEMTEST_REPLACE_ANIM6>" LX loop ACT_DOTA_RUN 1 ActivityModifier AttackCheck
+<ITEMTEST_COMMENT_IF_NO_ANIM15>$sequence sb_run_orx "<ITEMTEST_REPLACE_ANIM6>" LX loop addlayer "sb_turns" ACT_DOTA_RUN 1 ActivityModifier AttackCheck
+<ITEMTEST_COMMENT_IF_NO_ANIM7><ITEMTEST_COMMENT_IF_ANIM15>$sequence sb_run_injured "<ITEMTEST_REPLACE_ANIM7>" LX loop ACT_DOTA_RUN 1 ActivityModifier injured
+<ITEMTEST_COMMENT_IF_NO_ANIM7><ITEMTEST_COMMENT_IF_NO_ANIM15>$sequence sb_run_injuredx "<ITEMTEST_REPLACE_ANIM7>" LX loop addlayer "sb_turns" ACT_DOTA_RUN 1 ActivityModifier injured
+<ITEMTEST_COMMENT_IF_NO_ANIM8><ITEMTEST_COMMENT_IF_ANIM15>$sequence sb_run_haste "<ITEMTEST_REPLACE_ANIM8>" LX loop ACT_DOTA_RUN 1 ActivityModifier haste
+<ITEMTEST_COMMENT_IF_NO_ANIM8><ITEMTEST_COMMENT_IF_NO_ANIM15>$sequence sb_run_hastex "<ITEMTEST_REPLACE_ANIM8>" LX loop addlayer "sb_turns" ACT_DOTA_RUN 1 ActivityModifier haste
+
+$sequence sb_idle_or "<ITEMTEST_REPLACE_ANIM9>" loop ACT_DOTA_IDLE 1 ActivityModifier AttackCheck
+
+// Attacks: First 2 are ATTACK, Second 2 are ATTACK2. Only first is required.
+$sequence sb_attack "<ITEMTEST_REPLACE_ANIM10>" ACT_DOTA_ATTACK 1
+<ITEMTEST_COMMENT_IF_NO_ANIM11>$sequence sb_attackb "<ITEMTEST_REPLACE_ANIM11>" ACT_DOTA_ATTACK 1
+<ITEMTEST_COMMENT_IF_NO_ANIM12>$sequence sb_attack2 "<ITEMTEST_REPLACE_ANIM12>" ACT_DOTA_ATTACK2 1
+<ITEMTEST_COMMENT_IF_NO_ANIM13>$sequence sb_attack2b "<ITEMTEST_REPLACE_ANIM13>" ACT_DOTA_ATTACK2 1
+
+<ITEMTEST_COMMENT_IF_NO_ANIM14>$sequence sb_idle_rare "<ITEMTEST_REPLACE_ANIM14>" loop ACT_DOTA_IDLE_RARE 1
+
+// Portrait / Capture Idle. If we don't have a portrait idle, we re-use the base idle as our capture.
+<ITEMTEST_COMMENT_IF_ANIM15>$sequence portrait_idle "<ITEMTEST_REPLACE_ANIM1>" ACT_DOTA_CAPTURE 3
+<ITEMTEST_COMMENT_IF_NO_ANIM15>$sequence portrait_idle "<ITEMTEST_REPLACE_ANIM15>" ACT_DOTA_CAPTURE 3
+
+// Below is the definition of the turn layer.
+// First we start by creating 3 poses
+// The 3 "animations" (center, left, right) are actually just single frame poses.  Center is usually the 0 frame of the run animation, left and right are poses based on the 'center' frame to give the illusion of a left or right turn.
+// 'subtract' is defining each animation as the difference in pose between itself and the center pose
+<ITEMTEST_COMMENT_IF_NO_ANIM16>$sequence center_pose "<ITEMTEST_REPLACE_ANIM16>" frame 0 0
+<ITEMTEST_COMMENT_IF_NO_ANIM17>$sequence left_pose "<ITEMTEST_REPLACE_ANIM17>" frame 0 0
+<ITEMTEST_COMMENT_IF_NO_ANIM18>$sequence right_pose "<ITEMTEST_REPLACE_ANIM18>" frame 0 0
+<ITEMTEST_COMMENT_IF_NO_ANIM16>$animation sb_turn_center "<ITEMTEST_REPLACE_ANIM16>" subtract center_pose 0
+<ITEMTEST_COMMENT_IF_NO_ANIM17>$animation sb_turn_left "<ITEMTEST_REPLACE_ANIM17>" subtract center_pose 0
+<ITEMTEST_COMMENT_IF_NO_ANIM18>$animation sb_turn_right "<ITEMTEST_REPLACE_ANIM18>" subtract center_pose 0
+
+// The turn is comprised of the 3 poses we defined above all connected together.  
+// 'blendwidth' tells the sequence it is a combination of the 3 specified animations
+// 'blend' tells it which pose parameter to label it as, in this case "turn"
+// 'delta' signifies to the engine that this sequence is an additive layer, rather than completely stomping whatever animation it is added to.
+<ITEMTEST_COMMENT_IF_NO_ANIM16>$sequence sb_turns {
+<ITEMTEST_COMMENT_IF_NO_ANIM16>  sb_turn_left sb_turn_center sb_turn_right
+<ITEMTEST_COMMENT_IF_NO_ANIM16>  blendwidth 3
+<ITEMTEST_COMMENT_IF_NO_ANIM16>  blend turn -1.000000 1.000000
+<ITEMTEST_COMMENT_IF_NO_ANIM16>  delta
+<ITEMTEST_COMMENT_IF_NO_ANIM16>}
+
+$skinnedlods

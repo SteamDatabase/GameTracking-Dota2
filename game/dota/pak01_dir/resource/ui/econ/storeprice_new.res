@@ -1,0 +1,72 @@
+"Resource/UI/StorePrice_New.res"
+{
+	"StorePrice"
+	{
+		"ControlName"	"CStorePricePanel"
+		"fieldName"		"StorePrice"
+		"xpos"			"0"
+		"ypos"			"0"
+		"zpos"			"15"
+		"wide"			"118"
+		"tall"			"66"
+		"visible"		"1"
+		"enabled"		"1"
+	}
+
+	"Price"
+	{
+		"ControlName"	"CExLabel"
+		"fieldName"		"Price"
+		"font"			"HudFontSmallestBold"
+		"textAlignment"	"east"
+		"xpos"			"0"
+		"ypos"			"56"
+		"zpos"			"15"
+		"wide"			"85"
+		"tall"			"12"
+		"textinsetx"	"8"
+		"autoResize"	"1"
+		"pinCorner"		"0"	
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		"%price%"
+		"paintbackground"	"0"
+	}
+
+	"NewLarge"
+	{
+		"ControlName"	"CExLabel"
+		"fieldName"		"NewLarge"
+		"font"			"HudFontSmallestBold"
+		"textAlignment"	"east"
+		"xpos"			"0"
+		"ypos"			"0"
+		"zpos"			"15"
+		"wide"			"85"
+		"tall"			"12"
+		"textinsetx"	"8"
+		"autoResize"	"1"
+		"pinCorner"		"0"	
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		"#Store_Price_New"
+		"paintbackground"	"0"
+		"border"		"StoreNewBorder"
+		"fgcolor"		"10 10 10 255"
+	}
+
+	"LimitedLarge"
+	{
+		"ControlName"	"ImagePanel"
+		"fieldName"		"LimitedLarge"
+		"xpos"			"0"
+		"ypos"			"-6"
+		"zpos"			"0"
+		"wide"			"48"
+		"tall"			"48"
+		"visible"		"0"
+		"enabled"		"1"
+		"image"			"materials/vgui/backpack/crafting/limited_time_sticker.vmat"
+		"scaleImage"	"1"
+	}
+}

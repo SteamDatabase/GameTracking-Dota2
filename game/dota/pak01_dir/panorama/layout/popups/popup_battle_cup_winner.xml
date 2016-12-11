@@ -1,0 +1,86 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popups_shared.vcss_c" />
+		<include src="s2r://panorama/styles/popups/popup_battle_cup_winner.vcss_c" />
+		<include src="s2r://panorama/styles/dashboard_page_weekendtourney.vcss_c" />
+	</styles>
+
+	<script>
+
+		//var debugNoClose = false;	// set this to true to stop the popup from automatically closing iteself
+
+		function ResetAnim()
+		{
+			$.DispatchEvent( "DOTAGlobalSceneFireEntityInput", "ExplosionsLong", "Explosions", "treasure_opened_generic_part", "stopplayendcap", 1 );
+			$( '#TeamContainer').RemoveClass( "FadeIn" );
+			//debugNoClose = true;
+		}
+
+		function EventDOTAPopupBattleCupWinnerAnimate()
+		{
+			$.Schedule( 1.0, Sequence_ShowWinnerTeam );	
+			$.DispatchEvent( 'PlaySoundEffect', "ui.weekend_tournament_winner_screen" );
+		}
+
+		function Sequence_ShowWinnerTeam()
+		{
+			$.DispatchEvent( "DOTAGlobalSceneFireEntityInput", "ExplosionsLong", "battle_cup_background_particle", "stopplayendcap", 1 );
+			$.DispatchEvent( "DOTAGlobalSceneFireEntityInput", "ExplosionsLong", "battle_cup_background_particle", "start", 1 );
+			$.DispatchEvent( "DOTAGlobalSceneFireEntityInput", "Explosions", "treasure_opened_generic_part", "stopplayendcap", 1 );
+			$.DispatchEvent( "DOTAGlobalSceneFireEntityInput", "Explosions", "treasure_opened_generic_part", "start", 1 );
+			$( '#TeamContainer').AddClass( "FadeIn" );
+
+			 
+			// $.DispatchEventAsync( .9, 'PlaySoundEffect', "ui.weekend_tournament_winner_screen" );
+		}
+
+		function Sequence_Close()
+		{
+			//if ( !debugNoClose )
+			$.DispatchEvent( "DOTAPopupBattleCupWinnerClose" );
+		}
+
+		(function()
+		{
+			$.RegisterForUnhandledEvent( "DOTAPopupBattleCupWinnerAnimate", EventDOTAPopupBattleCupWinnerAnimate );
+			$.Schedule( 8.0, Sequence_Close );	
+		})();
+
+	</script>
+
+	<DOTAPopupBattleCupWinner class="PopupPanel Hidden" popupbackground="dim" oncancel="UIPopupButtonClicked()" >
+		
+		<DOTAScenePanel id="ExplosionsLong" map="scenes/battle_cup/battle_cup_background_particle" camera="camera_1" />
+		<DOTAScenePanel id="Explosions" map="scenes/treasure_opened_generic" camera="shot_cam" />
+		<DOTAScenePanel id="BattleCupTrophy" map="scenes/battle_cup/battle_cup_rotate_fall_2016" camera="camera_1"/>
+
+		<Panel id="LabelContainer">
+			<Label id="ChampionTitle" text="#dota_popup_battle_cup_winners_title" />
+			<Panel id="SubtitleContainer">
+				<Label id="Division" text="#dota_popup_battle_cup_winners_division" />
+				<Label id="Tier" text="#dota_popup_battle_cup_winners_tier" />
+				<Label id="Date" text="#dota_popup_battle_cup_winners_win_date" />
+			</Panel>
+
+			<Panel id="TeamContainer">
+				<DOTAUGCImage id="BattleCupTeamLogo" class="TeamLogo" scaling="stretch-to-fit-preserve-aspect" />
+				<Label id="BattleCupTeamName" text="#dota_profile_card_battle_cup_team_name" />
+			</Panel>
+		</Panel>
+
+		<Panel id="Footer" class="LeftRightFlow">
+			<Button class="PopupButton" onactivate="UIPopupButtonClicked()">
+				<Label text="#DOTA_Continue"/>
+			</Button>
+			<Button id="Button0EffectsTest" class="ButtonBevel" onactivate="EventDOTAPopupBattleCupWinnerAnimate()">
+				<Label text="start"/>
+			</Button>
+			<Button id="Button1EffectsTest" class="ButtonBevel" onactivate="ResetAnim()">
+				<Label text="reset"/>
+			</Button>
+		</Panel>
+
+	</DOTAPopupBattleCupWinner>
+
+</root>
