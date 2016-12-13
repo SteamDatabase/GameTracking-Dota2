@@ -1171,5 +1171,15 @@
 	"game_rules_shutdown"
 	{
 	}
+
+	"aegis_event"
+	{
+		"player_id"			"short"
+		"chat_message_type"	"short"
+	}
+	"bought_back"
+	{
+		"player_id"			"short"
+	}
 }
 

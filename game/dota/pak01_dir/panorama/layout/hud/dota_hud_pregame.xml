@@ -1,0 +1,636 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="s2r://panorama/styles/hudstyles.vcss_c" />
+		<include src="s2r://panorama/styles/hud/dota_hud_pregame.vcss_c" />
+	</styles>
+
+	<scripts>
+		<include src="s2r://panorama/scripts/hud/dota_hud_pregame.vjs_c" />
+	</scripts>
+
+	<snippets>
+		<snippet name="PreGameTeamItem">
+			<DOTAPreGameTeamItem>
+				<DOTAShopItem id="ShopItem" />
+				<DOTAHeroImage id="HeroImage" heroimagestyle="icon" scaling="stretch-to-fit-preserve-aspect" />
+			</DOTAPreGameTeamItem>
+		</snippet>
+
+		<snippet name="PreGameInventoryItem">
+			<DOTAPreGameInventoryItem>
+				<DOTAShopItem id="ShopItem" />
+				<Label id="Charges" class="MonoNumbersFont" text="{d:charge_count}" hittest="false" />
+			</DOTAPreGameInventoryItem>
+		</snippet>
+
+		<snippet name="AvailableEconItem">
+			<Panel class="AvailableEconItem">
+				<EconItemImage id="AvailableItemImage" />
+				<Panel id="AvailableItemOverlay">
+					<Label id="AvailableItemName" text="{g:dota_item_name:item_def}" />
+					<DOTAPurchaseButton id="AvailableItemPurchaseButton" class="HidePurchaseMethod" itemsource="HeroPicking_StrategyTime" />
+				</Panel>
+			</Panel>
+		</snippet>
+	</snippets>
+
+	<DOTAHudPreGame class="Hidden" hittest="false">
+		<DOTAScenePanel id="PregameBG" camera="shot_cameraA" map="backgrounds/pregame_phase" hittest="false" />
+		<DOTAScenePanel id="RadiantAmbient" class="AmbientCameraFX" camera="camera_top" map="scenes/pregame_dire_ambient" hittest="false" />
+		<DOTAScenePanel id="DireAmbient" class="AmbientCameraFX" camera="camera_bottom" map="scenes/pregame_dire_ambient" hittest="false" />
+		<Panel id="ConnectionFailed" class="TopBottomFlow">
+			<Panel id="ConnectionErrorIcon"/>
+			<Label text="#DOTA_Hero_Selection_ConnectionFailure"/>
+		</Panel>
+		<Panel id="MainContents" hittest="false">
+			<Panel id="ScreenContainer">
+				<Panel id="HeroPickScreen">
+					<Panel id="TitlesContainer" class="LeftRightFlow">
+						<Panel class="CenterBuffer"/>
+						<Label id="HeroSelectionText" />
+						<Panel class="CenterBuffer RightBuffer"/>
+					</Panel>
+					<Panel id="HeroPickScreenContents">
+						<Panel id="HeroPickLeftColumn">
+							<DOTAHeroSelectorGrid id="HeroGrid"/>
+							<DOTAHeroFilters id="HeroFilters" />
+						</Panel>
+						<Panel id="HeroPickRightColumn">
+							<DOTAHeroInspect id="HeroInspect" />
+							<Panel id="AlreadyBanned" hittest="false">
+								<Panel id="BanOuter" hittest="false"/>
+								<Label id="BanHeroName" text="#DOTA_Hero_Selection_HeroBanned"  hittest="false"/>
+								<Panel id="BanBar" hittest="false"/>
+							</Panel>
+							<Button id="BanButton" class="PickButton" onactivate="DOTABanInspectedHero()" >
+								<Label id="BanTitle" text="#DOTA_Hero_Selection_BanTitle" />
+								<Panel id="BanOuter"/>
+								<Label id="BanHeroName" text="{g:dota_hero_name:inspect_hero_id}" />
+								<Panel id="BanBar"/>
+							</Button>
+							<Panel id="HeroPickControls">
+								<Button id="LockInButton" class="PickButton" onactivate="DOTAPickInspectedHero()" >
+									<Label class="PickButtonTitle" text="#DOTA_Hero_Selection_Pick_InGame" />
+									<Label class="PickButtonHeroName" text="{g:dota_hero_name:inspect_hero_id}" />
+								</Button>
+								<Panel id="BanInfo">
+									<Label id="BanInfoTitle" text="#DOTA_Hero_Selection_NominatedBan" />
+									<Label id="BanInfoHeroName" text="{g:dota_hero_name:banned_hero_id}" />
+								</Panel>
+								<Button id="RandomButton" class="PickButton" onactivate="DOTAPickRandomHero()" >
+									<Panel class="RandomIcon" />
+									<Label text="#random" />
+								</Button>
+								<Button id="RepickButton" class="PickButton CancelPickButton" onactivate="DOTACancelHeroPick()" >
+									<Panel class="LeftRightFlow CenterAlign">
+										<Panel class="CancelPickIcon RepickIcon"/>
+										<Label text="#repick" />
+									</Panel>
+								</Button>
+								<Button id="ReRandomButton" class="PickButton CancelPickButton" onactivate="DOTACancelHeroPick()" >
+									<Panel class="LeftRightFlow CenterAlign">
+										<Panel class="CancelPickIcon RandomIcon"/>
+										<Label text="#DOTA_Hero_Selection_ReRandom" />
+									</Panel>
+								</Button>
+							</Panel>
+						</Panel>
+					</Panel>
+
+				</Panel>
+
+				<Panel id="StrategyScreen">
+					<Panel id="SelectedHeroDetails">
+						<Label id="EnterBattle" text="#DOTA_Hero_Selection_EnteringBattleAs" />
+						<Label id="SelectedHeroName" text="{g:dota_hero_name:selected_hero_id}" />
+						<Panel id="SelectedHeroAbilities" />
+					</Panel>
+					<Panel id="SelectedHeroPrimaryAttribute" />
+					<DOTALargeModelPreview id="HeroModel" />
+
+					<!-- These hit targets are not visible, but are above the hero model in z-order so 
+				     that we can accept hover events and redirect them to the real ability panels. -->
+					<Panel id="SelectedHeroAbilitiesHitTargets" hittest="false" />
+
+					<Button id="EnterGameRepickButton" class="PickButton EnterGameButton" onactivate="DOTACancelHeroPick()">
+						<Panel class="EnterGameIconContainer">
+							<Panel class="RepickIcon"/>
+						</Panel>
+						<Label text="#repick" />
+					</Button>
+					<Button id="EnterGameReRandomButton" class="PickButton EnterGameButton" onactivate="DOTACancelHeroPick()" >
+						<Panel class="EnterGameIconContainer">
+							<Panel class="RandomIcon"/>
+						</Panel>
+						<Label text="#DOTA_Hero_Selection_ReRandom" />
+					</Button>
+
+					<Button id="SkipIntoGame" class="PickButton EnterGameButton" onactivate="DOTASkipIntoGame() AddStyle( PreGame, StrategyVersusTransition )">
+						<Panel class="EnterGameIconContainer">
+							<Panel class="SkipIcon"/>
+						</Panel>
+						<Label text="#DOTA_Hero_Selection_SkipStrategyTime" />
+					</Button>
+
+					<Panel id="RightContainer">
+
+						<Panel id="RightContainerMain">
+							<Panel id="HeroLockedNav" class="LeftRightFlow">
+								<TextButton id="StrategyTabButton" text="Strategy" class="StrategyPhaseTab" onactivate="DOTASetSelectedStrategyTab( Strategy )" />
+								<Label text="/" class="StrategyPhaseTabSeparator"/>
+								<TextButton id="LoadoutTabButton" text="Loadout" class="StrategyPhaseTab" onactivate="DOTASetSelectedStrategyTab( Loadout )" />
+								<Label text="/" class="StrategyPhaseTabSeparator"/>
+								<TextButton id="GuidesTabButton" text="Guides" class="StrategyPhaseTab" onactivate="DOTASetSelectedStrategyTab( Guides )" />
+							</Panel>
+
+							<Panel id="StrategyTab" class="StrategyTabContents">
+								<Panel id="StrategyTabTopRow">
+									<Panel id="StrategyMap" class="StrategyPanel">
+										<Panel class="StrategyPanelHeader">
+											<Label class="StrategyPanelTitle" text="#DOTA_Hero_Selection_StrategyMap" />
+										</Panel>
+
+										<Panel id="StrategyMapContents">
+											<DOTAHeroPickingMinimap id="StrategyMinimap" />
+											<Panel id="StrategyMapControls">
+												<Panel id="AllyHeroesStrategyControl" class="StrategyControl">
+													<Panel class="StrategyControlHeader">
+														<Label class="StrategyControlTitle" text="#DOTA_Hero_Selection_AllyLanes" />
+														<Panel class="FillWidth" />
+														<Label class="StrategyControlStatusText MonoNumbersFont" text="{d:current_amount}/{d:total_amount}" />
+													</Panel>
+													<Panel id="AllyHeroes">
+														<!-- DOTAHeroPickingHeroIcon added dynamically -->
+													</Panel>
+												</Panel>
+
+												<Panel id="PredictEnemyHeroesStrategyControl" class="StrategyControl">
+													<Panel class="StrategyControlHeader">
+														<Label class="StrategyControlTitle" text="#DOTA_Hero_Selection_EnemyLanes" />
+														<Panel class="FillWidth" />
+														<Label class="StrategyControlStatusText MonoNumbersFont" text="{d:current_amount}/{d:total_amount}" />
+													</Panel>
+
+													<Panel id="PredictEnemyHeroes">
+														<!-- DOTAHeroPickingHeroIcon added dynamically -->
+													</Panel>
+												</Panel>
+
+												<Panel id="DesiredWardPlacementStrategyControl" class="StrategyControl StrategyControlLast">
+													<Panel class="StrategyControlHeader">
+														<Label class="StrategyControlTitle" text="#DOTA_Hero_Selection_WardPlacement" />
+														<Panel class="FillWidth" />
+														<Label class="StrategyControlStatusText MonoNumbersFont" text="{d:current_amount}/{d:total_amount}" />
+													</Panel>
+
+													<Panel id="DesiredWardPlacements">
+														<!-- Observer ward panels added dynamically -->
+													</Panel>
+												</Panel>
+											</Panel>
+										</Panel>
+									</Panel>
+
+									<Panel id="StrategyTeamCompPanel" class="StrategyPanel">
+										<Panel class="StrategyPanelHeader">
+											<Label class="StrategyPanelTitle" text="#DOTA_HUD_Pregame_TeamComposition_Title" />
+											<Panel class="FillWidth" />
+										</Panel>
+
+										<DOTAHeroPickingTeamComposition class="OneColumn" id="StrategyTeamComposition" />
+									</Panel>
+								</Panel>
+
+								<Panel id="StartingItems" class="StrategyPanel">
+									<Panel class="StrategyPanelHeader">
+										<Label class="StrategyPanelTitle" text="#DOTA_Item_Build_Starting_Items" />
+										<Panel class="FillWidth" />
+									</Panel>
+
+									<Panel id="StartingItemsContents">
+										<Panel id="StartingItemsLeftColumn">
+
+											<Panel id="StartingGoldContainer">
+												<Label class="StrategyControlTitle IndentTitle" text="#DOTA_Hero_Selection_RemainingGold" />
+												<Panel id="RemainingGoldContainer">
+													<Label id="StartingGold" text="{d:local_player_gold}" />
+													<Panel id="StartingItemsGoldIcon" />
+												</Panel>
+											</Panel>
+
+											<Panel id="InventoryStrategyControl" class="StrategyControl">
+												<Panel class="StrategyControlHeader IndentTitle">
+													<Label class="StrategyControlTitle" text="#DOTA_Hero_Selection_Inventory" />
+												</Panel>
+
+												<Panel id="StartingItemsInventory">
+													<Panel class="StartingItemsInventoryRow">
+														<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 0 )" />
+														<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 1 )" />
+														<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 2 )" />
+													</Panel>
+													<Panel class="StartingItemsInventoryRow">
+														<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 3 )" />
+														<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 4 )" />
+														<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 5 )" />
+													</Panel>
+													<Panel id="StartingItemsBackpackRow" class="StartingItemsInventoryRow">
+														<Panel id="StartingItemsBackpackRowContents">
+															<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 6 )" />
+															<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 7 )" />
+															<DOTAPreGameInventoryItem oncontextmenu="DOTAPreGameSellItem( 8 )" />
+														</Panel>
+													</Panel>
+												</Panel>
+											</Panel>
+										</Panel>
+
+										<Panel id="StartingItemsRightColumn">
+											<Panel id="StartingItemsRightColumnRow">
+												<Panel id="StartingItemsGuideStrategyControl" class="StrategyControl">
+													<Panel class="StrategyControlHeader">
+														<Label class="StrategyControlTitle" text="#DOTA_Hero_Selection_RecommendedByGuide" />
+													</Panel>
+
+													<Panel id="StartingItemsGuide" />
+												</Panel>
+
+												<Panel id="TeamPurchasesStrategyControl" class="StrategyControl">
+													<Panel class="StrategyControlHeader">
+														<Label class="StrategyControlTitle" text="#DOTA_Hero_Selection_TeamItems" />
+													</Panel>
+
+													<Panel id="TeamPurchases">
+														<DOTAPreGameTeamItem id="TeamCourierItem" itemname="item_courier" />
+														<DOTAPreGameTeamItem id="TeamWardItem0" itemname="item_ward_observer" />
+														<DOTAPreGameTeamItem id="TeamWardItem1" class="TeamItemLast" itemname="item_ward_observer" />
+													</Panel>
+												</Panel>
+											</Panel>
+
+											<Panel id="StartingItemsOtherOptionsStrategyControl" class="StrategyControl">
+												<Panel class="StrategyControlHeader">
+													<Label class="StrategyControlTitle" text="#dota_item_build_common_items" />
+												</Panel>
+
+												<Panel id="StartingItemsOtherOptions" />
+											</Panel>
+
+										</Panel>
+									</Panel>
+								</Panel>
+							</Panel>
+
+							<Panel id="LoadoutTab" class="StrategyTabContents">
+								<Panel class="LoadoutPanelHeader">
+									<Label text="#DOTA_Hero_Selection_HeroLoadout" class="LoadoutCategoryTitle" />
+								</Panel>
+								<Panel id="HeroLoadoutItems">
+									<DOTAHeroSetPicker id="HeroLoadoutSetPicker" />
+									<Panel id="HeroLoadoutSlots" />
+								</Panel>
+
+								<Panel id="GlobalLoadoutSlots">
+									<Panel class="LoadoutPanelHeader">
+										<Label text="#DOTA_Hero_Selection_GlobalLoadout" class="LoadoutCategoryTitle" />
+										<Panel class="FillWidth" />
+										<Label id="GlobalLoadoutChangeNotImmediate" text="#DOTA_Hero_Selection_TerrainChangesDelayed" />
+									</Panel>
+									<Panel id="GlobalLoadoutItems">
+										<Panel class="GlobalLoadoutSlotCategory">
+											<Label class="LoadoutCategoryTitle SubCategory" text="#DOTA_Armory_Category_CouriersAndWards" />
+											<Panel class="GlobalLoadoutSlotCategoryItems">
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="3" />
+												<!-- Courier -->
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="5" />
+												<!-- Ward -->
+											</Panel>
+										</Panel>
+
+										<Panel class="GlobalLoadoutSlotCategory">
+											<Label class="LoadoutCategoryTitle SubCategory" text="#DOTA_Armory_Category_Audio" />
+											<Panel class="GlobalLoadoutSlotCategoryItems">
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="4" />
+												<!-- Music -->
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="1" />
+												<!-- Announcer -->
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="2" />
+												<!-- MegaKills -->
+											</Panel>
+										</Panel>
+
+										<Panel class="GlobalLoadoutSlotCategory">
+											<Label class="LoadoutCategoryTitle SubCategory" text="#DOTA_GlobalItems_World" />
+											<Panel class="GlobalLoadoutSlotCategoryItems">
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="15" />
+												<!-- Terrain -->
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="8" />
+												<!-- Weather -->
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="9" />
+												<!-- Effigy -->
+											</Panel>
+										</Panel>
+
+										<Panel class="GlobalLoadoutSlotCategory">
+											<Label class="LoadoutCategoryTitle SubCategory" text="#DOTA_GlobalItems_Interface" />
+											<Panel class="GlobalLoadoutSlotCategoryItems">
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="6" />
+												<!-- HUD Skin -->
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="11" />
+												<!-- Cursor Pack -->
+												<DOTAHeroSlotItemPicker heroid="1000" slotindex="7" />
+												<!-- Loading Screen -->
+											</Panel>
+										</Panel>
+									</Panel>
+									<!--<DOTAHeroSlotItemPicker heroid="1000" slotindex="0" />-->
+									<!-- Action Item -->
+									<!--<DOTAHeroSlotItemPicker heroid="1000" slotindex="10" />-->
+									<!-- Multikill Banner-->
+									<!--<DOTAHeroSlotItemPicker heroid="1000" slotindex="12" />-->
+									<!-- Teleport Effect -->
+									<!--<DOTAHeroSlotItemPicker heroid="1000" slotindex="13" />-->
+									<!-- Blink Effect -->
+									<!--<DOTAHeroSlotItemPicker heroid="1000" slotindex="14" />-->
+									<!-- ??? -->
+								</Panel>
+
+
+							</Panel>
+
+							<Panel id="GuidesTab" class="StrategyTabContents">
+								<DOTAGuideBrowser id="GuideBrowser" />
+							</Panel>
+
+						</Panel>
+					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+
+		<Panel id="TeamPicker">
+			<Label id="TeamPickerTitle" text="#DOTA_Hero_Selection_ChooseTeam" />
+			
+			<Panel id="TeamPickerButtons">
+				<Button id="PickRadiantTeamButton" class="TeamPickerButton" onactivate="DOTAJoinGameTeam( 2 )">
+					<Panel class="TeamPickerButtonImage" />
+					<Label class="TeamPickerTeamName" text="#DOTA_GoodGuysShort" />
+				</Button>
+
+				<Button id="PickDireTeamButton" class="TeamPickerButton" onactivate="DOTAJoinGameTeam( 3 )">
+					<Panel class="TeamPickerButtonImage" />
+					<Label class="TeamPickerTeamName" text="#DOTA_BadGuysShort" />
+				</Button>
+			</Panel>
+		</Panel>
+		
+		<Button id="HeroPickViewStrategy" class="SwitchScreenButton" onactivate="DOTASetPreGameStrategyVisible( true );" >
+			<Panel class="SwitchScreenArrow" />
+			<Label text="#DOTA_Hero_Selection_SwitchToStrategy" />
+		</Button>			
+		<Button id="BacktoHeroGrid" class="SwitchScreenButton" onactivate="DOTASetPreGameStrategyVisible( false );" >
+			<Panel class="SwitchScreenArrow" />
+			<Label text="#DOTA_Hero_Selection_SwitchToHeroes"/>
+		</Button>
+		<Panel id="HeaderRanked">
+			<Panel id="HeaderRankedRadiant" class="HeaderRankedTeam">
+				<Label class="TeamAverageMMRLabel" text="#DOTA_Hero_Selection_AverageMMRShort" />
+				<Label class="TeamAverageMMRValue" text="{d:radiant_average_mmr}" />
+			</Panel>
+			<Panel id="HeaderRankedDire" class="HeaderRankedTeam">
+				<Label class="TeamAverageMMRLabel" text="#DOTA_Hero_Selection_AverageMMRShort" />
+				<Label class="TeamAverageMMRValue" text="{d:dire_average_mmr}" />
+			</Panel>
+		</Panel>		
+		<Panel id="Header" hittest="false">
+			<Panel class="FillWidth" />
+			<Panel id="RadiantTeamPlayers" class="TeamPlayers PlayerFailedToConnect">
+				<DOTAHudHeroPickingPlayer class="Slot0" />
+				<DOTAHudHeroPickingPlayer class="Slot1" />
+				<DOTAHudHeroPickingPlayer class="Slot2 PlayerFailedToConnect" />
+				<DOTAHudHeroPickingPlayer class="Slot3" />
+				<DOTAHudHeroPickingPlayer class="Slot4" />
+			</Panel>
+			<Panel id="HeaderCenter">
+				<Label id="ClockLabel" class="MonoNumbersFont" allowtextselection="false" />
+				<Panel id="HeaderSubtitle">
+					<Panel id="PickModeSubtitle">
+						<Label id="GameModeLabel" text="{s:game_mode}" />
+						<Panel id="HeaderPenaltyTime">
+							<Panel id="PenaltyTimeInfoIcon" onmouseout="UIHideTextTooltip()" />
+							<Label id="PenaltyTimeLabel" text="#DOTA_Hero_Selection_PenaltyTime" />
+						</Panel>
+					</Panel>
+					<Label id="StrategyTimeLabel" text="#DOTA_Hero_Selection_StrategyTime" />
+				</Panel>
+			</Panel>
+			<Panel id="DireTeamPlayers" class="TeamPlayers">
+				<DOTAHudHeroPickingPlayer class="Slot5" />
+				<DOTAHudHeroPickingPlayer class="Slot6" />
+				<DOTAHudHeroPickingPlayer class="Slot7" />
+				<DOTAHudHeroPickingPlayer class="Slot8" />
+				<DOTAHudHeroPickingPlayer class="Slot9" />
+			</Panel>
+			<Panel class="FillWidth" />
+		</Panel>
+		<Panel id="ConnectingLabelContainer" class="TopBottomFlow">
+			<Panel  class="LeftRightFlow">
+				<Panel class="Spinner"/>
+				<Label id="WaitingForPlayersLabel" text="#DOTA_Hero_Selection_PlayersConnecting" />
+			</Panel>
+			<Label id="ConnectionClock" class="MonoNumbersFont" text="{s:connect_timeout}"/>
+		</Panel>
+
+		<Panel id="BottomPanelsContainer" hittest="false">
+			<Panel id="PreMinimapContainer" hittest="false">
+				<DOTAHeroPickingMinimap id="HeroPickMinimap" />
+			</Panel>
+
+			<Panel id="AvailableItemsContainer">
+				<Panel id="AvailableItems">
+					<Carousel id="AvailableItemsCarousel" panels-visible="3" />
+
+					<Panel id="AvailableItemsFooter">
+						<Label id="AvailableItemsTitle" text="#DOTA_Hero_Selection_AvailableForPurchase" />
+						<Panel class="FillWidth" />
+						<CarouselNav carouselid="AvailableItemsCarousel" />
+					</Panel>
+				</Panel>
+			</Panel>
+
+			<Panel id="BottomPanels" hittest="false">
+				<Panel id="GridTeamComp">
+					<DOTAHeroPickingTeamComposition class="TwoColumn" id="HeroPickTeamComposition" />
+				</Panel>
+				<DOTAChat id="Chat" class="PreGameChat" chatstyle="hudpregame" />
+				<Panel id="BattlePassContainer">
+
+					<Panel id="BattlePassActive" class="BattlePassState" onactivate="ToggleStyle( QuestPickerHolder, Visible )">
+						<Panel class="BattlePassContainerHeader">
+							<Label id="QuestsTitle" text="#DOTA_DB_SeasonPass_CurrentQuest" />
+							<Panel class="FillWidth" />
+							<Label id="ViewQuestsLink" text="#DOTA_Hero_Selection_ViewQuests" />
+							<Panel id="ViewQuestsArrow" />
+						</Panel>
+
+						<Panel class="BattlePassContainerContents">
+							<Label id="CurrentQuestName" text="{s:current_quest_name}" />
+							<Label id="CurrentQuestDescription" text="{s:current_quest_description}" html="true" />
+							<DOTAQuestRanks id="CurrentQuestRanks" class="PreGameQuestRanks" />
+						</Panel>
+					</Panel>
+
+					<Panel id="BattlePassUpsell" class="BattlePassState">
+						<Label id="QuestsTitle" text="#DOTA_DB_SeasonPass_CurrentQuest" />
+						<Label class="BattlePassNote" text="#DOTA_Hero_Selection_NoBattlePass" />
+					</Panel>
+
+					<Panel id="BattlePassNotActive" class="BattlePassState">
+						<Label id="QuestsTitle" text="#DOTA_DB_SeasonPass_CurrentQuest" />
+						<Label class="BattlePassNote" text="#DOTA_Hero_Selection_BattlePassNotActive" />
+					</Panel>
+
+				</Panel>
+			</Panel>
+		</Panel>
+
+		<Panel id="QuestPickerHolder">
+			<DOTAQuestPicker id="QuestPicker" />
+			<Panel id="QuestPickerCloseButton" class="CloseButton" onactivate="RemoveStyle( QuestPickerHolder, Visible )" />
+		</Panel>
+		
+		<Button id="DashboardButton" onactivate="DOTAHUDShowDashboard();" />
+		<Button id="SettingsButton" onactivate="DOTASettings();" />
+<!-- 		<TextButton id="vs1" text="VS" onactivate="AddStyle( PreGame, StartVersusAnim ) RemoveStyle( PreGame, VersusOutro )" />
+		<TextButton id="vs2" text="Out" onactivate="AddStyle( PreGame, VersusOutro ) RemoveStyle( PreGame, StartVersusAnim )" /> -->
+		
+		<Panel id="ToGameTransition" class="TopBottomFlow" hittest="false" hittestchildren="false">
+			<Panel class="VerticalFiller"/>
+			<Panel class="MiddleContainer LeftRightFlow">
+				<Panel class="MiddleFiller"/>
+				<Panel id="MiddleLogo" />
+				<Panel class="MiddleFiller"/>
+			</Panel>
+			<Panel class="VerticalFiller"/>
+		</Panel>
+		
+		<Panel id="VersusScreen" hittest="false">
+			<Panel id="MainLayout" class="TopBottomFlow" hittest="false">
+				<Panel id="RadiantTeamSection" class="TeamSection">
+					<Panel id="RadiantVersusPlayers" class="ClipContainer">
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer0" team="DOTA_TEAM_GOODGUYS" />
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer1" team="DOTA_TEAM_GOODGUYS" />
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer2" team="DOTA_TEAM_GOODGUYS" />
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer3" team="DOTA_TEAM_GOODGUYS" />
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer4" team="DOTA_TEAM_GOODGUYS" />
+					</Panel>
+					<Label text="#DOTA_GoodGuysShort" class="TeamTitle TitleFont"/>
+				</Panel>
+				<Panel id="DireTeamSection"  class="TeamSection">
+					<Panel id="DireVersusPlayers" class="ClipContainer">
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer5" team="DOTA_TEAM_BADGUYS" />
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer6" team="DOTA_TEAM_BADGUYS" />
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer7" team="DOTA_TEAM_BADGUYS" />
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer8" team="DOTA_TEAM_BADGUYS" />
+						<DOTAHudHeroPickingVersusPlayer id="VersusPlayer9" team="DOTA_TEAM_BADGUYS" />
+					</Panel>
+					<Label text="#DOTA_BadGuysShort" class="TeamTitle TitleFont"/>
+				</Panel>			
+			</Panel>
+			<DOTAScenePanel id="VersusFX" map="scenes/versus_hline" camera="shot_camera"  hittest="false"/>
+			<DOTAScenePanel id="GodRays" map="scenes/versus_godrays" camera="camera_1" hittest="false"/>
+			<Panel id="VersusContainer">
+				<Panel id="LogoContainer">
+					<Panel id="DotaLogoBackgroundHoles" hittest="false" />
+					<Panel id="DotaLogoBackground" hittest="false" />
+					<Panel id="VersusLabel" hittest="false" />
+					<Panel id="DotaLogo" hittest="false" />
+				</Panel>
+			</Panel>
+		</Panel>
+
+		<Panel id="WaitingForMapLoad" hittest="false">
+			<Panel id="ReconnectBlack"  hittest="false"/>
+			<Panel id="WaitingForMapLoadContents" hittest="false">
+				<Panel class="Spinner"  hittest="false"/>
+				<Label text="#DOTA_Hero_Selection_FinishingLoading"  hittest="false"/>
+			</Panel>
+		</Panel>
+		<Panel id="RandomConfirm" acceptsinput="true">
+			<Panel id="RandomConfirmPopUp">
+				<Label id="RandomConfirmTitle" text="#DOTA_Hero_Selection_RandomConfirm_Title" />
+				<Label id="RandomConfirmHeroName" text="{g:dota_hero_name:selected_hero_id}" />
+				<DOTAHeroMovie id="RandomConfirmHeroMovie" />
+				<Panel id="RandomConfirmPopupButtons">
+					<Button id="RandomCancelButton" class="PickButton" onactivate="DOTACancelHeroPick()">
+						<Panel class="RandomPopupButtonIcon" />
+						<Label text="#DOTA_Hero_Selection_ReRandom" />
+					</Button>
+					<Button id="RandomConfirmButton" class="PickButton" onactivate="DOTAConfirmHeroPick()">
+						<Panel class="RandomPopupButtonIcon" />
+						<Label text="#DOTA_Confirm" />
+					</Button>
+				</Panel>
+				<Label id="RandomAutoConfirmLabel" class="MonoNumbersFont" text="#DOTA_Hero_Selection_RandomConfirm_AutoConfirm" />
+			</Panel>
+		</Panel>
+		<Panel id="PreConnectContainer" hittest="false">
+			<Panel id="PreLoadingRootBackground" hittest="false"/>
+			<Panel id="PreLoadingRootVignette" hittest="false"/>
+			<Panel id="TransitionContainer" class="TopBottomFlow" hittest="false">
+				<Panel class="TransitionRow LeftRightFlow" hittest="false">
+					<Panel id="a1" class="TransitionBox" hittest="false"/>
+					<Panel id="a2" class="TransitionBox" hittest="false"/>
+					<Panel id="a3" class="TransitionBox" hittest="false"/>
+					<Panel id="a4" class="TransitionBox" hittest="false"/>
+					<Panel id="a5" class="TransitionBox" hittest="false"/>
+				</Panel>
+				<Panel class="TransitionRow LeftRightFlow" hittest="false">
+					<Panel id="b1" class="TransitionBox" hittest="false"/>
+					<Panel id="b2" class="TransitionBox" hittest="false"/>
+					<Panel id="b3" class="TransitionBox" hittest="false"/>
+					<Panel id="b4" class="TransitionBox" hittest="false"/>
+					<Panel id="b5" class="TransitionBox" hittest="false"/>
+				</Panel>
+				<Panel class="TransitionRow LeftRightFlow" hittest="false">
+					<Panel id="c1" class="TransitionBox" hittest="false"/>
+					<Panel id="c2" class="TransitionBox" hittest="false"/>
+					<Panel id="c3" class="TransitionBox" hittest="false"/>
+					<Panel id="c4" class="TransitionBox" hittest="false"/>
+					<Panel id="c5" class="TransitionBox" hittest="false"/>
+				</Panel>
+				<Panel class="TransitionRow LeftRightFlow" hittest="false">
+					<Panel id="d1" class="TransitionBox" hittest="false"/>
+					<Panel id="d2" class="TransitionBox" hittest="false"/>
+					<Panel id="d3" class="TransitionBox" hittest="false"/>
+					<Panel id="d4" class="TransitionBox" hittest="false"/>
+					<Panel id="d5" class="TransitionBox" hittest="false"/>
+				</Panel>
+				<Panel class="TransitionRow LeftRightFlow" hittest="false">
+					<Panel id="e1" class="TransitionBox" hittest="false"/>
+					<Panel id="e2" class="TransitionBox" hittest="false"/>
+					<Panel id="e3" class="TransitionBox" hittest="false"/>
+					<Panel id="e4" class="TransitionBox" hittest="false"/>
+					<Panel id="e5" class="TransitionBox" hittest="false"/>
+				</Panel>
+			</Panel>
+			<Panel id="TestCircle" hittest="false"/>
+			<Panel id="DebugTextContainer" class="LeftRightFlow">
+				<Label id="ReconnectLabel" class="DebugText" text="RECONNECT"/>
+				<Label id="PreloadLabel" class="DebugText" text="PRELOAD"/>
+				<Label id="BecomeActiveLabel" class="DebugText" text="BECOMEACTIVE"/>
+				<Label id="WaitingLabel" class="DebugText" text="WAITINGFORPLAYERS"/>
+				<Label id="MapLoadLabel" class="DebugText" text="WAITINGFORMAPLOAD"/>
+				<Label id="HiddenLabel" class="DebugText" text="HIDDEN"/>
+				<Label id="MapLoadingOutroLabel" class="DebugText" text="MAP LOADING OUTRO"/>
+				<Label id="MapLoadingLabel" class="DebugText" text="MAP LOADING"/>
+				<Label id="StartPregameIntroLabel" class="DebugText" text="StartPregameIntro"/>
+				<Label id="EndPregameIntroLabel" class="DebugText" text="EndPregameIntro"/>
+				<Label id="FinishedLabel" class="DebugText" text="FINISHED"/>
+			</Panel>
+		</Panel>
+	</DOTAHudPreGame>
+</root>
+
+

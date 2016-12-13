@@ -67,9 +67,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run",
+		name = "run_anim",
 		sequences = {
-			{ "@run" }
+			{ "@run_anim" }
 		},
 		addlayer = {
 			"turns_arcana"
@@ -104,9 +104,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_alt_desolation",
+		name = "run_alt_desolation_anim",
 		sequences = {
-			{ "@run_alt_desolation" }
+			{ "@run_alt_desolation_anim" }
 		},
 		addlayer = {
 			"turns_arcana"
@@ -123,9 +123,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_haste_desolation",
+		name = "run_haste_desolation_anim",
 		sequences = {
-			{ "@run_haste_desolation" }
+			{ "@run_haste_desolation_anim" }
 		},
 		addlayer = {
 			"turns_arcana"
@@ -224,9 +224,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_haste",
+		name = "run_haste_anim",
 		sequences = {
-			{ "@run_haste" }
+			{ "@run_haste_anim" }
 		},
 		addlayer = {
 			"turns_arcana"
@@ -243,9 +243,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_injured",
+		name = "run_injured_anim",
 		sequences = {
-			{ "@run_injured" }
+			{ "@run_injured_anim" }
 		},
 		addlayer = {
 			"turns_arcana"

@@ -7,52 +7,9 @@
 --
 --=============================================================================
 
-model:CreateWeightlist(
-	"spine",
-	{
-		{ "root", 0.8 },
-		{ "Arm1_0_R", 0 },
-		{ "Arm0_0_L", 0 },
-		{ "Tail0_0", 1 },
-		{ "spine1", 1 },
-		{ "spine2", 1 }
-	}
-)
-
-model:CreateWeightlist(
-	"full",
-	{
-		{ "root", 1 }
-	}
-)
 
 
-model:CreateSequence(
-	{
-		name = "attack",
-		sequences = {
-			{ "@attack" }
-		},
-		weightlist = "spine",
-		activities = {
-			{ name = "ACT_DOTA_ATTACK", weight = 1 }
-		}
-	}
-)
 
-
-model:CreateSequence(
-	{
-		name = "poison_attack",
-		sequences = {
-			{ "@poison_attack" }
-		},
-		weightlist = "spine",
-		activities = {
-			{ name = "ACT_DOTA_CAST_ABILITY_1", weight = 1 }
-		}
-	}
-)
 
 
 -- AsLookLayer
@@ -112,15 +69,47 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run",
+		name = "run_anim",
 		sequences = {
-			{ "@run" }
+			{ "@run_anim" }
 		},
 		addlayer = {
 			"turns"
 		},
 		activities = {
 			{ name = "ACT_DOTA_RUN", weight = 1 }
+		}
+	}
+)
+model:CreateSequence(
+	{
+		name = "run_injured",
+		sequences = {
+			{ "@run_injured" }
+		},
+		addlayer = {
+			"turns"
+		},
+		activities = {
+			{ name = "ACT_DOTA_RUN", weight = 1 },
+			{ name = "injured", weight = 1 }
+		}
+	}
+)
+
+model:CreateSequence(
+	{
+		name = "run_injured_haste",
+		sequences = {
+			{ "@run_injured_haste" }
+		},
+		addlayer = {
+			"turns"
+		},
+		activities = {
+			{ name = "ACT_DOTA_RUN", weight = 1 },
+			{ name = "injured", weight = 1 },
+			{ name = "haste", weight = 1 }
 		}
 	}
 )

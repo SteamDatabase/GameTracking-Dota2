@@ -4,31 +4,27 @@
 --
 --=============================================================================
 
--- Msg( "ModelProcessing - Initializing script VM...\n" )
 
 -------------------------------------------------------------------------------
-
-
 -- returns a string like "foo.nut:53"
 -- with the source file and line number of its caller.
 -- returns the empty string if it couldn't get the source file and line number of its caller.
-function _sourceline(self) 
-    local v
-    -- FIXUP: Please fixup this call - Lua counterpart incompatible, manual fixup required - getstackinfos
-    v = getstackinfos(2)
+-------------------------------------------------------------------------------
+function _sourceline() 
+    local v = debug.getinfo( 2 )
     if v then 
-        return v.src .. ":" .. v.line .. " "
+        return tostring( v.source ) .. ":" .. tostring( v.currentline ) .. " "
     else 
         return ""
     end
 end
 
--- Msg( "ModelProcessing - ...done\n" )
-
 
 -------------------------------------------------------------------------------
 -- Initialization
 -------------------------------------------------------------------------------
-require "modelprocessing.utilities"
-require "modelprocessing.sequences"
-require "modelprocessing.animations"
+--print( "<<< modelprocessing script system - Initializing script VM..." .. _sourceline() )
+
+require "utils.library"
+
+--print( ">>> modelprocessing script system ...done" )

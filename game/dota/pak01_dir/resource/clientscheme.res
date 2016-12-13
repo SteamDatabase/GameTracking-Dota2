@@ -717,6 +717,20 @@ Scheme
 				"dropshadow"	"1"
 			}
 		}
+
+		"UnitInfoPlayerLevelFont"
+		{
+			"1"
+			{
+				"name"		"Dota Hypatia Bold"
+				"tall"		"18"
+				"weight"	"400"
+				"antialias" 	"1"
+				"dropshadow"	"1"
+				"isproportional" "0"
+			}
+		}
+
 		"HypatiaBoldSmall"
 		{
 			"1"

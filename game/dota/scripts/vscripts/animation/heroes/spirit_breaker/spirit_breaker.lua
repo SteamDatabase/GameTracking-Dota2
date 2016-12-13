@@ -86,9 +86,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run",
+		name = "run_anim",
 		sequences = {
-			{ "@run" }
+			{ "@run_anim" }
 		},
 		addlayer = {
 			"turns"
@@ -102,9 +102,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_injured",
+		name = "run_injured_anim",
 		sequences = {
-			{ "@run_injured" }
+			{ "@run_injured_anim" }
 		},
 		addlayer = {
 			"turns"

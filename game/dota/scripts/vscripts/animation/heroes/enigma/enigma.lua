@@ -67,9 +67,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run",
+		name = "run_anim",
 		sequences = {
-			{ "@run" }
+			{ "@run_anim" }
 		},
 		addlayer = {
 			"turn_layer",
@@ -86,9 +86,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_chase",
+		name = "run_chase_anim",
 		sequences = {
-			{ "@run_chase" }
+			{ "@run_chase_anim" }
 		},
 		addlayer = {
 			"turn_layer",
@@ -106,9 +106,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_haste",
+		name = "run_haste_anim",
 		sequences = {
-			{ "@run_haste" }
+			{ "@run_haste_anim" }
 		},
 		addlayer = {
 			"turn_layer",
@@ -126,9 +126,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_injured",
+		name = "run_injured_anim",
 		sequences = {
-			{ "@run_injured" }
+			{ "@run_injured_anim" }
 		},
 		addlayer = {
 			"turn_layer",

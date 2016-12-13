@@ -67,9 +67,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_arcana",
+		name = "run_arcana_anim",
 		sequences = {
-			{ "@run_arcana" }
+			{ "@run_arcana_anim" }
 		},
 		addlayer = {
 			"arcana_turns"
@@ -85,9 +85,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "arcana_agg_run",
+		name = "arcana_agg_run_anim",
 		sequences = {
-			{ "@arcana_agg_run" }
+			{ "@arcana_agg_run_anim" }
 		},
 		addlayer = {
 			"arcana_turns"
@@ -159,9 +159,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "wardstaff_run_arcana",
+		name = "wardstaff_run_arcana_anim",
 		sequences = {
-			{ "@wardstaff_run_arcana" }
+			{ "@wardstaff_run_arcana_anim" }
 		},
 		addlayer = {
 			"wardstaff_arcana_turns"
@@ -178,9 +178,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "wardstaff_arcana_agg_run",
+		name = "wardstaff_arcana_agg_run_anim",
 		sequences = {
-			{ "@wardstaff_arcana_agg_run" }
+			{ "@wardstaff_arcana_agg_run_anim" }
 		},
 		addlayer = {
 			"wardstaff_arcana_turns"

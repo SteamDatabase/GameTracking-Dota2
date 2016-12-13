@@ -67,9 +67,9 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "run_odachi",
+		name = "run_odachi_anim",
 		sequences = {
-			{ "@run_odachi" }
+			{ "@run_odachi_anim" }
 		},
 		addlayer = {
 			"turns_odachi"

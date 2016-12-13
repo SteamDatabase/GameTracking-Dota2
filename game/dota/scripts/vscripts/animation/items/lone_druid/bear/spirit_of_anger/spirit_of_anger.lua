@@ -75,12 +75,12 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "sb_run_orx",
+		name = "sb_run_or",
 		looping = true,
 		fadeInTime = 0.2,
 		fadeOutTime = 0.2,
 		sequences = {
-			{ "@sb_run_orx" }
+			{ "@sb_run_or" }
 		},
 		addlayer = { "sb_turns" },
 		activities = {
@@ -93,12 +93,12 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "sb_runx",
+		name = "sb_run",
 		looping = true,
 		fadeInTime = 0.2,
 		fadeOutTime = 0.2,
 		sequences = {
-			{ "@sb_runx" }
+			{ "@sb_run" }
 		},
 		addlayer = { "sb_turns" },
 		activities = {
@@ -110,12 +110,12 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "sb_run_injuredx",
+		name = "sb_run_injured",
 		looping = true,
 		fadeInTime = 0.2,
 		fadeOutTime = 0.2,
 		sequences = {
-			{ "@sb_run_injuredx" }
+			{ "@sb_run_injured" }
 		},
 		addlayer = { "sb_turns" },
 		activities = {
@@ -128,12 +128,12 @@ model:CreateSequence(
 
 model:CreateSequence(
 	{
-		name = "sb_run_hastex",
+		name = "sb_run_haste",
 		looping = true,
 		fadeInTime = 0.2,
 		fadeOutTime = 0.2,
 		sequences = {
-			{ "@sb_run_hastex" }
+			{ "@sb_run_haste" }
 		},
 		addlayer = { "sb_turns" },
 		activities = {

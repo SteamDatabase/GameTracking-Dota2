@@ -138,23 +138,18 @@ function CTutorialBasics:InitGameMode()
 	self._vTransitionTable["introduce_laning"] =		{ fnOnEnter = self._LaningTip,				nAdvanceEvent = ON_TIP_DISMISSED,	strNext = "move_to_lane_quest" }
 	self._vTransitionTable["move_to_lane_quest"] =		{ fnOnEnter = self._MoveToLaneQuest,		nAdvanceEvent = ON_TASK_ADVANCED,	strNext = "introduce_combat" }
 
-	self._vTransitionTable["introduce_combat"] =		{ fnOnEnter = self._CompleteToLaneQuest,	nAdvanceEvent = ON_TIP_DISMISSED,	strNext = "introduce_bounties", fnOnEnterDelayed = self._AttackingTip,	flEnterDelay = 1 }
-	self._vTransitionTable["introduce_bounties"] =		{ fnOnEnter = self._BountiesTip,			nAdvanceEvent = ON_TIP_DISMISSED,	strNext = "get_last_hits_quest" }
-	self._vTransitionTable["get_last_hits_quest"] =		{ fnOnEnter = self._LastHitQuest,			nAdvanceEvent = ON_LAST_HIT,		strNext = "introduce_xp" }
-
-	self._vTransitionTable["introduce_xp"] =			{ fnOnEnter = self._CompleteLastHitQuest,		nAdvanceEvent = ON_TIP_DISMISSED,			strNext = "gain_level_quest", fnOnEnterDelayed = self._XPTip,	flEnterDelay = 1 }
-	self._vTransitionTable["gain_level_quest"] =		{ fnOnEnter = self._GainLevelQuest,				nAdvanceEvent = ON_PLAYER_GAINED_LEVEL,		strNext = "introduce_leveling" }
-	self._vTransitionTable["introduce_leveling"] =		{ fnOnEnter = self._CompleteGainLevelQuest,		nAdvanceEvent = ON_TIP_DISMISSED,			strNext = "level_up_quest", fnOnEnterDelayed = self._LevelAbilityTip, flEnterDelay = 1 }
-	self._vTransitionTable["level_up_quest"] =			{ fnOnEnter = self._ToggleAbilityMode,			nAdvanceEvent = ON_LEVEL_ABILITY_TOGGLED_ON,strNext = "buy_ability_quest" }
-	self._vTransitionTable["buy_ability_quest"] =		{ fnOnEnter = self._CompleteToggleAbilityMode,	nAdvanceEvent = ON_ABILITY_LEARNED,			strNext = "introduce_casting", fnOnEnterDelayed = self._LevelAbilityQuest, flEnterDelay = 1 }
+	self._vTransitionTable["introduce_combat"] =		{ fnOnEnter = self._CompleteToLaneQuest,		nAdvanceEvent = ON_THINK,			strNext = "introduce_xp"  }
+	self._vTransitionTable["introduce_xp"] =			{ fnOnEnter = self._XPTip,						nAdvanceEvent = ON_TIP_DISMISSED,		strNext = "gain_level_quest" }
+	self._vTransitionTable["gain_level_quest"] =		{ fnOnEnter = self._GainLevelQuest,				nAdvanceEvent = ON_TIP_DISMISSED,		strNext = "wait_for_level", fnOnEnterDelayed = self._AttackingTip,	flEnterDelay = 1 }
+	self._vTransitionTable["wait_for_level"] =			{ fnOnEnter = self._GainLevelQuest, 			nAdvanceEvent = ON_PLAYER_GAINED_LEVEL, 	strNext = "introduce_ability_levels" }
+	self._vTransitionTable["introduce_ability_levels"] = { fnOnEnter = self._LevelAbilityTip, 			nAdvanceEvent = ON_TIP_DISMISSED,           strNext = "buy_ability_quest" }
+	self._vTransitionTable["buy_ability_quest"] =		{ fnOnEnter = self._LevelAbilityQuest,			nAdvanceEvent = ON_ABILITY_LEARNED,			strNext = "introduce_casting" }
 
 	self._vTransitionTable["introduce_casting"] =		{ fnOnEnter = self._CompleteLevelAbilityQuest,	nAdvanceEvent = ON_TIP_DISMISSED,			strNext = "cast_ability_quest", fnOnEnterDelayed = self._CastingTip, flEnterDelay = 1 }
 	self._vTransitionTable["cast_ability_quest"] =		{ fnOnEnter = self._CastQuest,					nAdvanceEvent = ON_PLAYER_USED_ABILITY,		strNext = "introduce_towers" }
 
 	self._vTransitionTable["introduce_towers"] =		{ fnOnEnter = self._CompleteCastQuest,		nAdvanceEvent = ON_TIP_DISMISSED,	strNext = "kill_tower_quest", 	fnOnEnterDelayed = self._TowersTip, flEnterDelay = 1 }
-	self._vTransitionTable["kill_tower_quest"] =		{ fnOnEnter = self._KillTowerQuest,			nAdvanceEvent = ON_TIP_DISMISSED,	strNext = "wait_for_end", fnOnEnterDelayed = self._EnemyTip,	flEnterDelay = 15 }
-
-	self._vTransitionTable["wait_for_end"] =			{ fnOnEnter = self._End,					nAdvanceEvent = ON_TOWER_KILL_GOOD,	strNext = "end" }
+	self._vTransitionTable["kill_tower_quest"] =		{ fnOnEnter = self._KillTowerQuest,			nAdvanceEvent = ON_TOWER_KILL_GOOD,	strNext = "end" }
 	self._vTransitionTable["end"] =						{ fnOnEnter = self._EndTutorial,			nAdvanceEvent = ON_TIP_DISMISSED,	strNext = "exit", fnOnEnterDelayed = self._VictoryTip,	flEnterDelay = 5 }
 	self._vTransitionTable["exit"] =					{ fnOnEnter = self._ExitMatch,				nAdvanceEvent = nil,				strNext = nil }
 
@@ -176,34 +171,6 @@ function CTutorialBasics:InitGameMode()
 
 	self._nFXIndex = -1
 	self._flFXClearTime = -1
-
-	self._nSkillIndex = 0
-	self._vSkillBuild = {}
-	self._vSkillBuild[0] = -1
-	self._vSkillBuild[1] = 0
-	self._vSkillBuild[2] = 0
-	self._vSkillBuild[3] = 2
-	self._vSkillBuild[4] = 0
-	self._vSkillBuild[5] = 3
-	self._vSkillBuild[6] = 0
-	self._vSkillBuild[7] = 1
-	self._vSkillBuild[8] = 1
-	self._vSkillBuild[9] = 2
-	self._vSkillBuild[10] = 3
-	self._vSkillBuild[11] = 2
-	self._vSkillBuild[12] = 1
-	self._vSkillBuild[13] = 1
-	self._vSkillBuild[14] = 2
-	self._vSkillBuild[15] = 3
-	self._vSkillBuild[16] = -1
-	self._vSkillBuild[17] = -1
-	self._vSkillBuild[18] = -1
-	self._vSkillBuild[19] = -1
-	self._vSkillBuild[20] = -1
-	self._vSkillBuild[21] = -1
-	self._vSkillBuild[22] = -1
-	self._vSkillBuild[23] = -1
-	self._vSkillBuild[24] = -1
 
 	-- Custom console commands
 	Convars:RegisterCommand( "tutorial_advance", function(...) return self:_TestAdvanceTutorial( ... ) end, "Advance the tutorial to the next state.", FCVAR_CHEAT )
@@ -317,39 +284,12 @@ function CTutorialBasics:OnPlayerGainedLevel()
 end
 
 function CTutorialBasics:OnPlayerLearnedAbility( event )
-	print("Ability Learned " .. tostring( self._nSkillIndex ) )
-
 	-- Shortcut if we skip a state.
 	if ( self._CurrentState == "introduce_leveling" or self._CurrentState == "level_up_quest" or self._CurrentState == "buy_ability_quest" ) then
 		self:_SetState( "introduce_casting" )
 	end
 
 	self:_FireEvent( ON_ABILITY_LEARNED )
-
-	local player = EntIndexToHScript( event.player )
-	local playerID = player:GetPlayerID()
-
-	if ( playerID == 0 ) then
-		local heroUnit = PlayerResource:GetSelectedHeroEntity( playerID )
-		if heroUnit ~= nil then
-			if heroUnit:IsRealHero() then
-				local upgradeAbility = heroUnit:FindAbilityByName( event.abilityname )
-				local buildAbility = nil
-				local bBuildStats = false
-
-				if ( self._vSkillBuild[self._nSkillIndex] == -1 ) then 
-					bBuildStats = true
-				else
-					buildAbility = heroUnit:GetAbilityByIndex( self._vSkillBuild[self._nSkillIndex] )			
-				end
-
-				-- Type 2 is the attributes ability
-				if ( upgradeAbility ~= nil and ( ( upgradeAbility == buildAbility ) or ( upgradeAbility:GetAbilityType() == 2 and bBuildStats ) ) ) then
-					self:_AdvanceAbilityBuild()
-				end
-			end
-		end
-	end
 end
 
 function CTutorialBasics:OnPlayerUsedAbility()
@@ -604,25 +544,6 @@ function CTutorialBasics:_SetGameFrozen( bFreeze )
 end
 
 -----------------------------------------------------------------------------------------
--- Build Management
------------------------------------------------------------------------------------------
-
-function CTutorialBasics:_AdvanceAbilityBuild()
-	self._nSkillIndex = self._nSkillIndex + 1
-	local newSkill = self._vSkillBuild[self._nSkillIndex]
-
-	if ( newSkill == nil ) then
-		return
-	end
-
-	if ( self._nSkillIndex >= 14 ) then
-		Tutorial:SetTutorialConvar( "dota_tutorial_force_learn_ability", "-1" )
-	else
-		Tutorial:SetTutorialConvar( "dota_tutorial_force_learn_ability", tostring( newSkill ) )
-	end
-end
-
------------------------------------------------------------------------------------------
 -- Dynamic tips
 -----------------------------------------------------------------------------------------
 
@@ -840,7 +761,6 @@ function CTutorialBasics:_CreateLockedAlertDialog( imageName, dialogVars )
 end
 
 function CTutorialBasics:_BasicsTakeAttributes()
---	Tutorial:UpgradePlayerAbility( "attribute_bonus" )
 	Tutorial:SetTutorialConvar( "dota_camera_hold_select_to_follow", "1" )
 	Tutorial:EnablePlayerOffscreenTip( true )
 	Tutorial:EnableCreepAggroViz( true )
@@ -848,7 +768,7 @@ function CTutorialBasics:_BasicsTakeAttributes()
 end
 
 function CTutorialBasics:_HeroIntroTip()
-	Tutorial:UpgradePlayerAbility( "attribute_bonus" )
+	Tutorial:UpgradePlayerAbility( "luna_lunar_blessing" ) -- To get rid of the level up buttons.
 	self:_CreateInfoDialog( "HeroImage", { TitleTextVar = "basics_HeroIntroTitle", BodyTextVar = "basics_HeroIntroBody" } )
 	self:_SetGameFrozen( true )
 end	
@@ -1088,33 +1008,23 @@ function CTutorialBasics:_CompleteGainLevelQuest()
 	EmitGlobalSound( "Tutorial.TaskProgress" )
 	CustomUI:DynamicHud_Destroy( -1, "tutorial_objective" )
 	CustomUI:DynamicHud_Create( -1, "tutorial_objective_completed", "file://{resources}/layout/custom_game/tutorial_objective_completed.xml", { TitleTextVar = "basics_objective_GetALevelTitle", BodyTextVar = "basics_objective_GetALevelBody" } )
+	Tutorial:SetTutorialConvar( "dota_tutorial_force_learn_ability", "0" )
 end
 
 function CTutorialBasics:_LevelAbilityTip()
 	self:_SetGameFrozen( true )
-	CustomUI:DynamicHud_Destroy( -1, "tutorial_objective_completed" )
 	self:_CreateInfoDialog( "AbilitiesImage", { TitleTextVar = "basics_AbilityIntroTitle", BodyTextVar = "basics_AbilityIntroBody" } )
 end
 
-function CTutorialBasics:_ToggleAbilityMode()
---	Tutorial:SetTutorialConvar( "dota_tutorial_force_learn_ability", "0" )
-	CustomUI:DynamicHud_Destroy( -1, "tutorial_tip" )
-	CustomUI:DynamicHud_Create( -1, "tutorial_objective", "file://{resources}/layout/custom_game/tutorial_objective.xml", { TitleTextVar = "basics_objective_LevelUpTitle", BodyTextVar = "basics_objective_LevelUpBody" } )
-end
-
-function CTutorialBasics:_CompleteToggleAbilityMode()
-	EmitGlobalSound( "Tutorial.TaskProgress" )
-	self:_SetGameFrozen( true )
-	CustomUI:DynamicHud_Destroy( -1, "tutorial_objective" )
-	CustomUI:DynamicHud_Create( -1, "tutorial_objective_completed", "file://{resources}/layout/custom_game/tutorial_objective_completed.xml", { TitleTextVar = "basics_objective_LevelUpTitle", BodyTextVar = "basics_objective_LevelUpBody" } )
-end
 
 function CTutorialBasics:_LevelAbilityQuest()
-	CustomUI:DynamicHud_Destroy( -1, "tutorial_objective_completed" )
+	Tutorial:SetTutorialConvar( "dota_tutorial_force_learn_ability", "0" )
+	CustomUI:DynamicHud_Destroy( -1, "tutorial_tip" )
 	CustomUI:DynamicHud_Create( -1, "tutorial_objective", "file://{resources}/layout/custom_game/tutorial_objective.xml", { TitleTextVar = "basics_objective_BuyAbilityTitle", BodyTextVar = "basics_objective_BuyAbilityBody" } )
 end
 
 function CTutorialBasics:_CompleteLevelAbilityQuest()
+	Tutorial:SetTutorialConvar( "dota_tutorial_force_learn_ability", "-1" )
 	EmitGlobalSound( "Tutorial.TaskProgress" )
 	self:_SetGameFrozen( true )
 	CustomUI:DynamicHud_Destroy( -1, "tutorial_objective" )

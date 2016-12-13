@@ -198,3 +198,20 @@ model:CreateSequence(
 		weightlist = "body_no_wings"
 	}
 )
+
+
+model:CreateSequence(
+	{
+		name = "versus_dive",
+		sequences = {
+			{ "@victory" }
+		},
+		addlayer = {
+			"wings"
+		},
+		activities = {
+			{ name = "ACT_DOTA_VERSUS", weight = 1 }
+		}
+	}
+)
+
