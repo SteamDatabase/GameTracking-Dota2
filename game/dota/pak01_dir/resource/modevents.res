@@ -1181,5 +1181,12 @@
 	{
 		"player_id"			"short"
 	}
+
+	"dota_shrine_kill"
+	{
+		"killer_userid"	"short"	
+		"teamnumber"	"short"
+		"gold"			"short"
+	}
 }
 
