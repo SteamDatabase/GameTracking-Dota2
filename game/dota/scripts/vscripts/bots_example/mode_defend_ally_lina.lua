@@ -5,14 +5,14 @@ require( GetScriptDirectory().."/mode_defend_ally_generic" )
 
 function OnStart()
 	-- Do the standard OnStart
-	mode_generic_defend_ally.OnStart();
+	mode_defend_ally_generic.OnStart();
 end
 
 ----------------------------------------------------------------------------------------------------
 
 function OnEnd()
 	-- Do the standard OnEnd
-	mode_generic_defend_ally.OnEnd();
+	mode_defend_ally_generic.OnEnd();
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ function Think()
 	local npcBot = GetBot();
 
 	-- Do the standard Think
-	mode_generic_defend_ally.Think()
+	mode_defend_ally_generic.Think()
 
 	-- Check if we're already using an ability
 	if ( npcBot:IsUsingAbility() ) then return end;
@@ -54,7 +54,7 @@ function GetDesire()
 		end
 	end
 
-	return Clamp( mode_generic_defend_ally.GetDesire() + fBonus, BOT_MODE_DESIRE_NONE, BOT_MODE_DESIRE_ABSOLUTE );
+	return Clamp( mode_defend_ally_generic.GetDesire() + fBonus, BOT_MODE_DESIRE_NONE, BOT_MODE_DESIRE_ABSOLUTE );
 end
 
 ----------------------------------------------------------------------------------------------------

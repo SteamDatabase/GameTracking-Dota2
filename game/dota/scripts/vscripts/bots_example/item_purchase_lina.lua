@@ -33,6 +33,8 @@ local tableItemsToBuy = {
 
 function ItemPurchaseThink()
 
+	local npcBot = GetBot();
+
 	if ( #tableItemsToBuy == 0 )
 	then
 		npcBot:SetNextItemPurchaseValue( 0 );
@@ -40,7 +42,6 @@ function ItemPurchaseThink()
 	end
 
 	local sNextItem = tableItemsToBuy[1];
-	local npcBot = GetBot();
 
 	npcBot:SetNextItemPurchaseValue( GetItemCost( sNextItem ) );
 

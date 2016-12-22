@@ -2,24 +2,24 @@
 ----------------------------------------------------------------------------------------------------
 
 _G._savedEnv = getfenv()
-module( "mode_generic_defend_ally", package.seeall )
+module( "mode_defend_ally_generic", package.seeall )
 
 ----------------------------------------------------------------------------------------------------
 
 function OnStart()
-	--print( "mode_generic_defend_ally.OnStart" );
+	--print( "mode_defend_ally_generic.OnStart" );
 end
 
 ----------------------------------------------------------------------------------------------------
 
 function OnEnd()
-	--print( "mode_generic_defend_ally.OnEnd" );
+	--print( "mode_defend_ally_generic.OnEnd" );
 end
 
 ----------------------------------------------------------------------------------------------------
 
 function Think()
-	--print( "mode_generic_defend_ally.Think" );
+	--print( "mode_defend_ally_generic.Think" );
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -93,6 +93,6 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
-for k,v in pairs( mode_generic_defend_ally ) do	_G._savedEnv[k] = v end
+for k,v in pairs( mode_defend_ally_generic ) do	_G._savedEnv[k] = v end
 
 ----------------------------------------------------------------------------------------------------
