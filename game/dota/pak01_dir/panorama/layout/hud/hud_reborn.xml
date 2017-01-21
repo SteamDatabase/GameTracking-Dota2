@@ -13,31 +13,6 @@
 		$.GetContextPanel().SetHasClass( "AbilityLearnMode", bInLearnMode );
 	}
 
-	function ShowStatBranchTooltip()
-	{
-		var statBranchPopup = $("#statbranchdialog");
-		if ( statBranchPopup != null && statBranchPopup.BHasClass( "ShowStatBranch" ) )
-			return;
-
-		var panel = $("#level_stats_frame");
-		
-		if ( panel != null )
-		{
-			if ( panel.BHasClass( "CanLevelStats" ) )
-			{
-				panel = panel.FindChildTraverse( "LevelUpButton" );
-			}
-			else
-			{
-				panel = $("#StatBranch");
-			}
-			if ( panel != null )
-			{
-				$.DispatchEvent( 'DOTAHUDShowStatBranchTooltip', panel );
-			}
-		}
-	}
-
 	(function()
 	{
 		$.RegisterForUnhandledEvent( "DOTAHUDAbilityLearnModeToggled", EventAbilityLearnModeToggled );
@@ -57,10 +32,10 @@
 			<DOTAGuideBrowser id="GuideBrowser" />
 			<DOTAHUDCursorCooldown id="CursorCooldown" hittest="false" />
 			<DOTAChat id="HudChat" class="HudChat" chatstyle="hud" oncancel="DOTAChatCancelMessageMode()" hittest="false"/>
-			<Panel id="StatBranchDrawer" hittest="false">
-				<DOTAStatBranch id="statbranchdialog" hittest="false" />
-			</Panel>
 			<Panel id="lower_hud" hittest="false" disallowedstyleflags="hover,descendantfocus">
+				<Panel id="StatBranchDrawer" hittest="false">
+					<DOTAStatBranch id="statbranchdialog" hittest="false" />
+				</Panel>
 				<Panel id="minimap_block" hittest="false" >
 					<DOTAMinimap id="minimap" require-composition-layer="true" />
                 </Panel>
@@ -80,52 +55,31 @@
 					    <Panel id="center_bg" />
 					    <Panel id="HUDSkinPortrait" hittest="false"/>
 					    <Panel id="HUDSkinXPBackground" hittest="false"/>
-						<Panel id="PortraitContainer">
-							<DOTAMultiUnit id="multiunit" hittest="false" class="PortraitLocation" />
+					    <DOTAMultiUnit id="multiunit" class="PortraitLocation" />
+						<Panel id="PortraitBacker" hittest="flase"/>
+						<Panel id="PortraitBackerColor" hittest="false"/>
+						<Panel id="PortraitContainer" hittest="false">
 							<DOTAPortrait id="portraitHUD" class="PortraitLocation" />
 							<DOTAPortrait id="portraitHUDOverlay" class="PortraitLocation"/>
 							<Panel id="SilenceIcon" hittest="false" always-cache-composition-layer="true" />
 							<Panel id="DeathGradient"/>
-							<DOTAHUDDeathPanel id="death_panel" />
 						</Panel>
+						<Panel id="xpBacker" />
 						<DOTAHUDDeathPanel id="death_panel_buyback" />
-						<Panel id="StatBranch" onactivate="DOTAHUDToggleStatBranchVisibility()" onmouseover="DOTAHUDMouseOverTalentTree()" onmouseout="DOTAHUDMouseOutTalentTree()" >
-							<Panel id="StatBranchBG"/>
+						<DOTAXP id="xp" hittest="false" />
+						<Panel id="stats_container" >
+							<Panel id="stats_container_bg" />
 							<Panel id="HUDSkinStatBranchBG" hittest="false"/>
-							<Panel id="HUDSkinStatBranchGlow" hittest="false"/>
-							<Panel id="StatBranchBGBranchWell"/>
-							<Panel id="StatBranchBGBranchWellGlow"/>
-							<Panel id="StatBranchGraphics">
-								<Panel id="StatBranchChannel">
-									<Panel id="StatPipContainer" class="">
-										<Panel id="StatRow25" class="StatBranchRow">
-											<Panel class="StatBranchPip LeftBranchPip"/>
-											<Panel class="StatBranchPip RightBranchPip"/>
-										</Panel>
-										<Panel id="StatRow20" class="StatBranchRow RightBranchSelected">
-											<Panel class="StatBranchPip LeftBranchPip"/>
-											<Panel class="StatBranchPip RightBranchPip"/>
-										</Panel>
-										<Panel id="StatRow15" class="StatBranchRow LeftBranchSelected">
-											<Panel class="StatBranchPip LeftBranchPip"/>
-											<Panel class="StatBranchPip RightBranchPip"/>
-										</Panel>
-										<Panel id="StatRow10" class="StatBranchRow LeftBranchSelected">
-											<Panel class="StatBranchPip LeftBranchPip"/>
-											<Panel class="StatBranchPip RightBranchPip"/>
-										</Panel>
-									</Panel>							
-									<Panel class="LevelProgress">
-										<ProgressBar id="StatLevelProgressBar" min="0" max="25" value="20" />
-									</Panel>
-									<Panel class="LevelProgressBlur">
-										<ProgressBar id="StatLevelProgressBarBlur" min="0" max="25" value="20" />
-									</Panel>								
-									
-								</Panel>
-
-								<DOTAXP id="xp" hittest="false" />
-							</Panel>
+							<Panel id="HUDSkinStatBranchGlow" hittest="false"/>							
+							<DOTAStatsRegion id="stats" class="ShowSplitLabels" hittest="false" />	
+							<DOTAHUDStrAgiInt id="stragiint" />
+							<Panel id="stats_tooltip_region" onmouseover="DOTAHUDShowDamageArmorTooltip();" onmouseout="DOTAHUDHideDamageArmorTooltip();" />
+						</Panel>
+						<Panel hittest="false" id="RecommendedUpgradeOverlay" >
+							<Panel hittest="false" class="BorderEdge BorderTop" />
+							<Panel hittest="false" class="BorderEdge BorderRight" />
+							<Panel hittest="false" class="BorderEdge BorderBottom" />
+							<Panel hittest="false" class="BorderEdge BorderLeft" />
 						</Panel>
 						<DOTAUnitName id="unitname" hittest="false" />
 						<DOTAHUDLevelStatsFrame id="level_stats_frame" hittest="false" onmouseover="DOTAHUDMouseOverTalentTree();" onmouseout="DOTAHUDMouseOutTalentTree()" />						
@@ -133,7 +87,44 @@
 						<DOTAHealthMana id="health_mana" />
 						<Panel id="HUDSkinAbilityContainerBG" hittest="false" />
 						<Panel class="AbilityInsetShadowLeft"/>
-                        <DOTAAbilityList id="abilities" hittest="false"/>
+						<DOTAHotkey id="StatBranchHotkey" keybind="LearnStats" hittest="false" />
+						<Panel id="AbilitiesAndStatBranch" hittest="false">
+							<Panel id="StatBranch" onactivate="DOTAHUDTalentTreeClicked()" onmouseover="DOTAHUDMouseOverTalentTree()" onmouseout="DOTAHUDMouseOutTalentTree()" >
+								<Panel id="StatBranchBG"/>
+								<!-- 								
+								<Panel id="StatBranchBGBranchWell"/>
+								<Panel id="StatBranchBGBranchWellGlow"/> -->
+								<Panel id="StatBranchGraphics">
+									<Panel id="StatBranchChannel">
+										<Panel id="StatPipContainer" class="">
+											<Panel id="StatRow25" class="StatBranchRow">
+												<Panel class="StatBranchPip LeftBranchPip"/>
+												<Panel class="StatBranchPip RightBranchPip"/>
+											</Panel>
+											<Panel id="StatRow20" class="StatBranchRow RightBranchSelected">
+												<Panel class="StatBranchPip LeftBranchPip"/>
+												<Panel class="StatBranchPip RightBranchPip"/>
+											</Panel>
+											<Panel id="StatRow15" class="StatBranchRow LeftBranchSelected">
+												<Panel class="StatBranchPip LeftBranchPip"/>
+												<Panel class="StatBranchPip RightBranchPip"/>
+											</Panel>
+											<Panel id="StatRow10" class="StatBranchRow LeftBranchSelected">
+												<Panel class="StatBranchPip LeftBranchPip"/>
+												<Panel class="StatBranchPip RightBranchPip"/>
+											</Panel>
+										</Panel>							
+										<Panel class="LevelProgress">
+											<ProgressBar id="StatLevelProgressBar" min="0" max="25" value="20" />
+										</Panel>
+										<Panel class="LevelProgressBlur">
+											<ProgressBar id="StatLevelProgressBarBlur" min="0" max="25" value="20" />
+										</Panel>
+									</Panel>
+								</Panel>
+							</Panel>
+                        	<DOTAAbilityList id="abilities" hittest="false"/>
+                        </Panel>
                         <Panel class="AbilityInsetShadowRight"/>
 						<ProgressBar id="MorphProgress" min="0" max="1" value="0.5" />
 						<DOTAUnitEconItem id="econ_item"/>

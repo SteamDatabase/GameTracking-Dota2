@@ -9,6 +9,12 @@
 		{
 			$( "#SearchTextEntry" ).SetFocus();
 		}
+
+		function ClearSearch()
+		{
+			$.DispatchEvent( "DOTAShopCancelSearch" );
+			$( "#SearchTextEntry" ).text = "";
+		}
 	</script>
 
 	<DOTAHUDShop hittest="false" oncancel="DOTAShopHideShop()">
@@ -33,7 +39,32 @@
 			</Panel>
 		</Panel>
 
-		<Panel id="GridFlyout">
+		<Button id="GuidesButton" onactivate="ToggleStyle( 'GuideFlyout', 'HideGuide' ); ToggleStyle( 'GuidesButton', 'HideGuide' )">
+			<Panel id="GuidesButtonIcon"/>
+		</Button>
+
+		<Panel id="GuideFlyout">
+			<Panel id="ItemsArea">
+				<Panel id="ItemBuildContainer">
+					<DOTAHUDItemBuild id="ItemBuild" draggableShopItems="true"/>
+	            </Panel>
+			</Panel>
+		</Panel>
+
+		<Panel id="Main">
+
+		<DOTAShopItemCombines id="ItemCombines" showpurchasestate="true" itemsdraggable="true" />
+	
+		<Panel id="HeightLimiter" >
+            <Panel id="SearchContainer">
+				<Panel id="SearchBox">
+					<Panel id="ShopSearchIcon" onactivate="SetSearchFocus();" />
+					<DOTAHUDShopTextEntry id="SearchTextEntry" placeholder="#DOTA_Search" />
+					<Button id="ClearSearchButton" class="CloseButton" onactivate="ClearSearch();" />
+				</Panel>
+	            <DOTAHUDShopSearchResults id="SearchResults" />
+			</Panel>
+
 			<Panel id="titles">
 				<Label id="main_shop_title" text="#DOTA_SHOP_NAME_BASIC" hittest="false" />
 				<Label id="secret_title" text="#DOTA_SHOP_NAME_SECRET" hittest="false" />
@@ -44,15 +75,19 @@
 					<Button id="SideShopButton" onactivate="DOTAShopShowSideShopTab();" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_SHOP_NAME_SIDE );" />
 				</Panel>
 			</Panel>
-			<Panel id="GridFlyoutMainShop">
-				<Panel id="GridFlyoutMainTabs" hittest="false" > 
-					<RadioButton id="GridFlyoutBasicTab" onactivate="RemoveStyle( 'GridFlyout', 'GridFlyoutShowUpgradeItemsTab' )">
+
+			<Panel id="GridMainShop" class="ShowPopular">
+				<Panel id="GridMainTabs" hittest="false" > 
+					<RadioButton id="GridBasicTab" onactivate="RemoveStyle( 'GridMainShop', 'ShowUpgradeItemsTab' )">
 						<Label text="#DOTA_Shop_Category_Basics"/>
 					</RadioButton>
-					<RadioButton id="GridFlyoutModeUpgradesTab" onactivate="AddStyle( 'GridFlyout', 'GridFlyoutShowUpgradeItemsTab' )">
+					<RadioButton id="GridModeUpgradesTab" onactivate="AddStyle( 'GridMainShop', 'ShowUpgradeItemsTab' )">
 						<Label text="#DOTA_Shop_Category_Upgrades"/>
 					</RadioButton>
 				</Panel>
+				<Button id="PopularItems" onactivate="ToggleStyle( 'GridMainShop', 'ShowPopular' );" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_Shop_Tip_Popular );">
+					<Panel id="PopularItemsIcon"/>
+				</Button>
 				<Panel id="MainShopBasicHotkeys" hittest="false" hittestchildren="false">
 					<DOTAHotkey id="HotkeyConsumables" keybind="ShopTabConsumables" />
 					<DOTAHotkey id="HotkeyAttributes" keybind="ShopTabAttributes" />
@@ -68,28 +103,31 @@
 					<DOTAHotkey id="HotkeyArmor" keybind="ShopTabArmor" />
 					<DOTAHotkey id="HotkeyArtifacts" keybind="ShopTabArtifacts" />
 				</Panel>
-				<Panel id="GridFlyoutMainShopContents" hittest="false" >
-					<Panel id="GridFlyoutBasicItemsCategory" class="ShopItemsCategory" >
-						<Panel id="GridFlyoutBasicItems" class="ShopItemsColumns" />
+				<Panel id="GridMainShopContents" hittest="false" >
+					<Panel id="GridBasicItemsCategory" class="ShopItemsCategory" >
+						<Panel id="GridBasicItems" class="ShopItemsColumns" />
 					</Panel>
 
-					<Panel id="GridFlyoutUpgradesCategory" class="ShopItemsCategory">
-						<Panel id="GridFlyoutUpgradeItems" class="ShopItemsColumns" />
+					<Panel id="GridUpgradesCategory" class="ShopItemsCategory">
+						<Panel id="GridUpgradeItems" class="ShopItemsColumns" />
 					</Panel>
 				</Panel>
 			</Panel>
+
+			<DOTAHUDCommonItems id="CommonItems" />
+
 			<Panel id="SideShopHotkeys" hittest="false" hittestchildren="false">
 				<DOTAHotkey id="HotkeySide1" keybind="ShopTabSidePage1" />
 				<DOTAHotkey id="HotkeySide2" keybind="ShopTabSidePage2" />
 			</Panel>
-			<Panel id="GridFlyoutSideShop">
-				<Panel id="GridFlyoutSideShopItems" class="ShopItemsColumns" />
+			<Panel id="GridSideShop">
+				<Panel id="GridSideShopItems" class="ShopItemsColumns" />
 			</Panel>
 			<Panel id="SecretShopHotkeys" hittest="false" hittestchildren="false">
 				<DOTAHotkey id="HotkeySecret" keybind="ShopTabSecret" />
 			</Panel>
-			<Panel id="GridFlyoutSecretShop">
-				<Panel id="GridFlyoutSecretShopItems" class="ShopItemsColumns" />
+			<Panel id="GridSecretShop">
+				<Panel id="GridSecretShopItems" class="ShopItemsColumns" />
 			</Panel>
 			<Panel id="GridRowHotkeys" hittest="false" hittestchildren="false">
 				<DOTAHotkey keybind="ShopSlot1" />
@@ -108,34 +146,12 @@
 				<DOTAHotkey id="ShopSlot14" keybind="ShopSlot14" />
 			</Panel>
 		</Panel>
+		
 
-		<Panel id="Main">
-		<DOTAShopItemCombines id="ItemCombines" showpurchasestate="true" itemsdraggable="true" />
-
-		<Panel id="HeightLimiter" >
-            <Panel id="SearchContainer">
-				<Panel id="SearchBox">
-					<Panel id="ShopSearchIcon" onactivate="SetSearchFocus();" />
-					<DOTAHUDShopTextEntry id="SearchTextEntry" placeholder="#DOTA_Search" />
-					<Button id="ClearSearchButton" class="CloseButton" onactivate="DOTAShopCancelSearch()" />
-				</Panel>
-                <DOTAHUDShopSearchResults id="SearchResults" />
-			</Panel>
-
-			<Panel id="ItemsArea">
-				<Panel id="ItemBuildContainer">
-                    <Panel id="SearchShadow" />
-                    <DOTAHUDCommonItems id="CommonItems" />
-					<Panel id="ItemBuildSpacer" />
-					<DOTAHUDItemBuild id="ItemBuild" draggableShopItems="true" addCommonItems="false" />
-                </Panel>
-			</Panel>
-		</Panel>
-
-		<Panel id="header">
+		<!-- <Panel id="header">
 			<Label id="title" text="#DOTA_HUDShop" hittest="false" />
 			<Button id="GuidesButton" onactivate="DOTAHUDToggleGuideBrowser()" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_HUD_GuideBrowserTooltip );"/>
-		</Panel>
+		</Panel> -->
 		</Panel>
 	</DOTAHUDShop>
 </root>
