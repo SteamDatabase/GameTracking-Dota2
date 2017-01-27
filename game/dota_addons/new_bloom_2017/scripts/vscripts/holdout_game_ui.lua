@@ -170,6 +170,9 @@ function CHoldoutGameMode:_DisplayGameEnd()
 	metadataTable[ "round_number" ] = self._nRoundNumber
 	GameRules:SetEventMetadataCustomTable( metadataTable )
 	print( "metadata set")
+	if self._playerPointsData == nil then
+		self._playerPointsData = {}
+	end
 	self._playerPointsData['event_score'] = self._nRoundNumber
 	UpdateEventPoints( self._playerPointsData )
 	self:_ChoseExitGame()
