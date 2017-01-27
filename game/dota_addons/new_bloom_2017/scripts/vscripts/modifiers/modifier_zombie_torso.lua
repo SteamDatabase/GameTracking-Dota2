@@ -3,7 +3,11 @@ modifier_zombie_torso = class({})
 ------------------------------------------------------------------
 
 function modifier_zombie_torso:OnCreated( kv )
-	self.spawn_delay = self:GetAbility():GetSpecialValueFor( "spawn_delay" )
+	if IsServer() then
+		if self:GetAbility() ~= nil then
+			self.spawn_delay = self:GetAbility():GetSpecialValueFor( "spawn_delay" )
+		end	
+	end
 end
 
 ------------------------------------------------------------------

@@ -91,6 +91,13 @@ function modifier_dark_seer_wall_of_replica_nb2017:OnIntervalThink()
 			    			replica:AddNewModifier( self:GetCaster(), self:GetAbility(), "modifier_darkseer_wallofreplica_illusion", { duration = flDuration } )
 			    			replica:SetControllableByPlayer( self:GetCaster():GetPlayerID(), true )
 			    			replica:SetIdleAcquire( true )
+			    			FindClearSpaceForUnit( replica, replica:GetOrigin(), true )
+
+			    			local hAbility = replica:FindAbilityByName( "zombie_torso" )
+			    			if hAbility ~= nil then
+			    				replica:RemoveModifierByName( "modifier_zombie_torso" )
+			    				replica:RemoveAbility( "zombie_torso" )
+			    			end
 			    		end
 
 			    		local kv2 =
