@@ -172,7 +172,7 @@ function sniper_assassinate_dm2017:OnProjectileHit( hTarget, vLocation )
 							victim = hTarget,
 							attacker = self:GetCaster(),
 							ability = self,
-							damage = self:GetSpecialValueFor( "assassinate_damage") / 2,
+							damage = self:GetSpecialValueFor( "assassinate_damage") * 0.4,
 							damage_type = DAMAGE_TYPE_PURE,
 						}
 

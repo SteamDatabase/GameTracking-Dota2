@@ -197,6 +197,7 @@ function InvokeThink()
 				return 0.1
 			end
 
+			--[[
 			if CheckToInvoke( s_ForgedSpirit ) then
 				table.insert( s_ChangeSpellQueue, s_Quas )
 				table.insert( s_ChangeSpellQueue, s_Exort )
@@ -204,6 +205,7 @@ function InvokeThink()
 				table.insert( s_ChangeSpellQueue, s_Invoke )
 				return 0.1
 			end
+			]]
 
 			if CheckToInvoke( s_Meteor ) then
 				table.insert( s_ChangeSpellQueue, s_Exort )

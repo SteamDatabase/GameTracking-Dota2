@@ -27,45 +27,63 @@ function catapult_disembark:OnChannelFinish( bInterrupted )
 		if bInterrupted == false then
 			ParticleManager:DestroyParticle( self.nPreviewFX, true )
 
-			local creeps = Entities:FindAllByName( "npc_dota_creature_creep_melee" )
-			if #creeps >= 64 then
-				return
-			end
-
-			local number_of_creeps = self:GetSpecialValueFor( "number_of_creeps" )
-			for i=0,number_of_creeps do
-				local hCreep = CreateUnitByName( "npc_dota_creature_creep_melee", self:GetCaster():GetOrigin() + RandomVector( 175 ), true, self:GetCaster(), self:GetCaster(), self:GetCaster():GetTeamNumber() )
-				if hCreep ~= nil then
-					hCreep:SetOwner( self:GetCaster() )
-					hCreep:SetControllableByPlayer( self:GetCaster():GetPlayerOwnerID(), false )
-					hCreep:SetInitialGoalEntity( self:GetCaster():GetInitialGoalEntity() )
-					hCreep:SetDeathXP( 0 )
-					hCreep:SetMinimumGoldBounty( 0 )
-					hCreep:SetMaximumGoldBounty( 0 )
-				end
-			end
-
-			local meepos = Entities:FindAllByName( "npc_dota_creature_creep_melee" )
-			if #meepos >= 32 then
-				return
-			end
-			local number_of_meepos = self:GetSpecialValueFor( "number_of_meepos" )
-			for i=0,number_of_meepos do
-				local hMeepo = CreateUnitByName( "npc_dota_creature_meepo", self:GetCaster():GetOrigin() + RandomVector( 175 ), true, self:GetCaster(), self:GetCaster(), self:GetCaster():GetTeamNumber() )
-				if hMeepo ~= nil then
-					hMeepo:SetOwner( self:GetCaster() )
-					hMeepo:SetControllableByPlayer( self:GetCaster():GetPlayerOwnerID(), false )
-					hMeepo:SetInitialGoalEntity( self:GetCaster():GetInitialGoalEntity() )
-					hMeepo:SetDeathXP( 0 )
-					hMeepo:SetMinimumGoldBounty( 0 )
-					hMeepo:SetMaximumGoldBounty( 0 )
-
-					local hNet = hMeepo:FindAbilityByName( "creature_earthbind" )
-					if hNet ~= nil then
-						hNet:UpgradeAbility( true )
+			local creeps = {}
+			local meepos = {}
+			local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetOrigin(), self:GetCaster(), FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS, 0, false )
+			if #enemies > 0 then
+				for _,enemy in pairs(enemies) do
+					if enemy ~= nil and enemy:IsAlive() then
+						if enemy:GetUnitName() == "npc_dota_creature_creep_melee" then
+							table.insert( creeps, enemy )
+						end 
+						if enemy:GetUnitName() == "npc_dota_creature_meepo" then
+							table.insert( meepos, enemy )
+						end
 					end
 				end
 			end
+
+
+			if #creeps < 64 then
+				local number_of_creeps = self:GetSpecialValueFor( "number_of_creeps" )
+				local nCreepsToSpawn = math.min( number_of_creeps, 64 - #creeps )
+				print ( "We have " .. #creeps .. " creeps, spawning " .. nCreepsToSpawn )
+				for i=0,nCreepsToSpawn do
+					local hCreep = CreateUnitByName( "npc_dota_creature_creep_melee", self:GetCaster():GetOrigin() + RandomVector( 175 ), true, self:GetCaster(), self:GetCaster(), self:GetCaster():GetTeamNumber() )
+					if hCreep ~= nil then
+						hCreep:SetOwner( self:GetCaster() )
+						hCreep:SetControllableByPlayer( self:GetCaster():GetPlayerOwnerID(), false )
+						hCreep:SetInitialGoalEntity( self:GetCaster():GetInitialGoalEntity() )
+						hCreep:SetDeathXP( 0 )
+						hCreep:SetMinimumGoldBounty( 0 )
+						hCreep:SetMaximumGoldBounty( 0 )
+					end
+				end
+			end
+
+
+			if #meepos < 32 then
+				local number_of_meepos = self:GetSpecialValueFor( "number_of_meepos" )
+				local nMeeposToSpawn = math.min( number_of_meepos, 32 - #meepos )
+				print ( "We have " .. #meepos .. " meepos, spawning " .. nMeeposToSpawn )
+				for i=0,nMeeposToSpawn do
+					local hMeepo = CreateUnitByName( "npc_dota_creature_meepo", self:GetCaster():GetOrigin() + RandomVector( 175 ), true, self:GetCaster(), self:GetCaster(), self:GetCaster():GetTeamNumber() )
+					if hMeepo ~= nil then
+						hMeepo:SetOwner( self:GetCaster() )
+						hMeepo:SetControllableByPlayer( self:GetCaster():GetPlayerOwnerID(), false )
+						hMeepo:SetInitialGoalEntity( self:GetCaster():GetInitialGoalEntity() )
+						hMeepo:SetDeathXP( 0 )
+						hMeepo:SetMinimumGoldBounty( 0 )
+						hMeepo:SetMaximumGoldBounty( 0 )
+
+						local hNet = hMeepo:FindAbilityByName( "creature_earthbind" )
+						if hNet ~= nil then
+							hNet:UpgradeAbility( true )
+						end
+					end
+				end
+			end
+			
 		end
 	end
 end

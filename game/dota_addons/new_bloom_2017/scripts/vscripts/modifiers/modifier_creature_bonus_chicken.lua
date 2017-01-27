@@ -82,7 +82,7 @@ function modifier_creature_bonus_chicken:OnTakeDamage( params )
 				local newItem = CreateItem( "item_bag_of_gold", nil, nil )
 				local nGoldAmount = 100
 				if self:GetParent():GetUnitName() == "npc_dota_creature_bonus_chicken2" then
-					nGoldAmount = 50
+					nGoldAmount = 35
 				end
 				newItem:SetPurchaseTime( 0 )
 				newItem:SetCurrentCharges( nGoldAmount )

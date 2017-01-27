@@ -648,7 +648,7 @@ function modifier_invoker_dark_moon_ghost_walk:WexPhase_Tornados( enemies )
 		if enemy ~= nil then
 			local hTornado = self:GetCaster():FindAbilityByName( "invoker_tornado" )						
 			if hTornado ~= nil then	
-				local vRandomPosAroundCaster = self:GetCaster():GetAbsOrigin() + Vector( RandomInt( -2000, 2000 ), RandomInt( -2000, 2000 ), 0 )
+				local vRandomPosAroundCaster = self:GetCaster():GetAbsOrigin() + Vector( RandomInt( -2500, 2500 ), RandomInt( -2500, 2500 ), 0 )
 				local vDir = enemy:GetOrigin() - vRandomPosAroundCaster
 				vDir.z = 0
 				vDir = vDir:Normalized()
@@ -658,10 +658,10 @@ function modifier_invoker_dark_moon_ghost_walk:WexPhase_Tornados( enemies )
 					Ability = hTornado,
 					Source = self:GetCaster(),
 					vSpawnOrigin = vRandomPosAroundCaster,
-					fDistance = 4200,
+					fDistance = 4500,
 					vVelocity = vDir * 500,
-					fStartRadius = 200,
-					fEndRadius = 200,
+					fStartRadius = 180,
+					fEndRadius = 180,
 					iUnitTargetTeam = DOTA_UNIT_TARGET_TEAM_ENEMY,
 					iUnitTargetType = DOTA_UNIT_TARGET_HERO,
 					iUnitTargetFlags = DOTA_UNIT_TARGET_FLAG_NONE,
