@@ -668,6 +668,7 @@ function CHoldoutGameMode:OnEntityKilled( event )
 	end
 
 	if killedUnit:GetUnitName() == "npc_dota_creature_boss_invoker" then
+		self:_AwardPoints( self._currentRound:GetPointReward() )
 		self:_Victory()
 	end
 end

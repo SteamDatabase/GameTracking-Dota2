@@ -251,4 +251,5 @@ function CHoldoutGameMode:_AwardPoints( nPointAmount )
 	end
 
 	self._nAccumulatedPoints = self._nAccumulatedPoints + nPointAmount
+	print ( "Awarded " .. nPointAmount )
 end
