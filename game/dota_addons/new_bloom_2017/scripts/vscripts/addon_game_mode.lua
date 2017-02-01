@@ -43,6 +43,15 @@ function Precache( context )
 	PrecacheResource( "particle", "particles/units/heroes/hero_bloodseeker/bloodseeker_vision.vpcf", context )
 	PrecacheResource( "particle", "particles/units/heroes/hero_bloodseeker/bloodseeker_thirst_owner.vpcf", context )
 	PrecacheResource( "particle", "particles/units/heroes/hero_gyrocopter/gyro_calldown_marker.vpcf", context )
+	PrecacheResource( "particle", "particles/frostivus_gameplay/drow_linear_arrow.vpcf", context ) 
+	PrecacheResource( "particle", "particles/frostivus_gameplay/drow_linear_frost_arrow.vpcf", context ) 
+	PrecacheResource( "particle", "particles/frostivus_gameplay/legion_gladiators_ring.vpcf", context ) 
+	PrecacheResource( "particle", "particles/frostivus_herofx/juggernaut_omnislash_ascension.vpcf", context ) 
+	PrecacheResource( "particle", "particles/frostivus_gameplay/holdout_juggernaut_omnislash_image.vpcf", context ) 
+	PrecacheResource( "particle", "particles/frostivus_herofx/juggernaut_fs_omnislash_slashers.vpcf", context ) 
+	PrecacheResource( "particle", "particles/frostivus_herofx/juggernaut_fs_omnislash_tgt.vpcf", context )
+
+	
 
 	PrecacheResource( "soundfile", "soundevents/game_sounds_new_bloom_2017.vsndevts", context )
 	PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_creeps.vsndevts", context )

@@ -2,6 +2,12 @@ catapult_disembark = class({})
 
 --------------------------------------------------------------------------------
 
+function catapult_disembark:IsStealable()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function catapult_disembark:OnAbilityPhaseStart()
 	if IsServer() then
 		self.nPreviewFX = ParticleManager:CreateParticle( "particles/dark_moon/darkmoon_creep_warning.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster() )

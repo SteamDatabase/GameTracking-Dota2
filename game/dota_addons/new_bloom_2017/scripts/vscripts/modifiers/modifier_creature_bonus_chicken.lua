@@ -93,11 +93,10 @@ function modifier_creature_bonus_chicken:OnTakeDamage( params )
 
 				self.flAccumDamage = self.flAccumDamage - 100
 				self.nBagsDropped = self.nBagsDropped + 1
-			end
-	
-			self.total_gold = self.total_gold - 100
-			if self.total_gold <= 0 then
-				self:TeleportOut()
+				self.total_gold = self.total_gold - 100
+				if self.total_gold <= 0 then
+					self:TeleportOut()
+				end
 			end
 		end
 	end

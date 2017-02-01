@@ -98,7 +98,15 @@ function modifier_dark_seer_wall_of_replica_nb2017:OnIntervalThink()
 			    				replica:RemoveModifierByName( "modifier_zombie_torso" )
 			    				replica:RemoveAbility( "zombie_torso" )
 			    			end
-			    		end
+
+			    			for i = 0, DOTA_ITEM_MAX - 1 do
+								local item = replica:GetItemInSlot( i )
+								if item ~= nil then
+									item:SetSellable( false )
+									item:SetDroppable( false )
+				    			end
+				    		end
+				    	end
 
 			    		local kv2 =
 			    		{
