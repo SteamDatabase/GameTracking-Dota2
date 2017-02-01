@@ -424,7 +424,9 @@ function CHoldoutGameMode:_RefreshPlayers()
 			if PlayerResource:HasSelectedHero( nPlayerID ) then
 				local hero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 				if not hero:IsAlive() then
-					hero:RespawnUnit()
+					local vLocation = hero:GetOrigin()
+					hero:RespawnHero( false, false, false )
+					FindClearSpaceForUnit( hero, vLocation, true )
 				end
 				hero:SetHealth( hero:GetMaxHealth() )
 				hero:SetMana( hero:GetMaxMana() )
