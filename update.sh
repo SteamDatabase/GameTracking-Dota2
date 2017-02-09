@@ -9,6 +9,7 @@ ProcessDepot ".dylib"
 ProcessVPK
 
 mono ../.support/SourceDecompiler/Decompiler.exe -i "game/dota/pak01_dir.vpk" -o "game/dota/pak01_dir/"
+mono ../.support/SourceDecompiler/Decompiler.exe -i "game/core/pak01_dir.vpk" -o "game/core/pak01_dir/"
 
 while IFS= read -r -d '' file
 do
