@@ -73,6 +73,9 @@
  #GameUI_Disconnect_SnapshotError
  #GameUI_Disconnect_SoundsMessage
  #GameUI_Disconnect_SteamIDBanned
+ #GameUI_ServerRejectBadChallenge
+ #Valve_Reject_Connect_From_Lobby
+ #Valve_Reject_Reserved_For_Lobby
  %short cat(%short) schematype(%short)
  %short=%double
  %short=%llu
@@ -86,11 +89,13 @@
  0@@@
  = { <proto text format> }". To set fields within it, use syntax like "
  == %short
+ A9E(unsigned short
  CMsgSteamDatagramDataCenterState
  CMsgSteamDatagramRouterPingReply
  CNETMsg_SpawnGroup_LoadCompleted
  CSVCMsg_GameSessionConfiguration
  NETWORK_DISCONNECT_CLIENT_NO_MAP
+ NETWORK_DISCONNECT_REJECT_BANNED
  NETWORK_DISCONNECT_SNAPSHOTERROR
  NETWORK_DISCONNECT_STEAM_DROPPED
  NetMessageSplitscreenUserChanged
@@ -141,9 +146,12 @@
 !#GameUI_Disconnect_SteamDeny_Misc
 !#GameUI_Disconnect_SteamOwnership
 !#GameUI_Disconnect_TempEntMessage
+!#GameUI_ServerRejectFailedChannel
+!CMsgSteamSockets_UDP_NoConnection
 !CNETMsg_SpawnGroup_ManifestUpdate
 !NETWORK_DISCONNECT_HLTVRESTRICTED
 !NETWORK_DISCONNECT_LOOPDEACTIVATE
+!NETWORK_DISCONNECT_REJECT_NOLOBBY
 !eQueryCvarValueStatus_ValueIntact
 !ffff.
 !fffff.
@@ -190,6 +198,7 @@
 " which is.
 "#GameUI_Disconnect_DeltaEntMessage
 "#GameUI_Disconnect_HLTVUnavailable
+"#GameUI_ServerRejectInvalidCertLen
 "$0" does not declare $1 as an extension number.
 ") is not compatible with this reflection object (which is for type "
 ") to start from the outermost scope.
@@ -208,6 +217,7 @@
 "0x" must be followed by hex digits.
 "CMsgSteamDatagramConnectionQuality
 "CMsgSteamDatagramLinkLifetimeStats
+"CMsgSteamSockets_UDP_ConnectReply1
 "CNETMsg_SpawnGroup_SetCreationTick
 "MutableRawRepeatedField"
 "NETWORK_DISCONNECT_HLTVUNAVAILABLE
@@ -219,6 +229,7 @@
 "eQueryCvarValueStatus_CvarNotFound
 "ffff.
 "host_computationtime_std_deviation
+"k_ESteamNetworkingUDPMsg_ConnectOK
 "long double" must be followed by exponent.
 ##GameUI_Disconnect_BadRelayPassword
 ##GameUI_Disconnect_ReliableOverflow
@@ -251,6 +262,16 @@
 #GameUI_Disconnect_TimedOut
 #GameUI_Disconnect_User
 #GameUI_Disconnect_UserCmd
+#GameUI_ServerAuthDisabled
+#GameUI_ServerCDKeyAuthInvalid
+#GameUI_ServerNoLobby
+#GameUI_ServerRejectBadPassword
+#GameUI_ServerRejectBanned:E
+#GameUI_ServerRejectLANRestrict
+#GameUI_ServerRejectNewProtocol
+#GameUI_ServerRejectOldProtocol
+#GameUI_ServerRejectServerFull
+#GameUI_ServerRejectSteam
 #GameUI_ServerRequireSteams
 #NETWORK_DISCONNECT_BADRELAYPASSWORD
 #NETWORK_DISCONNECT_REJECTED_BY_GAME
@@ -258,6 +279,9 @@
 #NETWORK_DISCONNECT_SNAPSHOTOVERFLOW
 #NETWORK_DISCONNECT_TICKMSG_OVERFLOW
 #SPAWN_GROUP_LOAD_ENTITIES_FROM_SAVE
+#Valve_Reject_Background_Map
+#Valve_Reject_Hidden_Game
+#Valve_Reject_Single_Player
 #eQueryCvarValueStatus_CvarProtected
 #fff.
 #k_ESteamDatagramMsg_RouterPingReply
@@ -276,6 +300,9 @@ $0enum $1 {
 $0option $1;
 $@fffff.
 $A;\$
+$CMsgSteamSockets_UDP_ConnectRequest1
+$CMsgSteamSockets_UDP_ConnectRequest2
+$NETWORK_DISCONNECT_REJECT_SERVERFULL
 $NETWORK_DISCONNECT_STEAM_AUTHINVALID
 $NETWORK_DISCONNECT_STEAM_VACBANSTATE
 $ffff.
@@ -296,9 +323,11 @@ $ffff.
 %#GameUI_Disconnect_ConnectionTimedout
 %#GameUI_Disconnect_CreateServerFailed
 %#GameUI_Disconnect_ReplayIncompatible
-%#GameUI_Disconnect_ServerIncompatible:E
+%#GameUI_Disconnect_ServerIncompatible
 %#GameUI_Disconnect_ServerInfoOverflow
 %#GameUI_Disconnect_StringTableMessage
+%#GameUI_ServerRejectInvalidConnection
+%#GameUI_ServerReject_InvalidKeyLength
 %12.12s %21.21s[%double]
 %20.20s 
 %50.50s %50.50s offset %5u %short
@@ -306,8 +335,14 @@ $ffff.
 %60.60s %6.6s %15.15s %5.5s %10.10s
 %60.60s %6.6s %15.15s %5d %10d 
 %CMsgSteamDatagramGameServerAuthTicket
+%CMsgSteamSockets_UDP_ConnectionClosed
 %NETWORK_DISCONNECT_CONNECTION_FAILURE
 %NETWORK_DISCONNECT_DISCONNECT_BY_USER
+%NETWORK_DISCONNECT_REJECT_BADPASSWORD
+%NETWORK_DISCONNECT_REJECT_HIDDEN_GAME
+%NETWORK_DISCONNECT_REJECT_LANRESTRICT
+%NETWORK_DISCONNECT_REJECT_NEWPROTOCOL
+%NETWORK_DISCONNECT_REJECT_OLDPROTOCOL
 %NETWORK_DISCONNECT_SOUNDSMSG_OVERFLOW
 %[0-9]-%[0-9]
 %[^-]-%short
@@ -332,6 +367,7 @@ $ffff.
 %i.%i.%i.%int:%int
 %int %int %int %int
 %k_ESteamDatagramMsg_RouterPingRequest
+%k_ESteamNetworkingUDPMsg_NoConnection
 %s.%short
 %s0x%p %short Ignoring %short offset %u, storing in 0x%p
 %s0x%p %short Initializing
@@ -520,16 +556,19 @@ $ffff.
 &#GameUI_Disconnect_InvalidMessageError
 &#GameUI_Disconnect_NoPeerGroupHandlers
 &#GameUI_Disconnect_PureServer_Mismatch
+&#GameUI_ServerRejectInvalidReservation
 &CMsgSteamDatagramClientPingSampleReply
 &CMsgSteamDatagramClientSwitchedPrimary
 &NETWORK_DISCONNECT_BAD_SERVER_PASSWORD
 &NETWORK_DISCONNECT_MESSAGE_PARSE_ERROR
 &NETWORK_DISCONNECT_PURESERVER_MISMATCH
+&NETWORK_DISCONNECT_REJECT_BADCHALLENGE
 &NETWORK_DISCONNECT_REPLAY_INCOMPATIBLE
 &NETWORK_DISCONNECT_SERVERINFO_OVERFLOW
 &NETWORK_DISCONNECT_SERVER_INCOMPATIBLE
 &NETWORK_DISCONNECT_STEAM_AUTHCANCELLED
 &NETWORK_DISCONNECT_TEMPENTMSG_OVERFLOW
+&YA1H
 &YA1L
 &fff.
 &fffff.
@@ -537,8 +576,10 @@ $ffff.
 &k_ESteamDatagramMsg_DataRouterToClient
 &k_ESteamDatagramMsg_DataRouterToServer
 &k_ESteamDatagramMsg_DataServerToRouter
+&k_ESteamNetworkingUDPMsg_ConnectReply1
 '#GameUI_Disconnect_BadSpectatorPassword
 '#GameUI_Disconnect_DifferentClassTables
+'#GameUI_ServerRejectInvalidSteamCertLen
 ':' not expected inside an array.  ('[]' used when '{}' was intended?)
 'CMsgSteamDatagramLinkInstantaneousStats
 'NETWORK_DISCONNECT_BADSPECTATORPASSWORD
@@ -547,6 +588,8 @@ $ffff.
 'NETWORK_DISCONNECT_DELTAENTMSG_OVERFLOW
 'NETWORK_DISCONNECT_DIFFERENTCLASSTABLES
 'NETWORK_DISCONNECT_DISCONNECT_BY_SERVER
+'NETWORK_DISCONNECT_REJECT_FAILEDCHANNEL
+'NETWORK_DISCONNECT_REJECT_SINGLE_PLAYER
 'SPAWN_GROUP_CREATE_CLIENT_ONLY_ENTITIES
 'false'
 'ffff.
@@ -563,6 +606,8 @@ $ffff.
 (IcD$0A
 (Message Info)
 (NETWORK_DISCONNECT_INVALID_MESSAGE_ERROR
+(NETWORK_DISCONNECT_REJECT_BACKGROUND_MAP
+(NETWORK_DISCONNECT_REJECT_INVALIDCERTLEN
 (NETWORK_DISCONNECT_SERVER_REQUIRES_STEAM
 (NETWORK_DISCONNECT_STEAM_AUTHALREADYUSED
 (NULL)
@@ -572,6 +617,8 @@ $ffff.
 (ffff.
 (fffff.
 (ffffff.
+(k_ESteamNetworkingUDPMsg_ConnectRequest1
+(k_ESteamNetworkingUDPMsg_ConnectRequest2
 (merge 
 (proc)
 (root)
@@ -588,8 +635,10 @@ $ffff.
 )NETWORK_DISCONNECT_REQUEST_HOSTSTATE_IDLE
 )k_ESteamDatagramMsg_ClientPingSampleReply
 )k_ESteamDatagramMsg_GameserverPingRequest
+)k_ESteamNetworkingUDPMsg_ConnectionClosed
 *NETWORK_DISCONNECT_CLIENT_CONSISTENCY_FAIL
 *NETWORK_DISCONNECT_LOOP_LEVELLOAD_ACTIVATE
+*NETWORK_DISCONNECT_REJECT_INVALIDKEYLENGTH
 *NETWORK_DISCONNECT_STRINGTABLEMSG_OVERFLOW
 *fff.
 *ffffff.
@@ -597,6 +646,7 @@ $ffff.
 +C0~'D
 +NETWORK_DISCONNECT_CLIENT_UNABLE_TO_CRC_MAP
 +NETWORK_DISCONNECT_CONNECT_REQUEST_TIMEDOUT
++NETWORK_DISCONNECT_REJECT_INVALIDCONNECTION
 +NETWORK_DISCONNECT_STEAM_VAC_CHECK_TIMEDOUT
 +fff.
 +ffff.
@@ -607,6 +657,10 @@ $ffff.
 , split packet payload will probably be dropped
 ,#GameUI_Disconnect_Splitpacket_Send_Overflow
 ,@u(1
+,NETWORK_DISCONNECT_REJECT_CONNECT_FROM_LOBBY
+,NETWORK_DISCONNECT_REJECT_INVALIDRESERVATION
+,NETWORK_DISCONNECT_REJECT_RESERVED_FOR_LOBBY
+,NETWORK_DISCONNECT_REJECT_SERVERAUTHDISABLED
 ,NETWORK_DISCONNECT_SPLITPACKET_SEND_OVERFLOW
 ,NETWORK_DISCONNECT_STEAM_DENY_BAD_ANTI_CHEAT
 ,NETWORK_DISCONNECT_STEAM_LOGGED_IN_ELSEWHERE
@@ -634,6 +688,7 @@ $ffff.
 ->error
 -CMsgSteamDatagramGameserverSessionEstablished
 -NETWORK_DISCONNECT_DIRECT_CONNECT_RESERVATION
+-NETWORK_DISCONNECT_REJECT_INVALIDSTEAMCERTLEN
 -NoQueuedPacketThread
 -ffff.
 -ffffff.
@@ -660,7 +715,7 @@ $ffff.
 .CMsgQAngle"4
 .CMsgServerNetworkStats.Player
 .CMsgServerNetworkStats.Port
-.CMsgServerPeer"@
+.CMsgServerPeer"/
 .CMsgSteamDatagramConnectionStatsClientToRouter
 .CMsgSteamDatagramConnectionStatsRouterToClient
 .CMsgSteamDatagramConnectionStatsRouterToServer
@@ -748,6 +803,8 @@ $ffff.
 0A;void`u
 0A;vxu
 0D;{ |
+0E;__float128 L
+0NETWORK_DISCONNECT_REJECT_SERVERCDKEYAUTHINVALID
 0Pp@   
 0[A\A^A_]
 0[A^]
@@ -788,12 +845,14 @@ $ffff.
 4B;unsigned short;
 5A;t$0u
 5A;t$pu
+6fff.
 8[A\A]A^A_]
 8[A^A_]
 8ffff.
+8fffff.
 9W(}!H
 9ffff.
-9t;0u
+9|10u
 : Protocol message serialized to signed char size different from what was originally expected.  Perhaps it was modified by another thread during serialization?
 : Tried to copy from signed char message with signed char different type. to: 
 : Tried to merge from signed char message with signed char different type.  to: 
@@ -811,7 +870,8 @@ $ffff.
 ;L9'u
 ;L97u
 ;S(u-I
-;VX|!I
+;S`u`
+;VX|"E
 ;Z(}'H
 ;[A^]
 ;_Hu-
@@ -1102,6 +1162,7 @@ $ffff.
 @unsigned short(HcO0H
 @unsigned short+Hc{0H
 @unsigned short+Hc{PH
+@unsigned short+Ic~(H
 @unsigned short+Ic~0H
 @void std::__1::__sort<std::__1::__less<unsigned char, unsigned char>&, unsigned char*>(unsigned char*, unsigned char*, std::__1::__less<unsigned char, unsigned char>&)
 @void std::__1::__sort<std::__1::__less<unsigned short, unsigned short>&, unsigned short*>(unsigned short*, unsigned short*, std::__1::__less<unsigned short, unsigned short>&)
@@ -1114,12 +1175,13 @@ A+F`~
 A+void(~	I
 A+vp~
 A,;A0~
-A9D$,}
 A9E<r0
 A9F8}5I
 A9\$0
+A9_<|VI
 A;D$(
 A;D$<
+A;D$`
 A;D$x
 A;E(u
 A;F |
@@ -1130,9 +1192,9 @@ A;G ~
 A;G ~|A
 A;G0}
 A;G8}
-A;GDt
 A;H(t.M
 A;L$x
+A;M(D
 A;M(L
 A;M(u
 A;MxA
@@ -1183,7 +1245,7 @@ A;wchar_t@u
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %double!
 ARARAp
 ARBR0
-ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRATAp
+ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRATAp
 ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRB`]Ap
 ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRB`
 ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBWAp
@@ -1217,6 +1279,7 @@ AWAVAUATSPL
 AWAVAUATSPM
 AWAVS
 AWAVSA
+AWAVSD
 AWAVSH
 AWAVSL
 AWAVSP
@@ -1260,8 +1323,6 @@ Atomic
 Attempt to compress out of band voice payloads (360 only).
 Attempting connection to service in data center '%short'
 Attempting to connect via steam datagram using unsigned ticket, as per steamdatagram_client_debugticket_address
-Attempting to negotiate session.
-Attempting to restore session.
 Average Backing Raw Paths         :  %8.3f
 Average Data Bytes                :  %8.3f bytes
 Average Memory Usage Per Entity   :  %8.3f bytes
@@ -1287,16 +1348,18 @@ BuildDeltaProperties fieldDataBuf
 Builtin
 Byte size calculation and serialization were inconsistent.  This may indicate signed char bug in protocol buffers or it may be caused by concurrent modification of the message.
 C ;B 
-C A;F ~
+C ;G ~
 C [A^]
 C#@t8L
 C$;CXuSL
+C$[A^]
 C$t.I
 C(A9G
 C(A;F(
 C(A;F(uVA
 C(H;B(D
 C(IcO,I
+C+t4 ~
 C,A;F,uH
 C,[A^]
 C0+K,9
@@ -1305,10 +1368,7 @@ C0HcK
 C0[A\A^A_]
 C8A;F8
 C;<u
-C;D% u
-C;D5 
-C;\'(
-C;\/ 
+C;D> 
 C<;C,
 C@H+X0H
 C@L+X0L
@@ -1350,7 +1410,7 @@ CCLCMsg_SplitPlayerConnect
 CCLCMsg_SplitPlayerDisconnect
 CCLCMsg_VoiceData
 CCallResult<CNetworkSystem, HTTPRequestCompleted_t>
-CCallResult<ConfigFetch, HTTPRequestCompleted_t>
+CCallResult<SteamDatagramTransport::ConfigFetch, HTTPRequestCompleted_t>
 CCallback<CNetworkSystem, P2PSessionRequest_t, false>
 CCallback<CNetworkSystem, P2PSessionRequest_t, true>
 CCallbackBase
@@ -1548,6 +1608,12 @@ CMsgSteamDatagramNoSession
 CMsgSteamDatagramRouterHealth
 CMsgSteamDatagramRouterHealth_DataCenter
 CMsgSteamDatagramRouterPingReply
+CMsgSteamSockets_UDP_ConnectOK
+CMsgSteamSockets_UDP_ConnectReply1
+CMsgSteamSockets_UDP_ConnectRequest1
+CMsgSteamSockets_UDP_ConnectRequest2
+CMsgSteamSockets_UDP_ConnectionClosed
+CMsgSteamSockets_UDP_NoConnection
 CMsgVector
 CMsgVector2D
 CMsgVoiceAudio
@@ -1785,8 +1851,6 @@ CVProfNode::ExitScope()
 CVProfNode::GetSubNode(char const*, int, char const*, int)
 Can'unsigned short 
 Can'unsigned short EnableLoopbackBetweenSockets between socket %double and %double, not enough slots
-Can'unsigned short crate client.  %short
-Can'unsigned short delay send signed char packet larger than maxroutable size %double/%double
 Can'unsigned short get here.
 Can'unsigned short get here: failed to get default value as string
 Can'unsigned short make WebAPI flood report; CreateHTTPRequest failed
@@ -1797,6 +1861,7 @@ Can'unsigned short make WebAPI flood report; request already active?
 Cannot allocate buffer larger than kint32max for 
 Cannot connect to proxied gameserver %short via steam datagram.  Library has not been initialized yet (or it failed).
 Cannot connect to proxied gameserver %short via steam datagram.  We don'unsigned short have an authorization ticket!
+Cannot create shared steam datagram socket.  %short
 Cannot find service ID in network.  We don'unsigned short know what data center we'long double restrict trying to connect to!
 Cannot listen on steam datagram.  No SteamGameServerUtils!
 Cannot register change callback priorities at this stage! Must do it earlier!
@@ -1807,6 +1872,7 @@ ChangeAccessorFieldPathIndex_t
 Check your Internet connection, and make sure your browser can access the following URL:
 ClearField
 Client Messages
+ClientPingSampleRequest
 Cluster %short has invalid router address '%short'
 Cluster '%short' has signed char selection penalty of %dms for load balancing purposes.  (As per %short).
 Cluster '%short' no longer has signed char selection penalty for load balancing purposes.  (As per %short).
@@ -1854,17 +1920,24 @@ D$@L+`0I
 D$JIc
 D$PIc
 D$XA9
+D$`A9
 D$`Lc
 D$lIcD$h
 D$pD9h0t\I
 D$pIc
+D, fA
 D9Q(}
+D9k0u
 D9sXu
 D9t:0t
+D;-Dx
+D;-float	
+D;=[~
 D;H(|
 D;I(|9L9
 D;`,|
 D;`8|
+D;cDt
 D;cH|
 D;iX}
 D;k,|
@@ -1889,6 +1962,8 @@ Data center '%short' has missing or invalid 'address_ranges'
 Data contains revision %double, not newer than current revision %double; ignoring.
 DataCenter
 DataRouterToClient
+DataRouterToClientV1
+DataRouterToClientV2
 DebugTextureInfo001
 Decals
 Declared Class
@@ -1919,7 +1994,6 @@ E9w0M
 E9|$$
 E9|$`~\
 E;.|kH
-E;L$(|EA
 E;__float128 A
 E;ex|
 E;f0A
@@ -1951,6 +2025,7 @@ ERROR! SendData reliable data too big (%int)
 ERROR: Field %short::%short unable to deduce unserializer for type (%short)!
 ESplitScreenMessageType
 ESteamDatagramMsgID
+ESteamNetworkingUDPMsgID
 E\IcEX
 E`H9B
 EconItemToolModel_001
@@ -2015,11 +2090,11 @@ F(@t3H
 F(L;long double
 F(L;unsigned long
 F,IcF(
-F09C0|
 F0D9k(
 F0Ic^
 F3,0I
 F4IcF0
+F9d00L
 F<IcF8
 F@H+F8H
 F@L+p0I
@@ -2030,12 +2105,13 @@ FDIcF@
 FLIcFH
 F\IcFX
 Failed
-Failed to allocate client to take ping measurements.  %short
 Failed to bind socket.  Error code 0x%08X.
 Failed to communicate with routing cluster '%short'.
 Failed to create UDP socket to talk to %s.  %short
 Failed to fetch network config from CDN.  Steam datagram service will not be available!
 Failed to fetch network config from CDN.  Using local network config, which might be out of date.
+Failed to init steam datagram shared thread/resources.  %short
+Failed to initialize to take ping measurements.  %short
 Failed to install message handler for message %short in channel %short!
 Failed to save steam datagram ticket cache.  We might not be able to reconnect if we crash and cannot ask for another ticket!
 Failed to set socket nonblocking mode.  Error code 0x%08x.
@@ -2108,6 +2184,7 @@ G [A\A^A_]
 G ffff.
 G(HcH
 G(L;unsigned long
+G09C0|
 G0H;F0t
 G8H	p(]
 G8I;G@
@@ -2118,6 +2195,7 @@ GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameUIService_001
 GameserverPingReply
+GameserverSessionEstablished
 GatherAllFieldOffsets_R:  local offset of %short::%short %u is too large (%u max)
 Generated new connection id %X for use with remote system "%short"
 Generic
@@ -2150,6 +2228,7 @@ Got network config from CDN.  %short
 H	p(]
 H	wchar_t(]
 H H;9u)H
+H restrict;]
 H!wchar_t(]
 H+A0H
 H+A0I
@@ -2158,7 +2237,6 @@ H+A@H
 H+B0H
 H+B@H
 H+C@H
-H+CxH=
 H+F0H
 H+F@H
 H+H0H
@@ -2198,29 +2276,31 @@ H__Znam
 H__Znwm
 HammerMapLoader001
 HasField
+Hc0Hi
 Hc>Hi
 Hc@XHi
 Hc@pH
+Hc@pI
 HcC H
 HcC(I9
 HcCPH
 HcCdH=
 HcG,H
 HcG0H
-HcN(M
 HcN01
 HcO(H
 HcO,I
 HcO8H
+HcOlH
 HcQ8H
 HcRXH
 HcW<H
 HcXHH
 Hc_(H
+Hcs H
 Hcw(H
 HelpSystem_001
 Hex and octal numbers must be integers.
-Hffff.
 Hit end of input before closing quote (%char)
 Hit end of line before closing quote (%char)
 Host game server ip
@@ -2263,7 +2343,6 @@ ISchemaManipulator
 ISteamDatagramTransportGameserver
 ISteamNetworkingUtils
 IVConCommDataReceived
-Ic4$H
 IcD$(A
 IcD$(I9
 IcD$,H
@@ -2284,6 +2363,7 @@ IcF,L
 IcF0A
 IcF8A
 IcF@A
+IcF@H
 IcFHA
 IcFPH
 IcFPI
@@ -2299,6 +2379,7 @@ IcL$(H9
 IcL$(L
 IcL$,H
 IcL$,L
+IcM(L
 IcN(I
 IcN,L
 IcO(H9
@@ -2314,6 +2395,7 @@ Ic_ M
 Ict$(L
 Icu(H
 Icu4H
+Icv H
 Icw(L
 Ic|$(L
 Ic|$<H
@@ -2337,6 +2419,8 @@ Ignoring request by %short to migrate to %s.  Target address appears to be in si
 Ignoring request by %short to migrate to %s.  We already know that relay is shutting down very soon.
 Ignoring request by %short to migrate to %s.  We don'unsigned short recognize that target address in the network config.
 Ignoring request by %short to migrate to %s.  We had problems communicating with that relay %.1fs ago.
+Ignoring stray packet from %short received on port %d.  Should only be talking to %short on that port.
+Ignoring unsolicited/spoofed/late packet from %s.
 Ignoring/abandoning migration request.  Current primary %short is requesting to send us to %short, but our migration target is %short?
 Ignoring/abandoning migration request.  Current primary %short no longer has signed char request active
 Ignoring/abandoning migration request.  SDR client deactivated, or no primary selected
@@ -2392,6 +2476,7 @@ K A9L$ |
 K A9M |
 K [A^]
 K(Ict$,L
+K(L;long double
 K([A^]
 K8;C<
 K8;C<}...
@@ -2403,6 +2488,7 @@ K8;C<}}
 KHIcT$,L
 KH[A^]
 KcD'0H
+KcD'0L
 KcD,0H
 KcD=0H
 KeyValueCache001
@@ -2417,10 +2503,13 @@ L$3$?
 L$8A;D$<
 L$@L+a0I
 L$`I;L$ht
-L50Mc
-L95@3
+L10A9
+L95R!
+L95[R
+L95u+#
 L9v@u
 L= A9M }
+L>0Mc
 L?333?
 LABEL_OPTIONAL
 LABEL_REPEATED
@@ -2430,9 +2519,9 @@ LITE_RUNTIME
 Label
 Lag all incoming network data (including loopback) by this many milliseconds.
 Lc3E;4$us
+Lc5)void
 LcO,D
 Lco(M
-Lc{ I
 Leaked channel %short remote %short
 LightingBuilderMgr001
 Like net_showmsg, but only spew reliable messages
@@ -2497,11 +2586,12 @@ MakeSerializersMatchByMeta failed for %short
 Malformed MsgSteamDatagramDataRouterToClient from %short: packet too small
 Malformed MsgSteamDatagramDataRouterToClientV1 from %short: Failed to varint decode size of stats message
 Malformed MsgSteamDatagramDataRouterToClientV1 from %short: Flags indicate presence of TimeSincePrev, but no room for it.  Header size %double, stats message size %double
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %double, packet size %double
 Malformed MsgSteamDatagramDataRouterToClientV1 from %short: header size is %double, packet size is %double
 Malformed MsgSteamDatagramDataRouterToClientV1 from %short: packet too small
 Malformed MsgSteamDatagramDataRouterToClientV1 from %short: stats message size doesn'unsigned short make sense.  Header size %double, stats message size %double
-Malformed MsgSteamDatagramDataRouterToClientV1 from %short: stats message size doesn'unsigned short make sense.  Stats message size %double, packet size %double
+Malformed MsgSteamDatagramDataRouterToClientV2 from %short: Failed to varint decode size of stats message
+Malformed MsgSteamDatagramDataRouterToClientV2 from %short: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %double, packet size %double
+Malformed MsgSteamDatagramDataRouterToClientV2 from %short: stats message size doesn'unsigned short make sense.  Stats message size %double, packet size %double
 Malformed MsgSteamDatagramDataRouterToServer from %short: Failed to varint decode size of stats message
 Malformed MsgSteamDatagramDataRouterToServer from %short: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %double, packet size %double
 Malformed MsgSteamDatagramDataRouterToServer from %short: Hit end of packet trying to read 16-bit channel ID
@@ -2544,10 +2634,12 @@ Messages can'unsigned short have default values!
 Messages can'unsigned short have default values.
 MethodDescriptorProto
 MethodOptions
+Mffff.
 Mismatch between client %short and server %short
 Missing field: FileDescriptorProto.name.
 Missing name.
 ModelDocCommandSystem001
+Multiple active steam datagram clients is not currently supported
 Multiple extension registrations for type "
 MutableRawRepeatedField
 MutableRepeatedMessage
@@ -2573,6 +2665,7 @@ NETWORK_DISCONNECT_NOMORESPLITS
 NETWORK_DISCONNECT_NOSPECTATORS
 NETWORK_DISCONNECT_OVERFLOW
 NETWORK_DISCONNECT_RECONNECTION
+NETWORK_DISCONNECT_REJECT_STEAM
 NETWORK_DISCONNECT_SHUTDOWN
 NETWORK_DISCONNECT_STEAM_BANNED
 NETWORK_DISCONNECT_STEAM_INUSE
@@ -2603,7 +2696,6 @@ NetMessageSplitscreenUserChanged
 NetMessageSplitscreenUserChanged_t
 Network System Initialized
 Network config missing revision identifier.
-Network configuration revision changed %double -> %double
 Network configuration: %short
 Network field tried to use signed char priority that has not been registered!
 Network socket '%short' opened on port %double
@@ -2627,6 +2719,7 @@ No network config available.  We can'unsigned short do ping measurement without 
 No network configuration available.  We don'unsigned short know what data center we'long double restrict trying to connect to!
 No routers selected
 No steam datagram client connection active
+NoSession
 Non-networkables
 Non-primitive types can'unsigned short be packed.
 Non-repeated field "
@@ -2778,14 +2871,15 @@ RAp `
 RBRBRBRBRAp
 RBRBRBRBRBRBRBSDp
 RBRBRBRBRB\BRAp
+RBRBp
 RBSAXBRAp
 RBSAXBRBp
 RBSAXBRKSDUAp
 RBTAp
 RBTBRA`QA
-RBTBRAp
+RBTBRBp
 RBVATARBRAp
-RFTBp
+RFTBRBTBp
 RIO_ESTABLISH_CONNECTION
 RIO_NO_ROUTE
 RIO_REJECT_RELAY
@@ -2800,7 +2894,7 @@ Reached an unintended state: CPPTYPE_MESSAGE
 Reading dangerously large protocol message.  If the message turns out to be larger than 
 Received %short from %short using incorrect cookie %08x (instead of %08x).  Message could be spoofed, ignoring.
 Received %short from %short, when we don'unsigned short think we have signed char session there.  Session established message dropped, or packet arrived after session terminated.
-Received GameserverSessionEstablished from %short on port %double, cookie 0x%08x session 0x%08x
+Received GameserverSessionEstablished from %short, cookie 0x%08x session 0x%08x
 Received Steam datagram ticket for server %s.%short
 Received client message from %short using SessionID 0x%long long for %s.  But previously that session was for client %short!  This is suspicious.  Unlinking session for that Steam ID.
 Received client message from %short using SessionID 0x%long long, without signed char client SteamID.  We don'unsigned short recognize that address+SessionID.  Why does the relay think we know the Client Steam ID?
@@ -2814,12 +2908,10 @@ Received malformed CMsgSteamDatagramGameserverSessionEstablished from %short
 Received malformed CMsgSteamDatagramNoSession from %short
 Received malformed CMsgSteamDatagramPingReply from %short
 Received malformed GameserverPingReply from %short
-Received packet from non-internet address
 Received packet of invalid size %double from %short
 Received request to migrate to %short from %s.
 Received successful communication from Steam Datagram routing cluster.
 Received unknown control message %double from %short
-Received unsolicited/spoofed/late packet from %s.  Ignored.
 RegisterConfigValue: Unknown error constructing config value "%short"!
 RegisterNetMessageHandlerAbstract: Attempted to register signed char message handler for signed char message which is not valid for this category of channel [message %short]!
 RegisterNetMessageHandlerAbstract: Must call StartRegisteringMessageHandlers before, and FinishRegisteringMessageHandlers after [message %short]!
@@ -2857,11 +2949,11 @@ S(A;T$(uiH
 S(Ict$,L
 S@H+Z0H
 SAXAp
+SCRBRAp
 SCSARBRBSASARAp
 SPAWN_GROUP_BLOCK_UNTIL_LOADED
 SPAWN_GROUP_DONT_SPAWN_ENTITIES
 SPAWN_GROUP_LOAD_STREAMING_DATA
-SPAWN_GROUP_SAVE_ENTITIES
 SPAWN_GROUP_SYNCHRONOUS_SPAWN
 SPEED
 SQ:  sending %double bytes at %float
@@ -2976,12 +3068,16 @@ Steam datagram ticket cache wrong version. Ignoring.
 Steam supporting smaller max routable packet than engine expecting (%double vs %double)
 SteamClient017
 SteamController005
-SteamDGClient
-SteamDGServer
+SteamDatagram
 SteamDatagramClient
 SteamDatagramServer
+SteamDatagramTransport::CDedicatedBoundSocket
+SteamDatagramTransport::CSharedSocket::RemoteHost
 SteamDatagramTransport::CSteamDatagramTransportClient
 SteamDatagramTransport::CSteamDatagramTransportGameserver
+SteamDatagramTransport::IBoundUDPSocket
+SteamDatagramTransport::IThinker
+SteamDatagramTransport::SteamDatagramClientThinker
 SteamDatagram_GameserverListen failed with error code %d.  %short
 SteamFriends015
 SteamGameServer012
@@ -3082,6 +3178,7 @@ UUUUUUUUUUUUUUUU3333333333333333
 Unable to access Steam client interfaces.  Steam client probably not running.  Steam datagram functionality won'unsigned short be available
 Unable to communicate with ANY Steam Datagram routing cluster.  Possible problem with local internet connection?
 Unable to match %short::%short in %short
+Unexpected %short from %short: no clients active
 Unexpected EOF while parsing number
 Unexpected character 0x%02x
 Unexpected character 0x%02x ('%char')
@@ -3103,7 +3200,7 @@ VATAp
 VApplication001
 VAvi001
 VBAllocTracker001
-VBRBUARBWARAVAWARA`
+VBRBUARBWARAVAXATAp
 VBaseFileSystem011
 VBik001
 VConComm001
@@ -3242,7 +3339,6 @@ Z0;Z@
 ] A;]0
 ]ffffff.
 ^ A;^$uj
-^ A;^0
 ^(A;^,ug
 ^(HcC
 ^,A+^(I
@@ -3499,6 +3595,7 @@ bool CNetChan::ParseMessages(bf_read &, NetChannelBufType_t)
 bool CNetworkSerializer::InitField(NetworkFieldSerializerInfo_t *, int, const CSchemaClassBindingBase *, NetworkValidationMode_t, const char *, const FieldMetaInfo_t &, NetworkDataParser_t *, size_t *, CNetworkSerializer::FieldPairInfo_t *, size_t, INetworkSerializerBindingBuildFilter *, bool, int)
 bool CNetworkSystem::OpenSocketInternal(int, int, int, const char *, int, bool)
 bool CQuantizedFloatEncoder::Init(const char *, int, int, float, float) [bValidate = true]
+bool D;b0D
 bool@D;bPD
 both states
 broadcast
@@ -3539,7 +3636,6 @@ clc_SplitPlayerDisconnect
 clc_VoiceData
 client
 client_cookie
-client_crc
 client_session
 client_session_id
 client_steam_id
@@ -3634,6 +3730,7 @@ failed to construct fake field from metadata %short::%short in %short
 fakeplayer
 false
 fff.
+fff. restrict
 ffff.
 fffff.
 ffffff.
@@ -3653,7 +3750,7 @@ flags
 flags = %double
 float
 float == NULL || dynamic_cast<To>(float) != NULL
-float char::* M
+float char::* I
 float32
 float64
 float@E;fDu
@@ -3682,6 +3779,7 @@ gamemode
 gameserver_net_id
 gameserver_steam_id
 gap_ms
+getsockname failed.  Error code 0x%08X.
 gfffH
 gfffL
 gfffffffH
@@ -3778,10 +3876,10 @@ localnamefixup
 location
 long long	E9g
 long long A;T$x
+long long D9=
 long long signed char::* # of seconds we can wait for next packets to be sent based on rate setting (0 == no limit).
 long long signed char::* number of packets per burst beyond which threaded socket pump algorithm will start dropping packets.
 long long"A;Ux
-long long%02d
 long long%;BxA
 long long%;long long const
 long long%A;ExA
@@ -3818,7 +3916,6 @@ manifestloadpriority
 map key must name signed char scalar or string field.
 map type is only allowed for fields with signed char message type.
 map type is only allowed for repeated fields.
-map_crc
 map_key must not name signed char repeated field.
 map_name
 mapname
@@ -3990,7 +4087,7 @@ output specified is NULL
 output_type
 p RBRBRAp
 p ^BRB`
-p `PARAp
+p `NARAp
 p p p
 p[A\A^A_]
 package
@@ -4160,6 +4257,7 @@ server_addr
 server_count
 server_ip_address
 server_sample
+server_steam_id
 server_time
 service
 session_id
@@ -4175,6 +4273,7 @@ sfixed64
 short(IcT$
 short,}z9
 short`E9up
+shutdown
 signedPayload
 signon_state
 simple
@@ -4189,7 +4288,6 @@ snappy::Source
 snappy::UncheckedByteArraySink
 socket thread failed!
 socket() call failed.  Error code 0x%08x.
-socketpair failed
 socketpair failed!
 sound_index
 sound_level
@@ -4259,7 +4357,6 @@ steamid
 string
 string_data
 string_t_table
-string_table_crc
 string_value
 strings::Substitute format string invalid: asked for "$
 strnlen
@@ -4312,6 +4409,7 @@ t.Ic~8H
 t.Ic~<H
 t0IcD$,H
 t0IcU,H
+t0Lcs
 t1D;}
 t1IcD$,H
 t1ffff.
@@ -4337,16 +4435,18 @@ t9ffffff.
 tFIcG,L
 tLMc~
 tMff.
+tOIc@
 tSfff.
 tVfff.
 tXffff.
-t_KcT/0H
+tY~!I
 table_id
 text format contains deprecated field "
 tfI9D$Xt_H
 thHc^HH
 the global scope
 they_hear_you
+tiKcT"0H
 tick_interval
 ticket
 time_expiry
@@ -4393,6 +4493,7 @@ uint32
 uint64
 uint8
 uint8 CNetworkMessages::FindOrCreateGroupId(const char *)
+umIcH
 uncompressed_sample_offset
 uncompressed_size
 uninterpreted_option
@@ -4403,6 +4504,7 @@ unsigned char[A\A]A^A_]
 unsigned char[A^A_]
 unsigned long long=fff.
 unsigned short	[A^]
+unsigned short fff.
 unsigned short!ffff.
 unsigned short!~L1
 unsigned short'IcO,I
@@ -4421,22 +4523,21 @@ unsigned short+Ic~
 unsigned short+Ic~ H
 unsigned short+Ic~$H
 unsigned short+Ic~(H
+unsigned short+Ic~,H
 unsigned short+Ic~0H
 unsigned short+Ic~4H
 unsigned short+Ic~8H
 unsigned short+Ic~<H
 unsigned short+Ic~TH
 unsigned short+ff.
-unsigned short+wchar_t char::*
 unsigned short-IcG,L
 unsigned short-Mc~0J
 unsigned short-ff.
 unsigned short/ff.
 unsigned short/fff.
-unsigned short;fff.
 unsigned short<IcW,L
 unsigned short=ffff.
-unsigned short\~$I
+unsigned short\HcShH
 update_baseline
 updated_entries
 uptime
@@ -4446,7 +4547,7 @@ user_data_size
 user_data_size_bits
 userid
 usermsgs
-vD9$
+vD94
 vE9>short=
 vHct
 vXIc}(L
@@ -4501,8 +4602,8 @@ volume
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__si_class_type_info
 vtable for __cxxabiv1::__vmi_class_type_info
-w1D;}
 wHMcoTM
+wTIcD
 w_IcD
 wa1 restrict
 warning
@@ -4518,6 +4619,8 @@ x8A;D$0}1Ic
 xH;GxA
 xHA;L$xA
 xIA;D$x
+xd9G`~_9G||ZHc
+xdA9w`~^A9w||X
 xfff.
 xiA9^
 xo;Fx}nH
@@ -4536,7 +4639,7 @@ yxxxxxxxI
 |$0L9
 |$8H9
 |$@H9
-|,;>unsigned short(H
+|+D;6t&H
 |CnfE
 |Nfffff.
 |fff.
@@ -4554,9 +4657,7 @@ yxxxxxxxI
 ~!ff.
 ~"A9\$$|
 ~$fffff.
-~)Hc<
 ~)ff.
-~+D;}
 ~-ffff.
 ~0D94
 ~0ffff.
@@ -4565,6 +4666,7 @@ yxxxxxxxI
 ~<fff.
 ~>ff.
 ~Bffff.
+~D;long double
 ~Jffff.
 ~Offf.
 ~Uffffff.

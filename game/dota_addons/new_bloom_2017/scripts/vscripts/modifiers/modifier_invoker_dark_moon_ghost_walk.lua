@@ -646,32 +646,35 @@ function modifier_invoker_dark_moon_ghost_walk:WexPhase_Tornados( enemies )
 
 	for enemyIndex, enemy in pairs( enemies ) do
 		if enemy ~= nil then
-			local hTornado = self:GetCaster():FindAbilityByName( "invoker_tornado" )						
-			if hTornado ~= nil then	
-				local vRandomPosAroundCaster = self:GetCaster():GetAbsOrigin() + Vector( RandomInt( -2500, 2500 ), RandomInt( -2500, 2500 ), 0 )
-				local vDir = enemy:GetOrigin() - vRandomPosAroundCaster
-				vDir.z = 0
-				vDir = vDir:Normalized()
-				local info = 
-				{
-					EffectName = "particles/units/heroes/hero_invoker/invoker_tornado.vpcf",
-					Ability = hTornado,
-					Source = self:GetCaster(),
-					vSpawnOrigin = vRandomPosAroundCaster,
-					fDistance = 4500,
-					vVelocity = vDir * 500,
-					fStartRadius = 180,
-					fEndRadius = 180,
-					iUnitTargetTeam = DOTA_UNIT_TARGET_TEAM_ENEMY,
-					iUnitTargetType = DOTA_UNIT_TARGET_HERO,
-					iUnitTargetFlags = DOTA_UNIT_TARGET_FLAG_NONE,
-					bProvidesVision = false,
-				}
+			local bChance = RandomInt( 1, 10 ) > 2
+			if bChance then
+				local hTornado = self:GetCaster():FindAbilityByName( "invoker_tornado" )						
+				if hTornado ~= nil then	
+					local vRandomPosAroundCaster = self:GetCaster():GetAbsOrigin() + Vector( RandomInt( -2500, 2500 ), RandomInt( -2500, 2500 ), 0 )
+					local vDir = enemy:GetOrigin() - vRandomPosAroundCaster
+					vDir.z = 0
+					vDir = vDir:Normalized()
+					local info = 
+					{
+						EffectName = "particles/units/heroes/hero_invoker/invoker_tornado.vpcf",
+						Ability = hTornado,
+						Source = self:GetCaster(),
+						vSpawnOrigin = vRandomPosAroundCaster,
+						fDistance = 4500,
+						vVelocity = vDir * 450,
+						fStartRadius = 170,
+						fEndRadius = 170,
+						iUnitTargetTeam = DOTA_UNIT_TARGET_TEAM_ENEMY,
+						iUnitTargetType = DOTA_UNIT_TARGET_HERO,
+						iUnitTargetFlags = DOTA_UNIT_TARGET_FLAG_NONE,
+						bProvidesVision = false,
+					}
 
-				ProjectileID = ProjectileManager:CreateLinearProjectile( info )
-				EmitSoundOn( "Hero_Invoker.Tornado.Cast", self:GetCaster() )
+					ProjectileID = ProjectileManager:CreateLinearProjectile( info )
+					EmitSoundOn( "Hero_Invoker.Tornado.Cast", self:GetCaster() )
 
-				bSpellCast = true
+					bSpellCast = true
+				end
 			end
 		end
 	end
@@ -709,7 +712,7 @@ function modifier_invoker_dark_moon_ghost_walk:QuasPhase_CastBigSpell()
 	local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetOrigin(), self:GetCaster(), FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE, 0, false )
 	if #enemies > 0 then
 		if nSpellToCast == 0 then
-			self:QuasPhase_ColdSnaps( enemies )
+			self:QuasPhase_ColdFeets( enemies )
 		elseif nSpellToCast == 1 then
 			self:QuasPhase_CreateUnitsNearby( enemies )
 		end
@@ -793,7 +796,7 @@ end
 
 --------------------------------------------------------------------------------
 
-function modifier_invoker_dark_moon_ghost_walk:QuasPhase_ColdSnaps( enemies )
+function modifier_invoker_dark_moon_ghost_walk:QuasPhase_ColdFeets( enemies )
 	local bSpellCast = false
 	for _,enemy in pairs( enemies ) do
 		if enemy ~= nil then
@@ -813,22 +816,4 @@ function modifier_invoker_dark_moon_ghost_walk:QuasPhase_ColdSnaps( enemies )
 end
 
 --------------------------------------------------------------------------------
-
-function modifier_invoker_dark_moon_ghost_walk:QuasPhase_IceWalls( enemies )
-	--[[
-	for _,enemy in pairs( enemies ) do
-		if enemy ~= nil then
-			local hColdFeetDebuff = enemy:FindModifierByName( "modifier_cold_feet" )
-			local hColdFeetStun = enemy:FindModifierByName( "modifier_ancientapparition_coldfeet_freeze" )
-			if hColdFeetDebuff == nil and hColdFeetStun == nil then
-				EmitSoundOn( "Hero_Ancient_Apparition.ColdFeetCast", enemy )
-				enemy:AddNewModifier( self:GetCaster(), self:GetAbility(), "modifier_cold_feet", kv )
-			end
-		end
-	end
-	]]
-end
-
---------------------------------------------------------------------------------
-
 

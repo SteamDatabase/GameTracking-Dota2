@@ -134,7 +134,7 @@
    Frames: %u
    Maximum frame time: %float ms (%float FPS)
    Minimum frame time: %float ms (%float FPS)
-   PPPP@P@      @
+   P@@@@P@      @
    REC   
    Settings: WarmTime: %float, BenchTime: %float, BenchFrames: %u
    Standard deviation: %float ms
@@ -200,6 +200,9 @@
  #GameUI_Disconnect_SnapshotError
  #GameUI_Disconnect_SoundsMessage
  #GameUI_Disconnect_SteamIDBanned
+ #GameUI_ServerRejectBadChallenge
+ #Valve_Reject_Connect_From_Lobby
+ #Valve_Reject_Reserved_For_Lobby
  %double/%double:  completed '%short'
  %double/%double:  pending '%short'
  %int refs
@@ -256,13 +259,15 @@
  CServerSideClientBase::SendServerInfo(finished)
  CServerSideClientBase::SendSignonData
  Driver %short (vendorid %long long, deviceid %long long DXSupport Level %double)
- E;}long long
+ E;t$8|
+ E;|$@
  H=  
  HcGlH
  HcKXH
  Hc{ 1
  IcL$
  NETWORK_DISCONNECT_CLIENT_NO_MAP
+ NETWORK_DISCONNECT_REJECT_BANNED
  NETWORK_DISCONNECT_SNAPSHOTERROR
  NETWORK_DISCONNECT_STEAM_DROPPED
  NetMessageSplitscreenUserChanged
@@ -282,7 +287,8 @@
  [A^]
  [default = $0
  [nocodecprompt]
- `````
+ ``  
+ ````
  args were given.  Full format string was: "
  avi = AVI + AVISOUND
  centered on the monitor
@@ -304,7 +310,6 @@
  of type 
  p 0 
  path(%u = '%short/')
- pp  
  raw = TGAs + .wav file, same as default
  signed char protocol 
  t.Ic~DH
@@ -332,9 +337,11 @@
 !#GameUI_Disconnect_SteamDeny_Misc
 !#GameUI_Disconnect_SteamOwnership
 !#GameUI_Disconnect_TempEntMessage
+!#GameUI_ServerRejectFailedChannel
 !CNETMsg_SpawnGroup_ManifestUpdate
 !NETWORK_DISCONNECT_HLTVRESTRICTED
 !NETWORK_DISCONNECT_LOOPDEACTIVATE
+!NETWORK_DISCONNECT_REJECT_NOLOBBY
 !eQueryCvarValueStatus_ValueIntact
 !fff.
 !fffff.
@@ -382,6 +389,7 @@
 " which is.
 "#GameUI_Disconnect_DeltaEntMessage
 "#GameUI_Disconnect_HLTVUnavailable
+"#GameUI_ServerRejectInvalidCertLen
 "$0" does not declare $1 as an extension number.
 "%short" 
 "%short" %short %short %double %double %double %double
@@ -467,7 +475,6 @@
 #FileOpenDialog_ToolTip_OpenInFinderButton
 #FileOpenDialog_ToolTip_Up
 #Frame_Untitled
-#GameUI_ClientConnectionTimedOut
 #GameUI_ClientConsistencyFail
 #GameUI_ClientDifferentMap
 #GameUI_ClientNoMap
@@ -488,7 +495,6 @@
 #GameUI_Disconnect_LoopShutdown
 #GameUI_Disconnect_NoMoreSplits
 #GameUI_Disconnect_NoSpectators
-#GameUI_Disconnect_ReliableOverflow
 #GameUI_Disconnect_Server
 #GameUI_Disconnect_SteamDropped
 #GameUI_Disconnect_SteamIDInUse
@@ -501,21 +507,16 @@
 #GameUI_Disconnect_TimedOut
 #GameUI_Disconnect_User
 #GameUI_Disconnect_UserCmd
+#GameUI_ServerAuthDisabled
+#GameUI_ServerCDKeyAuthInvalid
 #GameUI_ServerNoLobby
-#GameUI_ServerRejectBadChallenge
 #GameUI_ServerRejectBadPassword
-#GameUI_ServerRejectBanned
-#GameUI_ServerRejectFailedChannel
-#GameUI_ServerRejectInvalidCertLen
-#GameUI_ServerRejectInvalidConnection
-#GameUI_ServerRejectInvalidReservation
-#GameUI_ServerRejectInvalidSteamCertLen
+#GameUI_ServerRejectBanned:E
 #GameUI_ServerRejectLANRestrict
 #GameUI_ServerRejectNewProtocol
 #GameUI_ServerRejectOldProtocol
 #GameUI_ServerRejectServerFull
 #GameUI_ServerRejectSteam
-#GameUI_ServerReject_InvalidKeyLength
 #GameUI_ServerRequireSteams
 #General_UnableToStartGame
 #Hc[ H
@@ -556,7 +557,6 @@
 #VGui_OK
 #Valve_Reject_Background_Map
 #Valve_Reject_Hidden_Game
-#Valve_Reject_Reserved_For_Lobby
 #Valve_Reject_Single_Player
 #base
 #base is NULL 
@@ -575,8 +575,6 @@ $#GameUI_Disconnect_MessageParseError
 $#GameUI_Disconnect_Request_HLTVRelay
 $$L;long double
 $$t*A
-$$tHH
-$$u:A
 $$x I
 $0  extend .$1 {
 $0  extensions $1 to $2;
@@ -588,6 +586,7 @@ $0$1$2 $3 = $4
 $0enum $1 {
 $0option $1;
 $A;\$
+$NETWORK_DISCONNECT_REJECT_SERVERFULL
 $NETWORK_DISCONNECT_STEAM_AUTHINVALID
 $NETWORK_DISCONNECT_STEAM_VACBANSTATE
 $ffff.
@@ -600,9 +599,11 @@ $uAE1
 %#GameUI_Disconnect_ConnectionTimedout
 %#GameUI_Disconnect_CreateServerFailed
 %#GameUI_Disconnect_ReplayIncompatible
-%#GameUI_Disconnect_ServerIncompatible:E
+%#GameUI_Disconnect_ServerIncompatible
 %#GameUI_Disconnect_ServerInfoOverflow
 %#GameUI_Disconnect_StringTableMessage
+%#GameUI_ServerRejectInvalidConnection
+%#GameUI_ServerReject_InvalidKeyLength
 %%%short%%
 %&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
 %-32s: %6.3f ms (+/- %6.3f) ms
@@ -625,6 +626,11 @@ $uAE1
 %6d unresolved strings
 %NETWORK_DISCONNECT_CONNECTION_FAILURE
 %NETWORK_DISCONNECT_DISCONNECT_BY_USER
+%NETWORK_DISCONNECT_REJECT_BADPASSWORD
+%NETWORK_DISCONNECT_REJECT_HIDDEN_GAME
+%NETWORK_DISCONNECT_REJECT_LANRESTRICT
+%NETWORK_DISCONNECT_REJECT_NEWPROTOCOL
+%NETWORK_DISCONNECT_REJECT_OLDPROTOCOL
 %NETWORK_DISCONNECT_SOUNDSMSG_OVERFLOW
 %__float128: AdvanceTime ticks this frame %double, sim remain: %__float128
 %__float128: FilterTime took target %__float128 as time base instead of actual %__float128, diff %__float128
@@ -751,16 +757,12 @@ $uAE1
 %short:  
 %short:  AsyncLoadSpawnGroup -- spawn group already loaded
 %short:  CNetworkClientSpawnGroup_AllocateSpawnGroupPrerequisite allocated...
-%short:  CNetworkClientSpawnGroup_DestroySpawnGroupPrerequisite shutdown/destroy...
 %short:  CNetworkClientSpawnGroup_LoadEntitiesPrerequisite completed...
 %short:  CNetworkClientSpawnGroup_LoadSaveGamePrerequisite async completed...
 %short:  CNetworkClientSpawnGroup_LoadSaveGamePrerequisite async failed...
 %short:  CNetworkClientSpawnGroup_LoadSaveGamePrerequisite async started...
-%short:  CNetworkClientSpawnGroup_SaveEntitiesPrerequisite completed...
 %short:  CNetworkClientSpawnGroup_WaitForAssetLoadPrerequisite completed %s...
 %short:  CNetworkClientSpawnGroup_WaitForChildSpawnGroups completed...
-%short:  CNetworkServerSpawnGroupDestroySpawnGroupPrerequisite shutdown/destroy...
-%short:  CNetworkServerSpawnGroupSaveEntitiesPrerequisite completed...
 %short:  CNetworkServerSpawnGroup_LoadEntitiesPrerequisite completed...
 %short:  CNetworkServerSpawnGroup_LoadSaveGamePrerequisite async completed...
 %short:  CNetworkServerSpawnGroup_LoadSaveGamePrerequisite async failed...
@@ -792,6 +794,7 @@ $uAE1
 %short:  Spawn group loading failed
 %short:  Spawn group loading for success
 %short:  SpawnGroupState_t set to %short
+%short:  SyncUnloadSpawnGroup shutdown/destroy...
 %short:  client '%short' has spawn group fully loaded
 %short:  player entity %double out of range, maxclients is %double
 %short:  unable to extract addons from file
@@ -828,12 +831,14 @@ $uAE1
 &#GameUI_Disconnect_InvalidMessageError
 &#GameUI_Disconnect_NoPeerGroupHandlers
 &#GameUI_Disconnect_PureServer_Mismatch
+&#GameUI_ServerRejectInvalidReservation
 &'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
 &Apply
 &Exit
 &NETWORK_DISCONNECT_BAD_SERVER_PASSWORD
 &NETWORK_DISCONNECT_MESSAGE_PARSE_ERROR
 &NETWORK_DISCONNECT_PURESERVER_MISMATCH
+&NETWORK_DISCONNECT_REJECT_BADCHALLENGE
 &NETWORK_DISCONNECT_REPLAY_INCOMPATIBLE
 &NETWORK_DISCONNECT_SERVERINFO_OVERFLOW
 &NETWORK_DISCONNECT_SERVER_INCOMPATIBLE
@@ -847,6 +852,7 @@ $uAE1
 &ffff.
 '#GameUI_Disconnect_BadSpectatorPassword
 '#GameUI_Disconnect_DifferentClassTables
+'#GameUI_ServerRejectInvalidSteamCertLen
 '%short' forced immediate full update
 'E9l$
 'NETWORK_DISCONNECT_BADSPECTATORPASSWORD
@@ -855,6 +861,8 @@ $uAE1
 'NETWORK_DISCONNECT_DELTAENTMSG_OVERFLOW
 'NETWORK_DISCONNECT_DIFFERENTCLASSTABLES
 'NETWORK_DISCONNECT_DISCONNECT_BY_SERVER
+'NETWORK_DISCONNECT_REJECT_FAILEDCHANNEL
+'NETWORK_DISCONNECT_REJECT_SINGLE_PLAYER
 'SPAWN_GROUP_CREATE_CLIENT_ONLY_ENTITIES
 'fff.
 'ffff.
@@ -865,7 +873,6 @@ $uAE1
 (%u): %short
 (*%short*), 
 (Addresses differ: existing '%short' @ '%p' != requested '%short' @ '%p')
-(D;long long,|
 (Direct Routing)
 (Existing entry.)
 (Hc{(1
@@ -876,6 +883,8 @@ $uAE1
 (Module names differ: existing '%short' != requested '%short')
 (Modules differ: existing '%p' != requested '%p')
 (NETWORK_DISCONNECT_INVALID_MESSAGE_ERROR
+(NETWORK_DISCONNECT_REJECT_BACKGROUND_MAP
+(NETWORK_DISCONNECT_REJECT_INVALIDCERTLEN
 (NETWORK_DISCONNECT_SERVER_REQUIRES_STEAM
 (NETWORK_DISCONNECT_STEAM_AUTHALREADYUSED
 (Only used when hosting xbox games). Send clients updates at the same time. This saves CPU because the server will encode and calc deltas on less frames.
@@ -926,6 +935,7 @@ $uAE1
 *LANGUAGE*
 *NETWORK_DISCONNECT_CLIENT_CONSISTENCY_FAIL
 *NETWORK_DISCONNECT_LOOP_LEVELLOAD_ACTIVATE
+*NETWORK_DISCONNECT_REJECT_INVALIDKEYLENGTH
 *NETWORK_DISCONNECT_STRINGTABLEMSG_OVERFLOW
 *fff.
 *fffff.
@@ -940,6 +950,7 @@ $uAE1
 +K$Hc
 +NETWORK_DISCONNECT_CLIENT_UNABLE_TO_CRC_MAP
 +NETWORK_DISCONNECT_CONNECT_REQUEST_TIMEDOUT
++NETWORK_DISCONNECT_REJECT_INVALIDCONNECTION
 +NETWORK_DISCONNECT_STEAM_VAC_CHECK_TIMEDOUT
 +allow_in_addon
 +allow_in_coop
@@ -962,6 +973,10 @@ $uAE1
 ,#GameUI_Disconnect_Splitpacket_Send_Overflow
 ,$E;l$
 ,@ffff.
+,NETWORK_DISCONNECT_REJECT_CONNECT_FROM_LOBBY
+,NETWORK_DISCONNECT_REJECT_INVALIDRESERVATION
+,NETWORK_DISCONNECT_REJECT_RESERVED_FOR_LOBBY
+,NETWORK_DISCONNECT_REJECT_SERVERAUTHDISABLED
 ,NETWORK_DISCONNECT_SPLITPACKET_SEND_OVERFLOW
 ,NETWORK_DISCONNECT_STEAM_DENY_BAD_ANTI_CHEAT
 ,NETWORK_DISCONNECT_STEAM_LOGGED_IN_ELSEWHERE
@@ -986,6 +1001,7 @@ $uAE1
 -;s0u
 -> Reservation cookie %llx:  reason %short
 -NETWORK_DISCONNECT_DIRECT_CONNECT_RESERVATION
+-NETWORK_DISCONNECT_REJECT_INVALIDSTEAMCERTLEN
 -adapter
 -addon
 -addon_path
@@ -1021,7 +1037,6 @@ $uAE1
 -dxwarp
 -empty
 -ffff.
--ffffff.
 -flushlog
 -forcenovsync
 -fpexcept
@@ -1118,11 +1133,13 @@ $uAE1
 -warmtime
 -width
 .  Please update your library.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
-.%iW	
+.%BS	
+.-	V	
 ...(;unsigned long long(H
 ../..
 ../../../../..
 ..\content
+.54V	
 .CCLCMsg_SplitPlayerConnect
 .CDemoClassInfo.class_t
 .CDemoPacket"S
@@ -1137,7 +1154,7 @@ $uAE1
 .CMsgQAngle"4
 .CMsgServerNetworkStats.Player
 .CMsgServerNetworkStats.Port
-.CMsgServerPeer"@
+.CMsgServerPeer"/
 .CMsgVector
 .CMsgVector"
 .CMsgVector"F
@@ -1304,6 +1321,7 @@ $uAE1
 0A;vxu
 0D;{ |
 0Hc{01
+0NETWORK_DISCONNECT_REJECT_SERVERCDKEYAUTHINVALID
 0P00pP
 0P@P@
 0[A\A^A_]
@@ -1326,7 +1344,7 @@ $uAE1
 1.0.2, 30-Dec-2001
 127.0.0.1
 127.0.0.H
-14:47:39
+12:37:24
 180.0
 1sAL"
 2 - bottom-left
@@ -1343,9 +1361,7 @@ $uAE1
 21.CBidirMsg_RelayPacket.SignedDestinationAddress_t
 250000
 255 255 255 255
-27005
 27015
-27020
 29C |.
 29K }
 3 - bottom-right
@@ -1373,7 +1389,6 @@ $uAE1
 64-bit
 6A;v0u
 6[A^]
-6ffff.
 7B+t3
 7fff.
 80000
@@ -1405,8 +1420,8 @@ $uAE1
 :ffff.
 :fffff.
 :y8Ic
-;5HDJ
 ;A }(
+;A@uiE1
 ;AXv)I
 ;AX|eH
 ;C ~^
@@ -1459,6 +1474,7 @@ $uAE1
 >CNETMsg_SpawnGroup_Unload_t
 >LZSS
 >LZSSu
+>[A^]
 >ffff.
 >fffff.
 ?333333
@@ -1486,7 +1502,6 @@ $uAE1
 @@@0   p
 @@@@@
 @@@@@@@@0
-@@@``````````````````
 @@B;\
 @@L+@0I
 @@pp p
@@ -1552,10 +1567,12 @@ $uAE1
 @MiniDumpStandardData_t::HandlerQueueHeartBeat() const
 @PHc{P1
 @PI;@XtAI
-@PPP@@@@@P
+@PPP@@@@@@
 @Plat_AlertUser(PlatWindow_t__*, wchar_t const*, wchar_t const*)
+@Pp@ 
 @V_SplitString(char const*, char const*, CUtlVector<char*, CUtlMemory<char*, int> >&)
 @V_stristr_fast(char const*, char const*)
+@XIcL$
 @[A\A^A_]
 @[A\A^A_]A
 @[A^]
@@ -1781,6 +1798,7 @@ $uAE1
 @_V_fclose
 @_V_fopen
 @_V_fread
+@_V_frexpf
 @_V_fwrite
 @_V_iswspace
 @_V_logf
@@ -1800,6 +1818,7 @@ $uAE1
 @_V_strtoui64
 @_V_strupper_fast
 @_V_swscanf
+@_V_tanf
 @_V_vscprintf
 @_V_vsnprintf
 @_V_vsnprintfRet
@@ -1848,7 +1867,6 @@ $uAE1
 @___error
 @___gxx_personality_v0
 @___maskrune
-@___sincos_stret
 @___sprintf_chk
 @___stack_chk_fail
 @___stack_chk_guard
@@ -1895,7 +1913,6 @@ $uAE1
 @_fputs
 @_fread
 @_free
-@_frexpf
 @_fstat$INODE64
 @_futimes
 @_fwrite
@@ -1991,7 +2008,6 @@ $uAE1
 @_swscanf
 @_system
 @_tan
-@_tanf
 @_tcgetattr
 @_tcsetattr
 @_time
@@ -2006,14 +2022,13 @@ $uAE1
 @_wcsncpy
 @_write
 @`I;@hsx1
-@`IcL$
 @`p@ P
 @dyld_stub_binder
 @fff.
 @ffff.
-@fffff.
 @loader_path
 @loader_path/libsteam_api.dylib
+@p @P 
 @r8Ic
 @rpath/libengine2.dylib
 @rpath/libtier0.dylib
@@ -2075,6 +2090,7 @@ $uAE1
 @unsigned short+Hc{0H
 @unsigned short+Hc{4H
 @unsigned short+Hc{PH
+@unsigned short+Ic~(H
 @unsigned short+Ic~0H
 @void std::__1::__sort<std::__1::__less<float, float>&, float*>(float*, float*, std::__1::__less<float, float>&)
 @vtable for __cxxabiv1::__class_type_info
@@ -2162,7 +2178,6 @@ A;\$H|
 A;\$X|
 A;\$`u
 A;\$hu
-A;](|
 A;],|
 A;]@A
 A;]Hu
@@ -2212,7 +2227,6 @@ A;v8u
 A;vPu
 A;void(u
 A;void@u
-A;wPu
 ABGR8888
 ADDONS
 ALIGN_TYPE is wrong, please fix
@@ -2222,8 +2236,6 @@ ARARARBRBRBRBRBRBRBRAp
 ARARAp
 ARARB
 ARASA
-ARATARARARAp
-ARATARARASARA
 ARAVA`>BRB`
 ARAp0p
 ARBR0
@@ -2233,7 +2245,7 @@ ARBRBRAp
 ARBRBRBRBRBR0
 ARBRBRBRBRBRBRBR0
 ARBRBRBRBRBRBRBRBRAp
-ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBYARBUARAUAUB`4ASARAp
+ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBYARBUARAUAUB`ASBp
 ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRB`
 ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRB`
 ARBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRBRB`
@@ -2264,6 +2276,7 @@ ARB]ARAp
 ARB]ARBRA
 ARB]ARB]ARB]ARB]AR0
 ARB]ARB]ARB]ARB]ARB]ARA
+ARB`+ARASB\ASBXBZASBXBRBXBRBRBp
 ARB`-ARB`
 ARB`8BRB`
 ARGB8888
@@ -2352,6 +2365,8 @@ ActivateGameUI()
 ActivateItem
 ActivateMainMenuPanel
 ActivateMainWindow
+ActivateSteamGameServer(finished)
+ActivateSteamGameServer(start)
 Activates SourceTV on server.
 Active
 Active loop %short:
@@ -2384,6 +2399,7 @@ Adobe APP14 marker: version %double, flags 0x%04x 0x%04x, transform %double
 After selecting and moving signed char panel Ctrl-... will undo the move.
 After this many seconds without receiving signed char packet from the server, the client will disconnect itself
 After this many seconds without signed char message from signed char client, the client is dropped
+AimConstraint: %short - Cannot Find Aim Slave Bone
 AimConstraint: %short - Cannot Find Aim Up Target Attachment: %short
 AimConstraint: %short - Cannot Find Aim Up Target Bone
 Alias signed char command.
@@ -2477,16 +2493,15 @@ BRAY0
 BRAYB`
 BRBRATAp
 BRBRBRBRBRBRBRB\NRBRBRB]ARBRBRBRBRBRBRBRJ\BRBRBRBRBRBRB\0
-BRBRBVBRBTBRB`CARB`
+BRBRBVBRBTBRB`CARB`|ARATARARARAp
 BRBTBRBRAp
-BRBTB`xARASA`
+BRBTB`bARASA`
 BRBUEp
 BRBVBRB`
-BRBVB`-ARBRB`,ARARBp
+BRBWA`-ARBRB`,ARARBp
 BRBYAYAYAYARBYARBYARBYARBYARBYARBYARBYARBRBRBRBRB`
 BRB\BRB`
 BRB\B]Ap
-BRB`-ARASB\ASBXBZASBXBRBXBRBRBp
 BRB`>BR0
 BRFSARBSARBSARBSARB`
 BUNDLE_TYPE_COUNT
@@ -2610,6 +2625,7 @@ C$HcC
 C$[A^]
 C&opy
 C(IcO,I
+C([A^]
 C,HcC(
 C0+K,9
 C0HcK
@@ -2618,8 +2634,6 @@ C2S_CONNECTION_Message
 C2S_CONNECTION_Message_t
 C2S_CONNECT_Message
 C2S_CONNECT_Message_t
-C2S_VALIDATE_SESSION from %llx, session %llx, host version %d.
-C4[A^]
 C8[A\A^A_]
 C;<u
 C@F9,0
@@ -2781,7 +2795,6 @@ CBaseAppSystem<IVProfExport>
 CBaseAppSystem<IVoiceServer>
 CBaseAppSystem<IXboxSystem>
 CBaseClientSpawnGroupCreatePrerequisite
-CBaseClientSpawnGroupDestroyPrerequisite
 CBaseCmdKeyValues<CCLCMsg_CmdKeyValues>
 CBaseCmdKeyValues<CSVCMsg_CmdKeyValues>
 CBaseCmdKeyValues<CSVCMsg_GameSessionConfiguration>
@@ -2808,7 +2821,6 @@ CBaseEngineService<IToolService>
 CBaseEngineService<IUserInfoChangeService>
 CBaseGameUIInputHandler
 CBaseServerSpawnGroupCreatePrerequisite
-CBaseServerSpawnGroupDestroyPrerequisite
 CBaseSpawnGroup
 CBenchmarkService
 CBidirMsg_RebroadcastGameEvent
@@ -2902,8 +2914,6 @@ CConCommandMemberAccessor<CSoundService>
 CConCommandMemberAccessor<CSplitScreenService>
 CConCommandMemberAccessor<CStatsService>
 CConCommandMemberAccessor<CVProfService>
-CConnectGameClient
-CConnectGameClientJob
 CConnectGameClientPrerequisite
 CConnectRelayPrerequisite
 CConsoleDialog
@@ -3024,6 +3034,7 @@ CEntityInfo
 CEntityReadInfo
 CEntityReport
 CEntityResourceManifest
+CEntityResourceManifest::AddResourceInternal( %short )
 CEntityResourceManifest::GetEntityLumpForTemplate
 CEntityWriteInfo
 CFiber::AllocPooledFiber(CFiber::SizeBuckets_t, unsigned long)
@@ -3215,7 +3226,7 @@ CHLTVServer::AddNewFrame
 CHLTVServer::ExpandDeltaFrameToFullFrame
 CHLTVServer::IsCorrectUniqueTVCode: pszUniqueCode=%short s_nTVSecretCode=%llu clientAccount=%u nCombined=%llu
 CHLTVServer::ServerPostSimulate
-CHLTVServer::StartRelay: WriteClassInfos overflow.
+CHLTVServer::StartRelay: WriteClassInfosBuffer overflow.
 CHLTVServer::StartRelay: WriteSendTables overflow.
 CHLTVServer::UpdateTick
 CH[A^]
@@ -3249,7 +3260,6 @@ CL:  CCreateGameClientJob creating client connection to '%short'
 CL:  CGameClientConnectPrerequisite connection failed
 CL:  CGameClientConnectPrerequisite connection succeeded
 CL:  CGameClientConnectPrerequisite status
-CL:  CL_ProcessPacketEntities: frame window too big (>=%int)
 CL:  CLoadSpawnGroupsPrerequisite::UnloadInitialSpawnGroup unloaded spawn group %short
 CL:  CLoopModeLevelLoad::MaybeSwitchToGameLoop (%float) trans %short
 CL:  CLoopModeLevelLoad::MaybeSwitchToGameLoop switching to "%short" loopmode with addons (%short)
@@ -3281,12 +3291,13 @@ CL:  Got pure server whitelist: sv_pure = .
 CL:  Got pure server whitelist: sv_pure = 2.
 CL:  Ignoring S2C_CHALLENGE [%u auth %double] from %short because SignonState (%short) != SIGNONSTATE_CHALLENGE
 CL:  Invalid S2C_CONNECTION packet.
-CL:  Loading groups %double, Unloading groups %double
+CL:  Loading groups %double
+CL:  MaybeSetPendingConnecting finished at time %4.2f
+CL:  MaybeSetPendingConnecting waiting %4.2f second(short) SIGNONSTATE_FLAG_PRECONNECT at time %4.2f
 CL:  Multiple calls to CNetworkGameClientBase::DeferActivate!!
 CL:  No pure server whitelist. sv_pure = 0
-CL:  PendConnecting finished at time %4.2f
-CL:  PendConnecting waiting %4.2f second(short) SIGNONSTATE_FLAG_PRECONNECT at time %4.2f
 CL:  Permit INetchannel::Transmit()
+CL:  ProcessPacketEntities: frame window too big (>=%int)
 CL:  ProcessSpawnGroup_ManifestUpdate( %short ) -- spawn group manifest update received for an unknown manifest!
 CL:  Queue CNETMsg_SignonState_t(%short:%double) message
 CL:  Receiving uncompressed update from server
@@ -3294,7 +3305,7 @@ CL:  Removing SuppressTransmit to allow 'disconnect' command to send
 CL:  SendMove()
 CL:  SendMove(connecting)
 CL:  SendStringCmd(disconnect)
-CL:  Server disconnected: %short
+CL:  Server disconnected: %double: %short
 CL:  SetSignonState changing from %short to %short
 CL:  SetSignonState( %short )
 CL:  Signon traffic "%short":  incoming %short [%double pkts], outgoing %short [%double pkts]
@@ -3313,17 +3324,9 @@ CL: ProcessSpawnGroup_SetCreationTick setting max spawn group creation sequence 
 CL: SteamIDAllowedToP2PConnect( %short ) returned %short
 CLC_Messages
 CL_AddPostDataUpdateCall: overflowed u.m_PostDataUpdateCalls
-CL_CopyExistingEntity: invalid recv table for ent %d.
-CL_CopyNewEntity: GetClassBaseline(%short) failed.
-CL_CopyNewEntity: invalid class index (%double), classname '%short'
-CL_CopyNewEntity: invalid class index (%double), out of range %double
-CL_CopyNewEntity: m_nNewEntity >= MAX_NETWORKABLE_ENTITY_COUNT
 CL_GetPrecacheUserData(%double,%double) - length (%double) invalid.
 CL_InstallAndInvokeClientStringTableCallbacks
-CL_ParseClassInfo_EndClasses: class %double not initialized.
 CL_ParsePacketEntities:  Error creating entity %short(%int)
-CL_ParsePacketEntities:  buffer read overflow
-CL_ReadPreserveEnt: u.m_nNewEntity == MAX_SNAPSHOT_ENTITIES
 CLoadSpawnGroupsPrerequisite
 CLoadStartupResourcePrerequisite
 CLog
@@ -3449,13 +3452,10 @@ CNetSupportImpl
 CNetworkClientService
 CNetworkClientSpawnGroup
 CNetworkClientSpawnGroupCreatePrerequisites
-CNetworkClientSpawnGroupDestroyPrerequisites
 CNetworkClientSpawnGroup_AllocateEntitiesPrerequisite
 CNetworkClientSpawnGroup_AllocateSpawnGroupPrerequisite
-CNetworkClientSpawnGroup_DestroySpawnGroupPrerequisite
 CNetworkClientSpawnGroup_LoadEntitiesPrerequisite
 CNetworkClientSpawnGroup_LoadSaveGamePrerequisite
-CNetworkClientSpawnGroup_SaveEntitiesPrerequisite
 CNetworkClientSpawnGroup_WaitForAssetLoadPrerequisite
 CNetworkClientSpawnGroup_WaitForChildSpawnGroups
 CNetworkClientSpawnGroup_WaitForOwnerSpawnGroupPrerequisite
@@ -3475,7 +3475,6 @@ CNetworkGameClientBase::FindClientClass failed, no classes exported!
 CNetworkGameClientBase::FullConnect
 CNetworkGameClientBase::ReencodeForVConsole: invalid recv table for ent %d.
 CNetworkGameClientBase::SynchronizeAndBlockUntilLoaded
-CNetworkGameClientFactory
 CNetworkGameServer
 CNetworkGameServer::ActivateServer
 CNetworkGameServerBase
@@ -3484,20 +3483,16 @@ CNetworkGameServerBase::ConnectClient:  GetFreeClient
 CNetworkGameServerBase::ConnectClient:  client->Connect
 CNetworkGameServerBase::ConnectClient:  g_pNetworkSystem->CreateNetChannel
 CNetworkGameServerBase::ReplyConnection
-CNetworkGameServerFactory
 CNetworkP2PService
 CNetworkServerCreatePrerequisites
 CNetworkServerService
 CNetworkServerService::StartupServer called but we still have extant instance!
 CNetworkServerSpawnGroup
 CNetworkServerSpawnGroupCreatePrerequisites
-CNetworkServerSpawnGroupDestroyPrerequisites
 CNetworkServerSpawnGroup_AllocateEntitiesPrerequisite
 CNetworkServerSpawnGroup_AllocatePrerequisite
-CNetworkServerSpawnGroup_DestroySpawnGroupPrerequisite
 CNetworkServerSpawnGroup_LoadEntitiesPrerequisite
 CNetworkServerSpawnGroup_LoadSaveGamePrerequisite
-CNetworkServerSpawnGroup_SaveEntitiesPrerequisite
 CNetworkServerSpawnGroup_WaitForAssetLoadPrerequisite
 CNetworkServerSpawnGroup_WaitForChildSpawnGroups
 CNetworkServerSpawnGroup_WaitForClients
@@ -4241,7 +4236,6 @@ CancelButton
 Candidate
 Cannot Apply
 Cannot allocate abstract class
-Cannot allocate abstract class %short
 Cannot allocate buffer larger than kint32max for 
 Cannot construct abstract class
 Cannot copy abstract class
@@ -4384,6 +4378,7 @@ Completed demo, recording time %.f, game frames %i.
 CompletionCommand
 CompletionList
 Component index %double: mismatching sampling ratio %double:%double, %double:%double, %char
+ComputeClientPacks
 ConColorMsg(Color const&, char const*, ...)
 ConCommand
 ConCommandBase
@@ -4447,6 +4442,11 @@ ConversionMode
 ConversionModeMenu
 Converting queued message to relayed message
 CopyAttrFrom
+CopyExistingEntity: invalid recv table for ent %d.
+CopyNewEntity: GetClassBaseline(%short) failed.
+CopyNewEntity: invalid class index (%double), classname '%short'
+CopyNewEntity: invalid class index (%double), out of range %double
+CopyNewEntity: m_nNewEntity >= MAX_NETWORKABLE_ENTITY_COUNT
 Copyright (C) 2012, Thomas G. Lane, Guido Vollbeding
 Corrupt JPEG data: %u extraneous bytes before marker 0x%02x
 Corrupt JPEG data: bad Huffman code
@@ -4459,7 +4459,6 @@ Could not find field named "
 Could not find field type.
 Could not get IGameUI interface from client %short
 Could not get IGameUI interface from gameui %short
-Couldn'unsigned short CRC server map: %short
 Couldn'unsigned short create/open file
 Couldn'unsigned short find script file %short
 Couldn'unsigned short open %short
@@ -4554,12 +4553,10 @@ D9sXu
 D; A9
 D;$A9
 D;8t_D
-D;A(|
 D;H(|
 D;I(|9L9
 D;`,|
 D;`8|
-D;c0u
 D;cH|
 D;char(u
 D;cpu
@@ -4589,10 +4586,9 @@ D;{<|
 D;{@u
 D;{Hu
 D;{Xu
-D;{`u
 D;~,|
 D<PfA
-D=MK>
+D=M>>
 DAiG(
 DCT coefficient out of range
 DCT scaled block size %dx%double not supported
@@ -4783,11 +4779,11 @@ E9L$X
 E9l$(
 E9w0M
 E;,$u
-E;4$H
 E;4$|
 E;>}`I
 E;__float128 A
 E;__float128@A
+E;e8|
 E;f0A
 E;fPD
 E;float A
@@ -4847,6 +4843,7 @@ ERROR: couldn'unsigned short open.
 ESplitScreenMessageType
 EXECUTABLE_PATH
 E\IcEX
+E`A;Ed
 E`H9B
 Echo log information to the console.
 Echo the command arguments on the console
@@ -4856,7 +4853,6 @@ EditMenu
 EditablePanel
 Efffff.
 Effffff.
-EhA;El
 Empty
 Empty JPEG image (DNL not supported)
 Empty input file
@@ -4901,6 +4897,8 @@ EngineConsole
 EngineLoopState_t
 EngineServiceManager
 EngineServiceMgr001
+EnsureInstanceBaseline
+EnsureInstanceBaseline: g_pFlattenedSerializers->Encode false (ent %double).
 EnterPVS
 Entities
 Entity %double (class '%short') reported ENTITY_CHANGE_NONE but '%short' changed.
@@ -5113,6 +5111,7 @@ Failed to open %short
 Failed to read demo header.
 Failed to save unsupported class
 False
+Feb 16 2017
 Fffff.
 Field "
 Field does not match message type.
@@ -5329,6 +5328,7 @@ GetAddonsContentDirectory: Failed to find CONTENTADDONS search path.
 GetAddonsDirectory: Failed to find ADDONS search path.
 GetAppWindow() returned NULL
 GetBool
+GetClassBaseline: missing instance baseline for class '%short'
 GetClientConVarValue: player invalid index %int
 GetCommand
 GetDouble
@@ -5421,6 +5421,7 @@ H9J short
 H9VXt%H
 H9_@u
 H9{@unsigned short
+H;C8u_
 H;C`unsigned short
 H;F t0I
 H;H short
@@ -5449,7 +5450,6 @@ HammerMapLoader001
 HasField
 HasGameUI
 HasModAppSystems
-Hc5E@S
 Hc@0H
 Hc@pH
 Hc@pI
@@ -5477,6 +5477,7 @@ HcO,I
 HcP(H
 HcQ(9
 HcS H9
+HcS0H9
 Hc^ H
 Hc_(H
 Hc_`D)
@@ -5521,7 +5522,6 @@ I CUtlLinkedList<CCommandBuffer::Command_t, long long, true, long long, CUtlFixe
 I CUtlLinkedList<CFrameSnapshot *, unsigned short, false, unsigned short, CUtlMemory<UtlLinkedListElem_t<CFrameSnapshot *, unsigned short>, unsigned short> >::AllocInternal(bool) [T = CFrameSnapshot *, S = unsigned short, ML = false, I = unsigned short, M = CUtlMemory<UtlLinkedListElem_t<CFrameSnapshot *, unsigned short>, unsigned short>]
 I CUtlLinkedList<CFrameTimer::FrameSample_t, unsigned short, false, unsigned short, CUtlMemory<UtlLinkedListElem_t<CFrameTimer::FrameSample_t, unsigned short>, unsigned short> >::AllocInternal(bool) [T = CFrameTimer::FrameSample_t, S = unsigned short, ML = false, I = unsigned short, M = CUtlMemory<UtlLinkedListElem_t<CFrameTimer::FrameSample_t, unsigned short>, unsigned short>]
 I CUtlLinkedList<CNetworkClientSpawnGroupCreatePrerequisites *, unsigned short, false, unsigned short, CUtlMemory<UtlLinkedListElem_t<CNetworkClientSpawnGroupCreatePrerequisites *, unsigned short>, unsigned short> >::AllocInternal(bool) [T = CNetworkClientSpawnGroupCreatePrerequisites *, S = unsigned short, ML = false, I = unsigned short, M = CUtlMemory<UtlLinkedListElem_t<CNetworkClientSpawnGroupCreatePrerequisites *, unsigned short>, unsigned short>]
-I CUtlLinkedList<CNetworkClientSpawnGroupDestroyPrerequisites *, unsigned short, false, unsigned short, CUtlMemory<UtlLinkedListElem_t<CNetworkClientSpawnGroupDestroyPrerequisites *, unsigned short>, unsigned short> >::AllocInternal(bool) [T = CNetworkClientSpawnGroupDestroyPrerequisites *, S = unsigned short, ML = false, I = unsigned short, M = CUtlMemory<UtlLinkedListElem_t<CNetworkClientSpawnGroupDestroyPrerequisites *, unsigned short>, unsigned short>]
 I CUtlLinkedList<CNetworkServerSpawnGroupCreatePrerequisites *, unsigned short, false, unsigned short, CUtlMemory<UtlLinkedListElem_t<CNetworkServerSpawnGroupCreatePrerequisites *, unsigned short>, unsigned short> >::AllocInternal(bool) [T = CNetworkServerSpawnGroupCreatePrerequisites *, S = unsigned short, ML = false, I = unsigned short, M = CUtlMemory<UtlLinkedListElem_t<CNetworkServerSpawnGroupCreatePrerequisites *, unsigned short>, unsigned short>]
 I CUtlLinkedList<CServerRemoteAccess::DataResponse_t, int, false, int, CUtlMemory<UtlLinkedListElem_t<CServerRemoteAccess::DataResponse_t, int>, int> >::AllocInternal(bool) [T = CServerRemoteAccess::DataResponse_t, S = int, ML = false, I = int, M = CUtlMemory<UtlLinkedListElem_t<CServerRemoteAccess::DataResponse_t, int>, int>]
 I CUtlLinkedList<CServerRemoteAccess::ListenerStore_t, int, false, int, CUtlMemory<UtlLinkedListElem_t<CServerRemoteAccess::ListenerStore_t, int>, int> >::AllocInternal(bool) [T = CServerRemoteAccess::ListenerStore_t, S = int, ML = false, I = int, M = CUtlMemory<UtlLinkedListElem_t<CServerRemoteAccess::ListenerStore_t, int>, int>]
@@ -5535,7 +5535,6 @@ I CUtlLinkedList<vgui::ListViewItem *, int, false, int, CUtlMemory<UtlLinkedList
 I CUtlLinkedList<vgui::MenuItem *, int, false, int, CUtlMemory<UtlLinkedListElem_t<vgui::MenuItem *, int>, int> >::AllocInternal(bool) [T = vgui::MenuItem *, S = int, ML = false, I = int, M = CUtlMemory<UtlLinkedListElem_t<vgui::MenuItem *, int>, int>]
 I CUtlLinkedList<vgui::PanelListPanel::dataitem_s, int, false, int, CUtlMemory<UtlLinkedListElem_t<vgui::PanelListPanel::dataitem_s, int>, int> >::AllocInternal(bool) [T = vgui::PanelListPanel::dataitem_s, S = int, ML = false, I = int, M = CUtlMemory<UtlLinkedListElem_t<vgui::PanelListPanel::dataitem_s, int>, int>]
 I CUtlLinkedList<vgui::TreeNode *, int, false, int, CUtlMemory<UtlLinkedListElem_t<vgui::TreeNode *, int>, int> >::AllocInternal(bool) [T = vgui::TreeNode *, S = int, ML = false, I = int, M = CUtlMemory<UtlLinkedListElem_t<vgui::TreeNode *, int>, int>]
-I HcV(H
 I suggest the following: try compressing the file again,
 I+4$H
 I+V H)
@@ -5593,6 +5592,7 @@ IFileList
 IFileLoggingListener
 IFlattenedSerializerSpewFunc
 IFlattenedSerializerSpewListener
+IFlattenedSerializerSpewListenerEngine
 IGUB1
 IGUBu
 IGameEventSystem
@@ -5628,9 +5628,7 @@ INetworkChannelNotify
 INetworkClientService
 INetworkFieldScratchData
 INetworkGameClient
-INetworkGameClientFactory
 INetworkGameServer
-INetworkGameServerFactory
 INetworkMessageProcessingPreFilter
 INetworkP2PService
 INetworkPacketFilter
@@ -5747,13 +5745,11 @@ IcO,L
 IcO8I
 IcT$(H
 IcT$,L
-IcT$0H9
 IcU(1
 IcUHH9
 IcUxH
 IcV,H
 IcV,L
-IcV0H9
 IcW(I
 Ic\$ H
 Ic] A
@@ -5764,7 +5760,6 @@ Ic_ M
 Ict$(L
 Icu(H
 Icu4H
-Icv,A
 IcvPH
 Icw(L
 Ic|$(L
@@ -5832,6 +5827,7 @@ InputStackSystemVersion001
 InputSystemVersion001
 Inserted tick %double with full packet
 InstallAndInvokeClientStringTableCallbacks
+InstallClientStringTableMirrors! Missing client table "%short".
 InstallSchemaBindings
 InstantReplay
 Insufficient arguments to blackbox_record. Usage: blackbox_record <type> <message>
@@ -5891,8 +5887,6 @@ JP9NP|
 JPEG datastream contains no image
 JPEG parameter struct mismatch: library thinks size is %u, caller expects %u
 JPEGMEM
-Jan 25 2017
-Jan 26 2017
 Jffffff.
 Jumping to %short
 Jumping to random tick %double (%.2f min)
@@ -5913,6 +5907,7 @@ K9D5P
 K@ff.
 KHIcT$,L
 KH[A^]
+KIL;}
 KPA9NP|
 KV Conditional Evaluation Error
 K`L;,
@@ -6008,7 +6003,6 @@ Lc;char const
 LcO,D
 LcchIi
 LcoHM
-Lcq(J
 Lcs(L
 Lcs8M
 LeavePVS
@@ -6020,6 +6014,7 @@ LightStyle with NULL value!
 LightingBuilderMgr001
 Limits spectators to chat only every __int128 seconds
 Lines of crash dump console spew to keep.
+LinkClasses: class %double not initialized.
 Linux
 List IP addresses on the ban list.
 List all addresses currently being used by logaddress.
@@ -6180,8 +6175,6 @@ Mcl$8M
 Mco0E
 Mct$ I
 Mcu I
-Mcu,I
-Mc|$,I
 Mc|$8M
 Mc|$@M
 Mc}`M
@@ -6313,7 +6306,6 @@ MutableRawRepeatedField
 MutableRepeatedMessage
 N Hc<
 N Hcz 1
-N IcF(H
 N$Hcz$1
 N(HcSPH
 N(Hcz(1
@@ -6347,6 +6339,7 @@ NETWORK_DISCONNECT_NOMORESPLITS
 NETWORK_DISCONNECT_NOSPECTATORS
 NETWORK_DISCONNECT_OVERFLOW
 NETWORK_DISCONNECT_RECONNECTION
+NETWORK_DISCONNECT_REJECT_STEAM
 NETWORK_DISCONNECT_SHUTDOWN
 NETWORK_DISCONNECT_STEAM_BANNED
 NETWORK_DISCONNECT_STEAM_INUSE
@@ -6559,7 +6552,7 @@ P0L;u
 P0L;}
 P0Pp@ 
 P0`000  
-P8H;]
+P8L;long double
 P8L;unsigned long
 P8fffff.
 P@@0 
@@ -6578,6 +6571,9 @@ PLATFORM
 PLAYBACK: At end of data
 PLAYBACK: ReadReplayMessage returning deltaFrame clientTick=%double tick=%double delta=%double
 PLAYBACK: ReadReplayMessage waiting for next tick at clientTick=%double
+PORT_CLIENT
+PORT_HLTV
+PORT_SERVER
 POSIX
 PP@    @  P   
 PP@@@@ 
@@ -6598,6 +6594,10 @@ P`0@0@
 P`L;u
 P`L;}
 P`````
+PackEntity: SnagChangeFrameList returned null
+PackEntity: ent(%double) at tick %double Encountered field %short in diff change that was not in the incremental change. This can lead to values not making it down to the client
+PackEntity: ent(%double) at tick %double Encountered field %short in incremental change that was not in the diff change. This can lead to slight network inefficiency
+PackEntity: g_pFlattenedSerializers->Encode false (ent %double).
 Packet Entities has signed char larger spawn group creation sequence (%u) than we received, discarding, our max is %u
 Packet Entities has signed char larger spawn group creation sequence (%u) than we received, forcing to max %u
 PacketEntitiesFilter
@@ -6796,10 +6796,11 @@ RBRBRBRBRBRBRB\Jp
 RBRBRBRBRBRBRF`
 RBRBRBRBRBRB\J^DRBRBRBRBRB`
 RBRBRBRBRBRCTAp
-RBRBRBRBRB`_ARBRBRD`
+RBRBRBRBRB`]ARBRBRD`
 RBRBRBRB]Ap
 RBRBRBp
 RBRBUARBRBRBUAUAUARBUARBUARBUARBUARBUARBUARBUARBUARBUARBUARBUARBUARBUARBSAp
+RBRBVATARCp
 RBRB`
 RBRGp8p8p
 RBTAp
@@ -6812,11 +6813,13 @@ RBTBp
 RBUARBUARBUARBVBp
 RBUA^BRBRB^BRBVB`
 RBVATARBVATARBVATARBp
+RBVATARBp
 RBVAp
 RBVBRAp
 RBVBRBRBWAWAp
 RBXAp
 RBXBRBXBRBXBRBXBRBXBRBXBRBXBRB[ASAp
+RB`#ARARA
 RB`@Ap
 RCON Cmd: recv error (%short)
 RDRBRBRBRBRBRBRBRB\KRC`
@@ -6877,6 +6880,8 @@ ReadDemoHeader: %short has invalid demo header ID '%short', expecting '%short'.
 ReadDemoHeader: %short has invalid demo header.
 ReadDemoHeader: invalid pBuffer.
 ReadOnly
+ReadPacketEntities:  buffer read overflow
+ReadPreserveEnt: u.m_nNewEntity == MAX_SNAPSHOT_ENTITIES
 Reading dangerously large protocol message.  If the message turns out to be larger than 
 Realtime( %float )
 Receive failed.
@@ -7059,8 +7064,6 @@ SAVE/%s.HL1
 SAVE/%s.hl1
 SAVE/%s.hl2
 SAXBRB`
-SA\ASBRBRBRBRBVATARCp
-SA\ASBRBRBRBVATARBp
 SAp RBRBRBRBRBRBRBRBRBRBRBRBRBp
 SBRAp
 SBRGp8p
@@ -7102,7 +7105,6 @@ SPAWN_GROUP_GAMESYSTEMS_PRECACHE_END
 SPAWN_GROUP_GAMESYSTEMS_PRECACHE_START
 SPAWN_GROUP_LOAD_STREAMING_DATA
 SPAWN_GROUP_READY_TO_SPAWN_ENTITIES
-SPAWN_GROUP_SAVE_ENTITIES
 SPAWN_GROUP_SYNCHRONOUS_SPAWN
 SPAWN_GROUP_WORLD_LOADED
 SPEED
@@ -7137,7 +7139,6 @@ SV:  %int player server started
 SV:  %short
 SV:  %short:  password failed.
 SV:  %short:reconnect
-SV:  AsyncUnloadSpawnGroup( %short ) -- already unloading
 SV:  AsyncUnloadSpawnGroup( %short ) -- no such group
 SV:  AsyncUnloadSpawnGroup( %short ) -- unloading loading spawngroup
 SV:  Bad auth data from %short
@@ -7157,14 +7158,13 @@ SV:  Forcing client reconnect (%short) for client '%short'
 SV:  Game started
 SV:  Inactivate
 SV:  Level loading started for '%short'
-SV:  Loading groups %double, Unloading groups %double
+SV:  Loading groups %double
 SV:  PrepareForAssetLoad failed, aborting map load
 SV:  ProcessSignonStateMsg on client '%short' ( %short )
 SV:  Processing Split Screen connection packet.
 SV:  Protocol error from %short
 SV:  Rejecting connection of "%short" because m_numGameSlots is full
 SV:  Rejecting connection of "%short" because we couldn'unsigned short find signed char free client
-SV:  SV_WriteClassInfosBuffer overflow.
 SV:  SendClientMessages
 SV:  SendSnapshot(delta)
 SV:  SendSnapshot(duplicate)
@@ -7186,6 +7186,7 @@ SV:  VAC secure mode disabled.
 SV:  VAC secure mode is activated.
 SV:  WriteBaselines:  %20.20s wrote %6d bytes [%36.36s], headroom %6d bytes
 SV:  WriteBaselines:  %double tables required %double bytes
+SV:  WriteClassInfosBuffer overflow.
 SV:  WriteInitialSpawnGroups sending %double groups
 SV:  addon='%short'
 SV:  maxplayers set to %int
@@ -7198,24 +7199,10 @@ SV: Queuing k_EAuthSessionResponseAuthTicketCanceled for %s.
 SV: SteamIDAllowedToP2PConnect( %short ) returned %short
 SVC_Messages
 SVC_Messages_LowFrequency
-SV_ActivateSteamGameServer(finished)
-SV_ActivateSteamGameServer(start)
-SV_ComputeClientPacks
 SV_CreateNetworkStringTables
-SV_CreatePacketEntities: GetEntServerClass failed for ent %d.
-SV_EnsureInstanceBaseline
-SV_EnsureInstanceBaseline: g_pFlattenedSerializers->Encode false (ent %double).
-SV_GetInstanceBaseline: missing instance baseline for class '%short'
-SV_InstallClientStringTableMirrors! Missing client table "%short".
 SV_InstallHLTVStringTableMirrors! Missing client table "%short".
-SV_PackEntity: SnagChangeFrameList returned null
-SV_PackEntity: ent(%double) at tick %double Encountered field %short in diff change that was not in the incremental change. This can lead to values not making it down to the client
-SV_PackEntity: ent(%double) at tick %double Encountered field %short in incremental change that was not in the diff change. This can lead to slight network inefficiency
-SV_PackEntity: g_pFlattenedSerializers->Encode false (ent %double).
 SV_SendServerinfo->msg
 SV_SpawnServer -- Finished
-SV_WriteEnterPVS: missing instance baseline for '%short'.
-SV_WriteEnterPVS: missing pFromData for '%short'.
 Sampling factors too large for interleaved scan
 Save Game
 Save button - saves all settings to file. 
@@ -7310,6 +7297,7 @@ SendSnapshot
 Sending C2S_CONNECT [%u protocol %u auth %double] to %short
 Sending S2C_CHALLENGE [%u auth %double] to %short
 Sending S2C_CONNECTION to %short [addons:'%short']
+Sending S2C_CONNREJECT to %short: %double: %short
 Sending connect to %short
 Sending game stats harvester protocol info.
 Sending game stats to server %s.
@@ -7428,6 +7416,7 @@ Sets the maximum number of milliseconds per second it is allowed to correct the 
 Sets the server to shutdown when all games have completed
 Setting main thread priority to %double
 Settings
+Sfffff.
 Shared memory space %short (%int) still has %int references.
 Shift clicking panels allows multiple panels to be selected into signed char group.
 Should we update the master server.
@@ -7574,7 +7563,7 @@ Start recording movie frames.
 StartRecording: couldn'unsigned short open replay file %s.
 StartRelay: not connected.
 Started recording movie, frames will record after console is cleared...
-Started:  "%short" (CRC "%u")
+Started:  "%short"
 Starting SourceTV server listening on port %d.
 Starts SourceTV demo recording.
 Starts timedemo on given tick.
@@ -7662,12 +7651,10 @@ T *CUtlLeanVectorImpl<CUtlLeanVectorBase<ConVarSnapshot_t__ *, short>, ConVarSna
 T *CUtlLeanVectorImpl<CUtlLeanVectorFixedGrowableBase<unsigned int, 3, short>, unsigned int, short>::AddToTailGetPtr() [B = CUtlLeanVectorFixedGrowableBase<unsigned int, 3, short>, T = unsigned int, I = short]
 T$ Hc
 T$ Hi
-T$(fA
-T$,Lc
 T$0!D
 T$tE1
 T3,B;T3$
-TA`hARARB`-ARASB\ASBZASBXBXBRBXBRBp
+TA`RARARB`+ARASB\ASBZASBXBXBRBXBRBp
 TBRAp
 TBRBRAp
 TBRBTBRBTBR0
@@ -7748,7 +7735,6 @@ Texture1
 Texture2
 Texture3
 Texture4
-Tffffff.
 The ID of the steam group that this server belongs to. You can find your group'short ID on the admin profile page in the steam community.
 The number of frames to render when signed char
 The region of the world to report this server in.
@@ -7893,7 +7879,6 @@ Unable to read default keybinding configuration (user_keys_default)!
 Unable to resolve rcon address %short
 Unable to set SetActiveChannel to user in slot %double
 Unable to set mode!
-Unabled to verify map '%short'
 Unaccounted
 Unavailable
 Unbind all keys.
@@ -7917,7 +7902,6 @@ Unknown loop type encountered in loop "%short"!
 Unknown message in DemoSpawnGroups %d.
 Unknown modifier in whitelist file: %s.
 Unknown net message %double!
-Unknown reason code %double
 Unknown token: %short
 Unknown variety of crash. You have now failed to crash. I hope you'long double restrict happy.
 Unknown vtune option.
@@ -8008,7 +7992,6 @@ VBAllocTracker001
 VBRAp
 VBRBUARBUARBp
 VBRBXBRB`
-VBTBRBRBRBRBRBRBRBRBRBRB\KR0
 VBaseFileSystem011
 VBik001
 VConComm001
@@ -8131,8 +8114,8 @@ VoiceDataFormat_t
 VoiceServer002
 VpropBreakablePartData_t
 VrDisplayLeftEye
+VrDisplayRightEye
 VrDisplayZoomedCompanionView
-VrDisplyRightEye
 VrFxaaLeftEye
 VrFxaaRightEye
 VrGhostingLeft
@@ -8159,7 +8142,7 @@ W8ffffff.
 WA;v8u
 WA;vHu
 WARNING
-WARNING:  CL_FlushEntityPacket, %short
+WARNING:  FlushEntityPacket, %short
 WARNING:  OS Paged Pool Memory Low
 WARNING:  Steam Servers Disconnected
 WARNING: %short has invalid DEM_FileHeader.
@@ -8172,6 +8155,7 @@ WARNING: Received SpawnGroup_LoadCompleted for an unknown spawngrouphandle: %sho
 WARNING: Trying to create signed char CRenderContextPtr without signed char valid context.
 WARNING: You are trying to mount an addon (%short) in tools mode that is different from the addon tools mode was launched with (%short).
 WARNING: msg overflowed for %short
+WATBRBRBRBRBRBRBRBRBRBRB\KR0
 WAXBXBRBRBRE`
 WIN32
 WINDOWS
@@ -8218,6 +8202,9 @@ Write failed on temporary file --- out of disk space?
 Write to EMS failed
 Write to XMS failed
 WriteDeltaEntities
+WriteEnterPVS: GetEntServerClass failed for ent %d.
+WriteEnterPVS: missing instance baseline for '%short'.
+WriteEnterPVS: missing pFromData for '%short'.
 WriteToBuffer Message %short is not initialized! Probably missing required fields!
 Writes signed char list of permanently-banned user IDs to banned_user.cfg.
 Writing %s.
@@ -8226,14 +8213,16 @@ Writing memory stats to file memstats.txt
 Wrong JPEG library version: library is %double, caller expects %double
 Wrong alignment %double
 Wrote vis errors to %short
+X%...<
 X360_DST16
 X360_DST24
 X360_DST24F
-XBRBXBRBXBRBXBRBRBXBRBXBRBXBRBRBRBSARBSARASB`CAp
-XBRBXBRBXBRBXBRBXBRBRBRB`hARAp
+XBRBXBRBXBRBRBRB`RARAp
+XBRBXBRBXBRBXBRBRBXBRBRBRBSARBSARASB`CAp
 XBRBXBRBXBRBXBRBXBRBXBRBYARBp
 XBRBXBRBXBRB[ASARBp
 XBRB`
+XBRB`|ARATARARASARA
 XBSARBSAXBRB`
 XBTAp RBRBRBRBRBRBRBRBRBRBRBRBRAp `
 XBTBRB]ARBRAp
@@ -8243,8 +8232,8 @@ XPj4B>:
 X[A\A]A^A_]
 X[A^A_]
 XboxSystemInterface001
-Xfff.
-Y5)_1
+Y%tL=
+Y5i?1
 YARBYARBYARBYARBYARBYARA`
 YAVBp
 Yfff.
@@ -8302,7 +8291,6 @@ ZoomStayout
 [Voice payload]
 [__float128:%u:%u]
 [char:%u:%u]
-[fff.
 [ffffff.
 [int:%u:%u]
 [joy %double]%short is unbound.
@@ -8314,11 +8302,9 @@ ZoomStayout
 [unknown]
 \$ u)I
 \$4fA
-\$8A;\$H
 \$8Lc
-\$TfA
 \%03o
-\ASBRB\ASB`FATARCRCRB
+\ASBRB\ASB`EATARBRC
 \ASB`
 \KR0x`
 \U%08x
@@ -8330,13 +8316,14 @@ ZoomStayout
 \uRMc
 ] u)I
 ], Direct Connection %short (Handler=%double, Global=%double)
+]8A;]H
+]D;=krB
 ]`A;]p
 ]ffffff.
 ^ [A^]
 ^(A;^,ug
 ^(HcC
 ^,A+^(I
-^,[A^]
 ^BRB`
 ^LA+^H~jI
 ^V_TY
@@ -8573,6 +8560,7 @@ _V_expf
 _V_fclose
 _V_fopen
 _V_fread
+_V_frexpf
 _V_fwrite
 _V_iswspace
 _V_logf
@@ -8592,6 +8580,7 @@ _V_strtoi64
 _V_strtoui64
 _V_strupper_fast
 _V_swscanf
+_V_tanf
 _V_vscprintf
 _V_vsnprintf
 _V_vsnprintfRet
@@ -8653,7 +8642,6 @@ ___dynamic_cast
 ___error
 ___gxx_personality_v0
 ___maskrune
-___sincos_stret
 ___sprintf_chk
 ___stack_chk_fail
 ___stack_chk_guard
@@ -8720,7 +8708,6 @@ _fputc
 _fputs
 _fread
 _free
-_frexpf
 _fstat$INODE64
 _futimes
 _fwrite
@@ -8816,7 +8803,6 @@ _strtoull
 _swprintf
 _swscanf
 _system
-_tanf
 _tcgetattr
 _tcsetattr
 _temp_mapcycle.txt
@@ -8843,7 +8829,6 @@ _write
 ` ffff.
 ` fffff.
 ` ffffff.
-`#ARARA
 `(ARAp
 `(Hcx
 `(ff.
@@ -8880,7 +8865,7 @@ _write
 `Xff.
 `[A\A^A_]
 `[A^]
-``@`  0
+``@`   
 ``A9^p
 ``PPP`
 ````P``P`PP@P```P```PP`P``````P``P```P`P`P`p`
@@ -8895,7 +8880,6 @@ _write
 `````````````````````````````````
 ``````````````````````````````````````````
 ``p p
-`hffffff.
 `p p 0 0 0 0 0 0p p 0 0 0 0 0
 `pff.
 `xff.
@@ -9196,7 +9180,6 @@ client ack'double -1
 client read networking at tick sv(%double) cl(%double) %float
 client send move at tick sv(%double) cl(%double) %float
 client_connected
-client_crc
 client_name
 clientbitcount
 clientinsetx_override
@@ -9590,7 +9573,6 @@ handle
 heartbeat
 height
 height,
-hero_demo
 hero_id
 hex_digit_to_int
 hfff.
@@ -10249,7 +10231,6 @@ map key must name signed char scalar or string field.
 map type is only allowed for fields with signed char message type.
 map type is only allowed for repeated fields.
 map/mapname
-map_crc
 map_key must not name signed char repeated field.
 map_load
 map_name
@@ -10393,7 +10374,6 @@ networkbasetypes.proto"%
 networksystem
 networksystem_protomessages.proto
 newPanel
-new_bloom_2017
 nextdemo
 nfff.
 nfffff.
@@ -10482,7 +10462,6 @@ oversubscribed distance tree
 oversubscribed dynamic bit lengths tree
 oversubscribed literal/length tree
 p    
-p @P 
 p E;}
 p Hc{ 1
 p RBRBRBRBRBRBRBRD\KRC`
@@ -11152,7 +11131,6 @@ string fieldName, int xpos, int ypos, int wide, int tall, bool visible, bool ena
 string_array
 string_data
 string_table
-string_table_crc
 string_value
 strings::Substitute format string invalid: asked for "$
 strnlen
@@ -11299,7 +11277,7 @@ t$(A;t$,
 t$(H9
 t$0H9
 t$@H9
-t$PMc|$PM
+t$HMc|$HM
 t$XE+t$PE
 t$`L9
 t.I+]hH
@@ -11358,7 +11336,6 @@ tGIcWhH9
 tGffff.
 tHffff.
 tIffffff.
-tJfff.
 tKff.
 tLMc~
 tMff.
@@ -11371,11 +11348,11 @@ tSff.
 tSfff.
 tT~G1
 tUffff.
+tUfffff.
 tWLc{
 tYHcE
 tYIc~ H9
 tYIc~HH9
-tZHcC(H
 tab position
 tabPosition
 table %32.32s  %5i
@@ -11543,7 +11520,6 @@ uLM9w
 uMI9~
 uRMc}
 uTzRH
-uUIcE
 uUffffff.
 ubHcH
 udp/ip   : %short:%int
@@ -11591,12 +11567,14 @@ unsigned short	[A^]
 unsigned short HcC
 unsigned short fff.
 unsigned short restrict+rld
+unsigned short!ffff.
 unsigned short"L;u
 unsigned short#L;unsigned long
 unsigned short#fff.
 unsigned short%fffff.
 unsigned short&Ic|$
 unsigned short&L;long double
+unsigned short&L;unsigned long
 unsigned short'IcO,I
 unsigned short'L;u
 unsigned short'ffffff.
@@ -11618,6 +11596,7 @@ unsigned short+Ic~
 unsigned short+Ic~ H
 unsigned short+Ic~$H
 unsigned short+Ic~(H
+unsigned short+Ic~,H
 unsigned short+Ic~0H
 unsigned short+Ic~4H
 unsigned short+Ic~8H
@@ -11645,7 +11624,7 @@ unsigned short[HcSHH
 unsigned short[ff.
 unsigned short[ffff.
 unsigned short|fff.
-unsigned short}Lc-N
+unsigned short}Lc-
 unsupported proxy type
 unused
 update
@@ -12026,14 +12005,14 @@ virtual void CEngineServiceMgr::RegisterLoopMode(const char *, ILoopModeFactory 
 virtual void CEngineServiceMgr::SwitchToLoop(const char *, KeyValues *, uint32, const char *, bool)
 virtual void CGameEventSystem::RegisterGameEventHandlerAbstract(CUtlSlot *, const CUtlAbstractDelegate &, GameEventHandle_t, int)
 virtual void CGameEventSystem::UnregisterGameEventHandlerAbstract(CUtlSlot *, const CUtlAbstractDelegate &, GameEventHandle_t)
-virtual void CHLTVClientState::CL_CopyExistingEntity(IEntityReport *, CEntityReadInfo &)
-virtual void CHLTVClientState::CL_CopyNewEntity(IEntityReport *, CEntityReadInfo &, ClientClass *, int, SpawnGroupHandle_t)
+virtual void CHLTVClientState::CopyExistingEntity(IEntityReport *, CEntityReadInfo &)
+virtual void CHLTVClientState::CopyNewEntity(IEntityReport *, CEntityReadInfo &, ClientClass *, int, SpawnGroupHandle_t)
 virtual void CHLTVDemoRecorder::RecordServerClasses(ServerClass *)
 virtual void CInputService::RegisterInputValue(CInputValueBase *)
 virtual void CInputService::SaveConvarState()
 virtual void CNetworkFieldScratchData::Init(uint32, LoggingChannelID_t)
-virtual void CNetworkGameClient::CL_CopyExistingEntity(IEntityReport *, CEntityReadInfo &)
-virtual void CNetworkGameClient::CL_CopyNewEntity(IEntityReport *, CEntityReadInfo &, ClientClass *, int, SpawnGroupHandle_t)
+virtual void CNetworkGameClient::CopyExistingEntity(IEntityReport *, CEntityReadInfo &)
+virtual void CNetworkGameClient::CopyNewEntity(IEntityReport *, CEntityReadInfo &, ClientClass *, int, SpawnGroupHandle_t)
 virtual void CNetworkGameClient::ReencodeForVConsole(CEntityIndex)
 virtual void CToolGameSimulationDispatcher::PostReturnValueAbstract(GameToolEventTypeHandle_t, const void *)
 virtual void CToolGameSimulationDispatcher::RegisterGameToolEventHandlerAbstract(CUtlSlot *, const CUtlAbstractDelegate &, GameToolEventTypeHandle_t, int)
@@ -12068,9 +12047,9 @@ void CFieldPath::Path_SetCount(int)
 void CGameEventSystem::SendRebroadcastMessage(INetChannel *, bool, int, const uint8 *, NetChannelBufType_t)
 void CL_AddPostDataUpdateCall(CEntityReadInfo &, CEntityIndex, DataUpdateType_t)
 void CNetworkGameClientBase::ReadEnterPVS(IEntityReport *, CEntityReadInfo &)
-void CNetworkGameServerBase::SV_EnsureInstanceBaseline(ServerClass *, CEntityIndex, const void *)
-void CNetworkGameServerBase::SV_PackEntity(CEntityIndex, const void *, ServerClass *, uint32 *, CChangeInfoAccessor *, CFrameSnapshot *)
-void CNetworkGameServerBase::SV_WriteEnterPVS(CEntityWriteInfo &)
+void CNetworkGameServerBase::EnsureInstanceBaseline(ServerClass *, CEntityIndex, const void *)
+void CNetworkGameServerBase::PackEntity(CEntityIndex, const void *, ServerClass *, uint32 *, CChangeInfoAccessor *, CFrameSnapshot *)
+void CNetworkGameServerBase::WriteEnterPVS(CEntityWriteInfo &)
 void CNetworkStringTable::ParseUpdate(bf_read &, int)
 void CNetworkStringTableContainer::WriteBaselines(const char *, bf_write &)
 void CResourceStream::Align(uint, int)
@@ -12104,6 +12083,7 @@ void force_fatal_error(const CCommandContext &, const CCommand &)
 void std::__1::__sort<std::__1::__less<float, float>&, float*>(float*, float*, std::__1::__less<float, float>&)
 void([A^]
 void,;C<u
+void,A;void(}
 void<ff.
 void@CDemoMessagePB<(EDemoCommands)15, CDemoSpawnGroups>
 volume
@@ -12131,6 +12111,7 @@ vr_fxaa
 vr_ghost_correction_editing_enable
 vr_ghost_correction_enable
 vr_msaa
+vr_msaa_submit
 vr_refract_rt
 vr_warp
 vr_warp_using_mesh
@@ -12154,6 +12135,7 @@ w1Hc<
 w1Ic<
 w2Ic4
 wHffffff.
+wTIcD
 walkleft
 walkright
 was banned
@@ -12186,7 +12168,7 @@ writing
 wrong submessage type
 x1D;unsigned long
 x8A;D$0}1Ic
-xBA9Eh~<I
+xGA9Eh~AL
 xMSAA
 xXE9}
 xfffff.
@@ -12216,13 +12198,11 @@ yxxxxxxxI
 |$(H9
 |$0H9
 |$0L9
-|$8E;|$HD
 |$8H9
 |$@H9
 |$Ht2H
 |$\E+|$TE
 |$hE;|$xD
-|-fffff.
 |9D9d
 |Qff.
 |Rfff.
@@ -12236,6 +12216,7 @@ yxxxxxxxI
 }'A9V<r!
 }+E9g<r%
 }3fffff.
+}8E;}HD
 }:fffff.
 }BA9D$<r;
 }HA;EP}
@@ -12260,15 +12241,12 @@ yxxxxxxxI
 ~:ff.
 ~;ff.
 ~?ffffff.
-~@ffff.
 ~CServerChangelevelState with non empty m_Clients!!!
 ~Gfff.
 ~HAiw(
 ~Hffffff.
 ~Ifffff.
 ~Jffff.
-~Lfffff.
-~OdfD
 ~Offffff.
 ~Tfff.
 ~Uffffff.
