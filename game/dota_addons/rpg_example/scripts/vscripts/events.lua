@@ -208,9 +208,6 @@ end
 
 function PlayPACrit( hAttacker, hVictim )
 	local bloodEffect = "particles/units/heroes/hero_phantom_assassin/phantom_assassin_crit_impact.vpcf"
-	if hVictim:IsMechanical() then
-		bloodEffect = "particles/units/heroes/hero_phantom_assassin/phantom_assassin_crit_impact_mechanical.vpcf"
-	end
 	local nFXIndex = ParticleManager:CreateParticle( bloodEffect, PATTACH_CUSTOMORIGIN, nil )
 	ParticleManager:SetParticleControlEnt( nFXIndex, 0, hVictim, PATTACH_POINT_FOLLOW, "attach_hitloc", hVictim:GetAbsOrigin(), true )
 	ParticleManager:SetParticleControl( nFXIndex, 1, hVictim:GetAbsOrigin() )
