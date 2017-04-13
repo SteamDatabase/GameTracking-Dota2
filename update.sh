@@ -20,18 +20,6 @@ do
 	../.support/vpktool "$file" > "$baseFile"
 done <   <(find "game/dota/maps/" -type f -name "*.vpk" -print0)
 
-echo "Fixing UCS-2"
-
-while IFS= read -r -d '' file
-do
-	if ! file --mime "$file" | grep "charset=utf-16le"
-	then
-		continue
-	fi
-
-	temp_file=$(mktemp)
-	iconv -t UTF-8 -f UCS-2 -o "$temp_file" "$file" &&
-	mv -f "$temp_file" "$file"
-done <   <(find game/ -name "*.txt" -type f -print0)
+FixUCS2
 
 CreateCommit "$(grep "ClientVersion=" game/dota/steam.inf | grep -o '[0-9\.]*')"
