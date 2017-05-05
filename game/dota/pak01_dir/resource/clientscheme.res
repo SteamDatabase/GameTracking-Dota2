@@ -711,10 +711,8 @@ Scheme
 			"1"
 			{
 				"name"		"Dota Hypatia Bold"
-				"tall"		"16"
-				"weight"	"400"
-				"antialias" 	"1"
-				"dropshadow"	"1"
+				"tall"		"17"				
+				"weight"	"100"
 			}
 		}
 
@@ -722,12 +720,10 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"Dota Hypatia Bold"
-				"tall"		"18"
+				"name"		"RadianceM"
+				"tall"		"16"
 				"weight"	"400"
-				"antialias" 	"1"
-				"dropshadow"	"1"
-				"isproportional" "0"
+				"antialias" "1"
 			}
 		}
 
@@ -1016,6 +1012,16 @@ Scheme
         {
         	"font"		"vgui/fonts/cour.ttf" [$OSX||$LINUX]
         	"name"		"Courier New" [$OSX||$LINUX]
+        }
+        "5"
+        {
+        	"font"		"resource/radiance_regular.otf"
+        	"name"		"Radiance"
+        }
+        "6"
+        {
+        	"font"		"resource/radiancem_regular.otf"
+        	"name"		"RadianceM"
         }
 	}
 }

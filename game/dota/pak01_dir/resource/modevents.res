@@ -296,6 +296,12 @@
 	"dota_ability_changed"
 	{
 	}
+
+	"dota_spectator_talent_changed"
+	{
+		"abilityname"	"string"
+		"playerid"		"short"
+	}
 	
 	"dota_portrait_ability_layout_changed"
 	{
@@ -501,8 +507,9 @@
 	}
 	"dota_holdout_revive_complete"
 	{
-		"caster" "short"
-		"target" "short"
+		"caster" 			"short"
+		"target" 			"short"
+		"channel_time"		"float"	
 	}
 	"dota_player_killed"
 	{
@@ -1145,6 +1152,16 @@
 		"message"				"short"
 		"coins"				"uint64"
 	}
+	"dota_wager_token"
+	{
+		"userid"		"short"
+		"message"				"short"
+		"amount"				"int"
+	}
+	"dota_rank_wager"
+	{
+		"userid"		"short"
+	}
 	"colorblind_mode_changed"
 	{
 	}
@@ -1177,6 +1194,13 @@
 		"player_id"			"short"
 		"chat_message_type"	"short"
 	}
+
+	"dota_buyback"
+	{
+		"entindex"			"int"
+		"player_id"			"int"
+	}
+
 	"bought_back"
 	{
 		"player_id"			"short"

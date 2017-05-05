@@ -11035,7 +11035,7 @@
 				"damage_event"
 				{
 					"event"				"damage"
-					"attacker_must_be_hero"		"1"
+					"attacker_filter"	"must_be_hero"
 					"attacker_team"		"!enemyteam"
 					"target_team"		"!team"
 					"target_must_be_building" 	"1"
@@ -13536,8 +13536,2498 @@
 		}
 	}
 
+	"bloodstone_charges"
+	{
+		"challengetype"	"222"
+		"desc"			"#DOTA_ChallengeDesc_BloodstoneCharges"
+		"status_text"		"#DOTA_ChallengeStatusText_BloodstoneCharges"
+  		"challenge_ranks"	"3"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"detect_charges"
+				{
+					"event"			"bloodstone_charges"
+					"target"		"!hero"
+
+					"storage"
+					{
+						"1"
+						{
+							"key"			"value"
+							"aggregator"	"max"	
+						}
+					}
+				}
+			}
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_bloodstone_charges"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<bloodstone_charges>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<bloodstone_charges>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+
+	"death_count_at_game_end"
+	{
+		"challengetype"		"223"
+		"desc"				"#DOTA_ChallengeDesc_DeathsAtGameEnd"
+		"status_text"		"#DOTA_ChallengeStatusText_DeathsAtGameEnd"
+ 		"challenge_ranks"	"3"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"end_game"
+				{
+					"event"			"end_game_stats"
+					"playerid"		"!playerid"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"deaths"
+							"aggregator"	"max"
+						}	
+					}
+				}
+			}
+
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"0"
+			"post_tests"
+			{
+				"test_deaths"
+				{
+					"storage"		"1"
+					"compare"		"<="
+					"amount"		"<death_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<death_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+
+	"root_enemy_heroes"
+	{
+		"challengetype"	"224"
+		"desc"			"#DOTA_ChallengeDesc_RootEnemyHeroes"
+		"status_text"		"#DOTA_ChallengeStatusText_RootEnemyHeroes"
+		"challenge_ranks"	"3"
+		
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"root"
+				{
+					"event"						"modifier_add"
+					"caster"					"!hero"
+					"target_must_be_hero"		"1"
+					"is_root"					"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}
+			}
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_root"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<root_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<root_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		} 
+	}
+
+	"net_worth_by_time"
+	{
+		"challengetype"		"225"
+		"desc"				"#DOTA_ChallengeDesc_NetWorthByTime"
+		"status_text"		"#DOTA_ChallengeStatusText_NetWorthByTime"
+		"challenge_ranks"	"3"
+		"events"
+		{
+			"fail_gametime"		"<game_time>"
+			"matching_type"		"game_state"
+			"query"
+            {
+				"state_values"
+				{
+					"1"
+					{
+						"key"			"networth"
+						"aggregator"	"max" 
+					}
+				}
+			}
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_value"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<net_worth>"
+				}
+			}
+		}
+		"variables"
+		{
+			"<net_worth>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"<game_time>"
+			{
+				"format"	"gametime"
+				"index"		"1"
+			}
+		} 	
+	}
+
+	"deal_damage_with_units_under_hero_control"
+	{
+		"challengetype"		"226"
+		"desc"				"#DOTA_ChallengeDesc_DamageByControlledUnits"
+		"status_text"		"#DOTA_ChallengeStatusText_DamageByControlledUnits"
+		"challenge_ranks"	"3"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"damage_event"
+				{
+					"event"				"damage"
+					"damage_source"		"!hero"
+					"attacker_team"		"!team"
+					"target_must_be_hero"	"1"
+					"target_team"		"!enemyteam"
+					"attacker_filter" 	"must_not_be_hero"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"value"
+							"aggregator"		"sum"	
+						}
+					}
+				}    
+			}
+
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_total_damage"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<total_damage>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<total_damage>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+
+	"total_crit_damage"
+	{    
+		"challengetype"	"227"
+		"desc"			"#DOTA_ChallengeDesc_TotalCritDamage"
+		"status_text"		"#DOTA_ChallengeStatusText_TotalCritDamage"
+		"challenge_ranks"		"3"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"damage_event"
+				{
+					"event"				"critical_damage"
+					"damage_source"		"!hero"
+					"attacker_team"		"!team"
+					"target_team"		"!enemyteam"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"value"
+							"aggregator"	"sum"	
+						}
+					}
+				}  
+			}
+
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_total_damage"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<total_damage>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<total_damage>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+
+		}
+	}
+	
+	"win_multiple_games_with_primary_attribute"
+	{
+		"challengetype"	"228"
+		"desc"			"#DOTA_ChallengeDesc_WinWithPrimaryAttribute"
+		"status_text"		"#DOTA_ChallengeStatusText_WinWithPrimaryAttribute"
+		"challenge_ranks"		"3"
+		"requiredprimaryattribute"	"<hero_type>"
+ 		"multi_match"	"1"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"find_tower_kill"
+				{
+					"event"			"team_building_kill"
+					"enemyteam"		"!enemyteam"
+					"building_type"		"fort"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+			}
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"0"
+			"post_tests"
+			{
+				"fort_kill"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<win_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<hero_type>"
+			{
+				"format"	"primaryattribute"
+				"index"		"0"
+			}
+			"<win_count>"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+		}
+	}
+
+	"kill_enemies_with_assists"
+	{
+		"challengetype"	"229"
+		"desc"			"#DOTA_ChallengeDesc_KillEnemiesWithAssists"
+		"status_text"		"#DOTA_ChallengeStatusText_KillEnemiesWithAssists"
+		"challenge_ranks"		"3"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"kill"
+				{
+					"event"			"death"
+					"attacker"		"!hero"
+					"assist_count"	"<assist_count>"
+					"target_must_be_hero"	"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}
+			}
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_kills"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<kill_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<assist_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"<kill_count>"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+		}
+	}
+
+	"split_push_towers"
+	{
+		"challengetype"		"230"
+		"desc"				"#DOTA_ChallengeDesc_SplitPushTowers"
+		"status_text"		"#DOTA_ChallengeStatusText_SplitPushTowers"
+  		"challenge_ranks"		"3"
+
+		"events"
+		{
+			"fail_gametime"		"1800"
+			"matching_type"		"timeblock_accumulate_after_trigger"
+			"query"
+			{
+				"trigger"
+				{
+					"event"			"team_building_kill"
+					"team"			"!team"
+					"enemyteam"		"!enemyteam"
+					"building_type"		"tower"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+				"time_block_after_trigger"	"<splitpush_time>"
+				"accumulate_event"
+				{
+					"event"			"team_building_kill"
+					"team"			"!team"
+					"enemyteam"		"!enemyteam"
+					"building_type"		"tower"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+			}
+
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"1"
+			"post_tests"
+			{
+				"test_towers_killed"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<towers_killed>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<splitpush_time>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"<towers_killed>"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+		}
+	}
+
+	"total_team_healing"
+	{    
+		"challengetype"	"231"
+		"desc"			"#DOTA_ChallengeDesc_TotalTeamHealing"
+		"status_text"		"#DOTA_ChallengeStatusText_TotalTeamHealing"
+  		"challenge_ranks"		"3"
+		"multi_match"			"1"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"heal_event"
+				{
+					"event"			"heal"
+					"healer_team"		"!team"
+					"target_must_be_hero" "1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"value"
+							"aggregator"	"sum"	
+						}
+					}
+				}          
+			}
+
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_total_healing"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<total_healing>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<total_healing>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"[complete_limit]"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+			
+		}
+		
+	}
+
+	"smoke_gank_enemies_with_assists"
+	{
+		"challengetype"	"232"
+		"desc"			"#DOTA_ChallengeDesc_SmokeGankEnemiesWithAssists"
+		"status_text"		"#DOTA_ChallengeStatusText_SmokeGankEnemiesWithAssists"
+		"image"			"images/challenges/icon_challenges_smoked_kills.png"
+		"challenge_ranks"		"3"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"buff_lost"
+				{
+					"event"					"modifier_remove"
+					"modifier"				"modifier_smoke_of_deceit"
+					"caster"				"!hero"
+				}	
+				"separator"						"30.0"
+				"enemy_hero_kill"
+				{
+					"event"						"death"
+					"target_must_be_hero"		"1"
+					"assist_count"				"<assist_count>"
+					"target_team"				"!enemyteam"
+					"assist_player_id"			"!playerid"
+				}
+			}
+			"progress_stored_in"		"1"
+			"postmatch_increments"
+			{
+				"storage"
+				{
+					"1"
+					{
+						"aggregator"	"increment"
+					}
+				}
+			}
+			"post_tests"
+			{
+				"test_smoke_ganks"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<smoke_ganks>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<smoke_ganks>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"<assist_count>"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+		}
+	}
+
+	"team_kill_count"
+	{
+		"challengetype"		"233"
+		"desc"			"#DOTA_ChallengeDesc_TeamKills"
+		"status_text"		"#DOTA_ChallengeStatusText_TeamKills"
+		"challenge_ranks"		"3"
+
+		"events"
+		{
+			"fail_gametime"		"<game_time>"
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"kill"
+				{
+					"event"			"death"
+					"attacker_team"		"!team"
+					"target_team"		"!enemyteam"
+					"target_must_be_hero"	"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}
+			}
+
+			"clear_storage_per_query"	"0"
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_kill_count"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<kill_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<kill_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"<game_time>"
+			{
+				"format"	"gametime"
+				"index"		"1"
+			}
+		}
+	}
+
+	"win_captains_mode_games_multimatch"
+	{
+		"challengetype"	"234"
+		"desc"			"#DOTA_ChallengeDesc_WinCaptainsModeMultiMatch"
+		"status_text"		"#DOTA_ChallengeStatusText_WinCaptainsModeMultiMatch"
+		"challenge_ranks"		"3"
+		"multi_match"	"1"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"find_tower_kill"
+				{
+					"event"			"team_building_kill"
+					"enemyteam"		"!enemyteam"
+					"building_type"		"fort"
+					"required_game_mode"	"2"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+			}
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"0"
+			"post_tests"
+			{
+				"fort_kill"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<win_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<win_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+
+	"win_battle_cup_games_multimatch"
+	{
+		"challengetype"	"235"
+		"desc"			"#DOTA_ChallengeDesc_WinBattleCupMultiMatch"
+		"status_text"		"#DOTA_ChallengeStatusText_WinBattleCupMultiMatch"
+		"challenge_ranks"		"3"
+		"multi_match"	"1"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"find_tower_kill"
+				{
+					"event"			"team_building_kill"
+					"enemyteam"		"!enemyteam"
+					"building_type"		"fort"
+					"must_be_battle_cup"	"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+			}
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"0"
+			"post_tests"
+			{
+				"fort_kill"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<win_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<win_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+
+	"team_first_kills"
+	{
+		"challengetype"	"236"
+		"desc"			"#DOTA_ChallengeDesc_TeamFirstKills"
+		"status_text"		"#DOTA_ChallengeStatusText_TeamFirstKills"
+		"challenge_ranks"		"3"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"find_tower_kill"
+				{
+					"event"			"team_building_kill"
+					"team"			"!team"
+					"enemyteam"		"!enemyteam"
+					"building_type"		"tower"
+					"death_count"	"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+				"seperator" "OR"
+				"kill_roshan"
+				{
+					"event"			"death"
+					"attacker_team"	"!team"
+					"target"		"npc_dota_roshan"
+					"death_count"	"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+				"seperator" "OR"
+				"first_blood"
+				{
+					"event"			"first_blood"
+					"team"			"!team"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+			}
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"0"
+			"post_tests"
+			{
+				"test_kill_count"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<kill_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<kill_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+
+	"team_auras"
+	{
+		"challengetype"	"237"
+		"desc"			"#DOTA_ChallengeDesc_TeamAuras"
+		"status_text"		"#DOTA_ChallengeStatusText_TeamAuras"
+		"challenge_ranks"		"3"
+
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"find_aura_add"
+				{
+					"event"			"modifier_add"
+					"caster_team"	"!team"
+					"is_aura"		"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}	
+				}
+				"seperator" "OR"
+				"remove_aura_add"
+				{
+					"event"			"modifier_remove"
+					"caster_team"	"!team"
+					"is_aura"		"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"decrement"
+						}
+					}	
+				}
+			}
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"0"
+			"post_tests"
+			{
+				"test_kill_count"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<aura_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<aura_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"deal_damage_from_glimmer_ranked"
+	{    
+		"challengetype"	"238"
+		"desc"			"#DOTA_ChallengeDesc_DamageFromGlimmer"
+		"challenge_ranks" 	"3"
+		"status_text"	"#DOTA_ChallengeStatusText_DamageFromGlimmer"
+	
+		"events"
+		{
+			"matching_type"		"timeblock_accumulate_after_trigger"
+			"query"
+			{
+				"trigger"
+				{
+					"event"					"modifier_add"
+					"target"				"!hero"
+					"modifier"	"modifier_item_glimmer_cape_fade"		
+				}
+				"time_block_after_trigger"					"5"
+				"accumulate_event"
+				{
+					"event"			"damage"
+					"attacker"		"!hero"
+					"attacker_team"		"!team"
+					"target_team"		"!enemyteam"
+					"target_must_be_hero" "1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"value"
+							"aggregator"	"sum"	
+						}
+					}
+				}  
+			}        
+
+			"clear_storage_per_query"		"0"
+			"progress_stored_in"	"1"
+			"post_tests"
+			{
+				"test_invis_damage"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<invis_damage>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<invis_damage>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"three_man_meks_ranked"
+	{
+		"challengetype"		"239"
+		"desc"				"#DOTA_ChallengeDesc_TripleMek"
+		"status_text"		"#DOTA_ChallengeStatusText_TripleMek"
+		"challenge_ranks" 	"3"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"accumulate_event"
+				{
+					"event"					"modifier_add"
+					"modifier"				"modifier_item_mekansm_noheal"
+					"caster"				"!hero"
+					"target_must_be_hero" 	"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}          
+			}
+
+			"postmatch_increments"
+			{
+				"pre_storage_test"
+				{
+					"test_mekd_heroes_per_cast"
+					{
+						"storage"		"1"
+						"compare"		">="
+						"amount"		"3"
+					}
+				}
+				"storage"
+				{
+					"2"
+					{
+						"aggregator"			"increment"
+					}
+				}
+				
+			}
+
+			"clear_storage_per_trigger_or_pre_test_pass"
+			{
+				"1"			"1"		// Clear the value in our per-blink counter
+				"2"			"0"		// Don't clear our progress
+			}
+			"progress_stored_in"	"2"
+			"post_tests"
+			{
+				"test_mekd_heroes"
+				{
+					"storage"		"2"
+					"compare"		">="
+					"amount"		"<triple_meks>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<triple_meks>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+
+	"kill_enemy_towers_without_losing_yours"
+	{
+		"challengetype"	"240"
+		"desc"			"#DOTA_ChallengeDesc_KillEnemyTowerStreak"
+		"challenge_ranks"		"3"
+		"multi_query"			"1"
+
+		"events"
+		{
+			"1"
+			{
+				"desc"			"#DOTA_ChallengeDesc_KillEnemyTowerStreak_Sub1"
+				"status_text"		"#DOTA_ChallengeStatusText_KillEnemyTowerStreak_Sub1"
+				"matching_type"		"linear_series"
+				"query"
+				{
+					"find_tower_kill"
+					{
+						"event"			"team_building_kill"
+						"team"			"!team"
+						"enemyteam"		"!enemyteam"
+						"building_type"		"tower"
+						"storage"
+						{
+							"1"
+							{
+								"aggregator"	"increment"
+							}
+						}	
+					}
+				}
+				"progress_stored_in"		"1"
+				"clear_storage_per_query"	"0"
+				"post_tests"
+				{
+					"test_kill_count"
+					{
+						"storage"		"1"
+						"compare"		">="
+						"amount"		"<tower_count>"
+					}
+				}
+			}
+			"2"
+			{
+				"matching_type"		"linear_series"
+				"query_match_causes_failure" "1"
+				"query"
+				{
+					"fail_on_my_tower_kill"
+					{
+						"event"			"team_building_kill"
+						"team"			"!enemyteam"
+						"enemyteam"		"!team"
+						"building_type"		"tower"
+					}
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<tower_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+
+	"total_debuff_duration_with_medallion_solar_crest_ranked"
+	{
+		"challengetype"		"241"
+		"desc"				"#DOTA_ChallengeDesc_TotalDebuffWithMedallion"
+		"challenge_ranks"		"3"
+		"status_text"		"#DOTA_ChallengeStatusText_TotalDebuffWithMedallion"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"medallion_reduction_removed"
+				{
+					"event"									"modifier_remove"
+					"caster_playerid"						"!playerid"
+					"target_team"							"!enemyteam"
+					"target_must_be_hero"					"1"
+					"modifier" 								"modifier_item_medallion_of_courage_armor_reduction"
+					"duration_greater_than_mseconds"		"0.1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"elapsed_duration"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+				"separator" 	"OR"
+				"solar_crest_reduction_removed"
+				{
+					"event"									"modifier_remove"
+					"caster_playerid"						"!playerid"
+					"target_must_be_hero"					"1"
+					"modifier" 								"modifier_item_solar_crest_armor_reduction"
+					"duration_greater_than_mseconds"		"0.1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"elapsed_duration"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+				
+			}
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_debuff_duration"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<total_debuff_duration>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<total_debuff_duration>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		} 
+	}
+	"shivas_slow_and_damage_ranked"
+	{
+		"challengetype"			"242"
+		"desc" 					"#DOTA_ChallengeDesc_Shivas_Slow_Damage"
+		"status_text"		"#DOTA_ChallengeStatusText_Shivas_Slow_Damage"
+		"challenge_ranks"		"3"
+		"events"
+		{
+			"matching_type"								"linear_series"
+			"query"
+			{
+				"slow_added"
+				{
+					"event"									"modifier_remove"
+					"caster_playerid"						"!playerid"
+					"modifier"								"modifier_item_shivas_guard_blast"
+					"target_must_be_hero"					"1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"elapsed_duration"
+							"aggregator"		"sum"	
+						}
+					}
+				}
+			}
+		
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_total_duration"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<total_slow_duration>"
+				}
+			}
+			
+		}
+
+		"variables"
+		{
+			"<total_slow_duration>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"kills_during_bkb_ranked"
+	{
+		"challengetype"		"243"
+		"desc"				"#DOTA_ChallengeDesc_KillsDuringBKB_Ranked"
+		"status_text"		"#DOTA_ChallengeStatusText_KillsDuringBKB_Ranked"
+		"challenge_ranks"		"3"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"bkb_use"
+				{
+					"event"			"item"
+					"item"			"item_black_king_bar"
+					"caster"		"!hero"
+
+
+				}
+				"separator" 		"10"	
+				"kill_after_bkb"
+				{
+					"event"			"death" 
+					"target_must_be_hero"		"1"
+					"target_team"				"!enemyteam"
+					"assist_player_id"			"!playerid"
+					
+				}
+			}
+			"progress_stored_in"		"1"
+			"postmatch_increments"
+			{
+				"storage"
+				{
+					"1"
+					{
+						"aggregator"	"increment"
+					}
+				}
+				
+			}
+			"post_tests"
+			{
+				"test_kills_after_bkb"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<bkb_kill_count>"
+				}
+			}
+		}
+		"variables"
+		{
+			"<bkb_kill_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"total_linken_spell_absorbs"
+	{
+		"challengetype"		"244"
+		"desc"				"#DOTA_ChallengeDesc_TotalSpellAbsorbs"
+		"challenge_ranks"		"3"
+		"status_text"		"#DOTA_ChallengeStatusText_TotalSpellAbsorbs"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"spell_absorb_on_me"
+				{
+					"event"									"spell_absorb"
+					"caster"								"!hero"
+					"inflictor"								"modifier_item_sphere"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}
+				"separator" 	"OR"
+				"spell_absorb_on_others"
+				{
+					"event"									"spell_absorb"
+					"caster"								"!hero"
+					"inflictor"								"modifier_item_sphere_target"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}
+				"separator"		"OR"
+				"lotus_orb_triggered"
+				{
+					"event"		"ability_trigger"
+					"ability"	"item_lotus_orb"
+					"caster"	"!hero"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}
+				
+			}
+			"clear_storage_per_query"	"0"
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_absorb_count"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<total_spell_absorbs>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<total_spell_absorbs>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		} 
+	}
+
+	"obs_wards_multi_match_ranked"
+	{
+		"challengetype"		"245"
+		"desc"				"#DOTA_ChallengeDesc_PlaceWards"
+		"status_text"		"#DOTA_ChallengeStatus_PlaceWards"
+		"multi_match"		"1"
+		"challenge_ranks"	"3"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"end_game"
+				{
+					"event"			"end_game_stats"
+					"playerid"		"!playerid"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"obs_wards_placed"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+			}
+
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"0"
+			"post_tests"
+			{
+				"test_wards_placed"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<obs_wards_placed>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<obs_wards_placed>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"[complete_limit]"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+		}
+	}	
+	"kills_while_debuffing_armor"
+	{
+		"challengetype"		"246"
+		"desc"				"#DOTA_ChallengeDesc_Kills_Of_Armor_Debuffed_Enemies"
+		"challenge_ranks"	"3"
+		"status_text"		"#DOTA_ChallengeStatus_Kills_Of_Armor_Debuffed_Enemies"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"enemy_killed"
+				{
+					"event"			"death"
+					"target"		"!1"
+					"assist_player_id"	"!playerid"
+				}
+				"separator"			"1"
+				"track_lost"
+				{
+					"event"					"modifier_remove"
+					"is_armor_debuff"		"1"
+					"caster"				"!hero"
+					"target_team"			"!enemyteam"
+					"target_must_be_hero"	"1"
+					"storage"
+					{
+						"1"					"target"
+					}
+				}
+			}
+			"progress_stored_in"		"2"
+			"postmatch_increments"
+			{
+				"storage"
+				{
+					"2"
+					{
+						"aggregator"	"increment"
+					}
+				}
+				
+			}
+			"post_tests"
+			{
+				"test_debuffed_kills"
+				{
+					"storage"		"2"
+					"compare"		">="
+					"amount"		"<debuffed_kills>"
+				}
+			}
+		}
+		"variables"
+		{
+			"<debuffed_kills>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"blink_stun_ranked"
+	{    
+		"challengetype"	"247"
+		"desc"			"#DOTA_ChallengeDesc_Blink_Stun"
+		"status_text"		"#DOTA_ChallengeStatus_Blink_Stun"
+		"challenge_ranks"	"3"
+		"events"
+		{
+			"matching_type"		"timeblock_accumulate_after_trigger"
+			"query"
+			{
+				"trigger"
+				{
+					"event"			"item"
+					"item"			"item_blink"
+					"caster"		"!hero"
+				}
+				"time_block_after_trigger"	"2.0"
+				"accumulate_event"
+				{
+					"event"			"modifier_add"
+					"caster"		"!hero"
+					"target_must_be_hero" "1"
+					"is_stun"		"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}          
+			}
+			"progress_stored_in"	"1"
+			"post_tests"
+			{
+				"test_stunned_heroes"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<stun_count>"
+				}
+			}
+		}
+		"variables"
+		{
+			"<stun_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"damage_ethereal_target_ranked"
+	{    
+		"challengetype"	"248"
+		"desc"			"#DOTA_ChallengeDesc_Ethereal_Target_Damage"
+		"status_text"		"#DOTA_ChallengeStatus_Ethereal_Target_Damage"
+		"challenge_ranks"	"3"
+		"events"
+		{
+			"matching_type"		"timeblock_accumulate_after_trigger"
+			"query"
+			{
+				"trigger"
+				{
+					"event"			"modifier_add"
+					"target_team"	"!enemyteam"
+					"is_no_physical_damage_debuff"	"1"
+					"storage"
+					{
+						"2"		"target"
+					}
+				}
+				"time_block_after_trigger"	"4.5"
+				"accumulate_event"
+				{
+					"event"			"damage"
+					"attacker"		"!hero"
+					"attacker_team"		"!team"
+					"target_team"		"!enemyteam"
+					"target"		"!2"
+					"target_must_be_hero" "1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"value"
+							"aggregator"	"sum"	
+						}
+					}
+				}  
+			}        
+
+			"clear_storage_per_query"		"0"
+			"progress_stored_in"	"1"
+			"post_tests"
+			{
+				"test_invis_damage"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<ethereal_damage>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<ethereal_damage>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"triple_aoe_nukes_ranked_multimatch"
+	{
+		"challengetype"		"249"
+		"desc"				"#DOTA_ChallengeDesc_TripleAoENukes"
+		"challenge_ranks"	"3"
+		"multi_match"		"1"
+		"events"
+		{
+			"matching_type"		"timeblock_accumulate_after_trigger"
+			"query"
+			{
+				"trigger"
+				{
+					"event"			"ability"
+					"caster"		"!hero"
+				}
+				"time_block_after_trigger"	"1"
+				"accumulate_event"
+				{
+					"event"					"damage"
+					"caster"				"!hero"
+					"target_team"			"!enemyteam"
+					"target_must_be_hero" 	"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+				}          
+			}
+
+			"postmatch_increments"
+			{
+				"pre_storage_test"
+				{
+					"test_hit_heroes_per_cast"
+					{
+						"storage"		"1"
+						"compare"		">="
+						"amount"		"3"
+					}
+				}
+				"storage"
+				{
+					"2"
+					{
+						"aggregator"			"increment"
+					}
+				}
+				
+			}
+
+			"clear_storage_per_trigger_or_pre_test_pass"
+			{
+				"1"			"1"		// Clear the value in our per-blink counter
+				"2"			"0"		// Don't clear our progress
+			}
+			"progress_stored_in"	"2"
+			"post_tests"
+			{
+				"test_triplehit_heroes"
+				{
+					"storage"		"2"
+					"compare"		">="
+					"amount"		"<triple_hits>"
+				}
+			}
+		}
+		"variables"
+		{
+			"<triple_hits>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"[complete_limit]"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+		} 	
+	}
+	
+	"ogre_hit_and_multicast"
+	{
+		"challengetype"		"250"
+		"desc"				"#DOTA_ChallengeDesc_Ogre_Hit_And_Multicast"
+		"multi_query"		"1"
+		"challenge_ranks"	"3"
+		"requiredhero"		"84"
+		"events"
+		{
+			"1"
+			{
+				"desc"	 		"#DOTA_ChallengeDesc_Ogre_Hit_And_Multicast_Sub1"
+				"status_text" 	"#DOTA_ChallengeStatusText_Ogre_Hit_And_Multicast_Sub1"
+				"matching_type"		"linear_series"
+				"query"
+				{
+
+					"damage"
+					{
+						"event"			"damage"
+						"damage_type"	"physical"
+						"attacker"		"!hero"
+						"target_must_be_hero" "1"
+						"attacker_team"		"!team"
+						"target_team"		"!enemyteam"
+					}
+				}
+
+				"progress_stored_in"		"1"
+				"postmatch_increments"
+				{
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+					
+				}
+				"post_tests"
+				{
+					"test_regen_cancelled"
+					{
+						"storage"		"1"
+						"compare"		">="
+						"amount"		"<damage_instances>"
+					}
+				}
+			}
+			"2"
+			{
+				"desc"	 		"#DOTA_ChallengeDesc_Ogre_Hit_And_Multicast_Sub2"
+				"status_text" 	"#DOTA_ChallengeStatusText_Ogre_Hit_And_Multicast_Sub2"
+				"matching_type"		"linear_series"
+				"query"
+				{
+
+					"fireblast_multicasts"
+					{
+						"event"			"modifier_add"
+						"modifier"		"modifier_ogre_magi_fireblast_multicast"
+						"caster"		"!hero"
+						"storage"
+						{
+							"1"						"stack_count"
+						}
+					}
+					"separator"		"OR"
+					"ignite_multicasts"
+					{
+						"event"			"modifier_add"
+						"modifier"		"modifier_ogre_magi_ignite_multicast"
+						"caster"		"!hero"
+						"storage"
+						{
+							"1"						"stack_count"
+						}
+					}
+				}
+
+				"progress_stored_in"		"2"
+				
+				"postmatch_increments"
+				{
+				
+					"storage"
+					{
+						"2"
+						{
+							"key"					"derive_from_storage"
+							"from_storage_index"	"1"
+							"aggregator"			"sum"
+						}
+					}
+					
+				}
+				
+
+				"post_tests"
+				{
+					"test_regen_cancelled"
+					{
+						"storage"		"2"
+						"compare"		">="
+						"amount"		"<multicast_instances>"
+					}
+				}
+			}
+		}
+		"variables"
+		{
+			"<damage_instances>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"<multicast_instances>"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+		} 
+	}
+	"purge_debuffs_with_manta_ranked"
+	{    
+		"challengetype"		"251"
+		"desc"				"#DOTA_ChallengeDesc_PurgeDebuffsWithManta"
+		"challenge_ranks"	"3"
+		"status_text"		"#DOTA_ChallengeStatusText_PurgeDebuffsWithManta"
+		"events"
+		{
+			"matching_type"		"timeblock_accumulate_after_trigger"
+			"query"
+			{
+				"trigger"
+				{
+					"event"			"item"
+					"item"			"item_manta"
+					"caster"		"!hero"
+				}
+			
+				"time_block_after_trigger"	"1.0"
+				"accumulate_event"
+				{
+					"event"						"modifier_remove"
+					"is_debuff"					"1"
+					"purged"					"1"
+					"target_must_be_hero" "1"
+					"storage"
+					{
+						"1"						
+						{	
+							"aggregator"			"increment"
+						}
+					}
+				}
+			}
+			"progress_stored_in"		"1"
+			"clear_storage_per_query"	"0"
+			"post_tests"
+			{
+				"test_purges"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<debuffs_purged>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<debuffs_purged>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"use_moon_shard_multimatch_ranked"
+	{
+		"challengetype"		"252"
+		"desc"				"#DOTA_ChallengeDesc_Use_MoonShard"
+		"status_text"		"#DOTA_ChallengeStatusText_Use_MoonShard"
+		"challenge_ranks"		"3"
+		"multi_match"			"1"
+		"events"
+		{		
+			"matching_type"		"timeblock_accumulate_after_trigger"
+			"query"
+			{
+				"trigger"
+				{
+					"event"			"item"
+					"item"			"item_moon_shard"
+					"caster"		"!hero"
+				}
+			
+				"time_block_after_trigger"	"1.0"
+				"accumulate_event"
+				{
+					"event"						"modifier_add"
+					"modifier"					"modifier_item_moon_shard_consumed"
+					"storage"
+					{
+						"1"						
+						{	
+							"aggregator"			"increment"
+						}
+					}
+				}
+			}
+			"clear_storage_per_query"	"0"
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_value"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<moon_shard_uses>"
+				}
+			}
+		}
+		"variables"
+		{
+			"<moon_shard_uses>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"[complete_limit]"
+			{
+				"format"	"int"
+				"index"		"1"
+			}
+			
+		}
+	}
+	"deal_pure_damage_ranked"
+	{
+		"challengetype"		"253"
+		"desc"				"#DOTA_ChallengeDesc_AccumPureDamage"
+		"challenge_ranks"	"3"
+		"status_text"		"#DOTA_ChallengeStatus_AccumPureDamage"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"find_damage"
+				{
+					"event"			"damage"
+					"damage_type"	"pure"
+					"attacker"		"!hero"
+					"target_must_be_hero" "1"
+					"attacker_team"		"!team"
+					"target_team"		"!enemyteam"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"value"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+
+			}
+
+			"clear_storage_per_query"	"0"
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_value"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<accum_damage>"
+				}
+			}
+		}
+		
+		"variables"
+		{
+			"<accum_damage>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"total_hex_duration_ranked"
+	{
+		"challengetype"		"254"
+		"desc"				"#DOTA_ChallengeDesc_TotalHexDuration"
+		"challenge_ranks"	"3"
+		"status_text"		"#DOTA_ChallengeStatusText_TotalHexDuration"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"shadow_shaman_hex_removed"
+				{
+					"event"									"modifier_remove"
+					"caster_playerid"						"!playerid"
+					"target_team"							"!enemyteam"
+					"target_must_be_hero"					"1"
+					"modifier" 								"modifier_shadow_shaman_voodoo"
+					"duration_greater_than_mseconds"		"0.1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"elapsed_duration"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+				"separator" 	"OR"
+				"lion_hex_removed"
+				{
+					"event"									"modifier_remove"
+					"caster_playerid"						"!playerid"
+					"target_team"							"!enemyteam"
+					"target_must_be_hero"					"1"
+					"modifier" 								"modifier_lion_voodoo"
+					"duration_greater_than_mseconds"		"0.1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"elapsed_duration"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+				"separator" 	"OR"
+				"sheepstick_hex_removed"
+				{
+					"event"									"modifier_remove"
+					"caster_playerid"						"!playerid"
+					"target_team"							"!enemyteam"
+					"target_must_be_hero"					"1"
+					"modifier" 								"modifier_sheepstick_debuff"
+					"duration_greater_than_mseconds"		"0.1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"elapsed_duration"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+				
+			}
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_debuff_duration"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<total_hex_duration>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<total_hex_duration>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		} 
+	}
+	
+	"luna_hit_with_lucent_beams_kill_creeps"
+	{    
+		"challengetype"	"255"
+		"desc"			"#DOTA_ChallengeDesc_Luna_Lucent_Beams_Creep_Kills"
+		"challenge_ranks"		"3"
+		"multi_query"			"1"
+		"requiredhero"			"48"
+		"events"
+		{
+			"1"
+			{
+				"desc"			"#DOTA_ChallengeDesc_Luna_Lucent_Beams_Creep_Kills_Sub1"
+				"status_text"		"#DOTA_ChallengeStatusText_Luna_Lucent_Beams_Creep_Kills_Sub1"
+				
+				"matching_type"		"linear_series"
+				"query"
+				{
+					"lucent_beam_hits"
+					{
+						"event"									"damage"
+						"attack"								"luna_lucent_beam"
+						"caster_playerid"						"!playerid"
+						"target_team"							"!enemyteam"
+						"target_must_be_hero"					"1"
+					}
+					"separator"		"OR"
+					"eclipse_hits"
+					{
+						"event"									"damage"
+						"attack"								"luna_eclipse"
+						"caster_playerid"						"!playerid"
+						"target_team"							"!enemyteam"
+						"target_must_be_hero"					"1"
+					}
+					
+				}
+				"progress_stored_in"		"1"
+				
+				"postmatch_increments"
+				{
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"	"increment"
+						}
+					}
+					
+				}
+				"post_tests"
+				{
+					"test_beam_hits"
+					{
+						"storage"		"1"
+						"compare"		">="
+						"amount"		"<lucent_beam_hits>"
+					}
+				}
+			}
+			
+			
+			"2"
+			{
+				"desc"			"#DOTA_ChallengeDesc_Luna_Lucent_Beams_Creep_Kills_Sub2"
+				"status_text"		"#DOTA_ChallengeStatusText_Luna_Lucent_Beams_Creep_Kills_Sub2"
+				"matching_type"		"timeblock_accumulate"
+				"query"
+				{
+					"time_block"		"30"
+
+					"accumulate_event"
+					{
+						"event"			"death"
+							"attacker"		"!hero"
+							"storage"
+							{
+								"1"
+								{
+									"aggregator"	"increment"
+								}
+							}
+					}          
+				}
+
+				"postmatch_increments"
+				{
+					"storage"
+					{
+						"2"
+						{
+							"key"					"derive_from_storage"
+							"from_storage_index"	"1"
+							"aggregator"			"max"
+						}
+					}
+					
+				}
+				"clear_storage_per_query"
+				{
+					"1"			"1"		// Clear the value in our per-blink counter
+					"2"			"0"		// Don't clear our progress
+				}
+				"progress_stored_in"	"2"
+				"post_tests"
+				{
+					"test_creeps_killed"
+					{
+						"storage"		"1"
+						"compare"		">="
+						"amount"		"<creep_kills>"
+					}
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<lucent_beam_hits>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			
+			"<creep_kills>"
+			{
+				"format"	"int"
+				"index"		"1"
+			}			
+		}
+	}
+	
+	"bash_enemies_ranked"
+	{    
+		"challengetype"	"256"
+		"desc"			"#DOTA_ChallengeDesc_BashEnemies"
+		"status_text"		"#DOTA_ChallengeStatusText_BashEnemies"
+		"challenge_ranks"		"3"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"bash"
+				{
+					"event"			"modifier_add" 
+					"is_stun"		"1"
+					"caster"		"!hero"
+					"target_must_be_hero"		"1"
+					"target_team"				"!enemyteam"
+					"target" 		"!1"
+
+				}
+				"separator" 		"0"	
+				"physical_attack"
+				{
+					"event"			"damage"
+					"damage_type"	"physical"
+					"attacker"		"!hero"
+					"target_must_be_hero" "1"
+					"storage"
+					{
+						"1"					"target"
+					}
+					
+				}
+			}
+			"progress_stored_in"		"2"
+			"postmatch_increments"
+			{
+				"storage"
+				{
+					"2"
+					{
+						"aggregator"	"increment"
+					}
+				}
+				
+			}
+			"post_tests"
+			{
+				"test_bashes"
+				{
+					"storage"		"2"
+					"compare"		">="
+					"amount"		"<bash_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<bash_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	"team_stun_duration_ranked"
+	{
+		"challengetype"		"257"
+		"desc"				"#DOTA_ChallengeDesc_TotalTeamDisableDuration"
+		"challenge_ranks"		"3"
+		"status_text"		"#DOTA_ChallengeStatus_TotalTeamDisableDuration"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"stun_added"
+				{
+					"event"									"modifier_remove"
+					"attacker_team"		"!team"
+					"target_team"		"!enemyteam"
+					"target_must_be_hero" "1"
+					"target_must_be_hero"					"1"
+					"is_stun"								"1"
+					"duration_greater_than_mseconds"		"0.1"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"stun_duration"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+			}
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_stun_duration_total"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<total_stun_duration>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<total_stun_duration>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		} 
+	}
+	
+	"team_pickup_runes_ranked"
+	{
+		"challengetype"	"258"
+		"desc"			"#DOTA_ChallengeDesc_TeamPickupRunes"
+		"image"			"images/challenges/icon_challenges_xrune_pickups.png"
+		"challenge_ranks"		"3"
+		"status_text"	"#DOTA_ChallengeStatusText_TeamPickupRunes"
+		"events"
+		{
+			"fail_gametime"		"1800"
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"bounty_rune"
+				{
+					"event"			"pickup_rune"
+					"team"		"!team"
+				}
+			}
+			"progress_stored_in"		"1"
+			"postmatch_increments"
+			{
+				"storage"
+				{
+					"1"
+					{
+						"aggregator"	"increment"
+					}
+				}
+				
+			}
+			"post_tests"
+			{
+				"runes_picked_up"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<rune_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<rune_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
+	
+	"team_assist_count_by_time"
+	{
+		"challengetype"		"259"
+		"desc"				"#DOTA_ChallengeDesc_TeamAssistsByTime"
+		"status_text"	"#DOTA_ChallengeStatusText_TeamAssistsByTime"
+		"challenge_ranks"	"3"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"fail_gametime"		"<game_time>"
+			"query"
+			{
+				"find_kill"
+				{
+					"event"			"death"
+					"attacker_team"	"!team"
+					"target_team"	"!enemyteam"
+					"target_must_be_hero" 	"1"
+					"storage"
+					{
+						"1"			"assisting_player_count"
+					}
+				}
+			}
+			"progress_stored_in"		"2"
+			
+			"postmatch_increments"
+			{
+				"storage"
+				{
+					"2"
+					{
+						"key"					"derive_from_storage"
+						"from_storage_index"	"1"
+						"aggregator"			"sum"
+					}
+				}
+				
+			}
+
+			"clear_storage_per_query"
+				{
+					"1"			"1"		// Clear the value in our per-assist counter
+					"2"			"0"		// Don't clear our progress
+				}
+			
+			"post_tests"
+			{
+				"test_assist"
+				{
+					"storage"		"2"
+					"compare"		">="
+					"amount"		"<assist_count>"
+				}
+			}
+		}
+
+		"variables"
+		{
+			"<assist_count>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+			"<game_time>"
+			{
+				"format"	"gametime"
+				"index"		"1"
+			}
+		}
+	}
+	"team_deal_physical_damage_ranked"
+	{
+		"challengetype"		"260"
+		"desc"				"#DOTA_ChallengeDesc_TeamAccumPhysicalDamage"
+		"status_text"		"#DOTA_ChallengeStatusText_TeamAccumPhysicalDamage"
+		"challenge_ranks"	"3"
+		"events"
+		{
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"find_damage"
+				{
+					"event"			"damage"
+					"damage_type"	"physical"
+					"target_must_be_hero" "1"
+					"attacker_team"		"!team"
+					"target_team"		"!enemyteam"
+					"storage"
+					{
+						"1"
+						{
+							"key"			"value"
+							"aggregator"	"sum"	
+						}
+					}
+				}
+			}
+
+			"clear_storage_per_query"	"0"
+			"progress_stored_in"		"1"
+			"post_tests"
+			{
+				"test_value"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<accum_damage>"
+				}
+			}
+		}
+		
+		"variables"
+		{
+			"<accum_damage>"
+			{
+				"format"	"int"
+				"index"		"0"
+			}
+		}
+	}
 }
-
-
-
-
