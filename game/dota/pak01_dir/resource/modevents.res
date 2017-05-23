@@ -1054,10 +1054,6 @@
 		"display_ui_on_left"	"bool"
 	}
 
-	"ingame_events_changed"
-	{
-	}
-
 	"dota_match_signout"
 	{
 	}
@@ -1211,6 +1207,17 @@
 		"killer_userid"	"short"	
 		"teamnumber"	"short"
 		"gold"			"short"
+	}
+
+	"particle_system_start"
+	{
+		"targetname"			"string"
+	}
+
+	"particle_system_stop"
+	{
+		"targetname"			"string"
+		"immediate"				"bool"
 	}
 }
 
