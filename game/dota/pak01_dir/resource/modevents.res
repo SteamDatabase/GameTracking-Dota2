@@ -882,13 +882,6 @@
 		"reason_code" "int"
 		"reason_desc" "string"
 	}
-	"client_connectionless_packet"
-	{
-		"local"	"1"
-		"buffer" "local"
-		"buffersize" "long"
-		"address" "string"
-	}
 	"hero_selector_preview_set"
 	{
 		"setindex" "short"
