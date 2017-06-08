@@ -3196,7 +3196,7 @@ _G.ZonesDefinition =
 				},
 				-- Wave 2
 				{
-					flDuration = 21.0,
+					flDuration = 14.0,
 					flSpawnInterval = 7.1, -- guard against possible extra group bug
 					NPCs =
 					{
@@ -3258,7 +3258,7 @@ _G.ZonesDefinition =
 				},
 				-- Wave 3
 				{
-					flDuration = 14.0,
+					flDuration = 7.0,
 					flSpawnInterval = 7.1, -- guard against possible extra group bug
 					NPCs =
 					{
