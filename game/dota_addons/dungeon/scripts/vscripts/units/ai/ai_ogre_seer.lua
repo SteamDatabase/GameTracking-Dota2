@@ -45,7 +45,7 @@ function OgreSeerThink()
 	local bIgniteReady = ( #enemies > 0 and IgniteAbility ~= nil and IgniteAbility:IsFullyCastable() )
 
 	if BloodlustAbility ~= nil and BloodlustAbility:IsFullyCastable() then
-		local friendlies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, 1200, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
+		local friendlies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, 1500, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
 		for _,friendly in pairs ( friendlies ) do
 			if friendly ~= nil then
 				if ( friendly:GetUnitName() == "npc_dota_creature_ogre_tank" ) or ( friendly:GetUnitName() == "npc_dota_creature_ogre_tank_boss" ) then
@@ -54,7 +54,7 @@ function OgreSeerThink()
 					--print( string.format( "fDist == %d, fCastRange == %d", fDist, fCastRange ) )
 					if ( fDist <= fCastRange ) and ( ( #enemies > 0 ) or ( friendly:GetAggroTarget() ) ) then
 						return Bloodlust( friendly )
-					elseif ( fDist > 400 ) and ( fDist < 900 ) then -- ( not thisEntity:GetAggroTarget() ) and 
+					elseif ( fDist > 400 ) and ( fDist < 1500 ) and friendly:GetUnitName() == "npc_dota_creature_ogre_tank_boss" then
 						if bIgniteReady == false then
 							return Approach( friendly )
 						end

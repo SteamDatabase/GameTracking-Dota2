@@ -8,6 +8,8 @@ function Spawn( entityKeyValues )
 		return
 	end
 
+	--thisEntity.vInitialSpawnPos = thisEntity:GetOrigin()
+
 	thisEntity:AddNewModifier( nil, nil, "modifier_invulnerable", { duration = -1 } )
 
 	SmashAbility = thisEntity:FindAbilityByName( "ogre_tank_boss_melee_smash" )
@@ -25,11 +27,23 @@ function OgreTankBossThink()
 		return 1
 	end
 
+	if not thisEntity.bInitialized then
+		thisEntity.vInitialSpawnPos = thisEntity:GetOrigin()
+		thisEntity.bInitialized = true
+	end
+
 	if thisEntity.bStarted == false then
 		return 0.1
 	else
 		thisEntity:RemoveModifierByName( "modifier_invulnerable" )
-		print( "removed invuln modifier from ogre boss" )
+		--print( "removed invuln modifier from ogre boss" )
+	end
+
+	-- Are we too far from our initial spawn position?
+	local fDist = ( thisEntity:GetOrigin() - thisEntity.vInitialSpawnPos ):Length2D()
+	if fDist > 2500 then
+		RetreatHome()
+		return 2.0
 	end
 
 	local nEnemiesRemoved = 0
@@ -93,5 +107,15 @@ function Smash( enemy )
 	})
 
 	return 3 / thisEntity:GetHasteFactor()
+end
+
+function RetreatHome()
+	--print( "OgreTankBoss - RetreatHome()" )
+
+	ExecuteOrderFromTable({
+		UnitIndex = thisEntity:entindex(),
+		OrderType = DOTA_UNIT_ORDER_MOVE_TO_POSITION,
+		Position = thisEntity.vInitialSpawnPos
+	})
 end
 

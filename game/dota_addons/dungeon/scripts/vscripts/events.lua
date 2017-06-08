@@ -1252,13 +1252,13 @@ end
 ---------------------------------------------------------
 
 function CDungeon:TrackPlayerAchievementEvent( trackingTable, nPlayerID, nIndex )
-	local unAccountID = PlayerResource:GetSteamAccountID( nPlayerID )
+	local szAccountID = tostring( PlayerResource:GetSteamAccountID( nPlayerID ) )
 
-	if trackingTable[ unAccountID ] == nil then
-		trackingTable[ unAccountID ] = {}
+	if trackingTable[ szAccountID ] == nil then
+		trackingTable[ szAccountID ] = {}
 	end
 
-	trackingTable[ unAccountID ][ nIndex ] = true
+	trackingTable[ szAccountID ][ nIndex ] = true
 end
 
 ---------------------------------------------------------
