@@ -3,22 +3,233 @@
 		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
 		<include src="s2r://panorama/styles/dashboard_page_shared.vcss_c" />
 		<include src="s2r://panorama/styles/compendiums/compendium_styles.vcss_c" />
+		<include src="s2r://panorama/styles/battle_pass/international2017/bp_international2017_shared.vcss_c" />		
 		<include src="s2r://panorama/styles/battle_pass/international2017/bp_international2017_campaigndetails.vcss_c" />
+
 	</styles>
+	<script>
+		var TREASURE_ITEM_DEF = 12040;
+		var RELIC_ITEM_DEFS = [ 12055, 12056, 21135, 12041, 12042, 12043, 12044, 12045, 12046, 12047, 12048, 12049, 12050, 12051, 12052, 12053, 12054 ];
+
+		// "12055" Carapace of Qaldin
+		// "12056" The Caustic Finale
+		// "21135" Creed of Omniscience  General Items
+		// "12041" Oblivion's Locket
+		// "12042" Pelt of the Old Wolf  Lycan
+		// "12043" Paw of Lucius
+		// "12044" Longclaw's Amulet
+		// "12045" Bogdugg's Cudgel  Ogre
+		// "12046" Bogdugg's Baldric
+		// "12047" Bogdugg's Lucky Femur
+		// "12048" Sign of the Arachnid  Spider
+		// "12049" Unhallowed Icon
+		// "12050" Preserved Skull
+		// "12051" Treads of Ermacor  Temple Guardians
+		// "12053" Guardian Shell
+		// "12054" Watcher's Gaze
+		// "12052" Rhyzik's Eye  Sand King
+		
+		
+		g_nCurrentPageClick = 0;
+
+		var viewComic = function()
+		{
+		$.DispatchEvent( 'DOTAInternational2017ViewComic' );
+		};
+
+		var closeComic = function()
+		{
+		removePageClasses();
+		$( '#IntroComicContainer' ).RemoveClass( 'ShowIntroComic' );
+
+		$.DispatchEvent( 'DOTASetCurrentDashboardPageFullscreen', false );
+		};
+
+		var onPageClick = function()
+		{
+		if ( g_nCurrentPageClick > 25 )
+		{
+			$( '#ReplayComic' ).AddClass( 'ShowButton' );
+			$( '#ComicPageBox' ).AddClass( 'ComicFinished' );
+			$( '#StartCampaignButtonFromComic' ).AddClass( 'ComicFinished' );
+			$( '#PurchaseBattlePass' ).AddClass( 'ComicFinished' );
+			
+		return;
+		}
+			g_nCurrentPageClick = g_nCurrentPageClick + 1;
+			$( '#ComicPageBox' ).SetHasClass( 'CC' + g_nCurrentPageClick, true );
+		};
+
+		var onPageBack = function()
+		{
+		if ( g_nCurrentPageClick < 1 )
+			{
+				return;
+			}
+			$( '#ComicPageBox' ).SetHasClass( 'CC' + g_nCurrentPageClick, false );
+			g_nCurrentPageClick = g_nCurrentPageClick - 1;
+
+		};		
+		
+		var removePageClasses = function()
+		{
+			for (i = 0; i < g_nCurrentPageClick + 1; i++) 
+			{ 
+				$( '#ComicPageBox' ).RemoveClass( 'CC' + i );
+			}
+			
+			$( '#ComicPageBox' ).RemoveClass( 'ComicFinished' );
+			$( '#StartCampaignButtonFromComic' ).RemoveClass( 'ComicFinished' );
+			$( '#PurchaseBattlePass' ).RemoveClass( 'ComicFinished' );
+			$( '#ReplayComic' ).RemoveClass( 'ShowButton' );
+			
+			g_nCurrentPageClick = 0;
+		};
+		
+		var viewComicFullScreen = function()
+		{
+			
+		};
+				
+		var updateEarnedItems = function()
+		{
+				$.GetContextPanel().SetHasClass( 'HasPendingReward', LocalInventory.HasItemByDefinition( TREASURE_ITEM_DEF ) );
+				
+				var relicsList = $( '#EarnedRewardsList' );
+				relicsList.RemoveAndDeleteChildren();
+				for ( var i = 0; i < RELIC_ITEM_DEFS.length; ++i )
+				{
+					var itemDef = RELIC_ITEM_DEFS[ i ];
+					if ( !LocalInventory.HasItemByDefinition( itemDef ) )
+						continue;
+					
+					var relicPanel = $.CreatePanel( 'DOTAEconItem', relicsList, "Relic" + itemDef );
+					relicPanel.SetItemByDefinition( itemDef );
+					relicPanel.AddClass( 'DisableInspect' );
+				}
+				
+				$.GetContextPanel().SetHasClass( 'HasEarnedItems', relicsList.GetChildCount() > 0 );
+		};
+		
+		$.Schedule( 0.0, function()
+		{
+			// If your items change, we might need to update the earned items
+			$.RegisterForUnhandledEvent( 'DOTAInventoryItemUpdated', function( unItemDef, unItemID, reason )
+			{
+				if ( unItemDef == TREASURE_ITEM_DEF )
+				{
+					updateEarnedItems();
+					return;
+				}
+
+				for ( var i = 0; i < RELIC_ITEM_DEFS.length; ++i )
+				{
+					if ( RELIC_ITEM_DEFS[ i ] == unItemDef )
+					{
+						updateEarnedItems();
+						return;
+					}
+				}
+			} );
+		});
+		
+	</script>
+
+	<snippets>
+
+		<snippet name="ZoneLeaderboardElement">
+			<Panel>
+				<Panel id="NameContainer">
+					<Panel class="LeftRightFlow">
+						<DOTAHeroImage id="HeroImage1" heroimagestyle="icon" class="heroImage" scaling="stretch-to-cover-preserve-aspect" />
+						<Label text="{g:dota_persona:account_id_1}" html="true"/>
+					</Panel>
+
+					<Panel class="LeftRightFlow">						
+						<DOTAHeroImage id="HeroImage2" heroimagestyle="icon" class="heroImage" scaling="stretch-to-cover-preserve-aspect" />
+						<Label text="{g:dota_persona:account_id_2}" html="true"/>
+					</Panel>
+					
+					<Panel class="LeftRightFlow">					
+						<DOTAHeroImage id="HeroImage3" heroimagestyle="icon" class="heroImage" scaling="stretch-to-cover-preserve-aspect" />
+						<Label text="{g:dota_persona:account_id_3}" html="true"/>
+					</Panel>
+					
+					<Panel class="LeftRightFlow">					
+						<DOTAHeroImage id="HeroImage4" heroimagestyle="icon" class="heroImage" scaling="stretch-to-cover-preserve-aspect" />
+						<Label text="{g:dota_persona:account_id_4}" html="true"/>
+					</Panel>
+				</Panel>
+				<Panel id="StatsContainer">
+					<Panel id="StarContainerReplays">
+						<Panel id="ZoneStar1" class="Star"/>
+						<Panel id="ZoneStar2" class="Star"/>
+						<Panel id="ZoneStar3" class="Star"/>
+					</Panel>
+					<!-- <Label id="LeaderboardZoneLabel" text="{s:furthest_zone_name}"/> -->
+					<Panel id="TimeContainer">
+						<Panel class="ClockIcon"/>
+						<Label id="GameTime" class="MonoNumbersFont" text="{s:time}"/>
+					</Panel>
+				</Panel>	
+				<Panel id="MatchDetails" class="ExternalIcon"/>
+			</Panel>
+		</snippet>
+
+		<snippet name="TotalLeaderboardElement">
+			<Panel>
+				<Panel id="NameContainer" class="LiveGames">
+					<Panel class="LeftRightFlow">
+						<DOTAHeroImage id="HeroImage1" heroimagestyle="icon" class="heroImage" scaling="stretch-to-cover-preserve-aspect" />
+						<Label id="PlayerName1" class="PlayerName" text="{g:dota_persona:account_id_1}" html="true"/>
+					</Panel>
+
+					<Panel class="LeftRightFlow">						
+						<DOTAHeroImage id="HeroImage2" heroimagestyle="icon" class="heroImage" scaling="stretch-to-cover-preserve-aspect" />
+						<Label id="PlayerName2" class="PlayerName" text="{g:dota_persona:account_id_2}" html="true"/>
+					</Panel>
+					
+					<Panel class="LeftRightFlow">					
+						<DOTAHeroImage id="HeroImage3" heroimagestyle="icon" class="heroImage" scaling="stretch-to-cover-preserve-aspect" />
+						<Label id="PlayerName3" class="PlayerName" text="{g:dota_persona:account_id_3}" html="true"/>
+					</Panel>
+					
+					<Panel class="LeftRightFlow">					
+						<DOTAHeroImage id="HeroImage4" heroimagestyle="icon" class="heroImage" scaling="stretch-to-cover-preserve-aspect" />
+						<Label id="PlayerName4" class="PlayerName" text="{g:dota_persona:account_id_4}" html="true"/>
+					</Panel>
+				</Panel>
+				<Panel id="StatsContainer">
+					<Panel id="StarContainer">
+						<Panel class="StarLit Star"/>
+						<Label id="StarAmount" class="MonoNumbersFont" text="{i:stars}"/>
+					</Panel>		
+					<Label id="LeaderboardZoneLabel" text="{s:furthest_zone_name}"/>
+					<Panel id="TimeContainer">
+						<Panel class="ClockIcon"/>
+						<Label id="GameTime" class="MonoNumbersFont" text="{s:time}"/>
+					</Panel>
+					<Label id="LeaderboardSpectateLabel" text="{i:spectators}"/>
+				</Panel>				
+				<Panel id="MatchDetails" class="ExternalIcon"/>
+			</Panel>
+		</snippet>
+
+	</snippets>
 
 
-	<DOTABPInternational2017CampaignDetails class="DashboardPage BattlePassPage">
+	<DOTABPInternational2017CampaignDetails class="DashboardPage BattlePassPage" onpagesetupsuccess="updateEarnedItems()">
 
-		<Panel id="CompendiumBody" class="CompendiumBody">
+		<Panel id="CampaignDetailsContainer" class="CompendiumBody">
 			<Panel id="IntroPage" class="CampaignIntroPage">
 				<Panel class="CampaignSplash"/>
 				<Panel class="CampaignPageCore">
 					<Panel class="CampaignTitleContainer TopBottomFlow">
 						<Panel class="TitleFx">
-							<Label text="#DOTA_campaign_ti7_name" class="CampaignTitle TitleFont Glow Glow4"/>
+<!-- 							<Label text="#DOTA_campaign_ti7_name" class="CampaignTitle TitleFont Glow Glow4"/>
 							<Label text="#DOTA_campaign_ti7_name" class="CampaignTitle TitleFont Glow Glow3"/>
 							<Label text="#DOTA_campaign_ti7_name" class="CampaignTitle TitleFont Glow Glow2"/>
-							<Label text="#DOTA_campaign_ti7_name" class="CampaignTitle TitleFont Glow Glow1"/>
+							<Label text="#DOTA_campaign_ti7_name" class="CampaignTitle TitleFont Glow Glow1"/> -->
 							<Label text="#DOTA_campaign_ti7_name" class="CampaignTitle TitleFont Rim"/>
 							<Label text="#DOTA_campaign_ti7_name" class="CampaignTitle TitleFont "/>
 						</Panel>
@@ -27,39 +238,373 @@
 							<Panel id="SubtitleContainer">
 								<Label class="CampaignAct Rim" text="#DOTA_ti7_campaign_bp_tab_acti_title"/>
 								<Label class="CampaignAct" text="#DOTA_ti7_campaign_bp_tab_acti_title"/>
+							</Panel>										
+							<Panel id="MapStatsContainer">
+								<Label class="MapHeaderLabel" html="true" text="#DOTA_ti7_campaign_bp_tab_zonestar_totalcount"/>
+							</Panel>							
+								<Panel id="RewardLegendContainer">
+									<Panel id="ZoneRewardLegendContainer">
+										<Label class="LegendLabel" html="true" text="#DOTA_ti7_campaign_bp_tab_zonestar_pop"/>
+										<Panel id="RewardLegend" class="LeftRightFlow">
+											<Panel class="RewardStarStack TopBottomFlow">
+												<Panel class="XPCircle">
+													<Label id="QuestXP" class="SideQuestReward" text="200"/>
+													<Label id="PTS" text="#DOTA_SeasonPassAchievement_PTS"/>
+												</Panel>
+												<Panel class="StarGroup LeftRightFlow">
+													<Panel class="Star StarLit"/>
+													<Panel class="Star"/>
+													<Panel class="Star"/>
+												</Panel>
+											</Panel>
+											<Panel class="RewardStarStack TopBottomFlow">
+												<Panel class="XPCircle">
+													<Label id="QuestXP" class="SideQuestReward" text="400"/>
+													<Label id="PTS" text="#DOTA_SeasonPassAchievement_PTS"/>
+												</Panel>
+												<Panel class="StarGroup LeftRightFlow">
+													<Panel class="Star StarLit"/>
+													<Panel class="Star StarLit"/>
+													<Panel class="Star"/>
+												</Panel>
+											</Panel>
+											<Panel class="RewardStarStack TreasureReward TopBottomFlow">
+												<Panel class="CampaignTreasureReward" onactivate="DOTAShowItemDefPage( 12040 )">
+													<Label class="CampaignTreasureRewardBonus" text="#DOTA_ti7_campaign_bp_tab_zonestar_boosted_reward" />
+												</Panel>
+												<Panel class="StarGroup LeftRightFlow">
+													<Panel class="Star StarLit"/>
+													<Panel class="Star StarLit"/>
+													<Panel class="Star StarLit"/>
+												</Panel>
+											</Panel>
+										</Panel>
+									</Panel>
+									<Panel id="EmoticonReward">
+										<DOTAEmoticon emoticonid="187" onmouseover="DOTAShowEconItemTooltip( 17375, -1, -1 )" onmouseout="DOTAHideEconItemTooltip()" />
+										<Label text="#dota_profile_recent_game_result_win" />
+									</Panel>
+								</Panel>
+							<Panel id="BottomHalf" class="BottomAlign CenterAlign TopBottomFlow">
+								<Label class="ActLore" html="true" text="#DOTA_ti7_campaign_bp_tab_acti_intro_active"/>
+								<Panel id="StartCampaignContainer">
+									<TextButton id="StartCampaignButton" class="PlayActButton ButtonBevel" text="#DOTA_ti7_campaign_bp_tab_gotime" onactivate="viewComic();"/>
+									<Label id="FindingMatchLabel" text="Finding Match..."/>
+									<TextButton id="ViewComicButton" class="PlayActButton ButtonBevel" text="#DOTA_ti7_campaign_bp_tab_storytime" onactivate="viewComic();"/>
+								</Panel>
 							</Panel>
-							<Label class="ComingDate" text="#DOTA_ti7_campaign_bp_tab_acti_time"/>
-							<Label class="ActLore" html="true" text="#DOTA_ti7_campaign_bp_tab_acti_intro"/>
 							
+							<DOTASiltbreakerMap id="WorldMapFront" onactivate="DOTASiltbreakerZoneActivated(forest)" />
+							
+							<Panel id="BabyRoshan" class="" onactivate="DOTAShowStoreItemDetailsPage( -1, 12007, 1 )" >
+								<DOTAUIEconSetPreview id="DesertBabyRoshanModel" hittest="false" hittestchildren="false" itemdef="12007" displaymode="loadout_small" drawbackground="false" renderdeferred="false" deferredalpha="true"/>
+								<Panel id="InspectIcon" hittest="false"/>
+								<Label id="BabyRoshanLabel" text="#DOTA_Item_Extremely_Rare_Reward" hittest="false"/>
+							</Panel>						
 						</Panel>
-						<Panel id="Act2" class="ActContainer">
-							<Panel id="SubtitleContainer2">
-								<Label class="CampaignAct Rim" text="#DOTA_ti7_campaign_bp_tab_actii_title"/>
-								<Label class="CampaignAct" text="#DOTA_ti7_campaign_bp_tab_actii_title"/>
-							</Panel>
-							<Label class="ComingDate" text="#DOTA_ti7_campaign_bp_tab_actii_time"/>
-						</Panel>							
 					</Panel>	
+<!-- 					<Panel id="SubtitleContainer2">
+						<Label class="CampaignAct Rim" text="#DOTA_ti7_campaign_bp_tab_actii_title"/>
+						<Label class="CampaignAct" text="#DOTA_ti7_campaign_bp_tab_actii_title"/>
+					</Panel>					 -->
 					<Panel class="CampaignIntroLoreContainer">
 						<Label class="CampaignLoreText" text="#DOTA_ti7_campaign_bp_tab_actii_intro"/>
 					</Panel>
-					<Panel class="CampaignDetailsContainer TopBottomFlow">
+<!-- 					<Panel class="CampaignDetailsContainer TopBottomFlow">
 						<Label text="#DOTA_ti7_campaign_bp_tab_info_header" class="CampaignSubTitle" hittest="false"/>						
-						<Label id="CampaignInfo" text="#DOTA_ti7_campaign_bp_tab_info_body" hittest="false"/>					
-					</Panel>
-				</Panel>
-				<Panel id="BabyRoshan" onactivate="DOTAShowStoreItemDetailsPage( -1, 12007, 1 )" >
-					<DOTAUIEconSetPreview id="DesertBabyRoshanModel" hittest="false" hittestchildren="false" itemdef="12007" displaymode="loadout_small" drawbackground="false" renderdeferred="false" deferredalpha="true"/>
-					<Panel id="InspectIcon" hittest="false"/>
-					<Label id="BabyRoshanLabel" text="#DOTA_Item_Desert_Sands_Baby_Roshan" hittest="false"/>
-				</Panel>
-				<Panel class="CampaignDetails TopBottomFlow" hittest="false">
-					<Label text="#DOTA_ti7_campaign_bp_tab_info_header" class="CampaignSubTitle" hittest="false"/>						
-					<Label id="CampaignInfo" text="#DOTA_ti7_campaign_bp_tab_info_body" hittest="false"/>
-				</Panel>
+						<Label id="CampaignInfo" text="#DOTA_ti7_campaign_bp_tab_info_body" class="" hittest="false"/>					
+					</Panel> -->
+					<Panel id="TotalLeaderboardContainer">
+						<Panel id="BonusContainer">
+							<Panel id="BonusItemLevel" class="bp_shield_icon_endscreen">
+								<Label text="#DOTA_ti7_campaign_bp_tab_zonestar_boost_level" />
+							</Panel>
+							<Panel id="BonusContainerDetails">
+								<Panel class="BonusDescription">
+									<Panel class="Star StarLit"/>
+									<Panel class="Star StarLit"/>
+									<Panel class="Star StarLit"/>
+									<Label text="#DOTA_Siltbreaker_BonusReward" />
+								</Panel>
+								<TextButton id="ClaimBonusButton" class="BattlePassBrightButton" text="#DOTA_Claim" onactivate="DOTAShowBPInternational2017RewardsAtLevel( 165 )" />
+								<TextButton id="PurchaseBonusButton" class="BattlePassBrightButton" text="#DOTA_TI6_BattlePass_PurchaseLevels" onactivate="DOTAPurchaseEventLevelsAmount( EVENT_ID_INTERNATIONAL_2017, 165 )" />
+								<Label id="BonusAlreadyClaimedLabel" text="#DOTA_ti7_campaign_bp_tab_zonestar_boost_status" />
+							</Panel>
+						</Panel>
+						
+						<Panel id="UnopenedRewardsContainer" class="UnopenedRewards" onactivate="DOTAShowItemDefPage( 12040 )">
+							<Label class="UnopenedTreasureRewardLabel" text="#DOTA_Siltbreaker_UnopenedTreasure"/>
+							<Panel class="CampaignTreasureReward UnopenedTreasureRewardIcon" hittest="false" />
+							<Button class="ClaimRewardButton" onactivate="DOTAShowItemDefPage( 12040 )">											
+								<Label class="ClaimRewardText" text="#DOTA_Siltbreaker_OpenTreasure"/>
+							</Button>
+						</Panel>
+						<Panel class="EarnedRewards TopBottomFlow">
+							<Panel class="LeftRightFlow">
+								<Panel class="InfoIcon" onmouseover="UIShowCustomLayoutTooltip( CampaignArtifactsHelp, file://{resources}/layout/tooltips/tooltip_campaign_artifacts_help.xml )" onmouseout="UIHideCustomLayoutTooltip( CampaignArtifactsHelp )" /><Label class="EarnedRewardLabel" text="#DOTA_Siltbreaker_EarnedRewards"/>
+							</Panel>
+							<Panel id="EarnedRewardsList" class="LeftRightFlow">
+								<!-- Filled out dynamically -->
+							</Panel>
+						</Panel>
+						<Panel id="TotalLeaderboardHeader">
+							<RadioButton id="LiveGames" class="LeaderboardTab Selected" selected="true" group="tab" onactivate="DOTAInternational2017ShowLiveGames(1)">
+								<Label text="#DOTA_TI7_CampaignDetails_ZoneLeaderboards_Live" html="true"/>
+							</RadioButton>
+							<RadioButton id="FriendsReplays" class="LeaderboardTab" group="tab" onactivate="DOTAInternational2017ShowLiveGames(0)">
+								<Label text="#DOTA_TI7_CampaignDetails_ZoneLeaderboards_Replays" html="true"/>
+							</RadioButton>							
+						</Panel>
+						<Panel id="TotalLeaderboard">
+							<!-- Dynamically filled with ZoneLeaderboardElement -->
 
+						</Panel>
+					</Panel>
+
+				</Panel>
+<!-- 				<Panel class="CampaignDetails TopBottomFlow" hittest="false">
+					<Label text="#DOTA_ti7_campaign_bp_tab_info_header" class="CampaignSubTitle TempHide" hittest="false"/>						
+					<Label id="CampaignInfo" text="#DOTA_ti7_campaign_bp_tab_info_body" class="TempHide" hittest="false"/>
+				</Panel> -->
 			</Panel>
-			
+					<Panel id="WorldOverviewContainer" hittest="true" onload="SwitchStyle( ZoneRequirementContainer, TabSlot, Tab1Selected )" onactivate="RemoveStyle( CampaignDetailsContainer, ShowWorldMap ) RemoveStyle( IntroPage, ShowingWorldMap )" >
+						<Button class="CloseButton" onactivate="RemoveStyle( CampaignDetailsContainer, ShowWorldMap ) RemoveStyle( IntroPage, ShowingWorldMap )" />					
+						<Panel id="Box" acceptsinput="true" acceptsfocus="true" hittest="true" onactivate="">
+							<Panel id="WorldOverviewHeader">
+								<Label class="Title" text="#DOTA_TI7_CampaignDetails_WorldOverview"/>
+								<Panel id="MatchID" class="LeftRightFlow">
+									<Label class="MatchIDLabel" text="#dota_page_match_details_header_match_id"/>
+									<Label id="MatchIDLink" class="MatchIDLabel LabelLink MonoNumbersFont" text="#{d:r:match_id}"/>
+								</Panel>
+							</Panel>
+							<Panel id="RightColumn" class="TopBottomFlow">
+								<Panel id="PersonalZoneHeader">
+									<Panel id="SelectedZoneStarsContainer" class="LeftRightFlow">
+										<Panel id="ZoneStar1" class="Star"/>
+										<Panel id="ZoneStar2" class="Star"/>
+										<Panel id="ZoneStar3" class="Star"/>
+									</Panel>								
+									<Label class="SelectedZoneTitle TitleFont" text="#DOTA_TI7_CampaignDetails_Zone"/>
+									<Panel id="ZoneTimeContainer" class="LeftRightFlow">
+										<Panel class="ClockIcon"/>
+										<Label class="CompletionTime MonoNumbersFont" text="{s:time}"/>
+									</Panel>
+								</Panel>
+								<Panel id="PersonalZoneStats" class="LeftRightFlow">
+									<Panel id="HeroIconsContainer" class="TopBottomFlow">
+										<Panel id="PlayerHeroMovie">
+											<Label id="TeamMatesLabel" text="#DOTA_TournamentGroup_Team"/>
+											<DOTAHeroMovie id="MyHeroImage" class="myHeroImage"/>
+										<Panel id="Teammates" class="TopBottomFlow">
+											<Panel class="TeammateContainer">
+												<DOTAHeroImage id="TeammateHeroImage1" class="ZoneHeroIcon"  scaling="stretch-to-fit-y-preserve-aspect" />
+												<DOTAAvatarImage id="TeammateAvatar1" class="TeammateAvatarIcon"/>											
+											</Panel>
+											<Panel class="TeammateContainer">
+												<DOTAHeroImage id="TeammateHeroImage2" class="ZoneHeroIcon"  scaling="stretch-to-fit-y-preserve-aspect" />
+												<DOTAAvatarImage id="TeammateAvatar2" class="TeammateAvatarIcon"/>											
+											</Panel>
+											<Panel class="TeammateContainer">
+												<DOTAHeroImage id="TeammateHeroImage3" class="ZoneHeroIcon"  scaling="stretch-to-fit-y-preserve-aspect" />
+												<DOTAAvatarImage id="TeammateAvatar3" class="TeammateAvatarIcon"/>											
+											</Panel>										
+										</Panel>											
+										</Panel>
+
+									</Panel>
+									<Panel id="PlayerStatsContainer">
+										<Label id="ZoneIncomplete" text="#DOTA_TI7_CampaignDetails_ZoneLeaderboards_Incomplete"/>
+										<Panel id="TextStatsContainer" class="LeftRightFlow">
+											<Panel id="TextStatsLeft" class="TopBottomFlow" >
+												<Panel class="StatGroup TopBottomFlow">
+													<Label class="StatTitle" text="#DOTA_ti7_campaign_bp_tab_zonestar_killstats"/>
+													<Label class="StatValue" text="{i:kills}"/>
+												</Panel>
+												<Panel class="StatGroup TopBottomFlow">
+													<Label class="StatTitle" text="#DOTA_ti7_campaign_bp_tab_zonestar_dmgstats"/>
+													<Label class="StatValue" text="{i:damage}K"/>
+												</Panel>												
+												<Panel class="StatGroup TopBottomFlow">
+													<Label class="StatTitle" text="#DOTA_ti7_campaign_bp_tab_zonestar_healstats"/>
+													<Label class="StatValue LastValue" text="{i:healing}K"/>
+												</Panel>												
+											</Panel>
+											<Panel id="TextStatsRight" class="TopBottomFlow" >
+												<Panel class="StatGroup TopBottomFlow">
+													<Label class="StatTitle" text="#DOTA_ti7_campaign_bp_tab_zonestar_deadstats"/>
+													<Label class="StatValue" text="{i:my_deaths}"/>
+												</Panel>												
+												<Panel class="StatGroup TopBottomFlow">
+													<Label class="StatTitle" text="#DOTA_ti7_campaign_bp_tab_zonestar_teamdeadstats"/>
+													<Label class="StatValue" text="{i:deaths}"/>
+												</Panel>											
+											</Panel>
+										</Panel>
+										<Panel id="IconStatsContainer" class="LeftRightFlow">
+											<Panel class="StatIconGroup TopBottomFlow" onmouseover="UIShowTextTooltip( DOTA_TI7_CampaignDetails_GoldBagsGot );" onmouseout="UIHideTextTooltip();">
+												<Panel id="GoldIcon" class="StatIcon"/>
+												<Label class="StatValue" text="{i:goldbags}"/>			
+											</Panel>
+											<Panel class="StatIconGroup TopBottomFlow" onmouseover="UIShowTextTooltip( DOTA_TI7_CampaignDetails_PotionsGot );" onmouseout="UIHideTextTooltip();">
+												<Panel id="PotionsIcon" class="StatIcon"/>
+												<Label class="StatValue" text="{i:potions}"/>			
+											</Panel>											
+											<Panel class="StatIconGroup TopBottomFlow" onmouseover="UIShowTextTooltip( DOTA_TI7_CampaignDetails_ItemsGot );" onmouseout="UIHideTextTooltip();">
+												<Panel id="ItemsIcon" class="StatIcon"/>
+												<Label class="StatValue" text="{i:items}"/>			
+											</Panel>
+											<Panel class="StatIconGroup TopBottomFlow" onmouseover="UIShowTextTooltip( DOTA_TI7_CampaignDetails_Reviving );" onmouseout="UIHideTextTooltip();">
+												<Panel id="ReviveIcon" class="StatIcon"/>
+												<Label class="StatValue" text="{i:revive_time}"/>			
+											</Panel>											
+										</Panel>
+									</Panel>									
+								</Panel>
+								<Panel class="BottomHalf">
+									<Panel id="ZoneRequirement" class="TopBottomFlow">
+										<Panel id="ZoneLeaderboardHeader">
+											<Label text="#DOTA_TI7_CampaignDetails_ZoneLeaderboards_Criteria"/>
+										</Panel>
+										<Panel id="ZoneRequirementContainer" class="TopBottomFlow">
+											<Panel id="ZoneRequirementsTab" class="LeftRightFlow">
+												<RadioButton id="1StarReq" class="ReqTab HasStars1" selected="true" onactivate="SwitchStyle( ZoneRequirementContainer, TabSlot, Tab1Selected )"  >
+													<Panel id="StarContainerReplays">
+														<Panel id="ZoneStar1" class="Star"/>
+														<Panel id="ZoneStar2" class="Star"/>
+														<Panel id="ZoneStar3" class="Star"/>
+													</Panel>
+												</RadioButton>
+												<RadioButton id="2StarReq" class="ReqTab HasStars2" onactivate="SwitchStyle( ZoneRequirementContainer, TabSlot, Tab2Selected )" >
+													<Panel id="StarContainerReplays">
+														<Panel id="ZoneStar1" class="Star"/>
+														<Panel id="ZoneStar2" class="Star"/>
+														<Panel id="ZoneStar3" class="Star"/>
+													</Panel>
+												</RadioButton>
+												<RadioButton id="3StarReq" class="ReqTab HasStars3" onactivate="SwitchStyle( ZoneRequirementContainer, TabSlot, Tab3Selected )" >
+													<Panel id="StarContainerReplays">
+														<Panel id="ZoneStar1" class="Star"/>
+														<Panel id="ZoneStar2" class="Star"/>
+														<Panel id="ZoneStar3" class="Star"/>
+													</Panel>
+												</RadioButton>
+											</Panel>
+											<Panel id="ZoneStarRequirementsDesc">
+												<Label id="Zone01_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone01_1_Req"/>
+												<Label id="Zone01_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone01_2_Req"/>
+												<Label id="Zone01_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone01_3_Req"/>
+
+												<Label id="Zone02_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone02_1_Req"/>
+												<Label id="Zone02_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone02_2_Req"/>
+												<Label id="Zone02_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone02_3_Req"/>
+
+												<Label id="Zone03_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone03_1_Req"/>
+												<Label id="Zone03_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone03_2_Req"/>
+												<Label id="Zone03_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone03_3_Req"/>
+
+												<Label id="Zone04_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone04_1_Req"/>
+												<Label id="Zone04_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone04_2_Req"/>
+												<Label id="Zone04_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone04_3_Req"/>
+
+												<Label id="Zone05_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone05_1_Req"/>
+												<Label id="Zone05_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone05_2_Req"/>
+												<Label id="Zone05_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone05_3_Req"/>
+
+												<Label id="Zone06_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone06_1_Req"/>
+												<Label id="Zone06_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone06_2_Req"/>
+												<Label id="Zone06_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone06_3_Req"/>
+
+												<Label id="Zone07_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone07_1_Req"/>
+												<Label id="Zone07_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone07_2_Req"/>
+												<Label id="Zone07_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone07_3_Req"/>
+
+												<Label id="Zone08_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone08_1_Req"/>
+												<Label id="Zone08_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone08_2_Req"/>
+												<Label id="Zone08_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone08_3_Req"/>
+
+												<Label id="Zone09_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone09_1_Req"/>
+												<Label id="Zone09_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone09_2_Req"/>
+												<Label id="Zone09_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone09_3_Req"/>
+
+												<Label id="Zone10_1_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone10_1_Req"/>
+												<Label id="Zone10_2_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone10_2_Req"/>
+												<Label id="Zone10_3_Desc" class="ZoneReqLabel" html="true" text="#DOTA_TI7_CampaignDetails_Zone10_3_Req"/>
+											</Panel>
+									</Panel>
+									</Panel>
+									<Panel id="ZoneLeaderBoardContainer" class="CampaignLeaderBoardContainer">
+										<Panel id="ZoneLeaderboardHeader">
+											<Label text="#DOTA_TI7_CampaignDetails_ZoneLeaderboards_FriendStats"/>
+										</Panel>
+
+										<Panel id="ZoneLeaderboard">
+											<!-- Dynamically filled with ZoneLeaderboardElement -->
+										</Panel>								
+									</Panel>
+								</Panel>
+							</Panel>
+						</Panel>
+						<DOTASiltbreakerMap id="WorldMapContainerDetails" />						
+					</Panel>
+
+		</Panel>
+		<Panel id="IntroComicContainer" onactivate="onPageClick();">
+			<Panel id="ComicPageBox">
+				<Panel id="Page01" class="ComicPage">	
+					<Panel id="Blocker1" class="Blocker"/>
+					<Panel id="Blocker2" class="Blocker"/>
+					<Panel id="Blocker3" class="Blocker"/>
+				</Panel>
+				<Panel id="Page02" class="ComicPage">
+					<Panel id="Blocker1" class="Blocker"/>
+					<Panel id="Blocker2" class="Blocker"/>
+					<Panel id="Page02_01" class="ComicPage"/>
+					<Panel id="Blocker3" class="Blocker"/>
+					<Panel id="Blocker4" class="Blocker"/>
+					<Panel id="Blocker5" class="Blocker"/>
+				</Panel>
+				<Panel id="Page03" class="ComicPage">
+					<Panel id="Blocker1" class="Blocker"/>
+					<Panel id="Blocker2" class="Blocker"/>							
+				</Panel>
+				<Panel id="Page04" class="ComicPage">
+					<Panel id="Blocker1" class="Blocker"/>
+					<Panel id="Blocker2" class="Blocker"/>
+					<Panel id="Blocker3" class="Blocker"/>
+					<Panel id="Blocker4" class="Blocker"/>
+				</Panel>
+				<Panel id="Page05_06" class="ComicPage">
+					<Panel id="Page05" class="ComicPage"/>
+					<Panel id="Page05_01" class="ComicPage"/>
+					<Panel id="Page06" class="ComicPage"/>
+					<Panel id="Page06_01" class="ComicPage"/>
+					<Panel id="Page07_01" class="ComicPage"/>
+					<Panel id="Page07_02" class="ComicPage"/>
+					<Panel id="Page07_03" class="ComicPage"/>
+				</Panel>
+				<Panel id="Page08" class="ComicPage">
+					<Panel id="Blocker1" class="Blocker"/>
+					<Panel id="Blocker2" class="Blocker"/>
+					<Panel id="Blocker3" class="Blocker"/>							
+				</Panel>
+				<Panel id="Page09" class="ComicPage">
+					<Panel id="Page09_WD" class="ComicPage"/>
+					<Panel id="Page09_Drow" class="ComicPage"/>
+					<Panel id="Page09_Sven" class="ComicPage"/>
+					<Panel id="Page09_WR" class="ComicPage"/>
+					<Panel id="FinalBlock" class="ComicPage"/>
+					<Panel id="Blocker1" class="Blocker"/>
+				</Panel>
+			</Panel>
+			<TextButton id="StartCampaignButtonFromComic" class="PlayActButton ButtonBevel" text="#DOTA_ti7_campaign_bp_tab_doitnow" onactivate="DOTASetCurrentDashboardPageFullscreen( false ) DOTAStartFindingEventMatch()"/>
+			<TextButton id="PurchaseBattlePass" class="PlayActButton ButtonBevel" text="#DOTA_Treasure_PurchaseEvent"  onactivate="DOTAShowBPInternational2017PurchasePage( false )"/>
+			<Panel id="LeftSideControls">
+			</Panel>			
+			<Panel id="RightSideControls">
+				<Button id="SkipButton" class="CloseButton" onactivate="closeComic();"/>						
+				<Button id="FullscreenComic" class="MaximizeButton" onactivate="DOTAToggleCurrentDashboardPageFullscreen()" />
+				<Button id="ReplayComic" class="RefreshButton" onactivate="removePageClasses()" />
+			</Panel>
 		</Panel>
 		
 	</DOTABPInternational2017CampaignDetails>

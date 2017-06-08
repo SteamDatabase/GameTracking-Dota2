@@ -716,13 +716,37 @@ Scheme
 			}
 		}
 
+		"UnitInfoHeroNameFont2"
+		{
+			"1"
+			{
+				"name"		"Radiance"
+				"tall"		"17"				
+				"weight"	"600"
+				"antialias"	"1"
+			}
+		}
+
+		"UnitInfoPlayerLocalLevelFont"
+		{
+			"1"
+			{
+				"name"		"RadianceM"
+				"tall"		"14"
+				"weight"	"1200"
+				"italic"	"0"
+				"antialias" "1"
+			}
+		}
+
 		"UnitInfoPlayerLevelFont"
 		{
 			"1"
 			{
 				"name"		"RadianceM"
-				"tall"		"16"
-				"weight"	"400"
+				"tall"		"10"
+				"weight"	"1200"
+				"italic"	"0"
 				"antialias" "1"
 			}
 		}

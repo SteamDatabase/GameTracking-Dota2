@@ -53,6 +53,8 @@
 			PublicContent		dota_core
 			PublicContent		core
 		}
+
+		AddonsChangeDefaultWritePath 0
 	}
 
 	MaterialSystem2
@@ -131,6 +133,11 @@
 		"CMTAtlasHeight" "512"
 		"CMTAtlasChunkSize" "128"
 		"DrawParticleChildrenSeparateFromParents" "1"
+	}
+	
+	SoundSystem
+	{
+		"DisableSteamAudio" "1"
 	}
 
 	ToolsEnvironment

@@ -1212,5 +1212,25 @@
 		"targetname"			"string"
 		"immediate"				"bool"
 	}
+
+	"dota_combat_event_message"
+	{
+		"message"				"string"
+		"teamnumber"			"short"
+		"player_id"				"int"
+		"int_value"				"int"
+		"locstring_value"		"string"
+	}
+
+	"dota_item_spawned"
+	{
+		"item_ent_index"	"int"
+		"player_id"				"int"
+	}
+
+	"dota_player_reconnected"
+	{
+		"player_id"				"int"
+	}
 }
 
