@@ -44,12 +44,7 @@ function modifier_nyx_suicide_heal:OnDeath( params )
 			local entities = FindUnitsInRadius( self:GetParent():GetTeamNumber(), self:GetParent():GetOrigin(), nil, radius, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE, FIND_CLOSEST, false )
 			for _,entity in pairs( entities ) do
 				if entity ~= nil and entity:IsAlive() then
-					if entity:GetUnitName() == "npc_dota_creature_sand_king" then
-						entity:Heal( heal * 2, self:GetAbility() )
-					else
-						entity:Heal( heal / 2, self:GetAbility() )
-					end
-					
+					entity:Heal( heal, self:GetAbility() )
 					ParticleManager:ReleaseParticleIndex( ParticleManager:CreateParticle( "particles/items3_fx/fish_bones_active.vpcf", PATTACH_ABSORIGIN_FOLLOW, entity ) )
 				end
 			end

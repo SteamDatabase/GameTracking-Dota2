@@ -14,6 +14,12 @@ function item_treasure_box:OnSpellStart()
 				CurrentZone = Zone
 			end
 		end
+
+		if CurrentZone == nil then
+			self:SpendCharge()
+			return
+		end
+
 		local ChestTable = CurrentZone.Chests[#CurrentZone.Chests]
 		local hTreasure = CreateUnitByName( ChestTable.szNPCName, self:GetCaster():GetOrigin() + RandomVector( RandomFloat( 50, 100 ) ), true, nil, nil, DOTA_TEAM_GOODGUYS )
 		if hTreasure ~= nil then

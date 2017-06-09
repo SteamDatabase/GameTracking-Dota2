@@ -8,7 +8,7 @@ function OnStartTouch( trigger )
 
 	if hHero and hHero:IsRealHero() then
 		--print( string.format( "\"%s\" (player id %d) found the Carl in desert_expanse.", hHero:GetUnitName(), hHero:GetPlayerID() ) )
-		GameRules.Dungeon:TrackPlayerAchievementEvent( hHero:GetPlayerID(), 1 )
+		GameRules.Dungeon:OnPlayerFoundInvoker( hHero:GetPlayerID(), 1 )
 	end
 end
 

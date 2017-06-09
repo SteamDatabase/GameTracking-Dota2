@@ -34,7 +34,7 @@ _G.ZonesDefinition =
 		nZoneID = 2,
 		Type = ZONE_TYPE_SURVIVAL,
 		MaxZoneXP = 4700,  -- Level 1-4
-		MaxZoneGold = 5000,
+		MaxZoneGold = 5500,
 		szTeleportEntityName = "start_zone_forest",
 		StarCriteria =
 		{
@@ -445,7 +445,7 @@ _G.ZonesDefinition =
 		nZoneID = 3,
 		Type = ZONE_TYPE_HOLDOUT,
 		MaxZoneXP = 6000,  -- Level 4-6.5
-		MaxZoneGold = 5000,
+		MaxZoneGold = 5500,
 		vTeleportPos = Vector( -10363, -7004, 256 ),
 		StarCriteria =
 		{
@@ -680,8 +680,8 @@ _G.ZonesDefinition =
 
 				-- Wave 2
 				{
-					flDuration = 45.0,
-					flSpawnInterval = 9.0,
+					flDuration = 40.0,
+					flSpawnInterval = 10.0,
 					NPCs =
 					{
 						-- A path
@@ -847,7 +847,7 @@ _G.ZonesDefinition =
 		nZoneID = 4,
 		Type = ZONE_TYPE_EXPLORE,
 		MaxZoneXP = 2000,
-		MaxZoneGold = 1500,
+		MaxZoneGold = 1650,
 		szTeleportEntityName = "forest_holdout_zone_darkforest_death_maze",
 		StarCriteria =
 		{
@@ -876,7 +876,7 @@ _G.ZonesDefinition =
 				szQuestName = "navigate_death_maze",
 				szQuestType = "Explore",
 				RewardXP = 2000,
-				RewardGold = 1000,
+				RewardGold = 1100,
 				Activators = 
 				{
 					{
@@ -1244,7 +1244,7 @@ _G.ZonesDefinition =
 		nZoneID = 5,
 		Type = ZONE_TYPE_SURVIVAL,
 		MaxZoneXP = 6000,
-		MaxZoneGold = 5000,
+		MaxZoneGold = 5500,
 		--szTeleportEntityName = "forest_holdout_zone_darkforest_rescue",
 		vTeleportPos = Vector( -9408, -256, 256 ),
 		StarCriteria =
@@ -1905,7 +1905,7 @@ _G.ZonesDefinition =
 		nZoneID = 6,
 		Type = ZONE_TYPE_SURVIVAL,
 		MaxZoneXP = 7000,
-		MaxZoneGold = 6000,
+		MaxZoneGold = 6600,
 		--szTeleportEntityName = "forest_holdout_zone_darkforest_pass",
 		vTeleportPos = Vector( 960, -11424, 384 ),
 		StarCriteria =
@@ -2537,7 +2537,7 @@ _G.ZonesDefinition =
 		nZoneID = 7,
 		Type = ZONE_TYPE_SURVIVAL,
 		MaxZoneXP = 7000,
-		MaxZoneGold = 6000,
+		MaxZoneGold = 6600,
 		szTeleportEntityName = "darkforest_pass_zone_underground_temple",
 		--vTeleportPos = Vector( 1691, -11634, 768 ),
 		StarCriteria =
@@ -3012,7 +3012,7 @@ _G.ZonesDefinition =
 		nZoneID = 8,
 		Type = ZONE_TYPE_HOLDOUT,
 		MaxZoneXP = 10000,
-		MaxZoneGold = 7000,
+		MaxZoneGold = 7700,
 		--szTeleportEntityName = "underground_temple_zone_desert_start",
 		vTeleportPos = Vector( 11694, -5418, 512 ),
 		StarCriteria =
@@ -3317,7 +3317,7 @@ _G.ZonesDefinition =
 						},
 						Wave4_Bandit2 =
 						{
-							szSpawnerName = "desert_start_spawner_4",
+							szSpawnerName = "desert_start_spawner_7",
 							szWaypointName = "npc_dota_friendly_bristleback_son",
 							szNPCName = "npc_dota_creature_bandit",
 							nCount = 2,
@@ -3341,7 +3341,7 @@ _G.ZonesDefinition =
 						-- A path
 						Wave5_Bandit1 =
 						{
-							szSpawnerName = "desert_start_spawner_3",
+							szSpawnerName = "desert_start_spawner_7",
 							szWaypointName = "npc_dota_friendly_bristleback_son",
 							szNPCName = "npc_dota_creature_bandit",
 							nCount = 2,
@@ -3355,10 +3355,10 @@ _G.ZonesDefinition =
 						},
 						Wave5_Bandit2 =
 						{
-							szSpawnerName = "desert_start_spawner_6",
+							szSpawnerName = "desert_start_spawner_5",
 							szWaypointName = "npc_dota_friendly_bristleback_son",
 							szNPCName = "npc_dota_creature_bandit",
-							nCount = 3,
+							nCount = 2,
 						},
 						Wave5_BanditArcher1 =
 						{
@@ -3716,7 +3716,7 @@ _G.ZonesDefinition =
 		nZoneID = 10,
 		Type = ZONE_TYPE_SURVIVAL,
 		MaxZoneXP = 13000,
-		MaxZoneGold = 10000,
+		MaxZoneGold = 11000,
 		szTeleportEntityName = "desert_town_zone_desert_expanse",
 		StarCriteria =
 		{
@@ -4455,7 +4455,7 @@ _G.ZonesDefinition =
 		nZoneID = 12,
 		Type = ZONE_TYPE_ASSAULT,
 		MaxZoneXP = 14000,
-		MaxZoneGold = 12000,
+		MaxZoneGold = 13200,
 		szTeleportEntityName = "desert_outpost_zone_desert_chasm",
 		StarCriteria =
 		{
