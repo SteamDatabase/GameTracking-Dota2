@@ -1,0 +1,63 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+// Defines markup volume classes
+//
+//==================================================================================================
+
+@helpinfo( "ai_basenpc", "tools/help/fgd/markup_volumes.txt" )
+
+
+//--------------------------------------------------------------------------------------------------
+//
+// Markup volumes
+//
+//--------------------------------------------------------------------------------------------------
+@SolidClass base(Targetname, Parentname, Global) = markup_volume : "Generic markup volume entity, can be queried in-game by name/type/location"
+[
+	// TODO: add 'EnableDisable' functionality (need to add to CMarkupVolume also)
+]
+
+
+@SolidClass base(markup_volume) = markup_volume_tagged : "Tagged generic markup volume entity, can be queried in-game by tag/name/type/location"
+[
+	// Each markup group has an associated markup_group entity; 'groupnames' controls
+	// group membership by listing the targetnames of markup_group entities.
+	groupnames(tag_list_dynamic) : "Markup Groups" =
+	[
+	]
+
+	// tagFieldNames is a comma-separated list of this class's tag_list/tag_list_dynamic fields, so that CMarkupVolumeTagged can
+	// identify them - this needs to be present in all derived FGD types (with the appropriate field names).
+	// TODO: This is a workaround for CEntityKeyValues not storing field names or types.
+	//       A better long-term solution would be to hook up entity 'dynamic attributes' instead.
+	tagFieldNames(string) : "<internal>" : "groupnames" : "<internal>"
+]
+
+
+@SolidClass base(markup_volume_tagged) = markup_group : "Markup group entity; add the group's targetname to the 'Markup Groups' field of a markup entity to add that entity to this group"
+[
+	// markup_group represents a group of markup objects.
+	// It has tags, so you can search for the group using those tags.
+	// You can then search within the markup objects comprising the group.
+
+	// TODO: groupbyprefab(boolean)    : "Auto Group By Prefab"    : 0 : "Automatically add all markup entities to this group, within this prefab (and child prefabs)"
+	groupbyvolume(boolean)    : "Auto Group By Volume"    : 0 : "Automatically add any markup entities to this group that overlap this volume"
+	groupothergroups(boolean) : "Auto Group Other Groups" : 0 : "When auto-grouping (by prefab or by volume), include other markup_group entities in this group. By default this does not happen."
+]
+
+@SolidClass base(markup_volume_tagged) = func_nav_markup : "Tagged NAV markup volume entity, used during export and can be queried in-game by tag/name/type/location"
+[
+	navProperty_NavGen(tag_list) : "Nav Generation Markup" = 
+	[
+		"WALKABLESEED" : "Walkable Seed" : 0
+		"NONAV" : "No Nav" : 0
+	]
+
+	navProperty_NavAttributes(tag_list) : "Nav Attributes"  =
+	[
+		"AVOID": "Avoid" : 0
+	]
+
+	// See markup_volume_tagged
+	tagFieldNames(string) : "<internal>" : "navProperty_NavAttributes" : "<internal>"
+]

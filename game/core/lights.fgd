@@ -1,0 +1,119 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+// Defines entity classes to control lighting and sky rendering.
+//
+//==================================================================================================
+
+@include "lights_base.fgd"
+
+@helpinfo( "Lights", "tools/help/fgd/lights.txt" )
+
+
+@PointClass light() base(light_base, light_base_legacy_params, light_base_attenuation_params) editormodel("models/editor/spot") leansphere(lightsourceradius,255,255,255) sphere(range,255,255,0) = light_omni : "A point light source."
+[
+]
+
+
+@PointClass light() base(light_base, light_base_legacy_params, light_base_attenuation_params, CanBeClientOnly) editormodel("models/editor/spot") leansphere(lightsourceradius,255,255,255) lightcone() = light_spot : "A spot light source."
+[
+	lightcookie(string) : "Light Cookie" : "" : "light cookie name in effects/lightcookies.vtex"
+
+	falloff(float) : "Falloff" : "1" : "angular falloff exponent for spot lights"
+	innerconeangle(float) : "Inner Cone Angle" : "45" : "inner cone angle. no angular falloff within this cone"
+	outerconeangle(float) : "Outer Cone Angle" : "60" : "outer cone angle"
+
+	shadowfademindist(float) : "Shadow Start Fade Dist" : -250 : "Distance at which the shadow starts to fade (<0 = use fademaxdist)."
+	shadowfademaxdist(float) : "Shadow End Fade Dist" : 1000 : "Maximum distance at which the shadow is visible (0 = don't fade out)."
+]
+
+@PointClass
+	iconsprite( "materials/editor/light_importance_volume.vmat" )
+	orientedwirebox( box_mins, box_maxs )
+	bakelightimportancevolume()
+= light_importance_volume
+[
+	box_mins(vector) : "Box Mins" : "-512 -512 -512"
+	box_maxs(vector) : "Box Maxs" : "512 512 512"
+]
+
+@PointClass
+	iconsprite( "materials/editor/lightmap_resolution.vmat" )
+	orientedwirebox( box_mins, box_maxs )
+= lightmap_resolution_volume
+[
+	box_mins(vector) : "Box Mins" : "-512 -512 -512"
+	box_maxs(vector) : "Box Maxs" : "512 512 512"
+]
+
+@BaseClass = BaseLightProbeVolume
+[
+	lightprobetexture(resource:texture) : "Light Probe Texture" : "" : "Name of the light probe texture"
+	box_mins(vector) : "Box Mins" : "-72 -72 -72"
+	box_maxs(vector) : "Box Maxs" : "72 72 72"
+	voxel_size(choices) : "Voxel Size" : "48.0" : "" = 
+	[
+		"12.0" : "Very High Resolution"
+		"24.0" : "High Resolution"
+		"48.0" : "Medium Resolution"
+		"108.0" : "Low Resolution"
+	]
+	flood_fill(boolean) : "Capture Interior Lighting" : 1
+	light_probe_volume_from_cubemap(boolean) : "Calculate Diffuse Lighting Using Cubemap" : 0
+	lightgroup(string) : "Light Group" : "" : "Semicolon-delimited list of light groups to affect"
+	static(boolean) : "Is Static" : "1" : "Cannot be enabled, disabled or moved at runtime"
+	storage(choices) : "Storage" : "-1" : "" =
+	[
+		"-1" : "Default"
+		"0" : "AmbientCube RGBM8888 Uncompressed"
+		"1" : "AmbientCube RGBMDXT5 Compressed"
+	]
+]
+
+@BaseClass = BaseCubemap
+[
+	cubemaptexture(resource:texture) : "Cubemap Texture" : "" : "Name of the cubemap texture"
+	bakenearz(float) : "Bake Near Z" : "2.0" : "Near clip plane used for the camera when baking the cube map"
+	bakefarz(float) : "Bake Far Z" : "4096.0" : "Far clip plane used for the camera when baking the cube map"
+	lightgroup(string) : "Light Group" : "" : "Semicolon-delimited list of light groups to affect"
+	static(boolean) : "Is Static" : "1" : "Cannot be enabled, disabled or moved at runtime"
+]
+
+@PointClass
+	base( Targetname, Parentname, EnableDisable, BaseLightProbeVolume )
+	editormodel( "models/editor/iv_helper" )
+	orientedwirebox( box_mins, box_maxs )
+	bakeresource( lightprobetexture, vtex, env_light_probe_volume, "ToolObjects/LightProbeVolume" )
+= env_light_probe_volume : "A grid of precomputed light probes."
+[
+]
+
+@PointClass
+	base( Targetname, Parentname, EnableDisable, BaseCubemap )
+	editormodel( "models/editor/env_cubemap" )
+	leansphere( influenceradius, 128, 128, 255 )
+	bakeresource( cubemaptexture, vtex, env_cubemap, "ToolObjects/CubeMap" )
+= env_cubemap :	"Cubemap for sampling indirect specular reflection."
+[
+	influenceradius(float) : "Influence Radius" : "512.0" : "The radius of influence for this cubemap"
+]
+
+@PointClass
+	base( Targetname, Parentname, EnableDisable, BaseCubemap )
+	editormodel( "models/editor/env_cubemap" )
+	orientedwirebox( box_mins, box_maxs )
+	bakeresource( cubemaptexture, vtex, env_cubemap, "ToolObjects/CubeMap" )
+= env_cubemap_box : "An env_cubemap with box projection."
+[
+	box_mins(vector) : "Box Projection Mins" : "-72 -72 -72"
+	box_maxs(vector) : "Box Projection Maxs" : "72 72 72"
+]
+
+@PointClass
+	base( Targetname, Parentname, EnableDisable, BaseCubemap, BaseLightProbeVolume )
+	editormodel( "models/editor/env_cubemap" )
+	orientedwirebox( box_mins, box_maxs )
+	bakeresource( lightprobetexture, vtex, env_light_probe_volume, "ToolObjects/LightProbeVolume" )
+	bakeresource( cubemaptexture, vtex, env_cubemap, "ToolObjects/CubeMap" )
+= env_combined_light_probe_volume : "Combination of an env_cubemap_box and an env_light_probe_volume"
+[
+]
