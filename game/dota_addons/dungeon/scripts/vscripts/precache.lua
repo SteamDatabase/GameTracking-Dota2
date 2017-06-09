@@ -132,6 +132,8 @@ if GetMapName() == "ep_1" then
 		"particles/units/heroes/hero_ember_spirit/ember_spirit_searing_chains_start.vpcf", -- assault_captain_searing_chains
 		"particles/units/heroes/hero_ember_spirit/ember_spirit_searing_chains_debuff.vpcf", -- assault_captain_searing_chains
         "particles/test_particle/dungeon_footsteps_sand.vpcf", -- footsteps
+        "particles/msg_fx/msg_resist.vpcf",
+        "particles/msg_fx/msg_resist_schinese.vpcf",
 	}
 
 	g_ParticleFolderPrecache =

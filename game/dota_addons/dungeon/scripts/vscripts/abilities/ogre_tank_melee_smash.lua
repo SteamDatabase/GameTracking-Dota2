@@ -2,6 +2,12 @@ ogre_tank_melee_smash = class({})
 
 -----------------------------------------------------------------------------
 
+function ogre_tank_melee_smash:ProcsMagicStick()
+	return false
+end
+
+-----------------------------------------------------------------------------
+
 function ogre_tank_melee_smash:GetCooldown( iLevel )
 	return self.BaseClass.GetCooldown( self, self:GetLevel() ) / self:GetCaster():GetHasteFactor() 
 end
@@ -24,3 +30,6 @@ function ogre_tank_melee_smash:OnSpellStart()
 		local hThinker = CreateModifierThinker( self:GetCaster(), self, "modifier_ogre_tank_melee_smash_thinker", { duration = flSpeed }, vTarget, self:GetCaster():GetTeamNumber(), false )
 	end
 end
+
+-----------------------------------------------------------------------------
+

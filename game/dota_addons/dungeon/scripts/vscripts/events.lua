@@ -500,7 +500,7 @@ function CDungeon:OnRelicSpawned( item, itemKV )
 	print( "CDungeon:OnRelicSpawned - New Relic " .. item:GetAbilityName() .. " created of itemdef: " .. nRelicItemDef )
 	local Heroes = HeroList:GetAllHeroes()
 	for _,Hero in pairs ( Heroes ) do
-		if Hero ~= nil and Hero:IsRealHero() then
+		if Hero ~= nil and Hero:IsRealHero() and Hero:HasOwnerAbandoned() == false then
 			if GetItemDefOwnedCount( Hero:GetPlayerID(), nRelicItemDef ) == 0 then
 				print( "CDungeon:OnRelicSpawned - PlayerID " .. Hero:GetPlayerID() .. " does not own item, adding to grant list." )
 				table.insert( PlayerIDs, Hero:GetPlayerID() ) 

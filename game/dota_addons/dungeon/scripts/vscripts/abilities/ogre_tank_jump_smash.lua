@@ -3,6 +3,12 @@ LinkLuaModifier( "modifier_ogre_tank_melee_smash_thinker", "modifiers/modifier_o
 
 -----------------------------------------------------------------------------
 
+function ogre_tank_jump_smash:ProcsMagicStick()
+	return false
+end
+
+-----------------------------------------------------------------------------
+
 function ogre_tank_jump_smash:GetPlaybackRateOverride()
 	return 0.75
 end
@@ -15,3 +21,6 @@ function ogre_tank_jump_smash:OnSpellStart()
 		local hThinker = CreateModifierThinker( self:GetCaster(), self, "modifier_ogre_tank_melee_smash_thinker", { duration = self:GetSpecialValueFor( "jump_speed") }, self:GetCaster():GetOrigin(), self:GetCaster():GetTeamNumber(), false )
 	end
 end
+
+-----------------------------------------------------------------------------
+

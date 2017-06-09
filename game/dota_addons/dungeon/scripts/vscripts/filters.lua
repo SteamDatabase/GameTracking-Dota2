@@ -70,14 +70,22 @@ function CDungeon:ItemAddedToInventoryFilter( filterTable )
 	local hItem = EntIndexToHScript( filterTable["item_entindex_const"] )
 	local hInventoryParent = EntIndexToHScript( filterTable["inventory_parent_entindex_const"] )
 	if hItem ~= nil and hItem.bIsRelic ~= true and hInventoryParent ~= nil and hItem:GetAbilityName() ~= "item_tombstone" then
-		if hItem:GetAbilityName() == "item_orb_of_passage" and hItem.bKeyItemNotified ~= true and hInventoryParent:IsRealHero() then
-			hItem.bKeyItemNotified = true
-			local gameEvent = {}
-			gameEvent["player_id"] = hInventoryParent:GetPlayerID()
-			gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
-			gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_" .. hItem:GetAbilityName()
-			gameEvent["message"] = "#Dungeon_KeyItem"
-			FireGameEvent( "dota_combat_event_message", gameEvent )
+		if hItem:GetAbilityName() == "item_orb_of_passage" then
+			if hInventoryParent:IsRealHero() == false then
+				local drop = CreateItemOnPositionSync( hInventoryParent:GetAbsOrigin(), hItem )
+				local dropTarget = hInventoryParent:GetAbsOrigin() + RandomVector( 1 ) * 200
+				hItem:LaunchLoot( false, 150, 0.75, dropTarget )
+				return true
+			end
+			if hItem.bKeyItemNotified ~= true and hInventoryParent:IsRealHero() then
+				hItem.bKeyItemNotified = true
+				local gameEvent = {}
+				gameEvent["player_id"] = hInventoryParent:GetPlayerID()
+				gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
+				gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_" .. hItem:GetAbilityName()
+				gameEvent["message"] = "#Dungeon_KeyItem"
+				FireGameEvent( "dota_combat_event_message", gameEvent )
+			end
 		end
 
 		hItem:SetPurchaser( hInventoryParent )

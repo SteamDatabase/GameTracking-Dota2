@@ -3,6 +3,12 @@ bandit_archer_arrow = class({})
 
 --------------------------------------------------------------------------------
 
+function bandit_archer_arrow:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function bandit_archer_arrow:OnAbilityPhaseStart()
 	if IsServer() then
 		--[[
