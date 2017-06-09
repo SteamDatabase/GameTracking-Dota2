@@ -334,6 +334,10 @@ end
 --
 --------------------------------------------------------------------------------
 function CDungeon:HasDialog( hDialogEnt )
+	if hDialogEnt == nil or hDialogEnt:IsNull() then
+		return false
+	end
+	
 	for k,v in pairs ( DialogDefinition ) do
 		if k == hDialogEnt:GetUnitName() then
 			return true
