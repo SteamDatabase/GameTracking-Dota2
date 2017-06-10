@@ -57,6 +57,11 @@ function CDungeon:OnNPCSpawned( event )
 		if spawnedUnit:GetUnitName() == "npc_dota_goodguys_healers" then
 			spawnedUnit:AddNewModifier( spawnedUnit, nil, "modifier_filler_buff_icon", { duration = -1 } );
 		end
+
+		if spawnedUnit:GetUnitName() == "npc_dota_creature_invoker" then
+			spawnedUnit:AddNewModifier( spawnedUnit, nil, "modifier_invulnerable", { duration = -1 } );
+			spawnedUnit:AddNewModifier( spawnedUnit, nil, "modifier_rooted", { duration = -1 } );
+		end
 	end
 end
 
