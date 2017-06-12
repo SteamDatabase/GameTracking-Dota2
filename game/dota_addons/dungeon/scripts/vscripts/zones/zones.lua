@@ -127,7 +127,7 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:Precache()
-	print( "CDungeonZone:Precache - Precaching Zone " .. self.szName )
+	--print( "CDungeonZone:Precache - Precaching Zone " .. self.szName )
 	if self.bPrecached == true then
 		return
 	end
@@ -184,7 +184,7 @@ function CDungeonZone:PrecacheNPCs( zoneTable )
 						self.nPrecacheCount = self.nPrecacheCount + 1
 						PrecacheUnitByNameAsync( unitTable.szNPCName, function( sg ) table.insert( self.SpawnGroups, sg ) end )
 						table.insert( GameRules.Dungeon.PrecachedEnemies, unitTable.szNPCName )
-						print( "CDungeonZone:PrecacheNPCs() - Precached unit of type " .. unitTable.szNPCName )
+						--print( "CDungeonZone:PrecacheNPCs() - Precached unit of type " .. unitTable.szNPCName )
 					end
 				end
 			end
@@ -202,7 +202,7 @@ function CDungeonZone:PrecacheVIPs( vipTable )
 	local nVIPCount = 0
 	self.nPrecacheVIPCount = 0
 	
-	print( "CDungeonZone:PrecacheVIPs() - Precaching VIPs " .. tostring( vipTable ) )
+	--print( "CDungeonZone:PrecacheVIPs() - Precaching VIPs " .. tostring( vipTable ) )
 	for _, unitTable in pairs( vipTable ) do
 		if unitTable ~= nil then
 			nVIPCount = nVIPCount + unitTable.nCount
@@ -216,11 +216,11 @@ function CDungeonZone:PrecacheVIPs( vipTable )
 				self.nPrecacheVIPCount = self.nPrecacheVIPCount + 1
 				PrecacheUnitByNameAsync( unitTable.szVIPName, function( sg ) table.insert( self.SpawnGroups, sg ) end )
 				table.insert( GameRules.Dungeon.PrecachedVIPs, unitTable.szVIPName )
-				print( "CDungeonZone:PrecacheVIPs() - Precached unit of type " .. unitTable.szVIPName )
+				--print( "CDungeonZone:PrecacheVIPs() - Precached unit of type " .. unitTable.szVIPName )
 			end
 		end
 	end
-	print( "CDungeonZone:PrecacheVIPs() - There are " .. self.nPrecacheVIPCount .. " VIP types in zone." )
+	--print( "CDungeonZone:PrecacheVIPs() - There are " .. self.nPrecacheVIPCount .. " VIP types in zone." )
 end
 
 --------------------------------------------------------------------
@@ -230,7 +230,7 @@ function CDungeonZone:PrecacheNeutrals( neutralTable )
 		return
 	end
 
-	print( "CDungeonZone:PrecacheNeutrals() - Precaching Neutrals " .. tostring( neutralTable ) )
+	--print( "CDungeonZone:PrecacheNeutrals() - Precaching Neutrals " .. tostring( neutralTable ) )
 	for _, unitTable in pairs( neutralTable ) do
 		if unitTable ~= nil then
 			PrecacheUnitByNameAsync( unitTable.szNPCName, function( sg ) table.insert( self.SpawnGroups, sg ) end )
@@ -247,9 +247,9 @@ function CDungeonZone:SpawnSquadCreatures( bAsync )
 
 	self.bSpawnedSquads = true
 	self.nExpectedSquadNPCCount = 0
-	print( "-----------------------------------" )
+	--print( "-----------------------------------" )
 	if self.Squads.Fixed ~= nil then
-		print( "CDungeonZone:SpawnSquadCreatures() - Spawning Fixed Squads" )
+		--print( "CDungeonZone:SpawnSquadCreatures() - Spawning Fixed Squads" )
 		for _, squadTable in pairs( self.Squads.Fixed ) do
 			if ( squadTable.szSpawnerName == nil ) then
 				print( "CDungeonZone:SpawnSquadCreatures() - ERROR: No spawnerName specified for this squad type" )
@@ -276,7 +276,7 @@ function CDungeonZone:SpawnSquadCreatures( bAsync )
 	
 
 	if self.Squads.Random ~= nil then
-		print( "CDungeonZone:SpawnSquadCreatures() - Spawning Random Squads" )
+		--print( "CDungeonZone:SpawnSquadCreatures() - Spawning Random Squads" )
 		local hSpawnerList = {}
 		for _, squadTable in pairs( self.Squads.Random ) do
 			if ( squadTable.szSpawnerName == nil ) then
@@ -356,7 +356,7 @@ function CDungeonZone:SpawnSquadUnit( npcData, nTeam, hSpawner, sState, nMaxSpaw
 				
 
 				if #self.Enemies == self.nExpectedSquadNPCCount then
-					print( "CDungeonZone:SpawnSquadUnit() - Async Spawning Complete.  There are " .. #self.Enemies .. " enemies in zone." )
+					--print( "CDungeonZone:SpawnSquadUnit() - Async Spawning Complete.  There are " .. #self.Enemies .. " enemies in zone." )
 				end
 				
 			end )
@@ -509,8 +509,8 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:SpawnVIPs( vipsTable )
-	print( "-----------------------------------" )
-	print( "CDungeonZone:SpawnVIPs()" )
+	--print( "-----------------------------------" )
+	--print( "CDungeonZone:SpawnVIPs()" )
 	if vipsTable == nil then
 		print( "CDungeonZone:SpawnVIPs() - ERROR: No VIPs Table" )
 		return
@@ -524,7 +524,7 @@ function CDungeonZone:SpawnVIPs( vipsTable )
 		end
 
 		if hSpawner ~= nil then
-			print( "CDungeonZone:SpawnVIPs() - Spawning " .. vip.nCount .. " " .. vip.szVIPName )
+			--print( "CDungeonZone:SpawnVIPs() - Spawning " .. vip.nCount .. " " .. vip.szVIPName )
 
 			if vip.nSpawnAmt == nil then
 				vip.nSpawnAmt = 0
@@ -568,8 +568,8 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:SpawnNeutrals( NeutralsTable )
-	print( "-----------------------------------" )
-	print( "CDungeonZone:SpawnNeutrals()" )
+	--print( "-----------------------------------" )
+	--print( "CDungeonZone:SpawnNeutrals()" )
 	if NeutralsTable == nil then
 		print( "CDungeonZone:SpawnNeutrals() - ERROR: No Neutrals Table" )
 		return
@@ -580,7 +580,7 @@ function CDungeonZone:SpawnNeutrals( NeutralsTable )
 		if hSpawner == nil then
 			print( "CDungeonZone:SpawnNeutrals() - ERROR: No Spawners named " .. neutral.szSpawnerName .. " found" )
 		else
-			print( "CDungeonZone:SpawnNeutrals() - Spawning " .. neutral.nCount .. " " .. neutral.szNPCName )
+			--print( "CDungeonZone:SpawnNeutrals() - Spawning " .. neutral.nCount .. " " .. neutral.szNPCName )
 
 			if neutral.nSpawnAmt == nil then
 				neutral.nSpawnAmt = 0
@@ -632,7 +632,7 @@ end
 
 function CDungeonZone:SpawnChasingSquads( nCount, nTeamNumber, ChaserSquads, ChaserSpawners, SquadPool, bNoRepeat )
 	if self:InBossFight() then
-		print( "CDungeonZone:SpawnChasingSquads() - Aborting Spawn, boss fight is active." )
+	--	print( "CDungeonZone:SpawnChasingSquads() - Aborting Spawn, boss fight is active." )
 		return
 	end
 	
@@ -693,7 +693,7 @@ function CDungeonZone:SpawnChasingSquads( nCount, nTeamNumber, ChaserSquads, Cha
 		end
 
 		if vCenterOfHeroes == nil then
-			print( "CDungeonZone:SpawnChasingSquads() - All heroes dead, skip chasing spawn." )
+		--	print( "CDungeonZone:SpawnChasingSquads() - All heroes dead, skip chasing spawn." )
 			return
 		end
 			
@@ -786,8 +786,8 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:SpawnPathingSquads( waveTable, nTeamNumber )
-	print( "-----------------------------------" )
-	print( "CDungeonZone:SpawnPathingSquads()" )
+	--print( "-----------------------------------" )
+	--print( "CDungeonZone:SpawnPathingSquads()" )
 	if waveTable == nil then
 		print( "CDungeonZone:SpawnPathingSquads() - ERROR: No Wave Table" )
 		return
@@ -801,7 +801,7 @@ function CDungeonZone:SpawnPathingSquads( waveTable, nTeamNumber )
 
 	for _,npc in pairs ( NPCs ) do
 		if npc.flDelay ~= nil then
-			print( "CDungeonZone:SpawnPathingSquads() - NPC " .. npc.szNPCName .. " has " .. npc.flDelay .. " seconds remaining before spawning." )
+			--print( "CDungeonZone:SpawnPathingSquads() - NPC " .. npc.szNPCName .. " has " .. npc.flDelay .. " seconds remaining before spawning." )
 			npc.flDelay = npc.flDelay - waveTable.flSpawnInterval			
 			if npc.flDelay <= 0.0 then
 				npc.flDelay = nil
@@ -901,7 +901,7 @@ function CDungeonZone:Activate()
 		self.bSpawnedVIPs = true
 	end
 
-	print( "CDungeonZone:Activate - Zone " .. self.szName .. " is being activated" )
+	--print( "CDungeonZone:Activate - Zone " .. self.szName .. " is being activated" )
 	GameRules.Dungeon:OnZoneActivated( self )
 
 	if self.Type == ZONE_TYPE_SURVIVAL then
@@ -1200,7 +1200,7 @@ function CDungeonZone:OnQuestStarted( quest )
 	if self.Type == ZONE_TYPE_SURVIVAL then
 		if self.Survival.StartQuest ~= nil and self.Survival.StartQuest.bOnCompleted == false then
 			if quest.szQuestName == self.Survival.StartQuest.szQuestName then
-				print( "CDungeonZone:OnQuestStarted() - Survival in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " started." )
+			--	print( "CDungeonZone:OnQuestStarted() - Survival in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " started." )
 				self:SurvivalStart()
 				return
 			end
@@ -1210,7 +1210,7 @@ function CDungeonZone:OnQuestStarted( quest )
 	if self.Type == ZONE_TYPE_HOLDOUT then
 		if self.Holdout.StartQuest ~= nil and self.Holdout.StartQuest.bOnCompleted == false then
 			if quest.szQuestName == self.Holdout.StartQuest.szQuestName then
-				print( "CDungeonZone:OnQuestStarted() - Holdout in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " started." )
+			--	print( "CDungeonZone:OnQuestStarted() - Holdout in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " started." )
 				self:HoldoutStart()
 				return
 			end
@@ -1220,7 +1220,7 @@ function CDungeonZone:OnQuestStarted( quest )
 	if self.Type == ZONE_TYPE_ASSAULT then
 		if self.Assault.StartQuest ~= nil and self.Assault.StartQuest.bOnCompleted == false then
 			if quest.szQuestName == self.Assault.StartQuest.szQuestName then
-				print( "CDungeonZone:OnQuestStarted() - Assault in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " started." )
+			--	print( "CDungeonZone:OnQuestStarted() - Assault in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " started." )
 				self:AssaultStart()
 				return
 			end
@@ -1255,7 +1255,7 @@ function CDungeonZone:OnQuestCompleted( quest )
 	if self.Type == ZONE_TYPE_SURVIVAL then
 		if self.Survival.StartQuest ~= nil and self.Survival.StartQuest.bOnCompleted == true then
 			if quest.szQuestName == self.Survival.StartQuest.szQuestName then
-				print( "CDungeonZone:OnQuestStarted() - Survival in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " was completed." )
+			--	print( "CDungeonZone:OnQuestStarted() - Survival in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " was completed." )
 				self:SurvivalStart()
 			end
 		end
@@ -1264,7 +1264,7 @@ function CDungeonZone:OnQuestCompleted( quest )
 	if self.Type == ZONE_TYPE_HOLDOUT then
 		if self.Holdout.StartQuest ~= nil and self.Holdout.StartQuest.bOnCompleted == true then
 			if quest.szQuestName == self.Holdout.StartQuest.szQuestName then
-				print( "CDungeonZone:OnQuestStarted() - Holdout in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " was completed." )
+			--	print( "CDungeonZone:OnQuestStarted() - Holdout in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " was completed." )
 				self:HoldoutStart()
 			end
 		end
@@ -1273,7 +1273,7 @@ function CDungeonZone:OnQuestCompleted( quest )
 	if self.Type == ZONE_TYPE_ASSAULT then
 		if self.Assault.StartQuest ~= nil and self.Assault.StartQuest.bOnCompleted == false then
 			if quest.szQuestName == self.Assault.StartQuest.szQuestName then
-				print( "CDungeonZone:OnQuestStarted() - Assault in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " started." )
+			--	print( "CDungeonZone:OnQuestStarted() - Assault in " .. self.szName .. " starting because quest " .. quest.szQuestName .. " started." )
 				self:AssaultStart()
 				return
 			end
@@ -1296,7 +1296,7 @@ function CDungeonZone:Deactivate()
 		return
 	end
 
-	print( "CDungeonZone:Deactivate() - Zone " .. self.szName .. " is being deactivated." )
+	--print( "CDungeonZone:Deactivate() - Zone " .. self.szName .. " is being deactivated." )
 
 	self.bActivated = false
 
@@ -1387,7 +1387,7 @@ function CDungeonZone:CheckForZoneComplete()
 			return
 		end
 	elseif self.bZoneCompleted == false then
-		print( "CDungeonZone:CheckForZoneComplete() - Zone " .. self.szName .. " completed in " .. self.flCompletionTime .. " seconds." )
+		--print( "CDungeonZone:CheckForZoneComplete() - Zone " .. self.szName .. " completed in " .. self.flCompletionTime .. " seconds." )
 		self.bZoneCompleted = true
 		
 		if not self.bNoLeaderboard then
@@ -1570,7 +1570,7 @@ end
 
 function CDungeonZone:PerformZoneCleanup()
 	if #self.Enemies > 0 then
-		print( "CDungeonZone:PerformZoneCleanup() - There are " .. #self.Enemies .. " enemies remaining in " .. self.szName )
+		--print( "CDungeonZone:PerformZoneCleanup() - There are " .. #self.Enemies .. " enemies remaining in " .. self.szName )
 		local Heroes = HeroList:GetAllHeroes()
 		local nEnemiesRemoved = 0
 		for i=#self.Enemies,1,-1 do
@@ -1589,9 +1589,9 @@ function CDungeonZone:PerformZoneCleanup()
 				end
 			end
 		end
-		print( "CDungeonZone:PerformZoneCleanup() - Removed " .. nEnemiesRemoved.. " enemies from " .. self.szName  )
+	--	print( "CDungeonZone:PerformZoneCleanup() - Removed " .. nEnemiesRemoved.. " enemies from " .. self.szName  )
 	else
-		print( "CDungeonZone:PerformZoneCleanup() - Unloading " .. #self.SpawnGroups .. " spawn groups from " .. self.szName  )
+	--	print( "CDungeonZone:PerformZoneCleanup() - Unloading " .. #self.SpawnGroups .. " spawn groups from " .. self.szName  )
 		for _,SpawnGroup in pairs( self.SpawnGroups ) do
 			if SpawnGroup ~= nil then
 				UnloadSpawnGroupByHandle( SpawnGroup )
@@ -1664,7 +1664,7 @@ function CDungeonZone:BossThink()
 			--print( "CDungeonZone:BossThink() - Boss has not started" )
 				for _,Hero in pairs ( Heroes ) do
 					if Hero ~= nil and Hero:GetTeamNumber() == DOTA_TEAM_GOODGUYS and Hero:CanEntityBeSeenByMyTeam( Boss ) then
-						print( "CDungeonZone:BossThink() - Starting Boss" )
+					--	print( "CDungeonZone:BossThink() - Starting Boss" )
 						self:OnBossStart( Boss )
 						return
 					end
@@ -1710,7 +1710,7 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:SurvivalStart()
-	print( "CDungeonZone:SurvivalStart()" )
+	--print( "CDungeonZone:SurvivalStart()" )
 
 	self.Survival.bStarted = true
 
@@ -1730,7 +1730,7 @@ function CDungeonZone:SurvivalStart()
 		end
 	end
 
-	print( "CDungeonZone:SurvivalStart() - " .. ConvertToTime( GameRules:GetGameTime() ) .. " - Spawning creeps in " .. self.Survival.flSpawnInterval .. " seconds." )
+	--print( "CDungeonZone:SurvivalStart() - " .. ConvertToTime( GameRules:GetGameTime() ) .. " - Spawning creeps in " .. self.Survival.flSpawnInterval .. " seconds." )
 	self.Survival.flTimeOfNextAttack = GameRules:GetGameTime() + self.Survival.flSpawnInterval
 end
 
@@ -1747,7 +1747,7 @@ function CDungeonZone:SurvivalThink()
 		local flNewInterval = math.max( self.Survival.flMinSpawnInterval, self.Survival.flSpawnInterval - self.Survival.flSpawnIntervalChange )
 		--print( "CDungeonZone:SurvivalThink() - " .. ConvertToTime( flTimeNow ) .. " - Previous interval: " .. self.Survival.flSpawnInterval .. ", new interval:" .. flNewInterval )
 		self.Survival.flSpawnInterval = flNewInterval
-		print( "CDungeonZone:SurvivalThink() - " .. ConvertToTime( flTimeNow ) .. " - Spawning creeps in " .. self.Survival.flSpawnInterval .. " seconds." )
+		--print( "CDungeonZone:SurvivalThink() - " .. ConvertToTime( flTimeNow ) .. " - Spawning creeps in " .. self.Survival.flSpawnInterval .. " seconds." )
 		self.Survival.flTimeOfNextAttack = flTimeNow + self.Survival.flSpawnInterval
 	end
 end
@@ -1755,8 +1755,8 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:SpawnSurvivalAttackers()
-	print( "-----------------------------------" )
-	print( "CDungeonZone:SpawnSurvivalAttackers()" )
+	--print( "-----------------------------------" )
+	--print( "CDungeonZone:SpawnSurvivalAttackers()" )
 
 	self:SpawnChasingSquads( self.Survival.nSquadsPerSpawn, DOTA_TEAM_BADGUYS, self.Survival.ChasingSquads, self.Survival.ChasingSpawners, self.Squads, self.Survival.bDontRepeatSquads )
 end
@@ -1764,7 +1764,7 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:HoldoutStart()
-	print( "CDungeonZone:HoldoutStart()" )
+	--print( "CDungeonZone:HoldoutStart()" )
 	if self.bActivated == false then
 		self:Activate()
 	end
@@ -1828,23 +1828,23 @@ function CDungeonZone:HoldoutThink()
 
 	nTotalEnemiesRemaining = nTotalEnemiesRemaining + nEnemiesRemainingToSpawn
 	if self.Holdout.nLastReportedCount ~= nTotalEnemiesRemaining then
-		print( "CDungeonZone:HoldoutThink() - There are " .. nTotalEnemiesRemaining .. " enemies remaining in holdout event." )
+	--	print( "CDungeonZone:HoldoutThink() - There are " .. nTotalEnemiesRemaining .. " enemies remaining in holdout event." )
 		self.Holdout.nLastReportedCount = nTotalEnemiesRemaining
 	end
 	if nEnemiesRemainingToSpawn > 0 then 
-		print( "CDungeonZone:HoldoutThink() - There are " .. nEnemiesRemainingToSpawn .. " enemies delayed in holdout event." )
+	--	print( "CDungeonZone:HoldoutThink() - There are " .. nEnemiesRemainingToSpawn .. " enemies delayed in holdout event." )
 	end	
 
 	local flTimeNow = GameRules:GetGameTime()
 	if flTimeNow > self.flTimeOfNextWave and self.nCurrentWave < #self.Waves then
 		self.nCurrentWave = self.nCurrentWave + 1
-		print( "CDungeonZone:HoldoutThink() - Wave Start - " .. self.nCurrentWave )
+	--	print( "CDungeonZone:HoldoutThink() - Wave Start - " .. self.nCurrentWave )
 		self:SpawnPathingSquads( self.Waves[self.nCurrentWave], DOTA_TEAM_BADGUYS )
 
 		self.flTimeOfNextSpawn = flTimeNow + self.Waves[self.nCurrentWave].flSpawnInterval
 		self.flTimeOfNextWave = flTimeNow + self.Waves[self.nCurrentWave].flDuration
-		print( "CDungeonZone:HoldoutThink() - Next Wave at " .. ConvertToTime( self.flTimeOfNextWave ) )
-		print( "CDungeonZone:HoldoutThink() - Next Spawn at " .. ConvertToTime( self.flTimeOfNextSpawn ) )
+	--	print( "CDungeonZone:HoldoutThink() - Next Wave at " .. ConvertToTime( self.flTimeOfNextWave ) )
+	--	print( "CDungeonZone:HoldoutThink() - Next Spawn at " .. ConvertToTime( self.flTimeOfNextSpawn ) )
 	else
 		if self.nCurrentWave == 0 then
 			return
@@ -1853,18 +1853,18 @@ function CDungeonZone:HoldoutThink()
 		if flTimeNow > self.flTimeOfNextSpawn then
 			self:SpawnPathingSquads( self.Waves[self.nCurrentWave], DOTA_TEAM_BADGUYS )
 			self.flTimeOfNextSpawn = flTimeNow + self.Waves[self.nCurrentWave].flSpawnInterval
-			print( "CDungeonZone:HoldoutThink() - Next Spawn at " .. ConvertToTime( self.flTimeOfNextSpawn ) )
+	--		print( "CDungeonZone:HoldoutThink() - Next Spawn at " .. ConvertToTime( self.flTimeOfNextSpawn ) )
 		end
 	end
 
 	if self.nCurrentWave == #self.Waves then
-		print( "CDungeonZone:HoldoutThink() - All Waves Completed" )	
+	--	print( "CDungeonZone:HoldoutThink() - All Waves Completed" )	
 		if nTotalEnemiesRemaining == 0 then
-			print( "CDungeonZone:HoldoutThink() - Holdout Event Completed" )	
+	--		print( "CDungeonZone:HoldoutThink() - Holdout Event Completed" )	
 			self.Holdout.bCompleted = true
 			GameRules.Dungeon:OnZoneEventComplete( self )
 		else
-			print( "CDungeonZone:HoldoutThink() - Holdout Event has " .. nEnemiesRemainingToSpawn .. " enemies waiting to spawn." )	
+	--		print( "CDungeonZone:HoldoutThink() - Holdout Event has " .. nEnemiesRemainingToSpawn .. " enemies waiting to spawn." )	
 		end
 	end
 end
@@ -1872,7 +1872,7 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:AssaultStart()
-	print( "CDungeonZone:AssaultStart()" )
+	--print( "CDungeonZone:AssaultStart()" )
 	if self.bActivated == false then
 		self:Activate()
 	end
@@ -1889,14 +1889,14 @@ function CDungeonZone:AssaultStart()
 		for _,RescuedEntity in pairs ( hRescuedEntities ) do
 			for _,szRescuedName in pairs ( self.Assault.szRescuedAttackerTypes ) do
 				if RescuedEntity:GetUnitName() == szRescuedName then			
-					print( "CDungeonZone:AssaultStart() - Adding " .. szRescuedName .. " to Assault attackers." )
+		--			print( "CDungeonZone:AssaultStart() - Adding " .. szRescuedName .. " to Assault attackers." )
 					if RescuedEntity:GetUnitName() == "npc_dota_creature_friendly_ogre_tank" or RescuedEntity:GetUnitName() == "npc_dota_radiant_captain" then
 						local hWaypoint = Entities:FindByName( nil, self.Assault.szRescuedAttackerWaypoint )
 						if hWaypoint == nil then
 							print( "CDungeonZone:AssaultThink() - ERROR: Rescued waypoint is nil." )
 						end
 
-						print( "CDungeonZone:AssaultThink() - Issuing order to " .. RescuedEntity:GetUnitName() )
+		--				print( "CDungeonZone:AssaultThink() - Issuing order to " .. RescuedEntity:GetUnitName() )
 						RescuedEntity:SetInitialGoalEntity( hWaypoint )
 						RescuedEntity:RemoveModifierByName( "modifier_npc_dialog" )
 						RescuedEntity:RemoveModifierByName( "modifier_npc_dialog_notify" )
@@ -1938,7 +1938,7 @@ function CDungeonZone:AssaultThink()
 						print( "CDungeonZone:AssaultThink() - ERROR: Rescued waypoint is nil." )
 					end
 
-					print( "CDungeonZone:AssaultThink() - Issuing order to " .. hRescuedAttacker:GetUnitName() )
+		--			print( "CDungeonZone:AssaultThink() - Issuing order to " .. hRescuedAttacker:GetUnitName() )
 					hRescuedAttacker:SetInitialGoalEntity( hWaypoint )
 					hRescuedAttacker:RemoveModifierByName( "modifier_npc_dialog" )
 					hRescuedAttacker:RemoveModifierByName( "modifier_npc_dialog_notify" )
@@ -1953,7 +1953,7 @@ function CDungeonZone:AssaultThink()
 
 	if flTimeNow >= self.Assault.Defenders.flTimeOfNextSpawn then
 		if #self.Enemies >= self.Assault.nMaxDefenders then
-			print ( "CDungeonZone:AssaultThink - Number of defenders: " .. #self.Enemies .. " exceeds max defender count of: " .. self.Assault.nMaxDefenders )
+		--	print ( "CDungeonZone:AssaultThink - Number of defenders: " .. #self.Enemies .. " exceeds max defender count of: " .. self.Assault.nMaxDefenders )
 		else 
 			self:SpawnChasingSquads( self.Assault.Defenders.nSquadsPerSpawn, self.Assault.nDefenderTeam, self.Assault.Defenders.ChasingSquads, self.Assault.Defenders.ChasingSpawners, self.Squads, self.Assault.Defenders.bDontRepeatSquads )
 		end
@@ -2080,7 +2080,7 @@ function CDungeonZone:RemoveItemDropsFromZoneEnemies()
 	end
 
 	self.bDropsDisabled = true
-	print( "CDungeonZone:RemoveItemDropsFromZoneEnemies()" )
+	--print( "CDungeonZone:RemoveItemDropsFromZoneEnemies()" )
 end
 
 --------------------------------------------------------------------
@@ -2154,7 +2154,7 @@ end
 --------------------------------------------------------------------
 
 function CDungeonZone:SetCheckpoint( hCheckpoint )
-	print( "CDungeonZone:SetCheckpoint - Assigning new checkpoint for zone " .. self.szName )
+	--print( "CDungeonZone:SetCheckpoint - Assigning new checkpoint for zone " .. self.szName )
 	self.hZoneCheckpoint = hCheckpoint 
 end
 

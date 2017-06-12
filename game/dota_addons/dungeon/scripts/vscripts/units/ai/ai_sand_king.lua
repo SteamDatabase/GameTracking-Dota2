@@ -106,7 +106,7 @@ function ChangePhase()
 		return false
 	end
 
-	print( "Changing Phase " .. GameRules:GetGameTime() )
+	--print( "Changing Phase " .. GameRules:GetGameTime() )
 
 	if thisEntity.PHASE == PHASE_EPICENTER then
 		thisEntity.PHASE = PHASE_PHYSICAL
@@ -160,24 +160,24 @@ function SandKingThink()
 	if thisEntity.flNextPhaseTime == nil then
 		thisEntity.bBurrowStateQueued = true
 		thisEntity.flNextPhaseTime = GameRules:GetGameTime() + TRIGGER_PHASE_CD
-		print( "Setting inital phase time to " .. thisEntity.flNextPhaseTime )
+	--	print( "Setting inital phase time to " .. thisEntity.flNextPhaseTime )
 	end
 
 	if ChangePhase() then
-		print( "Changing Phase..")
+	--	print( "Changing Phase..")
 		thisEntity.flPhaseTriggerEndTime = GameRules:GetGameTime() + PHASE_DURATION
 		thisEntity.bBurrowStateQueued = true
 		if thisEntity.BurrowSkill == BurrowStrike then
 			thisEntity.BurrowSkill = BurrowDown
 			thisEntity.flUnburrowTime = GameRules:GetGameTime() + PHASE_DURATION + BURROW_DURATION
 			thisEntity.flNextPhaseTime = GameRules:GetGameTime() + TRIGGER_PHASE_CD + PHASE_DURATION + BURROW_DURATION
-			print( "Setting next phase time to " .. thisEntity.flNextPhaseTime )
+	--		print( "Setting next phase time to " .. thisEntity.flNextPhaseTime )
 		else
 			thisEntity.BurrowSkill = BurrowStrike
 			thisEntity.nBurrowStrikesRemaining = GetNumberBurrowStrikes()
 			thisEntity.nCurrentBurrowStrikes = GetNumberBurrowStrikes()
 			thisEntity.flNextPhaseTime = GameRules:GetGameTime() + TRIGGER_PHASE_CD + PHASE_DURATION --Burrowstrikes adds to this time later after tracking the duration of strikes
-			print( "Setting next phase time to " .. thisEntity.flNextPhaseTime )
+	--		print( "Setting next phase time to " .. thisEntity.flNextPhaseTime )
 		end
 	end
 
@@ -243,7 +243,7 @@ function BurrowThink( enemies )
 end
 
 function CastBurrowstrike( enemy )
-	print( "SandKingBoss - Cast Burrowstrike" )
+	--print( "SandKingBoss - Cast Burrowstrike" )
 	ExecuteOrderFromTable({
 		UnitIndex = thisEntity:entindex(),
 		OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
@@ -255,7 +255,7 @@ function CastBurrowstrike( enemy )
 end
 
 function CastBurrowDown()
-	print( "SandKingBoss - Cast BurrowDown" )
+	--print( "SandKingBoss - Cast BurrowDown" )
 	ExecuteOrderFromTable({
 		UnitIndex = thisEntity:entindex(),
 		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
@@ -267,7 +267,7 @@ end
 
 
 function CastBurrowUp()
-	print( "SandKingBoss - Cast BurrowUp" )
+	--print( "SandKingBoss - Cast BurrowUp" )
 	ExecuteOrderFromTable({
 		UnitIndex = thisEntity:entindex(),
 		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
@@ -392,7 +392,7 @@ function PhysicalThink( enemies )
 end
 
 function CastBlink( vPos )
-	print ( "Use Blink" )
+	--print ( "Use Blink" )
 	ExecuteOrderFromTable({
 		UnitIndex = thisEntity:entindex(),
 		OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
@@ -403,7 +403,7 @@ function CastBlink( vPos )
 end
 
 function CastShivas()
-	print ( "Use Shivas" )
+	--print ( "Use Shivas" )
 	ExecuteOrderFromTable({
 		UnitIndex = thisEntity:entindex(),
 		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,

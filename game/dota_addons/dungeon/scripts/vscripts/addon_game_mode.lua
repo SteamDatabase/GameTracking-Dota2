@@ -132,6 +132,7 @@ function CDungeon:InitGameMode()
 	self.nFortressExitActivators = 0
 	self.bFortressExitThinking = false
 	self.flVictoryTime = nil
+	self.bConfirmPending = false
 
 	self.RelicsFound = {}
 	self.RelicsDefinition = {}

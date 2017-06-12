@@ -61,7 +61,7 @@ function modifier_item_carapace_of_qaldin:OnTakeDamage( params )
 		end
 
 		local Attacker = params.attacker
-		if Attacker ~= nil then
+		if Attacker ~= nil and Attacker ~= self:GetParent() then
 			local damageInfo = 
 			{
 				victim = Attacker,

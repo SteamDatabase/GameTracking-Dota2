@@ -17,7 +17,7 @@ end
 
 function item_creed_of_omniscience:OnHeroLevelUp()
 	if IsServer() then
-		if self:GetCaster():GetLevel() == self.required_level then
+		if self:GetCaster():GetLevel() == self.required_level and self:IsInBackpack() == false then
 			self:OnUnequip()
 			self:OnEquip()
 		end

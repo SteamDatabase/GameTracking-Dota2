@@ -71,7 +71,7 @@ function CDungeon:ItemAddedToInventoryFilter( filterTable )
 	local hInventoryParent = EntIndexToHScript( filterTable["inventory_parent_entindex_const"] )
 	if hItem ~= nil and hItem.bIsRelic ~= true and hInventoryParent ~= nil and hItem:GetAbilityName() ~= "item_tombstone" then
 		if hItem:GetAbilityName() == "item_orb_of_passage" then
-			if hInventoryParent:IsRealHero() == false then
+			if hInventoryParent:IsRealHero() == false and hInventoryParent:IsIllusion() == false then
 				local drop = CreateItemOnPositionSync( hInventoryParent:GetAbsOrigin(), hItem )
 				local dropTarget = hInventoryParent:GetAbsOrigin() + RandomVector( 1 ) * 200
 				hItem:LaunchLoot( false, 150, 0.75, dropTarget )
@@ -79,12 +79,25 @@ function CDungeon:ItemAddedToInventoryFilter( filterTable )
 			end
 			if hItem.bKeyItemNotified ~= true and hInventoryParent:IsRealHero() then
 				hItem.bKeyItemNotified = true
+				
 				local gameEvent = {}
 				gameEvent["player_id"] = hInventoryParent:GetPlayerID()
 				gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
 				gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_" .. hItem:GetAbilityName()
 				gameEvent["message"] = "#Dungeon_KeyItem"
 				FireGameEvent( "dota_combat_event_message", gameEvent )
+
+				local szEventZoneName = nil
+				for _,Zone in pairs( self.Zones ) do
+					if Zone:ContainsUnit( hInventoryParent ) then
+						szEventZoneName = Zone.szName
+					end
+				end
+				if szEventZoneName ~= nil then
+					for _,Zone in pairs ( self.Zones ) do
+						Zone:OnKeyItemPickedUp( szEventZoneName, hItem:GetAbilityName() )
+					end
+				end
 			end
 		end
 

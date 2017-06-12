@@ -44,7 +44,7 @@ end
 
 function item_watchers_gaze:OnHeroLevelUp()
 	if IsServer() then
-		if self:GetCaster():GetLevel() == self.required_level then
+		if self:GetCaster():GetLevel() == self.required_level and self:IsInBackpack() == false then
 			self:OnUnequip()
 			self:OnEquip()
 		end

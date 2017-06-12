@@ -143,15 +143,15 @@ function CDungeon:CreateTreasureGoldDrop( hPlayerHero, hTreasureEnt )
 	local Zone = hTreasureEnt.zone
 	local nGoldToDrop = RandomInt( hTreasureEnt.nMinGold, hTreasureEnt.nMaxGold )
 
-	print( "Zone.nGoldRemaining == " .. Zone.nGoldRemaining )
+	--print( "Zone.nGoldRemaining == " .. Zone.nGoldRemaining )
 	if ( Zone.nGoldRemaining <= 0 ) or ( ( Zone.nGoldRemaining - nGoldToDrop ) <= 0 ) then
 		nGoldToDrop = nGoldToDrop * 0.5
 	end
 
-	print( "Chest nGoldToDrop == " .. nGoldToDrop )
+	--print( "Chest nGoldToDrop == " .. nGoldToDrop )
 
 	--print( "Before chest drop, Zone.nGoldRemaining == " .. Zone.nGoldRemaining )
-	print( "CDungeon:OnTreasureOpen() - Drop a bag with " .. nGoldToDrop .. " gold.")
+	--print( "CDungeon:OnTreasureOpen() - Drop a bag with " .. nGoldToDrop .. " gold.")
 	if nGoldToDrop > 0 then
 		local newItem = CreateItem( "item_bag_of_gold", nil, nil )
 		newItem:SetPurchaseTime( 0 )

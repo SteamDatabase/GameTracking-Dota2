@@ -486,13 +486,6 @@ function CDungeon:OnItemPickedUp( event )
 					Zone:AddStat( hero:GetPlayerID(), ZONE_STAT_ITEMS, 1 )
 				end
 			end
-
-			-- add other "quest/key" items here, should add kv check in future
-			if szEventZoneName ~= nil and item:GetAbilityName() == "item_orb_of_passage" then
-				for _,Zone in pairs ( self.Zones ) do
-					Zone:OnKeyItemPickedUp( szEventZoneName, item:GetAbilityName() )
-				end
-			end
 		end
 	end
 end
@@ -550,7 +543,7 @@ end
 
 
 function CDungeon:OnTriggerStartTouch( triggerName, activator_entindex, caller_entindex  )
-	print( "CDungeon:OnTriggerStartTouch - " .. triggerName )
+	--print( "CDungeon:OnTriggerStartTouch - " .. triggerName )
 	local playerHero = EntIndexToHScript( activator_entindex )
 	if playerHero ~= nil and playerHero:IsRealHero() and playerHero:GetPlayerOwnerID() ~= -1 then
 		local i, j = string.find( triggerName, "_zone_" )
@@ -578,7 +571,7 @@ function CDungeon:OnTriggerStartTouch( triggerName, activator_entindex, caller_e
 			local TriggerEntity = EntIndexToHScript( caller_entindex )
 			if TriggerEntity ~= nil then
 				local nRevealRadius = TriggerEntity:Attribute_GetIntValue( "reveal_radius", 512 )
-				print( "CDungeon - Setting FOW Reveal Radius to " .. nRevealRadius )
+			--	print( "CDungeon - Setting FOW Reveal Radius to " .. nRevealRadius )
 				playerHero:SetRevealRadius( nRevealRadius )
 			end
 		end
@@ -657,7 +650,7 @@ function CDungeon:OnCheckpointTouched( playerHero, szNewCheckpointName  )
 		FireGameEvent( "dota_combat_event_message", gameEvent )
 	end
 
-	print( "CDungeon - Checkpoint " .. szNewCheckpointName .. " activated." )
+	--print( "CDungeon - Checkpoint " .. szNewCheckpointName .. " activated." )
 	table.insert( self.CheckpointsActivated, szNewCheckpointName )
 	local szZoneName = nil
 	local hBuilding = Entities:FindByName( nil, szNewCheckpointName .. "_building" )
@@ -757,7 +750,7 @@ end
 ---------------------------------------------------------
 
 function CDungeon:OnQuestStarted( zone, quest )
-	print( "CDungeon:OnQuestStarted - Quest " .. quest.szQuestName .. " in Zone " .. zone.szName .. " started." )
+	--print( "CDungeon:OnQuestStarted - Quest " .. quest.szQuestName .. " in Zone " .. zone.szName .. " started." )
 	quest.bActivated = true
 
 	for _,zone in pairs( self.Zones ) do
@@ -787,7 +780,7 @@ end
 ---------------------------------------------------------
 
 function CDungeon:OnQuestCompleted( questZone, quest )
-	print( "CDungeon:OnQuestCompleted - Quest " .. quest.szQuestName .. " in Zone " .. questZone.szName .. " completed." )
+	--print( "CDungeon:OnQuestCompleted - Quest " .. quest.szQuestName .. " in Zone " .. questZone.szName .. " completed." )
 	quest.nCompleted = quest.nCompleted + 1
 	if quest.nCompleted >= quest.nCompleteLimit then
 		quest.bCompleted = true
@@ -855,6 +848,11 @@ function CDungeon:OnDialogBegin( hPlayerHero, hDialogEnt )
 		return
 	end
 
+	if self.bConfirmPending == true then
+		print( "CDungeon:OnDialogBegin - Cannot dialog, a confirm dialog is pending." )
+		return
+	end
+
 	if Dialog.szRequireQuestActive ~= nil then
 		if self:IsQuestActive( Dialog.szRequireQuestActive ) == false then
 			print( "CDungeon:OnDialogBegin - Required Active Quest for dialog line not active." )
@@ -884,6 +882,10 @@ function CDungeon:OnDialogBegin( hPlayerHero, hDialogEnt )
 
 	for _,zone in pairs( self.Zones ) do
 		zone:OnDialogBegin( hDialogEnt )
+	end
+
+	if Dialog.bPlayersConfirm == true then
+		self.bConfirmPending = true
 	end
 
 	if Dialog.bSkipFacePlayer ~= true then 
@@ -1091,7 +1093,7 @@ end
 ---------------------------------------------------------
 
 function CDungeon:OnZoneCompleted( zone )
-	print( "CDungeon:OnZoneCompleted - Zone " .. zone.szName .. " has been completed with " .. zone.nStars .. " stars " )
+	--print( "CDungeon:OnZoneCompleted - Zone " .. zone.szName .. " has been completed with " .. zone.nStars .. " stars " )
 end
 
 ---------------------------------------------------------
@@ -1205,6 +1207,7 @@ function CDungeon:OnDialogConfirm( eventSourceIndex, data )
 			zone:OnDialogAllConfirmed( EntIndexToHScript( data["DialogEntIndex"] ), data["DialogLine"] )
 		end
 		CustomGameEventManager:Send_ServerToAllClients( "dialog_player_all_confirmed", netTable )
+		self.bConfirmPending = false
 	end
 end
 
@@ -1217,6 +1220,7 @@ function CDungeon:OnDialogConfirmExpired( eventSourceIndex, data )
 		zone:OnDialogAllConfirmed( EntIndexToHScript( data["DialogEntIndex"] ), data["DialogLine"] )
 	end
 	CustomGameEventManager:Send_ServerToAllClients( "dialog_player_all_confirmed", netTable )
+	self.bConfirmPending = false
 end
 
 ---------------------------------------------------------
