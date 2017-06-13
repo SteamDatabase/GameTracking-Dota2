@@ -1092,15 +1092,7 @@ end
 
 ---------------------------------------------------------
 
-function CDungeon:OnZoneCompleted( zone )
-	--print( "CDungeon:OnZoneCompleted - Zone " .. zone.szName .. " has been completed with " .. zone.nStars .. " stars " )
-end
-
----------------------------------------------------------
-
-function CDungeon:OnGameFinished()
-	print( "CDungeon:OnGameFinished" )
-
+function CDungeon:UpdateGameEndTables()
 	local metadataTable = {}
 	metadataTable[ "event_name" ] = "siltbreaker"
 	metadataTable[ "map_name" ] = "ep_1"
@@ -1158,6 +1150,23 @@ function CDungeon:OnGameFinished()
 	GameRules:SetEventMetadataCustomTable( metadataTable )
 	GameRules:SetEventSignoutCustomTable( signoutTable )
 end
+
+---------------------------------------------------------
+
+function CDungeon:OnZoneCompleted( zone )
+	--print( "CDungeon:OnZoneCompleted - Zone " .. zone.szName .. " has been completed with " .. zone.nStars .. " stars " )
+	
+	self:UpdateGameEndTables();
+end
+
+---------------------------------------------------------
+
+function CDungeon:OnGameFinished()
+	print( "CDungeon:OnGameFinished" )
+
+	self:UpdateGameEndTables()
+end
+
 ---------------------------------------------------------
 
 function CDungeon:OnScrollClicked( eventSourceIndex, data )
