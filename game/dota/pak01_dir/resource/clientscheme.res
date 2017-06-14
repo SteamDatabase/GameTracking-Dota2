@@ -731,9 +731,9 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"RadianceM"
-				"tall"		"14"
-				"weight"	"1200"
+				"name"		"Dota Hypatia Bold"
+				"tall"		"13"
+				"weight"	"800"
 				"italic"	"0"
 				"antialias" "1"
 			}
@@ -743,9 +743,9 @@ Scheme
 		{
 			"1"
 			{
-				"name"		"RadianceM"
-				"tall"		"10"
-				"weight"	"1200"
+				"name"		"Dota Hypatia Bold"
+				"tall"		"13"
+				"weight"	"800"
 				"italic"	"0"
 				"antialias" "1"
 			}
