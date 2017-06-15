@@ -51,6 +51,9 @@ function Spawn( entityKeyValues )
 		
 		thisEntity.BurrowSkill = BurrowStrike
 
+		thisEntity.fOrigSpawnPos = Vector( 11136, 12160, 384 )
+		--print( string.format( "saved SK's spawn point: %.2f, %.2f, %.2f", thisEntity.fOrigSpawnPos.x, thisEntity.fOrigSpawnPos.y, thisEntity.fOrigSpawnPos.z ) )
+
 		thisEntity.flSpeechCooldown = GameRules:GetGameTime() + SPEECH_COOLDOWN
 		s_flNextLaughTime = GameRules:GetGameTime() + TAUNT_RATE
 	end
@@ -144,6 +147,13 @@ function SandKingThink()
 	end
 
 	if thisEntity.bStarted ~= true then
+		return 0.1
+	end
+
+	local fDistFromSpawn = ( thisEntity:GetOrigin() - thisEntity.fOrigSpawnPos ):Length2D()
+	if fDistFromSpawn > 7000 then
+		--print( "teleport SK back to his spawn point" )
+		FindClearSpaceForUnit( thisEntity, thisEntity.fOrigSpawnPos, true )
 		return 0.1
 	end
 
