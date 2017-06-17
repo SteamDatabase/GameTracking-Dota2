@@ -1,4 +1,3 @@
---[[ fire_trap_cycle_tripleshot.lua ]]
 
 ---------------------------------------------------------------------------
 -- Fire Trap
@@ -14,9 +13,16 @@ function OnTrigger( trigger )
 		return
 	end
 
-	thisEntity.nTimesCast = 0
+	thisEntity.fRefireTime = 2.0
+	thisEntity.fQuickRefireTime = 0.5
+
+	thisEntity.nQuickRefires = 0
+	thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fQuickRefireTime
+
 	thisEntity:SetContextThink( "ActivateTrap", function() return FireTrapActivate() end, 0 )
 end
+
+---------------------------------------------------------------------------
 
 function FireTrapActivate()
 	if not IsServer() then
@@ -27,22 +33,31 @@ function FireTrapActivate()
 		return 0.5
 	end
 
-	local fRefireTime = 2.0
-	local fQuickRefireTime = 0.5
+	if GameRules:GetGameTime() >= thisEntity.fNextAttackTime then
+		return QuickRefire()
+	end
 
+	return 0.25
+end
+
+---------------------------------------------------------------------------
+
+function QuickRefire()
 	thisEntity:SetAnimation( "bark_attack" );
 	thisEntity:CastAbilityOnPosition( thisEntity:GetTrapTarget(), thisEntity.hBreatheFireAbility, -1 )
 
-	thisEntity.nTimesCast = thisEntity.nTimesCast + 1
+	thisEntity.nQuickRefires = thisEntity.nQuickRefires + 1
 
-	if thisEntity.nTimesCast <= 2 then
-		return fQuickRefireTime
+	if thisEntity.nQuickRefires <= 2 then
+		thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fQuickRefireTime
 	else
-		thisEntity.nTimesCast = 0 -- reset counter
-		return fRefireTime
+		thisEntity.bNextAttackIsNormal = true
+		thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fRefireTime
+		thisEntity.nQuickRefires = 0 -- reset counter
 	end
 
-	return fRefireTime
+	return 0.25
 end
 
+---------------------------------------------------------------------------
 

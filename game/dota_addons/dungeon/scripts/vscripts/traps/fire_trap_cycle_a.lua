@@ -15,6 +15,8 @@ function OnTrigger( trigger )
 		return
 	end
 
+	thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fRefireTime
+
 	thisEntity:SetContextThink( "ActivateTrap", function() return FireTrapActivate() end, 0 )
 end
 
@@ -29,10 +31,13 @@ function FireTrapActivate()
 		return 0.5
 	end
 
-	thisEntity:SetAnimation( "bark_attack" );
-	thisEntity:CastAbilityOnPosition( thisEntity:GetTrapTarget(), thisEntity.hBreatheFireAbility, -1 )
+	if GameRules:GetGameTime() >= thisEntity.fNextAttackTime then
+		thisEntity:SetAnimation( "bark_attack" );
+		thisEntity:CastAbilityOnPosition( thisEntity:GetTrapTarget(), thisEntity.hBreatheFireAbility, -1 )
+		thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fRefireTime
+	end
 
-	return thisEntity.fRefireTime
+	return 0.5
 end
 
 ---------------------------------------------------------------------------

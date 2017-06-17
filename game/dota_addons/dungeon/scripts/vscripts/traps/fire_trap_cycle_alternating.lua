@@ -4,7 +4,6 @@
 ---------------------------------------------------------------------------
 
 function OnTrigger( trigger )
-
 	EmitGlobalSound( "ui.ui_player_disconnected" )
 	EmitSoundOn( "Dungeon.TrapActivate", hTrigger )
 
@@ -14,14 +13,19 @@ function OnTrigger( trigger )
 		return
 	end
 
-	thisEntity.nTimesCast = 0
+	thisEntity.fRefireTime = 1.8
+	thisEntity.fQuickRefireTime = 0.5
+	thisEntity.bNextAttackIsNormal = false
 
-	thisEntity:SetContextThink( "ActivateTrapNormal", function() return FireTrapActivateNormal() end, 0 )
+	thisEntity.nQuickRefires = 0
+	thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fQuickRefireTime
+
+	thisEntity:SetContextThink( "FireTrapActivateAlternating", function() return FireTrapActivateAlternating() end, 0 )
 end
 
 ---------------------------------------------------------------------------
 
-function FireTrapActivateTriple()
+function FireTrapActivateAlternating()
 	if not IsServer() then
 		return
 	end
@@ -30,38 +34,46 @@ function FireTrapActivateTriple()
 		return 0.5
 	end
 
-	local fQuickRefireTime = 0.5
-
-	thisEntity:SetAnimation( "bark_attack" );
-	thisEntity:CastAbilityOnPosition( thisEntity:GetTrapTarget(), thisEntity.hBreatheFireAbility, -1 )
-
-	thisEntity.nTimesCast = thisEntity.nTimesCast + 1
-
-	if thisEntity.nTimesCast <= 2 then
-		return fQuickRefireTime
+	if GameRules:GetGameTime() >= thisEntity.fNextAttackTime then
+		if thisEntity.bNextAttackIsNormal == false then
+			return QuickRefire()
+		else
+			return NormalRefire()
+		end
 	end
 
-	thisEntity.nTimesCast = 0 -- reset counter
-	thisEntity:SetContextThink( "ActivateTrapNormal", function() return FireTrapActivateNormal() end, 1.8 )
-	return nil
+	return 0.25
 end
 
 ---------------------------------------------------------------------------
 
-function FireTrapActivateNormal()
-	if not IsServer() then
-		return
-	end
-	
-	if GameRules:IsGamePaused() == true then
-		return 0.5
-	end
-
+function QuickRefire()
 	thisEntity:SetAnimation( "bark_attack" );
 	thisEntity:CastAbilityOnPosition( thisEntity:GetTrapTarget(), thisEntity.hBreatheFireAbility, -1 )
 
-	thisEntity:SetContextThink( "ActivateTrapTriple", function() return FireTrapActivateTriple() end, 1.8 )
-	return nil
+	thisEntity.nQuickRefires = thisEntity.nQuickRefires + 1
+
+	if thisEntity.nQuickRefires <= 2 then
+		thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fQuickRefireTime
+	else
+		thisEntity.bNextAttackIsNormal = true
+		thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fRefireTime
+		thisEntity.nQuickRefires = 0 -- reset counter
+	end
+
+	return 0.25
+end
+
+---------------------------------------------------------------------------
+
+function NormalRefire()
+	thisEntity:SetAnimation( "bark_attack" );
+	thisEntity:CastAbilityOnPosition( thisEntity:GetTrapTarget(), thisEntity.hBreatheFireAbility, -1 )
+
+	thisEntity.fNextAttackTime = GameRules:GetGameTime() + thisEntity.fRefireTime
+	thisEntity.bNextAttackIsNormal = false
+
+	return 0.25
 end
 
 ---------------------------------------------------------------------------
