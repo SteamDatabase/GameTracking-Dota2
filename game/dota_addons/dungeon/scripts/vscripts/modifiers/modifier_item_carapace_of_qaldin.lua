@@ -68,7 +68,7 @@ function modifier_item_carapace_of_qaldin:OnTakeDamage( params )
 				attacker = self:GetParent(),
 				damage = params.damage * self.damage_return_pct / 100,
 				damage_type = params.damage_type,
-				damage_flags = DOTA_DAMAGE_FLAG_REFLECTION,
+				damage_flags = DOTA_DAMAGE_FLAG_REFLECTION + DOTA_DAMAGE_FLAG_NO_SPELL_LIFESTEAL,
 				ability = self:GetAbility(), 
 			}
 			ApplyDamage( damageInfo )

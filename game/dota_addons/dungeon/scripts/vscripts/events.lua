@@ -93,19 +93,19 @@ function CDungeon:OnNPCSpawned_PlayerHero( event )
 			hPlayerHero.nRespawnsRemaining = nSTARTING_RESPAWNS
 			CustomNetTables:SetTableValue( "revive_state", string.format( "%d", hPlayerHero:entindex() ), { tombstone = false } )
 			CustomNetTables:SetTableValue( "respawns_remaining", string.format( "%d", hPlayerHero:entindex() ), { respawns = hPlayerHero.nRespawnsRemaining } )
-			local hPlayer = hPlayerHero:GetPlayerOwner()
-			if hPlayer then
-				PlayerResource:SetCustomBuybackCooldown( hPlayer:GetPlayerID(), 0 )
-				PlayerResource:SetCustomBuybackCost( hPlayer:GetPlayerID(), 0 )
+			local nPlayerID = hPlayerHero:GetPlayerOwnerID()
+			if nPlayerID ~= -1 then
+				PlayerResource:SetCustomBuybackCooldown( nPlayerID, 0 )
+				PlayerResource:SetCustomBuybackCost( nPlayerID, 0 )
 			end
 
 			local relicTable = {}
 			for _,Relic in pairs( self.RelicsDefinition ) do
-				if Relic ~= nil and GetItemDefOwnedCount( hPlayer:GetPlayerID(), Relic["DungeonItemDef"] ) > 0 then
+				if Relic ~= nil and GetItemDefOwnedCount( nPlayerID, Relic["DungeonItemDef"] ) > 0 then
 					table.insert( relicTable, Relic["RelicName"] )	
 				end
 			end
-			CustomNetTables:SetTableValue( "relics", string.format( "%d", hPlayer:GetPlayerID() ), relicTable )
+			CustomNetTables:SetTableValue( "relics", string.format( "%d", nPlayerID ), relicTable )
 
 			hPlayerHero:SetRevealRadius( 512 )
 		end

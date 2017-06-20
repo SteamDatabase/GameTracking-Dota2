@@ -65,6 +65,13 @@ function modifier_item_longclaws_amulet:OnTakeDamage( params )
 			return 0
 		end
 
+		if bit.band( params.damage_flags, DOTA_DAMAGE_FLAG_REFLECTION ) == DOTA_DAMAGE_FLAG_REFLECTION then
+			return 0
+		end
+		if bit.band( params.damage_flags, DOTA_DAMAGE_FLAG_NO_SPELL_LIFESTEAL ) == DOTA_DAMAGE_FLAG_NO_SPELL_LIFESTEAL then
+			return 0
+		end
+
 		local nFXIndex = ParticleManager:CreateParticle( "particles/items3_fx/octarine_core_lifesteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, Attacker )
 		ParticleManager:ReleaseParticleIndex( nFXIndex )
 
