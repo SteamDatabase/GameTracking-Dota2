@@ -5,7 +5,7 @@ cd "${0%/*}"
 
 echo "Processing Dota 2..."
 
-ProcessDepot ".dylib"
+ProcessDepot ".so"
 ProcessVPK
 
 while IFS= read -r -d '' file
