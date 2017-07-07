@@ -295,6 +295,7 @@
 
 	"dota_ability_changed"
 	{
+		"entityIndex"	"short"
 	}
 
 	"dota_spectator_talent_changed"
@@ -1116,6 +1117,7 @@
 	}
 	"dota_player_update_assigned_hero"
 	{
+		"playerid"		"short"
 	}
 	"dota_player_hero_selection_dirty"
 	{

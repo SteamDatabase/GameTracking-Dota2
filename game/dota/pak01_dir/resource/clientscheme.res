@@ -751,6 +751,17 @@ Scheme
 			}
 		}
 
+		"ParticleEffectFont"
+		{
+			"1"
+			{
+				"name"		"Radiance"
+				"tall"		"17"
+				"weight"	"600"
+				"antialias" "1"
+			}
+		}
+
 		"HypatiaBoldSmall"
 		{
 			"1"
