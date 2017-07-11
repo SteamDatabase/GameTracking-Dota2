@@ -100,7 +100,7 @@
 		"AllocWarnMB" "100"
 		// There are some known large virtual reservations, such as the SBH, which
 		// bypass this limit so we can be fairly conservative.
-		"ReserveWarnMB" "32"
+		"ReserveWarnMB" "64"
 
 		"RenderingPipeline"
 		{
