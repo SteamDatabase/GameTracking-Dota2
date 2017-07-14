@@ -2,13 +2,16 @@ function CreateBroodMotherIKChain( bonePrefix, boneSuffix, bForwardIsXPositive )
 
 	local endEffectorBoneName = bonePrefix .. "3" .. boneSuffix
 
-	local metatarsusBoneName = bonePrefix .. "2" .. boneSuffix	-- Last 'knuckle'
-	local tibiaName = bonePrefix .. "1" .. boneSuffix			-- Second to last 'knuckle'
+	local tarsusBoneName		= bonePrefix .. "2" .. boneSuffix	-- Last 'knuckle'
+	local metaTarsusBoneName	= bonePrefix .. "1" .. boneSuffix	-- Second to last 'knuckle'
+	local tibiaBoneName			= bonePrefix .. "0" .. boneSuffix	-- Root 'knuckle'
 
 	return model:CreateIKChain( 
 				endEffectorBoneName,
-				endEffectorBoneName,
 				{
+					ik_end_effector_bone=endEffectorBoneName,
+					ik_root_bone=tibiaBoneName,
+
 					bones_point_along_positive_x = bForwardIsXPositive,
 
 					target_orientation_speedlimit=360,	-- Degrees per second we'll adjust to match the target: -1 means don't limit speed, but will result in pops
@@ -26,12 +29,13 @@ function CreateBroodMotherIKChain( bonePrefix, boneSuffix, bForwardIsXPositive )
 					},
 
 					solverInfo = {
+--						type="fabrik"
 						type="perlin"
 					},
 
 					constraints = {
-						{ type="hinge", joint=metatarsusBoneName, min_angle=30, max_angle=140 }
-						--{ type="hinge", joint=tibiaName, min_angle=0, max_angle=90 } -- need more than a two bone solver for this
+						{ type="hinge", joint=tarsusBoneName, min_angle=30, max_angle=140 }
+						--{ type="hinge", joint=metaTarsusBoneName, min_angle=0, max_angle=90 } -- need more than a two bone solver for this
 					},
 				}
 		)

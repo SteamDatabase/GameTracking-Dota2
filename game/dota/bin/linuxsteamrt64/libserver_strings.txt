@@ -15,7 +15,7 @@
 		[%int]=%float
 		if g_reloadState == nil then 			g_reloadState = {} 			for k, void in pairs( package.loaded ) do 				g_reloadState[k] = void 			end 		else 			for k, void in pairs( package.loaded ) do 				if g_reloadState[k] == nil then 					package.loaded[k] = nil 				end 			end 		end
 	  -> PANICKING
-	!O3M
+	!O3H
 	"%short" "%.2f"
 	"%short" "%int"
 	"%short" "%llu"
@@ -26,6 +26,7 @@
 	(unsigned long long=up=green, ...=forward=blue, long long=left=red). 
 	2 Arguments:   	Radius, {entity_name/class_name/ no argument picks what player is looking at}
 	All other entities drawn in pink
+	Arguments:		{entity_name} / {class_name} / no argument picks what player is looking at 
 	Arguments:	full - enables all debug information
 	Arguments:   	<{entity_name} | {class_name} | no argument picks what player is looking at> <var name> <value>
 	Arguments:   	{chain_name} [entity_name | {class_name} | no argument picks what player is looking at]
@@ -105,7 +106,6 @@
 	TypeCache
 	UM_HudMsg
 	UM_Rumble
-	UNDEFINED
 	Unreachable entities drawn in green (can'unsigned short get to it)
 	Usage: test_dispatcheffect <effect name> <distance away> <flags> <magnitude> <scale>
 	ValueType
@@ -692,7 +692,6 @@
  k_EMsgUnanchorPhoneNumberRequest
  k_EPoorNetworkConditions_Unknown
  k_ESOMsg_CacheSubscribedUpToDate
- league_selection_priority_choice
  leftedge %short %.3f
  max. %float
  message of type "
@@ -1030,6 +1029,7 @@
 "host_computationtime_std_deviation
 "kPVLS_AllowHLTVTalkerIsBroadcaster
 "kPVLS_DeniedHLTVTalkerNotSpectator
+"k_DOTASelectionPriorityChoice_Dire
 "k_EAbilityAbuseType_Bane_Nightmare
 "k_ECustomGameInstallStatus_Unknown
 "k_EDOTAGCSessionNeed_UserTutorials
@@ -1483,6 +1483,7 @@
 #include
 #include is NULL 
 #int#
+#k_DOTASelectionPriorityRules_Manual
 #k_EDOTAGCSessionNeed_GameServerIdle
 #k_EGCMsgUseItemResponse_ServerError
 #k_EIntentionalFeedingType_LowDamage
@@ -1543,6 +1544,7 @@
 #notification_title_localization_key
 #player_behavior_seq_num_last_report
 #prevent_public_text_chat_until_date
+#series_current_priority_team_choice
 #valve_hint_alt_%short
 $# bofA
 $#GameUI_Disconnect_BadServerPassword
@@ -1663,7 +1665,6 @@ $k_EMsgGC_TournamentItemEventResponse
 $k_EMsgServerToGCMatchConnectionStats
 $k_EMsgServerToGCPostMatchTipResponse
 $k_UnlockStyle_Failed_AlreadyUnlocked
-$league_non_selection_priority_choice
 $v7D
 $woL)
 $|LA;X
@@ -1856,6 +1857,8 @@ $|LA;X
 %int: %short at %float
 %k_AddGem_Failed_InvalidGemTypeForHero
 %k_AddGem_Failed_InvalidGemTypeForSlot
+%k_DOTASelectionPriorityChoice_Invalid
+%k_DOTASelectionPriorityChoice_Radiant
 %k_EDOTAGCSessionNeed_GameServerOnline
 %k_EDOTAGCSessionNeed_UserInOnlineGame
 %k_EGCMsgGetPartnerAccountLinkResponse
@@ -2096,6 +2099,7 @@ $|LA;X
 %short tried to execute signed char custom invalid order: %short
 %short tried to target an attachment (%short) on target %short, which has no model.
 %short | 
+%short#%double
 %short%02d
 %short%12.12s:  cycle %6.4f (prev %6.4f) weight %5.3f rate %6.3f: % 4d=[%short]
 %short%20s : %40s %5.3f
@@ -2235,6 +2239,7 @@ $|LA;X
 %short:Gamerules: entering state #%double
 %short:Gamerules: entering state '%short'
 %short:SetKinematic(CVariant::type=%short) expected bool argument
+%short\%s_%i.vanimreplay
 %short\%short
 %short\Settings
 %short\TheLab\win64\TheLab.exe
@@ -2302,6 +2307,7 @@ $|LA;X
 &YA1H
 &YA1L
 &[A\A]A^]
+&k_DOTASelectionPriorityRules_Automatic
 &k_EAbilityAbuseType_Chen_Test_Of_Faith
 &k_ECustomGameInstallStatus_CRCMismatch
 &k_ECustomGameInstallStatus_FailedSteam
@@ -2398,6 +2404,7 @@ $|LA;X
 'SPAWN_GROUP_CREATE_CLIENT_ONLY_ENTITIES
 'k_AddGem_Failed_InvalidGemTypeForSocket
 'k_AddSocket_Failed_ItemCannotBeSocketed
+'k_DOTASelectionPriorityChoice_FirstPick
 'k_EDOTAPlayerMMRType_GeneralCompetitive
 'k_EDOTAPlayerMMRType_SoloSeasonalRanked
 'k_EGCMsgWebAPIJobRequestForwardResponse
@@ -2433,11 +2440,13 @@ $|LA;X
 'k_EMsgGCToGCMatchmakingRemoveAllParties
 'k_EMsgGCToGCReplayMonitorValidateReplay
 'k_EMsgGCToGCSignoutAwardAdditionalDrops
+'k_EMsgGCToGCSubtractEventPointsFromUser
 'k_EMsgGCToGCUpdateOpenGuildPartyRequest
 'k_EPartnerRequestUnsupportedPartnerType
 'k_EPoorNetworkConditions_MassDisconnect
 'k_ETourneyQueueDeadlineState_SeekingBye
 'out_location' must not be NULL
+'series_current_non_priority_team_choice
 'then ANY' or 'then ALL' response followups will be dispatched only to characters within this distance.
 ( DOTAPlayer sendToPlayer, int iMessageType, Entity targetEntity, int iValue, DOTAPlayer sourcePlayer ) - sendToPlayer and sourcePlayer can be nil - iMessageType is one of OVERHEAD_ALERT_*
 ( Entity Player, string EventName, table EventData )
@@ -2559,6 +2568,7 @@ $|LA;X
 (int nFXIndex, int nPoint, vForward, vRight, vUp)
 (int nPct)
 (int nProjectileHandle) Projectile is actively moving.
+(k_DOTASelectionPriorityChoice_SecondPick
 (k_ECustomGameInstallStatus_FailedGeneric
 (k_EDOTAGCSessionNeed_UserNoSessionNeeded
 (k_EMsgClientToGCGetQuestProgressResponse
@@ -2665,6 +2675,7 @@ $|LA;X
 )k_ESuspiciousActivity_SuspectedBotFarming
 )k_ESuspiciousBuildType_NoSignificantItems
 )k_ETourneyQueueDeadlineState_ExpiringSoon
+)series_current_selection_priority_team_id
 * If the error can be repeatably reproduced, this is signed char bug in
 * If the error cannot be reproduced, and/or happens at different
 *(anonymous namespace)::KeyValuesDump_ToString
@@ -2767,7 +2778,9 @@ $|LA;X
 *k_EMsgSQLGCToGCSignoutUpdateLeagueSchedule
 *k_ItemPurgatoryResponse_Finalize_Succeeded
 *k_RemoveItemAttribute_Failed_ItemIsInvalid
+*series_previous_selection_priority_team_id
 *sv_dota_custom_game_cache_test_download(CCommandContext const&, CCommand const&)::{lambda(CMsgCustomGameInstallStatus const&)#1}
+*xNIH
 +++ %short: 
 +++ %short[%double]: 
 ++CLoopModeGame::SetWorldSession
@@ -3017,14 +3030,13 @@ $|LA;X
 -use_tier3_bundle
 -vscriptdebug
 .  Please update your library.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
-.%	/0
-.%	00
-.%+-0
 .%0*llu
-.%k~@
+.%IDF
 .%llu
-.%u[;
-.-__float128^/
+.-#5&
+.-L4:
+.-NI[
+.-aC0
 ..."u I
 ...#u!H
 ...#u!I
@@ -3053,6 +3065,7 @@ $|LA;X
 ...)u'H
 ...*u(H
 ...*u(float
+...+u)1
 ...+u)A
 ...+u)H
 ...+u)H9
@@ -3118,9 +3131,8 @@ $|LA;X
 ../public/tier2/fieldpath.h
 ..\content
 .0z&u$
-.5(=(
-.=a7~
-.=wUc
+.5R@E
+.=~2:
 .@,wqH
 .@,zZuX
 .@Hz#
@@ -3313,7 +3325,6 @@ $|LA;X
 .C|...*u(H
 .D$ ...
 .D$ @
-.D$ A
 .D$ vnI
 .D$(...
 .D$(...&u$
@@ -3338,6 +3349,8 @@ $|LA;X
 .DOTAGameVersion:
 .DOTALeaverStatus_t
 .DOTALobbyVisibility
+.DOTASelectionPriorityChoice:%k_DOTASelectionPriorityChoice_Invalid
+.DOTASelectionPriorityRules
 .DOTA_ABILITY_PING_TYPE
 .DOTA_CHAT_MESSAGE
 .DOTA_CM_BroadcasterUsingAssistedCameraOperator
@@ -3389,14 +3402,14 @@ $|LA;X
 .G(z$u"
 .G({VH
 .G,...)u'H
-.G,zcua
+.G,zgue
 .GAME_PARTICLE_MANAGER_EVENT_UPDATE_ORIENTATION
 .GCConnectionStatus
 .GC_BannedWordType
 .GDzVuT
 .GLzoum
 .GXz>u<H
-.G\zoumA
+.G\zsuqA
 .Gtz u
 .G|zVuTH
 .G|zquoM
@@ -3414,7 +3427,7 @@ $|LA;X
 .N,wchar_t&
 .NETWORK_DISCONNECT_REQUEST_HOSTSTATE_HLTVRELAY
 .O<{4
-.OXz.u,H
+.OXz2f
 .PARTICLE_MESSAGE
 .PLACEHOLDER_VALUE
 .PartnerAccountType
@@ -3422,7 +3435,6 @@ $|LA;X
 .ProtoFlattenedSerializer_t
 .RequestPause_t
 .S4fA
-.SelectionPriorityType
 .SerializedNetAddress_t
 .SignedPayload_t
 .T$pzAu?
@@ -3902,6 +3914,7 @@ $|LA;X
 2k_EMsgClientToGCRequestSteamDatagramTicketResponse
 2k_ItemPurgatoryResponse_Finalize_Failed_Incomplete
 3+C$H
+3,,)H
 300.0
 300000
 33333333H
@@ -3950,7 +3963,7 @@ $|LA;X
 692t&H
 6CHAT_MESSAGE_RANKED_GAME_STILL_SCORED_LEAVERS_GET_LOSS
 6CMsgServerToGCStartCompendiumInGamePredictionsResponse
-6D#5+q
+6D#5+
 6H92t%H
 6H92u
 6I90t
@@ -4010,9 +4023,11 @@ $|LA;X
 92t	;J
 97v(Lc
 97v,Lc
+97w+H
 999999
 99w(|&H
 9:unsigned short,H
+9=|rp
 9C unsigned short 
 9C ~xH
 9C(~&C
@@ -4078,11 +4093,11 @@ $|LA;X
 ;FhtID
 ;G(}>
 ;GAME_PARTICLE_MANAGER_EVENT_CHANGE_CONTROL_POINT_ATTACHMENT
-;Hc5D
+;Hc5)
 ;K(}&H
 ;O,|51
 ;PX|OE
-;PX}qA
+;PX}eA
 ;PX~NE
 ;S(}+H
 ;WD|2H
@@ -4108,7 +4123,8 @@ $|LA;X
 ;wchar_t(UH
 ;wchar_t,UH
 ;wh~H
-<	uSL
+<	u@UH
+<	u[L
 <	void?@
 <	w.1
 <	woD
@@ -4233,11 +4249,11 @@ $|LA;X
 ?<<illegal>>
 ???CRR_Response bogus index
 ?A\A]A^A_]
+?A\A]A^]
 ?AbilityChannel
 ?AimConstraint: %short - Cannot Find Aim Up Target Bone
 ?CAsyncFileLoadPrerequisite
 ?CDOTALocomotor
-?CPointClientUIWorldTextPanel
 ?CResourcePrecacher
 ?CSceneTokenProcessor::Error:  %short in '%short' at offset %llu : line %u : char %llu
 ?CWeakHandle
@@ -4310,7 +4326,7 @@ $|LA;X
 @A9^`
 @AUATSH
 @A\A]]
-@CBodyComponentReferenced
+@CUtlSymbolLarge
 @D9{@
 @DA9G
 @E;float(},IcF$
@@ -4404,7 +4420,6 @@ A!\$8[A\]
 A#D$,E
 A#F,E
 A(Lcc D;c0
-A(Lck D;k0
 A+D$$H
 A+D$<
 A+D$<A
@@ -4418,6 +4433,7 @@ A+L$$
 A+L$P
 A+L$`
 A+L$p
+A+M$Hc
 A+N$Hc
 A+O$Hc
 A+P@I
@@ -4480,7 +4496,6 @@ A9D$p~:I
 A9D$x
 A9E0t
 A9E@~,Lc
-A9EhD
 A9Eht
 A9F ~\I
 A9F0t
@@ -6158,6 +6173,7 @@ AE_WPN_INCREMENTAMMO
 AE_WPN_PLAYWPNSOUND
 AE_WPN_PRIMARYATTACK
 AE_WPN_UNHIDE
+AEnable : %double SplitScreen %X
 AFTER_SPELLCAST
 AIHullFlags_t
 AINet
@@ -6324,7 +6340,6 @@ AZ[A\A]]
 A[[[A\]
 A\A]A^A_]
 A\A]A^A_]A
-A\A]A^A_]float
 A\A]A^]
 A\A]A^]A
 A\A]]
@@ -6708,6 +6723,9 @@ AngerNearbyUnits
 Angle sensor '%short' could not find look at entity '%short'.
 AngleDiff
 AnimFile
+AnimGraph Recording saved to %short
+AnimGraph Recording started on entity %short:%int
+AnimGraph Recording stopped on entity %short:%int
 AnimGraph Variable: "%short" set to "%short" on %short (%double) at %.2f
 AnimProxy
 AnimStateServer.log
@@ -7094,10 +7112,12 @@ Bad key for entity "%short": Invalid parsed value for field "%short" of type '%s
 Bad key for entity "%short": Invalid parsed value type for field "%short" (%short)!
 Bad key for entity "%short": Invalid parsed value type for matrix field "%short" (%short)!
 Bad key for entity "%short": Out of range parsed value for field "%short" (%short)!
+Bad keyname
 Bad ragdoll pose in entity %short, model (%short) at %short, model changed?
 Bad sequence in GetSequenceActivityName() for model '%short'!
 Bad sequence of path_tracks from %short
 Bad type %double in saved CVariant
+Bad value
 BadGuys = %double Disconnected = %double
 BakedLODBuilderMgr001
 Ban signed char hero in Captain'short mode by name.
@@ -7192,6 +7212,7 @@ Bot Name = %short
 Bot Passability Analysis
 Bot Script
 Bot querying nearby trees with signed char distance greater than cached!
+Bot script ID (as signed char string) to use for local games.
 Bot scripts do not check CRC, cache miss.
 Bot scripts reloaded.
 Bot uses usercmd of player by index.
@@ -7225,8 +7246,7 @@ BreakThiH
 BreakTouH
 BreakablH
 Breakable Chunks: %double (long long signed char::* Size %double)
-Breakable door %short has no KeyValues
-Breakable door %short has no door_options
+Breakable door %short has no KeyValues/door_options
 Breakable.Ceiling
 Breakable.Computer
 Breakable.Concrete
@@ -7240,6 +7260,7 @@ Breakable.MatMetal
 Breakable.MatWood
 Breakable.Metal
 BreakableModels
+BreakableModels/*
 BreakableType
 Breaks in the debugger
 Brewmaster_Earth.Boulder.Cast
@@ -7909,6 +7930,7 @@ CBodyComponentPoint
 CBodyComponentPoint::NetworkVar_m_sceneNode
 CBodyComponentPointReferenced
 CBodyComponentPointReferencedPtr
+CBodyComponentReferenced
 CBodyComponentReferencedPtr
 CBodyComponentSkeletonInstance
 CBodyComponentSkeletonInstance::NetworkVar_m_skeletonInstance
@@ -8087,7 +8109,6 @@ CCustomGameEventManager::Script_UnregisterListener - ID %double not found.
 CCustomGameEventManager::Script_UnregisterListener - Invalid ID
 CCustomKillEffectModifier
 CCustomNetTableManager
-CD0u=A
 CDHcs@
 CDOTAAnimState
 CDOTABaseAbility
@@ -24176,7 +24197,6 @@ CUtlStringToken hash collision between the two fields %short and %short!
 CUtlStringToken(%u)
 CUtlSymbol
 CUtlSymbolDataOps
-CUtlSymbolLarge
 CUtlVector
 CUtlVector< CEconItemAttribute >
 CUtlVectorDataOps<CNetworkUtlVectorBase<CHandle<CBaseCombatWeapon>, CBaseCombatCharacter::NetworkVar_m_hMyWeapons, -1>, 13>
@@ -24290,6 +24310,7 @@ C`[A\]
 C`fD;(unsigned short\L
 C`unsigned short;H
 CaD;;
+Cables
 Cache
 Cache hit.  CRC matches.
 CalcAnimationState
@@ -25007,8 +25028,6 @@ D$(H9C(u
 D$(H9C(unsigned short
 D$(H9C(unsigned short#H
 D$(H;
-D$(Hc
-D$(HcU
 D$(I9
 D$(Ic
 D$(IcT$0
@@ -25041,7 +25060,7 @@ D$0Ic
 D$0IcT$(M
 D$0IcT$8
 D$0Mk
-D$0tiH
+D$0tvH
 D$1@t9L
 D$40u
 D$49C4t
@@ -25059,8 +25078,6 @@ D$89C8t
 D$89C8t H
 D$89C8t9H
 D$8A;D$H
-D$8A\A]A^]
-D$8E1
 D$8H9
 D$8H9C8t:H
 D$8Hc
@@ -25084,6 +25101,7 @@ D$@I9
 D$@L9
 D$@Lc
 D$@M!
+D$D0u5H
 D$D9CDt
 D$D9CDt H
 D$D9CDt9H
@@ -25222,21 +25240,17 @@ D9 unsigned short-L
 D9 ~NH
 D9!u"
 D9!unsigned short"
-D9%IIy
-D9%zLy
-D9%~	
+D9#w3D
+D9%J9y
+D9%~6y
 D9't$H
 D9'unsigned short,H
 D9(t1H
 D9(unsigned short'I
-D9*w5
-D9-short!
 D90t[A
 D92tY1
-D93wJE1
 D9:unsigned short%H
 D9:wchar_t:;Z
-D9=signed char& volatile
 D9W(~mL
 D9b4t
 D9c(D
@@ -25269,38 +25283,36 @@ D:gTt
 D:sh|
 D:{ unsigned short=H
 D;!unsigned short{Hc
-D;% sM
-D;%#-
-D;%&.
-D;%+Q
-D;%9;
-D;%9P
-D;%<K
-D;%@+
-D;%Mr
-D;%`&
-D;%long long-
-D;%rJ
+D;%+6
+D;%+>
+D;%;;
+D;%>)
+D;%@&
+D;%K6
+D;%L8
+D;%R-
+D;%R{
+D;%unsigned short)
+D;%{(	
 D;'unsigned short{
 D;'unsigned short{Hc
 D;'}#H
 D;(unsigned short)
 D;*unsigned short>H
-D;- &
-D;- -
-D;-::
-D;-<...
-D;-L,
-D;-P<
-D;-\'
+D;+r)E;.
+D;-BQ	
+D;-K;
+D;-V'
+D;-\|
 D;.~3L
 D;.~9H
 D;/rbA
-D;3rYE1
-D;5b]
+D;5"\
+D;5_EG
 D;9t#H
 D;:tPH
-D;=lJ
+D;=IM
+D;=IX
 D;F0t
 D;G Lc
 D;G@t5H
@@ -25428,6 +25440,7 @@ D;pp|
 D;r`}
 D;s0|
 D;sX|
+D;shD
 D;short |
 D;short(D
 D;short(u
@@ -25610,6 +25623,8 @@ DOTAMusic_Stinger.009
 DOTAPortraitEnvironmentType_t
 DOTAProjectileAttachment_t
 DOTAScriptInventorySlot_t
+DOTASelectionPriorityChoice
+DOTASelectionPriorityRules
 DOTAServerVPROFNode
 DOTAServerVPROFReport
 DOTASlotType_t
@@ -27174,11 +27189,8 @@ E9'tRI
 E9'u-I
 E9'unsigned short[I
 E9)|7t%I
-E9.w<D9*
-E91w-
 E91~yM
 E94$~AI
-E97wDE1
 E9<$~
 E9B`D
 E9D$`
@@ -27209,13 +27221,11 @@ E9|$,~
 E9|unsigned char
 E9}PD
 E9~(u
-E;$rX1
 E;&}=I
 E;&}EI
 E;'tjI
-E;,$r@D;*
+E;,$r(D;*sBD
 E;,$tRA
-E;7ryf
 E;D$,
 E;ExD
 E;J0t[I
@@ -27276,11 +27286,12 @@ E;long double@|
 E;long double@}
 E;oL|
 E;ohD
+E;t$ D
 E;t$ M
+E;t$0
 E;t$0D
 E;t$0u
 E;t$8
-E;t$8D
 E;t$P
 E;t$Pt
 E;t$X
@@ -27293,7 +27304,6 @@ E;wL|
 E;wchar_t unsigned short
 E;wchar_t ~EA
 E;wchar_t`D
-E;|$ D
 E;|$(D
 E;|$@|
 E;} D
@@ -27538,7 +27548,6 @@ EarlyInit_Tier0
 Ease In
 Ease In/Out
 Ease Out
-Ebonus_aoe_radius
 EconEntityParticleDisableMode_t
 EconItem
 EconItemCount
@@ -27586,7 +27595,6 @@ EmitSoundOnLocationWithCaster
 Emoticon
 Empty %short (%short) at %.2f, %.2f, %.2f
 EmptyAnim
-Enable : %double SplitScreen %X
 Enable IK.
 Enable animation graph
 Enable animation sequence transitioner.
@@ -27854,7 +27862,11 @@ Expected member name or '}'
 Expected string.
 Expected token
 Expected type of next member
+Expected value after =
 Expected value or ']'
+Expected value.
+Expected {
+Expected }
 Expecting 'file', got %short
 Expecting '{' in enumeration '%short', got '%short'
 Expecting '{' in rule '%short', got '%short'
@@ -27909,6 +27921,7 @@ F4 uH
 F8A^A_]
 F8HcV@
 F9|  u
+F@;FP
 F@E;FPD
 FAILED
 FAILURE
@@ -28018,7 +28031,6 @@ FIND_FARTHEST
 FIND_UNITS_EVERYWHERE
 FIRE token in response needs exactly three parameters.
 FIRST_BLOOD
-FIRST_PICK
 FLEXCONTROLLER_REMAP_2WAY
 FLEXCONTROLLER_REMAP_EYELID
 FLEXCONTROLLER_REMAP_NWAY
@@ -28032,6 +28044,7 @@ FTNAH
 FUNC_DOOR_SPAWN_CLOSED
 FUNC_DOOR_SPAWN_OPEN
 FX9GXt
+F`A;Fp
 F`tCI
 F`unsigned short)H
 FaceTowards
@@ -28453,12 +28466,12 @@ G$tzL
 G(90tU
 G(A9G
 G(ATL
-G(H9C(A
+G(H9A(
+G(H9C(
 G(I9D$(@
-G(I9D$(A
 G(I9E(
-G(I9F(A
-G(I9G(A
+G(I9F(
+G(I9G(
 G(UHc
 G(]fD
 G(tCA
@@ -28487,7 +28500,6 @@ G<@unsigned short#float
 G<@unsigned short+]H
 G<@unsigned short:
 G<A8F<unsigned short<I
-G@;GP
 G@T	J
 G@UHc
 GAMEBIN
@@ -28703,7 +28715,6 @@ GameUIService_001
 Games required on signed char hero for average KDA to be valid and calibrated
 Ganker
 Gave the item!
-GduSL
 Gear: %double, RPM %4d
 General.Attack
 General.BurningFlesh
@@ -29796,172 +29807,176 @@ H;3t*H
 H;7t)H
 H;:u 
 H;:unsigned short(float
-H;=	int
-H;=!&
-H;=!T
-H;=!Z
-H;=!int
-H;=!unsigned __int128
-H;=!unsigned int
-H;=!unsigned long
-H;=!|
+H;=! 
+H;=!!
+H;=!(
+H;=!3
+H;=!8
+H;=!F
+H;=!H
+H;=!Y
+H;=!long
+H;="8
 H;=#+
-H;=#k$
-H;=&0
-H;=&9
-H;=&O
-H;=&X
-H;=&__int128
-H;=&unsigned long
-H;=&wchar_t
+H;=#long double
+H;=%unsigned __int128
+H;=&2
+H;=&M
+H;=&Q
+H;=&long
+H;=(	
 H;=(&
-H;=(I
-H;=([
-H;=(unsigned char
-H;=*P
-H;=+4
-H;=+T
-H;=+bool
-H;=+k
-H;=0:
-H;=12
-H;=1|
-H;=3E
-H;=3j$
-H;=5'
-H;=5G
-H;=6.
-H;=67
-H;=6M
-H;=6V
-H;=6l
-H;=6u
-H;=83
-H;=8D
+H;=(6
+H;=(}
+H;=*?
+H;=+=
+H;=+`
+H;=-`
+H;=/^
+H;=0x
+H;=1"
+H;=1-
+H;=14
+H;=15
+H;=1@
+H;=3%
+H;=3[
+H;=3]
+H;=5/
+H;=5L
+H;=60
+H;=6K
+H;=6O
+H;=6j
+H;=7	
+H;=8(
+H;=84
+H;=89
+H;=8@
+H;=8JE
 H;=8K
-H;=8X
-H;=8~
-H;=98
-H;=9J
-H;=9_
-H;=:P
-H;=;3
-H;=;6
-H;=;U
-H;=?u
-H;=AF
-H;=AJQ
-H;=AT
-H;=A]
-H;=A_
-H;=Ak
-H;=Ap
-H;=At
-H;=Av
-H;=Bl
-H;=C2
-H;=C5
-H;=CD
-H;=CT
-H;=E"
-H;=F	
-H;=F,
-H;=F5
-H;=FK
-H;=FT
-H;=Fj
-H;=Fs
-H;=HV
-H;=Hp
-H;=Lm
-H;=M$
-H;=PP
-H;=Q&
-H;=Qj
-H;=Qn
-H;=Qp
-H;=Q}
-H;=R:
-H;=S2
-H;=S=
+H;=8N
+H;=8OE
+H;=8V
+H;=8Y
+H;=8p
+H;=94
+H;=;4
+H;=;A
+H;=;O
+H;=>short
+H;=?)
+H;=@4
+H;=@signed char
+H;=A	
+H;=A'
+H;=A.
+H;=A/
+H;=A8
+H;=A:
+H;=AM
+H;=A`
+H;=Ab
+H;=As
+H;=Aw"
+H;=E!
+H;=El
+H;=F.
+H;=FI
+H;=FM
+H;=Fh
+H;=H-
+H;=Hc
+H;=H{
+H;=H~
+H;=M6
+H;=P?
+H;=P^
+H;=Q!
+H;=Q"
+H;=Q(
+H;=Q)
+H;=Q4
+H;=QG
+H;=QZ
+H;=Qm
+H;=Qx
+H;=S
+H;=SA
 H;=SX
-H;=V*
-H;=V.
-H;=V3
-H;=VI
-H;=VR
-H;=Vq
-H;=X%
-H;=Xk
-H;=Xm
-H;=Yr
-H;=[ 
-H;=[Z
-H;=__float128complex 
-H;=`P
-H;=`u
-H;=ad
-H;=ah
-H;=aj
-H;=aw
-H;=ay
-H;=bool@
-H;=c
-H;=cF
-H;=c_
-H;=char<
-H;=ck
-H;=f1
-H;=fG
-H;=fP
-H;=ff
-H;=float	
-H;=float(
-H;=fo
-H;=g
-H;=hB
-H;=hH
-H;=hW
-H;=hZ
-H;=hd
-H;=he
-H;=hi
-H;=hl
-H;=hr
-H;=i
-H;=int]"
-H;=k9
-H;=q=
-H;=q^
-H;=qd
-H;=qf
-H;=qq
-H;=qu
-H;=qw
-H;=sd$
-H;=short&
-H;=signed char}
-H;=unsigned char 
-H;=unsigned char volatile
-H;=unsigned int const
-H;=unsigned long restrict
-H;=us
-H;=u}
-H;=v
-H;=vE
-H;=vN
-H;=vP
-H;=vd
-H;=vm
-H;=void&
-H;=x1
-H;=x4
-H;=xf
+H;=Su
+H;=V,
+H;=VG
+H;=VK
+H;=X
+H;=X!
+H;=XME
+H;=XZ
+H;=Y!
+H;=YR
+H;=[:
+H;=[K
+H;=[wchar_t
+H;=`)
+H;=`O
+H;=a.
+H;=a5
+H;=a6
+H;=aA
+H;=aT
+H;=ag
+H;=az
+H;=b4
+H;=bD
+H;=cb
+H;=cm
+H;=cs
+H;=f
+H;=fE
+H;=fI
+H;=fa
+H;=fd
+H;=float volatile
+H;=float*
+H;=h8
+H;=hG
+H;=jl
+H;=k@
+H;=kP
+H;=long long&
+H;=long long+
+H;=m
+H;=m5
+H;=q(
+H;=q/
+H;=q0
+H;=q;
+H;=qN
+H;=qa
+H;=qt
+H;=r?
+H;=r^
+H;=rp
+H;=short(
+H;=signed char	
+H;=signed char#
+H;=sx
+H;=unsigned char'
+H;=unsigned char\
+H;=unsigned char^
+H;=vG
+H;=vb
+H;=void	
+H;=void(
+H;=xKE
+H;=xL
+H;=xr
+H;=xu
 H;=xx
-H;=yU
-H;={ 
-H;=|.
-H;=}A
+H;=y
+H;=y4
+H;={J
+H;={P
 H;B0u
 H;C r
 H;C@H
@@ -30100,7 +30115,6 @@ HaticsType_None
 Have Entity say string, and teamOnly or not
 Have we received the post match signout message that includes reward information
 HaveAllPlayersJoined
-Hc5]PX
 Hc9A9
 Hc@ H
 Hc@$H
@@ -31080,6 +31094,7 @@ Hero_StormSpirit.StaticRemnantExplode
 Hero_StormSpirit.StaticRemnantPlant
 Hero_Sven.Attack
 Hero_Sven.GodsStrength
+Hero_Sven.GreatCleave
 Hero_Sven.PreAttack
 Hero_Sven.StormBolt
 Hero_Sven.StormBoltImpact
@@ -31474,6 +31489,7 @@ INSERT_INTO_NEWLY_CREATED_SPAWN_GROUP
 INSERT_INTO_POINT_TEMPLATE_SPAWN_GROUP
 INTERACTION_CLIP_TO_ENERGYGUN
 INTERACTION_CLIP_TO_PISTOL
+INTERACTION_ENERGYGUN_TO_BATTERY
 INTERACTION_ENERGYGUN_TO_GRENADE
 INTERACTION_ENERGYGUN_TO_WEAPONMODULE
 INTERACTION_NONE
@@ -31752,7 +31768,6 @@ IcGPA;G`
 IcG`A;Gp
 IcG`D
 IcGhH
-IcL$0H
 IcL$8H
 IcL$PH
 IcL$`
@@ -31775,7 +31790,6 @@ IcT$ H
 IcT$ I
 IcT$$
 IcT$(
-IcT$(A;T$8
 IcT$(H
 IcT$(I
 IcT$,
@@ -33075,10 +33089,8 @@ L$(D;u
 L$(H9
 L$(Hc
 L$0D9
-L$0D9u
 L$0H9
 L$0Hc
-L$0t,H
 L$<E1
 L$@L9
 L$@fE
@@ -33091,7 +33103,6 @@ L$tt^
 L$xIcD$pH
 L$|[A\]
 L9	t9H
-L9%Ay
 L9J0t8
 L9` u
 L9`(unsigned short
@@ -33197,7 +33208,9 @@ Lc"D;bool
 Lc#D9b
 Lc#D;char
 Lc#E9
-Lc%*?
+Lc%I{
+Lc%J>
+Lc%Rq
 Lc&D;float
 Lc'D;__float128
 Lc'E)
@@ -33209,7 +33222,6 @@ Lc/E1
 Lc1D;q
 Lc3D;short
 Lc3E9
-Lc5Y]
 Lc6E9
 Lc7D)
 Lc7E)
@@ -33258,7 +33270,6 @@ LckpD;
 LckxL
 Lco D;o0D
 Lco(E
-Lcq@D;qPD
 Lcr0D;r@D
 Lcs D;s0D
 Lcs8D;sHD
@@ -33315,8 +33326,10 @@ LightningStart
 Limit server animation to dota heroes only
 LimitPathingSearchDepth
 Limits the number of visible tracers per frame
+Line %double at "%short": 
 Line %double at "%short": %short
 Line %double col %double: 
+Line %double: 
 Line %double: %short
 Line %double: Invalid literal value "%short"
 Line %double: Invalid value "%short"
@@ -33989,7 +34002,6 @@ McGxE;
 McHtA
 McgPE
 McgXf
-Mcl$ E;l$0
 Mcl$ E;l$0D
 Mcl$(E;l$8
 Mcl$(I
@@ -34000,11 +34012,11 @@ McoxE;
 Mct$ 
 Mct$ E;t$0D
 Mct$81
-Mct$8E;t$HD
 Mct$hE;t$xD
 McuPE
 McwPf
 Mc|$ E;|$0
+Mc|$8E;|$HD
 Mc|$HE;|$XD
 Mc|$XE;|$hD
 Mc}@A
@@ -34993,6 +35005,7 @@ ParticleSystemMgr002
 ParticleSystemQueryGameSystem
 ParticleSytemMissingWarnOnce
 ParticleTracer
+Particles.ControlPoints
 PartnerAccountType
 PartnerInfo
 PartnerItemPaymentRule
@@ -35405,7 +35418,6 @@ ProcsMagicStick
 ProjectileModel
 PropBreakableCreateAll: Could not create model %short
 PropBreakablePrecacheAll, ignoring %short since g_pBreakModelsPrecached == NULL (connection to server aborted?)
-PropDatafile
 PropDoorRotatingOpenDirection_e
 PropDoorRotatingSpawnPos_t
 PropaneTank.Burst
@@ -35461,6 +35473,7 @@ Q HcS@I
 Q,HcA(
 Q.fD9
 Q0HcI0
+Q0t+H
 Q@A9] 
 QAngle
 QAngle: %.2f %.2f %.2f
@@ -36118,6 +36131,7 @@ SAVE/%s.sav
 SAVE/%short%d.%short
 SAVE/%short%s.jpg
 SAVE/*.hl?
+SAVE\animgraph
 SAVE_HEADER
 SCLAbilityTriggerFields
 SCLAbilityUseFields
@@ -36164,7 +36178,6 @@ SCRIPT_DONE
 SCRIPT_ERROR
 SCRIPT_RUNNING
 SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN
-SECOND_PICK
 SEQUENCE_ERROR
 SERVER: Weapon Script "%short" loaded.
 SERVERASSIGN
@@ -36184,6 +36197,7 @@ SHAKE_STOP
 SHATTERSURFACE_GLASS
 SHATTERSURFACE_TILE
 SHLcc D;c0D
+SHLck L
 SHOP_VIEW_MODE_GRID
 SHOP_VIEW_MODE_LIST
 SHRINE_BASE_1
@@ -36330,17 +36344,18 @@ STATE_INACTIVE
 STATE_UNKNOWN
 STEAMAPPLIST_INTERFACE_VERSION001
 STEAMAPPS_INTERFACE_VERSION008
-STEAMHTMLSURFACE_INTERFACE_VERSION_003
+STEAMHTMLSURFACE_INTERFACE_VERSION_004
 STEAMHTTP_INTERFACE_VERSION002
-STEAMINVENTORY_INTERFACE_V001
+STEAMINVENTORY_INTERFACE_V002
 STEAMMUSICREMOTE_INTERFACE_VERSION001
 STEAMMUSIC_INTERFACE_VERSION001
+STEAMPARENTALSETTINGS_INTERFACE_VERSION001
 STEAMREMOTESTORAGE_INTERFACE_VERSION014
 STEAMSCREENSHOTS_INTERFACE_VERSION003
-STEAMUGC_INTERFACE_VERSION009
+STEAMUGC_INTERFACE_VERSION010
 STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001
 STEAMUSERSTATS_INTERFACE_VERSION011
-STEAMVIDEO_INTERFACE_V001
+STEAMVIDEO_INTERFACE_V002
 STRING
 STRING_PIECE
 SUBQUEST_NUM_PLAYER_STATS
@@ -36423,6 +36438,7 @@ SaveRestoreDataVersion001
 SaveRestoreIO
 SaveSuccessful
 SaveThinH
+Saves all active animgraph recordings to disk
 Saves session persister data immediately.
 Saves the current Navigation Mesh to disk.
 Saving crash sentinel: %short
@@ -36792,6 +36808,7 @@ Script_GetInitialGoalEntity
 Script_GetIntrinsicModifierName
 Script_GetItemComponents
 Script_GetItemDefOwnedCount
+Script_GetItemDefQuantity
 Script_GetItemInSlot
 Script_GetItemStockCount
 Script_GetLaneFrontAmount
@@ -37136,7 +37153,6 @@ Selected %double areas.
 Selected Nav Areas
 Selected set saved to %s.  Use 'nav_merge_mesh %s_selected_%4.4d' to merge it into another mesh.
 SelectedEditItemInfo_t
-SelectionPriorityType
 Selects any areas that intersect the given half-space.
 Selects areas with the given attribute.
 Selects signed char hero for signed char player.
@@ -37979,7 +37995,7 @@ SpotlightWidth
 SquareUpAreas()
 SsE9~
 Standard nav area minimum size
-StarfD
+Starf
 Start an auto save game test
 Start continuously adding to the selected set.
 Start continuously removing from the selected set.
@@ -38072,7 +38088,7 @@ SteamNetworking005
 SteamToursHost001
 SteamUGCQueryCompleted_t result code %double
 SteamUser019
-SteamUtils008
+SteamUtils009
 Steamworks Stats: %short Ending %short session id: %llu
 Steamworks Stats: %short Ending CLIENT session id: %llu
 Steamworks Stats: %short Received %short session id: %llu
@@ -38210,6 +38226,8 @@ T$hH9
 T$lHc
 T$pH9
 T$xH9
+T%&2 
+T%:. 
 T7Ft	]
 TEAM_DIRE
 TEAM_NEUTRAL
@@ -38695,6 +38713,7 @@ Toggles 'picker' mode.  When picker is on, the bounding box, pivot and debugging
 Toggles all areas into/out of the selected set.
 Toggles input/output message display for the selected entity(ies).  The name of the entity will be displayed as well as any messages that it sends or receives.
 Toggles on signed char chain in the selected entity(ies), by name of the chain.
+Toggles recording of animgraph replay of the given entity(short)
 Toggles server decal debug visualization
 Toggles the 'avoid this area when possible' flag used by the AI system.
 Toggles the 'dont avoid obstacles' flag used by the AI system.
@@ -39234,6 +39253,7 @@ Using signed char specific item loot list as part of signed char static recipe. 
 UsingItemBreaksInvisibility
 V tC1
 V$HcF 9
+V%QdH
 V(unsigned short+H
 V0u@H
 V4D;k@}SH
@@ -39548,8 +39568,10 @@ W H92tfH
 W H9r
 W L92tEH
 W f9:float
-W%LR<
+W%7\:
 W(H92t'H
+W-`X:
+W5{X:
 W89r(t1
 W8tPH
 W@H9V@u
@@ -39563,6 +39585,8 @@ WARNING: Attempting to set fields on signed char stopped sound
 WARNING: BackupPlayer trying to back player into signed char bad position - client %double
 WARNING: CDirWatcher not implemented
 WARNING: Could not find schema data for helper class for resource type %lld '%short'. (Missing MDiskDataForResourceType metadata or schema data isn'unsigned short loaded?)
+WARNING: Failed to load propdata.txt: %short
+WARNING: Failed to read propdata.txt
 WARNING: Ignoring invalid gameinfo MaxNetworkableEntities %double
 WARNING: Ignoring invalid gameinfo MaxNonNetworkableEntities %double
 WARNING: LoadAndValidateResourceHeader - FileSystem not initialized!
@@ -39754,8 +39778,12 @@ Writing kdTree with %double triangles
 Wrong alignment %double
 X Hc@
 X HcC 
-X%7G<
+X-McB
+X-unsigned char volatile*
 X2:jH
+X5;N	
+X5qdB
+X=%X%
 X@Hc@01
 X@TA;U<
 XAxis
@@ -39782,7 +39810,9 @@ Xd$0M
 XfA9D]
 Xg8Hc
 XxHc@unsigned short
-Y-1]unsigned long long
+Y%xPB
+Y(;Y8
+Y-ePB
 Y?[A\]
 Y@Half-Life 2
 YAxis
@@ -39903,14 +39933,10 @@ ZTutL
 \$@u	A
 \$HLcc D;c0D
 \$HfA
-\$L[A
 \$hIcEXI
 \%03o
-\%lnP
-\-FTA
-\-wt	
-\="@F
-\=r9%
+\-'u	
+\5)\A
 \@LfA
 \D$(A\]
 \D$,A\]
@@ -39940,14 +39966,13 @@ ZTutL
 ^ unsigned short+H
 ^8D9+
 ^8U)zj
-^=U8!
 ^@TA]A^]
+^_[A\A]A^]
 _ ;_0
 _ HcG
 _ UE1
 _ ~`I
 _8t;A
-_AX[A\A]A^]
 _ClientLevel
 _ClientModifier
 _ClientModifierLevel
@@ -40342,6 +40367,7 @@ __xstat64@@GLIBC_2.2.5
 _addons
 _attr_
 _bot
+_crit.vpcf
 _edata
 _female
 _filter A
@@ -40360,6 +40386,7 @@ _plasma
 _resetgamestats
 _resourcH
 _rifle.vH
+_root_keyname
 _selected_
 _tHcF
 _test_conversion_counter
@@ -40381,7 +40408,6 @@ _xIcGpL
 `hHc@double
 `pt L
 `|D;%
-`|D;%+
 `|D;char
 aPortalsH
 aaaaaaaazzzzzzzz
@@ -41430,6 +41456,7 @@ bonus_all_stats
 bonus_aoe_armor
 bonus_aoe_duration
 bonus_aoe_duration_hero
+bonus_aoe_radius
 bonus_armor_per_hero
 bonus_attack_damage
 bonus_attack_range
@@ -41525,6 +41552,7 @@ bot_interactions
 bot_kick
 bot_mimic
 bot_radiant
+bot_script
 bot_script_dedicated_servers
 bottle_heal_ally
 bottom_lane
@@ -41659,6 +41687,7 @@ cPD;char`D
 cX[A\]
 cXt*H
 ca[A\]
+cables_list
 cache_ragdoll_t
 cache_until
 cached_file_version
@@ -41837,6 +41866,7 @@ chaos_knight_chaos_strike
 chaos_knight_phantasm
 chaos_knight_reality_rift
 char D;c0D
+char D;k0D
 char E;long double
 char [A\]
 char unsigned short#L
@@ -42129,6 +42159,7 @@ contract_completed
 contributors
 control_point
 control_point_number
+control_points_list
 controller_test_melee_attack
 controller_test_slark_spin_attack
 controller_test_sven_overhead_attack
@@ -42270,7 +42301,7 @@ css_classes
 cstring
 ctSnowball
 ctype
-ctz5u3E1
+ctz@u>E1
 cubemaptexture
 cur_val
 curr_all_hero_challenge_id
@@ -42836,6 +42867,7 @@ dota_bot_populate
 dota_bot_potential_debug
 dota_bot_practice_difficulty
 dota_bot_practice_gamemode
+dota_bot_practice_script
 dota_bot_practice_select_hero
 dota_bot_practice_start
 dota_bot_practice_team
@@ -43696,6 +43728,7 @@ ensnare_duration
 ent yaw: %.2f, body_yaw: %.2f, body_pitch: %.2f, move_x: %.2f, move_y: %.2f
 ent yaw: %.2f, body_yaw: %.2f, move_yaw: %.2f, gait_yaw: %.2f, body_pitch: %.2f
 ent_absbox
+ent_animgraph_record
 ent_animgraph_setvar
 ent_attachments
 ent_autoaim
@@ -44078,6 +44111,8 @@ extractlevelsfromsavegame
 extradata
 extrapolated [%.2f]
 extrapolated [1.0] (single sample)
+eye_data
+eye_data_list
 eyebrows_controller
 eyebrows_mover
 eyes_follow
@@ -44118,7 +44153,6 @@ fC9L7
 fD9	u
 fD9 unsigned short
 fD9"t0H
-fD9%double%
 fD9/t0H
 fD9/unsigned short@H
 fD91u|
@@ -44516,6 +44550,7 @@ flexweight_t
 flicker
 flip_horizontal
 flip_viewmodel
+floaI
 float
 float %double %double %double
 float (*)()
@@ -46122,6 +46157,7 @@ item_healthkit
 item_helm_of_iron_will
 item_helm_of_the_dominator
 item_hlvr_grenade_
+item_hlvr_prop_battery
 item_hood_of_defiance
 item_iconname
 item_id
@@ -47143,7 +47179,6 @@ l$@D;k@t5H
 l$HfA
 l$LD:kLt
 l$PHc
-l$PfE
 l$XfA
 l$`Mc
 l$dr2
@@ -47243,7 +47278,6 @@ leadership
 leadership_radius
 leading_comments
 league_game_id
-league_selection_priority_team
 league_series_id
 league_view_pass
 leagueid
@@ -47366,6 +47400,7 @@ lightstyle
 lightworld
 limbs
 limit_maxbytes
+limittoentity
 lina_dragon_slave
 lina_light_strike_array
 lina_plays_granted
@@ -47510,6 +47545,7 @@ long long(A\A]A^]
 long long)A9t$h~"H
 long long*HcSx;
 long long,;7}(UHc
+long long:;=<
 long long:Hcw
 long long?HcK
 long long[A\A]A^A_]
@@ -49114,6 +49150,7 @@ m_bVisibilityDirtyFlag
 m_bVisible
 m_bVoiceChatBanned
 m_bVolIs2D
+m_bVolumeFogEnabled
 m_bVolumetric
 m_bVotingClosed
 m_bVulnerableOnCreepSpawn
@@ -51375,6 +51412,7 @@ m_life
 m_lifeState
 m_lifeTime
 m_lightCookie
+m_limitToEntity
 m_linear
 m_linearForce
 m_linearLimit
@@ -55103,6 +55141,7 @@ nMusicStatus
 nObjects
 nOrdertype
 nOtherPlayerID
+nPATI
 nParam0
 nParam1
 nPitch
@@ -56419,7 +56458,6 @@ particles/econ/items/phantom_assassin/phantom_assassin_arcana_elder_smith/pa_arc
 particles/econ/items/phantom_assassin/phantom_assassin_arcana_elder_smith/pa_arcana_gravemarker_lvl2.vpcf
 particles/econ/items/phantom_assassin/phantom_assassin_arcana_elder_smith/pa_arcana_gravemarker_lvl3.vpcf
 particles/econ/items/phantom_assassin/phantom_assassin_arcana_elder_smith/pa_arcana_screen_blood_splatter.vpcf
-particles/econ/items/sven/sven_ti7_sword/sven_ti7_sword_spell_great_cleave.vpcf
 particles/econ/items/techies/techies_arcana/techies_suicide_dud_arcana.vpcf
 particles/econ/items/techies/techies_arcana/techies_suicide_kills_arcana.vpcf
 particles/fire_01/env_fire_large.vpcf
@@ -57605,6 +57643,7 @@ particles/units/heroes/hero_venomancer/venomancer_venomous_gale_impact.vpcf
 particles/units/heroes/hero_venomancer/venomancer_venomous_gale_mouth.vpcf
 particles/units/heroes/hero_venomancer/venomancer_ward_cast.vpcf
 particles/units/heroes/hero_viper/viper_bloodpool.vpcf
+particles/units/heroes/hero_viper/viper_corrosive_debuff.vpcf
 particles/units/heroes/hero_viper/viper_poison_attack.vpcf
 particles/units/heroes/hero_viper/viper_poison_debuff.vpcf
 particles/units/heroes/hero_viper/viper_viper_strike_beam.vpcf
@@ -57724,6 +57763,7 @@ particles/world_shrine/dire_shrine_regen.vpcf
 particles/world_shrine/radiant_shrine_active.vpcf
 particles/world_shrine/radiant_shrine_ambient.vpcf
 particles/world_shrine/radiant_shrine_regen.vpcf
+particles_list
 partner
 partner_account_state
 partner_account_type
@@ -59043,6 +59083,7 @@ satyr_trickster_purge
 save %short
 save autosave
 save/%s.spe
+save_animgraph_recording
 save_async
 save_game_data
 save_game_key
@@ -59268,6 +59309,7 @@ selection_additive
 selection_id
 selection_index
 selection_names
+selection_priority_rules
 selection_value
 selectors %double, 
 self_damage
@@ -59700,13 +59742,13 @@ socaches
 socaches_loading
 socaches_to_unload
 social_feed_events
+sockA
 socket
 socket 1
 socket_chisel
 socket_hammer
 socket_hammer_safe
 socket_index
-sockfD
 solid { 
 solidCount
 solidbsp
@@ -60936,7 +60978,6 @@ t$(Mc.E;__int128
 t$0A\]
 t$0H)
 t$0Lc
-t$0f.
 t$0t#H
 t$4E+t$0E
 t$89C
@@ -60948,7 +60989,7 @@ t$<H)
 t$@A\]
 t$@tsHc
 t$D9j
-t$D;5
+t$D;5b
 t$DE+t$@E
 t$H9h
 t$HLc
@@ -60990,7 +61031,7 @@ t$hH)
 t$lH)
 t$tE+t$pE
 t.D9p
-t.D;5m
+t.D;5
 t.H9w(t8H9w0tBH9w8tLH9w@unsigned short
 t.Lc#M
 t.[A\]
@@ -61041,7 +61082,7 @@ tBHcW(H
 tBIc]
 tBMc,$E;l$
 tBMc4$E;t$
-tCLc%4
+tCLc%
 tDIcU
 tEMcY
 tEMci
@@ -61057,7 +61098,7 @@ tLHcE
 tMLcm
 tNHcE
 tOvefD
-tP95-
+tP95]L
 tPIcH8I
 tR="{
 tR[A\A]A^]
@@ -61618,7 +61659,6 @@ two_factor_enabled_time
 txA;\$ I
 txLcM
 txn_id
-tyHcK
 tyHcO
 tyHcR
 type != DATA_UPDATE_CREATED
@@ -61793,6 +61833,7 @@ unsigned char[A\A]]
 unsigned char[A\A^]
 unsigned charcomplex [A\]
 unsigned char|D;-
+unsigned char|D;-^p
 unsigned char|E;l$
 unsigned int
 unsigned int@[A\A]]
@@ -61836,18 +61877,18 @@ unsigned short#Hc{$H
 unsigned short#Hc{(H
 unsigned short#Hc{,H
 unsigned short#Lck
-unsigned short#LckXD;khD
 unsigned short#[A\A]A^]
 unsigned short#[A\]
 unsigned short%Lc;D;{
 unsigned short%Mc4$E;t$
 unsigned short%Mc>E;~
 unsigned short%[A\A]A^]
+unsigned short&;5_L
 unsigned short&D;=E
 unsigned short&Hcq
 unsigned short'<"unsigned short
 unsigned short'D9h,unsigned short
-unsigned short'D;-
+unsigned short'D;-^
 unsigned short'D;5
 unsigned short'HcC
 unsigned short'HcCH
@@ -61926,7 +61967,7 @@ unsigned short,E;,$u
 unsigned short,H9;u'
 unsigned short,I9}
 unsigned short,I;q
-unsigned short,Lc%
+unsigned short,Lc%5)
 unsigned short,Mc,$H
 unsigned short,Mc}
 unsigned short-Lc)D;int
@@ -61958,16 +61999,17 @@ unsigned short@@:>u
 unsigned short@D;(};E
 unsigned short@IcE
 unsigned short@Ic_
-unsigned short@Lc%
+unsigned short@Lc%I-
 unsigned short@[A\A]A^]
 unsigned short@long double char::*
 unsigned short[IcE
 unsigned short[r9<
+unsigned short\D9H
 unsigned short^[A\]
-unsigned short`95y
 unsigned short`[A\]
 unsigned short{D9s4u
 unsigned short{E;l$
+unsigned short{HcK
 unsigned short{HcM
 unsigned short{HcO
 unsigned short{Hc}
@@ -62312,6 +62354,7 @@ volrun
 volstart
 volume
 volume_atten
+volumefogenabled
 vote_create_failed_t
 vote_keys
 vpcf1
@@ -62329,6 +62372,7 @@ vr_anchor_allow_non_up_floor
 vr_aperture_main
 vr_controller_hold
 vr_controller_root
+vr_controller_root_knuckles
 vr_controller_root_left
 vr_controller_root_right
 vr_controller_use
@@ -62380,13 +62424,11 @@ w4AUL
 w8ATL
 w8AUI
 w8AUL
-w9D;#
 wHA;D$
 wHATL
 wHAUA
 wHAUL
 wLATL
-wPAUI
 wPAUL
 wXAUL
 w_desertH
@@ -62728,6 +62770,7 @@ zH"tT
 zHuFH
 zIuGH
 zIuGfA
+zJuHH
 zJuHI
 zKuIA
 zLuJH
@@ -62739,7 +62782,6 @@ zPuNA
 zPuND;
 zPuNH
 zPuNI
-zPuNM
 zRuPA
 zRuPH
 zRuPI
@@ -62756,7 +62798,6 @@ zZuXH
 zZuXM
 z_door_reopen_interval
 z_door_retry_interval
-z_u]H
 zbu`L
 zeucH
 zfudA
@@ -62765,7 +62806,6 @@ zgueM
 zh_CN
 zh_TW
 zhufH
-ziugH
 ziugI
 zjuhA
 zjuhH
@@ -62773,6 +62813,7 @@ zkuiD;unsigned long
 zkuiH
 zkuiL
 zlujH
+zmukH
 znulA
 zombie_interval
 zoom_amount
@@ -62818,6 +62859,7 @@ zzuxH
 |!A;D$(unsigned short[
 |$ A\]
 |$ fA
+|$$E1
 |$$}%
 |$'H)
 |$(E1
@@ -62830,10 +62872,10 @@ zzuxH
 |$8A\]
 |$8E1
 |$8Hc
+|$<E1
 |$@9xl
 |$HfA
 |$Nt-I
-|$PA\A]A^]
 |$PE;|$`D
 |$PVCCD
 |$PfA;
@@ -62963,18 +63005,18 @@ zzuxH
 ~(A\A]A^A_]
 ~)A;]
 ~)H97tC
-~)H9=char
+~)H9=short
 ~)H;_
 ~*HcE
 ~*I;X
 ~*L;signed char
 ~+A9\$
 ~,L;q
+~,Lc#M
 ~-L;bool
 ~-L;signed char
 ~099t
 ~0A\A]A^]
-~4Lc#M
 ~6Lc-
 ~79ZP
 ~:Lc+A
