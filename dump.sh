@@ -12,7 +12,8 @@ mv game/dota/addons/lobby.cfg game/dota/cfg/lobby.cfg
 
 echo "> Running the game"
 
-bash game/dota.sh -dedicated -source2genoutdir /home/steamdb/backend/files/dota/_dump/schema/ -vdumpoutdir /home/steamdb/backend/files/dota/_dump/lua/ +map dota +log off -dotacfg lobby.cfg -quitafterdump > /dev/null 2>&1
+chmod +x game/bin/linuxsteamrt64/dota2
+bash game/dota.sh -dedicated -source2genoutdir /home/steamdb/backend/files/dota/_dump/schema/ -vdumpoutdir /home/steamdb/backend/files/dota/_dump/lua/ +map dota +log off -dotacfg lobby.cfg -quitafterdump
 
 echo "> Cleanup"
 
