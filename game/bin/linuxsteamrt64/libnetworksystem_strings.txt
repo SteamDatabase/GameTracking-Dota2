@@ -58,6 +58,7 @@
   merged new baseline:
   possible match %double of %double:  %short %s.%short
  #GameUI_Disconnect_ExitingEngine
+ #GameUI_Disconnect_InternalError
  #GameUI_Disconnect_SnapshotError
  #GameUI_Disconnect_SoundsMessage
  #GameUI_Disconnect_SteamIDBanned
@@ -129,8 +130,10 @@
 !#GameUI_ServerRejectFailedChannel
 !CNETMsg_SpawnGroup_ManifestUpdate
 !NETWORK_DISCONNECT_HLTVRESTRICTED
+!NETWORK_DISCONNECT_INTERNAL_ERROR
 !NETWORK_DISCONNECT_LOOPDEACTIVATE
 !NETWORK_DISCONNECT_REJECT_NOLOBBY
+!NETWORK_DISCONNECT_REMOTE_TIMEOUT
 !eQueryCvarValueStatus_ValueIntact
 !host_framestarttime_std_deviation
 !m_bNeedsSort
@@ -208,6 +211,7 @@
 "CNETMsg_SpawnGroup_SetCreationTick
 "MutableRawRepeatedField"
 "NETWORK_DISCONNECT_HLTVUNAVAILABLE
+"NETWORK_DISCONNECT_REMOTE_BADCRYPT
 "NETWORK_DISCONNECT_SERVER_SHUTDOWN
 "NETWORK_DISCONNECT_STEAM_DENY_MISC
 "NETWORK_DISCONNECT_STEAM_OWNERSHIP
@@ -254,6 +258,7 @@
 #GameUI_Disconnect_SteamVAC
 #GameUI_Disconnect_TickMessage
 #GameUI_Disconnect_TimedOut
+#GameUI_Disconnect_Unusual
 #GameUI_Disconnect_User
 #GameUI_Disconnect_UserCmd
 #GameUI_ServerAuthDisabled
@@ -327,6 +332,7 @@ $[A\]
 %#GameUI_Disconnect_ConnectionOverflow
 %#GameUI_Disconnect_ConnectionTimedout
 %#GameUI_Disconnect_CreateServerFailed
+%#GameUI_Disconnect_LocalProblem_Other
 %#GameUI_Disconnect_ReplayIncompatible
 %#GameUI_Disconnect_ServerIncompatible
 %#GameUI_Disconnect_ServerInfoOverflow
@@ -345,6 +351,7 @@ $[A\]
 %60.60s %6.6s %15.15s %5d %10d 
 %NETWORK_DISCONNECT_CONNECTION_FAILURE
 %NETWORK_DISCONNECT_DISCONNECT_BY_USER
+%NETWORK_DISCONNECT_LOCALPROBLEM_OTHER
 %NETWORK_DISCONNECT_REJECT_BADPASSWORD
 %NETWORK_DISCONNECT_REJECT_HIDDEN_GAME
 %NETWORK_DISCONNECT_REJECT_LANRESTRICT
@@ -514,6 +521,7 @@ $[A\]
 &#GameUI_Disconnect_InvalidMessageError
 &#GameUI_Disconnect_NoPeerGroupHandlers
 &#GameUI_Disconnect_PureServer_Mismatch
+&#GameUI_Disconnect_RemoteProblem_Other
 &#GameUI_ServerRejectInvalidReservation
 &NETWORK_DISCONNECT_BAD_SERVER_PASSWORD
 &NETWORK_DISCONNECT_MESSAGE_PARSE_ERROR
@@ -540,6 +548,7 @@ $[A\]
 'SPAWN_GROUP_CREATE_CLIENT_ONLY_ENTITIES
 'out_location' must not be NULL
 (#GameUI_Disconnect_LoopLevelLoadActivate
+(#GameUI_Disconnect_RemoteProblem_Timeout
 (%double) is > avg (%.2f) with stddev*scale (%.2f * %.2f) and threshold (%.2f)
 (%short)%short
 (%u %u %u %u)
@@ -551,6 +560,7 @@ $[A\]
 (NETWORK_DISCONNECT_INVALID_MESSAGE_ERROR
 (NETWORK_DISCONNECT_REJECT_BACKGROUND_MAP
 (NETWORK_DISCONNECT_REJECT_INVALIDCERTLEN
+(NETWORK_DISCONNECT_REMOTE_CERTNOTTRUSTED
 (NETWORK_DISCONNECT_SERVER_REQUIRES_STEAM
 (NETWORK_DISCONNECT_STEAM_AUTHALREADYUSED
 (NULL)
@@ -563,12 +573,15 @@ $[A\]
 (root)
 )", which is not defined. The innermost scope is searched first in name resolution. Consider using signed char leading '.'(i.e., "(.
 )#GameUI_Disconnect_PureServer_ClientExtra
+)#GameUI_Disconnect_RemoteProblem_BadCrypt
 )#GameUI_Disconnect_SteamDeny_BadAntiCheat
 ).  Contact the program author for an update.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
 )NETWORK_DISCONNECT_NO_PEER_GROUP_HANDLERS
 )NETWORK_DISCONNECT_PURESERVER_CLIENTEXTRA
 )NETWORK_DISCONNECT_REQUEST_HOSTSTATE_IDLE
+*#GameUI_Disconnect_LocalProblem_ManyRelays
 *NETWORK_DISCONNECT_CLIENT_CONSISTENCY_FAIL
+*NETWORK_DISCONNECT_LOCALPROBLEM_MANYRELAYS
 *NETWORK_DISCONNECT_LOOP_LEVELLOAD_ACTIVATE
 *NETWORK_DISCONNECT_REJECT_INVALIDKEYLENGTH
 *NETWORK_DISCONNECT_STRINGTABLEMSG_OVERFLOW
@@ -596,6 +609,7 @@ $[A\]
 ,NETWORK_DISCONNECT_REJECT_INVALIDRESERVATION
 ,NETWORK_DISCONNECT_REJECT_RESERVED_FOR_LOBBY
 ,NETWORK_DISCONNECT_REJECT_SERVERAUTHDISABLED
+,NETWORK_DISCONNECT_REMOTE_TIMEOUT_CONNECTING
 ,NETWORK_DISCONNECT_SPLITPACKET_SEND_OVERFLOW
 ,NETWORK_DISCONNECT_STEAM_DENY_BAD_ANTI_CHEAT
 ,NETWORK_DISCONNECT_STEAM_LOGGED_IN_ELSEWHERE
@@ -615,12 +629,14 @@ $[A\]
 - reliable: %short
 - remote IP: %short
 - total: in %.f, out %.f MB
+-#GameUI_Disconnect_LocalProblem_NetworkConfig
 --- %short: 
 --- %short[%double]: 
 --> [%short]  Split packet can'unsigned short send %double bytes with mtu of %double bytes [%double usable], which would split into %double packets, but max splits is %double
 --> [%short] split packet seq #%double packet %4i/%4i size %4i mtu %4i to %short [ total %4i ]
 ->error
 -NETWORK_DISCONNECT_DIRECT_CONNECT_RESERVATION
+-NETWORK_DISCONNECT_LOCALPROBLEM_NETWORKCONFIG
 -NETWORK_DISCONNECT_REJECT_INVALIDSTEAMCERTLEN
 -NoQueuedPacketThread
 -net_no_parallel_build
@@ -701,6 +717,7 @@ $[A\]
 .strtab
 .symtab
 .text
+/#GameUI_Disconnect_RemoteProblem_CertNotTrusted
 /proc/net/route
 /seq[%double]_size[%double]_tm[%.3f].txt
 0 bit issue, changes
@@ -730,6 +747,7 @@ $[A\]
 2!.CSVCMsg_GameSessionConfiguration
 2#.CSVCMsgList_UserMessages.usermsg_t
 2#.CSVCMsg_GameEventList.descriptor_t
+2#GameUI_Disconnect_RemoteProblem_TimeoutConnecting
 21.CBidirMsg_RelayPacket.SignedDestinationAddress_t
 3+C$H
 3E8 u
@@ -742,9 +760,11 @@ $[A\]
 69r unsigned short,H
 6H92t%H
 7[A\A]A^]
+8#GameUI_Disconnect_LocalProblem_HostedServerPrimaryRelay
 8@8r0
 8A\A]A^A_]
 8H9:u
+8NETWORK_DISCONNECT_LOCALPROBLEM_HOSTEDSERVERPRIMARYRELAY
 8VBKVt6HcF
 8[A\A]A^A_]
 8[A\A]]
@@ -1515,7 +1535,6 @@ D+s$Mc
 D98t~
 D;!unsigned short{Hc
 D;'unsigned short{
-D;'unsigned short{Hc
 D;X,}
 D;c8|
 D;cH}*H
@@ -2153,12 +2172,14 @@ NETWORK_DISCONNECT_NOSPECTATORS
 NETWORK_DISCONNECT_OVERFLOW
 NETWORK_DISCONNECT_RECONNECTION
 NETWORK_DISCONNECT_REJECT_STEAM
+NETWORK_DISCONNECT_REMOTE_OTHER
 NETWORK_DISCONNECT_SHUTDOWN
 NETWORK_DISCONNECT_STEAM_BANNED
 NETWORK_DISCONNECT_STEAM_INUSE
 NETWORK_DISCONNECT_STEAM_LOGON
 NETWORK_DISCONNECT_STEAM_TICKET
 NETWORK_DISCONNECT_TIMEDOUT
+NETWORK_DISCONNECT_UNUSUAL
 NETWORK_DISCONNECT_USERCMD
 NET_Messages
 N`I;NhH
@@ -2383,7 +2404,6 @@ ResourceCompilerSystem001
 ResourceHandleUtils001
 ResourceManifestRegistry001
 ResourceSystem013
-RzBFKS
 S6[A\]
 SDR connect
 SIGNONSTATE_CHALLENGE
@@ -2545,6 +2565,7 @@ SteamNetworkingUtils
 SteamSocketNetworking
 SteamUser019
 SteamUtils009
+StfHc
 String %double: ref:%double %short
 String Command
 String Table
@@ -3939,9 +3960,10 @@ unsigned short*HcO
 unsigned short*[A\A]A^]
 unsigned short+Hc4
 unsigned short,Hc]
-unsigned short-D;5l
+unsigned short-D;5\
 unsigned short<IcV
 unsigned short=fD;J
+unsigned short?Hc4
 unsigned short@@:>u
 unsigned short{HcO
 unsigned short}HcO
@@ -4002,16 +4024,15 @@ weak_dependency
 world_offset_angle
 world_offset_pos
 worldgroupid
-wpATI
 write
 write@@GLIBC_2.2.5
 wrong submessage type
 wvIcF
 xGHcO
 xGHcW
-xOHcO
 xRD;Fx}LIc
 xRHcW
+x_HcO
 xlD;M
 xsHcW
 you_hear_them
@@ -4028,11 +4049,11 @@ z0t%H
 }*;CTw%
 }+A;ETw%
 }>;w$
-}F;w$
 }Hf;wchar_t
 }I;w$
 }PfD9
 }Tf;wchar_t
+}V;w$
 }WUHc
 }Xf;wchar_t
 }bfA9

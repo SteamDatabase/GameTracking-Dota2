@@ -469,6 +469,7 @@
   unsigned __int128 [no group entity]
   used during construction differ from defaults. Please long double restrict-export the map.
  #GameUI_Disconnect_ExitingEngine
+ #GameUI_Disconnect_InternalError
  #GameUI_Disconnect_SnapshotError
  #GameUI_Disconnect_SoundsMessage
  #GameUI_Disconnect_SteamIDBanned
@@ -794,8 +795,10 @@
 !DOTA_UNIT_SPEECH_CLIENTSIDE_RULES
 !ITestScriptMgr
 !NETWORK_DISCONNECT_HLTVRESTRICTED
+!NETWORK_DISCONNECT_INTERNAL_ERROR
 !NETWORK_DISCONNECT_LOOPDEACTIVATE
 !NETWORK_DISCONNECT_REJECT_NOLOBBY
+!NETWORK_DISCONNECT_REMOTE_TIMEOUT
 !NO_BATTLE_POINTS_WRONG_LOBBY_TYPE
 !OVERHEAD_ALERT_BONUS_SPELL_DAMAGE
 !Player voice listeners
@@ -1016,6 +1019,7 @@
 "GAME_PARTICLE_MANAGER_EVENT_UPDATE
 "MutableRawRepeatedField"
 "NETWORK_DISCONNECT_HLTVUNAVAILABLE
+"NETWORK_DISCONNECT_REMOTE_BADCRYPT
 "NETWORK_DISCONNECT_SERVER_SHUTDOWN
 "NETWORK_DISCONNECT_STEAM_DENY_MISC
 "NETWORK_DISCONNECT_STEAM_OWNERSHIP
@@ -1298,6 +1302,7 @@
 #GameUI_Disconnect_SteamVAC
 #GameUI_Disconnect_TickMessage
 #GameUI_Disconnect_TimedOut
+#GameUI_Disconnect_Unusual
 #GameUI_Disconnect_User
 #GameUI_Disconnect_UserCmd
 #GameUI_Language_Brazilian
@@ -1680,6 +1685,7 @@ $|LA;X
 %#GameUI_Disconnect_ConnectionOverflow
 %#GameUI_Disconnect_ConnectionTimedout
 %#GameUI_Disconnect_CreateServerFailed
+%#GameUI_Disconnect_LocalProblem_Other
 %#GameUI_Disconnect_ReplayIncompatible
 %#GameUI_Disconnect_ServerIncompatible
 %#GameUI_Disconnect_ServerInfoOverflow
@@ -1801,6 +1807,7 @@ $|LA;X
 %DOTA_UNIT_ORDER_SET_ITEM_COMBINE_LOCK
 %NETWORK_DISCONNECT_CONNECTION_FAILURE
 %NETWORK_DISCONNECT_DISCONNECT_BY_USER
+%NETWORK_DISCONNECT_LOCALPROBLEM_OTHER
 %NETWORK_DISCONNECT_REJECT_BADPASSWORD
 %NETWORK_DISCONNECT_REJECT_HIDDEN_GAME
 %NETWORK_DISCONNECT_REJECT_LANRESTRICT
@@ -2277,6 +2284,7 @@ $|LA;X
 &#GameUI_Disconnect_InvalidMessageError
 &#GameUI_Disconnect_NoPeerGroupHandlers
 &#GameUI_Disconnect_PureServer_Mismatch
+&#GameUI_Disconnect_RemoteProblem_Other
 &#GameUI_ServerRejectInvalidReservation
 &0000
 &A9<$u
@@ -2477,6 +2485,7 @@ $|LA;X
 ( vcd file, delay ) - play specified vcd file
 ("%short")
 (#GameUI_Disconnect_LoopLevelLoadActivate
+(#GameUI_Disconnect_RemoteProblem_Timeout
 (%0.2f) %short
 (%0.2f): %short
 (%1.3f)
@@ -2539,6 +2548,7 @@ $|LA;X
 (NETWORK_DISCONNECT_INVALID_MESSAGE_ERROR
 (NETWORK_DISCONNECT_REJECT_BACKGROUND_MAP
 (NETWORK_DISCONNECT_REJECT_INVALIDCERTLEN
+(NETWORK_DISCONNECT_REMOTE_CERTNOTTRUSTED
 (NETWORK_DISCONNECT_SERVER_REQUIRES_STEAM
 (NETWORK_DISCONNECT_STEAM_AUTHALREADYUSED
 (None)
@@ -2635,6 +2645,7 @@ $|LA;X
 (vector,vector,float) very basic interpolation of v0 to v1 over unsigned short on [0,1]
 )", which is not defined. The innermost scope is searched first in name resolution. Consider using signed char leading '.'(i.e., "(.
 )#GameUI_Disconnect_PureServer_ClientExtra
+)#GameUI_Disconnect_RemoteProblem_BadCrypt
 )#GameUI_Disconnect_SteamDeny_BadAntiCheat
 ).  Contact the program author for an update.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
 )CMsgClientToGCRemoveItemAttributeResponse
@@ -2689,6 +2700,7 @@ $|LA;X
 )series_current_selection_priority_team_id
 * If the error can be repeatably reproduced, this is signed char bug in
 * If the error cannot be reproduced, and/or happens at different
+*#GameUI_Disconnect_LocalProblem_ManyRelays
 *(anonymous namespace)::KeyValuesDump_ToString
 ** ERROR!!! BONE TRANSFORM DATA WITH NO MODEL**!!!!
 ** ERROR: .NAV FILE NOT WRITABLE!!!      **
@@ -2749,6 +2761,7 @@ $|LA;X
 *K0+E
 *LANGUAGE*
 *NETWORK_DISCONNECT_CLIENT_CONSISTENCY_FAIL
+*NETWORK_DISCONNECT_LOCALPROBLEM_MANYRELAYS
 *NETWORK_DISCONNECT_LOOP_LEVELLOAD_ACTIVATE
 *NETWORK_DISCONNECT_REJECT_INVALIDKEYLENGTH
 *NETWORK_DISCONNECT_STRINGTABLEMSG_OVERFLOW
@@ -2867,6 +2880,7 @@ $|LA;X
 ,NETWORK_DISCONNECT_REJECT_INVALIDRESERVATION
 ,NETWORK_DISCONNECT_REJECT_RESERVED_FOR_LOBBY
 ,NETWORK_DISCONNECT_REJECT_SERVERAUTHDISABLED
+,NETWORK_DISCONNECT_REMOTE_TIMEOUT_CONNECTING
 ,NETWORK_DISCONNECT_SPLITPACKET_SEND_OVERFLOW
 ,NETWORK_DISCONNECT_STEAM_DENY_BAD_ANTI_CHEAT
 ,NETWORK_DISCONNECT_STEAM_LOGGED_IN_ELSEWHERE
@@ -2900,6 +2914,7 @@ $|LA;X
 - %double: %short
 - %double: %short long long:%.4f unsigned long long:%.4f ...:%.4f
 - %double: REMOVED
+-#GameUI_Disconnect_LocalProblem_NetworkConfig
 --  Increase the size of the resource stream   --
 --  Need %double bytes, but only have %double bytes
 -- CNextbotLodManager -- %double LODs, %double NextBots
@@ -2964,6 +2979,7 @@ $|LA;X
 -DOTA_PARTICLE_MANAGER_EVENT_DESTROY_INVOLVING
 -GAME_PARTICLE_MANAGER_EVENT_DESTROY_INVOLVING
 -NETWORK_DISCONNECT_DIRECT_CONNECT_RESERVATION
+-NETWORK_DISCONNECT_LOCALPROBLEM_NETWORKCONFIG
 -NETWORK_DISCONNECT_REJECT_INVALIDSTEAMCERTLEN
 -ReturnFromExternalScene
 -VUUU
@@ -3045,9 +3061,12 @@ $|LA;X
 -vscriptdebug
 .  Please update your library.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
 .%0*llu
-.%I 1
+.%I#1
+.%I$1
+.%K"1
+.%R ?
+.%k!1
 .%llu
-.- 	0
 ..."u I
 ...#u!H
 ...#u!I
@@ -3143,8 +3162,8 @@ $|LA;X
 ../public/tier2/fieldpath.h
 ..\content
 .0z&u$
-.5x3)
-.=long double	!
+.5^"unsigned __int128
+.5x7)
 .@,wqH
 .@,zZuX
 .@Hz#
@@ -3519,6 +3538,7 @@ $|LA;X
 .vmaf
 .vrman
 .zCuAcomplex 
+/#GameUI_Disconnect_RemoteProblem_CertNotTrusted
 // Choreo version 1
 // Choreo version 1:  <%int> Exported Events
 /CHAT_MESSAGE_LOW_PRIORITY_COMPLETED_EXPLANATION
@@ -3739,6 +3759,7 @@ $|LA;X
 2#.CMsgSOMultipleObjects.SingleObject
 2#.CSVCMsgList_UserMessages.usermsg_t
 2#.CSVCMsg_GameEventList.descriptor_t
+2#GameUI_Disconnect_RemoteProblem_TimeoutConnecting
 2$.CDOTAUserMsg_StatsHeroMinuteDetails
 2$.CDOTAUserMsg_StatsTeamMinuteDetails
 2$.CGCMsgMemCachedGetResponse.ValueTag
@@ -3996,6 +4017,7 @@ $|LA;X
 8!unsigned short&H
 8"uIL
 8"uTH
+8#GameUI_Disconnect_LocalProblem_HostedServerPrimaryRelay
 8%t$L
 8%tzH
 86400.0
@@ -4018,6 +4040,7 @@ $|LA;X
 8LcgPL
 8McD$ 
 8McD$(
+8NETWORK_DISCONNECT_LOCALPROBLEM_HOSTEDSERVERPRIMARYRELAY
 8VBKVt6HcF
 8[A\A]A^A_]
 8[A\A]]
@@ -34285,12 +34308,14 @@ NETWORK_DISCONNECT_NOSPECTATORS
 NETWORK_DISCONNECT_OVERFLOW
 NETWORK_DISCONNECT_RECONNECTION
 NETWORK_DISCONNECT_REJECT_STEAM
+NETWORK_DISCONNECT_REMOTE_OTHER
 NETWORK_DISCONNECT_SHUTDOWN
 NETWORK_DISCONNECT_STEAM_BANNED
 NETWORK_DISCONNECT_STEAM_INUSE
 NETWORK_DISCONNECT_STEAM_LOGON
 NETWORK_DISCONNECT_STEAM_TICKET
 NETWORK_DISCONNECT_TIMEDOUT
+NETWORK_DISCONNECT_UNUSUAL
 NETWORK_DISCONNECT_USERCMD
 NET_Messages
 NEVER
@@ -38258,12 +38283,12 @@ T$hH9
 T$lHc
 T$pH9
 T$xH9
-T%!4 
-T%%6 
-T%32 
-T%f5 
-T%z1 
-T-_3 
+T%!8 
+T%%: 
+T%36 
+T%f9 
+T%z5 
+T-_7 
 T7Ft	]
 TEAM_DIRE
 TEAM_NEUTRAL
@@ -39606,12 +39631,12 @@ W H92tfH
 W H9r
 W L92tEH
 W f9:float
-W%7B:
-W%w_:
+W%7F:
+W%wc:
 W(H92t'H
 W89r(t1
 W8tPH
-W=FW:
+W=F[:
 W@H9V@u
 WAITING FOR VSCRIPT DEBUGGER CONNECTION -- '-vscriptdebug' was provided on the command line.
 WALKABLESEED
@@ -39816,10 +39841,10 @@ Writing kdTree with %double triangles
 Wrong alignment %double
 X Hc@
 X HcC 
-X-0ZA
+X-0^A
 X2:jH
-X=$C 
-X=long double[%
+X=$G 
+X=e_%
 X@Hc@01
 X@TA;U<
 XAxis
@@ -39846,11 +39871,11 @@ Xd$0M
 XfA9D]
 Xg8Hc
 XxHc@unsigned short
-Y%long' 
+Y%long+ 
 Y(;Y8
-Y-$:+
-Y=7Z%
-Y=unsigned int*>
+Y-$>+
+Y=7^%
+Y=__int128*>
 Y?[A\]
 Y@Half-Life 2
 YAxis
@@ -39973,11 +39998,11 @@ ZTutL
 \$HfA
 \$hIcEXI
 \%03o
-\%@F>
-\%\_Q
-\-PZA
-\-UfB
-\5_gB
+\%@J>
+\%\cQ
+\-P^A
+\-UjB
+\5_kB
 \@LfA
 \D$(A\]
 \D$,A\]
@@ -40007,7 +40032,7 @@ ZTutL
 ^ unsigned short+H
 ^8D9+
 ^8U)zj
-^=4.s
+^=42s
 ^@TA]A^]
 ^_[A\A]A^]
 _ ;_0
@@ -56157,7 +56182,7 @@ o0ATL
 o0ATSH
 o4ATI
 o4ATL
-o51^0
+o51b0
 o8ATI
 o8ATL
 o8D;oHD
@@ -61880,14 +61905,14 @@ unsigned
 unsigned __int128 ATI
 unsigned __int128 ATL
 unsigned __int128 ATSH
-unsigned __int128%nXL
+unsigned __int128%__int128\L
 unsigned __int128(ATE1
 unsigned __int128(ATI
 unsigned __int128(ATL
 unsigned __int128(ATSH
 unsigned __int128(D;o8D
 unsigned __int128,ATI
-unsigned __int128=/^0
+unsigned __int128=/b0
 unsigned __int128@ATI
 unsigned __int128@Inferred Farming
 unsigned __int128@u-L

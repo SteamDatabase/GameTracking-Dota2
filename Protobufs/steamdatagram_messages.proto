@@ -32,6 +32,7 @@ enum ESteamNetworkingUDPMsgID {
 	k_ESteamNetworkingUDPMsg_ConnectOK = 35;
 	k_ESteamNetworkingUDPMsg_ConnectionClosed = 36;
 	k_ESteamNetworkingUDPMsg_NoConnection = 37;
+	k_ESteamNetworkingUDPMsg_Stats = 38;
 }
 
 message CMsgSteamDatagramRouterPingReply {
@@ -133,6 +134,7 @@ message CMsgSteamDatagramGameserverSessionRequest {
 	optional fixed64 challenge = 4;
 	optional fixed32 connection_id = 5;
 	optional uint32 network_config_version = 6;
+	optional uint32 protocol_version = 7;
 }
 
 message CMsgSteamDatagramGameserverSessionEstablished {
@@ -239,34 +241,61 @@ message CMsgSteamDatagramConnectionQuality {
 }
 
 message CMsgSteamDatagramConnectionStatsClientToRouter {
+	enum Flags {
+		ACK_REQUEST_RELAY = 1;
+		ACK_REQUEST_E2E = 2;
+		ACK_REQUEST_IMMEDIATE = 4;
+	}
+
 	optional .CMsgSteamDatagramConnectionQuality c2r = 1;
 	optional .CMsgSteamDatagramConnectionQuality c2s = 2;
-	optional fixed32 client_timestamp = 3;
+	optional fixed32 legacy_client_timestamp = 3;
+	repeated fixed32 ack_relay = 4;
+	repeated fixed32 ack_e2e = 5;
+	optional uint32 flags = 6;
 	optional fixed32 connection_id = 8;
 	optional uint32 seq_num_c2r = 9;
 	optional uint32 seq_num_c2s = 10;
 }
 
 message CMsgSteamDatagramConnectionStatsRouterToClient {
+	enum Flags {
+		ACK_REQUEST_RELAY = 1;
+		ACK_REQUEST_E2E = 2;
+		ACK_REQUEST_IMMEDIATE = 4;
+	}
+
 	optional .CMsgSteamDatagramConnectionQuality r2c = 1;
 	optional .CMsgSteamDatagramConnectionQuality s2c = 2;
-	optional fixed32 client_timestamp_from_router = 3;
-	optional fixed32 client_timestamp_from_server = 4;
+	optional fixed32 legacy_client_timestamp_from_router = 3;
+	optional fixed32 legacy_client_timestamp_from_server = 4;
 	optional uint32 router_gameserver_latency = 5;
 	optional uint32 seconds_until_shutdown = 6;
 	optional fixed32 migrate_request_ip = 10;
 	optional uint32 migrate_request_port = 11;
 	optional uint32 scoring_penalty_relay_cluster = 12;
+	repeated fixed32 ack_relay = 13;
+	repeated fixed32 ack_e2e = 14;
+	optional uint32 flags = 15;
 	optional fixed32 connection_id = 7;
 	optional uint32 seq_num_r2c = 8;
 	optional uint32 seq_num_s2c = 9;
 }
 
 message CMsgSteamDatagramConnectionStatsRouterToServer {
+	enum Flags {
+		ACK_REQUEST_RELAY = 1;
+		ACK_REQUEST_E2E = 2;
+		ACK_REQUEST_IMMEDIATE = 4;
+	}
+
 	optional .CMsgSteamDatagramConnectionQuality r2s = 1;
 	optional .CMsgSteamDatagramConnectionQuality c2s = 2;
-	optional fixed32 client_timestamp = 3;
-	optional fixed32 router_timestamp = 4;
+	optional fixed32 legacy_client_timestamp = 3;
+	optional fixed32 legacy_router_timestamp = 4;
+	repeated fixed32 ack_relay = 10;
+	repeated fixed32 ack_e2e = 11;
+	optional uint32 flags = 12;
 	optional uint32 seq_num_r2s = 5;
 	optional uint32 seq_num_c2s = 6;
 	optional fixed64 client_steam_id = 7;
@@ -275,11 +304,22 @@ message CMsgSteamDatagramConnectionStatsRouterToServer {
 }
 
 message CMsgSteamDatagramConnectionStatsServerToRouter {
+	enum Flags {
+		ACK_REQUEST_RELAY = 1;
+		ACK_REQUEST_E2E = 2;
+		ACK_REQUEST_IMMEDIATE = 4;
+	}
+
 	optional .CMsgSteamDatagramConnectionQuality s2r = 1;
 	optional .CMsgSteamDatagramConnectionQuality s2c = 2;
+	repeated fixed32 ack_relay = 8;
+	repeated fixed32 ack_e2e = 9;
+	optional uint32 flags = 10;
 	optional uint32 seq_num_s2r = 3;
 	optional uint32 seq_num_s2c = 4;
 	optional fixed64 client_steam_id = 5;
+	optional uint32 relay_session_id = 6;
+	optional fixed32 connection_id = 7;
 }
 
 message CMsgSteamDatagramClientPingSampleRequest {
@@ -351,6 +391,7 @@ message CMsgSteamDatagramConnectRequest {
 	optional uint32 ping_est_ms = 5;
 	optional .CMsgSteamDatagramSessionCryptInfoSigned crypt = 6;
 	optional .CMsgSteamDatagramCertificateSigned cert = 7;
+	optional uint32 protocol_version = 8;
 }
 
 message CMsgSteamDatagramConnectOK {
@@ -360,6 +401,7 @@ message CMsgSteamDatagramConnectOK {
 	optional uint32 delay_time_usec = 4;
 	optional .CMsgSteamDatagramSessionCryptInfoSigned crypt = 5;
 	optional .CMsgSteamDatagramCertificateSigned cert = 6;
+	optional uint32 protocol_version = 8;
 }
 
 message CMsgSteamDatagramConnectionClosed {
@@ -388,12 +430,14 @@ message CMsgSteamDatagramNoConnection {
 message CMsgSteamSockets_UDP_ChallengeRequest {
 	optional fixed32 connection_id = 1;
 	optional fixed64 my_timestamp = 3;
+	optional uint32 protocol_version = 4;
 }
 
 message CMsgSteamSockets_UDP_ChallengeReply {
 	optional fixed32 connection_id = 1;
 	optional fixed64 challenge = 2;
 	optional fixed64 your_timestamp = 3;
+	optional uint32 protocol_version = 4;
 }
 
 message CMsgSteamSockets_UDP_ConnectRequest {
@@ -404,6 +448,7 @@ message CMsgSteamSockets_UDP_ConnectRequest {
 	optional uint32 ping_est_ms = 6;
 	optional .CMsgSteamDatagramSessionCryptInfoSigned crypt = 7;
 	optional .CMsgSteamDatagramCertificateSigned cert = 4;
+	optional uint32 protocol_version = 8;
 }
 
 message CMsgSteamSockets_UDP_ConnectOK {
@@ -413,6 +458,7 @@ message CMsgSteamSockets_UDP_ConnectOK {
 	optional uint32 delay_time_usec = 4;
 	optional .CMsgSteamDatagramSessionCryptInfoSigned crypt = 7;
 	optional .CMsgSteamDatagramCertificateSigned cert = 8;
+	optional uint32 protocol_version = 9;
 }
 
 message CMsgSteamSockets_UDP_ConnectionClosed {
@@ -423,5 +469,18 @@ message CMsgSteamSockets_UDP_ConnectionClosed {
 
 message CMsgSteamSockets_UDP_NoConnection {
 	optional fixed32 connection_id = 1;
+}
+
+message CMsgSteamSockets_UDP_Stats {
+	enum Flags {
+		ACK_REQUEST_E2E = 2;
+		ACK_REQUEST_IMMEDIATE = 4;
+	}
+
+	optional .CMsgSteamDatagramConnectionQuality stats = 1;
+	repeated fixed32 ack_e2e = 2;
+	optional uint32 flags = 3;
+	optional fixed32 connection_id = 8;
+	optional uint32 seq_num = 4;
 }
 
