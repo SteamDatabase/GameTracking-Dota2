@@ -36,6 +36,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 4700,  -- Level 1-4
 		MaxZoneGold = 5500,
 		szTeleportEntityName = "start_zone_forest",
+		nArtifactCoinReward = 5,
 		StarCriteria =
 		{
 			{
@@ -400,9 +401,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -447,6 +450,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 6000,  -- Level 4-6.5
 		MaxZoneGold = 5500,
 		vTeleportPos = Vector( -10363, -7004, 256 ),
+		nArtifactCoinReward = 10,
 		StarCriteria =
 		{
 			{
@@ -801,9 +805,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -849,6 +855,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 2000,
 		MaxZoneGold = 1650,
 		szTeleportEntityName = "forest_holdout_zone_darkforest_death_maze",
+		nArtifactCoinReward = 15,
 		StarCriteria =
 		{
 			{
@@ -1107,9 +1114,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed =
 			{
@@ -1141,9 +1150,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChestInvoker
 			{
@@ -1267,8 +1278,10 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.04,
 			},
 		},
 		Breakables =
@@ -1314,6 +1327,7 @@ _G.ZonesDefinition =
 		MaxZoneGold = 5500,
 		--szTeleportEntityName = "forest_holdout_zone_darkforest_rescue",
 		vTeleportPos = Vector( -9408, -256, 256 ),
+		nArtifactCoinReward = 20,
 		StarCriteria =
 		{
 			{
@@ -1890,9 +1904,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed
 			{
@@ -1927,9 +1943,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -1975,6 +1993,7 @@ _G.ZonesDefinition =
 		MaxZoneGold = 6600,
 		--szTeleportEntityName = "forest_holdout_zone_darkforest_pass",
 		vTeleportPos = Vector( 960, -11424, 384 ),
+		nArtifactCoinReward = 25,
 		StarCriteria =
 		{
 			{
@@ -2524,9 +2543,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed
 			{
@@ -2559,9 +2580,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -2607,6 +2630,7 @@ _G.ZonesDefinition =
 		MaxZoneGold = 6600,
 		szTeleportEntityName = "darkforest_pass_zone_underground_temple",
 		--vTeleportPos = Vector( 1691, -11634, 768 ),
+		nArtifactCoinReward = 30,
 		StarCriteria =
 		{
 			{
@@ -2973,9 +2997,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed
 			{
@@ -3007,9 +3033,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -3082,6 +3110,7 @@ _G.ZonesDefinition =
 		MaxZoneGold = 7700,
 		--szTeleportEntityName = "underground_temple_zone_desert_start",
 		vTeleportPos = Vector( 11694, -5418, 512 ),
+		nArtifactCoinReward = 35,
 		StarCriteria =
 		{
 			{
@@ -3484,9 +3513,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed
 			{
@@ -3513,9 +3544,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -3684,9 +3717,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -3785,6 +3820,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 13000,
 		MaxZoneGold = 11000,
 		szTeleportEntityName = "desert_town_zone_desert_expanse",
+		nArtifactCoinReward = 40,
 		StarCriteria =
 		{
 			{
@@ -4185,9 +4221,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed
 			{
@@ -4215,9 +4253,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--LivingTreasure
 			{
@@ -4337,8 +4377,10 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 				},
-				fRelicChance = 0.03,
+				fRelicChance = 0.04,
 			},
 		},
 		Breakables =
@@ -4471,9 +4513,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed
 			{
@@ -4501,9 +4545,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -4575,6 +4621,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 14000,
 		MaxZoneGold = 13200,
 		szTeleportEntityName = "desert_outpost_zone_desert_chasm",
+		nArtifactCoinReward = 45,
 		StarCriteria =
 		{
 			{
@@ -4972,9 +5019,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed
 			{
@@ -5002,9 +5051,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =
@@ -5076,6 +5127,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 99999,
 		MaxZoneGold = 99999,
 		szTeleportEntityName = "desert_chasm_zone_desert_fortress",
+		nArtifactCoinReward = 100,
 		bVictoryOnComplete = true,
 		StarCriteria =
 		{
@@ -5197,9 +5249,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 			--TreasureChest_Guaranteed
 			{
@@ -5227,9 +5281,11 @@ _G.ZonesDefinition =
 				{
 					"item_creed_of_omniscience",
 					"item_oblivions_locket",
+					"item_ambient_sorcery",
+					"item_corrupting_blade",
 					"item_life_rune",
 				},
-				fRelicChance = 0.01,
+				fRelicChance = 0.02,
 			},
 		},
 		Breakables =

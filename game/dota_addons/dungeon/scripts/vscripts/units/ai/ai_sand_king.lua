@@ -7,9 +7,6 @@ PHASE_EPICENTER = 2
 SANDSTORM_HP_PCT = 66
 EPICENTER_HP_PCT = 33
 
-SPEECH_COOLDOWN = 3.0
-TAUNT_RATE = 20
-
 TRIGGER_PHASE_CD = 12
 PHASE_DURATION = 15
 BURROW_DURATION = 15
@@ -53,9 +50,6 @@ function Spawn( entityKeyValues )
 
 		thisEntity.fOrigSpawnPos = Vector( 11136, 12160, 384 )
 		--print( string.format( "saved SK's spawn point: %.2f, %.2f, %.2f", thisEntity.fOrigSpawnPos.x, thisEntity.fOrigSpawnPos.y, thisEntity.fOrigSpawnPos.z ) )
-
-		thisEntity.flSpeechCooldown = GameRules:GetGameTime() + SPEECH_COOLDOWN
-		s_flNextLaughTime = GameRules:GetGameTime() + TAUNT_RATE
 	end
 end
 
@@ -162,10 +156,6 @@ function SandKingThink()
 		hEndCamera:SetAbsOrigin( thisEntity:GetAbsOrigin() )
 	end
 
-	if GameRules:GetGameTime() > s_flNextLaughTime then
-		TauntPlayers()
-		s_flNextLaughTime = s_flNextLaughTime + TAUNT_RATE
-	end
 
 	if thisEntity.flNextPhaseTime == nil then
 		thisEntity.bBurrowStateQueued = true
@@ -507,56 +497,3 @@ function CastForwardsTailSwipe( enemy )
 	})
 	return 2.5
 end
-
-function TauntPlayers()
-	if thisEntity.flSpeechCooldown > GameRules:GetGameTime() then
-		return
-	end
-
-	thisEntity.flSpeechCooldown = GameRules:GetGameTime() + SPEECH_COOLDOWN
-	local nTaunt = RandomInt( 0, 13 )
-	if nTaunt == 0 then
-		EmitSoundOn( "sandking_skg_laugh_01", thisEntity )
-	end
-	if nTaunt == 1 then
-		EmitSoundOn( "sandking_skg_laugh_02", thisEntity )
-	end
-	if nTaunt == 2 then
-		EmitSoundOn( "sandking_skg_laugh_03", thisEntity )
-	end
-	if nTaunt == 3 then
-		EmitSoundOn( "sandking_skg_laugh_04", thisEntity )
-	end
-	if nTaunt == 4 then
-		EmitSoundOn( "sandking_skg_laugh_05", thisEntity )
-	end
-	if nTaunt == 5 then
-		EmitSoundOn( "sandking_skg_laugh_06", thisEntity )
-	end
-	if nTaunt == 6 then
-		EmitSoundOn( "sandking_skg_laugh_07", thisEntity )
-	end
-	if nTaunt == 7 then
-		EmitSoundOn( "sandking_skg_laugh_08", thisEntity )
-	end
-	if nTaunt == 8 then
-		EmitSoundOn( "sandking_skg_laugh_09", thisEntity )
-	end
-	if nTaunt == 9 then
-		EmitSoundOn( "sandking_skg_laugh_10", thisEntity )
-	end
-	if nTaunt == 10 then
-		EmitSoundOn( "sandking_skg_laugh_11", thisEntity )
-	end
-	if nTaunt == 11 then
-		EmitSoundOn( "sandking_skg_laugh_12", thisEntity )
-	end
-	if nTaunt == 12 then
-		EmitSoundOn( "sandking_skg_laugh_13", thisEntity )
-	end
-	if nTaunt == 13 then
-		EmitSoundOn( "sandking_skg_laugh_14", thisEntity )
-	end
-end
-
-

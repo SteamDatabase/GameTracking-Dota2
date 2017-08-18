@@ -45,12 +45,12 @@ function CDungeon:ChooseBreakableSurprise( hAttacker, hBreakableEnt )
 
 	if hBreakableEnt.fCommonItemChance == nil then
 		hBreakableEnt.fCommonItemChance = 0.1
-		print( string.format( "CDungeon:ChooseBreakableSurprise() -- WARNING: No fItemChance specified for this breakable. Setting it to %.2f", hBreakableEnt.fCommonItemChance ) )
+		print( string.format( "CDungeon:ChooseBreakableSurprise() -- WARNING: No fCommonItemChance specified for this breakable. Setting it to %.2f", hBreakableEnt.fCommonItemChance ) )
 	end
 
 	if hBreakableEnt.fRareItemChance == nil then
 		hBreakableEnt.fRareItemChance = 0.02
-		print( string.format( "CDungeon:ChooseBreakableSurprise() -- WARNING: No fItemChance specified for this breakable. Setting it to %.2f", hBreakableEnt.fRareItemChance ) )
+		print( string.format( "CDungeon:ChooseBreakableSurprise() -- WARNING: No fRareItemChance specified for this breakable. Setting it to %.2f", hBreakableEnt.fRareItemChance ) )
 	end
 
 	if hBreakableEnt.fGoldChance == nil then

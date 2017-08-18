@@ -899,6 +899,7 @@ if GetMapName() == "ep_1" then
 				bSendToAll = true,
 				bAdvance = false,
 				Gesture = ACT_DOTA_LOADOUT,
+				bForceBreak = true,
 				szAdvanceQuestActive = "reach_desert_outpost",
 			},
 			{
@@ -909,7 +910,6 @@ if GetMapName() == "ep_1" then
 				bAdvance = false, 
 				Gesture = ACT_DOTA_IDLE,
 				szLogicRelay = "desert_expanse_bristleback_dad_relay",
-				
 			},
 		},
 		npc_dota_temple_wisp =

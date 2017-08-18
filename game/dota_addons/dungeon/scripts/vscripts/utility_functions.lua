@@ -123,6 +123,20 @@ function tablehaselements( t )
 	return tablefirstkey( t ) ~= nil
 end
 
+---------------------------------------------------------------------------
+
+function TableContainsValue( t, value )
+	for _, v in pairs( t ) do
+		if v == value then
+			return true
+		end
+	end
+
+	return false
+end
+
+---------------------------------------------------------------------------
+
 function ConvertToTime( value )
   	local value = tonumber( value )
 
@@ -138,3 +152,17 @@ function ConvertToTime( value )
 	    return hours .. ":" .. mins .. ":" .. secs
 	end
 end
+
+---------------------------------------------------------------------------
+-- AI functions
+---------------------------------------------------------------------------
+
+function SetAggroRange( hUnit, fRange )
+	--print( string.format( "Set search radius and acquisition range (%.2f) for unit %s", fRange, hUnit:GetUnitName() ) )
+	hUnit.fSearchRadius = fRange
+	hUnit:SetAcquisitionRange( fRange )
+	hUnit.bAcqRangeModified = true
+end
+
+--------------------------------------------------------------------------------
+

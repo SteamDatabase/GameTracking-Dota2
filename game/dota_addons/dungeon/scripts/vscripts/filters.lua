@@ -50,6 +50,7 @@ function CDungeon:DamageFilter( filterTable )
 	return true
 end
 
+
 ---------------------------------------------------------------------------
 --	ItemAddedToInventoryFilter
 --  *item_entindex_const
@@ -70,7 +71,7 @@ function CDungeon:ItemAddedToInventoryFilter( filterTable )
 	local hItem = EntIndexToHScript( filterTable["item_entindex_const"] )
 	local hInventoryParent = EntIndexToHScript( filterTable["inventory_parent_entindex_const"] )
 	if hItem ~= nil and hItem.bIsRelic ~= true and hInventoryParent ~= nil and hItem:GetAbilityName() ~= "item_tombstone" then
-		if hItem:GetAbilityName() == "item_orb_of_passage" then
+		if self:IsKeyItem(hItem) then
 			if hInventoryParent:IsRealHero() == false and hInventoryParent:IsIllusion() == false then
 				local drop = CreateItemOnPositionSync( hInventoryParent:GetAbsOrigin(), hItem )
 				local dropTarget = hInventoryParent:GetAbsOrigin() + RandomVector( 1 ) * 200
@@ -105,6 +106,33 @@ function CDungeon:ItemAddedToInventoryFilter( filterTable )
 		if hItem:GetAbilityName() == "item_life_rune" then
 			hItem:SetCastOnPickup( true )
 		end
+	end
+
+	return true
+end
+
+---------------------------------------------------------------------------
+--	ModifierGainedFilter
+--  *entindex_parent_const
+--	*entindex_ability_const
+--	*entindex_caster_const
+--	*name_const
+--	*duration
+---------------------------------------------------------------------------
+
+function CDungeon:ModifierGainedFilter( filterTable )
+	if filterTable["entindex_parent_const"] == nil then 
+		return true
+	end
+
+ 	if filterTable["name_const"] == nil then
+		return true
+	end
+
+	local szBuffName = filterTable["name_const"]
+	local hParent = EntIndexToHScript( filterTable["entindex_parent_const"] )
+	if szBuffName == "modifier_axe_berserkers_call" and hParent ~= nil and hParent.bBoss == true then
+		return false
 	end
 
 	return true

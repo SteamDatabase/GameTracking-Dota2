@@ -30,9 +30,9 @@ function SmallHellbearThink()
 	end
 
 	-- Increase acquisition range after the initial aggro
-	if ( not thisEntity.bAcqRangeIncreased ) and thisEntity:GetAggroTarget() then
+	if ( not thisEntity.bAcqRangeModified ) and thisEntity:GetAggroTarget() then
 		thisEntity:SetAcquisitionRange( 750 )
-		thisEntity.bAcqRangeIncreased = true
+		thisEntity.bAcqRangeModified = true
 	end
 
 	if thisEntity:GetAggroTarget() then

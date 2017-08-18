@@ -1,5 +1,10 @@
+
 if GetMapName() == "ep_1" then
 	require( "zones/zone_tables_ep_1" )
+end
+
+if GetMapName() == "ep_2" or GetMapName() == "ep_2_alt" then
+	require( "zones/zone_tables_ep_2" )
 end
 
 if CDungeonZone == nil then
@@ -38,6 +43,7 @@ function CDungeonZone:Init( data )
 
 	self.szName = data.szName
 	self.nZoneID = data.nZoneID
+	self.nArtifactCoinReward = data.nArtifactCoinReward or 0
 	self.bVictoryOnComplete = data.bVictoryOnComplete
 	self.szTeleportEntityName = data.szTeleportEntityName or nil
 	self.vTeleportPos = data.vTeleportPos or nil
@@ -58,9 +64,11 @@ function CDungeonZone:Init( data )
 	self.bSpawnedSquads = false
 	self.bSpawnedChests = false
 	self.bSpawnedBreakables = false
+	self.bSpawnedAlliedStructures = false
 	self.Squads = data.Squads or {}
 	self.Chests = data.Chests or {}
 	self.Breakables = data.Breakables or {}
+	self.AlliedStructures = data.AlliedStructures or {}
 	self.nVIPsKilled = 0
 	self.VIPsAlive = {}
 	self.VIPs = data.VIPs or {}
@@ -184,7 +192,7 @@ function CDungeonZone:PrecacheNPCs( zoneTable )
 						self.nPrecacheCount = self.nPrecacheCount + 1
 						PrecacheUnitByNameAsync( unitTable.szNPCName, function( sg ) table.insert( self.SpawnGroups, sg ) end )
 						table.insert( GameRules.Dungeon.PrecachedEnemies, unitTable.szNPCName )
-						--print( "CDungeonZone:PrecacheNPCs() - Precached unit of type " .. unitTable.szNPCName )
+						print( "CDungeonZone:PrecacheNPCs() - Precached unit of type " .. unitTable.szNPCName )
 					end
 				end
 			end
@@ -263,7 +271,11 @@ function CDungeonZone:SpawnSquadCreatures( bAsync )
 				hSpawner.tSquadMembers = {}
 				for _, npc in pairs( squadTable.NPCs ) do
 					for k = 1, npc.nCount do
-						local hUnit = self:SpawnSquadUnit( npc, DOTA_TEAM_BADGUYS, hSpawner, "SquadState", squadTable.nMaxSpawnDistance, bAsync )
+						local nTeam = DOTA_TEAM_BADGUYS
+						if npc.bNeutral == true then
+							nTeam = DOTA_TEAM_CUSTOM_1
+						end
+						local hUnit = self:SpawnSquadUnit( npc, nTeam, hSpawner, "SquadState", squadTable.nMaxSpawnDistance, bAsync )
 
 						-- Add unit to the hSpawner's squad members table
 						table.insert( hSpawner.tSquadMembers, hUnit )
@@ -305,7 +317,11 @@ function CDungeonZone:SpawnSquadCreatures( bAsync )
 			if hSpawnerToUse ~= nil then
 				for _, npc in pairs( squadTable.NPCs ) do
 					for k = 1, npc.nCount do
-						local hUnit = self:SpawnSquadUnit( npc, DOTA_TEAM_BADGUYS, hSpawnerToUse, "SquadState", squadTable.nMaxSpawnDistance, bAsync )
+						local nTeam = DOTA_TEAM_BADGUYS
+						if npc.bNeutral == true then
+							nTeam = DOTA_TEAM_CUSTOM_1
+						end
+						local hUnit = self:SpawnSquadUnit( npc, nTeam, hSpawnerToUse, "SquadState", squadTable.nMaxSpawnDistance, bAsync )
 
 						-- Add unit to the hSpawner's squad members table
 					--	table.insert( hSpawner.tSquadMembers, hUnit )
@@ -339,14 +355,14 @@ function CDungeonZone:SpawnSquadUnit( npcData, nTeam, hSpawner, sState, nMaxSpaw
 	if bAsync then
 		CreateUnitByNameAsync( npcData.szNPCName, vUnitSpawnPos, true, nil, nil, nTeam, 
 			function( hUnit ) 
-			--	print( hUnit )
-			--	print( hUnit:GetUnitName() )
 				hUnit.sState = sState
 				if npcData.bBoss == true then	
 					hUnit.bBoss = true
 					hUnit.bStarted = false
 				end
+
 				self:AddEnemyToZone( hUnit )
+
 				if npcData.bUseSpawnerFaceAngle == true then
 					local vSpawnerForward = hSpawner:GetForwardVector()
 					hUnit:SetForwardVector( vSpawnerForward )
@@ -354,6 +370,10 @@ function CDungeonZone:SpawnSquadUnit( npcData, nTeam, hSpawner, sState, nMaxSpaw
 					hUnit:FaceTowards( hSpawner:GetOrigin() )
 				end
 				
+				if npcData.Activities and #npcData.Activities > 0 then
+					hUnit:StartGesture( npcData.Activities[ RandomInt( 1, #npcData.Activities ) ] )
+					hUnit.bIsRitualist = true -- @fixme: ugly hack
+				end
 
 				if #self.Enemies == self.nExpectedSquadNPCCount then
 					--print( "CDungeonZone:SpawnSquadUnit() - Async Spawning Complete.  There are " .. #self.Enemies .. " enemies in zone." )
@@ -367,13 +387,21 @@ function CDungeonZone:SpawnSquadUnit( npcData, nTeam, hSpawner, sState, nMaxSpaw
 			hUnit.bBoss = true
 			hUnit.bStarted = false
 		end
+
 		self:AddEnemyToZone( hUnit )
+
 		if npcData.bUseSpawnerFaceAngle == true then
 			local vSpawnerForward = hSpawner:GetForwardVector()
 			hUnit:SetForwardVector( vSpawnerForward )
 		else
 			hUnit:FaceTowards( hSpawner:GetOrigin() )
 		end
+
+		if npcData.Activities and #npcData.Activities > 0 then
+			hUnit:StartGesture( npcData.Activities[ RandomInt( 1, #npcData.Activities ) ] )
+			hUnit.bIsRitualist = true -- @fixme: ugly hack
+		end
+
 	    return hUnit
 	end
 end
@@ -411,20 +439,22 @@ function CDungeonZone:SpawnChests()
 		end
 
 		if ( chestTable.szSpawnerName ~= nil ) then
-			--print( "chestTable.szSpawnerName == " .. chestTable.szSpawnerName )
+			-- print( "CDungeonZone:SpawnChests - chestTable.szSpawnerName == " .. chestTable.szSpawnerName )
 			local hSpawners = Entities:FindAllByName( chestTable.szSpawnerName )
 			for _, hSpawner in pairs( hSpawners ) do
 				local vSpawnLoc = hSpawner:GetOrigin() + RandomVector( RandomFloat( 0, chestTable.nMaxSpawnDistance ) )
 				-- Roll dice to determine whether to spawn chest at this spawner
 				local fThreshold = 1 - fSpawnChance
-				local bSpawnChest = RandomFloat( 0, 1 ) >= fThreshold
+				local fRandomRoll = RandomFloat( 0, 1 )
+				local bSpawnChest = fRandomRoll >= fThreshold
+				-- print( "CDungeonZone:SpawnChests - Chest roll " .. fRandomRoll .. " >= " .. fThreshold .. " with spawn chance " .. fSpawnChance)
 				if bSpawnChest then
 					local hUnit = CreateUnitByName( chestTable.szNPCName, vSpawnLoc, true, nil, nil, DOTA_TEAM_GOODGUYS )
 					if hUnit ~= nil then
 						local vSpawnerForward = hSpawner:GetForwardVector()
 						hUnit:SetForwardVector( vSpawnerForward )
 
-						--print( "Created chest unit named " .. hUnit:GetUnitName() )
+						-- print( "CDungeonZone:SpawnChests - Created chest unit named " .. hUnit:GetUnitName() )
 						hUnit.zone = self
 						hUnit.Items = chestTable.Items
 						hUnit.fItemChance = chestTable.fItemChance
@@ -436,6 +466,8 @@ function CDungeonZone:SpawnChests()
 						hUnit.nTrapLevel = chestTable.nTrapLevel
 
 						self:AddTreasureChestToZone( hUnit )
+					else
+						print("CDungeonZone:SpawnChests - ERROR: Failed to spawn chest by name " .. chestTable.szNPCName)
 					end
 				end
 			end
@@ -497,8 +529,65 @@ function CDungeonZone:SpawnBreakables()
 						hUnit.nMinGold = breakableTable.nMinGold
 						hUnit.nMaxGold = breakableTable.nMaxGold
 						hUnit.fGoldChance = breakableTable.fGoldChance
+						hUnit:AddNewModifier( hUnit, nil, "modifier_breakable_container", {} )
 
 						self:AddBreakableContainerToZone( hUnit )
+					end
+				end
+			end
+		end
+	end
+end
+
+--------------------------------------------------------------------
+
+function CDungeonZone:SpawnAlliedStructures()
+	if self.bSpawnedAlliedStructures == true then
+		return
+	end
+
+	self.bSpawnedAlliedStructures = true
+
+	--print( "-----------------------------------" )
+	--print( "CDungeonZone:SpawnAlliedStructures()" )
+	--print( string.format( "There are %d structure tables in zone \"%s\"", #self.AlliedStructures, self.szName ) )
+	--PrintTable( self.AlliedStructures, "   " )
+
+	for index, structureTable in ipairs( self.AlliedStructures ) do
+		--print( "" )
+		--print( "Looking at structureTable #" .. index )
+		if ( structureTable.szSpawnerName == nil ) then
+			print( string.format( "CDungeonZone:SpawnAlliedStructures() - ERROR: No szSpawnerName specified for this structure. [Zone: \"%s\"]", self.szName ) )
+		end
+
+		local fSpawnChance = structureTable.fSpawnChance
+		if fSpawnChance == nil or fSpawnChance <= 0 then
+			print( string.format( "CDungeonZone:SpawnAlliedStructures - ERROR: Structure spawn chance is not valid [Zone: \"%s\"]", self.szName ) )
+		end
+
+		if structureTable.nMaxSpawnDistance == nil or structureTable.nMaxSpawnDistance < 0 then
+			print( string.format( "CDungeonZone:SpawnAlliedStructures - WARNING: nMaxSpawnDistance is not valid. Defaulting to 0. [Zone: \"%s\"]", self.szName ) )
+			structureTable.nMaxSpawnDistance = 0
+		end
+
+		if ( structureTable.szSpawnerName ~= nil ) then
+			--print( "structureTable.szSpawnerName == " .. structureTable.szSpawnerName )
+			local hSpawners = Entities:FindAllByName( structureTable.szSpawnerName )
+			for _, hSpawner in pairs( hSpawners ) do
+				local vSpawnLoc = hSpawner:GetOrigin() + RandomVector( RandomFloat( 0, structureTable.nMaxSpawnDistance ) )
+				-- Roll dice to determine whether to spawn structure at this spawner
+				local fThreshold = 1 - fSpawnChance
+				local bSpawnStructure = RandomFloat( 0, 1 ) >= fThreshold
+				if bSpawnStructure then
+					local hUnit = CreateUnitByName( structureTable.szNPCName, vSpawnLoc, true, nil, nil, DOTA_TEAM_GOODGUYS )
+					if hUnit ~= nil then
+						local vSpawnerForward = hSpawner:GetForwardVector()
+						hUnit:SetForwardVector( vSpawnerForward )
+
+						--print( "Created allied structure unit named " .. hUnit:GetUnitName() )
+						hUnit.zone = self
+
+						--self:AddBreakableContainerToZone( hUnit )
 					end
 				end
 			end
@@ -554,6 +643,11 @@ function CDungeonZone:SpawnVIPs( vipsTable )
 							end
 						end
 
+						if vip.StartsWithQuest == true then
+							--print("adding modifier to unit")
+							hUnit:AddNewModifier( hUnit, nil, "modifier_npc_dialog_notify", {} )
+						end
+
 						vip.nSpawnAmt = vip.nSpawnAmt + 1
 						table.insert( self.VIPsAlive, hUnit )
 					else
@@ -600,7 +694,12 @@ function CDungeonZone:SpawnNeutrals( NeutralsTable )
 						--hack
 						if hUnit:GetUnitName() == "npc_dota_creature_invoker" then
 							hUnit:RemoveModifierByName( "modifier_stack_count_animation_controller" )
-							hUnit:AddNewModifier( hUnit, nil, "modifier_invoker_juggle", { duration = -1 } );
+							hUnit:AddNewModifier( hUnit, nil, "modifier_rooted", { duration = -1 } )
+							if self.szName == "crypt" then
+								--hUnit:AddNewModifier( hUnit, nil, "modifier_invoker_campfire_hide", {} )
+							else
+								hUnit:AddNewModifier( hUnit, nil, "modifier_invulnerable", { duration = -1 } )
+							end
 						end
 
 						hUnit.bRequired = neutral.bRequired or false
@@ -787,7 +886,7 @@ end
 
 function CDungeonZone:SpawnPathingSquads( waveTable, nTeamNumber )
 	--print( "-----------------------------------" )
-	--print( "CDungeonZone:SpawnPathingSquads()" )
+	print( "CDungeonZone:SpawnPathingSquads()" )
 	if waveTable == nil then
 		print( "CDungeonZone:SpawnPathingSquads() - ERROR: No Wave Table" )
 		return
@@ -801,7 +900,7 @@ function CDungeonZone:SpawnPathingSquads( waveTable, nTeamNumber )
 
 	for _,npc in pairs ( NPCs ) do
 		if npc.flDelay ~= nil then
-			--print( "CDungeonZone:SpawnPathingSquads() - NPC " .. npc.szNPCName .. " has " .. npc.flDelay .. " seconds remaining before spawning." )
+			print( "CDungeonZone:SpawnPathingSquads() - NPC " .. npc.szNPCName .. " has " .. npc.flDelay .. " seconds remaining before spawning." )
 			npc.flDelay = npc.flDelay - waveTable.flSpawnInterval			
 			if npc.flDelay <= 0.0 then
 				npc.flDelay = nil
@@ -818,7 +917,7 @@ function CDungeonZone:SpawnPathingSquads( waveTable, nTeamNumber )
 							hWaypoint = VIP
 						end
 					end
-					if hWaypoint == nil then
+					if hWaypoint == nil and ( not npc.bTargetPlayers ) then
 						print( "CDungeonZone:SpawnPathingSquads() - ERROR: No Waypoint Found" )
 					end
 				end
@@ -838,7 +937,7 @@ function CDungeonZone:SpawnPathingSquads( waveTable, nTeamNumber )
 				end
 			end
 
-			if hSpawner ~= nil and hWaypoint ~= nil then
+			if hSpawner ~= nil then
 				if npc.nSpawnAmt == nil then
 					npc.nSpawnAmt = 0
 				end
@@ -857,8 +956,21 @@ function CDungeonZone:SpawnPathingSquads( waveTable, nTeamNumber )
 								self:AddEnemyToZone( hUnit )
 							end
 
-							if not npc.bDontSetGoalEntity then
+							if npc.nAcquireRadius ~= nil then
+								hUnit:SetAcquisitionRange( npc.nAcquireRadius )
+							end
+
+							if hWaypoint and ( not npc.bDontSetGoalEntity ) and ( not npc.bTargetPlayers ) then
 								hUnit:SetInitialGoalEntity( hWaypoint )
+							elseif npc.bTargetPlayers then
+								local hRandHero = self:GetRandomHero()
+								if hRandHero then
+									hUnit:SetMustReachEachGoalEntity( true )
+									hUnit:SetInitialGoalEntity( hRandHero )
+									--print( "CDungeonZone:SpawnPathingSquads() - Holdout creature is targeting player hero: " .. hRandHero:GetUnitName() )
+								else
+									print( "CDungeonZone:SpawnPathingSquads() - ERROR: Could not find hero to assign as creature's goal entity." )
+								end
 							end
 							npc.nSpawnAmt = npc.nSpawnAmt + 1
 						else
@@ -867,6 +979,17 @@ function CDungeonZone:SpawnPathingSquads( waveTable, nTeamNumber )
 					end
 				end
 			end
+		end
+	end
+end
+
+--------------------------------------------------------------------
+
+function CDungeonZone:GetRandomHero()
+	local hAllHeroes = HeroList:GetAllHeroes()
+	for _, hHero in pairs( hAllHeroes ) do
+		if hHero ~= nil and ( hHero:GetTeamNumber() == DOTA_TEAM_GOODGUYS ) and hHero:IsRealHero() and hHero:IsAlive() and hHero:IsInvulnerable() == false and hHero:IsOutOfGame() == false then
+			return hHero
 		end
 	end
 end
@@ -893,6 +1016,10 @@ function CDungeonZone:Activate()
 
 	if self.bSpawnedBreakables == false and self.Breakables and #self.Breakables > 0 then
 		self:SpawnBreakables()
+	end
+
+	if self.bSpawnedAlliedStructures == false and self.AlliedStructures and #self.AlliedStructures > 0 then
+		self:SpawnAlliedStructures()
 	end
 
 	if not self.bSpawnedVIPs then
@@ -976,6 +1103,30 @@ function CDungeonZone:OnZoneEventComplete( zone )
 			end
 
 			if quest.bActivated == true and quest.Completion.Type == QUEST_EVENT_ON_ZONE_EVENT_FINISHED and quest.Completion.szZoneName == zone.szName then
+				GameRules.Dungeon:OnQuestCompleted( self, quest )
+			end
+		end
+	end
+end
+
+--------------------------------------------------------------------
+
+function CDungeonZone:OnCustomZoneEvent( szZoneName, szEventName )
+	for _,quest in pairs ( self.Quests ) do
+		if quest ~= nil and not quest.bCompleted == true then
+			if quest.bActivated == false then
+				local bShouldActivate = false
+				for _,activator in pairs( quest.Activators ) do
+					if activator ~= nil and activator.Type == QUEST_EVENT_ON_CUSTOM_EVENT and activator.szEventName == szEventName and activator.szZoneName == szZoneName then
+						bShouldActivate = true
+					end
+				end
+				if bShouldActivate == true then
+					GameRules.Dungeon:OnQuestStarted( self, quest )
+				end
+			end
+
+			if quest.bActivated == true and quest.Completion.Type == QUEST_EVENT_ON_CUSTOM_EVENT and quest.Completion.szEventName == szEventName and quest.Completion.szZoneName == szZoneName then
 				GameRules.Dungeon:OnQuestCompleted( self, quest )
 			end
 		end
@@ -1358,6 +1509,11 @@ function CDungeonZone:OnThink()
 
 	if #self.Bosses > 0 then
 		self:BossThink()
+	else
+		local netTable = {}
+		netTable["bosses_alive"] = 0
+		netTable["boss_hp"] = 0
+		CustomNetTables:SetTableValue( "boss", string.format( "%d", 0 ), netTable )
 	end
 
 	self.flCompletionTime = self.flCompletionTime + 0.5
@@ -1387,7 +1543,7 @@ function CDungeonZone:CheckForZoneComplete()
 			return
 		end
 	elseif self.bZoneCompleted == false then
-		--print( "CDungeonZone:CheckForZoneComplete() - Zone " .. self.szName .. " completed in " .. self.flCompletionTime .. " seconds." )
+		print( "CDungeonZone:CheckForZoneComplete() - Zone " .. self.szName .. " completed in " .. self.flCompletionTime .. " seconds." )
 		self.bZoneCompleted = true
 		
 		if not self.bNoLeaderboard then
@@ -1414,7 +1570,7 @@ function CDungeonZone:CheckForZoneComplete()
 						Criteria.Result = 0
 						if Criteria.Type == ZONE_STAR_CRITERIA_TIME then
 							if Criteria.Values == nil then
-								print( "CDungeonZone:CheckForZoneComplete - ERROR: StarCriteria for ZONE_STAR_CRITERIA_TIME has malformed values!" )
+								print( "CDungeonZone:CheckForZoneComplete - " .. self.szName .. " - ERROR: StarCriteria for ZONE_STAR_CRITERIA_TIME has malformed values!" )
 							end
 							Criteria.Result = self.flCompletionTime
 							for i=1,#Criteria.Values do
@@ -1425,12 +1581,12 @@ function CDungeonZone:CheckForZoneComplete()
 									end
 								end
 							end
-							print( "CDungeonZone:CheckForZoneComplete - Score for ZONE_STAR_CRITERIA_TIME is " .. Criteria.StarScore .. " with a value of " .. Criteria.Result )
+							print( "CDungeonZone:CheckForZoneComplete - " .. self.szName .. " - Score for ZONE_STAR_CRITERIA_TIME is " .. Criteria.StarScore .. " with a value of " .. Criteria.Result )
 						end
 
 						if Criteria.Type == ZONE_STAR_CRITERIA_DEATHS then
 							if Criteria.Values == nil then
-								print( "CDungeonZone:CheckForZoneComplete - ERROR: StarCriteria for ZONE_STAR_CRITERIA_DEATHS has malformed values!" )
+								print( "CDungeonZone:CheckForZoneComplete - " .. self.szName .. " - ERROR: StarCriteria for ZONE_STAR_CRITERIA_DEATHS has malformed values!" )
 							end
 
 							Criteria.Result = self.nDeaths
@@ -1443,16 +1599,16 @@ function CDungeonZone:CheckForZoneComplete()
 									end
 								end
 							end
-							print( "CDungeonZone:CheckForZoneComplete - Score for ZONE_STAR_CRITERIA_DEATHS is " .. Criteria.StarScore .. " with a value of " .. Criteria.Result )
+							print( "CDungeonZone:CheckForZoneComplete - " .. self.szName .. " - Score for ZONE_STAR_CRITERIA_DEATHS is " .. Criteria.StarScore .. " with a value of " .. Criteria.Result )
 						end
 
 						if Criteria.Type == ZONE_STAR_CRITERIA_QUEST_COMPLETE then
 							Criteria.Result = self:GetQuestCompleteCount( Criteria.szQuestName )
 							if Criteria.szQuestName == nil or nCompleteCount then
-								print( "CDungeonZone:CheckForZoneComplete - ERROR: StarCriteria for ZONE_STAR_CRITERIA_QUEST_COMPLETE has invalid quest name!" )
+								print( "CDungeonZone:CheckForZoneComplete - " .. self.szName .. " - ERROR: StarCriteria for ZONE_STAR_CRITERIA_QUEST_COMPLETE has invalid quest name!" )
 							end
 							if Criteria.Values == nil then
-								print( "CDungeonZone:CheckForZoneComplete - ERROR: StarCriteria for ZONE_STAR_CRITERIA_QUEST_COMPLETE has malformed values!" )
+								print( "CDungeonZone:CheckForZoneComplete - " .. self.szName .. " - ERROR: StarCriteria for ZONE_STAR_CRITERIA_QUEST_COMPLETE has malformed values!" )
 							end
 							for i=1,#Criteria.Values do
 								local completed = Criteria.Values[i]
@@ -1462,7 +1618,7 @@ function CDungeonZone:CheckForZoneComplete()
 									end
 								end
 							end
-							print( "CDungeonZone:CheckForZoneComplete - Score for ZONE_STAR_CRITERIA_QUEST_COMPLETE is " .. Criteria.StarScore .. " with a value of " .. Criteria.Result )
+							print( "CDungeonZone:CheckForZoneComplete - " .. self.szName .. " - Score for ZONE_STAR_CRITERIA_QUEST_COMPLETE is " .. Criteria.StarScore .. " with a value of " .. Criteria.Result )
 						end
 					end
 				end
@@ -1537,6 +1693,10 @@ function CDungeonZone:CheckForZoneComplete()
 			local nTotalData5 = bit.lshift( nTotalPlayerDeaths[0], 24 ) + bit.lshift( nTotalPlayerDeaths[1], 16 ) + bit.lshift( nTotalPlayerDeaths[2], 8 ) + nTotalPlayerDeaths[3]
 
 			GameRules:AddEventMetadataLeaderboardEntry( "total", nTotalTime, nTotalStars, nMaxTotalStars, nTotalData1, nTotalData2, nTotalData3, nTotalData4, nTotalData5 )
+
+			if self.nArtifactCoinReward > 0 then
+				GameRules.Dungeon:OnArtifactCoinsFound( -1, self.nArtifactCoinReward )
+			end
 		end
 
 		GameRules.Dungeon:OnZoneCompleted( self )
@@ -1570,7 +1730,7 @@ end
 
 function CDungeonZone:PerformZoneCleanup()
 	if #self.Enemies > 0 then
-		--print( "CDungeonZone:PerformZoneCleanup() - There are " .. #self.Enemies .. " enemies remaining in " .. self.szName )
+		print( "CDungeonZone:PerformZoneCleanup() - There are " .. #self.Enemies .. " enemies remaining in " .. self.szName )
 		local Heroes = HeroList:GetAllHeroes()
 		local nEnemiesRemoved = 0
 		for i=#self.Enemies,1,-1 do
@@ -1589,9 +1749,9 @@ function CDungeonZone:PerformZoneCleanup()
 				end
 			end
 		end
-	--	print( "CDungeonZone:PerformZoneCleanup() - Removed " .. nEnemiesRemoved.. " enemies from " .. self.szName  )
+		print( "CDungeonZone:PerformZoneCleanup() - Removed " .. nEnemiesRemoved.. " enemies from " .. self.szName  )
 	else
-	--	print( "CDungeonZone:PerformZoneCleanup() - Unloading " .. #self.SpawnGroups .. " spawn groups from " .. self.szName  )
+		print( "CDungeonZone:PerformZoneCleanup() - Unloading " .. #self.SpawnGroups .. " spawn groups from " .. self.szName  )
 		for _,SpawnGroup in pairs( self.SpawnGroups ) do
 			if SpawnGroup ~= nil then
 				UnloadSpawnGroupByHandle( SpawnGroup )
@@ -1657,6 +1817,7 @@ function CDungeonZone:BossThink()
 	local Heroes = HeroList:GetAllHeroes()
 	local nBossesIntroComplete = 0
 	local nTotalBossHPPct = 0
+	local nBossesAlive = 0
 	for _,Boss in pairs ( self.Bosses ) do
 		if Boss.bAwake == nil or Boss.bAwake == true then
 			--print( "CDungeonZone:BossThink() - Boss is awake" )
@@ -1673,14 +1834,27 @@ function CDungeonZone:BossThink()
 				--print( "CDungeonZone:BossThink() - Boss has started" )
 				if Boss.bStarted == true and GameRules:GetGameTime() > Boss.flIntroEndTime and Boss.bIntroComplete == false then
 					Boss.bIntroComplete = true
+					Boss.flSpeechCooldown = GameRules:GetGameTime()
+					Boss.flNextLaughTime = GameRules:GetGameTime() + 1
+					Boss.flNextPeriodicTauntTime = GameRules:GetGameTime() + VOICE_PERIODIC_TAUNT_COOLDOWN
 					GameRules.Dungeon:OnBossFightIntroEnd( Boss )
 					return
 				end
 			end
 			
 			if Boss.bIntroComplete == true then
+				local flNow = GameRules:GetGameTime()
+				if flNow > Boss.flSpeechCooldown then
+					if flNow > Boss.flNextPeriodicTauntTime then
+						GameRules.Dungeon:FireTaunt( Boss )
+					end
+					if flNow > Boss.flNextLaughTime then
+						GameRules.Dungeon:FireLaugh( Boss )
+					end
+				end
 				nBossesIntroComplete = nBossesIntroComplete + 1
 				if Boss:IsAlive() then
+					nBossesAlive = nBossesAlive + 1
 					local bCanBeSeen = false
 					for _,Hero in pairs( Heroes ) do
 						if Hero:CanEntityBeSeenByMyTeam( Boss ) and Hero:IsAlive() then
@@ -1702,6 +1876,7 @@ function CDungeonZone:BossThink()
 
 	if self:GetNumberOfBosses() == nBossesIntroComplete and nBossesIntroComplete ~= 0 then
 		local netTable = {}
+		netTable["bosses_alive"] = nBossesAlive
 		netTable["boss_hp"] = nTotalBossHPPct / ( 100 * self:GetNumberOfBosses() ) * 100
 		CustomNetTables:SetTableValue( "boss", string.format( "%d", 0 ), netTable )
 	end
@@ -1750,6 +1925,18 @@ function CDungeonZone:SurvivalThink()
 		--print( "CDungeonZone:SurvivalThink() - " .. ConvertToTime( flTimeNow ) .. " - Spawning creeps in " .. self.Survival.flSpawnInterval .. " seconds." )
 		self.Survival.flTimeOfNextAttack = flTimeNow + self.Survival.flSpawnInterval
 	end
+
+	if self.szName == "plateau" then
+		for _,Hero in pairs( HeroList:GetAllHeroes() ) do
+			if Hero ~= nil then
+				if self:ContainsUnit( Hero ) then
+					CDungeon:OnPlayerEnterPlateau( Hero )
+				else
+					CDungeon:OnPlayerExitPlateau( Hero )
+				end
+			end
+		end
+	end
 end
 
 --------------------------------------------------------------------
@@ -1783,7 +1970,9 @@ function CDungeonZone:HoldoutStart()
 			neutral:RemoveModifierByName( "modifier_npc_dialog" )
 		end	
 	end
-	CustomNetTables:SetTableValue( "vips", string.format( "%d", 0 ), netTable )
+	if #self.VIPsAlive > 0 then
+		CustomNetTables:SetTableValue( "vips", string.format( "%d", 0 ), netTable )
+	end
 end
 
 --------------------------------------------------------------------

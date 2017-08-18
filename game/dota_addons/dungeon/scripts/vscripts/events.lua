@@ -1,4 +1,5 @@
 
+require( "triggers/plateau" )
 
 ---------------------------------------------------------
 -- game_rules_state_change
@@ -31,6 +32,7 @@ function CDungeon:OnPlayerReconnected( event )
 	if hPlayer ~= nil then
 		local hPlayerHero = hPlayer:GetAssignedHero()
 		if hPlayerHero ~= nil and hPlayerHero.bHasClickedScroll == true then
+			self:OnScrollClicked( 0, { ent_index = hPlayerHero:entindex() })
 			CustomGameEventManager:Send_ServerToPlayer( hPlayer, "hide_scroll", {} )
 		end
 	end
@@ -48,19 +50,14 @@ function CDungeon:OnNPCSpawned( event )
 			self:OnNPCSpawned_PlayerHero( event )
 			return
 		end
-		if spawnedUnit:IsCreature() and spawnedUnit:GetTeamNumber() == DOTA_TEAM_BADGUYS then
+		if spawnedUnit:IsCreature() and spawnedUnit:GetTeamNumber() ~= DOTA_TEAM_GOODGUYS then
 			self:OnNPCSpawned_EnemyCreature( event )
 			return
 		end
 
 		-- Bit gross
 		if spawnedUnit:GetUnitName() == "npc_dota_goodguys_healers" then
-			spawnedUnit:AddNewModifier( spawnedUnit, nil, "modifier_filler_buff_icon", { duration = -1 } );
-		end
-
-		if spawnedUnit:GetUnitName() == "npc_dota_creature_invoker" then
-			spawnedUnit:AddNewModifier( spawnedUnit, nil, "modifier_invulnerable", { duration = -1 } );
-			spawnedUnit:AddNewModifier( spawnedUnit, nil, "modifier_rooted", { duration = -1 } );
+			spawnedUnit:AddNewModifier( spawnedUnit, nil, "modifier_filler_buff_icon", { duration = -1 } )
 		end
 	end
 end
@@ -76,7 +73,7 @@ function CDungeon:OnNPCSpawned_PlayerHero( event )
 			boots:SetPurchaser( hPlayerHero )
 			hPlayerHero:AddItem( boots )
 
-			if not PlayerResource:IsFakeClient( hPlayerHero:GetPlayerOwnerID() ) and IsDedicatedServer() then
+			if GetMapName() == "ep_1" and not PlayerResource:IsFakeClient( hPlayerHero:GetPlayerOwnerID() ) and IsDedicatedServer() and hPlayerHero.bHasClickedScroll ~= true then
 				local scroll = CreateItem( "item_tpscroll", hPlayerHero, hPlayerHero )
 				scroll:SetPurchaseTime( 0 )
 				scroll:SetPurchaser( hPlayerHero )
@@ -85,12 +82,21 @@ function CDungeon:OnNPCSpawned_PlayerHero( event )
 			end
 
 			if not IsDedicatedServer() and not PlayerResource:IsFakeClient( hPlayerHero:GetPlayerOwnerID() ) then
-				self:OnPlayerHeroEnteredZone( hPlayerHero, "start" )
-				CustomGameEventManager:Send_ServerToPlayer( PlayerResource:GetPlayer( hPlayerHero:GetPlayerOwnerID() ), "hide_scroll", {} )
+				if GetMapName() == "ep_1" then
+					self:OnPlayerHeroEnteredZone( hPlayerHero, "start" )
+					CustomGameEventManager:Send_ServerToPlayer( PlayerResource:GetPlayer( hPlayerHero:GetPlayerOwnerID() ), "hide_scroll", {} )
+				else
+					self:OnPlayerHeroEnteredZone( hPlayerHero, "ep_2_start" )
+				end
+				
 			end
 
 			hPlayerHero.bFirstSpawnComplete = true
-			hPlayerHero.nRespawnsRemaining = nSTARTING_RESPAWNS
+			if self.bExplorerMode == true then
+				hPlayerHero.nRespawnsRemaining = EXPLORER_MODE_STARTING_LIVES
+			else
+				hPlayerHero.nRespawnsRemaining = nSTARTING_RESPAWNS
+			end
 			CustomNetTables:SetTableValue( "revive_state", string.format( "%d", hPlayerHero:entindex() ), { tombstone = false } )
 			CustomNetTables:SetTableValue( "respawns_remaining", string.format( "%d", hPlayerHero:entindex() ), { respawns = hPlayerHero.nRespawnsRemaining } )
 			local nPlayerID = hPlayerHero:GetPlayerOwnerID()
@@ -99,13 +105,33 @@ function CDungeon:OnNPCSpawned_PlayerHero( event )
 				PlayerResource:SetCustomBuybackCost( nPlayerID, 0 )
 			end
 
-			local relicTable = {}
-			for _,Relic in pairs( self.RelicsDefinition ) do
-				if Relic ~= nil and GetItemDefOwnedCount( nPlayerID, Relic["DungeonItemDef"] ) > 0 then
-					table.insert( relicTable, Relic["RelicName"] )	
+			if self.bExplorerMode ~= true then
+				local newArtifactCurrency = {}
+				if self.bUseArtifactCurrency == true and nPlayerID ~= -1 then
+					newArtifactCurrency["PlayerID"] = nPlayerID
+					newArtifactCurrency["SteamID"] = PlayerResource:GetSteamID( nPlayerID )
+					newArtifactCurrency["StartingBalance"] = PlayerResource:GetEventPremiumPoints( nPlayerID )
+					newArtifactCurrency["Balance"] = PlayerResource:GetEventPremiumPoints( nPlayerID )
+					newArtifactCurrency["Delta"] = 0
+					table.insert( self.ArtifactCurrency, newArtifactCurrency )
+					CustomNetTables:SetTableValue( "artifact_currency", string.format( "%d", nPlayerID ), newArtifactCurrency )
 				end
+				
+				local relicTable = {}
+				for _,Relic in pairs( self.RelicsDefinition ) do
+					if Relic ~= nil and GetItemDefOwnedCount( nPlayerID, Relic["DungeonItemDef"] ) > 0 then
+						table.insert( relicTable, Relic )	
+					end
+				end
+
+				local PlayerArtifactsPurchased = {}
+				PlayerArtifactsPurchased["PlayerID"] = nPlayerID
+				PlayerArtifactsPurchased["SteamID"] = PlayerResource:GetSteamID( nPlayerID )
+				PlayerArtifactsPurchased["PurchasedCount"] = 0
+				table.insert( self.ArtifactsPurchased, PlayerArtifactsPurchased )
+
+				CustomNetTables:SetTableValue( "relics", string.format( "%d", nPlayerID ), relicTable )
 			end
-			CustomNetTables:SetTableValue( "relics", string.format( "%d", nPlayerID ), relicTable )
 
 			hPlayerHero:SetRevealRadius( 512 )
 		end
@@ -113,8 +139,13 @@ function CDungeon:OnNPCSpawned_PlayerHero( event )
 	end
 end
 
+---------------------------------------------------------
 
 function CDungeon:OnNPCSpawned_EnemyCreature( event )
+	local hEnemyCreature = EntIndexToHScript( event.entindex )
+	if hEnemyCreature ~= nil and self.bExplorerMode == true then
+		hEnemyCreature:AddNewModifier( hEnemyCreature, nil, "modifier_explorer_mode", {} )
+	end
 end
 
 ---------------------------------------------------------
@@ -133,7 +164,7 @@ function CDungeon:OnEntityKilled( event )
 			return
 		end
 
-		if killedUnit:IsCreature() and ( killedUnit:GetTeamNumber() == DOTA_TEAM_BADGUYS ) then
+		if killedUnit:IsCreature() and ( killedUnit:GetTeamNumber() ~= DOTA_TEAM_GOODGUYS ) then
 			self:OnEntityKilled_EnemyCreature( event )
 			return
 		end
@@ -165,7 +196,7 @@ function CDungeon:OnEntityKilled_PlayerHero( event )
 		if OrbOfPassage ~= nil and killedUnit.nRespawnsRemaining == 0 then
 			killedUnit:DropItemAtPositionImmediate( OrbOfPassage, killedUnit:GetAbsOrigin() )
 		end
-		
+
 		local bDropTombstone = killedUnit.nRespawnsRemaining > 0
 		if bDropTombstone then
 			local newItem = CreateItem( "item_tombstone",killedUnit , killedUnit )
@@ -270,6 +301,17 @@ function CDungeon:OnEntityKilled_EnemyCreature( event )
 
 		if Zone.nGoldRemaining <= 0 and Zone.nXPRemaining <= 0 then
 			Zone:RemoveItemDropsFromZoneEnemies()
+		else
+			if self.bUseArtifactCurrency == true and self.bExplorerMode == false and Zone:GetNumberOfBosses() == 0 then
+				if RollPercentage( nBASE_ARTIFACT_BAG_DROP_RATE ) then
+					local newItem = CreateItem( "item_bag_of_artifact_coins", nil, nil )
+					newItem:SetPurchaseTime( 0 )
+					newItem:SetCurrentCharges( nBASE_ARTIFACT_BAG_AMOUNT )
+					local drop = CreateItemOnPositionSync( hDeadCreature:GetAbsOrigin(), newItem )
+					local dropTarget = hDeadCreature:GetAbsOrigin() + RandomVector( RandomFloat( 50, 150 ) )
+					newItem:LaunchLoot( false, 150, 0.75, dropTarget )
+				end
+			end
 		end
 
 		Zone:CleanupZoneEnemy( hDeadCreature )
@@ -320,6 +362,36 @@ function CDungeon:OnEntityKilled_EnemyCreature( event )
 					if enemy ~= nil and enemy:IsAlive() then
 						enemy:ForceKill( false )
 					end
+				end
+			end
+
+			if hDeadCreature:GetUnitName() == "npc_dota_creature_ice_boss" then
+				local szRelayName = "aerie_exit_relay"
+				local hAerieExitRelay = Entities:FindByName( nil, szRelayName )
+				if hAerieExitRelay then
+					hAerieExitRelay:Trigger()
+				else
+					print( string.format( "CDungeon:OnEntityKilled_EnemyCreature - ERROR: Relay %s not found", szRelayName ) )
+				end
+			end
+
+			if hDeadCreature:GetUnitName() == "npc_dota_creature_elder_tiny" then
+				local szRelayName = "crypt_entrance_relay"
+				local hCryptEntryRelay = Entities:FindByName( nil, szRelayName )
+				if hCryptEntryRelay then
+					hCryptEntryRelay:Trigger()
+				else
+					print( string.format( "CDungeon:OnEntityKilled_EnemyCreature - ERROR: Relay %s not found", szRelayName ) )
+				end
+			end
+
+			if hDeadCreature:GetUnitName() == "npc_dota_creature_amoeba_boss" then
+				local szRelayName = "shoal_exit_relay"
+				local hShoalExitRelay = Entities:FindByName( nil, szRelayName )
+				if hShoalExitRelay then
+					hShoalExitRelay:Trigger()
+				else
+					print( string.format( "CDungeon:OnEntityKilled_EnemyCreature - ERROR: Relay %s not found", szRelayName ) )
 				end
 			end
 
@@ -436,6 +508,10 @@ function CDungeon:OnItemSpawned( event )
 		local itemKV = item:GetAbilityKeyValues()
 		if itemKV and itemKV["DungeonItemDef"] ~= nil then
 			item.bIsRelic = true
+			if self.bExplorerMode == true then
+				print( "CDungeon:OnItemSpawned - Artifact spawned in explorer mode, removing" )
+				UTIL_Remove( item )
+			end
 		end
 
 		if item.bIsRelic and item.nBoundPlayerID == nil and item:GetPurchaser() == nil and event.player_id == -1 then
@@ -509,6 +585,7 @@ function CDungeon:OnRelicSpawned( item, itemKV )
 	-- What do we do if it's empty?  Right now just give it to someone as a dupe?
 	local bDupeForAllPlayers = #PlayerIDs == 0
 	if bDupeForAllPlayers then
+		print( "CDungeon:OnRelicSpawned - Item is dupe for all players, adding all players as valid." )
 		for _,Hero in pairs ( Heroes ) do
 			if Hero ~= nil and Hero:IsRealHero() then
 				table.insert( PlayerIDs, Hero:GetPlayerID() ) 
@@ -516,7 +593,32 @@ function CDungeon:OnRelicSpawned( item, itemKV )
 		end
 	end
 
-	local WinningPlayerID =  PlayerIDs[RandomInt( 1, #PlayerIDs )]
+	local WinningPlayerID = -1
+	if #PlayerIDs == 1 then
+		WinningPlayerID = PlayerIDs[1]
+	else
+		for i=#PlayerIDs,1,-1 do
+			for _,Relic in pairs( self.RelicsFound ) do
+				if Relic ~= nil and Relic["PlayerID"] == PlayerIDs[i] then
+					print( "CDungeon:OnRelicSpawned - PlayerID " .. PlayerIDs[i] .. " has already found an artifact this game, skipping." )
+					table.remove( PlayerIDs, i )
+				end
+			end
+		end
+		if #PlayerIDs == 0 then
+			WinningPlayerID = RandomInt( 0, 3 )
+			print( "CDungeon:OnRelicSpawned - All players have found an artifact, randoming... winner is " .. WinningPlayerID )
+		else
+			WinningPlayerID = PlayerIDs[ RandomInt( 1, #PlayerIDs ) ]
+			print( "CDungeon:OnRelicSpawned - " .. #PlayerIDs .. " players have not yet found an artifact, winner is player ID " .. WinningPlayerID )
+		end
+	end
+
+	if WinningPlayerID == -1 or WinningPlayerID == nil then
+		print( "CDungeon:OnRelicSpawned - ERROR - WinningPlayerID is invalid." )
+		return
+	end
+	
 	local WinningHero = PlayerResource:GetSelectedHeroEntity( WinningPlayerID )
 	local WinningSteamID = PlayerResource:GetSteamID( WinningPlayerID )
 
@@ -529,6 +631,7 @@ function CDungeon:OnRelicSpawned( item, itemKV )
 	Relic["DungeonItemDef"] = itemKV["DungeonItemDef"]
 	Relic["DungeonAction"] = itemKV["DungeonAction"]
 	Relic["SteamID"] = WinningSteamID
+	Relic["PlayerID"] = WinningPlayerID
 	table.insert( self.RelicsFound, Relic )
 	
 	local gameEvent = {}
@@ -546,6 +649,12 @@ function CDungeon:OnTriggerStartTouch( triggerName, activator_entindex, caller_e
 	--print( "CDungeon:OnTriggerStartTouch - " .. triggerName )
 	local playerHero = EntIndexToHScript( activator_entindex )
 	if playerHero ~= nil and playerHero:IsRealHero() and playerHero:GetPlayerOwnerID() ~= -1 then
+		if triggerName == "crypt_holdout_zone_reefs_edge" then
+			local CryptHoldoutZone = self:GetZoneByName( "crypt_holdout" )
+			if CryptHoldoutZone ~= nil then
+				CryptHoldoutZone:PerformZoneCleanup()
+			end
+		end
 		local i, j = string.find( triggerName, "_zone_" )
 		--This is a zone transition trigger
 		if i ~= nil then
@@ -599,6 +708,10 @@ function CDungeon:OnTriggerStartTouch( triggerName, activator_entindex, caller_e
 				end
 			end
 		end
+
+		if triggerName == "zonevolume_plateau" then
+			CDungeon:OnPlayerEnterPlateau( playerHero )
+		end
 	end
 end
 
@@ -624,6 +737,10 @@ function CDungeon:OnTriggerEndTouch( triggerName, activator_entindex, caller_ent
 				self:OnPlayerHeroEnteredZone( playerHero, zone2.szName )
 				return
 			end
+		end
+
+		if triggerName == "zonevolume_plateau" then
+			CDungeon:OnPlayerExitPlateau( playerHero )
 		end
 	end
 end
@@ -657,8 +774,6 @@ function CDungeon:OnCheckpointTouched( playerHero, szNewCheckpointName  )
 	if hBuilding then
 		hBuilding:SetTeam( DOTA_TEAM_GOODGUYS )
 		hBuilding:AddNewModifier( hBuilding, nil, "modifier_provide_vision", {} )
-		--hBuilding:AddNewModifier( hBuilding, nil, "modifier_fountain_glyph", {} )
-		--EmitSoundOn( "Aegis.Expire", hBuilding )
 
 		for _,zone in pairs( self.Zones ) do
 			if zone ~= nil and zone:ContainsUnit( playerHero ) and zone:GetCheckpoint() ~= hBuilding then
@@ -678,8 +793,12 @@ function CDungeon:OnCheckpointTouched( playerHero, szNewCheckpointName  )
 			Hero.hRespawnCheckpoint = hBuilding
 
 			local nCurrentLives = Hero.nRespawnsRemaining
-			Hero.nRespawnsRemaining = math.min( Hero.nRespawnsRemaining + nCHECKPOINT_REVIVES, nMAX_RESPAWNS )
-
+			if self.bExplorerMode == true then
+				Hero.nRespawnsRemaining = math.min( Hero.nRespawnsRemaining + EXPLORER_MODE_LIVES_PER_CHECKPOINT, nMAX_RESPAWNS )
+			else
+				Hero.nRespawnsRemaining = math.min( Hero.nRespawnsRemaining + nCHECKPOINT_REVIVES, nMAX_RESPAWNS )
+			end
+			
 			if nCurrentLives ~= Hero.nRespawnsRemaining then
 				local netTable = {}
 				CustomGameEventManager:Send_ServerToPlayer( Hero:GetPlayerOwner(), "gained_life", netTable )
@@ -734,6 +853,15 @@ function CDungeon:OnZoneActivated( Zone )
 			if Tower ~= nil and Tower:GetUnitName() == "npc_dota_holdout_tower" then
 				Tower:RemoveAbility( "building_no_vision" )
 				Tower:RemoveModifierByName( "modifier_no_vision" )
+			end
+		end
+	end
+
+	if GetMapName() == "ep_2" and Zone.szName == "ice_lake" then
+		local hTowers = FindUnitsInRadius( DOTA_TEAM_NEUTRALS, Vector( 0, 0, 0 ), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_BUILDING, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, 0, false )
+		for _,Tower in pairs( hTowers ) do
+			if Tower ~= nil and Tower:GetUnitName() == "npc_dota_holdout_tower_snow" then
+				Tower:SetSkin( 2 )
 			end
 		end
 	end
@@ -801,6 +929,7 @@ function CDungeon:OnQuestCompleted( questZone, quest )
 			local hDialogEntities = FindUnitsInRadius( DOTA_TEAM_GOODGUYS, Vector( 0, 0, 0 ), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, 0, false )
 			for _,DialogEnt in pairs ( hDialogEntities ) do
 				if DialogEnt ~= nil  and DialogEnt:GetUnitName() == quest.Completion.szNPCName and DialogEnt:FindModifierByName( "modifier_npc_dialog_notify" ) then
+					--print("removing modifier from unit")
 					DialogEnt:RemoveModifierByName( "modifier_npc_dialog_notify" )
 				end
 			end
@@ -877,7 +1006,9 @@ function CDungeon:OnDialogBegin( hPlayerHero, hDialogEnt )
 	netTable["DialogPlayerConfirm"] = Dialog.bPlayersConfirm
 	netTable["ConfirmToken"] = Dialog.szConfirmToken
 	netTable["JournalEntry"] = hDialogEnt:FindAbilityByName( "ability_journal_note" ) ~= nil
+	netTable["WardenNote"] = hDialogEnt:FindAbilityByName( "ability_warden_note" ) ~= nil
 
+	--print("removing modifier from unit")
 	hDialogEnt:RemoveModifierByName( "modifier_npc_dialog_notify" )
 
 	for _,zone in pairs( self.Zones ) do
@@ -898,7 +1029,7 @@ function CDungeon:OnDialogBegin( hPlayerHero, hDialogEnt )
 	end
 
 	if Dialog.Sound ~= nil then
-		EmitSoundOn( Dialog.Sound, hDialogEnt )
+		hDialogEnt:EmitSoundParams( Dialog.Sound, 0, VOICE_VOLUME, 0 )
 	end
 
 	if Dialog.bAdvance == true then
@@ -921,13 +1052,22 @@ function CDungeon:OnDialogBegin( hPlayerHero, hDialogEnt )
 	if Dialog.bDialogStopsMovement == true then
 		hDialogEnt:SetMoveCapability( DOTA_UNIT_CAP_MOVE_NONE )
 	end
-	
+
 	if hDialogEnt:FindAbilityByName( "ability_journal_note" ) ~= nil then
-		local szJournalNumber = string.match( Dialog.szText, "chef_journal_(%d+)" );
+		local szJournalNumber = string.match( Dialog.szText, "chef_journal_(%d+)" )
 		if szJournalNumber ~= nil then
 			local nJournalNumber = tonumber( szJournalNumber );
 			local nPlayerID = hPlayerHero:GetPlayerID()
 			self:OnPlayerFoundChefNote( nPlayerID, nJournalNumber )
+		end
+	end
+
+	if hDialogEnt:FindAbilityByName( "ability_warden_note" ) ~= nil then
+		local szWardenNoteNumber = string.match( Dialog.szText, "warden_log_(%d+)" )
+		if szWardenNoteNumber ~= nil then
+			local nWardenNoteNumber = tonumber( szWardenNoteNumber );
+			local nPlayerID = hPlayerHero:GetPlayerID()
+			self:OnPlayerFoundWardenNote( nPlayerID, nWardenNoteNumber )
 		end
 	end
 
@@ -975,6 +1115,14 @@ function CDungeon:OnDialogEnded( eventSourceIndex, data )
 				local hLogicRelay = Entities:FindByName( nil, Dialog.szLogicRelay )
 				if hLogicRelay then
 					hLogicRelay:Trigger()
+				end
+			end
+			if Dialog.EntsToEnable ~= nil then
+				for _, szEntName in pairs( Dialog.EntsToEnable ) do
+					local hEnt = Entities:FindByName( nil, szEntName )
+					if hEnt then
+						hEnt:Enable()
+					end
 				end
 			end
 		end
@@ -1095,16 +1243,34 @@ end
 function CDungeon:UpdateGameEndTables()
 	local metadataTable = {}
 	metadataTable[ "event_name" ] = "siltbreaker"
-	metadataTable[ "map_name" ] = "ep_1"
+	metadataTable[ "explorer_mode" ] = self.bExplorerMode
+
+	local nTrophyID = 0
+	local nTrophyZoneID = 0
+	local nTrophyLevel = 0
+	
+	if GetMapName() == "ep_1" then
+		metadataTable[ "map_name" ] = "ep_1"
+		nTrophyID = 63
+		nTrophyZoneID = 13
+	elseif GetMapName() == "ep_2" then
+		metadataTable[ "map_name" ] = "ep_2"
+		nTrophyID = 64
+		nTrophyZoneID = 15
+	elseif GetMapName() == "ep_2_alt" then
+		metadataTable[ "map_name" ] = "ep_2_alt"
+	end
 
 	metadataTable[ "zones" ] = {}
 
-	local trophyLevel = 0
-
 	local signoutTable = {}
-	signoutTable["zone_stars"] = {}
-	signoutTable["chef_notes"] = self.ChefNotesFound;
-	signoutTable["invoker_found"] = self.InvokerFound;
+	signoutTable["explorer_mode"] = self.bExplorerMode
+	signoutTable["zone_data"] = {}
+	signoutTable["chef_notes"] = self.ChefNotesFound
+	signoutTable["warden_notes"] = self.WardenNotesFound
+	signoutTable["invoker_found"] = self.InvokerFound
+	signoutTable["penguin_ride"] = self.PenguinRideTimes
+	signoutTable["artifacts_purchased"] = self.ArtifactsPurchased
 
 	for _,zone in pairs( self.Zones ) do
 		if not zone.bNoLeaderboard and zone.flCompletionTime > 0 then
@@ -1125,26 +1291,42 @@ function CDungeon:UpdateGameEndTables()
 			
 			metadataTable[ "zones" ][ zone.szName ] = zoneTable
 
-			if ( zone.nZoneID == 13 ) then
-				trophyLevel = zone.nStars
-				if ( trophyLevel == 0 ) then
-					trophyLevel = 1
+			-- Signout only gets a subset of the data to cut down on processing on the GC
+			local signoutZoneTable = {}
+			
+			signoutZoneTable[ "stars" ] = zone.nStars
+			signoutZoneTable[ "completed" ] = zone.bZoneCompleted
+			signoutZoneTable[ "completion_time" ] = zone.flCompletionTime
+
+			signoutTable["zone_data"][ zone.nZoneID ] = signoutZoneTable
+			
+			-- Grant a trophy if necessary
+			if ( zone.nZoneID == nTrophyZoneID ) then
+				nTrophyLevel = zone.nStars
+				if ( nTrophyLevel == 0 ) then
+					nTrophyLevel = 1
 				end
 			end
 		end
-
-		if zone.nStars > 0 then
-			signoutTable["zone_stars"][ zone.nZoneID ] = zone.nStars
-		end
+	end
+	
+	if not self.bExplorerMode and nTrophyLevel > 0 then
+		signoutTable[ "trophy_id" ] = nTrophyID
+		signoutTable[ "trophy_level" ] = nTrophyLevel
 	end
 
 	if #self.RelicsFound > 0 then
 		signoutTable[ "relics_found" ] = self.RelicsFound
 	end
 
-	if trophyLevel > 0 then
-		signoutTable[ "trophy_id" ] = 63
-		signoutTable[ "trophy_level" ] = trophyLevel
+	if self.bUseArtifactCurrency == true then
+		signoutTable["artifact_currency"] = self.ArtifactCurrency
+		for _,Currency in pairs( self.ArtifactCurrency ) do
+			print( "Currency PlayerID: " .. Currency["PlayerID"] )
+			print( "Currency Starting Balance: " .. Currency["StartingBalance"] ) 
+			print( "Currency Ending Balance: " .. Currency["Balance"] ) 
+			print( "Currency Delta: " .. Currency["Delta"] ) 
+		end
 	end
 
 	GameRules:SetEventMetadataCustomTable( metadataTable )
@@ -1241,25 +1423,59 @@ function CDungeon:OnRelicClaimed( eventSourceIndex, data )
 		print( "CDungeon:OnRelicClaimed - Player " .. nPlayerID .. " is trying to claim relic " .. szClaimedRelicName )
 		local relicTable = CustomNetTables:GetTableValue( "relics", string.format( "%d", nPlayerID ) )
 		if relicTable ~= nil then
-			for k,v in pairs( relicTable ) do
-				if v ~= nil and v == szClaimedRelicName then
+			local relicIndex = 0
+			for _,Relic in pairs( relicTable ) do
+				relicIndex = relicIndex + 1
+				if Relic ~= nil and Relic["RelicName"] == szClaimedRelicName then
 					local Hero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 					if Hero ~= nil then
-						local newRelic = CreateItem( szClaimedRelicName, Hero, Hero )
-						newRelic:SetPurchaseTime( GameRules:GetGameTime() )
-						newRelic:SetPurchaser( Hero )
-						newRelic.bIsRelic = true
-						newRelic.nBoundPlayerID = nPlayerID
-						if Hero:HasAnyAvailableInventorySpace() then
-							Hero:AddItem( newRelic ) 
-						else
-							local drop = CreateItemOnPositionSync( Hero:GetAbsOrigin(), newRelic )
-							local dropTarget = Hero:GetAbsOrigin() + RandomVector( RandomFloat( 50, 150 ) )
-							newRelic:LaunchLoot( false, 150, 0.75, dropTarget )
+						local nArtifactCurrencyCost = Relic["DungeonCurrencyCost"]
+						local nBalance = 0
+						for _,Currency in pairs ( self.ArtifactCurrency ) do
+							if Currency ~= nil and Currency["PlayerID"] == nPlayerID then
+								nBalance = Currency["Balance"]
+							end
 						end
-						
-						relicTable[k] = nil
-						CustomNetTables:SetTableValue( "relics", string.format( "%d", nPlayerID ), relicTable )
+						print( "CDungeon:OnRelicClaimed - Current Balance: " .. nBalance )
+						print( "CDungeon:OnRelicClaimed - Artifact Cost: " .. nArtifactCurrencyCost ) 
+						if nBalance < nArtifactCurrencyCost and self.bUseArtifactCurrency == true then
+							--Throw error
+							print( "CDungeon:OnRelicClaimed - ERROR: Not enough currency." )
+						else
+							if self.bUseArtifactCurrency == true then
+								for _,Currency in pairs ( self.ArtifactCurrency ) do
+									if Currency ~= nil and Currency["PlayerID"] == nPlayerID then
+										Currency["Balance"] = nBalance - nArtifactCurrencyCost
+										Currency["Delta"] = Currency["Delta"] - nArtifactCurrencyCost
+										print( "CDungeon:OnRelicClaimed - Updated balance: " .. Currency["Balance"] )
+										CustomNetTables:SetTableValue( "artifact_currency", string.format( "%d", nPlayerID ), Currency )
+									end
+								end
+							end
+							
+							local newRelic = CreateItem( szClaimedRelicName, Hero, Hero )
+							newRelic:SetPurchaseTime( GameRules:GetGameTime() )
+							newRelic:SetPurchaser( Hero )
+							newRelic.bIsRelic = true
+							newRelic.nBoundPlayerID = nPlayerID
+							if Hero:HasAnyAvailableInventorySpace() then
+								Hero:AddItem( newRelic ) 
+							else
+								local drop = CreateItemOnPositionSync( Hero:GetAbsOrigin(), newRelic )
+								local dropTarget = Hero:GetAbsOrigin() + RandomVector( RandomFloat( 50, 150 ) )
+								newRelic:LaunchLoot( false, 150, 0.75, dropTarget )
+							end
+							
+							Relic["Purchased"] = 1
+
+							for _,PlayerArtifactsPurchased in pairs ( self.ArtifactsPurchased ) do
+								if PlayerArtifactsPurchased ~= nil and PlayerArtifactsPurchased["PlayerID"] == nPlayerID then
+									PlayerArtifactsPurchased["PurchasedCount"] = PlayerArtifactsPurchased["PurchasedCount"] + 1
+								end
+							end
+							
+							CustomNetTables:SetTableValue( "relics", string.format( "%d", nPlayerID ), relicTable )
+						end	
 					end
 				end
 			end
@@ -1287,6 +1503,81 @@ end
 
 ---------------------------------------------------------
 
+function CDungeon:OnPlayerFoundWardenNote( nPlayerID, nWardenNoteIndex )
+	self:TrackPlayerAchievementEvent( self.WardenNotesFound, nPlayerID, nWardenNoteIndex )
+end
+
+---------------------------------------------------------
+
 function CDungeon:OnPlayerFoundInvoker( nPlayerID, nInvokerIndex )
 	self:TrackPlayerAchievementEvent( self.InvokerFound, nPlayerID, nInvokerIndex )
+end
+
+---------------------------------------------------------
+
+function CDungeon:OnCustomZoneEvent( szZoneName, szZoneEvent )
+	for _,zone in pairs( self.Zones ) do
+		zone:OnCustomZoneEvent( szZoneName, szZoneEvent )
+	end
+end
+
+---------------------------------------------------------
+
+function CDungeon:OnArtifactCoinsFound( nFindingPlayerID, nAmount )
+	if nAmount == 0 or self.bExplorerMode == true then
+		return
+	end
+
+	for _,Currency in pairs ( self.ArtifactCurrency ) do
+		if Currency ~= nil then
+			Currency["Balance"] = Currency["Balance"] + nAmount
+			Currency["Delta"] = Currency["Delta"] + nAmount
+			CustomNetTables:SetTableValue( "artifact_currency", string.format( "%d", Currency["PlayerID"] ), Currency )
+		end
+	end
+
+	local gameEvent = {}
+	if nFindingPlayerID ~= -1 then	
+		gameEvent["player_id"] = nFindingPlayerID
+		gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
+		gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_item_bag_of_artifact_coins"
+		gameEvent["int_value"] = nAmount
+		gameEvent["message"] = "#Dungeon_FoundArtifactCoins"
+		FireGameEvent( "dota_combat_event_message", gameEvent )
+	else
+		gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
+		gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_item_bag_of_artifact_coins"
+		gameEvent["int_value"] = nAmount
+		gameEvent["message"] = "#Dungeon_ZoneCompleteArtifactCoins"
+		FireGameEvent( "dota_combat_event_message", gameEvent )
+	end
+end
+
+---------------------------------------------------------
+-- dota_non_player_used_ability
+-- * abilityname
+-- * caster_entindex
+---------------------------------------------------------
+
+function CDungeon:OnNonPlayerUsedAbility( event )
+	local szAbilityName = event.abilityname
+	if event.caster_entindex == nil then
+		print( "ERROR: event.caster_entindex is nil.  (szAbilityName == " .. szAbilityName .. "\")" )
+		return
+	end
+	local hCaster = EntIndexToHScript( event.caster_entindex )
+	if szAbilityName ~= nil and hCaster ~= nil and hCaster.bBoss == true and GameRules:GetGameTime() > hCaster.flSpeechCooldown then
+		self:FireAbilityLine( hCaster, szAbilityName )
+	end
+end
+
+---------------------------------------------------------
+
+function CDungeon:OnPenguinRideFinished( nPlayerID, flTime )
+	print( "CDungeon:OnPenguinRideFinished - PlayerID " .. nPlayerID .. " achieved a time of " .. flTime )
+	local PenguinRide = {}
+	PenguinRide["PlayerID"] = nPlayerID
+	PenguinRide["SteamID"] = PlayerResource:GetSteamID( nPlayerID )
+	PenguinRide["Time"] = flTime
+	table.insert( self.PenguinRideTimes, PenguinRide )
 end

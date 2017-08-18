@@ -5,8 +5,16 @@ function CDungeon:ChooseTreasureSurprise( hPlayerHero, hTreasureEnt )
 	hTreasureEnt.nRewardSpawnDist = 64
 
 	if hTreasureEnt.zone == nil then
-		print( "CDungeon:ChooseTreasureSurprise() -- WARNING: No zone found for this chest. Defaulting to \"forest\"" )
-		hTreasureEnt.zone = self:GetZoneByName( "forest" )
+		if GetMapName() == "ep_1" then
+			print( "CDungeon:ChooseTreasureSurprise() -- WARNING: No zone found for this chest. Defaulting to \"forest\"" )
+			hTreasureEnt.zone = self:GetZoneByName( "forest" )
+		elseif GetMapName() == "ep_2" then
+			print( "CDungeon:ChooseTreasureSurprise() -- WARNING: No zone found for this chest. Defaulting to \"tundra\"" )
+			hTreasureEnt.zone = self:GetZoneByName( "tundra" )
+		else
+			print( "CDungeon:ChooseTreasureSurprise() -- ERROR: No zone found for this chest and can't set a reasonable default because we're not in map \"ep_1\" or \"ep_2\"!" )
+			return
+		end
 	end
 
 	for _,zone in pairs( self.Zones ) do
@@ -31,7 +39,12 @@ function CDungeon:ChooseTreasureSurprise( hPlayerHero, hTreasureEnt )
 		hTreasureEnt.nMaxGold = hPlayerHero:GetLevel() * 300
 	end
 
-	if hTreasureEnt.szTraps == nil or #hTreasureEnt.szTraps == 0 then
+	local bPreventTraps = false
+	if not hTreasureEnt.bPreventTraps == nil and hTreasureEnt.bPreventTraps == true then
+		bPreventTraps = true
+	end
+
+	if bPreventTraps == false and (hTreasureEnt.szTraps == nil or #hTreasureEnt.szTraps == 0) then
 		print( "CDungeon:ChooseTreasureSurprise() -- WARNING: Field named szTraps is missing or empty for this chest.  Using default data instead." )
 		hTreasureEnt.szTraps =
 		{
@@ -47,13 +60,14 @@ function CDungeon:ChooseTreasureSurprise( hPlayerHero, hTreasureEnt )
 
 	if hTreasureEnt.fRelicChance == nil then
 		hTreasureEnt.fRelicChance = 0.01
-		print( string.format( "CDungeon:ChooseTreasureSurprise() -- WARNING: No fRelicChance specified for this chest. Setting it to %.2f", hTreasureEnt.fRelicChance ) )
+		--print( string.format( "CDungeon:ChooseTreasureSurprise() -- WARNING: No fRelicChance specified for this chest. Setting it to %.2f", hTreasureEnt.fRelicChance ) )
 	end
 
 	if hTreasureEnt.fItemChance == nil then
 		hTreasureEnt.fItemChance = 0.3
-		print( string.format( "CDungeon:ChooseTreasureSurprise() -- WARNING: No fItemChance specified for this chest. Setting it to %.2f", hTreasureEnt.fItemChance ) )
+		--print( string.format( "CDungeon:ChooseTreasureSurprise() -- WARNING: No fItemChance specified for this chest. Setting it to %.2f", hTreasureEnt.fItemChance ) )
 	end
+
 
 	local fRelicThreshold = 1 - hTreasureEnt.fRelicChance -- inverting because of how chances are authored, so comparisons below are more intuitive
 	local fItemThreshold = 1 - hTreasureEnt.fItemChance
@@ -71,6 +85,10 @@ function CDungeon:ChooseTreasureSurprise( hPlayerHero, hTreasureEnt )
 		return
 	else
 		local bTrap = RandomFloat( 0, 1 ) >= 0.6
+		if bPreventTraps then
+			bTrap = false
+		end
+
 		if bTrap then
 			self:ChooseTreasureTrap( hPlayerHero, hTreasureEnt )
 			return

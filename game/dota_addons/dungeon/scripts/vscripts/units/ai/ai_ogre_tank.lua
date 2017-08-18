@@ -22,9 +22,9 @@ function OgreTankThink()
 	end
 
 	-- Increase acquisition range after the initial aggro
-	if ( not thisEntity.bAcqRangeIncreased ) and thisEntity:GetAggroTarget() then
+	if ( not thisEntity.bAcqRangeModified ) and thisEntity:GetAggroTarget() then
 		thisEntity:SetAcquisitionRange( 850 )
-		thisEntity.bAcqRangeIncreased = true
+		thisEntity.bAcqRangeModified = true
 	end
 
 	local nEnemiesRemoved = 0

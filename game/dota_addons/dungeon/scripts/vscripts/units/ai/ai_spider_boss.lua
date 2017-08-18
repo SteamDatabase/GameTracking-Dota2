@@ -45,10 +45,10 @@ function SpiderBossThink()
 	end
 
 	-- Increase acquisition range after the initial aggro
-	if ( not thisEntity.bAcqRangeIncreased ) and thisEntity:GetAggroTarget() then
+	if ( not thisEntity.bAcqRangeModified ) and thisEntity:GetAggroTarget() then
 		print( "SpiderBossThink - Increased acquisition range" )
 		thisEntity:SetAcquisitionRange( 2000 )
-		thisEntity.bAcqRangeIncreased = true
+		thisEntity.bAcqRangeModified = true
 	end
 
 	-- Are we too far from our initial spawn position?

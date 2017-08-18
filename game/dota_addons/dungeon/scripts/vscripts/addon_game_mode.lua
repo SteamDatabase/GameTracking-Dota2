@@ -17,6 +17,7 @@ require( "precache" )
 require( "events" )
 require( "filters" )
 require( "triggers" )
+require( "voice_lines" )
 require( "units/ai/ai_chaser" )
 require( "zones/zones" )
 require( "units/breakable_container_surprises" )
@@ -24,6 +25,10 @@ require( "units/treasure_chest_surprises" )
 
 if GetMapName() == "ep_1" then
 	require( "zones/dialog_ep_1" )
+end
+
+if GetMapName() == "ep_2" or GetMapName() == "ep_2_alt" then
+	require( "zones/dialog_ep_2" )
 end
 
 LinkLuaModifier( "modifier_boss_intro", "modifiers/modifier_boss_intro", LUA_MODIFIER_MOTION_NONE )
@@ -38,6 +43,15 @@ LinkLuaModifier( "modifier_temple_guardian_statue", "modifiers/modifier_temple_g
 LinkLuaModifier( "modifier_ogre_tank_melee_smash_thinker", "modifiers/modifier_ogre_tank_melee_smash_thinker", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_sand_king_boss_caustic_finale", "modifiers/modifier_sand_king_boss_caustic_finale", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_invoker_juggle", "modifiers/modifier_invoker_juggle", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_player_light", "modifiers/modifier_player_light", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_provides_fow_position", "modifiers/modifier_provides_fow_position", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_undead_skeleton", "modifiers/modifier_undead_skeleton", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_breakable_container", "modifiers/modifier_breakable_container", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_invoker_campfire_hide", "modifiers/modifier_invoker_campfire_hide", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_explorer_mode", "modifiers/modifier_explorer_mode", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_siltbreaker_phase_one", "modifiers/modifier_siltbreaker_phase_one", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_siltbreaker_phase_two", "modifiers/modifier_siltbreaker_phase_two", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_siltbreaker_phase_three", "modifiers/modifier_siltbreaker_phase_three", LUA_MODIFIER_MOTION_NONE )
 
 --------------------------------------------------------------------------------
 --
@@ -99,7 +113,7 @@ function CDungeon:InitGameMode()
 	GameRules:SetShowcaseTime( 0.0 )
 	GameRules:SetPreGameTime( 0.0 )
 	GameRules:SetPostGameTime( 45.0 )
-	GameRules:SetTreeRegrowTime( 0.1 )
+	GameRules:SetTreeRegrowTime( 5.0 )
 	GameRules:SetStartingGold( 250 )
 	GameRules:SetGoldTickTime( 999999.0 )
 	GameRules:SetGoldPerTick( 0 )
@@ -116,11 +130,11 @@ function CDungeon:InitGameMode()
 	GameRules:GetGameModeEntity():SetWeatherEffectsDisabled( true )
 	GameRules:GetGameModeEntity():SetCameraSmoothCountOverride( 2 )
 	GameRules:GetGameModeEntity():SetSelectionGoldPenaltyEnabled( false )
- 	GameRules:SetCustomGameAllowHeroPickMusic(false)
- 	GameRules:SetCustomGameAllowBattleMusic(false)
-	GameRules:SetCustomGameAllowMusicAtGameStart(true)
+ 	GameRules:SetCustomGameAllowHeroPickMusic( false )
+ 	GameRules:SetCustomGameAllowBattleMusic( false )
+	GameRules:SetCustomGameAllowMusicAtGameStart( true )
 
-	self.flItemExpireTime = 30.0
+	self.flItemExpireTime = 60.0
 	self.bPlayerHasSpawned = false
 	self.PrecachedEnemies = {}
 	self.PrecachedVIPs = {}
@@ -131,15 +145,27 @@ function CDungeon:InitGameMode()
 	self.bTempleExitThinking = false
 	self.nFortressExitActivators = 0
 	self.bFortressExitThinking = false
+	self.nSiltArenaPlatformActivators = 0
+	self.bSiltArenaPlatformsThinking = false
 	self.flVictoryTime = nil
 	self.bConfirmPending = false
+	self.bUseArtifactCurrency = true
+	self.bExplorerMode = GameRules:GetCustomGameDifficulty() == 1
+	if self.bExplorerMode == true then
+		print( "CDungeon:InitGameMode() - Game starting in Explorer Mode." )
+		CustomGameEventManager:Send_ServerToAllClients( "easy_mode", {} )
+	end
 
 	self.RelicsFound = {}
 	self.RelicsDefinition = {}
 	self:LoadRelics()
 
+	self.ArtifactCurrency = {}
 	self.ChefNotesFound = {}
+	self.WardenNotesFound = {}
 	self.InvokerFound = {}
+	self.PenguinRideTimes = {}
+	self.ArtifactsPurchased = {}
 
 	-- Event Registration: Functions are found in dungeon_events.lua
 	ListenToGameEvent( "game_rules_state_change", Dynamic_Wrap( CDungeon, 'OnGameRulesStateChange' ), self )
@@ -151,9 +177,8 @@ function CDungeon:InitGameMode()
 	ListenToGameEvent( "dota_holdout_revive_complete", Dynamic_Wrap( CDungeon, "OnPlayerRevived" ), self )
 	ListenToGameEvent( "dota_buyback", Dynamic_Wrap( CDungeon, "OnPlayerBuyback" ), self )
 	ListenToGameEvent( "dota_item_spawned", Dynamic_Wrap( CDungeon, "OnItemSpawned" ), self )
-
+	ListenToGameEvent( "dota_non_player_used_ability", Dynamic_Wrap( CDungeon, "OnNonPlayerUsedAbility" ), self )
 	
-
 	CustomGameEventManager:RegisterListener( "dialog_complete", function(...) return self:OnDialogEnded( ... ) end )
 	CustomGameEventManager:RegisterListener( "boss_fight_start", function(...) return self:OnBossFightBegin( ... ) end )
 	CustomGameEventManager:RegisterListener( "scroll_clicked", function(...) return self:OnScrollClicked( ... ) end )
@@ -165,6 +190,7 @@ function CDungeon:InitGameMode()
 	GameRules:GetGameModeEntity():SetHealingFilter( Dynamic_Wrap( CDungeon, "HealingFilter" ), self )
 	GameRules:GetGameModeEntity():SetDamageFilter( Dynamic_Wrap( CDungeon, "DamageFilter" ), self )
 	GameRules:GetGameModeEntity():SetItemAddedToInventoryFilter( Dynamic_Wrap( CDungeon, "ItemAddedToInventoryFilter" ), self )
+	GameRules:GetGameModeEntity():SetModifierGainedFilter( Dynamic_Wrap( CDungeon, "ModifierGainedFilter" ), self )
 
 
 	Convars:RegisterCommand( "dungeon_test_zone", function(...) return self:TestZone( ... ) end, "Test a zone.", 0 )
@@ -302,7 +328,7 @@ function CDungeon:ThinkLootExpire()
 
 	for _,item in pairs( Entities:FindAllByClassname( "dota_item_drop" ) ) do
 		local containedItem = item:GetContainedItem()
-		if containedItem ~= nil and containedItem:GetAbilityName() ~= "item_orb_of_passage" and containedItem:GetAbilityName() ~= "item_life_rune" and containedItem.bIsRelic ~= true then
+		if containedItem ~= nil and not CDungeon:IsKeyItem(containedItem) and containedItem:GetAbilityName() ~= "item_life_rune" and containedItem.bIsRelic ~= true then
 			self:ProcessItemForLootExpire( item, flCutoffTime )
 		end
 	end
@@ -365,6 +391,12 @@ function CDungeon:GetDialog( hDialogEnt )
 		hDialogEnt.nCurrentLine = 1
 	end
 
+ 	if Dialog[hDialogEnt.nCurrentLine] ~= nil and Dialog[hDialogEnt.nCurrentLine].szAdvanceQuestActive ~= nil then
+ 		if self:IsQuestActive( Dialog[hDialogEnt.nCurrentLine].szAdvanceQuestActive ) then
+			hDialogEnt.nCurrentLine = hDialogEnt.nCurrentLine + 1
+		end
+	end
+
 	return Dialog[hDialogEnt.nCurrentLine]
 end
 
@@ -422,7 +454,7 @@ function CDungeon:TestZone( cmdName, szZoneName )
 	local vTeleportPos = nil
 	local nZoneIndex = 0
 
-	for i=1,#self.Zones do
+	for i = 1, #self.Zones do
 		if self.Zones[i].szName == szZoneName then
 			nZoneIndex = i
 			szTeleportEntityName = self.Zones[i].szTeleportEntityName
@@ -444,7 +476,7 @@ function CDungeon:TestZone( cmdName, szZoneName )
 	local nXP = 0
 	local bCaptainSpawned = false
 
-	for j=1,nZoneIndex do
+	for j = 1, nZoneIndex - 1 do
 		local Zone = self.Zones[j]
 		if Zone ~= nil then
 			local nQuestRewardGold = 0
@@ -462,8 +494,8 @@ function CDungeon:TestZone( cmdName, szZoneName )
 			end
 
 			if Zone.nGoldRemaining ~= nil then
-				nGold = nGold + ( Zone.nGoldRemaining * 0.25 ) + nQuestRewardGold
-				print( "CDungeon:TestZone - Awarding " .. ( Zone.nGoldRemaining * 0.25 ) .. " gold from zone " .. Zone.szName )
+				nGold = nGold + ( Zone.nGoldRemaining * 0.40 ) + nQuestRewardGold
+				print( "CDungeon:TestZone - Awarding " .. ( Zone.nGoldRemaining * 0.40 ) .. " gold from zone " .. Zone.szName )
 			end
 			if Zone.nXPRemaining ~= nil then
 				nXP = nXP + ( Zone.nXPRemaining * 0.25 ) + nQuestRewardXP
@@ -532,11 +564,19 @@ function CDungeon:LoadRelics()
 					print( "CDungeon:LoadRelics() - WARNING: RELIC " .. k .. " DEFINED WITHOUT CORRESPONDING EVENT ACTION" )
 					szDungeonAction = szDungeonAction * szDungeonAction
 				else
-					print( "CDungeon:LoadRelics() - Adding Relic " .. k .. " with item def " .. nDungeonItemDef )
+					
 					local Relic = {}
 					Relic["RelicName"] = k
 					Relic["DungeonItemDef"] = nDungeonItemDef
 					Relic["DungeonAction"] = szDungeonAction
+					Relic["Purchased"] = 0
+					if self.bUseArtifactCurrency == true then
+						Relic["DungeonCurrencyCost"] = v["DungeonCurrencyCost"] or 1
+						print( "CDungeon:LoadRelics() - Adding Relic " .. k .. " with item def " .. nDungeonItemDef .. " and cost of " .. Relic["DungeonCurrencyCost"] )
+					else
+						print( "CDungeon:LoadRelics() - Adding Relic " .. k .. " with item def " .. nDungeonItemDef )
+					end
+
 					table.insert( self.RelicsDefinition, Relic )
 				end
 			end
@@ -544,25 +584,10 @@ function CDungeon:LoadRelics()
 	end	
 end
 
-
-function CDungeon:FireDeathTaunt( killerUnit )
-	if killerUnit:GetUnitName() == "npc_dota_creature_sand_king" then
-		local nLine = RandomInt( 0, 4 )
-		if nLine == 0 then
-			EmitSoundOn( "sandking_skg_kill_01", killerUnit )
-		end
-		if nLine == 1 then
-			EmitSoundOn( "sandking_skg_kill_02", killerUnit )
-		end
-		if nLine == 2 then
-			EmitSoundOn( "sandking_skg_kill_06", killerUnit )
-		end
-		if nLine == 3 then
-			EmitSoundOn( "sandking_skg_kill_08", killerUnit )
-		end
-		if nLine == 4 then
-			EmitSoundOn( "sandking_skg_lasthit_02", killerUnit )
-		end
-		killerUnit.flSpeechCooldown = GameRules:GetGameTime() + 3.0
-	end
+---------------------------------------------------------------------------
+--  IsKeyItem - returns true if item is a key item for queusts
+---------------------------------------------------------------------------
+function CDungeon:IsKeyItem( hItem )
+	return hItem:GetAbilityName() == "item_orb_of_passage" or hItem:GetAbilityName() == "item_prison_cell_key"
 end
+

@@ -17,7 +17,6 @@ function modifier_breakable_container:OnCreated( kv )
 			self:GetParent():SetModelScale( RandomFloat( 0.4, 0.6 ) )
 		end
 		self:GetParent():AddNewModifier( nil, nil, "modifier_disable_aggro", { duration = -1 } )
-		self:GetParent():AddNewModifier( nil, nil, "modifier_provides_fow_position", { duration = -1 } )
 	end
 end
 
@@ -40,8 +39,15 @@ end
 function modifier_breakable_container:DeclareFunctions()
 	local funcs = {
 		MODIFIER_EVENT_ON_DEATH,
+		MODIFIER_PROPERTY_PROVIDES_FOW_POSITION,
 	}
 	return funcs
+end
+
+--------------------------------------------------------------------------------
+
+function modifier_breakable_container:GetModifierProvidesFOWVision( params )
+	return 1
 end
 
 -----------------------------------------------------------------------
