@@ -28,7 +28,7 @@ function swoledar_heal:OnSpellStart()
 			ParticleManager:SetParticleControlEnt( nFXIndex, 3, self.hTarget, PATTACH_ABSORIGIN_FOLLOW, nil, self.hTarget:GetOrigin(), true   )
 			ParticleManager:ReleaseParticleIndex( nFXIndex )
 
-			self:GetCaster():AddNewModifier( thisEntity, nil, "modifier_provides_vision", { duration = -1 } )
+			self:GetCaster():AddNewModifier( thisEntity, nil, "modifier_provide_vision", { duration = -1 } )
 		end
 	end
 end
@@ -50,7 +50,7 @@ function swoledar_heal:OnChannelFinish( bInterrupted )
 			self.hTarget = nil
 		end
 
-		self:GetCaster():RemoveModifierByName( "modifier_provides_vision" )
+		self:GetCaster():RemoveModifierByName( "modifier_provide_vision" )
 	end
 end
 

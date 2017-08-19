@@ -19,7 +19,7 @@ end
 
 function storegga_grab_throw:OnAbilityPhaseInterrupted()
 	if IsServer() then
-		ParticleManager:DestroyParticle( self.nTargetFX, false )
+		--ParticleManager:DestroyParticle( self.nTargetFX, false )
 	end
 end
 

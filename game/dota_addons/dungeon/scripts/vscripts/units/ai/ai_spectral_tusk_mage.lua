@@ -12,6 +12,8 @@ function Spawn( entityKeyValues )
 
 	TombstoneAbility = thisEntity:FindAbilityByName( "undead_tusk_mage_tombstone" )
 
+	thisEntity.hTombstones = {}
+
 	thisEntity:SetContextThink( "UndeadSpectralTuskMageThink", UndeadSpectralTuskMageThink, 0.5 )
 end
 
@@ -39,7 +41,34 @@ function UndeadSpectralTuskMageThink()
 		return 1
 	end
 
-	if TombstoneAbility ~= nil and TombstoneAbility:IsFullyCastable() then
+	for k, hTombstone in pairs( thisEntity.hTombstones ) do
+		if hTombstone == nil or hTombstone:IsNull() or hTombstone:IsAlive() == false then
+			table.remove( thisEntity.hTombstones, k )
+		end
+	end
+
+	local nTombstonesAround = 0
+
+	local friendlies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, 1500, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
+	for _, friendly in pairs ( friendlies ) do
+		if friendly ~= nil and friendly:GetUnitName() == "npc_dota_undead_tusk_tombstone" then
+			nTombstonesAround = nTombstonesAround + 1
+		end
+	end
+
+	--[[
+	if #friendlies >= 60 then
+		print( "UndeadSpectralTuskMageThink - too many fiendlies around, not making any more for now" )
+	end
+	]]
+
+	--[[
+	if nTombstonesAround >= 6 then
+		print( "UndeadSpectralTuskMageThink - too many tombstones around, not making any more for now" )
+	end
+	]]
+
+	if TombstoneAbility ~= nil and TombstoneAbility:IsFullyCastable() and ( #friendlies < 80 ) and ( nTombstonesAround < 6 ) then
 		local vCastLocation = nil
 		for _,enemy in pairs( enemies ) do
 			if enemy ~= nil then

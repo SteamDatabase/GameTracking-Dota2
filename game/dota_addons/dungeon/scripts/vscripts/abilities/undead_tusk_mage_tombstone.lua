@@ -23,8 +23,8 @@ function undead_tusk_mage_tombstone:OnSpellStart()
 		end
 		local hTombstone = CreateUnitByName( "npc_dota_undead_tusk_tombstone", self:GetCursorPosition(), true, self:GetCaster(), self:GetCaster(), self:GetCaster():GetTeamNumber() )
 		if hTombstone ~= nil then
-			
-			
+			table.insert( self:GetCaster().hTombstones, hTombstone )
+
 			local flDuration = self:GetSpecialValueFor( "duration" )
 			hTombstone:AddNewModifier( self:GetCaster(), self, "modifier_undead_tusk_mage_tombstone", { duration = flDuration } )
 			hTombstone:AddNewModifier( self:GetCaster(), self, "modifier_kill", { duration = flDuration } )

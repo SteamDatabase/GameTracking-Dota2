@@ -1742,7 +1742,7 @@ function CDungeonZone:PerformZoneCleanup()
 						bCanBeSeen = true
 					end
 				end
-				if not bCanBeSeen then
+				if not bCanBeSeen or self.szName == "crypt_holdout" then
 					UTIL_Remove( enemy )
 					table.remove( self.Enemies, i )
 					nEnemiesRemoved = nEnemiesRemoved + 1

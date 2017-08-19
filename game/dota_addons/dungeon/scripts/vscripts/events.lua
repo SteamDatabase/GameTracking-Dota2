@@ -1081,6 +1081,9 @@ end
 ---------------------------------------------------------
 
 function CDungeon:OnDialogEnded( eventSourceIndex, data )
+	if data.DialogEntIndex == nil then
+		return
+	end
 	local hDialogEnt = EntIndexToHScript( data.DialogEntIndex )
 	local hPlayerHero = EntIndexToHScript( data.PlayerHeroEntIndex )
 	local nDialogLine = data.DialogLine
@@ -1163,6 +1166,7 @@ function CDungeon:OnBossFightIntro( hBoss )
 
 	local netTable = {}
 	netTable["DialogText"] = Dialog.szText
+	netTable["DialogEntIndex"] = hBoss:entindex()
 	netTable["BossName"] = hBoss:GetUnitName()
 	netTable["BossEntIndex"] = hBoss:entindex()
 	netTable["BossIntroTime"] = Dialog.flAdvanceTime
