@@ -3011,7 +3011,7 @@ _G.ZonesDefinition =
 							bTargetPlayers = true,
 							nAcquireRadius = 3000,
 							szNPCName = "npc_dota_creature_tusk_skeleton",
-							nCount = 15,
+							nCount = 12,
 						},		
 
 						-- NorthWest
@@ -3065,7 +3065,7 @@ _G.ZonesDefinition =
 							bTargetPlayers = true,
 							nAcquireRadius = 3000,
 							szNPCName = "npc_dota_creature_tusk_skeleton",
-							nCount = 20,
+							nCount = 12,
 						},
 						
 						-- NorthWest
@@ -3127,7 +3127,7 @@ _G.ZonesDefinition =
 							bTargetPlayers = true,
 							nAcquireRadius = 3000,
 							szNPCName = "npc_dota_creature_tusk_skeleton",
-							nCount = 24,
+							nCount = 12,
 						},
 						
 

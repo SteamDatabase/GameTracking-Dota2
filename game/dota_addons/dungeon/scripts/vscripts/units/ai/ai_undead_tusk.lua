@@ -34,7 +34,7 @@ function UndeadTuskAbility()
 		return -1
 	end
 
-	if RandomInt( 0 , 2 ) ~= 0 and not thisEntity.bSummoned then
+	if RandomInt( 0 , 2 ) ~= 0 and not thisEntity.bSummoned and not thisEntity.isInHoldout then
 		ExecuteOrderFromTable({
 		UnitIndex = thisEntity:entindex(),
 		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,

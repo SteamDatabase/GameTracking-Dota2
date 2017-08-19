@@ -2028,6 +2028,12 @@ function CDungeonZone:HoldoutThink()
 	if flTimeNow > self.flTimeOfNextWave and self.nCurrentWave < #self.Waves then
 		self.nCurrentWave = self.nCurrentWave + 1
 	--	print( "CDungeonZone:HoldoutThink() - Wave Start - " .. self.nCurrentWave )
+
+		if #self.Enemies > 150 then
+			--print( "CDungeonZone:SpawnPathingSquads() - Too many enemies, aborting." )
+			return
+		end
+
 		self:SpawnPathingSquads( self.Waves[self.nCurrentWave], DOTA_TEAM_BADGUYS )
 
 		self.flTimeOfNextSpawn = flTimeNow + self.Waves[self.nCurrentWave].flSpawnInterval
@@ -2040,6 +2046,10 @@ function CDungeonZone:HoldoutThink()
 		end
 
 		if flTimeNow > self.flTimeOfNextSpawn then
+			if #self.Enemies > 150 then
+				--print( "CDungeonZone:SpawnPathingSquads() - Too many enemies, aborting." )
+				return
+			end
 			self:SpawnPathingSquads( self.Waves[self.nCurrentWave], DOTA_TEAM_BADGUYS )
 			self.flTimeOfNextSpawn = flTimeNow + self.Waves[self.nCurrentWave].flSpawnInterval
 	--		print( "CDungeonZone:HoldoutThink() - Next Spawn at " .. ConvertToTime( self.flTimeOfNextSpawn ) )
