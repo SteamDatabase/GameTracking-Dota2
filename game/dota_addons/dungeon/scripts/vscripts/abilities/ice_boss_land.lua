@@ -3,6 +3,12 @@ LinkLuaModifier( "modifier_ice_boss_land", "modifiers/modifier_ice_boss_land", L
 
 --------------------------------------------------------------------------------
 
+function ice_boss_land:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function ice_boss_land:OnAbilityPhaseStart()
 	if IsServer() then
 		self:GetCaster():AddNewModifier( self:GetCaster(), self, "modifier_ice_boss_land", {} )

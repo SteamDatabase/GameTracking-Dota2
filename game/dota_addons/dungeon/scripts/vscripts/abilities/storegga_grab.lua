@@ -5,6 +5,12 @@ LinkLuaModifier( "modifier_storegga_grabbed_debuff", "modifiers/modifier_storegg
 
 --------------------------------------------------------------------------------
 
+function storegga_grab:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function storegga_grab:OnAbilityPhaseStart()
 	if IsServer() then
 		if self:GetCaster():FindModifierByName( "modifier_storegga_grabbed_buff" ) ~= nil then

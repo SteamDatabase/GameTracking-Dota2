@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_siltbreaker_summon_minions", "modifiers/modifier_silt
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_summon_minions:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function siltbreaker_summon_minions:GetChannelAnimation()
 	return ACT_DOTA_CAST_ABILITY_3
 end

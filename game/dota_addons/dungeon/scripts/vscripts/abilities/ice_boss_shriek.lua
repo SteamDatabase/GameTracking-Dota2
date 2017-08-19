@@ -3,6 +3,12 @@ ice_boss_shriek = class({})
 
 --------------------------------------------------------------------------------
 
+function ice_boss_shriek:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function ice_boss_shriek:OnSpellStart()
 	if IsServer() then
 		self.projectile_speed = self:GetSpecialValueFor( "projectile_speed" )

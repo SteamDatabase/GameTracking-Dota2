@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_swoledar_heal", "modifiers/modifier_swoledar_heal", L
 
 -----------------------------------------------------------------------------
 
+function swoledar_heal:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function swoledar_heal:OnSpellStart()
 	if IsServer() then
 		local hTarget = self:GetCursorTarget()

@@ -3,6 +3,12 @@ LinkLuaModifier( "modifier_ice_boss_take_flight", "modifiers/modifier_ice_boss_t
 
 -----------------------------------------------------------------------
 
+function ice_boss_take_flight:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function ice_boss_take_flight:OnSpellStart()
 	if IsServer() then
 		EmitSoundOn( "Hero_Winter_Wyvern.ArcticBurn.Cast", self:GetCaster() )

@@ -3,6 +3,12 @@ bear_frenzy = class({})
 
 --------------------------------------------------------------------------------
 
+function bear_frenzy:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function bear_frenzy:OnSpellStart()
 	if IsServer() then
 		self.frenzy_duration = self:GetSpecialValueFor( "frenzy_duration" )

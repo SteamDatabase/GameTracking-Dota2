@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_siltbreaker_torrents_thinker", "modifiers/modifier_si
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_torrents:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 --[[
 function siltbreaker_torrents:GetChannelAnimation()
 	return ACT_DOTA_SWIM_IDLE

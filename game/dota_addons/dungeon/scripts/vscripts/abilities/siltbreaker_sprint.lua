@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_siltbreaker_sprint", "modifiers/modifier_siltbreaker_
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_sprint:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function siltbreaker_sprint:OnSpellStart()
 	if IsServer() then
 		self:GetCaster():AddNewModifier( self:GetCaster(), self, "modifier_siltbreaker_sprint", { duration = self:GetSpecialValueFor( "duration" ) } )

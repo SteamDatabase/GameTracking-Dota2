@@ -5,6 +5,12 @@ LinkLuaModifier( "modifier_siltbreaker_mind_control_marked", "modifiers/modifier
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_mind_control:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function siltbreaker_mind_control:OnAbilityPhaseStart()
 	if IsServer() then
 		EmitSoundOn( "Siltbreaker.MindControl.PreCast", self:GetCaster() )

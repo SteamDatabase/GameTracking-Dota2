@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_undead_skeleton_wake", "modifiers/modifier_undead_ske
 
 --------------------------------------------------------------------------------
 
+function undead_tusk_skeleton:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function undead_tusk_skeleton:GetIntrinsicModifierName()
 	return "modifier_undead_skeleton"
 end

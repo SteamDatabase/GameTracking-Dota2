@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_frostbitten_freezing_blast", "modifiers/modifier_fros
 
 --------------------------------------------------------------------------------
 
+function frostbitten_freezing_blast:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function frostbitten_freezing_blast:OnAbilityPhaseStart()
 	if IsServer() then
 		--EmitSoundOn( "lycan_lycan_attack_09", self:GetCaster() )

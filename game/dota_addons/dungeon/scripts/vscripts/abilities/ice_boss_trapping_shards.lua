@@ -3,6 +3,12 @@ ice_boss_trapping_shards = class({})
 
 --------------------------------------------------------------------------------
 
+function ice_boss_trapping_shards:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function ice_boss_trapping_shards:OnSpellStart()
 	if IsServer() then
 		self.duration_ticks = self:GetSpecialValueFor( "duration_ticks" )

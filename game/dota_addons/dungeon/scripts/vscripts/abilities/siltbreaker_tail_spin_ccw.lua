@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_siltbreaker_tail_spin", "modifiers/modifier_siltbreak
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_tail_spin_ccw:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function siltbreaker_tail_spin_ccw:OnAbilityPhaseStart()
 	if IsServer() then
 		self.animation_time = self:GetSpecialValueFor( "animation_time" )

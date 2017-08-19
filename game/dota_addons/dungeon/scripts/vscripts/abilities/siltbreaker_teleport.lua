@@ -5,6 +5,12 @@ LinkLuaModifier( "modifier_temple_guardian_immunity", "modifiers/modifier_temple
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_teleport:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function siltbreaker_teleport:GetChannelAnimation()
 	return ACT_DOTA_CAST_ABILITY_6
 end

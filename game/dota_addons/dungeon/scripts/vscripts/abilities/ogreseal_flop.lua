@@ -1,5 +1,12 @@
 ogreseal_flop = class({})
 LinkLuaModifier( "modifier_ogreseal_flop", "modifiers/modifier_ogreseal_flop", LUA_MODIFIER_MOTION_BOTH )
+
+--------------------------------------------------------------------------------
+
+function ogreseal_flop:ProcsMagicStick()
+	return false
+end
+
 --------------------------------------------------------------------------------
 
 function ogreseal_flop:OnAbilityPhaseStart()

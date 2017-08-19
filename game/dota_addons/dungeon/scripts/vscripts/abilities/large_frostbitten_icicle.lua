@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_large_frostbitten_icicle_thinker", "modifiers/modifie
 
 ------------------------------------------------------------------
 
+function large_frostbitten_icicle:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function large_frostbitten_icicle:OnSpellStart()
 	if IsServer() then
 		EmitSoundOn( "Hero_Tusk.IceShards.Projectile", self:GetCaster() )

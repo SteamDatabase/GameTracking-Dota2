@@ -3,6 +3,12 @@ LinkLuaModifier( "modifier_undead_tusk_bone_ball", "modifiers/modifier_undead_tu
 
 -----------------------------------------------------------------------
 
+function undead_tusk_bone_ball:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function undead_tusk_bone_ball:OnSpellStart()
 	if IsServer() then
 		if self:GetCursorTarget() == nil then

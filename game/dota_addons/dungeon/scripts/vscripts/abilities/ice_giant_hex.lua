@@ -5,6 +5,12 @@ LinkLuaModifier( "modifier_ice_giant_hex", "modifiers/modifier_ice_giant_hex", L
 
 --------------------------------------------------------------------------------
 
+function ice_giant_hex:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function ice_giant_hex:OnAbilityPhaseStart()
 	if IsServer() then
 		EmitSoundOn( "lycan_lycan_attack_09", self:GetCaster() )

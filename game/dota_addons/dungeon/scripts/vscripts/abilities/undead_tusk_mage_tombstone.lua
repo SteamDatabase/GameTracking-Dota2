@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_undead_tusk_mage_passive", "modifiers/modifier_undead
 
 -----------------------------------------------------------------------------------------
 
+function undead_tusk_mage_tombstone:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function undead_tusk_mage_tombstone:GetIntrinsicModifierName()
 	return "modifier_undead_tusk_mage_passive"
 end

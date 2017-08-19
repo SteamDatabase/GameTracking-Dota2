@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_siltbreaker_mouth_beam", "modifiers/modifier_siltbrea
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_mouth_beam:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function siltbreaker_mouth_beam:OnAbilityPhaseStart()
 	if IsServer() then
 		self.nChannelFX = ParticleManager:CreateParticle( "particles/act_2/siltbreaker_beam_channel.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster() )

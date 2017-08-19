@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_siltbreaker_phase_two", "modifiers/modifier_siltbreak
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_go_phase_two:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function siltbreaker_go_phase_two:OnSpellStart()
 	if IsServer() then
 		if self:GetCaster():HasModifier( "modifier_siltbreaker_phase_one" ) then

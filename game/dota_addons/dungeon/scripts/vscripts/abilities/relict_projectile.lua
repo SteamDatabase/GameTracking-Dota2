@@ -3,6 +3,12 @@ relict_projectile = class({})
 
 --------------------------------------------------------------------------------
 
+function relict_projectile:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function relict_projectile:OnAbilityPhaseStart()
 	if IsServer() then
 		--EmitSoundOn( "lycan_lycan_attack_09", self:GetCaster() )

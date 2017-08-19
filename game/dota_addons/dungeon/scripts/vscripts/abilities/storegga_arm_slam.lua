@@ -3,6 +3,12 @@ LinkLuaModifier( "modifier_storegga_arm_slam", "modifiers/modifier_storegga_arm_
 
 --------------------------------------------------------------------------------
 
+function storegga_arm_slam:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function storegga_arm_slam:OnAbilityPhaseStart()
 	if IsServer() then
 		self.animation_time = self:GetSpecialValueFor( "animation_time" )

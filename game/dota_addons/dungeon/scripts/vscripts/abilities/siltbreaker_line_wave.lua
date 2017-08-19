@@ -4,6 +4,12 @@ LinkLuaModifier( "modifier_siltbreaker_bubble", "modifiers/modifier_siltbreaker_
 
 --------------------------------------------------------------------------------
 
+function siltbreaker_line_wave:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function siltbreaker_line_wave:OnAbilityPhaseStart()
 	if IsServer() then
 		self.nPreviewFX = ParticleManager:CreateParticle( "particles/darkmoon_creep_warning.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster() )

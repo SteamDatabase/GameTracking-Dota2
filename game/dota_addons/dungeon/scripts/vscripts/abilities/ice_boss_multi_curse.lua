@@ -2,6 +2,12 @@ ice_boss_multi_curse = class({})
 
 ---------------------------------------------------------------------
 
+function ice_boss_multi_curse:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function ice_boss_multi_curse:OnSpellStart()
 	if IsServer() then
 		EmitSoundOn( "Hero_Winter_Wyvern.WintersCurse.Cast", self:GetCaster() )

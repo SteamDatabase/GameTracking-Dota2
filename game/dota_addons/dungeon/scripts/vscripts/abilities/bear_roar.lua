@@ -2,6 +2,12 @@ bear_roar = class({})
 
 --------------------------------------------------------------------------------
 
+function bear_roar:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function bear_roar:OnAbilityPhaseStart()
 	if IsServer() then
 		self.taunt_duration = self:GetSpecialValueFor( "taunt_duration" )

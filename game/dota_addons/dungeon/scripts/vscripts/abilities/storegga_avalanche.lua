@@ -1,6 +1,13 @@
 storegga_avalanche = class({})
 LinkLuaModifier( "modifier_storegga_avalanche_thinker", "modifiers/modifier_storegga_avalanche_thinker", LUA_MODIFIER_MOTION_NONE )
+
 -----------------------------------------------------------------------
+
+function storegga_avalanche:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
 
 function storegga_avalanche:GetChannelAnimation()
 	return ACT_DOTA_CHANNEL_ABILITY_1

@@ -3,6 +3,12 @@ bear_cleave = class({})
 
 --------------------------------------------------------------------------------
 
+function bear_cleave:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function bear_cleave:OnSpellStart()
 	if IsServer() then
 		-- self.cleave_radius = self:GetSpecialValueFor( "cleave_radius" )

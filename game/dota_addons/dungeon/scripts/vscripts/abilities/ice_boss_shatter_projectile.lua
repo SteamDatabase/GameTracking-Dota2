@@ -2,6 +2,12 @@ ice_boss_shatter_projectile = class({})
 
 --------------------------------------------------------------------------------
 
+function ice_boss_shatter_projectile:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function ice_boss_shatter_projectile:OnAbilityPhaseStart()
 	if IsServer() then
 		self.nPreviewFX = ParticleManager:CreateParticle( "particles/darkmoon_creep_warning.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster() )

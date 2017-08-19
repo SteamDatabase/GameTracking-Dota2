@@ -148,6 +148,10 @@ function PhaseOneThink( hSiltUnit, hEnemies )
 		return CastTailSpinCCW( hSiltUnit )
 	end
 
+	if LineWaveIsReady( hSiltUnit ) then
+		return CastLineWave( hSiltUnit, hEnemies )
+	end
+
 	if SprintIsReady( hSiltUnit ) then
 		AttackTargetOrder( hSiltUnit, hEnemies[ #hEnemies ] )
 		return CastSprint( hSiltUnit )
@@ -155,10 +159,6 @@ function PhaseOneThink( hSiltUnit, hEnemies )
 
 	if TeleportIsReady( hSiltUnit ) then
 		return CastTeleport( hSiltUnit, hEnemies )
-	end
-
-	if LineWaveIsReady( hSiltUnit ) then
-		return CastLineWave( hSiltUnit, hEnemies )
 	end
 
 	return AttackMoveOrder( hSiltUnit, hEnemies[ 1 ] )
@@ -187,6 +187,10 @@ function PhaseTwoThink( hSiltUnit, hEnemies )
 		return CastTailSpinCCW( hSiltUnit )
 	end
 
+	if LineWaveIsReady( hSiltUnit ) then
+		return CastLineWave( hSiltUnit, hEnemies )
+	end
+
 	if SprintIsReady( hSiltUnit ) then
 		AttackTargetOrder( hSiltUnit, hEnemies[ #hEnemies ] )
 		return CastSprint( hSiltUnit )
@@ -198,10 +202,6 @@ function PhaseTwoThink( hSiltUnit, hEnemies )
 
 	if TeleportIsReady( hSiltUnit ) then
 		return CastTeleport( hSiltUnit, hEnemies )
-	end
-
-	if LineWaveIsReady( hSiltUnit ) then
-		return CastLineWave( hSiltUnit, hEnemies )
 	end
 
 	return AttackMoveOrder( hSiltUnit, hEnemies[ 1 ] )
@@ -230,6 +230,10 @@ function PhaseThreeThink( hSiltUnit, hEnemies )
 		return CastTailSpinCCW( hSiltUnit )
 	end
 
+	if LineWaveIsReady( hSiltUnit ) then
+		return CastLineWave( hSiltUnit, hEnemies )
+	end
+
 	if SprintIsReady( hSiltUnit ) then
 		AttackTargetOrder( hSiltUnit, hEnemies[ #hEnemies ] )
 		return CastSprint( hSiltUnit )
@@ -241,10 +245,6 @@ function PhaseThreeThink( hSiltUnit, hEnemies )
 
 	if TeleportIsReady( hSiltUnit ) then
 		return CastTeleport( hSiltUnit, hEnemies )
-	end
-
-	if LineWaveIsReady( hSiltUnit ) then
-		return CastLineWave( hSiltUnit, hEnemies )
 	end
 
 	return AttackMoveOrder( hSiltUnit, hEnemies[ 1 ] )

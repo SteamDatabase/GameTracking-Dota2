@@ -78,6 +78,7 @@ function modifier_amoeba_boss_jump:CheckState()
 	local state =
 	{
 		[MODIFIER_STATE_STUNNED] = true,
+		[MODIFIER_STATE_UNSELECTABLE] = true,
 	}
 
 	return state

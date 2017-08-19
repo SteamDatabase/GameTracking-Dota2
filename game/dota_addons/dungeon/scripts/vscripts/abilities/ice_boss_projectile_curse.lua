@@ -1,5 +1,12 @@
 ice_boss_projectile_curse = class({})
+
 -----------------------------------------------------------------------
+
+function ice_boss_projectile_curse:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
 
 function ice_boss_projectile_curse:OnAbilityPhaseStart()
 	if IsServer() then

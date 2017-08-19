@@ -64,7 +64,7 @@ end
 
 function modifier_gaoler_passive:OnIntervalThink()
 	if IsServer() then
-		if self.hDummy ~= nil then
+		if self.hDummy ~= nil and not self.hDummy:IsNull() then
 			local vNewPos = self:GetParent():GetOrigin() + self:GetParent():GetForwardVector() * self.vision_circle_distance
 			local vOffsetDir = self:GetParent():GetRightVector()
 			if self.nDir == 1 then

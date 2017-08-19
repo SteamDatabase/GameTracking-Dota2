@@ -2,6 +2,12 @@ storegga_grab_throw = class({})
 
 --------------------------------------------------------------------------------
 
+function storegga_grab_throw:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function storegga_grab_throw:OnAbilityPhaseStart()
 	if IsServer() then
 
