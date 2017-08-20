@@ -193,7 +193,7 @@ function CDungeon:InitGameMode()
 	GameRules:GetGameModeEntity():SetModifierGainedFilter( Dynamic_Wrap( CDungeon, "ModifierGainedFilter" ), self )
 
 
-	Convars:RegisterCommand( "dungeon_test_zone", function(...) return self:TestZone( ... ) end, "Test a zone.", 0 )
+	Convars:RegisterCommand( "dungeon_test_zone", function(...) return self:TestZone( ... ) end, "Test a zone.", FCVAR_CHEAT )
 
 	for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 		PlayerResource:SetCustomTeamAssignment( nPlayerID, DOTA_TEAM_GOODGUYS )
