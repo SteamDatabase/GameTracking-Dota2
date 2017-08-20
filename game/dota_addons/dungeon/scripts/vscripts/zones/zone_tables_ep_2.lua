@@ -40,7 +40,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 5000,
 		MaxZoneGold = 4000,
 		szTeleportEntityName = "ep_2_start_zone_tundra",
-		nArtifactCoinReward = 5,
+		nArtifactCoinReward = 10,
 		StarCriteria =
 		{
 			{
@@ -662,7 +662,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 6000,
 		MaxZoneGold = 4500,
 		szTeleportEntityName = "tundra_zone_ice_lake",
-		nArtifactCoinReward = 10,
+		nArtifactCoinReward = 20,
 		StarCriteria =
 		{
 			{
@@ -1206,7 +1206,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 1500,
 		MaxZoneGold = 800,
 		szTeleportEntityName = "ice_lake_zone_aerie",
-		nArtifactCoinReward = 15,
+		nArtifactCoinReward = 25,
 		StarCriteria =
 		{
 			{
@@ -1500,7 +1500,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 8000,
 		MaxZoneGold = 5000,
 		szTeleportEntityName = "tusktown_zone_plateau",
-		nArtifactCoinReward = 15,
+		nArtifactCoinReward = 30,
 		StarCriteria =
 		{
 			{
@@ -1825,7 +1825,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 3000,
 		MaxZoneGold = 1000,
 		szTeleportEntityName = "plateau_zone_crag",
-		nArtifactCoinReward = 20,
+		nArtifactCoinReward = 35,
 		StarCriteria =
 		{
 			{
@@ -1993,7 +1993,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 15000,
 		MaxZoneGold = 8500,
 		szTeleportEntityName = "crag_zone_crypt",
-		nArtifactCoinReward = 25,
+		nArtifactCoinReward = 35,
 		StarCriteria =
 		{
 			{
@@ -2872,7 +2872,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 6500,
 		MaxZoneGold = 3000,
 		szTeleportEntityName = "crypt_zone_crypt_holdout",
-		nArtifactCoinReward = 30,
+		nArtifactCoinReward = 40,
 		StarCriteria =
 		{
 			{
@@ -3350,7 +3350,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 19000,
 		MaxZoneGold = 13000,
 		szTeleportEntityName = "crypt_holdout_zone_reefs_edge",
-		nArtifactCoinReward = 35,
+		nArtifactCoinReward = 45,
 		StarCriteria =
 		{
 			{
@@ -3647,7 +3647,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 6000,
 		MaxZoneGold = 5000,
 		szTeleportEntityName = "reefs_edge_zone_shoal",
-		nArtifactCoinReward = 40,
+		nArtifactCoinReward = 50,
 		StarCriteria =
 		{
 			{
@@ -4011,7 +4011,7 @@ _G.ZonesDefinition =
 		MaxZoneXP = 22000,
 		MaxZoneGold = 15000,
 		szTeleportEntityName = "dark_reef_a_zone_dark_reef_b",
-		nArtifactCoinReward = 45,
+		nArtifactCoinReward = 55,
 		StarCriteria =
 		{
 			{

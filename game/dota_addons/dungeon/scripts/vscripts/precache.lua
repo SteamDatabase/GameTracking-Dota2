@@ -295,6 +295,7 @@ if GetMapName() == "ep_2" or GetMapName() == "ep_2_alt" then
 		"particles/lycanboss_ruptureball_gale.vpcf", -- ice_giant_hex
 		"particles/units/heroes/hero_sandking/sandking_epicenter_tell.vpcf", -- Siltbreaker
 		"particles/units/heroes/hero_ogre_magi/ogre_magi_bloodlust_buff.vpcf", -- Siltbreaker
+		"particles/units/heroes/hero_ogre_magi/ogre_magi_bloodlust_cast.vpcf", -- Swoledar
 		"particles/test_particle/dungeon_generic_blast_pre.vpcf", -- Siltbreaker
 		"particles/test_particle/dungeon_generic_blast.vpcf", -- Siltbreaker
 		"particles/units/heroes/hero_kunkka/kunkka_spell_torrent_bubbles.vpcf", -- Siltbreaker
