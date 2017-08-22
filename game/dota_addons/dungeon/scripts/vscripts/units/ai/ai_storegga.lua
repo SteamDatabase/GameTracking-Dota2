@@ -7,6 +7,8 @@ function Spawn( entityKeyValues )
 		return
 	end
 
+	thisEntity:AddNewModifier( nil, nil, "modifier_invulnerable", { duration = -1 } )
+
 	SlamAbility = thisEntity:FindAbilityByName( "storegga_arm_slam" )
 	GrabAbility = thisEntity:FindAbilityByName( "storegga_grab" )
 	ThrowAbility = thisEntity:FindAbilityByName( "storegga_grab_throw" )
@@ -27,7 +29,11 @@ function StoreggaThink()
 	end
 
 	if thisEntity.bStarted == false then
-		return 1
+		return 0.1
+	elseif ( not thisEntity.bInitialInvulnRemoved ) then
+		thisEntity:RemoveModifierByName( "modifier_invulnerable" )
+		--print( "removed invuln modifier from Storegga boss" )
+		thisEntity.bInitialInvulnRemoved = true
 	end
 
 	if thisEntity:IsChanneling() then

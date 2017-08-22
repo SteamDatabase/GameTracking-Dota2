@@ -17,6 +17,10 @@ end
 
 function modifier_weather_dummy_passive:OnCreated( kv )
 	if IsServer() then
+		if ( self:GetParent():GetUnitName() == "npc_dota_holdout_truesight_dummy" ) then
+			self:GetParent():AddNewModifier( self:GetParent(), nil, "modifier_truesight_aura", { duration = -1, radius = 160 } )
+		end
+
 		self:GetParent():AddNewModifier( nil, nil, "modifier_disable_aggro", { duration = -1 } )
 	end
 end

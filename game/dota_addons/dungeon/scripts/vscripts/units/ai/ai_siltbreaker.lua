@@ -18,6 +18,8 @@ function Spawn( entityKeyValues )
 			return
 		end
 
+		thisEntity:AddNewModifier( nil, nil, "modifier_invulnerable", { duration = -1 } )
+
 		thisEntity.abilities =
 		{
 			hSprint = thisEntity:FindAbilityByName( "siltbreaker_sprint" ),
@@ -82,8 +84,12 @@ function SiltbreakerThink()
 		return 0.1
 	end
 
-	if thisEntity.bStarted ~= true then
+	if thisEntity.bStarted == false then
 		return 0.1
+	elseif ( not thisEntity.bInitialInvulnRemoved ) then
+		thisEntity:RemoveModifierByName( "modifier_invulnerable" )
+		--print( "removed invuln modifier from silt boss" )
+		thisEntity.bInitialInvulnRemoved = true
 	end
 
 	if ( not thisEntity.bInitAfterStart ) then

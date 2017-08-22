@@ -938,6 +938,7 @@ function CDungeon:OnQuestCompleted( questZone, quest )
 		local hLogicRelay = Entities:FindByName( nil, quest.szCompletionLogicRelay )
 		if hLogicRelay then
 			hLogicRelay:Trigger()
+			print( "triggered relay named " .. quest.szCompletionLogicRelay )
 		end
 
 		local Heroes = HeroList:GetAllHeroes()

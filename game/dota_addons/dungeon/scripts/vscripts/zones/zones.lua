@@ -342,12 +342,12 @@ function CDungeonZone:SpawnSquadUnit( npcData, nTeam, hSpawner, sState, nMaxSpaw
 	if nMaxSpawnDistance == nil then
 		nMaxSpawnDistance = 0
 	end
-	local vUnitSpawnPos = vSpawnerPos + RandomVector( RandomFloat( 25, nMaxSpawnDistance ) )
+	local vUnitSpawnPos = vSpawnerPos + RandomVector( RandomFloat( 0, nMaxSpawnDistance ) )
 
 	local nAttempts = 0
 	-- Verify path is clear from spawner to desired spawn loc (give up after a few, so we can't get stuck)
 	while ( ( not GridNav:CanFindPath( vSpawnerPos, vUnitSpawnPos ) ) and ( nAttempts < 5 ) ) do
-		vUnitSpawnPos = vSpawnerPos + RandomVector( RandomFloat( 25, nMaxSpawnDistance ) )
+		vUnitSpawnPos = vSpawnerPos + RandomVector( RandomFloat( 0, nMaxSpawnDistance ) )
 		nAttempts = nAttempts + 1
 		--print( "Verify path is clear from spawner to desired spawn loc, attempt #" .. nAttempts )
 	end

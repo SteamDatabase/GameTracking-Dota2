@@ -11,6 +11,10 @@ function Spawn( entityKeyValues )
 		return
 	end
 
+	if ( thisEntity:GetUnitName() == "npc_dota_creature_amoeba_boss" ) then
+		thisEntity:AddNewModifier( nil, nil, "modifier_invulnerable", { duration = -1 } )
+	end
+
 	FuseAbility = thisEntity:FindAbilityByName( "amoeba_fuse" )
 	BlobLaunchAbility = thisEntity:FindAbilityByName( "amoeba_blob_launch" )
 	BlobJumpSmashAbility = thisEntity:FindAbilityByName( "amoeba_boss_jump_splatter" )
@@ -33,6 +37,10 @@ function AmoebaThink()
 
 	if _G.hBossAmoeba ~= nil and _G.hBossAmoeba.bStarted ~= true then
 		return 1
+	elseif ( not thisEntity.bInitialInvulnRemoved ) and ( thisEntity:GetUnitName() == "npc_dota_creature_amoeba_boss" ) then
+		thisEntity:RemoveModifierByName( "modifier_invulnerable" )
+		--print( "removed invuln modifier from Amoeba boss" )
+		thisEntity.bInitialInvulnRemoved = true
 	end
 
 	if thisEntity.bCooldownsFlipped == false then

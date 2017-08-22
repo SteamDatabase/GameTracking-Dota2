@@ -2951,6 +2951,7 @@ _G.ZonesDefinition =
 				nCompleteLimit = 4,
 				RewardXP = 0,
 				RewardGold = 0,
+				szCompletionLogicRelay = "crypt_holdout_exit_bugfix_relay",
 			},
 			{
 				szQuestName = "escape_crypt_holdout",
@@ -3185,8 +3186,20 @@ _G.ZonesDefinition =
 							nCount = 1,
 						},
 					},
-					nMaxSpawnDistance = nSQUADMEMBER_MAX_SPAWN_DIST,
+					nMaxSpawnDistance = 0,
 					szSpawnerName = "crypt_holdout_vision_dummy",
+				},
+				TruesightDummies =
+				{
+					NPCs = 
+					{
+						{
+							szNPCName = "npc_dota_holdout_truesight_dummy",
+							nCount = 1,
+						},
+					},
+					nMaxSpawnDistance = 0,
+					szSpawnerName = "crypt_holdout_truesight_dummy",
 				},
 			},
 			Random = 

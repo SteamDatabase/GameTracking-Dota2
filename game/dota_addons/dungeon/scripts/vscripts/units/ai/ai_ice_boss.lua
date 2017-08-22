@@ -22,6 +22,8 @@ function Spawn( entityKeyValues )
 		return
 	end
 
+	thisEntity:AddNewModifier( nil, nil, "modifier_invulnerable", { duration = -1 } )
+
 	thisEntity.hShatterProjectile = thisEntity:FindAbilityByName( "ice_boss_shatter_projectile" )
 	thisEntity.hFlyingShatterProjectile = thisEntity:FindAbilityByName( "ice_boss_flying_shatter_blast" )
 	thisEntity.hTakeFlight = thisEntity:FindAbilityByName( "ice_boss_take_flight" )
@@ -66,8 +68,12 @@ function IceBossThink()
 		return 0.5
 	end
 
-	if thisEntity.bStarted ~= true then
-		return 0.5
+	if thisEntity.bStarted == false then
+		return 0.1
+	elseif ( not thisEntity.bInitialInvulnRemoved ) then
+		thisEntity:RemoveModifierByName( "modifier_invulnerable" )
+		--print( "removed invuln modifier from ice boss" )
+		thisEntity.bInitialInvulnRemoved = true
 	end
 
 	if thisEntity:FindModifierByName( "modifier_ice_boss_land" ) ~= nil then
