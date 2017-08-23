@@ -32,8 +32,8 @@ if GetMapName() == "ep_2" or GetMapName() == "ep_2_alt" then
 end
 
 LinkLuaModifier( "modifier_boss_intro", "modifiers/modifier_boss_intro", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_boss_inactive", "modifiers/modifier_boss_inactive", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_pre_teleport", "modifiers/modifier_pre_teleport", LUA_MODIFIER_MOTION_NONE )
-LinkLuaModifier( "modifier_boss_intro", "modifiers/modifier_boss_intro", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_command_restricted", "modifiers/modifier_command_restricted", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_npc_dialog", "modifiers/modifier_npc_dialog", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_npc_dialog_notify", "modifiers/modifier_npc_dialog_notify", LUA_MODIFIER_MOTION_NONE )

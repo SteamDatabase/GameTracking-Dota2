@@ -135,5 +135,10 @@ function CDungeon:ModifierGainedFilter( filterTable )
 		return false
 	end
 
+	if szBuffName == "modifier_bloodseeker_rupture" and hParent ~= nil and hParent.bBoss == true then
+		--print( "filtered out rupture from boss" )
+		return false
+	end
+
 	return true
 end

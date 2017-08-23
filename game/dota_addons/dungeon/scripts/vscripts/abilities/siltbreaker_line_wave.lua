@@ -77,7 +77,7 @@ end
 
 function siltbreaker_line_wave:OnProjectileHit( hTarget, vLocation )
 	if IsServer() then
-		if hTarget ~= nil and ( not hTarget:IsMagicImmune() ) and ( not hTarget:IsInvulnerable() ) then
+		if hTarget ~= nil and hTarget:IsRealHero() and ( not hTarget:IsMagicImmune() ) and ( not hTarget:IsInvulnerable() ) then
 			hTarget:AddNewModifier( self:GetCaster(), self, "modifier_siltbreaker_bubble", { duration = -1 } )
 			EmitSoundOn( "Siltbreaker.LineWave.Impact", hTarget )
 

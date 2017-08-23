@@ -6,7 +6,7 @@ function OnStartTouch( trigger )
 	local gamemode = GameRules.Dungeon
 
 	gamemode.nSiltArenaPlatformActivators = gamemode.nSiltArenaPlatformActivators + 1
-	print( "activators incremented, activators == " .. gamemode.nSiltArenaPlatformActivators )
+	--print( "activators incremented, activators == " .. gamemode.nSiltArenaPlatformActivators )
 
 	-- We only want one of these triggers to make us think
 	if ( not gamemode.bSiltArenaPlatformsThinking ) then
@@ -22,7 +22,7 @@ function OnEndTouch( trigger )
 	local gamemode = GameRules.Dungeon
 
 	gamemode.nSiltArenaPlatformActivators = gamemode.nSiltArenaPlatformActivators - 1
-	print( "Decremented activators, activators == " .. gamemode.nSiltArenaPlatformActivators )
+	--print( "Decremented activators, activators == " .. gamemode.nSiltArenaPlatformActivators )
 
 	if gamemode.nSiltArenaPlatformActivators < 0 then
 		gamemode.nSiltArenaPlatformActivators = 0
@@ -56,8 +56,9 @@ function SiltArenaPlatformThink()
 	if gamemode.nSiltArenaPlatformActivators >= nPlayerHeroesAlive then
 		OpenExitGate()
 		CloseEntryGate()
-		print( "SiltArenaPlatformThink had enough activators to trigger stuff" )
+		--print( "SiltArenaPlatformThink had enough activators to trigger stuff" )
 
+		UTIL_RemoveImmediate( thisEntity )
 		return -1
 	end
 
@@ -73,8 +74,24 @@ function OpenExitGate()
 		print( "ERROR: No trigger relay found" )
 		return
 	end
-	print( "Triggering relay named " .. szExitRelayName )
+	--print( "Triggering relay named " .. szExitRelayName )
 	hExitGateRelay:Trigger()
+
+	-- Remove Silt's modifier_boss_inactive
+	local hSilt = nil
+	local vPos = Vector( 10271, -11657, 384 )
+	local hCreatures = FindUnitsInRadius( DOTA_TEAM_GOODGUYS, vPos, nil, 2000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_INVULNERABLE + DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD, FIND_CLOSEST, false )
+	for _, hCreature in pairs( hCreatures ) do
+		if ( hCreature ~= nil ) and ( hCreature:GetUnitName() == "npc_dota_creature_siltbreaker" ) then
+			hSilt = hCreature
+			--print( "found silt" )
+		end
+	end
+
+	if hSilt then
+		hSilt:RemoveModifierByName( "modifier_boss_inactive" )
+		--print( "removed modifier_boss_inactive from " .. hSilt:GetUnitName() )
+	end
 end
 
 ---------------------------------------------------------------------------------
@@ -86,7 +103,7 @@ function CloseEntryGate()
 		print( "ERROR: No trigger relay named " .. szEntryRelayName )
 		return
 	end
-	print( "Triggering relay named " .. szEntryRelayName )
+	--print( "Triggering relay named " .. szEntryRelayName )
 	hEntryGateRelay:Trigger()
 end
 
