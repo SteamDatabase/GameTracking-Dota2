@@ -18,7 +18,10 @@ function Spawn( entityKeyValues )
 			return
 		end
 
-		thisEntity:AddNewModifier( nil, nil, "modifier_boss_inactive", { duration = -1 } )
+		thisEntity.bHasOwner = ( thisEntity:GetOwnerEntity() ~= nil )
+		if thisEntity.bHasOwner == false then
+			thisEntity:AddNewModifier( nil, nil, "modifier_boss_inactive", { duration = -1 } )
+		end
 
 		thisEntity.abilities =
 		{
@@ -93,7 +96,8 @@ function SiltbreakerThink()
 	end
 
 	local fDistFromSpawn = ( thisEntity:GetOrigin() - thisEntity.fOrigSpawnPos ):Length2D()
-	if fDistFromSpawn > 7000 then
+
+	if ( fDistFromSpawn > 7000 ) and ( thisEntity.bHasOwner == false ) then
 		FindClearSpaceForUnit( thisEntity, thisEntity.fOrigSpawnPos, true )
 		return 0.1
 	end

@@ -704,10 +704,9 @@ _G.ZonesDefinition =
 				RewardGold = 600,
 				Activators = 
 				{
-					{
-						Type = QUEST_EVENT_ON_DIALOG,
-						szNPCName = "npc_dota_elon_tusk",
-						nDialogLine = 1,
+					{	
+						Type = QUEST_EVENT_ON_ENEMY_KILLED,
+						szNPCName ="npc_dota_creature_big_bear",			
 					},
 				},
 				Completion =

@@ -383,6 +383,22 @@ function CDungeon:OnEntityKilled_EnemyCreature( event )
 				else
 					print( string.format( "CDungeon:OnEntityKilled_EnemyCreature - ERROR: Relay %s not found", szRelayName ) )
 				end
+
+				-- Remove all the rocks so they can't block the players' path
+				local neutrals = FindUnitsInRadius( DOTA_TEAM_NEUTRALS, hDeadCreature:GetOrigin(), hDeadCreature, 7000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, 0, false )
+				for _, neutral in pairs ( neutrals ) do
+					if neutral ~= nil and ( neutral:GetUnitName() == "npc_dota_storegga_rock" or neutral:GetUnitName() == "npc_dota_storegga_rock2" or neutral:GetUnitName() == "npc_dota_storegga_rock3" ) then
+						local fModelScale = neutral:GetModelScale()
+						local fParticleRadius = fModelScale * 200
+						local vOffset = Vector( 0, 100, 0 )
+						local nFXIndex = ParticleManager:CreateParticle( "particles/dev/library/base_aoe_ring_dust.vpcf", PATTACH_WORLDORIGIN, nil )
+						ParticleManager:SetParticleControl( nFXIndex, 0, neutral:GetOrigin() + vOffset )
+						ParticleManager:SetParticleControl( nFXIndex, 1, Vector( fParticleRadius, fParticleRadius, fParticleRadius ) )
+						ParticleManager:ReleaseParticleIndex( nFXIndex )
+
+						neutral:ForceKill( false )
+					end
+				end
 			end
 
 			if hDeadCreature:GetUnitName() == "npc_dota_creature_amoeba_boss" then
