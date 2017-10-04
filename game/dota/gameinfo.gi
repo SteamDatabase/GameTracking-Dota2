@@ -186,53 +186,12 @@
 			"envmap"	"0"	// Dota doesn't generate environment maps from the map
 			"gridnav"	"1"	// Dota generates its grid navigation data by default
 		}
+		"DotaTileGrid"	"1"
 	}
 
 	RenderPipelineAliases
 	{
 		"Tools"			"Dota:Forward"
 		"EnvMapBake"	"Dota"
-	}
-	
-	Source1Import
-	{
-		"importmod"			"dota"
-		"importdir"			"..\dota"
-		"ignoreParticleManifest" "1"	
-		"getSkinningFromLod0ByDefault" "0"
-		"createStaticOverlays" "1"	// info_overlay entities will be converted to static overlay nodes instead of preserved as Info_overlay entities
-		"changelist"	"2927753"	
-		"oldchangelist"	"2926660"	
-		"oldchangelist"	"2874269"
-		"oldchangelist"	"2864317"
-		"oldchangelist"	"2744452"
-		"oldchangelist"	"2628240"
-		"oldchangelist"	"2524630"
-		"oldchangelist"	"2383509"
-		"oldchangelist"	"2264042"
-		"oldchangelist"	"2246563"
-		"oldchangelist"	"2192759"
-		"oldchangelist"	"2192468"
-		"oldchangelist"	"2187054"
-		"oldchangelist"	"2149856"
-		"oldchangelist"	"2141840"
-		"oldchangelist"	"2141113"
-		"oldchangelist"	"2090590"
-		"oldchangelist"	"2085272"
-		"oldchangelist" "2067624"
-		"oldchangelist" "2051272"
-		"oldchangelist" "1803612"
-
-		// These are files that are synced ahead of the current change list
-		// To handle bug fixes from source 1
-
-		// All exception files must be under the depot game or content root paths
-		// These are needed to build a fake local filename to see if it is in 
-		// the user's clientspec.
-		depotRootPaths
-		{
-			"game"		"//dota/staging/game/dota/"
-			"content"	"//dota/staging/content/dota/"
-		}
 	}
 }
