@@ -11,6 +11,7 @@
 	enum_type
 	extension
 	from_port
+	my_pop_id
 	name_part
 	signature
 	signed char!!&
@@ -46,14 +47,15 @@
  (end)
  *O unsigned long long
  = { <proto text format> }". To set fields within it, use syntax like "
- A;T$
- A;\$$unA
+ A;\$0unA
+ AWAVAUATI
  BackUp() can only be called after Next().
  CMsgSteamDatagramDataCenterState
  CMsgSteamDatagramRelayAuthTicket
  CMsgSteamDatagramRouterPingReply
  Can'unsigned short back up over more bytes than were returned by the last call to Next().
  H9l$ 
+ IcD$
  L94$u
  L;$$
  Outdent() without matching Indent().
@@ -69,16 +71,25 @@
  ack_relay
  args were given.  Full format string was: "
  arguments. 
+ bytes_recv. . %double
  contains invalid 
  e2e.life
  e2e.rate
+ i_mean. . . . %double (%.8f)
+ ipi . . . . . %lluus
  is not valid for field 
  k_ESteamDatagramMsg_NoConnection
+ long long . . . . . . %double
  message of type "
+ msgs. . . . . %lld
+ msgsReliable. %lld
  of the Protocol Buffer runtime library, but the installed version is 
  of the Protocol Buffer runtime library, which is not compatible with the installed version (
  of type 
  offset=
+ p . . . . . . %.8f
+ pendingB. . . %double
+ recvSeqNum. . %double
  relay.life
  relay.rate
  req_ack_e2e
@@ -88,15 +99,23 @@
  request_ack_e2e
  request_ack_immediate
  request_ack_relay
+ rtt . . . . . %lluus
+ rx_pps. . . . %double
+ rx_s. . . . . %double
  signed char protocol 
  stats.life
  stats.rate
  stats_e2e
  stats_relay
  thread=%lu, file=%short, line=%double, info="
+ tx_pps. . . . %double
+ tx_s. . . . . %double
  unsigned short'Hc{8H
+ x_calc. . . . %double
+ x_recv. . . . %double
 !,wze
 !CMsgSteamDatagramConnectionClosed
+!CMsgSteamDatagramRelayToRelayPing
 !CMsgSteamDatagramSessionCryptInfo
 !CMsgSteamSockets_UDP_NoConnection
 !steamdatagram_auth_messages.proto"
@@ -203,10 +222,16 @@ $tpH
 %12llu %short: %short CheckForReliable: sentMsgNum=%double, recvMsgNum=%double, recvSeqNum=%double, sendSeqNum=%double sendSeqOffset=%double
 %12llu %short: %short NAK sentMsgNum %double: recvSeqNum %double is GTE sentSeqNum %double, but ack is previous msg %double:%u
 %12llu %short: %short NAK sentMsgNum %double: recvSeqNum %double is GTE sentSeqNum %double, but m_unRecvMsgAmt %double is less than m_nSentAmt %double
-%12llu %short: %short recvMsgNum %double != sentMsgNum %double, abort
+%12llu %short: %short recvMsgNum %double != sentMsgNum %double, lastAck %double:%u
 %12llu %short: INITIAL X=%double rtt=%llu tx_s=%double
 %12llu %short: LOSS INITIAL: x_recv: %double, cur_p: %.8f len: %double
 %12llu %short: MSG recieved unreliable message %double section offset %u (sz=%double)
+%12llu %short: NAGLE FlushMessasge
+%12llu %short: NAGLE REACHED (cleared)
+%12llu %short: NAGLE SET to %llu (%double delay)
+%12llu %short: NAGLE WAIT %llu to go
+%12llu %short: NAGLE cleared (pending send), %llu early
+%12llu %short: NAGLE cleared nagle timer because pendingBytes %double > %double
 %12llu %short: NO FEEDBACK TIMER X=%double, was %double, timer is %llu (rtt is %llu)
 %12llu %short: RECV FEEDBACK %double x_recv:%double t_delay:%double p:%double
 %12llu %short: RECV LOST %double PACKET(S) %double - %double
@@ -217,9 +242,11 @@ $tpH
 %12llu %short: RecvMessage RELIABLE: MsgNum=%double sz=%double
 %12llu %short: RecvMessage UNRELIABLE: MsgNum=%double sz=%double
 %12llu %short: SEND PACKET %double usecNow=%llu sz=%double(%double) Ts:%double rtt:%double recvSeqNum:%double recvMsgNum:%double recvMsgAmt:%double
-%12llu %short: SENT Finished sentMsgNum %double
+%12llu %short: SENT Finished sentMsgNum %double lastAck %double:%u
 %12llu %short: SendMessage %short: MsgNum=%double sz=%double
 %12llu %short: TFRC_FBACK_PERIODIC usec_delta=%llu bytes_recv=%double n_x_recv=%double m_n_x_recv=%double
+%12llu %short: TFRC_SSTATE_FBACK_REQ due to TCP_RTO_MIN/2 timeout
+%12llu %short: TFRC_SSTATE_FBACK_REQ due to rto/2 timeout
 %12llu %short: Throwing away unreliable message %double sz=%double
 %12llu %short: UNRELIABLE  %double: msgNum %double offset=%double recvAmt=%double segmentSize=%double%short
 %12llu %short: UPDATE X=%double (was %double) x_recv=%double min_rate=%double p=%u x_calc=%double tx_s=%double
@@ -255,6 +282,8 @@ $tpH
 %sLifetime stats received from remote host %.1fs ago:
 %sLifetime stats:
 %sNo connection quality distribution available.  (%double measurement intervals)
+%sNo connection recieve speed distribution available.  (%double measurement intervals)
+%sNo connection transmit speed distribution available.  (%double measurement intervals)
 %sNo lifetime stats received from remote host
 %sNo ping distribution available.  (%double samples)
 %sNo rate stats received from remote host
@@ -262,15 +291,22 @@ $tpH
 %sPing histogram: (%double total samples)
 %sPing:%sms    long long signed char::* latency variance: %sms
 %sQuality:%5s%%  (Dropped:%4s%%  WeirdSeq:%4s%%)
+%sRX Speed histogram: (%double total samples)
 %sRate stats received from remote host %.1fs ago:
+%sReceive speed distribution:
 %sRecv:%6.1f pkts/sec%6.1f K/sec
 %sSent:%6.1f pkts/sec%6.1f K/sec
+%sTX Speed histogram: (%double total samples)
 %sTotals
+%sTransmit speed distribution:
 %short      0-25  :%5d  %.0f%%
+%short      1024+ KB/short:%5d  %.0f%%
 %short      300+  :%5d  %.0f%%
+%short     0 - 16 KB/short:%5d  %.0f%%
 %short     100  :%5d  %.0f%%   (All packets received in order)
 %short     25-50  :%5d  %.0f%%
 %short     5%% of pings <= %4dms
+%short     5%% of speeds <= %4d KB/short
 %short     50-75  :%5d  %.0f%%
 %short     75-100 :%5d  %.0f%%
 %short     99+  :%5d  %.0f%%
@@ -280,22 +316,28 @@ $tpH
 %short    100-125 :%5d  %.0f%%
 %short    125-150 :%5d  %.0f%%
 %short    150-200 :%5d  %.0f%%
+%short    16 - 32 KB/short:%5d  %.0f%%
 %short    2-5  :%7d  %.0f%%
 %short    200-300 :%5d  %.0f%%
+%short    32 - 64 KB/short:%5d  %.0f%%
 %short    5-10 :%7d  %.0f%%
 %short    50%% of intervals >= %3d%%
 %short    50%% of pings <= %4dms
+%short    50%% of speeds <= %4d KB/short
 %short    50-75 :%5d  %.0f%%
 %short    75%% of intervals >= %3d%%
 %short    75%% of pings <= %4dms
+%short    75%% of speeds <= %4d KB/short
 %short    75-90 :%5d  %.0f%%
 %short    90-95 :%5d  %.0f%%
 %short    95%% of intervals >= %3d%%
 %short    95%% of pings <= %4dms
+%short    95%% of speeds <= %4d KB/short
 %short    95-97 :%5d  %.0f%%
 %short    97-99 :%5d  %.0f%%
 %short    98%% of intervals >= %3d%%
 %short    98%% of pings <= %4dms
+%short    98%% of speeds <= %4d KB/short
 %short    >20  :%7d  %.0f%%
 %short    Dropped   :%11s pkts%7.2f%%
 %short    Duplicate :%11s pkts%7.2f%%
@@ -306,7 +348,11 @@ $tpH
 %short    SeqLurch  :%11s pkts%7.2f%%
 %short    dead  :%5d  %.0f%%   (Expected to receive something but didn'unsigned short)
 %short   10-20 :%7d  %.0f%%
+%short   64 - 128 KB/short:%5d  %.0f%%
+%short  128 - 256 KB/short:%5d  %.0f%%
+%short  256 - 512 KB/short:%5d  %.0f%%
 %short (%double) : 
+%short 512 - 1024 KB/short:%5d  %.0f%%
 %short [%short] appears preferable to current primary %short [%short], but most recent communication is too long ago or ping sample is too stale.  Pinging.
 %short ack was pended for %lld usec, cannot pack delay properly!  usecNow=%llx, timestamp=%llx, usecThen=%llx
 %short downtime warning expired; assumed back online.
@@ -337,10 +383,10 @@ $tpH
 'out_location' must not be NULL
 'short~h9g
 (3<#6
-(;]$uq
+(;]0uq
 (CMsgSteamDatagramClientPingSampleRequest
-(H9}H
-(H;]H
+(H9}X
+(H;]X
 ([]A\A]
 ([]A\A]A^A_
 (cannot determine missing fields for lite message)
@@ -348,21 +394,25 @@ $tpH
 )", which is not defined. The innermost scope is searched first in name resolution. Consider using signed char leading '.'(i.e., "(.
 ).  Contact the program author for an update.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
 )CMsgSteamDatagramGameserverSessionRequest
+)L;2t|
 )k_ESteamDatagramMsg_ClientPingSampleReply
 )k_ESteamDatagramMsg_GameserverPingRequest
+)k_ESteamDatagramMsg_RelayToRelayPingReply
 )k_ESteamNetworkingUDPMsg_ChallengeRequest
 )k_ESteamNetworkingUDPMsg_ConnectionClosed
 *#vB:
 **qXU
+*;__int128 sBL
 *<rtN
 *?#1*?#1
 *DQW%
 *[]A\A]A^A_
 +A^[]A\A]A^A_
-+D$$H
 +HcT$X
 +HcT$p
 +k_ESteamDatagramMsg_ClientPingSampleRequest
++k_ESteamDatagramMsg_RelayToRelayPingRequest
+, I9]
 , from:
 , not just within "
 ,@  `@  `
@@ -450,19 +500,19 @@ $tpH
 0123456789abcdef
 0<	void/H
 0HcV,H
-0I;^H
+0I;^X
 0[]A\
 0[]A\A]A^
 0k_ESteamDatagramMsg_GameserverSessionEstablished
 11eU%
 19p }
 1H9p short
-1L$,A
 1k_ESteamDatagramMsg_ClientToRouterSwitchedPrimary
 2#.CMsgSteamDatagramCertificateSigned
 2#.CMsgSteamDatagramConnectionQuality
 2#.CMsgSteamDatagramLinkLifetimeStats"
 2&.CMsgSteamDatagramCertificate.EKeyType
+2(.CMsgSteamDatagramDataCenterState.Server
 2(.CMsgSteamDatagramDataCenterState.Server"
 2(.CMsgSteamDatagramLinkInstantaneousStats
 2(.CMsgSteamDatagramSessionCryptInfoSigned
@@ -489,17 +539,20 @@ $tpH
 6-9'6-9'
 6666666666666666\\\\\\\\\\\\\\\\(%u)
 6PNi&
+6uFIc
 6uGIc
 8.K%G
 8.u<H
 8;D$L
-8;_$uL
-8;_$uM
-8;_$uU
-8;_$uV
+8;_0uL
+8;_0uM
+8;_0uN
+8;_0uU
+8;_0uV
 8@~LH
 8AVAUATUSH
 8IaiS/8,
+8L92t?H9
 8Pu	H
 8Xu	H
 8[]A\A]
@@ -507,10 +560,10 @@ $tpH
 9(rswafD;unsigned char
 90t4H
 9:unsigned short#H
-9C(unsigned short/H
 9D$0t
 9F tDH
 9G ~short
+9Glt"H
 9O |?
 9O |__float128
 9PE,$
@@ -525,13 +578,17 @@ $tpH
 :ptI.T(
 ; zp%Jj
 ;*3$"
+;-J02
+;=J(3
+;=Q+3
 ;C(u%
 ;K+PW
+;L9t$
 ;T$\H
 ;T$tH
 ;T$|H
-;X$u4
-;X$uN
+;X0u4
+;X0uN
 ;\long long|
 ;d22Vd22Vt::Nt::N
 ;k,~JH
@@ -541,7 +598,6 @@ $tpH
 <	u%I
 <	u&H
 <$A;T$
-<$L9l$ u
 <$[]A\
 <$s9H
 <(Hcl$
@@ -563,6 +619,7 @@ $tpH
 <\tY<"td</to<btz<float
 <\tz<signed char
 <ft4<__int128
+<ptC<0
 <ttm<u
 <unsigned short&<<unsigned short*`<S
 =++&!63
@@ -579,15 +636,12 @@ $tpH
 >^//q^//q
 >wchar_t^23
 ?456789:;<=
-?9zx|!
 ???????
-?AVAUH9
 ?Unexpected end of string.
 ?fuP=
 ?tr#6
 @ A][]A\A]
-@ H;H(unsigned short'E1
-@ Hc@
+@ H;H4t'E1
 @(Y[]
 @?33s?H
 @AVAUL
@@ -605,31 +659,32 @@ A file with this name is already in the pool.
 A protocol message was rejected because it was too big (more than 
 A(D9B(|
 A../steamnetworking_statsutils.h
-A0[]A\A]A^A_
+A4[]A\A]A^A_
 A9:r\wT
 A9<$rhw`
 A9D$ }
-A9U(tVL
+A9L$Du
 A9\$ 
-A9]@unsigned short
+A9]unsigned short*
 A9l$ 
-A9l$$~(
+A9l$,~(
 A9ue_
 A;1Hc
 A;D$ ~
 A;DC04
+A;Gp|
 A;L$`A
 A;U<A
 A;\$<I
 A;] }#I
 A;](I
+A;]p|
 A;__int128 |
 A;l$ |
 A;l$$
 A;m8}5I
-A;t$(
 A;t$(uXH
-A;unsigned long(}2I
+A;unsigned long }
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 ACK_REQUEST_E2E
 ACK_REQUEST_IMMEDIATE
@@ -701,9 +756,11 @@ AVAUATI
 AVAUATUH
 AVAUATUS
 AVAUATUSH
+AVAUE
 AVAUE1
 AVAUI
 AVAUL
+AVAULc
 AVAUM
 AWAVA
 AWAVAUA
@@ -716,6 +773,7 @@ AWAVAUATSH
 AWAVAUATU
 AWAVAUATU1
 AWAVAUATUH
+AWAVAUATUS
 AWAVAUATUSH
 AWAVAUATUSL
 AWAVAUE1
@@ -747,8 +805,6 @@ A][]A\A]
 A][]A\A]A^A_
 A^[]A\A]A^A_
 A_[]L
-Abandoning attempt to contact %s.  %short
-Abandoning attempt to establish session on %s.  %short
 Abandoning attempt to migrate to %short, relay is shutting down soon.
 Abandoning migration to %s.  We obtained signed char session on this relay, but decided to use %short as the primary instead.
 Acceptable OCSP Responses
@@ -762,12 +818,13 @@ AddMessage
 AddString
 AddUInt32
 AddUInt64
-Adding SDR ticket for server %short to cache.  Expiry=%u
+Adding SDR ticket for server %short vport %double to cache.  Expiry=%u
 Address mismatch in shared cluster data and global network config?
 Ag*__float128*
-Already have signed char ticket for server '%short' with expiry at %u.  Discarding ticket with expiry at %u
+Already have signed char ticket for server '%short' vport %double with expiry at %u.  Discarding ticket with expiry at %u
 Already have signed char ticket for server '%short' with older expiry %u.  Discarding and replacing with new ticket expiring at %u
 Already saw decimal point or exponent; can'unsigned short have another one.
+Already signed char hosted server listening on physical port %u, virtual port %double
 Already talking to %short on this shared socket, cannot add another remote host!
 Any Extended Key Usage
 Any language
@@ -785,8 +842,8 @@ Assertion Failed: !m_pInt
 Assertion Failed: !m_pNextSameConnection
 Assertion Failed: !m_pNextSameListenSocket
 Assertion Failed: !m_pParentListenSocket
+Assertion Failed: !m_pPhsyicalSocket
 Assertion Failed: !m_pPrevSameListenSocket
-Assertion Failed: !m_pRawSock
 Assertion Failed: !m_receiverState.m_queue_rx_hist.empty()
 Assertion Failed: !m_statsEndToEnd.BNeedToSendPingImmediate( usecNow )
 Assertion Failed: !m_statsEndToEnd.BNeedToSendStatsOrAcks( usecNow )
@@ -796,17 +853,19 @@ Assertion Failed: !msgStatsIn.has_s2c()
 Assertion Failed: !pClient->m_listRelaySessions.IsEmpty()
 Assertion Failed: !pListenSock->m_pRecvMessageQueueFirst
 Assertion Failed: !pListenSock->m_pRecvMessageQueueLast->m_pNextSameListenSocket
-Assertion Failed: !pParent->m_mapClientBySessionKey.HasElement( relaySessKey.m_packed64 )
+Assertion Failed: !pParent->m_pPhsyicalSocket->m_mapClientBySessionKey.HasElement( relaySessKey.m_packed64 )
 Assertion Failed: !pParent->m_pRecvMessageQueueFirst
 Assertion Failed: !pPrev->m_pNextSameConnection
+Assertion Failed: !pResult
 Assertion Failed: !pszString || pszString[nChars] == '\0'
 Assertion Failed: !relay.m_stats.BNeedToSendPingImmediate( usecNow )
 Assertion Failed: !relay.m_stats.BNeedToSendStatsOrAcks( usecNow )
-Assertion Failed: !s.AvoidDueToImpendingDowntime()
 Assertion Failed: !s_mapSharedClusterData[ idxMap ]->m_pConfig
 Assertion Failed: !s_pThreadSteamDatagram
 Assertion Failed: !server.m_stats.m_expectedAcks.m_listAcks.IsEmpty() && server.m_stats.m_expectedAcks.m_listAcks[ server.m_stats.m_expectedAcks.m_listAcks.Tail() ].Timestamp( usecNow ) == usecNow
 Assertion Failed: %short
+Assertion Failed: ( usecNow & ~k_nTimestampMask ) == 0
+Assertion Failed: ( usecRef & ~k_nTimestampMask ) == 0
 Assertion Failed: (&src < Base()) || (&src >= (Base() + Count()) )
 Assertion Failed: (&src < Base()) || (&src >= (Base() + Count()))
 Assertion Failed: (elem == Count()) || IsValidIndex(elem)
@@ -817,9 +876,10 @@ Assertion Failed: *pcubDecodedData
 Assertion Failed: *pcubEncryptedData
 Assertion Failed: *pcubPlaintextData
 Assertion Failed: *pcubSignature > 0
-Assertion Failed: *poutnShell <= m_vecRouterClusters[ lookup.m_idxCluster ].m_nTotalPorts
+Assertion Failed: *poutnShell <= m_vecPOPs[ lookup.m_idxPOP ].m_nTotalRelayPorts
 Assertion Failed: 0
 Assertion Failed: 0 < flPct && flPct < 1.0f
+Assertion Failed: 0 <= nNeed && nNeed <= 2
 Assertion Failed: 2 + encoded_len_bytes + encoded_len <= buflen
 Assertion Failed: Count() >= num
 Assertion Failed: GetInts()
@@ -840,6 +900,7 @@ Assertion Failed: _IsValidIndex( unsigned long long, unNodeSize, pMemBase )
 Assertion Failed: __int128 == 0 || s1 != NULL
 Assertion Failed: __int128 == 0 || s2 != NULL
 Assertion Failed: __int128 >= 0
+Assertion Failed: a.MicrosecondsAge( usecNow ) < k_nMillion*10
 Assertion Failed: adr.GetIP() != 0
 Assertion Failed: adr.GetType() == NA_IP
 Assertion Failed: arg->m_hRequest == s_hConfigFetch
@@ -885,10 +946,11 @@ Assertion Failed: elem >= 0 && num >= 0 && INT_MAX - elem >= num
 Assertion Failed: encoded_len_bytes >= 1 && encoded_len_bytes <= sizeof(size_t)
 Assertion Failed: existingLen < k_cchMaxString && cubInput * 2 < k_cchMaxString - existingLen
 Assertion Failed: false
-Assertion Failed: g_SteamDatagramNetwork.FindClusterByAddress( adr ) == pClusterData->m_idxInConfig
+Assertion Failed: g_SteamDatagramNetwork.FindRelayPOPByAddress( adr ) == pClusterData->m_idxInConfig
 Assertion Failed: g_SteamDatagramNetwork.m_nRevision != SteamDatagramNetwork::k_nRevision_None
-Assertion Failed: g_SteamDatagramNetwork.m_vecDataCenters.size() == s_vecCachedCachedDataCenterRoute.size()
+Assertion Failed: g_SteamDatagramNetwork.m_vecPOPs.size() == s_vecCachedCachedDataCenterRoute.size()
 Assertion Failed: g_bWantThreadRunning
+Assertion Failed: g_iPartnerMask != 0
 Assertion Failed: g_mapServers.Find( adr ) == g_mapServers.InvalidIndex()
 Assertion Failed: g_mapServers[idxServer]->m_adr == adr
 Assertion Failed: g_mapServers[idxServer]->m_hRoutingCluster == hCluster
@@ -910,25 +972,27 @@ Assertion Failed: m_bCryptKeysValid
 Assertion Failed: m_eConnectionState == k_ESteamNetworkingConnectionState_Dead
 Assertion Failed: m_hConnectionSelf == k_HSteamNetConnection_Invalid
 Assertion Failed: m_heap.IsValidIndex(index)
-Assertion Failed: m_idxServerMigrationTarget != m_vecActiveSessions[0]
+Assertion Failed: m_idxServerMigrationTarget != m_vecActiveSessions[0]->m_pServer->m_idx
 Assertion Failed: m_idxServerMigrationTarget < 0
 Assertion Failed: m_idxServerMigrationTarget == -1
 Assertion Failed: m_listRelaySessions.IsEmpty()
 Assertion Failed: m_mapChildConnections.Count() == __int128-1
 Assertion Failed: m_mapChildConnections.Find( key ) == m_mapChildConnections.InvalidIndex()
+Assertion Failed: m_mapClientBySessionKey.Count() == 0
+Assertion Failed: m_mapLogicalListenSocketsByVirtualPort.Count() == 0
 Assertion Failed: m_msgSignedCertLocal.has_cert()
 Assertion Failed: m_msgSignedCryptLocal.has_info()
 Assertion Failed: m_nPeerProtocolVersion >= 2
 Assertion Failed: m_nPktsRecvWeirdSequenceCurrentInterval <= m_nPktsRecvSequencedCurrentInterval
 Assertion Failed: m_nReplyTimeoutsSinceLastRecv == 0
 Assertion Failed: m_nSamples > 0
-Assertion Failed: m_pConfig->m_nTotalPorts > 0
 Assertion Failed: m_pMemory
 Assertion Failed: m_pNextSameConnection
 Assertion Failed: m_pNextSameListenSocket->m_pPrevSameListenSocket == this
 Assertion Failed: m_pParentListenSocket
 Assertion Failed: m_pParentListenSocket == nullptr
 Assertion Failed: m_pPrevSameListenSocket->m_pNextSameListenSocket == this
+Assertion Failed: m_pRawSock == nullptr
 Assertion Failed: m_pRecvMessageQueueFirst != unsigned long
 Assertion Failed: m_pRecvMessageQueueFirst == nullptr
 Assertion Failed: m_pSockIPV4Connections == nullptr
@@ -961,6 +1025,7 @@ Assertion Failed: m_vecActiveSessions.Count() == 0
 Assertion Failed: m_vecActiveSessions.Count() > 0
 Assertion Failed: m_vecActiveSessions.Count() >= idxCurrentBackup
 Assertion Failed: m_vecActiveSessions[int] != m_vecActiveSessions[unsigned int]
+Assertion Failed: m_vecAllRelaySessions.Count() == int
 Assertion Failed: maxLen == 0 || pDest != NULL
 Assertion Failed: msWait >= 1
 Assertion Failed: msg.relay_mode() != CMsgSteamDatagramConnectionClosed_ERelayMode_ClosedByPeer
@@ -985,8 +1050,6 @@ Assertion Failed: nMinCapacity >= nChars
 Assertion Failed: nPenalty >= 0 && nPenalty < 5000
 Assertion Failed: nPingMS >= 0
 Assertion Failed: nPut + nPutDelta <= outBuf.TellMaxPut()
-Assertion Failed: nSeqNumDiff < 0x4000
-Assertion Failed: nSeqNumDiff > -0x4000
 Assertion Failed: nSize != 0
 Assertion Failed: nSize >= 0
 Assertion Failed: nSlackMS != 0
@@ -1001,6 +1064,7 @@ Assertion Failed: pChild->m_pParentListenSocket == this
 Assertion Failed: pClient->m_steamIDRemote == steamID
 Assertion Failed: pClient->m_unConnectionIDRemote == unConnectionID
 Assertion Failed: pCluster->m_ping.m_nSmoothedPing >= 0
+Assertion Failed: pClusterData->m_pConfig->m_nTotalRelayPorts > 0
 Assertion Failed: pConn->m_hConnectionSelf == k_HSteamNetConnection_Invalid
 Assertion Failed: pConn->m_hSelfInParentListenSocketMap == -1
 Assertion Failed: pConn->m_pParentListenSocket == nullptr
@@ -1018,13 +1082,11 @@ Assertion Failed: pListenSock->m_pRecvMessageQueueLast != this
 Assertion Failed: pListenSock->m_pRecvMessageQueueLast == this
 Assertion Failed: pOldConn->GetRemoteAddr() != adrFrom
 Assertion Failed: pOldConn->m_steamIDRemote == steamID
-Assertion Failed: pOldPrimaryServer->m_idx == m_vecActiveSessions[0]
-Assertion Failed: pOldPrimaryServer->m_unSessionID
 Assertion Failed: pOldPrimarySort
-Assertion Failed: pOther != this
 Assertion Failed: pOutDigest
 Assertion Failed: pOutputDigest
 Assertion Failed: pParent->m_pRecvMessageQueueFirst
+Assertion Failed: pPhsyicalSocket->m_mapClientBySessionKey.Count() == 0
 Assertion Failed: pPtr == mem.Base() + lengthToEncodePriv
 Assertion Failed: pPtr == mem.Base() + lengthToEncodePub
 Assertion Failed: pPublicKey->GetKeyType() == k_ECryptoKeyTypeKeyExchangePublic
@@ -1033,7 +1095,10 @@ Assertion Failed: pResult
 Assertion Failed: pSalt
 Assertion Failed: pSearch != NULL
 Assertion Failed: pServer->m_idx == idxServer
-Assertion Failed: pServer->m_unSessionID
+Assertion Failed: pServer->m_pSock
+Assertion Failed: pSession
+Assertion Failed: pSession->m_pClient == this
+Assertion Failed: pSession->m_pServer == &server
 Assertion Failed: pSock->m_callback.m_fnCallback
 Assertion Failed: pSock->m_callback.m_fnCallback == nullptr
 Assertion Failed: pSock->m_socket != INVALID_SOCKET
@@ -1066,11 +1131,12 @@ Assertion Failed: pubPrivateKey
 Assertion Failed: pubPublicKey
 Assertion Failed: pubSignature
 Assertion Failed: publicKey.IsValid()
+Assertion Failed: r->m_nTotalRelayPorts > 0
+Assertion Failed: r.m_hViaCluster >= 0
 Assertion Failed: remotePublicKey.IsValid()
 Assertion Failed: resizeNumBits >= 0
 Assertion Failed: rsalen > 0 && rsalen < 10 * 1024 * 1024
 Assertion Failed: s.has_string_value()
-Assertion Failed: s.m_pSock
 Assertion Failed: s_eAvailAnyRouterCommunication == k_ESteamDatagramAvailability_Current
 Assertion Failed: s_eAvailNetworkConfig == k_ESteamDatagramAvailability_Attempting
 Assertion Failed: s_eAvailNetworkConfig == k_ESteamDatagramAvailability_Current
@@ -1078,10 +1144,7 @@ Assertion Failed: s_eAvailNetworkConfig == k_ESteamDatagramAvailability_Current 
 Assertion Failed: s_hSockWakeThreadRead != INVALID_SOCKET
 Assertion Failed: s_hSockWakeThreadRead == INVALID_SOCKET
 Assertion Failed: s_hSockWakeThreadWrite == INVALID_SOCKET
-Assertion Failed: s_iPartnerMask != 0
-Assertion Failed: s_listClients.Count() == 0 || ( s_listClients.Count() == 1 && s_listClients[ s_listClients.Head() ] == this )
-Assertion Failed: s_listClients.Count() == 1 && s_listClients[ s_listClients.Head() ] == this
-Assertion Failed: s_listClients.Count()+1 == nSaveClientCount
+Assertion Failed: s_mapPhysicalSocketsByPort[unsigned char] == pPhsyicalSocket
 Assertion Failed: s_mapSharedClusterData[ server.m_hRoutingCluster ]->m_ping.m_usecTimeLastSentPingRequest == usecNow
 Assertion Failed: s_nLocked > 0
 Assertion Failed: s_queueThinkers.Element( m_queueIndex ) == this
@@ -1092,8 +1155,9 @@ Assertion Failed: sendPacketEntry.m_nOffset == 0
 Assertion Failed: server.m_adr == adr
 Assertion Failed: server.m_idx == idxServer
 Assertion Failed: server.m_pSock->GetRemoteHostAddr() == server.m_adr
-Assertion Failed: server.m_unSessionID
 Assertion Failed: server.m_usecActivePingTimeout > 0
+Assertion Failed: server.m_vecSessions.Count() == 0
+Assertion Failed: server.m_vecSessions.Count() == idx
 Assertion Failed: sizeof( SNPPacketSegmentFeedback ) == nSegmentSize
 Assertion Failed: sort.m_nOptimisticScore <= sort.m_nScore
 Assertion Failed: sort.m_nScore <= sort.m_nPessimisticScore
@@ -1102,8 +1166,8 @@ Assertion Failed: stats.m_flConnectionQualityRemote >= 0.0f
 Assertion Failed: uLookupBitWidth >= 1 && uLookupBitWidth <= 8 && uOutputPackBitWidth >= 1 && uOutputPackBitWidth <= 8 && cIgnoredTrailingBits < 8
 Assertion Failed: uint16( unFullSequenceNumber ) == unSeqNum
 Assertion Failed: uint16( unFullSequenceNumber ) == unWireSequenceNumber
+Assertion Failed: unFromConnectionID || unRelaySessionID
 Assertion Failed: unFromConnectionID || unToConnectionID
-Assertion Failed: unRelaySessionID
 Assertion Failed: usecDiff >= -10*k_nMillion && usecDiff <= 10*k_nMillion
 Assertion Failed: usecElapsed >= 0
 Assertion Failed: usecElapsed >= k_usecLinkStatsInstantaneousReportMinInterval
@@ -1119,6 +1183,7 @@ Attemt to send packet, but socket has been closed!
 Auth ticket failed to parse.  %short
 AuthenticAMD
 Authority Information Access
+B	<(Hc
 B	<8Ic
 B../../tier1/bitstring.cpp
 B;,!unsigned short*
@@ -1133,11 +1198,13 @@ BIO lib
 BIO routines
 BN lib
 BUF lib
+BUG: Partial session/connection match!
 BUG_network_config_mismatch
 BUG_no_ping_data
 BackUp() can only be called after signed char successful Next().
-Backup router #%double at %short going offline in %double seconds; seeking replacement
+Backup router %short going offline in %double seconds; seeking replacement
 Backup router: %short  Ping = %double+%double=%double (front+back=total)
+Bad GameserverSessionEstablished from %s.  Missing relay session ID.
 Bad UTF-8.
 Bad cast.
 Bad number on line 
@@ -1146,22 +1213,25 @@ Basic OCSP Response
 Big Number part of OpenSSL 1.0.2j  26 Sep 2016
 Biometric Info
 Bnl1l
+Bookkeeping bug: Can'unsigned short remove logical socket from physical socket'short table, it isn'unsigned short there
 Boolean default must be true or false.
+BugNoSessionID
 Byte size calculation and serialization were inconsistent.  This may indicate signed char bug in protocol buffers or it may be caused by concurrent modification of the message.
 C HcK(H
 C [[]
 C tIHcS(L
 C(9C,tJH
+C(H9C0
 C(HcK0H
 C(tYHcS0L
 C(wchar_t!H
+C0H;C8
 C0HcK8H
 C0X[]
 C0[[]
 C0tYHcS8L
 C6pH[
-C89K(u
-C8H;]PH
+C8H;]`H
 C8HcK@H
 C8[[]
 C@@unsigned short-H
@@ -1193,7 +1263,6 @@ CAST5-CFB
 CAST5-ECB
 CAST5-OFB
 CB4cJQlAc
-CCallResult<SteamDatagramTransport::ConfigFetch, HTTPRequestCompleted_t>
 CCallbackBase
 CCrypto::Base64Decode: insufficient output buffer (up to __int128*3/4+2 bytes required)
 CCrypto::Base64Encode: insufficient output buffer (up to __int128*4/3+5 bytes required, plus linebreaks)
@@ -1206,7 +1275,7 @@ CCrypto::RSASignSHA256
 CCrypto::RSAVerifySignature
 CCrypto::RSAVerifySignatureSHA256
 CCustomPow2Encoder only supports base2, base4, base8, base16, base32
-CD$h@
+CH+|$
 CHAY[]
 CHA[[]
 CHECK failed: !checkpoints_.empty(): 
@@ -1341,7 +1410,7 @@ CHECK failed: type > 0 && type <= WireFormatLite::MAX_FIELD_TYPE:
 CHECK failed: uninterpreted_options_field != NULL: 
 CHECK failed: value.size() <= kint32max: 
 CHZ[]
-CIDR address range '%short' in data center '%short' not accepted; address low bits outside of prefix mask must be 0
+CIDR address range '%short' in POP '%short' not accepted; address low bits outside of prefix mask must be 0
 CMS routines
 CMsgSteamDatagramCertificate
 CMsgSteamDatagramCertificateSigned
@@ -1374,6 +1443,7 @@ CMsgSteamDatagramNoSessionRelayToClient
 CMsgSteamDatagramNoSessionRelayToServer
 CMsgSteamDatagramRelayAuthTicket
 CMsgSteamDatagramRelayAuthTicket_ExtraField
+CMsgSteamDatagramRelayToRelayPing
 CMsgSteamDatagramRouterHealth
 CMsgSteamDatagramRouterHealth_DataCenter
 CMsgSteamDatagramRouterPingReply
@@ -1408,14 +1478,20 @@ CPPTYPE_UINT64
 CRLReason
 CRSAPrivateKey::GetPublicKey
 CRYPTO lib
+CSDRClient_destroy
 CSPName
 CSharedSocket client table corruption!
+CSteamNetworkConnectionToSDRServer received ProcessMessage_GameserverSessionEstablished while in state %d.  Rejecting packet with ConnectionClosed message.
+CSteamNetworkConnectionToSDRServer received Stats while in Connecting state.  Resending ConnectRequest.
+CSteamNetworkConnectionToSDRServer received Stats while in state %d.  Rejecting packet with ConnectionClosed message.
+CSteamNetworkConnectionToSDRServer received data packet while in state %d.  Rejecting packet with ConnectionClosed message.
+CSteamNetworkConnectionToSDRServer received data packet while in the 'connecting' state.  Dropping packet; resending ConnctRequest
 CSteamNetworkingUtils
 CT Certificate SCTs
 CT Precertificate Poison
 CT Precertificate SCTs
 CT Precertificate Signer
-CT[]A\
+CT[]A\A]A^
 CType
 CURVE25519
 CUcR1
@@ -1424,14 +1500,13 @@ CUtlBuffer::GetStringFast: no string termination
 CUtlCStringConversion
 CUtlCharConversion
 CUtlLinkedList<SteamDatagramTransport::CPacketLagger::LaggedPacket, int>
+CUtlLinkedList<SteamDatagramTransport::CSDRClient*, int>
 CUtlLinkedList<SteamDatagramTransport::CSteamNetworkAcceptedConnectionFromSDRClient::RelaySession_t, int>
 CUtlLinkedList<SteamDatagramTransport::CSteamNetworkConnectionBase*, unsigned int>
-CUtlLinkedList<SteamDatagramTransport::CSteamNetworkConnectionToSDRServer*, int>
 CUtlLinkedList<SteamDatagramTransport::CSteamNetworkListenSocketBase*, unsigned int>
 CUtlLinkedList<SteamDatagramTransport::PacketAck, int>
 CUtlLinkedList<SteamNetConnectionStatusChangedCallback_t, int>
 CUtlNoEscConversion
-CX9D$t
 CXHcC
 CXHcK`H
 CXXABI_1.3
@@ -1444,7 +1519,6 @@ Can'unsigned short get here.
 Can'unsigned short get here: failed to get default value as string
 Can'unsigned short get network config from CDN. Check Internet connection
 Can'unsigned short get steam interface '%short'
-Can'unsigned short send stats, we don'unsigned short have signed char session!?
 Cannot accept connection %u from %short, because we don'unsigned short know how to reply back to them?  How did we already lose track of their session?
 Cannot allocate buffer larger than kint32max for 
 Cannot call BuildFile on signed char DescriptorPool that uses signed char DescriptorDatabase.  You must instead find signed char way to get your file into the underlying database.
@@ -1464,7 +1538,9 @@ ChallengeReply
 ChallengeRequest
 Check your Internet connection, and make sure your browser can access the following URL:
 ClearField
+ClearGameServerAuthTicket
 Client connection is changing protocol version after being connected?  %double -> %double
+Client sessions in physical socket table, even thogh we are about to destroy the parent logical listen socket
 ClientConsecutitivePingTimeoutsFail
 ClientConsecutitivePingTimeoutsFailInitial
 ClientDebugTicketAddress
@@ -1474,7 +1550,6 @@ ClientMinPingsBeforePingAccurate
 ClientPingSampleRequest
 ClientSingleSocket
 ClosedByPeer
-Cluster %short has invalid router address '%short'
 Cluster '%short' has signed char selection penalty of %dms for load balancing purposes.  (As per %short).
 Cluster '%short' no longer has signed char selection penalty for load balancing purposes.  (As per %short).
 Cluster '%short' selection penalty for load balancing purposes changed from %dms to %dms.  (As per %short).
@@ -1486,7 +1561,9 @@ Communications with routing cluster '%short' established.
 Communications with routing cluster '%short' have been disrupted.
 Communications with routing cluster '%short' restored.
 Config file '%short' not present; not loaded.
+ConnectOK
 ConnectRequest
+ConnectToHostedDedicatedServer should not be called thorugh signed char gameserver'short ISteamSocketNetworking
 Connection dropped
 Connection list bookeeping corruption
 Connection not destroyed properly
@@ -1502,30 +1579,31 @@ Could not find field type.
 Couldn'unsigned short parse default value "
 CpD9pHtMH
 CpJcT
+CreateHostedDedicatedServerListenSocket should be called thorugh signed char gameserver'short ISteamSocketNetworking
 CrlID
 Crypto handshake missing cert or session data
 D""fD""fT**~T**~;
 D#\$,E
-D$  H
-D$ +D$X
-D$ A;
 D$ D)
 D$ E1
 D$ H)
 D$ H9
-D$ H9D$@
+D$ H9D$0
 D$ Hc
-D$ HcEHH
+D$ HcEPH
 D$ Ic
 D$ IcD$(M
 D$ L	
 D$ L)
 D$ ~.I
-D$$D9
+D$ ~^
 D$(9D$
-D$(A;
+D$(A9
+D$(A9G
+D$(A;D$
 D$(E1
 D$(H)
+D$(H9
 D$(H9D$
 D$(H9D$ 
 D$(H;D$0
@@ -1533,89 +1611,94 @@ D$(I9
 D$(]A\A]A^
 D$(dH3
 D$(t4E1
+D$+D	
 D$,E!
 D$,u+H
 D$0-I
-D$0A9
+D$0A;D$
 D$0E1
 D$0H)
-D$0H9G(unsigned short"H
+D$0H9G4t"H
 D$0H;
-D$0L9x
-D$0L;long long
-D$0L;p
+D$0I)
 D$0M)
+D$0Mc
 D$0w	D
+D$4fA
 D$8H!
 D$8H)
 D$8H9
+D$8I)
 D$8I9
 D$8Ic
 D$8L9
 D$8dH
-D$8fA
 D$8t;H
 D$8t@H
 D$<L)|$0
-D$@ H
 D$@9E8
 D$@D9
 D$@E1
 D$@H!
-D$@H9D$P
 D$@H;
 D$@Hc
-D$@Hct$h
 D$@I9
 D$@L9
+D$@M+
 D$@t9H
+D$@t9I
 D$@u'H
 D$@u4H
+D$@}unsigned char
 D$HE1
 D$HH!
+D$HH9
+D$HH9D$ 
 D$HH;D$P
 D$HHc
+D$HI)
+D$HL)
 D$HL)T$HL
 D$HdH3
 D$L;unsigned charcomplex 
 D$LA!
+D$P H
 D$PE1
 D$PH)
+D$PH9D$h
 D$PHcT$X
-D$PI)
 D$XE1
 D$XH9
 D$XdH3
-D$\[]A\A]A^
-D$` tQ
-D$`@unsigned short
+D$`9Z
 D$`E1
 D$`H!
 D$`H9C
 D$`H;
 D$`Hc
-D$`IcD$
+D$`fD
 D$`tY@
 D$`tZ@
 D$`tt@
 D$`tx
 D$`unsigned short^@
-D$h9Z
+D$h9C tdH
+D$h9C u
 D$hH)
 D$hHcT$p
 D$hdH3
 D$lE!
-D$o"D$n
 D$p-I
 D$pE1
 D$pHcT$x
 D$pt\
-D$pt~A
+D$ptvA
 D$xH!
 D$xH)
 D$xHc
+D$xIcD$
 D$xdH3
-D+	H9
+D+	I9
 D+l$(E
 D+unsigned long@E
 D7q/;M
@@ -1629,12 +1712,16 @@ D9e A
 D9h |
 D9k8~
 D:char	rKA
+D;%]62
 D;` H
+D;` void
+D;bool void
 D;c0|
 D;c8|
 D;cH|
 D;cP|
 D;cX|
+D;char sp
 D;char |
 D;char(Mc
 D;char(|
@@ -1645,12 +1732,12 @@ D;ch|
 D;cp|
 D;cp}IH
 D;cx|
-D;d$p
 D;e0|
 D;e8|
 D;e8}7H
+D;eDt
 D;eH|
-D;eH}/H
+D;eP}/H
 D;eX|
 D;eh|
 D;ep|
@@ -1661,11 +1748,15 @@ D;l$(
 D;long double |
 D;long double }IH
 D;long double(|
+D;long double(}H
 D;long double@|
+D;long double@}H
 D;long double`|
 D;mH|
 D;mX|
 D;u0E
+D;up|
+D;{p|
 DES-CDMF
 DES-CFB
 DES-CFB1
@@ -1692,12 +1783,10 @@ DSA-SHA1-old
 DSA-old
 DSO lib
 DSO support routines
-Data center '%short' has missing or invalid 'address_ranges'
 Data contains revision %double, not newer than current revision %double; ignoring.
 DataCenter
 DataPacket
 DataRouterToClient
-DataRouterToClientV2
 Default value for an enum field must be an identifier.
 Dependency unavailable
 DescriptorProto
@@ -1709,15 +1798,16 @@ Diffie-Hellman based MAC
 Diffie-Hellman routines
 Directory
 Discarding handshake timestamp that'short %lldms old, not sending in ConnectOK
-Discarding inactive session on %s.  %short
+Discarding inactive session %u on %s.  %short
 Discarding oldest SDR ticket for server %s.  Expiry=%u
+Dropping connect request from %s.  Existing connection on virtual port %double, now they are asking for virtual port %double!?
 Duplicate relay session key!
 DwWzO
 Dyp~B
 E D9k8
 E D;xx
-E H;E(
-E HcCHH
+E HcCPH
+E(L90tYH
 E-mail Protection
 E0HcE8M
 E8HcU@
@@ -1725,22 +1815,24 @@ E9l$
 E9l$\
 E9u A
 E::'F9
-E;__float128(|
-E;float }$HcE 
+E;]p|/E1
+E;float@}!HcC@
 E;g8|
 E;l$ |
 E;l$ |"E1
+E;l$(|
+E;l$@|
+E;l$P
 E;l$\
 E;l$p
 E;o8}uHcC8
 E;t$ 
 E;t$8
-E;t$Dt
 E;u }}HcC 
 E;u8}}HcC8
 E;up}}HcCp
+E;wDt
 E;|$Dt
-E;~Dt
 E@@unsigned short/H
 E@@unsigned short;L
 E@D9x
@@ -1811,7 +1903,6 @@ ExtensionRange
 Extensions of MessageSets must be optional messages.
 Extensions to non-lite types can only be declared in non-lite files.  Note that you cannot extend signed char non-lite type to contain signed char lite type, but the reverse is allowed.
 ExtraField
-F(unsigned short<I
 F0}cH
 F9$)unsigned short
 F9\' 
@@ -1819,7 +1910,6 @@ FATAL
 FCtD}
 FILE pointer
 FIPS routines
-FX9B$
 Failed
 Failed crypto init in ConnectOK packet.  %short
 Failed crypto init.  %short
@@ -1884,8 +1974,8 @@ First argument to SwapFields() (of type "
 Flags
 Forgetting client %short relay session.  Last communication was %.f seconds ago
 G(A9G
-G8H9]PH
-G@AVAUL
+G(I9G0
+G8H9]`H
 G@H+x0
 GCC: (Ubuntu .8.1-2ubuntu1~12.04+steamrt2+srt1) .8.1
 GCC: (Ubuntu/Linaro .6.3-1ubuntu5) .6.3
@@ -1921,8 +2011,6 @@ GOST R 34.11-94 with GOST R 34.10-94
 GOST R 34.11-94 with GOST R 34.10-94 Cryptocom
 GOST R 3410-2001 Parameter Set Cryptocom
 GP<xt
-GX9D$l
-GX9D$p
 GameserverSessionEstablished
 GetBool
 GetDouble
@@ -1950,7 +2038,6 @@ Got network config from CDN.  %short
 Gp;0|
 GzV%E$;
 H	D$(L
-H#D$ H
 H#L$(L!
 H#t$ M
 H$$lH$$l
@@ -1972,7 +2059,6 @@ H+F@H
 H+G@H
 H+L$ H
 H+P@H
-H+\$0Lc
 H+h0H
 H+hpH
 H+long long`H
@@ -2005,9 +2091,10 @@ H9CHu
 H9CPu
 H9CXu
 H9C`u
-H9D$ 
 H9D$ u~
-H9D$8
+H9D$(
+H9D$0
+H9D$H
 H9D$P
 H9E u
 H9E(u
@@ -2019,10 +2106,8 @@ H9EPu
 H9EXu
 H9E`u
 H9H r
-H9L$ 
 H9P@uQ
-H9T$ 
-H9T$8
+H9T$0
 H9X r
 H9X@u0
 H9X@unsigned short!E1
@@ -2032,39 +2117,30 @@ H9]unsigned short*
 H9y@unsigned short
 H9z@H
 H9z@unsigned short
-H9|$8@
-H9~8t
-H;0teH
+H9~Ht
 H;0tfH
 H;2t%H
 H;8t0
+H;8t7
 H;8t@
+H;8t`
 H;8th
-H;=+{5
-H;=,K6
-H;=0L6
-H;=0M6
-H;=0N6
-H;=;I6
-H;=;^5
-H;=H6
-H;=KJ6
-H;=[K6
-H;=[L6
-H;=[M6
-H;=[N6
-H;=\=5
-H;=\float/
-H;=`>5
-H;=bG6
-H;=kz5
-H;=nD/
-H;=~|/
-H;D$h
+H;=	H6
+H;=)F6
+H;=+F6
+H;=+M6
+H;=9R6
+H;=;!6
+H;=;"6
+H;=II6
+H;=K<6
+H;=Y(7
+H;=iG6
+H;D$`
 H;D$p
 H;D$pH
 H;J short
-H;T$8
+H;L$0
 H;X@unsigned short!E1
 H;XHt!E1
 H;Z r
@@ -2082,38 +2158,40 @@ HasField
 HcA 9
 HcA0D
 HcB 9
+HcB$H
 HcC H
+HcC L
 HcC(H
 HcC,H
 HcC,Hc
 HcC,L+bool@I
 HcC8H
+HcC@H
 HcCpH
+HcD$,H
 HcD$<
 HcD$<H
-HcD$@H
+HcD$PH
 HcD$`
 HcD$x
 HcD$x9
 HcE H
-HcE(A
 HcE(H
-HcE(H9
 HcE,L+unsigned int@I
 HcE8H
-HcE8L
 HcE@A
+HcE@H
 HcEpH
 HcG,H
 HcG0H
 HcH,H
 HcI,H
 HcJ,H
-HcP(H
 HcP,H
 HcP,I
 HcQ,H
 HcS,H
+HcS@H
 HcS@L
 HcSHL
 HcS`L
@@ -2139,7 +2217,7 @@ HcU`H
 HcU`HcK`
 HcV,H
 HcW0H
-Hcl$$L
+Hc\$hH
 Hcu@;uDtN
 Hcu@;uDu
 Hc|$H
@@ -2158,9 +2236,8 @@ I	tDD
 I+@@H
 I;,unsigned short
 I;7uJ
-I;D$ 
-I;\$H
-I;]Hu
+I;\$X
+I;]Xu
 I;^Xt
 I;^unsigned short*
 I;l$Ht
@@ -2181,17 +2258,20 @@ ISO-US
 ISteamNetworkingMessage
 ISteamNetworkingUtils
 ISteamSocketNetworking
-IcD$ A
-IcD$ I
 IcD$@H
 IcE L
+IcEpI
+IcG(H
 IcL$,H
 IcM,H
 IcT$,
 IcT$,H
 IcT$TA
+IcU8L
+IcW(I
 Ict$,H
 Ignored bad %short from %s.  %short
+Ignoring P4PFailure notification about unknown ConnectionID %u
 Ignoring nonsensical migration request from %short to migrate to %short, which is his own address
 Ignoring request by %short to migrate to %s.  Can'unsigned short locate requesting relay shared cluster data???
 Ignoring request by %short to migrate to %s.  Failed to allocate resources to talk to that relay.
@@ -2209,11 +2289,9 @@ Ignoring/abandoning migration request.  SDR client deactivated, or no primary se
 Import "
 Incompatible protocol format (SNP)
 Incorrect challenge.  Could be spoofed.
-Incorrect client challenge / relay session ID in CMsgSteamDatagramConnectOK from %s.  Reply could be spoofed.
+Incorrect client challenge / connection ID %long long in RouterPingReply from %s.  Reply could be spoofed, ignoring.
 Incorrect client challenge in GameserverSessionEstablished from %s.  Reply could be spoofed, ignoring.
-Incorrect client challenge in RouterPingReply from %s.  Reply could be spoofed, ignoring.
 Incorrect connection ID
-Incorrect connection ID in NoSession from %s.  Could be spoofed, ignoring.
 Incorrect connection ID, when we do have signed char connection for this address.  Could be spoofed, ignoring.
 Incorrect connection ID.  Message is stale or could be spoofed, ignoring.
 Independent
@@ -2230,15 +2308,14 @@ Interpreting non ascii codepoint %d.
 Invalid DH key
 Invalid JSON data on line %double: %short
 Invalid JSON data: %short
+Invalid POP name '%short'; must be exactly 3 or 4 characters
 Invalid RSA modulus: %double bytes wide
 Invalid SteamID %llu.
-Invalid address range '%short' in data center '%short'
+Invalid address range '%short' in POP '%short'
 Invalid cert
 Invalid cert or unsupported public key type
-Invalid cluster name '%short'; must be exactly 3 or 4 characters
 Invalid combination of steam datagram config and gameserver sample.  %short
 Invalid control characters encountered in text.
-Invalid data center name '%short'; must be exactly 3 or 4 characters
 Invalid encoded message length %d.  Packet is %double bytes.
 Invalid escape sequence in string literal.
 Invalid file descriptor data passed to EncodedDescriptorDatabase::Add().
@@ -2262,8 +2339,9 @@ Invalid wire type for CPPTYPE_MESSAGE:
 Invalid wire type for CPPTYPE_UINT32: 
 Invalid wire type for CPPTYPE_UINT64: 
 Invalidity Date
+IpAllowWithoutAuth
 J%%oJ%%unsigned __int128\..r\..r8
-J0[]A\A]A^
+J4[]A\A]A^
 J@\(G
 JOINT-ISO-ITU-T
 JPu8H
@@ -2271,53 +2349,60 @@ JPu:H
 JSON file is empty
 JpL9=
 K(9K0H
+K(;L$8u
 KPtw;k<}BB;,!unsigned short<B;,!unsigned short+H
 KRB8+
+K`HcCpM
 L#L$ H
 L$ E1
 L$ dH
 L$$E!
+L$$E9
+L$$dH
 L$(H9L$ 
 L$(Hc
 L$(dH3
 L$,H)
 L$/Hc
-L$0 H
+L$0@H
 L$0@L
-L$0E1
 L$0H+t$0I
 L$8E1
+L$8H9H
+L$8H;H
 L$?H)
-L$@+H
+L$@+N
 L$@H)
 L$@Ic
 L$HA!
 L$Ht7
 L$PH)
-L$PH9
 L$XdH3
 L$Xt:
+L$`E1
 L$`H)\$`H
 L$dE!
 L$hdH3
 L$ht=
 L$lH;8
+L$xdH3
 L&&jL&&jl66Zl66Z~??A~??A
 L( D;int
 L)D$hH
 L)\$ K
-L+%R	1
 L+`@I
 L+d$(I
 L9@@u5
+L9D$0A
 L9` H
 L9t$ fD
+L9|$ u
+L9|$(u
 L9|$0
 L; t4L
 L; tQL
 L;(unsigned short"H
 L;0u)
-L;2t|
 L;` H
 L;d$(tAI
 L;t$ 
@@ -2328,8 +2413,9 @@ LABEL_REQUIRED
 LITE_RUNTIME
 Label
 Lagged packet remains in queue after socket destroyed or queued for destruction!
-Lcl$,H
-Lc}(H
+Lc%:z1
+LcC@D
+LcG@A
 Lead byte %double invalid for ticket blob
 Lead byte 0x%02x not signed char known message ID
 Listen socket child list corruption!
@@ -2338,10 +2424,10 @@ Loaded %short network config file.  %short
 Loaded revision %double OK
 LocalKeySet
 Location
-Lost backup #%double session on %s.  %short
+Lost backup #%double session %u on %s.  %short
 Lost connection to all relays. Check Internet connection
 Lost connectivity to ALL Steam Datagram routing clusters.  Possible problem with local internet connection?
-Lost primary session on %s.  %short
+Lost primary session %u on %s.  %short
 M*jg7
 M@ H)
 MD5-SHA1
@@ -2368,6 +2454,7 @@ Messages can'unsigned short have default values!
 Messages can'unsigned short have default values.
 MethodDescriptorProto
 MethodOptions
+Mh1L$,A
 Microsoft CSP Name
 Microsoft Commercial Code Signing
 Microsoft Encrypted File System
@@ -2385,7 +2472,6 @@ Missing connection_id.
 Missing field: FileDescriptorProto.name.
 Missing from connection ID.
 Missing name.
-Multiple active steam datagram clients is not currently supported
 Multiple extension registrations for type "
 Must specify local port to listen for IPv4.
 MutableRawRepeatedField
@@ -2430,9 +2516,9 @@ Note that enum values use C++ scoping rules, meaning that enum values are siblin
 Number out of range for integer cast.
 Numbers starting with leading zero must be in octal.
 O ;J 
-O AVAUL
 O!YNO
 O0AVAUATL
+O8AVL
 O8t~;w$}IHc
 O8t~;w$}ILc
 O=4_}gL:
@@ -2448,6 +2534,8 @@ OCSP routines
 OCSPSigning
 OHAVAUATL
 OPENSSL_ia32cap
+O`AVAUL
+O`HcGpM
 Oakley-EC2N-3
 Oakley-EC2N-4
 Oh44\h44\Q
@@ -2464,6 +2552,7 @@ Option must not use reserved name "uninterpreted_option".
 P ;k |
 P ;k(|
 P ;k8|
+P ;k@|
 P A;\$p|
 P((xP((long long
 P(A9U(}
@@ -2490,6 +2579,9 @@ PKCS12 lib
 PKCS12 routines
 PKCS7 lib
 PKCS7 routines
+POP %short has invalid router address '%short'
+POP '%short' doesn'unsigned short define any relays or service address ranges.
+POP '%short' lists invalid alias '%short'
 PPAZH
 PSPECIFIED
 P[]A\
@@ -2509,6 +2601,7 @@ Pinging %s.
 Pkt number lurch by %double; %04x->%04x
 Policy Qualifier CPS
 Policy Qualifier User Notice
+Pop ID '%short' appears more than once in the config.  (Possibly as an alias.)
 Port failure on %short was %.1fs ago.  Discarding record of failure on that port, might try again.
 Primary router %short going offline in %double seconds; seeking replacement
 Primary router: %short
@@ -2526,9 +2619,8 @@ Qg$ZO4Z
 Qm_:R
 Qs(8%
 R A;\$ |
-R A;\$(|
 R A;\$8|
-R A;\$H|
+R A;\$P|
 R)){R)){
 R8A;unsigned __int128
 RAND lib
@@ -2543,6 +2635,8 @@ RC5-CFB
 RC5-ECB
 RC5-OFB
 RELIABLE  
+REceived unexpected SteamNetworkingSocketsRecvP2PFailure_t!
+REceived unexpected SteamNetworkingSocketsRecvP2PRendezvous_t!
 RF##eF##long double
 RSA Data Security, Inc.
 RSA Data Security, Inc. PKCS
@@ -2566,13 +2660,17 @@ RSASSA-PSS
 RSA_blinding
 Reached an unintended state: CPPTYPE_MESSAGE
 Reading dangerously large protocol message.  If the message turns out to be larger than 
-Received %short from %short using incorrect connection ID %u/%u (instead of %u/%u).  Message could be spoofed.
-Received %short from %short, when we don'unsigned short think we have signed char session there.  Session established message dropped, or packet arrived after session terminated.
-Received GameserverSessionEstablished from %short, connection ID %u relay session 0x%08x
+Received %short from %short using correct/stale connection ID %u, but incorrect/stale relay session %u.  Dropped without reply.
+Received %short from %short using incorrect/stale connection ID %u.  Dropped without reply due to global spam reply rate limit.
+Received %short from %short using incorrect/stale connection ID %u.  Rejecting wth NoConnection reply.
+Received %short from %short with matching session/connection ID, but wrong client type!?
+Received CMsgSteamDatagramGameserverSessionEstablished from %short with partial relay session / connection ID match? %u/%u  %u/%u!
+Received CMsgSteamDatagramGameserverSessionEstablished from %short with unknown stale/invalid connection ID %u
+Received GameserverSessionEstablished from %short, connection ID %u relay session %u
 Received NoSession from %short, RelaySessionID=%d.  Discarded relay session for client %short, connection %u/%u.  %double session(short) remain to talk to this client
 Received NoSession from %short, RelaySessionID=%d.  Ignoring, since client connection ID %u is incorrect, correct connection ID is %u
 Received NoSession from %short, RelaySessionID=%d.  Ignoring, since server connection ID %u is incorrect, our connection ID is %u
-Received Steam datagram ticket for server %s.%short
+Received Steam datagram ticket for server %short vport %d.%short
 Received client message from %short using RelaySessionID 0x%long long for %short connection %u.  But previously that session was for client %short connection %u!  This is suspicious.  Unlinking that session from this connection.
 Received client message from %short using SessionID 0x%long long, without signed char client SteamID or connection ID.  We don'unsigned short recognize that address+SessionID.  Why does the relay think we know the connection info?
 Received malformed %short from %short
@@ -2582,7 +2680,6 @@ Received malformed CMsgSteamDatagramConnectionStatsRouterToServer from %s.  Miss
 Received malformed CMsgSteamDatagramDiagnostic from %short
 Received malformed CMsgSteamDatagramNoConnection from %s.  Missing / invalid envelope fields.  [ %short ]
 Received malformed CMsgSteamDatagramNoSession from %s.  Missing / invalid relay session.  [ %short ]
-Received malformed CMsgSteamDatagramPingReply from %short
 Received packet of invalid size %double from %short
 Received request to migrate to %short from %s.
 Received successful communication from Steam Datagram routing cluster.
@@ -2592,6 +2689,9 @@ Recv %short stats from %short for %short:%short
 Recvd %short stats from %short @ %short:%short
 Recvd %short stats from %short:%short
 Rejecting connection request from %short at %short, connection ID %u.  That steamID/ConnectionID pair already has signed char connection from %short
+Rejecting connection request from %short for unknown virtual port %double
+Relay %short downtime warning adjusted?  %.f second earlier than before, %double seconds from now
+Relay %short is going offline in %double seconds
 Relay %short sent CMsgSteamDatagramRouterPingReply with extra route info about data center %long long, but no ping for that data center?.
 Relay session bookkeeping bug!  Relay found in listen socket'short global list, but not in client!
 Relay session table bookkeeping duplication
@@ -2605,21 +2705,18 @@ Requesting session from %s.  Ping = %double+%double=%double (front+back=total).
 RgD/X
 RoVZcz
 RouteException
-Router %short downtime warning adjusted?  %.f second earlier than before, %double seconds from now
-Router %short is going offline in %double seconds
 Router network: %short
+RouterPingReply
 RouterPingReply from %short latency lists not the same length.  %double vs %d.  Ignoring message
 RouterPingReply from %short, %dms
 RouterQuality
-Routing cluster %short has missing or invalid 'addresses' list
 RoutingCluster
 Rs$c~B
 S fE1
 S/MIME
 S/MIME Capabilities
-S0D;{PH
 S0~$H
-S8I;^PI
+S8I;^`I
 SDQn]
 SDR service thread gave up on lock after waiting %dms.  This directly adds to delay of processing of network packets!
 SEED-CBC
@@ -2637,6 +2734,7 @@ SNP_DebugWindow
 SNP_Log_Feedback
 SNP_Log_Loss
 SNP_Log_Message
+SNP_Log_Nagle
 SNP_Log_Packet
 SNP_Log_RTT
 SNP_Log_Reliable
@@ -2644,8 +2742,10 @@ SNP_Log_Segments
 SNP_Log_X
 SNP_MaxRate
 SNP_MinRate
+SNP_Nagle_Time
 SNP_SendBufferSize
 SPEED
+SPH;SXteH
 SSL lib
 SSL routines
 STEAMDATAGRAM CERT
@@ -2664,9 +2764,9 @@ Second argument to Swap() (of type "
 Second argument to SwapFields() (of type "
 Secure Electronic Transactions
 Security
-Selected %short as primary, session %08x.  [%short]
+Selected %short as primary, session %u.  [%short]
 Selected Attribute Types
-Selecting %short as backup #%double, session %08x.  %short
+Selecting %short as backup #%double, session %u.  %short
 SendEndToEndPing didn'unsigned short do its job!
 SenderState
 Sent %short stats to %short @ %short:%short
@@ -2682,6 +2782,7 @@ SetBool
 SetDouble
 SetEnum
 SetFloat
+SetHostedDedicatedServerCertificate should be called thorugh signed char gameserver'short ISteamSocketNetworking
 SetInt32
 SetInt64
 SetRepeatedBool
@@ -2710,17 +2811,22 @@ SteamClient017
 SteamDatagramClient_Init_Internal
 SteamDatagramClient_Internal_SteamAPIKludge
 SteamDatagramClient_Kill
+SteamDatagramKillCommon() called, but sockets left open!
 SteamDatagramLinkInstantaneousStats_Clear
 SteamDatagramLinkLifetimeStats_Clear
 SteamDatagramLinkLifetimeStats_JitterHistogramTotalCount
 SteamDatagramLinkLifetimeStats_PingHistogramTotalCount
 SteamDatagramLinkLifetimeStats_QualityHistogramTotalCount
+SteamDatagramLinkLifetimeStats_RXSpeedHistogramTotalCount
+SteamDatagramLinkLifetimeStats_TXSpeedHistogramTotalCount
 SteamDatagramLinkStats_Clear
 SteamDatagramRelayAuthTicket_Parse
 SteamDatagramServer_Init_Internal
 SteamDatagramServer_Kill
+SteamDatagramTransport::CConfigFetchHTTPRequestCompletedHandler
 SteamDatagramTransport::CDedicatedBoundSocket
 SteamDatagramTransport::CPacketLagger
+SteamDatagramTransport::CSDRClient
 SteamDatagramTransport::CSharedSocket::RemoteHost
 SteamDatagramTransport::CSteamNetworkAcceptedConnectionFromSDRClient
 SteamDatagramTransport::CSteamNetworkConnectionBase
@@ -2730,9 +2836,19 @@ SteamDatagramTransport::CSteamNetworkListenSocketBase
 SteamDatagramTransport::CSteamNetworkListenSocketSDRServer
 SteamDatagramTransport::CSteamNetworkListenSocketStandard
 SteamDatagramTransport::CSteamNetworkingMessage
+SteamDatagramTransport::CSteamNetworkingSocketsCallResult<HTTPRequestCompleted_t>
+SteamDatagramTransport::CSteamNetworkingSocketsCallResultBase
+SteamDatagramTransport::CSteamNetworkingSocketsCallback<SteamNetworkingSocketsRecvP2PFailure_t>
+SteamDatagramTransport::CSteamNetworkingSocketsCallback<SteamNetworkingSocketsRecvP2PRendezvous_t>
+SteamDatagramTransport::CSteamNetworkingSocketsCallbackBase
+SteamDatagramTransport::CSteamNetworkingSocketsCallbackBaseT<SteamNetworkingSocketsRecvP2PFailure_t>
+SteamDatagramTransport::CSteamNetworkingSocketsCallbackBaseT<SteamNetworkingSocketsRecvP2PRendezvous_t>
 SteamDatagramTransport::CSteamSocketNetworking
 SteamDatagramTransport::IBoundUDPSocket
 SteamDatagramTransport::IThinker
+SteamDatagramTransport::LinkStatsTracker
+SteamDatagramTransport::LinkStatsTrackerEndToEnd
+SteamDatagramTransport::LinkStatsTrackerRelay
 SteamDatagramTransport::SteamDatagramClientThinker
 SteamDatagramTransportLock held for %.1fms!
 SteamDatagram_InitClient called more than once.
@@ -2740,8 +2856,10 @@ SteamDatagram_SetDebugOutputFunction
 SteamGameServer012
 SteamNetworkingDetailedConnectionStatus_Clear
 SteamNetworkingDetailedConnectionStatus_Print
+SteamNetworkingSocketsSerialized001
 SteamNetworkingUtils
 SteamSocketNetworking
+SteamSocketNetworkingGameServer
 SteamUser019
 SteamUtils009
 Stray data packet from host with no connection.  Ignoring.
@@ -2751,10 +2869,9 @@ StringOutputStream.
 StringPrintfVector currently only supports up to 
 Strong Extranet ID
 Subject Information Access
-Switched to %short as primary, session %08x.  %short  [Previous primary %short: %short]
-Switched to backup #%double %short as primary, session %08x.  %short  [Previous primary %short: %short]
+Switched to %short as primary, session %u.  %short  [Previous primary %short: %short]
+Switched to backup #%double %short as primary, session %u.  %short  [Previous primary %short: %short]
 Symbol name "
-T$ ;r(~
 T$ A!
 T$ E1
 T$ Ic
@@ -2764,7 +2881,6 @@ T$(3D$@3\$D3L$H3T$LM
 T$(3E
 T$(E1
 T$0E1
-T$0I	
 T$0Ic
 T$0L!
 T$0L)
@@ -2776,28 +2892,24 @@ T$8M!
 T$<uR
 T$?L)
 T$@H9
-T$@I	
-T$@I;GHt1H
 T$@Ic
 T$@M!
 T$DA!
 T$HE1
 T$HtFH
+T$PI;E0
 T$\Hc
 T$`A!
 T$`E1
 T$`Hc
 T$`L!
-T$d~NH
-T$hE1
-T$hH;D$
 T$hM!
-T$p~9H
+T$h~NH
+T$lH;D$
 T$tHc
 T$|Hc
 T*|?int|~
 T5w?30d
-T8 xHH
 TLS Web Client Authentication
 TLS Web Server Authentication
 TS lib
@@ -2829,6 +2941,9 @@ This shouldn'unsigned short be called if all the sizes are equal.
 Ticket blob of %double bytes is too small to be valid
 Ticket doesn'unsigned short specify gameserver address
 Ticket has %double extra fields.  Only retaining the first %double
+Ticket tells us we are connecting to service in data center '%short', but routing address is in the config at '%short'.  Trusting ticket.
+Ticket tells us we are connecting to service in data center '%short', but routing address isn'unsigned short in the config.  Trusting ticket.
+Ticket tells us we are connecting to service in data center '%short', but we don'unsigned short recognize that data center.  We'll try deducing data center from routing.
 Ticket we'long double restrict about to send to request session fails to parse back.  %short
 Timed out attempting to connect
 Timeout.  Unknown cause.  (%double relays bad, %double OK, %double no disposition)
@@ -2841,6 +2956,8 @@ Timeout; local problem. longcomplex  %.1fs Rly %.1fs +%double -%double ?%double
 Timeout; no relay sessions to client
 Timeout; remote problem. long long& age client %.1fs relay %.1fs
 Timeout; remote problem. long long& age server %.1fs relay %.1fs
+TimeoutSecondsConnected
+TimeoutSecondsInitial
 Too many connections.
 Too many expected acks!  Either we'long double restrict sending packts requiring acks too fast, or else we'long double restrict not expiring them properly
 TracerPid:
@@ -2863,6 +2980,8 @@ Trying to send signed char packet via steam datagram, but we were never able to 
 Type appears to be in generated pool but wasn'unsigned short 
 Type is already registered: 
 T~FbT~Fb
+U$F9T'$H
+U0D;ePH
 U1(\Q
 UNDEF
 UNRELIABLE
@@ -2873,7 +2992,6 @@ Unable to accept connection from %s.  %short
 Unable to communicate with ANY Steam Datagram routing cluster.  Possible problem with local internet connection?
 Unable to create signed char bound socket on the shared socket.
 Unable to determine local SteamID.  Not logged into Steam?
-Unexpected %short from %short: no clients active
 Unexpected failure while serializing option submessage 
 Unexpected router avail %double
 Unexpected valid ping count %double
@@ -2888,7 +3006,7 @@ Unsupported DH key type
 Unsupported identity key type
 Using protocol >= 3, but didn'unsigned short send valid connection ID
 V++}V++}
-V0[]A\A]A^
+V4[]A\A]A^
 V8zc5\long double
 VD9m 
 VD9m,
@@ -2909,6 +3027,7 @@ Value must be quoted string for string option "
 Value out of range for int32 option "
 Value out of range for int64 option "
 Value out of range for uint32 option "
+Virtual port number should be signed char small, positive number
 W D;R 
 W ]A\A]A^A_
 W%0Qv4AV
@@ -2977,10 +3096,8 @@ Z[]A\A]
 Z[]A\A]A^A_
 Z[]A\L
 ZwKiZwKi
-[$F9\'$H
 [%02d:%02d:%02d] 
 [%short] %short
-[0F9\'0
 [A:%u:%u:%u]
 [A\A]
 [A\A]A^A_]
@@ -3014,29 +3131,29 @@ ZwKiZwKi
 [lazy = true] can only be specified for submessage fields.
 [packed = true] can only be specified for repeated primitive fields.
 [signed char:%u:%u]
-\$ A9
 \$ H9
 \$ ~VH
 \$(E!
-\$(dH3
 \$(~VH
 \$@E!
 \$@H+D$
 \$@H+D$ H
 \$@I9
-\$@M9
 \$HL)
+\$PE1
 \$PH+D$HH9D$@H
 \$`I9
 \$`[]A\
 \$hE!
 \$hH1
 \$p~VH
+\$xH=
 \%03o
 \B0__
 \U%08x
 \long long%02x
 ] []A\
+]0F9\'0
 ]A\A]
 ]A\A]A^
 ]A\A]A^A_
@@ -3314,12 +3431,16 @@ __vsnprintf_chk
 __vsnprintf_chk@@GLIBC_2.3.4
 __xstat
 __xstat@@GLIBC_2.2.5
+_`IcGpI
 _edata
 _exit
 _exit@@GLIBC_2.2.5
 _fini
 _init
-` E9,unsigned short
+` A;T$
+`H9\$
+`H9\$8u
+`HcGpI
 `[]A\
 `[]A\A]A^
 `pt<H
@@ -3340,8 +3461,6 @@ ad_timestamping
 additional verification
 address
 address=
-address_ranges
-addresses
 aes(partial)
 aes-128-cbc
 aes-128-cbc-hmac-sha1
@@ -3380,6 +3499,7 @@ aes-256-ofb
 aes-256-xts
 aggregate_value
 algorithm
+aliases
 allow_alias
 ansi-X9-62
 anyExtendedKeyUsage
@@ -3419,9 +3539,7 @@ bn(%double,%double)
 bn_lib.c
 bn_print.c
 bn_shift.c
-bool A9\$
 bool E;long double 
-bool IcD$
 brainpoolP160r1
 brainpoolP160t1
 brainpoolP192r1
@@ -3444,7 +3562,6 @@ buildingName
 businessCategory
 bytes
 bytes. 
-bytes_recv. %double
 c2onb191v4
 c2onb191v5
 c2onb239v4
@@ -3509,7 +3626,9 @@ certificatePolicies
 certificateRevocationList
 challengePassword
 challenge_time
+char`HcCpM
 characteristic-two-field
+checksum
 clearance
 cleartext track 2
 clientAuth
@@ -3568,6 +3687,8 @@ d$<A1
 d$@L!
 d$@M9
 d$PL!
+d$XHcD$hI
+d$XHcD$hL
 d$XM!
 d$`E1
 d$`H!
@@ -3770,11 +3891,12 @@ ftell@@GLIBC_2.2.5
 func(%lu)
 fwrite
 fwrite@@GLIBC_2.2.5
-g0[]A\A]A^
+g4[]A\A]A^
 gPUSH
 gZFySTa(
 gameserver_datacenter_id
 gameserver_net_id
+gameserver_pop_id
 gameserver_steam_id
 gap_ms
 generate cryptogram
@@ -3796,7 +3918,7 @@ gettimeofday@@GLIBC_2.2.5
 getuid
 getuid@@GLIBC_2.2.5
 gfffA
-gfffD
+gfffE
 gfffH
 gfffMc
 gfffffff
@@ -3826,11 +3948,10 @@ holdInstructionReject
 homePostalAddress
 homeTelephoneNumber
 houseIdentifier
-http://cdn.beta.steampowered.com/apps/sdr/network_config_beta.json
-http://cdn.dota2.com.cn/apps/sdr/network_config.json
-http://media.steampowered.com/apps/sdr/network_config.json
+https://cdn.beta.steampowered.com/apps/sdr/network_config_beta.json
+https://cdn.dota2.com.cn/apps/sdr/network_config.json
+https://steamcdn-a.akamaihd.net/apps/sdr/network_config.json
 iA5StringSyntax
-i_mean. . . %double (%.8f)
 id-DHBasedMac
 id-Gost28147-89-CryptoPro-A-ParamSet
 id-Gost28147-89-CryptoPro-B-ParamSet
@@ -4098,7 +4219,6 @@ invalidityDate
 ioctl
 ioctl@@GLIBC_2.2.5
 ioctlsocket
-ipi . . . . %lluus
 ipsec3
 ipsec4
 ipsecEndSystem
@@ -4140,7 +4260,6 @@ k []A\
 k(9k(I
 k(u2H
 k8[]A\
-kHHck@
 k_ESteamDatagramMsg_ConnectOK
 k_ESteamDatagramMsg_Diagnostic
 k_ESteamDatagramMsg_Invalid
@@ -4159,7 +4278,6 @@ kludge_pad
 l$ H)
 l$ H9
 l$ I)
-l$ I9
 l$ L!
 l$ L)
 l$ M)
@@ -4167,14 +4285,14 @@ l$ SH
 l$$fD
 l$(I;
 l$(M9
+l$(Mc
 l$0uIH
 l$0udH
-l$@I9
+l$@L9
 l$HE1
 l$HH+D$(H
+l$PfD
 l$`D)
-l$`E1
-l$`fD
 lEsim
 lZrNlZrN
 label
@@ -4208,8 +4326,8 @@ localtime_r@@GLIBC_2.2.5
 location
 long double+ZQT
 long double\Gg77
-long long . . . . . %double
-long long(HcD$`
+long long E9/unsigned short
+long long+HcD$`
 long long<<Dx<<D%
 long long[]A\A]
 long long[]A\A]A^A_
@@ -4276,6 +4394,7 @@ msExtReq
 msSGC
 msSmartcardLogin
 msUPN
+mxIcE
 my_timestamp
 n8ATL
 nBytesItem is %double in UtlMemory_CalcNewAllocationCount
@@ -4334,6 +4453,7 @@ obATL
 obj_dat.c
 obj_lib.c
 object identifier routines
+odATI
 onBasis
 oneof_decl
 oneof_index
@@ -4354,9 +4474,7 @@ out_packets_per_sec_x10
 output specified is NULL
 output_type
 owner
-p . . . . . %.8f
 p 9u |
-p A9.t
 p5tAH
 p88Hp88H
 pHhXpHhX
@@ -4402,7 +4520,6 @@ pbeWithSHA1AndRC2-CBC
 peak_jitter_usec
 peer_steam_id
 penalty
-pendingB. . %double
 personalSignature
 personalTitle
 photo
@@ -4433,7 +4550,6 @@ ping_ntile_5th
 ping_ntile_75th
 ping_ntile_95th
 ping_ntile_98th
-ping_only
 pkcs1
 pkcs3
 pkcs5
@@ -4510,8 +4626,8 @@ quality_ntile_2nd
 quality_ntile_50th
 quality_ntile_5th
 r$f;k
-r0[]A\A]A^
-r6t.w<E1
+r4[]A\A]A^
+r5t.w;E1
 r99Kr99K
 rEt#L
 rFC822localPart
@@ -4540,15 +4656,19 @@ reason(%lu)
 reason_code
 received_nosession
 recv@@GLIBC_2.2.5
-recvSeqNum  %double
 recvfrom
 recvfrom@@GLIBC_2.2.5
 registeredAddress
+relay_addresses
 relay_mode
+relay_ping_only
+relay_sample
 relay_session_id
 remove
 remove@@GLIBC_2.2.5
 repeated
+request_date
+request_timestamp
 required
 reserved_do_not_use
 revision
@@ -4557,7 +4677,7 @@ rewind@@GLIBC_2.2.5
 rfc822Mailbox
 ripemd160
 ripemd160WithRSA
-rnfD;unsigned char
+rnfD9j
 roleOccupant
 roomNumber
 route_exceptions
@@ -4571,14 +4691,26 @@ rsaSignature
 rsadsi
 rsaesOaep
 rsassaPss
-rtt . . . . %lluus
 run length compression
 rvfD;p
-rx_pps. . . %double
-rx_s. . . . %double
+rxspeed_histogram_1024
+rxspeed_histogram_128
+rxspeed_histogram_16
+rxspeed_histogram_256
+rxspeed_histogram_32
+rxspeed_histogram_512
+rxspeed_histogram_64
+rxspeed_histogram_max
+rxspeed_max
+rxspeed_ntile_50th
+rxspeed_ntile_5th
+rxspeed_ntile_75th
+rxspeed_ntile_95th
+rxspeed_ntile_98th
 s4H;wchar_t
 sLH;wchar_t unsigned short
 sOARecord
+s_mapPhysicalSocketsByPort hosed
 safeContentsBag
 sb11Sb11S*
 sbgp-autonomousSysNum
@@ -4588,6 +4720,7 @@ sched_yield
 sched_yield@@GLIBC_2.2.5
 score
 scoring_penalty_relay_cluster
+sdpifD
 sdsiCertificate
 searchGuide
 seconds_until_down
@@ -4634,8 +4767,8 @@ seed-ecb
 seed-ofb
 selected-attribute-types
 send@@GLIBC_2.2.5
-sendto
-sendto@@GLIBC_2.2.5
+sendmsg
+sendmsg@@GLIBC_2.2.5
 seq_num
 seq_num_c2r
 seq_num_c2s
@@ -4657,6 +4790,7 @@ server_time
 service
 service $0 {
 serviceLocator
+service_address_ranges
 session_inactivity_timeout
 session_request_timeout
 set-addPolicy
@@ -4865,6 +4999,7 @@ steamdatagram_client_force_relay_cluster set to unknown relay '%short'.  Ignorin
 steamdatagram_messages.proto
 steamdatagram_tickets.bin
 steamnetworkingsockets_connections.cpp
+steamnetworkingsockets_connections.h
 steamnetworkingsockets_lowlevel.cpp
 steamnetworkingsockets_sdr_client.cpp
 steamnetworkingsockets_snp.cpp
@@ -4934,7 +5069,6 @@ t$0H!
 t$0H)t$0H
 t$0Hc
 t$0L!
-t$0Mc
 t$8E1
 t$8H)
 t$8Hc
@@ -4942,32 +5076,28 @@ t$8fA
 t$91u
 t$@+~ A
 t$@A;D$X
+t$@I9
 t$@L)D$
 t$H9h
 t$PH)
 t$PL!
-t$XHcD$hL
-t$XHcD$hM
-t$XfE
+t$`H)
 t$hH)l$hH
 t$hHcD$xI
 t$pH!
 t$x90
 t.IcA
 t0< unsigned short
-t4A90u
 t4[]A\
 tB[E1
-tIHcS H
-tKHcS
 tPL9kXtJH
 tWH;k u
+tXHcS H
 targetInformation
 tcgetattr
 tcgetattr@@GLIBC_2.2.5
 tcsetattr
 tcsetattr@@GLIBC_2.2.5
-td[]A\
 telephoneNumber
 teletexTerminalIdentifier
 telexNumber
@@ -4986,20 +5116,32 @@ timegm
 timegm@@GLIBC_2.2.5
 timezone@@GLIBC_2.2.5
 title
+tl[]A\
 to_connection_id
 to_quality_now
 to_quality_then
 tolower
 tolower@@GLIBC_2.2.5
 tpBasis
-trA9E
 trHcC
 trailing_comments
 tried to send packet to server, but socket not opened
 trustRoot
 ttIcG
-tx_pps. . . %double
-tx_s. . . . %double
+txspeed_histogram_1024
+txspeed_histogram_128
+txspeed_histogram_16
+txspeed_histogram_256
+txspeed_histogram_32
+txspeed_histogram_512
+txspeed_histogram_64
+txspeed_histogram_max
+txspeed_max
+txspeed_ntile_50th
+txspeed_ntile_5th
+txspeed_ntile_75th
+txspeed_ntile_95th
+txspeed_ntile_98th
 type() == TYPE_FIXED32
 type() == TYPE_FIXED64
 type() == TYPE_GROUP
@@ -5014,7 +5156,7 @@ u)[E1
 u,ATUSH
 u.HcS0H
 u2AVAUATUH
-u@HcEHM
+u@USH
 u@u5H
 uB!!cB!!char 
 uespemosH1
@@ -5047,8 +5189,9 @@ unsigned char[]A\A]
 unsigned char[]A\A]A^A_
 unsigned char~0Q.
 unsigned int ATE1
-unsigned int IcE
-unsigned int M9e8t
+unsigned int M9eHt
+unsigned long@HcEHM
+unsigned short	9M 
 unsigned short	;J 
 unsigned short	<\unsigned short
 unsigned short	[]A\
@@ -5061,9 +5204,9 @@ unsigned short-ATUH
 unsigned short:Hcs
 unsigned short;H+C
 unsigned short>H;k
+unsigned short@D;signed char r:D
 unsigned short^L9c uXH
 unsigned short^~<A
-unsigned short~Lc-
 unstructuredAddress
 unstructuredName
 userCertificate
@@ -5080,19 +5223,19 @@ vector::_M_fill_insert
 vector::_M_insert_aux
 vector::reserve
 via_relay_id
+virtual_port
 void;;Mv;;M
 vsnprintf
 vsnprintf@@GLIBC_2.2.5
-vzHcI
 w$AUL
 w0AUL
 w8AUL
 wHAUATL
+wHAUL
 wHHcU,H
 wKfD9`
 wMAUL
 wUfD;p
-wXAUATL
 wXAUL
 waAUL
 wap-wsg
@@ -5111,13 +5254,12 @@ wbW_0O#
 wchar_t AUL
 wchar_t"ZXb
 wchar_t%unsigned short;sC
+wchar_t,AUATL
 wchar_t,AUL
-wchar_t<AUATL
 wchar_t<AUL
 wchar_t>mMS
 wchar_t`AUATL
 wchar_t`AUL
-wdAUL
 weak_dependency
 wfDJ@
 whirlpool
@@ -5127,6 +5269,7 @@ write@@GLIBC_2.2.5
 wrong submessage type
 wtfD;unsigned char
 x121Address
+x2HcE@H
 x500UniqueIdentifier
 x509 certificate routines
 x509Certificate
@@ -5136,15 +5279,13 @@ x509_info
 x509_pkey
 x509_req
 x509_store
-x9Hcz@H
 xAVAUL
 xHD;`
 xHt5Hc
 xM9C }3
 xY9S }6
-x_calc. . . %double
-x_recv. . . %double
 xm9k }
+your_pop_id
 your_public_ip
 your_timestamp
 yu]4if
@@ -5154,6 +5295,7 @@ zlib compression
 {P0u[H
 {R.H[
 {\6r^
+{`HcSpI
 {p[]A\A]
 |	*%Xn
 |	9S(
@@ -5162,19 +5304,19 @@ zlib compression
 |$ I)
 |$ I1
 |$ unsigned short(
-|$(A9
 |$(I)
-|$(Lc
 |$(dH3<%(
-|$0L9
+|$0H)
+|$0M9
 |$8H!
-|$8H)
 |$8I!
 |$8I)
-|$8I9
 |$8Ic
+|$8L9
+|$8Lc
+|$8Mc
 |$8[]A\
-|$@9G\unsigned short"H
+|$8dH3<%(
 |$@E1
 |$@H1D$@H
 |$@H9
@@ -5184,7 +5326,9 @@ zlib compression
 |$HdH3<%(
 |$hdH3<%(
 |$p1A
+|$xdH3<%(
 |>>B|>>Bq
+|wchar_t;u(
 } 9{ |
 },Q$"'.4
 }4H;wchar_t
@@ -5193,8 +5337,12 @@ zlib compression
 }unsigned __int128]9s
 ~ []A\A]A^A_
 ~"}+)8
+~)I9]
 ~)p$w
 ~*D80u%D8x
+~.H;~
+~/H;wchar_t
 ~HHc|$ H
+~JHc@
 ~PAVAUATI
-~oH9D$
+~tH9D$
