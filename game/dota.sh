@@ -64,7 +64,7 @@ if [ "$STEAM_RUNTIME" = "0" ]; then
 fi
 
 if [ "$USE_STEAM_RUNTIME" = "1" ]; then
-    STEAM_RUNTIME_PREFIX=/valve/steam-runtime/shell.sh
+    STEAM_RUNTIME_PREFIX=/valve/steam-runtime/bin/run.sh
     if [ ! -f $STEAM_RUNTIME_PREFIX ]; then
         STEAM_RUNTIME_PREFIX=
     fi

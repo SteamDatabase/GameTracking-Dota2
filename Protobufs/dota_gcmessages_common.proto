@@ -158,6 +158,12 @@ message CSODOTAGameAccountClient {
 	optional uint32 recent_report_time = 104;
 }
 
+message CSODOTAGameAccountPrime {
+	optional uint32 account_id = 1 [(key_field) = true];
+	optional uint32 original_start_date = 2;
+	optional uint32 prime_flags = 3;
+}
+
 message CMsgLobbyEventPoints {
 	message ChatWheelMessageRange {
 		optional uint32 message_id_start = 1;
@@ -184,6 +190,13 @@ message CMsgLobbyEventPoints {
 
 	optional uint32 event_id = 1;
 	repeated .CMsgLobbyEventPoints.AccountPoints account_points = 2;
+}
+
+message CMsgLocalServerFakeLobbyData {
+	optional uint32 account_id = 1;
+	repeated .CMsgLobbyEventPoints event_points = 2;
+	optional bool is_prime_subscriber = 3;
+	optional uint32 primary_event_id = 4;
 }
 
 message CMsgBattleCupVictory {
@@ -404,6 +417,8 @@ message CMsgDOTACombatLogEntry {
 	optional bool aura_modifier = 65;
 	optional bool armor_debuff_modifier = 66;
 	optional bool no_physical_damage_modifier = 67;
+	optional uint32 modifier_ability = 68;
+	optional bool modifier_hidden = 69;
 }
 
 message CMsgDOTAProfileCard {
@@ -462,12 +477,14 @@ message CMsgDOTAProfileCard {
 	optional uint32 event_points = 5;
 	optional uint32 event_id = 6;
 	optional .CMsgBattleCupVictory recent_battle_cup_victory = 7;
+	optional uint32 rank_tier = 8;
 }
 
 message CSODOTAPlayerChallenge {
 	enum EFlags {
 		eFlag_InstantRerollUncompleted = 1;
 		eFlag_QuestChallenge = 2;
+		eFlag_MultiMatch = 3;
 	}
 
 	optional uint32 account_id = 1 [(key_field) = true];
@@ -484,6 +501,9 @@ message CSODOTAPlayerChallenge {
 	optional uint32 attempts = 12;
 	optional uint32 complete_limit = 13;
 	optional uint32 quest_rank = 14;
+	optional uint32 max_quest_rank = 15;
+	optional uint32 instance_id = 16;
+	optional uint32 hero_id = 17;
 }
 
 message CMsgClientToGCRerollPlayerChallenge {
@@ -929,6 +949,7 @@ message CMsgDOTAMatch {
 		optional sint32 rank_change = 13;
 		optional bool solo_rank = 49;
 		optional bool seasonal_rank = 53;
+		optional int32 rank_tier = 62;
 		optional uint32 kills = 14;
 		optional uint32 deaths = 15;
 		optional uint32 assists = 16;
@@ -967,9 +988,12 @@ message CMsgDOTAMatch {
 		repeated .CMatchAdditionalUnitInventory additional_units_inventory = 48;
 		repeated .CMatchPlayerPermanentBuff permanent_buffs = 57;
 		optional .CMsgDOTAMatch.Player.CustomGameData custom_game_data = 50;
-		optional bool active_battle_pass = 51;
+		optional bool active_prime_subscription = 51;
 		optional uint32 net_worth = 52;
 		optional uint32 bot_difficulty = 58;
+		optional uint32 hero_pick_order = 63;
+		optional bool hero_was_randomed = 64;
+		optional bool hero_was_bonus = 65;
 	}
 
 	message BroadcasterInfo {
@@ -1124,5 +1148,74 @@ message CMsgDOTABotDebugInfo {
 	optional float desire_farm_roshan = 11;
 	optional float execution_time = 12;
 	repeated uint32 rune_status = 13;
+}
+
+message CMsgDOTALeagueTournament {
+	message NodeGroup {
+		optional string name = 1;
+		optional uint32 node_group_id = 2;
+		optional uint32 parent_node_group_id = 3;
+		optional uint32 advancing_node_group_id = 4;
+		optional uint32 advancing_team_count = 5;
+		optional uint32 team_count = 6;
+		optional .CMsgDOTALeagueTournament.ENodeGroupType node_group_type = 7 [default = INVALID_GROUP_TYPE];
+		optional .CMsgDOTALeagueTournament.ENodeType default_node_type = 8 [default = INVALID_NODE_TYPE];
+		optional uint32 round = 9;
+		optional uint32 max_rounds = 10;
+		optional bool is_tiebreaker = 11;
+		optional bool is_final_group = 12;
+		optional bool is_completed = 13;
+		repeated .CMsgDOTALeagueTournament.TeamStanding team_standings = 14;
+		repeated .CMsgDOTALeagueTournament.Node nodes = 15;
+		repeated .CMsgDOTALeagueTournament.NodeGroup node_groups = 16;
+	}
+
+	message Node {
+		optional string name = 1;
+		optional uint32 node_id = 2;
+		optional uint32 node_group_id = 3;
+		optional uint32 winning_node_id = 4;
+		optional uint32 losing_node_id = 5;
+		optional .CMsgDOTALeagueTournament.ENodeType node_type = 6 [default = INVALID_NODE_TYPE];
+		optional uint32 scheduled_time = 7;
+		optional uint32 team_id_1 = 10;
+		optional uint32 team_id_2 = 11;
+		optional uint32 series_id = 20;
+		repeated uint64 matches = 21;
+		optional uint32 team_1_wins = 22;
+		optional uint32 team_2_wins = 23;
+		optional bool is_completed = 24;
+	}
+
+	message TeamStanding {
+		optional uint32 team_id = 1;
+		optional uint32 node_wins = 2;
+		optional uint32 node_losses = 3;
+		optional uint32 match_wins = 4;
+		optional uint32 match_losses = 5;
+		optional uint32 score = 6;
+	}
+
+	enum ENodeGroupType {
+		INVALID_GROUP_TYPE = 0;
+		ORGANIZATIONAL = 1;
+		ROUND_ROBIN = 2;
+		SWISS = 3;
+		BRACKET_SINGLE = 4;
+		BRACKET_DOUBLE_SEED_LOSER = 5;
+		BRACKET_DOUBLE_ALL_WINNER = 6;
+		BRACKET_SHOWMATCH = 7;
+	}
+
+	enum ENodeType {
+		INVALID_NODE_TYPE = 0;
+		BEST_OF_ONE = 1;
+		BEST_OF_THREE = 2;
+		BEST_OF_FIVE = 3;
+		BEST_OF_TWO = 4;
+	}
+
+	optional uint32 league_id = 1;
+	repeated .CMsgDOTALeagueTournament.NodeGroup node_groups = 2;
 }
 

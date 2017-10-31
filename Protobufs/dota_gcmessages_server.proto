@@ -191,6 +191,11 @@ message CMsgDOTAFantasyMatch {
 	optional uint32 team_2 = 7;
 }
 
+message CMsgDOTAUpdateClippy {
+	repeated uint32 good_team_hero_ids = 1;
+	repeated uint32 bad_team_hero_ids = 2;
+}
+
 message CMsgServerToGCRealtimeStats {
 	optional .CMsgDOTARealtimeGameStatsTerse delayed = 1;
 	optional .CMsgDOTARealtimeGameStats current = 2;
@@ -247,6 +252,9 @@ message CMsgGameMatchSignOut {
 			optional .CMsgGameMatchSignOut.CTeam.CPlayer.CCustomGameData custom_game_data = 35;
 			optional uint32 match_player_flags = 36;
 			repeated uint32 talent_ability_ids = 41;
+			optional uint32 hero_pick_order = 42;
+			optional bool hero_was_randomed = 43;
+			optional bool hero_was_bonus = 44;
 		}
 
 		repeated .CMsgGameMatchSignOut.CTeam.CPlayer players = 1;
@@ -382,11 +390,6 @@ message CMsgSignOutCommunicationSummary {
 }
 
 message CMsgGameMatchSignoutResponse {
-	message CAdditionalSignoutMsg {
-		optional uint32 id = 1;
-		optional bytes contents = 2;
-	}
-
 	message PlayerMetadata {
 		optional uint32 hero_id = 1;
 		optional uint32 avg_kills_x16 = 2;
@@ -408,7 +411,6 @@ message CMsgGameMatchSignoutResponse {
 	repeated .CLobbyTimedRewardDetails timed_reward_details = 3;
 	repeated .CDOTALobbyMember xp_reward_details = 4;
 	optional uint32 leagueid = 5;
-	repeated .CMsgGameMatchSignoutResponse.CAdditionalSignoutMsg additional_msgs = 6;
 	optional fixed32 metadata_private_key = 7;
 	optional .CMsgDOTAMatch match_details = 8;
 	repeated .CMsgGameMatchSignoutResponse.PlayerMetadata players_metadata = 9;
@@ -980,31 +982,12 @@ message CMsgServerToGCPostMatchTipResponse {
 	optional .CMsgServerToGCPostMatchTipResponse.Result result = 4 [default = SUCCESS];
 }
 
-message CMsgServerToGCStartCompendiumInGamePredictions {
-	optional uint32 league_id = 1;
-	optional uint64 match_id = 2;
-	optional float hltv_delay = 3;
-	repeated uint32 prediction_ids = 4;
-	optional uint32 series_id = 5;
-}
-
-message CMsgServerToGCStartCompendiumInGamePredictionsResponse {
-	optional bool result = 1;
-}
-
 message CMsgServerToGCCloseCompendiumInGamePredictionVoting {
 	optional uint64 match_id = 1;
+	optional uint32 hltv_delay = 2;
 }
 
 message CMsgServerToGCCloseCompendiumInGamePredictionVotingResponse {
-	optional bool result = 1;
-}
-
-message CMsgServerToGCEndCompendiumInGamePredictions {
-	optional uint64 match_id = 1;
-}
-
-message CMsgServerToGCEndCompendiumInGamePredictionsResponse {
 	optional bool result = 1;
 }
 
@@ -1017,6 +1000,8 @@ message CMsgServerToGCCompendiumInGamePredictionResults {
 
 	optional uint64 match_id = 1;
 	repeated .CMsgServerToGCCompendiumInGamePredictionResults.PredictionResult results = 2;
+	optional uint32 league_id = 3;
+	optional uint32 series_id = 4;
 }
 
 message CMsgServerToGCCompendiumInGamePredictionResultsResponse {

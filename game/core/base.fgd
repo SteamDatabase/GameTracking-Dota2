@@ -557,7 +557,7 @@
 
 	NavRestrictionVolume(target_destination) [ group="NPC Properties" ] : "Nav Restriction Volume" : "" : "Markup volume entity to restrict unit navigation"
 
-	spawnasragdoll(boolean) [ group="NPC Properties" ] : "Spawn as ragdoll" : 0 : "This NPC will spawn as a ragdoll and will unragdoll when it settles."
+	spawnasragdoll(boolean) [ group="NPC Properties" ] : "Spawn as Temp Ragdoll" : 0 : "This NPC will spawn as a temporary ragdoll, and then unragdoll after it settles."
 
 	// Outputs
 	output OnDamaged(void) : "Fired when this NPC takes damage."
@@ -611,6 +611,7 @@
 	input BecomeTemporaryRagdoll(float) : "Become a temporary ragdoll that then can be later unrgadolled."
 	input StopTemporaryRagdoll(void) : "Rise from your grave."
 	input WalkTowardsTarget(target_destination) : "Walks towards a target."
+	input SetAnimGraphParameter(string) : "Set an animation graph parameter Format: <name=value>"
 ]
 
 @PointClass base(Targetname, Parentname) iconsprite("editor/info_target.vmat") = info_npc_spawn_destination : 
@@ -1047,7 +1048,14 @@
 	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
 	operatorName(string) : "Operator Name" : "" : "The name of the operator the OpVar is in"
 	opvarName(string) : "OpVar Name" : "" : "The name of the OpVar to change"
-	opvarValue(float)	:	"OpVar Value" : "1.0" : "Value to set the OpVar to"
+	opvarValueType(choices) : "Opvar Value Type" : "0" : "The interpreted type of value to be set on the opvar." =
+	[
+		0 : "Float"
+		1 : "String"
+	]	
+	opvarValue(float) : "OpVar Float" : "1.0" : "Value to set the OpVar to"
+	opvarValueString(string) : "OpVar String" : "null" : "String to set the OpVar to"
+	setOnSpawn(boolean) : "Set on Spawn" : 0 : "Set the opvar upon spawning"
 	
 	input SetStackName(string) : "Change the target stack name"
 	input SetOperatorName(string) : "Change the target operator name"
@@ -1559,7 +1567,7 @@
 //
 //-------------------------------------------------------------------------
 
-@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, CanBeClientOnly) model() = cycler :
+@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, CanBeClientOnly) model() model_archetypes(animated_model) = cycler :
 	"An entity used to display a model for testing purposes. Shooting it with cycle through the model's animations."
 [
 	spawnflags(flags) =
@@ -1587,11 +1595,11 @@
 
 	doClientSideAnimation(boolean) : "Use Client-Side Animation" : 0
 	
-	sequenceName(string) : "Sequence Name" : "idle" : "Default animation sequence for the model to be playing after spawning."
-	sequenceName2(string) : "Sequence Name 2" : "" : "Used by the 'Toggle Base Layer Sequence' test."
+	sequenceName(sequence) : "Sequence Name" : "idle" : "Default animation sequence for the model to be playing after spawning."
+	sequenceName2(sequence) : "Sequence Name 2" : "" : "Used by the 'Toggle Base Layer Sequence' test."
 	poseParameterName(string) : "Pose Parameter Name" : "" : "Pose parameter to use for various unit tests"
-	layerSequence1(string) : "Layer 1 Sequence Name" : "" : "Layer sequence #1 for the Add/Remove Animation Layers test."
-	layerSequence2(string) : "Layer 2 Sequence Name" : "" : "Layer sequence #2 for the Add/Remove Animation Layers test."
+	layerSequence1(sequence) : "Layer 1 Sequence Name" : "" : "Layer sequence #1 for the Add/Remove Animation Layers test."
+	layerSequence2(sequence) : "Layer 2 Sequence Name" : "" : "Layer sequence #2 for the Add/Remove Animation Layers test."
 
 	// Inputs
 	input AddSequenceLayer(void) : "Adds a random sequence as a new layer"
@@ -1599,7 +1607,7 @@
 ]
 
 
-@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, Studiomodel) model() = func_orator : 
+@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, Studiomodel) model() model_archetypes(animated_model) = func_orator : 
 	"A very simple model entity that has animations and response rules."
 [
 	spawnflags(flags) =
@@ -5845,7 +5853,7 @@
 		1: "Yes"
 	]
 
-	DefaultAnim(string) : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation."
+	DefaultAnim(sequence) : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation."
 
 	RandomAnimation(boolean) : "Randomly Animate" : 0 : "If set, this prop will randomly choose and play animations, based upon the times specified in 'Min/Max Random Anim Time'. Inbetween the random animations, it will revert to playing the 'Default Animation'."
 	HoldAnimation(boolean) : "Hold Animation" : 0 : "If set, the prop will not loop its animation, but hold the last frame."
@@ -5893,7 +5901,7 @@
 	model(studio) : "World model"
 ]
 
-@PointClass color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static) = prop_static
+@PointClass color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static) model_archetypes(static_prop_model) = prop_static
 [
 	model(resource:model) [report] : "World Model"
 	solid(choices) : "Collisions" : 6 =
@@ -5959,7 +5967,7 @@
 ]
 
 
-@PointClass base(prop_dynamic_base, EnableDisable) sphere(fademindist) sphere(fademaxdist) model() = prop_dynamic :
+@PointClass base(prop_dynamic_base, EnableDisable) sphere(fademindist) sphere(fademaxdist) model() model_archetypes(animated_model) = prop_dynamic :
 	"A prop that can be placed in hierarchy and can play animations and/or simulate cloth. It can also be configured to break when it takes enough damage. "+
 	"Note that the health of the object will be overridden by the health inside the model, to ensure consistent health game-wide. "+
 	"If the model used by the prop is configured to be used as a prop_physics (i.e. it should be physically simulated) then it CANNOT be "+
@@ -6062,7 +6070,7 @@
 	input IgniteHitboxFireScale(float) : "Ignite, with a parameter hitbox fire scale."
 ]
 
-@PointClass base(BasePropPhysics, RenderFields) model() sphere(fademindist) sphere(fademaxdist) = prop_physics :
+@PointClass base(BasePropPhysics, RenderFields) model() sphere(fademindist) sphere(fademaxdist) model_archetypes(physics_prop_model,breakable_prop_model) = prop_physics :
 	"A prop that physically simulates as a single rigid body. It can be constrained to other physics objects using hinges "+
 	"or other constraints. It can also be configured to break when it takes enough damage. "+
 	"Note that the health of the object will be overridden by the health inside the model, to ensure consistent health game-wide. "+
@@ -6946,7 +6954,7 @@
 // Misc
 //-------------------------------------------------------------------------
 
-@PointClass base(BaseNPC, Parentname) model() = npc_furniture : 
+@PointClass base(BaseNPC, Parentname) model() model_archetypes(animated_model) = npc_furniture : 
 	"An entity used for non-NPCs that need to synchronise their animation with an NPC in a scripted_sequence. Usually a piece"+
 	"of furniture or door that an NPC needs to manipulate within a scripted_sequence."
 [
@@ -7029,6 +7037,15 @@
 	input SetLocatorTargetEntity(string) : "Set the entity that the HUD locator should track. (Usually a vehicle)"
 	
 ]
+
+@PointClass base(Targetname, DamageFilter) size(-8 -8 -8, 8 8 8) = logic_gameevent_listener:
+	"An entity that listens to game events and fires off an output when the named event it fired"
+[
+	gameeventname(string) : "Game Event Name"
+	gameeventitem(string) :	"Item Name"
+	output OnEventFired(void) : "Fire an output when the named event fires"	
+]
+
 
 
 @PointClass base(Targetname, Parentname) editormodel("models/editor/spot.vmdl") frustum(lightfov, nearz, farz, lightcolor, -1) = env_projectedtexture :
@@ -7386,10 +7403,10 @@
 ]
 
 
-@PointClass base(Targetname, Parentname, RenderFields) editormodel("models/editor/axis_helper") externalHelper( ToolObjects/point_worldtext ) color(20 140 20) = point_worldtext : 
+@PointClass base(Targetname, Parentname, RenderFields) editormodel("models/editor/axis_helper_thick") externalHelper( ToolObjects/point_worldtext ) color(20 140 20) = point_worldtext : 
 	"3D text in the world" 
 [
-	message(string) : "Message"
+	message(text_block) : "Message"
 	enabled(boolean) : "Start Enabled" : "1"
 	fullbright(boolean) : "Draw Fullbright" : "0"
 	color(color255) : "Color" : "0 0 0 255"
@@ -7730,4 +7747,20 @@
 	input RemoveContext(string) : "Remove context (contextname)."
 	input ClearContext(void) : "Clear all context."
 	input SilencePlayer(bool): "Silence the player"
+]
+
+@PointClass base(Targetname, Parentname, EnableDisable) sphere() = env_volumetric_fog_controller : 
+	"Controller for volumetric fogging settings"
+[
+	FogStrength( float ) : "Fog strength" : "1.0" : "Technically the scattering value. Higher values make denser fog."
+	Anisotropy( float ) : "Anisotropy" : "0.2" : "How much the fog should get brighter when you stare directly at the light." 
+	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
+	DrawDistance( float ) : "Draw distance" : "600.0" : "Maximum distance to draw fog - WARNING! Changing from default will make fog blockier." 
+	input SetToDefaults(void) : "Resets scattering and anisotropy to default values"
+	input SetFogStrength(float) : "Set fog strength"
+	input SetAnisotropy(float) : "Set anisotropy value"
+	input SetFadeSpeed(float) : "Set fade in/out speed"
+	input SetDrawDistance(float) : "Set draw distance"
+	input Enable(boolean) : "Enable"
+	input Disable(boolean) : "Disable"
 ]

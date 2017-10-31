@@ -580,58 +580,6 @@ message CMsgDOTAStorePromoPagesResponse {
 	repeated .CMsgDOTAStorePromoPagesResponse.PromoPage pages = 1;
 }
 
-message CMsgLeagueScheduleBlockTeamInfo {
-	optional uint32 team_id = 1;
-	optional string name = 2;
-	optional uint64 logo = 4;
-}
-
-message CMsgLeagueScheduleBlock {
-	optional uint32 block_id = 1;
-	optional uint32 start_time = 2;
-	optional bool finals = 4;
-	optional string comment = 5;
-	repeated .CMsgLeagueScheduleBlockTeamInfo teams = 6;
-}
-
-message CMsgDOTALeague {
-	optional uint32 league_id = 1;
-	repeated .CMsgLeagueScheduleBlock schedule = 2;
-}
-
-message CMsgDOTALeagueScheduleRequest {
-	optional uint32 league_id = 1;
-}
-
-message CMsgDOTALeagueScheduleResponse {
-	optional .CMsgDOTALeague league = 1;
-	optional uint32 eresult = 2 [default = 2];
-}
-
-message CMsgDOTALeagueScheduleEdit {
-	optional uint32 league_id = 1;
-	optional .CMsgLeagueScheduleBlock schedule = 2;
-	optional bool delete_block = 3;
-}
-
-message CMsgDOTALeagueScheduleEditResponse {
-	optional .CMsgDOTALeague league = 1;
-	optional uint32 eresult = 2 [default = 2];
-}
-
-message CMsgDOTALeaguesInMonthRequest {
-	optional uint32 month = 1;
-	optional uint32 year = 2;
-	optional uint32 tier = 3;
-}
-
-message CMsgDOTALeaguesInMonthResponse {
-	optional uint32 eresult = 1 [default = 2];
-	optional uint32 month = 2;
-	optional uint32 year = 3;
-	repeated .CMsgDOTALeague leagues = 4;
-}
-
 message CMsgMatchmakingMatchGroupInfo {
 	optional uint32 players_searching = 1;
 	optional sint32 auto_region_select_ping_penalty = 2;
@@ -772,6 +720,10 @@ message CMsgGCGetHeroStandingsResponse {
 		optional uint32 best_gpm = 13;
 		optional uint32 best_xpm = 14;
 		optional float performance = 15;
+		optional uint32 wins_with_ally = 16;
+		optional uint32 losses_with_ally = 17;
+		optional uint32 wins_against_enemy = 18;
+		optional uint32 losses_against_enemy = 19;
 	}
 
 	repeated .CMsgGCGetHeroStandingsResponse.Hero standings = 1;
@@ -993,7 +945,7 @@ message CMsgDOTAGetPlayerMatchHistoryResponse {
 		optional bool abandon = 10;
 		optional uint32 duration = 11;
 		optional uint32 engine = 12;
-		optional bool active_battle_pass = 13;
+		optional bool active_prime_subscription = 13;
 		optional bool seasonal_rank = 14;
 		optional uint32 tourney_id = 15;
 		optional uint32 tourney_round = 16;
@@ -1833,10 +1785,15 @@ message CMsgGCToClientQuestProgressUpdated {
 		optional uint32 hero_id = 4;
 		optional uint32 challenge_type = 5;
 		optional uint32 quest_rank = 6;
+		optional uint32 max_quest_rank = 7;
 	}
 
 	optional uint32 quest_id = 1;
 	repeated .CMsgGCToClientQuestProgressUpdated.Challenge completed_challenges = 2;
+}
+
+message CMsgGCToClientUpdateClientClippy {
+	repeated uint32 hero_ids = 1;
 }
 
 message CMsgDOTARedeemItem {
@@ -1918,6 +1875,7 @@ message CMsgClientToGCSelectCompendiumInGamePrediction {
 
 	optional uint64 match_id = 1;
 	repeated .CMsgClientToGCSelectCompendiumInGamePrediction.Prediction predictions = 2;
+	optional uint32 league_id = 3;
 }
 
 message CMsgClientToGCSelectCompendiumInGamePredictionResponse {
@@ -2388,5 +2346,55 @@ message CMsgDOTAGameAutographRewardResponse {
 	}
 
 	optional .CMsgDOTAGameAutographRewardResponse.Result result = 1 [default = SUCCESS];
+}
+
+message CMsgDOTADestroyLobbyRequest {
+}
+
+message CMsgDOTADestroyLobbyResponse {
+	enum Result {
+		SUCCESS = 0;
+		ERROR_UNKNOWN = 1;
+	}
+
+	optional .CMsgDOTADestroyLobbyResponse.Result result = 1 [default = SUCCESS];
+}
+
+message CMsgPurchaseItemWithEventPoints {
+	optional uint32 item_def = 1;
+	optional uint32 quantity = 2;
+	optional .EEvent event_id = 3 [default = EVENT_ID_NONE];
+	optional bool use_premium_points = 4;
+}
+
+message CMsgPurchaseItemWithEventPointsResponse {
+	enum Result {
+		SUCCESS = 0;
+		UNKNOWN_EVENT = 1;
+		UNKNOWN_ITEM = 2;
+		BAD_QUANTITY = 3;
+		NOT_PURCHASEABLE = 4;
+		SDO_LOAD_FAILED = 5;
+		NOT_ENOUGH_POINTS = 6;
+		SQL_ERROR = 7;
+		FAILED_TO_SEND = 8;
+	}
+
+	optional .CMsgPurchaseItemWithEventPointsResponse.Result result = 1 [default = SUCCESS];
+}
+
+message CMsgGCRequestItemRecommendations {
+	optional uint32 mmr = 1;
+	optional uint32 hero_id = 2;
+	repeated uint32 allied_hero_ids = 3;
+	repeated uint32 enemy_hero_ids = 4;
+	repeated uint32 inventory_items = 5;
+	optional int32 game_time = 6;
+	optional uint32 gold = 7;
+	optional uint32 net_worth = 8;
+}
+
+message CMsgGCRequestItemRecommendationsResponse {
+	repeated uint32 recommended_item_ids = 1;
 }
 
