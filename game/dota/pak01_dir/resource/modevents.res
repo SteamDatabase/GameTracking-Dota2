@@ -1064,6 +1064,11 @@
 		"beast_id"				"uint64"
 	}
 
+	"dota_player_spawned"
+	{
+		"PlayerID"		"byte"
+	}
+
 	"dota_hero_undoselection"
 	{
 		"playerid1"		"byte"

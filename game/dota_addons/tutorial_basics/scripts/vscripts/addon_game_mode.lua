@@ -96,7 +96,6 @@ function CTutorialBasics:InitGameMode()
 	PrecacheUnitByNameAsync( "npc_dota_hero_luna",				function(unit) end )
 	PrecacheUnitByNameAsync( "npc_dota_hero_razor",				function(unit) end )
 
-
 	Tutorial:StartTutorialMode()
 
 	self._flDelay = 0
@@ -188,6 +187,7 @@ function CTutorialBasics:InitGameMode()
 	ListenToGameEvent( "npc_spawned",							Dynamic_Wrap( CTutorialBasics, "OnNPCSpawned" ), self )
 	ListenToGameEvent( "dota_tutorial_task_advance",			Dynamic_Wrap( CTutorialBasics, "OnTaskAdvance" ), self )
 	ListenToGameEvent( "dota_player_gained_level",				Dynamic_Wrap( CTutorialBasics, "OnPlayerGainedLevel" ), self )
+	ListenToGameEvent( "dota_player_spawned",					Dynamic_Wrap( CTutorialBasics, "OnPlayerSpawned" ), self )
 	ListenToGameEvent( "dota_player_learned_ability",			Dynamic_Wrap( CTutorialBasics, "OnPlayerLearnedAbility" ), self )
 	ListenToGameEvent( "dota_player_used_ability",				Dynamic_Wrap( CTutorialBasics, "OnPlayerUsedAbility" ), self )
 	ListenToGameEvent( "dota_player_take_tower_damage",			Dynamic_Wrap( CTutorialBasics, "OnPlayerTookTowerDamage" ), self )
@@ -276,6 +276,13 @@ end
 function CTutorialBasics:OnTaskAdvance()
 	print("I'm done with my task!")
 	self:_FireEvent( ON_TASK_ADVANCED )
+end
+
+function CTutorialBasics:OnPlayerSpawned()
+	if ( self._bInitialized == false ) then
+		self._bInitialized = true
+		self:_FireEvent( ON_INITIALIZED )
+	end
 end
 
 function CTutorialBasics:OnPlayerGainedLevel()
@@ -415,11 +422,6 @@ end
 function CTutorialBasics:OnThink()
 	if ( self._bPreventTowerDamage == true ) then
 		self._entTargetTower:ModifyHealth( 500, nil, false, 0 )
-	end
-
-	if ( self._bInitialized == false ) then
-		self._bInitialized = true
-		self:_FireEvent( ON_INITIALIZED )
 	end
 
 	if ( self._flFXClearTime > 0 and self._nFXIndex ~= -1 ) then
