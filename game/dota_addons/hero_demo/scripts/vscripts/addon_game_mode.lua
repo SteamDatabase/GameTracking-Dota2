@@ -33,6 +33,7 @@ require( "utility_functions" )
 function Precache( context )
 	PrecacheUnitByNameSync( sHeroSelection, context )
 	PrecacheUnitByNameSync( "npc_dota_hero_axe", context )
+	PrecacheUnitByNameSync( "npc_dota_hero_antimage", context )
 	PrecacheUnitByNameSync( "npc_dota_hero_target_dummy", context )
 end
 
