@@ -102,13 +102,13 @@
 	"dota_item_purchase"
 	{
 		"userid"		"short"
-		"itemid"		"short"
+		"item_ability_id"		"int"
 	}
 
 	"dota_item_gifted"
 	{
 		"userid"		"short"
-		"itemid"		"short"
+		"item_ability_id"		"int"
 		"sourceid"		"short"
 	}
 
@@ -127,8 +127,8 @@
 
 	"dota_item_spotted"
 	{
-		"userid"		"short"
-		"itemid"		"short"
+		"userid"			"short"
+		"item_ability_id"	"int"
 	}
 
 	"dota_no_battle_points"
@@ -273,6 +273,14 @@
 	}
 	
 	"dota_inventory_changed"
+	{
+	}
+	
+	"dota_item_suggestions_changed"
+	{
+	}
+
+	"dota_estimated_match_duration_changed"
 	{
 	}
 	
@@ -477,6 +485,7 @@
 	"dota_player_learned_ability"
 	{
 		"PlayerID"		"short"
+		"player"		"short"
 		"abilityname"	"string"
 	}	
 
