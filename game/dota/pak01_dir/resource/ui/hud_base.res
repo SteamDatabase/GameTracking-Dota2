@@ -46,10 +46,5 @@
 
 		"enabled"			"0"
 		"visible"			"1"
-
-		"inset_left"		"5"
-		"inset_top"			"0"
-		"inset_right"		"0"
-		"inset_bottom"		"0"
 	}
 }

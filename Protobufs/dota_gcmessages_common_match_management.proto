@@ -17,6 +17,20 @@ enum LobbyDotaPauseSetting {
 	LobbyDotaPauseSetting_Disabled = 2;
 }
 
+enum EReadyCheckStatus {
+	k_EReadyCheckStatus_Unknown = 0;
+	k_EReadyCheckStatus_NotReady = 1;
+	k_EReadyCheckStatus_Ready = 2;
+}
+
+enum EReadyCheckRequestResult {
+	k_EReadyCheckRequestResult_Success = 0;
+	k_EReadyCheckRequestResult_AlreadyInProgress = 1;
+	k_EReadyCheckRequestResult_NotInParty = 2;
+	k_EReadyCheckRequestResult_SendError = 3;
+	k_EReadyCheckRequestResult_UnknownError = 4;
+}
+
 message CSODOTAPartyMember {
 	optional .PartnerAccountType partner_type = 1 [default = PARTNER_NONE];
 	optional bool is_coach = 2;
@@ -78,6 +92,7 @@ message CSODOTAParty {
 	optional bool solo_queue = 59;
 	optional uint32 bot_script_index = 60;
 	optional uint32 steam_clan_account_id = 61;
+	optional .CMsgReadyCheckStatus ready_check = 62;
 }
 
 message CSODOTAPartyInvite {
@@ -310,9 +325,34 @@ message CSODOTALobby {
 	optional .EEvent current_primary_event = 103 [default = EVENT_ID_NONE];
 	optional bool lowpri_deprecated = 104;
 	repeated uint32 emergency_disabled_hero_ids = 105;
+	optional fixed64 custom_game_private_key = 106;
+	optional bool custom_game_penalties = 107;
 }
 
 message CMsgLobbyPlaytestDetails {
 	optional string json = 1;
+}
+
+message CMsgReadyCheckStatus {
+	message ReadyMember {
+		optional uint32 account_id = 1;
+		optional .EReadyCheckStatus ready_status = 2 [default = k_EReadyCheckStatus_Unknown];
+	}
+
+	optional uint32 start_timestamp = 1;
+	optional uint32 finish_timestamp = 2;
+	optional uint32 initiator_account_id = 3;
+	repeated .CMsgReadyCheckStatus.ReadyMember ready_members = 4;
+}
+
+message CMsgPartyReadyCheckRequest {
+}
+
+message CMsgPartyReadyCheckResponse {
+	optional .EReadyCheckRequestResult result = 1 [default = k_EReadyCheckRequestResult_Success];
+}
+
+message CMsgPartyReadyCheckAcknowledge {
+	optional .EReadyCheckStatus ready_status = 1 [default = k_EReadyCheckStatus_Unknown];
 }
 

@@ -3,6 +3,7 @@ import "dota_shared_enums.proto";
 import "dota_gcmessages_common.proto";
 import "gcsdk_gcmessages.proto";
 import "dota_gcmessages_common_match_management.proto";
+import "base_gcmessages.proto";
 
 option optimize_for = SPEED;
 option cc_generic_services = false;
@@ -419,6 +420,7 @@ message CMsgDOTAWelcome {
 	repeated .CMsgDOTAWelcome.CExtraMsg extra_messages = 26;
 	optional uint64 minimum_recent_item_id = 27;
 	optional .EEvent active_event = 28 [default = EVENT_ID_NONE];
+	optional uint32 additional_user_message = 29;
 }
 
 message CSODOTAGameHeroFavorites {
@@ -1213,6 +1215,10 @@ message CMsgGCToClientPlayerStatsResponse {
 	optional float support_score = 17;
 	optional float push_score = 18;
 	optional float versatility_score = 19;
+	optional float mean_networth = 20;
+	optional float mean_damage = 21;
+	optional float mean_heals = 22;
+	optional uint32 rapiers_purchased = 23;
 }
 
 message CMsgClientToGCCustomGamePlayerCountRequest {
@@ -2210,7 +2216,12 @@ message CMsgGCToClientBattlePassRollupListRequest {
 }
 
 message CMsgGCToClientBattlePassRollupListResponse {
-	repeated uint32 event_id = 1;
+	message EventInfo {
+		optional uint32 event_id = 1;
+		optional uint32 level = 2;
+	}
+
+	repeated .CMsgGCToClientBattlePassRollupListResponse.EventInfo event_info = 1;
 }
 
 message CMsgClientToGCTransferSeasonalMMRRequest {
@@ -2344,6 +2355,12 @@ message CMsgGCToClientTipNotification {
 	optional uint32 event_id = 5;
 }
 
+message CMsgGCToClientCommendNotification {
+	optional uint32 commender_account_id = 1;
+	optional string commender_name = 2;
+	optional uint32 flags = 3;
+}
+
 message CMsgGCToClientAllStarVotesRequest {
 	optional uint32 event_id = 1;
 }
@@ -2431,6 +2448,13 @@ message CMsgDOTADestroyLobbyResponse {
 	optional .CMsgDOTADestroyLobbyResponse.Result result = 1 [default = SUCCESS];
 }
 
+message CMsgDOTAGetRecentPlayTimeFriendsRequest {
+}
+
+message CMsgDOTAGetRecentPlayTimeFriendsResponse {
+	repeated fixed32 account_ids = 1;
+}
+
 message CMsgPurchaseItemWithEventPoints {
 	optional uint32 item_def = 1;
 	optional uint32 quantity = 2;
@@ -2484,5 +2508,45 @@ message CMsgGCRequestSkillUpRecommendationsResponse {
 	}
 
 	repeated .CMsgGCRequestSkillUpRecommendationsResponse.AbilitySelection abilities = 1;
+}
+
+message CMsgProfileRequest {
+	optional uint32 account_id = 1;
+}
+
+message CMsgProfileResponse {
+	message FeaturedHero {
+		optional uint32 hero_id = 1;
+		repeated .CSOEconItem equipped_econ_items = 2;
+		optional bool manually_set = 3;
+	}
+
+	message MatchInfo {
+		optional uint64 match_id = 1;
+		optional uint32 match_timestamp = 2;
+		optional sint32 performance_rating = 3;
+		optional uint32 hero_id = 4;
+		optional bool won_match = 5;
+	}
+
+	optional .CSOEconItem background_item = 1;
+	repeated .CMsgProfileResponse.FeaturedHero featured_heroes = 2;
+	repeated .CMsgProfileResponse.MatchInfo recent_matches = 3;
+	repeated .CMsgSuccessfulHero successful_heroes = 4;
+	optional .CMsgRecentMatchInfo recent_match_details = 5;
+}
+
+message CMsgProfileUpdate {
+	optional uint64 background_item_id = 1;
+	repeated uint32 featured_hero_ids = 2;
+}
+
+message CMsgProfileUpdateResponse {
+	enum Result {
+		SUCCESS = 0;
+		FAILURE = 1;
+	}
+
+	optional .CMsgProfileUpdateResponse.Result result = 1 [default = SUCCESS];
 }
 

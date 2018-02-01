@@ -45,8 +45,5 @@
 
 		"enabled"			"0"
 		"visible"			"1"
-
-		"inset_left"		"10"
-		"inset_top"			"0"
 	}
 }
