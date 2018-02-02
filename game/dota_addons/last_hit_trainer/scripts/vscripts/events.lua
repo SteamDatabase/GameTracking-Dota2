@@ -8,13 +8,13 @@ function CLastHitTrainer:OnGameRulesStateChange()
 	--print( "OnGameRulesStateChange: " .. nNewState )
 
 	if nNewState == DOTA_GAMERULES_STATE_HERO_SELECTION then
-		print( "OnGameRulesStateChange: Hero Selection" )
+		--print( "OnGameRulesStateChange: Hero Selection" )
 
 	elseif nNewState == DOTA_GAMERULES_STATE_PRE_GAME then
-		print( "OnGameRulesStateChange: Pre Game" )
+		--print( "OnGameRulesStateChange: Pre Game" )
 
 	elseif nNewState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		print( "OnGameRulesStateChange: Game In Progress" )
+		--print( "OnGameRulesStateChange: Game In Progress" )
 		--CustomGameEventManager:Send_ServerToAllClients( "mode_started", {} )
 
 	end
@@ -161,8 +161,6 @@ function CLastHitTrainer:IncrementLastHitStreakCount()
 	local nCurrentStreak = self.m_NetTableStats.m_CurrentLastHitStreakCount
 	self:PlayLastHitStreakSound( nCurrentStreak )
 
-	--print( "nCurrentStreak == " .. nCurrentStreak )
-
 	local vColor = self.m_vColorTier1
 	if nCurrentStreak >= 3 and nCurrentStreak < 6 then
 		vColor = self.m_vColorTier1
@@ -181,8 +179,6 @@ function CLastHitTrainer:IncrementLastHitStreakCount()
 	elseif nCurrentStreak >= 24 then
 		vColor = self.m_vColorTier8
 	end
-
-	--print( string.format( "vColor == ( %d, %d, %d )", vColor.x, vColor.y, vColor.z ) )
 
 	--[[
 		Cp 1: ( message_index, 0, 0)
@@ -325,15 +321,16 @@ function CLastHitTrainer:OnRoundEnded()
 	--self:SetupNextRound()
 
 	EmitGlobalSound( "RoundEnd" )
+
+	gGameInfo.m_bIsOverTime = false
+	CustomNetTables:SetTableValue( "last_hit_trainer_gameinfo", "gameinfo", gGameInfo )
 end
 
 --------------------------------------------------------------------------------
 -- 
 --------------------------------------------------------------------------------
 function CLastHitTrainer:OnThink()
-	if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		--print( "Template addon script is running." )
-	elseif GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
+	if GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
 		print( "Reached post-game, stop OnThink" )
 		return nil
 	end
@@ -351,24 +348,42 @@ function CLastHitTrainer:OnThink()
 		-- We're playing a round
 		local fRoundEndTime = ( gGameInfo.m_fRoundStartTime + gGameInfo.m_fRoundDuration )
 
-		if ( GameRules:GetGameTime() >= ( self.m_fTimeLastCreepsSpawned + 30 ) ) then
+		if ( GameRules:GetGameTime() >= ( self.m_fTimeLastCreepsSpawned + self.m_SPAWN_WAVE_INTERVAL ) ) then
 			self:SpawnLaneCreeps()
 		end
 
 		local nIntenseAudioDuration = 17
 		if ( not self.m_bPlayingIntenseAudio ) and ( ( GameRules:GetGameTime() + nIntenseAudioDuration ) >= fRoundEndTime ) then
-			-- Not much time left, play some intense audio
+			-- Not much time left in the round
 			EmitGlobalSound( "RoundNearlyOver" )
 			self.m_bPlayingIntenseAudio = true
 		end
 
 		if GameRules:GetGameTime() >= ( gGameInfo.m_fRoundStartTime + gGameInfo.m_fRoundDuration ) then
-			self:OnRoundEnded()
-			return 0.1
+			if self:AreAnyCreepsAlive() == false then
+				self:OnRoundEnded()
+			else
+				gGameInfo.m_bIsOverTime = true
+				CustomNetTables:SetTableValue( "last_hit_trainer_gameinfo", "gameinfo", gGameInfo )
+			end
 		end
 	end
 
 	return 0.1
+end
+
+--------------------------------------------------------------------------------
+--
+--------------------------------------------------------------------------------
+function CLastHitTrainer:AreAnyCreepsAlive()
+	local hLaneCreeps = Entities:FindAllByClassname( "npc_dota_creep_lane" )
+	for _, hCreep in pairs( hLaneCreeps ) do
+		if hCreep and hCreep:IsAlive() then
+			return true
+		end
+	end
+
+	return false
 end
 
 --------------------------------------------------------------------------------

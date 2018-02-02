@@ -49,8 +49,9 @@ _G.gScoreValue = {
 
 _G.gGameInfo = {
 	m_fRoundDuration = 3 * 60, -- Seconds
-	--m_fRoundDuration = 20, -- dev value
+	--m_fRoundDuration = 30, -- dev value
 	m_fRoundStartTime = -1,
+	m_bIsOvertime = false,
 	m_nBronzeScoreReq = 600,
 	m_nSilverScoreReq = 1600,
 	m_nGoldScoreReq = 2600,
@@ -60,7 +61,7 @@ _G.gGameInfo = {
 	m_nBronzeScoreReq = 100,
 	m_nSilverScoreReq = 200,
 	m_nGoldScoreReq = 300,
-	m_nDiamondScoreReq = 400
+	m_nDiamondScoreReq = 600
 	]]
 }
 
@@ -92,16 +93,20 @@ function CLastHitTrainer:InitGameMode()
 	print( self.m_IdealTriggerZone )
 	]]
 
-	local hRadiantSpawnEnt = Entities:FindByName( nil, "npc_dota_spawner_good_mid_staging" )
-	self.m_vRadiantSpawnPos = hRadiantSpawnEnt:GetOrigin()
+	local hRadiantHeroSpawnEnt = Entities:FindByName( nil, "radiant_hero" )
+	self.m_vRadiantHeroSpawnPos = hRadiantHeroSpawnEnt:GetOrigin()
 
-	local hDireSpawnEnt = Entities:FindByName( nil, "npc_dota_spawner_bad_mid_staging" )
-	self.m_vDireSpawnPos = hDireSpawnEnt:GetOrigin()
+	local hRadiantMeleeSpawnEnt = Entities:FindByName( nil, "radiant_creep_melee" )
+	self.m_vRadiantMeleeSpawnPos = hRadiantMeleeSpawnEnt:GetOrigin()
 
-	--[[
-	local hPlayerSpawnEnt = Entities:FindByName( nil, "info_player_start_goodguys" )
-	self.m_vPlayerSpawnPos = hPlayerSpawnEnt:GetOrigin()
-	]]
+	local hRadiantRangedSpawnEnt = Entities:FindByName( nil, "radiant_creep_ranged" )
+	self.m_vRadiantRangedSpawnPos = hRadiantRangedSpawnEnt:GetOrigin()
+
+	local hDireMeleeSpawnEnt = Entities:FindByName( nil, "dire_creep_melee" )
+	self.m_vDireMeleeSpawnPos = hDireMeleeSpawnEnt:GetOrigin()
+
+	local hDireRangedSpawnEnt = Entities:FindByName( nil, "dire_creep_ranged" )
+	self.m_vDireRangedSpawnPos = hDireRangedSpawnEnt:GetOrigin()
 
 	-- Colors for last hit particle
 	self.m_vColorTier1 = Vector( 100, 250, 30 )
@@ -112,6 +117,10 @@ function CLastHitTrainer:InitGameMode()
 	self.m_vColorTier6 = Vector( 250, 75, 30 )
 	self.m_vColorTier7 = Vector( 250, 45, 30 )
 	self.m_vColorTier8 = Vector( 250, 0, 30 )
+
+	self.m_SPAWN_WAVE_INTERVAL = 30
+
+	self.m_nCreepWavesSpawned = 0
 
 	self.m_fTimeLastCreepsSpawned = -1
 
@@ -171,8 +180,6 @@ end
 --
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 function CLastHitTrainer:DestroyCurrentRound()
-	--print( "DestroyCurrentRound" )
-
 	local hLaneCreeps = Entities:FindAllByClassname( "npc_dota_creep_lane" )
 	for _, hCreep in pairs( hLaneCreeps ) do
 		hCreep:ForceKill( true )
@@ -184,8 +191,11 @@ function CLastHitTrainer:DestroyCurrentRound()
 
 	self.m_fTimeLastCreepsSpawned = -1
 
+	gGameInfo.m_bIsOverTime = false
 	gGameInfo.m_fRoundStartTime = -1
 	CustomNetTables:SetTableValue( "last_hit_trainer_gameinfo", "gameinfo", gGameInfo )
+
+	self.m_nCreepWavesSpawned = 0
 
 	self.m_bPlayingIntenseAudio = false
 end
@@ -194,8 +204,6 @@ end
 --
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 function CLastHitTrainer:SetupNextRound()
-	--print( "Setting up next round" )
-
 	local fDelayBeforeRoundPrep = 0.0
 	local GameMode = GameRules:GetGameModeEntity()
 	GameMode:SetThink( "ThinkPrepNextRound", self, "ThinkPrepNextRound", fDelayBeforeRoundPrep )
@@ -209,12 +217,9 @@ function CLastHitTrainer:ThinkPrepNextRound()
 		return
 	end
 
-	--PauseGame( false )
-
 	if self.m_hPlayerHero:HasModifier( "modifier_invulnerable" ) then
 		self.m_hPlayerHero:RemoveModifierByName( "modifier_invulnerable" )
-		FindClearSpaceForUnit( self.m_hPlayerHero, self.m_vRadiantSpawnPos, true )
-		-- @todo: heal the hero
+		FindClearSpaceForUnit( self.m_hPlayerHero, self.m_vRadiantHeroSpawnPos, true )
 	end
 
 	local fDelayBeforeRoundStart = 2.0
@@ -237,11 +242,12 @@ function CLastHitTrainer:ThinkStartNextRound()
 		return
 	end
 
-	--print( "Start round" )
+	if not self.m_bRoundInitialized then
+		self.m_nWavesPerRound = ( gGameInfo.m_fRoundDuration / self.m_SPAWN_WAVE_INTERVAL )
+		self.m_bRoundInitialized = true
+	end
 
 	self:SpawnLaneCreeps()
-
-	-- @todo: spawn new towers
 
 	gGameInfo.m_fRoundStartTime = GameRules:GetGameTime()
 	CustomNetTables:SetTableValue( "last_hit_trainer_gameinfo", "gameinfo", gGameInfo )
@@ -253,20 +259,20 @@ end
 --
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 function CLastHitTrainer:SpawnLaneCreeps()
-	--print( "SpawnLaneCreeps" )
+	if self.m_nCreepWavesSpawned >= self.m_nWavesPerRound then
+		return
+	end
 
 	-- Radiant creeps
 	for i = 1, 3 do
-		local hCreep = CreateUnitByName( "npc_dota_creep_goodguys_melee", self.m_vRadiantSpawnPos,
+		local hCreep = CreateUnitByName( "npc_dota_creep_goodguys_melee", self.m_vRadiantMeleeSpawnPos,
 			true, nil, nil, DOTA_TEAM_GOODGUYS
 		)
 		if hCreep ~= nil then
-			--print( string.format( "%s wants to attack-move to this position:", hCreep:GetUnitName() ) )
-			--print( self.m_vDireSpawnPos )
 			ExecuteOrderFromTable({
 				UnitIndex = hCreep:entindex(),
 				OrderType = DOTA_UNIT_ORDER_ATTACK_MOVE,
-				Position = self.m_vDireSpawnPos,
+				Position = self.m_vDireMeleeSpawnPos,
 				Queue = true,
 			})
 
@@ -274,16 +280,14 @@ function CLastHitTrainer:SpawnLaneCreeps()
 		end
 	end
 
-	local hCreep = CreateUnitByName( "npc_dota_creep_goodguys_ranged", self.m_vRadiantSpawnPos,
+	local hCreep = CreateUnitByName( "npc_dota_creep_goodguys_ranged", self.m_vRadiantRangedSpawnPos,
 		true, nil, nil, DOTA_TEAM_GOODGUYS
 	)
 	if hCreep ~= nil then
-		--print( string.format( "%s wants to attack-move to this position:", hCreep:GetUnitName() ) )
-		--print( self.m_vDireSpawnPos )
 		ExecuteOrderFromTable({
 			UnitIndex = hCreep:entindex(),
 			OrderType = DOTA_UNIT_ORDER_ATTACK_MOVE,
-			Position = self.m_vDireSpawnPos,
+			Position = self.m_vDireMeleeSpawnPos,
 			Queue = true,
 		})
 
@@ -292,16 +296,14 @@ function CLastHitTrainer:SpawnLaneCreeps()
 	
 	-- Dire Creeps
 	for i = 1, 3 do
-		local hCreep = CreateUnitByName( "npc_dota_creep_badguys_melee", self.m_vDireSpawnPos,
+		local hCreep = CreateUnitByName( "npc_dota_creep_badguys_melee", self.m_vDireMeleeSpawnPos,
 			true, nil, nil, DOTA_TEAM_BADGUYS
 		)
 		if hCreep ~= nil then
-			--print( string.format( "%s wants to attack-move to this position:", hCreep:GetUnitName() ) )
-			--print( self.m_vRadiantSpawnPos )
 			ExecuteOrderFromTable({
 				UnitIndex = hCreep:entindex(),
 				OrderType = DOTA_UNIT_ORDER_ATTACK_MOVE,
-				Position = self.m_vRadiantSpawnPos,
+				Position = self.m_vRadiantMeleeSpawnPos,
 				Queue = true,
 			})
 
@@ -309,16 +311,14 @@ function CLastHitTrainer:SpawnLaneCreeps()
 		end
 	end
 
-	local hCreep = CreateUnitByName( "npc_dota_creep_badguys_ranged", self.m_vDireSpawnPos,
+	local hCreep = CreateUnitByName( "npc_dota_creep_badguys_ranged", self.m_vDireRangedSpawnPos,
 		true, nil, nil, DOTA_TEAM_BADGUYS
 	)
 	if hCreep ~= nil then
-		--print( string.format( "%s wants to attack-move to this position:", hCreep:GetUnitName() ) )
-		--print( self.m_vRadiantSpawnPos )
 		ExecuteOrderFromTable({
 			UnitIndex = hCreep:entindex(),
 			OrderType = DOTA_UNIT_ORDER_ATTACK_MOVE,
-			Position = self.m_vRadiantSpawnPos,
+			Position = self.m_vRadiantMeleeSpawnPos,
 			Queue = true,
 		})
 
@@ -326,4 +326,6 @@ function CLastHitTrainer:SpawnLaneCreeps()
 	end
 
 	self.m_fTimeLastCreepsSpawned = GameRules:GetGameTime()
+
+	self.m_nCreepWavesSpawned = self.m_nCreepWavesSpawned + 1
 end
