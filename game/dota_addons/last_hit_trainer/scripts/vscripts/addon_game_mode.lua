@@ -70,7 +70,7 @@ _G.gGameInfo = {
 function CLastHitTrainer:InitGameMode()
 	local GameMode = GameRules:GetGameModeEntity()
 
-	GameMode:SetThink( "OnThink", self, "GlobalThink", 0.25 )
+	GameMode:SetThink( "OnThink", self, "GlobalThink", 0.1 )
 	GameMode:SetFixedRespawnTime( 4 )
 	GameMode:SetStashPurchasingDisabled( true ) -- NO stash purchasing means no buying since we don't have any stores
 	GameMode:SetDaynightCycleDisabled( true )
@@ -178,7 +178,6 @@ function CLastHitTrainer:DestroyCurrentRound()
 		hCreep:ForceKill( true )
 	end
 
-	--self.m_hPlayerHero:ForceKill( true )
 	self.m_hPlayerHero:AddNewModifier( nil, nil, "modifier_invulnerable", { duration = -1 } )
 
 	self.m_bPlayerInitialized = false -- initializes on the next think, right now would be too early

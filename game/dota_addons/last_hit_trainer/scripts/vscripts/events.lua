@@ -74,6 +74,23 @@ function CLastHitTrainer:InitializePlayerHero()
 		return
 	end
 
+	self.m_hPlayerHero:SetAbilityPoints( 0 )
+
+	local nAbilities = self.m_hPlayerHero:GetAbilityCount()
+	for i = 0, nAbilities do
+		local hAbility = self.m_hPlayerHero:GetAbilityByIndex( i )
+		if not hAbility then
+			break
+		end
+
+		-- Reset all abilities to 0 first.  Some may have been quickly levelled before the OnThink tick.
+		if hAbility:GetLevel() > 0 then
+			hAbility:SetLevel( 0 )
+		end
+
+		self:AllowSpecificAbilities( hAbility )
+	end
+
 	-- Remove pre-existing items, e.g. tp scroll
 	for i = 0, 15 do
 		local item = self.m_hPlayerHero:GetItemInSlot( i )
@@ -82,8 +99,28 @@ function CLastHitTrainer:InitializePlayerHero()
 		end
 	end
 
+	-- Boost starting damage slightly
+	for i = 0, 1 do
+		self.m_hPlayerHero:AddItemByName( "item_faerie_fire" )
+	end
+
 	local nFullHP = self.m_hPlayerHero:GetMaxHealth()
 	self.m_hPlayerHero:SetHealth( nFullHP )
+end
+
+--------------------------------------------------------------------------------
+-- 
+--------------------------------------------------------------------------------
+function CLastHitTrainer:AllowSpecificAbilities( hAbility )
+	if not hAbility then
+		return
+	end
+
+	if hAbility:GetAbilityName() == "lone_druid_spirit_bear" then
+		hAbility:SetLevel( 1 )
+	elseif hAbility:GetAbilityName() == "troll_warlord_berserkers_rage" then
+		hAbility:SetLevel( 1 )
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -302,7 +339,7 @@ function CLastHitTrainer:OnThink()
 	end
 
 	if not self.m_hPlayerHero then
-		return 0.25
+		return 0.1
 	end
 
 	if not self.m_bPlayerInitialized then
@@ -327,11 +364,11 @@ function CLastHitTrainer:OnThink()
 
 		if GameRules:GetGameTime() >= ( gGameInfo.m_fRoundStartTime + gGameInfo.m_fRoundDuration ) then
 			self:OnRoundEnded()
-			return 0.25
+			return 0.1
 		end
 	end
 
-	return 0.25
+	return 0.1
 end
 
 --------------------------------------------------------------------------------
