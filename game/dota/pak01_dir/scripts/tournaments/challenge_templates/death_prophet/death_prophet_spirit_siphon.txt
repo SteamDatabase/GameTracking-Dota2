@@ -1,0 +1,121 @@
+"death_prophet_spirit_siphon"
+{
+	"challengetype"		"192"
+	"desc"		"#DOTA_ChallengeDesc_DeathProphetSpiritSiphon"
+	"requiredhero"		"43"
+	"multi_query"		"1"
+	"events"
+	{
+		"1"
+		{
+			"desc"		"#DOTA_ChallengeDesc_DeathProphetSpiritSiphon_Sub1"
+			"status_text"		"#DOTA_ChallengeStatusText_DeathProphetSpiritSiphon_Sub1"
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"spirit_siphon"
+				{
+					"event"		"modifier_remove"
+					"caster_playerid"		"!playerid"
+					"target_must_be_hero"		"1"
+					"modifier"		"modifier_death_prophet_spirit_siphon_slow"
+					"duration_greater_than_mseconds"		"0.100000"
+					"storage"
+					{
+						"3"
+						{
+							"key"		"elapsed_duration"
+							"aggregator"		"sum"
+						}
+					}
+				}
+			}
+			"progress_stored_in"		"3"
+			"post_tests"
+			{
+				"test_spirit_siphon_duration"
+				{
+					"storage"		"3"
+					"compare"		">="
+					"amount"		"<total_spirit_siphon_duration>"
+				}
+			}
+		}
+		"2"
+		{
+			"desc"		"#DOTA_ChallengeDesc_DeathProphetSpiritSiphon_Sub2"
+			"status_text"		"#DOTA_ChallengeStatusText_DeathProphetSpiritSiphon_Sub2"
+			"matching_type"		"timeblock_accumulate_after_trigger"
+			"query"
+			{
+				"trigger"
+				{
+					"event"		"ability"
+					"caster"		"!hero"
+				}
+				"time_block_after_trigger"		"1.000000"
+				"accumulate_event"
+				{
+					"event"		"modifier_add"
+					"caster"		"!hero"
+					"target_must_be_hero"		"1"
+					"is_silence"		"1"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"		"increment"
+						}
+					}
+				}
+			}
+			"postmatch_increments"
+			{
+				"pre_storage_test"
+				{
+					"test_stunned_heroes_per_cast"
+					{
+						"storage"		"1"
+						"compare"		">="
+						"amount"		"2"
+					}
+				}
+				"storage"
+				{
+					"2"
+					{
+						"aggregator"		"increment"
+					}
+				}
+			}
+			"clear_storage_per_trigger_or_pre_test_pass"
+			{
+				"1"		"1"
+				"2"		"0"
+			}
+			"progress_stored_in"		"2"
+			"post_tests"
+			{
+				"test_stunned_heroes"
+				{
+					"storage"		"2"
+					"compare"		">="
+					"amount"		"<double_silences>"
+				}
+			}
+		}
+	}
+	"variables"
+	{
+		"<total_spirit_siphon_duration>"
+		{
+			"format"		"int"
+			"index"		"0"
+		}
+		"<double_silences>"
+		{
+			"format"		"int"
+			"index"		"1"
+		}
+	}
+}

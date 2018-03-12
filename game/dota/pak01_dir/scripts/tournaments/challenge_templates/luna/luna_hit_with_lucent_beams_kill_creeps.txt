@@ -1,0 +1,118 @@
+"luna_hit_with_lucent_beams_kill_creeps"
+{
+	"challengetype"		"255"
+	"desc"		"#DOTA_ChallengeDesc_Luna_Lucent_Beams_Creep_Kills"
+	"multi_query"		"1"
+	"requiredhero"		"48"
+	"events"
+	{
+		"1"
+		{
+			"desc"		"#DOTA_ChallengeDesc_Luna_Lucent_Beams_Creep_Kills_Sub1"
+			"status_text"		"#DOTA_ChallengeStatusText_Luna_Lucent_Beams_Creep_Kills_Sub1"
+			"matching_type"		"linear_series"
+			"query"
+			{
+				"lucent_beam_hits"
+				{
+					"event"		"damage"
+					"attack"		"luna_lucent_beam"
+					"caster_playerid"		"!playerid"
+					"target_team"		"!enemyteam"
+					"target_must_be_hero"		"1"
+				}
+				"separator"		"OR"
+				"eclipse_hits"
+				{
+					"event"		"damage"
+					"attack"		"luna_eclipse"
+					"caster_playerid"		"!playerid"
+					"target_team"		"!enemyteam"
+					"target_must_be_hero"		"1"
+				}
+			}
+			"progress_stored_in"		"1"
+			"postmatch_increments"
+			{
+				"storage"
+				{
+					"1"
+					{
+						"aggregator"		"increment"
+					}
+				}
+			}
+			"post_tests"
+			{
+				"test_beam_hits"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<lucent_beam_hits>"
+				}
+			}
+		}
+		"2"
+		{
+			"desc"		"#DOTA_ChallengeDesc_Luna_Lucent_Beams_Creep_Kills_Sub2"
+			"status_text"		"#DOTA_ChallengeStatusText_Luna_Lucent_Beams_Creep_Kills_Sub2"
+			"matching_type"		"timeblock_accumulate"
+			"query"
+			{
+				"time_block"		"30"
+				"accumulate_event"
+				{
+					"event"		"death"
+					"attacker"		"!hero"
+					"storage"
+					{
+						"1"
+						{
+							"aggregator"		"increment"
+						}
+					}
+				}
+			}
+			"postmatch_increments"
+			{
+				"storage"
+				{
+					"2"
+					{
+						"key"		"derive_from_storage"
+						"from_storage_index"		"1"
+						"aggregator"		"max"
+					}
+				}
+			}
+			"clear_storage_per_query"
+			{
+				"1"		"1"
+				"2"		"0"
+			}
+			"progress_stored_in"		"2"
+			"post_tests"
+			{
+				"test_creeps_killed"
+				{
+					"storage"		"1"
+					"compare"		">="
+					"amount"		"<creep_kills>"
+				}
+			}
+		}
+	}
+	"variables"
+	{
+		"<lucent_beam_hits>"
+		{
+			"format"		"int"
+			"index"		"0"
+		}
+		"<creep_kills>"
+		{
+			"format"		"int"
+			"index"		"1"
+		}
+	}
+}

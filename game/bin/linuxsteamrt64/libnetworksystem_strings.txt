@@ -3,8 +3,6 @@
 	CannotBeNetworked        = %s
 	Category Mask            = %08X
 	Class                    = '%s'
-	Class Binary             = '%s'
-	Class Project            = '%s'
 	DefaultBufferType        = %d
 	Group                    = '%s'
 	Group ID                 = %u
@@ -55,6 +53,7 @@
   field is fixed sized array size %d
   field is using array manipulator, current size returned %d
   merged new baseline:
+  offset %u
   possible match %d of %d:  %s %s.%s
  #GameUI_Disconnect_ExitingEngine
  #GameUI_Disconnect_InternalError
@@ -64,6 +63,10 @@
  #GameUI_ServerRejectBadChallenge
  #Valve_Reject_Connect_From_Lobby
  #Valve_Reject_Reserved_For_Lobby
+ %%%d.%ds 
+ %%-%d.%ds 
+ %s : %s( %s ) [%s]
+ %s : %s::%s
  %s cat(%s) schematype(%s)
  '%s'
  ( def. "%s" )
@@ -71,11 +74,12 @@
  (procedural)
  (resend)
  = { <proto text format> }". To set fields within it, use syntax like "
+ == %s
  BackUp() can only be called after Next().
+ CNCG_DecodeParams::DecodeProceduralField() called for entity with procedural fields, but no INetworkProceduralDataHelper *pDataHelper passed into to API!!!
  CNETMsg_SpawnGroup_LoadCompleted
  CSVCMsg_GameSessionConfiguration
  Can't back up over more bytes than were returned by the last call to Next().
- HcFT
  NETWORK_DISCONNECT_CLIENT_NO_MAP
  NETWORK_DISCONNECT_REJECT_BANNED
  NETWORK_DISCONNECT_SNAPSHOTERROR
@@ -98,6 +102,7 @@
  arguments. 
  atomic(%s)
  builtin(%s)
+ builtin()
  contains invalid 
  count(%d)
  encoder(%s)
@@ -297,6 +302,7 @@ $0enum $1 {
 $0option $1;
 $0rpc $1(.$2) returns (.$3)
 $A+D$$H
+$A;\$
 $E;L$
 $E;T$
 $NETWORK_DISCONNECT_REJECT_SERVERFULL
@@ -309,6 +315,7 @@ $[A\]
 % 5d % 5d % 5d: %-20s [%d]: 0x%p decoding (stream: %s local: %s) %s field %s %s %s %s
 % 5d % 5d % 5d: %-20s [%d]: 0x%p decoding FAKE field %s %s: %s
 % 5d % 5d % 5d: %-20s [%d]: 0x%p decoding field %s %s: %s
+% 5d % 5d % 5d: %-20s: %s encoding field %s %s%s: %s
 % 5d % 5d % 5d: %-20s: 0x%p
 % 5d % 5d % 5d: %-20s: 0x%p encoding field %s %s%s: %s
 % 5d % 5d:% 5d: %-20s [%d]: delta field %s [%s]
@@ -317,6 +324,7 @@ $[A\]
 % 5d % 5d:% 5d: %-20s [%d]: delta field %s [%s]%s
 % 5d %-20s:  %-32s at offset % 5d, 0x%p FAKE field
 % 5d %-20s:  %-32s at offset % 5d, 0x%p array %-5s struct %-5s
+% 5d %5.5s:% 5d: %-20s [%d]: delta field %s [%s]:  "%s"
 %#GameUI_Disconnect_BadClientDeltaTick
 %#GameUI_Disconnect_ConnectionOverflow
 %#GameUI_Disconnect_ConnectionTimedout
@@ -331,13 +339,17 @@ $[A\]
 %-120s
 %-120s - %s
 %12.12s %21.21s[%d]
+%12.12s @ %5u [%50.50s] = '%75.75s' : %9.9s %s%s%s
+%12.12s @ %5u [%64.64s] = '%s'
 %12.12s:  @ %.3f [%s]
 %20.20s 
+%3d : %64.64s pri(%d) group(%s)
 %50.50s %50.50s offset %5u %s
-%50.50s %75.75s offset %6u %9.9s %s%s%s
+%50.50s %75.75s offset %10.10s %9.9s %s
 %50.50s: %2.2d bits == '%s'
 %60.60s %6.6s %15.15s %5.5s %10.10s
 %60.60s %6.6s %15.15s %5d %10d 
+%64.64s : %d variations
 %8.3f: %s ParseMessages RELIABLE %d bytes
 %8.3f: %s: ParseMessages RELIABLE %d bytes
 %8.3f: %s: ParseMessages UNRELIABLE Seq=%d %d bytes
@@ -359,6 +371,8 @@ $[A\]
 %d %s %u, 
 %d %s: %s at offset %d, 0x%p array %s struct %s: index %d array size %d in %s
 %d (%d peak) fields allocated in mempool
+%d -> %d
+%d : %d times
 %d == %u: %s
 %d Ignoring %s [%s], was in previous state only, now outside of valid range for field
 %d Metadata %s [utlvector count]:  %d
@@ -369,11 +383,15 @@ $[A\]
 %d,'%s','%s',%d
 %d.%d.%d
 %d.%d.%d.%d:%d
+%d:%s=%s
 %f %f %f %f
 %i %i %i %i
 %i.%i.%i.%i
 %i.%i.%i.%i:%i
 %ls [wstring, len = %d]
+%s  %s::%s expected read from bit %u->%u [%u bits] but actually read to bit %u!!!
+%s %d offsets remaining
+%s %s %s
 %s %s = %d
 %s %s = %s
 %s - Argument expected (message ID or name).
@@ -381,6 +399,7 @@ $[A\]
 %s - Unrecognized net message name: '%s'
 %s -> %s::%s is marked for networking but is not a CNetworkVar!
 %s : %s = '%s'
+%s Ignoring %s offset %u
 %s [%d]
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
@@ -398,6 +417,7 @@ $[A\]
 %s encoding procedural path %s %s%s: %s
 %s had %d different permutations
 %s pointer, skipping rest
+%s removing field %i %s at offset %u [%d]
 %s%s %s::%s recursively
 %s%s found %s in path %s
 %s%s: failed to find match for offset %llu [path %s]
@@ -416,6 +436,7 @@ $[A\]
 %s0x%p %s removing field %i %s at offset %u, removing from 0x%p
 %s0x%p Gathering field offsets in %s, storing in 0x%p
 %s0x%p rebuild %s::%s at %u
+%s:  %5d : %s bits %d to %d [%d bits] : %s
 %s:  %d : %s bits %d to %d [%d bits] : %s
 %s:  %s
 %s:  %s packet type '%s' %d/%d (%.1f%%)
@@ -428,7 +449,7 @@ $[A\]
 %s:  CNetChan::Transmit(%s) sending connection id header %X %X
 %s:  CNetChan::Transmit(%s):  Unreliable would overflow, skipping send
 %s:  CNetChan::Transmit(%s):  data would overflow, skipping send
-%s:  CNetChan::TransmitSNP(%s) %f elapsed since last send, NetTime=%f, TotalSize=%d
+%s:  CNetChan::TransmitSNP(%s) SinceLastSend=%.1fs, Sent=%d, pending R/U=%d/%d, queueTime=%.1fms
 %s:  GetSplitPacket
 %s:  Invalid split packet header, requested NET_SPLIT_PACKET_FLAG_EXPECTS_ACKS but no net channel
 %s:  Invalid split packet message type %u, expected %u
@@ -442,6 +463,7 @@ $[A\]
 %s:  high packet loss detected flow %s: %4dms latency, %5d/%5d dropped (%.1f%%)
 %s:  in serializer '%s' couldn't find field %s::%s, possibly already marked MNetworkExclude
 %s:  meta info problem %s
+%s:  metadata( %d : field %s (%s) arraycount = %d )
 %s:  metadata( %d : field %s arraycount = %d )
 %s:  out of bound compressed reliable data size of %d bytes
 %s:  out of bound reliable data size of %d bits
@@ -480,19 +502,21 @@ $[A\]
 %s:  unexpected reliable start sequence %d, wanted %d
 %s:  value %u: count %d
 %s: !CanPacket() - HasQueuedPackets().
+%s: !CanPacket() - SNPQueueTime=%.1fms.
 %s: !CanPacket() - m_SplitPacketResender.m_bActive.
 %s: !CanPacket() - m_bSuppressingTransmit.
 %s: !CanPacket() - m_flClearTime >= g_pNetworkSystem->GetNetTime() [ (%f) >= (%f) %f ].
 %s: %s %s
 %s: %s exists only in %s
-%s: Reliable buffer overrun in SNP send
-%s: Unreliable buffer overrun in SNP send
+%s: SendMessage reliable failed with result %d
+%s: SendMessage unreliable failed with result %d
 %s: string format requested %d chars
 %s:%d
 %s:%d reliable sequence
 %s:%s packet %i at %i
+%s:%u
 %s::%s
-%s::%s %s %s
+%s::%s type '%s' not declared for networking introspection
 %s::%s was in the original serializer at offset %u but that offset isn't in the ignore list!!!
 %s:Dropped %i packets at %i
 %sApplying %s
@@ -516,7 +540,6 @@ $[A\]
 %s| SizeOf: %d
 %s| Virtual: %s; Abstract: %s; TrivialConstr: %s; TrivialDestr: %s
 %u serializers with %u fields (approx memory %llu / %llu in fields ) bytes (field size %d, serializer size %d)
-%u:%u:%u
 %x (int:%d, float:%f)
 &#GameUI_Disconnect_InvalidMessageError
 &#GameUI_Disconnect_NoPeerGroupHandlers
@@ -551,7 +574,9 @@ $[A\]
 (#GameUI_Disconnect_RemoteProblem_BadCert
 (#GameUI_Disconnect_RemoteProblem_Timeout
 (%d) is > avg (%.2f) with stddev*scale (%.2f * %.2f) and threshold (%.2f)
+(%g,%g,%g) (%g,%g,%g)
 (%s)%s
+(%s::)
 (%u %u %u %u)
 (*%s*), 
 (D9p 
@@ -616,6 +641,7 @@ $[A\]
 - Loss:    avg out %.1f, in %.1f
 - Packets: net total out  %.1f/s, in %.1f/s
 - Ports: 
+- ProcessIncludesAndExcludes_R(%s)
 - flow: in %.1f, out %.1f kB/s
 - latency: %.1f, loss %.2f
 - online: %.3f seconds
@@ -632,7 +658,6 @@ $[A\]
 -NETWORK_DISCONNECT_DIRECT_CONNECT_RESERVATION
 -NETWORK_DISCONNECT_LOCALPROBLEM_NETWORKCONFIG
 -NETWORK_DISCONNECT_REJECT_INVALIDSTEAMCERTLEN
--NoQueuedPacketThread
 -fs_track_types
 -net_no_parallel_build
 -networkspew
@@ -728,6 +753,7 @@ $[A\]
 0: old, 1: new
 0<	wB
 0ATStiL
+0AUATSH
 0E;T$ 
 0H97u
 0NETWORK_DISCONNECT_REJECT_SERVERCDKEYAUTHINVALID
@@ -737,7 +763,6 @@ $[A\]
 0[A^]
 0[]A\A]A^
 0x%016llX
-0x%p assigned %d to '%s'
 10CMsgQAngle
 10CMsgVector
 10CMsg_CVars
@@ -755,6 +780,7 @@ $[A\]
 12CNETMsg_Tick
 12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE
 12CSVCMsg_Menu
+12CSceneObject
 12CThreadEvent
 13CCallbackBase
 13CCallbackImplILi8EE
@@ -770,6 +796,7 @@ $[A\]
 13CSVCMsg_Print
 14CBaseAppSystemI14INetworkSystemE
 14CBaseAppSystemI19INetworkSystemUtilsE
+14CFieldTypeList
 14CMsgIPCAddress
 14CMsgPlayerInfo
 14CMsgServerPeer
@@ -777,6 +804,7 @@ $[A\]
 14CNetworkSystem
 14CSVCMsg_Sounds
 14ConCommandBase
+14IFieldTypeList
 14INetworkSystem
 15CMemberFunctor1IP26CParallelProcessorAbstractI18CParallelProcessorI30BuildFlattenedSerializerInfo_t27CMemberFuncJobItemProcessorIS2_37CBuildNetworkSerializerHierarchyOrderS4_ELi1EEEMS7_FviEi12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor1IP26CParallelProcessorAbstractI18CParallelProcessorIN37CBuildNetworkSerializerHierarchyOrder12BuildEntry_tE27CMemberFuncJobItemProcessorIS3_S2_S2_ELi1EEEMS7_FviEi12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
@@ -800,7 +828,11 @@ $[A\]
 16CSerializerStack
 16ICommandCallback
 16INetworkMessages
+16ISceneObjectDesc
 17CCLCMsg_VoiceData
+17CNCG_ClassBuilder
+17CNCG_DecodeParams
+17CNCG_EncodeParams
 17CNETMsg_SetConVar
 17CNETMsg_StringCmd
 17CSVCMsg_ClassInfo
@@ -809,6 +841,8 @@ $[A\]
 17CSVCMsg_StopSound
 17CSVCMsg_VoiceData
 17CSVCMsg_VoiceInit
+17IGenericInterface
+17INCG_ClassBuilder
 18CAtomicManipulatorI10CTransformE
 18CAtomicManipulatorI10CUtlStringE
 18CAtomicManipulatorI10QuaternionE
@@ -848,15 +882,20 @@ $[A\]
 18ISchemaManipulator
 19CBidirMsg_RelayInfo
 19CCLCMsg_BaselineAck
+19CNCG_BaseOperations
+19CNCG_FieldAllocator
 19CNETMsg_SignonState
 19CNetworkSystemUtils
 19CQueuedPacketSender
 19CSVCMsg_SplitScreen
 19CSVCMsg_UserMessage
 19CSchemaRegistration
+19CSerializedEntities
 19IKeyValuesErrorSpew
+19INCG_FieldAllocator
 19INetworkSystemUtils
 19IQueuedPacketSender
+19ISerializedEntities
 19NetMessagePacketEnd
 2 .CBidirMsg_RelayInfo.Operation_t
 2 .ProtoFlattenedSerializerField_t"!
@@ -869,6 +908,7 @@ $[A\]
 20CCLCMsg_ListenEvents
 20CCLCMsg_RequestPause
 20CCLCMsg_ServerStatus
+20CNCG_CalcDeltaParams
 20CNETMsg_Disconnect_t
 20CNetworkSerializerPB
 20CPostConnectCallback
@@ -882,7 +922,6 @@ $[A\]
 21CCLCMsg_ClientMessage
 21CClientDatatableStack
 21CDeltaFieldPathTracer
-21CFlattenedSerializers
 21CNetworkEncodingStats
 21CSVCMsg_GameEventList
 21CSVCMsg_ServerSteamID
@@ -895,6 +934,7 @@ $[A\]
 21NetMessagePacketEnd_t
 21NetMessagePacketStart
 22CMsgServerNetworkStats
+22CNCG_MergeDeltasParams
 22CSVCMsgList_GameEvents
 22CSVCMsg_CrosshairAngle
 22CSVCMsg_FullFrameSplit
@@ -912,8 +952,13 @@ $[A\]
 23ISteamNetworkingMessage
 23NetMessagePacketStart_t
 24CCLCMsg_RespondCvarValue
+24CFlattenedSerializers_FS
+24CNCG_ReadFieldListParams
 24CSVCMsgList_UserMessages
 25CConCommandMemberAccessorI16CNetworkMessagesE
+25CFlattenedSerializers_NCG
+25CNCG_ResolveChangesParams
+25CNCG_WriteFieldListParams
 25CNETMsg_SpawnGroup_Unload
 25CNETMsg_SplitScreenUser_t
 25CSVCMsg_ClassInfo_class_t
@@ -928,23 +973,29 @@ $[A\]
 26ProtoFlattenedSerializer_t
 27CBidirMsg_RebroadcastSource
 27CMsgServerNetworkStats_Port
+27CNCG_FindFieldPathByAddress
 27CSVCMsg_FlattenedSerializer
 27CSVCMsg_GameEventList_key_t
 27IKeyValuesDumpContextAsText
 27NetMessageConnectionCrashed
+28CFlattenedSerializersControl
 28CSVCMsg_ClearAllStringTables
 28CSVCMsg_SendTable_sendprop_t
 28IFlattenedSerializerSpewFunc
+28IFlattenedSerializersControl
 28NetMessageConnectionClosed_t
 29CCLCMsg_SplitPlayerDisconnect
 29CKeyValuesDumpContextAsDevMsg
 29CMsgServerNetworkStats_Player
+29CNCG_ValidateSerializedEntity
 29NetMessageConnectionCrashed_t
 3+C$H
 30CBidirMsg_RebroadcastGameEvent
 30CSVCMsgList_GameEvents_event_t
+31CNCG_BuildDeltaPropertiesParams
 31ProtoFlattenedSerializerField_t
 32CFlattenedSerializerSpewFunc_Log
+32CNCG_AssignChangeAccessorPathIDs
 32CNETMsg_SpawnGroup_LoadCompleted
 32CNetworkFieldSerializerAllocator
 32CSVCMsg_GameSessionConfiguration
@@ -957,6 +1008,7 @@ $[A\]
 34CSVCMsgList_UserMessages_usermsg_t
 34CSVCMsg_GameEventList_descriptor_t
 34NetMessageSplitscreenUserChanged_t
+38CFlattenedSerializerSpewFunc_UtlString
 38Source2SteamNetworkingSocketsCallbacks
 3A9G(
 3E8 u
@@ -969,9 +1021,11 @@ $[A\]
 4HcP4
 4fff>fff>fff>fff>
 4vf;T
+5t~BC
 69r t,H
 6ConVar
 6H92t%H
+6H92u
 7IConVar
 7[A\A]A^]
 8#GameUI_Disconnect_LocalProblem_HostedServerPrimaryRelay
@@ -982,6 +1036,7 @@ $[A\]
 8CNetChan
 8CUtlSlot
 8H9:u
+8HcC@H
 8NETWORK_DISCONNECT_LOCALPROBLEM_HOSTEDSERVERPRIMARYRELAY
 8VBKVt6HcF
 8[A\A]A^A_]
@@ -992,14 +1047,18 @@ $[A\]
 9C`~XH
 9Cx~hM
 9S,|*D
+9XXt4A
+9fD99
 : Protocol message serialized to a size different from what was originally expected.  Perhaps it was modified by another thread during serialization?
 : Tried to copy from a message with a different type. to: 
 : Tried to merge from a message with a different type.  to: 
 :[tLL
 ;*3$"
+;0t,H
 ;B,|{
-;Cx|`H
+;Bxt(
 ;L9'u
+;L9?u
 ;Sx|!H
 ;XxHc
 <	w.1
@@ -1028,15 +1087,18 @@ $[A\]
 <Rt<<Pt`<S
 <Uu\H
 <\t"H
+<deleted>
 <null>
 <}tI<{uO
 =CSP1A
 =CSP1u
->@ == %s
+>@System
 >LZSS]
 >LZSSt
+?%u:%u:%u
+?L;/u
+@@<unknown>
 @@H;E
-@@System
 @P<	u.H
 @P<*t
 @P<*u
@@ -1046,6 +1108,8 @@ $[A\]
 @[A\A]A^]
 @[A\]
 @fD9$
+@fD9,
+@new handle [%s]!!!
 @pA\]
 @t'Hc{(H
 @t'Hc{0H
@@ -1053,7 +1117,6 @@ $[A\]
 @t0~>
 @tlH9
 @u'fA
-@uTHc
 A HcQ(
 A file with this name is already in the pool.
 A protocol message was rejected because it was too big (more than 
@@ -1074,22 +1137,21 @@ A4~5H
 A9D$ 
 A9D$(
 A9D$0
-A9EP}
 A9F t
 A9G }
-A9Ux~mC
 A9\$x
+A9\$xH
 A9^`~:I
 A9_@~8L
 A;D$ |
 A;D$x
-A;D$x|MH
 A;D$x}
-A;Ex}
+A;Fx|fH
 A;G A
 A;Gx}
 A;T$,u
 A;T$P
+A;T$x}oB
 A;\$ A
 A;](|
 A;](}*I
@@ -1104,6 +1166,8 @@ A;t$@
 A;t$X
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 ATSD;r
+ATStI
+ATStpH
 ATSuHH
 ATSva
 ATUSH
@@ -1116,7 +1180,6 @@ AUATL
 AUATLc
 AUATM
 AUATS
-AUATS1
 AUATSD
 AUATSH
 AUATSL
@@ -1135,11 +1198,12 @@ AVAUATSD
 AVAUATSH
 AVAUATUSH
 AVAUD
+AVAUE1
 AVAUH
 AVAUI
 AVAUL
 AVAULc
-AVAULi
+AVAUM
 AWAVA
 AWAVAU
 AWAVAUA
@@ -1156,6 +1220,8 @@ AWAVAUATUSH
 AWAVAUI
 AWAVAUL
 AWAVAULc
+AWAVAUM
+AWAVAUMc
 AWAVD
 AWAVE
 AWAVE1
@@ -1179,6 +1245,7 @@ AddBool
 AddDouble
 AddEnum
 AddFieldPathAndOffset
+AddFieldPathAndOffsetAtStartBit
 AddFloat
 AddInt32
 AddInt64
@@ -1191,6 +1258,7 @@ AddToTailGetPtr
 AddUInt32
 AddUInt64
 After sending last chunk of split packet payload, wait at least this many msecs after last activity before giving up
+AhA8Chu
 AllocInternal
 Already saw decimal point or exponent; can't have another one.
 AnimGraphEditorUtils001
@@ -1210,6 +1278,7 @@ AssociateNetMessageWithChannelCategoryAbstract: Passed in an invalid net message
 AssociateNetMessageWithChannelCategoryAbstract: Trying to use an unregistered netchannel category!
 Associating NetChan %s (%s) with Steam Net Connection handle %x
 Attempt to compress out of band voice payloads (360 only).
+Attempting to construct fake local field from metadata %s::%s in %s
 AuthenticAMD
 Available settings:
 Average Backing Raw Paths         :  %8.3f
@@ -1217,6 +1286,7 @@ Average Data Bytes                :  %8.3f bytes
 Average Memory Usage Per Entity   :  %8.3f bytes
 Average Number of Field Paths     :  %8.3f
 B$A9F
+B$H)M
 B(;A(
 B9L  t!
 BackUp() can only be called after a successful Next().
@@ -1225,11 +1295,13 @@ Bad expression syntax: '%s', expected a single matching pair of enclosing braces
 Bad expression token: %c
 BakedLODBuilderMgr001
 BenchmarkService001
+BhH9F
 Bidirectional_Messages
 BinaryProperties_GetValue
 Bitfield
 Boolean default must be true or false.
 Buffer overflow in net channel %s
+Build Time
 BuildDeltaProperties fieldDataBuf
 BuildHierarchy
 BuildMergedSerializedEntity:  delta header with corrupt array count [ ent %d ]:  entry %d/%d == %u!
@@ -1242,6 +1314,7 @@ C H;C(
 C Lc#D;c
 C(A;D$(u
 C(H9C A
+C(f;A(u
 C(f;B(
 C,[A\A]]
 C,[A\]
@@ -1295,10 +1368,10 @@ CFlattenedSerializer::ValidateSerializedEntity
 CFlattenedSerializer::WriteFieldList
 CFlattenedSerializer::WriteFieldList fieldDataBuf
 CFlattenedSerializer::[ent %d] Decode path %s array index %d out of range %d for field %s::%s [%d]
-CFlattenedSerializers::BuildMergedSerializedEntity fieldDataBuf
-CFlattenedSerializers::CompareSerializedEntities from field %s not present in to
-CFlattenedSerializers::CompareSerializedEntities to field %s not present in from
-CFlattenedSerializers::SpewSerializer: called with NULL serializer!!!
+CFlattenedSerializers_FS::BuildMergedSerializedEntity fieldDataBuf
+CFlattenedSerializers_FS::SpewSerializer: called with NULL serializer!!!
+CFlattenedSerializers_NCG::BuildMergedSerializedEntity fieldDataBuf
+CFlattenedSerializers_NCG::Report( TBD )
 CHECK failed: !checkpoints_.empty(): 
 CHECK failed: !coded_out.HadError(): 
 CHECK failed: !extension->is_repeated: 
@@ -1448,6 +1521,15 @@ CMsgVector
 CMsgVector2D
 CMsgVoiceAudio
 CMsg_CVars
+CNCG_ClassBuilder::LookupEncoder( %s ): no such encoder name
+CNCG_ClassBuilder::LookupEncoder( %s ): no such serializer name
+CNCG_EncodeParams::EncodeProceduralField() called for entity with procedural fields, but no INetworkProceduralDataHelper *pDataHelper passed into to API!!!
+CNCG_LocalClassDictionary::AddClass( %s )
+CNCG_LocalClassDictionary::ApplyOverrides
+CNCG_LocalClassDictionary::RemoveClass( %s )
+CNCG_ValidateSerializedEntity::DumpSerializedEntityToConsole
+CNCG_ValidateSerializedEntity::RemoveArrayElementsOutsideOfArrayMetadataBounds
+CNCG_ValidateSerializedEntity::ValidateSerializedEntity
 CNETMsg_Disconnect
 CNETMsg_NOP"'
 CNETMsg_SetConVar
@@ -1478,14 +1560,13 @@ CNetworkMessages::FindOrCreateNetMessage: It is illegal to register new net mess
 CNetworkMessages::FindOrCreateNetMessage: Message %s is expected to have already been registered!
 CNetworkMessages::Serialize attempted to serialize a non-serializeable message [%s]!
 CNetworkMessages::Unserialize encountered unknown network message type %u!
+CNetworkOriginCellCoordQuantizedVector m_cell%c cell %d is outside of cell bounds (0->%d) @(%f %f %f)
 CNetworkSerializer: Unable to find network encoder named %s!
 CNetworkSerializer::Init:  Couldn't find field %s in iterator for %s
 CNetworkSystem::BufferToBufferDecompress with improperly sized dest buffer (%u in, %llu needed)
 CNetworkSystem::BufferToBufferDecompress with improperly sized dest buffer (%u in, %u needed)
 CNetworkSystem::FlushPeerToPeerChannels
 CNetworkSystem::Init() m_SteamAPIContextClient.Init ( ) failed (no Steam?)
-CNetworkSystem::SendLoopPacket:  failed to allocate loopback_t!!!
-CNetworkSystem::SendLoopPacket:  packet too big (%i).
 CNetworkSystem::SendPacket Warning: %s : %s
 CNetworkSystem::SendToNsAddress SteamNetworkingSockets()->SendMessageToConnection %s returned %d when sending %d bytes
 CNetworkSystem::ShutdownPeerToPeerNetworking called but channel still exists
@@ -1538,6 +1619,8 @@ CSVCMsg_UpdateStringTable
 CSVCMsg_UserMessage
 CSVCMsg_VoiceData
 CSVCMsg_VoiceInit
+CSerializedEntities::CompareSerializedEntities from field %s not present in to
+CSerializedEntities::CompareSerializedEntities to field %s not present in from
 CStackPair
 CTSQueue corruption
 CTransform
@@ -1550,13 +1633,15 @@ CUtlMemoryPoolBase
 CUtlMemoryPoolBase: Cannot specify 0 elements to grow each time!
 CUtlRBTree overflow with %u elements!
 CUtlString
+CUtlStringToken
 CUtlSymbolLarge
 CXI9D$X
 CXXABI_1.3
+CX[A\A]A^]
 C`;Cp
 Can't 
 Can't BackUp() after failed Next().
-Can't EnableLoopbackBetweenSockets between socket %d and %d, not enough slots
+Can't ConnectLoopback between socket %d and %d, not enough slots
 Can't get here.
 Can't get here: failed to get default value as string
 Can't match up steam connection user data %lld to netchan.  This can happen due to a race condition, just as we close the connection.  But otehrwise it's probably a bug
@@ -1570,11 +1655,13 @@ ChangeAccessorFieldPathIndex_t
 ChangeCallbackOnChange
 ChangeCallbackOnChangeOrCreate
 CheckForDuplicatedFields
+ClampHealth
 ClearField
 Client Messages
 CloseSocket
 Closing Steam Net Connection on socket '%s' to %s, handle %x (%d %s)
 CmdLinkAH
+Cn`fE
 Color
 CommandLine
 ComputeDepth
@@ -1592,17 +1679,19 @@ Could not find field type.
 Couldn't parse default value "
 Couldn't resolve offset %u in %s at path %s
 Couldn't resolve offset %u in %s at path (%d = '%s')
+Couldn't resolve offset %u in %s, unable to lookup changeaccessor root at path (%d = '%s')
+Couldn't resolve offset %u in %s, unable to lookup runtime class %s at path (%d = '%s')
 Couldn't write error buffer, delete error###.dat files to make space
 CreateHostedDedicatedServerListenSocket for socket '%s' failed /+/ port %u vport %d
 CreateInterface
 CreateSerializedEntityBlob:  removing %s from field path list, culled by another change.
 Creating channel for %s:%d as NET_CATEGORY_PEER_TO_PEER
+CropFlagsToPlayerFlagBitsLength
 D$ H9
 D$ I9
 D$ L9
 D$ [A\A]A^]
 D$ fA
-D$#@H
 D$(E1
 D$0H9
 D$0I9
@@ -1618,8 +1707,13 @@ D$@M!
 D$D8CD
 D$E8CEu
 D$HH9
+D$PE1
 D$Pt?Hc
 D$`E1
+D$xE1
+D$xH9
+D$xI9
+D(%d %d %d %d)
 D+C$Mc
 D+c$Mc
 D+k$Mc
@@ -1627,20 +1721,26 @@ D+s$Mc
 D9't,H
 D98t~
 D9c`~OH
+D9kXu
 D9{x~_H
 D;!t{Hc
 D;'t{
 D;X,}
 D;c D
 D;c }*H
+D;c(u
 D;c8|
 D;cH}*H
 D;cP}*H
+D;cp|
 D;k |
 D;k(D
 D;k,}^L
 D;kH|
 D;kP|
+D;kx|
+D;s(u
+D;y(t(I
 DCQueuedPacketSender
 DEFAULT_WRITE_PATH
 DIALOG_ASKCONNECT
@@ -1649,6 +1749,9 @@ DIALOG_MENU
 DIALOG_MSG
 DIALOG_TEXT
 DIALOG_TYPE
+DOT:  Compare %s against %s
+DOTLong:  Compare %s against %s
+DOTLong:  Substring %s against %s
 DTI %s
 DTI reset
 DTI: wrote client stats into %s.
@@ -1675,9 +1778,10 @@ DotaCardGameClient_001
 Dump UDP packets summary to console
 Dump non-loopback udp only
 Duplicate entry %s already exists in field dict!
-E fD9
+E IcU(
 E(A9E
 E(fA;D$(
+E(tjH
 E+D$$Mc
 E+E$Mc
 E+F$Mc
@@ -1692,14 +1796,16 @@ E+o$Mc
 E+u0A
 E+}$Mc
 E,A;]
+E58DM
 E8A8D$8
 E9&t<A
 E9't3A
-E9epD
 E9gPI
+E9g`~*I
 E9l$`
 E9t$ ~kI
-E;eXD
+E9t$(
+E9|$pD
 E;f |
 E;f }
 E;f(|
@@ -1711,6 +1817,7 @@ E;l$ }
 E;l$8}$HcC8
 E;l$H}
 E;l$P}
+E;|$XD
 EMPTY - ok for slot zero only!
 ENetworkDisconnectionReason
 EQueryCvarValueStatus
@@ -1723,6 +1830,7 @@ EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
 EconItemToolModel_001
 EncodeField
+EncodeProceduralField
 Encountered 2 fields "%s" and "%s" in struct "%s" using the same change callback with different change callback types!
 Encountered message on net channel %s with an invalid network category! [net message %s]
 End-of-file inside block comment.
@@ -1779,10 +1887,13 @@ Extra connection %s:
 F(A9E(
 F(A9F
 F0HcQ8
+F0HcQ8H
+F0t$H
 F34 I
 FALSE
 FATAL
 FCVAR_NEVER_AS_STRING
+FP8GP
 Failed to init Steam gameserver context!  SDR and P2P functions won't work.
 Failed to install message handler for message %s in channel %s!
 Failed to open network socket '%s'
@@ -1835,9 +1946,11 @@ Files with optimize_for = LITE_RUNTIME cannot define services unless you set bot
 FindLessOrEqual
 FindOrCreateGroupId
 FindOrCreateNetMessage
+FindOrCreateQuantizedFloatEncoder
 First argument to Swap() (of type "
 First argument to SwapFields() (of type "
 Fixed Array
+FlattenedSerializersControlVersion001
 FlattenedSerializersVersion001
 FmtStrVSNPrintf truncated to %d without QUIET_TRUNCATION specified! String: "%s"
 FontManager_001
@@ -1845,14 +1958,14 @@ For network encoding stats, provide a notes field if field change count is above
 For servers behind NAT/DHCP meant to be exposed to the public internet, this is the public facing ip address string: ("x.x.x.x" )
 Forces larger payloads.
 FormatV
-Found -NoQueuedPacketThread, so no queued packet thread will be created.
 G A9G
 G u)H
-G$t:M
 G(A9C,u
 G(A9G
+G(HcW
 G,A+G0
 G,A9C0
+G0UH9
 G0t	I
 G8A9C<
 G8I;G@
@@ -1902,6 +2015,7 @@ GetInt64
 GetMessage
 GetPathData
 GetPathData failed for read only CFieldPath
+GetQuantizedFloatEncoderByIndex
 GetRepeatedBool
 GetRepeatedDouble
 GetRepeatedEnum
@@ -1923,38 +2037,38 @@ H	p(]
 H	w(UH
 H!w(H
 H9*tgH
+H97tbH
 H97trH
 H9K(t
 H9Q(H
 H9Q(t
 H9X tBH
 H9q(t
-H;= BP
-H;=$|N
-H;=($P
-H;=)5O
-H;=)WI
-H;=)mL
-H;=5'P
-H;=5LP
-H;=9uL
-H;=@'L
-H;=@)O
-H;=A{N
-H;=C:@
-H;=J3P
-H;=J|N
-H;=KmL
-H;=PuK
-H;=YXI
-H;=[VP
-H;=\zL
-H;=apL
-H;=c}N
-H;=f{N
-H;=iRI
-H;=y O
-H;=zjK
+H;=#UQ
+H;=2)Q
+H;=3cS
+H;=6-I
+H;=<*S
+H;=<iS
+H;=CbS
+H;=F+I
+H;=H]S
+H;=V)I
+H;=XEQ
+H;=Y)S
+H;=YTQ
+H;=b*S
+H;=biS
+H;=f'I
+H;=h#P
+H;=q[Q
+H;=t(Q
+H;=v%I
+H;=x.P
+H;=xzQ
+H;=~)S
+H;=~hS
+H;>t`H
 H;A8u
 H;S@w
 HIGHDPI
@@ -1964,6 +2078,7 @@ H[]A\A]A^A_
 HammerMapLoader001
 HasField
 Hc@0H
+HcC H
 HcC L
 HcC$H
 HcC(;C,tOH
@@ -1976,7 +2091,11 @@ HcCPL
 HcE(E1
 HcF@H
 HcG(UH
+HcI<H
+HcK H
+HcK(Ic
 HcKPHc
+HcN0H
 HcN@H
 HcOXH
 HcP(;P,
@@ -1991,11 +2110,11 @@ HcS(H
 HcS,H
 HcS8H
 HcSPH
-HcSXH
 HcW@H
 HcWPH
 HcWpH
 Hcs H
+Hcw8H9
 Hc{ H
 Hc{$H
 Hc{(H
@@ -2028,14 +2147,16 @@ IcD$(A
 IcD$(I
 IcD$0A
 IcD$0I
+IcD$81
 IcD$8A
 IcD$HA
 IcD$HI
 IcD$PA
 IcD$PI
 IcE@J
-IcL$ H
+IcF`A;Fp
 IcL$8Ic
+IcM(Ic
 IcN(Ic
 IcO 1
 IcT$ I
@@ -2043,6 +2164,7 @@ IcT$(I
 IcT$,
 IcT$8H
 IcT$8I
+IcU(A;U,
 IcU(I
 IcW@1
 Ic]PI
@@ -2118,6 +2240,7 @@ LZSSH
 Label
 Lc D;`
 Lc#D;c
+Lc#E9
 Lc&D;f
 Lc'D;g
 Lc+D;k
@@ -2126,8 +2249,8 @@ Lc6E9
 Lc7E)
 Lc7E9
 Lcc(D;c8D
-LcmX1
-Lcu 1
+Lcg`D;gpD
+Lcm 1
 Lc{pD;
 Leaked channel %s remote %s
 Like net_showmsg, but only spew reliable messages
@@ -2145,6 +2268,7 @@ LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
 LoggingSystem_RegisterLoggingChannel
 Logic Error in CExpressionEvaluator
+M$E;_
 M9<$u
 MATCHFRAMEWORK_001
 MIcMpIc
@@ -2168,12 +2292,14 @@ MNetworkOverride
 MNetworkOverride_Invalid
 MNetworkPriority
 MNetworkProceduralDataHelper
+MNetworkRemoveAll
 MNetworkSendProxyRecipientsFilter
 MNetworkSerializeAs
 MNetworkSerializer
 MNetworkTypeAlias
 MNetworkUserGroup
 MNetworkUserGroupSendProxyRecipientsFilter
+MNetworkVarEmbeddedFieldOffsetDelta
 MNetworkVarNames
 MNetworkVarsAtomic
 MNetworkVarsDisable
@@ -2182,26 +2308,30 @@ MODEL_PROCESSING_SERVICES_INTERFACE_001
 MResourceTypeForInfoType
 MSG_SPLITSCREEN_ADDUSER
 MSG_SPLITSCREEN_REMOVEUSER
-M`I;MhH
+MSerializeAs
 MakeSerializersMatch failed for %s
 MakeSerializersMatchByMeta failed for %s
 MapListService_001
+Match:  %s root %s
 MaterialUtils_001
 MathLib_Init
 Max # of seconds we can wait for next packets to be sent based on rate setting (0 == no limit).
 Maximum amount of foreign packets (no established connection) allowed per frame before we discard
 Maximum queries per second to respond to from a single IP address.
 Maximum queries per second to respond to from anywhere.
-MbP?+
-MbP?deactivated
+MbP?networkmessages.cpp
+Mc&E;f
 Mc,$E
 Mc,$E;l$
 Mc,$H
+Mc4$E9
 Mc4$E;t$
 Mc>E;~
 McD$ 
 Mcf0E;f@D
 Mcl$(E;l$8t3I
+Mco(E;o8
+Mct$(E;t$8u
 MemAlloc_AllocFunc
 MemAlloc_FreeFunc
 MergeDeltas
@@ -2226,6 +2356,9 @@ Multiple extension registrations for type "
 Multiple steam net connections from %s
 MutableRawRepeatedField
 MutableRepeatedMessage
+N L9I$u
+N(D9I,u
+N,D9I0u
 N24CFieldPathHuffmanEncoder12InternalNodeE
 N24CFieldPathHuffmanEncoder5INodeE
 N24CFieldPathHuffmanEncoder8LeafNodeE
@@ -2233,6 +2366,14 @@ N6snappy15ByteArraySourceE
 N6snappy22UncheckedByteArraySinkE
 N6snappy4SinkE
 N6snappy6SourceE
+N8D9I<
+N<D8I@u
+NCG_DecodeImpl(%s):  bogus path %s spot %d value %d out of range %d->%d
+NCG_GetFieldNameImpl(%s):  bogus path %s spot %d value %d out of range %d->%d
+NCG_GetFieldNameParams_t::GetFieldNameProcedural() called for entity with procedural fields, but no INetworkProceduralDataHelper *pDataHelper passed into to API!!!
+NCG_GetFieldNameParams_t::GetFieldNameProcedural() called on non-procedural field %s
+NCG_MakeNetworkingMatchByMeta failed for %s
+NE fA
 NETWORK_DISCONNECT_BADDELTATICK
 NETWORK_DISCONNECT_BANADDED
 NETWORK_DISCONNECT_DISCONNECTED
@@ -2260,6 +2401,12 @@ NETWORK_DISCONNECT_STEAM_TICKET
 NETWORK_DISCONNECT_TIMEDOUT
 NETWORK_DISCONNECT_UNUSUAL
 NETWORK_DISCONNECT_USERCMD
+NETWORK_FIELD_CHANGES_OFTEN_PRIORITY
+NETWORK_FIELD_CHANGES_OFTEN_PRIORITY_TOPOOGICAL
+NETWORK_FIELD_CHANGES_OFTEN_PRIORITY_TOPOOGICAL_SORTLOWER
+NETWORK_FIELD_DEFAULT_PRIORITY
+NETWORK_FIELD_HIGHEST_PRIORITY
+NETWORK_FIELD_LOWEST_PRIORITY
 NET_Messages
 NamePart
 Nc$ A
@@ -2279,6 +2426,7 @@ Network System Initialized
 Network field tried to use a priority that has not been registered!
 Network socket '%s' opened on port %d
 NetworkClientService_001
+NetworkCodeGen
 NetworkMessagesVersion001
 NetworkP2PService_001
 NetworkServerService_001
@@ -2304,6 +2452,7 @@ Number of CSerializedEntities     :  %d
 Number of fragments for a splitpacket that can be sent per frame
 Numbers starting with leading zero must be in octal.
 O(A9O
+OhHcD
 Oneof must have at least one field.
 OneofDescriptorProto
 Opened Steam Net Connection on socket '%s' to %s, handle %x
@@ -2329,7 +2478,7 @@ PACKET_FLAG_RELIABLE
 PLACEHOLDER_VALUE
 POSIX
 PRGNH
-PXfD;p E
+PXfD;p
 P[A\A]A^]
 P[A\]
 PanoramaTextServices001
@@ -2387,8 +2536,11 @@ Print detailed network statistics for each network connection
 Procedural
 ProceduralData
 ProceduralData_%s_%d
+ProcessIncludesAndExcludes( %s )
+ProcessIncludesAndExcludes_R(%s):  %s for %s
 ProcessOverride encountered unknown directive NetworkOverrideType_t(%d)
 ProcessPacketSNP %s:%s packet %i at %i
+ProcessUserGroupIncludesAndExcludes_R(%s):  %s for %s
 PropertyEditorSystem_001
 Proto 
 ProtoFlattenedSerializerField_t
@@ -2475,6 +2627,7 @@ ResourceCompilerSystem001
 ResourceHandleUtils001
 ResourceManifestRegistry001
 ResourceSystem013
+Run Time
 S6[A\]
 SDR connect
 SIGNONSTATE_CHALLENGE
@@ -2510,7 +2663,6 @@ STRING
 STRING_PIECE
 SVC_Messages
 SVC_Messages_LowFrequency
-ScaleformUI001
 SceneSystem_002
 SceneUtils_001
 Schema
@@ -2519,7 +2671,7 @@ SchemaTestExternal_One_001
 SchemaTestExternal_Two_001
 Second argument to Swap() (of type "
 Second argument to SwapFields() (of type "
-SendLoopPacket
+SerializedEntitiesVersion001
 SerializedNetAddress_t
 Serializer for %s has two fields of same name (%s)
 Serializer,Field,Field Path,Decode Count,Total Bits,Avg Bits,Total Index Bits,Avg Index Bits,Priority,Best Priority,=SUM(E:E),Full Name,Notes
@@ -2637,6 +2789,7 @@ SteamNetworkingSocketsGameServer
 SteamNetworkingUtils
 SteamUser019
 SteamUtils009
+StepSimulationFuncRotatingAnglesSerializer
 StfHc
 String %d: ref:%d %s
 String Command
@@ -2647,9 +2800,13 @@ StringOutputStream.
 StringPrintfVector currently only supports up to 
 Summary of connection to %s:
 Symbol name "
-T$ Hc
+T$(Hc
 T$0H9
 T$8H)
+T$PH;
+T$hH;
+T$hHcD
+T$hJc
 TCP/UDP Disabled.
 TIcL$
 TYPE_BYTES
@@ -2668,6 +2825,11 @@ TYPE_SINT64
 TYPE_STRING
 TYPE_UINT32
 TYPE_UINT64
+TestFormatA
+TestFormatB
+TestFormatC
+TestFormatD
+TestFormatE
 TestScriptMgr001
 TextLayout_001
 TextMessageMgr_001
@@ -2713,11 +2875,11 @@ UninterpretedOption
 Unknown enumeration value of "
 UpdateNetGraph
 Usage: sdr <setting> [<value>]
-Use a high priority thread to send queued packets out instead of sending them each frame.
 Use lz compression on game packets.
 Use network sockets layer even for listen server local player's packets (multiplayer only).
 User Messages
 UserInfoChangeService_001
+V(A;U(
 V0u@H
 VApplication001
 VAvi001
@@ -2735,6 +2897,7 @@ VGUI_Scheme010
 VGUI_Surface032
 VGUI_System010
 VGUI_ivgui008
+VIcO8Ic
 VMDLLIB001
 VMaterialSystem2_001
 VMediaFoundation001
@@ -2753,6 +2916,7 @@ VScript
 VScriptDbg
 VScriptManager010
 VStringTokenSystem001
+VUUUL
 V_AddBackSlashesToSpecialChars
 V_FixDoubleSlashes
 V_FixSlashes
@@ -2780,6 +2944,7 @@ V_frexpf
 V_localeconv
 V_logf
 V_powf
+V_qsort
 V_qsort_s
 V_sinf
 V_snprintf
@@ -2827,6 +2992,7 @@ WEt%H
 WIN32
 WINDOWS
 WINXP
+WPt@L
 Wait this many msecs before checking whether to send resend requests.
 Warning
 Warning parsing text-format 
@@ -2846,6 +3012,9 @@ X[A\A]]
 X[]A\A]A^A_
 ZIcL$
 [ Net Message Info: %s ]
+[%d(%s:%s)]/
+[%d/%d] found %d (%s) in %s: convert %s->%s
+[+%d]
 [A:%u:%u:%u]
 [A\A]A^A_]
 [A\A]A^]
@@ -2876,7 +3045,9 @@ ZIcL$
 [packed = true] can only be specified for repeated primitive fields.
 \$ H9
 \$ I9
+\$(E1
 \%03o
+\;C@|
 \U%08x
 \t!Hc
 \u0000
@@ -3188,10 +3359,13 @@ addons
 aggregate_value
 allow_alias
 angle
+angle_normalize_positive
+animTimeSerializer
 archive
 array of pointers changed
 array size changed
 array_ != __null
+arraycount
 atomic 
 audible_mask
 audio
@@ -3217,20 +3391,28 @@ bi_RebroadcastSource
 bi_RelayInfo
 bi_RelayPacket
 binary
+binary_bc
 bind@@GLIBC_2.2.5
 bit %u - %u (%u bits/%u bytes):
+bit count
+bit range
 bitfield 
 borrow
 both states
 broadcast
 buffer. Use the 'bytes' type if you intend to send raw 
 buftype
+building %s
 bytes
 bytes. 
 c.[A\]
 c8t6H
+can't use value tracking callbacks %s::%s on an embedded field that is being flattened
 cc_generic_services
 ceil@@GLIBC_2.2.5
+cellx
+celly
+cellz
 channel
 cheat
 cl_cmdrate
@@ -3282,6 +3464,8 @@ creationsequence
 ctype
 cull rule %d:  %s
 cull rule %d:  %s -> %s
+culling %s due to rule [%s->%s]
+culling for client %d : %d rules
 culling for client %d of %d rules
 cvars
 dH34%(
@@ -3289,6 +3473,7 @@ dH3<%(
 data_compressed
 data_table_name
 databytes
+deactivated
 decal_texture_index
 declared 
 decode
@@ -3317,6 +3502,7 @@ dti_report_stddev_threshold
 duplicate
 eIcL$
 eQueryCvarValueStatus_NotACvar
+ehandle
 empty_string_ != __null
 enabled
 encode_flags
@@ -3326,6 +3512,7 @@ entity_data
 entity_index
 entityfiltername
 entitylumpname
+entry#
 enum 
 event
 event_mask
@@ -3336,26 +3523,31 @@ events
 eventsource
 exclude
 excluding
+excluding %s::%s due to MNetworkNoBase
 experimental_map_key
 extend .$0 {
 extendee
 extension_range
 f == __null || dynamic_cast<To>(f) != __null
-f94Q}
 f;0tr
 f;B(u
 f;C.w
+f;Q t
+f;Q"t
+f;WJw
+f;^Jv
+fA9D$
 fA;0M
 fA;0trA
 fA;D$
-fA;F:s$D
 fD9/t1H
 fD91u|
+fD;+tc
 fD;/t@H
 fD;Z(u
 fE9.tVA
 fE9.tWI
-fE9~:veI
+fE9n`fE
 failed to construct fake field from metadata %s::%s in %s
 fakeplayer
 false
@@ -3375,6 +3567,7 @@ field
 field %s had different encoding for %d bits
 field %s had different spans [%d -> %d (%d)] vs. [%d -> %d (%d)]
 field %s not present in %s
+field#
 field_serializer_name_sym
 field_serializer_version
 fieldpath_%02d%02d%02d-%02d%02d%02d.csv
@@ -3384,11 +3577,16 @@ fieldtype:  %80.80s : example '%s'
 fieldtype:  %d types
 filename
 filesystem_stdio
+fish_pos_x
+fish_pos_y
+fish_pos_z
 fixed32
 fixed64
 flags
 flags = %d
+flattenedserializer.cpp
 flattenedserializers.cpp
+flattenedserializers_ncg.cpp
 float
 float( %f )
 float32
@@ -3400,6 +3598,8 @@ floorf@@GLIBC_2.2.5
 fopen64
 fopen64@@GLIBC_2.2.5
 format
+found %s in %d classes
+found offset %u in %s at path '%s'
 fp_trace
 fprintf
 fprintf@@GLIBC_2.2.5
@@ -3409,6 +3609,7 @@ friends_id
 friends_name
 from array size %d != to size %d
 from missing
+funcRotatingSimulationTimeSerializer
 g E;g0D
 g_Tier1_BitWriteMasks
 g_Tier1_CRC32Table
@@ -3420,14 +3621,19 @@ g_pFlattenedSerialized->GetFieldNameProcedural() called for entity with procedur
 g_pFlattenedSerialized->ReadFieldList() called for entity with procedural fields, but no INetworkProceduralDataHelper *pDataHelper passed into to API!!!
 g_pMemAlloc
 g_pThreadPool
+gameSceneNode
+gameSceneNodeStepSimulationAnglesSerializer
+gameSceneNodeStepSimulationOriginSerializer
 game_dir
 game_session_config
 game_session_manifest
 gamemode
+gathering field offsets in %s
 generated_proto/linuxsteamrt64/netmessages.pb.cc
 generated_proto/linuxsteamrt64/network_connection.pb.cc
 generated_proto/linuxsteamrt64/networkbasetypes.pb.cc
 generated_proto/linuxsteamrt64/networksystem_protomessages.pb.cc
+generic
 gethostbyname
 gethostbyname@@GLIBC_2.2.5
 gethostname
@@ -3440,7 +3646,8 @@ gfffA
 gfffffffH
 go_package
 group
-h$uJH
+h(%2u) : %64.64s : %d members
+h(%4u) : %3d fields, used by %3d '%s'
 h[A\A]A^A_]
 h[A\A]]
 high_value
@@ -3452,10 +3659,12 @@ hostip
 hostname
 i >= 0
 identifier_value
+ignore offset %u in %s at path '%s'
 import "$0";
 import public "$0";
 import weak "$0";
 including
+including %s::%s to ensure entire chain to field
 incoming
 inet_addr
 inet_addr@@GLIBC_2.2.5
@@ -3494,8 +3703,11 @@ java_multiple_files
 java_outer_classname
 java_package
 java_string_check_utf8
+k t9fD
 k8D;kHtMH
 k@[A\A]A^]
+keeping %s due to rule [%s->%s]
+keeping %s since it is not in any rules
 key_t
 l$ M9u
 label
@@ -3564,8 +3776,10 @@ message $0
 message_set_wire_format
 message_type
 messagessize
+metadata
 method
 min_client_limit
+minusone
 model_index
 msg_data
 msg_type
@@ -3573,6 +3787,7 @@ nIndex != m_priorityToOrderMap.InvalidIndex()
 nPriority != NETWORK_FIELD_CHANGE_DEFAULT_PRIORITY
 nTries < 10000000
 name_part
+ncg 0x%p assigned %d to '%s'
 needs_decoder
 negative_int_value
 nested_type
@@ -3612,7 +3827,6 @@ net_public_adr
 net_qosinterval_spew
 net_qospacketloss_percentage_threshold
 net_queue_trace
-net_queued_packet_thread
 net_restrict_showmsg_socket
 net_serializedentitymemory
 net_showdrop
@@ -3647,7 +3861,8 @@ network_connection_token
 networkbasetypes.proto
 networkbasetypes.proto"
 networking/%04d_%02d_%02d_%02d_%02d_%02d
-networkmessages.cpp
+networkintrospection_decode.cpp
+networkintrospection_encode.cpp
 networkserializer.cpp
 networksystem
 networksystem.cpp
@@ -3656,14 +3871,17 @@ next state only
 no CSerializedEntity memory being used
 no cull rules
 no fastpath for %d because field %s %s changed the array size from %d to %d
+no fastpath for %d because field %s base depth is too large (pointer metadata change?)
 no fastpath for %d because field %s not in previous encoding
 no fastpath for %d because field %s not resolvable
 no_standard_descriptor_accessor
 non-parallel
+nonzero
 normal
 notconnected
 nothing
 notify
+nullptr
 num_bits
 num_bots
 num_changed_entries
@@ -3677,10 +3895,12 @@ num_tv_relays
 number
 o ATI
 o ATL
+o ATSH
 o$ATI
 o0ATSH
+o0E;E
 o8A;]
-oL~8M
+oLY8M
 oneof_decl
 oneof_index
 optimize_for
@@ -3695,8 +3915,13 @@ out of order
 outgoing
 output specified is NULL
 output_type
+override %s
+oxATI
 p H9r u
 p0@8r0u
+p0x/Hc
+pContext
+p[A\A]A^]
 p[A\]
 package
 package $0;
@@ -3775,11 +4000,15 @@ reliable
 reliable_sound
 remote_addr
 repeated
+replacing %s with %s
 replicated
 required
 resource_type
 s,D+s(E
+s0E;q0
 s1_mapname
+sPA;qPu
+sT[A\A]]
 sample_rate
 savegamefilename
 savegamename
@@ -3820,6 +4049,7 @@ signedPayload
 signon_state
 simple
 simplified
+simulationTimeSerializer
 sincosf
 sincosf@@GLIBC_2.2.5
 singleplayer
@@ -3867,7 +4097,9 @@ strcpy@@GLIBC_2.2.5
 strerror
 strerror@@GLIBC_2.2.5
 string
+string changed
 string_data
+string_t
 string_t_table
 string_value
 strings::Substitute format string invalid: asked for "$
@@ -3925,12 +4157,15 @@ svc_VoiceInit
 symbols
 syntax = "proto2";
 t	[A\A]A^]
+t	[A\]
 t HcS
 t Hc{ H
 t!HcO
 t!I;>u
 t"HcK
 t"HcO
+t"[A\A]A^]
+t#9pXt6H
 t#Hc{
 t#Hc{$H
 t#Hc{(H
@@ -3939,13 +4174,14 @@ t$<IcD$89
 t$@A\]
 t$H9h
 t$HcK
+t$HcM
 t$Hc{<H
 t$Hc{@H
 t$Ic}
 t$Ic~8H
-t&D;-5LJ
+t&D;-5
 t&IcD$
-t'D;-FHG
+t'D;-
 t'D;5
 t'Hc{
 t'Hc{ H
@@ -3964,38 +4200,39 @@ t*HcK
 t*HcO
 t*[A\A]A^]
 t+Hc4
-t,D;-;KJ
+t,D;-;
 t,Hc]
 t-D;5
 t.4Hc
 t.D;5
 t0IcD$
-t0L;M
-t2UE1
+t1[A\]
+t2\Hc
 t3Hc4
 t3[A\]
 t4[A\]
 t5IcE@H
-t:[A\]
+t5~8H
 t?Hc4
 t@@:>u
 tAHc4
 tBLcm
 tDfD;R
 tEfD;J
+tEfD;R
 tILcCxD;
 tJHcC
-tQxZ1
+tRI;]
 tR[A\A]A^]
 tSHcO
 tWA9]
 tXxcE1
 table_id
 tdA:]
+teIcW8
 text format contains deprecated field "
 the global scope
 they_hear_you
-tiHcS
 tick_interval
 tl[A\A]A^]
 to missing
@@ -4006,31 +4243,30 @@ total_data_in
 total_data_out
 total_packets_in
 total_packets_out
+tqIcGxH
 trailing_comments
 ttIcG
 twL9+u
-tyHcO
 type() == TYPE_FIXED32
 type() == TYPE_FIXED64
 type() == TYPE_GROUP
 type() == TYPE_LENGTH_DELIMITED
 type() == TYPE_VARINT
 type_name
-tzHcM
 t{HcO
+t}HcM
 t}HcO
-t~HcM
 u(t-E9
 u64( %lld = 0x%llX )
 uG[A\A]A^]
 uIcL$
-uJD;c
-ucHcV
+ubHcV
 uhL;&
 uint16
 uint32
 uint64
 uint8
+unable to deduce a valid fake field type for %s
 uncompressed_sample_offset
 uncompressed_size
 uninterpreted_option
@@ -4052,6 +4288,7 @@ v AUI
 v I9w 
 v!<\t
 v0t%H
+v`HcE
 val_bool
 val_byte
 val_long
@@ -4083,6 +4320,7 @@ w$AUL
 w(AUATI
 w(AUL
 w0AUL
+w4A;_
 wHAUL
 wPAUL
 wXAUL
@@ -4098,27 +4336,30 @@ worldgroupid
 write
 write@@GLIBC_2.2.5
 wrong submessage type
+x	;Bx
 x	;Jx
-x	umD9c
+x HcW
 x(H9z(u
-x0t*H
 xGHcO
 xGHcW
-xRD;Fx}LIc
 xRHcW
 x[A\A]A^A_]
 x[A\A]]
 x_HcO
 x`;8}\H
+xbHcE
 xlD;E
 xsHcW
 you_hear_them
 z/u-H
+{0[A\]
 {8;C0t4
+{\A;F
 {}()':
-|$ A\A]A^]
 |$$9x
-|$xE1
+|$(A\A]A^]
+|$xfD
+|,D9c
 |9Ic>I
 |yA;t$8
 |}A;t$(
@@ -4131,6 +4372,7 @@ z/u-H
 }V;w$
 }WUHc
 }Xf;w
+}YD9e
 }bfA9
 }j;w$
 }pfD9
@@ -4138,8 +4380,9 @@ z/u-H
 ~ AUATI
 ~)A;]
 ~)H97tC
+~+A9\$
 ~099t
 ~SHcC
-~[HcW
+~aHcW
 ~uLce
 ~vHcKPHc

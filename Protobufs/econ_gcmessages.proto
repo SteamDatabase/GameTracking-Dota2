@@ -98,8 +98,6 @@ enum EGCItemMsg {
 	k_EMsgGCServerRentalsBase = 1700;
 	k_EMsgGCDev_NewItemRequest = 2001;
 	k_EMsgGCDev_NewItemRequestResponse = 2002;
-	k_EMsgGCStoreGetUserData = 2500;
-	k_EMsgGCStoreGetUserDataResponse = 2501;
 	k_EMsgGCStorePurchaseFinalize = 2504;
 	k_EMsgGCStorePurchaseFinalizeResponse = 2505;
 	k_EMsgGCStorePurchaseCancel = 2506;
@@ -180,9 +178,10 @@ enum EGCItemMsg {
 	k_EMsgGCToGCInternalTestMsg = 2592;
 	k_EMsgGCToGCClientServerVersionsUpdated = 2593;
 	k_EMsgGCUseMultipleItemsRequest = 2594;
-	k_EMsgGCCheckAccountSubscription = 2595;
-	k_EMsgGCCheckAccountSubscriptionResponse = 2596;
-	k_EMsgGCToGCAccountSubscriptionChange = 2597;
+	k_EMsgGCGetAccountSubscriptionItem = 2595;
+	k_EMsgGCGetAccountSubscriptionItemResponse = 2596;
+	k_EMsgGCToGCBroadcastMessageFromSub = 2598;
+	k_EMsgGCToClientCurrencyPricePoints = 2599;
 }
 
 enum EItemPurgatoryResponse_Finalize {
@@ -511,26 +510,12 @@ message CMsgDevNewItemRequestResponse {
 	optional bool success = 1;
 }
 
-message CMsgGCCheckAccountSubscription {
+message CMsgGCGetAccountSubscriptionItem {
 	optional uint32 account_id = 1;
-	optional uint32 def_index = 2;
 }
 
-message CMsgGCCheckAccountSubscriptionResponse {
-	enum ESubscriptionState {
-		STATE_UNKNOWN = 0;
-		STATE_INACTIVE = 1;
-		STATE_ACTIVE = 2;
-	}
-
-	optional .CMsgGCCheckAccountSubscriptionResponse.ESubscriptionState state = 1 [default = STATE_UNKNOWN];
-	optional uint32 cache_until = 2;
-}
-
-message CMsgGCToGCAccountSubscriptionChange {
-	optional uint32 account_id = 1;
-	optional uint32 item_definition_index = 2;
-	optional bool is_subscription_active = 3;
+message CMsgGCGetAccountSubscriptionItemResponse {
+	optional uint32 def_index = 1;
 }
 
 message CMsgGCAddGiftItem {
@@ -966,5 +951,22 @@ message CMsgGCToGCClientServerVersionsUpdated {
 	optional uint32 client_active_version = 2;
 	optional uint32 server_active_version = 3;
 	optional uint32 server_deployed_version = 4;
+}
+
+message CMsgGCToGCBroadcastMessageFromSub {
+	optional uint32 msg_id = 1;
+	optional bytes serialized_msg = 2;
+	repeated uint32 account_id_list = 3 [packed = true];
+	repeated fixed64 steam_id_list = 4 [packed = true];
+}
+
+message CMsgGCToClientCurrencyPricePoints {
+	message Currency {
+		optional uint32 currency_id = 1;
+		repeated uint64 currency_price = 2 [packed = true];
+	}
+
+	repeated uint64 price_key = 1 [packed = true];
+	repeated .CMsgGCToClientCurrencyPricePoints.Currency currencies = 2;
 }
 

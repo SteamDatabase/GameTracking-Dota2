@@ -585,7 +585,7 @@
 	input SetRelationship(string) : "Changes this entity's relationship with another entity or class. Format: <entityname/classname> <D_HT/D_FR/D_LI/D_NU> <priority>"
 	input SetEnemyFilter(string) : "Changes this NPC's enemy filter to the named filter."
 	input SetHealth(integer) : "Set this NPC's health."
-	input SetBodyGroup(integer) : "HACK: Sets this NPC's body group (from 0 - n). You'd better know what you are doing!"
+	input SetBodyGroup(string) : "Sets NPC bodygroup. Format is <BodygroupName,index> "
 	input physdamagescale(float) : "Sets the value that scales damage energy when this character is hit by a physics object. NOTE: 0 means this feature is disabled for backwards compatibility."
 	input Ignite(void) : "Ignite, burst into flames"
 	input IgniteLifetime(float) : "Ignite, with a parameter lifetime."
@@ -900,7 +900,7 @@
 		1024: "Physics debris" : 0
 		2048: "Only NPCs in vehicles (respects player ally flag)" : 0
 		4096: "Correctly account for object mass (trigger_push used to assume 100Kg) and multiple component physobjs (car, blob...)" : 1
-		8192: "Ignore client's tracked limbs (hands, HMD...)" : 0
+		8192: "Ignore client's hands" : 0
 	]
 
 	filtername(filterclass) : "Filter Name" : : "Filter to use to see if activator triggers me. See filter_activator_name for more explanation."
@@ -1023,12 +1023,13 @@
 ]
 
 
-@PointClass base(Targetname, Parentname) iconsprite("editor/ambient_generic.vmat") = point_soundevent :
+@PointClass base(Targetname, Parentname) iconsprite("editor/snd_event.vmat") = point_soundevent :
 	"Plays a sound event from a point. The point can be this entity or a specified entity's position."
 [
 	soundName(sound) : "Sound Event Name" : "" : "Name of the sound event to play"
 	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity the sound should emit from."
 	startOnSpawn(boolean) : "Start On Spawn" : "" : "Play the sound immediately upon spawning"
+	toLocalPlayer(boolean) : "To Local Player" : "" : "Play the sound directly to the local player"
 	alwaysTransmitToClient(boolean) : "Always Transmit To Client" : "" : "Always transmit this entity to the client. Use when this entity moves around or is parented to an entity that will move."
 
 	// Inputs
@@ -1038,9 +1039,35 @@
 	input PauseSound(void) : "Pause the sound event."
 	input UnPauseSound(void) : "UnPause the sound event."
 	input StopSound(void) : "Stop the sound event"
+	
+	output SoundEventGuid(integer) : "Sound Event GUID"
 ]
 
-@PointClass base(Targetname) iconsprite("editor/ambient_generic.vmat") = sound_opvar_set :
+@PointClass base(point_soundevent) iconsprite("editor/snd_event.vmat") = snd_event_point :
+	"Plays a sound event from a point. The point can be this entity or a specified entity's position."
+[
+]
+
+@PointClass base(point_soundevent) iconsprite("editor/snd_event.vmat") box_oriented( box_mins, box_maxs ) = snd_event_alignedbox :
+	"Plays a sound event from a point, passes along the min and max positions of its AABB. The point can be this entity or a specified entity's position."
+[
+	box_mins(vector) : "Box Mins" : "-64 -64 -64"
+	box_maxs(vector) : "Box Maxs" : "64 64 64"
+]
+
+@PointClass base(Targetname, Parentname) iconsprite("editor/snd_event.vmat") = snd_event_param :
+	"Set a public parameter of a playing soundevent."
+[
+	parameterName(string) : "Parameter Name" : "" : "Name of the parameter to set"
+	floatValue(float) : "Float Value" : "" : "Single float value to set on parameter."
+
+	// Inputs
+	input SetParamName(string) : "Set the name of the parameter to set on the soundevent."
+	input SetFloatValue(float) : "Set the name of the sound event to play."
+	input SetSoundEventGUID(integer) : "Start the sound event using a snd_event_point and pass its guid output to this."
+]
+
+@PointClass base(Targetname) iconsprite("editor/snd_opvar_set.vmat") = snd_opvar_set :
 	"Sets an opvar value on a library stack"
 [
 	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
@@ -2296,6 +2323,11 @@
 	radius(integer) : "Radius" : 128					// NEEDHELP: The datadesc doesn't include this entry. Probably not used.
 ]
 
+@PointClass base(env_soundscape_proxy) sphere() iconsprite("editor/env_soundscape.vmat") = snd_soundscape_proxy : 
+	"An entity that acts like a soundscape but gets all of its sound parameters from another env_soundscape entity."
+[
+]
+
 @PointClass base(Targetname,Parentname,EnableDisable) sphere() iconsprite("editor/env_soundscape.vmat") line(255 255 255, targetname, position0) line(255 255 255, targetname, position1) line(255 255 255, targetname, position2) line(255 255 255, targetname, position3) line(255 255 255, targetname, position4) line(255 255 255, targetname, position5) line(255 255 255, targetname, position6) line(255 255 255, targetname, position7) = env_soundscape : 
 	"An entity to control sound in an area. The active soundscape at any time is the last one that had line-of-sight to the player, and was within the radius."
 [
@@ -2320,7 +2352,17 @@
 	output OnPlay(void) : "Fired when this soundscape becomes the active one."
 ]
 
+@PointClass base(env_soundscape) sphere() iconsprite("editor/env_soundscape.vmat") line(255 255 255, targetname, position0) line(255 255 255, targetname, position1) line(255 255 255, targetname, position2) line(255 255 255, targetname, position3) line(255 255 255, targetname, position4) line(255 255 255, targetname, position5) line(255 255 255, targetname, position6) line(255 255 255, targetname, position7) = snd_soundscape : 
+	"An entity to control sound in an area. The active soundscape at any time is the last one that had line-of-sight to the player, and was within the radius."
+[
+]
+
 @PointClass base(env_soundscape) sphere() iconsprite("editor/env_soundscape.vmat") = env_soundscape_triggerable : 
+	"An entity that works like env_soundscape except that it works in conjunction with trigger_soundscape to determine when a player hears it."
+[
+]
+
+@PointClass base(env_soundscape_triggerable) sphere() iconsprite("editor/env_soundscape.vmat") = snd_soundscape_triggerable : 
 	"An entity that works like env_soundscape except that it works in conjunction with trigger_soundscape to determine when a player hears it."
 [
 ]
@@ -5427,10 +5469,11 @@
 		2: "Limit Endpoints" : 0
 	]
 	slideaxis(vecline) : "Sliding Axis"
-	slidefriction(float) : "Friction" : "0" : "Resistance/friction in the constraint"
+	slidefriction(float) : "Set motor friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
 	SystemLoadScale(float) : "Load Scale" : "1" : "Scale of the mass load connected to this constraint (1=just the objects directly connected)"
 	
 	// Inputs
+	input SetSlideFriction(float) : "Set motor friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
 	input SetVelocity(float) : "Set linear velocity along the constraint"
 	
 	
@@ -5868,6 +5911,8 @@
 		1 : "Per-Vertex"
 		//2 : "Light Map"
 	]
+
+	excludefromimpostors(boolean) [ group="Render Properties" ] : "Exclude from Impostors" : 0 : "Exclude this geometry from impostor LOD rendering"
 ]
 
 
@@ -6030,6 +6075,7 @@
 		16384 : "Motion Disabled" : 0
 		32768 : "Allow stretch" : 0
 		65536 : "Start asleep" : 0
+		131072 : "Don't force sleep" : 0
 	]
 	angleOverride(string) : "Override Animation" : "" : "Filled in by the engine via wc_update_entity, do not edit by hand except to clear."
 
@@ -6865,6 +6911,12 @@
 	model(studio) : "Model"
 	input DisablePlayerCollision(void) : "Disable collisions against the player."
 	input EnablePlayerCollision(void) : "Enable collisions against the player."
+
+	has_animated_face(Choices) : "Has Animated Face" : 0 : "Does this entity have an animated face?" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
 ]
 
 
@@ -6942,7 +6994,7 @@
 	
 ]
 
-@PointClass base(Targetname, DamageFilter) size(-8 -8 -8, 8 8 8) = logic_gameevent_listener:
+@PointClass base(Targetname, DamageFilter)  iconsprite("editor/game_event_listener.vmat") = logic_gameevent_listener:
 	"An entity that listens to game events and fires off an output when the named event it fired"
 [
 	gameeventname(string) : "Game Event Name"
@@ -7653,15 +7705,29 @@
 	input SilencePlayer(bool): "Silence the player"
 ]
 
-@PointClass base(Targetname, Parentname, EnableDisable) sphere() = env_volumetric_fog_controller : 
-	"Controller for volumetric fogging settings"
+
+@PointClass base(Targetname, Parentname, EnableDisable) sphere() 
+	box_world_aligned( box_mins, box_maxs )
+= env_volumetric_fog_controller : "Controller for volumetric fogging - bounds are extents of fog irradiance volume (for indirect)"
 [
+	box_mins(vector) : "Box Mins" : "-72 -72 -72"
+	box_maxs(vector) : "Box Maxs" : "72 72 72"
+	voxel_dim(choices) : "Max Voxel Dimension" : "256.0" : "" = 
+	[
+		"512.0" : "Very High Resolution"
+		"256.0" : "High Resolution"
+		"128.0" : "Medium Resolution"
+		"64.0" : "Low Resolution"
+	]
+
 	FogStrength( float ) : "Fog strength" : "1.0" : "Technically the scattering value. Higher values make denser fog."
 	Anisotropy( float ) : "Anisotropy" : "0.2" : "How much the fog should get brighter when you stare directly at the light." 
 	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
 	DrawDistance( float ) : "Draw distance" : "600.0" : "Maximum distance to draw fog - WARNING! Changing from default will make fog blockier." 
+	BakedLightStrength( float ) : "Baked light strength" : "1.0" : "This is how strong the baked lighting in the fog is."
+	fogirradiancevolume(resource:texture) : "Fog Irradiance Texture" : "" : "Name of the fog irradiance texture"
 	input SetToDefaults(void) : "Resets scattering and anisotropy to default values"
-	input SetFogStrength(float) : "Set fog strength"
+	input SetFogStrength(float) : "Set overall fog strength"
 	input SetAnisotropy(float) : "Set anisotropy value"
 	input SetFadeSpeed(float) : "Set fade in/out speed"
 	input SetDrawDistance(float) : "Set draw distance"
@@ -7669,12 +7735,24 @@
 	input Disable(boolean) : "Disable"
 ]
 
-@PointClass iconsprite( "materials/editor/visibility_hint.vmat" ) orientedwirebox( box_mins, box_maxs ) = visibility_hint
+@PointClass iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint
 [
-       box_mins(vector) : "Box Mins" : "-64 -64 -64"
-       box_maxs(vector) : "Box Maxs" : "64 64 64"
-	   hintType(choices) : "Hint Type" : 0 =
+	box_mins(vector) : "Box Mins" : "-64 -64 -64"
+	box_maxs(vector) : "Box Maxs" : "64 64 64"
+	hintType(choices) : "Hint Type" : 0 =
 	[
 		0: "Use High Resolution"
 	]
 ]
+
+@PointClass centered_box_world_aligned( box_size ) = test_centered_box_world_aligned : "A test for the 'centered_box_world_aligned' heleper"
+[
+	box_size(vector) : "Box Size" : "128 128 128"
+]
+
+
+@PointClass centered_box_oriented( box_size ) = test_centered_box_oriented : "A test for the 'centered_box_oriented'"
+[
+	box_size(vector) : "Box Size" : "128 128 128"
+]
+

@@ -151,3 +151,15 @@ function TransitionFromMapLoadingScreen()
 		$.GetContextPanel().MapLoadingOutroFinished();
 	} );
 }
+
+function TogglePrimeMode( enablePrimeMode )
+{
+	if ( enablePrimeMode === undefined )
+	{
+		$('#PreGame').ToggleClass( 'PrimePageActive' );
+	}
+	else
+	{
+		$('#PreGame').SetHasClass( 'PrimePageActive', ( enablePrimeMode ) ? true : false );	
+	}
+}

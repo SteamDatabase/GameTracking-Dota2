@@ -1,4 +1,5 @@
 import "networkbasetypes.proto";
+import "dota_shared_enums.proto";
 import "dota_commonmessages.proto";
 
 option optimize_for = SPEED;
@@ -10,7 +11,7 @@ enum EDotaUserMessages {
 	DOTA_UM_ChatEvent = 466;
 	DOTA_UM_CombatHeroPositions = 467;
 	DOTA_UM_CombatLogData = 468;
-	DOTA_UM_CombatLogShowDeath = 470;
+	DOTA_UM_CombatLogBulkData = 470;
 	DOTA_UM_CreateLinearProjectile = 471;
 	DOTA_UM_DestroyLinearProjectile = 472;
 	DOTA_UM_DodgeTrackingProjectiles = 473;
@@ -112,7 +113,10 @@ enum EDotaUserMessages {
 	DOTA_UM_ChatWheelCooldown = 569;
 	DOTA_UM_DismissAllStatPopups = 570;
 	DOTA_UM_TE_DestroyProjectile = 571;
+	DOTA_UM_HeroRelicProgress = 572;
 	DOTA_UM_AbilityDraftRequestAbility = 573;
+	DOTA_UM_ItemSold = 574;
+	DOTA_UM_DamageReport = 575;
 }
 
 enum DOTA_CHAT_MESSAGE {
@@ -258,26 +262,6 @@ enum EDotaEntityMessages {
 	DOTA_UNIT_SPEECH_CLIENTSIDE_RULES = 7;
 }
 
-enum DOTA_PARTICLE_MESSAGE {
-	DOTA_PARTICLE_MANAGER_EVENT_CREATE = 0;
-	DOTA_PARTICLE_MANAGER_EVENT_UPDATE = 1;
-	DOTA_PARTICLE_MANAGER_EVENT_UPDATE_FORWARD = 2;
-	DOTA_PARTICLE_MANAGER_EVENT_UPDATE_ORIENTATION = 3;
-	DOTA_PARTICLE_MANAGER_EVENT_UPDATE_FALLBACK = 4;
-	DOTA_PARTICLE_MANAGER_EVENT_UPDATE_ENT = 5;
-	DOTA_PARTICLE_MANAGER_EVENT_UPDATE_OFFSET = 6;
-	DOTA_PARTICLE_MANAGER_EVENT_DESTROY = 7;
-	DOTA_PARTICLE_MANAGER_EVENT_DESTROY_INVOLVING = 8;
-	DOTA_PARTICLE_MANAGER_EVENT_RELEASE = 9;
-	DOTA_PARTICLE_MANAGER_EVENT_LATENCY = 10;
-	DOTA_PARTICLE_MANAGER_EVENT_SHOULD_DRAW = 11;
-	DOTA_PARTICLE_MANAGER_EVENT_FROZEN = 12;
-	DOTA_PARTICLE_MANAGER_EVENT_CHANGE_CONTROL_POINT_ATTACHMENT = 13;
-	DOTA_PARTICLE_MANAGER_EVENT_UPDATE_ENTITY_POSITION = 14;
-	DOTA_PARTICLE_MANAGER_EVENT_SET_FOW_PROPERTIES = 15;
-	DOTA_PARTICLE_MANAGER_EVENT_SET_TEXT = 16;
-}
-
 enum DOTA_OVERHEAD_ALERT {
 	OVERHEAD_ALERT_GOLD = 0;
 	OVERHEAD_ALERT_DENY = 1;
@@ -300,6 +284,7 @@ enum DOTA_OVERHEAD_ALERT {
 	OVERHEAD_ALERT_OUTGOING_DAMAGE = 18;
 	OVERHEAD_ALERT_DISABLE_RESIST = 19;
 	OVERHEAD_ALERT_DEATH = 20;
+	OVERHEAD_ALERT_BLOCKED = 21;
 }
 
 enum DOTA_ROSHAN_PHASE {
@@ -413,9 +398,6 @@ message CDOTAUserMsg_ChatEvent {
 	optional uint32 value3 = 10;
 }
 
-message CDOTAUserMsg_CombatLogShowDeath {
-}
-
 message CDOTAUserMsg_BotChat {
 	optional uint32 player_id = 1;
 	optional string message = 3;
@@ -428,6 +410,13 @@ message CDOTAUserMsg_CombatHeroPositions {
 	optional int32 time = 2;
 	optional .CMsgVector2D world_pos = 3;
 	optional int32 health = 4;
+}
+
+message CDOTAUserMsg_CombatLogBulkData {
+	repeated .CMsgDOTACombatLogEntry combat_entries = 1;
+	optional float timestamp = 2;
+	optional float duration = 3;
+	optional uint32 player_id = 4;
 }
 
 message CDOTAUserMsg_MiniKillCamInfo {
@@ -713,117 +702,16 @@ message CDOTAUserMsg_ItemPurchased {
 	optional int32 item_ability_id = 1;
 }
 
+message CDOTAUserMsg_ItemSold {
+	optional int32 item_ability_id = 1;
+}
+
 message CDOTAUserMsg_ItemFound {
 	optional int32 player = 1;
 	optional int32 quality = 2;
 	optional int32 rarity = 3;
 	optional int32 method = 4;
 	optional int32 itemdef = 5;
-}
-
-message CDOTAUserMsg_ParticleManager {
-	message ReleaseParticleIndex {
-	}
-
-	message CreateParticle {
-		optional fixed64 particle_name_index = 1;
-		optional int32 attach_type = 2;
-		optional int32 entity_handle = 3;
-		optional int32 entity_handle_for_modifiers = 4;
-	}
-
-	message DestroyParticle {
-		optional bool destroy_immediately = 1;
-	}
-
-	message DestroyParticleInvolving {
-		optional bool destroy_immediately = 1;
-		optional int32 entity_handle = 3;
-	}
-
-	message UpdateParticle {
-		optional int32 control_point = 1;
-		optional .CMsgVector position = 2;
-	}
-
-	message UpdateParticleFwd {
-		optional int32 control_point = 1;
-		optional .CMsgVector forward = 2;
-	}
-
-	message UpdateParticleOrient {
-		optional int32 control_point = 1;
-		optional .CMsgVector forward = 2;
-		optional .CMsgVector right = 3;
-		optional .CMsgVector up = 4;
-	}
-
-	message UpdateParticleFallback {
-		optional int32 control_point = 1;
-		optional .CMsgVector position = 2;
-	}
-
-	message UpdateParticleOffset {
-		optional int32 control_point = 1;
-		optional .CMsgVector origin_offset = 2;
-	}
-
-	message UpdateParticleEnt {
-		optional int32 control_point = 1;
-		optional int32 entity_handle = 2;
-		optional int32 attach_type = 3;
-		optional int32 attachment = 4;
-		optional .CMsgVector fallback_position = 5;
-		optional bool include_wearables = 6;
-	}
-
-	message UpdateParticleSetFrozen {
-		optional bool set_frozen = 1;
-	}
-
-	message UpdateParticleShouldDraw {
-		optional bool should_draw = 1;
-	}
-
-	message ChangeControlPointAttachment {
-		optional int32 attachment_old = 1;
-		optional int32 attachment_new = 2;
-		optional int32 entity_handle = 3;
-	}
-
-	message UpdateEntityPosition {
-		optional int32 entity_handle = 1;
-		optional .CMsgVector position = 2;
-	}
-
-	message SetParticleFoWProperties {
-		optional int32 fow_control_point = 1;
-		optional int32 fow_control_point2 = 2;
-		optional float fow_radius = 3;
-	}
-
-	message SetParticleText {
-		optional string text = 1;
-	}
-
-	required .DOTA_PARTICLE_MESSAGE type = 1 [default = DOTA_PARTICLE_MANAGER_EVENT_CREATE];
-	required uint32 index = 2;
-	optional .CDOTAUserMsg_ParticleManager.ReleaseParticleIndex release_particle_index = 3;
-	optional .CDOTAUserMsg_ParticleManager.CreateParticle create_particle = 4;
-	optional .CDOTAUserMsg_ParticleManager.DestroyParticle destroy_particle = 5;
-	optional .CDOTAUserMsg_ParticleManager.DestroyParticleInvolving destroy_particle_involving = 6;
-	optional .CDOTAUserMsg_ParticleManager.UpdateParticle update_particle = 7;
-	optional .CDOTAUserMsg_ParticleManager.UpdateParticleFwd update_particle_fwd = 8;
-	optional .CDOTAUserMsg_ParticleManager.UpdateParticleOrient update_particle_orient = 9;
-	optional .CDOTAUserMsg_ParticleManager.UpdateParticleFallback update_particle_fallback = 10;
-	optional .CDOTAUserMsg_ParticleManager.UpdateParticleOffset update_particle_offset = 11;
-	optional .CDOTAUserMsg_ParticleManager.UpdateParticleEnt update_particle_ent = 12;
-	optional .CDOTAUserMsg_ParticleManager.UpdateParticleShouldDraw update_particle_should_draw = 14;
-	optional .CDOTAUserMsg_ParticleManager.UpdateParticleSetFrozen update_particle_set_frozen = 15;
-	optional .CDOTAUserMsg_ParticleManager.ChangeControlPointAttachment change_control_point_attachment = 16;
-	optional .CDOTAUserMsg_ParticleManager.UpdateEntityPosition update_entity_position = 17;
-	optional .CDOTAUserMsg_ParticleManager.SetParticleFoWProperties set_particle_fow_properties = 18;
-	optional .CDOTAUserMsg_ParticleManager.SetParticleText set_particle_text = 19;
 }
 
 message CDOTAUserMsg_OverheadEvent {
@@ -1313,8 +1201,23 @@ message CDOTAUserMsg_ChatWheelCooldown {
 	optional float cooldown_remaining = 2;
 }
 
+message CDOTAUserMsg_HeroRelicProgress {
+	optional uint32 hero_relic_type = 1;
+	optional uint32 value = 2;
+	optional uint32 ehandle = 3;
+	optional uint32 event_id = 4;
+}
+
 message CDOTAUserMsg_AbilityDraftRequestAbility {
 	optional uint32 player_id = 1;
 	optional uint32 requested_ability_id = 2;
+}
+
+message CDOTAUserMsg_DamageReport {
+	optional uint32 player_id = 1;
+	optional uint32 target_hero_id = 2;
+	optional uint32 source_hero_id = 3;
+	optional int32 damage_amount = 4;
+	optional bool broadcast = 5;
 }
 
