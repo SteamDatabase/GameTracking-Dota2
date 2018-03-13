@@ -633,8 +633,8 @@ function TestAnimateHeroBadgeLevel()
 			}
 		]
 	};
-
-	RunSingleAction( new AnimateHeroBadgeLevelScreenAction( data ) );
+	data.is_debug = true;
+	StartProgressAnimation( data );
 }
 
 
@@ -647,6 +647,7 @@ function TestAnimateHeroBadgeLevel()
 function StartProgressAnimation( data )
 {
 	$.Msg( "Showing progress for: " + JSON.stringify( data ) );
+	$('#ProgressScreens').RemoveAndDeleteChildren();
 
 	var seq = new RunSequentialActions();
 
@@ -655,11 +656,14 @@ function StartProgressAnimation( data )
 		seq.actions.push( new AnimateHeroBadgeLevelScreenAction( data ) );
 	}
 
-	// Signal back to the C++ code that we're done displaying progress
-	seq.actions.push( new RunFunctionAction( function ()
+	if ( data.is_debug !== true )
 	{
-		$.DispatchEvent( 'DOTAPostGameProgressAnimationComplete', $.GetContextPanel() );
-	} ) );
+		// Signal back to the C++ code that we're done displaying progress
+		seq.actions.push( new RunFunctionAction( function ()
+		{
+			$.DispatchEvent( 'DOTAPostGameProgressAnimationComplete', $.GetContextPanel() );
+		} ) );
+	}
 
 	RunSingleAction( seq );
 }
