@@ -36,8 +36,6 @@ enum EIntentionalFeedingType {
 	k_EIntentionalFeedingType_SoldTooMuchItemValue = 64;
 	k_EIntentionalFeedingType_TooManyDroppedItems = 128;
 	k_EIntentionalFeedingType_ExcessiveTowerDamage = 256;
-	k_EIntentionalFeedingType_LastHitsDenies = 512;
-	k_EIntentionalFeedingType_XPPM = 1024;
 }
 
 enum ESuspiciousActivity {
@@ -191,11 +189,6 @@ message CMsgDOTAFantasyMatch {
 	optional uint32 team_2 = 7;
 }
 
-message CMsgDOTAUpdateClippy {
-	repeated uint32 good_team_hero_ids = 1;
-	repeated uint32 bad_team_hero_ids = 2;
-}
-
 message CMsgServerToGCRealtimeStats {
 	optional .CMsgDOTARealtimeGameStatsTerse delayed = 1;
 	optional .CMsgDOTARealtimeGameStats current = 2;
@@ -252,12 +245,6 @@ message CMsgGameMatchSignOut {
 			optional .CMsgGameMatchSignOut.CTeam.CPlayer.CCustomGameData custom_game_data = 35;
 			optional uint32 match_player_flags = 36;
 			repeated uint32 talent_ability_ids = 41;
-			optional uint32 hero_pick_order = 42;
-			optional bool hero_was_randomed = 43;
-			optional bool hero_was_bonus = 44;
-			optional uint32 lane = 45;
-			repeated .CMatchPlayerTimedStats timed_stats = 46;
-			optional bool is_using_plus_guide = 47;
 		}
 
 		repeated .CMsgGameMatchSignOut.CTeam.CPlayer players = 1;
@@ -278,27 +265,6 @@ message CMsgGameMatchSignOut {
 
 	message CCustomGameData {
 		optional uint32 publish_timestamp = 1;
-	}
-
-	message EventGameLeaderboardEntry {
-		optional string name_suffix = 1;
-		optional int32 score = 2;
-		optional uint32 extra_data_1 = 3;
-		optional uint32 extra_data_2 = 4;
-		optional uint32 extra_data_3 = 5;
-		optional uint32 extra_data_4 = 6;
-		optional uint32 extra_data_5 = 7;
-	}
-
-	message WardPlacement {
-		optional uint32 player_id = 1;
-		optional uint32 team_id = 2;
-		optional uint32 placed_time = 3;
-		optional uint32 building_state = 4;
-		optional uint32 creep_state = 5;
-		optional bool roshan_alive = 6;
-		optional uint32 position_x = 7;
-		optional uint32 position_y = 8;
 	}
 
 	optional uint64 match_id = 1 [(key_field) = true];
@@ -340,8 +306,6 @@ message CMsgGameMatchSignOut {
 	optional uint32 match_flags = 38;
 	repeated uint32 team_scores = 39;
 	optional uint32 pre_game_duration = 40;
-	repeated .CMsgGameMatchSignOut.EventGameLeaderboardEntry event_game_leaderboard_entries = 42;
-	repeated .CMsgGameMatchSignOut.WardPlacement ward_placements = 43;
 }
 
 message CMsgSignOutDraftInfo {
@@ -381,10 +345,6 @@ message CMsgSignOutPlayerStats {
 	optional uint32 denies = 21;
 	optional float gpm = 22;
 	optional float xppm = 23;
-	optional float net_worth = 24;
-	optional float damage = 25;
-	optional float heals = 26;
-	optional uint32 rapiers_purchased = 27;
 }
 
 message CMsgSignOutCommunicationSummary {
@@ -409,6 +369,11 @@ message CMsgSignOutCommunicationSummary {
 }
 
 message CMsgGameMatchSignoutResponse {
+	message CAdditionalSignoutMsg {
+		optional uint32 id = 1;
+		optional bytes contents = 2;
+	}
+
 	message PlayerMetadata {
 		optional uint32 hero_id = 1;
 		optional uint32 avg_kills_x16 = 2;
@@ -430,6 +395,7 @@ message CMsgGameMatchSignoutResponse {
 	repeated .CLobbyTimedRewardDetails timed_reward_details = 3;
 	repeated .CDOTALobbyMember xp_reward_details = 4;
 	optional uint32 leagueid = 5;
+	repeated .CMsgGameMatchSignoutResponse.CAdditionalSignoutMsg additional_msgs = 6;
 	optional fixed32 metadata_private_key = 7;
 	optional .CMsgDOTAMatch match_details = 8;
 	repeated .CMsgGameMatchSignoutResponse.PlayerMetadata players_metadata = 9;
@@ -450,13 +416,6 @@ message CMsgGameMatchSignOutPermissionResponse {
 	optional bool permission_granted = 1 [default = false];
 	optional bool abandon_signout = 2 [default = false];
 	optional uint32 retry_delay_seconds = 3 [default = 0];
-}
-
-message CMsgGameMatchSignOutEventGameData {
-	optional .EEvent event_id = 1 [default = EVENT_ID_NONE];
-	optional string game_name = 2;
-	optional string map_name = 3;
-	optional bytes event_game_data = 4;
 }
 
 message CMsgDOTALiveScoreboardUpdate {
@@ -888,7 +847,6 @@ message CMsgServerToGCLockCharmTrading {
 message CMsgSignOutUpdatePlayerChallenge {
 	message Challenge {
 		optional uint32 event_id = 1;
-		optional uint32 slot_id = 2;
 		optional uint32 sequence_id = 3;
 		optional uint32 progress = 4;
 		optional uint32 challenge_rank = 5;
@@ -943,27 +901,11 @@ message CMsgSignOutWagerStats {
 	optional uint32 event_id = 2;
 }
 
-message CMsgSpendWager {
-	message Player {
-		optional uint32 account_id = 1;
-		optional uint32 wager = 2;
-		optional uint64 wager_token_item_id = 3;
-	}
-
-	repeated .CMsgSpendWager.Player players = 1;
-	optional uint32 event_id = 2;
-	optional uint32 timestamp = 3;
-	optional uint64 match_id = 4;
-	optional uint64 server_steam_id = 5;
-}
-
 message CMsgSignOutXPCoins {
 	message Player {
 		optional uint32 account_id = 1;
 		optional uint32 xp_gained = 2;
 		optional uint32 coins_spent = 3;
-		optional uint64 wager_token_item_id = 4;
-		optional uint32 rank_wager = 5;
 	}
 
 	repeated .CMsgSignOutXPCoins.Player players = 1;
@@ -1002,12 +944,30 @@ message CMsgServerToGCPostMatchTipResponse {
 	optional .CMsgServerToGCPostMatchTipResponse.Result result = 4 [default = SUCCESS];
 }
 
+message CMsgServerToGCStartCompendiumInGamePredictions {
+	optional uint32 league_id = 1;
+	optional uint64 match_id = 2;
+	optional float hltv_delay = 3;
+	repeated uint32 prediction_ids = 4;
+}
+
+message CMsgServerToGCStartCompendiumInGamePredictionsResponse {
+	optional bool result = 1;
+}
+
 message CMsgServerToGCCloseCompendiumInGamePredictionVoting {
 	optional uint64 match_id = 1;
-	optional uint32 hltv_delay = 2;
 }
 
 message CMsgServerToGCCloseCompendiumInGamePredictionVotingResponse {
+	optional bool result = 1;
+}
+
+message CMsgServerToGCEndCompendiumInGamePredictions {
+	optional uint64 match_id = 1;
+}
+
+message CMsgServerToGCEndCompendiumInGamePredictionsResponse {
 	optional bool result = 1;
 }
 
@@ -1020,77 +980,9 @@ message CMsgServerToGCCompendiumInGamePredictionResults {
 
 	optional uint64 match_id = 1;
 	repeated .CMsgServerToGCCompendiumInGamePredictionResults.PredictionResult results = 2;
-	optional uint32 league_id = 3;
-	optional uint32 series_id = 4;
 }
 
 message CMsgServerToGCCompendiumInGamePredictionResultsResponse {
 	optional bool result = 1;
-}
-
-message CMsgGCToGCCompendiumInGamePredictionResults {
-	optional .CMsgServerToGCCompendiumInGamePredictionResults results = 1;
-}
-
-message CMsgServerToGCMatchPlayerItemPurchaseHistory {
-	message ItemPurchase {
-		optional uint32 item = 1;
-		optional uint32 gold = 2;
-		optional uint32 net_worth = 3;
-		optional uint32 game_time = 4;
-		repeated uint32 inventory_items = 5;
-		repeated bool talents_skilled = 7;
-	}
-
-	message Player {
-		optional uint32 player_slot = 1;
-		optional uint32 account_id = 2;
-		optional uint32 hero_id = 3;
-		repeated uint32 allied_hero_ids = 4;
-		repeated uint32 enemy_hero_ids = 5;
-		repeated .CMsgServerToGCMatchPlayerItemPurchaseHistory.ItemPurchase item_purchases = 6;
-	}
-
-	optional uint64 match_id = 1;
-	optional uint32 mmr = 2;
-	repeated .CMsgServerToGCMatchPlayerItemPurchaseHistory.Player players = 3;
-}
-
-message CMsgServerToGCMatchStateHistory {
-	message PlayerState {
-		optional uint32 hero_id = 1;
-		optional uint32 net_worth = 2;
-		optional uint32 level = 3;
-		optional uint32 deaths = 4;
-		optional uint32 respawn_time = 5;
-		optional bool has_buyback = 6;
-		optional bool has_aegis = 7;
-		optional bool has_rapier = 8;
-		optional uint32 distance = 9;
-	}
-
-	message TeamState {
-		optional uint32 team = 1;
-		repeated .CMsgServerToGCMatchStateHistory.PlayerState player_states = 2;
-		repeated uint32 tower_health_pct = 3;
-		repeated uint32 barracks_health_pct = 4;
-		optional uint32 ancient_health_pct = 5;
-		optional uint32 glyph_cooldown = 6;
-		optional uint32 kills = 7;
-		optional uint32 creep_distance_safe = 8;
-		optional uint32 creep_distance_mid = 9;
-		optional uint32 creep_distance_off = 10;
-	}
-
-	message MatchState {
-		optional uint32 game_time = 1;
-		optional .CMsgServerToGCMatchStateHistory.TeamState radiant_state = 2;
-		optional .CMsgServerToGCMatchStateHistory.TeamState dire_state = 3;
-	}
-
-	optional uint64 match_id = 1;
-	optional bool radiant_won = 2;
-	optional uint32 mmr = 3;
-	repeated .CMsgServerToGCMatchStateHistory.MatchState match_states = 4;
 }
 

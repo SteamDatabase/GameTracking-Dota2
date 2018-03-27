@@ -457,18 +457,22 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 	// Now animate the relics
 	if ( this.data.hero_relics_progress )
 	{
-		this.seq.actions.push( new AddClassAction( panel, 'ShowRelicsProgress' ) );
-		this.seq.actions.push( new WaitAction( 0.5 ) );
-
-		var relicsList = panel.FindChildInLayoutFile( "HeroRelicsProgressList" );
-		for ( var i = 0; i < this.data.hero_relics_progress.length; ++i )
+		if ( this.data.hero_relics_progress.length > 0 )
 		{
-			this.seq.actions.push( new AnimateHeroRelicProgressAction( this.data.hero_relics_progress[i], relicsList ) );
+			this.seq.actions.push( new AddClassAction( panel, 'ShowRelicsProgress' ) );
+			this.seq.actions.push( new WaitAction( 0.5 ) );
+			var relicParallelAction = new RunParallelActions();
+			this.seq.actions.push( relicParallelAction );
+			var relicsList = panel.FindChildInLayoutFile( "HeroRelicsProgressList" );
+			for ( var i = 0; i < this.data.hero_relics_progress.length; ++i )
+			{
+				relicParallelAction.actions.push( new AnimateHeroRelicProgressAction( this.data.hero_relics_progress[i], relicsList ) )
+			}
+			this.seq.actions.push( new AddClassAction( panel, 'WaitingForAdvance' ) );
+			this.seq.actions.push( new WaitForEventAction( $('#AdvanceHeroBadgeProgressButton'), 'Activated' ) );
+			this.seq.actions.push( new RemoveClassAction( panel, 'WaitingForAdvance' ) );
+			this.seq.actions.push( new RemoveClassAction( panel, 'ShowRelicsProgress' ) );
 		}
-		this.seq.actions.push( new AddClassAction( panel, 'WaitingForAdvance' ) );
-		this.seq.actions.push( new WaitForEventAction( $('#AdvanceHeroBadgeProgressButton'), 'Activated' ) );
-		this.seq.actions.push( new RemoveClassAction( panel, 'WaitingForAdvance' ) );
-		this.seq.actions.push( new RemoveClassAction( panel, 'ShowRelicsProgress' ) );
 	}
 
 	this.seq.start();
