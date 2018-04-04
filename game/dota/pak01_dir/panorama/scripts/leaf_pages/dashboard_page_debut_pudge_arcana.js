@@ -8,6 +8,9 @@ var RunPageAnimation = function ()
 {
 	var seq = new RunSequentialActions();
 
+	$( '#ModelContainer' ).RemoveAndDeleteChildren();
+	$( '#ModelContainer' ).BLoadLayoutSnippet( 'ModelSnippet' );
+
 	$( '#MainContainer' ).RemoveClass( 'Initialize' );
 	$( '#ModelBackground' ).RemoveClass( 'Initialize' );
 	$( '#DebutInformation' ).RemoveClass( 'Initialize' );
