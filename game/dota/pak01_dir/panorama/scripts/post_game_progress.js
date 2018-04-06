@@ -323,29 +323,6 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 	this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( heroModel, 'SceneLoaded' ), 3.0 ) );
 	this.seq.actions.push( new WaitAction( 1.0 ) );
 
-	var rankSuffixFromRankClassName = function( rankClassName ) {
-		var mapping = { 'BronzeTier' : "1", "SilverTier" : "2", "GoldTier" : "3", "PlatinumTier" : "4", "MasterTier" : "5" };
-		if ( rankClassName in mapping )
-		{
-			return mapping[ rankClassName ];
-		}
-		else
-		{
-			return "1";
-		}
-	}	
-	var rankSuffix = rankSuffixFromRankClassName( this.data.tier_class );
-	if ( this.data.hero_badge_level_up )
-	{
-		for( var j = 0; j < this.data.hero_badge_level_up.rewards.length; ++j )
-		{
-			if ( this.data.hero_badge_level_up.rewards[j].reward_type === HERO_BADGE_LEVEL_REWARD_TIER )
-			{
-				rankSuffix = rankSuffixFromRankClassName( this.data.hero_badge_level_up.rewards[j].tier_class );				
-			}
-		}
-	}
-
 	if ( this.data.hero_badge_progress )
 	{
 		this.seq.actions.push( new AddClassAction( panel, 'ShowHeroProgress' ) );
@@ -387,42 +364,57 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 				{
 					heroLevel = heroLevel + 1;
 
-					this.seq.actions.push( new RunFunctionAction( function ()
+					( function ( me, heroLevel )
 					{
-						panel.AddClass( "LeveledUp" );
-						panel.SetDialogVariableInt( 'current_level', heroLevel );
-					} ) );
-
-					this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( $( '#LevelUpRankScene' ), 'SceneLoaded' ), 3.0 ) );
-
-					this.seq.actions.push( new RunFunctionAction( function ()
-					{
-						$.GetContextPanel().PlayUISoundScript( "HeroBadge.Levelup" );
-						$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'light_rank_' + rankSuffix, 'TurnOn', '1' );
-						$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'particle_rank_' + rankSuffix, 'start', '1' );
-					} ) );
-
-					// Now animate the rewards
-					if ( this.data.hero_badge_level_up )
-					{
-						this.seq.actions.push( new WaitAction( 4.0 ) );
-
-						var rewardsPanel = panel.FindChildInLayoutFile( "HeroBadgeProgressRewardsList" );
-
-						for ( var j = 0; j < this.data.hero_badge_level_up.rewards.length; ++j )
+						me.seq.actions.push( new RunFunctionAction( function ()
 						{
-							this.seq.actions.push( new AnimateHeroBadgeLevelRewardAction( this.data.hero_badge_level_up.rewards[j], rewardsPanel ) );
+							panel.AddClass( "LeveledUp" );
+							panel.SetDialogVariableInt( 'current_level', heroLevel );
+						} ) );
+
+						var levelUpData = me.data.hero_badge_level_up[ heroLevel ];
+						if ( levelUpData )
+						{
+							me.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( $( '#LevelUpRankScene' ), 'SceneLoaded' ), 3.0 ) );
+
+							var rewardsPanel = panel.FindChildInLayoutFile( "HeroBadgeProgressRewardsList" );
+
+							me.seq.actions.push( new RunFunctionAction( function ()
+							{
+								rewardsPanel.RemoveAndDeleteChildren();
+								panel.RemoveClass( 'RewardsFinished' );
+
+								$.GetContextPanel().PlayUISoundScript( "HeroBadge.Levelup" );
+								$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'light_rank_' + levelUpData.tier_number, 'TurnOn', '1' );
+								$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'particle_rank_' + levelUpData.tier_number, 'start', '1' );
+							} ) );
+
+							me.seq.actions.push( new WaitAction( 4.0 ) );
+
+							for ( var j = 0; j < levelUpData.rewards.length; ++j )
+							{
+								me.seq.actions.push( new AnimateHeroBadgeLevelRewardAction( levelUpData.rewards[j], rewardsPanel ) );
+							}
+
+							me.seq.actions.push( new WaitAction( 0.5 ) );
+							me.seq.actions.push( new AddClassAction( panel, 'RewardsFinished' ) );
+							me.seq.actions.push( new WaitForEventAction( panel.FindChildInLayoutFile( "RewardsFinishedButton" ), 'Activated' ) );
+
+							me.seq.actions.push( new RunFunctionAction( function ()
+							{
+								$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'light_rank_' + levelUpData.tier_number, 'TurnOff', '1' );
+								$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'particle_rank_' + levelUpData.tier_number, 'DestroyImmediately', '1' );
+							} ) );
 						}
 
-						this.seq.actions.push( new WaitAction( 0.5 ) );
-						this.seq.actions.push( new AddClassAction( panel, 'RewardsFinished' ) );
-						this.seq.actions.push( new WaitForEventAction( panel.FindChildInLayoutFile( "RewardsFinishedButton" ), 'Activated' ) );
-						this.seq.actions.push( new RunFunctionAction( function ()
+						me.seq.actions.push( new RunFunctionAction( function ()
 						{
 							panel.RemoveClass( 'LeveledUp' );
 							panel.FindChildInLayoutFile( "HeroBadgeProgressHeroBadge" ).herolevel = heroLevel;
 						} ) );
-					}
+
+					} )( this, heroLevel );
+					
 					this.seq.actions.push( new WaitAction( 2.0 ) );
 
 					if ( heroLevel >= k_unMaxHeroRewardLevel )
@@ -435,13 +427,17 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 						xpLevelNext = $.GetContextPanel().GetHeroXPForNextHeroBadgeLevel( heroLevel );
 					}
 
-					this.seq.actions.push( new RunFunctionAction( function ()
+					( function ( me, xpLevelInternal, xpLevelNextInternal )
 					{
-						panel.SetDialogVariableInt( 'current_level_xp', xpLevel );
-						panel.SetDialogVariableInt( 'xp_to_next_level', xpLevelNext );
-						panel.FindChildInLayoutFile( "HeroBadgeLevelProgress" ).max = xpLevelNext;
-						panel.FindChildInLayoutFile( "HeroBadgeLevelProgress" ).value = xpLevel;
-					} ) );
+						me.seq.actions.push( new RunFunctionAction( function ()
+						{
+							panel.SetDialogVariableInt( 'current_level_xp', xpLevelInternal );
+							panel.SetDialogVariableInt( 'xp_to_next_level', xpLevelNextInternal );
+							panel.FindChildInLayoutFile( "HeroBadgeLevelProgress" ).max = xpLevelNextInternal;
+							panel.FindChildInLayoutFile( "HeroBadgeLevelProgress" ).value = xpLevelInternal;
+						} ) );
+					} )( this, xpLevel, xpLevelNext );
+					
 				}
 			}
 
@@ -491,7 +487,7 @@ function TestAnimateHeroBadgeLevel()
 	var data =
 	{
 		hero_id: 11,
-		hero_badge_xp_start: 26850,
+		hero_badge_xp_start: 22850,
 
 		hero_badge_progress:
 		[
@@ -514,27 +510,36 @@ function TestAnimateHeroBadgeLevel()
 
 		hero_badge_level_up:
 		{
-			new_hero_badge_level: 18,
-			rewards:
-			[
+			18:
 				{
-					reward_type: HERO_BADGE_LEVEL_REWARD_TIER,
-					tier_name: "#DOTA_HeroLevelBadgeTier_Platinum",
-					tier_class: "PlatinumTier"
+					tier_number: 4,
+					rewards:
+					[
+						{
+							reward_type: HERO_BADGE_LEVEL_REWARD_TIER,
+							tier_name: "#DOTA_HeroLevelBadgeTier_Platinum",
+							tier_class: "PlatinumTier"
+						},
+						{
+							reward_type: HERO_BADGE_LEVEL_REWARD_CHAT_WHEEL,
+							chat_wheel_message: "#dota_chatwheel_message_nevermore_4",
+							all_chat: 1,
+							sound_event: "soundboard.ay_ay_ay"
+						}
+					],
 				},
+			19:
 				{
-					reward_type: HERO_BADGE_LEVEL_REWARD_CHAT_WHEEL,
-					chat_wheel_message: "#dota_chatwheel_message_nevermore_4",
-					all_chat: 1,
-					sound_event: "soundboard.ay_ay_ay"
-				},
-				{
-					reward_type: HERO_BADGE_LEVEL_REWARD_CURRENCY,
-					currency_amount: 3000
-				},
-			]
+					tier_number: 4,
+					rewards: 
+					[
+						{
+							reward_type: HERO_BADGE_LEVEL_REWARD_CURRENCY,
+							currency_amount: 3000
+						}
+					]
+				}
 		},
-
 		hero_relics_progress:
 		[
 			{
