@@ -1,22 +1,73 @@
 
-function StartNewScreen( panelID )
+// ----------------------------------------------------------------------------
+//   Screen Handling functions
+// ----------------------------------------------------------------------------
+
+function CreateProgressScreen( panelID )
 {
-	// Mark all previous screens as finished
+	var screenPanel = $.CreatePanel( 'Panel', $( '#ProgressScreens' ), panelID );
+	screenPanel.AddClass( 'ProgressScreen' );
+	return screenPanel;
+}
+
+function ShowProgressScreen( screenPanel )
+{
 	var screensContainer = $( '#ProgressScreens' );
 	for ( var i = 0; i < screensContainer.GetChildCount() ; ++i )
 	{
-		screensContainer.GetChild( i ).AddClass( 'Finished' );
+		var otherScreenPanel = screensContainer.GetChild( i );
+		otherScreenPanel.SetHasClass( 'ShowScreen', otherScreenPanel == screenPanel );
 	}
+}
 
-	var panel = $.CreatePanel( 'Panel', screensContainer, panelID );
-	return panel;
+function StartNewScreen( panelID )
+{
+	var screenPanel = CreateProgressScreen( panelID );
+	ShowProgressScreen( screenPanel );
+	return screenPanel;
 }
 
 
+function GetScreenLinksContainer()
+{
+	// This is sorta hacky, but we need to reach into the parent's layout file to find our button container.
+	return $.GetContextPanel().GetParent().FindPanelInLayoutFile( 'ProgressScreenButtons' );
+}
+
+/* Called from C++ code */
 function ResetScreens()
 {
 	$( '#ProgressScreens' ).RemoveAndDeleteChildren();
+	GetScreenLinksContainer().RemoveAndDeleteChildren();
 }
+
+function AddScreenLink( screenPanel, linkClass, tooltipText, activateFunction )
+{
+	var link = $.CreatePanel( 'Button', GetScreenLinksContainer(), '' );
+	link.AddClass( 'ProgressScreenButton' );
+	link.AddClass( linkClass );
+
+	link.SetPanelEvent( 'onactivate', function ()
+	{
+		$.DispatchEvent( 'DOTAPostGameProgressShowSummary', screenPanel );
+		ShowProgressScreen( screenPanel );
+		if ( activateFunction )
+		{
+			activateFunction();
+		}
+	} );
+
+	link.SetPanelEvent( 'onmouseover', function () { $.DispatchEvent( 'UIShowTextTooltip', link, tooltipText ); } );
+	link.SetPanelEvent( 'onmouseout', function () { $.DispatchEvent( 'UIHideTextTooltip', link ); } );
+
+	return link;
+}
+
+function AddScreenLinkAction( screenPanel, linkClass, tooltipText, activateFunction )
+{
+	RunFunctionAction.call( this, function () { AddScreenLink( screenPanel, linkClass, tooltipText, activateFunction ); } );
+}
+AddScreenLinkAction.prototype = new RunFunctionAction();
 
 
 // ----------------------------------------------------------------------------
@@ -83,7 +134,7 @@ const k_unMaxHeroRewardLevel = 25;
 
 function GetXPIncreaseAnimationDuration( xpAmount )
 {
-	return RemapValClamped( xpAmount, 0, 500, 0.7, 1.3 );
+	return RemapValClamped( xpAmount, 0, 500, 0.5, 1.0 );
 }
 
 // Action to animate a hero badge xp increase
@@ -321,11 +372,16 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 	this.seq = new RunSequentialActions();
 	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
 	this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( heroModel, 'SceneLoaded' ), 3.0 ) );
-	this.seq.actions.push( new WaitAction( 1.0 ) );
+	this.seq.actions.push( new WaitAction( 0.5 ) );
 
 	if ( this.data.hero_badge_progress )
 	{
-		this.seq.actions.push( new AddClassAction( panel, 'ShowHeroProgress' ) );
+		this.seq.actions.push( new AddScreenLinkAction( panel, 'HeroBadgeProgress', '#DOTA_PlusPostGame_HeroProgress', function ()
+		{
+			panel.SwitchClass( 'current_screen', 'ShowHeroProgress' );
+		} ) );
+
+		this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', 'ShowHeroProgress' ) );
 
 		var xpEarned = 0;
 		var xpLevel = xpLevelStart;
@@ -375,7 +431,9 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 						var levelUpData = me.data.hero_badge_level_up[ heroLevel ];
 						if ( levelUpData )
 						{
-							me.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( $( '#LevelUpRankScene' ), 'SceneLoaded' ), 3.0 ) );
+							var levelUpScene = panel.FindChildInLayoutFile( 'LevelUpRankScene' );
+
+							me.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( levelUpScene, 'SceneLoaded' ), 3.0 ) );
 
 							var rewardsPanel = panel.FindChildInLayoutFile( "HeroBadgeProgressRewardsList" );
 
@@ -385,8 +443,8 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 								panel.RemoveClass( 'RewardsFinished' );
 
 								$.GetContextPanel().PlayUISoundScript( "HeroBadge.Levelup" );
-								$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'light_rank_' + levelUpData.tier_number, 'TurnOn', '1' );
-								$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'particle_rank_' + levelUpData.tier_number, 'start', '1' );
+								$.DispatchEvent( 'DOTASceneFireEntityInput', levelUpScene, 'light_rank_' + levelUpData.tier_number, 'TurnOn', '1' );
+								$.DispatchEvent( 'DOTASceneFireEntityInput', levelUpScene, 'particle_rank_' + levelUpData.tier_number, 'start', '1' );
 							} ) );
 
 							me.seq.actions.push( new WaitAction( 4.0 ) );
@@ -402,8 +460,8 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 
 							me.seq.actions.push( new RunFunctionAction( function ()
 							{
-								$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'light_rank_' + levelUpData.tier_number, 'TurnOff', '1' );
-								$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LevelUpRankScene' ), 'particle_rank_' + levelUpData.tier_number, 'DestroyImmediately', '1' );
+								$.DispatchEvent( 'DOTASceneFireEntityInput', levelUpScene, 'light_rank_' + levelUpData.tier_number, 'TurnOff', '1' );
+								$.DispatchEvent( 'DOTASceneFireEntityInput', levelUpScene, 'particle_rank_' + levelUpData.tier_number, 'DestroyImmediately', '1' );
 							} ) );
 						}
 
@@ -415,7 +473,7 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 
 					} )( this, heroLevel );
 					
-					this.seq.actions.push( new WaitAction( 2.0 ) );
+					this.seq.actions.push( new WaitAction( 1.0 ) );
 
 					if ( heroLevel >= k_unMaxHeroRewardLevel )
 					{
@@ -444,10 +502,9 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 			this.seq.actions.push( new WaitAction( 0.2 ) );
 		}
 
-		this.seq.actions.push( new AddClassAction( panel, 'WaitingForAdvance' ) );
-		this.seq.actions.push( new WaitForEventAction( $('#AdvanceHeroBadgeProgressButton'), 'Activated' ) );
-		this.seq.actions.push( new RemoveClassAction( panel, 'WaitingForAdvance' ) );
-		this.seq.actions.push( new RemoveClassAction( panel, 'ShowHeroProgress' ) );
+		this.seq.actions.push( new WaitAction( 1.0 ) );
+		this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
+		this.seq.actions.push( new WaitAction( 0.5 ) );
 	}
 
 	// Now animate the relics
@@ -455,19 +512,24 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 	{
 		if ( this.data.hero_relics_progress.length > 0 )
 		{
-			this.seq.actions.push( new AddClassAction( panel, 'ShowRelicsProgress' ) );
+			this.seq.actions.push( new AddScreenLinkAction( panel, 'HeroRelicsProgress', '#DOTA_PlusPostGame_RelicsProgress', function ()
+			{
+				panel.SwitchClass( 'current_screen', 'ShowRelicsProgress' );
+			} ) );
+
+			this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', 'ShowRelicsProgress' ) );
 			this.seq.actions.push( new WaitAction( 0.5 ) );
-			var relicParallelAction = new RunParallelActions();
-			this.seq.actions.push( relicParallelAction );
+			var stagger = new RunStaggeredActions( 0.15 );
+			this.seq.actions.push( stagger );
 			var relicsList = panel.FindChildInLayoutFile( "HeroRelicsProgressList" );
 			for ( var i = 0; i < this.data.hero_relics_progress.length; ++i )
 			{
-				relicParallelAction.actions.push( new AnimateHeroRelicProgressAction( this.data.hero_relics_progress[i], relicsList ) )
+				stagger.actions.push( new AnimateHeroRelicProgressAction( this.data.hero_relics_progress[i], relicsList ) )
 			}
-			this.seq.actions.push( new AddClassAction( panel, 'WaitingForAdvance' ) );
-			this.seq.actions.push( new WaitForEventAction( $('#AdvanceHeroBadgeProgressButton'), 'Activated' ) );
-			this.seq.actions.push( new RemoveClassAction( panel, 'WaitingForAdvance' ) );
-			this.seq.actions.push( new RemoveClassAction( panel, 'ShowRelicsProgress' ) );
+
+			this.seq.actions.push( new WaitAction( 1.0 ) );
+			this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
+			this.seq.actions.push( new WaitAction( 0.5 ) );
 		}
 	}
 
@@ -481,6 +543,7 @@ AnimateHeroBadgeLevelScreenAction.prototype.finish = function ()
 {
 	this.seq.finish();
 }
+
 
 function TestAnimateHeroBadgeLevel()
 {
@@ -642,37 +705,57 @@ function TestAnimateHeroBadgeLevel()
 			}
 		]
 	};
-	data.is_debug = true;
-	StartProgressAnimation( data );
+
+	TestProgressAnimation( data );
 }
+
 
 
 // ----------------------------------------------------------------------------
 //   All Screens
 // ----------------------------------------------------------------------------
 
-
-/* Called from C++ to start the progress animation */
-function StartProgressAnimation( data )
+function CreateProgressAnimationSequence( data )
 {
-	$.Msg( "Showing progress for: " + JSON.stringify( data ) );
-	$('#ProgressScreens').RemoveAndDeleteChildren();
-
 	var seq = new RunSequentialActions();
+
+	// While the actions are animating, don't allow clicking links to other screens.
+	seq.actions.push( new RunFunctionAction( function () 
+	{
+		GetScreenLinksContainer().enabled = false;
+	} ) );
 
 	if ( data.hero_badge_progress != null || data.hero_relics_progress != null )
 	{
 		seq.actions.push( new AnimateHeroBadgeLevelScreenAction( data ) );
 	}
 
-	if ( data.is_debug !== true )
+	seq.actions.push( new RunFunctionAction( function ()
 	{
-		// Signal back to the C++ code that we're done displaying progress
-		seq.actions.push( new RunFunctionAction( function ()
-		{
-			$.DispatchEvent( 'DOTAPostGameProgressAnimationComplete', $.GetContextPanel() );
-		} ) );
-	}
+		GetScreenLinksContainer().enabled = true;
+	} ) );
+
+	return seq;
+}
+
+function TestProgressAnimation( data )
+{
+	RunSingleAction( CreateProgressAnimationSequence( data ) );
+}
+
+/* Called from C++ to start the progress animation */
+function StartProgressAnimation( data )
+{
+	$.Msg( "Showing progress for: " + JSON.stringify( data ) );
+	ResetScreens();
+
+	var seq = CreateProgressAnimationSequence( data );
+
+	// Signal back to the C++ code that we're done displaying progress
+	seq.actions.push( new RunFunctionAction( function ()
+	{
+		$.DispatchEvent( 'DOTAPostGameProgressAnimationComplete', $.GetContextPanel() );
+	} ) );
 
 	RunSingleAction( seq );
 }

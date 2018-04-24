@@ -88,6 +88,44 @@ RunParallelActions.prototype.update = function ()
 	return anyTicking;
 }
 
+// Action to rum multiple actions in parallel, but with a slight stagger start between each of them
+function RunStaggeredActions( staggerSeconds )
+{
+	this.actions = [];
+	this.staggerSeconds = staggerSeconds;
+}
+RunStaggeredActions.prototype = new BaseAction();
+RunStaggeredActions.prototype.start = function ()
+{
+	this.par = new RunParallelActions();
+
+	for ( var i = 0; i < this.actions.length; ++i )
+	{
+		var delay = i * this.staggerSeconds;
+		if ( delay > 0 )
+		{
+			var seq = new RunSequentialActions();
+			seq.actions.push( new WaitAction( delay ) );
+			seq.actions.push( this.actions[i] );
+			this.par.actions.push( seq );
+		}
+		else
+		{
+			this.par.actions.push( this.actions[i] );
+		}
+	}
+
+	this.par.start();
+}
+RunStaggeredActions.prototype.update = function ()
+{
+	return this.par.update();
+}
+RunStaggeredActions.prototype.finish = function ()
+{
+	this.par.finish();
+}
+
 
 // Runs a set of actions but stops as soon as any of them are finished.  continueOtherActions is a bool
 // that determines whether to continue ticking the remaining actions, or whether to just finish them immediately.
@@ -277,6 +315,20 @@ RemoveClassAction.prototype = new BaseAction();
 RemoveClassAction.prototype.update = function ()
 {
 	this.panel.RemoveClass( this.panelClass );
+	return false;
+}
+
+// Switch a class on a panel
+function SwitchClassAction( panel, panelSlot, panelClass )
+{
+	this.panel = panel;
+	this.panelSlot = panelSlot;
+	this.panelClass = panelClass;
+}
+SwitchClassAction.prototype = new BaseAction();
+SwitchClassAction.prototype.update = function ()
+{
+	this.panel.SwitchClass( this.panelSlot, this.panelClass );
 	return false;
 }
 
