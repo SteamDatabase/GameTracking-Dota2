@@ -1089,6 +1089,32 @@
 	input SetOpvar(void) : "Set the OpVar value in the stack"
 ]
 
+@PointClass base(Targetname) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) = snd_opvar_set_point :
+	"Sets an opvar value on a library stack"
+[
+	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
+	operatorName(string) : "Operator Name" : "" : "The name of the operator the OpVar is in"
+	opvarName(string) : "OpVar Name" : "" : "The name of the OpVar to change"
+	opvarArrayIndex(integer) : "OpVar Index" : "" : "Index of the OpVar array to set"
+	distanceMin(float) : "Minimum Distance" : "5.0" : "Minimum distance to map the OpVar value to"
+	distanceMax(float) : "Maximum Distance" : "25.0" : "Maximum distance to map the OpVar value to"
+	distanceMapMin(float) : "Distance Map Minimum" : "" : "Minimum value to map distance to"
+	distanceMapMax(float) : "Distance Map Maximum" : "" : "Maximum value to map distance to"
+	occlusionRadius(float) : "Occlusion Radius" : "" : "Size of the occlusion sphere"
+	occlusionMin(float) : "Minimum Occlusion" : "" : "Occlusion value when fully occluded"
+	occlusionMax(float) : "Maximum Occlusion" : "" : "Occlusion value when un-occluded"
+	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity to check distance/occlusion from"
+	StartDisabled(bool) : "Start Disabled" : 0
+	
+	input SetStackName(string) : "Change the target stack name"
+	input SetOperatorName(string) : "Change the target operator name"
+	input SetOpvarName(string) : "Change the target opvar name"	
+	input SetOpvarIndex(integer) : "Change the target opvar index"	
+	input SetSourceEntity(string) : "Set the name of the entity to check distance/occlusion from. This check will follow the entity as it moves."
+	input Enable(void) : "Enable the entity"
+	input Disable(void) : "Disable the entity"
+]
+
 
 @SolidClass base(Targetname) sphere(DisappearMinDist) sphere(DisappearMaxDist) = func_lod : 
 	"Brush-built model that fades out over a specified distance. Useful for creating world detail that doesn't need to be drawn far away, for performance reasons."
@@ -3373,7 +3399,7 @@
 	]
 ]
 
-@SolidClass base(Targetname, Parentname, RenderFields) = func_movelinear :
+@SolidClass base(Targetname, Parentname, RenderFields) drawangles( movedir, movedir_islocal ) = func_movelinear :
 	"A brush entity that moves linearly along a given distance, in a given direction."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the brushes will move, when told to."
@@ -3403,7 +3429,7 @@
 	output OnFullyClosed(void) : "Fired when the brush reaches the starting position."
 ]
 
-@SolidClass base(Targetname, Parentname) = func_water_analog :
+@SolidClass base(Targetname, Parentname) drawangles( movedir ) = func_water_analog :
 	"A water brush entity that moves linearly along a given distance, in a given direction"
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the water will move, when told to 'Open'."
@@ -3582,7 +3608,7 @@
     displaytext(string) : "Display Text" : : "Place localization text here and it will be displayed in tooltips, etc."
 ]
 
-@SolidClass base(Targetname, Parentname, RenderFields,DamageFilter, Button) = func_button : 
+@SolidClass base(Targetname, Parentname, RenderFields,DamageFilter, Button) drawangles( movedir, movedir_islocal ) = func_button : 
 	"A brush entity that's designed to be used for a player-useable button. When used by the player, it moves to a pressed position."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "Specifies the direction of motion to move when the button is used."
@@ -3796,7 +3822,7 @@
 	input SetSpeed(float) : "Set the door speed."
 ]
 
-@SolidClass base(Door) = func_door : 
+@SolidClass base(Door) drawangles( movedir, movedir_islocal ) = func_door : 
 	"A brush entity for use as a player-useable door."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the door will move, when it opens."
@@ -5949,6 +5975,7 @@
 		8192: "Force non-solid to players" : 0
 		32768: "Enable +use glow effect" : 0
 		1048576: "Physgun can ALWAYS pick up. No matter what." : 0
+		16777216: "Important Grabbity Glove target." : 0
 	]
 	
 	minhealthdmg(integer) [ group="Physics Properties" ] : "Min Damage to Hurt" : 0 : "The prop will ignore any damage events if the damage is less than this amount."
@@ -6689,7 +6716,7 @@
 	output OnEndLook(void) : "Fired when the player was looking and unlooked while still touching."
 ]
 
-@SolidClass base(Trigger) = trigger_push : 
+@SolidClass base(Trigger) drawangles( pushdir, pushdir_islocal )= trigger_push : 
 	"A trigger volume that pushes entities that touch it."
 [
 	pushdir(angle) : "Push Direction (Pitch Yaw Roll)" : "0 0 0" : "Angles indicating the direction to push touched entities."
@@ -7447,7 +7474,6 @@
 		"ACT_WALK" : "ACT_WALK"
 		"ACT_RUN" : "ACT_RUN"
 	]
-	wiring(boolean) : "Wiring" : 0
 	radius(float) : "Radius" : 0
 
 	// Inputs 
@@ -7584,7 +7610,7 @@
 	StartEnabled(boolean) : "Start Enabled" : "1" : "Start Enabled"
 ]
 
-@PointClass base(base_clientui_ent) orientedwidthheight( width, height ) = point_clientui_world_panel
+@PointClass base(base_clientui_ent, Parentname) orientedwidthheight( width, height ) = point_clientui_world_panel
 [
 	width(float) : "Width" : "32"
 	height(float) : "Height" : "32"
@@ -7687,7 +7713,10 @@
 	GlassInFrame(boolean) : "Is in a frame" : "1" : "In in a frame"
 	SpawnInvulnerability(float) : "Spawn Invulnerability" : "3"
 	StartBroken(boolean) : "Start Broken" : "0" : "Spawn in a broken state"
-	DamagePositioningEntity(target_destination) : "Damage Position" : : "If set, this helper position is used for Hit input damage."
+	DamagePositioningEntity(target_destination) : "Damage Position 01" : : "If set, this helper position is used for Hit input damage."
+	DamagePositioningEntity02(target_destination) : "Damage Position 02" : : "If set, this helper position is used for Hit input damage."
+	DamagePositioningEntity03(target_destination) : "Damage Position 03" : : "If set, this helper position is used for Hit input damage."
+	DamagePositioningEntity04(target_destination) : "Damage Position 04" : : "If set, this helper position is used for Hit input damage."
 	output OnBroken(void) : "Fires when the panel first breaks."
 	surface_type(choices) : "Surface Type" : 0 =
 	[
@@ -7710,22 +7739,47 @@
 	box_world_aligned( box_mins, box_maxs )
 = env_volumetric_fog_controller : "Controller for volumetric fogging - bounds are extents of fog irradiance volume (for indirect)"
 [
+	// Note: Currently not yet supporting spiralling fog
+
 	box_mins(vector) : "Box Mins" : "-72 -72 -72"
 	box_maxs(vector) : "Box Maxs" : "72 72 72"
-	voxel_dim(choices) : "Max Voxel Dimension" : "256.0" : "" = 
-	[
-		"512.0" : "Very High Resolution"
-		"256.0" : "High Resolution"
-		"128.0" : "Medium Resolution"
-		"64.0" : "Low Resolution"
-	]
 
 	FogStrength( float ) : "Fog strength" : "1.0" : "Technically the scattering value. Higher values make denser fog."
-	Anisotropy( float ) : "Anisotropy" : "0.2" : "How much the fog should get brighter when you stare directly at the light." 
-	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
 	DrawDistance( float ) : "Draw distance" : "600.0" : "Maximum distance to draw fog - WARNING! Changing from default will make fog blockier." 
-	BakedLightStrength( float ) : "Baked light strength" : "1.0" : "This is how strong the baked lighting in the fog is."
+
+	IndirectEnabled( bool ) [ group="Indirect Lighting" ] : "Enable indirect lighting" : "0"
+	IndirectStrength( float ) [ group="Indirect Lighting" ] : "Indirect light strength" : "1.0" 
+	IndirectVoxelDim(choices) [ group="Indirect Lighting" ] : "Indirect Lighting Dimension" : "256.0" : "" = 
+	[
+		"512.0" : "Very High Resolution (512x)"
+		"256.0" : "High Resolution (256x)"
+		"128.0" : "Medium Resolution (128x)"
+		"64.0" : "Low Resolution (64x)"
+	]
+
+	NoiseType(choices) [ group="Noise" ] : "Noise type" : "0" : "" = 
+	[
+		"0" : "Disabled"
+		"1" : "Enabled"
+	//	"2" : "Angular Movement"
+	//	"3" : "Linear and Angular Movement"
+	]
+	NoiseDirectionA( local_point ) [ group="Noise" ] :  "Movement direction A" : "64 0 0" 
+	NoiseMovementSpeedA( float ) [ group="Noise" ] : "Movement speed A" : "1.0"
+	NoiseDirectionB( local_point ) [ group="Noise" ] : "Movement direction B" : "0 48 -48"
+	NoiseMovementSpeedB( float ) [ group="Noise" ] : "Movement speed B" : "1.0"
+	NoiseScale( float ) [ group="Noise" ] : "Texture scale" : "1"
+	NoiseContrast( float ) [ group="Noise" ] : "Contrast (0 - 1)" : "1"
+	NoiseStrength( float ) [ group="Noise" ] : "Strength" : "1"
+
+	//NoiseRotationSpeedA( float ) : "Rotation speed A"
+	//NoiseRotationSpeedB( float ) : "Rotation speed B"
+	//NoiseRotationCenter(target_destination) : "The default entity to spiral around for spiraling fog."
+
+	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
+	Anisotropy( float ) : "Anisotropy" : "1.0" : "How much the fog should get brighter when you stare directly at the light." 
 	fogirradiancevolume(resource:texture) : "Fog Irradiance Texture" : "" : "Name of the fog irradiance texture"
+
 	input SetToDefaults(void) : "Resets scattering and anisotropy to default values"
 	input SetFogStrength(float) : "Set overall fog strength"
 	input SetAnisotropy(float) : "Set anisotropy value"
@@ -7733,6 +7787,20 @@
 	input SetDrawDistance(float) : "Set draw distance"
 	input Enable(boolean) : "Enable"
 	input Disable(boolean) : "Disable"
+	
+	input EnableIndirect( bool ) : "Turns on/off indirect fogging"
+	input SetNoiseType( integer ) : "Sets noise animation type - 0: No Noise, 1: Noise with linear movement"
+	input SetNoiseScale( float ) : "Sets the granularity of the noise"
+	input SetNoiseContrast( float ) : "Sets the contrast of the noise"
+	input SetNoiseStrength(float) : "Set strength of the noise"
+	input SetNoiseMovementDirectionA(vector) : "Set movement direction for noise texture A"
+	input SetNoiseMovementDirectionB(vector) : "Set movement direction for noise texture B"
+	input SetNoiseMovementSpeedA(float) : "Set movement speed for noise texture A"
+	input SetNoiseMovementSpeedB(float) : "Set movement speed for noise texture B"
+	//input SetNoiseRotationSpeedA( float ) : "Set angular speed for noise A"
+	//input SetNoiseRotationSpeedB( float ) : "Set angular speed for noise B"
+	//input SetEntityToRotateAround( string ) : "Sets the center of the spiraling fog. Takes the name of an entity to spiral around"
+
 ]
 
 @PointClass iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint

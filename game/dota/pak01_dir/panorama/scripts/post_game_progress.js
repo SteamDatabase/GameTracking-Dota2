@@ -544,6 +544,55 @@ AnimateHeroBadgeLevelScreenAction.prototype.finish = function ()
 	this.seq.finish();
 }
 
+// ----------------------------------------------------------------------------
+// Cavern Crawl Screen
+// ----------------------------------------------------------------------------
+
+function AnimateCavernCrawlScreenAction( data )
+{
+	this.data = data;
+}
+
+AnimateCavernCrawlScreenAction.prototype = new BaseAction();
+
+AnimateCavernCrawlScreenAction.prototype.start = function ()
+{
+	var heroID = this.data.hero_id;
+	var eventID = this.data.cavern_crawl_progress.event_id;
+
+	// Create the screen and do a bunch of initial setup
+	var panel = StartNewScreen( 'CavernCrawlProgressScreen' );
+	panel.BLoadLayoutSnippet( "CavernCrawlProgress" );
+
+	// Setup the sequence of actions to animate the screen
+	this.seq = new RunSequentialActions();
+
+	this.seq.actions.push( new AddScreenLinkAction( panel, 'CavernsProgress', '#DOTACavernCrawl_Title' ) );
+
+	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
+	this.seq.actions.push( new WaitAction( 1.0 ) );
+
+	var cavernCrawlPanel = panel.FindChildInLayoutFile( 'CavernCrawl' );
+
+	this.seq.actions.push( new AddClassAction( panel, 'ShowCavernCrawlProgress' ) );
+	this.seq.actions.push( new RunFunctionAction( function ()
+	{
+		cavernCrawlPanel.ShowPostGameProgress( eventID, 0, heroID );
+	} ) );
+	this.seq.actions.push( new WaitForEventAction( cavernCrawlPanel, 'DOTACavernCrawlPostGameProgressComplete' ) );
+
+	this.seq.start();
+}
+
+AnimateCavernCrawlScreenAction.prototype.update = function ()
+{
+	return this.seq.update();
+}
+
+AnimateCavernCrawlScreenAction.prototype.finish = function ()
+{
+	this.seq.finish();
+}
 
 function TestAnimateHeroBadgeLevel()
 {
@@ -709,7 +758,19 @@ function TestAnimateHeroBadgeLevel()
 	TestProgressAnimation( data );
 }
 
+function TestAnimateCavernCrawl()
+{
+	var data =
+	{
+		hero_id: 92,
+		cavern_crawl_progress:
+		{
+			event_id: 22,
+		},
+	};
 
+	TestProgressAnimation( data );
+}
 
 // ----------------------------------------------------------------------------
 //   All Screens
@@ -724,6 +785,11 @@ function CreateProgressAnimationSequence( data )
 	{
 		GetScreenLinksContainer().enabled = false;
 	} ) );
+
+	if ( data.cavern_crawl_progress != null )
+	{
+		seq.actions.push( new AnimateCavernCrawlScreenAction( data ) );
+	}
 
 	if ( data.hero_badge_progress != null || data.hero_relics_progress != null )
 	{

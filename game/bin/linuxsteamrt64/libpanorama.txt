@@ -2,6 +2,9 @@
  A _edata
  A _end
  AssertMsg_ConditionFailed
+ CBufferString::Purge(int)
+ CBufferString::SetPtr(char*, int, int, bool, bool)
+ CBufferString::ShortenPath()
  CFiber::AllocPooledFiber(CFiber::SizeBuckets_t, unsigned long)
  CFiber::ReachedZeroReferences()
  CFiber::SetThreadFiberMemoryRange(unsigned long)
@@ -19,6 +22,9 @@
  CThreadEvent::Reset()
  CThreadEvent::Set()
  CThreadFastMutex::Lock(unsigned long long, unsigned int) volatile
+ CThreadMultiWaitEvent::CThreadMultiWaitEvent(bool)
+ CThreadMultiWaitEvent::Set()
+ CThreadMultiWaitEvent::~CThreadMultiWaitEvent()
  CThreadMutex::TryLock()
  CThreadRWLock::LockForWrite()
  CThreadRWLock::UnlockWrite()
@@ -60,25 +66,29 @@
  Plat_DebugPrint
  Plat_DebugString
  Plat_ExitProcess
+ Plat_FileExists
  Plat_FileSize
  Plat_FloatTime
  Plat_GetCPUFrequency
  Plat_GetExecutablePathUTF8
+ Plat_GetModuleInterfaceFactory
  Plat_GetOSType
  Plat_GetTime
  Plat_IsHighDPI
  Plat_IsInDebugSessionRaw
  Plat_IsInTestMode
  Plat_IsWindowFocused
+ Plat_LoadModule
  Plat_RelativeTicks
+ Plat_RemoveFile
  Plat_ScreenToWindowCoords
  Plat_SetActiveWindow
  Plat_ShouldCollectMiniDumpsForFatalErrors
  Plat_TickDiffMicroSec
  Plat_TicksAfterMicroSecs
+ Plat_UnloadModule
  Plat_VirtualAlloc
  Plat_VirtualFree
- Plat_localtime
  R v8::platform::DefaultPlatform::kMaxThreadPoolSize
  RandomFloat
  RandomInt
@@ -159,6 +169,7 @@
  ThreadInitOnceCall_Finish
  ThreadInitOnceCall_ShouldRun
  ThreadInterlockedExchange64
+ ThreadMultiWait
  ThreadSleep
  V typeinfo name for EVideoPlayerEvent
  V typeinfo name for panorama::EActiveControllerType
@@ -169,7 +180,9 @@
  V vtable for v8::platform::DefaultPlatform
  V vtable for v8::platform::WorkerThread
  VTT for std::basic_ostringstream<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >@@GLIBCXX_3.4
+ VTT for std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >@@GLIBCXX_3.4
  V_AddBackSlashesToSpecialChars
+ V_CopyMemory3D
  V_ExtractDomainFromURL
  V_FixDoubleSlashes
  V_FixSlashes
@@ -179,6 +192,7 @@
  V_HtmlEntityDecodeToUTF8
  V_IsAbsolutePath
  V_PathContainsPath
+ V_PrettifyNum
  V_RemoveDotSlashes
  V_SetErrno
  V_SplitString(char const*, char const*, CUtlVector<CUtlString, CUtlMemory<CUtlString, int> >&, bool)
@@ -209,21 +223,31 @@
  V_fclose
  V_fmodf
  V_fopenUTF8
+ V_fprintf
+ V_fputc
+ V_fread
+ V_frexpf
  V_fwrite
  V_isstrlower_fast
  V_localeconv
  V_logf
+ V_longjmp
+ V_pow
  V_powf
- V_pretifynum
  V_qsort
  V_qsort_s
+ V_setjmp
+ V_sincosf
  V_sinf
  V_snprintf
- V_snwprintf
+ V_snwprintf_bytes
+ V_snwprintf_cch
  V_sscanf
  V_stricmp_fast
  V_stristr_fast(char const*, char const*)
  V_strlower_fast
+ V_strnchr
+ V_strnlen
  V_strtod
  V_strtoi64
  V_strtok
@@ -231,6 +255,7 @@
  V_strupper_fast
  V_swscanf
  V_tanf
+ V_tier0_strstr
  V_vscprintf
  V_vsnprintf
  V_vsnprintfRet
@@ -243,11 +268,13 @@
  W bool __gnu_cxx::__is_null_pointer<char>(char*)
  W v8::Platform::~Platform()
  W void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&)
+ W void std::vector<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > >::_M_emplace_back_aux<std::vector<unsigned long, std::allocator<unsigned long> > const&>(std::vector<unsigned long, std::allocator<unsigned long> > const&)
  Warning
  XQueryPointer
  _ITM_deregisterTMCloneTable
  _ITM_registerTMCloneTable
  _Jv_RegisterClasses
+ _V_AppendSlash
  _V_ComposeFileName
  _V_ExtractFileExtension
  _V_ExtractFilePath
@@ -260,6 +287,7 @@
  _V_StripLastDir
  _V_strcspn
  _V_strncat
+ _V_strncmp
  _V_strncpy
  _V_strnicmp_fast
  _V_strnistr_fast
@@ -294,10 +322,10 @@
  __memset_chk@@GLIBC_2.3.4
  __printf_chk@@GLIBC_2.3.4
  __pthread_key_create@@GLIBC_2.2.5
- __register_atfork@@GLIBC_2.3.2
  __sprintf_chk@@GLIBC_2.3.4
  __stack_chk_fail@@GLIBC_2.4
  __strcat_chk@@GLIBC_2.3.4
+ __strcpy_chk@@GLIBC_2.3.4
  __tls_get_addr@@GLIBC_2.3
  __vfprintf_chk@@GLIBC_2.3.4
  __xstat64@@GLIBC_2.2.5
@@ -305,6 +333,7 @@
  _setjmp@@GLIBC_2.2.5
  abort@@GLIBC_2.2.5
  alphasort64@@GLIBC_2.2.5
+ calloc@@GLIBC_2.2.5
  ceil@@GLIBC_2.2.5
  ceilf@@GLIBC_2.2.5
  close@@GLIBC_2.2.5
@@ -338,6 +367,7 @@
  ftell@@GLIBC_2.2.5
  ftruncate64@@GLIBC_2.2.5
  fwrite@@GLIBC_2.2.5
+ g_Mathlib_GammaToLinearByteTable
  g_Tier1_BitWriteMasks
  g_Tier1_CRC32Table
  g_Tier1_CRC64Table
@@ -345,10 +375,12 @@
  g_VProfCurrentProfile
  g_pCurrentFiberTL
  g_pMemAlloc
+ g_pThreadPool
  getenv@@GLIBC_2.2.5
  getpid@@GLIBC_2.2.5
  gettimeofday@@GLIBC_2.2.5
  getuid@@GLIBC_2.2.5
+ gmtime@@GLIBC_2.2.5
  gmtime_r@@GLIBC_2.2.5
  localtime@@GLIBC_2.2.5
  longjmp@@GLIBC_2.2.5
@@ -407,17 +439,22 @@
  std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
  std::_Rb_tree_rebalance_for_erase(std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
  std::__throw_bad_alloc()@@GLIBCXX_3.4
+ std::__throw_bad_cast()@@GLIBCXX_3.4
  std::__throw_bad_function_call()@@GLIBCXX_3.4.14
  std::__throw_length_error(char const*)@@GLIBCXX_3.4
  std::__throw_logic_error(char const*)@@GLIBCXX_3.4
  std::__throw_out_of_range(char const*)@@GLIBCXX_3.4
  std::allocator<char>::allocator()@@GLIBCXX_3.4
  std::allocator<char>::~allocator()@@GLIBCXX_3.4
+ std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)@@GLIBCXX_3.4
  std::basic_ios<char, std::char_traits<char> >::eof() const@@GLIBCXX_3.4
  std::basic_ios<char, std::char_traits<char> >::fail() const@@GLIBCXX_3.4
  std::basic_ios<char, std::char_traits<char> >::good() const@@GLIBCXX_3.4
+ std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)@@GLIBCXX_3.4
  std::basic_ios<wchar_t, std::char_traits<wchar_t> >::imbue(std::locale const&)@@GLIBCXX_3.4
  std::basic_ios<wchar_t, std::char_traits<wchar_t> >::init(std::basic_streambuf<wchar_t, std::char_traits<wchar_t> >*)@@GLIBCXX_3.4
+ std::basic_iostream<char, std::char_traits<char> >::~basic_iostream()@@GLIBCXX_3.4
+ std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
  std::basic_ostream<wchar_t, std::char_traits<wchar_t> >& std::basic_ostream<wchar_t, std::char_traits<wchar_t> >::_M_insert<double>(double)@@GLIBCXX_3.4.9
  std::basic_ostringstream<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::~basic_ostringstream()@@GLIBCXX_3.4
  std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string()@@GLIBCXX_3.4
@@ -432,6 +469,8 @@
  std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::_Rep::_S_empty_rep_storage@@GLIBCXX_3.4
  std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::assign(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@@GLIBCXX_3.4
  std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::swap(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)@@GLIBCXX_3.4
+ std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::~basic_stringstream()@@GLIBCXX_3.4
+ std::ctype<char>::_M_widen_init() const@@GLIBCXX_3.4.11
  std::exception::~exception()@@GLIBCXX_3.4
  std::ios_base::Init::Init()@@GLIBCXX_3.4
  std::ios_base::Init::~Init()@@GLIBCXX_3.4
@@ -443,6 +482,8 @@
  std::locale::locale(char const*)@@GLIBCXX_3.4
  std::locale::~locale()@@GLIBCXX_3.4
  std::nothrow@@GLIBCXX_3.4
+ std::ostream::flush()@@GLIBCXX_3.4
+ std::ostream::put(char)@@GLIBCXX_3.4
  std::ostream::write(char const*, long)@@GLIBCXX_3.4
  std::string::_Alloc_hider::_Alloc_hider(char*, std::allocator<char> const&)@@GLIBCXX_3.4
  std::string::_M_iend() const@@GLIBCXX_3.4
@@ -510,7 +551,6 @@
  strcpy@@GLIBC_2.2.5
  strdup@@GLIBC_2.2.5
  strerror@@GLIBC_2.2.5
- strftime@@GLIBC_2.2.5
  strlen@@GLIBC_2.2.5
  strncasecmp@@GLIBC_2.2.5
  strncmp@@GLIBC_2.2.5
@@ -528,8 +568,6 @@
  tcgetattr@@GLIBC_2.2.5
  tcsetattr@@GLIBC_2.2.5
  time@@GLIBC_2.2.5
- tolower@@GLIBC_2.2.5
- toupper@@GLIBC_2.2.5
  trunc@@GLIBC_2.2.5
  typeinfo for CThread
  typeinfo for CThreadSyncObject
@@ -643,11 +681,16 @@
  vtable for __cxxabiv1::__class_type_info@@CXXABI_1.3
  vtable for __cxxabiv1::__si_class_type_info@@CXXABI_1.3
  vtable for __cxxabiv1::__vmi_class_type_info@@CXXABI_1.3
+ vtable for std::basic_ios<char, std::char_traits<char> >@@GLIBCXX_3.4
  vtable for std::basic_ios<wchar_t, std::char_traits<wchar_t> >@@GLIBCXX_3.4
  vtable for std::basic_ostringstream<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >@@GLIBCXX_3.4
+ vtable for std::basic_streambuf<char, std::char_traits<char> >@@GLIBCXX_3.4
  vtable for std::basic_streambuf<wchar_t, std::char_traits<wchar_t> >@@GLIBCXX_3.4
+ vtable for std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >@@GLIBCXX_3.4
  vtable for std::basic_stringbuf<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >@@GLIBCXX_3.4
+ vtable for std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >@@GLIBCXX_3.4
  vtable for std::exception@@GLIBCXX_3.4
+ wcscmp@@GLIBC_2.2.5
  wcslen@@GLIBC_2.2.5
  wmemcpy@@GLIBC_2.2.5
  write@@GLIBC_2.2.5

@@ -40,6 +40,19 @@
  B spv::spirvbin_t::errorHandler
  B spv::spirvbin_t::logHandler
  B yydebug
+ CBufferString::AppendFormat(char const*, ...)
+ CBufferString::ComposeFileName(char const*, char const*, char)
+ CBufferString::ExtendPath(char const*, char)
+ CBufferString::FixSlashes(char)
+ CBufferString::FixupPathName()
+ CBufferString::Insert(int, char const*, int, bool)
+ CBufferString::MakeAbsolutePath(char const*, char const*)
+ CBufferString::MakeRelativePath(char const*, char const*)
+ CBufferString::Purge(int)
+ CBufferString::RemoveAt(int, int)
+ CBufferString::ShortenPath()
+ CBufferString::StripTrailingSlash()
+ CBufferString::Swap(CBufferString&)
  CMemAllocSystemInitialize
  CThreadEvent::CThreadEvent(bool)
  CThreadEvent::Set()
@@ -121,7 +134,6 @@
  Plat_VirtualAlloc
  Plat_VirtualFree
  Plat_WindowToOsSpecificHandle
- Plat_getwd
  R glslang::TAllocation::guardBlockBeginVal
  R glslang::TAllocation::guardBlockEndVal
  R glslang::TAllocation::guardBlockSize
@@ -2043,6 +2055,7 @@
  V_GetFileExtension
  V_IsAbsolutePath
  V_PathContainsPath
+ V_PrettifyNum
  V_RemoveDotSlashes
  V_SetErrno
  V_StrTrim
@@ -2064,20 +2077,23 @@
  V_cosf
  V_expf
  V_fmodf
+ V_frexpf
  V_localeconv
  V_logf
  V_pow
  V_powf
- V_pretifynum
  V_qsort
  V_qsort_s
+ V_sincosf
  V_sinf
  V_snprintf
- V_snwprintf
+ V_snwprintf_cch
  V_sscanf
  V_stricmp_fast
  V_stristr_fast(char const*, char const*)
  V_strlower_fast
+ V_strnchr
+ V_strnlen
  V_strspn
  V_strtod
  V_strtoi64
@@ -2085,7 +2101,7 @@
  V_strupper_fast
  V_swscanf
  V_tanf
- V_vscprintf
+ V_tier0_strstr
  V_vsnprintf
  V_vsnprintfRet
  V_vsnprintfSize
@@ -2974,6 +2990,7 @@
  W void std::vector<std::unique_ptr<spvtools::opt::analysis::ForwardPointer, std::default_delete<spvtools::opt::analysis::ForwardPointer> >, std::allocator<std::unique_ptr<spvtools::opt::analysis::ForwardPointer, std::default_delete<spvtools::opt::analysis::ForwardPointer> > > >::_M_emplace_back_aux<spvtools::opt::analysis::ForwardPointer*&>(spvtools::opt::analysis::ForwardPointer*&)
  W void std::vector<std::vector<unsigned int, std::allocator<unsigned int> > const*, std::allocator<std::vector<unsigned int, std::allocator<unsigned int> > const*> >::_M_emplace_back_aux<std::vector<unsigned int, std::allocator<unsigned int> > const*>(std::vector<unsigned int, std::allocator<unsigned int> > const*&&)
  W void std::vector<std::vector<unsigned int, std::allocator<unsigned int> >, std::allocator<std::vector<unsigned int, std::allocator<unsigned int> > > >::_M_emplace_back_aux<std::vector<unsigned int, std::allocator<unsigned int> > >(std::vector<unsigned int, std::allocator<unsigned int> >&&)
+ W void std::vector<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > >::_M_emplace_back_aux<std::vector<unsigned long, std::allocator<unsigned long> > const&>(std::vector<unsigned long, std::allocator<unsigned long> > const&)
  W void std::vector<unsigned int, std::allocator<unsigned int> >::_M_emplace_back_aux<unsigned int const&>(unsigned int const&)
  W void std::vector<unsigned int, std::allocator<unsigned int> >::_M_emplace_back_aux<unsigned int>(unsigned int&&)
  W void std::vector<unsigned int, std::allocator<unsigned int> >::_M_insert_aux<unsigned int const&>(__gnu_cxx::__normal_iterator<unsigned int*, std::vector<unsigned int, std::allocator<unsigned int> > >, unsigned int const&)
@@ -2996,6 +3013,7 @@
  _V_StripLastDir
  _V_strcspn
  _V_strncat
+ _V_strncmp
  _V_strncpy
  _V_strnicmp_fast
  _V_strnistr_fast
@@ -3016,7 +3034,6 @@
  __gxx_personality_v0@@CXXABI_1.3
  __longjmp_chk@@GLIBC_2.11
  __memcpy_chk@@GLIBC_2.3.4
- __memset_chk@@GLIBC_2.3.4
  __printf_chk@@GLIBC_2.3.4
  __pthread_key_create@@GLIBC_2.2.5
  __pthread_register_cancel@@GLIBC_2.3.3
@@ -3039,6 +3056,8 @@
  ceilf@@GLIBC_2.2.5
  cos@@GLIBC_2.2.5
  dl_iterate_phdr@@GLIBC_2.2.5
+ dlopen@@GLIBC_2.2.5
+ dlsym@@GLIBC_2.2.5
  exit@@GLIBC_2.2.5
  exp@@GLIBC_2.2.5
  floor@@GLIBC_2.2.5
@@ -3060,7 +3079,6 @@
  isalpha@@GLIBC_2.2.5
  isspace@@GLIBC_2.2.5
  isxdigit@@GLIBC_2.2.5
- localtime@@GLIBC_2.2.5
  log@@GLIBC_2.2.5
  logf@@GLIBC_2.2.5
  longjmp@@GLIBC_2.2.5
@@ -3070,7 +3088,6 @@
  memcpy@@GLIBC_2.14
  memmove@@GLIBC_2.2.5
  memset@@GLIBC_2.2.5
- mktime@@GLIBC_2.2.5
  modf@@GLIBC_2.2.5
  pow@@GLIBC_2.2.5
  pthread_getspecific@@GLIBC_2.2.5
@@ -3088,7 +3105,6 @@
  pthread_setspecific@@GLIBC_2.2.5
  realloc@@GLIBC_2.2.5
  sin@@GLIBC_2.2.5
- sincosf@@GLIBC_2.2.5
  snprintf@@GLIBC_2.2.5
  sqrt@@GLIBC_2.2.5
  sqrtf@@GLIBC_2.2.5
@@ -3116,6 +3132,7 @@
  std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode)@@GLIBCXX_3.4
  std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)@@GLIBCXX_3.4
  std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)@@GLIBCXX_3.4
+ std::basic_iostream<char, std::char_traits<char> >::~basic_iostream()@@GLIBCXX_3.4
  std::basic_istream<char, std::char_traits<char> >& std::getline<char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)@@GLIBCXX_3.4
  std::basic_istringstream<char, std::char_traits<char>, std::allocator<char> >::~basic_istringstream()@@GLIBCXX_3.4
  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
@@ -3132,6 +3149,7 @@
  std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::_M_sync(char*, unsigned long, unsigned long)@@GLIBCXX_3.4
  std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::str() const@@GLIBCXX_3.4
  std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream(std::_Ios_Openmode)@@GLIBCXX_3.4
+ std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::~basic_stringstream()@@GLIBCXX_3.4
  std::cerr@@GLIBCXX_3.4
  std::cout@@GLIBCXX_3.4
  std::ctype<char>::_M_widen_init() const@@GLIBCXX_3.4.11
@@ -3198,123 +3216,10 @@
  strtoul@@GLIBC_2.2.5
  strtoull@@GLIBC_2.2.5
  tan@@GLIBC_2.2.5
- time@@GLIBC_2.2.5
  tolower@@GLIBC_2.2.5
  toupper@@GLIBC_2.2.5
  trunc@@GLIBC_2.2.5
  typeinfo for CThreadSyncObject
- vkAllocateCommandBuffers
- vkAllocateDescriptorSets
- vkAllocateMemory
- vkBeginCommandBuffer
- vkBindBufferMemory
- vkBindImageMemory
- vkCmdBeginQuery
- vkCmdBeginRenderPass
- vkCmdBindDescriptorSets
- vkCmdBindIndexBuffer
- vkCmdBindPipeline
- vkCmdBindVertexBuffers
- vkCmdBlitImage
- vkCmdClearAttachments
- vkCmdCopyBuffer
- vkCmdCopyBufferToImage
- vkCmdCopyImage
- vkCmdCopyImageToBuffer
- vkCmdCopyQueryPoolResults
- vkCmdDispatch
- vkCmdDispatchIndirect
- vkCmdDraw
- vkCmdDrawIndexed
- vkCmdEndQuery
- vkCmdEndRenderPass
- vkCmdExecuteCommands
- vkCmdFillBuffer
- vkCmdNextSubpass
- vkCmdPipelineBarrier
- vkCmdPushConstants
- vkCmdResetQueryPool
- vkCmdResolveImage
- vkCmdSetBlendConstants
- vkCmdSetDepthBias
- vkCmdSetScissor
- vkCmdSetStencilCompareMask
- vkCmdSetStencilReference
- vkCmdSetStencilWriteMask
- vkCmdSetViewport
- vkCmdWriteTimestamp
- vkCreateBuffer
- vkCreateBufferView
- vkCreateCommandPool
- vkCreateComputePipelines
- vkCreateDescriptorPool
- vkCreateDescriptorSetLayout
- vkCreateDevice
- vkCreateFence
- vkCreateFramebuffer
- vkCreateGraphicsPipelines
- vkCreateImage
- vkCreateImageView
- vkCreateInstance
- vkCreatePipelineCache
- vkCreatePipelineLayout
- vkCreateQueryPool
- vkCreateRenderPass
- vkCreateSampler
- vkCreateSemaphore
- vkCreateShaderModule
- vkCreateXcbSurfaceKHR
- vkDestroyBuffer
- vkDestroyBufferView
- vkDestroyCommandPool
- vkDestroyDescriptorPool
- vkDestroyDescriptorSetLayout
- vkDestroyDevice
- vkDestroyFence
- vkDestroyFramebuffer
- vkDestroyImage
- vkDestroyImageView
- vkDestroyInstance
- vkDestroyPipeline
- vkDestroyPipelineCache
- vkDestroyPipelineLayout
- vkDestroyQueryPool
- vkDestroyRenderPass
- vkDestroySampler
- vkDestroySemaphore
- vkDestroyShaderModule
- vkDeviceWaitIdle
- vkEndCommandBuffer
- vkEnumerateDeviceExtensionProperties
- vkEnumerateInstanceExtensionProperties
- vkEnumerateInstanceLayerProperties
- vkEnumeratePhysicalDevices
- vkFlushMappedMemoryRanges
- vkFreeCommandBuffers
- vkFreeMemory
- vkGetBufferMemoryRequirements
- vkGetDeviceProcAddr
- vkGetDeviceQueue
- vkGetFenceStatus
- vkGetImageMemoryRequirements
- vkGetInstanceProcAddr
- vkGetPhysicalDeviceFeatures
- vkGetPhysicalDeviceFormatProperties
- vkGetPhysicalDeviceImageFormatProperties
- vkGetPhysicalDeviceMemoryProperties
- vkGetPhysicalDeviceProperties
- vkGetPhysicalDeviceQueueFamilyProperties
- vkGetPipelineCacheData
- vkGetQueryPoolResults
- vkMapMemory
- vkQueueSubmit
- vkQueueWaitIdle
- vkResetCommandBuffer
- vkResetDescriptorPool
- vkResetFences
- vkUnmapMemory
- vkUpdateDescriptorSets
- vkWaitForFences
  vsnprintf@@GLIBC_2.2.5
  vtable for __cxxabiv1::__class_type_info@@CXXABI_1.3
  vtable for __cxxabiv1::__function_type_info@@CXXABI_1.3
@@ -3329,5 +3234,6 @@
  vtable for std::basic_streambuf<char, std::char_traits<char> >@@GLIBCXX_3.4
  vtable for std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >@@GLIBCXX_3.4
  vtable for std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >@@GLIBCXX_3.4
+ wcscmp@@GLIBC_2.2.5
  wcslen@@GLIBC_2.2.5
  xcb_connect

@@ -29,23 +29,28 @@ RunSequentialActions.prototype.start = function ()
 }
 RunSequentialActions.prototype.update = function ()
 {
-	if ( this.currentActionIndex >= this.actions.length )
-		return false;
-
-	if ( !this.currentActionStarted )
+	while ( this.currentActionIndex < this.actions.length )
 	{
-		this.actions[this.currentActionIndex].start();
-		this.currentActionStarted = true;
-	}
-	if ( !this.actions[ this.currentActionIndex ].update() )
-	{
-		this.actions[this.currentActionIndex].finish();
+		if ( !this.currentActionStarted )
+		{
+	        this.actions[this.currentActionIndex].start();
+	        this.currentActionStarted = true;
+		}
 
-		this.currentActionIndex++;
-		this.currentActionStarted = false;
+		if ( !this.actions[this.currentActionIndex].update() )
+		{
+			this.actions[this.currentActionIndex].finish();
+
+			this.currentActionIndex++;
+			this.currentActionStarted = false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 
-	return this.currentActionIndex < this.actions.length;
+	return false;
 }
 
 
