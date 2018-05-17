@@ -251,7 +251,7 @@ var OnPathCompleted = function (id, nPrevState)
     var y = panel.actualyoffset / panel.actualuiscale_y;
     fxPanel.SetPositionInPixels( x, y, 0 );
 
-    seq.actions.push( new ActionWithTimeout( new WaitForClassAction( fxPanel, 'SceneLoaded' ), 6.0 ) );
+    seq.actions.push( new ActionWithTimeout( new WaitForClassAction( fxPanel, 'SceneLoaded' ), 2.0 ) );
 
     seq.actions.push(new AddClassAction(panel, 'ChallengeCompleting'));
     seq.actions.push(new RunFunctionAction(function ()
