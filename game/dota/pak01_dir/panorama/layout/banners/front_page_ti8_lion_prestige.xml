@@ -5,10 +5,55 @@
 		<include src="s2r://panorama/styles/banners/front_page_ti8_lion_prestige.vcss_c" />
 	</styles>
 
+	<script>
+		var g_lastGestureStartTime = 0.0;
+		var g_bPlayingTaunt = false;
+
+		function HandleActivate()
+		{
+			if ( IsDotaAltPressed() )
+			{
+				DoTauntAnimation();
+			}
+			else
+			{
+				$.DispatchEvent( 'DOTAShowItemDefPage', 9746 );
+			}
+		}
+
+		function DoModelAnimation()
+		{
+			if ( g_bPlayingTaunt )
+				return;
+
+			var now = Date.now();
+			if ( now - g_lastGestureStartTime < 9.0 * 1000 )
+				return;
+		
+			$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LionPrestige' ), 'hero', 'StartGestureOverride', 'ACT_DOTA_SHRUG' );
+			g_lastGestureStartTime = now;
+		}
+		
+		function DoTauntAnimation()
+		{
+			if ( g_bPlayingTaunt )
+				return;
+
+			g_bPlayingTaunt = true;
+			$.DispatchEvent( 'PlaySoundEffect', 'Hero_Lion.TauntToHell' );
+			$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LionPrestige' ), 'hero', 'StartGestureOverride', 'ACT_DOTA_TAUNT' );
+			$.Schedule( 5.0, function ()
+			{
+				$.DispatchEvent( 'DOTASceneFireEntityInput', $( '#LionPrestige' ), 'hero', 'RemoveGesture', 'ACT_DOTA_TAUNT' );
+				g_bPlayingTaunt = false;
+			} );
+		}
+
+	</script>
+
 	<CustomLayoutPanel class="FrontpageCell LionPrestigeCell" 
-										 onactivate="DOTAShowItemDefPage( 9746 )" 
-										 onmouseover="DOTASceneFireEntityInput( LionPrestige, 'hero', 'SetActivity', 'ACT_DOTA_SHRUG' )" 
-										 onmouseout="DOTASceneFireEntityInput( LionPrestige, 'hero', 'SetActivity', 'ACT_DOTA_LOOK_AROUND' )">
+										 onactivate="HandleActivate()" 
+										 onmouseover="DoModelAnimation()">
 		
 		<DOTAScenePanel id="LionPrestige" anti-alias="true" map="scenes/battlepass_ti8/prestige_lion_frontpage" light="hero_light" renderdeferred="true" deferredalpha="false" camera="hero_camera" hittest="true" antialias="true"  particleonly="false"/>
 
