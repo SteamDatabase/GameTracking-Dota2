@@ -125,9 +125,11 @@
 	SUCCEEDED
 	SingleInt
 	SingleTip
+	SoftReset
 	Specify negative seconds to keep faded out.
 	Subscribe
 	Successful delayed player swap!
+	SwapItems
 	TAG_EMPTY
 	TAG_TAKEN
 	TE_DustId
@@ -140,6 +142,7 @@
 	TypeCache
 	UM_HudMsg
 	UM_Rumble
+	UseShrine
 	ValueType
 	Waiting for lock %s from: %s line %d
 	XP[%d] = %d
@@ -221,6 +224,8 @@
 	evictions
 	explosive
 	extension
+	extraData
+	fDuration
 	fade_time
 	favorited
 	file_name
@@ -373,6 +378,7 @@
 	signature
 	slot_type
 	slow_duration: %2.2f
+	softReset
 	soid_type
 	solo_rank
 	sort_type
@@ -389,6 +395,7 @@
 	survey_id
 	svc_Print
 	svc_dummy
+	swapItems
 	target: %s
 	target_source: %s
 	team1_tag
@@ -422,6 +429,7 @@
 	type_name
 	unit_name
 	unit_type
+	useShrine
 	user_name
 	usermsg_t
 	val_float
@@ -883,6 +891,7 @@
  Position(%.2f,%.2f,%.2f)
  ReadToken overflow
  Returns details on a Cloud file.
+ SCRIPTING_DEBUG_DRAW_SCREEN_TEXT
  Subscribed = %u
  TOURNAMENT_GAME_HAS_NO_DIRE_TEAM
  Target:%s(%d)
@@ -1046,6 +1055,7 @@
  t'Hc{TH
  t'Hc{dH
  t'Hc{pH
+ t+Hc{XH
  t+UH
  t.A;
  t.Hc
@@ -1467,6 +1477,8 @@
 "NETWORK_DISCONNECT_STEAM_DENY_MISC
 "NETWORK_DISCONNECT_STEAM_OWNERSHIP
 "OVERHEAD_ALERT_BONUS_POISON_DAMAGE
+"RPC_GET_ESTIMATED_DAMAGE_TO_TARGET
+"SCRIPTING_DEBUG_SCREEN_TEXT_PRETTY
 "SPAWN_GROUP_CREATE_NEW_SCENE_WORLD
 "SPAWN_GROUP_IS_INITIAL_SPAWN_GROUP
 "TEAM_INVITE_FAILURE_INVITE_TIMEOUT
@@ -6008,7 +6020,6 @@ $~tHcS(I
 (#GameUI_Disconnect_RemoteProblem_Timeout
 (%.2fs)
 (%0.2f): %s
-(%Gw}
 (%d)  EffectName "%s"  Dormant? %s  Emission Stopped? %s 
 (%d)  unit1:%d  unit2:%d  type:%d  priority:%d  time:%.1f
 (%d) In: %.1f  unit1:%d  unit2:%d  priority:%d Out:%.1f Length:%.1f
@@ -6021,8 +6032,6 @@ $~tHcS(I
 (%d)"%s" 
 (%d)"unconnected" 
 (%d/%d)%s
-(%d[P
-(%fTP
 (%g %g %g %g)
 (%g %g %g)
 (%g %g)
@@ -6040,19 +6049,18 @@ $~tHcS(I
 (*%s*), 
 (*MARK) must have an argument
 (*VERB) not recognized or malformed
-(-?+R
-(-]TP
-(-fkP
 (0:%.2d)
 (0x%08X)'??'
 (1 + n) * 3 <= vecsize
-(5]kP
 (8HXhx
 (9O I
 (9r$t
 (9s ~@H
 (9w t
 (9w(t7
+(=3+Q
+(=C7Q
+(=SCQ
 (?R or (?[+-]digits must be followed by )
 (@8w tF@
 (@8w)
@@ -6363,7 +6371,6 @@ $~tHcS(I
 *6._1015
 *6._1018
 *:JZjz
-*=z&h
 *A9],t3H
 *ATSH
 *BaseAnimating::C_BodyComponentBaseAnimating
@@ -6609,6 +6616,7 @@ $~tHcS(I
 *NETWORK_DISCONNECT_REJECT_INVALIDKEYLENGTH
 *NETWORK_DISCONNECT_STRINGTABLEMSG_OVERFLOW
 *S?~uJ?x
+*SCRIPTING_DOTA_UNIT_ORDER_MOVE_TO_POSITION
 *TEAM_INVITE_ERROR_INCORRECT_USER_RESPONDED
 *XXfA
 *Z27DetermineAssetModiferUINamePK14CAssetModifierPK14C_EconItemViewPK19CEconItemDefinitionEUlS1_E_
@@ -7313,17 +7321,13 @@ $~tHcS(I
 -walk
 -zoom
 .  Please update your library.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
-.%#/B
-.%(0B
-.%+R(
 .%0*llu
-.%6i7
-.%A|l
+.%Q.>
+.%siB
+.%xjB
 .(Optional) Set of tags for the published file.
-.-!oq
-.-ITN
-.-J"r
-.-T3k
+.-Z"r
+.-d>k
 ...done!
 ../../../dota/resource/dota
 ../../../dota/resource/hero_chat_wheel
@@ -7375,9 +7379,11 @@ $~tHcS(I
 .1 -1.0 -0.2
 .1 -3.1 -0.2
 .3333
-.5U0a
+.5%ta
+.5UjB
 .;z'u%
-.=>/B
+.=*bP
+.=MWK
 .>N^n~
 .@ zVuT
 .@"origin"	"%.1f, %.1f, %.1f"
@@ -7489,6 +7495,12 @@ $~tHcS(I
 .CMsgBattleCupVictory
 .CMsgBattleCupVictory"0
 .CMsgBotWorldState.Ability
+.CMsgBotWorldState.Action
+.CMsgBotWorldState.Action.CastH
+.CMsgBotWorldState.Action.ChatH
+.CMsgBotWorldState.Action.GlyphH
+.CMsgBotWorldState.Action.StopH
+.CMsgBotWorldState.Action.Type
 .CMsgBotWorldState.Courier
 .CMsgBotWorldState.CourierState
 .CMsgBotWorldState.DroppedItem
@@ -12276,6 +12288,9 @@ $~tHcS(I
 2 arguments expected: %s <map name> <override map name>
 2!.CMsgAMSendEmail.ReplacementToken
 2!.CMsgAddSocketResponse.EAddSocket"
+2!.CMsgBotWorldState.Action.BuybackH
+2!.CMsgBotWorldState.Action.CourierH
+2!.CMsgBotWorldState.Actions.Header
 2!.CMsgDOTALeaveTeamResponse.Result"e
 2!.CMsgDOTAMatch.BroadcasterChannel
 2!.CMsgDOTAMatchmakingStatsResponse"F
@@ -12301,6 +12316,9 @@ $~tHcS(I
 2".CDOTAUserMsg_UnitEvent.AddGesture
 2".CDOTAUserMsg_UnitEvent.SpeechMute
 2".CGCStoreRechargeRedirect_LineItem"c
+2".CMsgBotWorldState.Action.CastTreeH
+2".CMsgBotWorldState.Action.DropItemH
+2".CMsgBotWorldState.Action.SellItemH
 2".CMsgDOTAChatRegionsEnabled.Region
 2".CMsgDOTACreateTeamResponse.Result
 2".CMsgDOTAHallOfFame.FeaturedFarmer
@@ -12320,6 +12338,9 @@ $~tHcS(I
 2#.CDOTAUserMsg_StatsHeroPositionInfo
 2#.CDOTAUserMsg_UnitEvent.BloodImpact
 2#.CDOTAUserMsg_UnitEvent.FadeGesture
+2#.CMsgBotWorldState.Action.SoftResetH
+2#.CMsgBotWorldState.Action.SwapItemsH
+2#.CMsgBotWorldState.Action.UseShrineH
 2#.CMsgBotWorldState.LinearProjectile
 2#.CMsgDOTAChatMessage.TriviaAnswered
 2#.CMsgDOTAGuildCreateResponse.EError"
@@ -12346,6 +12367,11 @@ $~tHcS(I
 2$.CGCMsgMemCachedGetResponse.ValueTag
 2$.CGameInfo.CDotaGameInfo.CPlayerInfo
 2$.CMsgAddItemToSocketResponse.EAddGem"
+2$.CMsgBotWorldState.Action.AttackMoveH
+2$.CMsgBotWorldState.Action.CastTargetH
+2$.CMsgBotWorldState.Action.CastToggleH
+2$.CMsgBotWorldState.Action.PickUpItemH
+2$.CMsgBotWorldState.Action.PickupRuneH
 2$.CMsgBotWorldState.EventRoshanKilled
 2$.CMsgDOTAClientToGCQuickStatsRequest
 2$.CMsgDOTADestroyLobbyResponse.Result"(
@@ -12376,6 +12402,13 @@ $~tHcS(I
 2%.CMsgSource1LegacyGameEventList.key_t"K
 2&.CDOTAMatchPrivateMetadata.Team.Player
 2&.CDOTAUserMsg_MiniKillCamInfo.Attacker
+2&.CMsgBotWorldState.Action.AttackTargetH
+2&.CMsgBotWorldState.Action.CastLocationH
+2&.CMsgBotWorldState.Action.HoldLocationH
+2&.CMsgBotWorldState.Action.MoveToTargetH
+2&.CMsgBotWorldState.Action.OceanWinGameH
+2&.CMsgBotWorldState.Action.PurchaseItemH
+2&.CMsgBotWorldState.Action.TrainAbilityH
 2&.CMsgClientToGCCreateStaticRecipe.Item
 2&.CMsgClientToGCVoteForArcana.MatchVote
 2&.CMsgDOTAGetEventPointsResponse.Action
@@ -12410,6 +12443,7 @@ $~tHcS(I
 2(.CCommunity_GamePersonalDataCategoryInfo
 2(.CDOTAMatchPrivateMetadata.Team.Building
 2(.CGCSystemMsg_GetAccountDetails_Response
+2(.CMsgBotWorldState.Action.MoveToLocationH
 2(.CMsgDOTAEditFantasyTeamResponse.EResult"
 2(.CMsgDOTAFantasyMessagesResponse.EResult
 2(.CMsgDOTAFantasyMessagesResponse.Message
@@ -12429,6 +12463,7 @@ $~tHcS(I
 2).CDOTAUserMsg_PredictionResult.Prediction
 2).CGameInfo.CDotaGameInfo.CHeroSelectEvent
 2).CMsgActivatePlusFreeTrialResponse.Result"
+2).CMsgBotWorldState.Action.DisassembleItemH
 2).CMsgClientToGCNameItemResponse.ENameItem
 2).CMsgDOTAAnchorPhoneNumberResponse.Result"w
 2).CMsgDOTAFantasyTeamScoreResponse.EResult
@@ -12450,6 +12485,7 @@ $~tHcS(I
 2).CUserMsg_ParticleManager.SetParticleText
 2*.CDOTAMatchMetadata.Team.AutoStyleCriteria
 2*.CDOTAMatchMetadata.Team.InventorySnapshot
+2*.CMsgBotWorldState.Actions.OceanAnnotation
 2*.CMsgDOTAFantasyLeagueFindResponse.EResult
 2*.CMsgDOTAFantasyLeagueInfoResponse.EResult"F
 2*.CMsgDOTAFantasyTeamCreateResponse.EResult
@@ -12491,6 +12527,7 @@ $~tHcS(I
 2+.CUserMsg_ParticleManager.UpdateParticleFwd
 2,.CDOTAResponseQuerySerialized.Fact.ValueType
 2,.CMsgAMSendEmail.PersonaNameReplacementToken
+2,.CMsgBotWorldState.Action.SetCombineLockItemH
 2,.CMsgDOTAClaimEventActionResponse.ResultCode
 2,.CMsgDOTACreateFantasyLeagueResponse.EResult"
 2,.CMsgDOTAFantasyLeagueCreateResponse.EResult
@@ -12537,6 +12574,8 @@ $~tHcS(I
 2..CUserMsg_ParticleManager.UpdateEntityPosition
 2..CUserMsg_ParticleManager.UpdateParticleOffset
 2..CUserMsg_ParticleManager.UpdateParticleOrient
+2/.CMsgBotWorldState.Action.ScriptingDebugDrawBoxH
+2/.CMsgBotWorldState.Actions.OceanAnnotation.Hero
 2/.CMsgClientToGCRecyclePlayerCardResponse.Result
 2/.CMsgDOTAFantasyPlayerStandingsResponse.EResult
 2/.CMsgDOTAFantasyTeamTradeCancelResponse.EResult"Z
@@ -12550,6 +12589,9 @@ $~tHcS(I
 2/.CMsgPurchaseItemWithEventPointsResponse.Result"
 20.0f
 20.CDOTAUserMsg_StatsHeroPositionInfo.PositionPair
+20.CMsgBotWorldState.Action.OceanReplayCorrectTimeH
+20.CMsgBotWorldState.Action.ScriptingDebugDrawLineH
+20.CMsgBotWorldState.Action.ScriptingDebugDrawTextH
 20.CMsgClientToGCOpenPlayerCardPackResponse.Result
 20.CMsgDOTAFantasyScheduledMatchesResponse.EResult
 20.CMsgDOTAWeekendTourneyParticipationDetails.Tier*
@@ -12818,6 +12860,8 @@ $~tHcS(I
 21.CBidirMsg_RelayPacket.SignedDestinationAddress_t
 21.CDOTAMatchPrivateMetadata.Team.Player.BuffRecord
 21.CDOTAUserMsg_PredictionResult.Prediction.EResult
+21.CMsgBotWorldState.Action.GetActualIncomingDamageH
+21.CMsgBotWorldState.Action.ScriptingDebugDrawClearH
 21.CMsgClientToGCGetPlayerCardRosterResponse.Result
 21.CMsgClientToGCGetQuestProgressResponse.Challenge"0
 21.CMsgClientToGCSetPlayerCardRosterResponse.Result"
@@ -13057,6 +13101,7 @@ $~tHcS(I
 21TEBubbles_GameEvent_t
 21prevent_interaction_t
 22.CMsgAMGetUserGameStatsResponse.Achievement_Blocks
+22.CMsgBotWorldState.Action.ScriptingDebugDrawCircleH
 22.CMsgClientToGCCavernCrawlClaimRoomResponse.Result"H
 22.CMsgClientToGCCreatePlayerCardPackResponse.Result"
 22.CMsgClientToGCGetLeagueSeriesResponse.Series.Team
@@ -13537,6 +13582,7 @@ $~tHcS(I
 23C_DOTA_Item_HandOfMidas
 23C_DOTA_Item_MaskOfDeath
 23C_DOTA_Item_MysticStaff
+23C_DOTA_Item_PocketTower
 23C_DOTA_Item_PowerTreads
 23C_DOTA_Item_Recipe_Kaya
 23C_DOTA_Item_Recipe_Pipe
@@ -13594,6 +13640,7 @@ $~tHcS(I
 23TraceRayServerToolEvent
 23item_definition_index_t
 24.CDOTAMatchPrivateMetadata.Team.Player.CombatSegment
+24.CMsgBotWorldState.Action.GetEstimatedDamageToTargetH
 24.CMsgClientToGCCreateStaticRecipeResponse.InputError
 24.CMsgClientToGCCreateStaticRecipeResponse.OutputItem
 24.CMsgDOTAFantasyPlayerHisoricalStatsResponse.EResult
@@ -13920,6 +13967,7 @@ $~tHcS(I
 24CInstancedResponseSystem
 24CLobbyTimedRewardDetails
 24CMsgBalancedShuffleLobby
+24CMsgBotWorldState_Action
 24CMsgBotWorldState_Player
 24CMsgBotWorldState_Vector
 24CMsgClientToGCEquipItems
@@ -14224,6 +14272,7 @@ $~tHcS(I
 25CModifieractoryDictionary
 25CMsgAMGetLicensesResponse
 25CMsgBotWorldState_Ability
+25CMsgBotWorldState_Actions
 25CMsgBotWorldState_Courier
 25CMsgClearWorldDecalsEvent
 25CMsgClientToGCUnlockCrate
@@ -14350,6 +14399,7 @@ $~tHcS(I
 25TEPlayerDecal_GameEvent_t
 25ToolEvent_FireEntityInput
 25ToolEvent_GetEntityInputs
+26.CMsgBotWorldState.Action.ScriptingDebugDrawScreenTextH
 26.CMsgClientToGCCavernCrawlUseItemOnPathResponse.Result"H
 26.CMsgClientToGCCavernCrawlUseItemOnRoomResponse.Result"H
 26.CMsgClientToGCRequestEventPointLogResponseV2.LogEntry
@@ -14986,6 +15036,7 @@ $~tHcS(I
 27Source1LegacyListenEvents_t
 27TEArmorRicochet_GameEvent_t
 28.CDOTAUserMsg_StatsTeamMinuteDetails.LocationPerformance
+28.CMsgBotWorldState.Action.ScriptingDebugScreenTextPrettyH
 28.CMsgClientToGCCavernCrawlRequestMapStateResponse.Result
 28.CMsgDOTAFantasyPlayerHisoricalStatsResponse.PlayerStats
 28.CMsgGCToGCGrantAccountRolledItems.Item.DynamicAttribute
@@ -15390,6 +15441,9 @@ $~tHcS(I
 29CHtmlFormattedLoggingListener
 29CKeyValuesDumpContextAsDevMsg
 29CMatchAdditionalUnitInventory
+29CMsgBotWorldState_Action_Cast
+29CMsgBotWorldState_Action_Chat
+29CMsgBotWorldState_Action_Stop
 29CMsgBotWorldState_DroppedItem
 29CMsgBotWorldState_EventDamage
 29CMsgClientProvideSurveyResult
@@ -15830,6 +15884,7 @@ $~tHcS(I
 30CInterpolatedVarProceduralBaseIhLb0ELb1E28COwnerInterpolationLerpFuncsIh24CElementFauxInterpolatorIhEEE
 30CInterpolatedVarProceduralBaseIiLb0ELb1E28COwnerInterpolationLerpFuncsIi24CElementFauxInterpolatorIiEEE
 30CMsgAMGetUserGameStatsResponse
+30CMsgBotWorldState_Action_Glyph
 30CMsgBotWorldState_EventAbility
 30CMsgBotWorldState_TeleportInfo
 30CMsgClientToGCApplyGemCombiner
@@ -16354,6 +16409,9 @@ $~tHcS(I
 32CGCTrading_InitiateTradeResponse
 32CMsgAMSendEmail_ReplacementToken
 32CMsgActivatePlusFreeTrialRequest
+32CMsgBotWorldState_Action_Buyback
+32CMsgBotWorldState_Action_Courier
+32CMsgBotWorldState_Actions_Header
 32CMsgClientToGCAddTI6TreeProgress
 32CMsgClientToGCCreateStaticRecipe
 32CMsgClientToGCEquipItemsResponse
@@ -16629,6 +16687,9 @@ $~tHcS(I
 33CGCClientJobSocialFeedPostMessage
 33CGCStoreRechargeRedirect_LineItem
 33CMsgActivatePlusFreeTrialResponse
+33CMsgBotWorldState_Action_CastTree
+33CMsgBotWorldState_Action_DropItem
+33CMsgBotWorldState_Action_SellItem
 33CMsgClientToGCEmoticonDataRequest
 33CMsgClientToGCGetAdditionalEquips
 33CMsgClientToGCGetProfileCardStats
@@ -16894,6 +16955,9 @@ $~tHcS(I
 34CGCClientJobSetCompendiumSelection
 34CGCClientJobWeekendTourneySchedule
 34CInlineJob_CMsgDOTALobbyMVPAwarded
+34CMsgBotWorldState_Action_SoftReset
+34CMsgBotWorldState_Action_SwapItems
+34CMsgBotWorldState_Action_UseShrine
 34CMsgBotWorldState_LinearProjectile
 34CMsgClientToGCCavernCrawlClaimRoom
 34CMsgClientToGCCreatePlayerCardPack
@@ -17135,6 +17199,11 @@ $~tHcS(I
 35CGameInfo_CDotaGameInfo_CPlayerInfo
 35CGameIntegrationDataRenderer_Map_v1
 35CHLTVSpectatorChannelJoinGameSystem
+35CMsgBotWorldState_Action_AttackMove
+35CMsgBotWorldState_Action_CastTarget
+35CMsgBotWorldState_Action_CastToggle
+35CMsgBotWorldState_Action_PickUpItem
+35CMsgBotWorldState_Action_PickupRune
 35CMsgBotWorldState_EventRoshanKilled
 35CMsgClientToGCFeaturedHeroesRequest
 35CMsgClientToGCGetTrophyListResponse
@@ -17557,6 +17626,7 @@ $~tHcS(I
 35CSchemaNonConstructibleClassBindingI23C_DOTA_Item_HandOfMidasE
 35CSchemaNonConstructibleClassBindingI23C_DOTA_Item_MaskOfDeathE
 35CSchemaNonConstructibleClassBindingI23C_DOTA_Item_MysticStaffE
+35CSchemaNonConstructibleClassBindingI23C_DOTA_Item_PocketTowerE
 35CSchemaNonConstructibleClassBindingI23C_DOTA_Item_PowerTreadsE
 35CSchemaNonConstructibleClassBindingI23C_DOTA_Item_Recipe_KayaE
 35CSchemaNonConstructibleClassBindingI23C_DOTA_Item_Recipe_PipeE
@@ -19825,6 +19895,7 @@ $~tHcS(I
 35CSchemaNonConstructibleClassBindingIN23C_DOTA_Item_HandOfMidas26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN23C_DOTA_Item_MaskOfDeath26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN23C_DOTA_Item_MysticStaff26CEntityInstanceEntityClassEE
+35CSchemaNonConstructibleClassBindingIN23C_DOTA_Item_PocketTower26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN23C_DOTA_Item_PowerTreads26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN23C_DOTA_Item_Recipe_Kaya26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN23C_DOTA_Item_Recipe_Pipe26CEntityInstanceEntityClassEE
@@ -22174,6 +22245,13 @@ $~tHcS(I
 37CGameIntegrationDataRenderer_Draft_v1
 37CGameIntegrationDataRenderer_Items_v1
 37CInterpolatedVarAutoCompletionFunctor
+37CMsgBotWorldState_Action_AttackTarget
+37CMsgBotWorldState_Action_CastLocation
+37CMsgBotWorldState_Action_HoldLocation
+37CMsgBotWorldState_Action_MoveToTarget
+37CMsgBotWorldState_Action_OceanWinGame
+37CMsgBotWorldState_Action_PurchaseItem
+37CMsgBotWorldState_Action_TrainAbility
 37CMsgClientToGCCreateStaticRecipe_Item
 37CMsgClientToGCGetAllHeroOrderResponse
 37CMsgClientToGCGetLeagueSeriesResponse
@@ -22566,6 +22644,7 @@ $~tHcS(I
 39CGCTrading_InitiateTradeRequestResponse
 39CInlineJob_CMsgGCToClientPlaytestStatus
 39CInlineJob_CMsgGCToClientWageringUpdate
+39CMsgBotWorldState_Action_MoveToLocation
 39CMsgClearDecalsForSkeletonInstanceEvent
 39CMsgClientToGCLookupAccountNameResponse
 39CMsgClientToGCRecyclePlayerCardResponse
@@ -22827,6 +22906,7 @@ $~tHcS(I
 40CInterpolatedVarProceduralUsingOwnerLerpIf24CElementFauxInterpolatorIfEE
 40CInterpolatedVarProceduralUsingOwnerLerpIh24CElementFauxInterpolatorIhEE
 40CInterpolatedVarProceduralUsingOwnerLerpIi24CElementFauxInterpolatorIiEE
+40CMsgBotWorldState_Action_DisassembleItem
 40CMsgClientToGCCavernCrawlRequestMapState
 40CMsgClientToGCCreateStaticRecipeResponse
 40CMsgClientToGCGetAllHeroProgressResponse
@@ -23034,6 +23114,7 @@ $~tHcS(I
 41CGameIntegrationDataRenderer_Abilities_v1
 41CGameIntegrationDataRenderer_Buildings_v1
 41CGameIntegrationDataRenderer_Wearables_v1
+41CMsgBotWorldState_Actions_OceanAnnotation
 41CMsgClientToGCGetAdditionalEquipsResponse
 41CMsgClientToGCGetPlayerCardRosterResponse
 41CMsgClientToGCRemoveItemAttributeResponse
@@ -23378,6 +23459,7 @@ $~tHcS(I
 43CGCClientJobRequestTopLeagueMatchesResponse
 43CInlineJob_CMsgGCToClientMatchGroupsVersion
 43CMsgAMSendEmail_PersonaNameReplacementToken
+43CMsgBotWorldState_Action_SetCombineLockItem
 43CMsgClientToGCRequestLinaGameResultResponse
 43CMsgClientToGCSocialMatchPostCommentRequest
 43CMsgDOTAFantasyPlayerHisoricalStatsResponse
@@ -23885,6 +23967,8 @@ $~tHcS(I
 46CEconItemAttributeIterator_ApplyAttributeFloat
 46CEconItemAttributeIterator_EconItemViewWrapper
 46CGCClientJobToggleBroadcastChannelCameraStatus
+46CMsgBotWorldState_Action_ScriptingDebugDrawBox
+46CMsgBotWorldState_Actions_OceanAnnotation_Hero
 46CMsgClientToGCCavernCrawlUseItemOnPathResponse
 46CMsgClientToGCCavernCrawlUseItemOnRoomResponse
 46CMsgClientToGCRequestPlusWeeklyChallengeResult
@@ -23993,6 +24077,9 @@ $~tHcS(I
 47CDOTA_Modifier_Ursa_Fury_Swipes_Damage_Increase
 47CDOTA_Modifier_Winter_Wyvern_Arctic_Burn_Flight
 47CDOTA_Modifier_Winter_Wyvern_Winters_Curse_Aura
+47CMsgBotWorldState_Action_OceanReplayCorrectTime
+47CMsgBotWorldState_Action_ScriptingDebugDrawLine
+47CMsgBotWorldState_Action_ScriptingDebugDrawText
 47CMsgClientToGCRequestLinaPlaysRemainingResponse
 47CMsgDOTAFantasyTeamInfoRequestByFantasyLeagueID
 47CMsgDOTATeamInvite_GCImmediateResponseToInviter
@@ -24104,6 +24191,8 @@ $~tHcS(I
 48CDOTA_Modifier_SpiritBreaker_NetherStrike_Vision
 48CDOTA_Modifier_Undying_Tombstone_Zombie_Modifier
 48CDOTA_Modifier_Winter_Wyvern_Splinter_Blast_Slow
+48CMsgBotWorldState_Action_GetActualIncomingDamage
+48CMsgBotWorldState_Action_ScriptingDebugDrawClear
 48CMsgClientToGCCavernCrawlRequestMapStateResponse
 48CMsgClientToGCGetQuestProgressResponse_Challenge
 48CMsgClientToGCRequestSteamDatagramTicketResponse
@@ -24212,6 +24301,7 @@ $~tHcS(I
 49CGCClientJobRequestCompendiumEventPointsForLeague
 49CGCClientJobRequestStoreSalesDataUpToDateResponse
 49CMsgAMGetUserGameStatsResponse_Achievement_Blocks
+49CMsgBotWorldState_Action_ScriptingDebugDrawCircle
 49CMsgClientToGCGetLeagueSeriesResponse_Series_Team
 49CMsgClientToGCRequestArcanaVotesRemainingResponse
 49CMsgDOTARealtimeGameStats_GraphData_LocationStats
@@ -24418,6 +24508,7 @@ $~tHcS(I
 51CDOTA_Modifier_VengefulSpirit_Command_Aura_Illusion
 51CDOTA_Modifier_VengefulSpirit_Command_Negative_Aura
 51CGCClientJobFantasyTeamInfoRequestByFantasyLeagueID
+51CMsgBotWorldState_Action_GetEstimatedDamageToTarget
 51CMsgClientToGCCreateStaticRecipeResponse_InputError
 51CMsgClientToGCCreateStaticRecipeResponse_OutputItem
 51CMsgDOTAClaimEventActionResponse_LootListRewardData
@@ -24494,6 +24585,7 @@ $~tHcS(I
 53CDOTA_Modifier_Terrorblade_Reflection_Invulnerability
 53CDOTA_Modifier_Visage_SummonFamiliars_StoneForm_Timer
 53CDOTA_Modifier_Winter_Wyvern_Arctic_Burn_Frost_Attack
+53CMsgBotWorldState_Action_ScriptingDebugDrawScreenText
 53CMsgClientToGCRequestEventPointLogResponseV2_LogEntry
 53CMsgDOTARealtimeGameStats_GraphData_TeamLocationStats
 53CMsgGCToClientBattlePassRollup_Winter2017_Predictions
@@ -24548,6 +24640,7 @@ $~tHcS(I
 55CDOTA_Modifier_SkeletonKing_MortalStrike_Summon_Thinker
 55CDOTA_Modifier_Terrorblade_Metamorphosis_Transform_Aura
 55CDOTA_Modifier_Visage_SummonFamiliars_StoneForm_Thinker
+55CMsgBotWorldState_Action_ScriptingDebugScreenTextPretty
 55CMsgDOTAFantasyPlayerHisoricalStatsResponse_PlayerStats
 55CMsgGCToGCGrantAccountRolledItems_Item_DynamicAttribute
 55C_DOTA_Ability_Greevil_Miniboss_Orange_LightStrikeArray
@@ -25116,7 +25209,6 @@ $~tHcS(I
 ;GAME_PARTICLE_MANAGER_EVENT_CHANGE_CONTROL_POINT_ATTACHMENT
 ;H0}K
 ;H8tUA
-;Hc529+
 ;J t|H9
 ;K4tQ
 ;L9'u
@@ -25516,7 +25608,6 @@ $~tHcS(I
 ?C_GameEntity::CEntityInstanceEntityClass
 ?C_InfoLadderDismount
 ?C_RopeKeyframe
-?D;%P?c
 ?ERCP
 ?Ict$
 ?LoadFromFile
@@ -25646,8 +25737,6 @@ $~tHcS(I
 @:0t/UE1
 @:0t[UE1
 @:2t'
-@:5-5B
-@:5>5B
 @:9tx
 @:qPt
 @:w t
@@ -25736,6 +25825,7 @@ $~tHcS(I
 @t'Hc{0H
 @t'Hc{4H
 @t'Hc{8H
+@t'Hc{<H
 @t'Hc{DH
 @t'Hc{HH
 @t'Hc{LH
@@ -25743,6 +25833,7 @@ $~tHcS(I
 @t'Hc{TH
 @t'Hc{tH
 @t(Hc{xH
+@t+Hc{\H
 @t.Hc
 @t0~>
 @t9Ct[
@@ -26007,6 +26098,7 @@ A;D$ |
 A;D$ }
 A;D$ }!I
 A;D$$t
+A;D$$u
 A;D$(
 A;D$(|
 A;D$(}
@@ -26075,6 +26167,7 @@ A;GhH
 A;L$ 
 A;L$(
 A;L$8
+A;L$@
 A;L$Dt
 A;L$T
 A;M w
@@ -26085,6 +26178,7 @@ A;T$(t`
 A;T$0
 A;T$8
 A;T$@
+A;T$D
 A;T$H
 A;T$P
 A;T$X
@@ -26127,6 +26221,7 @@ A;] }#I
 A;] }&I
 A;] }*I
 A;] }+I
+A;] }.I
 A;](|
 A;](}&I
 A;](}*I
@@ -26134,6 +26229,7 @@ A;](}W
 A;]0|
 A;]0}#I
 A;]0}&I
+A;]0}*I
 A;]8|
 A;]8}#I
 A;]8}&I
@@ -26206,6 +26302,10 @@ ACCOUNT_NOT_FOUND
 ACCOUNT_TOO_MANY_GUILDS
 ACHIEVED
 ACH_FAILED
+ACTION_CHAT
+ACTION_COURIER
+ACTION_SWAP_ITEMS
+ACTION_USE_SHRINE
 ACTIVATE_TYPE_DATAUPDATE_CREATION
 ACTIVATE_TYPE_INITIAL_CREATION
 ACTIVATE_TYPE_ONRESTORE
@@ -28031,11 +28131,13 @@ Action Item Used
 Action Points
 ActionAcceptFriendRequest
 ActionAddFriend
+ActionData"
 ActionIgnoreFriendRequest
 ActionInviteToParty
 ActionRemoveFriend
 ActionSendMessage
 ActionSpectateGame
+Actions
 Activate radar mode
 Activate speed boost on courier
 ActivateBattlePassPopup
@@ -28495,10 +28597,12 @@ AttackCusor
 AttackDamageContainer
 AttackDamageMax
 AttackDamageMin
+AttackMove
 AttackRangeActivityModifiers
 AttackRangeRow
 AttackSpeedActivityModifiers
 AttackSpeedRow
+AttackTarget
 Attacker
 AttackerDropdown
 Attempt to add unknown item to stock info
@@ -29304,6 +29408,7 @@ BuyInCheckBox
 BuyInContainer
 BuyInParty
 BuyInTooMuch
+Buyback
 BuybackButton
 BuybackGoldRequired
 BuybackNo
@@ -29371,6 +29476,7 @@ C!?tnL
 C"tJL
 C$A9D$$u
 C$A;D$dt
+C$D+C E
 C$[A\A]A^]
 C$[A\]
 C&f9C$t@
@@ -30836,6 +30942,7 @@ CDOTA_Item_Octarine_Core
 CDOTA_Item_Octarine_Core::CEntityInstanceEntityClass
 CDOTA_Item_Physical
 CDOTA_Item_Pipe
+CDOTA_Item_PocketTower
 CDOTA_Item_PowerTreads
 CDOTA_Item_QuellingBlade
 CDOTA_Item_Radiance
@@ -36530,6 +36637,8 @@ C_DOTA_Item_PlaneswalkersCloak
 C_DOTA_Item_PlaneswalkersCloak::CEntityInstanceEntityClass
 C_DOTA_Item_PlateMail
 C_DOTA_Item_PlateMail::CEntityInstanceEntityClass
+C_DOTA_Item_PocketTower
+C_DOTA_Item_PocketTower::CEntityInstanceEntityClass
 C_DOTA_Item_PointBooster
 C_DOTA_Item_PointBooster::CEntityInstanceEntityClass
 C_DOTA_Item_PoorMansShield
@@ -37706,6 +37815,10 @@ CarouselTitle
 Carry
 CastCursor
 CastFilterResultLocation
+CastLocation
+CastTarget
+CastToggle
+CastTree
 CasterImage
 CastersInfo
 Castle Controller
@@ -38689,6 +38802,7 @@ D$$-x
 D$$8C$t
 D$$9C$t
 D$$;C$t
+D$$E+D$ E
 D$$E1
 D$$H)
 D$$[A\]
@@ -38776,6 +38890,7 @@ D$8H;X@t$H
 D$8I9
 D$8IcT$0H
 D$8Ict$
+D$8Ic|$@
 D$8L9
 D$8Mc
 D$8[A\A]A^]
@@ -38788,6 +38903,7 @@ D$<A)
 D$<E1
 D$@8C@t
 D$@9C@t
+D$@A;D$Du
 D$@A;D$P
 D$@A\]
 D$@E1
@@ -38800,6 +38916,7 @@ D$@Mc
 D$@f9
 D$D8CDt
 D$D9CDt
+D$DA)
 D$DA\
 D$DMc'
 D$D[A\A]A^]
@@ -38957,6 +39074,7 @@ D333333
 D4	_A
 D6	 H
 D7	 H
+D8%D)
 D8G!t
 D8G,u
 D8G@u
@@ -38971,9 +39089,7 @@ D9 ~FH
 D9 ~zH
 D9!t"
 D9!u"
-D9%2(
-D9%g*)
-D9%y	o
+D9%y}p
 D9't$H
 D9't,H
 D9(t'I
@@ -38984,10 +39100,10 @@ D92tY1
 D93~5
 D93~JL
 D93~RH
+D95o0R
 D9:t%H
 D9;~<L
 D9;~dL
-D9=Xt
 D9A\w
 D9D$4B
 D9D$4H
@@ -39082,8 +39198,6 @@ D9{`~LH
 D9{ht
 D9{xt
 D9|$ 
-D:%xf
-D:%zM
 D:GpG
 D:c1u+H
 D:hxt
@@ -39098,19 +39212,23 @@ D;!t$H
 D;!tk
 D;!t{Hc
 D;"tgC
-D;%#B
-D;%7<3
-D;%D/
-D;%G93
-D;%G\
-D;%\L*
-D;%d7
-D;%k>3
-D;%kcM
-D;%sM*
-D;%us
-D;%{;3
-D;%{|
+D;%+1|
+D;%04y
+D;%2y
+D;%90|
+D;%@8y
+D;%Q+m
+D;%RZ
+D;%S3
+D;%^f
+D;%c[p
+D;%d_
+D;%k*|
+D;%k2|
+D;%p:y
+D;%qdl
+D;%w[
+D;%|/|
 D;'t{
 D;'t{Hc
 D;'}#H
@@ -39118,25 +39236,37 @@ D;(tmH
 D;(trH
 D;)t#H
 D;+};H
-D;-$9
-D;-,/z
-D;-.m
-D;-?(
-D;-D~
-D;-Qk
-D;-Qx
-D;-oU
+D;-	v
+D;-.|
+D;-<K|
+D;-=Jx
+D;->5
+D;->s|
+D;-?%
+D;-Ky
+D;-N0
+D;-YM
+D;-Z{
+D;-[D|
+D;-_|
+D;-i$
+D;-jr|
+D;-s~
+D;-t'
+D;-wL|
 D;.~3L
 D;/rbA
 D;0tyHc@
-D;5*|z
-D;5=G3
-D;5oH3
-D;5pzz
-D;5rE3
-D;5s4
+D;5&E
+D;5.p
+D;5GE
+D;5UF
+D;5a#
 D;:r;;Z
 D;:tPH
+D;=$t
+D;=9t
+D;=<"|
 D;B\r
 D;B`|
 D;C8toH
@@ -43286,6 +43416,7 @@ DOTA_UNIT_ORDER_DROP_ITEM
 DOTA_UNIT_ORDER_GIVE_ITEM
 DOTA_UNIT_ORDER_GLYPH
 DOTA_UNIT_ORDER_HOLD_POSITION
+DOTA_UNIT_ORDER_MOVE_DIRECTLY
 DOTA_UNIT_ORDER_MOVE_ITEM
 DOTA_UNIT_ORDER_MOVE_TO_TARGET
 DOTA_UNIT_ORDER_NONE
@@ -43815,6 +43946,7 @@ Disabler
 Disables all chains except for the mentioned one on the selected entity(ies), by name of the chain.
 Disables right clicking on the minimap.
 Disabling damage on breakable prop %s - no physics interactions on model and no breakpieces.
+DisassembleItem
 Discard match history
 Discarded rule %s
 DisconnectOutput
@@ -44096,6 +44228,7 @@ DropDownSelectNext
 DropDownSelectPrevious
 DropDownSelectionChanged
 DropInputFocus
+DropItem
 DropItemAtCursor
 DropWillRemove
 DropdownMenuFocusChanged
@@ -46757,6 +46890,7 @@ GetAbsoluteNoDamagePhysical
 GetAbsoluteNoDamagePure
 GetAbsorbSpell
 GetActivityTranslationModifiers
+GetActualIncomingDamage
 GetAddonsContentDirectory: Failed to find CONTENTADDONS search path.
 GetAddonsDirectory: Failed to find ADDONS search path.
 GetAllBuildingEntities
@@ -46878,6 +47012,7 @@ GetElapsedTime
 GetEntityHandle
 GetEntityNameAsCStr
 GetEnum
+GetEstimatedDamageToTarget
 GetEyePosition() Can't get pstudiohdr ptr!
 GetFieldPriority
 GetFileDetails
@@ -47283,6 +47418,7 @@ Glows: Blur Y
 Glows: Clear texture
 Glows: Render Objects Solid Color
 Glows: Stencil To Screen
+Glyph
 GoLiveButton
 GoOffline
 GoOnline
@@ -47461,7 +47597,6 @@ H92tPH
 H97txH
 H9:t.H
 H9:tx
-H9=bLq
 H9APu
 H9C t
 H9C t 
@@ -47520,6 +47655,7 @@ H;0u)
 H;1t!
 H;1u 
 H;2u#
+H;5#bv
 H;8tFL
 H;8tU
 H;8t]
@@ -47528,205 +47664,275 @@ H;:ty
 H;:t}
 H;:u 
 H;:u"
+H;=	E
 H;=	O
-H;=	q
-H;= y
-H;=!#
-H;=!t
-H;="d
-H;="r
-H;=#o
-H;=$G
-H;=%$
-H;=(!<
-H;=("
-H;=()
-H;=(*y
-H;=(+
-H;=(8
-H;=(=	
-H;=(B	
-H;=(G	
-H;=(I
-H;=(L	
-H;=(N
-H;=(Q	
-H;=(V	
-H;=(]4
-H;=(b4
-H;=(t]
-H;=(u
-H;=(w
-H;=)f
-H;=+d
-H;=+}
-H;=/{
-H;=1S
-H;=1U
-H;=1s
-H;=1u}
-H;=1wO
-H;=1x
-H;=2+
-H;=2.
-H;=39
-H;=3T
-H;=6 
-H;=82
-H;=87
-H;=8<
-H;=8A
-H;=8F
-H;=8K
-H;=8P
-H;=8U
-H;=8Y
+H;=	V*
+H;=	j+
+H;=	z
+H;= !g
+H;= "
+H;= &
+H;= 0
+H;= <s
+H;= f"
+H;= gv
+H;= i\
+H;= k
+H;= k"
+H;= s
+H;= z
+H;= {=
+H;=!A7
+H;="?
+H;="@
+H;="N
+H;=#X
+H;=%3
+H;=%q
+H;=&F
+H;=(B
+H;=)?
+H;=)C
+H;=)M
+H;=)Y
+H;=)]*
+H;=)b
+H;=)y
+H;=)}
+H;=*-
+H;=*6
+H;=*I
+H;=*L
+H;=*N
+H;=*w
+H;=+E
+H;=+O
+H;=+S
+H;=+n
+H;=+o
+H;=+z
+H;=,E
+H;=-9
+H;=.Q
+H;=.kz
+H;=.}*
+H;=0'J
+H;=0,J
+H;=0/
+H;=01J
+H;=06J
+H;=07S
+H;=09
+H;=0;J
+H;=0<S
+H;=0@J
+H;=0AS
+H;=0D
+H;=0EJ
+H;=0FS
+H;=0I
+H;=0JJ
+H;=0X
+H;=0[
+H;=0^
+H;=0d0
+H;=0m
+H;=1).
+H;=1?
+H;=3R
+H;=47
+H;=4L
+H;=4W
+H;=72
+H;=80
 H;=8Z
-H;=8e
-H;=8ko
-H;=8m
-H;=9+
-H;=9c
-H;=9r
-H;=9~
-H;=;'
-H;=;/
-H;=<W
-H;=<Y
-H;=<|
-H;==-
-H;==C
-H;==f
-H;=?Q
-H;=@`
-H;=AM
-H;=AM3
-H;=AN
-H;=A[
-H;=BR~
-H;=By
-H;=C#
-H;=Ct
-H;=E1
-H;=H(y
-H;=H;	
-H;=H@	
-H;=HE	
-H;=HJ	
-H;=HL
+H;=9=
+H;=9E
+H;=9W*
+H;=9X
+H;=9_
+H;=9k+
+H;=9s
+H;=:Q
+H;=:|I
+H;=;C
+H;=;m
+H;=;s
+H;=;v
+H;=<t
+H;=>_
+H;=@$g
+H;=@3
+H;=@:s
+H;=@?
+H;=@C
+H;=@d"
+H;=@i"
+H;=@u
+H;=@v
+H;=@x
+H;=@y=
+H;=@}
+H;=@~=
+H;=Ag
+H;=Aq
+H;=Ci
+H;=Cm
+H;=E#
+H;=E&
 H;=HN
-H;=HO	
-H;=HP
-H;=HT	
-H;=HY	
-H;=HYX
-H;=H[4
-H;=H`4
-H;=Hi|
-H;=Hw]
-H;=H~
-H;=H~k
-H;=I(
-H;=JG
-H;=OY
-H;=Oc
-H;=QX
-H;=R&
-H;=R*
-H;=TSH
-H;=X)
-H;=X6
-H;=X:
-H;=X;
-H;=X?
-H;=XD
-H;=XE
-H;=XI
-H;=XN
-H;=XS
-H;=XX
-H;=Xf
-H;=Xk
-H;=Xn
-H;=Xx
-H;=Xz>
-H;=X{
-H;=X}
-H;=YG
-H;=Yh
-H;=["
-H;=[d
-H;=\ 
-H;=]_
-H;=]e
-H;=_5
-H;=_R
-H;=`/
-H;=`Q
-H;=al
-H;=bW
-H;=b`
-H;=b`H
-H;=b|
-H;=cM
-H;=cN
-H;=e_
-H;=ew
-H;=g^6
-H;=h!
-H;=h&y
-H;=h+y
-H;=h9	
-H;=h<
-H;=h>	
-H;=hC	
-H;=hH	
-H;=hJ
-H;=hM	
-H;=hR	
-H;=hW	
-H;=h^4
-H;=hc4
-H;=hk
-H;=hu]
-H;=k+
-H;=pG
-H;=pY
-H;=q)
-H;=q5
-H;=q7
-H;=qJ
-H;=qL
-H;=q_
-H;=qrO
-H;=r>H
-H;=r`
-H;=sX
-H;=t[H
-H;=u 
-H;=x#a
-H;=x3
-H;=x8
-H;=x=
-H;=x?
-H;=xB
-H;=xG
-H;=xI
-H;=xL
-H;=xO
-H;=xQ
-H;=xT
-H;=xV
-H;=x[
-H;=xe
-H;=xf
-H;=xn
-H;=xq
-H;=xx>
-H;={u
-H;=|3
-H;=}6
-H;=~{
+H;=I 
+H;=I!
+H;=I2
+H;=ID
+H;=IQ*
+H;=Id*
+H;=It
+H;=Iu
+H;=JB
+H;=K?
+H;=KF
+H;=K}
+H;=LP
+H;=L|
+H;=MP
+H;=O~
+H;=P%J
+H;=P*J
+H;=P-
+H;=P/J
+H;=P2
+H;=P4J
+H;=P5
+H;=P5S
+H;=P6
+H;=P9J
+H;=P:S
+H;=P>J
+H;=P?S
+H;=PB
+H;=PCJ
+H;=PDS
+H;=PG
+H;=PHJ
+H;=P\
+H;=Pg
+H;=Ph
+H;=Pt
+H;=Pw
+H;=P{E
+H;=Q>
+H;=QS
+H;=QY
+H;=Q{
+H;=SP
+H;=TQ
+H;=U]
+H;=Y5
+H;=YB
+H;=YD
+H;=YN
+H;=Y^*
+H;=Z0
+H;=Z7
+H;=ZL
+H;=ZW
+H;=[.
+H;=[=
+H;=[_
+H;=[j
+H;=[k
+H;=[s
+H;=\%
+H;=]N
+H;=]w
+H;=^Z
+H;=_@
+H;=`!
+H;=`"g
+H;=`1
+H;=`E
+H;=`K
+H;=`U
+H;=`W
+H;=`b"
+H;=`d
+H;=`g"
+H;=`hv
+H;=`j\
+H;=`l"
+H;=`v
+H;=`{
+H;=`|=
+H;=a#
+H;=a,
+H;=a5
+H;=a|
+H;=b>
+H;=cW
+H;=d_
+H;=ed
+H;=g	
+H;=he
+H;=i/
+H;=i2
+H;=i8
+H;=iX
+H;=iX*
+H;=il+
+H;=iv
+H;=k!
+H;=k-
+H;=k2
+H;=k9
+H;=kW
+H;=ky
+H;=m[
+H;=m\
+H;=nN
+H;=p(
+H;=p(J
+H;=p-J
+H;=p2J
+H;=p7J
+H;=p8S
+H;=p;
+H;=p<J
+H;=p=S
+H;=p@
+H;=pAJ
+H;=pBS
+H;=pE
+H;=pFJ
+H;=pJ
+H;=pKJ
+H;=pS
+H;=ph.
+H;=px
+H;=pz
+H;=qI
+H;=s 
+H;=sV
+H;=s^
+H;=su
+H;=us
+H;=v6
+H;=vP
+H;=wV
+H;=y:
+H;=yF
+H;=yR*
+H;=yT
+H;=y[
+H;=ye*
+H;=yf
+H;=zQ
+H;=zY
+H;={ 
+H;={4
+H;={5
+H;={B
+H;={V
 H;>t&H
 H;C I
 H;C r
@@ -48143,13 +48349,10 @@ HaticsType_None
 HaveItems
 HavePlayersLastWeek
 Hazhadal 			
-Hc5RD+
-Hc5bu
+Hc5.P?
+Hc58fd
 Hc8Hi
 Hc9A9
-Hc=5"
-Hc=Wo
-Hc=yr
 Hc@ A
 Hc@ H
 Hc@ I
@@ -48173,8 +48376,10 @@ HcB`H9
 HcBpD9
 HcC ;C$
 HcC ;C$tI
+HcC ;C$tIH
 HcC ;C$tK
 HcC ;C$tM
+HcC ;C$tMH
 HcC ;C$tO
 HcC ;C$u
 HcC ;C0
@@ -48546,6 +48751,7 @@ Hc{4H
 Hc{@H
 Hc{PH
 Hc~@H
+Header
 Header dump: %s
 Header | 
 HeaderConnection
@@ -48929,6 +49135,7 @@ Hit Test Children
 HitBoxSet_t
 HitBox_t
 Hitbox indexing is incorrect for set %s, hitbox %s. Hitboxes will not be setup properly.
+HoldLocation
 HomeFriendsList
 HomePosition%d
 HomeTeamIsActive
@@ -49202,6 +49409,8 @@ IcD$ 9
 IcD$ A
 IcD$ A;D$$
 IcD$ A;D$$t8I
+IcD$ A;D$$tOI
+IcD$ A;D$$tQI
 IcD$ A;D$$tS
 IcD$ A;D$$tSI
 IcD$ A;D$$thI
@@ -49426,6 +49635,7 @@ IcT$@
 IcT$@A;T$D
 IcT$@H
 IcT$@I
+IcT$@f
 IcT$HH
 IcT$HI
 IcT$P
@@ -49536,8 +49746,10 @@ Ic|$(
 Ic|$0
 Ic|$0HcS0H
 Ic|$8
+Ic|$@
 Ic|$p
 Ic}(H
+Ic},H
 Ic}0H
 Ic~8H
 IdleExpression
@@ -50695,6 +50907,7 @@ L$4E1
 L$<9H\
 L$<E)
 L$@D)
+L$@E9
 L$@L9
 L$H9CD
 L$HE1
@@ -50913,12 +51126,11 @@ Lc#A9
 Lc#D;c
 Lc#E9
 Lc#E;eLs;
-Lc%)(
-Lc%X?c
-Lc%a(
-Lc%bcM
-Lc%ls
-Lc%r|
+Lc%	f
+Lc%IZ
+Lc%J3
+Lc%[f
+Lc%~[p
 Lc&D;f
 Lc'D;g
 Lc'E)
@@ -50929,7 +51141,7 @@ Lc+D)
 Lc+D;k
 Lc+Ic
 Lc+t@
-Lc-;~
+Lc-7Jx
 Lc.D;n
 Lc/E)
 Lc/E1
@@ -50937,7 +51149,6 @@ Lc0D;p
 Lc2D;r
 Lc3D9
 Lc3D;s
-Lc5;s;
 Lc6E9
 Lc7D;w
 Lc7E)
@@ -52507,6 +52718,8 @@ MovePanelUp
 MoveRight
 MoveSpeedModifierLabel
 MoveSpeedRow
+MoveToLocation
+MoveToTarget
 MoveType_t
 MoveUp
 Movement will be relative to the camera, eg: left means screen-left
@@ -52578,6 +52791,7 @@ MutableRepeatedMessage
 Mutation
 Mutation%d
 MutationInfoTooltip
+Mutation_MapFlip
 MuteList
 Mutes certain parts of the units speech: 0 = no speech, 1 = only events, 2 = all
 MuzzleFlash
@@ -52956,6 +53170,7 @@ N23C_DOTA_Item_Faerie_Fire26CEntityInstanceEntityClassE
 N23C_DOTA_Item_HandOfMidas26CEntityInstanceEntityClassE
 N23C_DOTA_Item_MaskOfDeath26CEntityInstanceEntityClassE
 N23C_DOTA_Item_MysticStaff26CEntityInstanceEntityClassE
+N23C_DOTA_Item_PocketTower26CEntityInstanceEntityClassE
 N23C_DOTA_Item_PowerTreads26CEntityInstanceEntityClassE
 N23C_DOTA_Item_Recipe_Kaya26CEntityInstanceEntityClassE
 N23C_DOTA_Item_Recipe_Pipe26CEntityInstanceEntityClassE
@@ -55946,6 +56161,12 @@ O@D9BD
 OAuth Token, granted on success
 OAuthToken
 OAuthToken.ImplicitGrantNoPrompt#1
+OCEAN_FULL_UPDATE
+OCEAN_HOLD_FRAMESKIP
+OCEAN_RELOAD_CODE
+OCEAN_REPLAY_CORRECT_TIME
+OCEAN_SOFT_RESET
+OCEAN_WIN_GAME
 OE8O>
 OHcKXIc
 OHcK`Ic
@@ -55985,6 +56206,9 @@ O`D+w@D)
 Obtained EMS handle %u
 Obtained XMS handle %u
 OcclusionQueryIssueLayer
+OceanAnnotation
+OceanReplayCorrectTime
+OceanWinGame
 OddRow
 Offering Points
 OfficialTeam%u
@@ -57085,11 +57309,13 @@ PickRateGraph
 PickSound
 PickStat
 PickStat%u
+PickUpItem
 PickerButtonOK
 PickerVisible
 PickingActive
 PickingPlayer%d
 Pickup Item:
+PickupRune
 Ping a peer.
 Ping the specified ability (Equivalent to alt-clicking the ability in the HUD action bar)
 PingBad
@@ -57792,6 +58018,7 @@ Purchase Specific Hero Relic
 Purchase doesn't match current price sheet data
 Purchase order specified an invalid or missing item.
 PurchaseInProgressScreen
+PurchaseItem
 PurchasePlus
 PurchaseQuickbuy
 PurchaseRelicButton
@@ -58117,6 +58344,7 @@ RP: Setting CustomGameMode to %llu
 RP: Setting WatchableGameID to %llu
 RP: Setting lobby to %s
 RP: Setting party to %s
+RPC_GET_ACTUAL_INCOMING_DAMAGE
 RPGShotDown
 RPGShotDown_global_client
 RP_PAUSE
@@ -58994,6 +59222,11 @@ SCREENEFFECT_EP1_INTRO
 SCREENEFFECT_EP2_ADVISOR_STUN
 SCREENEFFECT_EP2_GROGGY
 SCRIPT UNKNOWN STATUS
+SCRIPTING_DEBUG_DRAW_BOX
+SCRIPTING_DEBUG_DRAW_CIRCLE
+SCRIPTING_DEBUG_DRAW_CLEAR
+SCRIPTING_DEBUG_DRAW_LINE
+SCRIPTING_DEBUG_DRAW_TEXT
 SCRIPT_DONE
 SCRIPT_ERROR
 SCRIPT_RUNNING
@@ -59448,6 +59681,13 @@ Script_VectorCrossProduct
 Scripted Replay Error: %s event at %d (%d) isn't farther ahead in ticks than its preceding event.
 Scripted Replay Error: Unknown script event command '%s'.
 Scripting disabled or no server running
+ScriptingDebugDrawBox
+ScriptingDebugDrawCircle
+ScriptingDebugDrawClear
+ScriptingDebugDrawLine
+ScriptingDebugDrawScreenText
+ScriptingDebugDrawText
+ScriptingDebugScreenTextPretty
 Scroll the panel down by one line.
 Scroll the panel down by one page.
 Scroll the panel left by one line.
@@ -59625,6 +59865,7 @@ SelfFocus
 SelfGameEventActive
 SelfGood
 SelfLegend
+SellItem
 Send a HTTP request.
 Send a chatwheel message. Usage: chatwheel_say <messagenum>
 Send a client-side event using gameeventmanager (only useful for a few specific events)
@@ -59800,6 +60041,7 @@ SetCameraYaw
 SetCanBeBlocked
 SetCarouselSelectedChild
 SetChildPanelsSelected
+SetCombineLockItem
 SetControlPoint
 SetControls
 SetCursorOffset
@@ -61118,8 +61360,11 @@ T$xMc
 T&hL9
 T(*fD
 T*DHc
+T--[/
+T-z]/
 T0$tD
 T7Ft	]
+T=_[/
 TAG_BAD_CHARACTERS
 TAG_TOO_LONG
 TARGET_ENGINE_MISMATCH
@@ -62071,6 +62316,7 @@ TradeResultPopup
 TradeWaitingForSession
 Tradeable
 Traditional_Chinese
+TrainAbility
 Transaction Insert
 Transaction currency does not match user's Steam Wallet currency
 Transaction denied
@@ -62234,6 +62480,7 @@ U9w<H
 U9w@H
 U9wPH
 U?y$L?
+U@8=Hob
 U@8w$H
 U@8wMH
 UF_FAIL_ANCIENT
@@ -63291,22 +63538,23 @@ W UHcG(H
 W!:P"tTUH
 W$f9W&tFL
 W%:O&t
-W%?%.
-W%f!.
+W%TI4
+W%`@4
+W%r5G
+W%~8G
 W(H92t'H
 W(HcO0H
 W(t4H
 W,:V,u
-W-HK'
 W0;V0t
 W0A;_H
 W0Hc_8A
 W0t	H
-W5{J'
+W58V.
 W8H9P
 W8HcGHM
 W8UHcG0H
-W=a@G
+W=sMs
 W@H9V@u
 WAITING FOR VSCRIPT DEBUGGER CONNECTION -- '-vscriptdebug' was provided on the command line.
 WAITING_FOR_PLAYERS
@@ -63700,7 +63948,7 @@ X(Hc@0L
 X(Optional) If true, only return the published file ids of files that satisfy this query.
 X(u)H
 X, Y, RuneType
-X-6mz
+X-Fxz
 X09X,
 X0Hc@(H
 X0Hc@8H
@@ -63710,13 +63958,11 @@ X2:jH
 X360_DST16
 X360_DST24
 X360_DST24F
-X56TJ
 X8Hc@0L
 X8Hc@@H
 X8Hc@@L
 X: %.0f Y: %.0f
-X=EO>
-X=khg
+X=uNG
 X@Hc@8L
 X@Hc@HL
 X@Hc}
@@ -63790,15 +64036,20 @@ X|A;]@
 X|A;_@
 Y D;Y$t
 Y$D;Q(t
-Y%PSt
-Y%~8{
+Y%"VT
+Y%$;"
+Y%N|{
+Y%RTu
+Y%f5B
+Y%kD(
 Y(E9^(A
 Y(Optional) Starting index to begin enumeration at. Defaults to the beginning of the list."Z
-Y-cky
+Y-#"&
+Y-#nT
+Y-rTu
 Y4E9pD
-Y5TTJ
-Y5V|U
-Y5e3T
+Y5+"&
+Y5L:B
 YD$$D
 YD$$L
 YEXfA
@@ -64054,15 +64305,16 @@ ZoomedOut
 \$`E1
 \$`fE
 \$hIcEX
+\%$Oz
 \%03o
-\%qoo
+\%QT>
+\%x_>
 \0 A9
 \0$A9
 \0(A9
 \0,A9
 \00A9]
 \08A9
-\5*2C
 \;C@|
 \C not allowed in lookbehind assertion
 \C@E1
@@ -64110,7 +64362,10 @@ ZoomedOut
 ^ HcF(L
 ^ t+H
 ^$z%u#G
+^%"4s
+^%h[c
 ^([\da-z\.-]+)\.([a-z\.]{2,6})(([\/\w\.-]*)*)(\?[^\s]*)?(#[^\s]*)?
+^-2V5
 ^0IcF8L
 ^0t'A
 ^4w1H
@@ -64946,9 +65201,9 @@ _xIcGpL
 `chunkCount' attribute is not found in the header.
 `xHc@t
 `|D;%
-`|D;%+
-`|D;%:
-`|D;%K
+`|D;%%h
+`|D;%[T
+`|D;%{K
 `|D;c
 `|D;c0
 a b c d 
@@ -64985,6 +65240,7 @@ abilityName, entityIndex
 abilityName, guideName
 abilityName, guideName, entityIndex
 abilityName, heroid
+abilitySlot
 ability_active
 ability_animation_attack
 ability_attack
@@ -65008,6 +65264,7 @@ ability_points
 ability_select
 ability_slot
 ability_target_handle
+ability_target_name
 ability_trigger
 ability_ultimate
 ability_upgrades
@@ -65093,6 +65350,11 @@ acosf@@GLIBC_2.2.5
 acquisitions
 act_as_wearable
 action
+actionDelay
+actionID
+actionLogp
+actionName
+actionType
 action_id_range
 action_num_to_grant
 action_param
@@ -65104,6 +65366,7 @@ actionpanel/center_left_wide
 actionpanel/center_right
 actionpanel/minimapborder
 actionpanel/portrait_wide
+actions
 activate_item_def
 activate_item_def:
 activate_item_defs
@@ -65200,6 +65463,7 @@ after solve err=%f
 after_series_id
 aftershock_range
 age_seconds
+agentID
 aggregate_value
 aggressive
 aghanim_description
@@ -65613,6 +65877,8 @@ attachment_type
 attachment_type_cp1
 attachmentindex
 attachmentname
+attackMove
+attackTarget
 attack_acquisition_range
 attack_anim_point
 attack_damage
@@ -65635,6 +65901,7 @@ attack_speed_slow
 attack_spill_range
 attack_spill_width
 attack_target_handle
+attack_target_name
 attackcheck
 attacker
 attacker_hero_level
@@ -65797,10 +66064,12 @@ bAddToGroup
 bAlert
 bAllow
 bBlock
+bBold
 bChainLightningConsidered
 bClampEyeAngles
 bClip3DSkyBoxNearToWorldFar
 bCraniumBasherTested
+bCurrentlyAvailable
 bDampenEyePosition
 bDestroyImmediately
 bDiffusalApplied
@@ -65839,6 +66108,7 @@ bStatusEffect
 bSuppressDamage
 bTooltip
 bUpdate
+bViewCheck
 bVisible
 bVoteUp
 bWasRunningAnim
@@ -66516,6 +66786,7 @@ burst_str_fx
 buy ( or set quickbuy with shift held ) a particular displayed row
 buy_cost
 buy_cost_deficit
+buyback
 buyback_cooldown
 buyback_cost
 buyback_gold_needed
@@ -66696,6 +66967,10 @@ carries
 carrion_swarm_cooldown_adjust
 carrion_swarm_mana_cost_adjust
 carry_type
+castLocation
+castTarget
+castToggle
+castTree
 cast_animation
 cast_radius
 cast_range
@@ -66712,6 +66987,7 @@ caster_player_id
 caster_real_name
 caster_team
 caster_title
+caster_unit_type
 casters_loaded
 casters_total
 castpoint_scepter
@@ -66818,6 +67094,7 @@ centaur_double_edge
 centaur_hoof_stomp
 centaur_khan_endurance_aura
 centaur_khan_war_stomp
+center
 center_block
 center_follow
 centered_on_book
@@ -67809,6 +68086,7 @@ countevent
 country
 country_code
 country_revenue
+courier
 courier seed
 courier slots 1
 courier slots 2
@@ -68317,6 +68595,7 @@ delete_hits
 delete_misses
 deleted_item_id
 deleteoldest
+delta
 delta_assists
 delta_deaths
 delta_denies
@@ -68430,6 +68709,7 @@ destroy_immediately
 destroy_particle
 destroy_particle_involving
 detail props
+detailedStats
 details
 dev/panorama_world_panel_default.vmat
 dev/panorama_world_panel_opaque.vmat
@@ -68511,6 +68791,7 @@ disableifoutofrange
 disablenav
 disallowed Unicode code point (>= 0xd800 && <= 0xdfff)
 disarm_duration
+disassembleItem
 disassemble_time
 discard_match_results
 disconnect #DOTA_Matchmaking_No_OverrideVPK
@@ -70124,6 +70405,7 @@ drain_pct
 drain_range_buffer
 drain_rate
 drawbackground
+dropItem
 drop_account_id
 drop_items
 drop_rate_bonus
@@ -70800,7 +71082,6 @@ fB;D*
 fC9L7
 fD9	u
 fD9 t
-fD9%t
 fD9/t0H
 fD9/t1H
 fD90t!A
@@ -72485,6 +72766,8 @@ generic_stunned
 generic_tracked
 genuine
 german
+getActualIncomingDamage
+getEstimatedDamageToTarget
 get_hits
 get_misses
 get_params
@@ -72563,6 +72846,7 @@ glowcolor
 glowrange
 glowrangemin
 glowstate
+glyph
 glyph_cooldown
 glyph_cooldown_enemy
 glyph_hotkey
@@ -73085,6 +73369,7 @@ hero_wins
 hero_wins_string
 hero_xp
 hero_xp_%s
+heroes
 heroes/icons/%s.png
 heroes/phonemes
 heroes_completed
@@ -73153,6 +73438,7 @@ hlvr_weapon_shotgun
 hmd_anchor_rotate
 hmd_anchor_rotate -90
 hmd_anchor_rotate 90
+holdLocation
 holdTime
 holdout_culling_blade
 holdout_example
@@ -73600,6 +73886,7 @@ internal error: overran compiling workspace
 internal error: previously-checked referenced subpattern not found
 internal error: unexpected repeat
 internal error: unknown opcode in find_fixedlength()
+internalAction
 internalFileAttribs
 international event drop attribute
 interp entity count
@@ -73860,6 +74147,7 @@ itemDef
 itemDef, styleIndex, heroID
 itemHeight
 itemID
+itemId
 itemKVString
 itemName
 itemPos
@@ -73989,6 +74277,7 @@ item_player_pick_percent
 item_player_stats
 item_player_win_count
 item_player_win_percent
+item_pocket_tower
 item_poor_mans_shield
 item_positions
 item_prefab
@@ -74356,7 +74645,7 @@ just happens to cross-check the results of huge numbers of
 justify_horizontal
 justify_vertical
 k A;u
-k D9-
+k D9-`
 k D;k0D
 k Mcu
 k t+E;e\M
@@ -75532,6 +75821,7 @@ lina_light_strike_array
 lina_plays_granted
 line-height
 line-through
+lineOffset
 lineOrder
 line_count
 line_items
@@ -80335,6 +80625,7 @@ maxgust
 maxgustdelay
 maxhealthpoints
 maximpacttime
+maximum
 maximumChangePerSecond
 maximumDistanceFromLine
 maximum_attack_speed
@@ -80472,6 +80763,7 @@ mingpulevel
 mingust
 mingustdelay
 minhealthdmg
+minigameConfig
 minimal
 minimap: missing icon %s
 minimap_controlledcreep
@@ -80521,6 +80813,7 @@ minimap_sideshop
 minimap_speech
 minimap_sword
 minimap_ward_obs
+minimum
 minimum_damage
 minimum_priority
 minimum_purge_duration
@@ -82194,6 +82487,9 @@ mousedx
 mousedy
 mousepanningcursorsize
 mousewheeltickcount
+moveDirectly
+moveToLocation
+moveToTarget
 move_cam_after
 move_cam_to
 move_pct_cap
@@ -82368,8 +82664,11 @@ nCompleted
 nCompletionThreshold
 nControlledUnitEnt
 nCost
+nDamage
 nDamageCategory
 nDamageTaken
+nDamageType
+nDamageTypes
 nDamageflags
 nDefIndex
 nElementType
@@ -82995,12 +83294,10 @@ o(ATL
 o(ATSH
 o(D;o8tOH
 o,ATI
-o-Px>
 o0ATI
 o0ATSH
 o4ATI
 o4ATL
-o5Nx>
 o7139EZSzRU
 o8ATI
 o8ATL
@@ -83038,6 +83335,9 @@ obsolete
 obsolete1
 obsolete2
 obtainable
+oceanAnnotation
+oceanReplayCorrectTime
+oceanWinGame
 octal value is greater than \377 in 8-bit non-UTF-8 mode
 octarine
 oculus
@@ -84540,6 +84840,7 @@ physical_source_%d
 physicsmode
 pick%d_class
 pick%d_id
+pickUpItem
 pick_ban_label
 pick_count
 pick_order
@@ -84553,6 +84854,7 @@ picker_state
 picking_player
 picks
 picks_bans
+pickupRune
 pickup_item
 pickup_rune
 pickup_team
@@ -85171,6 +85473,7 @@ pulse_interval
 pulse_type
 punct
 purchasable
+purchaseItem
 purchase_access_event
 purchase_battle_pass_levels_activate_timeout
 purchase_def
@@ -86079,6 +86382,7 @@ reward_level_1
 reward_level_2
 reward_loot_list
 reward_name
+reward_names
 reward_normal_pts
 reward_premium_pts
 reward_quantity
@@ -86474,6 +86778,13 @@ script_debug %s
 scripted_demo_restart
 scripted_scene
 scripted_sequence
+scriptingDebugDrawBox
+scriptingDebugDrawCircle
+scriptingDebugDrawClear
+scriptingDebugDrawLine
+scriptingDebugDrawScreenText
+scriptingDebugDrawText
+scriptingDebugScreenTextPretty
 scriptioH
 scripts/
 scripts/1
@@ -86705,6 +87016,7 @@ self_account_id
 self_bonus
 self_class
 self_with_wearables
+sellItem
 sell_back_seconds
 sell_price
 sell_time
@@ -86790,6 +87102,7 @@ service_list
 set item tint RGB
 set item tint rgb
 set item tint rgb 2
+setCombineLockItem
 set_action
 set_cam_pos
 set_cam_speed
@@ -87001,6 +87314,7 @@ shredder_return_chakram;shredder_return_chakram_2
 shredder_return_chakram_2
 shredder_timber_chain
 shredder_whirling_death
+shrine
 shrine_cooldown
 shrine_name
 shrink
@@ -87143,6 +87457,8 @@ slot_2
 slot_3
 slot_4
 slot_5
+slot_a
+slot_b
 slot_chosen
 slot_id
 slot_item_count
@@ -87187,6 +87503,7 @@ snake_mana_steal
 snake_scale
 snap %s
 snapValue
+snapshotData
 snapshot_file
 snd_gamevoicevolume
 snd_gamevolume
@@ -88826,6 +89143,7 @@ t Hc{(H
 t Hc{,H
 t Hc{4H
 t Ic}$H
+t Ic}(H
 t Lc+D;k
 t LcW
 t!90t
@@ -88854,7 +89172,7 @@ t"Lc#D;c
 t"Lc+E
 t"[A\]
 t"~8H
-t#;=3
+t#;=C8J
 t#H;]
 t#Hc]
 t#Hc{
@@ -88909,11 +89227,10 @@ t$@E;t$PD
 t$@tsHc
 t$D9j
 t$D;-
-t$D;-c
+t$D;-s]I
 t$D;=
-t$D;=C
 t$D;=S
-t$D;=SPV
+t$D;=c
 t$D;h,t
 t$DE+t$@E
 t$DdH
@@ -88930,6 +89247,7 @@ t$HcM
 t$HcP
 t$HcV
 t$Hc{
+t$Hc{ H
 t$Hc{$H
 t$Hc{(H
 t$Hc{,H
@@ -88945,6 +89263,7 @@ t$Hf.
 t$HfA
 t$Ic}
 t$Ic}$H
+t$Ic}(H
 t$Ic},H
 t$Ic}@H
 t$Ic~
@@ -88976,7 +89295,7 @@ t$tE+t$pE
 t$xH)
 t%;C8t 
 t%<%H
-t%D;%
+t%D;%$
 t%D;-
 t%[A\A]A^]
 t%[A\]
@@ -88985,8 +89304,8 @@ t&D:5
 t&D;%
 t&D;-
 t&D;5
-t&D;5E
-t&D;5U7g
+t&D;5U%r
+t&D;5e
 t&H;]
 t&Hcq
 t&IcD$
@@ -88994,18 +89313,19 @@ t&IcD$ A
 t&Mc<$E;|$
 t'92u
 t'9:u
-t';=/
-t';=O
-t';=o
+t';=?jl
+t';=_nl
 t'D9h,t
 t'D;%
-t'D;-.
-t'D;-N
-t'D;-n
-t'D;5
+t'D;%.
+t'D;->-y
+t'D;-^Ji
+t'D;-~Zi
+t'D;5&
+t'D;5.
 t'D;=
-t'D;=.
-t'D;=f
+t'D;=>Ih
+t'D;=v
 t'HcC
 t'Hc{
 t'Hc{ H
@@ -89032,15 +89352,16 @@ t'Lce
 t'[A\]
 t(<)u
 t(D;%
-t(D;%g
-t(D;%o
+t(D;%wFk
 t(D;-
 t(E;u
 t(HcO
+t(Hc{HH
 t(IcD$
 t(Ic}
 t(Ic}(H
 t(Ic},H
+t(Ic}0H
 t(Ic}@H
 t(Ic~
 t(Ic~ H
@@ -89048,16 +89369,18 @@ t(Ic~0H
 t(McepE;
 t(Mcu
 t(f92t=H
+t);="
 t)<%H
 t)@:5
 t)A9T8
 t)D98u
 t)D9s
 t)D:u
-t)D;%p
-t)D;-0
-t)D;-@
-t)D;=`	g
+t)D;%
+t)D;-@gH
+t)D;-P7X
+t)D;-P:i
+t)D;=pvh
 t)HcC(
 t)IcD$
 t)Lc+D;k
@@ -89065,8 +89388,9 @@ t)[A\]
 t*<*u
 t*@Hc
 t*D;%
+t*D;%)
 t*D;-
-t*D;5Y
+t*D;5i
 t*HcC
 t*HcE
 t*HcK(
@@ -89085,6 +89409,7 @@ t*fA9
 t+<\u
 t+D9s
 t+D;%
+t+D;%*]Z
 t+D;-
 t+Hc4
 t+HcC
@@ -89096,7 +89421,10 @@ t+Hc{HH
 t+Hc{LH
 t+Hc{XH
 t+Hc{\H
+t+Hc{dH
+t+Hc{hH
 t+Hc{lH
+t+Hc{pH
 t+Hc{tH
 t+Hc{xH
 t+Hc{|H
@@ -89111,8 +89439,8 @@ t+[A\A]A^]
 t+[A\]
 t+fA9
 t,(t	H
-t,D;-K
-t,D;5;
+t,D;-[
+t,D;5K
 t,D;=
 t,H9;u'
 t,HcC
@@ -89122,7 +89450,7 @@ t,Ut[K
 t,[A\]
 t-@8z
 t-D;%
-t-D;=
+t-D;=,
 t-Hc@p1
 t-HcPp1
 t-IcD$
@@ -89135,7 +89463,7 @@ t-rex
 t.D9p
 t.D:%
 t.D;%
-t.D;%m
+t.D;%}
 t.D;5
 t.IcD$
 t.Lc#I
@@ -89150,7 +89478,8 @@ t/HcC
 t/HcCp
 t/IcD$
 t/Lc%
-t/Lc%H
+t/Lc%H+m
+t/Lc%x-m
 t/Lc+
 t/Lcg`H
 t/[A\]
@@ -89207,6 +89536,7 @@ t6[A\]
 t7<.u&
 t7D9k
 t7D;.~'L
+t7HcC 
 t7Lc+M
 t7[A\A]A^]
 t7[A\]
@@ -89262,9 +89592,9 @@ tBViewEffects
 tB[A\]
 tCHcPp1
 tCHcQ8H
-tCLc%$
+tCLc%T
 tC[A\A]A^]
-tD@:595B
+tD@:5I
 tDD9k
 tDHcx D
 tDL;h L
@@ -89298,7 +89628,6 @@ tOH9u
 tOLcX
 tOO : high back rounded vowel
 tO[A\A]A^]
-tP95m
 tPA9Q ~JM
 tPHcPp1
 tPIcH8I
@@ -89340,6 +89669,7 @@ t\G9l
 t^;0~+L
 t^Mc4$E
 t^[A\]
+t`95i
 t`[A\]
 taG : voiced velar stop
 ta[A\A]A^]
@@ -89436,7 +89766,7 @@ tbHcO
 tbLcC8Ic
 tb[A\A]A^]
 tb[A\]
-tc@:545B
+tc@:5D
 tcHcC 
 tcHcQ
 tcLc@ E
@@ -89766,7 +90096,6 @@ time_last_query
 time_last_seen
 time_of_day
 time_remaining
-time_remaning
 time_since_last_message
 time_since_seen
 time_stamp
@@ -89856,6 +90185,7 @@ to missing
 to</tc
 to<pt;<0
 to[A\A]A^]
+to_allchat
 to_the_light
 toastExitDuration
 toast_ignore_hover_for_dismiss
@@ -90065,6 +90395,7 @@ trade_restriction
 trades
 trailing spaces removed from keyword
 trailing_comments
+trainAbility
 trance_duration
 tranquil_boots2_active
 tranquil_boots_active
@@ -90266,6 +90597,7 @@ type_name
 type_value
 tzHc@p
 tzHcO
+tzIcD$ D
 tz[A\A]A^]
 tzset
 tzset@@GLIBC_2.2.5
@@ -90718,6 +91050,7 @@ value { %s }
 value100percent
 value2
 value3
+valueFunction
 value_bytes
 value_float
 value_is_account_id
@@ -91787,6 +92120,7 @@ zoom_amount
 zoom_autoaim
 zoom_sensitivity_ratio
 zquoH
+ztest
 zuus1
 zuusH
 zuusM
@@ -91870,6 +92204,7 @@ z}u{I
 |$ fA
 |$ fI
 |$"E1
+|$$E+|$ E
 |$$E1
 |$$t$:
 |$'H)
@@ -92108,7 +92443,7 @@ z}u{I
 ~4Lce
 ~6HcE
 ~79ZP
-~7Lc%
+~7Lc%H
 ~8D;c`}2E
 ~<AUATSH
 ~=Hc]
