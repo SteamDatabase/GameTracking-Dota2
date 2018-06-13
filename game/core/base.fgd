@@ -654,7 +654,8 @@
 	MinSpawnDistance(integer) : "Minimum spawn distance from player" : 0 : "The spawn destination node distance to the player will have to be further or equal than this value."
 
 	MaxNPCCount(integer) : "Num. of NPCs" : 1 : "Number of NPCs that will spawn before this spawner is exhausted."
-	SpawnFrequency(string) : "Frequency" : "5" : "How often (in seconds) a new NPC will be spawned. If set to -1, a new NPC will be made when the last NPC dies."
+	SpawnFrequency(integer) : "Frequency" : 5 : "How often (in seconds) a new NPC will be spawned. If set to -1, a new NPC will be made when the last NPC dies."
+	RetryFrequency(integer) : "Retry Frequency" : -1 : "How long (in seconds) to wait before trying again after failing to spawn an NPC."
 	MaxLiveChildren(integer) : "Max Live NPCs" : 5 : "Maximum number of live children allowed at any one time (new ones will not be made until one dies). If set to -1, no limit is applied."
 	HullCheckMode(Choices) : "Hull Check Mode" : 0 : "How NPC's hull should be checked at spawn destination?" =
 	[
@@ -1080,31 +1081,33 @@
 	]	
 	opvarValue(float) : "OpVar Float" : "1.0" : "Value to set the OpVar to"
 	opvarValueString(string) : "OpVar String" : "null" : "String to set the OpVar to"
+	opvarIndex(integer) : "OpVar Index" : "0" : "Index of the OpVar to set"
 	setOnSpawn(boolean) : "Set on Spawn" : 0 : "Set the opvar upon spawning"
 	
 	input SetStackName(string) : "Change the target stack name"
 	input SetOperatorName(string) : "Change the target operator name"
 	input SetOpvarName(string) : "Change the target opvar name"	
+	input SetOpvarIndex(integer) : "Change the target opvar index"	
 	input ChangeOpvarValue(float) : "Change the value of the OpVar (does not set it in the stack)"
 	input SetOpvar(void) : "Set the OpVar value in the stack"
 ]
 
-@PointClass base(Targetname) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) = snd_opvar_set_point :
-	"Sets an opvar value on a library stack"
-[
+@BaseClass = SndOpvarSetPointBase
+[ 
 	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
 	operatorName(string) : "Operator Name" : "" : "The name of the operator the OpVar is in"
 	opvarName(string) : "OpVar Name" : "" : "The name of the OpVar to change"
 	opvarArrayIndex(integer) : "OpVar Index" : "" : "Index of the OpVar array to set"
-	distanceMin(float) : "Minimum Distance" : "5.0" : "Minimum distance to map the OpVar value to"
-	distanceMax(float) : "Maximum Distance" : "25.0" : "Maximum distance to map the OpVar value to"
 	distanceMapMin(float) : "Distance Map Minimum" : "" : "Minimum value to map distance to"
 	distanceMapMax(float) : "Distance Map Maximum" : "" : "Maximum value to map distance to"
 	occlusionRadius(float) : "Occlusion Radius" : "" : "Size of the occlusion sphere"
 	occlusionMin(float) : "Minimum Occlusion" : "" : "Occlusion value when fully occluded"
 	occlusionMax(float) : "Maximum Occlusion" : "" : "Occlusion value when un-occluded"
+	setToValueOnDisable(bool) : "Set OpVar value when disabled" : 0
+	disabledValue(float) : "Set to value on disable" : "0.0" : "Value to set the OpVar index to when disabled"
+	startDisabled(bool) : "Start Disabled" : 0
+	autoDisable(bool) : "Disable when out of range" : 0
 	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity to check distance/occlusion from"
-	StartDisabled(bool) : "Start Disabled" : 0
 	
 	input SetStackName(string) : "Change the target stack name"
 	input SetOperatorName(string) : "Change the target operator name"
@@ -1113,6 +1116,27 @@
 	input SetSourceEntity(string) : "Set the name of the entity to check distance/occlusion from. This check will follow the entity as it moves."
 	input Enable(void) : "Enable the entity"
 	input Disable(void) : "Disable the entity"
+]
+
+@BaseClass = SndOpvarSetPointBaseDistance
+[ 
+	distanceMin(float) : "Minimum Distance" : "5.0" : "Minimum distance to map the OpVar value to"
+	distanceMax(float) : "Maximum Distance" : "25.0" : "Maximum distance to map the OpVar value to"
+]
+
+@PointClass base( Targetname, SndOpvarSetPointBaseDistance, SndOpvarSetPointBase ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) = snd_opvar_set_point :
+	"Sets an opvar value on a library stack"
+[
+]
+
+@PointClass base( Targetname, SndOpvarSetPointBase ) iconsprite("editor/snd_opvar_set.vmat") box_world_aligned( box_inner_mins, box_inner_maxs ) box_world_aligned( box_outer_mins, box_outer_maxs ) = snd_opvar_set_aabb :
+	"Sets an opvar value on a library stack"
+[	
+	
+	box_inner_mins(vector) : "Box Inner Mins" : "-32 -32 -32"
+	box_inner_maxs(vector) : "Box Inner Maxs" : "32 32 32"	
+	box_outer_mins(vector) : "Box Outer Mins" : "-64 -64 -64"
+	box_outer_maxs(vector) : "Box Outer Maxs" : "64 64 64"
 ]
 
 
@@ -1259,6 +1283,8 @@
 	percent_target(float) : "Target Brightness Percent" : "-1.0" : "Set a custom brightness target to go along with 'Target Bright Pixel Percentage'. (-1 for default engine behavior)"
 	rate(float) : "Rate" : "2.0"
 	master(boolean) 	: "Master"	: 0 : "The master tonemap controller for the map presents the default values to use. Will be used initially and whenever active tonemaps are disabled." 
+	bloom_strength( float ) : "Bloom Strength" : "-1" : "Sets bloom strength / response  (-1 for default engine behavior. Nominal value is 0.5)"
+	bloom_start_value( float ) : "Bloom Start Value" : "-1" : "Sets the pixel brightness to start blooming (-1 for default engine behavior. Nominal value is 1.0)"
 
 	input Enable(void) : "Enables this tonemap controller"
 	input Disable(void) : "Enables this tonemap controller"
@@ -1269,6 +1295,9 @@
 	input SetMinAverageLuminosity(float) : "Sets average luminosity for this tonemap controller"
 	input SetRate(float) : "Sets rate of adjustment for this tonemap controller"
 	input SetAccelerateExposureDown(float) : "Sets accelerate exposure down for this tonemap controller"
+	input SetBloomStrength(float) : "Sets bloom strength / response. -1.0 returns to default"
+	input SetBloomStartValue(float) : "Sets the pixel brightness to start blooming. -1.0 returns to default"
+	
 ]
 
 
@@ -3920,6 +3949,7 @@
 	output OnClose(void) : "Fired when the door is told to close."
 	output OnOpen(void) : "Fired when the door is told to open."
 	output OnFullyOpen(void) : "Fired when the door reaches the fully open position."
+	output OnAjarOpen(void) : "Fired when the door is ajar and told to open."
 	output OnFullyClosed(void) : "Fired when the door reaches the fully closed position."
 	output OnBlockedClosing(void) : "Fired when the door is blocked while closing."
 	output OnBlockedOpening(void) : "Fired when the door is blocked while opening."
@@ -5379,6 +5409,8 @@
 	// Inputs
 	input SetAngularVelocity(float) : "Set angular velocity around the hinge (motor) in deg/sec"
 	input SetHingeFriction(float) : "Set Motor Friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
+	input SetMinLimit(float) : "Set the minimum hinge angle (degrees)"
+	input SetMaxLimit(float) : "Set the maximum hinge angle (degrees)"
 	input TurnMotorOn(void) : "Turn Motor On, use 0 target velocity to turn on the friction"
 	input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
 	input SetMotorTorqueFactor(float) : "Set Motor torque factor, dimentionless, alternative to setting torque directly in Newton*meters, 1.0 = resist gravity"
@@ -5420,6 +5452,8 @@
 	// Inputs
 	input SetAngularVelocity(float) : "Set angular velocity around the hinge (motor) in deg/sec"
 	input SetHingeFriction(float) : "Set Motor Friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
+	input SetMinLimit(float) : "Set the minimum hinge angle (degrees)"
+	input SetMaxLimit(float) : "Set the maximum hinge angle (degrees)"
 	input TurnMotorOn(void) : "Turn Motor On, use 0 target velocity to turn on the friction"
 	input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
 	input SetMotorTorqueFactor(float) : "Set Motor torque factor, dimentionless, alternative to setting torque directly in Newton*meters, 1.0 = resist gravity"
@@ -7021,15 +7055,6 @@
 	
 ]
 
-@PointClass base(Targetname, DamageFilter)  iconsprite("editor/game_event_listener.vmat") = logic_gameevent_listener:
-	"An entity that listens to game events and fires off an output when the named event it fired"
-[
-	gameeventname(string) : "Game Event Name"
-	gameeventitem(string) :	"Item Name"
-	output OnEventFired(void) : "Fire an output when the named event fires"	
-]
-
-
 
 @PointClass base(Targetname, Parentname) editormodel("models/editor/spot.vmdl") frustum(lightfov, nearz, farz, lightcolor, -1) = env_projectedtexture :
 	"Projected texture entity, used for things like flashlights."
@@ -7357,6 +7382,7 @@
 
 	input ShowHint(string) : "Start showing the hint. If an entity name is passed as a parameter, the hint is shown only to that entity."	
 	input EndHint(void) : "Stop showing the hint if it hasn't already timed out."
+	input SetTargetPlayerToActivator( void ) : "Set the player that should receive this hint to the activator of this input. Only necessary to use this if the player isn't the activator of the ShowHint input. You shouldn't use !player for this, because that only works in singleplayer, and the point of this is to handle multiple players. Instead, fire this input from an output of the entity that the target player activated to initiate the series of events that caused you to want to show them this hint."
 ]
 
 @PointClass base(Targetname) = func_timescale :

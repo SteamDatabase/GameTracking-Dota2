@@ -52,6 +52,24 @@ RunSequentialActions.prototype.update = function ()
 
 	return false;
 }
+RunSequentialActions.prototype.finish = function ()
+{
+	while ( this.currentActionIndex < this.actions.length )
+	{
+		if ( !this.currentActionStarted )
+		{
+			this.actions[this.currentActionIndex].start();
+			this.currentActionStarted = true;
+
+			this.actions[this.currentActionIndex].update();
+		}
+
+		this.actions[this.currentActionIndex].finish();
+
+		this.currentActionIndex++;
+		this.currentActionStarted = false;
+	}
+}
 
 
 // Action to run multiple actions all at once. The action is complete once all sub actions are done.
@@ -91,6 +109,17 @@ RunParallelActions.prototype.update = function ()
 	}
 
 	return anyTicking;
+}
+RunParallelActions.prototype.finish = function ()
+{
+	for ( var i = 0; i < this.actions.length; ++i )
+	{
+		if ( !this.actionsFinished[ i ] )
+		{
+			this.actions[ i ].finish();
+			this.actionsFinished[ i ] = true;
+		}
+	}
 }
 
 // Action to rum multiple actions in parallel, but with a slight stagger start between each of them
@@ -437,6 +466,36 @@ AnimateProgressBarAction.prototype.update = function ()
 AnimateProgressBarAction.prototype.finish = function ()
 {
 	this.progressBar.value = this.endValue;
+}
+
+
+// Action to animate a progress bar	with middle
+function AnimateProgressBarWithMiddleAction( progressBar, startValue, endValue, seconds )
+{
+	this.progressBar = progressBar;
+	this.startValue = startValue;
+	this.endValue = endValue;
+	this.seconds = seconds;
+}
+AnimateProgressBarWithMiddleAction.prototype = new BaseAction();
+AnimateProgressBarWithMiddleAction.prototype.start = function ()
+{
+	this.startTimestamp = Date.now();
+	this.endTimestamp = this.startTimestamp + this.seconds * 1000;
+}
+AnimateProgressBarWithMiddleAction.prototype.update = function ()
+{
+	var now = Date.now();
+	if ( now >= this.endTimestamp )
+		return false;
+
+	var ratio = ( now - this.startTimestamp ) / ( this.endTimestamp - this.startTimestamp );
+	this.progressBar.uppervalue = this.startValue + ( this.endValue - this.startValue ) * ratio;
+	return true;
+}
+AnimateProgressBarWithMiddleAction.prototype.finish = function ()
+{
+	this.progressBar.uppervalue = this.endValue;
 }
 
 

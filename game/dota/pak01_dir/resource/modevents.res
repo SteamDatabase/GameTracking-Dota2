@@ -521,6 +521,12 @@
 		"target" 			"short"
 		"channel_time"		"float"	
 	}
+	"dota_holdout_revive_eliminated"
+	{
+		"caster" 			"short"
+		"target" 			"short"
+		"channel_time"		"float"	
+	}
 	"dota_player_killed"
 	{
 		"PlayerID"		"short"

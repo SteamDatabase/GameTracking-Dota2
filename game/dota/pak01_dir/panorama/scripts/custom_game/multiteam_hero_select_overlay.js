@@ -89,20 +89,38 @@ function UpdateTimer()
 
 (function()
 {
+	var bLargeGame = Game.GetAllPlayerIDs().length >= 12;
+
 	var localPlayerTeamId = Game.GetLocalPlayerInfo().player_team_id;
 	var first = true;
 	var teamsContainer = $("#HeroSelectTeamsContainer");
+	var teamsContainer2 = $("#HeroSelectTeamsContainer2");
 	$.CreatePanel( "Panel", teamsContainer, "EndSpacer" );
+	$.CreatePanel( "Panel", teamsContainer2, "EndSpacer" );
 	
-	var timerPanel = $.CreatePanel( "Panel", teamsContainer, "TimerPanel" );
+	var timerPanel = $.CreatePanel( "Panel", $.GetContextPanel(), "TimerPanel" );
 	timerPanel.BLoadLayout( "file://{resources}/layout/custom_game/multiteam_hero_select_overlay_timer.xml", false, false );
 
+	var nTeamsCreated = 0;
+	var nTeams = Game.GetAllTeamIDs().length
+	$.Msg( nTeams );
 	for ( var teamId of Game.GetAllTeamIDs() )
 	{
-		$.CreatePanel( "Panel", teamsContainer, "Spacer" );
+		var teamPanelToUse = null;
+		if ( bLargeGame && nTeamsCreated >= ( nTeams / 2 ) )
+		{
+			teamPanelToUse = teamsContainer2;
+		}
+		else
+		{
+			teamPanelToUse = teamsContainer;
+			
+		}
+
+		$.CreatePanel( "Panel", teamPanelToUse, "Spacer" );
 
 		var teamPanelName = "team_" + teamId;
-		var teamPanel = $.CreatePanel( "Panel", teamsContainer, teamPanelName );
+		var teamPanel = $.CreatePanel( "Panel", teamPanelToUse, teamPanelName );
 		teamPanel.BLoadLayout( "file://{resources}/layout/custom_game/multiteam_hero_select_overlay_team.xml", false, false );
 		var teamName = teamPanel.FindChildInLayoutFile( "TeamName" );
 		if ( teamName )
@@ -123,7 +141,7 @@ function UpdateTimer()
 		{
 			var teamColor = GameUI.CustomUIConfig().team_colors[ teamId ];
 			teamColor = teamColor.replace( ";", "" );
-			var gradientText = 'gradient( linear, 0% 0%, 0% 100%, from( #00000000 ), to( ' + teamColor + '40 ) );';
+			var gradientText = 'gradient( linear, 0% 0%, 0% 100%, from( ' + teamColor + '40  ), to( #00000000 ) );';
 //			$.Msg( gradientText );
 			teamGradient.style.backgroundColor = gradientText;
 		}
@@ -142,9 +160,11 @@ function UpdateTimer()
 		{
 			teamPanel.AddClass( "not_local_player_team" );
 		}
+		nTeamsCreated = nTeamsCreated + 1;
 	}
 
 	$.CreatePanel( "Panel", teamsContainer, "EndSpacer" );
+	$.CreatePanel( "Panel", teamsContainer2, "EndSpacer" );
 
 	OnUpdateHeroSelection();
 	GameEvents.Subscribe( "dota_player_hero_selection_dirty", OnUpdateHeroSelection );
