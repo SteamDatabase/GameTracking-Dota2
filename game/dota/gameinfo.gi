@@ -39,6 +39,7 @@
 Game dota/addons/metamod
 Game dota/addons/metamod
 Game dota/addons/metamod
+Game dota/addons/metamod
 			// *LANGUAGE* will be replaced with the actual language name. If not running a specific language, these paths will not be mounted
 			Game_Language		dota_*LANGUAGE*
 
