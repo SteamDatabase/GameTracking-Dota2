@@ -115,6 +115,18 @@ _G.VictoryLines =
 	"announcer_ann_custom_victory_05", -- purple
 }
 
+_G.TeamDefeatLines =
+{
+	"announcer_ann_custom_defeated_02", -- yellow
+	"announcer_ann_custom_defeated_04", -- orange
+	"announcer_ann_custom_defeated_06", -- blue
+	"announcer_ann_custom_defeated_10", -- green
+	"announcer_ann_custom_defeated_08", -- brown
+	"announcer_ann_custom_defeated_09", -- cyan
+	"announcer_ann_custom_defeated_07", -- olive
+	"announcer_ann_custom_defeated_05", -- purple
+}
+
 --------------------------------------------------------------------------------
 
 function CCavern:FireLaugh( laughUnit )

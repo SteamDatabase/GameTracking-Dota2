@@ -369,6 +369,7 @@ function CCavern:OnTeamDefeated( nTeam )
 	end
 	print( "Team " .. nTeam .. " has finished in position " .. self.nNextTeamFinishPosition .. " and earned " .. nBattlePoints )
 	
+	self:PlayAnnouncerTeamDefeatLine( nTeam )
 	
 	data["finish_position"] = self.nNextTeamFinishPosition
 	CustomGameEventManager:Send_ServerToTeam( nTeam, "on_team_defeated", data ) 
@@ -585,12 +586,12 @@ function CCavern:OnPlayerOwnedNPCEnteredRoom( Room, NPC )
 	
 	for nDir=CAVERN_PATH_DIR_NORTH,CAVERN_PATH_DIR_WEST do
 		local Neighbor = Room:GetNeighboringRoom( nDir )
-		if Neighbor and Neighbor ~= Room then
+		if Neighbor and Neighbor ~= Room and Neighbor:IsDestroyedByRoshan() == false then
 			Neighbor:GenerateDoodads()
 		end
 	end
 
-	if Room:HasEncounterStarted() == false then
+	if Room:HasEncounterStarted() == false and Room:IsDestroyedByRoshan() == false then
 		Room:GenerateDoodads()
 		Room:StartEncounter()
 	end

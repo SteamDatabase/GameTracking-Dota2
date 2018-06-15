@@ -211,7 +211,7 @@ function CCavern:SetupGameRules()
 	GameRules:SetHeroSelectionTime( 60.0 )
 	GameRules:SetStrategyTime( 0.0 )
 	GameRules:SetShowcaseTime( 0.0 )
-	GameRules:SetPreGameTime( 30.0 )
+	GameRules:SetPreGameTime( 45.0 )
 	GameRules:SetPostGameTime( 45.0 )
 	GameRules:SetTreeRegrowTime( 300.0 )
 	GameRules:SetStartingGold( CAVERN_STARTING_GOLD )
@@ -1163,6 +1163,35 @@ function CCavern:PlayAnnouncerVictoryLine( nTeamID )
 	assert( szVictoryLine ~= nil, "ERROR: CCavern:PlayAnnouncerVictoryLine -- szVictoryLine is nil" )
 
 	EmitAnnouncerSound( szVictoryLine )
+end
+
+--------------------------------------------------------------------------------
+
+function CCavern:PlayAnnouncerTeamDefeatLine( nTeamID )
+
+	local szTeamDefeatLine = nil
+
+	if nTeamID == DOTA_TEAM_CUSTOM_1 then
+		szTeamDefeatLine = TeamDefeatLines[ 1 ]
+	elseif nTeamID == DOTA_TEAM_CUSTOM_2 then
+		szTeamDefeatLine = TeamDefeatLines[ 2 ]
+	elseif nTeamID == DOTA_TEAM_CUSTOM_3 then
+		szTeamDefeatLine = TeamDefeatLines[ 3 ]
+	elseif nTeamID == DOTA_TEAM_CUSTOM_4 then
+		szTeamDefeatLine = TeamDefeatLines[ 4 ]
+	elseif nTeamID == DOTA_TEAM_CUSTOM_5 then
+		szTeamDefeatLine = TeamDefeatLines[ 5 ]
+	elseif nTeamID == DOTA_TEAM_CUSTOM_6 then
+		szTeamDefeatLine = TeamDefeatLines[ 6 ]
+	elseif nTeamID == DOTA_TEAM_CUSTOM_7 then
+		szTeamDefeatLine = TeamDefeatLines[ 7 ]
+	elseif nTeamID == DOTA_TEAM_CUSTOM_8 then
+		szTeamDefeatLine = TeamDefeatLines[ 8 ]
+	end
+
+	assert( szTeamDefeatLine ~= nil, "ERROR: CCavern:PlayAnnouncerTeamDefeatLine -- szTeamDefeatLine is nil" )
+
+	EmitAnnouncerSound( szTeamDefeatLine )
 end
 
 --------------------------------------------------------------------------------
