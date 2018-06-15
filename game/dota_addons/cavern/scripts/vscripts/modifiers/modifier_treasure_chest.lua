@@ -204,13 +204,13 @@ function modifier_treasure_chest:ChooseTreasureRewards( hPlayerHero, hTreasureEn
 
 	local TreasureLevelDrops =
 	{
-		{ 1, 0, 0, 1 }, -- tier 1
-		{ 2, 1, 1, 2 }, -- tier 2
-		{ 3, 2, 2, 3 }, -- etc
-		{ 4, 3, 3, 4 },
-		{ 5, 4, 4, 5 }
+		{ 1, 0, 0 }, -- tier 1
+		{ 2, 1, 1 }, -- tier 2
+		{ 3, 2, 2 }, -- etc
+		{ 4, 3, 3 },
+		{ 5, 4, 4 }
 	}
-	local ItemDropChances = { 0.8, 0.4, 0.2, 0.1 }
+	local ItemDropChances = { 0.8, 0.4, 0.2 }
 
 	self.flSpawnTime = RandomFloat( 0.25, 0.75 )
 
@@ -224,7 +224,7 @@ function modifier_treasure_chest:ChooseTreasureRewards( hPlayerHero, hTreasureEn
 	if self.nTreasureType == CAVERN_TREASURE_TYPE_SPECIAL then
 		nTotalGold = nTotalGold * 2
 		flDynamiteChance = 0.75
-		ItemDropChances = { 1.0, 0.8, 0.4, 0.2 }
+		ItemDropChances = { 1.0, 0.8, 0.4 }
 		fCheeseChance = SpecialChestCheeseChances[ self.nTreasureLevel ]
 	end
 
@@ -246,7 +246,7 @@ function modifier_treasure_chest:ChooseTreasureRewards( hPlayerHero, hTreasureEn
 	table.insert( ItemDrops, "item_health_potion" )
 	table.insert( ItemDrops, "item_mana_potion" )
 
-	for i = 1,4 do
+	for i = 1,3 do
 		local nTreasureLevel = TreasureLevelDrops[self.nTreasureLevel][i]
 
 		local fRandRoll = RandomFloat( 0, 1 )	

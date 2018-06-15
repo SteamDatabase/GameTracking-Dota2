@@ -21,6 +21,8 @@ function modifier_roshan_cavern:CheckState()
 		state[ MODIFIER_STATE_NO_HEALTH_BAR ] = true
 		state[ MODIFIER_STATE_INVULNERABLE ] = true
 		state[ MODIFIER_STATE_OUT_OF_GAME ] = true
+		state[ MODIFIER_STATE_DISARMED ] = true
+		
 		state[ MODIFIER_STATE_PROVIDES_VISION ] = false
 	end
 	

@@ -17,7 +17,7 @@ do
 	../.support/vpktool "$file" > "$baseFile"
 done <   <(find "game/dota/maps/" -type f -name "*.vpk" -print0)
 
-./dump.sh
+#./dump.sh
 
 FixUCS2
 

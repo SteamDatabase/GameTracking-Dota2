@@ -314,6 +314,27 @@ function CCavern:OnHeroDefeated( Hero )
 		gameEvent["int_value"] = CAVERN_BP_REWARD_ELIMINATION
 		gameEvent["message"] = "#Cavern_PlayerEliminated"
 		FireGameEvent( "dota_combat_event_message", gameEvent )
+
+		if CreditNPC:IsOwnedByAnyPlayer() then
+			local nEliminatedHeroLevel = Hero:GetLevel()
+			local nEliminationXP = ELIMINATED_HERO_XP_REWARD[ nEliminatedHeroLevel ]
+
+			local HeroesToReward = {}
+			local nRewardTeam = CreditNPC:GetTeamNumber()
+			for _,Hero in pairs( HeroList:GetAllHeroes() ) do
+				if (Hero ~= nil) and Hero:IsRealHero() and (not Hero:IsTempestDouble()) and (Hero:GetTeamNumber() == nRewardTeam) then
+					--printf("adding reward hero %s %s", Hero, Hero:GetName())
+					table.insert( HeroesToReward, Hero )
+				end
+			end
+
+			local nXPPerHero = math.ceil( nEliminationXP / #HeroesToReward )
+
+			for _,RewardHero in pairs( HeroesToReward ) do
+				--printf( "adding %d xp to hero %s", nXPPerHero, RewardHero:GetName() )
+				RewardHero:AddExperience( nXPPerHero, DOTA_ModifyXP_HeroKill, false, true )
+			end
+		end
 	else
 		local gameEvent = {}
 		gameEvent["player_id"] = Hero:GetPlayerID()
@@ -332,22 +353,43 @@ function CCavern:OnHeroDefeated( Hero )
 		self:OnTeamDefeated( Hero:GetTeamNumber() )
 	end
 
-	local nGoldCarried = PlayerResource:GetGold( Hero:GetPlayerID() )
-	if nGoldCarried > 0 then
-		--print( killedHero:GetUnitName() .. " just dropped " .. nGoldCarried .. " gold!" )
-		LaunchGoldBag( nGoldCarried/2, Hero:GetAbsOrigin() )
-
-		PlayerResource:SetGold( Hero:GetPlayerID(), 0, true )
-		PlayerResource:SetGold( Hero:GetPlayerID(), 0, false )
-	end
+	local SortedItems = {}
+	local nGoldToDrop = 0
 
 	for slot=0,DOTA_ITEM_SLOT_9 do
 		local item = Hero:GetItemInSlot( slot )
 		if item ~= nil then
-			Hero:DropItemAtPositionImmediate( item, Hero:GetAbsOrigin() )
-			item:LaunchLoot( false, 125, 0.75, Hero:GetAbsOrigin() + RandomVector( RandomFloat( 150, 300 ) ) )
+			table.insert( SortedItems, item )
 		end
 	end
+
+	table.sort( SortedItems, 
+		function(a,b)
+			return a:GetCost() > b:GetCost()
+		end
+	)
+
+	for i,item in pairs(SortedItems) do
+		if i <= 3 then
+			--printf("dropping %s worth %s", item:GetName(), item:GetCost())
+			Hero:DropItemAtPositionImmediate( item, Hero:GetAbsOrigin() )
+			item:LaunchLoot( false, 125, 0.75, Hero:GetAbsOrigin() + RandomVector( RandomFloat( 150, 300 ) ) )
+		else
+			--printf("converting %s worth %s", item:GetName(), item:GetCost())
+			nGoldToDrop = nGoldToDrop + item:GetCost() / 2
+		end
+	end
+
+	nGoldToDrop = nGoldToDrop + PlayerResource:GetGold( Hero:GetPlayerID() ) / 2
+
+	if nGoldToDrop > 0 then
+		--print( killedHero:GetUnitName() .. " just dropped " .. nGoldToDrop .. " gold!" )
+		LaunchGoldBag( nGoldToDrop, Hero:GetAbsOrigin() )
+		PlayerResource:SetGold( Hero:GetPlayerID(), 0, true )
+		PlayerResource:SetGold( Hero:GetPlayerID(), 0, false )
+	end
+
+	
 end
 
 ---------------------------------------------------------

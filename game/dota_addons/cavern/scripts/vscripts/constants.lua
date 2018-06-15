@@ -161,3 +161,32 @@ _G.DestructibleGateNames =
 	"npc_dota_cavern_gate_destructible_tier2",
 	"npc_dota_cavern_gate_destructible_tier3",
 }
+
+_G.ELIMINATED_HERO_XP_REWARD =
+{
+	200,
+	400,
+	480,
+	600,
+	620,
+	640,
+	660,
+	680,
+	800,
+	820,
+	840,
+	900,
+	1225,
+	1250,
+	1275,
+	1300,
+	1325,
+	1400,
+	1490,
+	1500,
+	1750,
+	2000,
+	2250,
+	2500,
+	2750,
+}

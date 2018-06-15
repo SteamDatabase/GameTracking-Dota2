@@ -27,6 +27,7 @@ function modifier_antechamber_start:CheckState()
 	local state = {}
 
 	state[ MODIFIER_STATE_SILENCED ] = true
+	state[ MODIFIER_STATE_MUTED ] = true
 	
 	return state
 end

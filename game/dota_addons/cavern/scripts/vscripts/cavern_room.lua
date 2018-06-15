@@ -377,6 +377,10 @@ function CCavernRoom:StartEncounter()
 	if self:IsDestroyedByRoshan() == true then
 		return
 	end
+
+	if GameRules:State_Get() < DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
+		return
+	end
 	
 	if self.ActiveEncounter ~= nil and self:HasEncounterStarted() == false and self:IsEncounterCleared() == false and self.ActiveEncounter:Start() then
 	--	printf( "Starting encounter \"%s\" in Room %d", self.szSelectedEncounterName, self.nRoomID )	
