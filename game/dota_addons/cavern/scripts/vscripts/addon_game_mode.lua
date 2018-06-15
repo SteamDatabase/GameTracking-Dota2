@@ -1038,8 +1038,9 @@ function CCavern:CheckForDefeat()
 				nTeamKills = nTeamKills + PlayerResource:GetKills( Hero:GetPlayerOwnerID() )
 				nTeamDeaths = nTeamDeaths + PlayerResource:GetDeaths( Hero:GetPlayerOwnerID() )
 				nTeamNetWorth = nTeamNetWorth + PlayerResource:GetNetWorth( Hero:GetPlayerOwnerID() )
+				local bConnected = PlayerResource:GetConnectionState( Hero:GetPlayerOwnerID() ) == DOTA_CONNECTION_STATE_CONNECTED
 				self.Heroes[Hero:GetPlayerOwnerID()] = Hero
-				if ( Hero:IsAlive() or Hero:IsReincarnating() ) and not Hero:HasOwnerAbandoned() then
+				if ( Hero:IsAlive() or Hero:IsReincarnating() ) and not Hero:HasOwnerAbandoned() and bConnected then
 					nTeamHeroesAlive = nTeamHeroesAlive + 1
 					self.LivingHeroes[Hero:GetPlayerOwnerID()] = Hero
 				end
