@@ -208,7 +208,7 @@ function CCavern:SetupGameRules()
 	end
 	
 	GameRules:SetHeroRespawnEnabled( false )	
-	GameRules:SetHeroSelectionTime( 60.0 )
+	GameRules:SetHeroSelectionTime( 30.0 )
 	GameRules:SetStrategyTime( 0.0 )
 	GameRules:SetShowcaseTime( 0.0 )
 	GameRules:SetPreGameTime( 45.0 )
@@ -1529,6 +1529,24 @@ function CCavern:RemoveTombstoneVisionDummy( hHero )
 		UTIL_Remove( hHero.hTombstoneVisionDummy )
 	end
 end
+
+---------------------------------------------------------------------------
+
+function CCavern:FindPathablePositionNearby( vSourcePos, nMinDistance, nMaxDistance )
+	local vPos = vSourcePos + RandomVector( nMinDistance, nMaxDistance )
+
+	local nAttempts = 0
+	local nMaxAttempts = 7
+
+	while ( ( not GridNav:CanFindPath( vSourcePos, vPos ) ) and ( nAttempts < nMaxAttempts ) ) do
+		vPos = vSourcePos + RandomVector( nMinDistance, nMaxDistance )
+		nAttempts = nAttempts + 1
+	end
+
+	return vPos
+end
+
+---------------------------------------------------------------------------
 
 
 ---------------------------------------------------------------------------

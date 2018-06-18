@@ -45,7 +45,7 @@ function CCavern:AddResultToSignOut()
 	self.SignOutTable["game_time"] = GameRules:GetGameTime()
 
 	for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
-		if PlayerResource:IsValidPlayerID( nPlayerID ) then
+		if PlayerResource:IsValidPlayerID( nPlayerID ) and self.EventMetaData[nPlayerID] ~= nil then
 			local PlayerStats = {}
 			PlayerStats["player_id"] = nPlayerID
 			PlayerStats["steam_id"] = PlayerResource:GetSteamID( nPlayerID )
@@ -373,7 +373,8 @@ function CCavern:OnHeroDefeated( Hero )
 		if i <= 3 then
 			--printf("dropping %s worth %s", item:GetName(), item:GetCost())
 			Hero:DropItemAtPositionImmediate( item, Hero:GetAbsOrigin() )
-			item:LaunchLoot( false, 125, 0.75, Hero:GetAbsOrigin() + RandomVector( RandomFloat( 150, 300 ) ) )
+			local vItemPos = self:FindPathablePositionNearby( Hero:GetAbsOrigin(), 100, 300 )
+			item:LaunchLoot( false, 125, 0.75, vItemPos )
 		else
 			--printf("converting %s worth %s", item:GetName(), item:GetCost())
 			nGoldToDrop = nGoldToDrop + item:GetCost() / 2

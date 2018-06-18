@@ -18,10 +18,19 @@ function pendulum_trap:OnChannelThink( flInterval )
 			self.attachAttack3 = self:GetCaster():ScriptLookupAttachment( "attach_rightblade" )
 		end
 
+		-- We're checking which part of the pendulum_swing_loop animation we're in.
 		local flCycle = self:GetCaster():GetCycle()
-		if ( flCycle > 0.15 and flCycle < 0.28 ) or ( flCycle > 0.70 and flCycle < 0.83 ) then
-			local Locations = {  self:GetCaster():GetAttachmentOrigin( self.attachAttack2 ), self:GetCaster():GetAttachmentOrigin( self.attachAttack3 )}
-			for i=1,#Locations do 
+		local bDamagePathOutgoing = ( flCycle > 0.15 and flCycle < 0.28 )
+		local bDamagePathReturning = ( flCycle > 0.70 and flCycle < 0.83 )
+
+		if bDamagePathOutgoing or bDamagePathReturning then
+			if ( flCycle > 0.15 and flCycle < 0.16 ) or ( flCycle > 0.70 and flCycle < 0.71 ) then
+				-- Ugly: we're relying on the speed of the pendulum and the length of our channelthink interval in order to not play this sound more than once per outgoing or returning swing
+				EmitSoundOn( "Pendulum.Swing", self:GetCaster() )
+			end
+
+			local Locations = { self:GetCaster():GetAttachmentOrigin( self.attachAttack2 ), self:GetCaster():GetAttachmentOrigin( self.attachAttack3 ) }
+			for i = 1, #Locations do 
 				local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), Locations[i], self:GetCaster(), self.radius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, 0, false )
 				--DebugDrawCircle( Locations[i], Vector( 0, 255, 0 ), 255, self.radius, false, 0.1 )
 				for _,enemy in pairs( enemies ) do
