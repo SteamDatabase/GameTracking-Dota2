@@ -1533,13 +1533,13 @@ end
 ---------------------------------------------------------------------------
 
 function CCavern:FindPathablePositionNearby( vSourcePos, nMinDistance, nMaxDistance )
-	local vPos = vSourcePos + RandomVector( nMinDistance, nMaxDistance )
+	local vPos = vSourcePos + RandomVector( RandomFloat( nMinDistance, nMaxDistance ) )
 
 	local nAttempts = 0
 	local nMaxAttempts = 7
 
 	while ( ( not GridNav:CanFindPath( vSourcePos, vPos ) ) and ( nAttempts < nMaxAttempts ) ) do
-		vPos = vSourcePos + RandomVector( nMinDistance, nMaxDistance )
+		vPos = vSourcePos + RandomVector( RandomFloat( nMinDistance, nMaxDistance ) )
 		nAttempts = nAttempts + 1
 	end
 
