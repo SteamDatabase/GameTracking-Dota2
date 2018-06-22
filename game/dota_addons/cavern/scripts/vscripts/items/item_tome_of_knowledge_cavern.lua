@@ -20,10 +20,11 @@ function item_tome_of_knowledge_cavern:OnSpellStart()
 		self:GetCaster():EmitSoundParams( "DOTA_Item.FaerieSpark.Activate", 0, 0.5, 0)
 		local Heroes = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetOrigin(), self:GetCaster(), 2500, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS, 0, false )
 		for _,Hero in pairs( Heroes ) do
-			Hero:AddExperience( nExperience, DOTA_ModifyXP_Unspecified, false, true )
-			--AddExperience(float amount, int nReason, bool bApplyBotDifficultyScaling, bool bIncrementTotal)
-			local nFXIndex = ParticleManager:CreateParticle( "particles/items3_fx/fish_bones_active.vpcf", PATTACH_ABSORIGIN_FOLLOW, Hero )
-			ParticleManager:ReleaseParticleIndex( nFXIndex )
+			if Hero:IsRealHero() and Hero.AddExperience ~= nil then
+				Hero:AddExperience( nExperience, DOTA_ModifyXP_Unspecified, false, true )
+				local nFXIndex = ParticleManager:CreateParticle( "particles/items3_fx/fish_bones_active.vpcf", PATTACH_ABSORIGIN_FOLLOW, Hero )
+				ParticleManager:ReleaseParticleIndex( nFXIndex )
+			end
 		end
 
 		self:SpendCharge()

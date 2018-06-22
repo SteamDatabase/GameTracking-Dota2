@@ -146,7 +146,6 @@ function CastShapeshift()
 				UnitIndex = thisEntity:entindex(),
 				OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
 				AbilityIndex = thisEntity.hBKBAbility:entindex(),
-				Queue = true,
 			})
 		end, thisEntity )
 	end

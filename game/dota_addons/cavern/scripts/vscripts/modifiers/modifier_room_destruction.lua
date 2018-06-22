@@ -15,6 +15,12 @@ end
 
 --------------------------------------------------------------------------------
 
+ function modifier_room_destruction:GetTexture()
+	return "tiny_avalanche"
+ end
+
+--------------------------------------------------------------------------------
+
 function modifier_room_destruction:StatusEffectPriority()
 	return 14
 end

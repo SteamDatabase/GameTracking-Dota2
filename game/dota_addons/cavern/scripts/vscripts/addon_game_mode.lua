@@ -43,6 +43,7 @@ LinkLuaModifier( "modifier_creature_lich_statue", 		"modifiers/modifier_creature
 LinkLuaModifier( "modifier_provides_fow_position", 		"modifiers/modifier_provides_fow_position", 	LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_not_on_minimap", 			"modifiers/modifier_not_on_minimap", 			LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_troll_camp", 				"modifiers/modifier_troll_camp", 				LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_room_decider", 				"modifiers/modifier_room_decider", 				LUA_MODIFIER_MOTION_NONE )
 
 --------------------------------------------------------------------------------
 
@@ -212,6 +213,7 @@ function CCavern:SetupGameRules()
 	GameRules:SetStrategyTime( 0.0 )
 	GameRules:SetShowcaseTime( 0.0 )
 	GameRules:SetPreGameTime( 45.0 )
+	GameRules:SetHeroSelectPenaltyTime( 0.0 )
 	GameRules:SetPostGameTime( 45.0 )
 	GameRules:SetTreeRegrowTime( 300.0 )
 	GameRules:SetStartingGold( CAVERN_STARTING_GOLD )

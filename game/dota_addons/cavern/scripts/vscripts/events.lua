@@ -154,6 +154,9 @@ function CCavern:OnHeroFinishSpawn( event )
 			--local hCheeseItem = CreateItem( "item_big_cheese_cavern", nil, nil )
 			--local hCheeseItemPhysical = CreateItemOnPositionSync( hPlayerHero:GetAbsOrigin(), hCheeseItem )
 
+			hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_room_decider", {} )
+
+
 			local nPlayerID = hPlayerHero:GetPlayerOwnerID()
 			local PlayerBattlePointsData = {}
 			PlayerBattlePointsData["player_id"] = nPlayerID
@@ -691,6 +694,12 @@ function CCavern:OnTriggerStartTouch( triggerName, activator_entindex, caller_en
 	local NPC = EntIndexToHScript( activator_entindex )
 	local TriggerEntity = EntIndexToHScript( caller_entindex )
 	if NPC ~= nil then
+
+		-- currently don't want to use triggers for player heroes, they get a special modifier to determine which room they're
+		if NPC:IsHero() and NPC:IsOwnedByAnyPlayer() then
+			return
+		end
+
 		local i, j = string.find( triggerName, "room_" )
 		local szRoomNumber = string.sub( triggerName, j+1, string.len( triggerName ) )
 		local Room = self.Rooms[tonumber(szRoomNumber)]
@@ -718,6 +727,12 @@ function CCavern:OnTriggerEndTouch( triggerName, activator_entindex, caller_enti
 	local NPC = EntIndexToHScript( activator_entindex )
 	local TriggerEntity = EntIndexToHScript( caller_entindex )
 	if NPC ~= nil then
+
+		-- currently don't want to use triggers for player heroes, they get a special modifier to determine which room they're
+		if NPC:IsHero() and NPC:IsOwnedByAnyPlayer() then
+			return
+		end
+		
 		local i, j = string.find( triggerName, "room_" )
 		local szRoomNumber = string.sub( triggerName, j+1, string.len( triggerName ) )
 		local Room = self.Rooms[tonumber(szRoomNumber)]

@@ -57,7 +57,7 @@ function modifier_creature_techies_land_mine:OnIntervalThink()
 		ParticleManager:SetParticleControl( nFXIndex, 2, Vector( 1.0, 1.0, radius ) )
 		ParticleManager:ReleaseParticleIndex( nFXIndex )
 
-		EmitSoundOn( "TreasureChest.MineTrap.Detonate", self:GetParent() )
+		--EmitSoundOn( "TreasureChest.MineTrap.Detonate", self:GetParent() )
 		self:GetParent():ForceKill( false )
 	end
 end

@@ -34,7 +34,10 @@ g_UnitPrecache =
 	"npc_dota_creature_small_eimermole",
 	"npc_dota_creature_large_eimermole",
 	"npc_dota_creature_dark_willow",
+	"npc_dota_creature_lich_statue",
 	"npc_dota_creature_night_stalker",
+	"npc_dota_pendulum_trap",
+	"npc_dota_creature_pudge",
 	"npc_dota_cavern_life_stealer",
 
 	"npc_treasure_chest", -- Treasure
@@ -51,7 +54,6 @@ g_UnitPrecache =
 	"npc_dota_cavern_gate_blocked",
 
 	-- dota assets
-	"npc_dota_hero_life_stealer",
 	"npc_dota_hero_undying",
 	"npc_dota_lycan_wolf1",
 	"npc_dota_lycan_wolf2",
@@ -61,21 +63,17 @@ g_UnitPrecache =
 
 g_ModelPrecache =
 {
-	-- cavern assets
-	"models/gameplay/breakingcrate_dest.vmdl", -- npc_dota_crate
-	"models/creeps/ogre_1/large_ogre.vmdl", -- Ogres
-	"models/props/traps/pendulum/pendulum_extended.vmdl",
-	
 	-- dota assets
 	"models/props_rock/riveredge_rock_wall003a.vmdl",
 	"models/props_gameplay/cheese_01.vmdl", -- Cheeeese
 	"models/props_gameplay/cheese_large.vmdl", -- Cheeeese
-	"models/heroes/pudge/pudge.vmdl", -- Poodge
-	"models/heroes/pangolier/pangolier.vmdl", -- Pango
-	"models/heroes/bounty_hunter/bounty_hunter.vmdl", -- Bounty Hunter Statue
 	"models/props_gameplay/treasure_chest_gold.vmdl", -- Bunch of gold from treasure
-	"models/props/statues/priest/statue_priest.vmdl", -- lich statue
-	"models/creeps/roshan/roshan.vmdl", -- Roshan
+	"models/heroes/lycan/lycan_wolf.vmdl",
+	"models/creeps/neutral_creeps/n_creep_forest_trolls/n_creep_forest_troll_berserker.vmdl",
+	"models/creeps/neutral_creeps/n_creep_golem_a/n_creep_golem_a.vmdl",
+	"models/creeps/neutral_creeps/n_creep_golem_b/n_creep_golem_b.vmdl",
+	"models/creeps/neutral_creeps/n_creep_ghost_b/n_creep_ghost_b.vmdl",
+	"dota/models/heroes/lycan/lycan_wolf.vmdl",
 }
 
 g_ParticlePrecache =
@@ -92,12 +90,16 @@ g_ParticlePrecache =
 	"particles/cavern_player_deferred_light.vpcf", -- player light
 	"particles/roshan_room_warninggoal.vpcf", -- in world roshan warning
 	"particles/shop/shop_indicator_goal.vpcf", -- Shopkeeper
+
+	-- dota standard precache we need
+	"particles/dire_fx/dire_building_damage_major.vpcf",
+	"particles/dire_fx/dire_building_damage_minor.vpcf",
+	"particles/base_attacks/ranged_tower_bad_linear.vpcf",
+	"particles/world_destruction_fx/tree_destroy.vpcf",
+	"particles/base_attacks/ranged_badguy.vpcf",
+	"particles/units/heroes/hero_earthshaker/earthshaker_totem_leap_blur.vpcf",	
 	
-	-- dota assets
-	"particles/units/heroes/hero_antimage/antimage_blade_hit.vpcf", 
-	"particles/units/heroes/hero_antimage/antimage_blink_start.vpcf", 
-	"particles/units/heroes/hero_antimage/antimage_blink_end.vpcf", 
-	"particles/units/heroes/hero_antimage/antimage_manavoid.vpcf", 
+	-- dota assets	
 	"particles/units/heroes/hero_phantom_assassin/phantom_assassin_crit_impact.vpcf", -- Ogres
 	"particles/units/heroes/hero_techies/techies_land_mine_explode.vpcf", -- treasure_chest
 	"particles/units/heroes/hero_invoker/invoker_sun_strike_team.vpcf", -- treasure_chest's sunstrike trap
@@ -114,23 +116,69 @@ g_ParticlePrecache =
 	"particles/units/heroes/hero_lich/lich_slowed_cold.vpcf",
 	"particles/units/heroes/hero_invoker/invoker_sun_strike_team.vpcf", -- Creature Invoker
 	"particles/units/heroes/hero_invoker/invoker_exort_orb.vpcf", -- Creature Invoker
-	"particles/units/heroes/hero_bounty_hunter/bounty_hunter_track_shield.vpcf", -- Bounty Hunter Statue
 	"particles/units/heroes/hero_visage/visage_summon_familiars.vpcf", -- generic unit spawn 
 	"particles/status_fx/status_effect_guardian_angel.vpcf", -- invuln on revive
 	"particles/units/heroes/hero_omniknight/omniknight_guardian_angel_halo_buff.vpcf", --invuln on revive
 	"particles/units/heroes/hero_omniknight/omniknight_guardian_angel_omni.vpcf", --invuln on revive
+
+	"particles/units/heroes/hero_antimage/antimage_blade_hit.vpcf", 
+	"particles/units/heroes/hero_antimage/antimage_blink_start.vpcf", 
+	"particles/units/heroes/hero_antimage/antimage_blink_end.vpcf", 
+	"particles/units/heroes/hero_antimage/antimage_manavoid.vpcf", 
+
+	"particles/units/heroes/hero_skeletonking/wraith_king_vampiric_aura_lifesteal.vpcf",
+
+	"particles/units/heroes/hero_bristleback/bristleback_viscous_nasal_goo.vpcf",
+	"particles/units/heroes/hero_bristleback/bristleback_quill_spray.vpcf",
+	"particles/units/heroes/hero_bristleback/bristleback_quill_spray_impact.vpcf",
+	"particles/units/heroes/hero_bristleback/bristleback_quill_spray_hit.vpcf",
+	"particles/units/heroes/hero_bristleback/bristleback_viscous_nasal_goo_debuff.vpcf",
+
+	"particles/units/heroes/hero_sniper/sniper_headshot_slow.vpcf",
+	"particles/units/heroes/hero_sniper/sniper_headshot_slow_caster.vpcf",
+
+	"particles/units/heroes/hero_pugna/pugna_decrepify.vpcf",
+	"particles/units/heroes/hero_pugna/pugna_netherblast_pre.vpcf",
+ 	"particles/units/heroes/hero_pugna/pugna_netherblast.vpcf",
+ 	"particles/units/heroes/hero_pugna/pugna_life_drain.vpcf",
+
+ 	"particles/units/heroes/hero_lycan/lycan_summon_wolves_cast.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_summon_wolves_spawn.vpcf",
+	"particles/units/heroes/hero_pangolier/pangolier_heartpiercer_debuff.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_shapeshift_cast.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_shapeshift_buff_speed.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_shapeshift_buff.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_shapeshift_portrait.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_claw_blur_b.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_claw_blur.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_shapeshift_revert.vpcf",
+	"particles/units/heroes/hero_lycan/lycan_shapeshift_death_fwd.vpcf",
+
+	"particles/units/heroes/hero_earthshaker/earthshaker_aftershock.vpcf",
+	"particles/units/heroes/hero_earthshaker/earthshaker_totem_buff.vpcf",
+	"particles/units/heroes/hero_earthshaker/earthshaker_totem_hero_effect.vpcf",
+	"particles/units/heroes/hero_earthshaker/earthshaker_totem_cast.vpcf",
+	"particles/units/heroes/hero_earthshaker/earthshaker_totem_blur_impact.vpcf",
+	"particles/units/heroes/hero_earthshaker/earthshaker_echoslam.vpcf",
+	"particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start.vpcf",
+
+	"particles/units/heroes/hero_dark_willow/dark_willow_bramble_cast.vpcf",
+	"particles/units/heroes/hero_dark_willow/dark_willow_bramble_precast.vpcf",
+	"particles/units/heroes/hero_dark_willow/dark_willow_bramble_wraith.vpcf",
+	"particles/units/heroes/hero_dark_willow/dark_willow_bramble.vpcf",
+
+	"particles/units/heroes/hero_pangolier/pangolier_gyroshell_cast.vpcf",
+	"particles/units/heroes/hero_pangolier/pangolier_gyroshell.vpcf",
+	"particles/units/heroes/hero_pangolier/pangolier_gyroshell_jump_trail.vpcf",
+	"particles/units/heroes/hero_pangolier/pangolier_loadout.vpcf",
+	"particles/units/heroes/hero_life_stealer/life_stealer_open_wounds_impact.vpcf",
+	"particles/units/heroes/hero_life_stealer/life_stealer_open_wounds.vpcf",
+	"particles/units/heroes/hero_life_stealer/life_stealer_rage.vpcf",
 }
+
 
 g_ParticleFolderPrecache =
 {
-	"particles/units/heroes/hero_pugna", 	-- Pugna
-	"particles/units/heroes/hero_sniper", 	-- Sniper
-	"particles/units/heroes/hero_ogre_magi", -- Ogres
-	"particles/units/heroes/hero_pudge", -- Pudge
-	"particles/units/heroes/hero_pangolier", --Pangoliers
-	"particles/units/heroes/hero_enigma", --Enigmaloiers
-	"particles/units/heroes/hero_earthshaker", --Earthshakerliers
-	"particles/units/heroes/hero_skeleton_king", -- Wraith Kings
 }
 
 g_SoundPrecache =
@@ -138,29 +186,7 @@ g_SoundPrecache =
 	-- cavern assets
 	"soundevents/game_sounds_cavern.vsndevts",
 	"soundevents/game_sounds_misc.vsndevts",
-	
-	-- dota assets
-	"soundevents/game_sounds_items.vsndevts",
 
-	"soundevents/voscripts/game_sounds_vo_antimage.vsndevts", -- AM
-	"soundevents/voscripts/game_sounds_vo_lycan.vsndevts", -- Lycan
-	"soundevents/voscripts/game_sounds_vo_ogre_magi.vsndevts", -- Ogres
-	"soundevents/voscripts/game_sounds_vo_sniper.vsndevts", -- Sniper
-	"soundevents/voscripts/game_sounds_vo_pugna.vsndevts", -- Pugna
-	"soundevents/voscripts/game_sounds_vo_lich.vsndevts", -- Lich
-	"soundevents/voscripts/game_sounds_vo_skeleton_king.vsndevts", -- Wraith King
-	"soundevents/voscripts/game_sounds_vo_secretshop.vsndevts", -- Shopkeeper
-
-	"soundevents/game_sounds_heroes/game_sounds_techies.vsndevts", -- Techies
-	"soundevents/game_sounds_heroes/game_sounds_antimage.vsndevts", -- AM
-	"soundevents/game_sounds_heroes/game_sounds_pudge.vsndevts", -- Pudge
-	"soundevents/game_sounds_heroes/game_sounds_pangolier.vsndevts", -- Pangoballer
-	"soundevents/game_sounds_heroes/game_sounds_omniknight.vsndevts", -- Small Omni
-	"soundevents/game_sounds_heroes/game_sounds_enigma.vsndevts", -- Enigmaloiers
-	"soundevents/game_sounds_heroes/game_sounds_earthshaker.vsndevts", -- Earthshakerliers
-	"soundevents/game_sounds_heroes/game_sounds_pugna.vsndevts", -- Big Pugna
-	"soundevents/game_sounds_heroes/game_sounds_sniper.vsndevts", -- Big Sniper
-	"soundevents/game_sounds_heroes/game_sounds_skeletonking.vsndevts", -- Wraith King
-	"soundevents/game_sounds_heroes/game_sounds_lich.vsndevts", -- Lich Trap
-	"soundevents/game_sounds_roshan_halloween.vsndevts", -- Roshan
+	"soundevents/game_sounds/game_sounds_creature_techies.vsndevts",
+	"soundevents/game_sounds/game_sounds_hud_roshan.vsndevts",
 }

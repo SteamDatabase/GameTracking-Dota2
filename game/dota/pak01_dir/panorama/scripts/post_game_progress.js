@@ -864,11 +864,12 @@ function AnimateWageringSubpanelAction( panel, ownerPanel, wagering_data, starti
 	panelXPCircle.BLoadLayoutSnippet( 'BattlePassXPCircle' );
 
 	panel.SetDialogVariableInt( 'wager_amount', wagering_data.wager_amount );
+	panel.SetDialogVariableInt( 'wager_conversion_ratio', wagering_data.conversion_ratio );
 	panel.SetDialogVariableInt( 'wager_count_250', wagering_data.wager_count_250 );
 	panel.SetDialogVariableInt( 'wager_count_500', wagering_data.wager_count_500 );
 	panel.SetDialogVariableInt( 'wager_count_1000', wagering_data.wager_count_1000 );
 
-	this.total_points = wagering_data.wager_amount +
+	this.total_points = wagering_data.wager_amount * wagering_data.conversion_ratio +
 		250 * wagering_data.wager_count_250 +
 		500 * wagering_data.wager_count_500 +
 		1000 * wagering_data.wager_count_1000;
@@ -1582,6 +1583,7 @@ function TestAnimateBattlePass()
 			wagering:
 			{
 				wager_amount: 250,
+				conversion_ratio: 2,
 				wager_count_250: 2,
 				wager_count_500: 0,
 				wager_count_1000: 0

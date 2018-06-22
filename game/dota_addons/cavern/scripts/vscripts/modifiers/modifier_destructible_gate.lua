@@ -69,7 +69,7 @@ end
 
 function modifier_destructible_gate:OnDeath( params )
 	if IsServer() then
-		if params.unit == self:GetParent() then
+		if params.unit == self:GetParent() and not self:GetParent():IsNull() then
 			assert ( self.szDestroySound ~= nil, "ERROR: modifier_destructible_gate - self.szDestroySound is nil" )
 
 			if GameRules:State_Get() >= DOTA_GAMERULES_STATE_PRE_GAME then
