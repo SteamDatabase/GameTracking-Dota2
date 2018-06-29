@@ -84,6 +84,14 @@ function UpdateTimer()
 	}
 	$("#TimerPanel").SetDialogVariableInt( "timer_seconds", timerValue );
 
+	var banPhaseInstructions = $("#BanPhaseInstructions");
+	var pickPhaseInstructions = $("#PickPhaseInstructions");
+
+	var bIsInBanPhase = Game.IsInBanPhase();
+
+	banPhaseInstructions.SetHasClass(  "Visible", bIsInBanPhase == true );
+	pickPhaseInstructions.SetHasClass( "Visible", bIsInBanPhase == false );
+
 	$.Schedule( 0.1, UpdateTimer );
 }
 
