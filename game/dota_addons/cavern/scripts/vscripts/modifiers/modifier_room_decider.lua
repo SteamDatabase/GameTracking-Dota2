@@ -82,7 +82,7 @@ function modifier_room_decider:OnIntervalThink()
 			local szRoomName = hClosestRoom:GetName()
 			local hCavernRoom = self:GetRoomFromString( szRoomName )
 			if self.szLastRoom ~= szRoomName then 
-				printf("entered room = %s, %s, %s", szRoomName, hCavernRoom, hCavernRoom:GetRoomID() );	
+				--printf("entered room = %s, %s, %s", szRoomName, hCavernRoom, hCavernRoom:GetRoomID() );	
 				GameRules.Cavern:OnNPCEnteredRoom( hCavernRoom, self:GetParent() )
 				self.szLastRoom = szRoomName
 			end

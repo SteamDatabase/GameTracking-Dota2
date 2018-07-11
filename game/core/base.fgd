@@ -99,7 +99,7 @@
 @BaseClass = Studiomodel
 [
 	model(studio) [report]: "World Model"
-	skin(choices) [ group="Misc" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
+	skin(choices) [ group="Render Properties" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
 	[
 		"0" : "Ignored by the modelhelper code"
 	]
@@ -655,7 +655,7 @@
 
 	MaxNPCCount(integer) : "Num. of NPCs" : 1 : "Number of NPCs that will spawn before this spawner is exhausted."
 	SpawnFrequency(integer) : "Frequency" : 5 : "How often (in seconds) a new NPC will be spawned. If set to -1, a new NPC will be made when the last NPC dies."
-	RetryFrequency(integer) : "Retry Frequency" : -1 : "How long (in seconds) to wait before trying again after failing to spawn an NPC."
+	RetryFrequency(integer) : "Retry Frequency" : -1 : "How long (in seconds) to wait before trying again after failing to spawn an NPC when no valid spot could be found. If set to -1, Spawn Frequency is used."
 	MaxLiveChildren(integer) : "Max Live NPCs" : 5 : "Maximum number of live children allowed at any one time (new ones will not be made until one dies). If set to -1, no limit is applied."
 	HullCheckMode(Choices) : "Hull Check Mode" : 0 : "How NPC's hull should be checked at spawn destination?" =
 	[
@@ -1107,24 +1107,30 @@
 	disabledValue(float) : "Set to value on disable" : "0.0" : "Value to set the OpVar index to when disabled"
 	startDisabled(bool) : "Start Disabled" : 0
 	autoDisable(bool) : "Disable when out of range" : 0
-	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity to check distance/occlusion from"
 	
+	//Inputs
 	input SetStackName(string) : "Change the target stack name"
 	input SetOperatorName(string) : "Change the target operator name"
 	input SetOpvarName(string) : "Change the target opvar name"	
 	input SetOpvarIndex(integer) : "Change the target opvar index"	
-	input SetSourceEntity(string) : "Set the name of the entity to check distance/occlusion from. This check will follow the entity as it moves."
 	input Enable(void) : "Enable the entity"
 	input Disable(void) : "Disable the entity"
+	
+	//Outputs
+	output OnEnter(void) : "Fired when the player enters the outer distance."
+	output OnExit(void) : "Fired when the player exits the outer distance."
 ]
 
-@BaseClass = SndOpvarSetPointBaseDistance
+@BaseClass = SndOpvarSetPointBaseAddition
 [ 
 	distanceMin(float) : "Minimum Distance" : "5.0" : "Minimum distance to map the OpVar value to"
 	distanceMax(float) : "Maximum Distance" : "25.0" : "Maximum distance to map the OpVar value to"
+	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity to check distance/occlusion from"
+	
+	input SetSourceEntity(string) : "Set the name of the entity to check distance/occlusion from. This check will follow the entity as it moves."
 ]
 
-@PointClass base( Targetname, SndOpvarSetPointBaseDistance, SndOpvarSetPointBase ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) = snd_opvar_set_point :
+@PointClass base( Targetname, SndOpvarSetPointBaseAddition, SndOpvarSetPointBase ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) = snd_opvar_set_point :
 	"Sets an opvar value on a library stack"
 [
 ]
@@ -1132,11 +1138,19 @@
 @PointClass base( Targetname, SndOpvarSetPointBase ) iconsprite("editor/snd_opvar_set.vmat") box_world_aligned( box_inner_mins, box_inner_maxs ) box_world_aligned( box_outer_mins, box_outer_maxs ) = snd_opvar_set_aabb :
 	"Sets an opvar value on a library stack"
 [	
-	
+	AABBDirection(choices) : "AABB Direction" : "0" : "Limit the evaluation of the AABB to a single axis" =
+	[
+		0 : "Any"
+		1 : "X Only"
+		2 : "Y Only"
+		3 : "Z Only"
+		4 : "No Z"
+	]	
 	box_inner_mins(vector) : "Box Inner Mins" : "-32 -32 -32"
 	box_inner_maxs(vector) : "Box Inner Maxs" : "32 32 32"	
 	box_outer_mins(vector) : "Box Outer Mins" : "-64 -64 -64"
-	box_outer_maxs(vector) : "Box Outer Maxs" : "64 64 64"
+	box_outer_maxs(vector) : "Box Outer Maxs" : "64 64 64"	
+	
 ]
 
 
@@ -1278,7 +1292,7 @@
 	"An entity that controls the HDR tonemapping for the player. Think of it as a method of controlling the exposure of the player's eyes."
 [
 	MinExposure(float)   : "Minimum Auto Exposure"		: "0.25"
-	MaxExposure(float)   : "Maximum Auto Exposure"		: "4.0"
+	MaxExposure(float)   : "Maximum Auto Exposure"		: "8.0"
 	percent_bright_pixels(float) : "Target Bright Pixel Percentage" : "-1.0" : "Set a target for percentage of pixels above a certain brightness. (-1 for default engine behavior)"
 	percent_target(float) : "Target Brightness Percent" : "-1.0" : "Set a custom brightness target to go along with 'Target Bright Pixel Percentage'. (-1 for default engine behavior)"
 	rate(float) : "Rate" : "2.0"
@@ -1655,7 +1669,7 @@
 		1 : "Not Solid" : 0
 	]
 	model(studio) : "Model"
-	skin(choices) [ group="Misc" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
+	skin(choices) [ group="Render Properties" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
 	[
 		"0" : "Ignored by the modelhelper code"
 	]
@@ -3886,7 +3900,8 @@
 	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist" : 0 : "Max fade distance at which the prop is visible (0 = don't fade out)"
 	fadescale(float) [ group="Render Properties" ] : "Fade Scale" : 1 : "If you specify a fade in the worldspawn, or if the engine is running under low end/medium end/XBox360, then the engine will forcibly fade out props even if fademindist/fademaxdist isn't specified." +
 												 " This scale factor gives you some control over the fade. Using 0 here turns off the forcible fades." +
-												 " Numbers smaller than 1 cause the prop to fade out at further distances, and greater than 1 cause it to fade out at closer distances."
+												 " Numbers smaller than 1 cause the prop to fade out at further distances, and greater than 1 cause it to fade out at closer distances."												 
+	rendercolor(color255) : "Color (R G B)" : "255 255 255"
 ]
 
 
@@ -3923,7 +3938,6 @@
 	soundlockedoverride(sound) : "Locked Sound" : : "Sound played when the player tries to open the door, and fails because it's locked."
 	soundunlockedoverride(sound) : "Unlocked Sound" : : "Sound played when the door is unlocked."
 	soundlatchoverride(sound) : "Latch Sound" : : "Sound played when the door's latch is engaged."
-	rendercolor(color255) : "Color (R G B)" : "255 255 255"
 
 	forceclosed(boolean) : "Force Closed" : 0 : "If set, this door will close no matter what. Useful for doors that have to close even if the player tries to block them with objects."
 
@@ -5276,7 +5290,6 @@
 	]
 	attach1(target_destination) : "Entity 1" : ""
 	attach2(target_destination) : "Entity 2" : ""
-	constraintsystem(target_destination) : "Constraint System Manager" : "" : "The name of a phys_constraintsystem that this constraint should be a part of. All constraints on a set of entities should be placed in the same system, or they will fight each other during simulation."
 
 	forcelimit(float) : "Impulse Limit to Break (kg)" : "0" : "The amount of impulse an impact must apply to the constraint to break it. A way of calculating this is to set it to the mass of an object that would break this constraint if it were resting on the constrainted objects."
 	torquelimit(float) : "Angular Impulse Limit to Break (kg * distance)" : "0" : "The amount of angular impulse required to break the constraint. A way of calculating this is to multiply any reference mass by the resting distance (from the center of mass of the object) needed to break the constraint."
@@ -5292,13 +5305,6 @@
 	output OnBreak(void) : "Fired when the constraint breaks."
 ]
 	
-@PointClass base(Targetname) = phys_constraintsystem : 
-	"An entity used to manage a group of interacting constraints and keep them stable. " +
-	"All constraints on a set of entities should be placed in the same system, or they will fight each other during simulation."
-[
-	additionaliterations(integer) : "Additional System Iterations" : 0 : "Adding iterations makes the interactions among constraints in a system tighter.  It will not compensate for errors due to collision, but will help in cases where objects of disparate mass are constrained to each other."
-]
-
 @PointClass base(Targetname) = phys_keepupright : "A controller that tries to keep an entity facing a particular direction."
 [
 	spawnflags(flags) =
@@ -5808,7 +5814,7 @@
 @BaseClass base(SystemLevelChoice) = prop_static_base
 [
 	model(studio) [report] : "World Model"
-	skin(choices) [ group="Misc" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
+	skin(choices) [ group="Render Properties" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
 	[
 		"0" : "Ignored by the modelhelper code"
 	]
@@ -5908,7 +5914,7 @@
 	model(studio) : "World model"
 ]
 
-@PointClass color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static) model_archetypes(static_prop_model) = prop_static
+@PointClass color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static, posable) model_archetypes(static_prop_model) = prop_static
 [
 	model(resource:model) [report] : "World Model"
 	solid(choices) : "Collisions" : 6 =
@@ -5921,7 +5927,7 @@
 	disableshadows(boolean) [ group="Render Properties" ] : "Disable Shadows" : 0
 	screenspacefade(boolean) [ group="Render Properties" ] : "Screen Space Fade" : 0 : "The method by which the fading distance should be determined. If 'No', the fade distances is the distance from the player's view to the object, in inches. If 'Yes', the fade distance is the size of the object onscreen, in pixels."
 
-	skin(choices) [ group="Misc" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
+	skin(choices) [ group="Render Properties" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
 	[
 		"0" : "Ignored by the modelhelper code"
 	]
@@ -5992,7 +5998,7 @@
 	health(integer) : "Health" : 0 : "Number of points of damage to take before breaking.  0 means don't break."	
 ]
 
-@BaseClass base(Targetname, Global, CanBeClientOnly, Studiomodel, BreakableProp, SystemLevelChoice, Glow) = BasePropPhysics
+@BaseClass base(Parentname, Targetname, Global, CanBeClientOnly, Studiomodel, BreakableProp, SystemLevelChoice, Glow) = BasePropPhysics
 [ 
 	spawnflags(flags) [ group="Physics Properties" ] = 
 	[
@@ -6039,6 +6045,7 @@
 	addon(string) [ group="Physics Properties" ] : "AI AddOn" : "" : "If specified this object will use this addon behavior when installed in a composite AI"
 	interactAs(string) [ group="Physics Properties" ] : "interactAs" : "" : "comma-separated list of interaction layers"
 	forcenavignore(boolean) [ group="Physics Properties" ] : "Force Nav Ignore" : "0" : "If set, NPCs will ignore this prop when navigating."
+	auto_convert_back_from_debris(boolean) [ group="Physics Properties" ] : "Auto Convert back from Debris" : "1" : "If set, this prop will automatically convert back to interactive debris after coming to rest as Debris."
 
 	// Inputs
 	input Wake(void) : "Wake up this physics object, if it is sleeping."
@@ -6054,6 +6061,7 @@
 	input DisableDamageForces(void) : "Damaging the entity does *not* apply physics forces to it."
 	input EnablePuntSound(void) : "Allow this prop to play its own sound when punted"
 	input DisablePuntSound(void) : "Prevent this prop from playing its own sound when punted"
+	input SetAutoConvertBackFromDebris(boolean) : "Set whether or not this prop should automatically convert back to interactive debris after it comes to rest as debris."
 
 	// Outputs
 	output OnMotionEnabled(void) : "Fired when motion is enabled on this prop, either via 'Health Level to Override Motion' or from the EnableMotion input."
@@ -6126,7 +6134,7 @@
 ]
 
 
-@PointClass base(Targetname, Studiomodel, SystemLevelChoice, BaseFadeProp, EnableDisable) sphere(fademindist) sphere(fademaxdist) model() = prop_ragdoll :
+@PointClass base(Targetname, Studiomodel, SystemLevelChoice, BaseFadeProp, EnableDisable) sphere(fademindist) sphere(fademaxdist) model(posable) = prop_ragdoll :
 	"A prop that physically simulates and can be articulated with internal joints. The joint constraints are part of the physics model."
 [
 	spawnflags(flags) = 
@@ -6236,16 +6244,18 @@
 	rendercolor(color255) : "Color (R G B)" : "100 100 100"
 	preciptype(choices) : "Precipitation Type" : 0 =	
 	[
-		0 : "Rain"
-		1 : "Snow"
-		2 : "Ash"
-		3 : "Snowfall"
+		0 : "Rain (DEPRECATED)"
+		1 : "Snow (DEPRECATED)"
+		2 : "Ash (DEPRECATED)"
+		3 : "Snowfall (DEPRECATED)"
 		4 : "Particle Rain"
 		5 : "Particle Ash"
 		6 : "Particle Rainstorm"
 		7 : "Particle Bugs"
 		8 : "Particle Smoke"
-		7 : "Particle Snow"
+		9 : "Particle Snow"
+		10 : "Particle Xen Particulate"
+		11 : "Particle Dust Motes"
 	]
 	minSpeed(float) : "Minimum speed (snowfall only)" : 25
 	maxSpeed(float) : "Maximum speed (snowfall only)" : 35
@@ -6740,12 +6750,12 @@
 	LookTime(string) : "Look Time" : "0.5" : "The time, in seconds, that the player must look the target before firing the output. Resets if player leaves trigger, or looks outside the Field of View threshold."
 	FieldOfView(string) : "Field Of View" : "0.9" : "How close the player has to be looking at the target. 1.0 = straight ahead\n 0.0 = +/- 90 degrees\n -1.0 = all directions)."
 	FOV2D(boolean) : "Use 2D Field Of View" : "0" : "In 2D mode the look angle FOV is only checked along the x and y axes, not the z."
-	Timeout(float) : "Timeout" : "0" : "The time, in seconds, to wait after player enters the trigger before firing the OnTimeout output, 0 = never."
+	Timeout(float) : "Timeout" : "0" : "The time, in seconds, to wait after player enters the trigger before firing the OnTimeout output, 0 = never. NOTE: When the timeout expires, the OnTrigger output does NOT fire!"
 	test_occlusion(boolean) : "Test occlusion" : "0" : "If set, player must have clear LOS to the target (ignoring dynamic entities)."
 
 	// Output
-	output OnTrigger(void) : "Fired when the trigger is activated."
-	output OnTimeout(void) : "Fired after the timeout interval expires if the player never looked at the target."
+	output OnTrigger(void) : "Fired when the trigger is activated. Does NOT fire if the timeout expires."
+	output OnTimeout(void) : "Fired after the timeout interval expires if the player never looked at the target. OnTrigger does NOT fire in this case."
 	output OnStartLook(void) : "Fired once when the player looks until they have unlooked/untouched."
 	output OnEndLook(void) : "Fired when the player was looking and unlooked while still touching."
 ]
@@ -7765,7 +7775,7 @@
 	box_world_aligned( box_mins, box_maxs )
 = env_volumetric_fog_controller : "Controller for volumetric fogging - bounds are extents of fog irradiance volume (for indirect)"
 [
-	// Note: Currently not yet supporting spiralling fog
+	// ActiveInHammer( bool ) : "Preview in hammer" : "1" : "Use this as the active fog in hammer"
 
 	box_mins(vector) : "Box Mins" : "-72 -72 -72"
 	box_maxs(vector) : "Box Maxs" : "72 72 72"
@@ -7783,6 +7793,7 @@
 		"64.0" : "Low Resolution (64x)"
 	]
 
+	// Note: Currently not yet supporting spiralling fog
 	NoiseType(choices) [ group="Noise" ] : "Noise type" : "0" : "" = 
 	[
 		"0" : "Disabled"
@@ -7836,6 +7847,7 @@
 	hintType(choices) : "Hint Type" : 0 =
 	[
 		0: "Use High Resolution"
+		3: "Use Low Resolution (64 unit grid)"
 	]
 ]
 

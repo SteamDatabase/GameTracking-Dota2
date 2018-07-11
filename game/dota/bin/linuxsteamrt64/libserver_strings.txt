@@ -55,6 +55,7 @@
 	Defaults are: <distance 1024> <flags 0> <magnitude 0> <scale 0>
 	ELaneType
 	ENameItem
+	ENodeType
 	EResetGem
 	EResponse
 	ESetStyle
@@ -78,11 +79,13 @@
 	LobbyType
 	MatchType
 	No client, finding a random bot to use for the player ID instead.
+	NodeGroup
 	None
 	PFT_SOUND
 	PROCESSING RESPONSE RULE FROM .NUT :
 	Passenger Role:	%s (%d seats)
 	Private script scope:
+	PrizePool
 	Public script scope:
 	RETURNING DUE TO BEING ABLE TO RETURN.
 	RETURNING DUE TO TIMER ELAPSED.
@@ -152,6 +155,8 @@
 	def_index
 	destroyed
 	dir_index
+	dire_logo
+	dire_name
 	direction
 	directory
 	dodgeable
@@ -230,6 +235,7 @@
 	low_value
 	magnitude
 	map_entry
+	match_ids
 	max_speed
 	max_wager
 	modifiers
@@ -240,6 +246,8 @@
 	net_worth
 	new responses:
 	new_class
+	node_type
+	node_wins
 	num_fails
 	num_kills
 	old result response: %s
@@ -280,6 +288,7 @@
 	stat_type
 	statpopup
 	steam_ids
+	stream_id
 	summaries
 	survey_id
 	svc_Print
@@ -287,6 +296,8 @@
 	swapItems
 	tQUH
 	team_good
+	team_id_1
+	team_id_2
 	team_logo
 	team_name
 	team_only
@@ -663,16 +674,15 @@
  GCConnectionStatus_GC_GOING_DOWN
  GameState changed from %s to %s
  H97tbH
- H;5I
- H;5Y
- H;5d=
- H;=y
+ H;5)
+ H;5T
  HcC`L
  HcClI)
  HcJ(1
  HcSlD
  IcD$`L
  IcD$lI)
+ LEAGUE_AUDIT_ACTION_NODE_DESTROY
  Lc[PH)
  Lc[hH)
  Lc[lH
@@ -799,6 +809,7 @@
  k_EMsgGCToGCEnsureAccountInParty
  k_EMsgGCToGCGetCompendiumFanfare
  k_EMsgGCToGCGetCustomGameTickets
+ k_EMsgGCToGCGetLiveLeagueMatches
  k_EMsgGCToGCGetServersForClients
  k_EMsgGCToGCGetUserServerMembers
  k_EMsgGCToGCGetUserSessionServer
@@ -926,6 +937,11 @@
 !HcSl
 !INFO_CUSTOM_GAME_PENALTY_REMINDER
 !ITestScriptMgr
+!LEAGUE_AUDIT_ACTION_LEAGUE_CREATE
+!LEAGUE_AUDIT_ACTION_LEAGUE_DELETE
+!LEAGUE_AUDIT_ACTION_NODE_SET_TEAM
+!LEAGUE_AUDIT_ACTION_NODE_SET_TIME
+!LEAGUE_TIER_CATEGORY_PROFESSIONAL
 !NETWORK_DISCONNECT_HLTVRESTRICTED
 !NETWORK_DISCONNECT_INTERNAL_ERROR
 !NETWORK_DISCONNECT_LOOPDEACTIVATE
@@ -1165,6 +1181,7 @@
 "GetMapData"
 "GetRawRepeatedField"
 "InsertOrLookupMapValue"
+"LEAGUE_AUDIT_ACTION_NODE_COMPLETED
 "LookupMapValue"
 "MapBegin"
 "MapEnd"
@@ -1316,6 +1333,7 @@
 #CHAT_MESSAGE_HOLDOUT_WALL_DESTROYED
 #CM_WorldUIControllerHasPanelChanged
 #CMsgClientToGCRerollPlayerChallenge
+#CMsgDOTALeagueInfoListAdminsRequest"R
 #CMsgDOTARequestBatchPlayerResources
 #CMsgGCGetPlayerCardItemInfoResponse
 #CMsgGCRequestStoreSalesDataResponse
@@ -1530,6 +1548,7 @@
 #Item_Refunded
 #Item_TournamentDrop
 #Item_Traded
+#LEAGUE_AUDIT_ACTION_NODE_AUTOCREATE
 #LoadoutSlot_%s
 #NETWORK_DISCONNECT_BADRELAYPASSWORD
 #NETWORK_DISCONNECT_REJECTED_BY_GAME
@@ -1799,6 +1818,10 @@ $I9D$
 $I;D$
 $I;T$
 $L9	t+H
+$LEAGUE_AUDIT_ACTION_LEAGUE_ADMIN_ADD
+$LEAGUE_AUDIT_ACTION_LEAGUE_MATCH_END
+$LEAGUE_AUDIT_ACTION_LEAGUE_SUBMITTED
+$LEAGUE_AUDIT_ACTION_NODEGROUP_CREATE
 $LccpD;
 $Mcg@E;gP
 $NETWORK_DISCONNECT_REJECT_SERVERFULL
@@ -1994,6 +2017,9 @@ $|LA;X
 %DOTA_REPLAY_STATE_EVENT_STARTING_HORN
 %DOTA_UNIT_ORDER_EJECT_ITEM_FROM_STASH
 %DOTA_UNIT_ORDER_SET_ITEM_COMBINE_LOCK
+%LEAGUE_AUDIT_ACTION_LEAGUE_STREAM_ADD
+%LEAGUE_AUDIT_ACTION_NODEGROUP_DESTROY
+%LEAGUE_INVITE_CHAMPIONS_CUP_QUALIFIED
 %NETWORK_DISCONNECT_CONNECTION_FAILURE
 %NETWORK_DISCONNECT_DISCONNECT_BY_USER
 %NETWORK_DISCONNECT_LOCALPROBLEM_OTHER
@@ -2064,7 +2090,7 @@ $|LA;X
 %d:%s=%s
 %d=%s:  pos[ %8.3f %8.3f %8.3f ] ang[ %8.3f %8.3f %8.3f ]
 %dd_%s
-%f %f %f %f
+%f %f %f %f %f %f %f
 %f %f %f %f %f %f %f %f %f
 %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f
 %f %f %f, %f %f %f
@@ -2092,7 +2118,6 @@ $|LA;X
 %k_EHeroStatType_CullingBladeKillCount
 %k_EIntentionalFeedingType_LowActivity
 %k_EMatchOutcome_NotScored_ServerCrash
-%k_EMsgClientToGCFeaturedHeroesRequest
 %k_EMsgClientToGCGetTrophyListResponse
 %k_EMsgClientToGCMatchesMinimalRequest
 %k_EMsgClientToGCRemoveItemDescription
@@ -2102,6 +2127,8 @@ $|LA;X
 %k_EMsgClientToGCVoteForArcanaResponse
 %k_EMsgCustomGameClientFinishedLoading
 %k_EMsgDOTAGetPeriodicResourceResponse
+%k_EMsgDOTALeagueInfoListAdminsReponse
+%k_EMsgDOTALeagueInfoListAdminsRequest
 %k_EMsgGCFantasyLeagueEditInfoResponse
 %k_EMsgGCFantasyLeagueMatchupsResponse
 %k_EMsgGCFantasyPlayerStandingsRequest
@@ -2454,6 +2481,7 @@ $|LA;X
 %s:  transitioning '%s' entities from previous map '%s' (landmark='%s')
 %s: %1.3f %s
 %s: %2.2f
+%s: %f %f %f %f %f %f %f;
 %s: %s
 %s: %s could not find viewposition %s.
 %s: %s could not find viewtarget %s.
@@ -2501,7 +2529,6 @@ $|LA;X
 %s__%2d_%3d_%2d_%2d_%2d.txt
 %s_mega
 %s_query%d_ranked
-%s_tempcontent
 %s_upgraded
 %s_upgraded_mega
 %s_weapon
@@ -2509,7 +2536,6 @@ $|LA;X
 %sfemale%s
 %sjunk
 %smale%s
-%svpks/%s.vpk
 %u:  %s
 %u:%u:%u
 %u[%d]
@@ -2545,6 +2571,10 @@ $|LA;X
 &DOTA_UNIT_ORDER_VECTOR_TARGET_POSITION
 &GAME_PARTICLE_MANAGER_EVENT_UPDATE_ENT
 &GE_ClearDecalsForSkeletonInstanceEvent
+&LEAGUE_AUDIT_ACTION_LEAGUE_MATCH_START
+&LEAGUE_AUDIT_ACTION_NODEGROUP_ADD_TEAM
+&LEAGUE_AUDIT_ACTION_NODE_SET_ADVANCING
+&LEAGUE_AUDIT_ACTION_NODE_SET_SERIES_ID
 &NETWORK_DISCONNECT_BAD_SERVER_PASSWORD
 &NETWORK_DISCONNECT_MESSAGE_PARSE_ERROR
 &NETWORK_DISCONNECT_PURESERVER_MISMATCH
@@ -2599,7 +2629,6 @@ $|LA;X
 &k_EMsgGCTeamInvite_GCResponseToInvitee
 &k_EMsgGCTeamInvite_GCResponseToInviter
 &k_EMsgGCTeamInvite_InviteeResponseToGC
-&k_EMsgGCToClientFeaturedHeroesResponse
 &k_EMsgGCToClientHeroStatueCreateResult
 &k_EMsgGCToGCGetServerForClientResponse
 &k_EMsgGCToGCGrantSelfMadeItemToAccount
@@ -2650,6 +2679,8 @@ $|LA;X
 'DOTA_LOW_PRIORITY_BAN_SECONDARY_ABANDON
 'GAME_PARTICLE_MANAGER_EVENT_SHOULD_DRAW
 'INFO_COOP_LOW_PRIORITY_PASSIVE_REMINDER
+'LEAGUE_AUDIT_ACTION_LEAGUE_ADMIN_REVOKE
+'LEAGUE_INVITE_REGIONAL_DIRECT_QUALIFIED
 'NETWORK_DISCONNECT_BADSPECTATORPASSWORD
 'NETWORK_DISCONNECT_CLIENT_DIFFERENT_MAP
 'NETWORK_DISCONNECT_CREATE_SERVER_FAILED
@@ -2737,14 +2768,14 @@ $|LA;X
 (#GameUI_Disconnect_LoopLevelLoadActivate
 (#GameUI_Disconnect_RemoteProblem_BadCert
 (#GameUI_Disconnect_RemoteProblem_Timeout
+(% TZ
+(%'L@
 (%0.2f) %s
 (%0.2f): %s
 (%1.3f)
 (%2.2f - %2.2f - %2.2f)
 (%2.3f)
-(%FsF
-(%G-Y
-(%`^^
+(%AEk
 (%d %d %d %d)
 (%d) Name: %s (%s)
 (%f, %f, %f)
@@ -2754,15 +2785,13 @@ $|LA;X
 (%g,%g,%g) (%g,%g,%g)
 (%s->%s)
 (%s::)
-(%wjP
-(%{f^
+(%uEF
+(%wFB
 ()+-*/
 (*%s*), 
 (*MARK) must have an argument
 (*VERB) not recognized or malformed
-(- :[
-(-R9X
-(-l5_
+(-;.T
 (0x%08X)'??'
 (8HXhx
 (9r$t
@@ -2771,6 +2800,7 @@ $|LA;X
 (A9] 
 (A9^ 
 (ACTIVE)
+(AVAUATE1
 (A]A^]
 (Addresses differ: existing '%s' @ '%p' != requested '%s' @ '%p')
 (CDOTAClientMsg_BroadcasterUsingCameraman
@@ -2787,7 +2817,10 @@ $|LA;X
 (CMsgGCToGCMasterSubscribeToCacheResponse"a
 (CMsgGCToGCStoreProcessSettlementResponse
 (CWorkshop_GetPackageDailyRevenue_Request
+(D$0A
 (D$0D
+(D$0[A
+(D$@A
 (D9cH
 (D9cH~RM
 (D9k8
@@ -2802,7 +2835,6 @@ $|LA;X
 (E9f 
 (E9g 
 (E9o 
-(ECDOTALocomotor
 (Existing entry.)
 (H97tyH
 (HSCRIPT hTarget) Determine whether an issued command on a target is valid.
@@ -2812,6 +2844,11 @@ $|LA;X
 (HSCRIPT hTarget, Vector vLocation, table kv) Projectile has collided with a given target or reached its destination (target is invalid).
 (HcO`H
 (IcGxA;
+(LEAGUE_AUDIT_ACTION_LEAGUE_ADMIN_PROMOTE
+(LEAGUE_AUDIT_ACTION_LEAGUE_IMAGE_UPDATED
+(LEAGUE_AUDIT_ACTION_LEAGUE_MESSAGE_ADDED
+(LEAGUE_AUDIT_ACTION_LEAGUE_STREAM_REMOVE
+(LEAGUE_AUDIT_ACTION_NODE_MATCH_COMPLETED
 (Module names differ: existing '%s' != requested '%s')
 (Modules differ: existing '%p' != requested '%p')
 (NAV IGNORED)
@@ -2899,6 +2936,7 @@ $|LA;X
 (k_EMsgGCToGCDestroyOpenGuildPartyRequest
 (k_EMsgGCToGCEnsureAccountInPartyResponse
 (k_EMsgGCToGCGetCustomGameTicketsResponse
+(k_EMsgGCToGCGetLiveLeagueMatchesResponse
 (k_EMsgGCToGCGetServersForClientsResponse
 (k_EMsgGCToGCGetUserServerMembersResponse
 (k_EMsgGCToGCGetUserSessionServerResponse
@@ -2963,6 +3001,8 @@ $|LA;X
 )J fA
 )L$ u
 )L$0A
+)LEAGUE_AUDIT_ACTION_LEAGUE_SET_PRIZE_POOL
+)LEAGUE_AUDIT_ACTION_LEAGUE_STATUS_CHANGED
 )NETWORK_DISCONNECT_NO_PEER_GROUP_HANDLERS
 )NETWORK_DISCONNECT_PURESERVER_CLIENTEXTRA
 )NETWORK_DISCONNECT_REQUEST_HOSTSTATE_IDLE
@@ -3138,7 +3178,6 @@ $|LA;X
 *k_EMsgGCToGCMasterSubscribeToCacheResponse
 *k_EMsgGCToGCStoreProcessSettlementResponse
 *k_EMsgGCToGCUpdateIngameEventDataBroadcast
-*k_EMsgSQLGCToGCSignoutUpdateLeagueSchedule
 *k_ItemPurgatoryResponse_Finalize_Succeeded
 *k_RemoveItemAttribute_Failed_ItemIsInvalid
 *pEnd > *pStart
@@ -3148,7 +3187,7 @@ $|LA;X
 +++ %s[%d]: 
 ++CLoopModeGame::SetWorldSession
 +;K[k{
-+AXD;-E
++AXD;-
 +C$Hc
 +C$Lc
 +CClientMsg_DevPaletteVisibilityChangedEvent
@@ -3163,6 +3202,7 @@ $|LA;X
 +J`Hc
 +K$Hc
 +K$Lc
++LEAGUE_AUDIT_ACTION_LEAGUE_ADD_INVITED_TEAM
 +N$Hc
 +NETWORK_DISCONNECT_CLIENT_UNABLE_TO_CRC_MAP
 +NETWORK_DISCONNECT_CONNECT_REQUEST_TIMEDOUT
@@ -3216,7 +3256,6 @@ $|LA;X
 ,#GameUI_Disconnect_Splitpacket_Send_Overflow
 ,$D9m
 ,$E;l$
-,$E;u
 ,$H;]
 ,$[A\A]A^]
 ,0IcU
@@ -3344,6 +3383,7 @@ $|LA;X
 -NETWORK_DISCONNECT_REJECT_INVALIDSTEAMCERTLEN
 -P"B5
 -VUUU
+-addon
 -addon_path
 -allents
 -botworldstatetosocket_dire
@@ -3431,12 +3471,16 @@ $|LA;X
 -vscriptdebug
 .  Please update your library.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
 . This will make the proto fail to compile for some languages, such as C#.
-.%,E6
+.%-Y`
 .%0*llu
-.%QjK
-.%lda
+.%B3s
+.%\=Y
 .%llu
-.%~,+
+.%q.s
+.%q/s
+.%s-s
+.-_dR
+.-vu=
 ...<truncated>...
 ...done!
 ../../public/appframework/tier1app.h
@@ -3471,9 +3515,15 @@ $|LA;X
 ../public/tier2/fieldpath.h
 ../public/tier2/fileutils.h
 ..\content
-.0z%u#
-.=!=4
-.=d,'
+.0z&u$
+.53]W
+.5=dU
+.5I)*
+.5[Lb
+.5qWe
+.=Ab5
+.=YA`
+.=pLb
 .>N^n~
 .@,wqH
 .ALeaver status:
@@ -3582,6 +3632,21 @@ $|LA;X
 .CMsgDOTAFantasyPlayerStats
 .CMsgDOTAFantasyPlayerStats"
 .CMsgDOTAFantasyPlayerStats"L
+.CMsgDOTALeague.Admin
+.CMsgDOTALeague.ENodeGroupType
+.CMsgDOTALeague.ENodeType
+.CMsgDOTALeague.Info
+.CMsgDOTALeague.Node
+.CMsgDOTALeague.NodeGroup
+.CMsgDOTALeague.Player
+.CMsgDOTALeague.PrizePool
+.CMsgDOTALeague.PrizePoolItem
+.CMsgDOTALeague.SeriesInfo
+.CMsgDOTALeague.Stream
+.CMsgDOTALeague.Team
+.CMsgDOTALeague.TeamStanding
+.CMsgDOTALeagueInfo"
+.CMsgDOTALeagueMessages.Message
 .CMsgDOTAMatch
 .CMsgDOTAMatch.BroadcasterInfo
 .CMsgDOTAMatch.CustomGameData
@@ -3742,6 +3807,11 @@ $|LA;X
 .EGCPartnerRequestResponse
 .EHapticPulseType"I
 .EHeroStatType
+.ELeagueBroadcastProvider
+.ELeagueInvite
+.ELeagueRegion
+.ELeagueStatus
+.ELeagueTier
 .EMatchOutcome
 .ENetworkDisconnectionReason
 .ENetworkDisconnectionReason"
@@ -3783,6 +3853,8 @@ $|LA;X
 .K8zBf
 .Kpz_u]
 .L$pzIuGH
+.LEAGUE_AUDIT_ACTION_LEAGUE_ADD_PRIZE_POOL_ITEM
+.LEAGUE_AUDIT_ACTION_LEAGUE_REMOVE_INVITED_TEAM
 .LobbyDotaPauseSetting
 .LobbyDotaTVDelay
 .M;UU
@@ -3799,13 +3871,12 @@ $|LA;X
 .S4fA
 .SerializedNetAddress_t
 .SignedPayload_t
-.Sxz~u|
 .T$pzturI
 .V8w.
 .VoiceDataFormat_t:
 .W4{Jf.
 .[0fA
-.[|zK
+.[|zKuIH
 .\$,w0I
 .]8w!A
 ._8w!A
@@ -3882,46 +3953,31 @@ $|LA;X
 /CMsgRequestItemPurgatory_RefundPurchaseResponse
 /CMsgServerToGCCompendiumInGamePredictionResults
 /I9D$
-/actions/default_left
-/actions/default_left/in/Drop
-/actions/default_left/in/HandCurl
-/actions/default_left/in/HandSkeleton
-/actions/default_left/in/Pad
-/actions/default_left/in/PadTouch
-/actions/default_left/in/RClick
-/actions/default_left/in/ShowInventory
-/actions/default_left/in/Teleport
-/actions/default_left/in/ToggleMenu
-/actions/default_left/in/TrackPad
-/actions/default_left/in/TriggerPull
-/actions/default_left/in/TurnLeft
-/actions/default_left/in/TurnRight
-/actions/default_left/in/Use
-/actions/default_left/in/UseGrip
-/actions/default_right
-/actions/default_right/in/Drop
-/actions/default_right/in/HandCurl
-/actions/default_right/in/HandSkeleton
-/actions/default_right/in/Pad
-/actions/default_right/in/PadTouch
-/actions/default_right/in/RClick
-/actions/default_right/in/ShowInventory
-/actions/default_right/in/Teleport
-/actions/default_right/in/ToggleMenu
-/actions/default_right/in/TrackPad
-/actions/default_right/in/TriggerPull
-/actions/default_right/in/TurnLeft
-/actions/default_right/in/TurnRight
-/actions/default_right/in/Use
-/actions/default_right/in/UseGrip
-/actions/prop_tool_left
-/actions/prop_tool_right
+/actions/default
+/actions/default/in/Drop
+/actions/default/in/HandCurl
+/actions/default/in/HandSkeleton
+/actions/default/in/LClick
+/actions/default/in/Pad
+/actions/default/in/PadTouch
+/actions/default/in/RClick
+/actions/default/in/ShowInventory
+/actions/default/in/ToggleMenu
+/actions/default/in/TrackPad
+/actions/default/in/TriggerPull
+/actions/default/in/Use
+/actions/default/in/UseGrip
+/actions/move
+/actions/move/in/Teleport
+/actions/move/in/TurnLeft
+/actions/move/in/TurnRight
 /content/
 /game/
-/game/dota_addons/%s/
+/game/dota_addons/
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/_generated_code/server_dota/release/linuxsteamrt64/../../../../game/server/basecombatweapon.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/_generated_code/server_dota/release/linuxsteamrt64/../../../../game/server/client.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/_generated_code/server_dota/release/linuxsteamrt64/../../../../game/server/dota/dota_player.cpp
+/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/_generated_code/server_dota/release/linuxsteamrt64/../../../../game/server/dota/dota_suggest.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/_generated_code/server_dota/release/linuxsteamrt64/../../../../game/server/entityflame.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/_generated_code/server_dota/release/linuxsteamrt64/../../../../game/server/vguiscreen.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/_generated_code/server_dota/release/linuxsteamrt64/../../../../game/shared/dota/dota_game_manager.cpp
@@ -3933,7 +3989,7 @@ $|LA;X
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/dota/dota_gc_server.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/dota/dota_server_custom_game_cache.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/gameinterface.cpp
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/gameinterface.cpp(1666): Cannot find a unit that uses model: "%s" 
+/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/gameinterface.cpp(1669): Cannot find a unit that uses model: "%s" 
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/hltvdirector.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/info_spawngroupstream.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/nav_generate.cpp
@@ -3944,6 +4000,7 @@ $|LA;X
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/server/testfunctions.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/shared/ai_responsesystem.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/shared/animationlayer.cpp
+/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/shared/baseanimatingoverlaycontroller.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/shared/baseentity_shared.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/shared/baseflex_shared.cpp
 /home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/game/shared/decalgamesystem.cpp
@@ -3993,6 +4050,8 @@ $|LA;X
 /maps/
 /softlinks/
 /thanks
+/user/hand/left
+/user/hand/right
 0 0 0
 0 0 0 30
 0 <= i
@@ -4695,6 +4754,7 @@ $|LA;X
 14CMarkupManager
 14CMessageEntity
 14CModelModifier
+14CMsgDOTALeague
 14CMsgEffectData
 14CMsgIPCAddress
 14CMsgLeaveParty
@@ -5565,6 +5625,7 @@ $|LA;X
 16CModifierFactoryI34CDOTA_Modifier_Broodmother_SpinWebE
 16CModifierFactoryI34CDOTA_Modifier_Centaur_Return_AuraE
 16CModifierFactoryI34CDOTA_Modifier_Chen_HolyPersuasionE
+16CModifierFactoryI34CDOTA_Modifier_Courier_AutoDeliverE
 16CModifierFactoryI34CDOTA_Modifier_Dazzle_Poison_TouchE
 16CModifierFactoryI34CDOTA_Modifier_DrowRanger_TrueshotE
 16CModifierFactoryI34CDOTA_Modifier_EarthSpirit_PetrifyE
@@ -6934,6 +6995,7 @@ $|LA;X
 18CAtomicManipulatorI10CUtlVectorIN18CDOTA_BaseNPC_Hero15sHeroDamageInfoE10CUtlMemoryIS2_iEEE
 18CAtomicManipulatorI10CUtlVectorIN18CDOTA_BaseNPC_Hero23sHeroRecentModifierInfoE10CUtlMemoryIS2_iEEE
 18CAtomicManipulatorI10CUtlVectorIN21CDOTA_ScriptedSpawner17scripted_moveto_tE10CUtlMemoryIS2_iEEE
+18CAtomicManipulatorI10CUtlVectorIN29CBoneConstraintPoseSpaceMorph7Input_tE10CUtlMemoryIS2_iEEE
 18CAtomicManipulatorI10CUtlVectorIP10CDOTA_Tree10CUtlMemoryIS2_iEEE
 18CAtomicManipulatorI10CUtlVectorIP11CFuncLadder10CUtlMemoryIS2_iEEE
 18CAtomicManipulatorI10CUtlVectorIP11sSpiritInfo10CUtlMemoryIS2_iEEE
@@ -7246,6 +7308,7 @@ $|LA;X
 18CMsgApplyAutograph
 18CMsgBannedWordList
 18CMsgClientPingData
+18CMsgDOTALeagueInfo
 18CMsgGameServerInfo
 18CMsgIDLinkResponseILj2ELj16ELj7026E27CMsgServerToGCRequestStatusLj7546E36CMsgServerToGCRequestStatus_ResponseE
 18CMsgIDLinkResponseILj2ELj16ELj7158E28CMsgGameServerUploadSaveGameLj7159E28CMsgGameServerSaveGameResultE
@@ -7561,6 +7624,7 @@ $|LA;X
 18CSchemaManipulatorI10CUtlVectorIN18CDOTA_BaseNPC_Hero15sHeroDamageInfoE10CUtlMemoryIS2_iEEE
 18CSchemaManipulatorI10CUtlVectorIN18CDOTA_BaseNPC_Hero23sHeroRecentModifierInfoE10CUtlMemoryIS2_iEEE
 18CSchemaManipulatorI10CUtlVectorIN21CDOTA_ScriptedSpawner17scripted_moveto_tE10CUtlMemoryIS2_iEEE
+18CSchemaManipulatorI10CUtlVectorIN29CBoneConstraintPoseSpaceMorph7Input_tE10CUtlMemoryIS2_iEEE
 18CSchemaManipulatorI10CUtlVectorIP10CDOTA_Tree10CUtlMemoryIS2_iEEE
 18CSchemaManipulatorI10CUtlVectorIP11CFuncLadder10CUtlMemoryIS2_iEEE
 18CSchemaManipulatorI10CUtlVectorIP11sSpiritInfo10CUtlMemoryIS2_iEEE
@@ -7799,6 +7863,7 @@ $|LA;X
 19CBaseClientUIEntity
 19CBidirMsg_RelayInfo
 19CBodyComponentPoint
+19CBoneConstraintBase
 19CCLCMsg_BaselineAck
 19CClientLobbyWatcher
 19CCombatCharVisCache
@@ -7885,6 +7950,9 @@ $|LA;X
 19CMomentaryRotButton
 19CMsgAddItemToSocket
 19CMsgApplyEggEssence
+19CMsgDOTALeague_Info
+19CMsgDOTALeague_Node
+19CMsgDOTALeague_Team
 19CMsgDOTAProfileCard
 19CMsgGCIsProResponse
 19CMsgGCMsgSetOptions
@@ -8166,6 +8234,7 @@ $|LA;X
 19CSchemaClassBindingI28VPhysXShapeCompoundHeader2_tE
 19CSchemaClassBindingI28VPhysicsCollisionAttribute_tE
 19CSchemaClassBindingI28constraint_breakableparams_tE
+19CSchemaClassBindingI29CBoneConstraintPoseSpaceMorphE
 19CSchemaClassBindingI29CNetworkOriginQuantizedVectorE
 19CSchemaClassBindingI29CPhysSurfacePropertiesPhysicsE
 19CSchemaClassBindingI29ClusteredDistributionParams_tE
@@ -8210,6 +8279,7 @@ $|LA;X
 19CSchemaClassBindingIN18CDOTA_BaseNPC_Hero23sHeroRecentModifierInfoEE
 19CSchemaClassBindingIN20CBaseCombatCharacter13DamageHistoryEE
 19CSchemaClassBindingIN21CDOTA_ScriptedSpawner17scripted_moveto_tEE
+19CSchemaClassBindingIN29CBoneConstraintPoseSpaceMorph7Input_tEE
 19CSchemaFieldVisitor
 19CSchemaRegistration
 19CSimplePhysicsBrush
@@ -8263,6 +8333,7 @@ $|LA;X
 1CCommunity_GetGamePersonalDataCategories_Response
 1CMsgRequestItemPurgatory_FinalizePurchaseResponse
 1DBlend
+1LEAGUE_AUDIT_ACTION_LEAGUE_REMOVE_PRIZE_POOL_ITEM
 1f92u
 1k_EGCMsgInitiateTradeResponse_Sent_Invalid_Cookie
 1k_EGCMsgInitiateTradeResponse_Service_Unavailable
@@ -8270,6 +8341,7 @@ $|LA;X
 1k_EMsgClientToGCPlayerCardSpecificPurchaseRequest
 1k_EMsgClientToGCRequestLinaPlaysRemainingResponse
 1k_EMsgClientToGCRequestSocialFeedCommentsResponse
+1k_EMsgGCToGCReconcilePlusAutoGrantItemsUnreliable
 1k_EMsgServerToGCCompendiumInGamePredictionResults
 1k_ItemPurgatoryResponse_Finalize_Failed_NoSOCache
 1k_ItemPurgatoryResponse_Refund_Failed_NexonWebAPI
@@ -8295,6 +8367,7 @@ $|LA;X
 2!.CMsgBotWorldState.Action.BuybackH
 2!.CMsgBotWorldState.Action.CourierH
 2!.CMsgBotWorldState.Actions.Header
+2!.CMsgDOTALeagueLiveGames.LiveGame
 2!.CMsgDOTAMatch.BroadcasterChannel
 2!.CMsgDOTASeasonPredictions.Choice
 2!.CMsgGCMsgSetOptions.GCSQLVersion
@@ -8427,6 +8500,7 @@ $|LA;X
 2).CUserMsg_ParticleManager.SetParticleText
 2*.CDOTAMatchMetadata.Team.AutoStyleCriteria
 2*.CDOTAMatchMetadata.Team.InventorySnapshot
+2*.CDOTAMatchMetadata.Team.VictoryPrediction"
 2*.CMsgBotWorldState.Actions.OceanAnnotation
 2*.CMsgDOTARealtimeGameStats.BuildingDetails
 2*.CMsgDOTARealtimeGameStats.HeroToHeroStats
@@ -8611,6 +8685,7 @@ $|LA;X
 20CMsgDOTABotDebugInfo
 20CMsgDOTAFantasyMatch
 20CMsgDOTAHasItemQuery
+20CMsgDOTALeague_Admin
 20CMsgDOTAMatch_Player
 20CMsgDOTAUpdateClippy
 20CMsgGCGetCommandList
@@ -8846,6 +8921,8 @@ $|LA;X
 21CLogicMeasureMovement
 21CMatchHeroSelectEvent
 21CMsgAddSocketResponse
+21CMsgDOTALeague_Player
+21CMsgDOTALeague_Stream
 21CMsgDOTASeasonRewards
 21CMsgDevNewItemRequest
 21CMsgGCCheckFriendship
@@ -9038,6 +9115,8 @@ $|LA;X
 22CMsgBotWorldState_Unit
 22CMsgClientToGCNameItem
 22CMsgDOTACombatLogEntry
+22CMsgDOTALeagueInfoList
+22CMsgDOTALeagueMessages
 22CMsgDPPartnerMicroTxns
 22CMsgGCBanStatusRequest
 22CMsgGCClientMarketData
@@ -9298,6 +9377,8 @@ $|LA;X
 23CMsgApplyPennantUpgrade
 23CMsgCombatAnalyzerStats
 23CMsgDOTAHasItemResponse
+23CMsgDOTALeagueLiveGames
+23CMsgDOTALeaguePrizePool
 23CMsgExtractGemsResponse
 23CMsgGCBanStatusResponse
 23CMsgGCGetAppFriendsList
@@ -9624,6 +9705,8 @@ $|LA;X
 24CMsgDOTAAwardEventPoints
 24CMsgDOTABotDebugInfo_Bot
 24CMsgDOTAHasItemDefsQuery
+24CMsgDOTALeague_NodeGroup
+24CMsgDOTALeague_PrizePool
 24CMsgDOTAProfileCard_Slot
 24CMsgGCToGCRefreshSOCache
 24CMsgGCTopCustomGamesList
@@ -9837,6 +9920,7 @@ $|LA;X
 25CMsgBotWorldState_Courier
 25CMsgClearWorldDecalsEvent
 25CMsgClientToGCUnlockCrate
+25CMsgDOTALeague_SeriesInfo
 25CMsgDOTARealtimeGameStats
 25CMsgDOTASeasonPredictions
 25CMsgGCCheckClanMembership
@@ -10248,6 +10332,7 @@ $|LA;X
 27CMsgConnectedPlayers_Player
 27CMsgCustomGameInstallStatus
 27CMsgDOTAHasItemDefsResponse
+27CMsgDOTALeague_TeamStanding
 27CMsgDOTASDOHeroStatsHistory
 27CMsgGCClientMarketDataEntry
 27CMsgGCGetPartnerAccountLink
@@ -10384,6 +10469,7 @@ $|LA;X
 27CSchemaUtlVectorManipulatorI10CUtlVectorIN18CDOTA_BaseNPC_Hero15sHeroDamageInfoE10CUtlMemoryIS2_iEES2_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorIN18CDOTA_BaseNPC_Hero23sHeroRecentModifierInfoE10CUtlMemoryIS2_iEES2_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorIN21CDOTA_ScriptedSpawner17scripted_moveto_tE10CUtlMemoryIS2_iEES2_E
+27CSchemaUtlVectorManipulatorI10CUtlVectorIN29CBoneConstraintPoseSpaceMorph7Input_tE10CUtlMemoryIS2_iEES2_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorIP10CDOTA_Tree10CUtlMemoryIS2_iEES2_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorIP11CFuncLadder10CUtlMemoryIS2_iEES2_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorIP11sSpiritInfo10CUtlMemoryIS2_iEES2_E
@@ -10567,6 +10653,7 @@ $|LA;X
 28CMsgAMAddFreeLicenseResponse
 28CMsgCombatAnalyzerPlayerStat
 28CMsgDOTAFrostivusTimeElapsed
+28CMsgDOTALeague_PrizePoolItem
 28CMsgDOTALiveScoreboardUpdate
 28CMsgDOTAMatch_CustomGameData
 28CMsgDOTARewardDiretidePrizes
@@ -10631,6 +10718,7 @@ $|LA;X
 291t[
 29CAdditionalEquipSlotClientMsg
 29CBodyComponentBaseModelEntity
+29CBoneConstraintPoseSpaceMorph
 29CCLCMsg_SplitPlayerDisconnect
 29CDOTABehaviorCommandMoveToNPC
 29CDOTAClientMsg_CoinWagerToken
@@ -11160,6 +11248,7 @@ $|LA;X
 30CMsgBotWorldState_TeleportInfo
 30CMsgClientToGCNameItemResponse
 30CMsgDOTAFantasyLivePlayerStats
+30CMsgDOTALeagueMessages_Message
 30CMsgDOTARealtimeGameStatsTerse
 30CMsgDOTARequestPlayerResources
 30CMsgDPPartnerMicroTxnsResponse
@@ -11595,6 +11684,7 @@ $|LA;X
 32CMsgClientToGCEquipItemsResponse
 32CMsgClientToGCGetGiftPermissions
 32CMsgClientToGCWrapAndDeliverGift
+32CMsgDOTALeagueLiveGames_LiveGame
 32CMsgDOTAMatch_BroadcasterChannel
 32CMsgDOTASeasonPredictions_Choice
 32CMsgGCGetAccountSubscriptionItem
@@ -11647,6 +11737,7 @@ $|LA;X
 333?333?
 333?A
 33BreadthFirstSearchVolumeCollector
+33CDOTABehaviorCommandVampireThrall
 33CDOTABroadcastMsg_LANLobbyRequest
 33CDOTAClientMsg_KillcamDamageTaken
 33CDOTAClientMsg_RequestGraphUpdate
@@ -11676,6 +11767,7 @@ $|LA;X
 33CDOTA_Ability_Bristleback_Warpath
 33CDOTA_Ability_Broodmother_SpinWeb
 33CDOTA_Ability_Chen_HolyPersuasion
+33CDOTA_Ability_Courier_AutoDeliver
 33CDOTA_Ability_Creature_Ice_Breath
 33CDOTA_Ability_Dazzle_Poison_Touch
 33CDOTA_Ability_DrowRanger_Trueshot
@@ -11969,6 +12061,7 @@ $|LA;X
 34CDOTA_Modifier_Broodmother_SpinWeb
 34CDOTA_Modifier_Centaur_Return_Aura
 34CDOTA_Modifier_Chen_HolyPersuasion
+34CDOTA_Modifier_Courier_AutoDeliver
 34CDOTA_Modifier_Dazzle_Poison_Touch
 34CDOTA_Modifier_DrowRanger_Trueshot
 34CDOTA_Modifier_EarthSpirit_Petrify
@@ -12233,6 +12326,7 @@ $|LA;X
 35CMsgBotWorldState_Action_PickupRune
 35CMsgBotWorldState_EventRoshanKilled
 35CMsgClientToGCRerollPlayerChallenge
+35CMsgDOTALeagueInfoListAdminsRequest
 35CMsgDOTAMatch_Player_CustomGameData
 35CMsgDOTARealtimeGameStats_GraphData
 35CMsgDOTARequestBatchPlayerResources
@@ -12623,6 +12717,7 @@ $|LA;X
 35CSchemaNonConstructibleClassBindingI19CAdditionalWearableE
 35CSchemaNonConstructibleClassBindingI19CBaseClientUIEntityE
 35CSchemaNonConstructibleClassBindingI19CBodyComponentPointE
+35CSchemaNonConstructibleClassBindingI19CBoneConstraintBaseE
 35CSchemaNonConstructibleClassBindingI19CDOTAGamerulesProxyE
 35CSchemaNonConstructibleClassBindingI19CDOTA_BaseNPC_CreepE
 35CSchemaNonConstructibleClassBindingI19CDOTA_BaseNPC_TowerE
@@ -13499,6 +13594,7 @@ $|LA;X
 35CSchemaNonConstructibleClassBindingI33CDOTA_Ability_Bristleback_WarpathE
 35CSchemaNonConstructibleClassBindingI33CDOTA_Ability_Broodmother_SpinWebE
 35CSchemaNonConstructibleClassBindingI33CDOTA_Ability_Chen_HolyPersuasionE
+35CSchemaNonConstructibleClassBindingI33CDOTA_Ability_Courier_AutoDeliverE
 35CSchemaNonConstructibleClassBindingI33CDOTA_Ability_Creature_Ice_BreathE
 35CSchemaNonConstructibleClassBindingI33CDOTA_Ability_Dazzle_Poison_TouchE
 35CSchemaNonConstructibleClassBindingI33CDOTA_Ability_DrowRanger_TrueshotE
@@ -16037,6 +16133,7 @@ $|LA;X
 35CSchemaNonConstructibleClassBindingIN33CDOTA_Ability_Bristleback_Warpath26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN33CDOTA_Ability_Broodmother_SpinWeb26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN33CDOTA_Ability_Chen_HolyPersuasion26CEntityInstanceEntityClassEE
+35CSchemaNonConstructibleClassBindingIN33CDOTA_Ability_Courier_AutoDeliver26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN33CDOTA_Ability_Creature_Ice_Breath26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN33CDOTA_Ability_Dazzle_Poison_Touch26CEntityInstanceEntityClassEE
 35CSchemaNonConstructibleClassBindingIN33CDOTA_Ability_DrowRanger_Trueshot26CEntityInstanceEntityClassEE
@@ -18191,6 +18288,7 @@ $|LA;X
 40CDOTAClientMsg_HelpTipSystemStateChanged
 40CDOTAClientMsg_UnitsAutoAttackAfterSpell
 40CDOTALobbyMember_CDOTALobbyMemberXPBonus
+40CDOTAStaticRecipeComponentEventOwnership
 40CDOTAUserMsg_CourierKilledAlert_LostItem
 40CDOTAUserMsg_PredictionResult_Prediction
 40CDOTAUserMsg_SpectatorPlayerUnitOrders_t
@@ -18363,7 +18461,7 @@ $|LA;X
 41CDOTAClientMsg_AbilityDraftRequestAbility
 41CDOTAMatchMetadata_Team_AutoStyleCriteria
 41CDOTAMatchMetadata_Team_InventorySnapshot
-41CDOTAStaticRecipeComponentLeagueOwnership
+41CDOTAMatchMetadata_Team_VictoryPrediction
 41CDOTAUserMsg_AbilityDraftRequestAbility_t
 41CDOTA_Ability_AncientApparition_IceVortex
 41CDOTA_Ability_Bristleback_ViscousNasalGoo
@@ -19915,7 +20013,8 @@ $|LA;X
 6CModel
 6CWorld
 6ConVar
-6D#5{f
+6D#5;
+6D#5[[
 6D;U$
 6H92t%H
 6H92u
@@ -19998,7 +20097,6 @@ $|LA;X
 8Cxt&H
 8Cyt&H
 8Czt&H
-8D9%1
 8E9'~;I
 8E;f@
 8E;w4u
@@ -20017,7 +20115,7 @@ $|LA;X
 8McD$
 8McD$P
 8NETWORK_DISCONNECT_LOCALPROBLEM_HOSTEDSERVERPRIMARYRELAY
-8Sgt5H
+8S&t5H
 8Sht5H
 8VBKVt6HcF
 8Vector2D
@@ -20048,7 +20146,7 @@ $|LA;X
 926XsBm
 92t H
 92t*H
-92tyHcR
+95!W0
 97v(Lc
 97v,Lc
 999999
@@ -20110,7 +20208,6 @@ $|LA;X
 9CTEImpact
 9CTESparks
 9CTimeline
-9CXti
 9C`~1L
 9Cx~<L
 9C|tg
@@ -20157,6 +20254,7 @@ $|LA;X
 :>	As?K
 :A9L$
 :Sft5H
+:Sgt5H
 :[tlL
 :fA99
 :fA99u
@@ -20170,16 +20268,13 @@ $|LA;X
 ;2t#1
 ;2t%H
 ;2t0H
-;2tqHcR
 ;3tWD
 ;7t9H
 ;7t<H
-;8tSHc@
 ;:HcR
 ;:tzHcJ
 ;:~`H
 ;;D$H
-;=aS6
 ;@:8t"
 ;A0}4H
 ;A;E4u
@@ -20193,15 +20288,16 @@ $|LA;X
 ;G(}>
 ;GAME_PARTICLE_MANAGER_EVENT_CHANGE_CONTROL_POINT_ATTACHMENT
 ;H98u
-;Hc5Iu
+;Hc5NH
 ;L9'u
-;L9/u
 ;L9?u
 ;O,|51
 ;PX|RE
 ;PX}eA
 ;PX~NE
 ;S0t5H
+;S@t5H
+;SDt5H
 ;WD|2H
 ;X(~.
 ;Xp}}H
@@ -20215,7 +20311,7 @@ $|LA;X
 ;p\t"H
 ;ppt"1
 ;ppt?H9
-;r8t&H
+;r8t.H
 ;r8t4H
 ;sv_pausable;sv_cheats
 ;w |	]
@@ -20247,6 +20343,7 @@ $|LA;X
 <$A\H
 <$A\]
 <$D;s
+<$D;w
 <$E;|$
 <$H9zpt	L9
 <$HcC0H
@@ -20310,6 +20407,7 @@ $|LA;X
 <Ath<G
 <Eu.H
 <INVALID EXPRESSION>
+<INVALID_RBF_TYPE>
 <Iwi>y
 <Loop> should be 1 or 0.
 <NO EXPRESSION>
@@ -20407,12 +20505,13 @@ $|LA;X
 ?A\A]A^A_]
 ?A\A]A^]
 ?AbilityChannel
+?CDOTALocomotor
 ?CGameEntity::CEntityInstanceEntityClass
 ?CInfoLadderDismount
 ?CSceneTokenProcessor::Error:  %s in '%s' at offset %llu : line %u : char %llu
 ?ERCP
-?H;=r
 ?H;{@t
+?L9/u
 ?Mct$ 
 ?NewNode
 ?Out of Memory
@@ -20491,7 +20590,7 @@ $|LA;X
 @DA9G
 @E;f(},IcF$
 @H97tbH
-@H;5$3
+@H;51
 @HA^]
 @HD3+
 @HD9aPu
@@ -20521,6 +20620,7 @@ $|LA;X
 @animTimeSerializer
 @end_camera
 @hA\]
+@htNE1
 @htRH
 @m?X[j
 @modifier_ice_vortex
@@ -20528,7 +20628,6 @@ $|LA;X
 @pA\]
 @player_changename
 @player_start_teleport_destination
-@replenish_amount
 @t	[A\]
 @t0~>
 @tBE+
@@ -20581,6 +20680,7 @@ A!\$8[A\]
 A#D$,E
 A#F,E
 A(Lcc D;c0
+A(Lck D;k0
 A)_8I
 A+D$$9
 A+D$$H
@@ -20621,6 +20721,7 @@ A+^$Hc
 A+_$Hc
 A+t$$Hc
 A+u$Hc
+A+w$Hc
 A09r0
 A0fD+ E
 A2D$?
@@ -20633,9 +20734,9 @@ A8F6t
 A8F7t
 A8G6t
 A8Lcc D;c0
+A8T$Ht;I
 A8UPt7I
 A8U|t7I
-A8\$&t;I
 A8~uLc
 A94$H
 A97tVA
@@ -20646,6 +20747,7 @@ A9D$(
 A9D$,
 A9D$0
 A9D$0t
+A9D$0~
 A9D$8
 A9D$<
 A9D$@
@@ -20681,7 +20783,7 @@ A9T$\|
 A9T$h
 A9T$h~5I
 A9T$p
-A9V(A
+A9W(A
 A9W8L
 A9Wh~
 A9\$(
@@ -20709,7 +20811,6 @@ A9u8}
 A9|$4
 A:A(t
 A:D$8tBI
-A:F%t"I
 A;<$}
 A;D$ 
 A;D$ }
@@ -20718,13 +20819,11 @@ A;D$(
 A;D$(tBI
 A;D$0
 A;D$0|
-A;D$0}
 A;D$0}2I
 A;D$<
 A;D$<u
 A;D$H
 A;D$Ht
-A;D$\
 A;D$d|"
 A;D$hA
 A;D$l
@@ -20770,7 +20869,6 @@ A;\$8|
 A;\$8}&I
 A;\$<t
 A;\$@t
-A;\$@t;I
 A;\$H
 A;\$X
 A;\$\
@@ -20782,6 +20880,7 @@ A;] t5I
 A;] |
 A;](|
 A;]@|
+A;]Pt[I
 A;]P|
 A;]\t@I
 A;]`|
@@ -22430,6 +22529,7 @@ AUATSL
 AUATSPH
 AUATSf
 AUATSt	H
+AUATSt)H
 AUATStII
 AUATStMI
 AUATSt\
@@ -22611,7 +22711,7 @@ Ability.XMarksTheSpot.Return
 Ability.XMarksTheSpot.Target
 Ability.pre.Torrent
 Ability/Item %s has no ID defined.  This will break stats tracking!
-Ability/Item %s is using a duplicate ID.  This will break stats tracking!
+Ability/Item %s is using a duplicate ID (%d).  This will break stats tracking!
 AbilityCastAnimation
 AbilityCastAnimationIsGesture
 AbilityCastPoint
@@ -22756,6 +22856,7 @@ Action_UseAbilityOnLocation
 Action_UseAbilityOnTree
 Action_UseShrine
 Actions
+Activate
 Activate a different one with spawn_group_activate!
 Activate specified spawngroup.
 ActivateServerFromLobby
@@ -22885,6 +22986,7 @@ Adds an I/O connection that will call the named function on this entity when the
 Adds passed value to base attribute value, then calls CalculateStatBonus.
 Adds the no draw flag.
 Adds to list of names to display text debugging information about the given entity(ies) on top of the entity (See Overlay Text)
+Admin
 Adobe APP14 marker: version %d, flags 0x%04x 0x%04x, transform %d
 Aegis.Expire
 Aegis.Timer
@@ -22924,6 +23026,7 @@ Allocated %d probes for a path from Vector( %.2f, %.2f, 0.f ) to Vector( %.2f, %
 Allow Interrupt
 Allow Vis
 Allow players to pause in matchmade games
+AllowAddonDependencies
 AllowVoteChanging
 Allowing
 Allows anchor teleportation onto walls and ceiling. NOTE: WIP, mostly broken!
@@ -23233,13 +23336,13 @@ Avoidance! Tower: %d, PhysicalEffect: %d, MagicalEffect: %d, Creep: %d, Hero: %d
 AvoidanceZone
 AwardEventPoints failed as no lobby found!
 AwardPoints
-AxHcQpL
 B  0x%08X %s,
 B 3B43B
 B IcU0
 B channel not found
 B channel not found in %s
 B$3B83B
+B$t>I
 B%s(#%d)
 B(3B<3B
 B(9A(
@@ -23265,6 +23368,10 @@ BEAM_INVALID
 BEAM_LASER
 BEAM_POINTS
 BEAM_SPLINE
+BEST_OF_FIVE
+BEST_OF_ONE
+BEST_OF_THREE
+BEST_OF_TWO
 BGCPostSchemaInitStartupChecks(): tool '%s' is invalid.
 BGR565
 BGR888_BLUESCREEN
@@ -23340,6 +23447,10 @@ BOT_MODE_WARD
 BPRECIPITATION
 BR(Ht!H
 BR(Hu
+BRACKET_DOUBLE_ALL_WINNER
+BRACKET_DOUBLE_SEED_LOSER
+BRACKET_SHOWMATCH
+BRACKET_SINGLE
 BRUSHSOLID_ALWAYS
 BRUSHSOLID_NEVER
 BRUSHSOLID_TOGGLE
@@ -23488,6 +23599,7 @@ Bmodifier_abaddon_frostmourne
 Bodies: %d (%d)
 Body Component Scriptdesc
 BodyGameSystem
+BodyGroupChoice
 Bogus DAC index %d
 Bogus DAC value 0x%x
 Bogus DHT index %d
@@ -23601,6 +23713,7 @@ BuildCacheSubscribed(CEconItemLeagueViewPass)
 BuildCacheSubscribed(CEconItemTournamentPassport)
 BuildComponentRecursive
 BuildDeltaProperties fieldDataBuf
+BuildTransmitInfo
 Building
 Building: %s destroyed at %f.
 BuildingDetails
@@ -23629,7 +23742,6 @@ C A;E
 C D;8
 C E9w 
 C H;C(
-C I;F
 C IcT$
 C Lc#
 C [A\A]A^]
@@ -23637,6 +23749,7 @@ C [A\]
 C fD; tNH
 C uXH
 C uaH
+C ~:A
 C!?t?
 C!?t`D
 C"tJL
@@ -23666,7 +23779,6 @@ C,[A\A]]
 C,[A\]
 C,~/E1
 C-side of entity framework
-C/ [A\]
 C0;C@
 C0HcC
 C0HcS(I
@@ -23676,8 +23788,10 @@ C0f%?
 C0t L
 C1A8D$1
 C333333
+C4D;c
 C4Mcl$
 C4[A\]
+C4t-A
 C89C\
 C8Hc{0
 C8I;D$
@@ -23687,6 +23801,7 @@ C8IcT$0H
 C8[A\A]A^]
 C8[A\]
 C8t	L
+C8t#I
 C8tyH
 C9D.|t H
 C<[A\A]A^]
@@ -23694,7 +23809,7 @@ C<[A\]
 C@H;CHs
 C@I9E
 C@IcT$8H
-C@T	KInvade
+C@T	Kreplenish_amount
 C@[A\A]A^]
 C@[A\]
 C@tAA
@@ -23873,6 +23988,9 @@ CBodyComponentReferencedPtr
 CBodyComponentSkeletonInstance
 CBodyComponentSkeletonInstanceReferenced
 CBodyComponentSkeletonInstanceReferencedPtr
+CBoneConstraintBase
+CBoneConstraintPoseSpaceMorph
+CBoneConstraintPoseSpaceMorph::Input_t
 CBreakable
 CBreakable::CEntityInstanceEntityClass
 CBreakableProp
@@ -24636,6 +24754,8 @@ CDOTA_Ability_Clinkz_WindWalk
 CDOTA_Ability_Clinkz_WindWalk::CEntityInstanceEntityClass
 CDOTA_Ability_Corspselord_Revive
 CDOTA_Ability_Corspselord_Revive::CEntityInstanceEntityClass
+CDOTA_Ability_Courier_AutoDeliver
+CDOTA_Ability_Courier_AutoDeliver::CEntityInstanceEntityClass
 CDOTA_Ability_Courier_Burst
 CDOTA_Ability_Courier_Burst::CEntityInstanceEntityClass
 CDOTA_Ability_Courier_GoToEnemySecretShop
@@ -29889,6 +30009,12 @@ CMsgDOTAHasItemDefsQuery
 CMsgDOTAHasItemDefsResponse
 CMsgDOTAHasItemQuery
 CMsgDOTAHasItemResponse
+CMsgDOTALeague
+CMsgDOTALeagueInfo
+CMsgDOTALeagueInfoList
+CMsgDOTALeagueLiveGames
+CMsgDOTALeagueMessages
+CMsgDOTALeaguePrizePool
 CMsgDOTALiveScoreboardUpdate
 CMsgDOTAMatch
 CMsgDOTAPlayerFailedToConnect
@@ -30249,6 +30375,7 @@ CONSTRAINT_TYPE_MORPH
 CONSTRAINT_TYPE_ORIENT
 CONSTRAINT_TYPE_PARENT
 CONSTRAINT_TYPE_POINT
+CONSTRAINT_TYPE_POSE_SPACE_MORPH
 CONSTRAINT_TYPE_ROTATION
 CONSTRAINT_TYPE_TILT_TWIST
 CONSTRAINT_TYPE_TWIST
@@ -30476,6 +30603,7 @@ CPropDoorRotatingBreakable::CEntityInstanceEntityClass
 CPropHMDAvatar
 CPropHMDAvatar::CEntityInstanceEntityClass
 CPropVRHand
+CPropVRHand::AttachmentsThink
 CPropVRHand::CEntityInstanceEntityClass
 CPropVRTrackedObject
 CPropVRTrackedObject::CEntityInstanceEntityClass
@@ -30501,7 +30629,6 @@ CPt`H
 CPushable
 CPushable::CEntityInstanceEntityClass
 CP~#L
-CP~0H
 CP~F[A\]
 CP~GH
 CRC error
@@ -30817,8 +30944,8 @@ CTeamSpawnPoint
 CTeamplayRules
 CTensorFlowServer: Error running model %d: %s
 CTensorFlowServer: Error writing output %d of %d in model %d
-CTensorFlowServer: Failed to init socket!
-CTensorFlowServer: Failed to listen to socket %d!
+CTensorFlowServer: Failed to init socket! (%d)
+CTensorFlowServer: Failed to listen to socket %d! (%d)
 CTensorFlowServer: Failure reading input '%s' (%d of %d) in model %d
 CTensorFlowServer: Failure reading input desc %d of %d
 CTensorFlowServer: Failure reading output desc %d of %d
@@ -31037,6 +31164,7 @@ CXfD; t
 CXt	I
 CXt;H
 CXu(H
+CX~<L
 CYA8D$Y
 CZA8D$ZuR1
 C\[A\]
@@ -31271,6 +31399,7 @@ Causes the dire team to win
 Causes the radiant team to win
 Caution: quantization tables are too coarse for baseline JPEG
 CavernCrawl
+Cbyte
 Cchicken
 CdA9D$dt H
 Center Position: %f, %f, %f
@@ -31478,6 +31607,7 @@ CommandMoveToTargetToCast
 CommandProcedure
 CommandProcedureList
 Commanded to attack an entity
+Commanded to become a thrall
 Commanded to cast an ability on a position
 Commanded to cast an ability on given entity
 Commanded to cast an ability with no target
@@ -31835,7 +31965,6 @@ D$ I;E
 D$ I;E t
 D$ Ic
 D$ IcD$`D
-D$ L9
 D$ L90t,w
 D$ [A\A]A^]
 D$ [A\]
@@ -31911,7 +32040,7 @@ D$0Hc
 D$0Hk
 D$0I9
 D$0Ic
-D$0L9
+D$0Mk
 D$1@t9L
 D$49C4t
 D$49C4t H
@@ -31940,6 +32069,7 @@ D$8L9
 D$8Lc
 D$8Mc
 D$8fE
+D$<8C<
 D$<8C<t:H
 D$<9C<
 D$<9C<t
@@ -31959,10 +32089,8 @@ D$@Lc
 D$@M!
 D$@Mc
 D$@f9C@t
-D$@fE
 D$@~)
 D$D0u5H
-D$D8CDt
 D$D9CDt
 D$D9CDt H
 D$D9CDt9H
@@ -31970,6 +32098,7 @@ D$DA)
 D$DA\
 D$D[A\A]A^]
 D$D[A\]
+D$H8CHt
 D$H9C 
 D$H9CHt
 D$H9CHt9H
@@ -31985,6 +32114,7 @@ D$P u
 D$P8CPt 
 D$P9CPt
 D$PA\]
+D$PH9
 D$PH9CP
 D$PHc
 D$PIc
@@ -32035,6 +32165,7 @@ D$^f9C^t"H
 D$`8C`t!H
 D$`9C`t
 D$`E1
+D$`H9
 D$`Hc
 D$`f9C`t!
 D$`fA
@@ -32117,12 +32248,14 @@ D9 t-L
 D9 ~NH
 D9!t"
 D9!u"
-D9%96,
+D9%2\`
+D9%CF
+D9%iC
 D9't$H
 D9't,H
 D9(t'I
-D9-goC
 D90t[A
+D90~#H
 D9:t%H
 D9D$4B
 D9D$4H
@@ -32133,16 +32266,16 @@ D9L$0~VM
 D9W(~mL
 D9` ~
 D9`0u
+D9b,u
 D9c,t5H
+D9c0~_H
 D9c8u
 D9c<t
 D9cDt
-D9cP~:Lc}
 D9cP~cH
 D9cpu
 D9e }
 D9h u
-D9h,tPH
 D9k ~QH
 D9k ~VH
 D9k0t
@@ -32152,6 +32285,7 @@ D9kp~4H
 D9l$H
 D9p u
 D9p(~
+D9p,tPH
 D9pHu
 D9pX~
 D9pp~
@@ -32161,6 +32295,7 @@ D9t$@
 D9t$H
 D9z }
 D9{ u
+D9{Pu
 D9{`~LH
 D9|$ 
 D:C!t
@@ -32178,40 +32313,37 @@ D;"t=H
 D;"t]H
 D;"tgC
 D;$8u
-D;%"1;
-D;%$8$
-D;%1Lj
-D;%8(k
-D;%;Kk
-D;%>ZJ
-D;%J $
-D;%U(&
-D;%Xy>
-D;%`MJ
-D;%h:6
-D;%k74
-D;%sX0
-D;%x|<
-D;%|^6
-D;%~Y
+D;%$tA
+D;%&<5
+D;%0]
+D;%4F5
+D;%:5
+D;%>%q
+D;%>E2
+D;%BG5
+D;%ND2
+D;%YEW
+D;%b&+
+D;%v ?
+D;%}4
+D;%~qW
 D;'thH
 D;'t{
 D;'t{Hc
 D;'}#H
 D;(t)
-D;-2Ok
-D;-?;.
-D;-Pt
-D;-w[
-D;-~`
+D;-@w
+D;-YMm
+D;-u_3
+D;-w^`
+D;-~Sm
 D;.~3L
 D;/rbA
-D;5J+k
-D;5RfO
-D;8u"
+D;5Q	
+D;5fM3
+D;8u#
 D;:r;;Z
 D;:tPH
-D;=y`O
 D;@(D
 D;F`u
 D;G Lc
@@ -32260,6 +32392,7 @@ D;k(u
 D;k0D
 D;k0|
 D;k0}JH
+D;k4t5H
 D;k<tEH
 D;k@t7H
 D;k@|
@@ -32275,7 +32408,7 @@ D;l$(
 D;l$0
 D;l$H
 D;n |
-D;n }=L
+D;n }EL
 D;nPt
 D;o D
 D;p u
@@ -34128,7 +34261,6 @@ E0tQA
 E3\$@x)D
 E3\$Px
 E8A;EH
-E8nDt7I
 E8upt7I
 E9&t<A
 E9&tJI
@@ -34140,9 +34272,9 @@ E9'tRI
 E9't[I
 E9'u+I
 E9'~5H
+E9(~{M
 E9)|7t%I
 E9,$~
-E9,$~sM
 E94$~AI
 E9<$~BI
 E9D$8
@@ -34151,6 +34283,7 @@ E9L$h
 E9e@~
 E9e@~jH
 E9eh~NI
+E9g ~eH
 E9gPI
 E9g`~*I
 E9l$ 
@@ -34171,7 +34304,6 @@ E9|$
 E9|$ ~bI
 E9|$,
 E9|$,~
-E9|$Pu
 E9}0u
 E9}<u
 E9~(u
@@ -34193,6 +34325,7 @@ E;f@|
 E;f@}AH
 E;g D
 E;g0|
+E;g@u
 E;gL|$I
 E;gTH
 E;ghD
@@ -34206,6 +34339,7 @@ E;l$@}uL
 E;l$Pt
 E;l$p
 E;l$tt
+E;nL|
 E;n\|
 E;o(|
 E;o0|
@@ -34225,7 +34359,6 @@ E;u |
 E;u(t?I
 E;u<t8
 E;w t
-E;w4t?I
 E;wL|
 E;|$(D
 E;|$4u2H
@@ -34236,7 +34369,6 @@ E;}$},H
 E;}<L
 E;}xH
 E;~ D
-E;~L|
 E?sprites/plasma1.vmat
 E@A\H
 E@D9p$u
@@ -34324,6 +34456,14 @@ EItemPurgatoryResponse_Finalize
 EItemPurgatoryResponse_Refund
 EJA8D$J
 ELaneSelectionFlags
+ELeagueAuditAction
+ELeagueBroadcastProvider
+ELeagueFlags
+ELeagueInvite
+ELeagueRegion
+ELeagueStatus
+ELeagueTier
+ELeagueTierCategory
 EMPTY - ok for slot zero only!
 EM_DoSpark
 EM_FixAngle
@@ -34357,6 +34497,8 @@ ENT_FIND_METHOD_FARTHEST
 ENT_FIND_METHOD_NEAREST
 ENT_FIND_METHOD_RANDOM
 ENetworkDisconnectionReason
+ENodeGroupType
+EPD90
 EPHcM0H
 EPlayerVoiceListenState
 EPoorNetworkConditionsType
@@ -34474,6 +34616,7 @@ EVENT_ID_WINTER_MAJOR_2016
 EVENT_ID_WINTER_MAJOR_2017
 EVENT_LEVELSHUTDOWN:  with negative elapsed time (rt %f starttime %f)
 EXA;]`
+EXD;u
 EXECUTABLE_PATH
 EXL)e
 EXPLOSION_DEFAULT
@@ -34491,6 +34634,7 @@ Earned Trivia Points
 Ease In
 Ease In/Out
 Ease Out
+Ebonus_aoe_radius
 EconEntityParticleDisableMode_t
 EconItem
 EconItemCount
@@ -34583,7 +34727,6 @@ Encountered a 'chances' block in a static recipe which is not allowed
 Encountered a 'counts' block on a static recipe which is not allowed
 Encountered a circular dependency with library %s!
 Encountered a duplicate autograph with ID %u
-Encountered an event recipe component that did not specify a league_id
 Encountered an event recipe component that did not specify an event_id
 Encountered an invalid action ID %s
 Encountered an invalid action grant number %u for action %s
@@ -34595,9 +34738,9 @@ Encountered multiple input or output components with the same name (slot ID) of 
 Encountered multiple references to action ID %s
 Encountered point_prefab with no targetMapName key!
 Encountered recipe event that did not specify points or actions
+Encountered recipe that includes an event ownership check but is not associated with an input reward (only supported on inputs currently)
 Encountered recipe that includes an event reward but is not a static recipe
 Encountered recipe that includes an event reward but is not associated with an output reward (only supported on outputs currently)
-Encountered recipe that includes an league ownership check but is not associated with an input reward (only supported on inputs currently)
 Encountered unknown entity i/o target type!
 Encountered unknown enum value %s for field %s
 Encountered unknown resource type "%s" for resource "%s"!
@@ -34900,10 +35043,10 @@ F49C`
 F8$(t H
 F88A8
 F8A^A_]
-F8Lcc D;c0
 F9t  u
 F: %.2f deg
 F;, u
+F;<0u
 F;|  u
 F@I;FHs
 F@[A\A]A^]
@@ -34946,7 +35089,7 @@ FCVAR_UNLOGGED
 FCVAR_UNREGISTERED
 FCVAR_USERINFO
 FCVAR_VCONSOLE_SET_FOCUS
-FD8GDt
+FD9GDt
 FHATSH
 FHH9GHt
 FIELD_BOOLEAN
@@ -35467,6 +35610,7 @@ Function              %10s %10s %10s %10s
 F|Lcc
 F|z#u!
 F}D;c(
+G	4<A
 G 9F 
 G A+G
 G A9D$ 
@@ -35723,6 +35867,7 @@ GameToolEventTraceRayServerToolEvent_tHookupGameSystem
 GameUIService_001
 Games required on a hero for average KDA to be valid and calibrated
 Ganker
+Gaussian
 Gave the item!
 GduSL
 Gear: %d, RPM %4d
@@ -36060,6 +36205,7 @@ GetAutoCastState
 GetAverageTrueAttackDamage
 GetBackswingTime
 GetBaseAgility
+GetBaseAttackRange
 GetBaseAttackTime
 GetBaseDamage
 GetBaseDamageMax
@@ -36396,6 +36542,7 @@ GetModifierMoveSpeed_Limit
 GetModifierMoveSpeed_Max
 GetModifierName
 GetModifierNegativeEvasion_Constant
+GetModifierNoVisionOfAttacker
 GetModifierOverrideAttackDamage
 GetModifierPercentageCasttime
 GetModifierPercentageCooldown
@@ -36493,6 +36640,7 @@ GetOverrideAttackMagical
 GetOwner
 GetPaddedCollisionRadius
 GetParticleReplacement
+GetPartyID
 GetPathData
 GetPathData failed for read only CFieldPath
 GetPhysicalArmorBaseValue
@@ -36774,6 +36922,7 @@ GoodGuys = %d Disconnected = %d
 Got a NaN origin on %s
 Got a NaN velocity on %s
 Gothic
+GpHcGl
 GpUHc
 Grant Ownership
 GrantXPGold
@@ -36843,8 +36992,6 @@ H90t%A
 H90t/H
 H92tPH
 H9:tx
-H9=,s<
-H9=auh
 H9C t
 H9C(t
 H9D$(
@@ -36876,265 +37023,291 @@ H;1ta
 H;1u 
 H;2u#
 H;3t2H
-H;5	+
-H;5 "M
-H;5 $
-H;5 2
-H;5 WR
-H;5!&
-H;5##
-H;5#FY
-H;5#UG
-H;5'4I
-H;5(&Y
-H;5(Kv
-H;5(PM
-H;5,=
-H;5,LG
-H;50%?
-H;50*
-H;54&
-H;567M
-H;56nM
-H;56p?
-H;58<M
-H;58=I
-H;58E
-H;59xq
-H;5:(
-H;5<8
-H;5<;
-H;5<<
-H;5<lf
-H;5<}
-H;5>E
-H;5?SY
-H;5?m?
-H;5F$Y
-H;5H!H
-H;5H$
-H;5H4
-H;5H>
-H;5HcM
-H;5H|
-H;5I&?
-H;5K7d
-H;5Lp
-H;5Ow
-H;5P2
-H;5PuM
-H;5SH
-H;5SUG
-H;5VK
-H;5Xr
-H;5YTG
-H;5YjM
-H;5\ff
-H;5_1M
-H;5_xq
-H;5`nM
-H;5ccl
-H;5dEM
-H;5d]q
-H;5d|u
-H;5fIM
-H;5fQG
-H;5foM
-H;5iob
-H;5kw?
-H;5l'Y
-H;5llf
-H;5oQ
-H;5x;?
-H;5xS
-H;5xZY
-H;5xw
-H;5yYm
-H;5|(
+H;5&Ux
+H;5&{O
+H;5'2K
+H;5(;O
+H;5(Y[
+H;5)ev
+H;5+n
+H;5,>
+H;5/3[
+H;56+[
+H;56eO
+H;58+K
+H;58=
+H;58~
+H;5<1
+H;5<@T
+H;5?8
+H;5?EA
+H;5?hA
+H;5?nO
+H;5C	
+H;5CLO
+H;5FPA
+H;5H3
+H;5HJO
+H;5HQ?
+H;5HU[
+H;5Jh
+H;5KVx
+H;5L O
+H;5LCT
+H;5M	s
+H;5P{O
+H;5QeA
+H;5S%v
+H;5T;O
+H;5VSA
+H;5WoI
+H;5Z>[
+H;5^AA
+H;5_	y
+H;5_<A
+H;5`+[
+H;5`:v
+H;5`eO
+H;5c#i
+H;5ciA
+H;5dlI
+H;5dzx
+H;5f6A
+H;5fS[
+H;5h8
+H;5iev
+H;5jF
+H;5l&s
+H;5l@T
+H;5n:[
+H;5o;
+H;5o<[
+H;5ogO
+H;5pZK
+H;5sLO
+H;5t1
+H;5wmA
+H;5wnO
+H;5x)O
+H;5x>
+H;5x|O
+H;5y6O
+H;5{if
+H;5|XA
+H;5~-S
+H;5~{
 H;7t)H
 H;8tdH
 H;:t(f
 H;:t}
 H;:u 
-H;= q
-H;=!m{
-H;="1
-H;="{`
-H;=#&H
-H;=#S
-H;=#]
-H;=%Yn
-H;=%]N
-H;='(W
-H;=',W
-H;='0s
-H;=(/
-H;=(fC
-H;=(zW
-H;=)rQ
-H;=)u{
-H;=*+
-H;=*:G
-H;=*u,
-H;=+,
-H;=+>
-H;=+aa
-H;=,ST
-H;=,wH
-H;=/ N
-H;=/#J
-H;=/)@
-H;=/-N
-H;=/;N
-H;=/CA
-H;=/K
-H;=/Q[
-H;=/dN
-H;=/e
-H;=/un
-H;=/z
-H;=/zh
-H;=/}?
-H;=0G
-H;=0d{
-H;=3l
-H;=4.
+H;=	VI
+H;= 	
+H;= 4
+H;=!FY
+H;="ib
+H;=$QI
+H;=%#
+H;='-P
+H;='3P
+H;='7L
+H;='8\
+H;='8z
+H;='C
+H;='Fv
+H;='JI
+H;='LI
+H;='MB
+H;='WY
+H;='^I
+H;='fC
+H;='{z
+H;='|P
+H;='|]
+H;=(7w
+H;=(B
+H;=(HN
+H;=(Rw
+H;=,"@
+H;=,*
+H;=,-
+H;=,0E
+H;=,w
+H;=-O~
+H;=.WL
+H;=/D
+H;=4+
 H;=4C
-H;=4]
-H;=6 r
-H;=8	_
-H;=8H
-H;=93B
-H;=;r,
-H;=<K
-H;=<O{
-H;=<PT
-H;==:-
-H;==>-
-H;=>&L
-H;=>+L
-H;=?"J
-H;=?P[
-H;=?ZN
-H;=?]
-H;=?mb
-H;=D&s
-H;=D6G
-H;=Dl
-H;=E	
-H;=E(N
-H;=E5@
-H;=ExE
-H;=F v
-H;=F&q
-H;=H4W
-H;=HNW
-H;=He
-H;=I!|
-H;=Iu\
-H;=LCL
-H;=LxH
-H;=N*
-H;=NS
-H;=O!J
-H;=O,@
-H;=O8w
-H;=OAH
-H;=OHw
-H;=OO[
-H;=OTZ
-H;=OeC
-H;=Op
-H;=PB-
-H;=QX
-H;=QfC
-H;=STv
-H;=Sm{
-H;=U>
-H;=UdN
-H;=VER
-H;=Wu{
-H;=X'L
-H;=X,L
-H;=XA
-H;=Y=
-H;=Yb
-H;=Yp,
-H;=[5G
-H;=[9_
-H;=\5e
-H;=\@a
-H;=\G
-H;=\KR
-H;=\L
-H;=]f
-H;=_ J
-H;=_:R
-H;=_L
-H;=_N@
-H;=_N[
-H;=_SN
-H;=_XM
-H;=_]h
-H;=_a
-H;=_eZ
-H;=_jE
-H;=_p
-H;=_rE
-H;=`r
-H;=ba
-H;=bd{
-H;=c/
-H;=dH
-H;=dx,
-H;=eZN
-H;=h<L
-H;=hOW
-H;=hz{
-H;=i)W
-H;=jA-
-H;=jk,
-H;=l1e
-H;=lDL
-H;=lGL
-H;=lyH
-H;=m5`
-H;=n]P
-H;=o#Q
-H;=o(N
-H;=o)
-H;=o2g
-H;=o9R
-H;=o>@
-H;=oHn
-H;=oM[
-H;=oNA
-H;=oNo
-H;=oT
-H;=ohE
-H;=oo
-H;=oo@
-H;=op
-H;=ox
-H;=p6G
-H;=p:Z
-H;=pl
-H;=s@-
-H;=sM@
-H;=tft
-H;=uMs
-H;=uTZ
-H;=wfv
-H;=x&s
-H;=xrH
-H;=y;G
-H;=yS
-H;=z-
-H;=zpP
-H;=|M
-H;=~'L
-H;=~,L
-H;=~eC
+H;=4z
+H;=6Zs
+H;=6a
+H;=6oM
+H;=7)\
+H;=7+\
+H;=71
+H;=76L
+H;=7B
+H;=7VI
+H;=7]I
+H;=7_
+H;=7eC
+H;=7zP
+H;=7zj
+H;=7{]
+H;=8&
+H;=8+w
+H;=8R
+H;=8iJ
+H;=9PI
+H;=<)@
+H;=<*@
+H;=<Z
+H;=<dN
+H;==;z
+H;=>aI
+H;=?%Y
+H;=?B
+H;=?R
+H;=@2
+H;=@c
+H;=AqP
+H;=Dj\
+H;=F.T
+H;=FtT
+H;=G"
+H;=G1
+H;=GA
+H;=GCS
+H;=GG
+H;=GP
+H;=GRz
+H;=G^
+H;=G_c
+H;=GcY
+H;=GdC
+H;=GfP
+H;=GiT
+H;=Gkp
+H;=GnG
+H;=Gtj
+H;=Gz\
+H;=HCN
+H;=H}Y
+H;=I#
+H;=J"
+H;=JM
+H;=Jj
+H;=K#a
+H;=Krb
+H;=L	
+H;=L#@
+H;=LzT
+H;=M b
+H;=MJI
+H;=N7w
+H;=NHN
+H;=Ni/
+H;=O@
+H;=P?
+H;=PQI
+H;=RFv
+H;=Rk
+H;=SFY
+H;=W0
+H;=W1
+H;=W9
+H;=W@
+H;=WO
+H;=WOG
+H;=WU
+H;=W]
+H;=Wa]
+H;=WcC
+H;=WhT
+H;=Wyz
+H;=X-
+H;=YT~
+H;=YW
+H;=Y\Y
+H;=Z#f
+H;=[#
+H;=\%@
+H;=\[
+H;=\eN
+H;=])\
+H;=]Ez
+H;=]l
+H;=]zP
+H;=^*
+H;=^Ns
+H;=_>
+H;=`	
+H;=`0
+H;=`5
+H;=`O<
+H;=b	N
+H;=bPI
+H;=c>
+H;=co
+H;=f(x
+H;=fj?
+H;=g#z
+H;=g/
+H;=g?
+H;=gC
+H;=gKB
+H;=gN
+H;=gT
+H;=gVz
+H;=g[\
+H;=g\
+H;=g`]
+H;=gbC
+H;=gkP
+H;=gmB
+H;=gp
+H;=h7N
+H;=hDN
+H;=kMc
+H;=l'@
+H;=lI
+H;=l`
+H;=lqP
+H;=mRz
+H;=mfP
+H;=n>|
+H;=o<
+H;=pgb
+H;=pj\
+H;=q%Y
+H;=q.T
+H;=r\S
+H;=s\x
+H;=tAS
+H;=w#
+H;=w,T
+H;=w5K
+H;=w>
+H;=wAL
+H;=wM
+H;=wRP
+H;=w[
+H;=waC
+H;=whG
+H;=wz
+H;=w~
+H;=ya
+H;=zF
+H;={"
+H;=|*
+H;=|=
+H;=|QI
+H;=|\
+H;=|a
+H;=|fN
+H;=~EH
+H;=~Q
+H;=~`
 H;B0u
 H;C r
 H;C@H
@@ -37286,7 +37459,7 @@ Have Entity say string, and teamOnly or not
 Have we received the post match signout message that includes reward information
 HaveAllPlayersJoined
 Hc3;s
-Hc5B9n
+Hc5NS
 Hc8Hi
 Hc9A9
 Hc@ H
@@ -37308,6 +37481,7 @@ HcBh;Bx
 HcBpD9
 HcC ;C0
 HcC H
+HcC H9
 HcC I
 HcC M
 HcC$9
@@ -37377,7 +37551,9 @@ HcG H
 HcG(;G,
 HcG(H
 HcG,H
+HcG09
 HcG0H
+HcG0L
 HcG4H
 HcG89
 HcG8A9
@@ -37554,6 +37730,7 @@ HcWXA;_
 HcWXH
 HcX@I
 HcXH;XXtEH
+Hc_0D
 Hc_0H
 Hc_H;_X
 Hc_`H
@@ -38529,7 +38706,7 @@ Hero_Zuus.LightningBolt
 Hero_Zuus.LightningBolt.Cast
 Hero_Zuus.LightningBolt.Cloud
 Hero_razor.lightning
-Heroes Baseline
+Heroes Losers
 Heroes nearer than this distance will poll for the TLK_ALLY_NEARBY concept.
 Heroes will use the basic NPC functionality for determining their bounty, rather than DOTA specific formulas.
 Hex and octal numbers must be integers.
@@ -38542,7 +38719,7 @@ Hides this layer
 Hier Avg
 Hierarchically spawn an entity group from a set of spawn tables.
 HierarchyType_t
-Highlights props based on their collision group: COLLISION_GROUP_PROPS(white), COLLISION_GROUP_PROPS_VR_INTERACTIVE_DEBRIS(green), COLLISION_GROUP_PROPS_VR_DEBRIS(red), COLLISION_GROUP_DEBRIS(blue), OTHER(grey)
+Highlights props based on their collision group: COLLISION_GROUP_PROPS(white), COLLISION_GROUP_PROPS_VR_INTERACTIVE_DEBRIS(green), COLLISION_GROUP_PROPS_VR_DEBRIS and will return to COLLISION_GROUP_PROPS_VR_INTERACTIVE_DEBRIS on sleeping(bright red), COLLISION_GROUP_PROPS_VR_DEBRIS permanently (dark red), COLLISION_GROUP_DEBRIS(blue), OTHER(grey)
 Hiragana
 Hit %s
 Hit position: %.2f, %.2f, %.2f
@@ -38612,7 +38789,6 @@ I9<$t=
 I9D$ t
 I9D$(t
 I9D$(u
-I9D$H
 I9F t
 I9F(t
 I9G t
@@ -38620,6 +38796,7 @@ I9G(t
 I9L$ t
 I9\$@t+1
 I9\90
+I;D$Ht
 I;F8H
 I;G(t1H
 I;G(t2H
@@ -38688,6 +38865,8 @@ INVALID
 INVALID CGameEventStartTouchCollideAdaptor
 INVALID_ARGUMENT
 INVALID_CPPTYPE
+INVALID_GROUP_TYPE
+INVALID_NODE_TYPE
 INVALID_TEAM
 IN_MATCH
 INextBot::Update
@@ -38738,7 +38917,6 @@ ITEM_SLOT_TYPE_MAIN
 ITEM_SLOT_TYPE_STASH
 IVehicle
 Ic4$A;t$
-Ic4$H)
 Ic4$f
 Ic7McO
 Ic<$H
@@ -38760,6 +38938,7 @@ IcD$0A;
 IcD$0A;D$4
 IcD$0A;D$4tAI
 IcD$0A;D$4u
+IcD$0H
 IcD$0I
 IcD$8
 IcD$89
@@ -38769,6 +38948,7 @@ IcD$8H
 IcD$8I
 IcD$8M
 IcD$@
+IcD$@1
 IcD$@A
 IcD$@A;D$D
 IcD$@A;D$Du
@@ -38788,7 +38968,6 @@ IcD$PI
 IcD$X
 IcD$XA
 IcD$XA;D$\
-IcD$XD
 IcD$XI
 IcD$`
 IcD$`A
@@ -38815,10 +38994,12 @@ IcE(H
 IcE(I
 IcE01
 IcE0D
+IcE0H
 IcE81
 IcE8H
 IcE8I
 IcE@I
+IcEP1
 IcEPH
 IcEPI
 IcEXI
@@ -38832,6 +39013,7 @@ IcF@I9
 IcF\1
 IcF`A;Fp
 IcFhA;Fx
+IcFx1
 IcG A;G0
 IcG H
 IcG I
@@ -38881,7 +39063,6 @@ IcL$`
 IcL$`H9
 IcL$h
 IcL$p
-IcL$|H
 IcM H
 IcM Ic
 IcM$H
@@ -38914,7 +39095,6 @@ IcN@Ic
 IcNDt
 IcNHI
 IcNPI
-IcNPIc
 IcNXI
 IcO(Ic
 IcO8Hc
@@ -39069,6 +39249,7 @@ If nonzero, then only one in this many servers will run vprof if dota_ogs_report
 If set one, many debug prints to help track down the TLK_IDLE issue. Set two for super verbose info
 If set to a valid map name, will change to this map during the next changelevel
 If set to the name of the rule, that rule's score will be shown whenever a concept is passed into the response rules system.
+If set to true, use current rune spawn rules.  Either setting respects custom spawn intervals.
 If set to true, we will never attempt to move this unit to clear space, even when it unphases.
 If set, all pose parameters on client/server are forced to neutral value
 If set, bots will be set to the level specified with appropriate gold on game start
@@ -39369,7 +39550,6 @@ InputGoUp
 InputGrowBack
 InputHandBrakeOff
 InputHandBrakeOn
-InputHandGripWhileHeld
 InputHideDisplacement
 InputHideHudHint
 InputHideSprite
@@ -39457,6 +39637,7 @@ InputSetAnimationNoReset
 InputSetAnimationTransition
 InputSetAnisotropy
 InputSetAttached
+InputSetAutoConvertBackFromDebris
 InputSetAutomaticallyRespawn
 InputSetBarrierState
 InputSetBloomStartValue
@@ -39813,6 +39994,7 @@ Interrupted at cast position, can't cast.
 Interrupted at cast position, silenced or not enough mana.
 Interval at which blocked doors will try to reopen
 Intro
+Invade
 Invalid IHDR chunk
 Invalid IHDR data
 Invalid JPEG file structure: SOS before SOF
@@ -39862,7 +40044,6 @@ Invalid file version for %s
 Invalid filter method in IHDR
 Invalid float number: 
 Invalid format for pCAL parameter
-Invalid function pointer in entity!
 Invalid gAMA after IDAT
 Invalid hIST after IDAT
 Invalid header
@@ -39941,6 +40122,7 @@ InventoryItemID5
 InventoryItemID6
 InventorySnapshot
 InventoryValue
+Inverse Multi Quadratic
 Invisible physics body for: %s
 Invite
 InvokeMiniDumpHandler
@@ -40323,12 +40505,15 @@ Jungler
 Jyt!H
 J|5!Q
 K +K<
+K ;K0
 K HcU
 K tvH
+K ~?A
 K$+K<
 K$+KX;K,
 K,+K(
 K,[A\]
+K0H+U
 K0tNH
 K0~XH
 K8Hc{(
@@ -40391,7 +40576,6 @@ Knockback
 Kochanek-Bartels
 Kochanek-Bartels Early
 Kochanek-Bartels Late
-KpHcCl
 KpHcE
 L$ Lc
 L$$E1
@@ -40413,6 +40597,7 @@ L$<A+L$8
 L$<E1
 L$@D)
 L$@L9
+L$FfE
 L$HfA
 L$PE1
 L$XA)
@@ -40448,21 +40633,27 @@ L9kPfD
 L9t$H
 L9|$HJ
 L: %.2f deg
-L;%%/F
-L;%%2|
-L;%%Fr
-L;%0c
-L;%5.F
-L;%51|
-L;%E-F
-L;%E0|
-L;%U,F
-L;%U`J
-L;%e+F
-L;%e_J
-L;%u*F
-L;%u^J
-L;%u~A
+L;%"NS
+L;%%,|
+L;%%CH
+L;%%wL
+L;%5+|
+L;%5BH
+L;%5vL
+L;%E*|
+L;%EuL
+L;%E}t
+L;%U)|
+L;%UtL
+L;%U|t
+L;%e%|
+L;%e(|
+L;%esL
+L;%e{t
+L;%u'|
+L;%urL
+L;%uzt
+L;%u~
 L;(tHL
 L;(tTH
 L;0t!A
@@ -40503,13 +40694,53 @@ LAYOUT_HAND_DEFAULT
 LAYOUT_WORLD_DEFAULT
 LD_xkF
 LE9}P
+LEAGUE_ACCEPTED_AGREEMENT
+LEAGUE_AUDIT_ACTION_INVALID
+LEAGUE_AUDIT_ACTION_LEAGUE_EDIT
+LEAGUE_AUDIT_ACTION_NODE_CREATE
+LEAGUE_BROADCAST_OTHER
+LEAGUE_BROADCAST_STEAM
+LEAGUE_BROADCAST_TWITCH
+LEAGUE_BROADCAST_UNKNOWN
+LEAGUE_BROADCAST_YOUTUBE
+LEAGUE_COMPENDIUM_ALLOWED
+LEAGUE_COMPENDIUM_PUBLIC
+LEAGUE_FLAGS_NONE
+LEAGUE_INVITE_CHAMPIONS_CUP
+LEAGUE_INVITE_DIRECT
+LEAGUE_INVITE_INVALID
+LEAGUE_INVITE_OPEN
+LEAGUE_INVITE_OPEN_QUALIFIED
+LEAGUE_INVITE_REGIONAL_DIRECT
+LEAGUE_PAYMENT_EMAIL_SENT
+LEAGUE_REGION_CHINA
+LEAGUE_REGION_CIS
+LEAGUE_REGION_EUROPE
+LEAGUE_REGION_NA
+LEAGUE_REGION_SA
+LEAGUE_REGION_SEA
+LEAGUE_REGION_UNSET
+LEAGUE_STATUS_ACCEPTED
+LEAGUE_STATUS_CONCLUDED
+LEAGUE_STATUS_DELETED
+LEAGUE_STATUS_REJECTED
+LEAGUE_STATUS_SUBMITTED
+LEAGUE_STATUS_UNSET
+LEAGUE_STATUS_UNSUBMITTED
+LEAGUE_TIER_AMATEUR
+LEAGUE_TIER_CATEGORY_AMATEUR
+LEAGUE_TIER_CATEGORY_DPC
+LEAGUE_TIER_INTERNATIONAL
+LEAGUE_TIER_MAJOR
+LEAGUE_TIER_MINOR
+LEAGUE_TIER_PROFESSIONAL
+LEAGUE_TIER_UNSET
 LEGACY_SOLO_QUEUE_MATCH
 LEGACY_TEAM_MATCH
 LEVEL DESIGN ERROR: Divide by zero in math_value
 LEVEL DESIGN ERROR: Entity %s is parented to itself!
 LE_BGRA8888
 LE_BGRX8888
-LHcK01
 LIFE_ALIVE
 LIFE_DEAD
 LIFE_DYING
@@ -40586,27 +40817,24 @@ Lc!D;a
 Lc#D9b
 Lc#D;c
 Lc#E9
-Lc%(Lj
-Lc%5ZJ
-Lc%A $
-Lc%L(&
-Lc%Oy>
-Lc%RzO
-Lc%WMJ
-Lc%_:6
-Lc%b74
-Lc%jX0
-Lc%o|<
-Lc%s^6
-Lc%xY
-Lc%}~,
+Lc%+F5
+Lc%15
+Lc%5%q
+Lc%5E2
+Lc%9G5
+Lc%ED2
+Lc%PEW
+Lc%Y&+
+Lc%m ?
+Lc%uqW
+Lc%~o%
 Lc&D;f
 Lc'D;g
 Lc'E)
 Lc(D;h
 Lc+D;k
 Lc+Ic
-Lc-q[
+Lc-x^`
 Lc.D;n
 Lc/D;o
 Lc/E)
@@ -40614,7 +40842,6 @@ Lc/E1
 Lc0D;p
 Lc3D;s
 Lc3fA
-Lc5IfO
 Lc6E9
 Lc7E)
 Lc7E9
@@ -40696,6 +40923,7 @@ LckpD;
 Lco D;o0D
 Lco(E
 Lco8H
+LcoxD;
 Lcp4M
 Lcs D;s0D
 Lcs8D;sHt&H
@@ -40789,6 +41017,7 @@ Lists all entities
 Lists all simulating/thinking entities
 Lists all touchlinks
 Lists the item definitions that can be whitelisted in the item_whitelist.txt file in tournament mode.
+LiveGame
 Load Game %d Successful
 Load Game:  Failed to get reply from the GC for save game %u
 Load named spawn group.
@@ -40984,12 +41213,14 @@ MESH_TRANSLUCENCY_FULLY_OPAQUE
 MESH_TRANSLUCENCY_PARTIALLY_ALPHA_BLENDED
 MFieldVerificationName
 MHACKDisallowSynthVerification
+MHcK01
 MHcKP1
 MIB8t
 MIN( 
 MINION
 MISSING CLASS in ClassifyText()
 MIcM Ic
+MIcM(Ic
 MIsWorldSpace
 MIsWorldSpaceOrientation
 MKA8L$K
@@ -41480,7 +41711,6 @@ Mc<$E
 Mc<$E;|$
 Mc<$H
 Mc>E;~
-Mc@|J
 McD$0
 McD$<B
 McD$P
@@ -41549,6 +41779,7 @@ MeshGroupMasp : %llx
 MeshSystem001
 MeshTranslucencyType_t
 MeshUtils001
+Message
 Message %s arrived responding to job %lld which no longer exists, dropping message
 Message Name
 Message class "
@@ -41705,8 +41936,8 @@ MorphSetData_t::LOOKUP_TYPE_VERTEX_ID
 MorphSetData_t::LookupType_t
 Morty Bot
 Motion Disabled
-MountAddon
 MountAddon: Failed to find ADDONS search path.
+MountAddonInternal
 MountAddonSearchPaths: Failed to find CONTENTADDONS search path.
 Move Speed: %f - Attacks Per Second: %f
 Move To
@@ -41719,7 +41950,6 @@ Move to follow a unit.
 MoveCollide_t
 MovePingSound
 MoveToLocation
-MoveToNPCToAttack
 MoveToPositionAggressive
 MoveToTarget
 MoveType_t
@@ -43010,6 +43240,7 @@ N33CDOTA_Ability_Brewmaster_WindWalk26CEntityInstanceEntityClassE
 N33CDOTA_Ability_Bristleback_Warpath26CEntityInstanceEntityClassE
 N33CDOTA_Ability_Broodmother_SpinWeb26CEntityInstanceEntityClassE
 N33CDOTA_Ability_Chen_HolyPersuasion26CEntityInstanceEntityClassE
+N33CDOTA_Ability_Courier_AutoDeliver26CEntityInstanceEntityClassE
 N33CDOTA_Ability_Creature_Ice_Breath26CEntityInstanceEntityClassE
 N33CDOTA_Ability_Dazzle_Poison_Touch26CEntityInstanceEntityClassE
 N33CDOTA_Ability_DrowRanger_Trueshot26CEntityInstanceEntityClassE
@@ -44593,6 +44824,8 @@ New_Tai_Lue
 Newer version is available
 Newline in string literal
 Newly marked ladder is connected to %d Areas
+Next avaH
+Next available ids are: 
 Next free IDs:
 NextBot
 NextBot tickrate changed from %d (%.3fms) to %d (%.3fms)
@@ -44818,7 +45051,6 @@ O tmH
 O trH
 O(H;1t;H
 O(UHc
-O0A;GH
 O0A;WH
 O0I9M t
 O0~_G
@@ -44833,11 +45065,11 @@ OCEAN_SOFT_RESET
 OCEAN_WIN_GAME
 OE A9
 OHcK(Ic
-OIcFx1
 OP9NPu
 OPH9NPu
 OPHcE
 OPTIONS
+ORGANIZATIONAL
 OSCILLATE_POSE_PARAMETERS
 OSType
 OUTBUFF_FULL
@@ -44942,6 +45174,7 @@ OnCommandRetreat
 OnCommandString
 OnCommentaryMultiplayerSpawn
 OnContact
+OnCustomCommand
 OnDeAggro
 OnDealDamage
 OnDetach
@@ -44988,7 +45221,6 @@ OnModifierAdded
 OnMoveToFailure
 OnMoveToSuccess
 OnNavAreaChanged
-OnNetworkedIKContextChanged
 OnNextPoint
 OnOrbFire
 OnOrbImpact
@@ -45047,6 +45279,7 @@ OnTerritoryLost
 OnToggleOff
 OnToggleOn
 OnTooltip
+OnTooltip2
 OnUnStuck
 OnUnequip
 OnUnitMoved
@@ -45264,12 +45497,14 @@ PRACTICE
 PRC-8
 PRECIPITATIONBLOCKER
 PRECIPITATION_TYPE_ASH
+PRECIPITATION_TYPE_DUSTMOTES
 PRECIPITATION_TYPE_PARTICLEASH
 PRECIPITATION_TYPE_PARTICLEBUGS
 PRECIPITATION_TYPE_PARTICLERAIN
 PRECIPITATION_TYPE_PARTICLERAINSTORM
 PRECIPITATION_TYPE_PARTICLESMOKE
 PRECIPITATION_TYPE_PARTICLESNOW
+PRECIPITATION_TYPE_PARTICLEXENSPORES
 PRECIPITATION_TYPE_RAIN
 PRECIPITATION_TYPE_SNOW
 PRECIPITATION_TYPE_SNOWFALL
@@ -45749,6 +45984,7 @@ Print, to the console, an entity's current criteria set used to select responses
 PrintLinkedConsoleMessage
 Prints a snapshot of the commander's state
 Prints server lobby object
+PrizePoolItem
 Probably failed to set object type (%d) on the server/client.
 Problem with response rule %s: 'then' clauses are not supported on the Dota server.
 ProceduralData
@@ -45896,6 +46132,7 @@ QueueChange
 QueueDuplicate
 QueuePostDataUpdates
 QueuedLoaderVersion001
+Quintic
 Quit after a game is completed, do not hibernate
 QuitServer() called while already terminating
 QuitServer() executing "disconnect"
@@ -45986,6 +46223,7 @@ ROSHAN
 ROSHAN_SPAWN_PHASE_ALIVE
 ROSHAN_SPAWN_PHASE_BASE_TIMER
 ROSHAN_SPAWN_PHASE_VISIBLE_TIMER
+ROUND_ROBIN
 RPC_GET_ACTUAL_INCOMING_DAMAGE
 RP_PAUSE
 RP_TOGGLEPAUSE
@@ -46179,7 +46417,6 @@ RemoveHandAttachmentByHandle
 RemoveHorizontalMotionController
 RemoveLast
 RemoveModifier
-RemoveModifierByName
 RemoveModifierByNameAndCaster
 RemoveNoDraw
 RemoveRecord
@@ -46862,6 +47099,7 @@ SV: PlayerID %d was asked to make a random hero selection but team %d isn't vali
 SV: Started streaming map dota spawngroup %d
 SVC_Messages
 SVC_Messages_LowFrequency
+SWISS
 SXA;G0
 SX[A\A]A^]
 S`[A\A]A^]
@@ -47068,8 +47306,6 @@ ScriptSetNearZ
 ScriptSetOrigin
 ScriptSetParent
 ScriptSetPoseParameter
-ScriptSetProceduralIKTarget
-ScriptSetProceduralIKTargetWeight
 ScriptSetQuadraticAttenuation
 ScriptSetRenderAlpha
 ScriptSetRenderColor
@@ -47238,6 +47474,7 @@ Script_GetDroppedItemList
 Script_GetEffectAttachType
 Script_GetEffectName
 Script_GetEntityIndexForTreeId
+Script_GetEvasion
 Script_GetEventPointsForPlayerID
 Script_GetEventPremiumPoints
 Script_GetEventRanks
@@ -47318,7 +47555,9 @@ Script_GetShopType
 Script_GetShrine
 Script_GetShrineCooldown
 Script_GetSpecialValueFor
+Script_GetSpellAmplification
 Script_GetStatusEffectName
+Script_GetStatusResistance
 Script_GetSubquest
 Script_GetSubquestByName
 Script_GetTableValue
@@ -47469,6 +47708,7 @@ Script_RemoveGesture
 Script_RemoveHorizontalMotionController
 Script_RemoveImmediate
 Script_RemoveItem
+Script_RemoveModifierByName
 Script_RemoveModifierByNameAndCaster
 Script_RemoveOnDeath
 Script_RemoveSpawnGroupFilterProxy
@@ -47672,6 +47912,7 @@ SerializeKeys
 SerializedEntitiesVersion001
 SerializedNetAddress_t
 Serializing event '%s' (%i):
+SeriesInfo
 Server Animation
 Server Game
 Server Level(%s)
@@ -47726,6 +47967,7 @@ Set a tutorial convar
 Set a value on a unit
 Set an override for the default selection entity, instead of each player's hero.
 Set automatically by matchmaking to fill slots with bots
+Set bounty rune spawn rate
 Set custom color for player (minimap, scoreboard, etc)
 Set custom team assignment for this player.
 Set developer message level.
@@ -47752,6 +47994,7 @@ Set light quadratic attenuation value
 Set nav attribute for all areas in the selected set.
 Set pausing enabled/disabled
 Set players quick buy item.
+Set power rune spawn rate
 Set rendering on/off for an ehandle
 Set scale of entity's model.
 Set skin (int).
@@ -47883,6 +48126,7 @@ SetArmorGain
 SetAssertionPrompt
 SetAttackCapability
 SetAttackTimeGain
+SetAutoConvertBackFromDebris
 SetBaseAgility
 SetBaseAttackTime
 SetBaseDamageMax
@@ -47906,6 +48150,7 @@ SetBotsInLateGame
 SetBotsMaxPushTier
 SetBountyGain
 SetBountyRunePickupFilter
+SetBountyRuneSpawnInterval
 SetBrightness
 SetBuyBackDisabledByReapersScythe
 SetBuybackCooldownTime
@@ -48107,9 +48352,9 @@ SetPlayerGold
 SetPlayerID
 SetPositionMoveDone
 SetPostGameTime
+SetPowerRuneSpawnInterval
 SetPreGameTime
 SetPrimaryAttribute
-SetProceduralIKTargetWeight
 SetPurchaseTime
 SetQuestName
 SetQuestPhase
@@ -48195,6 +48440,7 @@ SetUnitShareMaskForPlayer
 SetUseBaseGoldBountyOnHeroes
 SetUseCustomHeroLevels
 SetUseCustomHeroXPValues
+SetUseDefaultDOTARuneSpawnLogic
 SetUseUniversalShopMode
 SetVelocityLimit
 SetVelocityLimitDelta
@@ -48232,8 +48478,6 @@ Sets the initial waypoint goal for this NPC.
 Sets the level of this ability.
 Sets the maximum base damage.
 Sets the minimum base damage.
-Sets the named procedural IK target.
-Sets the named procedural IK targets weight: 0 = full animation, 1 = full IK.
 Sets the original model of this entity, which it will tend to fall back to anytime its state changes.
 Sets the scale applied to non-fixed respawn times. 1 = default DOTA respawn calculations.
 Sets the stack count of a given modifier.
@@ -48515,7 +48759,6 @@ Spoof a wager for a specific player
 SpotlightLength
 SpotlightThink
 SpotlightWidth
-Spraywheel.Paint
 Spt	fD
 SquareUpAreas()
 St14_Function_base
@@ -48686,6 +48929,7 @@ Strainge Type:
 Strange
 StrangeGemProgress
 StreakAtDeath
+Stream
 Strength: %f - Agility: %f - Intellect: %f
 Stress: %.2f (%.2f / %.2f)
 StrikeThink
@@ -48771,7 +49015,7 @@ T$(Ic
 T$(L!
 T$(L9t
 T$,A+T$(
-T$0H9
+T$0E1
 T$0Hc
 T$0L9
 T$0Lc
@@ -48781,7 +49025,6 @@ T$4D;d$4
 T$4tLH
 T$8H)
 T$DA+T$@
-T$FfE
 T$GH)
 T$HHi
 T$HfA
@@ -49083,6 +49326,7 @@ TYPE_SINT64
 TYPE_STRING
 TYPE_UINT32
 TYPE_UINT64
+T[A\]
 Tagalog
 Tagbanwa
 Tai_Le
@@ -49125,6 +49369,7 @@ TeamDesiresScriptScope
 TeamDetails
 TeamID_t
 TeamLocationStats
+TeamStanding
 TeamThink
 Teleport the selected bot to your cursor position
 Teleport the specified entity to where the player is looking.
@@ -49241,6 +49486,7 @@ The server tries to keep each player's m_nTickBase withing this many msecs of th
 The system ran out of memory while loading the game.
 The type parameter T in RepeatedFieldRef<T> API doesn't match 
 There are no entries in the Place database.
+Thin Plate
 Think this item
 This Mana regen is derived from constant bonuses like Basilius.
 This ZeroCopyOutputStream doesn't support aliasing. Reaching here usually means a ZeroCopyOutputStream implementation bug.
@@ -49260,7 +49506,6 @@ Thread "%s" (ID %llu) failed to shut down
 ThreadGetCurrentId
 ThreadGetCurrentProcessId
 ThreadInMainThread
-ThreadInterlockedExchange64
 ThreadMultiWait
 ThreadSleep
 ThreadYield
@@ -49809,8 +50054,8 @@ Unload named spawn group.
 UnloadSpawnGroupByHandle
 Unlocked prop_door '%s' at (%.0f %.0f %.0f) has no hardware. All openable doors must have hardware!
 Unlocking prop_door '%s' at (%.0f %.0f %.0f) with no hardware. All openable doors must have hardware!
-UnmountAddon
 UnmountAddon: Failed to find %s search path.
+UnmountAddonInternal
 Unnormalized joint weights encountered (%f): Skinning may not work!
 UnpressedAttack
 UnpressedAttack2
@@ -50253,6 +50498,7 @@ VerticalControlFunction
 VerticalGlowSize
 Very Good
 VguiScreen
+VictoryPrediction
 ViewLockData_t
 ViewSmoothingData_t
 Viewers: %d  DirtyViewerCount:%d
@@ -50294,14 +50540,20 @@ Vulkan
 W H9r
 W HcG
 W L92tGH
+W%@|/
+W%c=^
+W%my^
 W(H92t'H
-W-#2/
-W-GI'
-W-h| 
+W-s=^
 W0;V0t
 W0Hc_8A
-W5|3/
+W5#@^
+W5KO^
+W5U@^
+W5h@^
+W5{=^
 W8t>H
+W=C@^
 W@H9V@u
 WAITING FOR VSCRIPT DEBUGGER CONNECTION -- '-vscriptdebug' was provided on the command line.
 WALKABLESEED
@@ -50369,6 +50621,7 @@ WEBAPI_PARAM_STEAMID_ACCOUNTID
 WEEKEND_TOURNEY
 WHH92t1H
 WHcC(1
+WHcC01
 WIDE_HUMAN_HULL
 WILL TRANSITION
 WIN32
@@ -50501,7 +50754,6 @@ WeightedSuggestion_t
 Welcome message contained %s twice
 Weld Joint: %s -> %s
 Went Invisible while attack moving.
-WhHcE
 WheelDust
 When -gamestatsfileoutputonly is specified, file will be emitted here instead of to modpath
 When computing respondents for a 'THEN ANY' rule, all rule-matching scores within this much of the best score will be considered.
@@ -50582,14 +50834,18 @@ Writing kdTree with %d triangles
 Wrong JPEG library version: library is %d, caller expects %d
 Wrong alignment %d
 X D;s
-X%<o\
+X%SbY
 X(9Y(
 X(;X8
+X-v,&
+X-zlY
 X0~tA
 X2:jH
 X360_DST16
 X360_DST24
 X360_DST24F
+X5Bb`
+X=P[Y
 X@TA;U<
 XAxis
 XBowBolt
@@ -50630,16 +50886,17 @@ Xd$ D
 XfA9D]
 Xg8Hc
 XxHc@t
-Y%Hvd
-Y%Y=^
-Y%^]I
-Y%q=^
-Y%x?[
+Y%W2 
+Y%gS!
+Y%hEb
+Y%qrk
 Y(E9^(A
 Y, ]&]
-Y-07^
+Y-aM[
 Y5*3y
-Y=`2~
+Y5@2 
+Y=22 
+Y=~L[
 Y?[A\]
 Y@Half-Life 2
 Y@modifier_luna_moon_glaive
@@ -50685,7 +50942,6 @@ ZIcL$
 ZIcL$8Ic
 ZN29CNavSearchHexLatticeCollectorC1E9NavHull_tRK6VectorRSt8functionIF20NavSearchPosResult_tS3_EEffEUlS3_E_
 ZTutL
-Z[A\A]A^A_]
 Z[A\A]A^]
 Zero length tRNS chunk
 [ (%f, %f, %f, %f), (%f, %f, %f, %f), (%f, %f, %f, %f), (%f, %f, %f, %f) ]
@@ -50712,6 +50968,7 @@ Zero length tRNS chunk
 [%s%03i]
 [%s::%s]
 [%s] 
+[4t+A
 [5t!H
 [8D;C
 [:<:]]
@@ -50726,6 +50983,8 @@ Zero length tRNS chunk
 [A\A]]A
 [A\A^A_]
 [A\A^]
+[All Chat] %s
+[Allies Chat] %s
 [C:%u:%u]
 [DIFFERS]
 [DOTASTATS] Incrementing timeline stat by %f, elapsed: %f
@@ -50784,13 +51043,11 @@ Zero length tRNS chunk
 \$ H9
 \$ I9
 \$ [A\]
-\$&[A\]
 \$(E1
 \$,A+\$(
 \$0E1
 \$0[A\A]A^]
 \$@E1
-\$@[A\]
 \$@u	A
 \$HLcc D;c0D
 \$HfA
@@ -50800,8 +51057,9 @@ Zero length tRNS chunk
 \$ht#L
 \$xIcD$pL
 \%03o
-\%Es\
-\-PAf
+\-Jlc
+\-p}g
+\5$J\
 \C not allowed in lookbehind assertion
 \IcE(1
 \IcL$
@@ -50842,14 +51100,15 @@ Zero length tRNS chunk
 ]`[A\A]A^]
 ]hIcE`L
 ^ t+H
-^-0g%
 ^0A;^@
 ^8D;+
 ^8U)zj
-^=C&A
+^=cQB
 ^@TA]A^]
 ^HcKXIc
+^HcKhIc
 ^PA;^`
+^[A\A]A^A_]
 ^[A\A]]
 ^_[A\]
 ^{tS$
@@ -51361,6 +51620,7 @@ _ZNKSt8_Rb_treeIiiSt9_IdentityIiESt4lessIiESaIiEE8_M_beginEv
 _ZNKSt8equal_toISsEclERKSsS2_
 _ZNKSt8functionIFbttEEclEtt
 _ZNKSt8functionIFfvEEclEv
+_ZNKSt8functionIFvPKfEEclES1_
 _ZNKSt8functionIFvRKyEEclES1_
 _ZNKSt8ios_base5flagsEv
 _ZNKSt9_IdentityISsEclERKSs
@@ -52683,6 +52943,7 @@ _selected_
 _setjmp
 _setjmp@@GLIBC_2.2.5
 _tHcF
+_tempcontent
 _test_conversion_counter
 _to_curve_
 _xIcGpL
@@ -52714,16 +52975,18 @@ _xIcGpL
 `hHc@d
 `pt L
 `|D;%
-`|D;%{Ak
+`|D;%kAm
 `|D;c
 a numbered reference must not be zero
 a t/L
 a trigger_changelevel doesn't have a map
 a world layer in a dota map
 a.%S>@
+aGMoveToNPCToAttack
 aIcD$
 aIcL$
 aIcN Ic
+aIcNPIc
 aaaaaaaazzzzzzzz
 aabb_max
 aabb_min
@@ -52888,6 +53151,7 @@ addons
 adjust_point_grants_periodic_resource
 adjustment
 admin
+admins
 adrenalinepresence
 adult male human
 advance_event
@@ -52895,6 +53159,8 @@ advance_on_quest
 advance_time
 advance_trigger
 advanced to state %d at %f
+advancing_node_group_id
+advancing_team_count
 advct
 aegis_taken
 aegises_snatched
@@ -53383,8 +53649,10 @@ aura_search_flags
 aura_search_team
 aura_search_type
 auras
+author_account_id
 autoDisable
 auto_attack
+auto_convert_back_from_debris
 auto_disable
 auto_remove_timeout
 auto_start_ambient_sound
@@ -53461,6 +53729,7 @@ bApplyBotDifficultyScaling
 bAreaTarget
 bAttack
 bAutoUse
+bBaseOnly
 bBlock
 bBlocked
 bBold
@@ -53869,7 +54138,6 @@ bonus_all_stats
 bonus_aoe_armor
 bonus_aoe_duration
 bonus_aoe_duration_hero
-bonus_aoe_radius
 bonus_armor_per_hero
 bonus_attack_damage
 bonus_attack_range
@@ -54058,6 +54326,7 @@ bristleback_viscous_nasal_goo
 broadcast
 broadcast_channel_info
 broadcast_id
+broadcast_provider
 broadcaster_channels
 broadcaster_infos
 broadcasters
@@ -54135,7 +54404,9 @@ c D;c0D
 c E;e
 c [A\]
 c t#L
+c t6H
 c$[A\]
+c&[A\]
 c(D;c8D
 c([A\]
 c.[A\]
@@ -54150,11 +54421,14 @@ c4[A\]
 c8D; 
 c8D;cHD
 c8[A\]
+c8tgH
 c8u(1
 c<[A\]
 c@D; 
 c@L9cHv
+c@[A\]
 c@t@A
+cD[A\]
 cHD;cX
 cHRM Blue X
 cHRM Blue Y
@@ -55137,7 +55411,6 @@ decodable
 decoder_ring
 decrement
 dedicated
-default
 defaultSession
 default_clip
 default_clip2
@@ -55145,6 +55418,7 @@ default_color
 default_color_gem_color
 default_drop_quantity
 default_max_value
+default_node_type
 default_price
 default_quest_id
 default_radius
@@ -56244,6 +56518,7 @@ drow_ranger_frost_arrows
 drow_ranger_marksmanship
 drow_ranger_silence
 drow_ranger_wave_of_silence
+ds are: H
 dt_name
 duel__class_lock
 duel_ban_expiration
@@ -56302,6 +56577,7 @@ eRawValueType_t
 eResolutionType_t
 eResponse_InternalError
 eResponse_InvalidItems
+eResponse_MissingEvent
 eResponse_MissingLeague
 eResponse_OfferingDisabled
 eResponse_Success
@@ -56391,6 +56667,7 @@ elems
 elephant
 eligible_for_online_play
 ema H
+email_address
 email_format
 email_lang
 email_msg_type
@@ -56438,6 +56715,7 @@ end_killstreak
 end_radius
 end_time
 end_time_stamp
+end_timestamp
 end_vision_duration
 end_x
 end_y
@@ -56521,6 +56799,7 @@ ent_remove
 ent_remove_all
 ent_rotate
 ent_scale
+ent_scale_hack
 ent_script_dump
 ent_select
 ent_setang
@@ -56881,7 +57160,9 @@ eyes_follow
 eyes_radius
 f %d %d %d
 f == __null || dynamic_cast<To>(f) != __null
+f E;f0D
 f t}L
+f8E:n%t
 f98tG
 f98w0
 f99tyHcQ
@@ -56896,13 +57177,13 @@ f9w0tN]
 f;0tp
 f;0tr
 f;2tlH9
-f;C.w
 f;Cbt<H
 f;Cnv
 f;F@t
 f;Q t
 f;Q"t
 f;S(}.H
+f;S.w
 f;WJw
 f;Wnw
 f;^6w
@@ -57450,6 +57731,7 @@ force_lane
 force_multicast
 force_npc_height
 force_output_description
+force_recalculate
 force_select
 forceclosed
 forcecreepspawn
@@ -57661,19 +57943,15 @@ g default
 g$D;m
 g$E9w
 g(L;%
-g(L;%EFg
-g(L;%UTI
+g(L;%U
+g(L;%uxi
 g.txH
 g0E;g@D
 g0L;%
-g0L;%%j[
 g0L;%U
-g0L;%e
-g0L;%eNJ
-g0L;%epR
-g0L;%uMJ
 g:l4d2,
-gHL;%
+gHL;%%
+gHL;%u
 gHcC81
 gHcK`Ic
 gIcD$
@@ -58107,6 +58385,7 @@ gustdirchange
 gustduration
 gwr,/s
 gx=%d, gy=%d, bx=%d, by=%d
+gxL;%
 gyrocopter_call_down
 gyrocopter_flak_cannon
 gyrocopter_homing_missile
@@ -58528,7 +58807,6 @@ huskar_burning_spear
 huskar_inner_vitality
 huskar_life_break
 h|D;-
-h|D;-N
 h|E;l$
 i < length_
 i = %d, area = %p, cost = %0.2f, heuristic = %0.2f, total cost = %0.2f, path length = %0.2f
@@ -58638,6 +58916,10 @@ ik_enable_only_this_chain
 ik_enable_only_this_chain: Couldn't find chain named '%s', or a unique match.  #%d Chains available on entity '%s'
 ik_enable_only_this_chain: No chain name specified.  #%d Chains available on entity '%s'
 ik_enable_only_this_chain: no valid entities found in picker.
+ik_ground_rule_normalspring_strength
+ik_ground_rule_zspring_strength
+ik_locks_acquire_threshold
+ik_locks_release_threshold
 ik_toggle_chain
 ik_toggle_chain:	%s
 ik_toggle_chain: Couldn't find chain named '%s', as IK isn't available on entity '%s' (missing IK control rig)
@@ -58645,6 +58927,7 @@ ik_toggle_chain: Couldn't find chain named '%s', or a unique match.  #%d Chains 
 ik_toggle_chain: No chain name specified.  #%d Chains available on entity '%s'
 ik_toggle_chain: no chains available on entity '%s'
 ik_toggle_chain: no valid entities found in picker.
+ilable iH
 illusion1
 illusion2
 illusionLabel
@@ -58674,6 +58957,7 @@ illusioncount
 illusionlabel
 image
 image_banner
+image_bits
 image_inventory
 image_inventory_overlay
 image_inventory_pos_x
@@ -58738,6 +59022,7 @@ incorrect header check
 incorrect length check
 increment_amount
 increment_goal
+increment_per_second
 increment_trophy
 index
 index < 10
@@ -58870,6 +59155,7 @@ internal error: previously-checked referenced subpattern not found
 internal error: unexpected repeat
 internal error: unknown opcode in find_fixedlength()
 internalAction
+international
 interpolated [%.2f]
 interpolated hermite [%.2f]
 interrupt_channel
@@ -58918,6 +59204,8 @@ invert_orientation
 invis_threshold_pct
 invisibility_modifier
 invite_gid
+invite_type
+invited_teams
 invoker_attribute_bonus
 invoker_chaos_meteor
 invoker_deafening_blast
@@ -58974,6 +59262,7 @@ is_channeling
 is_coach
 is_combined_locked
 is_community_banned
+is_completed
 is_creep_from_camp_type
 is_cyber_cafe
 is_dash
@@ -58988,6 +59277,7 @@ is_end
 is_evade_disabled
 is_extension
 is_fake_client
+is_final_group
 is_free_trial_account
 is_from_illusion
 is_fully_castable
@@ -59026,9 +59316,11 @@ is_phone_verified
 is_pick
 is_plus_guide
 is_plus_subscriber
+is_primary
 is_pro
 is_profile_created
 is_profile_public
+is_reward_repeatable
 is_root
 is_school_account
 is_sentence
@@ -59048,6 +59340,7 @@ is_target_hero
 is_target_illusion
 is_team_logo
 is_test_item_set
+is_tiebreaker
 is_timed_drop
 is_toggled
 is_tracker
@@ -59063,6 +59356,7 @@ is_using_ability
 is_using_plus_guide
 is_vac_banned
 is_verified
+is_victory
 is_visible_dire
 is_visible_radiant
 is_wallet_cash_trusted
@@ -59474,6 +59768,7 @@ k(tHH
 k0D;(
 k0D;(~
 k0t!L
+k0t+H
 k0tAL
 k8D;(
 k8D;(~
@@ -60022,7 +60317,6 @@ k_EMsgGCToGCReportKillSummaries
 k_EMsgGCToGCSOCacheSubscribe
 k_EMsgGCToGCSOCacheUnsubscribe
 k_EMsgGCToGCSendUpdateLeagues
-k_EMsgGCToGCSetIsLeagueAdmin
 k_EMsgGCToGCSetNewNotifications
 k_EMsgGCToGCSignoutSpendWager
 k_EMsgGCToGCUniverseStartup
@@ -60082,6 +60376,7 @@ k_EMsgSQLDelayedGrantLeagueDrop
 k_EMsgSQLGCToGCGrantAccountFlag
 k_EMsgSQLGCToGCGrantBadgePoints
 k_EMsgSQLGrantTrophyToAccount
+k_EMsgSQLSetIsLeagueAdmin
 k_EMsgServerGetEventPoints
 k_EMsgServerToGCGetProfileCard
 k_EMsgServerToGCHoldEventPoints
@@ -60594,6 +60889,7 @@ listen@@GLIBC_2.2.5
 listenserver
 listenserver.cfg
 literal_hand_type
+live_spectator_team
 load_game_id
 load_master_item_schema
 loadingscreen
@@ -60719,6 +61015,7 @@ loot_list_name
 loot_lists
 lootlist
 loser_score
+losing_node_id
 losing_players
 losses
 lost_items
@@ -61121,8 +61418,10 @@ m_OnEndLook
 m_OnEndTouch
 m_OnEndTouchAll
 m_OnEngage
+m_OnEnter
 m_OnEqualTo
 m_OnEventFired
+m_OnExit
 m_OnExtinguished
 m_OnFacingLookat
 m_OnFail
@@ -61676,6 +61975,7 @@ m_bCustomKillEffect
 m_bDOFEnabled
 m_bDampAllRotation
 m_bDebris
+m_bDefaultRuneSpawnLogic
 m_bDestroyImmediatly
 m_bDetermineAmbientEffect
 m_bDeveloperOnly
@@ -62216,6 +62516,7 @@ m_bSetOnSpawn
 m_bSetValueOnDisable
 m_bShapeChanged
 m_bShouldAnimateDuringGameplayPause
+m_bShouldAutoConvertBackFromDebris
 m_bShouldBeInitiallySuggested
 m_bShouldBePhysicallyConstrained
 m_bShouldBeSuggested
@@ -62530,9 +62831,11 @@ m_eCurrentOpenDirection
 m_eDoorState
 m_eHull
 m_eLastState
+m_eLiveSpectatorTeam
 m_eOpenDirection
 m_eOrientationType
 m_ePlayerStatType
+m_eRbfType
 m_eSpawnPosition
 m_eSpecialBonusOperation
 m_eTeam
@@ -62809,6 +63112,7 @@ m_flBlockedTalkTime
 m_flBloomScale
 m_flBloomStartValue
 m_flBloomStrength
+m_flBountyRuneSpawnInterval
 m_flBreakAfterTimeStartTimeX
 m_flBreakAfterTimeStartTimeY
 m_flBreakAfterTimeStartTimeZ
@@ -63321,6 +63625,7 @@ m_flPositionUpdateTime
 m_flPostSpawnDirectionVariance
 m_flPostSpawnSpeed
 m_flPostSpeakDelay
+m_flPowerRuneSpawnInterval
 m_flPreDelay
 m_flPreGameStartTime
 m_flPreGameStartTime set to %2.2f
@@ -64559,6 +64864,8 @@ m_initialOwner
 m_initialSpeed
 m_initialstate
 m_inputLayoutFields
+m_inputList
+m_inputValue
 m_instances
 m_int
 m_integrator
@@ -64825,6 +65132,7 @@ m_moveTimer
 m_movementCollisionNormal
 m_movementSoundName
 m_movementType
+m_nAABBDirection
 m_nARDMHeroesPrecached
 m_nARDMHeroesRemaining
 m_nAbilityDraftAdvanceSteps
@@ -65459,6 +65767,8 @@ m_opvarName
 m_opvarNameChar
 m_origin
 m_outCounter
+m_outputMorph
+m_outputWeightList
 m_ownerChannelIndex
 m_ownerSpawnGroupType
 m_pAchievementKV
@@ -65793,6 +66103,7 @@ m_rtBotScriptUpdated
 m_ruf
 m_sAbilityNameSymbol
 m_sAnimationPrefix
+m_sAttachmentName
 m_sBlockName
 m_sBoneName
 m_sComment
@@ -66420,7 +66731,7 @@ m_zmax
 m_zmin
 machine_name
 machinelearning/hero_picker.pb
-machinelearning/hero_picker_baseline.pb
+machinelearning/hero_picker_losers.pb
 machinelearning/itempurchase_ingame.pb
 machinelearning/itempurchase_ingame_sequence.pb
 machinelearning/itempurchase_pregame.pb
@@ -66564,6 +66875,7 @@ match_disabled_count
 match_disabled_until_date
 match_flags
 match_id
+match_losses
 match_outcome
 match_player_flags
 match_seq_num
@@ -66571,6 +66883,7 @@ match_start_target
 match_states
 match_tips
 match_type
+match_wins
 matched, weight %4.2f (s %4.2f x c %4.2f)
 matches
 matches_have_mvp_data
@@ -66698,6 +67011,7 @@ max_raw_value
 max_recipients
 max_ride_speed
 max_rotation
+max_rounds
 max_skeleton_charges
 max_slow
 max_spawngroup_creationsequence
@@ -66906,6 +67220,7 @@ modeldoc13
 modeldoc14
 modeldoc15
 modeldoc16
+modeldoc17
 modeldoc2
 modeldoc3
 modeldoc4
@@ -67203,6 +67518,7 @@ modifier_clockwerk_rocket_flare_thinker
 modifier_cold_feet
 modifier_controller_test_melee_attack
 modifier_corpselord_revive
+modifier_courier_autodeliver
 modifier_courier_burst
 modifier_courier_flying
 modifier_courier_morph_effect
@@ -68558,6 +68874,7 @@ morphling_morph_replicate
 morphling_morph_state_agi
 morphling_morph_state_str
 morphling_morph_str;morphling_morph
+most_recent_activity
 motd.txt
 motdfile
 motion_controller_modifier
@@ -68716,6 +69033,7 @@ nDefault
 nDegrees
 nDerivedStatType
 nDifficulty
+nDontInfiniteLoop < 100
 nEventID
 nFXAmbientIndex
 nFlag
@@ -68798,6 +69116,7 @@ nSuggestion
 nTeam
 nTeamNumber
 nTeamNumberKnownTo
+nTeamRestrictedTeam != TEAM_UNASSIGNED
 nTier
 nTooltipParam
 nTreeNumberKnownTo
@@ -69325,10 +69644,16 @@ noclip OFF
 noclip ON
 noclip_fixup
 nodamageforces
+node_group_id
+node_group_type
+node_groups
+node_id
+node_losses
 node_viewer_fly
 node_viewer_human
 node_viewer_large
 nodelay
+nodes
 nodmgforce
 nogibshadows
 noheader
@@ -69363,6 +69688,7 @@ not_tradable
 notarget OFF
 notarget ON
 notconnected
+notes
 nothing
 nothing to repeat
 notify
@@ -69790,7 +70116,6 @@ nyx_assassin_vendetta
 o ATI
 o ATL
 o ATSH
-o E;o0D
 o$ATI
 o$ATL
 o(ATE1
@@ -69903,6 +70228,7 @@ operand of unlimited repeat could match the empty string
 operation
 operations_submitted
 operations_timed_out_in_queue
+operator()
 operatorname
 optGH
 optimize_for
@@ -70003,7 +70329,7 @@ override_shadow_farz
 overrides 
 overview
 overwhelmingodds
-own_league_id
+own_event_id
 owned
 ownerPlayerID
 owner_account_id
@@ -70035,7 +70361,6 @@ pAddedBuff
 pAnimation
 pAttachmentName
 pAttachmentname
-pChainName
 pContext
 pData->GetDataDescMap() == pTemplateDataMap
 pDefault
@@ -70047,6 +70372,7 @@ pHeroname
 pIcL$
 pItemName
 pLabel
+pLayer->GetOwner() == this
 pLightGroup
 pMaterialGroup
 pMeshGroupName
@@ -70058,7 +70384,6 @@ pOwner
 pProjectileName
 pSequenceName
 pSpirit
-pTargetName
 pValue
 pWhitelistKeyValues
 pWorldObject
@@ -70119,6 +70444,7 @@ parent
 parentAttachmentName
 parentIndex
 parent_count
+parent_node_group_id
 parent_piece
 parent_relay_count
 parent_stack_index
@@ -70438,12 +70764,15 @@ particles/rain_fx/ash.vpcf
 particles/rain_fx/ash_outer.vpcf
 particles/rain_fx/bugs_precipitation.vpcf
 particles/rain_fx/bugs_precipitation_outer.vpcf
+particles/rain_fx/dust_motes_precipitation_outer.vpcf
 particles/rain_fx/precipitation_ash.vpcf
 particles/rain_fx/rain.vpcf
 particles/rain_fx/rain_outer.vpcf
 particles/rain_fx/smoke_precipitation.vpcf
 particles/rain_fx/smoke_precipitation_outer.vpcf
 particles/rain_fx/smoke_precipitation_screen.vpcf
+particles/rain_fx/xen_spore_precipitation.vpcf
+particles/rain_fx/xen_spore_precipitation_outer.vpcf
 particles/rain_storm_fx/rain_storm.vpcf
 particles/rain_storm_fx/rain_storm_outer.vpcf
 particles/rain_storm_fx/rain_storm_screen.vpcf
@@ -71994,6 +72323,7 @@ playoverscript
 playsound
 please implement MergeFrom for your type.
 plus:
+plus_auto_grant
 plus_auto_grant_yearly_pattern_end
 plus_auto_grant_yearly_pattern_start
 plus_flags
@@ -72228,6 +72558,10 @@ private_metadata
 private_metadata_key
 prize_def_index
 prize_list
+prize_pool
+prize_pool_items
+prize_split_pct_x100
+pro_circuit_points
 proc_chance
 proc_damage
 procedural
@@ -72352,6 +72686,8 @@ ptr_ != __null
 public
 public_dependency
 public_list_contents
+publish_data
+publish_data.txt
 publish_timestamp
 published_file_id
 publisher_group_id
@@ -72425,7 +72761,6 @@ py_generic_services
 q,9p,
 q0Mc}
 qIcL$
-qTargetRotation
 qangle
 qangle_pitch_yaw
 qop_blink
@@ -72474,10 +72809,10 @@ quill_stack_damage
 quill_stack_duration
 r t(f
 r+H9]
-r6LcA
 r6mFH
 r6mFt!H
 r6mFu
+r7LcQ
 r>w'D
 r@fountain_heal
 rA9D$
@@ -72510,6 +72845,8 @@ radiant_heroes_alive
 radiant_jungle
 radiant_kills
 radiant_lead
+radiant_logo
+radiant_name
 radiant_only
 radiant_secret_shop
 radiant_series_wins
@@ -72663,6 +73000,7 @@ reflection_amount
 refrigerator
 regen_duration
 regen_rate_self
+region
 region_code
 region_codes
 region_ping_codes
@@ -72671,6 +73009,7 @@ region_ping_times
 region_pings
 region_select_flags
 registered: 
+registered_players
 regular
 regular expression is too large
 reincarnate
@@ -72873,6 +73212,8 @@ reveal_npc
 reveal_npc_delay
 reveal_radius
 revealed_invisible
+revenue_cents_per_sale
+revenue_pct
 revenue_percent
 revenue_percentage
 revenue_usd
@@ -72902,6 +73243,8 @@ reward_loot_list
 reward_name
 reward_names
 reward_normal_pts
+reward_normal_pts_escalation_amount
+reward_normal_pts_escalation_limit
 reward_premium_pts
 reward_sound
 reward_type
@@ -72981,6 +73324,7 @@ rotationSpeed
 rotation_angle
 rotortime
 rotortimevariance
+round
 round_end
 round_start_post_nav
 round_start_pre_entity
@@ -73036,7 +73380,7 @@ s!@8u
 s(D9r(
 s(D;s8
 s(D;s8D
-s(H;=
+s(H;=`
 s([A\A]A^]
 s([A\]
 s(~YH
@@ -73096,6 +73440,7 @@ s_staginH
 s_unLobbyPartyID
 s_unLobbySteamID
 sale_price
+sales_stop_timestamp
 sample_rate
 samples_use_time
 sand_storm_damage
@@ -73181,6 +73526,7 @@ scepter_remnant_interval
 scepter_speed
 sched_yield
 sched_yield@@GLIBC_2.2.5
+scheduled_time
 schema_catalog
 schemasystem
 schinese
@@ -73407,6 +73753,7 @@ serializer_name_sym
 serializer_version
 serializers
 serializing
+series_infos
 series_type
 server_
 server_active_version
@@ -73573,6 +73920,7 @@ show_level_rewards_even
 show_message
 show_minimap_select_dialog
 show_no_other_dialogs
+show_raw_values
 show_subtitle
 show_tip
 show_tooltip_at_entity
@@ -73880,6 +74228,7 @@ source_code_info
 source_entity_index
 source_file
 source_filename
+source_folder
 source_hero_id
 source_key
 source_player_entindex
@@ -75049,6 +75398,8 @@ strdup@@GLIBC_2.2.5
 streak
 stream 
 stream end
+stream_url
+streams
 strength
 strength_pct
 strerror
@@ -75403,7 +75754,8 @@ t!Lc+D;k
 t![A\]
 t",Hc
 t"H;=
-t"H;=S
+t"H;=#
+t"H;=C
 t"HcK
 t"HcM
 t"HcO
@@ -75416,9 +75768,9 @@ t#Hcs
 t#Hcs`
 t#IcL$ 
 t#Lck
+t#[A\]
 t$	E1
 t$ A\A]A^]
-t$ E1
 t$ H9
 t$ L9
 t$'H)
@@ -75439,16 +75791,17 @@ t$8H9
 t$8Hc
 t$8Ic
 t$8L9
-t$;=U
+t$;=5
 t$<	t 
 t$<E;t$`
 t$@A\]
 t$@E1
 t$@H9
 t$@L9
+t$@fE
 t$@tzHc
 t$D9j
-t$D;%
+t$D;5
 t$D;=
 t$DE+t$@E
 t$H9h
@@ -75483,12 +75836,13 @@ t$lfA
 t$pA\A]A^A_]
 t$pH9
 t$pL9
+t$xH9
 t$xL9
 t%HcK8
 t%IcE
 t%IcM 
-t&D:=
-t&D;5ee
+t&D:=U
+t&D;5
 t&Hcq
 t&IcD$
 t'D;5
@@ -75501,10 +75855,12 @@ t'IcW
 t'Lcc
 t'[A\]
 t(91u
+t(95fT
 t(;;tR
 t(<)u
-t(D;%
-t(D;-
+t(D;%O]
+t(D;-G
+t(D;5
 t(H9q
 t(H;=
 t(H;]
@@ -75517,17 +75873,15 @@ t([A\]
 t(f92t=H
 t)A9T8
 t)D8u
-t)D;%
+t)D;%P
 t)Lc+D;k
 t)[A\]
 t)fD9
 t* Hc
 t*<*u
 t*D9p
-t*D;%
-t*D;-9Q9
+t*D;-
 t*HcC
-t*HcE
 t*HcK
 t*HcKH
 t*HcO
@@ -75536,15 +75890,15 @@ t*L;m
 t*LcC
 t*Mc>
 t*[A9
+t*[A\A]A^]
+t*[A\]
 t*fA9
-t+;5l
 t+<\u
 t+D9s
 t+Hc4
 t+HcO
 t+IcD$
 t+Jc4
-t+Lc'D;g
 t+Mc'E;g
 t+Mcl$pE;
 t+fA9
@@ -75558,10 +75912,10 @@ t-D9h,t
 t-Hc9I
 t-Mc4$E;t$
 t-Mcv
-t-[A\A]A^]
 t-rex
-t.D:%&
+t.D:%
 t.H9w(t8H9w0tBH9w8tLH9w@t
+t.HcH
 t.HcK 
 t.Lc#I
 t.[A\]
@@ -75570,6 +75924,7 @@ t/9w t29w0t=1
 t/H9q
 t/Lc+
 t/Mc4$E;t$
+t/[A\A]A^]
 t/[A\]
 t0A;D$|t)1
 t0Mcv
@@ -75580,7 +75935,6 @@ t1HcF
 t1Mc,$A
 t1Mc}
 t1[A\]
-t2[A\A]A^]
 t2[A\]
 t3D8J
 t3Ic]
@@ -75628,7 +75982,6 @@ t=Mc}
 t=~K=
 t>IcM
 t>Mc.E9n
-t>[A\A]A^]
 t>[Mc
 t>fA9
 t?,Hc
@@ -75670,7 +76023,6 @@ tL[A\]
 tMLcm
 tO[A\A]A^]
 tPIcH8I
-tR="{
 tRI;]
 tRNS chunk has out-of-range samples for bit_depth
 tRNS chunk not allowed with alpha channel
@@ -75694,6 +76046,7 @@ tYHcS
 tY[A\]
 tY~^L
 tZ<*u
+tZ="{
 tZD;@
 tZHcS
 tZHcU
@@ -75706,7 +76059,7 @@ t\~UL
 t^Lcc
 t^[A\]
 t_Ict$
-t`95I
+t`95iW0
 t`[A\]
 taD;w
 ta[A\]
@@ -75795,7 +76148,6 @@ taunting_player_id
 tax_usd
 tbD;&~3H
 tb[A\A]A^]
-tb[A\]
 tcHcQ
 tcIcv 
 tchinese
@@ -75803,7 +76155,6 @@ tdA:]
 tdHcO
 te.proto
 teLch
-te[A\]
 teaching
 team1_score
 team2_score
@@ -75811,8 +76162,10 @@ teamToBlock
 team_
 team_1
 team_1_cheers
+team_1_wins
 team_2
 team_2_cheers
+team_2_wins
 team_attacked
 team_aura_count
 team_bad
@@ -75821,6 +76174,7 @@ team_base_logo
 team_building_kill
 team_chat_messages
 team_complete
+team_count
 team_details
 team_first_courier
 team_id
@@ -75833,6 +76187,7 @@ team_number
 team_only
 team_scores
 team_showcase_forge
+team_standings
 team_tag
 team_ui_logo
 team_wager_amount
@@ -75926,6 +76281,7 @@ tf_server_stats_spew_local
 tf_server_write_timeout_s
 tgE+e D9
 tgF;\
+tg[A\]
 tgtpath
 tg~rUH
 th[A\]
@@ -76011,6 +76367,7 @@ tips_received_leaderboard_name
 title
 tk#C,
 tlD;M
+tlLcp
 tmpnam
 tmpnam@@GLIBC_2.2.5
 tm~bI
@@ -76066,6 +76423,7 @@ total_packets_in
 total_packets_out
 total_physical_memory
 total_points_use_high_watermark
+total_prize_pool
 total_pull_distance
 total_pulses
 total_steps
@@ -76311,11 +76669,12 @@ t{HcM
 t{HcO
 t{Icv
 t{Mc,$A
+t|#C,
+t|HcK
 t}HcM
 t}HcO
 t~D9{4u
 t~HcJ
-t~HcK
 t~HcM
 u	[A\A]A^]
 u	[A\]
@@ -76327,6 +76686,7 @@ u!L9]
 u"[A\A]A^]
 u#H9w t#H9w(t
 u$[A\A]A^]
+u$[A\]
 u%[A\A]A^]
 u%[A\]
 u&[A\A]A^]
@@ -76359,6 +76719,7 @@ u2f9W
 u3D	k
 u3[A\A]A^]
 u3[A\]
+u4[A\A]A^]
 u5[A\A]A^]
 u5[A\]
 u64( %lld = 0x%llX )
@@ -76427,7 +76788,6 @@ uPMc4$fA
 uP[A\A]A^]
 uQ[A\A]A^]
 uQ[A\]
-uRD	c
 uRMcl$
 uR[A\A]A^]
 uR[A\]
@@ -76482,7 +76842,7 @@ uint16
 uint32
 uint64
 uint8
-ujL;-;70
+ujL;-{
 ujLcW`fE
 uj[A\A]A^]
 uk[A\A]A^]
@@ -76633,6 +76993,7 @@ upsidedown
 uptime
 uptodate_subscribed_caches
 uq[A\]
+urD	c
 urn_of_shadows_used
 us[A\]
 usable_gc
@@ -76703,7 +77064,6 @@ v%Mc>L
 v'D9c
 v'Mce
 v(H9P
-v+<	uOA
 v0x.Hc
 v8array
 v8callback
@@ -76737,7 +77097,6 @@ vPosition
 vSourceLoc
 vTarget
 vTargetLoc
-vTargetPosition
 vTargetX
 vTargetY
 vTargetZ
@@ -76941,6 +77300,7 @@ vmin < 0
 vmin <= 0 - base
 vmorf
 vn %g %g %g
+vod_url
 voice
 voice_chat_banned
 voice_chat_seconds
@@ -76963,6 +77323,7 @@ vpcfL
 vpcf_c
 vphys
 vphysics2
+vpks/
 vpost
 vprof_scope_entity_gamephys
 vprof_scope_entity_thinks
@@ -77023,7 +77384,6 @@ vulnerableoncreepspawn
 w ATL
 w AUL
 w E	&H
-w E;w0D
 w IcD
 w L9&
 w tfH
@@ -77036,7 +77396,6 @@ w$ATL
 w$AUL
 w$IcD
 w(ATL
-w(AUATI
 w(AUI
 w(AUL
 w(D;w8tOI
@@ -77061,9 +77420,11 @@ w=fD;m"
 w@ATL
 w@AUL
 wDATL
+wDAUL
 wHATL
 wHAUA
 wHAUL
+wHt4D
 wIcN`1
 wLATL
 wLAUL
@@ -77238,6 +77599,7 @@ winner
 winner_count
 winner_score
 winners
+winning_node_id
 winning_players
 winning_team
 winnings
@@ -77311,7 +77673,6 @@ x ;s|~
 x HcW
 x!;1|
 x";7}
-x";=/S6
 x#Hcs
 x#Hcw
 x$McM E;M0tkI
@@ -77326,17 +77687,19 @@ x*HcSx;
 x,;7}(UHc
 x,McT$(E;T$8
 x.Lcm
+x0;w0}+H
 x0;wX}+Hc
 x0Hc@(L
+x6;w0}1
 x7Hcw
 x8Lcc D;c0
 x8udL
 x8uwH
-x:;=lQ6
+x:;=<
 x:Hcw
 x<IcH
 x?HcK
-x@H;=
+x@H;=z
 xBA	\$
 xC;whI
 xED;c }?E
@@ -77356,7 +77719,9 @@ x[A\A^]
 x[HcO
 x[]A\A]A^A_
 x\A;R
+x^;7}ZHc
 x^HcS
+x_;7}[Hc
 x_HcO
 x_normal
 x_return
@@ -77430,20 +77795,20 @@ z*u(f
 z+u)1
 z+u)A
 z,u*;O
-z,u*A
 z,u*H
-z-u+A
-z.u,E	
+z,u*I
 z.u,H
 z.u,fA
 z/u-A
 z/u-H
 z/u-I
 z0u.H
+z1u/A
 z1u/H
 z2u0H
 z2u0f
 z4u2A
+z4u2E	
 z4u2H
 z5u3H
 z5u3fA
@@ -77488,17 +77853,17 @@ zIuGH
 zIuGfA
 zJuHI
 zKuIA
-zKuIf
+zLuJA
 zLuJH
-zMuKH
+zLuJf.
 zNear
 zNuLH
 zOuMD
 zPuND;
 zPuNE
 zPuNH
-zPuNI
 zQuOH
+zRuPH
 zRuPI
 zSuQ1
 zSuQH
@@ -77542,7 +77907,6 @@ zombie_interval
 zoom_amount
 zoumA
 zoumH
-zpunI
 zquoH
 zquoL
 zrupA
@@ -77567,38 +77931,41 @@ z|uzH
 z~u|H
 { D;s
 { H;=
-{ H;=+
+{ H;=i
+{ H;=k
+{ H;=kz
+{ H;={"a
 { H;}
 { Lcu
 { [A\A]A^]
+{ ~EIc
 {$fE;
 {$tQH
 {$tXH
 {(D;{8tKH
 {(H;=
+{(H;=(
+{(H;=3
 {(H;}
 {(Lcu
 {([A\]
 {,D+{(E
 {0H;=
-{0H;=4A`
-{0H;=D
-{0H;=b
+{0H;=R
 {4D+{0E
 {8;C0t4
 {8H;=
-{8H;=D
 {@9xd
 {@D;{P
 {@HcE
 {@I9x@w
 {@[A\]
 {DD+{@E
-{HH;=(
-{HH;=Y
+{HH;=
+{HH;=h
 {PD;{`
 {PD;{`D
-{PH;=
+{PH;=!
 {XH	E
 {XMcl$pE;
 {X[A\]
@@ -77613,7 +77980,7 @@ z~u|H
 {}[]()=&, 	
 {}[]=, 	
 |$ A\]
-|$ H;=
+|$ H;=E
 |$ H;=w
 |$ fA
 |$$E1
@@ -77625,7 +77992,8 @@ z~u|H
 |$0A\]
 |$0E1
 |$0H;=
-|$0H;=}
+|$0H;==
+|$0H;=D
 |$0L9
 |$8	~A
 |$8A\]
@@ -77674,7 +78042,6 @@ z~u|H
 |IIcO
 |KIcO
 |KtA9
-|MIcO
 |NHcK
 |NIcN
 |P>~k
@@ -77688,7 +78055,7 @@ z~u|H
 |bIcM
 |jD9cp
 |ktYL9
-|qIcA
+|uIcI
 |zA;T$
 } f;r
 }!f;S
@@ -77715,7 +78082,7 @@ z~u|H
 }4A9|$4
 }4UHc
 }4f;C
-}5D;-
+}5D;-a
 }6;C$
 }8A9|$8
 }8f9Cnr2H
@@ -77747,7 +78114,7 @@ z~u|H
 }MA8|$M
 }N;w$
 }NA8|$N
-}PH;=,
+}PH;=
 }PfA9
 }Rf;w
 }Tf;w
@@ -77757,7 +78124,8 @@ z~u|H
 }Xf;w
 }Yf;JnwSf
 }Yf;w
-}`H;=
+}`H;=h
+}`H;=m
 }af;C
 }bfA9
 }dD9}
@@ -77773,6 +78141,7 @@ z~u|H
 }|UHc
 ~	;Cl
 ~	ATI
+~ E;~0D
 ~ toH
 ~#Hcs
 ~$Mcu
@@ -77785,12 +78154,13 @@ z~u|H
 ~(A\A]A^A_]
 ~(H;=
 ~)A;]
-~)H9=c
+~)H9=S
 ~)H;^
 ~*HcE
 ~*I;X
 ~*L;q
 ~*Lc}
+~*Mc>E;~
 ~+A9\$
 ~,Hc]
 ~,L;y
@@ -77804,8 +78174,9 @@ z~u|H
 ~4Mcg
 ~79ZP
 ~8D;c@}2E
+~;HcE
 ~<AUI
-~<Lc%
+~<Lc%m
 ~?HcH
 ~@E9<$u
 ~@E;~PD

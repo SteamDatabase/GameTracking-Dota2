@@ -16,6 +16,7 @@
  []A\
  max. %f
  min. %f
+!m_bNeedsSort
 "%s" 
 "%s" = "%s"
 "t&L;}
@@ -83,6 +84,7 @@ $ORIGIN
 ../public/tier1/utlblockmemory.h
 ../public/tier1/utllinkedlist.h
 ../public/tier1/utlrbtree.h
+../public/tier1/utlsortvector.h
 .comment
 .data
 .data.rel.ro
@@ -129,14 +131,17 @@ $ORIGIN
 15CTier2AppSystemI15IResourceSystemLi0EE
 15IResourceSystem
 16CDefaultAccessor
+16CLoadingResource
 16CNullTypeManager
 16ICommandCallback
 18CAtomicManipulatorI10CTransformE
 18CAtomicManipulatorI10CUtlStringE
 18CAtomicManipulatorI10QuaternionE
 18CAtomicManipulatorI11FourVectorsE
+18CAtomicManipulatorI12matrix3x4a_tE
 18CAtomicManipulatorI14CResourceArrayI10CTransformEE
 18CAtomicManipulatorI14CResourceArrayI11FeSimdTri_tEE
+18CAtomicManipulatorI14CResourceArrayI12FeBoxRigid_tEE
 18CAtomicManipulatorI14CResourceArrayI12FeNodeBase_tEE
 18CAtomicManipulatorI14CResourceArrayI12FeSimdQuad_tEE
 18CAtomicManipulatorI14CResourceArrayI13FeFitMatrix_tEE
@@ -186,8 +191,10 @@ $ORIGIN
 18CSchemaManipulatorI10CUtlStringE
 18CSchemaManipulatorI10QuaternionE
 18CSchemaManipulatorI11FourVectorsE
+18CSchemaManipulatorI12matrix3x4a_tE
 18CSchemaManipulatorI14CResourceArrayI10CTransformEE
 18CSchemaManipulatorI14CResourceArrayI11FeSimdTri_tEE
+18CSchemaManipulatorI14CResourceArrayI12FeBoxRigid_tEE
 18CSchemaManipulatorI14CResourceArrayI12FeNodeBase_tEE
 18CSchemaManipulatorI14CResourceArrayI12FeSimdQuad_tEE
 18CSchemaManipulatorI14CResourceArrayI13FeFitMatrix_tEE
@@ -236,6 +243,7 @@ $ORIGIN
 19CSchemaClassBindingI11FeSimdTri_tE
 19CSchemaClassBindingI11LightDesc_tE
 19CSchemaClassBindingI11OldFeEdge_tE
+19CSchemaClassBindingI12FeBoxRigid_tE
 19CSchemaClassBindingI12FeEdgeDesc_tE
 19CSchemaClassBindingI12FeNodeBase_tE
 19CSchemaClassBindingI12FeSimdQuad_tE
@@ -336,6 +344,7 @@ $ORIGIN
 21IVConCommDataReceived
 22CSchemaEnumBindingBase
 22CSchemaInstallCallback
+22CStreamingResourceData
 23CResourceSystemProfiler
 23CSchemaClassBindingBase
 23CSplitScreenAddedConVar
@@ -355,6 +364,7 @@ $ORIGIN
 28ICodeResourceManifestManager
 29CRD_RegisterResourceDataUtils
 29IRD_RegisterResourceDataUtils
+30IAsyncResourceDataRequestOwner
 32CSchemaRegistration_resourcefile
 34CSchemaRegistration_resourcesystem
 34CVConResourceProfileCommandHandler
@@ -372,6 +382,7 @@ $ORIGIN
 8[A\A]A^A_]
 8[A\A]]
 8[]A\A]A^A_
+9wtUH
 ;*3$"
 ;*t*1
 <$/tyL
@@ -390,6 +401,7 @@ $ORIGIN
 @Allocate
 @[A\A]A^]
 @[A\]
+@`t	H
 A+D$$9
 A+D$$H
 A+G$H
@@ -399,6 +411,7 @@ A+W$f
 A+u$Hc
 A9G }
 A9_@~8L
+A;D$ ~uI
 A;G A
 A;\$ A
 A;]@|
@@ -529,24 +542,22 @@ CreateInterface
 D$  u
 D$ B;
 D$ H9
-D$ H90
 D$ Hi
-D$ L9
 D$(E1
 D$0A\]
 D$0H9
-D$0L9
 D$8A\]
 D$8H9
 D$8I9
 D$8L9
+D$@A+T$
 D$@H9
 D$@I9
 D$@L9
 D$HfA
 D;!t{Hc
 D;c D
-D;k(t2H
+D;s(t=H
 DATAH
 DISABLED
 DMCRu
@@ -592,7 +603,6 @@ Error loading resource "%s" (Invalid header version: %d != %d)
 Error loading resource file "%s" (Error: %s)
 Error loading resource manifest "%s" (No DATA block)
 EventSystem001
-F@A+^
 FATAL ERROR: %s resource '%s' (%016llX) is the wrong resource type! (This is likely caused by a hash collision between the strings '%s' and '%s')
 FCVAR_NEVER_AS_STRING
 FPSRH
@@ -602,6 +612,7 @@ Failed to map from %s to game-path
 FeAnimStrayRadius_t
 FeAxialEdgeBend_t
 FeBandBendLimit_t
+FeBoxRigid_t
 FeCollisionPlane_t
 FeCollisionSphere_t
 FeCtrlOffset_t
@@ -636,6 +647,7 @@ FeWeightedNode_t
 FeWorldCollisionParams_t
 FileSystem
 Final operation count %llu
+FindLessOrEqual
 FindOrRegisterResourceByName
 FixupResourceName: Illegal full path passed in ("%s")!
 FixupResourceName: Illegal path, missing extension passed in ("%s")!
@@ -675,7 +687,7 @@ GetResourceStatus( pResourceName ) == RESOURCE_STATUS_RESIDENT
 H	p(]
 H	w(UH
 H!w(H
-H+S(H
+H+K(H
 H9*tgH
 H97trH
 H9WPu 
@@ -692,6 +704,7 @@ H[A\A]]
 H[]A\A]A^A_
 HammerMapLoader001
 Hc@pH
+HcC H9
 HcJ@1
 HcJH1
 HcJP1
@@ -718,8 +731,8 @@ HelpSystem_001
 HookUpConfigValue
 HostStateMgr001
 I;<$u
+I;t$Hu
 IQuickTime001
-Ic4$H)
 Idle (ResourceSystemSleep)
 InfoForResourceTypeAnimationGroupResourceData_t
 InfoForResourceTypeAnimationResourceData_t
@@ -760,6 +773,7 @@ InfoForResourceTypeWorld_t
 InputService_001
 InputStackSystemVersion001
 InputSystemVersion001
+Insert
 InstallChangeCallback called with NULL callback, ignoring!!!
 InstallChangeCallback ignoring duplicate change callback!!!
 InstallResourceTypeManager
@@ -781,6 +795,9 @@ Leaked reference to ERROR resource for type %s!
 Leaked resource: Refcount %s for %s%s resource "%s" (%016llX).  This may result in a crash.
 LightDesc_t
 LightSourceShape_t
+Loading Resource %016llX (file "%s") is waiting for an external system to finish work.
+Loading Resource %016llX (file "%s") is waiting for its file to load.
+Loading Resource %016llX (file "%s") is waiting for streaming bits to load.
 Localize_001
 LoggingSystem_GetChannel
 LoggingSystem_GetChannelVerbosity
@@ -788,7 +805,6 @@ LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
 LoggingSystem_RegisterLoggingChannel
 LoggingSystem_SetChannelVerbosity
-M;D$Hu
 M;eHu
 M;|$Hu
 MATCHFRAMEWORK_001
@@ -940,6 +956,7 @@ ResourceSystem
 ResourceSystem013
 ResourceSystemWaitingForFutureWork
 RnPlane_t
+S9w0}3A
 SIcL$8Ic
 SSE and SSE2 are required.
 SceneSystem_002
@@ -973,7 +990,6 @@ StatsService_001
 SteamAudio001
 String %d: ref:%d %s
 SubmitResourceFileRequests
-T$0H9
 T$8H)
 T$HfA
 TestFormatA
@@ -987,7 +1003,6 @@ TextMessageMgr_001
 The filename may only contain lower case alphanumeric characters and underscores.
 ThreadGetCurrentId
 ThreadGetCurrentProcessId
-ThreadInterlockedExchange64
 ThreadNanoSleep
 ThreadSleep
 ToolFramework2_002
@@ -1090,6 +1105,7 @@ Vector
 Vector2D
 Vector4D
 VisBuilder_001
+W H92
 WARNING: %s resource '%s' (%016llX) requested but is not in the system. (Missing from from a manifest?)
 WARNING: %s resource '%s' is the wrong resource type (expected %s)!
 WARNING: Could not find schema data for helper class for resource type %lld '%s'. (Missing MDiskDataForResourceType metadata or schema data isn't loaded?)
@@ -1257,7 +1273,7 @@ f4RelaxationFactor
 f4Slack
 f4Weight0
 f4Weights
-f;C.w
+f;S.w
 fA;0M
 fA;0trA
 false
@@ -1282,6 +1298,7 @@ flNodeWeight0
 flPointDamping
 flRadius
 flRelaxationFactor
+flReserved
 flSlack
 flSpringConstant
 flSpringDamping
@@ -1330,6 +1347,7 @@ m_Attenuation1
 m_Attenuation2
 m_AxialEdges
 m_BounceColor
+m_BoxRigids
 m_CollisionPlanes
 m_CollisionSpheres
 m_Color
@@ -1416,6 +1434,7 @@ m_flDefaultVelQuadAirDrag
 m_flDefaultVelRodAirDrag
 m_flDefaultVolumetricSolveAmount
 m_flFogContributionStength
+m_flInternalPressure
 m_flK
 m_flLength
 m_flLightSourceDim0
@@ -1450,6 +1469,7 @@ m_flYawDamping
 m_flYawFriction
 m_flYawStiffness
 m_hResource->m_nLoadingResource != LOADING_RESOURCE_INDEX_INVALID
+m_hResource->m_nStreamingResource != STREAMING_RESOURCE_DATA_INDEX_INVALID
 m_jiggleBone
 m_lightCookie
 m_nBakeLightIndex
@@ -1457,7 +1477,9 @@ m_nCollisionSphereInclusiveCount
 m_nDynamicNodeFlags
 m_nEHandle
 m_nEvent
+m_nExtraGoalIterations
 m_nExtraIterations
+m_nExtraPressureIterations
 m_nFitMatrixCount1
 m_nFitMatrixCount2
 m_nFlags
@@ -1468,13 +1490,13 @@ m_nManifestIndex
 m_nNode
 m_nNodeCount
 m_nObjectId
+m_nPriority
 m_nQuadCount1
 m_nQuadCount2
 m_nQuadVelocitySmoothIterations
 m_nReferencerResourceId
 m_nReferredToResourceId
 m_nReserved
-m_nReservedUint16
 m_nReservedUint8
 m_nResourceId
 m_nRodVelocitySmoothIterations
@@ -1513,6 +1535,7 @@ malloc
 malloc@@GLIBC_2.2.5
 mathlib.cpp
 mathlib_extended
+matrix3x4a_t
 memcmp
 memcmp@@GLIBC_2.2.5
 memcpy
@@ -1567,7 +1590,7 @@ pthread_mutexattr_settype@@GLIBC_2.2.5
 pthread_once
 pthread_once@@GLIBC_2.2.5
 qAdjust
-r6LcA
+r7LcQ
 replicated
 require_exact_pairings
 resource_leaks
@@ -1594,9 +1617,11 @@ strcmp
 strcmp@@GLIBC_2.2.5
 strcpy
 strcpy@@GLIBC_2.2.5
+streamingresourcedata.cpp
 strlen
 strlen@@GLIBC_2.2.5
 strstr@@GLIBC_2.2.5
+t	[A\]
 t!L;0u
 t"HcK
 t"HcO
@@ -1615,9 +1640,11 @@ tWA9]
 t^[A\]
 tdA:]
 tgL;(u
+tkD9p
+tmFrame
 ttIcG
 t}HcO
-uT9wt}O
+uL9wd}G
 uint64
 utlbuffer.cpp
 utlstring.cpp
@@ -1625,6 +1652,7 @@ v;<\t7I
 vCenter
 vOffset
 vShape
+vSize
 vagrp
 vanim
 vents
@@ -1648,17 +1676,14 @@ vvvtx
 vwenvmapvwrlt
 vwnod
 vwrld
-w(AUATI
 x HcW
 xGHcO
 x[A\A]A^A_]
 z/u-H
-{ [A\]
 {8;C0t4
 {error resource: %s}
 {}()':
 |$ Hi
-|$HfA
 |JA;X
 }>;w$
 }Hf;w
@@ -1666,10 +1691,11 @@ z/u-H
 ~&H97t@
 ~&H9wHt'H
 ~)A;]
-~,H95gq,
+~,H957
 ~4Lc+I
 ~8H9wHts
 ~CH9wH
 ~CLoadingResource
+~CStreamingResourceData
 ~aHcW
 ~vHcKPHc

@@ -54,12 +54,6 @@ enum EWeekendTourneyRichPresenceEvent {
 	k_EWeekendTourneyRichPresenceEvent_Eliminated = 3;
 }
 
-enum EDOTAEventInviteType {
-	k_EDOTAEventInviteType_Direct = 0;
-	k_EDOTAEventInviteType_OpenQualifier = 1;
-	k_EDOTAEventInviteType_ChampionsCup = 2;
-}
-
 enum EDOTATriviaQuestionCategory {
 	k_EDOTATriviaQuestionCategory_AbilityIcon = 0;
 	k_EDOTATriviaQuestionCategory_AbilityCooldown = 1;
@@ -958,13 +952,7 @@ message CMsgClientToGCMarkNotificationListRead {
 }
 
 message CMsgGCLeagueAdminState {
-	message PrivateLeagueKeys {
-		optional uint32 leagueid = 1;
-		optional uint32 privatekey = 2;
-	}
-
-	repeated uint32 leagues = 1;
-	repeated .CMsgGCLeagueAdminState.PrivateLeagueKeys keys = 2;
+	repeated uint32 league_ids = 1;
 }
 
 message CMsgGCPlayerInfoRequest {
@@ -1213,31 +1201,6 @@ message CMsgClientToGCFriendsPlayedCustomGameRequest {
 message CMsgGCToClientFriendsPlayedCustomGameResponse {
 	optional uint64 custom_game_id = 1;
 	repeated uint32 account_ids = 2;
-}
-
-message CMsgClientToGCFeaturedHeroesRequest {
-}
-
-message CMsgGCToClientFeaturedHeroesResponse {
-	message DataField {
-		optional .EFeaturedHeroDataType data_type = 1 [default = k_EFeaturedHeroDataType_HeroID];
-		optional uint32 uint32_value = 2;
-		optional uint64 uint64_value = 3;
-		optional string string_value = 4;
-		optional float float_value = 5;
-	}
-
-	message FeaturedHero {
-		repeated .CMsgGCToClientFeaturedHeroesResponse.DataField data_fields = 1;
-	}
-
-	message Category {
-		optional int32 category_weight = 1;
-		repeated .EFeaturedHeroTextField text_fields = 2;
-		repeated .CMsgGCToClientFeaturedHeroesResponse.FeaturedHero featured_heroes = 3;
-	}
-
-	repeated .CMsgGCToClientFeaturedHeroesResponse.Category categories = 1;
 }
 
 message CMsgClientToGCSocialMatchPostCommentRequest {
@@ -1519,11 +1482,6 @@ message CMsgMVPVotesForMatch {
 	}
 
 	repeated .CMsgMVPVotesForMatch.Player players = 1;
-}
-
-message CMsgLeaguePrizePool {
-	optional uint32 prize_pool = 1;
-	optional float increment_per_second = 2;
 }
 
 message CMsgClientToGCTeammateStatsRequest {
@@ -2112,19 +2070,6 @@ message CMsgClientToGCJoinPlaytestResponse {
 	optional string error = 1;
 }
 
-message CMsgDOTAEventInvite {
-	message Team {
-		optional uint32 team_id = 1;
-		optional uint32 announcement_date = 2;
-		optional string team_name = 3;
-		optional .EDOTAEventInviteType invite_type = 4 [default = k_EDOTAEventInviteType_Direct];
-		optional uint32 region = 5;
-		optional bool qualifier_winner = 6;
-	}
-
-	repeated .CMsgDOTAEventInvite.Team teams = 1;
-}
-
 message CMsgDOTASetFavoriteTeam {
 	optional uint32 team_id = 1;
 	optional uint32 event_id = 2;
@@ -2343,6 +2288,8 @@ message CMsgPurchaseItemWithEventPointsResponse {
 		FAILED_TO_SEND = 8;
 		SERVER_ERROR = 9;
 		NOT_ALLOWED = 10;
+		CANCELLED = 11;
+		CLIENT_ERROR = 12;
 	}
 
 	optional .CMsgPurchaseItemWithEventPointsResponse.Result result = 1 [default = SUCCESS];
@@ -2432,6 +2379,8 @@ message CMsgProfileResponse {
 		optional uint32 hero_id = 1;
 		repeated .CSOEconItem equipped_econ_items = 2;
 		optional bool manually_set = 3;
+		optional uint32 plus_hero_xp = 4;
+		optional .CSOEconItem plus_hero_relics_item = 5;
 	}
 
 	message MatchInfo {

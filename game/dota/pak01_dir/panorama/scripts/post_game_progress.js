@@ -380,6 +380,46 @@ AnimateHeroBadgeXPIncreaseAction.prototype.finish = function ()
 }
 
 
+// Action to display victory prediction shards
+function AnimateShardRewardAction( panel, label, shardAmount )
+{
+	this.panel = panel;
+	this.label = label;
+	this.shardAmount = shardAmount;
+
+}
+AnimateShardRewardAction.prototype = new BaseAction();
+
+AnimateShardRewardAction.prototype.start = function ()
+{
+	var rowsContainer = this.panel.FindChildInLayoutFile( "HeroBadgeProgressRows" );
+	var row = null;
+
+	this.seq = new RunSequentialActions();
+
+	row = $.CreatePanel( 'Panel', this.panel.FindChildInLayoutFile( "HeroBadgeProgressCenter" ), '' );
+	row.BLoadLayoutSnippet( 'HeroBadgeProgressRow_ShardReward' );
+	row.SetDialogVariable( 'reward_type', $.Localize( this.label ) );
+	row.SetDialogVariableInt( 'shard_value', 0 );
+	this.seq.actions.push( new AddClassAction( row, 'ShowRow' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+	this.seq.actions.push( new AddClassAction( row, 'ShowValue' ) );
+	var duration = GetXPIncreaseAnimationDuration( this.shardAmount ) * 2;
+	var par = new RunParallelActions();
+	par.actions.push( new AnimateDialogVariableIntAction( row, 'shard_value', 0, this.shardAmount, duration ) );
+	par.actions.push( new PlaySoundForDurationAction( "XP.Count", duration ) );
+	this.seq.actions.push( par );
+	this.seq.start();
+}
+AnimateShardRewardAction.prototype.update = function ()
+{
+	return this.seq.update();
+}
+AnimateShardRewardAction.prototype.finish = function ()
+{
+	this.seq.finish();
+}
+
 
 function AnimateHeroBadgeLevelRewardAction( data, containerPanel )
 {
@@ -664,10 +704,16 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 			this.seq.actions.push( new WaitAction( 0.2 ) );
 		}
 
+
+		if ( this.data.victory_prediction_shard_reward > 0 )
+		{
+			this.seq.actions.push( new AnimateShardRewardAction( panel, '#DOTA_PlusPostGame_VictoryPrediction', this.data.victory_prediction_shard_reward ) )
+		}
+
 		this.seq.actions.push( new StopSkippingAheadAction() );
-		this.seq.actions.push( new WaitAction( 1.0 ) );
+		this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
 		this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
-		this.seq.actions.push( new WaitAction( 0.5 ) );
+		this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
 	}
 
 	// Now animate the relics
@@ -692,9 +738,9 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 			}
 
 			this.seq.actions.push( new StopSkippingAheadAction() );
-			this.seq.actions.push( new WaitAction( 1.0 ) );
+			this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
 			this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
-			this.seq.actions.push( new WaitAction( 0.5 ) );
+			this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
 		}
 	}
 
@@ -737,7 +783,7 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 	this.seq.actions.push( new AddScreenLinkAction( panel, 'CavernsProgress', '#DOTACavernCrawl_Title' ) );
 
 	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
-	this.seq.actions.push( new WaitAction( 1.0 ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
 
 	var cavernCrawlPanel = panel.FindChildInLayoutFile( 'CavernCrawl' );
 
@@ -1383,9 +1429,9 @@ AnimateBattlePassScreenAction.prototype.start = function ()
 	this.seq.actions.push( new WaitAction( 0.2 ) );
 
 	this.seq.actions.push( new StopSkippingAheadAction() );
-	this.seq.actions.push( new WaitAction( 1.5 ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
 	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
-	this.seq.actions.push( new WaitAction( 0.5 ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
 
 	this.seq.start();
 }
