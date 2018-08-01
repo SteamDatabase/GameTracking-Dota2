@@ -29,6 +29,14 @@
 
 
 //-------------------------------------------------------------------------
+// Inherit from this class to indcate support for authored skeleton pose data
+//-------------------------------------------------------------------------
+@BaseClass = PosableSkeleton
+[
+]
+
+
+//-------------------------------------------------------------------------
 //
 // Base Classes
 //
@@ -508,7 +516,7 @@
 	output OnPhysCannonAnimatePostStarted(void) : "Fired when this prop starts playing the Post physcannon-pull activity. Only fired if the ACT_PHYSCANNON_ANIMATE_POST activity is defined in the model this breakable is using."
 ]
 
-@BaseClass base(Targetname, RenderFields, DamageFilter, ResponseContext, Shadow) color(0 200 200) = BaseNPC
+@BaseClass base(Targetname, RenderFields, DamageFilter, ResponseContext, Shadow, PosableSkeleton) color(0 200 200) = BaseNPC
 [
 	target(target_destination) [ group="NPC Properties" ] : "Target Path Corner" : : "If set, the name of a path corner entity that this NPC will walk to, after spawning."
 	squadname(String) [ group="NPC Properties" ] : "Squad Name" : : "NPCs that are in the same squad (i.e. have matching squad names) will share information about enemies, and will take turns attacking and covering each other."
@@ -555,7 +563,12 @@
 
 	NavRestrictionVolume(target_destination) [ group="NPC Properties" ] : "Nav Restriction Volume" : "" : "Markup volume entity to restrict unit navigation"
 
-	spawnasragdoll(boolean) [ group="NPC Properties" ] : "Spawn as Temp Ragdoll" : 0 : "This NPC will spawn as a temporary ragdoll, and then unragdoll after it settles."
+	spawnasragdoll(choices) [ group="NPC Properties" ] : "Spawn as Temp Ragdoll" : 0 : "Specifies if the NPC will spawn as a temporary ragdoll and the behavior after becoming a ragdoll." =
+	[
+		0 : "Disabled"
+		1 : "Ragdoll and get up when settled"
+		2 : "Ragdoll and remain ragdoll"
+	]
 
 	// Outputs
 	output OnDamaged(void) : "Fired when this NPC takes damage."
@@ -1288,7 +1301,7 @@
 ]
 
 
-@PointClass global( tonemap ) tonemap() iconsprite("materials/editor/env_tonemap_controller.vmat") = env_tonemap_controller :
+@PointClass base(Targetname) global( tonemap ) tonemap() iconsprite("materials/editor/env_tonemap_controller.vmat") = env_tonemap_controller :
 	"An entity that controls the HDR tonemapping for the player. Think of it as a method of controlling the exposure of the player's eyes."
 [
 	MinExposure(float)   : "Minimum Auto Exposure"		: "0.25"
@@ -5914,7 +5927,7 @@
 	model(studio) : "World model"
 ]
 
-@PointClass color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static, posable) model_archetypes(static_prop_model) = prop_static
+@PointClass base(PosableSkeleton) color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static) model_archetypes(static_prop_model) = prop_static
 [
 	model(resource:model) [report] : "World Model"
 	solid(choices) : "Collisions" : 6 =
@@ -6134,7 +6147,7 @@
 ]
 
 
-@PointClass base(Targetname, Studiomodel, SystemLevelChoice, BaseFadeProp, EnableDisable) sphere(fademindist) sphere(fademaxdist) model(posable) = prop_ragdoll :
+@PointClass base(Targetname, Studiomodel, SystemLevelChoice, BaseFadeProp, EnableDisable, PosableSkeleton) sphere(fademindist) sphere(fademaxdist) model() = prop_ragdoll :
 	"A prop that physically simulates and can be articulated with internal joints. The joint constraints are part of the physics model."
 [
 	spawnflags(flags) = 
