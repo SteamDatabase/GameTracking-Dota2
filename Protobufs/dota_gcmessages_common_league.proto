@@ -3,6 +3,84 @@ import "dota_shared_enums.proto";
 option optimize_for = SPEED;
 option cc_generic_services = false;
 
+enum ELeagueNodeGroupType {
+	INVALID_GROUP_TYPE = 0;
+	ORGANIZATIONAL = 1;
+	ROUND_ROBIN = 2;
+	SWISS = 3;
+	BRACKET_SINGLE = 4;
+	BRACKET_DOUBLE_SEED_LOSER = 5;
+	BRACKET_DOUBLE_ALL_WINNER = 6;
+	SHOWMATCH = 7;
+	GSL = 8;
+}
+
+enum ELeagueNodeType {
+	INVALID_NODE_TYPE = 0;
+	BEST_OF_ONE = 1;
+	BEST_OF_THREE = 2;
+	BEST_OF_FIVE = 3;
+	BEST_OF_TWO = 4;
+}
+
+message CMsgDOTALeagueNode {
+	message MatchDetails {
+		optional uint64 match_id = 1;
+		optional uint32 winning_team_id = 2;
+	}
+
+	optional string name = 1;
+	optional uint32 node_id = 2;
+	optional uint32 node_group_id = 3;
+	optional uint32 winning_node_id = 4;
+	optional uint32 losing_node_id = 5;
+	optional uint32 incoming_node_id_1 = 6;
+	optional uint32 incoming_node_id_2 = 7;
+	optional .ELeagueNodeType node_type = 8 [default = INVALID_NODE_TYPE];
+	optional uint32 scheduled_time = 9;
+	optional uint32 series_id = 10;
+	optional uint32 team_id_1 = 11;
+	optional uint32 team_id_2 = 12;
+	repeated .CMsgDOTALeagueNode.MatchDetails matches = 13;
+	optional uint32 team_1_wins = 14;
+	optional uint32 team_2_wins = 15;
+	optional bool has_started = 16;
+	optional bool is_completed = 17;
+	repeated uint32 stream_ids = 18;
+}
+
+message CMsgDOTALeagueNodeGroup {
+	message TeamStanding {
+		optional uint32 standing = 1;
+		optional uint32 team_id = 2;
+		optional string team_name = 3;
+		optional string team_tag = 4;
+		optional uint32 node_wins = 5;
+		optional uint32 node_losses = 6;
+		optional uint32 match_wins = 7;
+		optional uint32 match_losses = 8;
+		optional int32 score = 9;
+	}
+
+	optional string name = 1;
+	optional uint32 node_group_id = 2;
+	optional uint32 parent_node_group_id = 3;
+	repeated uint32 incoming_node_group_ids = 4;
+	optional uint32 advancing_node_group_id = 5;
+	optional uint32 advancing_team_count = 6;
+	optional uint32 team_count = 7;
+	optional .ELeagueNodeGroupType node_group_type = 8 [default = INVALID_GROUP_TYPE];
+	optional .ELeagueNodeType default_node_type = 9 [default = INVALID_NODE_TYPE];
+	optional uint32 round = 10;
+	optional uint32 max_rounds = 11;
+	optional bool is_tiebreaker = 12;
+	optional bool is_final_group = 13;
+	optional bool is_completed = 14;
+	repeated .CMsgDOTALeagueNodeGroup.TeamStanding team_standings = 15;
+	repeated .CMsgDOTALeagueNode nodes = 16;
+	repeated .CMsgDOTALeagueNodeGroup node_groups = 17;
+}
+
 message CMsgDOTALeague {
 	message Info {
 		optional uint32 league_id = 1;
@@ -73,80 +151,11 @@ message CMsgDOTALeague {
 		optional .ELeagueInvite invite_type = 6 [default = LEAGUE_INVITE_INVALID];
 	}
 
-	message NodeGroup {
-		optional string name = 1;
-		optional uint32 node_group_id = 2;
-		optional uint32 parent_node_group_id = 3;
-		repeated uint32 incoming_node_group_ids = 4;
-		optional uint32 advancing_node_group_id = 5;
-		optional uint32 advancing_team_count = 6;
-		optional uint32 team_count = 7;
-		optional .CMsgDOTALeague.ENodeGroupType node_group_type = 8 [default = INVALID_GROUP_TYPE];
-		optional .CMsgDOTALeague.ENodeType default_node_type = 9 [default = INVALID_NODE_TYPE];
-		optional uint32 round = 10;
-		optional uint32 max_rounds = 11;
-		optional bool is_tiebreaker = 12;
-		optional bool is_final_group = 13;
-		optional bool is_completed = 14;
-		repeated .CMsgDOTALeague.TeamStanding team_standings = 15;
-		repeated .CMsgDOTALeague.Node nodes = 16;
-		repeated .CMsgDOTALeague.NodeGroup node_groups = 17;
-		repeated .CMsgDOTALeague.Stream streams = 18;
-	}
-
-	message Node {
-		optional string name = 1;
-		optional uint32 node_id = 2;
-		optional uint32 node_group_id = 3;
-		optional uint32 winning_node_id = 4;
-		optional uint32 losing_node_id = 5;
-		optional .CMsgDOTALeague.ENodeType node_type = 6 [default = INVALID_NODE_TYPE];
-		optional uint32 scheduled_time = 7;
-		optional uint32 series_id = 8;
-		optional uint32 team_id_1 = 9;
-		optional uint32 team_id_2 = 10;
-		optional uint32 team_1_wins = 20;
-		optional uint32 team_2_wins = 21;
-		optional bool has_started = 22;
-		optional bool is_completed = 23;
-	}
-
-	message TeamStanding {
-		optional uint32 team_id = 1;
-		optional string team_name = 2;
-		optional string team_tag = 3;
-		optional uint32 node_wins = 4;
-		optional uint32 node_losses = 5;
-		optional uint32 match_wins = 6;
-		optional uint32 match_losses = 7;
-		optional uint32 score = 8;
-	}
-
-	enum ENodeGroupType {
-		INVALID_GROUP_TYPE = 0;
-		ORGANIZATIONAL = 1;
-		ROUND_ROBIN = 2;
-		SWISS = 3;
-		BRACKET_SINGLE = 4;
-		BRACKET_DOUBLE_SEED_LOSER = 5;
-		BRACKET_DOUBLE_ALL_WINNER = 6;
-		SHOWMATCH = 7;
-		GSL = 8;
-	}
-
-	enum ENodeType {
-		INVALID_NODE_TYPE = 0;
-		BEST_OF_ONE = 1;
-		BEST_OF_THREE = 2;
-		BEST_OF_FIVE = 3;
-		BEST_OF_TWO = 4;
-	}
-
 	optional .CMsgDOTALeague.Info info = 1;
 	optional .CMsgDOTALeague.PrizePool prize_pool = 2;
 	repeated .CMsgDOTALeague.Admin admins = 3;
 	repeated .CMsgDOTALeague.Stream streams = 4;
-	repeated .CMsgDOTALeague.NodeGroup node_groups = 5;
+	repeated .CMsgDOTALeagueNodeGroup node_groups = 5;
 	repeated .CMsgDOTALeague.SeriesInfo series_infos = 6;
 	repeated .CMsgDOTALeague.Player registered_players = 7;
 	repeated .CMsgDOTALeague.Team invited_teams = 8;
@@ -199,5 +208,50 @@ message CMsgDOTALeaguePrizePool {
 }
 
 message CMsgDOTALeagueInfoListAdminsRequest {
+}
+
+message CMsgDOTALeagueNodeRequest {
+	optional uint32 league_id = 1;
+	optional uint32 node_id = 2;
+}
+
+message CMsgDOTALeagueNodeResponse {
+	optional .CMsgDOTALeagueNode node = 1;
+}
+
+message CMsgDOTALeagueAvailableLobbyNodesRequest {
+	optional uint32 league_id = 1;
+}
+
+message CMsgDOTALeagueAvailableLobbyNodes {
+	message NodeInfo {
+		optional uint32 node_id = 1;
+		optional string node_name = 2;
+		optional string node_group_name = 3;
+		optional uint32 team_id_1 = 4;
+		optional uint32 team_id_2 = 5;
+	}
+
+	repeated .CMsgDOTALeagueAvailableLobbyNodes.NodeInfo node_infos = 1;
+}
+
+message CMsgDOTALeagueNodeResults {
+	message Result {
+		optional uint32 node_id = 1;
+		optional uint32 winning_node_id = 2;
+		optional uint32 losing_node_id = 3;
+		optional uint32 incoming_node_id_1 = 4;
+		optional uint32 incoming_node_id_2 = 5;
+		optional uint32 team_id_1 = 6;
+		optional uint32 team_id_2 = 7;
+		optional string team_1_name = 8;
+		optional string team_2_name = 9;
+		optional uint32 team_1_wins = 10;
+		optional uint32 team_2_wins = 11;
+		optional uint32 winning_team_id = 12;
+		optional uint32 losing_team_id = 13;
+	}
+
+	repeated .CMsgDOTALeagueNodeResults.Result node_results = 1;
 }
 
