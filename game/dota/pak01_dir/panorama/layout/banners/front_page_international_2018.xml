@@ -6,7 +6,38 @@
 		<include src="s2r://panorama/styles/banners/front_page_international_2018.vcss_c" />
 	</styles>
 
-	<Panel class="FrontpageTakeover">
+	<script>
+		function SetGrimstrokeVisible( bVisible )
+		{
+			$.GetContextPanel().SetHasClass( "GrimstrokeVisible", bVisible );
+		}
+		function ToggleGrimstrokeVisible()
+		{
+			$.GetContextPanel().ToggleClass( "GrimstrokeVisible" );
+		}
+
+		function SetGrimstrokeHighlighted( bHighlighted )
+		{
+			$.GetContextPanel().SetHasClass( "GrimstrokeHighlighted", bHighlighted );
+		}
+
+		var g_fCarouselAutoScrollDelay = 10.0;
+		function DoCarouselToggle()
+		{
+			if ( !$.GetContextPanel().BHasClass( "GrimstrokeHighlighted" ) )
+			{
+				ToggleGrimstrokeVisible();
+			}
+		
+			$.Schedule( g_fCarouselAutoScrollDelay, DoCarouselToggle );
+		}
+		$.Schedule( g_fCarouselAutoScrollDelay, function()
+		{
+			DoCarouselToggle();
+		} );
+	</script>
+
+	<Panel class="FrontpageTakeover GrimstrokeVisible">
 		<Panel id="MainContents">
 			<Panel id="Header">
 				<Panel class="Title" />
@@ -20,62 +51,7 @@
 			<Panel id="Contents">
 
 				<DOTAFrontpageContents id="FrontpageContents" />
-
-				<!--<DOTAFrontpageVideoStreamTwitch id="VideoStreamTwitch"
-										class="FrontpageCell"
-										league-id="9870"
-										english-channel="dota2ti"
-										russian-channel="dota2ti_ru"
-										chinese-stream="http://play.huomao.com/outplayer/htmlfive/10661.html"
-										chinese-previous-stream="http://list.youku.com/albumlist/show/id_50555560.html?spm=a2h0j.8191423.module_basic_info.5~5~8~A" />-->
-
-					<!--<DOTAFrontpageDefaultButton class="FrontpageCell InternationalCell"
-																					cellimage="s2r://panorama/images/front_page/ti7/trove_psd.vtex"
-																					cellheader="#DOTA_International2017_TroveCarafe_Header"
-																					celltitle="#DOTA_International2017_TroveCarafe_Title"
-																					onactivate="DOTAShowItemDefPage( 12122 )" />-->
-
-					<!--<DOTAFrontpageCarousel id="NewsCarousel" class="FrontpageCell InternationalCell">
-						<DOTAFrontpageDefaultButton id="NewPlayers" class="InternationalCell"
-																cellimage="s2r://panorama/images/battlepass/ti7/blog_meepos_png.vtex"
-																cellheader="#DOTA_International2017_NewPlayer_Header"
-																celltitle="#DOTA_International2017_NewPlayer_Title"
-																onactivate="BrowserGoToURL( http://blog.dota2.com/2017/07/welcoming-new-players/ )" />
-
-						<DOTAFrontpageDefaultButton class="InternationalCell"
-																						cellimage="s2r://panorama/images/front_page/ti7/blog_filmcontest_2017_jpg.vtex"
-																						cellheader="#DOTA_Unternational2017_ShortFilm_Header"
-																						celltitle="#DOTA_Unternational2017_ShortFilm_Title"
-																						onactivate="DOTAShowShortFilmVote()" />
-					</DOTAFrontpageCarousel>-->
-
-
-					<!--<DOTAFrontpageDefaultButton class="InternationalCell"
-																					cellimage="s2r://panorama/images/front_page/ti7/babyrosh_psd.vtex"
-																					cellheader="#DOTA_International2017_BabyRosh_Header"
-																					celltitle="#DOTA_International2017_BabyRosh_Title"
-																					onactivate="BrowserGoToURL( http://blog.dota2.com/2017/07/level-2000-collectors-baby-roshan/ )"/>
-					<DOTAFrontpageDefaultButton class="FrontpageCell InternationalCell"
-																				cellimage="s2r://panorama/images/front_page/ti7/bracket_psd.vtex"
-																				cellheader="#DOTA_International2017_Format_Header"
-																				celltitle="#DOTA_International2017_Format_Title"
-																				onactivate="BrowserGoToDOTAURL( international/replays )" />
-
-					<DOTAFrontpageDefaultButton id="Blog"
-																		class="FrontpageCell InternationalCell"
-																		cellheader="#DOTA_Blog" />
-
-					<DOTAFrontpageDefaultButton class="FrontpageCell InternationalCell"
-																					cellimage="s2r://panorama/images/front_page/ti7/newbstream_psd.vtex"
-																					cellheader="#DOTA_International2017_NewcomerStream_Header"
-																					celltitle="#DOTA_International2017_NewcomerStream_Title"
-																					onactivate="BrowserGoToDOTAURLAnchor( international/overview, HowToWatchContainer )" />
-					<DOTAFrontpageDefaultButton class="FrontpageCell InternationalCell"
-																					cellimage="s2r://panorama/images/front_page/ti7/archive_psd.vtex"
-																					cellheader="#DOTA_International2017_Archives_Header"
-																					celltitle="#DOTA_International2017_Archives_Title"
-																					onactivate="ExternalBrowserGoToURL( https://www.youtube.com/playlist?list=PLxkyNsoBqOdBQr1cPDxGA00mzmRS94sNy )" />-->
-
+			
 				<Panel id="EventDetails">
 					<Label class="EventDetailsTitle" text="#DOTA_CompendiumRecap_MainEvent" />
 					<Label class="EventDetailsText" text="#DOTA_TI8_MainEventDates" />
@@ -89,8 +65,34 @@
 			</Panel>
 		</Panel>
 
-		<Panel id="Overlay" hittest="false" hittestchildren="false">
-			<DOTAScenePanel id="Aegis" map="scenes/battlepass_ti8/aegis_rotate" camera="camera_1" antialias="true" particleonly="false"/>
+		<Panel id="Overlay" hittest="false">
+			<DOTAScenePanel id="Aegis" map="scenes/battlepass_ti8/aegis_rotate" camera="camera_1" antialias="true" particleonly="false" hittest="false" />
+
+			<Movie id="GrimstrokeBackground" 
+						 src="file://{resources}/videos/promo/grimstrok_bg_small.webm" 
+						 controls="none" repeat="true" autoplay="onload" 
+						 hittest="false" />
+			<Button id="GrimstrokeHitTarget" 
+							onmouseover="SetGrimstrokeHighlighted( true )"
+							onmouseout="SetGrimstrokeHighlighted( false )"
+							onactivate="DOTAShowReferencePage( file://{resources}/layout/leaf_pages/dashboard_page_debut_grimstroke.xml )"/>
+			<DOTAScenePanel id="GrimstrokeModel" 
+											anti-alias="true" 
+											map="backgrounds/hero_frontpage_grimstroke" 
+											light="hero_light" 
+											renderdeferred="true" 
+											deferredalpha="true" 
+											camera="hero_camera" 
+											antialias="true" 
+											particleonly="false" 
+											hittest="false" />
+			<Panel id="GrimstrokeTitle" hittest="false" />
+			
+			<Panel id="CarouselDots">
+				<Button id="GrimstrokeCarouselDot" class="CarouselDot" onactivate="SetGrimstrokeVisible( true )" />
+				<Button id="NormalCarouselDot" class="CarouselDot" onactivate="SetGrimstrokeVisible( false )" />
+			</Panel>
+			
 		</Panel>
 
 	</Panel>
