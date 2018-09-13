@@ -704,11 +704,20 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 			this.seq.actions.push( new WaitAction( 0.2 ) );
 		}
 
-
-		if ( this.data.victory_prediction_shard_reward > 0 )
+		if ( this.data.dota_plus_progress !== undefined && this.data.dota_plus_progress.tips !== undefined && this.data.dota_plus_progress.tips.length != 0 )
 		{
-			this.seq.actions.push( new AnimateShardRewardAction( panel, '#DOTA_PlusPostGame_VictoryPrediction', this.data.victory_prediction_shard_reward ) )
+			var nShardTips = 0;
+			for ( var i = 0; i < this.data.dota_plus_progress.tips.length; ++i )
+			{
+				nShardTips += this.data.dota_plus_progress.tips[i].amount;
+			}
+			this.seq.actions.push( new AnimateShardRewardAction( panel, '#DOTA_PlusPostGame_PlayerTips', nShardTips ) );
 		}
+
+		if ( this.data.dota_plus_progress !== undefined && this.data.dota_plus_progress.victory_prediction_shard_reward > 0 )
+		{
+			this.seq.actions.push( new AnimateShardRewardAction( panel, '#DOTA_PlusPostGame_VictoryPrediction', this.data.dota_plus_progress.victory_prediction_shard_reward ) );
+		}	
 
 		this.seq.actions.push( new StopSkippingAheadAction() );
 		this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
@@ -1608,7 +1617,22 @@ function TestAnimateHeroBadgeLevel()
 				starting_value: 25,
 				ending_value: 29,
 			}
-		]
+		],
+
+		dota_plus_progress:
+		{
+			tips:
+			[
+				{
+					account_id: 172258,
+					count: 2,
+					amount: 50,
+				},
+			],
+
+			victory_prediction_shard_reward: 20
+		}
+
 	};
 
 	TestProgressAnimation( data );
