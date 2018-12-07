@@ -138,6 +138,7 @@
 	SoundSystem
 	{
 		"DisableSteamAudio" "1"
+		"DefaultWindowsXAudio" "1"
 	}
 
 	ToolsEnvironment
