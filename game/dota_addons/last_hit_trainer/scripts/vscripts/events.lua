@@ -38,13 +38,6 @@ function CLastHitTrainer:OnEntityKilled(event)
 		self.m_NetTableStats.m_CurrentLastHitStreakCount = 0
 	end
 
-	local killed = EntIndexToHScript( event.entindex_killed )
-
-	-- Denies don't have their own event.
-	if killer:GetTeam() == killed:GetTeam() and killer:IsPlayer() then
-		self:OnDeny( victim )
-	end
-
 	local nLastHitsPlusDenies = self.m_NetTableStats.m_LastHitCount + self.m_NetTableStats.m_DenyCount
 	self.m_NetTableStats.m_TotalLastHitOrDenyPct = nLastHitsPlusDenies / self.m_NetTableStats.m_TotalCreepDeaths
 
@@ -128,6 +121,23 @@ end
 --------------------------------------------------------------------------------
 function CLastHitTrainer:OnLastHit( event )
 	local victim = EntIndexToHScript( event.EntKilled )
+	local hPlayer = PlayerResource:GetPlayer( event.PlayerID )
+
+	if not victim or not hPlayer then
+		return
+	end
+
+	local hPlayerHero = hPlayer:GetAssignedHero()
+
+	if not hPlayerHero then
+		return
+	end
+
+	-- Handle denies differently
+	if hPlayerHero:GetTeamNumber() == victim:GetTeamNumber() then
+		self:OnDeny( victim )
+		return
+	end
 
 	increment(self.m_NetTableStats, 'm_LastHitCount')
 	self:IncrementLastHitStreakCount()

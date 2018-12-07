@@ -107,10 +107,8 @@
 @BaseClass = Studiomodel
 [
 	model(studio) [report]: "World Model"
-	skin(choices) [ group="Render Properties" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
-	[
-		"0" : "Ignored by the modelhelper code"
-	]
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : ""
 	
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity."
 
@@ -119,6 +117,7 @@
 	input DisableShadow(void) : "Turn shadow off."
 	input EnableShadow(void) : "Turn shadow on."
 	input AlternativeSorting(bool) : "Used to attempt to fix sorting problems when rendering. True activates, false deactivates"
+	input SetRenderAttribute(string) : "Set the value of a render attribute used in material dynamic expressions. Examples: $myfloat=0.25 $myfloat4=1.0,0.0,1.0,1.0"
 
 	// Outputs
 	output OnIgnite(void) : "Fired when this object catches fire."
@@ -621,7 +620,9 @@
 	input BecomeRagdoll(void) : "This NPC will instantly become a ragdoll with ZERO force (just go limp). OnDeath, OnHalfHealth, etc. Outputs will **NOT** BE FIRED."
 	input BecomeTemporaryRagdoll(float) : "Become a temporary ragdoll that then can be later unrgadolled."
 	input StopTemporaryRagdoll(void) : "Rise from your grave."
+	input StopTemporaryRagdollAndSetEnemy(string) : "Rise from your grave to attack an enemy. Animgraph NPCs will turn to face the enemy during their unragdoll. Parameter is the enemy, usually the !activator on the trigger that's firing this input."
 	input WalkTowardsTarget(target_destination) : "Walks towards a target."
+	input StartResilientPathFollow(string) : "Walks towards the specified path corner. Will resiliently restart the walk if it's interrupted for any reason."
 	input SetAnimGraphParameter(string) : "Set an animation graph parameter Format: <name=value>"
 ]
 
@@ -1044,7 +1045,6 @@
 	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity the sound should emit from."
 	startOnSpawn(boolean) : "Start On Spawn" : "" : "Play the sound immediately upon spawning"
 	toLocalPlayer(boolean) : "To Local Player" : "" : "Play the sound directly to the local player"
-	alwaysTransmitToClient(boolean) : "Always Transmit To Client" : "" : "Always transmit this entity to the client. Use when this entity moves around or is parented to an entity that will move."
 
 	// Inputs
 	input SetSourceEntity(string) : "Set the name of the entity to play the sound from. The sound will follow the entity as it moves."
@@ -1124,12 +1124,14 @@
 	autoDisable(bool) : "Disable when out of range" : 0
 	
 	//Inputs
+	input SetSoundEventGUID(integer) : "Start the sound event using a snd_event_point and pass its guid output to this."
 	input SetStackName(string) : "Change the target stack name"
 	input SetOperatorName(string) : "Change the target operator name"
 	input SetOpvarName(string) : "Change the target opvar name"	
 	input SetOpvarIndex(integer) : "Change the target opvar index"	
 	input Enable(void) : "Enable the entity"
 	input Disable(void) : "Disable the entity"
+
 	
 	//Outputs
 	output OnEnter(void) : "Fired when the player enters the outer distance."
@@ -1687,11 +1689,7 @@
 		1 : "Not Solid" : 0
 	]
 	model(studio) : "Model"
-	skin(choices) [ group="Render Properties" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
-	[
-		"0" : "Ignored by the modelhelper code"
-	]
-
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
 	testMode(choices) : "Test Mode" : 0 =
 	[
 		0 : "None"
@@ -2139,7 +2137,7 @@
 	input StartFogTransition(void) : "Start fog transition."
 
 	// Starting fog parameters for the level. These are selectable per LOD.	
-	fogenable(boolean) : "Fog Enable" : 0
+	fogenable(boolean) : "Fog Enable" : 1
 	fogblend(boolean) : "Fog Blend" : 0
 	use_angles(boolean) : "Use Angles for Fog Dir" : 0
 	fogcolor(color255) : "Primary Fog Color" : "255 255 255"
@@ -4328,6 +4326,113 @@
 	output OnNotEqual(void) : "Fires if the values are not equal"
 ]
 
+@BaseClass = LogicNPCCounterPointBase
+[ 
+	startDisabled(bool) : "Start Disabled" : 0
+	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity to check distance from"
+	minCount(int) : "On Min Count All" : -1 : "The minimum count threshold of all npcs"
+	maxCount(int) : "On Max Count All" : -1 : "The maximum count threshold of all npcs"
+	minFactor(int) : "Min Factor All" : 0 : "The minimum count of all npcs for factor calculations"
+	maxFactor(int) : "Max Factor All" : 0 : "The maximum count of all npcs for factor calculations"
+
+	// npc type 1
+	NPCType1(npcclass) : "Class name of NPC 1 to count"
+	NPCState1(choices) : "NPC State 1" : "-1" : "Only match NPCs in this state" =
+	[
+		-1 : "Any"
+		0 : "None"
+		1 : "Idle"
+		2 : "Alert"
+		3 : "Combat"
+		4 : "Script"
+		5 : "Playdead"
+		6 : "Prone"
+		7 : "Dead"
+	]
+	minCount1(int) : "On Min Count 1" : -1 : "The minimum count threshold of npc 1"
+	maxCount1(int) : "On Max Count 1" : -1 : "The maximum count threshold of npc 1"
+	minFactor1(int) : "Min Factor 1" : 0 : "The minimum count of npc 1 for factor calculations"
+	maxFactor1(int) : "Max Factor 1" : 0 : "The maximum count of npc 1 for factor calculations"
+
+	// npc type 2
+	NPCType2(npcclass) : "Class name of NPC 2 to count"
+	NPCState2(choices) : "NPC State 2" : "-1" : "Only match NPCs in this state" =
+	[
+		-1 : "Any"
+		0 : "None"
+		1 : "Idle"
+		2 : "Alert"
+		3 : "Combat"
+		4 : "Script"
+		5 : "Playdead"
+		6 : "Prone"
+		7 : "Dead"
+	]
+	minCount2(int) : "On Min Count 2" : -1 : "The minimum count threshold of npc 2"
+	maxCount2(int) : "On Max Count 2" : -1 : "The maximum count threshold of npc 2"
+	minFactor2(int) : "Min Factor 2" : 0 : "The minimum count of npc 2 for factor calculations"
+	maxFactor2(int) : "Max Factor 2" : 0 : "The maximum count of npc 2 for factor calculations"
+
+	// npc type 3
+	NPCType3(npcclass) : "Class name of NPC 3 to count"
+	NPCState3(choices) : "NPC State 3" : "-1" : "Only match NPCs in this state" =
+	[
+		-1 : "Any"
+		0 : "None"
+		1 : "Idle"
+		2 : "Alert"
+		3 : "Combat"
+		4 : "Script"
+		5 : "Playdead"
+		6 : "Prone"
+		7 : "Dead"
+	]
+	minCount3(int) : "On Min Count 3" : -1 : "The minimum count threshold of npc 3"
+	maxCount3(int) : "On Max Count 3" : -1 : "The maximum count threshold of npc 3"
+	minFactor3(int) : "Min Factor 3" : 0 : "The minimum count of npc 3 for factor calculations"
+	maxFactor3(int) : "Max Factor 3" : 0 : "The maximum count of npc 3 for factor calculations"
+
+	//Inputs
+	input Enable(void) : "Enable the entity"
+	input Disable(void) : "Disable the entity"
+	input SetSourceEntity(string) : "Set the name of the entity to base this entities location on. This check will follow the entity as it moves."
+	
+	//Outputs
+	output OnMinCountAll(void) : "Fired when the count of all npcs transitions to the min count or less."
+	output OnMaxCountAll(void) : "Fired when the count of all npcs transitions to the max count or greater."
+	output OnRangeFactorAll(float) : "Outputs the factor of the count of all npcs."
+	// npc 1
+	output OnMinCount1(void) : "Fired when the count of npc 1 transitions to the min count or less."
+	output OnMaxCount1(void) : "Fired when the count of npc 1 transitions to the max count or greater."
+	output OnRangeFactor1(float) : "Outputs the factor of the count of npc 1."
+	// npc 2
+	output OnMinCount2(void) : "Fired when the count of npc 2 transitions to the min count or less."
+	output OnMaxCount2(void) : "Fired when the count of npc 2 transitions to the max count or greater."
+	output OnRangeFactor2(float) : "Outputs the factor of the count of npc 2."
+	// npc 3
+	output OnMinCount3(void) : "Fired when the count of npc 3 transitions to the min count or less."
+	output OnMaxCount3(void) : "Fired when the count of npc 3 transitions to the max count or greater."
+	output OnRangeFactor3(float) : "Outputs the factor of the count of npc 3."
+]
+
+@PointClass base( Targetname, LogicNPCCounterPointBase ) iconsprite("editor/math_counter.vmat") sphere(distanceMax) = logic_npc_counter_radius :
+	"Does calculations based on the number of a specified type of NPC in a specified region."
+[
+	distanceMax(float) : "Maximum Distance" : "25.0" : "Maximum distance to test for NPC"
+]
+
+@PointClass base( Targetname, LogicNPCCounterPointBase ) iconsprite("editor/math_counter.vmat") box_world_aligned( box_outer_mins, box_outer_maxs ) = logic_npc_counter_aabb :
+	"Does calculations based on the number of a specified type of NPC in a specified region."
+[	
+	box_outer_mins(vector) : "Box Outer Mins" : "-64 -64 -64"
+	box_outer_maxs(vector) : "Box Outer Maxs" : "64 64 64"	
+]
+
+@PointClass base( Targetname, logic_npc_counter_aabb ) iconsprite("editor/math_counter.vmat") box_oriented( box_outer_mins, box_outer_maxs ) = logic_npc_counter_obb :
+"Does calculations based on the number of a specified type of NPC in a specified region."
+[
+]
+
 
 @PointClass base(Targetname, EnableDisable) iconsprite("editor/logic_random_outputs.vmat") = logic_random_outputs :
 	"A message forwarder. Fires up to eight separate outputs, each with a different chance of firing."
@@ -5853,10 +5958,7 @@
 @BaseClass base(SystemLevelChoice) = prop_static_base
 [
 	model(studio) [report] : "World Model"
-	skin(choices) [ group="Render Properties" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
-	[
-		"0" : "Ignored by the modelhelper code"
-	]
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
 	solid(choices) : "Collisions" : 6 =
 	[
 		0: "Not Solid"
@@ -5914,7 +6016,6 @@
 
 	MinAnimTime(float) : "Min Random Anim Time" : "5" : "Minimum time between random animations."
 	MaxAnimTime(float) : "Max Random Anim Time" : "10" : "Maximum time between random animations."
-	SetBodyGroup(integer) : "Body Group" : 0	// NEEDHELP
 	
 	LagCompensate(boolean) : "Lag Compensation" : 0 : "Enable to lag compensate this prop, should be use very sparingly!"
 	AnimateOnServer(boolean) : "Animate on server in multiplayer" : 0 : "Enable this to animate on the server in multiplayer games, such as for props with triggers parented to attachment points. Use sparingly as there is a performance cost."
@@ -5929,7 +6030,7 @@
 	input SetAnimationTransition(string) : "Force the prop to play an animation. The parameter should be the name of the animation. The second animation is the name of the animation it's transitioning from. If that one is still playing it'll just reverse from the current frame."
 	input SetDefaultAnimation(string) : "Set the Default Animation to the one specified in the parameter."
 	input SetPlaybackRate(float) : "Set the playback rate for the animation."
-	input SetBodyGroup(integer) : "Set the visible bodygroup, by index."
+	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
 	input TurnOn(void) : "Make the prop visible."
 	input TurnOff(void) : "Make the prop invisible."
 	input EnableCollision(void) : "Enable collision on the prop."
@@ -5968,10 +6069,7 @@
 	disableshadows(boolean) [ group="Render Properties" ] : "Disable Shadows" : 0
 	screenspacefade(boolean) [ group="Render Properties" ] : "Screen Space Fade" : 0 : "The method by which the fading distance should be determined. If 'No', the fade distances is the distance from the player's view to the object, in inches. If 'Yes', the fade distance is the size of the object onscreen, in pixels."
 
-	skin(choices) [ group="Render Properties" ] : "Skin" : "0" : "Some models have multiple versions of their textures, called skins. This is programmatically populated from the model. The FGD data is unused!" =
-	[
-		"0" : "Ignored by the modelhelper code"
-	]
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
 
 	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist/Pixels" : -1 : "Distance at which the prop starts to fade (<0 = use fademaxdist). If 'Screen Space Fade' is selected, this represents the number of pixels wide covered by the prop when it starts to fade."
 	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist/Pixels" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out). If 'Screen Space Fade' is selected, this represents the *minimum* number of pixels wide covered by the prop when it fades."
@@ -6096,7 +6194,7 @@
 	input EnablePickup(void) : "Enable player pickup of this prop."
 	input DisablePickup(void) : "Disable player pickup of this prop."
 	input DisableFloating(void) : "Disable fluid/floating simulation to reduce cost."
-	input SetBodyGroup(integer) : "Set this prop's body group (from 0 - n)."
+	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
 	input physdamagescale(float) : "Set the Physics Impact Damage Scale for this character. NOTE: 0 means this feature is disabled for backwards compatibility."
 	input EnableDamageForces(void) : "Damaging the entity applies physics forces to it."
 	input DisableDamageForces(void) : "Damaging the entity does *not* apply physics forces to it."
@@ -7816,7 +7914,7 @@
 	box_world_aligned( box_mins, box_maxs )
 = env_volumetric_fog_controller : "Controller for volumetric fogging - bounds are extents of fog irradiance volume (for indirect)"
 [
-	// ActiveInHammer( bool ) : "Preview in hammer" : "1" : "Use this as the active fog in hammer"
+	IsMaster( bool )  : "Master Fog Controller" : "0" : "Use this as the active fog if there are more than one"
 
 	box_mins(vector) : "Box Mins" : "-72 -72 -72"
 	box_maxs(vector) : "Box Maxs" : "72 72 72"
@@ -7865,6 +7963,7 @@
 	input SetDrawDistance(float) : "Set draw distance"
 	input Enable(boolean) : "Enable"
 	input Disable(boolean) : "Disable"
+	input ForceRefresh(void) : "Forces the fog volume to update if a light's state has changed"
 	
 	input EnableIndirect( bool ) : "Turns on/off indirect fogging"
 	input SetNoiseType( integer ) : "Sets noise animation type - 0: No Noise, 1: Noise with linear movement"
@@ -7885,7 +7984,7 @@
 [
 	box_mins(vector) : "Box Mins" : "-64 -64 -64"
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
-	hintType(choices) : "Hint Type" : 0 =
+	hintType(choices) : "Hint Type" : 3 =
 	[
 		0: "Use High Resolution"
 		3: "Use Low Resolution (64 unit grid)"
