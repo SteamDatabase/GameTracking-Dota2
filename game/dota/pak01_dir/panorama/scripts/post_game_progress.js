@@ -1453,6 +1453,223 @@ AnimateBattlePassScreenAction.prototype.finish = function ()
 	this.seq.finish();
 }
 
+// Rubick Arcana
+
+function AnimateRubickArcanaScreenAction( data )
+{
+	this.data = data;
+}
+
+AnimateRubickArcanaScreenAction.prototype = new BaseAction();
+
+AnimateRubickArcanaScreenAction.prototype.start = function ()
+{
+	var heroID = this.data.hero_id;
+
+	// Create the screen and do a bunch of initial setup
+	var panel = StartNewScreen( 'RubickArcanaProgressScreen' );
+	panel.BLoadLayoutSnippet( "RubickArcanaProgress" );
+	
+	var heroModel = panel.FindChildInLayoutFile( 'RubickArcanaModel' );
+	if ( typeof this.data.player_slot !== 'undefined' )
+	{
+		// Use this normally when viewing the details
+		$.GetContextPanel().SetScenePanelToPlayerHero( heroModel, this.data.player_slot );
+	}
+	else
+	{
+		// Use this for testing when we don't actually have match data
+		$.GetContextPanel().SetScenePanelToLocalHero( heroModel, this.data.hero_id );
+	}
+
+	var progress = panel.FindChildInLayoutFile('RubickArcanaProgress');
+	progress.current_score = this.data.rubick_arcana_progress.arcana_start_score;
+	progress.ScrollToCurrentScore();
+
+	var endScore = this.data.rubick_arcana_progress.arcana_end_score;
+
+	// Setup the sequence of actions to animate the screen
+	this.seq = new RunSequentialActions();
+	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+	this.seq.actions.push( new AddScreenLinkAction( panel, 'RubickArcanaProgress', '#DOTA_PlusPostGame_RubickArcanaProgress' ) );
+	this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( heroModel, 'SceneLoaded' ), 3.0 ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+	this.seq.actions.push( new AddClassAction( panel, 'ShowProgress' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
+	this.seq.actions.push( new RunFunctionAction( function ()
+	{
+		progress.current_score = endScore;
+		progress.ScrollToCurrentScore();
+		progress.TriggerClass('PulseScore');
+	} ) );
+	this.seq.actions.push( new StopSkippingAheadAction() );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
+	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+
+	this.seq.start();
+}
+AnimateRubickArcanaScreenAction.prototype.update = function ()
+{
+	return this.seq.update();
+}
+AnimateRubickArcanaScreenAction.prototype.finish = function ()
+{
+	this.seq.finish();
+}
+
+// Frostivus 2018
+
+function AnimateFrostivusScreenAction( data )
+{
+	this.data = data;
+}
+
+AnimateFrostivusScreenAction.prototype = new BaseAction();
+
+AnimateFrostivusScreenAction.prototype.start = function ()
+{
+	var battlePointsStart = this.data.frostivus_progress.battle_points_start;
+	var battleLevelStart = Math.floor( battlePointsStart / this.data.frostivus_progress.battle_points_per_level );
+	var heroID = this.data.hero_id;
+
+	var battlePointsAtLevelStart = battleLevelStart * this.data.frostivus_progress.battle_points_per_level;
+
+	var bpLevelStart = 0;
+	var bpLevelNext = 0;
+	bpLevelStart = battlePointsStart - battlePointsAtLevelStart;
+	bpLevelNext = this.data.frostivus_progress.battle_points_per_level;
+
+	// Create the screen and do a bunch of initial setup
+	var panel = StartNewScreen( 'Frostivus2018ProgressScreen' );
+	panel.BLoadLayoutSnippet( "Frostivus2018Progress" );
+
+	panel.SetDialogVariableInt( 'total_points_gained', 0 );
+
+	// Setup the sequence of actions to animate the screen
+	this.seq = new RunSequentialActions();
+	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+
+	this.seq.actions.push( new AddScreenLinkAction( panel, 'Frostivus2018Progress', '#DOTA_PlusPostGame_Frostivus2018Progress', function ()
+	{
+		panel.SwitchClass( 'current_screen', 'ShowFrostivus2018Progress' );
+	} ) );
+	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', 'ShowFrostivus2018Progress' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+
+	( function ( me, myPanel )
+		{
+			me.seq.actions.push( new RunFunctionAction( function ()
+			{
+				myPanel.SetDialogVariableInt( 'total_points_gained', me.data.frostivus_progress.battle_points_earned );
+			} ) );
+	} )( this, panel );
+
+	//panel.FindChildInLayoutFile( "Frostivus2018TotalsRow" ).SetDialogVariableInt( 'bp_value', 0 );
+	panel.SetDialogVariableInt( 'current_level_bp', bpLevelStart );
+	panel.SetDialogVariableInt( 'bp_to_next_level', bpLevelNext );
+	panel.FindChildInLayoutFile( 'Frostivus2018LevelShield' ).SetEventLevel( this.data.frostivus_progress.battle_points_event_id, battleLevelStart );
+
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.75 ) ) );
+
+	var progressBar = panel.FindChildInLayoutFile( "BattleLevelProgress" );
+	progressBar.max = bpLevelNext;
+	progressBar.lowervalue = bpLevelStart;
+	progressBar.uppervalue = bpLevelStart;
+
+	var bpEarned = 0;
+	var bpLevel = bpLevelStart;
+	var battleLevel = battleLevelStart;
+
+	var bpRemaining = this.data.frostivus_progress.battle_points_earned;
+	var bpEarnedOnRow = 0;
+
+	while ( bpRemaining > 0 )
+	{
+		var bpToAnimate = 0;
+		var bpToNextLevel = 0;
+		bpToNextLevel = bpLevelNext - bpLevel;
+		bpToAnimate = Math.min( bpRemaining, bpToNextLevel );
+
+		$.Msg( 'animate ' + bpToAnimate )
+		if ( bpToAnimate > 0 )
+		{
+			this.seq.actions.push( new SkippableAction( new AnimateBattlePointsIncreaseAction( panel, bpToAnimate, bpEarnedOnRow, bpEarned, bpLevel ) ) );
+
+			bpEarned += bpToAnimate;
+			bpLevel += bpToAnimate;
+			bpEarnedOnRow += bpToAnimate;
+			bpRemaining -= bpToAnimate;
+		}
+
+		bpToNextLevel = bpLevelNext - bpLevel;
+
+		if ( bpToNextLevel != 0 )
+			continue;
+
+		battleLevel = battleLevel + 1;
+		bpLevel = 0;
+
+		this.seq.actions.push( new AddClassAction(panel, 'LeveledUpStart') );
+
+		( function ( me, battleLevelInternal )
+		{
+			me.seq.actions.push( new RunFunctionAction( function ()
+			{
+				var levelShield = panel.FindChildInLayoutFile( 'Frostivus2018LevelShield' );
+				levelShield.AddClass( 'LeveledUp' );
+				levelShield.SetEventLevel( me.data.frostivus_progress.battle_points_event_id, battleLevelInternal );
+			} ) );
+		} )( this, battleLevel );
+
+		this.seq.actions.push( new RemoveClassAction( panel, 'LeveledUpStart' ) );
+		this.seq.actions.push( new AddClassAction( panel, 'LeveledUpEnd' ) );
+		this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
+
+		( function ( me, battleLevelInternal )
+		{
+			me.seq.actions.push( new RunFunctionAction( function ()
+			{
+				var levelShield = panel.FindChildInLayoutFile( 'Frostivus2018LevelShield' );
+				levelShield.RemoveClass( 'LeveledUp' );
+			} ) );
+		} )( this, battleLevel );
+		this.seq.actions.push( new RemoveClassAction( panel, 'LeveledUpEnd' ) );
+
+		( function ( me, bpLevelInternal, bpLevelNextInternal )
+		{
+			me.seq.actions.push( new RunFunctionAction( function ()
+			{
+				progressBar.lowervalue = 0;
+				progressBar.uppervalue = 0;
+				panel.SetDialogVariableInt( 'current_level_bp', bpLevelInternal );
+				panel.SetDialogVariableInt( 'bp_to_next_level', bpLevelNextInternal );
+				panel.FindChildInLayoutFile( "BattleLevelProgress" ).max = bpLevelNextInternal;
+				panel.FindChildInLayoutFile( "BattleLevelProgress" ).value = bpLevelInternal;
+			} ) );
+		} )( this, bpLevel, bpLevelNext );
+	}
+
+	this.seq.actions.push( new WaitAction( 0.2 ) );
+
+	this.seq.actions.push( new StopSkippingAheadAction() );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
+	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+
+	this.seq.start();
+}
+AnimateFrostivusScreenAction.prototype.update = function ()
+{
+	return this.seq.update();
+}
+AnimateFrostivusScreenAction.prototype.finish = function ()
+{
+	this.seq.finish();
+}
+
 // ----------------------------------------------------------------------------
 //
 // Debugging
@@ -1749,6 +1966,42 @@ function TestAnimateCavernCrawl()
 }
 
 
+function TestAnimateRubickArcanaProgress()
+{
+	var data =
+	{
+		hero_id: 86,
+
+		rubick_arcana_progress:
+		{
+			arcana_start_score: 34,
+			arcana_end_score: 36
+		}
+	};
+
+	TestProgressAnimation( data );
+}
+
+function TestAnimateFrostivusProgress()
+{
+	var data =
+	{
+		hero_id: 87,
+		frostivus_progress:
+		{
+			battle_points_event_id: 24,
+			battle_points_start: 2200,
+			battle_points_per_level: 1000,
+			battle_points_earned: 1250,
+			battle_points_daily_bonus_earned: 1000,
+		}
+	};
+
+	TestProgressAnimation( data );
+}
+
+
+
 // ----------------------------------------------------------------------------
 //   All Screens
 // ----------------------------------------------------------------------------
@@ -1773,9 +2026,19 @@ function CreateProgressAnimationSequence( data )
 		seq.actions.push( new AnimateBattlePassScreenAction( data ) );
 	}
 
+	if ( data.rubick_arcana_progress != null )
+	{
+		seq.actions.push( new AnimateRubickArcanaScreenAction( data ) );
+	}
+
 	if ( data.hero_badge_progress != null || data.hero_relics_progress != null )
 	{
 		seq.actions.push( new AnimateHeroBadgeLevelScreenAction( data ) );
+	}
+
+	if ( data.frostivus_progress != null )
+	{
+		seq.actions.push( new AnimateFrostivusScreenAction( data ) );
 	}
 
 	seq.actions.push( new RunFunctionAction( function ()

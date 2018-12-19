@@ -81,6 +81,7 @@ function CHeroDemo:InitGameMode()
 	CustomGameEventManager:RegisterListener( "InvulnerabilityButtonPressed", function(...) return self:OnInvulnerabilityButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnAllyButtonPressed", function(...) return self:OnSpawnAllyButtonPressed( ... ) end ) -- deprecated
 	CustomGameEventManager:RegisterListener( "SpawnEnemyButtonPressed", function(...) return self:OnSpawnEnemyButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "SelectHeroButtonPressed", function(...) return self:OnSelectHeroButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "LevelUpEnemyButtonPressed", function(...) return self:OnLevelUpEnemyButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "DummyTargetButtonPressed", function(...) return self:OnDummyTargetButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "RemoveSpawnedUnitsButtonPressed", function(...) return self:OnRemoveSpawnedUnitsButtonPressed( ... ) end )
@@ -115,6 +116,7 @@ function CHeroDemo:InitGameMode()
 	self.m_bFreeSpellsEnabled = false
 	self.m_bInvulnerabilityEnabled = false
 	self.m_bCreepsEnabled = true
+	self.m_sHeroToSpawn = "npc_dota_hero_axe" 
 
 	local hNeutralSpawn = Entities:FindByName( nil, "neutral_caster_spawn" )
 	if ( hNeutralSpawn == NIL ) then

@@ -1,4 +1,4 @@
 bugreporter
 {
-	"config_file"		"\\bugsub.valve.org\bugsub\config.txt"
+	"config_file"		"\\bugsub.valve.org\bugsub_jira\config.txt"
 }

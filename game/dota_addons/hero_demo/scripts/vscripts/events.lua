@@ -189,15 +189,17 @@ end
 function CHeroDemo:OnSpawnAllyButtonPressed( eventSourceIndex, data )
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
 	self.m_nAlliesCount = self.m_nAlliesCount + 1
-	self.m_tAlliesList[ self.m_nAlliesCount ] = CreateUnitByName( "npc_dota_hero_axe", hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nALLIES_TEAM )
-	local hUnit = self.m_tAlliesList[ self.m_nAlliesCount ]
-	hUnit:SetControllableByPlayer( self.m_nPlayerID, false )
-	hUnit:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
-	FindClearSpaceForUnit( hUnit, hPlayerHero:GetAbsOrigin(), false )
-	hUnit:Hold()
-	hUnit:SetIdleAcquire( false )
-	hUnit:SetAcquisitionRange( 0 )
-	self:BroadcastMsg( "#SpawnAlly_Msg" )
+	CreateUnitByNameAsync( self.m_sHeroToSpawn, hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nALLIES_TEAM,
+		function( hUnit )
+			self.m_tAlliesList[ self.m_nAlliesCount ] = hUnit
+			hUnit:SetControllableByPlayer( self.m_nPlayerID, false )
+			hUnit:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
+			FindClearSpaceForUnit( hUnit, hPlayerHero:GetAbsOrigin(), false )
+			hUnit:Hold()
+			hUnit:SetIdleAcquire( false )
+			hUnit:SetAcquisitionRange( 0 )
+			self:BroadcastMsg( "#SpawnAlly_Msg" )
+		end )
 end
 
 --------------------------------------------------------------------------------
@@ -209,17 +211,28 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 		return
 	end
 
-	local hAbility = self._hNeutralCaster:FindAbilityByName( "la_spawn_enemy_at_target" )
-	self._hNeutralCaster:CastAbilityImmediately( hAbility, -1 )
-
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-	local hAbilityTestSearch = hPlayerHero:FindAbilityByName( "la_spawn_enemy_at_target" )
-	if hAbilityTestSearch then -- Testing whether AddAbility worked successfully on the lua-based ability
-		--print( "hPlayerHero:AddAbility( \"la_spawn_enemy_at_target\" ) was successful" )
-	end
-
-	self:BroadcastMsg( "#SpawnEnemy_Msg" )
+	CreateUnitByNameAsync( self.m_sHeroToSpawn, hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nENEMIES_TEAM, 
+		function( hEnemy )
+			table.insert( self.m_tEnemiesList, hEnemy )
+			hEnemy:SetControllableByPlayer( self.m_nPlayerID, false )
+			hEnemy:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
+			FindClearSpaceForUnit( hEnemy, hPlayerHero:GetAbsOrigin(), false )
+			hEnemy:Hold()
+			hEnemy:SetIdleAcquire( false )
+			hEnemy:SetAcquisitionRange( 0 )
+			self:BroadcastMsg( "#SpawnEnemy_Msg" )
+		end )
 end
+
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: SelectHeroButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSelectHeroButtonPressed( eventSourceIndex, data )
+	self.m_sHeroToSpawn	= DOTAGameManager:GetHeroUnitNameByID( tonumber( data.str ) );
+end
+
 
 --------------------------------------------------------------------------------
 -- ButtonEvent: OnLevelUpEnemyButtonPressed
