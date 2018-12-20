@@ -179,6 +179,9 @@ function InitialPrecache( context )
 	PrecacheResource( "particle_folder", "particles/units/heroes/hero_rubick", context )
 	PrecacheResource( "particle_folder", "particles/units/heroes/keeper_of_the_light", context )
 	PrecacheResource( "particle_folder", "particles/rubick_boss", context )
+	PrecacheResource( "model", "models/heroes/rubick/rubick_staff.vmdl", context )
+	PrecacheResource( "model", "models/heroes/rubick/cape.vmdl", context )
+	
 	PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_keeper_of_the_light.vsndevts", context )
 
 	PrecacheUnitByNameSync( "npc_dota_creature_rubick_melee_creep", context, -1 )

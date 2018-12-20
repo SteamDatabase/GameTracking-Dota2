@@ -22,7 +22,7 @@ function modifier_rubick_boss_telekinesis_land_damage:OnDestroy()
 					victim = Hero,
 					attacker = self:GetCaster(),
 					damage = self.telekinesis_land_damage,
-					damage_type = DAMAGE_TYPE_PHYSICAL,
+					damage_type = DAMAGE_TYPE_PURE,
 					ability = self:GetAbility(),
 				}
 				ApplyDamage( damageInfo )

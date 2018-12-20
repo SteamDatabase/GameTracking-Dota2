@@ -411,7 +411,7 @@ function modifier_rubick_boss_passive:TelekinesisPhase_Think()
 		self.flTelekinesisLoopTimeLeft = self.flTelekinesisLoopTimeLeft - self.flThinkTime
 		--print( "Telekinesis Loop Time Left: " .. self.flTelekinesisLoopTimeLeft )
 		if self.flTelekinesisLoopTimeLeft > 0 then
-			if #self.MinionsThisLoop == 0 then
+			if self.MinionsThisLoop and #self.MinionsThisLoop == 0 then
 				self:TelekinesisPhase_SpawnMinionsAndCastTelekinesis()
 			else
 				self:TelekinesisPhase_CastTelekinesisLand()

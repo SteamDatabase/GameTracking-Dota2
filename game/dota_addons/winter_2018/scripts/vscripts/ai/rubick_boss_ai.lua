@@ -277,6 +277,8 @@ BLACKLISTED_ABILITIES =
 	"keeper_of_the_light_illuminate",
 	"frostivus2018_dark_willow_shadow_realm",
 	"pugna_life_drain",
+	"weaver_time_lapse",
+	"earthshaker_enchant_totem",
 }
 
 function IsAbilityBlacklisted( szAbilityName )
