@@ -52,8 +52,8 @@ function modifier_creature_ginger_rosh:OnCreated( kv )
 		self.flMaxMoveSpeed = 425
 		self.flMaxMoveSpeedReduction = 200
 
-		self.nGoldBagMin = 150
-		self.nGoldBagMax = 250
+		self.nGoldBagMin = 110
+		self.nGoldBagMax = 160
 
 	end
 end

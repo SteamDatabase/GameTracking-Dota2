@@ -740,16 +740,16 @@ end
 function modifier_rubick_boss_passive:GetModifierSpellAmplify_Percentage( params )
 	if IsServer() then
 		if self:GetParent().Phase == RUBICK_PHASES.NORMAL then
-			return 125
+			return 115
 		end
 		if self:GetParent().Phase == RUBICK_PHASES.TELEKINESIS then
-			return 150
+			return 140
 		end
 		if self:GetParent().Phase == RUBICK_PHASES.FADE_BOLTS then
-			return 175
+			return 165
 		end
 		if self:GetParent().Phase == RUBICK_PHASES.SPELL_STEAL or self:GetParent().Phase == RUBICK_PHASES.INSANE then
-			return 200
+			return 190
 		end
 	end
 	return 0

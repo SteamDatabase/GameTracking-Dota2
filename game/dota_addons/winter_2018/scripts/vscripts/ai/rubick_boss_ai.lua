@@ -279,6 +279,7 @@ BLACKLISTED_ABILITIES =
 	"pugna_life_drain",
 	"weaver_time_lapse",
 	"earthshaker_enchant_totem",
+	"frostivus2018_centaur_stampede",
 }
 
 function IsAbilityBlacklisted( szAbilityName )
