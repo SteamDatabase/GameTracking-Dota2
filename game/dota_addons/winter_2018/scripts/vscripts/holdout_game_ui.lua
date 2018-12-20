@@ -138,6 +138,33 @@ function CHoldout:_CheckRestartVotes()
 	return 0.25
 end
 
+function CHoldout:_GetDailyBonusActive( nPlayerID )
+	local szAccountID = tostring( PlayerResource:GetSteamAccountID( nPlayerID ) )
+
+	if not self._hEventGameDetails then
+		return false
+	end
+
+	-- for backwards compatibility
+	if self._hEventGameDetails[szAccountID] ~= nil and self._hEventGameDetails[szAccountID] < 1 then
+		return true
+	end
+
+	for nPlayerRecord = 0, DOTA_MAX_TEAM_PLAYERS-1 do
+		local szPlayerRecord = string.format( "Player%d", nPlayerRecord )
+		if self._hEventGameDetails[szPlayerRecord] ~= nil then
+			local szRecordAccountID = self._hEventGameDetails[szPlayerRecord]['account_id']
+			local nNumResourcesUsed = self._hEventGameDetails[szPlayerRecord]['resources_used']
+			if szRecordAccountID ~= nil and szRecordAccountID == szAccountID and nNumResourcesUsed ~= nil and nNumResourcesUsed < 1 then
+				return true
+			end
+		end
+	end
+
+	return false
+
+end
+
 function CHoldout:_DisplayGameEnd()
 	self._bDisplayingGameEnd = true
 
@@ -161,8 +188,8 @@ function CHoldout:_DisplayGameEnd()
 		local nPlayerID = i-1
 		if PlayerResource:HasSelectedHero( nPlayerID ) then
 			local szPlayerID = string.format( "%d", nPlayerID )
-			local szSteamID = tostring( PlayerResource:GetSteamAccountID( nPlayerID ) )
-			local bDailyBonusActive = self._hEventGameDetails and self._hEventGameDetails[szSteamID] ~= nil and self._hEventGameDetails[szSteamID] < 1 
+			local bDailyBonusActive = self:_GetDailyBonusActive( nPlayerID )
+			printf("player %s daily bonus active %s", nPlayerID, bDailyBonusActive)
 			netTable[ szPlayerID .. "Kills" ] = 0
 			netTable[ szPlayerID .. "Deaths" ] = PlayerResource:GetDeaths( nPlayerID )
 			netTable[ szPlayerID .. "Bags" ] = 0

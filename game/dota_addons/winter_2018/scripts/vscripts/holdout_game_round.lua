@@ -601,10 +601,8 @@ end
 
 function CHoldoutGameRound:GetPointReward( nPlayerID )
 
-	local szSteamID = tostring( PlayerResource:GetSteamAccountID( nPlayerID ) )
-	local bDailyBonusActive = self._gameMode._hEventGameDetails and self._gameMode._hEventGameDetails[szSteamID] ~= nil and self._gameMode._hEventGameDetails[szSteamID] < 1 
+	if self._gameMode:_GetDailyBonusActive( nPlayerID ) then 
 
-	if bDailyBonusActive then 
 		if self:GetRoundNumber() < 5 then
 			return self._nPointReward
 		elseif self:GetRoundNumber() == 5 then
@@ -612,6 +610,7 @@ function CHoldoutGameRound:GetPointReward( nPlayerID )
 		else
 			return self._nPointReward * self._gameMode._periodic_points_scale_normal_event_points
 		end
+		
 	end
 
 	return self._nPointReward
