@@ -79,7 +79,7 @@ SPELL_BEHAVIORS =
 				end
 			end
 
-			if thisEntity.hStampedeTarget:IsAlive() == false or thisEntity.hStampedeTarget:FindModifierByName( "modifier_centaur_stampede_slow" ) ~= nil then
+			if thisEntity.hStampedeTarget ~= nil and ( thisEntity.hStampedeTarget:IsAlive() == false or thisEntity.hStampedeTarget:FindModifierByName( "modifier_centaur_stampede_slow" ) ~= nil ) then
 				thisEntity.hStampedeTarget = nil
 				print( "centaur_stampede: I hit my target, find a new one" )
 			else

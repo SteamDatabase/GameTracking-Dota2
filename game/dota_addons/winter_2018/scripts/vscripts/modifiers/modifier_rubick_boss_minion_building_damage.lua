@@ -29,7 +29,7 @@ function modifier_rubick_boss_minion_building_damage:GetModifierDamageOutgoing_P
 		local hTarget = params.target
 		local hAttacker = params.attacker
 		if hAttacker == self:GetParent() and hTarget ~= nil and hTarget:IsBuilding() then
-			return -75
+			return -50
 		end
 	end
 	return 0

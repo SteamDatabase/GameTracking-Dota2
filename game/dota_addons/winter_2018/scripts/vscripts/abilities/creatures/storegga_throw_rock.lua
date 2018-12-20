@@ -142,13 +142,13 @@ function storegga_throw_rock:OnProjectileHit( hTarget, vLocation )
 		EmitSoundOnLocationWithCaster( vLocation, "Storegga.ThrowRock.Impact", self:GetCaster() )
 
 		if self.hRockUnit and not self.hRockUnit:IsNull() and self.hThrownBuff and not self.hThrownBuff:IsNull() then
-			self.hThrownBuff:Destroy()
-		end
+			local nFXIndex = ParticleManager:CreateParticle( "particles/test_particle/ogre_melee_smash.vpcf", PATTACH_WORLDORIGIN, self:GetCaster() )
+			ParticleManager:SetParticleControl( nFXIndex, 0, GetGroundPosition( vLocation, self.hRockUnit ) )
+			ParticleManager:SetParticleControl( nFXIndex, 1, Vector( self.impact_radius, self.impact_radius, self.impact_radius ) )
+			ParticleManager:ReleaseParticleIndex( nFXIndex )
 
-		local nFXIndex = ParticleManager:CreateParticle( "particles/test_particle/ogre_melee_smash.vpcf", PATTACH_WORLDORIGIN, self:GetCaster() )
-		ParticleManager:SetParticleControl( nFXIndex, 0, GetGroundPosition( vLocation, self.hRockUnit ) )
-		ParticleManager:SetParticleControl( nFXIndex, 1, Vector( self.impact_radius, self.impact_radius, self.impact_radius ) )
-		ParticleManager:ReleaseParticleIndex( nFXIndex )
+			self:DestroyRock()
+		end
 
 		local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), vLocation, self:GetCaster(), self.impact_radius, DOTA_UNIT_TARGET_TEAM_ENEMY, self:GetAbilityTargetType(), DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, 0, false )
 		for _, enemy in pairs( enemies ) do
@@ -230,6 +230,10 @@ end
 
 function storegga_throw_rock:DestroyRock()
 	if IsServer() then
+		if self.hRockUnit == nil or self.hRockUnit:IsNull() then
+			return
+		end
+
 		StopSoundOn( "Storegga.ThrowRock.ProjectileLoop", self.hRockUnit )
 
 		ParticleManager:DestroyParticle( self.nTargetPreviewFX, true )
@@ -237,6 +241,10 @@ function storegga_throw_rock:DestroyRock()
 		if self.hThrownBuff ~= nil and self.hThrownBuff:IsNull() == false then
 			self.hThrownBuff:Destroy()
 		end
+
+		--print( "storegga_throw_rock - Destroying rock" )
+		self.hRockUnit:AddEffects( EF_NODRAW )
+		self.hRockUnit:ForceKill( false )
 
 		UTIL_Remove( self.hRockUnit )
 	end
