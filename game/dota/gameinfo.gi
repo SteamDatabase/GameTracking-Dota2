@@ -168,6 +168,8 @@
 		"UnitsFiles"			"scripts/npc/npc_units.txt; scripts/npc/npc_units_custom.txt; scripts/npc/npc_heroes.txt"
 		"ItemsFiles"			"scripts/npc/items.txt; scripts/npc/npc_items_custom.txt"
 		"OverlayBoxSize"		"16"
+		"TileGridBlendOrderBGRA"	"1"
+		"TileGridBlendDefaultColor"	"0 255 0"
 	}
 
 	MaterialEditor
