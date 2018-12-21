@@ -37,7 +37,6 @@ function DoomlingThink()
 				if ( fNow - flLastAllyCastTime ) > ( 0.2 ) then
 					CastTargetedAbility( thisEntity, hTarget, AbilityDoom )
 					UpdateLastCastTime( thisEntity, AbilityDoom, hTarget )
-					EmitSoundOn( "Hero_DoomBringer.Doom", hTarget )
 				end
 			end
 		end

@@ -362,6 +362,10 @@ function CHoldoutGameSpawner:_DoSpawn()
 		local entUnit = CreateUnitByName( szNPCClassToSpawn, vSpawnLocation, true, nil, nil, DOTA_TEAM_BADGUYS )
 		if entUnit then
 			if entUnit:IsCreature() then
+
+				-- this is necessary to prevent weird pathing issues with the invade behavior
+				entUnit:SetRequiresReachingEndPath( true )
+				
 				if bIsChampion then
 					self._nChampionsSpawnedThisRound = self._nChampionsSpawnedThisRound + 1
 					nChampionsSpawnedThisInterval = nChampionsSpawnedThisInterval + 1
