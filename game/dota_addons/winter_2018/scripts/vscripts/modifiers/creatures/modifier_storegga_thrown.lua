@@ -179,7 +179,7 @@ function modifier_storegga_thrown:OnDestroy()
 		self:GetParent():RemoveHorizontalMotionController( self )
 		self:GetParent():RemoveVerticalMotionController( self )
 
-		--UTIL_Remove( self:GetParent() )
+		UTIL_Remove( self:GetParent() )
 	end
 end
 

@@ -243,10 +243,13 @@ function storegga_throw_rock:DestroyRock()
 		end
 
 		--print( "storegga_throw_rock - Destroying rock" )
-		self.hRockUnit:AddEffects( EF_NODRAW )
-		self.hRockUnit:ForceKill( false )
 
-		UTIL_Remove( self.hRockUnit )
+		if self.hRockUnit ~= nil and self.hRockUnit:IsNull() == false then
+			self.hRockUnit:AddEffects( EF_NODRAW )
+			self.hRockUnit:ForceKill( false )
+
+			UTIL_Remove( self.hRockUnit )
+		end
 	end
 end
 
