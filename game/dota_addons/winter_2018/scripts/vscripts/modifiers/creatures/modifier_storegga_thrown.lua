@@ -41,6 +41,11 @@ end
 
 function modifier_storegga_thrown:OnCreated( kv )
 	if IsServer() then
+		if self:GetCaster() == nil or self:GetCaster():IsNull() or self:GetCaster():IsAlive() == false then
+			self:Destroy()
+			return
+		end
+
 		if self:ApplyHorizontalMotionController() == false or self:ApplyVerticalMotionController() == false then 
 			self:Destroy()
 			return
@@ -57,6 +62,11 @@ end
 
 function modifier_storegga_thrown:UpdateHorizontalMotion( me, dt )
 	if IsServer() then
+		if self:GetCaster() == nil or self:GetCaster():IsNull() or self:GetCaster():IsAlive() == false then
+			self:Destroy()
+			return
+		end
+
 		local vLocation = nil
 		if self.nProjHandle == -1 then
 			local attach = self:GetCaster():ScriptLookupAttachment( "attach_attack2" )
@@ -74,6 +84,11 @@ end
 
 function modifier_storegga_thrown:UpdateVerticalMotion( me, dt )
 	if IsServer() then
+		if self:GetCaster() == nil or self:GetCaster():IsNull() or self:GetCaster():IsAlive() == false then
+			self:Destroy()
+			return
+		end
+
 		if not self.bInitialized and self.flTime ~= 0.0 then
 			self.fTotalTravelTime = self.flTime
 			self.fTravelStartTime = GameRules:GetGameTime()
