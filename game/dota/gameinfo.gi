@@ -102,6 +102,8 @@
 		// bypass this limit so we can be fairly conservative.
 		"ReserveWarnMB" "64"
 
+		"SupportsVulkanParticleOptimizations" "1"
+
 		"RenderingPipeline"
 		{
 			"SkipPostProcessing" "1"
@@ -196,5 +198,14 @@
 	{
 		"Tools"			"Dota:Forward"
 		"EnvMapBake"	"Dota"
+	}
+	
+	RenderSystem
+	{
+		// rendersystemvulkan setting that determines how many partitions scenesystem places
+		// in each job. The higher the number, the more work per command buffer. Vulkan has higher 
+		// cost per command buffer than software contexts so settings this higher reduces 
+		// overall number of command buffers.
+		"VulkanSceneSystemJobCost"		"2"
 	}
 }
