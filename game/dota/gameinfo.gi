@@ -102,8 +102,6 @@
 		// bypass this limit so we can be fairly conservative.
 		"ReserveWarnMB" "64"
 
-		"SupportsVulkanParticleOptimizations" "1"
-
 		"RenderingPipeline"
 		{
 			"SkipPostProcessing" "1"
