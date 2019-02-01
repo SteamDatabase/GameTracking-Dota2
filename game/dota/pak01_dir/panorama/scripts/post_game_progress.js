@@ -1376,7 +1376,6 @@ AnimateBattlePassScreenAction.prototype.start = function ()
 		bpToNextLevel = bpLevelNext - bpLevel;
 		bpToAnimate = Math.min( bpRemaining, bpToNextLevel );
 
-		$.Msg( 'animate ' + bpToAnimate )
 		if ( bpToAnimate > 0 )
 		{
 			this.seq.actions.push( new SkippableAction( new AnimateBattlePointsIncreaseAction( panel, bpToAnimate, bpEarnedOnRow, bpEarned, bpLevel ) ) );
@@ -1519,6 +1518,7 @@ AnimateRubickArcanaScreenAction.prototype.finish = function ()
 	this.seq.finish();
 }
 
+
 // Frostivus 2018
 
 function AnimateFrostivusScreenAction( data )
@@ -1593,7 +1593,6 @@ AnimateFrostivusScreenAction.prototype.start = function ()
 		bpToNextLevel = bpLevelNext - bpLevel;
 		bpToAnimate = Math.min( bpRemaining, bpToNextLevel );
 
-		$.Msg( 'animate ' + bpToAnimate )
 		if ( bpToAnimate > 0 )
 		{
 			this.seq.actions.push( new SkippableAction( new AnimateBattlePointsIncreaseAction( panel, bpToAnimate, bpEarnedOnRow, bpEarned, bpLevel ) ) );
@@ -1666,6 +1665,162 @@ AnimateFrostivusScreenAction.prototype.update = function ()
 	return this.seq.update();
 }
 AnimateFrostivusScreenAction.prototype.finish = function ()
+{
+	this.seq.finish();
+}
+
+// Event Points [New Bloom 2019, etc]
+
+function AnimateEventPointsScreenAction( data )
+{
+	this.data = data;
+}
+
+AnimateEventPointsScreenAction.prototype = new BaseAction();
+
+AnimateEventPointsScreenAction.prototype.start = function ()
+{
+	var battlePointsStart = this.data.event_points_progress.battle_points_start;
+	var battleLevelStart = Math.floor( battlePointsStart / this.data.event_points_progress.battle_points_per_level );
+	var heroID = this.data.hero_id;
+
+	var battlePointsAtLevelStart = battleLevelStart * this.data.event_points_progress.battle_points_per_level;
+
+	var bpLevelStart = 0;
+	var bpLevelNext = 0;
+	bpLevelStart = battlePointsStart - battlePointsAtLevelStart;
+	bpLevelNext = this.data.event_points_progress.battle_points_per_level;
+
+	// Create the screen and do a bunch of initial setup
+	var panel = StartNewScreen( 'EventPointsProgressScreen' );
+	panel.BLoadLayoutSnippet( "EventPointsProgress" );
+
+	panel.SetDialogVariableInt( 'total_points_gained', 0 );
+
+	panel.SetDialogVariable( 'event_name', $.Localize( this.data.event_points_progress.battle_points_event_name ) );
+
+	// Setup the sequence of actions to animate the screen
+	this.seq = new RunSequentialActions();
+	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+
+	this.seq.actions.push( new AddScreenLinkAction( panel, 'EventPointsProgress', '#DOTA_PlusPostGame_EventPointsProgress', function ()
+	{
+		panel.SwitchClass( 'current_screen', 'ShowEventPointsProgress' );
+	} ) );
+	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', 'ShowEventPointsProgress' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+
+	( function ( me, myPanel )
+		{
+			me.seq.actions.push( new RunFunctionAction( function ()
+			{
+				myPanel.SetDialogVariableInt( 'total_points_gained', me.data.event_points_progress.battle_points_earned );
+			} ) );
+	} )( this, panel );
+
+	//panel.FindChildInLayoutFile( "EventPointsTotalsRow" ).SetDialogVariableInt( 'bp_value', 0 );
+	panel.SetDialogVariableInt( 'current_level_bp', bpLevelStart );
+	panel.SetDialogVariableInt( 'bp_to_next_level', bpLevelNext );
+	panel.FindChildInLayoutFile( 'EventPointsLevelShield' ).SetEventLevel( this.data.event_points_progress.battle_points_event_id, battleLevelStart );
+
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.75 ) ) );
+
+	var wonGameRow = panel.FindChildInLayoutFile( "EventPointsWonGameRow" );
+	this.seq.actions.push( new AddClassAction( wonGameRow, 'ShowRow' ) );
+	this.seq.actions.push( new AddClassAction( wonGameRow, 'ShowValue' ) );
+
+	var progressBar = panel.FindChildInLayoutFile( "BattleLevelProgress" );
+	progressBar.max = bpLevelNext;
+	progressBar.lowervalue = bpLevelStart;
+	progressBar.uppervalue = bpLevelStart;
+
+	var bpEarned = 0;
+	var bpLevel = bpLevelStart;
+	var battleLevel = battleLevelStart;
+
+	var bpRemaining = this.data.event_points_progress.battle_points_earned;
+	var bpEarnedOnRow = 0;
+
+	while ( bpRemaining > 0 )
+	{
+		var bpToAnimate = 0;
+		var bpToNextLevel = 0;
+		bpToNextLevel = bpLevelNext - bpLevel;
+		bpToAnimate = Math.min( bpRemaining, bpToNextLevel );
+
+		if ( bpToAnimate > 0 )
+		{
+			this.seq.actions.push( new SkippableAction( new AnimateBattlePointsIncreaseAction( panel, bpToAnimate, bpEarnedOnRow, bpEarned, bpLevel ) ) );
+
+			bpEarned += bpToAnimate;
+			bpLevel += bpToAnimate;
+			bpEarnedOnRow += bpToAnimate;
+			bpRemaining -= bpToAnimate;
+		}
+
+		bpToNextLevel = bpLevelNext - bpLevel;
+
+		if ( bpToNextLevel != 0 )
+			continue;
+
+		battleLevel = battleLevel + 1;
+		bpLevel = 0;
+
+		this.seq.actions.push( new AddClassAction(panel, 'LeveledUpStart') );
+
+		( function ( me, battleLevelInternal )
+		{
+			me.seq.actions.push( new RunFunctionAction( function ()
+			{
+				var levelShield = panel.FindChildInLayoutFile( 'EventPointsLevelShield' );
+				levelShield.AddClass( 'LeveledUp' );
+				levelShield.SetEventLevel( me.data.event_points_progress.battle_points_event_id, battleLevelInternal );
+			} ) );
+		} )( this, battleLevel );
+
+		this.seq.actions.push( new RemoveClassAction( panel, 'LeveledUpStart' ) );
+		this.seq.actions.push( new AddClassAction( panel, 'LeveledUpEnd' ) );
+		this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
+
+		( function ( me, battleLevelInternal )
+		{
+			me.seq.actions.push( new RunFunctionAction( function ()
+			{
+				var levelShield = panel.FindChildInLayoutFile( 'EventPointsLevelShield' );
+				levelShield.RemoveClass( 'LeveledUp' );
+			} ) );
+		} )( this, battleLevel );
+		this.seq.actions.push( new RemoveClassAction( panel, 'LeveledUpEnd' ) );
+
+		( function ( me, bpLevelInternal, bpLevelNextInternal )
+		{
+			me.seq.actions.push( new RunFunctionAction( function ()
+			{
+				progressBar.lowervalue = 0;
+				progressBar.uppervalue = 0;
+				panel.SetDialogVariableInt( 'current_level_bp', bpLevelInternal );
+				panel.SetDialogVariableInt( 'bp_to_next_level', bpLevelNextInternal );
+				panel.FindChildInLayoutFile( "BattleLevelProgress" ).max = bpLevelNextInternal;
+				panel.FindChildInLayoutFile( "BattleLevelProgress" ).value = bpLevelInternal;
+			} ) );
+		} )( this, bpLevel, bpLevelNext );
+	}
+
+	this.seq.actions.push( new WaitAction( 0.2 ) );
+
+	this.seq.actions.push( new StopSkippingAheadAction() );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
+	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+
+	this.seq.start();
+}
+AnimateEventPointsScreenAction.prototype.update = function ()
+{
+	return this.seq.update();
+}
+AnimateEventPointsScreenAction.prototype.finish = function ()
 {
 	this.seq.finish();
 }
@@ -2000,6 +2155,25 @@ function TestAnimateFrostivusProgress()
 	TestProgressAnimation( data );
 }
 
+function TestAnimateEventPointsProgress()
+{
+	$.GetContextPanel().AddClass( 'Season_NewBloom2019' );
+	var data =
+	{
+		hero_id: 87,
+		event_points_progress:
+		{
+			battle_points_event_id: 24,
+			battle_points_start: 2200,
+			battle_points_per_level: 1000,
+			battle_points_earned: 1250,
+			battle_points_event_name: '#DOTA_EventName_NewBloom2019',
+		}
+	};
+
+	TestProgressAnimation( data );
+}
+
 
 
 // ----------------------------------------------------------------------------
@@ -2039,6 +2213,11 @@ function CreateProgressAnimationSequence( data )
 	if ( data.frostivus_progress != null )
 	{
 		seq.actions.push( new AnimateFrostivusScreenAction( data ) );
+	}
+
+	if ( data.event_points_progress != null )
+	{
+		seq.actions.push( new AnimateEventPointsScreenAction( data ) );
 	}
 
 	seq.actions.push( new RunFunctionAction( function ()
