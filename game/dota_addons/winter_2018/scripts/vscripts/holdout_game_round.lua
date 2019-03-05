@@ -34,6 +34,7 @@ function CHoldoutGameRound:ReadConfiguration( kv, gameMode, roundNumber )
 	self._bTimedRound = tonumber(kv.TimedRound)==1 or false
 	self._flTimedRoundDuration = tonumber(kv.TimedRoundDuration or 60)
 	self._flTimedRoundPostGame = tonumber(kv.TimedRoundPostGame or 0)
+	self._iNPCSpawnedUnits = 0
 	
 	self._vSpawners = {}
 	for k, v in pairs( kv ) do
@@ -135,6 +136,7 @@ function CHoldoutGameRound:Begin()
 		self._nCoreUnitsTotal = self._nCoreUnitsTotal + spawner:GetTotalUnitsToSpawn()
 	end
 	self._nCoreUnitsKilled = 0
+	self._nNPCSpawnedUnitsKilled = 0
 
 	-- are we a bonus round?
 	if self._nRoundNumber == 5 or self._nRoundNumber == 10 then
@@ -342,6 +344,12 @@ function CHoldoutGameRound:OnNPCSpawned( event )
 		table.insert( self._vEnemiesRemaining, spawnedUnit )
 		spawnedUnit:SetDeathXP( 0 )
 		spawnedUnit.unitName = spawnedUnit:GetUnitName()
+		if spawnedUnit:GetOwnerEntity() then 
+			if spawnedUnit:GetOwnerEntity():GetClassname() == "npc_dota_unit_spectral_tusk_tombstone" or spawnedUnit:GetOwnerEntity():IsCreature() then
+				self._iNPCSpawnedUnits = self._iNPCSpawnedUnits + 1
+				spawnedUnit.Holdout_IsNPCSpawnedUnit = true
+			end
+		end
 	end
 end
 
@@ -381,6 +389,10 @@ function CHoldoutGameRound:OnEntityKilled( event )
 				hero:AddExperience( math.ceil( self:GetXPPerCoreUnit() / 5 ), DOTA_ModifyXP_CreepKill, false, true )
 			end
 		end
+	end
+
+	if killedUnit.Holdout_IsNPCSpawnedUnit then
+		self._nNPCSpawnedUnitsKilled = self._nNPCSpawnedUnitsKilled + 1
 	end
 
 	if killedUnit and killedUnit:IsTower() then
@@ -565,7 +577,7 @@ function CHoldoutGameRound:GetRemainingUnits()
 end
 
 function CHoldoutGameRound:GetTotalUnitsKilled()
-	return self._nCoreUnitsKilled
+	return self._nCoreUnitsKilled + self._nNPCSpawnedUnitsKilled
 end
 
 function CHoldoutGameRound:GetPlayerStats( nPlayerID )

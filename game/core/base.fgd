@@ -450,7 +450,6 @@
 	input EnableDamageForces(void) : "Damaging the entity applies physics forces to it."
 	input DisableDamageForces(void) : "Damaging the entity does *not* apply physics forces to it."
 
-	gibmodel(string) : "Gib Model" : "" : "Used by HL1Port to specify a custom gib model to break into, overriding the 'Material Type'."
 	spawnobject(choices) : "Spawn On Break" : 0 : "When broken, an entity of the selected type will be created." =
 	[
 		1:	"item_battery"				
@@ -1045,6 +1044,7 @@
 	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity the sound should emit from."
 	startOnSpawn(boolean) : "Start On Spawn" : "" : "Play the sound immediately upon spawning"
 	toLocalPlayer(boolean) : "To Local Player" : "" : "Play the sound directly to the local player"
+	stopOnNew(boolean) : "Re-trigger Stops Last" : 1 : "Stop a previously playing event when a new one is started"
 
 	// Inputs
 	input SetSourceEntity(string) : "Set the name of the entity to play the sound from. The sound will follow the entity as it moves."
@@ -1069,7 +1069,7 @@
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
 ]
 
-@PointClass base(Targetname, Parentname) iconsprite("editor/snd_event.vmat") = snd_event_param :
+@PointClass base(Targetname, Parentname) iconsprite("editor/snd_opvar_set.vmat") = snd_event_param :
 	"Set a public parameter of a playing soundevent."
 [
 	parameterName(string) : "Parameter Name" : "" : "Name of the parameter to set"
@@ -1593,6 +1593,8 @@
 	input Alpha(integer) : "Sets the brush's alpha value."
 	input SetExcluded( string ) : "Change the NPC class excluded from collisions"
 	input SetInvert( integer ) : "Set the state of invversion for NPC class exclusion (0 or 1)"
+	input SetSolid( void ) : "Enables all collisions with this func_brush."
+	input SetNonsolid( void ) : "Disables all collisions with this func_brush."
 ]
 
 
@@ -2573,7 +2575,7 @@
 ]
 
 
-@PointClass size(-16 -16 -16, 16 16 16) color(0 0 255) = sky_camera : 
+@PointClass size(-1 -1 -1, 1 1 1) color(0 0 255) = sky_camera : 
 	"An entity used to control the 3D Skybox. Its origin is used to determine the 3D Skybox's position relative to the map. Place this entity, in the 3D Skybox, at the point where the origin of the map should be."
 [
 	scale(integer) : "3D Skybox scale" : 16 : "Scale of the skybox."
@@ -6395,6 +6397,8 @@
 		9 : "Particle Snow"
 		10 : "Particle Xen Particulate"
 		11 : "Particle Dust Motes"
+		12 : "Particle Embers"
+
 	]
 	minSpeed(float) : "Minimum speed (snowfall only)" : 25
 	maxSpeed(float) : "Maximum speed (snowfall only)" : 35
@@ -6805,6 +6809,7 @@
 		1048576 : "CHEMICAL"
 		2097152 : "SLOWBURN"
 		67108864 : "DISSOLVE"
+		1114112 : "SPORE"
 	]
 
 	damagemodel(choices) : "Damage Model" : 0 : "How damage is dealt. Normal always does the specified amount of damage each half second. Doubling starts with the specified amount and doubles it each time it hurts the toucher. Forgiveness means that if the toucher gets out of the trigger the damage will reset to the specified value. Good for making triggers that are deadly over time without having to cause massive damage on each touch." =
@@ -7733,6 +7738,8 @@
 	input SetDisengageistance(float) : "Sets disengage distance"
 
 	// Outputs
+	output Position(float) : "Fires when the interp value changes, passing the new position [0.0 .. 1.0]"
+	output PositionDelta(float) : "Fires when the interp value changes, passing the change in position [-1.0 .. 1.0]"
 	output OnReachedValueZero(void) : "Fires when the interp value hits 0.0"
 	output OnReachedValueOne(void) : "Fires when the interp value hits 1.0"
 	output OnReachedValueCustom(void) : "Fires when the interp value hits a custom specified value"
