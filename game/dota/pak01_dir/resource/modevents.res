@@ -1261,5 +1261,11 @@
 		"heroindex"		"int"
 		"hero"			"string"
 	}
+
+	"dota_creature_gained_level"
+	{
+		"entindex"		"short"
+		"level"			"short"
+	}
 }
 

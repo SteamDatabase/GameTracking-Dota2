@@ -1,11 +1,30 @@
 
-var OnRoomRevealed = function ( id, nPrevState )
+var OnRoomRevealed = function ( id, nPrevState, nFlareOrigin )
 {
 	var seq = new RunSequentialActions();
 
-	var center = $( '#Room0' );
+	if ( nFlareOrigin == 255 )
+	{
+		nFlareOrigin = 0;
+	}
+	var center = $( '#Room' + nFlareOrigin );
 	var panel = $( '#' + id );
 	var fxPanel = $( '#FlareFX' );
+
+	if ( nFlareOrigin != 0 )
+	{
+		seq.actions.push( new AddClassAction( center, 'FlareActivating' ) );
+		seq.actions.push( new RunFunctionAction(function ()
+		{
+			$.DispatchEvent( 'PlaySoundEffect', 'ui_treasure_map' );
+		}));
+		seq.actions.push( new RunFunctionAction( function ()
+		{
+			$.DispatchEvent( 'DOTACavernCrawlFlareShooting', panel, true );
+		} ) );
+		seq.actions.push( new WaitAction( 1.2 ) );
+		seq.actions.push( new RemoveClassAction( center, 'FlareActivating' ) );
+	}
 
 	var x = panel.actualxoffset / panel.actualuiscale_x;
 	var y = panel.actualyoffset / panel.actualuiscale_y;
@@ -20,6 +39,12 @@ var OnRoomRevealed = function ( id, nPrevState )
 
 	cx -= w / 2;
 	cy -= h / 2;
+
+	if ( nFlareOrigin != 0 )
+	{
+		cy -= center.actuallayoutheight * .5 / 2;
+	}
+
 	cy = -cy;
 
 	var speed = 250;
@@ -42,6 +67,14 @@ var OnRoomRevealed = function ( id, nPrevState )
 	duration = duration + 0.5;
 
 	seq.actions.push( new WaitAction( duration ) );
+
+	if ( nFlareOrigin != 0 )
+	{
+		seq.actions.push( new RunFunctionAction( function ()
+		{
+			$.DispatchEvent( 'DOTACavernCrawlFlareShooting', panel, false );
+		} ) );
+	}
 
 	duration = 3.0;
 
@@ -115,12 +148,25 @@ var OnRoomAvailable = function (id, nPrevState)
     RunSingleAction(seq);
 }
 
-var OnRoomCompleted = function (id, nPrevState, isSet)
+var OnRoomCompleted = function ( id, nPrevState, isSet, isTreasureMap )
 {
     var seq = new RunSequentialActions();
 
     var panel = $('#' + id);
-    seq.actions.push(new RemoveClassAction(panel, 'RewardAvailable'));
+    seq.actions.push( new RemoveClassAction( panel, 'RewardAvailable' ) );
+
+    if ( isTreasureMap )
+    {
+    	seq.actions.push( new AddClassAction( panel, 'RewardClaimed' ) );
+    	seq.actions.push( new WaitAction( 0.1 ) );	// Need to wait for the panel to finish setting up
+    	seq.actions.push( new RunFunctionAction( function ()
+    	{
+    		$.DispatchEvent( 'DOTACavernCrawlAdvanceUpdates', panel );
+    	} ) );
+    	RunSingleAction( seq );
+    	return;
+    }
+
     seq.actions.push(new AddClassAction(panel, 'RewardClaiming'));
 
     seq.actions.push(new RunFunctionAction(function ()
@@ -232,6 +278,83 @@ var OnPathRetired = function ( id, nPrevState )
 	seq.actions.push( new RemoveClassAction( panel, 'ChallengeAvailable' ) );
 	seq.actions.push( new RemoveClassAction( panel, 'ChallengeRevealed' ) );
 
+	seq.actions.push( new RunFunctionAction( function ()
+	{
+		$.DispatchEvent( 'DOTACavernCrawlAdvanceUpdates', panel );
+	} ) );
+
+	RunSingleAction( seq );
+}
+
+var OnPathHalfCompleted = function ( id, nPrevState )
+{
+	var seq = new RunSequentialActions();
+
+	var panel = $( '#' + id );
+
+	var fxPanel = $( '#ChallengeFX' );
+	var x = panel.actualxoffset / panel.actualuiscale_x;
+	var y = panel.actualyoffset / panel.actualuiscale_y;
+	fxPanel.SetPositionInPixels( x, y, 0 );
+
+	seq.actions.push( new ActionWithTimeout( new WaitForClassAction( fxPanel, 'SceneLoaded' ), 2.0 ) );
+
+	seq.actions.push( new RunFunctionAction( function ()
+	{
+		$.DispatchEvent( 'PlaySoundEffect', 'ui_wounded_start' );
+	} ) );
+	seq.actions.push( new AddClassAction( fxPanel, 'ShowWounding' ) );
+	seq.actions.push( new WaitAction( 0.8 ) );
+
+	seq.actions.push( new AddClassAction( panel, 'ChallengeWounding' ) );
+	seq.actions.push( new AddClassAction( panel, 'ChallengeWound1' ) );
+	seq.actions.push( new RunFunctionAction( function ()
+	{
+		fxPanel.FireEntityInput( 'wound_fx_left', 'start', 0 );
+		$.DispatchEvent( 'PlaySoundEffect', 'ui_wounded_attack' );
+	} ) );
+	seq.actions.push( new WaitAction( 0.2 ) );
+
+	seq.actions.push( new AddClassAction( panel, 'ChallengeWound2' ) );
+	seq.actions.push( new RemoveClassAction( panel, 'ChallengeWound1' ) );
+	seq.actions.push( new RunFunctionAction( function ()
+	{
+		fxPanel.FireEntityInput( 'wound_fx_left', 'stop', 0 );
+		fxPanel.FireEntityInput( 'wound_fx_right', 'start', 0 );
+		$.DispatchEvent( 'PlaySoundEffect', 'ui_wounded_attack' );
+	} ) );
+	seq.actions.push( new WaitAction( 0.2 ) );
+
+	seq.actions.push( new AddClassAction( panel, 'ChallengeWound3' ) );
+	seq.actions.push( new RemoveClassAction( panel, 'ChallengeWound2' ) );
+	seq.actions.push( new RunFunctionAction( function ()
+	{
+		fxPanel.FireEntityInput( 'wound_fx_right', 'stop', 0 );
+		fxPanel.FireEntityInput( 'wound_fx_left', 'start', 0 );
+		$.DispatchEvent( 'PlaySoundEffect', 'ui_wounded_attack' );
+	} ) );
+	seq.actions.push( new WaitAction( 0.2 ) );
+
+	seq.actions.push( new AddClassAction( panel, 'ChallengeWound4' ) );
+	seq.actions.push( new RemoveClassAction( panel, 'ChallengeWound3' ) );
+	seq.actions.push( new RunFunctionAction( function ()
+	{
+		fxPanel.FireEntityInput( 'wound_fx_left', 'stop', 0 );
+		fxPanel.FireEntityInput( 'wound_fx_right', 'start', 0 );
+		$.DispatchEvent( 'PlaySoundEffect', 'ui_wounded_attack' );
+	} ) );
+	seq.actions.push( new WaitAction( 0.2 ) );
+
+	seq.actions.push( new AddClassAction( panel, 'ChallengeHalfCompleted' ) );
+	seq.actions.push( new RemoveClassAction( panel, 'ChallengeWound4' ) );
+	seq.actions.push( new RemoveClassAction( panel, 'ChallengeWounding' ) );
+
+	seq.actions.push( new WaitAction( 1.2 ) );
+	seq.actions.push( new RemoveClassAction( fxPanel, 'ShowWounding' ) );
+	seq.actions.push( new RunFunctionAction( function ()
+	{
+		fxPanel.FireEntityInput( 'wound_fx_right', 'stop', 0 );
+	} ) );
 	seq.actions.push( new RunFunctionAction( function ()
 	{
 		$.DispatchEvent( 'DOTACavernCrawlAdvanceUpdates', panel );

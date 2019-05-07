@@ -5,7 +5,6 @@ var clickNumber;
     $.RegisterEventHandler('DOTAScenePanelSceneLoaded', $('#Model'),
         function ()
         {
-            $.Msg("pig loaded");
             pigAnimating = false;
             clickNumber = 0;
             $.FireEntityInput('pig', 'SetAnimation', 'pb_idle');

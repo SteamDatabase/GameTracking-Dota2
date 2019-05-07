@@ -789,7 +789,7 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 	// Setup the sequence of actions to animate the screen
 	this.seq = new RunSequentialActions();
 
-	this.seq.actions.push( new AddScreenLinkAction( panel, 'CavernsProgress', '#DOTACavernCrawl_Title' ) );
+	this.seq.actions.push( new AddScreenLinkAction( panel, 'CavernsProgress', '#DOTACavernCrawl_Title_TI2019' ) );
 
 	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
 	this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
@@ -812,6 +812,7 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 	{
 		return function ()
 		{
+			me.disabled_update = true;
 			me.cavern_panel.DisableUpdateDisplay( true );
 		};
 	}( this ) );
@@ -827,7 +828,10 @@ AnimateCavernCrawlScreenAction.prototype.update = function ()
 AnimateCavernCrawlScreenAction.prototype.finish = function ()
 {
 	$.UnregisterForUnhandledEvent( "PostGameProgressSkippingAhead", this.eventHandler );
-	this.cavern_panel.DisableUpdateDisplay( false );
+	if ( this.disabled_update )
+	{
+		this.cavern_panel.DisableUpdateDisplay( false );
+	}
 	this.seq.finish();
 }
 
@@ -1069,7 +1073,7 @@ function AnimateCavernCrawlSubpanelAction( panel, ownerPanel, cavern_data, start
 	var panelXPCircle = panel.FindChildInLayoutFile( "XPCircleContainer" );
 	panelXPCircle.BLoadLayoutSnippet( 'BattlePassXPCircle' );
 
-	panel.FindChildInLayoutFile( "CavernCrawlHero" ).SetImage( 'file://{images}/heroes/icons/' + cavern_data.hero_name + '.png' );
+	panel.FindChildInLayoutFile( "CavernCrawlHero" ).heroid = cavern_data.hero_id;
 
 	this.total_points = cavern_data.bp_amount;
 }
@@ -1238,6 +1242,100 @@ AnimateWeeklyChallengeSubpanelAction.prototype.update = function ()
 AnimateWeeklyChallengeSubpanelAction.prototype.finish = function ()
 {
 	this.seq.finish();
+}
+
+
+//-----------------------------------------------------------------------------
+// Main entry point for MVP Voting
+//-----------------------------------------------------------------------------
+
+function AnimateMVPVotingScreenAction( data )
+{
+    this.data = data;
+}
+
+AnimateMVPVotingScreenAction.prototype = new BaseAction();
+
+AnimateMVPVotingScreenAction.prototype.start = function ()
+{
+    // Create the screen and do a bunch of initial setup
+    var panel = StartNewScreen( 'MVPVotingProgressScreen' );
+    panel.BLoadLayoutSnippet( "MVPVotingProgress" );
+    var mvpVotePanel = panel.FindChildInLayoutFile( 'PostGameMVPVote' );
+    mvpVotePanel.SetMatchID( this.data.mvp_voting_progress.match_id );
+    var heroContainer = mvpVotePanel.FindChildInLayoutFile( 'HeroContainer' );
+    for ( var i = 0; i < this.data.mvp_voting_progress.match_players.length; ++i )
+    {
+        var match_player = this.data.mvp_voting_progress.match_players[i];
+        var player_slot = match_player.player_slot;
+		var player_hero_id = match_player.hero_id;
+        var heroInfoPanel = mvpVotePanel.AddHeroPanel( match_player.account_id, match_player.vote_count );
+		
+        heroInfoPanel.SetDialogVariable( "hero_name_mvp", $.Localize( '#' + match_player.hero_name ) );
+        heroInfoPanel.SetDialogVariable( "player_name_mvp", match_player.player_name );
+        heroInfoPanel.SetDialogVariableInt( "mvp_kills", match_player.kills );
+        heroInfoPanel.SetDialogVariableInt( "mvp_assists", match_player.assists );
+        heroInfoPanel.SetDialogVariableInt( "mvp_deaths", match_player.deaths );
+		heroInfoPanel.SetDialogVariableInt( "vote_count", match_player.vote_count );
+		
+        var voteClickArea = heroInfoPanel.FindChildInLayoutFile( 'VoteAreaPanel' );
+		var j = i + 1;
+		if ( typeof player_slot !== 'undefined' )
+        {
+			
+            // Use this normally when viewing the details
+            mvpVotePanel.SetPortraitUnitToPlayerHero( player_slot, player_hero_id, "background_hero_" + j );
+			( function ( panel, account_id )
+			{
+				voteClickArea.SetPanelEvent( 'onactivate', function ()
+				{
+					$.DispatchEvent( 'PostGameMVPSubmitVote', voteClickArea, account_id );
+				});
+			})( voteClickArea, match_player.account_id )
+        }
+        else
+        {
+            // Use this for testing when we don't actually have match data
+            mvpVotePanel.SetPortraitUnitToPlayerHero( i, player_hero_id, "background_hero_" + j );
+			( function ( panel, account_id, player_index )
+			{
+				voteClickArea.SetPanelEvent( 'onactivate', function ()
+				{
+					$.DispatchEvent( 'PostGameMVPSubmitVoteTest', voteClickArea, player_index + 1 );
+				});
+			})( voteClickArea, match_player.account_id, i )
+        }
+
+        if( match_player.owns_event == 0 )
+        {
+            heroInfoPanel.AddClass( "NoCurrentBattlepass" );
+        }
+        else
+        {
+            var eventShieldPanel = heroInfoPanel.FindChildInLayoutFile( 'BPLevel' );
+            eventShieldPanel.SetEventPoints(match_player.event_id, match_player.event_points);
+        }
+        
+    }
+    // Setup the sequence of actions to animate the screen
+    this.seq = new RunSequentialActions();
+    this.seq.actions.push( new AddClassAction( mvpVotePanel, 'ShowScreen'));
+    this.seq.actions.push( new AddScreenLinkAction( panel, 'MVPProgress', '#DOTAMVPVote_TitleLink' ) );
+    this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( mvpVotePanel, 'HasVotedForMVP' ), 20.0 ) );
+    this.seq.actions.push( new StopSkippingAheadAction() );
+	this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( mvpVotePanel, 'DidNotVoteForMVP' ), 2.5 ) );
+    this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
+    this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
+
+    this.seq.start();
+}
+AnimateMVPVotingScreenAction.prototype.update = function ()
+{
+    return this.seq.update();
+}
+AnimateMVPVotingScreenAction.prototype.finish = function ()
+{
+    this.seq.finish();
 }
 
 
@@ -1827,6 +1925,151 @@ AnimateEventPointsScreenAction.prototype.finish = function ()
 
 // ----------------------------------------------------------------------------
 //
+// Coach Rating Screen
+//
+// ----------------------------------------------------------------------------
+
+function WaitForRatingStateChange( panel )
+{
+	this.panel = panel;
+}
+WaitForRatingStateChange.prototype = new BaseAction();
+WaitForRatingStateChange.prototype.update = function ()
+{
+	var goodRatingButton = this.panel.FindChildInLayoutFile( 'GoodRatingButton' );
+	if ( goodRatingButton.BHasClass( 'Selected' ) )
+		return false;
+
+	var badRatingButton = this.panel.FindChildInLayoutFile( 'BadRatingButton' );
+	if ( badRatingButton.BHasClass( 'Selected' ) )
+		return false;
+
+	var abusiveRatingButton = this.panel.FindChildInLayoutFile( 'AbusiveRatingButton' );
+	if ( abusiveRatingButton.BHasClass( 'Selected' ) )
+		return false;
+
+	return true;
+}
+
+function WaitForAbusiveRatingPopupAction()
+{
+	this.popupActive = false;
+}
+WaitForAbusiveRatingPopupAction.prototype = new BaseAction();
+WaitForAbusiveRatingPopupAction.prototype.update = function ()
+{
+	return this.popupActive;
+}
+
+function AnimateCoachRatingScreenAction( data, coach_data )
+{
+	this.data = data;
+	this.coach_data = coach_data;
+}
+
+AnimateCoachRatingScreenAction.prototype = new BaseAction();
+
+AnimateCoachRatingScreenAction.prototype.start = function ()
+{
+	var action_data = this.data;
+	var rating_data = this.coach_data;
+
+	// Create the screen and do a bunch of initial setup
+	var panel = StartNewScreen( 'CoachRatingScreen' );
+	panel.BLoadLayoutSnippet( "CoachRating" );
+
+	var countdownProgressBar = panel.FindChildInLayoutFile( 'CoachTimeRemainingProgressBar' );
+	var goodRatingButton = panel.FindChildInLayoutFile( 'GoodRatingButton' );
+	var badRatingButton = panel.FindChildInLayoutFile( 'BadRatingButton' );
+	var abusiveRatingButton = panel.FindChildInLayoutFile( 'AbusiveRatingButton' );
+
+	var flCountdownDuration = 15.0;
+	countdownProgressBar.max = flCountdownDuration;
+
+	panel.SetDialogVariable( 'coach_player_name', rating_data.coach_player_name );
+	panel.FindChildInLayoutFile( 'CoachAvatarImage' ).accountid = rating_data.coach_account_id;
+	panel.FindChildInLayoutFile( 'CoachRatingBadge' ).rating = rating_data.coach_rating;
+
+	var SubmitRating = function ( strRating, strReason )
+	{
+		if ( action_data.match_id == '0')
+			return;
+
+		$.DispatchEvent( 'DOTASubmitCoachRating', action_data.match_id, rating_data.coach_account_id, strRating, strReason );
+
+		// Once a rating has been changed, disable all the other UI
+		goodRatingButton.enabled = false;
+		badRatingButton.enabled = false;
+		abusiveRatingButton.enabled = false;
+	};
+
+	$.RegisterEventHandler( 'Activated', goodRatingButton, function ()
+	{
+		goodRatingButton.AddClass( 'Selected' );
+		SubmitRating( 'k_ECoachTeammateRating_Positive', '' );
+	});
+	$.RegisterEventHandler( 'Activated', badRatingButton, function ()
+	{
+		badRatingButton.AddClass( 'Selected' );
+		SubmitRating( 'k_ECoachTeammateRating_Negative', '' );
+	});
+
+	var waitForAbusiveRatingPopupAction = new WaitForAbusiveRatingPopupAction();
+	$.RegisterEventHandler( 'Activated', abusiveRatingButton, function ()
+	{
+		waitForAbusiveRatingPopupAction.popupActive = true;
+		$.DispatchEvent( 'PostGameProgressConfirmAbusiveCoachRating', panel );
+	});
+	$.RegisterEventHandler( 'PostGameProgressConfirmAbusiveCoachRatingFinished', panel, function ( bSubmit, strReason )
+	{
+		if ( bSubmit )   
+		{   
+			abusiveRatingButton.AddClass( 'Selected' );
+			SubmitRating( 'k_ECoachTeammateRating_Abusive', strReason );
+		}
+		waitForAbusiveRatingPopupAction.popupActive = false;
+	});
+
+	// Setup the sequence of actions to animate the screen
+	this.seq = new RunSequentialActions();
+	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
+	this.seq.actions.push( new AddScreenLinkAction( panel, 'CoachRatingProgress', '#DOTA_CoachRatingPostGame_CoachRating', function ()
+	{
+		panel.AddClass( 'RatingScreenForceVisible' );
+	}));
+	this.seq.actions.push( new WaitAction( 0.5 ) );
+	this.seq.actions.push( new AddClassAction( panel, 'RatingScreenVisible' ) );
+
+	var countdownActions = new RunParallelActions();
+	countdownActions.actions.push( new AnimateDialogVariableIntAction( panel, 'countdown_seconds', flCountdownDuration, 0, flCountdownDuration ) );
+	countdownActions.actions.push( new AnimateProgressBarAction( countdownProgressBar, flCountdownDuration, 0, flCountdownDuration ) );
+
+	var durationAction = new RunUntilSingleActionFinishedAction();
+	durationAction.actions.push( countdownActions );
+	durationAction.actions.push( new WaitForRatingStateChange( panel ) );
+	durationAction.actions.push( new WaitForClassAction( panel, 'CountdownFinished' ) );
+	this.seq.actions.push( durationAction );
+
+	this.seq.actions.push( new AddClassAction( panel, 'CountdownFinished' ) );
+	this.seq.actions.push( waitForAbusiveRatingPopupAction );
+
+	this.seq.actions.push( new WaitAction( 0.5 ) );
+	this.seq.actions.push( new RemoveClassAction( panel, 'RatingScreenVisible' ) );
+	this.seq.actions.push( new WaitAction( 0.5 ) );
+
+	this.seq.start();
+}
+AnimateCoachRatingScreenAction.prototype.update = function ()
+{
+	return this.seq.update();
+}
+AnimateCoachRatingScreenAction.prototype.finish = function ()
+{
+	this.seq.finish();
+}
+
+// ----------------------------------------------------------------------------
+//
 // Debugging
 //
 // ----------------------------------------------------------------------------
@@ -2018,7 +2261,7 @@ function TestAnimateBattlePass()
 
 		battle_pass_progress:
 		{
-			battle_points_event_id: 22,
+			battle_points_event_id: 25,
 			battle_points_start: 74850,
 			battle_points_per_level: 1000,
 
@@ -2082,7 +2325,7 @@ function TestAnimateBattlePass()
 
 			cavern_crawl:
 			{
-				hero_name: 'npc_dota_hero_disruptor',
+				hero_id: 87,
 				bp_amount: 375,
 			},
 
@@ -2113,7 +2356,7 @@ function TestAnimateCavernCrawl()
 		hero_id: 92,
 		cavern_crawl_progress:
 		{
-			event_id: 22,
+			event_id: 25,
 		},
 	};
 
@@ -2174,7 +2417,111 @@ function TestAnimateEventPointsProgress()
 	TestProgressAnimation( data );
 }
 
+function TestMVPVotingProgress() {
+ 
+    var data =
+	{
+	    mvp_voting_progress:
+        {
+            match_id: '123456789',
+            match_players:
+            [
+                {
+                    hero_id: 34,
+                    hero_name: 'Tinker',
+                    event_points: 0,
+                    event_id: 25,
+                    vote_count: 2,
+                    player_name: 'Eric L',
+                    account_id: 1,
+                    kills: 7,
+                    assists: 3,
+                    deaths: 6,
+					owns_event: 0
+                },
+                {
+                    hero_id: 29,
+                    hero_name: 'Tidehunter',
+                    event_points: 8000,
+                    event_id: 25,
+                    vote_count: 0,
+                    player_name: 'Brett S',
+                    account_id: 2,
+                    kills: 14,
+                    assists: 3,
+                    deaths: 8,
+					owns_event: 1
+                },
+                {
+                    hero_id: 86,
+                    hero_name: 'Rubick',
+                    event_points: 12000,
+                    event_id: 25,
+                    vote_count: 3,
+                    player_name: 'Kyle',
+                    account_id: 3,
+                    kills: 2,
+                    assists: 12,
+                    deaths: 0,
+					owns_event: 1
+                },
+                {
+                    hero_id: 102,
+                    hero_name: 'Abaddon',
+                    event_points: 5000,
+                    event_id: 25,
+                    vote_count: 0,
+                    player_name: 'Sergei',
+                    account_id: 4,
+                    kills: 21,
+                    assists: 12,
+                    deaths: 14,
+					owns_event: 1
+                },
+                {
+                    hero_id: 59,
+                    hero_name: 'Huskar',
+                    event_points: 200,
+                    event_id: 25,
+                    vote_count: 5,
+                    player_name: 'Alex',
+                    account_id: 5,
+                    kills: 8,
+                    assists: 4,
+                    deaths: 2,
+					owns_event: 0
+                }
+            ]
+        }
+	};
 
+    TestProgressAnimation(data);
+}
+
+function TestAnimateCoachRating()
+{
+	var data =
+	{
+		//match_id: '123456789012345',
+		match_id: '0',
+
+		coaches_need_rating:
+		[
+			{
+				coach_account_id: 85501006,
+				coach_player_name: 'EricL',
+				coach_rating: 2345
+			}
+			//{
+			//	coach_account_id: 85501829,
+			//	coach_player_name: 'Cameron',
+			//	coach_rating: 5678
+			//}
+		]
+	}
+
+	TestProgressAnimation( data );
+}
 
 // ----------------------------------------------------------------------------
 //   All Screens
@@ -2188,7 +2535,20 @@ function CreateProgressAnimationSequence( data )
 	seq.actions.push( new RunFunctionAction( function () 
 	{
 		GetScreenLinksContainer().enabled = false;
-	} ) );
+	}));
+
+	if ( data.coaches_need_rating != null )
+	{
+		for (var i = 0; i < data.coaches_need_rating.length; ++i)
+		{
+			seq.actions.push( new AnimateCoachRatingScreenAction( data, data.coaches_need_rating[ i ] ) );
+		}
+	}
+
+	if ( data.mvp_voting_progress != null )
+	{
+	    seq.actions.push( new AnimateMVPVotingScreenAction( data ) );
+	}
 
 	if ( data.cavern_crawl_progress != null )
 	{

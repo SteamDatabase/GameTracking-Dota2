@@ -132,6 +132,7 @@ message CSODOTAGameAccountClient {
 	optional uint32 recent_win_time_1 = 106;
 	optional uint32 recent_win_time_2 = 107;
 	optional uint32 recent_win_time_3 = 108;
+	optional uint32 coach_rating = 109;
 }
 
 message CSODOTAGameAccountPlus {
@@ -268,6 +269,12 @@ message CMatchHeroSelectEvent {
 	optional bool is_pick = 1;
 	optional uint32 team = 2;
 	optional uint32 hero_id = 3;
+}
+
+message CPartySearchClientParty {
+	optional fixed64 party_id = 1;
+	optional int32 beacon_type = 2;
+	repeated fixed32 party_members = 3;
 }
 
 message CMsgDOTAProcessFantasyScheduledEvent {
@@ -973,7 +980,6 @@ message CMsgDOTAMatch {
 		optional uint32 bot_difficulty = 58;
 		optional uint32 hero_pick_order = 63;
 		optional bool hero_was_randomed = 64;
-		optional bool hero_was_bonus = 65;
 		optional bool hero_was_dota_plus_suggestion = 69;
 		repeated .CMsgDOTAMatch.Player.HeroDamageReceived hero_damage_received = 67;
 		optional uint32 seconds_dead = 70;
@@ -990,6 +996,14 @@ message CMsgDOTAMatch {
 		optional string description = 2;
 		repeated .CMsgDOTAMatch.BroadcasterInfo broadcaster_infos = 3;
 		optional string language_code = 4;
+	}
+
+	message Coach {
+		optional uint32 account_id = 1;
+		optional string coach_name = 2;
+		optional uint32 coach_rating = 3;
+		optional uint32 coach_team = 4;
+		optional uint64 coach_party_id = 5;
 	}
 
 	message CustomGameData {
@@ -1052,6 +1066,8 @@ message CMsgDOTAMatch {
 	optional uint32 tournament_id = 51;
 	optional uint32 tournament_round = 52;
 	optional uint32 pre_game_duration = 53;
+	repeated uint32 mvp_account_id = 56;
+	repeated .CMsgDOTAMatch.Coach coaches = 57;
 }
 
 message CMsgPlayerCard {
@@ -1220,6 +1236,22 @@ message CMsgMatchConsumableUsage {
 	repeated .CMsgMatchConsumableUsage.PlayerUsage player_consumables_used = 1;
 }
 
+message CMsgMatchEventActionGrants {
+	message Grant {
+		optional uint32 event_id = 1;
+		optional uint32 action_id = 2;
+		optional uint32 audit = 3;
+		optional uint32 quantity = 4;
+	}
+
+	message PlayerGrants {
+		optional uint32 account_id = 1;
+		repeated .CMsgMatchEventActionGrants.Grant actions_granted = 2;
+	}
+
+	repeated .CMsgMatchEventActionGrants.PlayerGrants player_grants = 1;
+}
+
 message CMsgCustomGameWhitelist {
 	optional uint32 version = 1;
 	repeated uint64 custom_games_whitelist = 2;
@@ -1233,5 +1265,69 @@ message CMsgCustomGameWhitelistForEdit {
 	}
 
 	repeated .CMsgCustomGameWhitelistForEdit.WhitelistEntry whitelist_entries = 1;
+}
+
+message CMsgPlayerRecentMatchInfo {
+	optional uint64 match_id = 1;
+	optional uint32 timestamp = 2;
+	optional uint32 duration = 3;
+	optional bool win = 4;
+	optional uint32 hero_id = 5;
+	optional uint32 kills = 6;
+	optional uint32 deaths = 7;
+	optional uint32 assists = 8;
+}
+
+message CMsgPlayerMatchRecord {
+	optional uint32 wins = 1;
+	optional uint32 losses = 2;
+}
+
+message CMsgPlayerRecentMatchOutcomes {
+	optional uint32 outcomes = 1;
+	optional uint32 match_count = 2;
+}
+
+message CMsgPlayerRecentCommends {
+	optional uint32 commends = 1;
+	optional uint32 match_count = 2;
+}
+
+message CMsgPlayerRecentAccomplishments {
+	optional .CMsgPlayerRecentMatchOutcomes recent_outcomes = 1;
+	optional .CMsgPlayerMatchRecord total_record = 2;
+	optional uint32 prediction_streak = 3;
+	optional uint32 plus_prediction_streak = 4;
+	optional .CMsgPlayerRecentCommends recent_commends = 5;
+	optional uint32 first_match_timestamp = 6;
+	optional .CMsgPlayerRecentMatchInfo last_match = 7;
+}
+
+message CMsgPlayerHeroRecentAccomplishments {
+	optional .CMsgPlayerRecentMatchOutcomes recent_outcomes = 1;
+	optional .CMsgPlayerMatchRecord total_record = 2;
+	optional .CMsgPlayerRecentMatchInfo last_match = 3;
+}
+
+message CMsgRecentAccomplishments {
+	optional .CMsgPlayerRecentAccomplishments player_accomplishments = 1;
+	optional .CMsgPlayerHeroRecentAccomplishments hero_accomplishments = 2;
+}
+
+message CMsgRequestPlayerRecentAccomplishments {
+	optional uint32 account_id = 1;
+	optional uint32 hero_id = 2;
+}
+
+message CMsgRequestPlayerRecentAccomplishmentsResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+	}
+
+	optional .CMsgRequestPlayerRecentAccomplishmentsResponse.EResponse result = 1 [default = k_eInternalError];
+	optional .CMsgRecentAccomplishments player_accomplishments = 2;
 }
 

@@ -94,6 +94,7 @@
 	parentAttachmentName(parentAttachment) [ group="Hierarchy" ] : "Parent Model Bone/Attachment Name" : : "The name of the bone or attachment to attach to on the entity's parent in the movement hierarchy. Use !bonemerge to use bone-merge style attachment."
 	local.origin(vector) [ group="Hierarchy" ] : "Model Attachment position offset" : : "Offset in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
 	local.angles(angle) [ group="Hierarchy" ] : "Model Attachment angular offset" : : "Angular offset in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
+	local.scales(vector) [ group="Hierarchy" ] : "Model Attachment scale" : : "Scale in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
 	useLocalOffset(boolean) [ group="Hierarchy" ] : "Use Model Attachment Offset" : 0 : "Whether to respect the specified local offset when doing the initial hierarchical attachment to its parent."
 
 	// Inputs
@@ -623,6 +624,7 @@
 	input WalkTowardsTarget(target_destination) : "Walks towards a target."
 	input StartResilientPathFollow(string) : "Walks towards the specified path corner. Will resiliently restart the walk if it's interrupted for any reason."
 	input SetAnimGraphParameter(string) : "Set an animation graph parameter Format: <name=value>"
+	input SetEasingParameter(string) : "Set an easing parameter Format: <name=value>"
 ]
 
 @PointClass base(Targetname, Parentname) iconsprite("editor/info_target.vmat") = info_npc_spawn_destination : 
@@ -1911,25 +1913,37 @@
 	iMagnitude(Integer) : "Magnitude" : 100 : "The amount of damage done by the explosion."
 	// If no radius override, magnitude will determine radius.
 	iRadiusOverride(Integer) : "Radius Override" : 0 : "If specified, the radius in which the explosion damages entities. If unspecified, the radius will be based on the magnitude."
-	fireballsprite(sprite) : "Fireball Sprite" : "sprites/zerogxplode.spr"
 	spawnflags(flags) =
 	[
 		1: "No Damage" : 0
 		2: "Repeatable" : 0
-		4: "No Fireball" : 0
-		8: "No Smoke" : 0
 		16: "No Decal" : 0
-		32: "No Sparks" : 0
 		64: "No Sound" : 0
-		128: "Random Orientation" : 0
-		256: "No Fireball Smoke" : 0
-		512: "No particles" : 0
-		1024: "No DLights" : 0
-		2048: "Don't clamp Min" : 0
-		4096: "Don't clamp Max" : 0
-		8192: "Damage above surface only" : 0
+		8192: "Damage above water surface only" : 0
 		16384: "Generic damage" : 0
 	]
+
+	explosion_type(choices) : "Explosion Type" : "" : "" =
+	[
+		""					:	"Default"
+		"grenade"			:	"Grenade"
+		"molotov"			:	"Molotov"
+		"fireworks"			:	"Fireworks"
+		"gascan"			:	"Gasoline Can"
+		"gascylinder"		:	"Pressurized Gas Cylinder"
+		"explosivebarrel"	:	"Explosive Barrel"
+		"electrical"		:	"Electrical"
+		"emp"				:	"EMP"
+		"shrapnel"			:	"Shrapnel"
+		"smoke"				:	"Smoke Grenade"
+		"flashbang"			:	"Flashbang"
+		"tripmine"			:	"Tripmine"
+		"ice"				:	"Ice"
+		"none"				:	"None"
+		"custom"			:	"Custom"
+	]
+	explosion_custom_effect(resource:particle) : "Custom Particle Effect"
+	explosion_custom_sound(sound) : "Custom Sound Effect" : ""
 
 	ignoredEntity(target_destination) : "Ignored Entity" : : "Do not harm or affect the named entity."
 	ignoredClass(Integer) : "Ignored Class" : 0 : "Do not harm or affect this class."
@@ -3136,7 +3150,8 @@
 	input Start(void) : "Tell the particle system to start emitting."
 	input Stop(void) : "Tell the particle system to stop emitting."
 	input StopPlayEndCap(void) : "Tell the particle system to stop emitting and play its End Cap Effect."
-	input DestroyImmediately(void) : "Destroy the particle system and remove all particles immediately."		
+	input DestroyImmediately(void) : "Destroy the particle system and remove all particles immediately."
+	input SetControlPoint(string) : "Set a Control Point via format - CP: X Y Z"
 ]
 
 
@@ -5516,7 +5531,7 @@
 	"'Length' is what's known as the 'natural spring length'. This is how long the spring would "+
 	"be if it was at rest (nothing hanging on it or attached). When you attach something to the "+
 	"spring, it will stretch longer than its 'natural length'. The amount of stretch is "+
-	"determined by the 'Sprint Constant'. The larger the spring constant the less stretch the spring."
+	"determined by the 'Sprint Frequency'. The larger the spring frequency the less stretch the spring."
 [
 	spawnflags(flags) =
 	[
@@ -5527,17 +5542,15 @@
 	attach2(target_destination) : "Entity 2" : ""
 
 	springaxis(vecline) : "Spring Axis" : "" : "Use the helper. Drag it out to match the virtual spring."
-	length(string) : "Spring Length" : "0" : "How long the spring would be if it was at rest (nothing hanging on it or attached). 0 means the length of the brush."
-	constant(string) : "Spring Constant" : "50" : "Stiffness of the spring.  The larger the number the less the spring will stretch."
-	damping(string) : "Damping Constant" : "2.0" : "How much energy the spring loses.  The larger the number, the less bouncy the spring."
-	relativedamping(string) : "Relative Damping Constant" : "0.1" : "The amount of energy the spring loses proportional to the relative velocity of the two objects the spring is attached to."
-	// UNDONE: add max tension and what event to fire when it breaks
-	breaklength(string) : "Break on Length" : "0" : "If the spring's length ever exceeds this length, the spring breaks."
+	length(string) : "Length" : "0" : "How long the spring would be if it was at rest (nothing hanging on it or attached). 0 means the length of the helpr ."
+	frequency(string) : "Frequency" : "5" : "The stiffness of the spring.  The larger the number the less the spring will stretch. The maximum should be not more than 30!"
+	damping(string) : "Damping Ratio" : "0.7" : "How much energy the spring loses. Values less than one give you an osscilating spring. A value of one makes the spring return without overshooting"
+	//breaklength(string) : "Break on Length" : "0" : "If the spring's length ever exceeds this length, the spring breaks."
 
 	// Inputs
-	input SetSpringConstant(float) : "Set the Spring Constant."
-	input SetSpringLength(float) : "Set the Spring Length."
-	input SetSpringDamping(float) : "Set the Spring Damping."
+	input SetRestLength(float) : "Set the spring rest length."
+	input SetFrequency(float) : "Set the spring frequency (stiffness)."
+	input SetDampingRatio(float) : "Set the spring damping ratio."
 ]
 
 
@@ -5683,6 +5696,8 @@
 	slidefriction(float) : "Set motor friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
 	SystemLoadScale(float) : "Load Scale" : "1" : "Scale of the mass load connected to this constraint (1=just the objects directly connected)"
 	initialoffset(float) : "Initial Offset" : "0" : "Initial offset in the range from -1 to 1 where -1 means spawn at the min limit, 0 means apply no offset, and 1 means spawn at max limit"
+	enablelinearconstraint(boolean) : "Enable Linear Constraint" : 1
+	enableangularconstraint(boolean) : "Enable Angular Constraint" : 1
 	
 	// Inputs
 	input SetSlideFriction(float) : "Set motor friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
@@ -6072,6 +6087,7 @@
 	screenspacefade(boolean) [ group="Render Properties" ] : "Screen Space Fade" : 0 : "The method by which the fading distance should be determined. If 'No', the fade distances is the distance from the player's view to the object, in inches. If 'Yes', the fade distance is the size of the object onscreen, in pixels."
 
 	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	lodlevel(lod_level)  [ group="Render Properties" ] : "LOD Level" : "-1" : "LOD level to be displayed in game. Set to Auto for standard automatic selection, or set to a specific level to always use that level."
 
 	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist/Pixels" : -1 : "Distance at which the prop starts to fade (<0 = use fademaxdist). If 'Screen Space Fade' is selected, this represents the number of pixels wide covered by the prop when it starts to fade."
 	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist/Pixels" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out). If 'Screen Space Fade' is selected, this represents the *minimum* number of pixels wide covered by the prop when it fades."
@@ -6111,12 +6127,11 @@
 		8 : "Scale up by 256"
 	]
 
-	bakelightoutput(choices) [ group="Render Properties" ] : "Baked Lighting" : -1 =
+	bakelighting(choices) [ group="Render Properties" ] : "Bake Lighting" : -1 =
 	[
 		-1 : "Default"
-		0 : "None"
-		1 : "Per-Vertex"
-		//2 : "Light Map"
+		0 : "No"
+		1 : "Yes"
 	]
 
 	excludefromimpostors(boolean) [ group="Render Properties" ] : "Exclude from Impostors" : 0 : "Exclude this geometry from impostor LOD rendering"
@@ -6817,6 +6832,7 @@
 		0 : "Normal"
 		1 : "Doubling w/forgiveness"
 	]
+	forgivedelay(float) : "Forgiveness delay" : 3 : "When doubling with forgiveness, how many seconds the trigger must go without hurting anything before the damage is reset."
 	
 	nodmgforce(boolean) : "Zero Damage Force" : 0 : "Should the damaged entity receive no physics force from this trigger."
 	damageforce(vector) : "Damage Force Override"
@@ -6976,6 +6992,9 @@
 [
 	target(target_destination) : "Remote Destination" : : "The entity specifying the point to which entities should be teleported."
 	landmark(target_destination) : "Local Destination Landmark" : : "If specified, then teleported entities are offset from the target by their initial offset from the landmark."
+
+	use_landmark_angles(boolean) : "Use Landmark Orientations" : 0 : "Rotate around landmark by relative landmark orientations"
+
 	spawnflags(flags) =
 	[
 		32: "Preserve angles even when a local landmark is not specified" : 0
@@ -7918,14 +7937,11 @@
 
 
 @PointClass base(Targetname, Parentname, EnableDisable) sphere() 
-	box_world_aligned( box_mins, box_maxs )
+	volumetric_fog_controller( box_mins, box_maxs )
 = env_volumetric_fog_controller : "Controller for volumetric fogging - bounds are extents of fog irradiance volume (for indirect)"
 [
 	IsMaster( bool )  : "Master Fog Controller" : "0" : "Use this as the active fog if there are more than one"
-
-	box_mins(vector) : "Box Mins" : "-72 -72 -72"
-	box_maxs(vector) : "Box Maxs" : "72 72 72"
-
+	
 	FogStrength( float ) : "Fog strength" : "1.0" : "Technically the scattering value. Higher values make denser fog."
 	DrawDistance( float ) : "Draw distance" : "600.0" : "Maximum distance to draw fog - WARNING! Changing from default will make fog blockier." 
 
@@ -7985,6 +8001,26 @@
 	//input SetNoiseRotationSpeedB( float ) : "Set angular speed for noise B"
 	//input SetEntityToRotateAround( string ) : "Sets the center of the spiraling fog. Takes the name of an entity to spiral around"
 
+]
+
+
+
+@PointClass base(Targetname, Parentname, EnableDisable) sphere() 
+	box_world_aligned( box_mins, box_maxs, autoCenter )
+	iconsprite( "materials/editor/fog_volume.vmat" )
+= env_volumetric_fog_volume : "Sets a user bounding volume for volumetric fog - if one of these are in the map then all fog will get clamped to it. More than one then fog gets rendered if it's inside any of them."
+[
+	box_mins(vector) : "Box Mins" : "-64 -64 -64"
+	box_maxs(vector) : "Box Maxs" : "64 64 64"
+	input Enable(boolean) : "Enable"
+	input Disable(boolean) : "Disable"
+	FogStrength( float ) : "Fog strength" : "1.0" : "Technically the scattering value. Higher values make denser fog."
+	FalloffExponent( float ) : "Falloff Exponent" : "1.0" : "Controls the fall off curve for the fog at the edges"
+	Shape(choices) : "Falloff Shape" : "0" : "" = 
+	[
+		"0" : "Linear (Box) Falloff"
+		"1" : "Radial (Sphere) Falloff"
+	]
 ]
 
 @PointClass iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint

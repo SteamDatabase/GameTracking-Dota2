@@ -499,6 +499,22 @@ AnimateProgressBarWithMiddleAction.prototype.finish = function ()
 }
 
 
+// Action to play a sound effect
+function PlaySoundEffect( soundName )
+{
+	$.DispatchEvent( 'PlaySoundEffect', soundName );
+}
+function PlaySoundEffectAction( soundName )
+{
+	this.soundName = soundName;
+}
+PlaySoundEffectAction.prototype = new BaseAction();
+PlaySoundEffectAction.prototype.update = function ()
+{
+	PlaySoundEffect( this.soundName );
+	return false;
+}
+
 // ----------------------------------------------------------------------------
 
 // Helper function to asynchronously tick a single action until it's finished, then call finish on it.
