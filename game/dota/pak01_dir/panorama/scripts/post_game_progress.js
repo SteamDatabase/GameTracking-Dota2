@@ -781,6 +781,8 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 {
 	var heroID = this.data.hero_id;
 	var eventID = this.data.cavern_crawl_progress.event_id;
+	var turboMode = this.data.cavern_crawl_progress.turbo_mode;
+	var mapProgress = this.data.cavern_crawl_progress.map_progress;
 
 	// Create the screen and do a bunch of initial setup
 	var panel = StartNewScreen( 'CavernCrawlProgressScreen' );
@@ -799,7 +801,16 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 	this.seq.actions.push( new AddClassAction( panel, 'ShowCavernCrawlProgress' ) );
 	this.seq.actions.push( new RunFunctionAction( function ()
 	{
-		cavernCrawlPanel.ShowPostGameProgress( eventID, 0, heroID );
+		cavernCrawlPanel.ClearMapResults();
+		if ( mapProgress )
+		{
+			for ( var i = 0; i < mapProgress.length; ++i )
+			{
+				var result = mapProgress[i]
+				cavernCrawlPanel.AddMapResult( result.path_id_completed, result.room_id_claimed );
+			}
+		}
+		cavernCrawlPanel.ShowPostGameProgress( eventID, 0, heroID, turboMode );
 	} ) );
 	this.seq.actions.push( new WaitForEventAction( cavernCrawlPanel, 'DOTACavernCrawlPostGameProgressComplete' ) );
 	this.seq.actions.push( new StopSkippingAheadAction() );
