@@ -1070,6 +1070,86 @@ AnimateTippingSubpanelAction.prototype.finish = function ()
 
 
 //-----------------------------------------------------------------------------
+// Animates actions granted subpanel
+//-----------------------------------------------------------------------------
+// Action to animate a battle pass bp increase
+function AnimateActionsGrantedSubpanelAction( panel, ownerPanel, actions_granted, startingPoints )
+{
+	this.panel = panel;
+	this.ownerPanel = ownerPanel;
+	this.startingPoints = startingPoints;
+
+	panel.AddClass( 'Visible' );
+
+	var panelXPCircle = panel.FindChildInLayoutFile( "XPCircleContainer" );
+	panelXPCircle.BLoadLayoutSnippet( 'BattlePassXPCircle' );
+
+	this.panelCount = 0;
+	this.total_points = 0;
+
+	var actionContainer = panel.FindChildInLayoutFile( "ActionContainer" );
+	for ( var i = 0; i < actions_granted.length; ++i )
+	{
+		var actionPanel = $.CreatePanel( 'Panel', actionContainer, 'Action' + i );
+		actionPanel.BLoadLayoutSnippet( 'BattlePassAction' );
+
+		if ( actions_granted[i].action_image != null )
+		{
+			var imagePanel = actionPanel.FindChildInLayoutFile( "ConsumableImage" );
+			imagePanel.SetImage( actions_granted[i].action_image );
+		}
+
+		actionPanel.SetDialogVariableInt( 'action_points', actions_granted[i].bp_amount );
+		actionPanel.SetDialogVariableInt( 'action_quantity', actions_granted[i].quantity );
+
+		this.panelCount = this.panelCount + 1;
+		this.total_points += actions_granted[i].quantity * actions_granted[i].bp_amount
+	}
+}
+
+AnimateActionsGrantedSubpanelAction.prototype = new BaseAction();
+
+AnimateActionsGrantedSubpanelAction.prototype.start = function ()
+{
+	this.seq = new RunSequentialActions();
+	this.seq.actions.push( new AddClassAction( this.panel, 'BecomeVisible' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( g_DelayAfterStart ) ) );
+
+	this.seq.actions.push( new AddClassAction( this.panel, 'ShowTotalActions' ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( g_SubElementDelay ) ) );
+
+	for ( var i = 0; i < this.panelCount; ++i )
+	{
+		var actionPanel = this.panel.FindChildInLayoutFile( 'Action' + i );
+		this.seq.actions.push( new AddClassAction( actionPanel, 'ShowAction' ) );
+	}
+
+	this.seq.actions.push( new SkippableAction( new WaitAction( g_SubElementDelay ) ) );
+
+	var panel = this.panel;
+	var ownerPanel = this.ownerPanel;
+	var total_points = this.total_points;
+	var startingPoints = this.startingPoints;
+	this.seq.actions.push( new RunFunctionAction( function ()
+	{
+		UpdateSubpanelTotalPoints( panel, ownerPanel, total_points, startingPoints, false );
+	} ) );
+
+	this.seq.start();
+}
+
+AnimateActionsGrantedSubpanelAction.prototype.update = function ()
+{
+	return this.seq.update();
+}
+
+AnimateActionsGrantedSubpanelAction.prototype.finish = function ()
+{
+	this.seq.finish();
+}
+
+
+//-----------------------------------------------------------------------------
 // Animates cavern crawl subpanel
 //-----------------------------------------------------------------------------
 // Action to animate a battle pass bp increase
@@ -1434,6 +1514,14 @@ AnimateBattlePassScreenAction.prototype.start = function ()
 	{
 		var cavernPanel = panel.FindChildInLayoutFile( "BattlePassCavernCrawlProgress" );
 		var subpanelAction = new AnimateCavernCrawlSubpanelAction( cavernPanel, panel, this.data.battle_pass_progress.cavern_crawl, startingPointsToAdd );
+		startingPointsToAdd += subpanelAction.total_points;
+		subPanelActions.actions.push( subpanelAction );
+	}
+
+	if ( this.data.battle_pass_progress.actions_granted != null && this.data.battle_pass_progress.actions_granted.length != 0 )
+	{
+		var dailyPanel = panel.FindChildInLayoutFile( "BattlePassActionsGrantedProgress" );
+		var subpanelAction = new AnimateActionsGrantedSubpanelAction( dailyPanel, panel, this.data.battle_pass_progress.actions_granted, startingPointsToAdd );
 		startingPointsToAdd += subpanelAction.total_points;
 		subPanelActions.actions.push( subpanelAction );
 	}
@@ -2354,6 +2442,22 @@ function TestAnimateBattlePass()
 				complete_limit: 50000,
 				bp_amount: 250,
 			},
+
+			actions_granted:
+			[
+				{
+					action_id: 704,
+					quantity: 2,
+					bp_amount: 100,
+					action_image: "file://{images}/spellicons/consumables/seasonal_ti9_shovel.png"
+				},
+				{
+					action_id: 705,
+					quantity: 1,
+					bp_amount: 5000,
+					action_image: "file://{images}/spellicons/consumables/seasonal_ti9_shovel.png"
+				},
+			]
 		}
 	};
 
@@ -2533,6 +2637,7 @@ function TestAnimateCoachRating()
 
 	TestProgressAnimation( data );
 }
+
 
 // ----------------------------------------------------------------------------
 //   All Screens
