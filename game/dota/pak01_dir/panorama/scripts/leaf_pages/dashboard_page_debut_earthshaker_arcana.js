@@ -23,16 +23,7 @@ function alternateStyle()
 	$('#ModelBackground').FireEntityInput('shaker_style_1', 'Start', '0');
 	$('#ModelBackground').FireEntityInput('fake_light', "Stop", '0');
 	$('#ModelBackground').FireEntityInput('fake_light_alt', "Start", '0');
-	$('#ModelBackground').FireEntityInput('ground_a', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_b', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_c', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_d', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_e', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_a', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_b', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_c', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_d', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_e', "TurnOn", '0');
+
 }
 
 function originalStyle()
@@ -44,16 +35,7 @@ function originalStyle()
 	$('#ModelBackground').FireEntityInput('shaker_style_1', 'Stop', '0');
 	$('#ModelBackground').FireEntityInput('fake_light', "Start", '0');
 	$('#ModelBackground').FireEntityInput('fake_light_alt', "Stop", '0');
-	$('#ModelBackground').FireEntityInput('ground_a', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_b', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_c', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_d', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_e', "TurnOn", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_a', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_b', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_c', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_d', "TurnOff", '0');
-	$('#ModelBackground').FireEntityInput('ground_alt_e', "TurnOff", '0');
+
 }
 
 function panelHide()
