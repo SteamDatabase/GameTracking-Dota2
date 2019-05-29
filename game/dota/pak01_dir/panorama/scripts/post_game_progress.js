@@ -86,8 +86,11 @@ function SetSkippingAhead( bSkipAhead )
 	if ( g_bSkipAheadActions == bSkipAhead )
 		return;
 
-	// $.Msg( "SetSkippingAhead( " + bSkipAhead + " )" );
-	$.DispatchEvent( "PostGameProgressSkippingAhead" );
+	$.Msg( "SetSkippingAhead( " + bSkipAhead + " )" );
+	if ( bSkipAhead )
+	{
+		$.DispatchEvent( "PostGameProgressSkippingAhead" );
+	}
 	$.GetContextPanel().SetHasClass( 'SkippingAhead', bSkipAhead );
 	g_bSkipAheadActions = bSkipAhead;
 
@@ -831,8 +834,11 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 	{
 		return function ()
 		{
-			me.disabled_update = true;
-			me.cavern_panel.DisableUpdateDisplay( true );
+			if ( !me.disabled_update )
+			{
+				me.disabled_update = true;
+				me.cavern_panel.DisableUpdateDisplay( true );
+			}
 		};
 	}( this ) );
 
