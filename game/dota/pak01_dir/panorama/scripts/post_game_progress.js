@@ -1428,7 +1428,7 @@ AnimateMVPVotingScreenAction.prototype.start = function ()
     this.seq.actions.push( new AddScreenLinkAction( panel, 'MVPProgress', '#DOTAMVPVote_TitleLink' ) );
     this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( mvpVotePanel, 'HasVotedForMVP' ), 25.0 ) );
     this.seq.actions.push( new StopSkippingAheadAction() );
-	this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( mvpVotePanel, 'DidNotVoteForMVP' ), 4 ) );
+	this.seq.actions.push( new ActionWithTimeout( new WaitForClassAction( mvpVotePanel, 'DidNotVoteForMVP' ), 1.8 ) );
     this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
     this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
 
