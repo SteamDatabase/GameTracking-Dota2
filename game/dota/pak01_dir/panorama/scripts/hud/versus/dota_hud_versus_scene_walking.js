@@ -11,23 +11,25 @@ var PlayScene = function ()
 	// Initial Setup
 	mainPanel.RemoveClass( 'RevealTeamDetails' );
 	mainPanel.RemoveClass( 'RevealFeaturedHeroDetails' );
-	scenePanel.FireEntityInput( 'movement_dummy', 'SetAnimation', 'versus_movement_dummy_anim' );
-	scenePanel.FireEntityInput( 'explosion', 'Stop', '' );
-	scenePanel.FireEntityInput( 'explosion', 'Start', '' );
-
-	for ( var i = 0; i < 5; ++i )
-	{
-	    scenePanel.FireEntityInput( mainPanel.GetHeroEntityNameByHeroSlot( i ), 'StartGestureOverride', 'ACT_DOTA_RUN' );
-	    scenePanel.FireEntityInput( mainPanel.GetHeroEntityNameByHeroSlot( i ), 'SetPlaybackRateOnAllLayers', 0.2 );
-	}
 
 	// Wait for the fade-in, then reveal the scene
 	if ( bRadiantTeam )
 	{
 		mainSeq.actions.push( new PlaySoundEffectAction( 'versus_screen.whoosh' ) );
 	}
-	mainSeq.actions.push( new WaitForClassAction( scenePanel, 'SceneLoaded' ) );
-	mainSeq.actions.push( new WaitForClassAction( scenePanelBG, 'SceneLoaded' ) );
+	mainSeq.actions.push( new WaitForScenesToLoadAction( scenePanel, scenePanelBG ) );
+	mainSeq.actions.push( new RunFunctionAction( function ()
+	{
+		scenePanel.FireEntityInput( 'movement_dummy', 'SetAnimation', 'versus_movement_dummy_anim' );
+		scenePanel.FireEntityInput( 'explosion', 'Stop', '' );
+		scenePanel.FireEntityInput( 'explosion', 'Start', '' );
+
+		for ( var i = 0; i < 5; ++i )
+		{
+			scenePanel.FireEntityInput( mainPanel.GetHeroEntityNameByHeroSlot( i ), 'StartGestureOverride', 'ACT_DOTA_RUN' );
+			scenePanel.FireEntityInput( mainPanel.GetHeroEntityNameByHeroSlot( i ), 'SetPlaybackRateOnAllLayers', 0.2 );
+		}
+	} ) );
 	mainSeq.actions.push( new WaitAction( 0.5 ) );
 	mainSeq.actions.push( new AddClassAction( mainPanel, 'RevealScene' ) );
 	mainSeq.actions.push( new PlaySoundEffectAction( bRadiantTeam ? 'versus_screen.radiant' : 'versus_screen.dire' ) );

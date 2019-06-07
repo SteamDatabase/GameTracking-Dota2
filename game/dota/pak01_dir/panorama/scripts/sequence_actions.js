@@ -265,6 +265,24 @@ WaitAction.prototype.update = function ()
 	return Date.now() < this.endTimestamp;
 }
 
+// Action to wait a single frame
+function WaitOneFrameAction()
+{
+}
+WaitOneFrameAction.prototype = new BaseAction();
+WaitOneFrameAction.prototype.start = function ()
+{
+	this.updated = false;
+}
+WaitOneFrameAction.prototype.update = function ()
+{
+	if ( this.updated )
+		return false;
+
+	this.updated = true;
+	return true;
+}
+
 // Action that waits for a specific event type to be fired on the given panel.
 function WaitForEventAction( panel, eventName )
 {
