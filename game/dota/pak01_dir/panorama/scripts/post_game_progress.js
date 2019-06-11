@@ -801,13 +801,34 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 
 	// Setup the sequence of actions to animate the screen
 	this.seq = new RunSequentialActions();
+    this.eventHandler = null;
+
+    ( function (me) 
+    {
+        me.seq.actions.push( new RunFunctionAction( function ()
+        {
+            me.eventHandler = (function (me2)
+            {
+                return function ()
+                {
+                    if (!me2.disabled_update )
+                    {
+                        me2.disabled_update = true;
+                        me2.cavern_panel.DisableUpdateDisplay(true);
+                    }
+                };
+            }(me));
+
+            $.RegisterForUnhandledEvent("PostGameProgressSkippingAhead", me.eventHandler );
+        }));
+    })(this);
 
 	this.seq.actions.push( new AddScreenLinkAction( panel, 'CavernsProgress', '#DOTACavernCrawl_Title_TI2019' ) );
 
 	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
 	this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
 
-	var cavernCrawlPanel = panel.FindChildInLayoutFile( 'CavernCrawl' );
+    var cavernCrawlPanel = panel.FindChildInLayoutFile('CavernCrawl');
 
 	this.seq.actions.push( new AddClassAction( panel, 'ShowCavernCrawlProgress' ) );
 	this.seq.actions.push( new RunFunctionAction( function ()
@@ -829,20 +850,6 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 	this.seq.start();
 
 	this.cavern_panel = panel.FindChildInLayoutFile( "CavernCrawl" );
-
-	this.eventHandler = ( function ( me )
-	{
-		return function ()
-		{
-			if ( !me.disabled_update )
-			{
-				me.disabled_update = true;
-				me.cavern_panel.DisableUpdateDisplay( true );
-			}
-		};
-	}( this ) );
-
-	$.RegisterForUnhandledEvent( "PostGameProgressSkippingAhead", this.eventHandler );
 }
 
 AnimateCavernCrawlScreenAction.prototype.update = function ()
@@ -852,7 +859,12 @@ AnimateCavernCrawlScreenAction.prototype.update = function ()
 
 AnimateCavernCrawlScreenAction.prototype.finish = function ()
 {
-	$.UnregisterForUnhandledEvent( "PostGameProgressSkippingAhead", this.eventHandler );
+    if ( this.eventHandler != null )
+    {
+        $.UnregisterForUnhandledEvent("PostGameProgressSkippingAhead", this.eventHandler);
+        this.eventHandler = null;
+    }
+
 	if ( this.disabled_update )
 	{
 		this.cavern_panel.DisableUpdateDisplay( false );
@@ -2493,8 +2505,16 @@ function TestAnimateCavernCrawl()
 		hero_id: 92,
 		cavern_crawl_progress:
 		{
-			event_id: 25,
-		},
+            event_id: 25,
+            turbo_mode: false,
+            map_progress:
+                [
+                    {
+                        path_id_completed: 0,
+                        room_id_claimed: 1,
+                    }
+                ],
+ 		},
 	};
 
 	TestProgressAnimation( data );
