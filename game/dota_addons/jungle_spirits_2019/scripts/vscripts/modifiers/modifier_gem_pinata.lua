@@ -146,6 +146,7 @@ function modifier_gem_pinata:CheckState()
 		[ MODIFIER_STATE_MAGIC_IMMUNE ] = true,
 		[ MODIFIER_STATE_DISARMED ] = true,
 		[ MODIFIER_STATE_ROOTED ] = true,
+		[ MODIFIER_STATE_NO_HEALTH_BAR ] = true,
 	}
 
 	return state
