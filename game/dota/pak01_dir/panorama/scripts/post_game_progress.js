@@ -814,7 +814,7 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
                     if (!me2.disabled_update )
                     {
                         me2.disabled_update = true;
-                        me2.cavern_panel.DisableUpdateDisplay(true);
+                        //me2.cavern_panel.DisableUpdateDisplay(true);
                     }
                 };
             }(me));
@@ -867,7 +867,8 @@ AnimateCavernCrawlScreenAction.prototype.finish = function ()
 
 	if ( this.disabled_update )
 	{
-		this.cavern_panel.DisableUpdateDisplay( false );
+        //this.cavern_panel.DisableUpdateDisplay(false);
+        this.disabled_update = false;
 	}
 	this.seq.finish();
 }
@@ -1231,6 +1232,104 @@ AnimateCavernCrawlSubpanelAction.prototype.finish = function ()
 
 
 //-----------------------------------------------------------------------------
+// Event game bp progress
+//-----------------------------------------------------------------------------
+function AnimateEventGameSubpanelAction( panel, ownerPanel, event_game, startingPoints ) {
+    var kWinPointsBase = 250;
+
+    this.panel = panel;
+    this.ownerPanel = ownerPanel;
+    this.startingPoints = startingPoints;
+    this.total_points = event_game.bp_amount;
+    this.show_win = ( event_game.win_points > 0 );
+    this.show_daily_bonus = ( event_game.win_points > kWinPointsBase );
+    this.show_treasure = ( event_game.treasure_points > 0 );
+
+    panel.AddClass( 'Visible' );
+
+    if ( this.show_win )
+    {
+        panel.AddClass( "EventGame_HasWin" );
+    }
+
+    if ( this.show_daily_bonus )
+    {
+        panel.AddClass( "EventGame_HasDailyBonus" );
+    }
+
+    if ( this.show_treasure )
+    {
+        panel.AddClass( "EventGame_HasTreasure" );
+    }
+
+    var panelXPCircle = panel.FindChildInLayoutFile( "XPCircleContainer" );
+    panelXPCircle.BLoadLayoutSnippet( 'BattlePassXPCircle' );
+
+    panel.SetDialogVariableInt( "win_points", event_game.win_points > kWinPointsBase ? kWinPointsBase : event_game.win_points );
+    panel.SetDialogVariableInt( "bonus_points", event_game.win_points - kWinPointsBase );
+    panel.SetDialogVariableInt( "treasure_points", event_game.treasure_points );
+
+    var progressMax = event_game.weekly_cap_total;
+    var progressEnd = progressMax - event_game.weekly_cap_remaining;
+    var progressStart = progressEnd - event_game.bp_amount;
+
+    panel.SetDialogVariableInt( "weekly_progress", progressEnd );
+    panel.SetDialogVariableInt( "weekly_complete_limit", progressMax );
+
+    var progressBar = panel.FindChildInLayoutFile( "EventGameWeeklyProgress" );
+    progressBar.max = progressMax;
+    progressBar.lowervalue = progressStart;
+    progressBar.uppervalue = progressEnd;
+
+}
+
+AnimateEventGameSubpanelAction.prototype = new BaseAction();
+
+AnimateEventGameSubpanelAction.prototype.start = function () {
+    this.seq = new RunSequentialActions();
+    this.seq.actions.push( new AddClassAction( this.panel, 'BecomeVisible' ) );
+    this.seq.actions.push( new SkippableAction( new WaitAction( g_DelayAfterStart ) ) );
+
+    if ( this.show_win )
+    {
+        this.seq.actions.push( new AddClassAction( this.panel, 'EventGame_ShowWin' ) );
+        this.seq.actions.push( new SkippableAction( new WaitAction( g_SubElementDelay ) ) );
+
+        if ( this.show_daily_bonus )
+        {
+            this.seq.actions.push( new AddClassAction( this.panel, 'EventGame_ShowDailyBonus' ) );
+            this.seq.actions.push( new SkippableAction( new WaitAction( g_SubElementDelay ) ) );
+        }
+    }
+
+    if ( this.show_treasure )
+    {
+        this.seq.actions.push( new AddClassAction( this.panel, 'EventGame_ShowTreasure' ) );
+        this.seq.actions.push( new SkippableAction( new WaitAction( g_SubElementDelay ) ) );
+    }
+
+    this.seq.actions.push( new AddClassAction( this.panel, 'EventGame_ShowWeeklyProgress' ) );
+    this.seq.actions.push( new SkippableAction( new WaitAction( g_SubElementDelay ) ) );
+
+    var panel = this.panel;
+    var ownerPanel = this.ownerPanel;
+    var total_points = this.total_points;
+    var startingPoints = this.startingPoints;
+    this.seq.actions.push( new RunFunctionAction( function () {
+        UpdateSubpanelTotalPoints( panel, ownerPanel, total_points, startingPoints, false );
+    } ) );
+
+    this.seq.start();
+}
+AnimateEventGameSubpanelAction.prototype.update = function () {
+    return this.seq.update();
+}
+AnimateEventGameSubpanelAction.prototype.finish = function () {
+    this.seq.finish();
+}
+
+
+//-----------------------------------------------------------------------------
 // Animates daily challenge subpanel
 //-----------------------------------------------------------------------------
 // Action to animate a battle pass bp increase
@@ -1520,13 +1619,38 @@ AnimateBattlePassScreenAction.prototype.start = function ()
 	var subPanelActions = new RunSkippableStaggeredActions( .3 );
 
 	var startingPointsToAdd = 0;
+	var panelCount = 0;
+	var kMaxPanels = 6;
+
+	if ( this.data.battle_pass_progress.event_game != null )
+	{
+	    var eventPanel = panel.FindChildInLayoutFile( "BattlePassEventGameProgress" );
+	    var subpanelAction = new AnimateEventGameSubpanelAction( eventPanel, panel, this.data.battle_pass_progress.event_game, startingPointsToAdd );
+	    startingPointsToAdd += subpanelAction.total_points;
+	    subPanelActions.actions.push( subpanelAction );
+	    if ( ++panelCount > kMaxPanels )
+	        eventPanel.RemoveClass( 'Visible' );
+	}
+
+	if ( this.data.battle_pass_progress.cavern_crawl != null )
+	{
+	    var cavernPanel = panel.FindChildInLayoutFile( "BattlePassCavernCrawlProgress" );
+	    var subpanelAction = new AnimateCavernCrawlSubpanelAction( cavernPanel, panel, this.data.battle_pass_progress.cavern_crawl, startingPointsToAdd );
+	    startingPointsToAdd += subpanelAction.total_points;
+	    subPanelActions.actions.push( subpanelAction );
+	    if ( ++panelCount > kMaxPanels )
+	        cavernPanel.RemoveClass( 'Visible' );
+	}
+
 	if ( this.data.battle_pass_progress.wagering != null )
 	{
 		var wagerPanel = panel.FindChildInLayoutFile( "BattlePassWagerProgress" );
 		var subpanelAction = new AnimateWageringSubpanelAction( wagerPanel, panel, this.data.battle_pass_progress.wagering, startingPointsToAdd );
 		startingPointsToAdd += subpanelAction.total_points;
 		subPanelActions.actions.push( subpanelAction );
-	}
+		if ( ++panelCount > kMaxPanels )
+		    wagerPanel.RemoveClass( 'Visible' );
+    }
 
 	if ( this.data.battle_pass_progress.tips != null && this.data.battle_pass_progress.tips.length != 0 )
 	{
@@ -1534,23 +1658,19 @@ AnimateBattlePassScreenAction.prototype.start = function ()
 		var subpanelAction = new AnimateTippingSubpanelAction( tipPanel, panel, this.data.battle_pass_progress.tips, startingPointsToAdd );
 		startingPointsToAdd += subpanelAction.total_points;
 		subPanelActions.actions.push( subpanelAction );
-	}
-
-	if ( this.data.battle_pass_progress.cavern_crawl != null )
-	{
-		var cavernPanel = panel.FindChildInLayoutFile( "BattlePassCavernCrawlProgress" );
-		var subpanelAction = new AnimateCavernCrawlSubpanelAction( cavernPanel, panel, this.data.battle_pass_progress.cavern_crawl, startingPointsToAdd );
-		startingPointsToAdd += subpanelAction.total_points;
-		subPanelActions.actions.push( subpanelAction );
-	}
+		if ( ++panelCount > kMaxPanels )
+		    tipPanel.RemoveClass( 'Visible' );
+    }
 
 	if ( this.data.battle_pass_progress.actions_granted != null && this.data.battle_pass_progress.actions_granted.length != 0 )
 	{
-		var dailyPanel = panel.FindChildInLayoutFile( "BattlePassActionsGrantedProgress" );
-		var subpanelAction = new AnimateActionsGrantedSubpanelAction( dailyPanel, panel, this.data.battle_pass_progress.actions_granted, startingPointsToAdd );
+		var actionPanel = panel.FindChildInLayoutFile( "BattlePassActionsGrantedProgress" );
+		var subpanelAction = new AnimateActionsGrantedSubpanelAction( actionPanel, panel, this.data.battle_pass_progress.actions_granted, startingPointsToAdd );
 		startingPointsToAdd += subpanelAction.total_points;
 		subPanelActions.actions.push( subpanelAction );
-	}
+		if ( ++panelCount > kMaxPanels )
+		    actionPanel.RemoveClass( 'Visible' );
+    }
 
 	if ( this.data.battle_pass_progress.daily_challenge != null )
 	{
@@ -1558,15 +1678,19 @@ AnimateBattlePassScreenAction.prototype.start = function ()
 		var subpanelAction = new AnimateDailyChallengeSubpanelAction( dailyPanel, panel, this.data.battle_pass_progress.daily_challenge, startingPointsToAdd );
 		startingPointsToAdd += subpanelAction.total_points;
 		subPanelActions.actions.push( subpanelAction );
-	}
+		if ( ++panelCount > kMaxPanels )
+		    dailyPanel.RemoveClass( 'Visible' );
+    }
 
 	if ( this.data.battle_pass_progress.weekly_challenge_1 != null )
 	{
-		var dailyPanel = panel.FindChildInLayoutFile( "BattlePassWeeklyChallengeProgress" );
-		var subpanelAction = new AnimateWeeklyChallengeSubpanelAction( dailyPanel, panel, this.data.battle_pass_progress.weekly_challenge_1, startingPointsToAdd );
+		var weeklyPanel = panel.FindChildInLayoutFile( "BattlePassWeeklyChallengeProgress" );
+		var subpanelAction = new AnimateWeeklyChallengeSubpanelAction( weeklyPanel, panel, this.data.battle_pass_progress.weekly_challenge_1, startingPointsToAdd );
 		startingPointsToAdd += subpanelAction.total_points;
 		subPanelActions.actions.push( subpanelAction );
-	}
+		if ( ++panelCount > kMaxPanels )
+		    weeklyPanel.RemoveClass( 'Visible' );
+    }
 
 	this.seq.actions.push( subPanelActions );
 
@@ -2461,6 +2585,15 @@ function TestAnimateBattlePass()
 				hero_id: 87,
 				bp_amount: 375,
 			},
+
+			event_game:
+            {
+                bp_amount: 1200,
+                win_points: 1000,
+                treasure_points: 200,
+                weekly_cap_remaining: 1000,
+                weekly_cap_total: 3000,
+            },
 
 			daily_challenge:
 			{
