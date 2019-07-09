@@ -14,7 +14,7 @@ function Spawn( entityKeyValues )
 
 	thisEntity.fThinkInterval = 0.1
 	thisEntity.fCommonSpellBufferInterval = 0.25
-	thisEntity.fBigSpellBufferInterval = 10
+	thisEntity.fBigSpellBufferInterval = 7
 	thisEntity.flNextBigSpellAvailableTime = 0.0
 
 	thisEntity.fAllySearchRangeMedium = 1200

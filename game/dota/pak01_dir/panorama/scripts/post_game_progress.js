@@ -1235,13 +1235,14 @@ AnimateCavernCrawlSubpanelAction.prototype.finish = function ()
 // Event game bp progress
 //-----------------------------------------------------------------------------
 function AnimateEventGameSubpanelAction( panel, ownerPanel, event_game, startingPoints ) {
-    var kWinPointsBase = 250;
+    var kWinPointsBase = 300;
 
     this.panel = panel;
     this.ownerPanel = ownerPanel;
     this.startingPoints = startingPoints;
     this.total_points = event_game.bp_amount;
     this.show_win = ( event_game.win_points > 0 );
+    this.show_loss = ( event_game.loss_points > 0 );
     this.show_daily_bonus = ( event_game.win_points > kWinPointsBase );
     this.show_treasure = ( event_game.treasure_points > 0 );
 
@@ -1250,6 +1251,11 @@ function AnimateEventGameSubpanelAction( panel, ownerPanel, event_game, starting
     if ( this.show_win )
     {
         panel.AddClass( "EventGame_HasWin" );
+    }
+
+    if ( this.show_loss )
+    {
+        panel.AddClass( "EventGame_HasLoss" );
     }
 
     if ( this.show_daily_bonus )
@@ -1267,6 +1273,7 @@ function AnimateEventGameSubpanelAction( panel, ownerPanel, event_game, starting
 
     panel.SetDialogVariableInt( "win_points", event_game.win_points > kWinPointsBase ? kWinPointsBase : event_game.win_points );
     panel.SetDialogVariableInt( "bonus_points", event_game.win_points - kWinPointsBase );
+	panel.SetDialogVariableInt( "loss_points",  event_game.loss_points );
     panel.SetDialogVariableInt( "treasure_points", event_game.treasure_points );
 
     var progressMax = event_game.weekly_cap_total;
@@ -1300,6 +1307,12 @@ AnimateEventGameSubpanelAction.prototype.start = function () {
             this.seq.actions.push( new AddClassAction( this.panel, 'EventGame_ShowDailyBonus' ) );
             this.seq.actions.push( new SkippableAction( new WaitAction( g_SubElementDelay ) ) );
         }
+    }
+
+	if ( this.show_loss )
+    {
+        this.seq.actions.push( new AddClassAction( this.panel, 'EventGame_ShowLoss' ) );
+        this.seq.actions.push( new SkippableAction( new WaitAction( g_SubElementDelay ) ) );
     }
 
     if ( this.show_treasure )
@@ -2590,6 +2603,7 @@ function TestAnimateBattlePass()
             {
                 bp_amount: 1200,
                 win_points: 1000,
+                loss_points: 0,
                 treasure_points: 200,
                 weekly_cap_remaining: 1000,
                 weekly_cap_total: 3000,

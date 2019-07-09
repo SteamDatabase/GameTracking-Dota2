@@ -114,22 +114,17 @@ function CJungleSpirits:OnHeroFinishSpawn( event )
 			hPlayerHero.bFirstSpawnComplete = true
 
 			local nPlayerID = hPlayerHero:GetPlayerOwnerID()
-			local PlayerBattlePointsData = {}
-			PlayerBattlePointsData["player_id"] = nPlayerID
-			PlayerBattlePointsData["steam_id"] = PlayerResource:GetSteamID( nPlayerID )
-			PlayerBattlePointsData["points_from_treasure"] = 0
-			PlayerBattlePointsData["points_from_win"] = 0
-			self.PlayerPointsData[nPlayerID] = PlayerBattlePointsData
-
 			self.EventMetaData[nPlayerID] = {}
 			self.EventMetaData[nPlayerID]["kills"] = 0
 			self.EventMetaData[nPlayerID]["essence_gathered"] = 0
 			self.EventMetaData[nPlayerID]["team_id"] = hPlayerHero:GetTeamNumber()
 			self.EventMetaData[nPlayerID]["level"] = 1
 			self.EventMetaData[nPlayerID]["net_worth"] = 0
+			self.EventMetaData[nPlayerID]["points_from_treasure"] = 0
+			self.EventMetaData[nPlayerID]["points_from_win"] = 0
 
 			local netTable = {}
-			netTable["earned_points"] = PlayerBattlePointsData["points_from_treasure"]
+			netTable["earned_points"] = 0
 			CustomNetTables:SetTableValue( "bp_tracker", string.format( "%d", nPlayerID ), netTable )
 		end
 	end
@@ -186,7 +181,16 @@ end
 --------------------------------------------------------------------------------
 
 function CJungleSpirits:OnGameFinished( event )
+
 	printf("[MOROKAI] OnGameFinished: winningteam=%d", event["winningteam"])
+
+	printf("[MOROKAI] EventGameDetails table:")
+	if self._hEventGameDetails then
+	    DeepPrintTable(self._hEventGameDetails)
+	else
+		printf("NOT FOUND!!")
+	end
+	
 	self:AddResultToSignOut( event )
 	print( "[MOROKAI] Metadata Table:" )
 	PrintTable( self.EventMetaData, " " )
@@ -202,7 +206,6 @@ function CJungleSpirits:AddResultToSignOut( event )
 	self.SignOutTable["game_time"] = GameRules:GetGameTime()
 	for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 		if PlayerResource:IsValidPlayerID( nPlayerID ) then
-			local PlayerPointsData = self.PlayerPointsData[nPlayerID] or {}
 			local PlayerEventMetaData = self.EventMetaData[nPlayerID] or {}
 			local EventGameDetails = self:GetEventGameDetails( nPlayerID ) or {}
 			local unPointCapTotal = EventGameDetails["pointcap_total"] or 0
@@ -217,23 +220,41 @@ function CJungleSpirits:AddResultToSignOut( event )
 			PlayerStats["team_id"] = PlayerEventMetaData["team_id"]
 			PlayerStats["level"] = PlayerResource:GetLevel( nPlayerID )
 			PlayerStats["net_worth"] = PlayerResource:GetNetWorth( nPlayerID )
-			PlayerStats["points_from_treasure"] = math.min( unPointCapRemaining, PlayerPointsData["points_from_treasure"] or 0 )
-			unPointCapRemaining = unPointCapRemaining - PlayerStats["points_from_treasure"] 
+			PlayerStats["pointcap_remaining_pregame"] = unPointCapRemaining
+			PlayerStats["points_from_treasure"] = PlayerEventMetaData["points_from_treasure"] or 0
+			PlayerStats["capped_points_from_treasure"] = math.min( unPointCapRemaining,  PlayerStats["points_from_treasure"] )
+			unPointCapRemaining = unPointCapRemaining - PlayerStats["capped_points_from_treasure"] 
 			PlayerStats["points_from_win"] = 0
+			PlayerStats["points_from_loss"] = 0
 			if event["winningteam"] == PlayerResource:GetTeam( nPlayerID ) then
-				local unPointsFromWin = 250
+				local unPointsFromWin = 300
 				if unDailyBonusesRemaining > 0 then
 					unPointsFromWin = 1000
 				end
-				PlayerStats["points_from_win"] = math.min( unPointCapRemaining, unPointsFromWin )
+				PlayerStats["points_from_win"] = unPointsFromWin
+				PlayerStats["capped_points_from_win"] = math.min( unPointCapRemaining, unPointsFromWin )
 				unPointCapRemaining = unPointCapRemaining - PlayerStats["points_from_win"] 
+			else
+				local unPointsFromLoss = 100
+				PlayerStats["points_from_loss"] = unPointsFromLoss
+				PlayerStats["capped_points_from_loss"] = math.min( unPointCapRemaining, unPointsFromLoss )
+				unPointCapRemaining = unPointCapRemaining - PlayerStats["points_from_loss"] 
 			end
+
 			PlayerStats["pointcap_remaining"] = unPointCapRemaining
 			PlayerStats["pointcap_total"] = unPointCapTotal
 
 			-- duplicate this in event metadata for post game screen
 			PlayerEventMetaData["points_from_treasure"] = PlayerStats["points_from_treasure"]
+			PlayerEventMetaData["capped_points_from_treasure"] = PlayerStats["capped_points_from_treasure"]
+		
 			PlayerEventMetaData["points_from_win"] = PlayerStats["points_from_win"]
+			PlayerEventMetaData["capped_points_from_win"] = PlayerStats["capped_points_from_win"]
+
+			PlayerEventMetaData["points_from_loss"] = PlayerStats["points_from_loss"]
+			PlayerEventMetaData["capped_points_from_loss"] = PlayerStats["capped_points_from_loss"]
+
+			PlayerEventMetaData["pointcap_remaining_pregame"] = PlayerStats["pointcap_remaining_pregame"]
 			PlayerEventMetaData["pointcap_remaining"] = PlayerStats["pointcap_remaining"]
 			PlayerEventMetaData["pointcap_total"] = PlayerStats["pointcap_total"]
 
@@ -793,7 +814,7 @@ function CJungleSpirits:OnBattlePointsEarned( hLootingHero, nTeamBattlePoints, s
 
 		EmitSoundOnClient( "Plus.shards_tick", hHero:GetPlayerOwner() )
 
-		self.PlayerPointsData[nPlayerID]["points_from_treasure"] = self.PlayerPointsData[nPlayerID]["points_from_treasure"] + nPlayerBattlePoints
+		self.EventMetaData[nPlayerID]["points_from_treasure"] = self.EventMetaData[nPlayerID]["points_from_treasure"] + nPlayerBattlePoints
 
 		if self.EventMetaData[nPlayerID][szReason] == nil then
 			self.EventMetaData[nPlayerID][szReason] = 0
@@ -802,15 +823,13 @@ function CJungleSpirits:OnBattlePointsEarned( hLootingHero, nTeamBattlePoints, s
 		self.EventMetaData[nPlayerID][szReason] = self.EventMetaData[nPlayerID][szReason] + 1
 
 		local netTable = {}
-		netTable["earned_points"] = self.PlayerPointsData[nPlayerID]["points_from_treasure"]
+		netTable["earned_points"] = self.EventMetaData[nPlayerID]["points_from_treasure"]
 		CustomNetTables:SetTableValue( "bp_tracker", string.format( "%d", nPlayerID ), netTable )
 
 		if szReason ~= nil then
 			print( "-- Player " .. nPlayerID .. " just earned " .. nPlayerBattlePoints .. " battle points for " .. szReason )
 		end
 	end
-
-	self.SignOutTable["points"] = self.PlayerPointsData
 end
 
 --------------------------------------------------------------------------------

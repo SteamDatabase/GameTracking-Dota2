@@ -76,6 +76,8 @@ function CJungleSpirits:InitGameMode()
 	-- Custom console commands
 	--Convars:RegisterCommand( "JungleSpirits_status_report", function(...) return self:_StatusReportConsoleCommand( ... ) end, "Report the status of the current JungleSpirits game.", FCVAR_CHEAT )
 
+	printf("[MOROKAI] Initalizing Game Mode..")
+
 	Convars:RegisterCommand( "jungle_spirits_new_round", function( ... ) return self:ForceNewSpiritRound( ... ) end, "Start the next Jungle Spirit round.", FCVAR_CHEAT )
 	Convars:RegisterCommand( "jungle_spirits_force_spawn_gem", function( ... ) return self:ForceSpawnGem( ... ) end, "Force a gem drop after the warning period.", FCVAR_CHEAT )
 	Convars:RegisterCommand( "jungle_spirits_force_spawn_gem_immediate", function( ... ) return self:ForceSpawnGemImmediate( ... ) end, "Force a gem drop immediately, skipping the warning period.", FCVAR_CHEAT )
@@ -104,7 +106,6 @@ function CJungleSpirits:InitGameMode()
 	self.EventMetaData[ "event_name" ]  = "jungle_spirits_2019"
 	self.EventMetaData[ "radiant_upgrade_order" ] = {}
 	self.EventMetaData[ "dire_upgrade_order" ] = {}
-	self.PlayerPointsData = {}
 	self.SignOutTable = {}
 	self.SignOutTable["stats"] = {}
 	self.SignOutTable["points"] = {}
@@ -112,9 +113,11 @@ function CJungleSpirits:InitGameMode()
 
 	self._hEventGameDetails = GetLobbyEventGameDetails()
 
+	printf("[MOROKAI] EventGameDetails table:")
 	if self._hEventGameDetails then
-		printf("EventGameDetails table")
 	    DeepPrintTable(self._hEventGameDetails)
+	else
+		printf("NOT FOUND!!")
 	end
 
 	-- parse dev mode starting flags

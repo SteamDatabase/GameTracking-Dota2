@@ -15,8 +15,8 @@ _G.DOTA_MAX_ABILITIES = 30
 _G.ABILITY_NOT_LEARNABLE = 4
 
 _G.TIME_BEFORE_FIRST_MARCH = 300
-_G.TIME_BETWEEN_TEAM_MARCHES = 90
-_G.TIME_AFTER_MARCH_PAIR = 300
+_G.TIME_BETWEEN_TEAM_MARCHES = 75
+_G.TIME_AFTER_MARCH_PAIR = 270
 _G.SPIRIT_LIFETIME_PER_MARCH = 150
 _G.SPIRIT_DEATH_TIMER = 6
 _G.SPIRIT_TIME_BETWEEN_BRANCH_ABILITIES = 20.0
@@ -45,9 +45,9 @@ SPIRIT_ABILITIES_BY_TIER[SPIRIT_BRANCH_JUNGLE] =
 
 	"jungle_spirit_jungle_building_regeneration",
 
-	"special_bonus_unique_jungle_spirit_spell_lifesteal",
-
 	"morokai_jungle_heal_beam",
+
+	"special_bonus_unique_jungle_spirit_spell_lifesteal",
 
 	"jungle_spirit_jungle_lumber_lock",
 
@@ -68,9 +68,9 @@ SPIRIT_ABILITIES_BY_TIER[SPIRIT_BRANCH_STORM] =
 
 	"jungle_spirit_river_rejuvenation",
 
-	"special_bonus_unique_jungle_spirit_magic_resistance",
-
 	"jungle_spirit_storm_cyclone",
+
+	"special_bonus_unique_jungle_spirit_magic_resistance",
 
 	"jungle_spirit_storm_multicast",
 
@@ -91,9 +91,9 @@ SPIRIT_ABILITIES_BY_TIER[SPIRIT_BRANCH_VOLCANO] =
 
 	"jungle_spirit_volcano_damage_block",
 
-	"special_bonus_unique_jungle_spirit_health_regen",
-
 	"junglespirit_volcano_eruption",
+
+	"special_bonus_unique_jungle_spirit_health_regen",
 
 	"jungle_spirit_volcano_fire_strike",
 
