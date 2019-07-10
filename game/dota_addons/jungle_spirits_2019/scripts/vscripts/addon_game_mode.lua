@@ -130,6 +130,7 @@ function CJungleSpirits:InitGameMode()
 
 	GameRules:SetCustomGameSetupTimeout( 0 ) 
 	GameRules:SetCustomGameSetupAutoLaunchDelay( 0 )
+	GameRules:GetGameModeEntity():SetDraftingBanningTimeOverride( 12 )
 
 	if self._bDevMode then
 		GameRules:SetHeroSelectionTime( 20.0 )
