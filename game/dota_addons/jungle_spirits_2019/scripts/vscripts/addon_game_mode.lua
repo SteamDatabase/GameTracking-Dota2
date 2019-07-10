@@ -152,12 +152,15 @@ function CJungleSpirits:InitGameMode()
 
 	ListenToGameEvent( "tree_cut", Dynamic_Wrap( CJungleSpirits, 'OnTreeCut' ), self )
 
-	GameRules:GetGameModeEntity():SetModifierGainedFilter( Dynamic_Wrap( CJungleSpirits, "ModifierGainedFilter" ), self )
+	GameMode:SetModifierGainedFilter( Dynamic_Wrap( CJungleSpirits, "ModifierGainedFilter" ), self )
+	GameMode:SetModifyGoldFilter( Dynamic_Wrap( CJungleSpirits, "ModifyGoldFilter"), self )
+	GameMode:SetModifyExperienceFilter( Dynamic_Wrap( CJungleSpirits, "ModifyExperienceFilter" ), self )
 
 	CustomGameEventManager:RegisterListener( "branch_button_clicked", function(...) return self:OnBranchButtonClicked( ... ) end )
 
-	GameRules:GetGameModeEntity():SetUseDefaultDOTARuneSpawnLogic( true )
-	GameRules:GetGameModeEntity():SetThink( "OnThink", self, 0.25 )
+	GameMode:SetUseDefaultDOTARuneSpawnLogic( true )
+
+	GameMode:SetThink( "OnThink", self, 0.25 )
 end
 
 --------------------------------------------------------------------------------
@@ -250,21 +253,20 @@ function CJungleSpirits:OnTreeCut( event )
 	self:DropGoldBag( vPos, nGoldToDrop )
 end
 
-
+--------------------------------------------------------------------------------
 
 function CJungleSpirits:GetEventGameDetails( nPlayerID )
 	local szAccountID = tostring( PlayerResource:GetSteamAccountID( nPlayerID ) )
 
 	if not self._hEventGameDetails then
-		return false
+		return nil
 	end
 
 	for nPlayerRecord = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 		local szPlayerRecord = string.format( "Player%d", nPlayerRecord )
 		if self._hEventGameDetails[szPlayerRecord] ~= nil then
 			local szRecordAccountID = self._hEventGameDetails[szPlayerRecord]['account_id']
-			local nNumDailyBonuses = self._hEventGameDetails[szPlayerRecord]['daily_bonuses_remaining']
-			if szRecordAccountID ~= nil then
+			if szRecordAccountID ~= nil and szRecordAccountID == szAccountID then
 				return self._hEventGameDetails[szPlayerRecord]
 			end
 		end
@@ -272,4 +274,46 @@ function CJungleSpirits:GetEventGameDetails( nPlayerID )
 
 	return nil
 
+end
+
+--------------------------------------------------------------------------------
+
+function CJungleSpirits:ModifyExperienceFilter( filterTable )
+	--printf( "ModifyExperienceFilter - filterTable:" )
+	--PrintTable( filterTable )
+
+	local player = PlayerResource:GetPlayer( filterTable[ "player_id_const" ] )
+	if player == nil then
+		return true
+	end
+
+	--printf( "  before - filterTable[ \"experience\" ] == %d", filterTable[ "experience" ] )
+
+	filterTable[ "experience" ] = filterTable[ "experience" ] * HERO_EXPERIENCE_GAIN_MULTIPLIER
+
+	--printf( "  after - filterTable[ \"experience\" ] == %d", filterTable[ "experience" ] )
+
+	return true
+end
+
+--------------------------------------------------------------------------------
+
+function CJungleSpirits:ModifyGoldFilter( filterTable )
+	--printf( "ModifyGoldFilter - filterTable:" )
+	--PrintTable( filterTable )
+
+	local player = PlayerResource:GetPlayer( filterTable[ "player_id_const" ] )
+
+	local hero = player:GetAssignedHero()
+	if player == nil then
+		return true
+	end
+
+	--printf( "  before - filterTable[ \"gold\" ] == %d", filterTable[ "gold" ] )
+
+	filterTable[ "gold" ] = filterTable[ "gold" ] * HERO_GOLD_GAIN_MULTIPLIER
+
+	--printf( "  before - filterTable[ \"gold\" ] == %d", filterTable[ "gold" ] )
+
+	return true
 end

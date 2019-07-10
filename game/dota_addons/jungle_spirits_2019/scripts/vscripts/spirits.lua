@@ -53,6 +53,15 @@ function CJungleSpirits:SpawnRadiantSpirit()
 					hAbility:UpgradeAbility( true )
 				end
 			end
+
+			-- Adding manually so it doesn't get auto-levelled
+			local szAbilityName = "generic_gold_bag_fountain"
+
+			local hNewAbility = self._hRadiantSpirit:AddAbility( szAbilityName )
+			if hNewAbility then
+				hNewAbility:UpgradeAbility( false )
+				--printf( "SpawnRadiantSpirit - adding %s level %d to %s", szAbilityName, hNewAbility:GetLevel(), self._hRadiantSpirit:GetUnitName() )
+			end
 		end
 	end
 end
@@ -84,6 +93,15 @@ function CJungleSpirits:SpawnDireSpirit()
 				while hAbility and hAbility:CanAbilityBeUpgraded() == ABILITY_CAN_BE_UPGRADED do
 					hAbility:UpgradeAbility( true )
 				end
+			end
+
+			-- Adding manually so it doesn't get auto-levelled
+			local szAbilityName = "generic_gold_bag_fountain"
+
+			local hNewAbility = self._hDireSpirit:AddAbility( szAbilityName )
+			if hNewAbility then
+				hNewAbility:UpgradeAbility( false )
+				--printf( "SpawnRadiantSpirit - adding %s level %d to %s", szAbilityName, hNewAbility:GetLevel(), self._hDireSpirit:GetUnitName() )
 			end
 		end
 	end

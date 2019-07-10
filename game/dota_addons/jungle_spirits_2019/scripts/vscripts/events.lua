@@ -457,8 +457,30 @@ end
 
 function CJungleSpirits:OnCreatureGainedLevel( event )
 	local hCreature = EntIndexToHScript( event.entindex )
+	if hCreature:GetUnitName() ~= "npc_dota_creature_jungle_spirit" then
+		return
+	end
+
 	local nLevel = event.level
 	self:CreateSpiritGainedLevelMessage( hCreature:GetTeamNumber(), nLevel )
+
+	local szAbilityName = "generic_gold_bag_fountain"
+	--printf( "Looking for ability %s on creature named %s", szAbilityName, hCreature:GetUnitName() )
+	local hAbility = hCreature:FindAbilityByName( szAbilityName )
+	if hAbility == nil then
+		--printf( "OnCreatureGainedLevel - no ability found" )
+		return
+	end
+
+	--printf( "Mo'rokai is level %d", nLevel )
+
+	if nLevel > 9 and nLevel <= 17 and hAbility:GetLevel() ~= 2 then
+		--printf( "Upgrade gold bag ability" )
+		hAbility:SetLevel( 2 )
+	elseif nLevel > 17 and hAbility:GetLevel() ~= 3 then
+		--printf( "Upgrade gold bag ability" )
+		hAbility:SetLevel( 3 )
+	end
 end
 
 --------------------------------------------------------------------------------
