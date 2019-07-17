@@ -645,7 +645,7 @@
 	output OnSpawnNPC(void) : "Fired when an NPC spawns at this destination."
 ]
 
-@BaseClass base(Targetname) iconsprite("editor/npc_maker.vmat") color(0 0 255) = BaseNPCMaker
+@BaseClass base(Targetname, Parentname) iconsprite("editor/npc_maker.vmat") color(0 0 255) = BaseNPCMaker
 [
 	StartDisabled(boolean) : "Start Disabled" : 1
 
@@ -909,7 +909,12 @@
 	input DisableHint(void) : "Disable hint."
 ]
 
-@BaseClass base(Targetname, Parentname, EnableDisable, Global) = TriggerOnce
+@BaseClass base(Targetname, Parentname, EnableDisable, Global)
+	metadata
+	{
+		auto_apply_material = "materials/tools/toolstrigger.vmat"
+	}
+= TriggerOnce
 [
 	spawnflags(flags) = 
 	[
@@ -2475,6 +2480,12 @@
 	"An entity used to create sparks at its origin." 
 [
 	MaxDelay(string) : "Max Delay" : "0" : "The longest delay between sparks (in seconds)."
+	SparkType(choices) : "Spark Type" : 1 : "What Type of Spark Effect" =
+	[
+		1 : "Electrical"
+		2 : "Metal"
+		3 : "base"
+	]
 	Magnitude(choices) : "Magnitude" : 1 : "The size of the sparks." =
 	[
 		1 : "Small"
@@ -5565,7 +5576,23 @@
 // Physics constraints
 //
 //--------------------------------------------------------------------------------------------------
-@PointClass halfgridsnap editormodel("models/editor/axis_helper") base(TwoObjectPhysics) = phys_hinge : 
+@BaseClass = ConstraintSoundInfo
+[
+	minSoundThreshold(float) : "Minimum Sound Velocity" : "6" : "When travelling below this many units/sec, will not play any sound."
+	maxSoundThreshold(float) : "Full Sound Velocity" : "80" : "When travelling at this speed or above, will play sound at full volume."
+	slidesoundfwd(sound) : "Travel sound (forward)" : "" : "Play this sound when travelling forward on helper axis"
+	slidesoundback(sound) : "Travel sound (backward)" : "" : "Play this sound when travelling backward on helper axis"
+	
+	reversalsoundthresholdSmall(float) : "Reversal sound threshold (small)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the small reversal sound." 
+	reversalsoundthresholdMedium(float) : "Reversal sound threshold (medium)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the medium reversal sound."
+	reversalsoundthresholdLarge(float) : "Reversal sound threshold (large)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the large reversal sound."
+	
+	reversalsoundSmall(sound) : "Reversal sound (small)" : "" : "Play this sound when making a hard reverse over the small threshold but less than medium"
+	reversalsoundMedium(sound) : "Reversal sound (medium)" : "" : "Play this sound when making a hard reverse over the medium threshold but less than large"
+	reversalsoundLarge(sound) : "Reversal sound (large)" : "" : "Play this sound when making a hard reverse over the large threshold"
+]
+
+@PointClass halfgridsnap editormodel("models/editor/axis_helper") base(TwoObjectPhysics, ConstraintSoundInfo) = phys_hinge : 
 	"A physically simulated hinge. Use the helper to define the axis of rotation."
 [
 	hingefriction(float) : "Friction" : "0" : "Resistance/friction in the hinge. A value of 1 will hold the child object still under gravity"
@@ -5587,29 +5614,14 @@
 	input SetMotorTargetAngle(float) : "Set Motor target angle, degrees. Exact number depends on constrained bodies reference frames and initial configuration. See constraint limits for reference to sensible range of values."
 	input TurnMotorTargetAngleOn(void) : "Set Motor to Angle mode. When on, motor will attempt to drive to the given target angle with given target velocity, and stop there"
 	input TurnMotorTargetAngleOff(void) : "Set Motor to Velocity mode. When on, motor will attempt to drive at the given velocity/direction, regardless of the current angle of the motor"
-		
-	//// Episodic only -- for now.
 	
-	minSoundThreshold(float) : "Minimum Sound Velocity" : "6" : "When travelling below this many units/sec, will not play any sound."
-	maxSoundThreshold(float) : "Full Sound Velocity" : "80" : "When travelling at this speed or above, will play sound at full volume."
-	slidesoundfwd(sound) : "Travel sound (forward)" : "" : "Play this sound when travelling forward on helper axis"
-	slidesoundback(sound) : "Travel sound (backward)" : "" : "Play this sound when travelling backward on helper axis"
-	
-	reversalsoundthresholdSmall(float) : "Reversal sound threshold (small)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the small reversal sound." 
-	reversalsoundthresholdMedium(float) : "Reversal sound threshold (medium)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the medium reversal sound."
-	reversalsoundthresholdLarge(float) : "Reversal sound threshold (large)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the large reversal sound."
-	
-	reversalsoundSmall(sound) : "Reversal sound (small)" : "" : "Play this sound when making a hard reverse over the small threshold but less than medium"
-	reversalsoundMedium(sound) : "Reversal sound (medium)" : "" : "Play this sound when making a hard reverse over the medium threshold but less than large"
-	reversalsoundLarge(sound) : "Reversal sound (large)" : "" : "Play this sound when making a hard reverse over the large threshold"
-
 	// Outputs
 	output NotifyMinLimitReached(void) : "The min limit has been reached."
 	output NotifyMaxLimitReached(void) : "The max limit has been reached."
 ]
 
 
-@PointClass halfgridsnap editormodel("models/editor/axis_helper") base(TwoObjectPhysics) = phys_hinge_local : 
+@PointClass halfgridsnap editormodel("models/editor/axis_helper") base(TwoObjectPhysics, ConstraintSoundInfo) = phys_hinge_local : 
 	"A physically simulated hinge. Use the helper to define the axis of rotation."
 [
 	hingefriction(float) : "Friction" : "0" : "Resistance/friction in the hinge"
@@ -5632,21 +5644,6 @@
 	input TurnMotorTargetAngleOn(void) : "Set Motor to Angle mode. When on, motor will attempt to drive to the given target angle with given target velocity, and stop there"
 	input TurnMotorTargetAngleOff(void) : "Set Motor to Velocity mode. When on, motor will attempt to drive at the given velocity/direction, regardless of the current angle of the motor"
 		
-	//// Episodic only -- for now.
-	
-	minSoundThreshold(float) : "Minimum Sound Velocity" : "6" : "When travelling below this many units/sec, will not play any sound."
-	maxSoundThreshold(float) : "Full Sound Velocity" : "80" : "When travelling at this speed or above, will play sound at full volume."
-	slidesoundfwd(sound) : "Travel sound (forward)" : "" : "Play this sound when travelling forward on helper axis"
-	slidesoundback(sound) : "Travel sound (backward)" : "" : "Play this sound when travelling backward on helper axis"
-	
-	reversalsoundthresholdSmall(float) : "Reversal sound threshold (small)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the small reversal sound." 
-	reversalsoundthresholdMedium(float) : "Reversal sound threshold (medium)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the medium reversal sound."
-	reversalsoundthresholdLarge(float) : "Reversal sound threshold (large)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the large reversal sound."
-	
-	reversalsoundSmall(sound) : "Reversal sound (small)" : "" : "Play this sound when making a hard reverse over the small threshold but less than medium"
-	reversalsoundMedium(sound) : "Reversal sound (medium)" : "" : "Play this sound when making a hard reverse over the medium threshold but less than large"
-	reversalsoundLarge(sound) : "Reversal sound (large)" : "" : "Play this sound when making a hard reverse over the large threshold"
-
 	// Outputs
 	output NotifyMinLimitReached(void) : "The min limit has been reached."
 	output NotifyMaxLimitReached(void) : "The max limit has been reached."
@@ -5690,7 +5687,7 @@
 	]
 ]
 
-@PointClass halfgridsnap base(TwoObjectPhysics) editormodel("models/editor/axis_helper.vmdl") = phys_slideconstraint : 
+@PointClass halfgridsnap base(TwoObjectPhysics, ConstraintSoundInfo) editormodel("models/editor/axis_helper.vmdl") = phys_slideconstraint : 
 	"A constraint that constrains an entity along a line segment."
 [
 	spawnflags(flags) =
@@ -5706,24 +5703,9 @@
 	enableangularconstraint(boolean) : "Enable Angular Constraint" : 1
 	
 	// Inputs
-	input SetSlideFriction(float) : "Set motor friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
+	input SetOffset(float) : "Normalized input to drive along the slide axis. E.g 0 = min limit and 1 = max limit"
 	input SetVelocity(float) : "Set linear velocity along the constraint"
-	
-	
-	//// Episodic only -- for now.
-	
-	minSoundThreshold(float) : "Minimum Sound Velocity" : "6" : "When travelling below this many units/sec, will not play any sound."
-	maxSoundThreshold(float) : "Full Sound Velocity" : "80" : "When travelling at this speed or above, will play sound at full volume."
-	slidesoundfwd(sound) : "Travel sound (forward)" : "" : "Play this sound when travelling forward on helper axis"
-	slidesoundback(sound) : "Travel sound (backward)" : "" : "Play this sound when travelling backward on helper axis"
-	
-	reversalsoundthresholdSmall(float) : "Reversal sound threshold (small)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the small reversal sound." 
-	reversalsoundthresholdMedium(float) : "Reversal sound threshold (medium)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the medium reversal sound."
-	reversalsoundthresholdLarge(float) : "Reversal sound threshold (large)" : "0" : "When accelerating by more than this many units/sec^2 opposite to direction of travel, play the large reversal sound."
-	
-	reversalsoundSmall(sound) : "Reversal sound (small)" : "" : "Play this sound when making a hard reverse over the small threshold but less than medium"
-	reversalsoundMedium(sound) : "Reversal sound (medium)" : "" : "Play this sound when making a hard reverse over the medium threshold but less than large"
-	reversalsoundLarge(sound) : "Reversal sound (large)" : "" : "Play this sound when making a hard reverse over the large threshold"
+	input SetSlideFriction(float) : "Set motor friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
 ]
 
 @PointClass base(TwoObjectPhysics) editormodel("models/editor/axis_helper.vmdl") = phys_lengthconstraint : 
@@ -6736,7 +6718,12 @@
 //
 //-------------------------------------------------------------------------
 
-@SolidClass base(Targetname) = trigger_autosave : 
+@SolidClass base(Targetname)
+	metadata
+	{
+		auto_apply_material = "materials/tools/toolstrigger.vmat"
+	}
+= trigger_autosave : 
 	"A trigger volume that autosaves when the player touches it."
 [
 	master(string) : "Master" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this entity will not activate."
@@ -6747,7 +6734,12 @@
 	MinimumHitPoints(integer): "Minumum Hit Points" : 0 : "Don't save dangerous when player has less than this many hitpoints."
 ]
 
-@SolidClass base(EnableDisable) = trigger_changelevel : 
+@SolidClass base(EnableDisable) 
+	metadata
+	{
+		auto_apply_material = "materials/tools/toolstrigger.vmat"
+	}
+= trigger_changelevel : 
 	"An entity that triggers a level change.\n" +
 	"Place an info_landmark in both maps that marks the 'same' location in each map.\n"+
 	"TIPS & TRICKS: To fire events in the next level, use the OnLevelChange output to turn on "+
@@ -8048,6 +8040,31 @@
 		0: "Use High Resolution"
 		3: "Use Low Resolution (64 unit grid)"
 	]
+]
+
+@PathClass base(Targetname) particle_rope() 
+	metadata
+	{
+		default_interpolation = "linear"
+	}
+= path_particle_rope
+[
+	effect_name(particlesystem) [report] : "Particle System Name" : "particles/entity/path_particle_rope_default.vpcf"
+	start_active(boolean) : "Start Active" : 1 : "Will the particle system be visible on spawn"
+	max_simulation_time(float) : "Max Time To Simulate" : 0 : "Max number of seconds to run the particle simulation for. A value of 0 means run the simulation indefinitely."
+	particle_spacing(float) : "Spacing" : 32 : "Units between the individual partcles in the rope simulation."
+	slack(float) : "Slack" : "0.0" : "Controls the amount the rope will drop between path nodes. Generally between 0.0 and 1.0, the value is a multiplier on the distance that particles on path can seperate relative to their initial distance."
+	radius(float) : "Radius" : "1.0" : "Radius of the rope."
+	color_tint(color255) : "Color Tint" : "255 255 255"
+			
+	// Inputs
+	input Start(void) : "Tell the particle system to start emitting."
+	input Stop(void) : "Tell the particle system to stop emitting."
+	input StopPlayEndCap(void) : "Tell the particle system to stop emitting and play its End Cap Effect."
+	input DestroyImmediately(void) : "Destroy the particle system and remove all particles immediately."
+	input SetRadius( float ) : "Set the radius parameter provided the particle system"
+	input SetSlack( float ) : "Set the slack parameter which may be used by the particle system to determine how much the rope droops."
+	input DisablePin( string ) : "Disable the contraint which pins a particle to the specified path node."
 ]
 
 @PointClass centered_box_world_aligned( box_size ) = test_centered_box_world_aligned : "A test for the 'centered_box_world_aligned' heleper"
