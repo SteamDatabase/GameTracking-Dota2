@@ -110,7 +110,10 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnRefreshButtonPressed( eventSourceIndex )
 	SendToServerConsole( "dota_dev hero_refresh" )
-	self:BroadcastMsg( "#Refresh_Msg" )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+
+	--self:BroadcastMsg( "#Refresh_Msg" )
 end
 
 --------------------------------------------------------------------------------
@@ -118,7 +121,10 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnLevelUpButtonPressed( eventSourceIndex )
 	SendToServerConsole( "dota_dev hero_level 1" )
-	self:BroadcastMsg( "#LevelUp_Msg" )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+
+	--self:BroadcastMsg( "#LevelUp_Msg" )
 end
 
 --------------------------------------------------------------------------------
@@ -127,9 +133,6 @@ end
 function CHeroDemo:OnMaxLevelButtonPressed( eventSourceIndex, data )
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
 	hPlayerHero:AddExperience( 32400, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
-	--while hPlayerHero:GetLevel() < 25 do
-		--hPlayerHero:HeroLevelUp( false )
-	--end
 
 	for i = 0, DOTA_MAX_ABILITIES - 1 do
 		local hAbility = hPlayerHero:GetAbilityByIndex( i )
@@ -140,8 +143,11 @@ function CHeroDemo:OnMaxLevelButtonPressed( eventSourceIndex, data )
 		end
 	end
 
-	hPlayerHero:SetAbilityPoints( 4 )
-	self:BroadcastMsg( "#MaxLevel_Msg" )
+	hPlayerHero:SetAbilityPoints( 4 ) -- talents?
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+
+	--self:BroadcastMsg( "#MaxLevel_Msg" )
 end
 
 --------------------------------------------------------------------------------
@@ -156,7 +162,9 @@ function CHeroDemo:OnFreeSpellsButtonPressed( eventSourceIndex )
 	elseif self.m_bFreeSpellsEnabled == true then
 		self.m_bFreeSpellsEnabled = false
 		self:BroadcastMsg( "#FreeSpellsOff_Msg" )
-	end	
+	end
+
+	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 --------------------------------------------------------------------------------
@@ -181,25 +189,8 @@ function CHeroDemo:OnInvulnerabilityButtonPressed( eventSourceIndex, data )
 		self.m_bInvulnerabilityEnabled = false
 		self:BroadcastMsg( "#InvulnerabilityOff_Msg" )
 	end
-end
 
---------------------------------------------------------------------------------
--- ButtonEvent: OnSpawnAllyButtonPressed -- deprecated
---------------------------------------------------------------------------------
-function CHeroDemo:OnSpawnAllyButtonPressed( eventSourceIndex, data )
-	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-	self.m_nAlliesCount = self.m_nAlliesCount + 1
-	CreateUnitByNameAsync( self.m_sHeroToSpawn, hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nALLIES_TEAM,
-		function( hUnit )
-			self.m_tAlliesList[ self.m_nAlliesCount ] = hUnit
-			hUnit:SetControllableByPlayer( self.m_nPlayerID, false )
-			hUnit:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
-			FindClearSpaceForUnit( hUnit, hPlayerHero:GetAbsOrigin(), false )
-			hUnit:Hold()
-			hUnit:SetIdleAcquire( false )
-			hUnit:SetAcquisitionRange( 0 )
-			self:BroadcastMsg( "#SpawnAlly_Msg" )
-		end )
+	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 --------------------------------------------------------------------------------
@@ -223,6 +214,8 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 			hEnemy:SetAcquisitionRange( 0 )
 			self:BroadcastMsg( "#SpawnEnemy_Msg" )
 		end )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 
@@ -231,6 +224,8 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnSelectHeroButtonPressed( eventSourceIndex, data )
 	self.m_sHeroToSpawn	= DOTAGameManager:GetHeroUnitNameByID( tonumber( data.str ) );
+
+	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 
@@ -243,7 +238,25 @@ function CHeroDemo:OnLevelUpEnemyButtonPressed( eventSourceIndex )
 			self.m_tEnemiesList[ k ]:HeroLevelUp( false )
 		end
 	end
-	self:BroadcastMsg( "#LevelUpEnemy_Msg" )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+
+	--self:BroadcastMsg( "#LevelUpEnemy_Msg" )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnMaxLevelEnemyButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnMaxLevelEnemyButtonPressed( eventSourceIndex )
+	for k, v in pairs( self.m_tEnemiesList ) do
+		if self.m_tEnemiesList[ k ]:IsRealHero() then
+			self.m_tEnemiesList[ k ]:AddExperience( 32400, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
+		end
+	end
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+
+	--self:BroadcastMsg( "#MaxLevelEnemy_Msg" )
 end
 
 --------------------------------------------------------------------------------
@@ -258,7 +271,10 @@ function CHeroDemo:OnDummyTargetButtonPressed( eventSourceIndex, data )
 	hDummy:Hold()
 	hDummy:SetIdleAcquire( false )
 	hDummy:SetAcquisitionRange( 0 )
-	self:BroadcastMsg( "#SpawnDummyTarget_Msg" )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+
+	--self:BroadcastMsg( "#SpawnDummyTarget_Msg" )
 end
 
 --------------------------------------------------------------------------------
@@ -276,24 +292,9 @@ function CHeroDemo:OnRemoveSpawnedUnitsButtonPressed( eventSourceIndex )
 
 	self.m_nEnemiesCount = 0
 
-	self:BroadcastMsg( "#RemoveSpawnedUnits_Msg" )
-end
+	EmitGlobalSound( "UI.Button.Pressed" )
 
---------------------------------------------------------------------------------
--- ButtonEvent: OnLaneCreepsButtonPressed
---------------------------------------------------------------------------------
-function CHeroDemo:OnLaneCreepsButtonPressed( eventSourceIndex )
-	SendToServerConsole( "toggle dota_creeps_no_spawning" )
-	if self.m_bCreepsEnabled == false then
-		self.m_bCreepsEnabled = true
-		self:BroadcastMsg( "#LaneCreepsOn_Msg" )
-	elseif self.m_bCreepsEnabled == true then
-		-- if we're disabling creep spawns, then also kill existing creep waves
-		SendToServerConsole( "dota_kill_creeps radiant" )
-		SendToServerConsole( "dota_kill_creeps dire" )
-		self.m_bCreepsEnabled = false
-		self:BroadcastMsg( "#LaneCreepsOff_Msg" )
-	end
+	--self:BroadcastMsg( "#RemoveSpawnedUnits_Msg" )
 end
 
 --------------------------------------------------------------------------------
@@ -302,6 +303,8 @@ end
 function CHeroDemo:OnChangeCosmeticsButtonPressed( eventSourceIndex )
 	-- currently running the command directly in XML, should run it here if possible
 	-- can use GetSelectedHeroID
+
+	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 --------------------------------------------------------------------------------
@@ -311,6 +314,8 @@ function CHeroDemo:OnChangeHeroButtonPressed( eventSourceIndex, data )
 	-- currently running the command directly in XML, should run it here if possible
 	local nHeroID = PlayerResource:GetSelectedHeroID( data.PlayerID )
 	print( "PlayerResource:GetSelectedHeroID( data.PlayerID ) == " .. nHeroID )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 --------------------------------------------------------------------------------
@@ -318,11 +323,15 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnPauseButtonPressed( eventSourceIndex )
 	SendToServerConsole( "dota_pause" )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 --------------------------------------------------------------------------------
 -- GameEvent: OnLeaveButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnLeaveButtonPressed( eventSourceIndex )
+	EmitGlobalSound( "UI.Button.Pressed" )
+
 	SendToServerConsole( "disconnect" )
 end

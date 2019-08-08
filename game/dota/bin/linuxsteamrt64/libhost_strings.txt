@@ -277,6 +277,7 @@ $0message $1
 $0oneof $1 {
 $0option $1;
 $0rpc $1($4.$2) returns ($5.$3)
+$@0J 
 $A;\$
 $NETWORK_DISCONNECT_REJECT_SERVERFULL
 $NETWORK_DISCONNECT_STEAM_AUTHINVALID
@@ -316,6 +317,8 @@ $zYuWA
 %f %f %f %f
 %i %i %i %i
 %ls [wstring, len = %d]
+%s (Color)
+%s (Material)
 %s * %s
 %s + %s
 %s - %s
@@ -329,6 +332,8 @@ $zYuWA
 %s:  IGameSystem::LoopPostInitAllSystems(finish)
 %s:  IGameSystem::LoopPostInitAllSystems(start)
 %s: string format requested %d chars
+%s_color
+%s_matgrp
 &#GameUI_Disconnect_InvalidMessageError
 &#GameUI_Disconnect_NoPeerGroupHandlers
 &#GameUI_Disconnect_PureServer_Mismatch
@@ -426,11 +431,12 @@ $zYuWA
 -addon
 -addon_path
 -con_logfile
--con_timestamp
--conclearlog
 -condebug
 -conrotate
 -consolelog
+-consolelog_append
+-consolelog_notimestamp
+-consolelog_rotate
 -contentroot
 -devcontent
 -dotatestmodels
@@ -677,7 +683,7 @@ $zYuWA
 ;0tWD
 ;BX|'1
 ;G tu+G$L
-;Hc5[
+;Hc56
 <	t$1
 <	t9w
 <	ubUH
@@ -734,6 +740,7 @@ $zYuWA
 @P<*u
 @P</t
 @[A\]
+@spawn
 @tBE+
 @tB[A\]
 @u'fA
@@ -1222,6 +1229,10 @@ CHitBoxSetList
 CL$(9
 CMaterialDrawDescriptor
 CMemAllocSystemInitialize
+CModelConfig
+CModelConfigElement
+CModelConfigElement_UserPick
+CModelConfigList
 CMorphConstraint
 CMsgPlayerInfo
 CMsgQAngle
@@ -1396,6 +1407,7 @@ CommandProcedureList
 ConVar(%s) defined with infinite float value (%s)
 ConVarRef %s doesn't point to an existing ConVar
 Conditional Error: %s
+ConfigAttachedModel
 ConfigurationSystem_001
 ConnectGameInterfaces
 ConnectInterfaces
@@ -1410,8 +1422,8 @@ Cycle or diamond double-reference to '%s'
 D#j\H
 D$ E1
 D$ H9E
+D$(H9
 D$(Ic
-D$0H9
 D$8I9
 D$@E1
 D$@H9
@@ -1452,6 +1464,7 @@ DotaCardGameClient_001
 DotaMapUtils001
 Double-register of KV3 conversion (from '%s' to '%s')
 Double-save to Member '%s'
+DynamicConfigList
 E A+E
 E+D$ 
 E+O$Mc
@@ -1475,6 +1488,7 @@ EXECUTABLE_PATH
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
 EconItemToolModel_001
+EditorDynamicConfig
 EmptyAnim
 End-of-file inside block comment.
 EngineLoopState_t
@@ -1655,7 +1669,9 @@ GCC: (Ubuntu 5.4.0-7.really.6+steamrt1.1+srt1) 5.4.1 20160803
 GCC: (crosstool-NG 1.17.0) 4.6.3
 GLIBCXX_3.4
 GLIBCXX_3.4.10
+GLIBCXX_3.4.11
 GLIBCXX_3.4.14
+GLIBCXX_3.4.21
 GLIBCXX_3.4.5
 GLIBC_2.14
 GLIBC_2.2.5
@@ -1708,9 +1724,11 @@ Groups are not supported in proto3 syntax.
 H	p(]
 H!w(H
 H;*twH
-H;=*'B
-H;=[$B
-H;=jKB
+H;=;3B
+H;=JZB
+H;=`=B
+H;=j3B
+H;=p<B
 H=vmdlu
 HBm_influenceFlags
 HELPER_BONE
@@ -1872,6 +1890,7 @@ MNetworkPriority
 MNetworkRemoveAll
 MNetworkSerializer
 MNetworkUserGroup
+MODEL_CONFIG_ATTACHMENT_COUNT
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MapKey::GetBoolValue
@@ -1928,6 +1947,7 @@ Missing file '%s'
 Missing name.
 Model %s missing bone and flex counts (%d < %d), init %d
 ModelCompile/UseShadowFastPathHeuristic
+ModelConfigAttachmentType_t
 ModelDocUtils001
 MountAddon: Failed to find ADDONS search path.
 MountAddonSearchPaths: Failed to find CONTENTADDONS search path.
@@ -1982,6 +2002,7 @@ NETWORK_FIELD_LOWEST_PRIORITY
 NET_Messages
 NOT_FOUND
 NO_SIDE_EFFECTS
+NSt6thread10_Impl_baseE
 NULL output boolean given.
 NWay( 
 NamePart
@@ -2091,7 +2112,7 @@ Plat_IgnoreContentAsserts
 Plat_InitializeCOM
 Plat_IsDirectory
 Plat_IsHighDPI
-Plat_IsInDebugSessionRaw
+Plat_IsInDebugSession
 Plat_IsInTestMode
 Plat_IsRunningOnCustomerMachine
 Plat_LoadModule
@@ -2115,6 +2136,11 @@ Pm_nValue
 PosXYZ
 PostProcessingSystem_001
 PredictionDiffManager001
+PreviewAttachmentModel
+PreviewBoneAttachedModel
+PreviewBoneMergedModel
+PreviewPreset
+PreviewPresetList
 PropWorldOrigin
 PropertyEditorSystem_001
 Proto file starts with 0xEF but not UTF-8 BOM. Only UTF-8 is accepted for proto file.
@@ -2132,6 +2158,7 @@ RESOURCE_EXHAUSTED
 ROTATION
 RadianEuler
 RandomFloat
+RandomInt
 RandomSeed
 Reached an unintended state: CPPTYPE_MESSAGE
 Reached impossible case in HasBit().
@@ -2151,10 +2178,12 @@ ReleaseLast
 ReleaseLast() called on a RepeatedPtrField that is on an arena, 
 ReleaseMessage
 RemapValClamped( 
+RemoveBoneAndChildren
 RemoveLast
 RenderDevice003
 RenderDeviceMgr001
 RenderHardwareConfig002
+RenderMeshFile
 RenderPrimitiveType_t
 RenderService_001
 RenderSkeletonBone_t
@@ -2252,6 +2281,9 @@ Source2ServerSerializers002
 SourceCodeInfo
 SpawnGroupFlags_t
 Sqrt( %s )
+St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+St16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+St19_Sp_make_shared_tag
 Stack depth limit hit (%d)
 StatsService_001
 SteamAudio001
@@ -2390,6 +2422,7 @@ VRStartup
 VR_001
 VRenderDeviceSetupV001
 VSInputSignature
+VSNAPFile
 VScript
 VScriptDbg
 VScriptManager010
@@ -2543,6 +2576,7 @@ _Z6ConMsgPKcz
 _Z6DevMsgPKcz
 _ZN12CThreadEvent3SetEv
 _ZN12CThreadEventC1Eb
+_ZN12CThreadMutex7TryLockEv
 _ZN13CBufferString10ExtendPathEPKcc
 _ZN13CBufferString10FixSlashesEc
 _ZN13CBufferString10RelinquishENS_19EAllocationOption_tE
@@ -2574,6 +2608,7 @@ _ZN17CThreadSpinRWLock10UnlockReadEv
 _ZN17CThreadSpinRWLock11LockForReadEv
 _ZN17CThreadSpinRWLock11UnlockWriteEv
 _ZN17CThreadSpinRWLock16SpinLockForWriteEy
+_ZN17CThreadSyncObject4WaitEj
 _ZN17CThreadSyncObject8WaitImplEj
 _ZN17CThreadSyncObjectD2Ev
 _ZNKSi6gcountEv
@@ -2655,9 +2690,12 @@ _ZNSsixEm
 _ZNSspLEPKc
 _ZNSspLERKSs
 _ZNSspLEc
+_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv
 _ZNSt19basic_ostringstreamIcSt11char_traitsIcESaIcEEC1ESt13_Ios_Openmode
 _ZNSt19basic_ostringstreamIcSt11char_traitsIcESaIcEED1Ev
 _ZNSt3tr18__detail12__prime_listE
+_ZNSt6thread15_M_start_threadESt10shared_ptrINS_10_Impl_baseEEPFvvE
+_ZNSt6thread4joinEv
 _ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIIRKiEEEvDpOT_
 _ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT_
 _ZNSt8ios_base4InitC1Ev
@@ -2675,18 +2713,27 @@ _ZSt25__throw_bad_function_callv
 _ZSt28_Rb_tree_rebalance_for_erasePSt18_Rb_tree_node_baseRS_
 _ZSt29_Rb_tree_insert_and_rebalancebPSt18_Rb_tree_node_baseS0_RS_
 _ZSt7nothrow
+_ZSt9terminatev
 _ZStlsIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_St5_Setw
 _ZStlsIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_St8_SetfillIS3_E
 _ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKSbIS4_S5_T1_E
 _ZTI17CThreadSyncObject
+_ZTINSt6thread10_Impl_baseE
 _ZTISs
+_ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+_ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
 _ZTISt9exception
 _ZTIc
 _ZTIh
+_ZTSNSt6thread10_Impl_baseE
 _ZTSSs
+_ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+_ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+_ZTSSt19_Sp_make_shared_tag
 _ZTVN10__cxxabiv117__class_type_infoE
 _ZTVN10__cxxabiv120__si_class_type_infoE
 _ZTVN10__cxxabiv121__vmi_class_type_infoE
+_ZTVNSt6thread10_Impl_baseE
 _ZTVSt9exception
 _ZdaPv
 _ZdlPv
@@ -2750,8 +2797,10 @@ application
 appsystemdict.cpp
 archive
 array_ != __null
+attach_point
 attachment
 attachment_offset
+attachment_type
 auto_unragdoll_duration
 bUpdate
 baselayer
@@ -2769,7 +2818,10 @@ blendindices
 blendweight
 blendweights
 blockLOS
+body_groups
 body_type
+bone_name
+bone_names
 borrow
 break_create_joint_revolute
 break_uniform_burst
@@ -2794,7 +2846,6 @@ children
 client
 client_streaming
 clientcmd_can_execute
-close
 close() failed: 
 closedir
 cloth_collide
@@ -2805,9 +2856,9 @@ cloth_collision_layer3
 cloth_enable
 collision_group
 collision_prop
-color
 command
 composite
+config_state
 configvalue.cpp
 console.log
 control_point
@@ -2872,6 +2923,7 @@ faceMergeAngle
 fakeplayer
 false
 false"
+fclose
 fcntl
 fdatasync
 female
@@ -2881,6 +2933,7 @@ ffffff.
 fffffff
 fflush
 field
+fileno
 filesystem_stdio
 fixed32
 fixed64
@@ -2890,6 +2943,7 @@ float( %f )
 floor
 floorf
 fltx4
+fopen64
 force
 format
 formats.cpp
@@ -2897,6 +2951,7 @@ fprintf
 frame
 friction
 ftruncate64
+fwrite
 g cMesh
 g default
 g_Tier1_BitWriteMasks
@@ -3005,19 +3060,28 @@ lowprecisionuv
 lowprecisionuv1
 lseek
 lseek64
+m_AttachmentName
+m_AttachmentType
 m_Bone
 m_ChainData
 m_Children
+m_Choices
+m_Color
 m_ConeAxis
 m_ConeCutoff
+m_ConfigName
+m_Configs
 m_ControlRigData
 m_CullDataIndex
 m_DefaultSolverSettings
 m_DefaultTargetSettings
+m_ElementName
+m_Elements
 m_Emitters
 m_EndEffectorBone
 m_EndEffectorTargetBone
 m_ForceGenerators
+m_GroupName
 m_HitBoxSets
 m_HitBoxes
 m_IKChains
@@ -3028,7 +3092,9 @@ m_JointConstraintPairs
 m_JointName
 m_Joints
 m_LoopState
+m_MaterialGroupName
 m_Name
+m_NestedElements
 m_Operators
 m_PreEmissionOperators
 m_Renderers
@@ -3037,6 +3103,7 @@ m_SolverType
 m_SourceFilename
 m_TargetSettingSource
 m_TargetSource
+m_aAngOffset
 m_ankleBoneName
 m_attachments
 m_bApplyMinForce
@@ -3077,11 +3144,14 @@ m_bScaleInitialValue
 m_bScalePerParticle
 m_bSelected
 m_bThreadsActive
+m_bTopLevel
 m_bTrailBias
 m_bTranslationOnly
 m_bUseCompressedNormalTangent
 m_bUseHighestEndCP
 m_bUseShadowFastPath
+m_bUserSpecifiedColor
+m_bUserSpecifiedMaterialGroup
 m_bVisible
 m_bbox
 m_boneArray
@@ -3164,6 +3234,7 @@ m_flags
 m_floatAttributes
 m_floatParams
 m_hBuffer
+m_hModel
 m_hSnapshot
 m_hingeAxis
 m_hitboxsets
@@ -3199,6 +3270,7 @@ m_nChainIndex
 m_nChainInvIndex
 m_nChainType
 m_nChannelElements
+m_nChoice
 m_nClientOutputFrames
 m_nClusterSizeMax
 m_nClusterSizeMin
@@ -3347,6 +3419,7 @@ maps/%s.trm
 maps/%s.vhcg
 maps/*.*
 master_morph_weight
+material_group
 materials/error.vmat
 mathlib.cpp
 matrix3x4_t
@@ -3363,6 +3436,7 @@ memcpy
 memmove
 mempool.cpp
 memset
+merge
 mesh.cpp
 meshUtilsKeyValues
 mesh_calculate_curvature_smooth_invert
@@ -3376,6 +3450,7 @@ method
 min_angle
 min_client_limit
 model_default_preview_sequence_name
+model_name
 modeldoc0
 modeldoc1
 modeldoc10
@@ -3395,6 +3470,8 @@ modeldoc22
 modeldoc23
 modeldoc24
 modeldoc25
+modeldoc26
+modeldoc27
 modeldoc3
 modeldoc4
 modeldoc5
@@ -3436,7 +3513,6 @@ o(ATI
 objc_class_prefix
 oneof_decl
 oneof_index
-open64
 opendir
 optimize_for
 optional
@@ -3485,6 +3561,7 @@ proto2
 proto3
 ptestbed
 pthread_cancel
+pthread_create
 pthread_mutex_destroy
 pthread_mutex_init
 pthread_mutex_lock
@@ -3494,6 +3571,7 @@ pthread_mutex_unlock:
 pthread_mutexattr_init
 pthread_mutexattr_settype
 pthread_once
+pthread_sigmask
 ptr( 0x%p )
 ptr_ != __null
 public_dependency
@@ -3508,6 +3586,8 @@ readlink
 reason
 recenter_on_parent_bone
 registered: 
+relative_angles
+relative_origin
 remapping vertex %d[w%d] invalid: %d->%d >= %d
 remapping vertex %d[w%d] invalid: %d->? >= %d
 repeated
@@ -3525,15 +3605,14 @@ s H;5
 s off
 s(H;5
 s0H;5
-s0H;5 
-s0H;5@
+s0H;50
 s1_mapname
 s8H;5
-s8H;5P
-s@H;5
+s8H;5@
+s@H;5x
 sHH;5
-sHH;5U
-sPH;5
+sHH;5E
+sPH;5z
 savegamefilename
 savegamename
 scandir64
@@ -3557,6 +3636,7 @@ sfixed32
 sfixed64
 shapeType
 sharpStartAngle
+sigfillset
 signon_state
 singleplayer
 sint32
@@ -3685,6 +3765,7 @@ unspecified
 update
 useMotionDamping
 useSmoothPaths
+use_additional_offset
 usemtl initialShadingGroup
 userid
 usermsgs

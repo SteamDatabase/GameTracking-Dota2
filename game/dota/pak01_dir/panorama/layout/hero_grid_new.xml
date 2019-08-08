@@ -1,0 +1,170 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="s2r://panorama/styles/battle_pass/current_battle_pass.vcss_c" />
+		<include src="s2r://panorama/styles/hero_grid_new.vcss_c" />
+	</styles>
+
+	<snippets>
+
+		<snippet name="HeroCategory">
+			<Panel class="HeroCategory">
+				<Panel class="HeroCategoryControls">
+					<Panel id="CategoryDragTarget" draggable="true">
+						<Panel id="CategoryDragIcon" onmouseover="UIShowTextTooltip( '#DOTA_HeroGrid_DragCategory' )" onmouseout="UIHideTextTooltip()" />
+						<Label id="HeroCategoryName" text="{g:dota_filtered_string:hero_category_name}" />
+					</Panel>
+
+					<Button id="EditCategorySettingsButton" onmouseover="UIShowTextTooltip( '#DOTA_HeroGrid_EditCategory' )" onmouseout="UIHideTextTooltip()" onactivate="DOTAHeroGridEditCategorySettings()" />
+				</Panel>
+				<Panel id="HeroListContainer">
+					<DOTAHeroCardList id="HeroList">
+						<!-- HeroCard snippets -->
+					</DOTAHeroCardList>
+					<Panel id="HeroListOverlay" hittest="false">
+						<Panel id="HeroListSizeDragPoint" acceptsfocus="true" draggable="true" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</snippet>
+
+		<snippet name="HeroCard">
+			<Panel class="HeroCard" onmouseover="DOTAHeroGridCardMouseOver()" onmouseout="DOTAHeroGridCardMouseOut()" onactivate="DOTAHeroGridCardActivated()" hittestchildren="false">
+				
+				<!-- These panels will fade/brighten as a hero is filtered/selected -->
+				<Panel class="HeroCardContents">
+					<DOTAHeroImage id="HeroImage" heroimagestyle="portrait" scaling="stretch-to-cover-preserve-aspect" />
+					
+					<Panel id="SuggestedOverlay" class="HeroCardImageOverlay" />
+					<Panel id="SuggestedBanOverlay" class="HeroCardImageOverlay" />
+					<Panel id="AllHeroChallengeOverlay" class="HeroCardImageOverlay" />
+					<Panel id="DailyHeroChallengeIcon" />
+					<Panel id="CavernIcon" />
+					<Panel id="RecommendHeroIcon" />
+					<Panel id="AvoidHeroIcon" />
+					<Label id="NewHeroOverlay" text="#DOTA_New" />
+					<Label id="PlaytestHeroOverlay" text="#DOTA_Playtest" />
+					<Panel id="HeroBadgeStatus">
+						<Label id="HeroBadgeLevel" text="{d:hero_badge_level}" />
+						<Panel id="HeroBadgeIcon" class="PlusHeroBadgeIconTiny" />
+					</Panel>
+				</Panel>
+
+				<!-- These panels are always on top and won't fade/brighten -->
+				<Panel class="HeroCardOverlays">
+					<Panel id="BannedOverlay" />
+					<Panel id="DragOverlay" />
+					<Panel id="AddHeroOverlay" />
+					<Panel id="DragDeleteOverlay" />
+				</Panel>
+			</Panel>
+		</snippet>
+
+	</snippets>
+
+	<DOTAHeroGridNew acceptsfocus="true" acceptsinput="true" tabindex="auto" selectionpos="auto">
+		<Panel id="MainContents">
+			<Panel id="GridCategories" />
+
+			<Panel id="GridOverlay" hittest="false">
+				<Panel id="MissingHeroesOverlay" hittest="false">
+					<Panel id="MissingHeroesList">
+						<!-- HeroCard snippets -->
+					</Panel>
+					<TextButton id="MissingHeroesButton" onactivate="$.GetContextPanel().ToggleClass( 'ShowMissingHeroes' )"/>
+				</Panel>
+				<Label id="QuickSearch" hittest="false" />
+			</Panel>
+		</Panel>
+
+		<Panel id="Footer">
+
+			<Panel id="ViewModeControls">
+
+				<Panel id="ArrangeContainer">
+					<Label class="FilterCategoryTitle" text="#DOTA_HeroGrid_Sort_By" />
+
+					<Button id="ArrangeButton" onactivate="DOTAHeroGridShowConfigPicker()">
+						<Label text="{s:selected_config_name}" />
+						<Panel id="ArrangeButtonIcon" />
+					</Button>
+					<TextButton id="EditCurrentConfigButton" text="#DOTA_Edit" onactivate="DOTAHeroGridStartEditing()" />
+				</Panel>
+
+				<Panel class="FillWidth" />
+
+				<Panel id="Filters">
+
+					<Panel class="FilterCategory">
+						<Label class="FilterCategoryTitle" text="#DOTA_HeroGrid_FarmPriority" />
+						<Panel class="FilterCategoryItems">
+							<Button id="CarryButton" class="FilterButton" onmouseover="UIShowTitleTextTooltip( '#DOTA_HeroRole_Carry', '#DOTA_Hero_Selection_PipTooltip_Carry_Sub' )" onmouseout="UIHideTitleTextTooltip()" onactivate="DOTAHeroGridToggleRoleFilter( 'Carry' )" />
+							<Button id="SupportButton" class="FilterButton" onmouseover="UIShowTitleTextTooltip( '#DOTA_HeroRole_Support', '#DOTA_Hero_Selection_PipTooltip_Support_Sub' )" onmouseout="UIHideTitleTextTooltip()" onactivate="DOTAHeroGridToggleRoleFilter( 'Support' )" />
+						</Panel>
+					</Panel>
+
+					<Panel id="AttackTypeCategory" class="FilterCategory">
+						<Label class="FilterCategoryTitle" text="#DOTA_HeroStats_Castegory_Attack" />
+						<Panel class="FilterCategoryItems">
+							<Button id="MeleeButton" class="FilterButton" onmouseover="UIShowTextTooltip( '#DOTA_HeroSelectorCategory_AttackRange_Melee' )" onmouseout="UIHideTextTooltip()" onactivate="DOTAHeroGridToggleAttackTypeFilter( 'Melee' )" />
+							<Button id="RangedButton" class="FilterButton" onmouseover="UIShowTextTooltip( '#DOTA_HeroSelectorCategory_AttackRange_Ranged' )" onmouseout="UIHideTextTooltip()" onactivate="DOTAHeroGridToggleAttackTypeFilter( 'Ranged' )" />
+						</Panel>
+					</Panel>
+
+					<Panel class="FilterCategory">
+						<Label class="FilterCategoryTitle" text="#DOTA_HeroComplexity" />
+						<Panel class="FilterCategoryItems">
+							<Button id="Complexity1Button" class="FilterButton ComplexityButton" onmouseover="UIShowTitleTextTooltip( '#DOTA_HeroComplexity_Title_1', '#DOTA_HeroComplexity_Description_1' )" onmouseout="UIHideTitleTextTooltip()" onactivate="DOTAHeroGridToggleComplexityFilter( 1 )" />
+							<Button id="Complexity2Button" class="FilterButton ComplexityButton" onmouseover="UIShowTitleTextTooltip( '#DOTA_HeroComplexity_Title_2', '#DOTA_HeroComplexity_Description_2' )" onmouseout="UIHideTitleTextTooltip()" onactivate="DOTAHeroGridToggleComplexityFilter( 2 )" />
+							<Button id="Complexity3Button" class="FilterButton ComplexityButton" onmouseover="UIShowTitleTextTooltip( '#DOTA_HeroComplexity_Title_3', '#DOTA_HeroComplexity_Description_3' )" onmouseout="UIHideTitleTextTooltip()" onactivate="DOTAHeroGridToggleComplexityFilter( 3 )" />
+						</Panel>
+					</Panel>
+
+					<Panel id="BattlePassCategory" class="FilterCategory">
+						<Label class="FilterCategoryTitle" text="#DOTA_BattlePass_WindowTitle" />
+						<Panel class="FilterCategoryItems">
+							<Button id="RecommendedButton" class="FilterButton" onmouseover="UIShowTitleTextTooltip( '#DOTA_HeroSelectorCategory_Recommend', '#DOTA_HeroGrid_Recommended_Description' )" onmouseout="UIHideTitleTextTooltip()" onactivate="DOTAHeroGridToggleRecommendedHeroesFilter()" />
+							<Button id="CavernCrawlButton" class="FilterButton" onmouseover="UIShowTitleTextTooltip( '#DOTA_TI9_FrontPage_JungleExpedition_Title', '#DOTA_HeroGrid_JungleExpedition_Description' )" onmouseout="UIHideTitleTextTooltip()" onactivate="DOTAHeroGridToggleCavernCrawlFilter()" />
+						</Panel>
+						<TextButton id="CavernMapButton" text="#DOTACavernCrawl_PreGame_Map_TI2019" onactivate="DOTAShowCavernCrawlMap()" />
+					</Panel>
+
+				</Panel>
+
+			</Panel>
+
+			<Panel id="EditModeControls">
+
+				<TextEntry id="EditingConfigName" />
+				<Button id="ConfirmEditButton" class="EditLayoutButton" onactivate="DOTAHeroGridStopEditing( true )">
+					<Panel class="EditButtonContents">
+						<!-- <Panel class="EditButtonIcon" />-->
+						<Label text="#DOTA_HeroGrid_SaveLayout" />
+					</Panel>
+				</Button>
+				<Button id="DiscardEditButton" class="EditLayoutButton" onactivate="DOTAHeroGridStopEditing( false )">
+					<Panel class="EditButtonContents">
+						<!-- <Panel class="EditButtonIcon" />-->
+						<Label text="#DOTA_UI_Confirmation_Cancel" />
+					</Panel>
+				</Button>
+				<Panel class="FillWidth" />
+				<Button id="AddCategoryButton" class="EditLayoutButton" onactivate="DOTAHeroGridAddNewCategory()">
+					<Panel class="EditButtonContents">
+						<Panel class="EditButtonIcon" />
+						<Label text="#DOTA_HeroGrid_NewCategoryName" />
+					</Panel>
+				</Button>
+				<Button id="DeleteButton" class="EditLayoutButton" onactivate="DOTAHeroGridDeleteSelectedConfig()">
+					<Panel class="EditButtonContents">
+<!--						<Panel class="EditButtonIcon" />-->
+						<Label text="#DOTA_HeroGrid_DeleteCustomLayout_Btn" />
+					</Panel>
+				</Button>
+			</Panel>
+
+		</Panel>
+
+	</DOTAHeroGridNew>
+
+</root>

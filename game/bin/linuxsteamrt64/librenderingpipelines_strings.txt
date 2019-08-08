@@ -36,12 +36,16 @@ $[A\]
 %f %f %f %f
 %i %i %i %i
 %ls [wstring, len = %d]
+%s (Color)
+%s (Material)
 %s (mat_fullbright: %d)
 %s * %s
 %s + %s
 %s - %s
 %s / %s
 %s: string format requested %d chars
+%s_color
+%s_matgrp
 &YA1D
 &YA1H
 &YA1L
@@ -178,6 +182,7 @@ $[A\]
 @[A\A]A^]
 @[A\]
 @mathlib.cpp
+@spawn
 A;\$ 
 A;](|
 A;_p|
@@ -368,6 +373,10 @@ CHitBoxSetList
 CL$(9
 CMaterialDrawDescriptor
 CMemAllocSystemInitialize
+CModelConfig
+CModelConfigElement
+CModelConfigElement_UserPick
+CModelConfigList
 CMorphConstraint
 COLORCORRECTION_VERSION_1
 CONTENT
@@ -496,6 +505,7 @@ CommandProcedure
 CommandProcedureList
 ConVar(%s) defined with infinite float value (%s)
 ConVarRef %s doesn't point to an existing ConVar
+ConfigAttachedModel
 ConfigurationSystem_001
 ConnectInterfaces
 CopyHDRBackBuffer
@@ -506,7 +516,7 @@ CreatePerViewConstantBuffer
 Cubic
 CustomClearColor
 D#j\H
-D$0H9
+D$(H9
 D$PPE
 D$TPA
 D15S1
@@ -546,6 +556,7 @@ DownsampleDepth
 Dynamic Decals
 Dynamic Opaque Forward
 DynamicAmbientOcclusion
+DynamicConfigList
 DynamicGBuffer
 E9gPI
 E9t$(D
@@ -556,6 +567,7 @@ ERROR: Specified path %s could not be made content-relative
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
 EconItemToolModel_001
+EditorDynamicConfig
 EffectsOpaque
 EffectsTranslucent
 EmissiveGBuffer
@@ -633,7 +645,6 @@ GetResourceManifestCount
 GetResourceManifests
 GroundFog
 H	C0H
-H	P0H
 H	p(]
 H	p0H
 H!w(H
@@ -737,6 +748,7 @@ MDefaultString
 MESH_DRAW_FLAGS_DRAW_LAST
 MESH_DRAW_FLAGS_IS_OCCLUDER
 MESH_DRAW_FLAGS_NONE
+MODEL_CONFIG_ATTACHMENT_COUNT
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MSAA Resolve
@@ -762,6 +774,7 @@ Min( %s, %s )
 Missing file '%s'
 Model %s missing bone and flex counts (%d < %d), init %d
 ModelCompile/UseShadowFastPathHeuristic
+ModelConfigAttachmentType_t
 ModelDocUtils001
 MovementSettings
 N&B:A
@@ -852,7 +865,7 @@ Plat_GetModuleFilename
 Plat_GetOSType
 Plat_GetThreadIndex
 Plat_IsHighDPI
-Plat_IsInDebugSessionRaw
+Plat_IsInDebugSession
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_UUIDFromString
 Plat_UUIDToString
@@ -872,6 +885,11 @@ PostProcessingSystem_001
 PpD9u f
 PrevFrameHDRBuffer
 Preview L
+PreviewAttachmentModel
+PreviewBoneAttachedModel
+PreviewBoneMergedModel
+PreviewPreset
+PreviewPresetList
 PropWorldOrigin
 PropertyEditorSystem_001
 QZw..
@@ -907,6 +925,7 @@ RGBX555
 RGBX8888
 ROTATION
 RandomFloat
+RandomInt
 RandomSeed
 ReflectionTemplate
 ReflexSightsLayer
@@ -915,9 +934,11 @@ RegisterConfigValue: Unknown error constructing config value "%s"!
 RegisterStringToken
 Release
 RemapValClamped( 
+RemoveBoneAndChildren
 RenderDevice003
 RenderDeviceMgr001
 RenderHardwareConfig002
+RenderMeshFile
 RenderPipelineAliases
 RenderPipelineVr
 RenderPrimitiveType_t
@@ -1121,6 +1142,7 @@ VR3DSkyboxView
 VR_001
 VRenderDeviceSetupV001
 VSInputSignature
+VSNAPFile
 VScript
 VScriptDbg
 VScriptManager010
@@ -1332,8 +1354,10 @@ anim_name_b
 animgraph0
 aps.H
 archive
+attach_point
 attachment
 attachment_offset
+attachment_type
 auto_unragdoll_duration
 bUpdate
 baselayer
@@ -1347,7 +1371,10 @@ blendindices
 blendweight
 blendweights
 blockLOS
+body_groups
 body_type
+bone_name
+bone_names
 borrow
 break_create_joint_revolute
 break_uniform_burst
@@ -1373,8 +1400,8 @@ cloth_collision_layer3
 cloth_enable
 collision_group
 collision_prop
-color
 composite
+config_state
 configvalue.cpp
 control_point
 create_particle
@@ -1471,19 +1498,28 @@ loop_in_action
 looping
 lowprecisionuv
 lowprecisionuv1
+m_AttachmentName
+m_AttachmentType
 m_Bone
 m_ChainData
 m_Children
+m_Choices
+m_Color
 m_ConeAxis
 m_ConeCutoff
+m_ConfigName
+m_Configs
 m_ControlRigData
 m_CullDataIndex
 m_DefaultSolverSettings
 m_DefaultTargetSettings
+m_ElementName
+m_Elements
 m_Emitters
 m_EndEffectorBone
 m_EndEffectorTargetBone
 m_ForceGenerators
+m_GroupName
 m_HitBoxSets
 m_HitBoxes
 m_IKChains
@@ -1493,7 +1529,9 @@ m_Initializers
 m_JointConstraintPairs
 m_JointName
 m_Joints
+m_MaterialGroupName
 m_Name
+m_NestedElements
 m_Operators
 m_PreEmissionOperators
 m_Renderers
@@ -1502,6 +1540,7 @@ m_SolverType
 m_SourceFilename
 m_TargetSettingSource
 m_TargetSource
+m_aAngOffset
 m_ankleBoneName
 m_attachments
 m_bApplyMinForce
@@ -1539,11 +1578,14 @@ m_bScaleInitialRange
 m_bScaleInitialValue
 m_bScalePerParticle
 m_bSelected
+m_bTopLevel
 m_bTrailBias
 m_bTranslationOnly
 m_bUseCompressedNormalTangent
 m_bUseHighestEndCP
 m_bUseShadowFastPath
+m_bUserSpecifiedColor
+m_bUserSpecifiedMaterialGroup
 m_bVisible
 m_bbox
 m_boneArray
@@ -1619,6 +1661,7 @@ m_flags
 m_floatAttributes
 m_floatParams
 m_hBuffer
+m_hModel
 m_hSnapshot
 m_hingeAxis
 m_hitboxsets
@@ -1654,6 +1697,7 @@ m_nChainIndex
 m_nChainInvIndex
 m_nChainType
 m_nChannelElements
+m_nChoice
 m_nClusterSizeMax
 m_nClusterSizeMin
 m_nControlPoint
@@ -1778,6 +1822,7 @@ malloc
 mapbuilder.nodraw
 mapbuilder.occluder
 master_morph_weight
+material_group
 materials/deferred_fog/fog_apply.vmat
 materials/deferred_fog/ground_fog_accumulate.vmat
 materials/deferred_lights/ssao_strong.vmat
@@ -1808,6 +1853,7 @@ memcpy
 memmove
 mempool.cpp
 memset
+merge
 mesh.cpp
 meshUtilsKeyValues
 mesh_calculate_curvature_smooth_invert
@@ -1817,6 +1863,7 @@ meshes
 min_angle
 model.cpp
 model_default_preview_sequence_name
+model_name
 modeldoc0
 modeldoc1
 modeldoc10
@@ -1836,6 +1883,8 @@ modeldoc22
 modeldoc23
 modeldoc24
 modeldoc25
+modeldoc26
+modeldoc27
 modeldoc3
 modeldoc4
 modeldoc5
@@ -1902,6 +1951,7 @@ r_post_colorcorrection
 r_post_film_grain
 r_post_fxaa
 r_post_vignette
+r_render_to_cubemap_debug
 r_showdebugoverlays
 r_showsceneobjectbounds
 r_ssao
@@ -1917,6 +1967,8 @@ radius0
 radius1
 recenter_on_parent_bone
 reflex_sights_back_buffer
+relative_angles
+relative_origin
 remapping vertex %d[w%d] invalid: %d->%d >= %d
 remapping vertex %d[w%d] invalid: %d->? >= %d
 renderingpipeline_vr.cpp
@@ -1991,6 +2043,7 @@ unspecified
 update
 useMotionDamping
 useSmoothPaths
+use_additional_offset
 usemtl initialShadingGroup
 utlstring.cpp
 v %g %g %g
@@ -2046,7 +2099,6 @@ vr_render_opaque
 vr_render_opaque_notzprepassed
 vr_render_overlays
 vr_render_refaction
-vr_render_to_cubemap_debug
 vr_render_translucent
 vr_shadows_debug
 vr_stencil_debug

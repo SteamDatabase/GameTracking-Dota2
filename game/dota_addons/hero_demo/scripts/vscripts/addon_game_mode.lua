@@ -32,9 +32,9 @@ require( "utility_functions" )
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 function Precache( context )
 	PrecacheUnitByNameSync( sHeroSelection, context )
-	PrecacheUnitByNameSync( "npc_dota_hero_axe", context )
-	PrecacheUnitByNameSync( "npc_dota_hero_antimage", context )
 	PrecacheUnitByNameSync( "npc_dota_hero_target_dummy", context )
+
+	PrecacheResource( "soundfile", "soundevents/game_sounds_hero_demo.vsndevts", context )
 end
 
 --------------------------------------------------------------------------------
@@ -79,13 +79,12 @@ function CHeroDemo:InitGameMode()
 	CustomGameEventManager:RegisterListener( "MaxLevelButtonPressed", function(...) return self:OnMaxLevelButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "FreeSpellsButtonPressed", function(...) return self:OnFreeSpellsButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "InvulnerabilityButtonPressed", function(...) return self:OnInvulnerabilityButtonPressed( ... ) end )
-	CustomGameEventManager:RegisterListener( "SpawnAllyButtonPressed", function(...) return self:OnSpawnAllyButtonPressed( ... ) end ) -- deprecated
 	CustomGameEventManager:RegisterListener( "SpawnEnemyButtonPressed", function(...) return self:OnSpawnEnemyButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SelectHeroButtonPressed", function(...) return self:OnSelectHeroButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "LevelUpEnemyButtonPressed", function(...) return self:OnLevelUpEnemyButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "MaxLevelEnemyButtonPressed", function(...) return self:OnMaxLevelEnemyButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "DummyTargetButtonPressed", function(...) return self:OnDummyTargetButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "RemoveSpawnedUnitsButtonPressed", function(...) return self:OnRemoveSpawnedUnitsButtonPressed( ... ) end )
-	CustomGameEventManager:RegisterListener( "LaneCreepsButtonPressed", function(...) return self:OnLaneCreepsButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "ChangeHeroButtonPressed", function(...) return self:OnChangeHeroButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "ChangeCosmeticsButtonPressed", function(...) return self:OnChangeCosmeticsButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "PauseButtonPressed", function(...) return self:OnPauseButtonPressed( ... ) end )

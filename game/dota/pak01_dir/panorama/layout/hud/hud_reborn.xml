@@ -36,6 +36,7 @@
 			<DOTAHUDCursorCooldown id="CursorCooldown" hittest="false"  class="VisGroup_Top"/>
 			<DOTAChat id="HudChat" class="HudChat VisGroup_Top" chatstyle="hud" oncancel="DOTAChatCancelMessageMode()" hittest="false"/>
 			<DOTAHUDNeutralCampPullTimes id="NeutralCampPullTimes" />
+			<DOTAHUDAbilityHeroIcons id="AbilityHeroIcons" />
 			<Panel id="minimap_container" hittest="false" disallowedstyleflags="hover,descendantfocus">
 				<Panel id="minimap_block" acceptsinput="true" >
 					<DOTAMinimap id="minimap" require-composition-layer="true" />
@@ -55,9 +56,11 @@
 				<Panel id="StatBranchDrawer" hittest="false">
 					<DOTAStatBranch id="statbranchdialog" hittest="false" />
 				</Panel>
-				
-				<DOTABuffList id="buffs" showdebuffs="false" />
-				<DOTABuffList id="debuffs" showbuffs="false" />
+
+				<Panel id="BuffContainer" hittest="false" >
+					<DOTABuffList id="buffs" showdebuffs="false" />
+					<DOTABuffList id="debuffs" showbuffs="false" />
+				</Panel>
 								
 				<DOTASpellCard id="InvokerSpellCard" hittest="false"/>
 
@@ -68,14 +71,16 @@
 						<Panel id="HUDSkinPortrait" hittest="false"/>
 						<Panel id="HUDSkinXPBackground" hittest="false"/>
 						<DOTAMultiUnit id="multiunit" class="PortraitLocation" />
-						<Panel id="PortraitBacker" hittest="flase"/>
-						<Panel id="PortraitBackerColor" hittest="false"/>
-						<Panel id="PortraitContainer" hittest="false">
-							<DOTAPortrait id="portraitHUD" class="PortraitLocation" />
-							<DOTAPortrait id="portraitHUDOverlay" class="PortraitLocation"/>
-							<Panel id="SilenceIcon" hittest="false" always-cache-composition-layer="true" />
-							<Panel id="MutedIcon" hittest="false" always-cache-composition-layer="true" />
-							<Panel id="DeathGradient"/>
+						<Panel id="PortraitGroup">
+							<Panel id="PortraitBacker" hittest="false"/>
+							<Panel id="PortraitBackerColor" hittest="false"/>
+							<Panel id="PortraitContainer" hittest="false">
+								<DOTAPortrait id="portraitHUD" class="PortraitLocation" onmouseover="DOTAHUDShowVisionRange();" onmouseout="DOTAHUDHideVisionRange();" />
+								<DOTAPortrait id="portraitHUDOverlay" class="PortraitLocation"/>
+								<Panel id="SilenceIcon" hittest="false" always-cache-composition-layer="true" />
+								<Panel id="MutedIcon" hittest="false" always-cache-composition-layer="true" />
+								<Panel id="DeathGradient"/>
+							</Panel>							
 						</Panel>
 						<DOTAHUDDeathPanel id="death_panel_buyback" />
 						<DOTAXP id="xp" hittest="false" always-cache-composition-layer="true" require-composition-layer="true" />
@@ -107,16 +112,20 @@
 						<Panel id="HUDSkinAbilityContainerBG" hittest="false" />
 						<Panel class="AbilityInsetShadowLeft"/>
 						<DOTAHotkey id="StatBranchHotkey" keybind="LearnStats" hittest="false" />
-						<DOTASecondaryAbilitiesBar id="SecondaryAbilitiesBar" class="HideWhenCanLevelAbilities" />
-						<Panel class="TertiaryAbilityContainer" hittest="false">
-							<DOTASecondaryAbilitiesBar id="TertiaryAbilitiesBar" secondary_ability_type="2" />							
+						<Panel id="SecondaryAbilityContainer">
+							<DOTASecondaryAbilitiesBar id="SecondaryAbilitiesBar" class="HideWhenCanLevelAbilities" />
+							<Panel class="TertiaryAbilityContainer" hittest="false">
+								<DOTASecondaryAbilitiesBar id="TertiaryAbilitiesBar" secondary_ability_type="2" />							
+							</Panel>
 						</Panel>
 						<Panel id="AbilitiesAndStatBranch" hittest="false">
-							<DOTATalentDisplay id="StatBranch"/>
-							<DOTAAbilityList id="abilities" hittest="false"/>
+							<Panel class="LeftRightFlow">
+								<DOTATalentDisplay id="StatBranch"/>
+								<DOTAAbilityList id="abilities" hittest="false"/>
+							</Panel>
+							<ProgressBar id="MorphProgress" min="0" max="1" value="0.5" />
 						</Panel>
 						<Panel class="AbilityInsetShadowRight" require-composition-layer="true" always-cache-composition-layer="true"/>
-						<ProgressBar id="MorphProgress" min="0" max="1" value="0.5" />
 						<DOTAUnitEconItem id="econ_item"/>
 						<DOTAInventory id="inventory" slotsDraggable="true" />
 						<Panel id="right_flare" >
@@ -156,6 +165,7 @@
 			<Panel id="stackable_side_panels" class="TopBottomFlow" hittest="false">
 				<DOTAQuickStats id="quickstats" class="VisGroup_Top" hittest="false" require-composition-layer="true" always-cache-composition-layer="true"/>
 				<DOTAPlusStatus id="PlusStatus"  class="VisGroup_Top"/>
+				<DOTAHeroDisplay id="HeroDisplay" />
 			</Panel>
 			<DOTAMutations id="mutations" class="VisGroup_Top" hittest="false" require-composition-layer="true" always-cache-composition-layer="true"/>
 			<DOTAWagering id="Wagering" class="VisGroup_Top" hittest="false"/>
@@ -171,7 +181,11 @@
 			<DOTAGG id="GG"/>
 		</Panel>
 		<DOTAPredictionsButton id="predictions_button" />
-		<DOTAChannelBar id="ChannelBar" hittest="false" />
+
+		<Panel id="OrdersContainer" hittest="false">
+			<DOTAChannelBar id="ChannelBar" hittest="false" />
+			<DOTAQueuedOrders id="QueuedOrders" hittest="false"/>
+		</Panel>
 		<DOTASpectatorGameStats id="spectator_game_stats" class="VisGroup_Top" />
 		<DOTASpectatorOptions id="spectator_options" class="VisGroup_Top"/>
 		<DOTASpectatorGraph id="SpectatorGraph" hittest="false" class="VisGroup_Top" />
@@ -191,8 +205,7 @@
 		<DOTASpectatorItems id="SpectatorItems"  class="VisGroup_Top"/>
 		<DOTAPaused id="PausedInfo"  class="VisGroup_Top"/>
 		<DOTAGuideBrowser id="GuideBrowser" acceptsinput="true" class="SmallMode VisGroup_Top" />
-		<DOTAHUDCharms id="Charms" />
-		<DOTAHeroDisplay id="HeroDisplay" />
+		<DOTAHUDCharms id="Charms" />	
 		<DOTACameraman id="Cameraman" />
 		<DOTAHudBotDebug id="BotDebug" />
 		<DOTASpectatorDVR id="spectator_dvr" />

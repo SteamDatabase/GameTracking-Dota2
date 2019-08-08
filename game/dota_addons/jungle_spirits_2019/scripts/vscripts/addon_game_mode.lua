@@ -124,10 +124,6 @@ function CJungleSpirits:InitGameMode()
 	self._bDevMode = (GameRules:GetGameSessionConfigValue("DevMode", "false") == "true")
 	self._szDevHero = GameRules:GetGameSessionConfigValue("DevHero", nil)
 	
-	if self._bDevMode then
-		GameRules:SetPreGameTime( 5.0 )
-	end
-
 	GameRules:SetCustomGameSetupTimeout( 0 ) 
 	GameRules:SetCustomGameSetupAutoLaunchDelay( 0 )
 	GameRules:GetGameModeEntity():SetDraftingBanningTimeOverride( 12 )
