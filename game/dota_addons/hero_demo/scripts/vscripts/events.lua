@@ -136,8 +136,8 @@ function CHeroDemo:OnMaxLevelButtonPressed( eventSourceIndex, data )
 
 	for i = 0, DOTA_MAX_ABILITIES - 1 do
 		local hAbility = hPlayerHero:GetAbilityByIndex( i )
-		if hAbility and hAbility:CanAbilityBeUpgraded () == ABILITY_CAN_BE_UPGRADED and not hAbility:IsHidden() and not hAbility:IsAttributeBonus() then
-			while hAbility:GetLevel() < hAbility:GetMaxLevel() do
+		if hAbility and not hAbility:IsAttributeBonus() then
+			while hAbility:GetLevel() < hAbility:GetMaxLevel() and hAbility:CanAbilityBeUpgraded () == ABILITY_CAN_BE_UPGRADED and not hAbility:IsHidden()  do
 				hPlayerHero:UpgradeAbility( hAbility )
 			end
 		end

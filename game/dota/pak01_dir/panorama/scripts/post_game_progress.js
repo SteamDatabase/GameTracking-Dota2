@@ -728,6 +728,11 @@ AnimateHeroBadgeLevelScreenAction.prototype.start = function ()
 			{
 				this.seq.actions.push( new AnimateShardRewardAction( panel, '#DOTA_PlusPostGame_CavernCrawlProgress', this.data.dota_plus_progress.cavern_crawl.shard_amount ) );
 			}
+
+			if ( this.data.dota_plus_progress.role_call_shard_reward > 0 )
+			{
+			    this.seq.actions.push( new AnimateShardRewardAction( panel, '#DOTA_PlusPostGame_RoleCallProgress', this.data.dota_plus_progress.role_call_shard_reward ) );
+			}
 		}
 
 		this.seq.actions.push( new StopSkippingAheadAction() );
@@ -2338,184 +2343,186 @@ AnimateCoachRatingScreenAction.prototype.finish = function ()
 
 function TestAnimateHeroBadgeLevel()
 {
-	var data =
+    var data =
 	{
-		hero_id: 11,
-		hero_badge_xp_start: 22850,
+	    hero_id: 11,
+	    hero_badge_xp_start: 22850,
 
-		hero_badge_progress:
+	    hero_badge_progress:
 		[
 			{
-				xp_type: HERO_BADGE_XP_TYPE_MATCH_FINISHED,
-				xp_amount: 50
+			    xp_type: HERO_BADGE_XP_TYPE_MATCH_FINISHED,
+			    xp_amount: 50
 			},
 			{
-				xp_type: HERO_BADGE_XP_TYPE_MATCH_WON,
-				xp_amount: 50
+			    xp_type: HERO_BADGE_XP_TYPE_MATCH_WON,
+			    xp_amount: 50
 			},
 			{
-				xp_type: HERO_BADGE_XP_TYPE_CHALLENGE_COMPLETED,
-				xp_amount: 375,
+			    xp_type: HERO_BADGE_XP_TYPE_CHALLENGE_COMPLETED,
+			    xp_amount: 375,
 
-				challenge_stars: 2,
-				challenge_description: "Kill an enemy hero in 15 seconds after teleporting in 1/2/3 times."
+			    challenge_stars: 2,
+			    challenge_description: "Kill an enemy hero in 15 seconds after teleporting in 1/2/3 times."
 			},
 		],
 
-		hero_badge_level_up:
+	    hero_badge_level_up:
 		{
-			18:
+		    18:
 				{
-					tier_number: 4,
-					rewards:
+				    tier_number: 4,
+				    rewards:
 					[
 						{
-							reward_type: HERO_BADGE_LEVEL_REWARD_TIER,
-							tier_name: "#DOTA_HeroLevelBadgeTier_Platinum",
-							tier_class: "PlatinumTier"
+						    reward_type: HERO_BADGE_LEVEL_REWARD_TIER,
+						    tier_name: "#DOTA_HeroLevelBadgeTier_Platinum",
+						    tier_class: "PlatinumTier"
 						},
 						{
-							reward_type: HERO_BADGE_LEVEL_REWARD_CHAT_WHEEL,
-							chat_wheel_message: "#dota_chatwheel_message_nevermore_4",
-							all_chat: 1,
-							sound_event: "soundboard.ay_ay_ay"
+						    reward_type: HERO_BADGE_LEVEL_REWARD_CHAT_WHEEL,
+						    chat_wheel_message: "#dota_chatwheel_message_nevermore_4",
+						    all_chat: 1,
+						    sound_event: "soundboard.ay_ay_ay"
 						}
 					],
 				},
-			19:
+		    19:
 				{
-					tier_number: 4,
-					rewards: 
+				    tier_number: 4,
+				    rewards: 
 					[
 						{
-							reward_type: HERO_BADGE_LEVEL_REWARD_CURRENCY,
-							currency_amount: 3000
+						    reward_type: HERO_BADGE_LEVEL_REWARD_CURRENCY,
+						    currency_amount: 3000
 						}
 					]
 				}
 		},
-		hero_relics_progress:
+	    hero_relics_progress:
 		[
 			{
-				relic_type: 0,
-				relic_rarity: 1,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 0,
+			    relic_rarity: 1,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 1,
-				relic_rarity: 1,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 1,
+			    relic_rarity: 1,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 2,
-				relic_rarity: 1,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 2,
+			    relic_rarity: 1,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 3,
-				relic_rarity: 1,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 3,
+			    relic_rarity: 1,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 4,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 4,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 5,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 5,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 6,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 6,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 7,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 7,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 8,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 8,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 9,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 9,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 10,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 10,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 11,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 11,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 12,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 12,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			},
 			{
-				relic_type: 13,
-				relic_rarity: 0,
-				primary_attribute: 1,
-				starting_value: 25,
-				ending_value: 29,
+			    relic_type: 13,
+			    relic_rarity: 0,
+			    primary_attribute: 1,
+			    starting_value: 25,
+			    ending_value: 29,
 			}
 		],
 
-		dota_plus_progress:
+	    dota_plus_progress:
 		{
-			tips:
+		    tips:
 			[
 				{
-					account_id: 172258,
-					count: 2,
-					amount: 50,
+				    account_id: 172258,
+				    count: 2,
+				    amount: 50,
 				},
 			],
 
-			cavern_crawl:
+		    cavern_crawl:
 			{
-				event_id: 25,
-				hero_id: 87,
-				hero_name: 'disruptor',
-				shard_amount: 150,
+			    event_id: 25,
+			    hero_id: 87,
+			    hero_name: 'disruptor',
+			    shard_amount: 150,
 			},
 
-			victory_prediction_shard_reward: 20
+		    victory_prediction_shard_reward: 20,
+
+		    role_call_shard_reward: 25
 		}
 
 	};

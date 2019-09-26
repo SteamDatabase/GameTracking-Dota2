@@ -1070,6 +1070,7 @@
 	input StopSound(void) : "Stop the sound event"
 	
 	output SoundEventGuid(integer) : "Sound Event GUID"
+	output OnSoundFinished(void) : "Fired when the sound finished playing"
 ]
 
 @PointClass base(point_soundevent) iconsprite("editor/snd_event.vmat") = snd_event_point :
@@ -1118,6 +1119,7 @@
 	input SetOpvarName(string) : "Change the target opvar name"	
 	input SetOpvarIndex(integer) : "Change the target opvar index"	
 	input ChangeOpvarValue(float) : "Change the value of the OpVar (does not set it in the stack)"
+	input ChangeOpvarValueAndSet(float) : "Change the value of the OpVar and set it in the stack"
 	input SetOpvar(void) : "Set the OpVar value in the stack"
 	input SetSoundEventGUID(integer) : "Start the sound event using a snd_event_point and pass its guid output to this."
 ]
@@ -1146,6 +1148,7 @@
 	input SetOpvarIndex(integer) : "Change the target opvar index"	
 	input Enable(void) : "Enable the entity"
 	input Disable(void) : "Disable the entity"
+	input SetDisabledValue(void) : "Set the on-disable value for the player that causes this input"
 
 	
 	//Outputs
@@ -1501,9 +1504,9 @@
 ]
 
 @PointClass base(Targetname, Parentname) sweptplayerhull() = func_useableladder : 
-	"A Half-Life 2 ladder. Handles player auto mount/unmount, as well as +use to get onto the ladder. \n\n" +
-	"See also 'info_ladder_dismount', used to specify ladder auto-dismount points.\n\n" +
-	"Note: This entity is non-functional in Counter-Strike: Source. Use func_ladder instead."
+	"A Half-Life 2 ladder. Handles player auto mount/unmount, as well as +use to get onto the ladder.<br><br>"+
+	"See also 'info_ladder_dismount', used to specify ladder auto-dismount points.<br><br>"+
+	"<b>Note:</b> This entity is non-functional in Counter-Strike: Source. Use func_ladder instead."
 [
 	spawnflags(flags) =
 	[
@@ -1527,10 +1530,10 @@
 
 @PointClass base(Targetname, Parentname) size( -16 -16 0, 16 16 72 ) color(127 127 127) = func_ladderendpoint : 
 	"An entity used to specify the endpoints of a ladder. This entity is functional, but has been replaced by the " + 
-	"easier-to-use func_useableladder entity. Left in only for backwards-compatibility!\n\n" +
+	"easier-to-use func_useableladder entity. Left in only for backwards-compatibility!<br><br>" +
 	"To be valid, a full sized player hull traced between the start and end points must not be obstructed at level " + 
 	"activation time. The angle determines in which direction the player leaves the ladder if the player presses the " +
-	"+jump button.\n\n" +
+	"+jump button.<br><br>" +
 	"Note: This entity is non-functional in Counter-Strike: Source. In CS:S, use func_ladder instead."
 [
 	target(target_destination) : "Other" : : "A ladder goes between any two func_ladderendpoints pointing at each other."
@@ -3033,14 +3036,16 @@
 ]
 
 @PointClass base(Targetname) iconsprite("editor/info_landmark") = info_landmark : 
-	"An entity that acts as a landmark for transitions to another level. There should be a corresponding info_landmark entity in the next map. Entities will be transitioned to the next level relative to the info_landmark entities."
+	"An entity that acts as a local coordinate frame for transitions to another level. There should be a corresponding info_landmark entity in the next map. "+
+	"Entities will transition to the next level at the same relative offset from the info_landmark entity.<br><br>"+
+	"Note that only entities in same the PVS as the info_landmark are considered for transitioning, so it should generally be placed inside the transition space."
 [
 ]
 
 @PointClass base(Targetname) color(0 255 0) iconsprite("editor/info_target.vmat") = info_spawngroup_load_unload : "Logical entity that starts async loading or unloading a level."
 [
 	targetname(target_source) : "Name"
-	mapname(string) : "Level to stream in/out"	
+	mapname(string) : "Level to stream in/out"
 	entityfiltername(string) : "Name of entity filter to apply"	
 	landmark(string) : "The landmark (same landmark name should be in both maps) used to determine the offset of the second map to the first"
 	timeoutInterval(float) : "Timeout Interval" : "0" : "The amount of seconds after which, if any client hasn't finished streaming the necessary assets, that client is disconnected and the spawngroup spawns anyways. 0 means use some reasonable default set in the code."
@@ -3227,7 +3232,7 @@
 	"A navigation node for ground moving NPCs that includes some context information for NPCs that are interested in it. The hint might " +
 	"indicate a window that could be looked out of, or an item of interest that could be commented on. Many hint nodes are NPC-specific, " +
 	"so it's helpful to use naming conventions like 'Crow: Fly to point' in the hint choices list. The angles of a hint node indicate what direction " +
-	"the NPC should face to perform the hint behavior.\n\n" +
+	"the NPC should face to perform the hint behavior.<br><br>" +
 	"It's important to understand the distinction between scripts, such as scripted_sequence and scripted_schedule, and info_hint entities. Scripts summon " +
 	"NPCs to specific cue points to play their parts, while hints provide context information to the AI that they use to perform their " +
 	"behaviors. Hints require code support in the NPC, while scripts are generic and may require only animations to play. Use a hint if the behavior is driven " +
@@ -4263,7 +4268,7 @@
 
 
 @PointClass base(Targetname) = logic_branch_listener :
-	"Contains a list of logic_branch entities and fires outputs when the state of any of the logic_branches changes.\n\n"+
+	"Contains a list of logic_branch entities and fires outputs when the state of any of the logic_branches changes.<br><br>"+
 	"This entity is used to fire an event when a set of conditions are all satisfied."
 [
 	Branch01(target_destination) : "Logic Branch 01" : : "The name of one or more logic_branches (wildcards allowed)."
@@ -4293,9 +4298,9 @@
 
 @PointClass base(Targetname) iconsprite("editor/logic_case.vmat") = logic_case :
 	"Compares an input to up to 16 preset values. If the input value is the same as " +
-	"any of the preset values, an output corresponding to that value is fired.\n\n" +
+	"any of the preset values, an output corresponding to that value is fired.<br><br>" +
 	"For example: if Case01 is set to 2 and Case02 is set to 5, and the input value is 5, " +
-	"the OnCase02 output will be fired.\n\n" +
+	"the OnCase02 output will be fired.<br><br>" +
 	"This entity can also be used to select from a number of random targets via the " +
 	"PickRandom input. One of the OnCase outputs that is connected to another entity will " +
 	"be picked at random and fired."
@@ -4383,10 +4388,12 @@
 		6 : "Prone"
 		7 : "Dead"
 	]
+	invertState1(bool) : "Invert State" : 0
 	minCount1(int) : "On Min Count 1" : -1 : "The minimum count threshold of npc 1"
 	maxCount1(int) : "On Max Count 1" : -1 : "The maximum count threshold of npc 1"
 	minFactor1(int) : "Min Factor 1" : 0 : "The minimum count of npc 1 for factor calculations"
 	maxFactor1(int) : "Max Factor 1" : 0 : "The maximum count of npc 1 for factor calculations"
+	defaultDist1(float) : "Default Dist 1" : 0 : "The default minimum player distance of npc 1"
 
 	// npc type 2
 	NPCType2(npcclass) : "Class name of NPC 2 to count"
@@ -4402,10 +4409,13 @@
 		6 : "Prone"
 		7 : "Dead"
 	]
+	invertState2(bool) : "Invert State" : 0
 	minCount2(int) : "On Min Count 2" : -1 : "The minimum count threshold of npc 2"
 	maxCount2(int) : "On Max Count 2" : -1 : "The maximum count threshold of npc 2"
 	minFactor2(int) : "Min Factor 2" : 0 : "The minimum count of npc 2 for factor calculations"
 	maxFactor2(int) : "Max Factor 2" : 0 : "The maximum count of npc 2 for factor calculations"
+	defaultDist2(float) : "Default Dist 2" : 0 : "The default minimum player distance of npc 2"
+
 
 	// npc type 3
 	NPCType3(npcclass) : "Class name of NPC 3 to count"
@@ -4421,10 +4431,13 @@
 		6 : "Prone"
 		7 : "Dead"
 	]
+	invertState3(bool) : "Invert State" : 0
 	minCount3(int) : "On Min Count 3" : -1 : "The minimum count threshold of npc 3"
 	maxCount3(int) : "On Max Count 3" : -1 : "The maximum count threshold of npc 3"
 	minFactor3(int) : "Min Factor 3" : 0 : "The minimum count of npc 3 for factor calculations"
 	maxFactor3(int) : "Max Factor 3" : 0 : "The maximum count of npc 3 for factor calculations"
+	defaultDist3(float) : "Default Dist 3" : 0 : "The default minimum player distance of npc 3"
+
 
 	//Inputs
 	input Enable(void) : "Enable the entity"
@@ -4435,18 +4448,23 @@
 	output OnMinCountAll(void) : "Fired when the count of all npcs transitions to the min count or less."
 	output OnMaxCountAll(void) : "Fired when the count of all npcs transitions to the max count or greater."
 	output OnRangeFactorAll(float) : "Outputs the factor of the count of all npcs."
+	output OnMinPlayerDistAll(float) : "Outputs distance to the NPC, of all NPCs, that is closest to player."
 	// npc 1
 	output OnMinCount1(void) : "Fired when the count of npc 1 transitions to the min count or less."
 	output OnMaxCount1(void) : "Fired when the count of npc 1 transitions to the max count or greater."
 	output OnRangeFactor1(float) : "Outputs the factor of the count of npc 1."
+	output OnMinPlayerDist1(float) : "Outputs distance to the NPC, of NPCs 1, that is closest to player."
 	// npc 2
 	output OnMinCount2(void) : "Fired when the count of npc 2 transitions to the min count or less."
 	output OnMaxCount2(void) : "Fired when the count of npc 2 transitions to the max count or greater."
 	output OnRangeFactor2(float) : "Outputs the factor of the count of npc 2."
+	output OnMinPlayerDist2(float) : "Outputs distance to the NPC, of NPCs 2, that is closest to player."
 	// npc 3
 	output OnMinCount3(void) : "Fired when the count of npc 3 transitions to the min count or less."
 	output OnMaxCount3(void) : "Fired when the count of npc 3 transitions to the max count or greater."
 	output OnRangeFactor3(float) : "Outputs the factor of the count of npc 3."
+	output OnMinPlayerDist3(float) : "Outputs distance to the NPC, of NPCs 3, that is closest to player."
+
 ]
 
 @PointClass base( Targetname, LogicNPCCounterPointBase ) iconsprite("editor/math_counter.vmat") sphere(distanceMax) = logic_npc_counter_radius :
@@ -4527,14 +4545,14 @@
 
 @PointClass base(Targetname, EnableDisable) iconsprite("editor/logic_relay.vmat") = logic_relay :
 	"A message forwarder. Fires an OnTrigger output when triggered, and " +
-	"can be disabled to prevent forwarding outputs.\n\n" +
+	"can be disabled to prevent forwarding outputs.<br><br>" +
 	"Useful as an intermediary between one entity and another for turning " +
 	"on or off an I/O connection, or as a container for holding a set of " +
 	"outputs that can be triggered from multiple places."
 [
 	TriggerOnce(boolean) : "Trigger Once" : 0 : "Deletes the logic relay after firing an OnTrigger() or a connected OnSpawn() output"
 	FastRetrigger(boolean) : "Fast Retrigger" : 0 : "Without this, the logic_relay will wait until all inputs connected to OnTrigger() have fired before retriggering"
-	PassthroughCaller(boolean) : "Pass through caller" : 0 : "If set, this logic_relay will be ignored by !caller in downstream IO connections. Instead, the previous caller in the IO chain will be found by !caller.\n"
+	PassthroughCaller(boolean) : "Pass through caller" : 0 : "If set, this logic_relay will be ignored by !caller in downstream IO connections. Instead, the previous caller in the IO chain will be found by !caller."
 	
 	// Inputs
 	input Trigger(void) : "Trigger the relay, causing its OnTrigger output to fire if it is enabled."
@@ -4622,6 +4640,7 @@
 	// Inputs
 	input EnableCollisions(void) : "Enable collisions between the first and second entity."
 	input DisableCollisions(void) : "Disable collisions between the first and second entity."
+	input DisableCollisionsWith(string) : "Disable collisions between the first entity and use the parameter to find the second entity."
 ]
 
 
@@ -4914,9 +4933,9 @@
 	"If there are interdependencies (entity I/O, hierarchy, or other name references) between the entities "+
 	"in the template, the entities in the template will have their names changed and the interdependencies will "+
 	"be reconnected to the changes names. The name change format is as follows: '<original name>&0000', where the 0000 "+
-	"will be replaced with the current global template instance, so wildcard searches for '<original name>*' will still find them.\n"+
-	"If you don't want the name fixup to happen, because you're only spawning the template once, or you want inputs to "+
-	"trigger all instances of the template, check the 'Preserve entity names' spawnflag. \n"+
+	"will be replaced with the current global template instance, so wildcard searches for '<original name>*' will still find them.<br><br>"+
+	"If you don't want the name fixup to happen because you're only spawning the template once, or you want inputs to "+
+	"trigger all instances of the template, check the 'Preserve entity names' spawnflag.<br><br>"+
 	"To spawn the template in other places, use an env_entity_maker."
 [
 	spawnflags(flags) =
@@ -5080,8 +5099,8 @@
 		1 : "OR (any filter must pass)"
 	]
 
-	Negated(choices) : "Negate Outcome" : 0 : "Whether to negate the result of the subfilters, after combining them using the Logic Type chosen.\n"+
-		"Negating the outcome using the AND logic type means that any subfilter must fail for this filter to pass.\n"+
+	Negated(choices) : "Negate Outcome" : 0 : "Whether to negate the result of the subfilters, after combining them using the Logic Type chosen.<br>"+
+		"Negating the outcome using the AND logic type means that any subfilter must fail for this filter to pass.<br>"+
 		"Negating the outcome using the OR logic type means that all subfilters must fail for this filter to pass." =
 	[
 		0 : "No"
@@ -5543,7 +5562,7 @@
 	target(target_destination) : "Target object" : ""  : "The entity whose mass center will be overridden."
 ]
 
-@PointClass halfgridsnap base(Targetname, BasePhysicsNoSettleAttached) = phys_spring : 
+@PointClass halfgridsnap  editormodel("models/editor/axis_helper") base(Targetname, BasePhysicsNoSettleAttached) = phys_spring : 
 	"A physically simulated spring. "+
 	"'Length' is what's known as the 'natural spring length'. This is how long the spring would "+
 	"be if it was at rest (nothing hanging on it or attached). When you attach something to the "+
@@ -6044,6 +6063,7 @@
 	input EnableCollision(void) : "Enable collision on the prop."
 	input DisableCollision(void) : "Disable collision on the prop."
 	input SetNavIgnore(boolean) : "Enable and disable NAVIgnore on the prop."
+	input SetAnimGraphParameter(string) : "Set an animation graph parameter Format: <name=value>"
 
 	// Outputs
 	output OnAnimationBegun(void) : "Fired whenever a new animation has begun playing."
@@ -6056,6 +6076,10 @@
 	rendercolor(color255) : "Color (R G B)" : "255 255 255"
 	updatechildren(boolean) : "Update children" : 0 : "Update touches for any children that are attached to attachment points as this prop animates. "+
 		"This allows SetParentAttached triggers or func_brushes to touch properly."
+
+	use_animgraph(boolean) : "Allow Animgraph" : 0 : "Allow this entity to use its animgraph"
+
+	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "0" : "Create a navigation obstacle to assist NPC pathfinding"
 ]
 
 @PointClass base(prop_detail_base) model() = prop_detail : 
@@ -6139,7 +6163,7 @@
 ]
 
 @PointClass base(prop_dynamic_base) model() = prop_dynamic_override :
-	"A prop that can be placed in hierarchy and can play animations. It can also be configured to break when it takes enough damage.\n"+
+	"A prop that can be placed in hierarchy and can play animations. It can also be configured to break when it takes enough damage.<br>"+
 	"prop_dynamic_override is a prototyping entity only. It will allow the use of models designed to be used as prop_physics."
 [
 	health(integer) : "Health" : 0 : "Number of points of damage to take before breaking.  0 means don't break."	
@@ -6167,7 +6191,7 @@
 	
 	minhealthdmg(integer) [ group="Physics Properties" ] : "Min Damage to Hurt" : 0 : "The prop will ignore any damage events if the damage is less than this amount."
 	shadowcastdist(integer) [ group="Physics Properties" ] : "Shadow Cast Distance" : 0 : "Use this to override how far this object casts shadows. 0 = default distance."
-	physdamagescale(float) [ group="Physics Properties" ] : "Physics Impact Damage Scale" : "0.1" : "Scales damage energy when this object is hit by a physics object. NOTE: 0 means this feature is disabled for backwards compatibility.\nSet to 1.0 for materials as strong as flesh, smaller numbers indicate stronger materials."
+	physdamagescale(float) [ group="Physics Properties" ] : "Physics Impact Damage Scale" : "0.1" : "Scales damage energy when this object is hit by a physics object. NOTE: 0 means this feature is disabled for backwards compatibility.<br>Set to 1.0 for materials as strong as flesh, smaller numbers indicate stronger materials."
 	Damagetype(choices) [ group="Physics Properties" ] : "Impact damage type" : 0 =
 	[
 		0: "Blunt"
@@ -6352,7 +6376,7 @@
 	gamemass(integer) : "Game Mass Override" : 0 : "Set the game mass by hand instead of using the code defaults."
 
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
-	physdamagescale(float) [ group="Physics Properties" ] : "Physics Impact Damage Scale" : "1.0" : "Scales damage energy when this object is hit by a physics object. NOTE: 0 means this feature is disabled for backwards compatibility.\nSet to 1.0 for materials as strong as flesh, smaller numbers indicate stronger materials."
+	physdamagescale(float) [ group="Physics Properties" ] : "Physics Impact Damage Scale" : "1.0" : "Scales damage energy when this object is hit by a physics object. NOTE: 0 means this feature is disabled for backwards compatibility.<br>Set to 1.0 for materials as strong as flesh, smaller numbers indicate stronger materials."
 ]
 
 @SolidClass base(Targetname, Parentname, RenderFields, Shadow) = func_conveyor : 
@@ -6620,7 +6644,7 @@
 ]
 
 @SolidClass base(BaseTrain) = func_tracktrain :
-	"A moving platform that the player can ride. It follows a path of path_track entities.\n" +
+	"A moving platform that the player can ride. It follows a path of path_track entities.<br>" +
 	"NOTE: Build your train so that the front of the train is facing down the X axis. " +
 	"When it spawns it will automatically rotate to face the next path_track on the path."
 [
@@ -6633,7 +6657,7 @@
 ]
 
 @SolidClass base(BaseTrain) = func_tanktrain :
-	"A moving train that follows a path of path_track entities, shoots at the player, and can be killed.\n" + 
+	"A moving train that follows a path of path_track entities, shoots at the player, and can be killed.<br>" + 
 	"NOTE: Build your train so that the front of the train is facing down the X axis. " +
 	"When it spawns it will automatically rotate to face the next path_track on the path."
 [
@@ -6743,11 +6767,11 @@
 		auto_apply_material = "materials/tools/toolstrigger.vmat"
 	}
 = trigger_changelevel : 
-	"An entity that triggers a level change.\n" +
-	"Place an info_landmark in both maps that marks the 'same' location in each map.\n"+
-	"TIPS & TRICKS: To fire events in the next level, use the OnLevelChange output to turn on "+
+	"An entity that triggers a level change.<br><br>" +
+	"Place an info_landmark in both maps in the PVS of the transition region that marks the 'same' location in each map.<br><br>"+
+	"<b>TIPS & TRICKS:</b><br>To fire events in the next level, use the OnLevelChange output to turn on "+
 	"an env_global in the current level.  Create a logic_auto in the next level that checks "+
-	"for the state set by the env_global.\n\n"+
+	"for the state set by the env_global.<br><br>"+
 	"To control which entities go through the level transition, create one or more trigger_transitions and "+
 	"give them the same name as the landmark. Any entities within the trigger_transition(s) will go to the next map."
 [
@@ -6910,7 +6934,7 @@
 	
 	target(target_destination) : "Look Target" : : "The name of the entity to be looked at."
 	LookTime(string) : "Look Time" : "0.5" : "The time, in seconds, that the player must look the target before firing the output. Resets if player leaves trigger, or looks outside the Field of View threshold."
-	FieldOfView(string) : "Field Of View" : "0.9" : "How close the player has to be looking at the target. 1.0 = straight ahead\n 0.0 = +/- 90 degrees\n -1.0 = all directions)."
+	FieldOfView(string) : "Field Of View" : "0.9" : "How close the player has to be looking at the target.<br><br> 1.0 = straight ahead<br> 0.0 = +/- 90 degrees<br> -1.0 = all directions"
 	FOV2D(boolean) : "Use 2D Field Of View" : "0" : "In 2D mode the look angle FOV is only checked along the x and y axes, not the z."
 	Timeout(float) : "Timeout" : "0" : "The time, in seconds, to wait after player enters the trigger before firing the OnTimeout output, 0 = never. NOTE: When the timeout expires, the OnTrigger output does NOT fire!"
 	test_occlusion(boolean) : "Test occlusion" : "0" : "If set, player must have clear LOS to the target (ignoring dynamic entities)."
@@ -6958,7 +6982,7 @@
 ]
 
 @SolidClass base(Targetname) = trigger_impact : 
-	"A trigger volume that can be told to push all physics objects that are inside of it in the direction specified by this trigger's angles.\n"+
+	"A trigger volume that can be told to push all physics objects that are inside of it in the direction specified by this trigger's angles.<br>"+
 	"Also outputs the force at the time of impact for anyone else that wants to use it."
 [
 	Magnitude(float) : "Magnitude" : 200    : "The strength of the impact. Negative values reverse the direction."
@@ -7154,6 +7178,7 @@
 		0 : "No"
 		1 : "Yes"
 	]
+	furniture_physics(boolean) : "Furniture Physics" : 0 : "Create (kinematic) physics for the furniture. (By default npc_furniture is nonsolid to avoid unintentional interactions with any co-actors.)"
 ]
 
 
@@ -7181,8 +7206,8 @@
 	// Inputs
 	input SetMaterialVar(string) : "Fire to modify a material variable. The argument is the value to set the variable to."
 	input SetMaterialVarToCurrentTime(void) : "This sets the material variable to the current time on the server."
-	input StartAnimSequence(string) : "Force an animated material with the MaterialModifyAnimated proxy to play a set of animation frames. Format is: <Frame Start> <Frame End> <Frame Rate> <Loop>\nSetting <Frame End> to -1 uses the last frame of the texture. <Loop> should be 1 or 0."
-	input StartFloatLerp(string) : "Force a material with the MaterialModifyAnimated proxy to lerp a material var between two floating point values. Format is: <Start Value> <End Value> <Transition Time> <Loop>\n<Loop> should be 1 or 0."
+	input StartAnimSequence(string) : "Force an animated material with the MaterialModifyAnimated proxy to play a set of animation frames. Format is: <Frame Start> <Frame End> <Frame Rate> <Loop><br>Setting <Frame End> to -1 uses the last frame of the texture. <Loop> should be 1 or 0."
+	input StartFloatLerp(string) : "Force a material with the MaterialModifyAnimated proxy to lerp a material var between two floating point values. Format is: <Start Value> <End Value> <Transition Time> <Loop><br><Loop> should be 1 or 0."
 ] 
 
 //-------------------------------------------------------------------------
@@ -7637,7 +7662,7 @@
 	ColorCorrectionName(target_destination) : "ColorCorrection Name" : : "The name of the color_correction entity associated with this volume."
 ]
 
-@SolidClass base( Targetname, Parentname, EnableDisable ) = func_occluder : "A func_occluder occludes objects behind it. It is used for rendering performance optimization. One use case is to put it into a doorway and toggle it based on whether the door is open or not. Note that geometry surrounding the doorway should have occluders as well, otherwise the benefit of the func_occluder is limited.\nfunc_occluders should be as large as possible for best occlusion."
+@SolidClass base( Targetname, Parentname, EnableDisable ) = func_occluder : "A func_occluder occludes objects behind it. It is used for rendering performance optimization. One use case is to put it into a doorway and toggle it based on whether the door is open or not. Note that geometry surrounding the doorway should have occluders as well, otherwise the benefit of the func_occluder is limited.<br>func_occluders should be as large as possible for best occlusion."
 [
 ]
 
@@ -8052,12 +8077,12 @@
 	}
 = path_particle_rope
 [
-	effect_name(particlesystem) [report] : "Particle System Name" : "particles/entity/path_particle_rope_default.vpcf"
+	effect_name(particlesystem) [report] : "Particle System Name" : "particles/entity/path_particle_cable_default.vpcf"
 	start_active(boolean) : "Start Active" : 1 : "Will the particle system be visible on spawn"
 	max_simulation_time(float) : "Max Time To Simulate" : 0 : "Max number of seconds to run the particle simulation for. A value of 0 means run the simulation indefinitely."
 	particle_spacing(float) : "Spacing" : 32 : "Units between the individual partcles in the rope simulation."
-	slack(float) : "Slack" : "0.0" : "Controls the amount the rope will drop between path nodes. Generally between 0.0 and 1.0, the value is a multiplier on the distance that particles on path can seperate relative to their initial distance."
-	radius(float) : "Radius" : "1.0" : "Radius of the rope."
+	slack(float) : "Slack" : "0.5" : "Controls the amount the rope will drop between path nodes. Generally between 0.0 and 1.0, the value is a multiplier on the distance that particles on path can seperate relative to their initial distance."
+	radius(float) : "Radius" : "4.0" : "Radius of the rope."
 	color_tint(color255) : "Color Tint" : "255 255 255"
 			
 	// Inputs

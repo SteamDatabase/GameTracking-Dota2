@@ -210,6 +210,12 @@
 		"LARGE_HULL" : "Large"
 	]
 	footstep_script(string) : "Footstep script" : ""
+	act_as_flyer(choices) : "Act as a Flyer?" : 0 =
+	[
+		0 : "No, obey gravity"
+		1 : "Yes, don't apply gravity on spawn"
+	]
+	is_friendly_npc(boolean) : "Friendly NPC? (Prevent Player Attacking)" : 0 : "Set for the NPC to notify the game is it friendly and players should not be allowed to attack it"
 ]
 
 
@@ -260,10 +266,16 @@
 	m_iszPlay(sequence) : "Action Animation" : "" : "The name of the main sequence (such as 'reload02') or activity (such as 'ACT_RELOAD') to play."
 	m_iszPostIdle(sequence) : "Post Action Idle Animation" : "" : "The name of the sequence (such as 'idle01') or activity (such as 'ACT_IDLE') to play after the action animation."
 	m_iszCustomMove(sequence) : "Custom Move Animation" : "" : "Used in conjunction with the 'Custom movement' setting for the 'Move to Position' property, specifies the sequence (such as 'crouch_run01') or activity (such as 'ACT_RUN') to use while moving to the scripted position."
+	sync_group(string) : "Synchronization Group" : : "If set, identifier used to match other scripted sequences to synchronze with (alternative to name-based sync)"
 	m_bLoopActionSequence(boolean) : "Loop Action Animation?" : 0
 	m_bSynchPostIdles(boolean) : "Synch Post Idles?" : 0
 	m_bAllowCustomInterruptConditions(boolean) : "Allow custom interrupt conditions to be set." : 0
-	m_nGroundIKPreference(Choices) : "Ground IK Preference" : 0 : "If this NPC has ground IK; whether we disable it for the playthrough of the sequence or not." = 
+	conflict_response(choices) : "Script Conflict Response" : 0 : "What to do if this scripted sequence begins and the actor is already executing a scripted sequence." = 
+	[
+		0 : "Enqueue"
+		1 : "Interrupt"
+	] 
+	m_nGroundIKPreference(choices) : "Ground IK Preference" : 0 : "If this NPC has ground IK; whether we disable it for the playthrough of the sequence or not." = 
 	[
 		0 : "No change"
 		1 : "Disable for this sequence"
@@ -292,7 +304,8 @@
 	input CancelSequence(void) : "Stops the scripted sequence. If fired after a sequence starts, this input will not take effect until the NPC finishes playing the scripted action animation."
 
 	// Outputs
-	output OnBeginSequence(void) : "Fires when the action animation begins playing."
+	output OnBeginSequence(void) : "Fires when the scripted sequence begins playing."
+	output OnActionStartOrLoop(void) : "Fires when the action animation begins playing and each time it loops."
 	output OnEndSequence(void) : "Fires when the action animation completes."
 	output OnCancelSequence(void) : "Fires when the sequence is cancelled."
 	output OnCancelFailedSequence(void) : "Fires when the sequence is cancelled without ever playing (OnCancelSequence will also fire)."
@@ -391,7 +404,7 @@
 	]
 	
 	// Inputs
-	input ApplyRelationship(void) : "Apply relationship changes. This will change all Subject entities' relationships to all Target entities. \n\nIMPORTANT: Once you ApplyRelationships, this entity is then 'ALWAYS ON' until you send a Disable input or RevertRelationship input. During the time this entity is 'ON', any entities that spawn who match the Subject or Target names will be affected. \n\nIMPORTANT: Unpredictable results may occur when two ai_relationship entities refer to the same set or subset of target or subject entities. This situation should be avoided."
+	input ApplyRelationship(void) : "Apply relationship changes. This will change all Subject entities' relationships to all Target entities.<br><br><b>IMPORTANT:</b> Once you ApplyRelationships, this entity is then 'ALWAYS ON' until you send a Disable input or RevertRelationship input. During the time this entity is 'ON', any entities that spawn who match the Subject or Target names will be affected.<br><br><b>IMPORTANT:</b> Unpredictable results may occur when two ai_relationship entities refer to the same set or subset of target or subject entities. This situation should be avoided."
 
 	input RevertRelationship(void) : "Revert relationship changes. This will return the relationship to what it was at the time the ApplyRelationship input was called (or when this ai_relationship was spawned if StartActive is set)."
 	input RevertToDefaultRelationship(void) : "Revert relationship changes to the default relationship, which may have changed since this ai_relationship was applied. This returns control of the entity relationship to the code."
@@ -1054,16 +1067,16 @@
 @PointClass base(BaseScripted, DXLevelChoice) editormodel("models/editor/scripted_sequence.vmdl") sphere(m_flRadius) sequenceList( entity, "m_iszEntity" ) = scripted_sequence :
 	"Grabs an NPC and makes them play a specified set of animations. The NPC can be told to move to the scripted sequence position or can "+
 	"be told to play the script wherever they currently are. "+
-	"Multiple scripted sequences of the same name will frame-synchronize in the action animation once all the actors have moved to position. "+
-	"This allows tight interaction between actors (one actor grabbing another, hitting them, etc.) The flow is as follows:\n\n"+
-	"1) Move to position using the specified movement animation. If 'Move to Position' is set to NONE, skip to step 2.\n"+
-	"2) If forced to wait for another actor to move to position, play the pre-action idle animation, otherwise skip to step 3. If there is no pre-action idle specified, ACT_IDLE is used.\n"+
-	"3) Fire the OnBeginSequence output.\n"+
-	"4) Play the action animation. If no action animation is specified, skip to step 5.\n"+
-	"5) Play the post-action idle animation. If none is specified, skip to step 6. If the 'Loop in Post Idle' spawnflag is set, keep playing the post-action idle until the script is cancelled. If no post-action idle animation is specified, ACT_IDLE is used.\n"+
-	"6) Fire the OnEndSequence output.\n"+
-	"7) If a next script to play is specified, hand the NPC to the next script and repeat this process for that script.\n\n"+
-	"The MoveToPosition input runs steps 1 and 2, then waits while playing the pre-action idle animation until the BeginSequence input is received.\n\n"+
+	"Multiple scripted sequences of the same name (or sync group, if specified) will frame-synchronize in the action animation once all the actors have moved to position. "+
+	"This allows tight interaction between actors (one actor grabbing another, hitting them, etc.) The flow is as follows:<br><br>"+
+	"1) Move to position using the specified movement animation. If 'Move to Position' is set to NONE, skip to step 2.<br>"+
+	"2) If forced to wait for another actor to move to position, play the pre-action idle animation, otherwise skip to step 3. If there is no pre-action idle specified, ACT_IDLE is used.<br>"+
+	"3) Fire the OnBeginSequence output.<br>"+
+	"4) Play the action animation. If no action animation is specified, skip to step 5.<br>"+
+	"5) Play the post-action idle animation. If none is specified, skip to step 6. If the 'Loop in Post Idle' spawnflag is set, keep playing the post-action idle until the script is cancelled. If no post-action idle animation is specified, ACT_IDLE is used.<br>"+
+	"6) Fire the OnEndSequence output.<br>"+
+	"7) If a next script to play is specified, hand the NPC to the next script and repeat this process for that script.<br><br>"+
+	"The MoveToPosition input runs steps 1 and 2, then waits while playing the pre-action idle animation until the BeginSequence input is received.<br><br>"+
 	"If the sequence has motion extraction in it, set the 'Don't Teleport NPC On End' spawnflag."
 [
 	spawnflags(Flags) = 
@@ -1258,18 +1271,18 @@
 
 
 @PointClass base(Targetname, Parentname) sphere(volume) iconsprite("editor/ai_sound.vmat") = ai_sound :
-	"This entity makes sounds or smells that can be sensed by NPCs, butnot by the player. This can be used " +
-	"to cause reactions in nearby NPCs.\n\n" +
-	"Sound Types\n" +
-	"  Combat: Will cause most NPCs to become alert\n" +
-	"  World: Will cause most NPCs to become alert\n" +
-	"  Danger: Will cause most NPCs to move away from the position of the sound\n" +
-	"  Bullet Impact: \n" +
-	"  Carcass: \n" +
-	"  Meat: \n" +
-	"  Garbage: \n" +
-	"  Thumper: causes antlions to run away briefly\n" +
-	"  Readiness: (Low, Medium, High) Causes player companions that can hear this sound to change readiness\n"
+	"This entity makes sounds or smells that can be sensed by NPCs, but not by the player. This can be used " +
+	"to cause reactions in nearby NPCs.<br><br>" +
+	"<b>Sound Types</b><br>" +
+	"- Combat: Will cause most NPCs to become alert<br>" +
+	"- World: Will cause most NPCs to become alert<br>" +
+	"- Danger: Will cause most NPCs to move away from the position of the sound<br>" +
+	"- Bullet Impact<br>" +
+	"- Carcass<br>" +
+	"- Meat<br>" +
+	"- Garbage<br>" +
+	"- Thumper: causes antlions to run away briefly<br>" +
+	"- Readiness: (Low, Medium, High) Causes player companions that can hear this sound to change readiness"
 [
 	//input InsertSound(Integer) : "THIS IS NOW OBSOLETE. Use InsertAISound"
 	input EmitAISound(void) : "Start playing the AI sound."

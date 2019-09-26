@@ -197,11 +197,11 @@ function CJungleSpirits:CreateNewRoundMessage( team, szLaneName )
 	local szLaneDisplayName = szLaneName
 
 	if szLaneName == "top" then
-		szLaneDisplayName = "top"
+		szLaneDisplayName = "#top_lane"
 	elseif szLaneName == "mid" then
-		szLaneDisplayName = "middle"
+		szLaneDisplayName = "#middle_lane"
 	elseif szLaneName == "bot" then
-		szLaneDisplayName = "bottom"
+		szLaneDisplayName = "#bottom_lane"
 	end
 
 
