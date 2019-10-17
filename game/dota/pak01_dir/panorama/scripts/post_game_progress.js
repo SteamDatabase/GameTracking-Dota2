@@ -2234,6 +2234,28 @@ function AnimateCoachRatingScreenAction( data, coach_data )
 	this.coach_data = coach_data;
 }
 
+function WaitForSurveyStateChange( panel )
+{
+	this.panel = panel;
+}
+WaitForSurveyStateChange.prototype = new BaseAction();
+WaitForSurveyStateChange.prototype.update = function ()
+{
+	var goodRatingContainer = this.panel.FindChildInLayoutFile( 'GoodRatingContainer' );
+	if ( !goodRatingContainer.enabled )
+		return false;
+
+	var badRatingContainer = this.panel.FindChildInLayoutFile( 'BadRatingContainer' );
+	if ( !badRatingContainer.enabled)
+		return false;
+
+	var skipButton = this.panel.FindChildInLayoutFile( 'SkipButton' );
+	if ( skipButton.BHasClass( 'Selected' ) )
+		return false;
+
+	return true;
+}
+
 AnimateCoachRatingScreenAction.prototype = new BaseAction();
 
 AnimateCoachRatingScreenAction.prototype.start = function ()
@@ -2334,6 +2356,125 @@ AnimateCoachRatingScreenAction.prototype.finish = function ()
 {
 	this.seq.finish();
 }
+
+
+
+
+// ----------------------------------------------------------------------------
+//
+// Player Match Survey Screen
+//
+// ----------------------------------------------------------------------------
+function AnimatePlayerMatchSurveyScreenAction( data )
+{
+	this.data = data;
+}
+
+AnimatePlayerMatchSurveyScreenAction.prototype = new BaseAction();
+
+AnimatePlayerMatchSurveyScreenAction.prototype.start = function ()
+{
+	var data = this.data;
+
+	// Create the screen and do a bunch of initial setup
+	var panel = StartNewScreen( 'PlayerMatchSurveyScreen' );
+	panel.BLoadLayoutSnippet( "PlayerMatchSurvey" );
+
+	var goodRatingContainer = panel.FindChildInLayoutFile( 'GoodRatingContainer' );
+	var badRatingContainer = panel.FindChildInLayoutFile( 'BadRatingContainer' );
+	var skipButton = panel.FindChildInLayoutFile( 'SkipButton' );
+
+	var SubmitRating = function ( nRating, nFlags )
+	{
+		if( !data.match_id || data.match_id == '0' )
+		{
+			data.match_id = 0;
+		}
+		$.Msg("submitting survey for match "+data.match_id);
+		$.DispatchEvent( 'DOTAMatchSubmitPlayerMatchSurvey', data.match_id, nRating, nFlags );
+
+		// Once a rating has been changed, disable all the other UI
+		goodRatingContainer.enabled = false;
+		badRatingContainer.enabled = false;
+		
+		$.GetContextPanel().PlayUISoundScript( "ui_goto_player_page" );	
+	};
+
+	for ( var i = 0; i < goodRatingContainer.GetChildCount() ; ++i )
+	{
+		var goodRatingButton = goodRatingContainer.GetChild( i );
+		var nRating = goodRatingButton.GetAttributeInt("rating_flag", 0);
+
+		var reg = function( goodRatingButton, nRating )
+		{
+			$.RegisterEventHandler('Activated', goodRatingButton, function ( )
+			{
+				goodRatingButton.AddClass( 'Selected' );
+				SubmitRating( 1, nRating );
+			});
+		};
+		reg( goodRatingButton, nRating );
+	}
+
+	for ( var i = 0; i < badRatingContainer.GetChildCount() ; ++i )
+	{
+		var badRatingButton = badRatingContainer.GetChild( i );
+		var nRating = badRatingButton.GetAttributeInt("rating_flag", 0);
+		var reg = function( badRatingButton, nRating )
+		{
+			$.RegisterEventHandler('Activated', badRatingButton, function ( )
+			{
+				badRatingButton.AddClass( 'Selected' );
+				SubmitRating( -1, nRating );
+			});
+		};
+		reg( badRatingButton, nRating );
+	}
+
+	$.RegisterEventHandler('Activated', skipButton, function ()
+	{
+		skipButton.AddClass( 'Selected' );
+		panel.AddClass("Skipped")
+		SubmitRating( 0, 0 );
+	});
+
+	// Setup the sequence of actions to animate the screen
+	this.seq = new RunSequentialActions();
+	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
+	this.seq.actions.push( new AddScreenLinkAction( panel, 'PlayerMatchSurveyProgress', '#DOTA_PlayerMatchSurveyPostGame_PlayerMatchSurvey', function ()
+	{
+		panel.AddClass( 'RatingScreenForceVisible' );
+	}));
+	this.seq.actions.push( new WaitAction( 0.25 ) );
+	this.seq.actions.push( new AddClassAction( panel, 'RatingScreenVisible' ) );
+
+	var durationAction = new RunUntilSingleActionFinishedAction();
+	durationAction.actions.push( new WaitForSurveyStateChange( panel ) );
+	this.seq.actions.push( durationAction );
+
+	this.seq.actions.push( new AddClassAction( panel, 'HideSkipButton' ) );
+	this.seq.actions.push( new WaitAction( 0.5 ) );
+	
+	this.seq.actions.push( new PlaySoundAction( "ui_hero_select_slide_late" ) );
+	this.seq.actions.push( new AddClassAction( panel, 'SubmitFeedbackVisible' ) );
+
+	this.seq.actions.push( new WaitAction( 1.25 ) );
+	this.seq.actions.push( new RemoveClassAction( panel, 'RatingScreenVisible' ) );
+	this.seq.actions.push( new WaitAction( 0.5 ) );
+
+	this.seq.start();
+}
+
+AnimatePlayerMatchSurveyScreenAction.prototype.update = function ()
+{
+	return this.seq.update();
+}
+AnimatePlayerMatchSurveyScreenAction.prototype.finish = function ()
+{
+	this.seq.finish();
+}
+
+
 
 // ----------------------------------------------------------------------------
 //
@@ -2835,6 +2976,18 @@ function TestAnimateCoachRating()
 }
 
 
+function TestAnimatePlayerMatchSurvey()
+{
+	var data =
+	{
+		match_id: '0',
+		player_match_survey_progress: {}
+	}
+
+	TestProgressAnimation( data );
+}
+
+
 // ----------------------------------------------------------------------------
 //   All Screens
 // ----------------------------------------------------------------------------
@@ -2890,6 +3043,11 @@ function CreateProgressAnimationSequence( data )
 	if ( data.event_points_progress != null )
 	{
 		seq.actions.push( new AnimateEventPointsScreenAction( data ) );
+	}
+
+	if ( data.player_match_survey_progress != null )
+	{
+		seq.actions.push( new AnimatePlayerMatchSurveyScreenAction( data ) );
 	}
 
 	seq.actions.push( new RunFunctionAction( function ()
