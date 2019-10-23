@@ -2400,7 +2400,7 @@ AnimatePlayerMatchSurveyScreenAction.prototype.start = function ()
 		$.GetContextPanel().PlayUISoundScript( "ui_goto_player_page" );	
 	};
 
-	for ( var i = 0; i < goodRatingContainer.GetChildCount() ; ++i )
+	for ( var i = 1; i < goodRatingContainer.GetChildCount() ; ++i )
 	{
 		var goodRatingButton = goodRatingContainer.GetChild( i );
 		var nRating = goodRatingButton.GetAttributeInt("rating_flag", 0);
@@ -2416,7 +2416,7 @@ AnimatePlayerMatchSurveyScreenAction.prototype.start = function ()
 		reg( goodRatingButton, nRating );
 	}
 
-	for ( var i = 0; i < badRatingContainer.GetChildCount() ; ++i )
+	for ( var i = 1; i < badRatingContainer.GetChildCount() ; ++i )
 	{
 		var badRatingButton = badRatingContainer.GetChild( i );
 		var nRating = badRatingButton.GetAttributeInt("rating_flag", 0);
@@ -2430,6 +2430,24 @@ AnimatePlayerMatchSurveyScreenAction.prototype.start = function ()
 		};
 		reg( badRatingButton, nRating );
 	}
+
+	// scramble the buttons to avoid bias
+	for ( var k = 0 ; k < 5 ; ++ k)
+	{
+		for ( var i = 1; i < goodRatingContainer.GetChildCount() ; ++i )
+		{
+			var randint = Math.floor( (goodRatingContainer.GetChildCount()-1)*Math.random() ) + 1; 
+			var button = goodRatingContainer.GetChild( i );
+			goodRatingContainer.MoveChildAfter( button, goodRatingContainer.GetChild(randint) );
+		}
+		for ( var i = 1; i < badRatingContainer.GetChildCount() ; ++i )
+		{
+			var randint = Math.floor( (badRatingContainer.GetChildCount()-1)*Math.random() ) + 1; 
+			var button = badRatingContainer.GetChild( i );
+			badRatingContainer.MoveChildAfter( button, badRatingContainer.GetChild(randint) );
+		}
+	}
+
 
 	$.RegisterEventHandler('Activated', skipButton, function ()
 	{
