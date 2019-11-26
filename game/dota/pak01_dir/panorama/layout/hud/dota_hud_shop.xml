@@ -7,47 +7,61 @@
 	<script>
 		function SetSearchFocus()
 		{
-		$( "#SearchTextEntry" ).SetFocus();
+			$( "#SearchTextEntry" ).SetFocus();
 		}
 
 		function ClearSearch()
 		{
-		$.DispatchEvent( "DOTAShopCancelSearch" );
-		$( "#SearchTextEntry" ).text = "";
+			$.DispatchEvent( "DOTAShopCancelSearch" );
+			$( "#SearchTextEntry" ).text = "";
 		}
+		
+		function UpdateSelectedTab()
+		{
+			var strTabClass = '';
+			if ( $( '#GridBasicsTab' ).checked )
+			{
+				strTabClass = 'ShowBasicItemsTab';
+			}
+			else if ( $( '#GridUpgradesTab' ).checked )
+			{
+				strTabClass = 'ShowUpgradeItemsTab';
+			}
+			
+			$( '#GridMainShop' ).SwitchClass( 'selected_shop_tab', strTabClass );
+		}
+		
+		$.Schedule( 0.0, function ()
+		{
+			$.RegisterEventHandler( 'TabSelected', $( '#GridMainShop' ), function () { UpdateSelectedTab(); } );
+			UpdateSelectedTab();
+		} );
 		
 	</script>
 	<snippets>
+		
 		<snippet name="ShopItemsLayout">
 			<Panel class="ShopItemRowContainer">
 				<Label id="ShopItemsHeader" text="{s:shop_row_title}" />
 				<Panel id="ShopItemsContainer" />
 			</Panel>
 		</snippet>
+
+		<snippet name="NeutralItemsTier">
+			<Panel class="NeutralItemsTier">
+				<Panel class="NeutralItemsTierHeader">
+					<Label class="NeutralItemsTierName" text="#DOTA_Shop_NeutralTier" />
+					<Panel class="FillWidth" />
+					<Label class="NeutralItemsTierTimes" text="{s:tier_times}" />
+				</Panel>
+				<Panel id="NeutralItemsList" />
+			</Panel>
+		</snippet>
+		
 	</snippets>
 
 	<DOTAHUDShop acceptfocus="true" onfocus="DropInputFocus()" oncancel="DOTAShopHideShop()" require-composition-layer="true" always-cache-composition-layer="true">
-		<Panel id="EditModeFlyout">
-			<Label id="EditModeHint" text="#DOTA_HUD_EditModeHint" />
-			<Panel id="EditModeGridTabs" hittest="false" >
-				<RadioButton id="EditModeBasicTab" group="ShopEditTab" onactivate="RemoveStyle( 'EditModeFlyout', 'EditModeShowUpgradeItemsTab' )">
-					<Label text="#DOTA_Shop_Category_Basics"/>
-				</RadioButton>
-				<RadioButton id="EditModeUpgradesTab" group="ShopEditTab" onactivate="AddStyle( 'EditModeFlyout', 'EditModeShowUpgradeItemsTab' )">
-					<Label text="#DOTA_Shop_Category_Upgrades"/>
-				</RadioButton>
-			</Panel>
-			<Panel id="EditModeShopContents" hittest="false" >
-				<Panel id="EditModeBasicItemsCategory" class="ShopItemsCategory" >
-					<Panel id="EditModeBasicItems" class="ShopItemsColumns" />
-				</Panel>
-
-				<Panel id="EditModeUpgradesCategory" class="ShopItemsCategory">
-					<Panel id="EditModeUpgradeItems" class="ShopItemsColumns" />
-				</Panel>
-			</Panel>
-		</Panel>
-
+	
 		<Button id="GuidesButton" onactivate="ToggleStyle( 'GuideFlyout', 'HideGuide' ); ToggleStyle( 'GuidesButton', 'HideGuide' )">
 			<Panel id="GuidesButtonIcon"/>
 		</Button>
@@ -84,7 +98,7 @@
 
 				<Panel id="GridMainShop" class="ShowPopular ShowHilight">
 					<Panel id="GridShopHeaders" hittest="false">
-						<Panel id="SearchAndToggleContainer">
+						<Panel id="SearchAndButtonsContainer">
 							<Panel id="SearchContainer" acceptsfocus="true" onfocus="DropInputFocus()">
 								<Panel id="SearchBox">
 									<Panel id="ShopSearchIcon" onactivate="SetSearchFocus();" />
@@ -93,24 +107,19 @@
 								</Panel>
 								<DOTAHUDShopSearchResults id="SearchResults" />
 							</Panel>
-							<Panel id="ToggleMinimalShop" onactivate="DOTAShopToggleMinimalShop()" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_Hud_Shop_Toggle );" />
-						</Panel>
-						<Panel id="NonSearchHeaderContainer">
-							<Panel id="GridMainTabs" hittest="false" >
-								<RadioButton id="GridBasicTab" group="ShopGridTab" onactivate="RemoveStyle( 'GridMainShop', 'ShowUpgradeItemsTab' )">
-									<Label text="#DOTA_Shop_Category_Basics"/>	
-								</RadioButton>
-								<RadioButton id="GridModeUpgradesTab" group="ShopGridTab" onactivate="AddStyle( 'GridMainShop', 'ShowUpgradeItemsTab' )">
-									<Label text="#DOTA_Shop_Category_Upgrades"/>
-								</RadioButton>
-							</Panel>
-							<Button id="RequestSuggestion" onactivate="DOTATrackUserStatsEvent( DOTA_USER_STATS_EVENT_ASKED_FOR_ITEM_SUGGESTION, 0 ) DOTAShopRequestSuggestion()" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_Shop_Tip_RequestSuggestion );" onload="DOTAAttachHelpTip( 'suggested_items' )" >
+							<Button id="RequestSuggestion" class="HeaderButton" onactivate="DOTATrackUserStatsEvent( DOTA_USER_STATS_EVENT_ASKED_FOR_ITEM_SUGGESTION, 0 ) DOTAShopRequestSuggestion()" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_Shop_Tip_RequestSuggestion );" onload="DOTAAttachHelpTip( 'suggested_items' )" >
 								<Panel id="RequestSuggestionIcon" />
 								<DOTAHeroImage id="RequestSuggestionHeroImage" heroimagestyle="icon" />
 							</Button>
-							<Button id="PopularItems" onactivate="ToggleStyle( 'GridMainShop', 'ShowPopular' );" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_Shop_Tip_Popular );">
+							<Button id="PopularItems" class="HeaderButton" onactivate="ToggleStyle( 'GridMainShop', 'ShowPopular' );" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_Shop_Tip_Popular );">
 								<Panel id="PopularItemsIcon"/>
 							</Button>
+							<Panel id="ToggleMinimalShop" class="HeaderButton" onactivate="DOTAShopToggleMinimalShop()" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #DOTA_Hud_Shop_Toggle );" />
+						</Panel>
+						<Panel id="GridMainTabs" hittest="false" >
+							<TabButton id="GridBasicsTab" class="ShopItemsTab" group="ShopGridTab" onactivate="SwitchStyle( 'GridMainShop', 'selected_shop_tab', 'ShowBasicItemsTab' )" text="#DOTA_Shop_Category_Basics" selected="true" />
+							<TabButton id="GridUpgradesTab" class="ShopItemsTab" group="ShopGridTab" onactivate="SwitchStyle( 'GridMainShop', 'selected_shop_tab', 'ShowUpgradeItemsTab' )" text="#DOTA_Shop_Category_Upgrades" />
+							<TabButton id="GridNeutralsTab" class="ShopItemsTab" group="ShopGridTab" onactivate="SwitchStyle( 'GridMainShop', 'selected_shop_tab', 'ShowNeutralItemsTab' )" text="#npc_dota_neutral_default" />
 						</Panel>
 					</Panel>
 					<Panel id="MainShopBasicHotkeys" hittest="false" hittestchildren="false">
@@ -129,13 +138,18 @@
 						<DOTAHotkey id="HotkeyArtifacts" keybind="ShopTabArtifacts" />
 					</Panel>
 					<Panel id="GridMainShopContents" hittest="false" >
-						<Panel id="GridBasicItemsCategory" class="ShopItemsCategory" >
+						<TabContents id="GridBasicItemsCategory" group="ShopGridTab" tabid="GridBasicsTab" class="ShopItemsCategory" selected="true">
 							<Panel id="GridBasicItems" class="ShopItemsRows" />
-						</Panel>
+						</TabContents>
 
-						<Panel id="GridUpgradesCategory" class="ShopItemsCategory">
+						<TabContents id="GridUpgradesCategory" group="ShopGridTab" tabid="GridUpgradesTab" class="ShopItemsCategory">
 							<Panel id="GridUpgradeItems" class="ShopItemsRows" />
-						</Panel>
+						</TabContents>
+
+						<TabContents id="GridNeutralsCategory" group="ShopGridTab" tabid="GridNeutralsTab" class="ShopItemsCategory">
+							<Label id="NeutralItemsDescription" text="#DOTA_Shop_NeutralItemsDescription" />
+							<Panel id="GridNeutralItems" />
+						</TabContents>
 					</Panel>
 				</Panel>
 

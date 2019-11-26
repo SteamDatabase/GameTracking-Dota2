@@ -12,7 +12,7 @@ function CHeroDemo:OnGameRulesStateChange()
 
 	elseif nNewState == DOTA_GAMERULES_STATE_PRE_GAME then
 		--print( "OnGameRulesStateChange: Pre Game Selection" )
-		SendToServerConsole( "dota_dev forcegamestart" )
+		SendToServerConsole( "dota_dev forcegamestart" ) 
 
 	elseif nNewState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		--print( "OnGameRulesStateChange: Game In Progress" )
@@ -132,7 +132,11 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnMaxLevelButtonPressed( eventSourceIndex, data )
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-	hPlayerHero:AddExperience( 32400, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
+	if hPlayerHero == nil then
+		return
+	end
+
+	hPlayerHero:AddExperience( 59900, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
 
 	for i = 0, DOTA_MAX_ABILITIES - 1 do
 		local hAbility = hPlayerHero:GetAbilityByIndex( i )
@@ -171,6 +175,10 @@ end
 -- ButtonEvent: OnInvulnerabilityButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnInvulnerabilityButtonPressed( eventSourceIndex, data )
+	if hPlayerHero == nil then
+		return
+	end
+
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
 	local hAllPlayerUnits = {}
 	hAllPlayerUnits = hPlayerHero:GetAdditionalOwnedUnits()
@@ -203,6 +211,10 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 	end
 
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+
 	CreateUnitByNameAsync( self.m_sHeroToSpawn, hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nENEMIES_TEAM, 
 		function( hEnemy )
 			table.insert( self.m_tEnemiesList, hEnemy )
@@ -264,6 +276,10 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnDummyTargetButtonPressed( eventSourceIndex, data )
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+	
 	table.insert( self.m_tEnemiesList, CreateUnitByName( "npc_dota_hero_target_dummy", hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nENEMIES_TEAM ) )
 	local hDummy = self.m_tEnemiesList[ #self.m_tEnemiesList ]
 	hDummy:SetAbilityPoints( 0 )
