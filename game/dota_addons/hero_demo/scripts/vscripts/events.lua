@@ -46,6 +46,8 @@ function CHeroDemo:Think_InitializePlayerHero( hPlayerHero )
 		return 0.1
 	end
 
+	hPlayerHero:GetPlayerOwner():CheckForCourierSpawning( hPlayerHero )
+
 	if self.m_bPlayerDataCaptured == false then
 		if hPlayerHero:GetUnitName() == self.m_sHeroSelection then
 			local nPlayerID = hPlayerHero:GetPlayerOwnerID()
