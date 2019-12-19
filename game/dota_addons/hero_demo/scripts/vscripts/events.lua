@@ -149,8 +149,6 @@ function CHeroDemo:OnMaxLevelButtonPressed( eventSourceIndex, data )
 		end
 	end
 
-	hPlayerHero:SetAbilityPoints( 4 ) -- talents?
-
 	EmitGlobalSound( "UI.Button.Pressed" )
 
 	--self:BroadcastMsg( "#MaxLevel_Msg" )
