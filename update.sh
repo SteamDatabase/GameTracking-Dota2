@@ -17,8 +17,6 @@ do
 	../.support/vpktool "$file" > "$baseFile"
 done <   <(find "game/dota/maps/" -type f -name "*.vpk" -print0)
 
-#./dump.sh
-
 FixUCS2
 
 CreateCommit "$(grep "ClientVersion=" game/dota/steam.inf | grep -o '[0-9\.]*')" "$1"
