@@ -1066,6 +1066,7 @@
 	startOnSpawn(boolean) : "Start On Spawn" : "" : "Play the sound immediately upon spawning"
 	toLocalPlayer(boolean) : "To Local Player" : "" : "Play the sound directly to the local player"
 	stopOnNew(boolean) : "Re-trigger Stops Last" : 1 : "Stop a previously playing event when a new one is started"
+	saveAndRestore(boolean) : "Save/Restore" : 0 : "This soundevent should be saved and restored."
 
 	// Inputs
 	input SetSourceEntity(string) : "Set the name of the entity to play the sound from. The sound will follow the entity as it moves."
@@ -1089,6 +1090,12 @@
 [
 	box_mins(vector) : "Box Mins" : "-64 -64 -64"
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
+]
+
+@PointClass base(Targetname) tags( Sound ) iconsprite("editor/snd_event.vmat") = snd_stack_save :
+	"Save/Load the fields of a specific operator stack."
+[
+	stackToSave(string) : "Stack Name" : "" : "Name of the stack to save op fields."
 ]
 
 @PointClass base(Targetname, Parentname) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") = snd_event_param :
@@ -1158,9 +1165,17 @@
 	occlusionRadius(float) : "Occlusion Radius" : "" : "Size of the occlusion sphere"
 	occlusionMin(float) : "Minimum Occlusion" : "" : "Occlusion value when fully occluded"
 	occlusionMax(float) : "Maximum Occlusion" : "" : "Occlusion value when un-occluded"
-	directSimulationMode(integer) : "Direct Simulation Mode" : "0" : "Source 2 (0), SA Raycast (1), SA Volumetric (2)"
-	indirectSimulationMode(integer) : "Indirect Simulation Mode" : "0" : "None (0), Pathing (1)"
-	indirectSimulationScale(float) : "Indirect Simulation Scale" : "1.0" : "Set to a value between 0 and 1. Weight assigned to contribution of indirect mode."
+
+	simulationMode(choices) : "Simulation Mode" : "0" : "Simulation Mode for occlusion check." =
+	[
+		0 : "Source 2"
+		1 : "Steam Audio Raycast"
+		2 : "Steam Audio Volumetric"
+		3 : "Steam Audio Pathing"
+		4 : "Steam Audio Dynamic Pathing"
+	]	
+
+	visibilitySamples(integer) : "Visibility Samples" : 8 : "Number of samples to use for volumetric occlusion or dynamic pathing."
 	setToValueOnDisable(bool) : "Set OpVar value when disabled" : 0
 	disabledValue(float) : "Set to value on disable" : "0.0" : "Value to set the OpVar index to when disabled"
 	startDisabled(bool) : "Start Disabled" : 0
@@ -1191,9 +1206,11 @@
 	input SetSourceEntity(string) : "Set the name of the entity to check distance/occlusion from. This check will follow the entity as it moves."
 ]
 
-@PointClass base( Targetname, SndOpvarSetPointBaseAddition, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) = snd_opvar_set_point :
+@PointClass base( Targetname, SndOpvarSetPointBaseAddition, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) = snd_opvar_set_point :
 	"Sets an opvar value on a library stack"
 [
+	dynamicProxyPoint(local_point) : "Dynamic Proxy Point" : "" : "Position of a proxy point across a dynamic point to use for visiblity calculation. Make sure to set the Occlusion Radius such that it is entirely on one side of the dynamic object."
+	dynamicMaximumOcclusion(float) : "Dynamic Maximum Occlusion" : "1.0" : "Value when the dynamic occlusion is considered fully unoccluded and return 1."
 ]
 
 @PointClass base( Targetname, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_world_aligned( box_inner_mins, box_inner_maxs ) box_world_aligned( box_outer_mins, box_outer_maxs ) = snd_opvar_set_aabb :
@@ -5209,7 +5226,7 @@
 		"all entities EXCEPT those whose mass is greater than the given float will pass the filter."
 ]
 
-@FilterClass base(BaseFilter) = filter_damage_type :
+@FilterClass base(BaseFilter) iconsprite("editor/filter_type.vmat") = filter_damage_type :
 	"A damage filter that filters by the type of damage inflicted. This can only be used as a damage filter, not as an activator filter."
 [
 	damagetype(choices) : "Damage type" : 64 : "The damage type to filter by. If the filter mode is Allow, only damage types that "+
@@ -5475,6 +5492,7 @@
 		2097152 : "Physgun is NOT allowed to pick this up." : 0 
 		4194304 : "Physgun is NOT allowed to punt this object." : 0
 		8388608: "Prevent motion enable on player bump" : 0
+		16777216: "Force nav-ignore" : 0
 	]
 	
 	Damagetype(choices) : "Impact Damage Type" : 0 =
@@ -5665,10 +5683,12 @@
 	"A physically simulated hinge. Use the helper to define the axis of rotation."
 [
 	hingefriction(float) : "Friction" : "0" : "Resistance/friction in the hinge. A value of 1 will hold the child object still under gravity"
-	min_rotation(float) : "Min Rotation Limit" : "0" : "Minimum rotation limit around hinge axis"
-	max_rotation(float) : "Max Rotation Limit" : "0" : "Maximum rotation limit around hinge axis"
+	min_rotation(float) [ min="-180.0", max="0.0" ]: "Min Rotation Limit" : "0" : "Minimum rotation limit around hinge axis"
+	max_rotation(float) [ min="0.0", max="180.0" ]: "Max Rotation Limit" : "0" : "Maximum rotation limit around hinge axis"
 	initial_rotation(float) : "Initial rotation" : "0" : "Initial rotation of the hinge (values -1 to 1 where -1 mean open at minimum limit and 1 means open at maximum limit)"
 	hingeaxis(vecline) : "Hinge Axis"
+	motorfrequency(float) : "Motor frequency" : "10" : "Range 0 - 30 (only used when driving the relative angle through the angle input)"
+	motordampingratio(float) : "Motor damping ratio" : "1" : "Range 0 - 1 (only used when driving the relative angle through the angle input)"
 	SystemLoadScale(float) : "Load Scale" : "1" : "Scale of the load connected to this hinge (1=just the objects directly connected)"
 	
 	// Inputs
@@ -5676,13 +5696,13 @@
 	input SetHingeFriction(float) : "Set Motor Friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
 	input SetMinLimit(float) : "Set the minimum hinge angle (degrees)"
 	input SetMaxLimit(float) : "Set the maximum hinge angle (degrees)"
-	input TurnMotorOn(void) : "Turn Motor On, use 0 target velocity to turn on the friction"
-	input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
-	input SetMotorTorqueFactor(float) : "Set Motor torque factor, dimentionless, alternative to setting torque directly in Newton*meters, 1.0 = resist gravity"
+	//input TurnMotorOn(void) : "Turn Motor On, use 0 target velocity to turn on the friction"
+	//input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
+	//input SetMotorTorqueFactor(float) : "Set Motor torque factor, dimentionless, alternative to setting torque directly in Newton*meters, 1.0 = resist gravity"
 	input SetMotorTargetVelocity(float) : "Set Motor target velocity in deg/sec, use 0 to just turn friction on"
 	input SetMotorTargetAngle(float) : "Set Motor target angle, degrees. Exact number depends on constrained bodies reference frames and initial configuration. See constraint limits for reference to sensible range of values."
-	input TurnMotorTargetAngleOn(void) : "Set Motor to Angle mode. When on, motor will attempt to drive to the given target angle with given target velocity, and stop there"
-	input TurnMotorTargetAngleOff(void) : "Set Motor to Velocity mode. When on, motor will attempt to drive at the given velocity/direction, regardless of the current angle of the motor"
+	//input TurnMotorTargetAngleOn(void) : "Set Motor to Angle mode. When on, motor will attempt to drive to the given target angle with given target velocity, and stop there"
+	//input TurnMotorTargetAngleOff(void) : "Set Motor to Velocity mode. When on, motor will attempt to drive at the given velocity/direction, regardless of the current angle of the motor"
 	
 	// Outputs
 	output NotifyMinLimitReached(void) : "The min limit has been reached."
@@ -5694,10 +5714,12 @@
 	"A physically simulated hinge. Use the helper to define the axis of rotation."
 [
 	hingefriction(float) : "Friction" : "0" : "Resistance/friction in the hinge"
-	min_rotation(float) : "Min Rotation Limit" : "0" : "Minimum rotation limit around hinge axis"
-	max_rotation(float) : "Max Rotation Limit" : "0" : "Maximum rotation limit around hinge axis"
+	min_rotation(float) [ min="-180.0", max="0.0" ]:  "Min Rotation Limit" : "0" : "Minimum rotation limit around hinge axis"
+	max_rotation(float) [ min="0.0", max="180.0" ] : "Max Rotation Limit" : "0" : "Maximum rotation limit around hinge axis"
 	initial_rotation(float) : "Initial rotation" : "0" : "Initial rotation of the hinge (values -1 to 1 where -1 mean open at minimum limit and 1 means open at maximum limit)"
 	hingeaxis(localaxis) : "Local Space Hinge Axis"
+	motorfrequency(float) : "Motor frequency" : "10" : "Range 0 - 30 (only used when driving the relative angle through the angle input)"
+	motordampingratio(float) : "Motor damping ratio" : "1" : "Range 0 - 1 (only used when driving the relative angle through the angle input)"
 	SystemLoadScale(float) : "Load Scale" : "1" : "Scale of the load connected to this hinge (1=just the objects directly connected)"
 	
 	// Inputs
@@ -5705,13 +5727,13 @@
 	input SetHingeFriction(float) : "Set Motor Friction, 0 = no friction, 1 = friction that is about enough to counter gravity"
 	input SetMinLimit(float) : "Set the minimum hinge angle (degrees)"
 	input SetMaxLimit(float) : "Set the maximum hinge angle (degrees)"
-	input TurnMotorOn(void) : "Turn Motor On, use 0 target velocity to turn on the friction"
-	input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
-	input SetMotorTorqueFactor(float) : "Set Motor torque factor, dimentionless, alternative to setting torque directly in Newton*meters, 1.0 = resist gravity"
+	//input TurnMotorOn(void) : "Turn Motor On, use 0 target velocity to turn on the friction"
+	//input TurnMotorOff(void) : "Turn Motor Off, will turn all friction off"
+	//input SetMotorTorqueFactor(float) : "Set Motor torque factor, dimentionless, alternative to setting torque directly in Newton*meters, 1.0 = resist gravity"
 	input SetMotorTargetVelocity(float) : "Set Motor target velocity in deg/sec, use 0 to just turn friction on"
 	input SetMotorTargetAngle(float) : "Set Motor target angle, degrees. Exact number depends on constrained bodies reference frames and initial configuration. See constraint limits for reference to sensible range of values."
-	input TurnMotorTargetAngleOn(void) : "Set Motor to Angle mode. When on, motor will attempt to drive to the given target angle with given target velocity, and stop there"
-	input TurnMotorTargetAngleOff(void) : "Set Motor to Velocity mode. When on, motor will attempt to drive at the given velocity/direction, regardless of the current angle of the motor"
+	//input TurnMotorTargetAngleOn(void) : "Set Motor to Angle mode. When on, motor will attempt to drive to the given target angle with given target velocity, and stop there"
+	//input TurnMotorTargetAngleOff(void) : "Set Motor to Velocity mode. When on, motor will attempt to drive at the given velocity/direction, regardless of the current angle of the motor"
 		
 	// Outputs
 	output NotifyMinLimitReached(void) : "The min limit has been reached."
@@ -6172,7 +6194,7 @@
 	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"	
 	precomputelightprobes(boolean) [ group="Render Properties" ] : "Precompute Light Probes" : 1 : "Pre-compute environment map and light probe volume used on this object."
 	materialoverride(material) [ group="Render Properties" ] : "Override Material" : ""
-	disableinlowquality(boolean) [ group="Render Properties" ] : "Disable in low quality mode" : "Do not render this prop when using the lowest quality video settings, it is an non-essential detail."
+	disableinlowquality(boolean) [ group="Render Properties" ] : "Disable in low quality mode" : 0 : "Do not render this prop when using the lowest quality video settings, it is an non-essential detail."
 	lightmapscalebias(choices) [ group="Render Properties" ] : "Lightmap Scale Bias" : 0 : "Use to scale the resolution of the lightmap for this object." =
 	[
 		-8 : "Scale down by 256"
@@ -6201,7 +6223,7 @@
 		1 : "Yes"
 	]
 
-	excludefromimpostors(boolean) [ group="Render Properties" ] : "Exclude from Impostors" : 0 : "Exclude this geometry from impostor LOD rendering"
+	renderwithdynamic(boolean) [ group="Render Properties" ] : "Render with Dynamic Objects" : 0 : "Render this object with other dynamic objects"
 ]
 
 
@@ -6465,13 +6487,8 @@
 	"A brush entity that creates rain and snow inside its volume."
 [
 	renderamt(integer) : "Density (0-100%)" : 100	
-	rendercolor(color255) : "Color (R G B)" : "100 100 100"
-	preciptype(choices) : "Precipitation Type" : 0 =	
+	preciptype(choices) : "Precipitation Type" : 4 =	
 	[
-		0 : "Rain (DEPRECATED)"
-		1 : "Snow (DEPRECATED)"
-		2 : "Ash (DEPRECATED)"
-		3 : "Snowfall (DEPRECATED)"
 		4 : "Particle Rain"
 		5 : "Particle Ash"
 		6 : "Particle Rainstorm"
@@ -6482,10 +6499,7 @@
 		11 : "Particle Dust Motes"
 		12 : "Particle Embers"
 		13 : "Particle Ground Fog"
-
 	]
-	minSpeed(float) : "Minimum speed (snowfall only)" : 25
-	maxSpeed(float) : "Maximum speed (snowfall only)" : 35
 ]
 
 
@@ -7073,11 +7087,7 @@
 	landmark(target_destination) : "Local Destination Landmark" : : "If specified, then teleported entities are offset from the target by their initial offset from the landmark."
 
 	use_landmark_angles(boolean) : "Use Landmark Orientations" : 0 : "Rotate around landmark by relative landmark orientations"
-
-	spawnflags(flags) =
-	[
-		32: "Preserve angles even when a local landmark is not specified" : 0
-	]
+	mirror_player(boolean) : "Mirror Player" : 0 : "Mirror the player teleport position through the plane defined by the trigger's origin and up vector"
 ]
 
 @SolidClass base(Targetname) tags( Trigger ) = trigger_transition : 
@@ -8022,17 +8032,6 @@
 	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Will only be lit by lights affecting this group."
 ]
 
-
-@PointClass base(Targetname, Parentname) = point_player_speak : "Used to force the HLVR player to speak"
-[
-	input SpeakConcept(string) : "Speak the desired concept. Optional string can be used to specify temp contexts for this speak (context1:value1)"
-	input AddContext(string) : "Adds context (context1:value1,context2:value2)."
-	input RemoveContext(string) : "Remove context (contextname)."
-	input ClearContext(void) : "Clear all context."
-	input SilencePlayer(bool): "Silence the player"
-]
-
-
 @PointClass base(Targetname, Parentname, EnableDisable) tags( Lighting ) sphere() 
 	volumetric_fog_controller( box_mins, box_maxs )
 = env_volumetric_fog_controller : "Controller for volumetric fogging - bounds are extents of fog irradiance volume (for indirect)"
@@ -8044,7 +8043,6 @@
 	FadeInStart( float ) : "Fade-in start" : "20.0" : "Distance from the eye at which fog starts to fade in." 
 	FadeInEnd( float ) : "Fade-in end" : "100.0" : "Distance from the eye at which fog finishes fading in and is at full strength." 
 
-
 	IndirectEnabled( bool ) [ group="Indirect Lighting" ] : "Enable indirect lighting" : "0"
 	IndirectStrength( float ) [ group="Indirect Lighting" ] : "Indirect light strength" : "1.0" 
 	IndirectVoxelDim(choices) [ group="Indirect Lighting" ] : "Indirect Lighting Dimension" : "256.0" : "" = 
@@ -8054,26 +8052,6 @@
 		"128.0" : "Medium Resolution (128x)"
 		"64.0" : "Low Resolution (64x)"
 	]
-
-	// Note: Currently not yet supporting spiralling fog
-	NoiseType(choices) [ group="Noise" ] : "Noise type" : "0" : "" = 
-	[
-		"0" : "Disabled"
-		"1" : "Enabled"
-	//	"2" : "Angular Movement"
-	//	"3" : "Linear and Angular Movement"
-	]
-	NoiseDirectionA( local_point ) [ group="Noise" ] :  "Movement direction A" : "64 0 0" 
-	NoiseMovementSpeedA( float ) [ group="Noise" ] : "Movement speed A" : "1.0"
-	NoiseDirectionB( local_point ) [ group="Noise" ] : "Movement direction B" : "0 48 -48"
-	NoiseMovementSpeedB( float ) [ group="Noise" ] : "Movement speed B" : "1.0"
-	NoiseScale( float ) [ group="Noise" ] : "Texture scale" : "1"
-	NoiseContrast( float ) [ group="Noise" ] : "Contrast (0 - 1)" : "1"
-	NoiseStrength( float ) [ group="Noise" ] : "Strength" : "1"
-
-	//NoiseRotationSpeedA( float ) : "Rotation speed A"
-	//NoiseRotationSpeedB( float ) : "Rotation speed B"
-	//NoiseRotationCenter(target_destination) : "The default entity to spiral around for spiraling fog."
 
 	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
 	Anisotropy( float ) : "Anisotropy" : "1.0" : "How much the fog should get brighter when you stare directly at the light." 
@@ -8087,20 +8065,7 @@
 	input Enable(boolean) : "Enable"
 	input Disable(boolean) : "Disable"
 	input ForceRefresh(void) : "Forces the fog volume to update if a light's state has changed"
-	
 	input EnableIndirect( bool ) : "Turns on/off indirect fogging"
-	input SetNoiseType( integer ) : "Sets noise animation type - 0: No Noise, 1: Noise with linear movement"
-	input SetNoiseScale( float ) : "Sets the granularity of the noise"
-	input SetNoiseContrast( float ) : "Sets the contrast of the noise"
-	input SetNoiseStrength(float) : "Set strength of the noise"
-	input SetNoiseMovementDirectionA(vector) : "Set movement direction for noise texture A"
-	input SetNoiseMovementDirectionB(vector) : "Set movement direction for noise texture B"
-	input SetNoiseMovementSpeedA(float) : "Set movement speed for noise texture A"
-	input SetNoiseMovementSpeedB(float) : "Set movement speed for noise texture B"
-	//input SetNoiseRotationSpeedA( float ) : "Set angular speed for noise A"
-	//input SetNoiseRotationSpeedB( float ) : "Set angular speed for noise B"
-	//input SetEntityToRotateAround( string ) : "Sets the center of the spiraling fog. Takes the name of an entity to spiral around"
-
 ]
 
 
@@ -8122,7 +8087,7 @@
 	]
 ]
 
-@PointClass iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint
+@PointClass tags( Info ) iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint
 [
 	box_mins(vector) : "Box Mins" : "-64 -64 -64"
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
@@ -8130,6 +8095,30 @@
 	[
 		0: "Use High Resolution"
 		3: "Use Low Resolution (64 unit grid)"
+	]
+]
+
+@PointClass base(Targetname, EnableDisable) tags( Info ) iconsprite( "materials/editor/info_visibility_box.vmat" ) centered_box_oriented( box_size ) 
+= info_visibility_box : "A visibility culling box which can be used to hide objects at runtime and can be toggled on and off by entity I/O."
+[
+	box_size(vector) : "Box Size" : "128 128 128"
+	cull_mode(choices) : "Mode" : "0" : "Should the box hide objects inside or outside of its bounds. If inside is selected, any objects fully inside the box will be hidden. If outside is selected, all active visibility boxes are considered, and objects not intersecting any visibility boxes will be hidden."=
+	[
+		0: "Hide objects inside"
+		1: "Hide objects outside"
+	]
+]
+
+@PointClass tags( Info ) iconsprite( "materials/editor/info_cull_triangles.vmat" ) centered_box_oriented( box_size ) = info_cull_triangles
+[
+	box_size(vector) : "Box Size" : "128 128 128"
+	limit_to_world(bool) : "Limit to Prefab" : "0" : "Limit the box to culling triangles objects in the prefab to which it belongs."
+	targets(node_id_List) : "Target Objects" : "" : "Limit the box to culling triangles from the specified target objects."
+	geometry_type(choices) : "Apply To" : "0" : "Spcifies the type of geometry which can be culled by the box" =
+	[
+		"0" : "Everything"
+		"1" : "Only Static Props"
+		"2" : "Only World Geometry"
 	]
 ]
 
@@ -8146,6 +8135,8 @@
 	particle_spacing(float) : "Spacing" : 32 : "Units between the individual partcles in the rope simulation."
 	slack(float) : "Slack" : "0.5" : "Controls the amount the rope will drop between path nodes. Generally between 0.0 and 1.0, the value is a multiplier on the distance that particles on path can seperate relative to their initial distance."
 	radius(float) : "Radius" : "4.0" : "Radius of the rope."
+	static_collision( bool ) : "Create Static Collision" : "0" : "Create a static physics representation of the path. Note the collision is generated based on the path, movement applied by the particle system will not be included."
+	surface_properties(surface_properties) : "Surface Properties" : "" : "Surface properties to apply to the static collision if generated"
 	color_tint(color255) : "Color Tint" : "255 255 255"
 			
 	// Inputs
@@ -8158,16 +8149,6 @@
 	input DisablePin( string ) : "Disable the contraint which pins a particle to the specified path node."
 ]
 
-@PointClass centered_box_world_aligned( box_size ) = test_centered_box_world_aligned : "A test for the 'centered_box_world_aligned' heleper"
-[
-	box_size(vector) : "Box Size" : "128 128 128"
-]
-
-
-@PointClass centered_box_oriented( box_size ) = test_centered_box_oriented : "A test for the 'centered_box_oriented'"
-[
-	box_size(vector) : "Box Size" : "128 128 128"
-]
 
 @PointClass base(Targetname) iconsprite("editor/haptic_relay.vmat") = haptic_relay :
 	"Takes Eventoutput and translates them to a Haptic Event (VR / Controller Target)"

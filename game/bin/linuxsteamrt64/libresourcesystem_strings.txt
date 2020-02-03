@@ -74,6 +74,7 @@ $[A\]
 - Schematized reference, Pairing ID: %d, operation: %lld
 -exit_on_resource_load_failure
 -force_all_resource_loads_to_fail
+-norefcheckaccess
 -resource_exit_after_time
 -resource_leaks
 -resource_system_verbose
@@ -86,7 +87,10 @@ $[A\]
 ../public/tier1/utlblockmemory.h
 ../public/tier1/utllinkedlist.h
 ../public/tier1/utlrbtree.h
+../public/tier1/utlreferencetracker.h
 ../public/tier1/utlsortvector.h
+../public/tier1/utlsymbol.h
+../public/tier1/utltshash.h
 .comment
 .data
 .data.rel.ro
@@ -115,7 +119,6 @@ $[A\]
 10ConCommand
 10IAppSystem
 11IRefCounted
-12CEmptyConVar
 12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE
 12CThreadEvent
 14CBaseAppSystemI15IResourceSystemE
@@ -131,11 +134,14 @@ $[A\]
 16CLoadingResource
 16CNullTypeManager
 16ICommandCallback
+18CPlaceholderConVar
+18ITSHashConstructorI21ResourceBindingBase_tE
 19CSchemaRegistration
 1D;G 
 1DBlend
 20CPostConnectCallback
 20CRefCountServiceBaseILb1E6CRefMTE
+20CResourceConstructor
 20IResourceHandleUtils
 20IResourceSystemUtils
 20IResourceTypeManager
@@ -193,8 +199,10 @@ $[A\]
 <Ht%1
 <INVALID>
 <Xt%1
+<deferred>
 <no failure reason set>
 <null>
+<unconnected>
 <unknown>
 >;9t9H
 ?Trailing Data
@@ -210,14 +218,16 @@ A+E$A
 A+E$H
 A+E$I
 A+F$H
+A+F$I
 A+G$H
 A+M$L
 A+N$Hc
-A+P$Hc
+A+Q$Hc
 A+T$$
 A+U$Hc
+A+V$I
 A+]$Hc
-A+p$Hc
+A+q$Hc
 A+u$A+~$D
 A9E t
 A;D$X}
@@ -531,16 +541,16 @@ ConfigurationSystem_001
 ConnectInterfaces
 CreateInterface
 Cycle or diamond double-reference to '%s'
-D#%`P%
+D#%\e%
 D#j\H
 D$ B;
 D$ Hc
 D$(H9
 D$8H9
 D$@H9
+D$hH9
 D+c$Mc
 D+k$Mc
-D+s$Mc
 D9C ~JMc
 D9k D
 D;c D
@@ -660,7 +670,6 @@ H	p(]
 H	w(UH
 H!w(H
 H;2t,H
-H;5>G&
 H;CHu
 H;PHu
 H;WPu#
@@ -669,7 +678,7 @@ H;sHu
 H;wHu
 H[A\A]A^A_]
 HammerMapLoader001
-Hc5zc&
+Hc5jb&
 HcC(M
 HcHpH
 HcK(Ic
@@ -693,6 +702,7 @@ Idle (ResourceSystemSleep)
 InfoForResourceTypeCAnimData
 InfoForResourceTypeCAnimationGroup
 InfoForResourceTypeCChoreoSceneFileData
+InfoForResourceTypeCDACGameDefsData
 InfoForResourceTypeCDOTAPatchNotesList
 InfoForResourceTypeCDotaItemDefinitionResource
 InfoForResourceTypeCEntityLump
@@ -743,7 +753,7 @@ KTu6L
 KeyValueCache001
 KeyValuesSystem
 L$PA#D$DH
-L;>t[H
+L;>tKH
 LIGHT_SOURCE_SHAPE_SPHERE
 LOG_GENERAL
 Lc'E)
@@ -1183,21 +1193,21 @@ _ZN13CBufferString6FormatEPKcz
 _ZN13CBufferString6InsertEiPKcib
 _ZN13CBufferString6SetPtrEPciibb
 _ZN13CBufferString8RemoveAtEii
-_ZN13CThreadRWLock11UnlockWriteEv
+_ZN13CThreadRWLock11UnlockWriteEPKci
 _ZN13CThreadRWLock11WaitForReadEv
-_ZN13CThreadRWLock12LockForWriteEv
+_ZN13CThreadRWLock12LockForWriteEPKci
 _ZN14CStackTop_BaseC2Ev
 _ZN14CStackTop_BaseD2Ev
 _ZN17CCallStackCaptureC1EPFiPPviiEjj
 _ZN17CCallStackCaptureC2EPFiPPviiEjj
-_ZN17CThreadSpinRWLock10UnlockReadEv
-_ZN17CThreadSpinRWLock11LockForReadEv
-_ZN17CThreadSpinRWLock11UnlockWriteEv
-_ZN17CThreadSpinRWLock16SpinLockForWriteEy
+_ZN17CThreadSpinRWLock10UnlockReadEPKci
+_ZN17CThreadSpinRWLock11LockForReadEPKci
+_ZN17CThreadSpinRWLock11UnlockWriteEPKci
+_ZN17CThreadSpinRWLock16SpinLockForWriteEPKciy
 _ZN17CThreadSyncObject4WaitEj
 _ZN17CThreadSyncObject8WaitImplEj
 _ZN17CThreadSyncObjectD2Ev
-_ZNV16CThreadFastMutex4LockEyj
+_ZNV16CThreadFastMutex4LockEPKciyj
 _ZTI17CThreadSyncObject
 _ZTVN10__cxxabiv117__class_type_infoE
 _ZTVN10__cxxabiv120__si_class_type_infoE
@@ -1672,36 +1682,42 @@ strlen
 suppress
 surface_prop
 t	[A\]
-t"L98u
+t#L98u
 t$ Hi
 t%L;}
+t'L; u
 t'L;8u
 t'L;;u
 t)HcE
+t/L;8u
+t/L;;u
 t6[A\A]]
 t7L;8u
 t8UE1
 t=[A\]
-t?L;8u
+tGL;8u
 tJHcC
 tRLc#D;c
 test_angles_relative
 texturescale
 tkD9p
 tlH;1u
+toL;8u
 turn_rate
+u	[A\A]A^]
 u1Lc#D;c
 uint64
 use_additional_offset
 utlbuffer.cpp
 utlstring.cpp
+utlsymbol.cpp
 v;<Htg<Xtc<7
 vagrp
 value
 vanim
 vanmgrph
-vanmgrph@
 vcdlist
+vdacdefs
 vents
 version
 vmdlkeys0
@@ -1743,8 +1759,8 @@ vrgrp
 vrman
 vrnmd
 vsnap
-vsndevts
-vsndstck@
+vsndevts@
+vsndstck
 vstdlib
 vsurf
 vwnod

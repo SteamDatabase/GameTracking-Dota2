@@ -44,6 +44,8 @@ $[A\]
 %s + %s
 %s - %s
 %s / %s
+%s allocation count overflow
+%s allocation count overflow( %llu >= %llu )
 %s: string format requested %d chars
 %s_color
 %s_matgrp
@@ -57,12 +59,16 @@ $[A\]
 (None)
 ([A\A]A^A_]
 ([A\A]]
+*ZL27CreatePerViewConstantBufferP10ISceneViewR17CRenderAttributesPKS_RK7VMatrixbbEUlS4_fiE_
 , parent: 
+-norefcheckaccess
 -sse2
 -sse3
 -sse4
 ../public/ordered_constructor.h
+../public/scenesystem/vertexformat.h
 ../public/tier1/utlblockmemory.h
+../public/tier1/utlleanvector.h
 ../public/tier1/utllinkedlist.h
 ../public/tier1/utlrbtree.h
 .M;UU
@@ -92,9 +98,9 @@ $[A\]
 0[A\]
 0x%016llX
 1 1 1
+1 = bloom output, 2 = quarter res downsample
 10IAppSystem
 11IVSSequence
-12CEmptyConVar
 12CThreadEvent
 13IBaseSequence
 14CBaseAppSystemI10IAppSystemE
@@ -106,6 +112,8 @@ $[A\]
 15CTier3AppSystemI10IAppSystemLi0EE
 15CVrQuadRenderer
 16CDefaultAccessor
+17CCsgoQuadRenderer
+18CPlaceholderConVar
 18CRenderingPipeline
 18IRenderingPipeline
 19CRenderingPipelines
@@ -114,7 +122,9 @@ $[A\]
 20CPostConnectCallback
 20CPostProcessRenderer
 20CRenderingPipelineVr
+21CCsgo3DSkyboxRenderer
 21CMyClearLayerRenderer
+22CRenderingPipelineCsgo
 22CRenderingPipelineSSAO
 22CSchemaInstallCallback
 22CVROvertopMenuRenderer
@@ -122,15 +132,18 @@ $[A\]
 24CVrComputeShaderRenderer
 24IProceduralLayerRenderer
 25CRenderingPipelineFactoryI20CRenderingPipelineVrE
+25CRenderingPipelineFactoryI22CRenderingPipelineCsgoE
 25CRenderingPipelineFactoryI22CRenderingPipelineSSAOE
 25CRenderingPipelineFactoryI25CRenderingPipelineForwardE
 25CRenderingPipelineFactoryI28CRenderingPipelineLightSetupE
 25CRenderingPipelineFactoryI28CRenderingPipelineVR3DSkyboxE
 25CRenderingPipelineFactoryI29CRenderingPipelineOvertopMenuE
 25CRenderingPipelineFactoryI29CRenderingPipelinePostProcessE
+25CRenderingPipelineFactoryI30CRenderingPipelineCsgo3DSkyboxE
 25CRenderingPipelineFactoryI30CRenderingPipelineSlimDeferredE
 25CRenderingPipelineForward
 25IRenderingPipelineFactory
+26CCsgoComputeShaderRenderer
 26CGaussianBloomBlurRenderer
 28CRenderingPipelineLightSetup
 28CRenderingPipelineVR3DSkybox
@@ -140,16 +153,20 @@ $[A\]
 2Way_0( %s )
 2Way_1( %s )
 2_BONE_IK
+30CRenderingPipelineCsgo3DSkybox
 30CRenderingPipelineSlimDeferred
 31CScreenSpaceReflectionsRenderer
 33333333H
 3D Skybox
 3D Skybox Procedural
+3DSkybox Depth Prepass
 3DSkybox Translucent Forward
 3DSkyboxForward
+3DSkyboxLightBinnerCsgo
 3DSkyboxLightBinnerVr
 41CVrClearQuadOverdrawVisualizationTextures
 42CTemplateSceneViewFactory_RenderVRMonitors
+43CCsgoClearQuadOverdrawVisualizationTextures
 5t~BC
 6ConVar
 7IConVar
@@ -173,11 +190,12 @@ $[A\]
 <NO EXPRESSION>
 <NULL>
 <Xt%1
+<deferred>
 <no failure reason set>
 <null>
+<unconnected>
 <unknown>
 <}\vH
-<}\vL
 >;9t9H
 ?postprocess
 ?root
@@ -253,6 +271,7 @@ AVAUATSH
 AVAUI
 AVAUL
 AWAVA
+AWAVAUATE1
 AWAVAUATI
 AWAVAUATL
 AWAVAUATSH
@@ -264,20 +283,29 @@ AWAVH
 AWAVI
 AWAVL
 AWAVM
+AYAZH
+AYA[H
+AZA[L
+AZA[f
+A[A\H
 A\A]A^A_]
 A\A]A^A_]L
 A\A]A^]
 A\A]]
+A\A]]H
 A\A]]L
 AbsolutePoseControl
 AddRef
+AddToTailGetPtr
 After3DGeo
 AfterTranslucent3D
 AlbedoOrReflectivity
+Allow bloom on scene monitors
 Am_flPosition
 Ambient Occlusion Proxies
 Ambient Occlusion Proxies Downsample Depth
 Ambient Occlusion Proxies: Texture Barrier
+Ambient Occlusion Proxy Blit
 AmbientOcclusionDepth
 Angle; 
 AnimAddLayer
@@ -317,7 +345,6 @@ AssetSystem001
 AssetSystemTest001
 Attempting to get the Skeletal Input settings from model %s, which doesn't have any.  
 Attempting to get the movement settings from model %s, for which movement settings have not been set.  
-Attribute counts between meshes is inconsistent
 BGR565
 BGR888_BLUESCREEN
 BGRA1010102
@@ -347,6 +374,7 @@ BreakPieceExternal
 C$x$H
 C,[A\]
 CAimConstraint
+CAmbientOcclusionProxySceneObjectDesc
 CAnimBone
 CAnimDataChannelDesc
 CAnimKeyData
@@ -367,6 +395,7 @@ CCommand::Tokenize: Encountered command which overflows the argument buffer.. Cl
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CConstraintSlave
 CConstraintTarget
+CCsgoQuadRenderer
 CDrawCullingData
 CFingerBone
 CFingerChain
@@ -504,6 +533,7 @@ CameraDepth
 Cht7Lc{pD;
 Clear Color Depth Stencil
 Clear Depth Stencil
+ClearDepth Stencil
 ClearHdrBackBuffer
 ClearOutputDepth
 ClearQuadCoverage
@@ -522,13 +552,17 @@ ConfigurationSystem_001
 ConnectInterfaces
 CopyHDRBackBuffer
 CopyRefractTexture
-Cos( %s )
 CreateInterface
 CreatePerViewConstantBuffer
+Csgo3DSkybox
+Csgo3DSkyboxRendererTemplate
+Csgo3DSkyboxView
+CsgoQuadLayout
 Cubic
 CustomClearColor
 D#j\H
 D$(H9
+D$0H9
 D$PPE
 D$TPA
 D15S1
@@ -540,6 +574,7 @@ D24X8_SHADOW
 D9k D
 DXT1_ONEBITALPHA
 DXT5_NM
+D_ENABLE_VOLUMETRIC_FOG is set, but cannot find CVolumetricFog via "VolumetricFog"
 DebugDrawObjects
 DebugTextureInfo001
 DebugVisualizerMgr
@@ -573,6 +608,7 @@ DynamicConfigList
 DynamicGBuffer
 E9gPI
 E9t$(D
+ERROR! Cannot load RenderingPipelineCsgoStartup resource manifest for the Csgo render pipeline!
 ERROR! Cannot load RenderingPipelineVrStartup resource manifest for the vr render pipeline!
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: Specified full path %s does not lie under the mod search path!)
@@ -660,9 +696,7 @@ GetResourceManifestCount
 GetResourceManifests
 GroundFog
 H	C0H
-H	P0H
 H	p(]
-H	p0H
 H!w(H
 HBm_influenceFlags
 HDRBloom
@@ -680,9 +714,8 @@ Hologram Depth
 Hologram Wireframe
 HookUpConfigValue
 HostStateMgr001
-I	D$0I
-I	V0A
-I	W0A
+I	E0A
+I	F0A
 IKChain
 IKChainOld
 IKData
@@ -718,6 +751,7 @@ KTu6L
 KV3 load transfer failed: %s
 KeyValueCache001
 KeyValuesSystem
+L	p0H
 LBRIGHT
 LE_BGRA8888
 LE_BGRX8888
@@ -742,6 +776,7 @@ LightingBasis
 LightingH
 LightmapH
 LightmapUV
+LightmapUVW
 Line %d at "%s": %s
 Line %d: %s
 Line %d: Invalid value "%s"
@@ -749,8 +784,7 @@ Linear
 LoadKV3ObjectInPlace error: %s
 Localize_001
 LockDynamicConstantBuffer failed in CreatePerViewConstantBuffer!!!
-LockDynamicConstantBuffer failed in SetupCubemapFogForView!!!
-LockDynamicConstantBuffer failed in SetupGradientFogForView!!!
+LockDynamicConstantBuffer failed in SetupConstantBufferForCoreGradientFog!!!
 LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
 LoggingSystem_LogDirect
@@ -779,13 +813,11 @@ MaterialResourceData_t
 MaterialSystem2/ShaderIDColors
 MaterialUtils_001
 MathLib_Init
-Max( %s, %s )
 MbP?+
 MemAlloc_AllocFunc
 MemAlloc_FreeFunc
 MeshSystem001
 MeshUtils001
-Min( %s, %s )
 Missing file '%s'
 Model %s missing bone and flex counts (%d < %d), init %d
 ModelCompile/UseShadowFastPathHeuristic
@@ -901,6 +933,7 @@ PostProcessPipeline
 PostProcessing
 PostProcessingSystem_001
 PrevFrameHDRBuffer
+Preview H
 Preview L
 PreviewAttachmentModel
 PreviewBoneAttachedModel
@@ -958,6 +991,7 @@ RenderDeviceMgr001
 RenderHardwareConfig002
 RenderMeshFile
 RenderPipelineAliases
+RenderPipelineCsgo
 RenderPipelineVr
 RenderPrimitiveType_t
 RenderService_001
@@ -965,6 +999,13 @@ RenderSkeletonBone_t
 RenderSystemSurface001
 RenderUtils_001
 RenderinH
+RenderingPipelineCsgoComputeShaderManifest
+RenderingPipelineCsgoDeveloperMode
+RenderingPipelineCsgoDeveloperModeGroup
+RenderingPipelineCsgoGroup
+RenderingPipelineCsgoManifest
+RenderingPipelineCsgoManifestDeveloperModeOnly
+RenderingPipelineCsgoStartup
 RenderingPipelineForwardManifest
 RenderingPipelinePostProcessManifest
 RenderingPipelineSSAOManifest
@@ -990,10 +1031,11 @@ RetinaBurnRt0
 RetinaBurnRt1
 RetinaBurnSplat
 Rigid; 
-SASARAQWH
 SSAOBlurH
 SSAOBlurV
 SSE and SSE2 are required.
+SceneSystem/CsgoDefaultShadowTextureHeight
+SceneSystem/CsgoDefaultShadowTextureWidth
 SceneSystem/EnvironmentalInteraction
 SceneSystem/VrDefaultShadowTextureHeight
 SceneSystem/VrDefaultShadowTextureWidth
@@ -1011,13 +1053,12 @@ SequenceMarkup
 SequenceMarkupList
 SerializedEntitiesVersion001
 ServerUploadGameStats001
-SetupCubemapFogForView
-SetupGradientFogForView
+SetupConstantBufferForCoreGradientFog
 ShadowVisLayer
 Simulated
-Sin( %s )
 SkeletonBoneBounds_t
 SlimDeferred
+SlopeTrace
 SoundOpSystem001
 SoundOpSystemEdit001
 SoundService_001
@@ -1034,7 +1075,6 @@ Source2GameEntities001
 Source2Host001
 Source2Server001
 Source2ServerSerializers002
-Sqrt( %s )
 Stack depth limit hit (%d)
 Static Opaque Forward
 Static World Overlays
@@ -1101,6 +1141,7 @@ ToolsVisMode: SPECULAR_AMBIENT_OCCLUSION
 ToolsVisMode: SPECULAR_LIGHTING					
 ToolsVisMode: TANGENT_U_WS						
 ToolsVisMode: TANGENT_V_WS						
+ToolsVisMode: TOOLS_VIS_MODE_TEXTURE_MIP_USAGE	
 ToolsVisMode: TRANSMISSIVE_LIGHTING				
 ToolsVisMode: UNKNOWN
 ToolsVisMode: WRINKLE							
@@ -1232,7 +1273,6 @@ VertexColorPos_t
 VertexPaintBlendParams
 VertexPaintBlendParams1
 VertexPaintTintColor
-VertexPostProcess_t
 ViewModelForward
 ViewModelGBuffer
 ViewModelTranslucent
@@ -1240,6 +1280,7 @@ VisBuilder_001
 VisualizeQuads
 VolumetricFog
 VolumetricFogManifest
+VrPerfHUD
 VrQuadLayout
 VrTeleportPathRendering
 VrWriteStencilMaskLeftEye
@@ -1325,19 +1366,19 @@ _ZN13CBufferString6FormatEPKcz
 _ZN13CBufferString6InsertEiPKcib
 _ZN13CBufferString6SetPtrEPciibb
 _ZN13CBufferString8RemoveAtEii
-_ZN13CThreadRWLock11UnlockWriteEv
+_ZN13CThreadRWLock11UnlockWriteEPKci
 _ZN13CThreadRWLock11WaitForReadEv
-_ZN13CThreadRWLock12LockForWriteEv
-_ZN17CThreadSpinRWLock10UnlockReadEv
-_ZN17CThreadSpinRWLock11LockForReadEv
-_ZN17CThreadSpinRWLock11UnlockWriteEv
-_ZN17CThreadSpinRWLock16SpinLockForWriteEy
+_ZN13CThreadRWLock12LockForWriteEPKci
+_ZN17CThreadSpinRWLock10UnlockReadEPKci
+_ZN17CThreadSpinRWLock11LockForReadEPKci
+_ZN17CThreadSpinRWLock11UnlockWriteEPKci
+_ZN17CThreadSpinRWLock16SpinLockForWriteEPKciy
 _ZN17CThreadSyncObject8WaitImplEj
 _ZN17CThreadSyncObjectD2Ev
 _ZNSt14_Function_base13_Base_managerIPFvP12CSceneObjectEE10_M_managerERSt9_Any_dataRKS6_St18_Manager_operation
 _ZNSt8ios_base4InitC1Ev
 _ZNSt8ios_base4InitD1Ev
-_ZNV16CThreadFastMutex4LockEyj
+_ZNV16CThreadFastMutex4LockEPKciyj
 _ZSt25__throw_bad_function_callv
 _ZTI17CThreadSyncObject
 _ZTVN10__cxxabiv117__class_type_infoE
@@ -1365,6 +1406,7 @@ _edata
 _fini
 _test_conversion_counter
 `[A\]
+abs( %s )
 ai_model_info
 ality orH
 allowstatic
@@ -1428,7 +1470,37 @@ composite
 config_state
 configvalue.cpp
 control_point
+cos( %s )
 create_particle
+csgo_3d_skybox
+csgo_aoproxy_debug
+csgo_aoproxy_enable
+csgo_cubemap_normalization
+csgo_custom_msaa_resolve
+csgo_decal_debug
+csgo_depth_prepass
+csgo_depth_prepass_alphatested
+csgo_depth_prepass_cull_threshold
+csgo_effects_bloom
+csgo_enable_cubemap_fog
+csgo_enable_glows
+csgo_enable_gradient_fog
+csgo_enable_tonemapping
+csgo_enable_translucent_screen_space
+csgo_enable_volume_fog
+csgo_fullsort_depth_prepass
+csgo_postprocess_enable
+csgo_readonly_depth_stencil_enable
+csgo_render_decals
+csgo_render_dynamic_objects
+csgo_render_opaque
+csgo_render_opaque_notzprepassed
+csgo_render_overlays
+csgo_render_refraction
+csgo_render_translucent
+csgo_shadows_debug
+csgo_stencil_debug
+csgo_use_fullsort_for_opaque
 curvature
 dH34%(
 default
@@ -1453,6 +1525,7 @@ encoding
 event_class
 event_keys
 eventindex
+exp( %s )
 explosion_behavior
 explosion_buildup
 explosion_delay
@@ -1471,6 +1544,7 @@ force
 format
 formats.cpp
 friction
+fullsort the opaque pass when there wasn't a depth prepass
 g as FULH
 g cMesh
 g default
@@ -1493,13 +1567,16 @@ hurt_them
 ikdata
 int( %d = 0x%X )
 interfaces.cpp
+intermediate_color_rt
 intermediate_color_stereo_rt
+intermediate_depth_rt
 intermediate_depth_stereo_rt
 invert_orientation
 is_debris
 jiggle bone %u
 k@_aA
 k@_aH
+keyvalues.cpp
 kv3format_manager.cpp
 last_sniff
 ld-linux-x86-64.so.2
@@ -1592,7 +1669,6 @@ m_bHasBakedLightingBasisInVertex
 m_bHasBakedLightingFromLightMap
 m_bHasBakedLightingFromVertexStream
 m_bHasCullingData
-m_bHasPerInstanceBakedLightingData
 m_bHideMaterialGroupInTools
 m_bHideRenderColorInTools
 m_bIgnoreRotation
@@ -1852,6 +1928,8 @@ m_vOffset
 m_vSplayHingeAxis
 m_vTintColor
 m_vTipOffset
+m_vTraceOffset
+m_vTraceScale
 m_vUpLS
 m_vUpVector
 m_value
@@ -1892,6 +1970,7 @@ materials/error.vmat
 materials/rendertargetops/bilateral_blur_horz.vmat
 materials/rendertargetops/bilateral_blur_vert.vmat
 materialsystem2
+max( %s, %s )
 maxHullVertices
 maxSpringTension
 maxVerticesPerHull
@@ -1907,6 +1986,7 @@ mesh_calculate_curvature_smooth_invert
 mesh_calculate_curvature_smooth_pass_count
 mesh_calculate_curvature_smooth_weight
 meshes
+min( %s, %s )
 min_angle
 model.cpp
 model_default_preview_sequence_name
@@ -1959,6 +2039,7 @@ parent of jiggle bone %u: %s
 particles/
 pervertexlighting
 phys_res
+physaggregatedata.cpp
 physgun_interactions
 physib
 physicsmode
@@ -1971,6 +2052,7 @@ point1
 pose_control
 pose_control_type
 position
+post_process_depth_stencil
 postprocess.cpp
 posxyz
 pping quH
@@ -1999,11 +2081,14 @@ r_hdr_bloom
 r_hlvr_old_tonemapping_curve
 r_paint_post
 r_post_bloom
+r_post_bloom_debug
 r_post_bloom_kawase_steps
 r_post_bloom_strength
 r_post_colorcorrection
 r_post_film_grain
 r_post_fxaa
+r_post_mirror_horizontal
+r_post_mirror_vertical
 r_post_vignette
 r_render_to_cubemap_debug
 r_showdebugoverlays
@@ -2016,6 +2101,8 @@ r_ssao_strength
 r_transmissive_lighting
 r_vignette
 r_vr_3d_skybox
+r_vr_3d_skybox_depth_prepass
+r_vr_3d_skybox_depth_prepass_cull_threshold
 r_vr_overtop_menu
 radius0
 radius1
@@ -2025,6 +2112,7 @@ relative_angles
 relative_origin
 remapping vertex %d[w%d] invalid: %d->%d >= %d
 remapping vertex %d[w%d] invalid: %d->? >= %d
+renderingpipeline_csgo.cpp
 renderingpipeline_vr.cpp
 renderingpipelineforward.cpp
 renderingpipelinepostprocess.cpp
@@ -2053,11 +2141,13 @@ sequence_number
 server_can_execute
 shapeType
 sharpStartAngle
+sin( %s )
 singleplayer
 source_filename
 spawn_motion_disabled
 speeds
 springConstant
+sqrt( %s )
 sqrtf
 ss_added
 ssaoBlurTemp1
@@ -2136,6 +2226,8 @@ vpcf6
 vpcf7
 vpcf8
 vpcf9
+vr_aoproxy_cones
+vr_aoproxy_cull_threshold
 vr_aoproxy_debug
 vr_aoproxy_enable
 vr_carry_type
@@ -2145,12 +2237,14 @@ vr_decal_debug
 vr_depth_prepass
 vr_depth_prepass_alphatested
 vr_depth_prepass_cull_threshold
+vr_enable_cubemap_fog
 vr_enable_glows
+vr_enable_gradient_fog
 vr_enable_tonemapping
 vr_enable_translucent_screen_space
 vr_enable_volume_fog
 vr_expand_cull_frustum
-vr_fullsort_depth_prepass
+vr_monitor_bloom
 vr_postprocess_enable
 vr_readonly_depth_stencil_enable
 vr_render_decals
@@ -2158,16 +2252,18 @@ vr_render_dynamic_objects
 vr_render_opaque
 vr_render_opaque_notzprepassed
 vr_render_overlays
-vr_render_refaction
+vr_render_refraction
 vr_render_translucent
 vr_shadows_debug
 vr_stencil_debug
 vr_stencil_hidden_pixels
+vr_stencil_postprocessing
 vr_use_fullsort_for_opaque
 vr_use_invalid_bubble
 vr_warp
 vr_warp_debug
 vsnap
+vtexL
 walkspeed
 wcscmp
 wcslen
@@ -2182,6 +2278,7 @@ yaw_start
 {}()':
 {}[]()=&, 	
 {}[]=, 	
+|VertexPostProcess_t
 ~(A\A]A^]
 ~)H;7I
 ~7;w$

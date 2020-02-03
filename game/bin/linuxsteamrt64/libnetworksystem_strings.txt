@@ -249,7 +249,6 @@
 ##GameUI_Disconnect_BadRelayPassword
 ##GameUI_Disconnect_ReliableOverflow
 ##GameUI_Disconnect_SnapshotOverflow
-#5"3 
 #Bidirectional_Messages_LowFrequency
 #GameUI_ClientConsistencyFail
 #GameUI_ClientDifferentMap
@@ -612,6 +611,7 @@ $[A\]
 -networkvar_validate
 -nodns
 -noip
+-norefcheckaccess
 -perfectworld
 -sse2
 -sse3
@@ -624,11 +624,15 @@ $[A\]
 ../public/networksystem/serializedentity.h
 ../public/ordered_constructor.h
 ../public/tier0/tslist.h
+../public/tier1/eventdispatcher.h
 ../public/tier1/quantizedfloatencoder.h
 ../public/tier1/utlleanvector.h
 ../public/tier1/utllinkedlist.h
 ../public/tier1/utlrbtree.h
+../public/tier1/utlsignalslot.h
 ../public/tier1/utlsortvector.h
+../public/tier1/utlsymbol.h
+../public/tier1/utltshash.h
 ../public/tier2/fieldpath.h
 .A;L$
 .CMsgIPCAddress
@@ -701,7 +705,6 @@ $[A\]
 0[A\]
 0[A^]
 0[]A\A]A^
-0f91u
 0x%p assigned %d to '%s'
 10CEntityMsg
 10CMsgQAngle
@@ -716,7 +719,6 @@ $[A\]
 127.0.0.
 127.0.0.1
 12CCLCMsg_Move
-12CEmptyConVar
 12CMsgVector2D
 12CNETMsg_Tick
 12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE
@@ -775,6 +777,7 @@ $[A\]
 18CCLCMsg_ClientInfo
 18CCLCMsg_ServerPing
 18CNETMsg_Disconnect
+18CPlaceholderConVar
 18CSVCMsg_HLTVStatus
 18CSVCMsg_ServerInfo
 19CBidirMsg_RelayInfo
@@ -788,12 +791,10 @@ $[A\]
 19INetworkSystemUtils
 19ISerializedEntities
 19NetMessagePacketEnd
-1@87@
 1A80@
 1A90u
 1DBlend
 1I30t
-1f97u
 1fA90u
 2 .CBidirMsg_RelayInfo.Operation_t
 2 .ProtoFlattenedSerializerField_t"!
@@ -899,7 +900,6 @@ $[A\]
 69r t&H
 6ConVar
 6H92t%H
-7H31t
 7IConVar
 7[A\A]A^]
 8#GameUI_Disconnect_LocalProblem_HostedServerPrimaryRelay
@@ -910,22 +910,24 @@ $[A\]
 8CMsgRGBA
 8CNetChan
 8CUtlSlot
-8D;2u
+8H9>u
 8I98u
 8Lc'E
 8NETWORK_DISCONNECT_LOCALPROBLEM_HOSTEDSERVERPRIMARYRELAY
 8[A\A]A^A_]
 8[A\A]]
 8[]A\A]A^A_
-9A8:@
-9A9:u
-9fA9:u
+8f99u
+9A88@
+9A89@
+9A99u
+9H39t
+9I38t
+9fA99u
 : Protocol message serialized to a size different from what was originally expected.  Perhaps it was modified by another thread during serialization?
 : Tried to copy from a message with a different type. to: 
 : Tried to merge from a message with a different type.  to: 
 : failed to parse contents
-:H39t
-:H3>t
 :f9>u
 :fA99u)1
 ;*3$"
@@ -975,25 +977,25 @@ $[A\]
 <Uu`H
 <Xt%1
 <Xu;H
+<deferred>
 <no failure reason set>
 <null>
+<unconnected>
 <unknown>
 >;9t9H
->A8:@
->A9:u
->I3:t
 >LZSSt
 >f98u
->fA9:u
 >fE9}
 >mathlib.cpp
 ?%u:%u:%u
+?%x (int:%d, float:%f)
 ?456789:;<=
-@$t@<
+@$tC<
 @(9A,u
 @,9A0
 @0H;E
 @89A<
+@8HcF
 @<8A@u
 @<APD
 @@H;E
@@ -1014,9 +1016,8 @@ $[A\]
 A file with this name is already in the pool.
 A protocol message was rejected because it was too big (more than 
 A#W\H
-A#z\H
 A#|$TH
-A#}\H
+A#|$\H
 A+D$,I
 A+E$A
 A+F$H
@@ -1027,11 +1028,10 @@ A9F(@
 A9G@u
 A9q<u
 A;2B7
-A;B`}
 A;D$X}
 A;D$\
+A;D$`}
 A;D$p
-A;E`}
 A;F`u
 A;Fp|
 A;Fp}
@@ -1236,8 +1236,8 @@ Average Data Bytes                :  %8.3f bytes
 Average Memory Usage Per Entity   :  %8.3f bytes
 Average Number of Field Paths     :  %8.3f
 B I9A$u
+B(;A(
 B0A9A4u
-B4~IH
 B4~MH
 B88C8
 BackUp() can only be called after a successful Next().
@@ -1268,7 +1268,7 @@ Byte size calculation and serialization were inconsistent.  This may indicate a 
 C$x$H
 C(|v1
 C,D9c
-C8HcC@H9
+C8HcCHH9
 CANCELLED
 CAuthPhysBody
 CAuthPhysJoint
@@ -1545,7 +1545,6 @@ CHECK failed: uninterpreted_options_field != NULL:
 CHECK failed: value != NULL: 
 CHECK failed: z.first != NULL: 
 CHandle<
-CH~X1
 CITDH
 CL$(9
 CLC_Messages
@@ -1579,6 +1578,7 @@ CNetChan::SendNetMessage: Trying to send message %s, which is an invalid categor
 CNetChan::SendNetMessage: Unable to send message %s, buffer is full!
 CNetChan::SetMaxBufferSize: cant preserve exiting data %i>%i.
 CNetChan::Setup for %s
+CNetChan::UpdateMessageStats, bit counter about to roll over with addition of %d bits, resetting to zero
 CNetChan_TransmitBits->send
 CNetworkFieldChangedEventQueue::QueueChange:  ran out of scratch data space!!!
 CNetworkMessages::AllocateAndCopyConstructNetMessageAbstract unable to allocate unknown message type!
@@ -1617,6 +1617,7 @@ CPPTYPE_UINT32
 CPPTYPE_UINT64
 CParticleSystemDefinition
 CP~6H
+CP~X1
 CSVCMsgList_GameEvents
 CSVCMsgList_UserMessages
 CSVCMsg_BSPDecal
@@ -1845,7 +1846,7 @@ D$0I9
 D$0IcL$
 D$0M9
 D$8I9
-D$<tHH
+D$8tHH
 D$@E1
 D$@H9
 D$@Hc
@@ -1854,9 +1855,8 @@ D$@u{A
 D$LH9C
 D$T9C
 D$XHc
-D$xH9
-D%x (int:%d, float:%f)
-D+u0D9
+D$`H9
+D+e0D9
 D6<Hc
 D8"u'
 D9+t*
@@ -1865,6 +1865,7 @@ D9sp~rH
 D9{X~~H
 D:"u;
 D;!ttHc
+D;%-mG
 D;+t*
 D;c D
 D;c I
@@ -1928,9 +1929,9 @@ E;l$$
 E;o D
 E;|$(fD
 E@Icw
-EHA;EX
-EHHcE
 ENetworkDisconnectionReason
+EPA;E`
+EPHcE
 EP~8H
 EQueryCvarValueStatus
 ERROR
@@ -2031,10 +2032,9 @@ F A\H
 F t2SH
 F t5SH
 F(~:I
+F8tbH
 F8ttMc
 F8})L
-F<tbH
-FA+<@H
 FAILED_PRECONDITION
 FALSE
 FATAL
@@ -2115,7 +2115,6 @@ Forces larger payloads.
 FormatV
 Found invalid proto option data for: 
 G U9G
-G(A;F(
 G(~5I
 G0AQE1
 G0UH9
@@ -2123,9 +2122,10 @@ G8I;G@
 G8I;G@r
 G8t%H
 G8t.H
+G8tFH
+G8t_H
 G<@tY
-G<tFH
-G<t_H
+GA+4@H
 GCC: (Ubuntu 5.4.0-7.really.6+steamrt1.1+srt1) 5.4.1 20160803
 GCC: (crosstool-NG 1.17.0) 4.6.3
 GLIBCXX_3.4
@@ -2180,10 +2180,10 @@ GetString
 GetStringReference
 GetUInt32
 GetUInt64
-GhL; 
 Got ISteamNetworkingSockets user interfaces from standalone lib
 Got ISteamNetworkingSockets user interfaces from steam client
 Got message on poll group for socket %s, but cannot find connection in table?
+GpL; 
 Groups are not supported in proto3 syntax.
 H	p(]
 H	w(UH
@@ -2194,35 +2194,31 @@ H9J(t
 H9Q(H
 H9Q(t
 H;*twH
-H;5!!O
-H;5!*M
-H;5!<M
-H;5<)O
-H;5X.M
-H;5p@M
-H;5x+M
-H;=)vL
-H;==FO
-H;=>>O
-H;=@kO
-H;=BSM
-H;=J9G
-H;=JaO
-H;=JvE
-H;=PjO
-H;=Z`L
-H;=[vL
-H;=^:L
-H;=`iO
-H;=h=O
-H;=hFO
-H;=i>O
-H;=phO
-H;=q`O
-H;=tSM
-H;=z7G
-H;=z^L
-H;=|[L
+H;5 )M
+H;5 ;O
+H;5 KO
+H;5(RM
+H;5H%M
+H;5I2M
+H;5\nM
+H;5`!M
+H;5paM
+H;5y+M
+H;5y?O
+H;5yHM
+H;5yZM
+H;=*LG
+H;=0rM
+H;=8\O
+H;=9eO
+H;=:UG
+H;=ZUL
+H;=bdO
+H;=brM
+H;=c\O
+H;=deO
+H;=hqM
+H;=jSG
 H;r(H
 H[A\A]A^A_]
 H[A\A]]
@@ -2281,7 +2277,7 @@ IcE01
 IcF(J
 IcG A
 IcL$(Hc
-IcL$@
+IcL$H
 IcO H
 IcT$$A
 IcU09
@@ -2346,9 +2342,10 @@ KeyValuesSystem
 KhJcD!
 L$ H9
 L$ IcG
-L$PfA
+L$XfA
 L$Xu$
 L$lE1
+L; tFH
 LABEL_OPTIONAL
 LABEL_REPEATED
 LABEL_REQUIRED
@@ -2608,6 +2605,7 @@ Ordered constructor wrapped type has no default constructor.
 Overrides IP for multihomed hosts
 P HcA
 P IcG
+P4~LH
 PACKET_STATUS_DROPPED
 PACKET_STATUS_INVALID
 PACKET_STATUS_NORMAL
@@ -2977,7 +2975,7 @@ Symbol name "
 System
 T$ H9
 T$(H9
-T$pD9
+T$xD9
 TCP/UDP Disabled.
 TIcL$
 TYPE_BYTES
@@ -3254,7 +3252,7 @@ X[]A\A]A^A_
 \%03o
 \U%08x
 \x%02x
-]IcL$pIc
+]IcL$xIc
 ]XtHI9
 ^IcL$ Ic
 ^IcO@Ic
@@ -3291,19 +3289,19 @@ _ZN13CBufferString5PurgeEi
 _ZN13CBufferString6ConcatEPKcS1_z
 _ZN13CBufferString6FormatEPKcz
 _ZN13CBufferString6InsertEiPKcib
-_ZN13CThreadRWLock11UnlockWriteEv
+_ZN13CThreadRWLock11UnlockWriteEPKci
 _ZN13CThreadRWLock11WaitForReadEv
-_ZN13CThreadRWLock12LockForWriteEv
+_ZN13CThreadRWLock12LockForWriteEPKci
 _ZN16CThreadSemaphore7ReleaseEiPi
 _ZN16CThreadSemaphoreD1Ev
-_ZN17CThreadSpinRWLock10UnlockReadEv
-_ZN17CThreadSpinRWLock11LockForReadEv
-_ZN17CThreadSpinRWLock11UnlockWriteEv
-_ZN17CThreadSpinRWLock16SpinLockForWriteEy
+_ZN17CThreadSpinRWLock10UnlockReadEPKci
+_ZN17CThreadSpinRWLock11LockForReadEPKci
+_ZN17CThreadSpinRWLock11UnlockWriteEPKci
+_ZN17CThreadSpinRWLock16SpinLockForWriteEPKciy
 _ZN17CThreadSyncObject8WaitImplEj
 _ZN17CThreadSyncObjectD2Ev
 _ZN21CThreadMultiWaitEvent3SetEv
-_ZN22CThreadRWLock_FastRead20UnlockReadAccountingEj
+_ZN22CThreadRWLock_FastRead20UnlockReadAccountingEPKcij
 _ZN22CThreadRWLock_FastRead23UnlockRead_LockForWriteEv
 _ZN22CThreadRWLock_FastRead25WaitForReadLockTransitionEj
 _ZN22CThreadRWLock_FastReadC1Ev
@@ -3396,7 +3394,7 @@ _ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT_
 _ZNSt8ios_base4InitC1Ev
 _ZNSt8ios_base4InitD1Ev
 _ZNSt9exceptionD2Ev
-_ZNV16CThreadFastMutex4LockEyj
+_ZNV16CThreadFastMutex4LockEPKciyj
 _ZSt17__throw_bad_allocv
 _ZSt18_Rb_tree_decrementPKSt18_Rb_tree_node_base
 _ZSt18_Rb_tree_decrementPSt18_Rb_tree_node_base
@@ -3719,6 +3717,7 @@ field_serializer_name_sym
 field_serializer_version
 fieldname
 fieldpath_%02d%02d%02d-%02d%02d%02d.csv
+fieldpathpacker.cpp
 fields
 fields_index
 filename
@@ -4160,6 +4159,7 @@ network_connection_token
 networkbasetypes.proto
 networkbasetypes.proto"
 networking/%04d_%02d_%02d_%02d_%02d_%02d
+networkmessages.h
 networkserializer.cpp
 networksystem
 networksystem.cpp
@@ -4319,24 +4319,24 @@ rnd_down
 rnd_up
 rootNode
 s H;5
-s H;5@
-s H;5X
-s H;5qBM
+s H;5IGO
+s H;5T_M
+s H;5XRM
 s(H;5
-s(H;5-4M
 s0H;5
-s0H;5L
-s0H;5e4M
+s0H;5 
+s0H;5@0O
 s1Hc@
 s1_mapname
 s8H;5
-s8H;5t
+s8H;5@#O
+s8H;5P1O
 s@H;5
-s@H;5 
-s@H;50
+s@H;5iSM
+s@H;5x#O
 sHH;5
-sHH;5E
-sPH;5"
+sHH;5E$O
+sPH;5z$O
 sample_rate
 savegamefilename
 savegamename
@@ -4473,6 +4473,7 @@ syntax = "$0";
 t	X[]
 t	[A\]
 t!IcU
+t!L; u
 t";2}
 t#IcW
 t$ fA
@@ -4482,11 +4483,14 @@ t$8H9
 t$H;h
 t$HcU
 t$HcW
+t$L9 u
 t%9p8
 t%D;-
 t%Hcs8
 t&IcN
+t';5h
 t(D9-
+t);=R
 t)HcE
 t*D;=
 t.HcC H
@@ -4553,6 +4557,7 @@ t8HcO H
 t8IcD$0H
 t9IcD$0H
 t=[A\]
+t?L; u
 t?[A\A]A^]
 tHLccpD;
 tJHcC
@@ -4575,6 +4580,7 @@ total_packets_in
 total_packets_out
 trailing_comments
 turn_rate
+twL; u
 twL;+u
 txHcW
 tyHcW
@@ -4587,7 +4593,7 @@ type() == TYPE_VARINT
 type.googleapis.com/
 type.googleprod.com/
 tzHcU
-tzLc=[HI
+tzLc=
 t}HcU
 t}L9}
 u	[A\A]A^]
@@ -4604,17 +4610,15 @@ uE[A\]
 uH[A\]
 uIcL$
 uO[A\]
-uPL;>
 uR[A\]
 uY[A\]
 u[[A\A]A^]
 u\[A\]
 u]A	\$
-ubH9}
+u`H9}
+ubH9u
 ubHcF
 udA	\$
-uhL;>
-uiH9u
 uint32
 uint64
 unable to match %s::%s (type %s) in %s, no likely matches found
@@ -4624,7 +4628,9 @@ uninterpreted_option
 unknown
 unreliable
 unreliable_bits
+uoH9}
 uo[A\]
+upH9u
 update_baseline
 updated_entries
 uptime
@@ -4637,8 +4643,10 @@ userid
 usermsgs
 utlbuffer.cpp
 utlstring.cpp
+utlsymbol.cpp
 utlvector count
 u|E;.w/L
+v!D9M
 v;<Htg<Xtc<7
 vYHc@
 val_bool
@@ -4713,7 +4721,6 @@ worldgroupid
 write
 writing (in %s)
 wrong submessage type
-wxAUI
 x	;B`
 x	;F`
 x$A9}
@@ -4735,6 +4742,7 @@ yaw_start
 you_hear_them
 z)u'A
 ziugH
+{ [A\]
 {@u	H
 {YIN?
 {}()':
@@ -4745,18 +4753,16 @@ ziugH
 |$0E;|$@
 |$@H9}
 |$@H9}(A
-|$hIc_
-}#A;D$Tw
+}#A;D$\w
 }%fD9
 }%fD;
-}+A9GTr%
-}+A;ETw%
+}+A9G\r%
+}+A;G\w%
+}4A;G\w.
 }<D9m
 }<D;m
-}AA;ETw;
 }cfA9
 }ufA9
-~ t1A
 ~)H;7I
 ~7;w$
 ~9;w$
@@ -4765,4 +4771,3 @@ ziugH
 ~IHcK
 ~If;w
 ~j;w$
-~w;=A

@@ -4,7 +4,14 @@
     Component %d: %dhx%dv q=%d
     Component %d: dc=%d ac=%d
     with %d x %d thumbnail image
+  %s / %s MB
+  %s / %s MB (non-evictable: %s MB)
+  CB: %u buffers, %.2f MB
+  IB: %d buffers, %.2f MB
   Ss=%d, Se=%d, Ah=%d, Al=%d
+  TEX: %u textures, %.2f MB
+  TOTAL: %.2f MB
+  VB: %d buffers, %.2f MB
  ( def. "%s" )
  -shadowTargetSize forcing nPoolSizeInMb size to %d from %d, bLarge %d, avail %lld
  0@P`p
@@ -93,6 +100,7 @@ $fD	0
 -mantle
 -maxdxlevel
 -maxtextureres
+-norefcheckaccess
 -preloadtextures
 -r_max_device_threads
 -rendersystem_thread_mode
@@ -104,9 +112,11 @@ $fD	0
 -vulkan
 ../public/ordered_constructor.h
 ../public/tier0/tslist.h
+../public/tier1/memstack.h
 ../public/tier1/utlfixedmemory.h
 ../public/tier1/utllinkedlist.h
 ../public/tier1/utlrbtree.h
+../public/tier1/utltshash.h
 .>N^n~
 .comment
 .data
@@ -144,7 +154,6 @@ $fD	0
 11CFunctorJob
 11IRefCounted
 12CDeviceFence
-12CEmptyConVar
 12CRefCounted1I11IRefCounted20CRefCountServiceBaseILb1E6CRefMTEE
 12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE
 12CRenderUtils
@@ -157,8 +166,8 @@ $fD	0
 14CSwapChainBase
 14ConCommandBase
 14IRenderContext
-15CMemberFunctor4IP19CTextureManagerBaseMS0_FvP25IAsyncResourceDataRequestP12CTextureBase22TextureSpecification_tiES3_S5_S6_i12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
-15CMemberFunctor7IP19CTextureManagerBaseMS0_FvP12CTextureBase12ResourceId_tPvi22TextureSpecification_ti23TextureBitsMemoryType_tES3_S4_S5_iS6_iS7_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
+15CMemberFunctor5IP19CTextureManagerBaseMS0_FvP25IAsyncResourceDataRequest11CWeakHandleI31InfoForResourceTypeCTextureBaseEP12CTextureBase22TextureSpecification_tiES3_S6_S8_S9_i12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
+15CMemberFunctor9IP19CTextureManagerBaseMS0_FvP12CTextureBase11CWeakHandleI31InfoForResourceTypeCTextureBaseE12ResourceId_tPvj22TextureSpecification_tS9_i23TextureBitsMemoryType_tES3_S6_S7_S8_iS9_S9_iSA_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CRenderPassDesc
 15CSwapChainEmpty
 15CTier0AppSystemI12IRenderUtilsE
@@ -173,6 +182,7 @@ $fD	0
 16IRenderDeviceMgr
 17CRenderDeviceBase
 18CEmptyShaderBuffer
+18CPlaceholderConVar
 18CRenderDeviceEmpty
 19CRenderContextEmpty
 19CSchemaRegistration
@@ -202,6 +212,7 @@ $fD	0
 37CSchemaRegistration_rendersystemempty
 3[A\]
 5UUUU
+5cfg/moddefaults.txt
 5t~BC
 6A;1t"
 6ConVar
@@ -229,10 +240,12 @@ $fD	0
 <1tj<0
 << NULL >>
 <NULL>
+<deferred>
 <invalid %d>
 <no failure reason set>
 <none>
 <null>
+<unconnected>
 <unknown multisample type
 <unknown>
 <x360>
@@ -242,12 +255,11 @@ $fD	0
 >Too many bytes for PNG signature
 ?N24CFieldPathHuffmanEncoder5INodeE
 ?Out of Memory
-?cfg/moddefaults.txt
 ?u='@
-@-dev
 @[A\A]A^A_]
 @[A\]
 @tB[A\]
+@vb_created_input_layout
 A!;I2
 A+D$$
 A+D$$H
@@ -288,7 +300,6 @@ ATSLc&E)
 ATSt$@
 ATUSH
 AUATA
-AUATE
 AUATE1
 AUATH
 AUATI
@@ -309,7 +320,6 @@ AVAUATA
 AVAUATE1
 AVAUATI
 AVAUATL
-AVAUATLc
 AVAUATS
 AVAUATSH
 AVAUATSHc
@@ -323,6 +333,7 @@ AVAUE1
 AVAUH
 AVAUI
 AVAUL
+AWAUH
 AWAVA
 AWAVAUA
 AWAVAUATA
@@ -373,7 +384,9 @@ AssetBrowserSystem_001
 AssetPreviewSystem_001
 AssetSystem001
 AssetSystemTest001
+Async Texture hookup uses its own threadpool instead of the global pool.
 AsyncHookUpTextureBits
+AsyncTextureHookup
 At marker 0x%02x, recovery action %d
 Attempt to set buffer size beyond max ignored
 B channel not found
@@ -414,7 +427,6 @@ C ASH
 C w,9E
 C*w*<
 C,;C0
-CB: %u buffers, %.2f MB
 CCIR601 sampling not implemented yet
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
@@ -437,6 +449,7 @@ CResourceString
 CTSQueue corruption
 CTextureManagerBase::MarkAsyncUpdatedThisFrame - Invalid texture handle.
 CTextureManagerBase::WasAsyncUpdatedThisFrame - Invalid texture handle.
+CThreadeI
 CTransform
 CUBEMAP_FACE_NEGATIVE_X
 CUBEMAP_FACE_NEGATIVE_Y
@@ -461,6 +474,7 @@ CXXABI_1.3
 CXXABI_1.3.3
 Call to NULL read function
 Can't clear TEXTURE_WAITING_FOR_IO flag because of streaming request mismatch: %d in handle, %d in request
+Can't clear TEXTURE_WAITING_FOR_IO flag because pTexture is NULL
 Can't detect memory size on this platform!
 Can't discard critical data on CRC error
 Can't set both read_data_fn and write_data_fn in the same structure
@@ -496,6 +510,7 @@ Corrupt JPEG data: bad arithmetic code
 Corrupt JPEG data: found marker 0x%02x instead of RST%d
 Corrupt JPEG data: premature end of data segment
 CreateInterface
+CreateNewThreadPool
 CubeMapFace_t
 D$ H)
 D$ H9D$
@@ -529,7 +544,7 @@ D;c(}
 D;kdXZw
 D;l$(
 D;l$0
-DATAI
+DATAE1
 DCT coefficient out of range
 DCT scaled block size %dx%d not supported
 DXT1_ONEBITALPHA
@@ -585,9 +600,9 @@ EXRHeader variable is not initialized.
 EXRReadFile() - B channel not found!
 EXRReadFile() - G channel not found!
 EXRReadFile() - R channel not found!
-E`9C$u
 EarlyInit_Tier0
 EconItemToolModel_001
+Eh9C$u
 Empty
 Empty Driver
 Empty JPEG image (DNL not supported)
@@ -603,6 +618,7 @@ Extra compression data
 F	@t&
 FATAL ERROR: unable to register all schema data: %s
 FCVAR_NEVER_AS_STRING
+FPATI
 Failed AllocateTexture for '%s'
 Failed to compute channel layout.
 Failed to create device. Modules loaded: %s
@@ -709,11 +725,9 @@ Hc{@L
 Hc{xH
 HelpSystem_001
 HookUpConfigValue
-HookUpTextureBits
 HostStateMgr001
 Huffman code size table overflow
 Huffman table 0x%02x was not defined
-IB: %d buffers, %.2f MB
 INPUT_LAYOUT_VARIATION_DEFAULT
 INPUT_LAYOUT_VARIATION_MAX
 INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID
@@ -1057,6 +1071,7 @@ Out of place sRGB chunk
 Out of place tIME chunk
 Output file write error --- out of disk space?
 Output memory size is zero
+Overall System GPU memory use:
 Overflow of the sheet cache texture. Releasing and starting over. This is ok in asset browser, not so ok if the game is triggering this!
 Overflow of the sheet cache texture: Try increasing SheetCacheTextureRows in gameinfo.gi (current value %d)!
 P8H=vtex
@@ -1298,20 +1313,16 @@ T$0H9
 T$0t}H
 T$4D;d$4
 T$4E+n A9
-TEX: %u textures, %.2f MB
-TEXMAN: %s %s
 TEXMAN: %s MarkTextureBitsLoaded (%s)
 TEXMAN: %s loaded %s %i/%i mips (%ix%i / %ix%i) of %s (%i bytes)
 TEXMAN: Abandoning job in %s
+TEXMAN: Abandoning streaming request early in %s
 TEXMAN: Abandoning streaming request in %s
-TEXMAN: Added hookup job for %s
 TEXMAN: Adding %s, %llx to abandoned hookup jobs
 TEXMAN: DeferTextureLoads %s MarkTextureBitsLoaded (%s)
 TEXMAN: Deleting %d textures
 TEXMAN: Outstanding stream count %d -> %d (%s)
-TEXMAN: Posting resource load complete msg.
 TIcL$
-TOTAL: %.2f MB
 TRPGI
 TSPEC_CUBE_CAN_SAMPLE_AS_ARRAY
 TSPEC_CUBE_TEXTURE
@@ -1342,6 +1353,7 @@ TestFormatE
 TestScriptMgr001
 TextLayout_001
 TextMessageMgr_001
+Texture Streaming:
 Texture manager out of space! Can't allocate new texture!
 Texture memory discrepancy! %llu != %llu
 Texture streaming validation OK (%d texture loads in flight).
@@ -1402,7 +1414,6 @@ Upper limit on texture pool size.
 UserInfoChangeService_001
 VApplication001
 VAvi001
-VB: %d buffers, %.2f MB
 VBAllocTracker001
 VBaseFileSystem011
 VBik001
@@ -1443,6 +1454,7 @@ V_GetErrno
 V_GetFileExtension
 V_IsAbsolutePath
 V_PathContainsPath
+V_PrettifyNum
 V_RemoveDotSlashes
 V_SetErrno
 V_StrTrim
@@ -1496,7 +1508,9 @@ Vector2D
 Vector4D
 VectorAligned
 VendorID
+Version
 Video Card %s (%04x : %04x)
+Video config version number changed ( '%s' is version %i, current version is %i ). Resetting video config.
 Virtual array controller messed up
 VisBuilder_001
 VsInputSignatureElement_t
@@ -1520,11 +1534,11 @@ Width is too large for libpng to process pixels
 WorkshopSetup001
 WorldRendererBuilderMgr001
 WorldRendererMgr001
-Wqt:D
 Write failed on temporary file --- out of disk space?
 Write to EMS failed
 Write to XMS failed
 Wrong JPEG library version: library is %d, caller expects %d
+Wyt:D
 X0~wA
 X360_DST16
 X360_DST24
@@ -1602,17 +1616,17 @@ _ZN13CBufferString6SetPtrEPciibb
 _ZN13CBufferString8RemoveAtEii
 _ZN16CThreadSemaphore7ReleaseEiPi
 _ZN16CThreadSemaphoreD1Ev
-_ZN17CThreadSpinRWLock10UnlockReadEv
-_ZN17CThreadSpinRWLock11LockForReadEv
-_ZN17CThreadSpinRWLock11UnlockWriteEv
-_ZN17CThreadSpinRWLock16SpinLockForWriteEy
+_ZN17CThreadSpinRWLock10UnlockReadEPKci
+_ZN17CThreadSpinRWLock11LockForReadEPKci
+_ZN17CThreadSpinRWLock11UnlockWriteEPKci
+_ZN17CThreadSpinRWLock16SpinLockForWriteEPKciy
 _ZN17CThreadSyncObject4WaitEj
 _ZN17CThreadSyncObject8WaitImplEj
 _ZN17CThreadSyncObjectD2Ev
 _ZN21CThreadMultiWaitEvent3SetEv
 _ZN21CThreadMultiWaitEventC1Eb
 _ZN21CThreadMultiWaitEventD1Ev
-_ZN22CThreadRWLock_FastRead20UnlockReadAccountingEj
+_ZN22CThreadRWLock_FastRead20UnlockReadAccountingEPKcij
 _ZN22CThreadRWLock_FastRead25WaitForReadLockTransitionEj
 _ZN22CThreadRWLock_FastRead30HandleFirstWriteLockTransitionEv
 _ZN22CThreadRWLock_FastReadC1Ev
@@ -1668,7 +1682,7 @@ _ZNSt6vectorItSaItEEC2EmRKS0_
 _ZNSt8ios_baseC2Ev
 _ZNSt8ios_baseD2Ev
 _ZNSt9basic_iosIcSt11char_traitsIcEE4initEPSt15basic_streambufIcS1_E
-_ZNV16CThreadFastMutex4LockEyj
+_ZNV16CThreadFastMutex4LockEPKciyj
 _ZSt11__once_call
 _ZSt15__once_callable
 _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l
@@ -1724,7 +1738,6 @@ __pthread_key_create
 __sprintf_chk
 __stack_chk_fail
 __tls_get_addr
-_bake
 _edata
 _fini
 _setjmp
@@ -1765,6 +1778,7 @@ calloc
 ceilf
 cfg/video.txt
 cfg/video_%02d.txt
+cfg/video_version.txt
 cfg/videodefaults.txt
 channels
 cheat
@@ -1778,6 +1792,7 @@ d$ L9
 d$(E1
 dH34%(
 dH3<%(
+dJobA
 data error
 data height too large.
 data width or data height is negative.
@@ -1863,6 +1878,7 @@ invalid literal/length code
 invalid literal/lengths set
 invalid stored block lengths
 invalid window size
+keyvalues.cpp
 l$ E9
 l$ u0H
 ld-linux-x86-64.so.2
@@ -1930,9 +1946,9 @@ need dictionary
 notconnected
 notify
 o$D9e
+occlusionquerymgr.cpp
 out of memory
 p[A\A]A^]
-p[A\]
 parameter error
 pixelAspectRatio
 png/jpg
@@ -1955,6 +1971,7 @@ queued
 r_fullscreen_gamma
 r_gpu_mem_stats
 r_max_texture_pool_size
+r_texture_hookup_uses_threadpool
 r_texture_nonstreaming_load
 r_texture_nonstreaming_only_fullmipchain
 r_texture_pool_size
@@ -1965,7 +1982,10 @@ r_validate_texture_streaming
 r_wait_on_present
 realloc
 rendercontextbase.cpp
+renderdevicebase.cpp
 renderdevicemgrbase.cpp
+renderstatehelper.h
+rendersystem (%s) tracked resources:
 rendersystemempty
 replicated
 resourcesystem
@@ -1974,7 +1994,6 @@ rgb to gray red coefficient
 rnd_down
 rnd_up
 roundf
-s8AUAVH
 sAmTb
 sPLT chunk has bad length
 sPLT chunk requires too much memory
@@ -2030,13 +2049,13 @@ strlen
 sub%dx%d.tga
 submrg%dx%d.tga
 t	[A\]
+t"L;:u
 t$	H9
 t$8E1
 t$lfA
 t'H9P
 t-[A\]
 t.H9P
-t0[A\]
 t3D8J
 t3[A\]
 t5Mcb
@@ -2051,16 +2070,16 @@ tUH;v0
 t[D9e
 text compression mode is out of range
 texturebase.cpp
-texturebase.cpp(1726):Error loading texture: %s
-texturebase.cpp(2642):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2663):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2674):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2685):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2696):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2717):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2728):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2739):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2750):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(1803):Error loading texture: %s
+texturebase.cpp(2740):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2761):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2772):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2783):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2794):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2815):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2826):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2837):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2848):ResourceHandleToData( %s ) failed! Falling back to error texture!
 tiles
 tmE;>thH
 too many length or distance symbols
@@ -2072,7 +2091,7 @@ twD;e
 u'[]A\A]A^
 u64( %lld = 0x%llX )
 u?H9G8L
-uAL;%
+uAL;%*
 uLH9G8L
 uRIcI
 unknown compression method
@@ -2083,13 +2102,13 @@ utlbuffer.cpp
 utlstring.cpp
 uvCropped
 uvUncropped
-vb_created_input_layout
 vector::_M_default_append
 vector::_M_emplace_back_aux
 vector::_M_range_check: __n (which is %zu) >= this->size() (which is %zu)
 vector::_M_range_insert
 vhMcNxAQ
 video.cfg
+video_version
 vstdlib
 vtexE1
 vtexH
@@ -2121,6 +2140,7 @@ zlib version error
 |5H;I0
 |B Hc
 ~)H;7I
+~0AWE
 ~7;w$
 ~CHcW
 ~IHcK
