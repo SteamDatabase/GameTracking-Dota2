@@ -795,8 +795,9 @@ AnimateCavernCrawlScreenAction.prototype = new BaseAction();
 
 AnimateCavernCrawlScreenAction.prototype.start = function ()
 {
-	var heroID = this.data.hero_id;
-	var eventID = this.data.cavern_crawl_progress.event_id;
+    var heroID = this.data.hero_id;
+    var eventID = this.data.cavern_crawl_progress.event_id;
+    var mapVariant = this.data.cavern_crawl_progress.map_variant;
 	var turboMode = this.data.cavern_crawl_progress.turbo_mode;
 	var mapProgress = this.data.cavern_crawl_progress.map_progress;
 
@@ -847,7 +848,7 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
 				cavernCrawlPanel.AddMapResult( result.path_id_completed, result.room_id_claimed );
 			}
 		}
-		cavernCrawlPanel.ShowPostGameProgress( eventID, 0, heroID, turboMode );
+        cavernCrawlPanel.ShowPostGameProgress( eventID, 0, mapVariant, heroID, turboMode );
 	} ) );
 	this.seq.actions.push( new WaitForEventAction( cavernCrawlPanel, 'DOTACavernCrawlPostGameProgressComplete' ) );
 	this.seq.actions.push( new StopSkippingAheadAction() );
@@ -2819,6 +2820,7 @@ function TestAnimateCavernCrawl()
 		cavern_crawl_progress:
 		{
             event_id: 25,
+            map_variant: 0,
             turbo_mode: false,
             map_progress:
                 [

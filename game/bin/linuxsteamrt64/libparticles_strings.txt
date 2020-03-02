@@ -113,7 +113,6 @@ $SPECULARSCALE
 -90.0f
 -avx
 -inf
--norefcheckaccess
 -sse2
 -sse3
 -sse4
@@ -287,7 +286,6 @@ $SPECULARSCALE
 19C_OP_CurlNoiseForce
 19C_OP_DecayOffscreen
 19C_OP_ParentVortices
-19C_OP_RemapSpeedtoCP
 19C_OP_RenderAsModels
 19IParticleCollection
 1DBlend
@@ -366,6 +364,7 @@ $SPECULARSCALE
 22C_OP_RenderScreenShake
 22C_OP_SequenceFromModel
 22C_OP_SetFromCPSnapshot
+22C_OP_SetSimulationRate
 22C_OP_UpdateLightSource
 23CControlPointEditorData
 23C_INIT_ChaoticAttractor
@@ -681,6 +680,7 @@ $SPECULARSCALE
 32CParticleFunctionDefinitionTypedI22C_OP_RenderScreenShakeE
 32CParticleFunctionDefinitionTypedI22C_OP_SequenceFromModelE
 32CParticleFunctionDefinitionTypedI22C_OP_SetFromCPSnapshotE
+32CParticleFunctionDefinitionTypedI22C_OP_SetSimulationRateE
 32CParticleFunctionDefinitionTypedI22C_OP_UpdateLightSourceE
 32CParticleFunctionDefinitionTypedI23C_INIT_ChaoticAttractorE
 32CParticleFunctionDefinitionTypedI23C_INIT_DistanceToCPInitE
@@ -977,6 +977,7 @@ $SPECULARSCALE
 <No schemasystem>
 <deferred>
 <elt type not set>
+<no deferred ref found>
 <no failure reason set>
 <null>
 <unconnected>
@@ -1034,6 +1035,8 @@ APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 ATTACHMENT_INFLUENCE_FLAGS_NONE
 AbsolutePoseControl
 Acceleration
+Access of unconnected ConVarRef
+Access of unconnected SplitScreenConVarRef
 Add + Self Illum
 Add Decay to Bounce
 Add a wind-like force to particles that used the particle normal to scale the force
@@ -1179,6 +1182,8 @@ CAimConstraint
 CAnimBone
 CAnimDataChannelDesc
 CAnimKeyData
+CAnimMotorList
+CAnimMovementManager
 CAnimRetargetChainData
 CAnimRetargetData
 CAnimRetargetElementData
@@ -1193,6 +1198,7 @@ CBaseTrailRenderer
 CBoneConstraintBase
 CBoneConstraintPoseSpaceBone
 CBoneConstraintPoseSpaceMorph
+CBufferString
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
 CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
@@ -1237,6 +1243,7 @@ CMaterialDrawDescriptor
 CMemAllocSystemInitialize
 CModelConfig
 CModelConfigElement
+CModelConfigElement_Command
 CModelConfigElement_UserPick
 CModelConfigList
 CMorphConstraint
@@ -1665,6 +1672,7 @@ C_OP_SetParentControlPointsToChildCP
 C_OP_SetPerChildControlPoint
 C_OP_SetPerChildControlPointFromAttribute
 C_OP_SetRandomControlPointPosition
+C_OP_SetSimulationRate
 C_OP_SetSingleControlPointPosition
 C_OP_SetToCP
 C_OP_SetVec
@@ -2046,6 +2054,7 @@ InstallChangeCallback ignoring duplicate change callback!!!
 InstallSchemaBindings
 Intentionally vague touch behavior for %p
 Invalid Color Control Point
+Invalid access of deferred ConVarRef for '%s'
 Invalid compressed buffer size
 Invalid control point %d in %s
 Invalid data for member '%s'
@@ -2183,6 +2192,7 @@ MaterialParamVector_t
 MaterialParam_t
 MaterialResourceData_t
 MaterialUtils_001
+MathLib_Init
 Max Instances
 Max Particles
 Max Render (us)
@@ -2550,6 +2560,7 @@ Plat_GetTime
 Plat_IsHighDPI
 Plat_IsInDebugSession
 Plat_MSTime
+Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_USTime
 Plat_UUIDFromString
@@ -2844,6 +2855,7 @@ Set Float
 Set Frames Manually
 Set Normal
 Set Radius
+Set Simulation Timescale
 Set System-Wide Float
 Set Value
 Set Vec
@@ -3275,6 +3287,7 @@ animation rate scale field
 animation sequence field
 animation type
 animgraph0
+animgraph1
 apply radius to ends (capsule)
 apply velocity in local space (0/1)
 archive
@@ -3496,6 +3509,7 @@ dest CP
 dest control point component
 destination scalar field
 destroy all particles immediately
+destroy particles immediately when child is removed
 detail 2 texture
 difference maximum
 difference minimum
@@ -3836,8 +3850,8 @@ light 4 type 0=point 1=spot
 light amplification amount
 light bias
 light cookie string
-light has _fifty_percent_distance of %f but no zero_percent_distance
 light per vertex
+light priority
 light radius multiplier
 light start falloff
 light type
@@ -3870,6 +3884,7 @@ lowprecisionuv
 lowprecisionuv1
 m
 m_ActivityName
+m_Args
 m_AttachmentName
 m_AttachmentType
 m_Attenuation0
@@ -3893,6 +3908,7 @@ m_ColorFadeMin
 m_ColorMax
 m_ColorMin
 m_ColorScale
+m_Command
 m_ConeAxis
 m_ConeCutoff
 m_ConfigName
@@ -3971,6 +3987,7 @@ m_MaterialVars
 m_MaterialVecVars
 m_MaxForce
 m_ModelList
+m_MotorList
 m_Name
 m_NestedElements
 m_Notes
@@ -4192,6 +4209,7 @@ m_bRemapPullForceToLife
 m_bRemove
 m_bRenderDiffuse
 m_bRenderSpecular
+m_bRenderTransmissive
 m_bResetAnimOnStop
 m_bReverse
 m_bReverseOrder
@@ -4687,6 +4705,7 @@ m_flSequence1AlphaWeight
 m_flSequence1RGBWeight
 m_flShadowCascadeDistance
 m_flShakeDuration
+m_flSimulationScale
 m_flSlideAmount
 m_flSlopeIncoming
 m_flSlopeOutgoing
@@ -5132,6 +5151,7 @@ m_pBody
 m_pD3DSemanticName
 m_pDebugName
 m_pJointConstraintData
+m_pMovementManager
 m_pName
 m_pOwningParticleProperty
 m_pParent
@@ -5703,7 +5723,6 @@ preferred_carryangles
 prepare for rigid lock
 previous position sacale
 previous position scale
-priority
 procedural_spritecard.vmat
 project on characters
 project on water
@@ -5802,6 +5821,7 @@ render specular
 renderdiffuse
 renderers
 renderspecular
+rendertransmissive
 report_columns
 report_info
 report_rows
@@ -5821,7 +5841,6 @@ reverse z-buffer test
 right eye first seq offset
 rnd_down
 rnd_up
-root
 rootNode
 rope shake
 rotate normals
@@ -5918,6 +5937,7 @@ sharpStartAngle
 sheet
 sheet animation time scale
 shuffle
+simulation timescale
 sin( %s )
 singleplayer
 size at which to fade away

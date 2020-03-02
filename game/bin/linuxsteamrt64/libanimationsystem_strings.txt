@@ -52,6 +52,7 @@ $ORIGIN
 %d.Worldspace( %s, %d, %.2f )
 %d=%s:  pos[ %8.3f %8.3f %8.3f ] ang[ %8.3f %8.3f %8.3f ]
 %f %f %f %f
+%f is before m_SimulationState[%d].m_flSimulationTime %f
 %g %g %g %g
 %hd
 %hu
@@ -172,6 +173,7 @@ $ORIGIN
 %s: failed, weightlist "%s", didn't result in any defined weights
 %s: failed, weightlist "%s", no data passed on model: %s
 %s: failed, weightlist "%s", table not passed on model: %s
+%s: failed, weightlist "%s", weightlist alreadt exists on model: %s
 %s: ignoring table entry %d, expected a string for the key
 %s: ignoring unexpected sequence paramater: %s
 %s: ignoring unknown sequence paramater: %s
@@ -230,7 +232,6 @@ $ORIGIN
 -animdecodecachemem
 -avx
 -inf
--norefcheckaccess
 -sse2
 -sse3
 -sse4
@@ -347,7 +348,6 @@ $ORIGIN
 15CTier3AppSystemI16IAnimationSystemLi0EE
 15IActivityValues
 15IAnimTagManager
-15IAnimUpdateNode
 15IAnimationGraph
 15IChoiceAnimNode
 15IParameterValue
@@ -367,6 +367,7 @@ $ORIGIN
 16CMotionClipGroup
 16CMoverUpdateNode
 16CParticleAnimTag
+16CStaticPoseCache
 16CUnaryUpdateNode
 16IAnimNodeBuilder
 16IAnimationHelper
@@ -431,7 +432,6 @@ $ORIGIN
 18CUnregisterReceiptI9CSmartPtrI23CAnimationGraphInstance17CRefCountAccessorEMS1_FvP34IAnimGraphSequenceFinishedListenerES5_E
 18IActivityValueList
 18IAnimMotorInstance
-18IAnimParameterList
 18ICompressorService
 18IEnumAnimParameter
 18IIKRuleDescription
@@ -473,6 +473,7 @@ $ORIGIN
 20.0
 20CAimMatrixUpdateNode
 20CAnimGraphLogManager
+20CAnimMovementManager
 20CAnimStateTransition
 20CAnimUpdateFixedData
 20CCompressedFullFloat
@@ -496,15 +497,18 @@ $ORIGIN
 20CPostConnectCallback
 20CRefCountServiceBaseILb1E6CRefMTE
 20CSetFacingUpdateNode
+20CSingleFrameAnimNode
 20CTagConditionUpdater
 20CTimeRemainingMetric
 20CTwoBoneIKUpdateNode
 20CVectorAnimParameter
+20IAnimMovementManager
 20IAnimStateTransition
 20IIKControlRigContext
 20IResourceTypeManager
 21CAnimGraphDebugReplay
 21CAnimGraphInitContext
+21CAnimMovementSettings
 21CAnimNodeInstanceBase
 21CAnimResourceSequence
 21CAnimationSystemUtils
@@ -530,6 +534,7 @@ $ORIGIN
 21CTimeConditionUpdater
 21CTurnHelperUpdateNode
 21IAnimGraphDebugReplay
+21IAnimMovementSettings
 21IAnimTagSpanContainer
 21IAnimationSystemUtils
 21IClothSettingsAnimTag
@@ -553,12 +558,14 @@ $ORIGIN
 22CPathAnimMotorInstance
 22CSchemaInstallCallback
 22CSeqResourceS1Sequence
+22CSingleFrameUpdateNode
 22CSkeletalInputAnimNode
 22IAnimGraphModelBinding
 22IAnimParameterInstance
 22IAnimationGraphBuilder
 22IFootstepLandedAnimTag
 22IIKJointConstraintData
+23CAnimGraphSettingsGroup
 23CAnimGraphUpdateContext
 23CAnimStateConditionBase
 23CAnimTagManagerInstance
@@ -586,6 +593,7 @@ $ORIGIN
 23CUpdateNodeInstanceData
 23CVConCommandMessageAnim
 23CWayPointHelperAnimNode
+23IAnimGraphSettingsGroup
 23IAnimTagManagerInstance
 23IAnimationDebugRenderer
 23IAnimationGraphInstance
@@ -605,6 +613,9 @@ $ORIGIN
 24CSkeletalInputUpdateNode
 24IIKControlRigDescription
 24ISequenceFinishedAnimTag
+25CAnimGraphGeneralSettings
+25CAnimGraphNetworkSettings
+25CAnimGraphSettingsManager
 25CCompressedAnimQuaternion
 25CCompressedFullQuaternion
 25CCompressedReferenceFloat
@@ -624,6 +635,7 @@ $ORIGIN
 25CSequenceAnimNodeInstance
 25CSlowDownOnSlopesAnimNode
 25CWayPointHelperUpdateNode
+25IAnimGraphSettingsManager
 25IAnimStateMachineInstance
 25IFootLockAnimNodeInstance
 25IPostGraphIKChainBlendTag
@@ -705,6 +717,7 @@ $ORIGIN
 27CSchemaUtlVectorManipulatorI10CUtlVectorI9CSmartPtrI17CMotionMetricBase17CRefCountAccessorE10CUtlMemoryIS4_iEES4_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorI9CSmartPtrI18CAnimParameterBase17CRefCountAccessorE10CUtlMemoryIS4_iEES4_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorI9CSmartPtrI20CAnimStateTransition17CRefCountAccessorE10CUtlMemoryIS4_iEES4_E
+27CSchemaUtlVectorManipulatorI10CUtlVectorI9CSmartPtrI23CAnimGraphSettingsGroup17CRefCountAccessorE10CUtlMemoryIS4_iEES4_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorI9CSmartPtrI23CAnimStateConditionBase17CRefCountAccessorE10CUtlMemoryIS4_iEES4_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorIN22CGroundIKSolveAnimNode23DebugSkeletonBoneType_tE10CUtlMemoryIS2_iEES2_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorIP10CAnimState10CUtlMemoryIS2_iEES2_E
@@ -813,6 +826,7 @@ $ORIGIN
 8CFmtStrNILi8192ELb0EE
 8CReceipt
 8IAnimTag
+9CAnimData
 9CAnimPath
 9CAnimPose
 9IAnimNode
@@ -844,6 +858,7 @@ $ORIGIN
 <embedded>
 <function>
 <input>
+<no deferred ref found>
 <no failure reason set>
 <null>
 <resource>
@@ -1005,7 +1020,8 @@ AccelerationFrontBack
 AccelerationHeading
 AccelerationLeftRight
 AccelerationSpeed
-AccumulatePose
+Access of unconnected ConVarRef
+Access of unconnected SplitScreenConVarRef
 Active While Current
 AddEventTypeFlags
 AddToTailGetPtr
@@ -1018,6 +1034,7 @@ Aim Matrix
 Aim Matrix does not have a valid attachment.
 Aim Matrix does not have a valid sequence
 Aim Matrix is missing a child.
+Aim Matrix sequence %s has %i frames, needs %i
 AimMatrixBlendMode
 AimMatrixBlendMode_Additive
 AimMatrixBlendMode_BoneMask
@@ -1057,8 +1074,8 @@ AnimNodeNetworkMode
 AnimOffset
 AnimParamButton_t
 AnimParamID
-AnimPathData:BoundaryRadius[ %d ]
-AnimPathData:WaypointPos[ %d ]
+AnimPathData:BoundaryRadius
+AnimPathData:Pos
 AnimPathData:m_count
 AnimPathData:m_startIndex
 AnimPoseControl
@@ -1081,6 +1098,7 @@ AnimVrFingerSplay_t
 Animated
 Animation State
 Animation( %s, %.3f ) : %.3f
+Animation/AccumulatePose
 AnimationDecodeDebugDumpElement_t
 AnimationDecodeDebugDump_t
 AnimationGroupResourceData_t
@@ -1094,7 +1112,6 @@ AnimationSystem/%s
 AnimationSystem/DecodeCacheMemoryKB
 AnimationSystem/DisableAnimationScript
 AnimationSystem/DisableMoveMgrNetworkVars
-AnimationSystem/DisableServerInterpCompensation
 AnimationSystem/NumDecodeCaches
 AnimationSystem: IK
 AnimationSystemUtils_001
@@ -1124,14 +1141,13 @@ Audio Clip
 Audio Tag
 Auto Reset
 Auto-Calculate target speed
-Average Ground Position
 B
 B->C
+BIAnimStateMachineInstance
 BLEND_PREALIGNED|
 BREAK: distance to target.
 BREAK: hyperextension. (%.2f degrees vs max of %.2f)
 BREAK: rotated over maximum of %.2f.
-BSubtract node is missing a child.  Will use t-pose by default
 Bad AnimEvent, sequence = "%s", AnimEvent = "%s", cycle & frame are both < 0 on model: %s
 Bad KV3 data for '%s': %s
 Bad KV3 data for resource '%s': %s
@@ -1261,6 +1277,10 @@ CAnimEncodedFrames
 CAnimFrameBlockAnim
 CAnimFrameSegment
 CAnimGraphDebugReplay
+CAnimGraphGeneralSettings
+CAnimGraphNetworkSettings
+CAnimGraphSettingsGroup
+CAnimGraphSettingsManager
 CAnimGraphUpdateContextBuilder
 CAnimIKRuleStallFrame
 CAnimInputDamping
@@ -1269,6 +1289,8 @@ CAnimLocalHierarchy
 CAnimMorphDifference
 CAnimMotorList
 CAnimMovement
+CAnimMovementManager
+CAnimMovementSettings
 CAnimNodeBase
 CAnimNodeInstanceBase
 CAnimNodeList
@@ -1517,6 +1539,7 @@ CMaterialDrawDescriptor
 CMemAllocSystemInitialize
 CModelConfig
 CModelConfigElement
+CModelConfigElement_Command
 CModelConfigElement_UserPick
 CModelConfigList
 CModelVScriptCompile
@@ -1592,6 +1615,8 @@ CSequenceInstanceData
 CSequenceUpdateNode
 CSetFacingAnimNode
 CSetFacingUpdateNode
+CSingleFrameAnimNode
+CSingleFrameUpdateNode
 CSisterResourceBlockLoader::BlockingLoadResourceFileData: Trying to load an illegal resource name %s!
 CSkeletalInputAnimNode
 CSkeletalInputUpdateNode
@@ -1960,6 +1985,7 @@ Enable Hip Shift
 Enable IK
 Enable IK.
 Enable Lock Breaking
+Enable Networking
 Enable On Tag
 Enable Speed Scaling
 Enable Stretching
@@ -1971,6 +1997,7 @@ End Effector Post Solve
 End Effector Type
 End State
 EngineServiceMgr001
+EnsureCapacity
 EntryNode
 Enum Parameter
 EnumParameter
@@ -2144,6 +2171,7 @@ Failed to allocate an instance of class '%s'
 Failed to assign bool literal value
 Failed to call CBaseIntrospectedToKV3TypeManager::Init
 Failed to compile script text
+Failed to convert KV3 to string; error: %s
 Failed to convert introspected block: %s
 Failed to find chain data to associate to this chain.
 Failed to find rule type; skipping.
@@ -2319,6 +2347,7 @@ HitReact:m_resetCount
 HookUpConfigValue
 Horizontal Axis
 HostStateMgr001
+IAnimGraphSettingsGroup
 IAnimMotor
 IAnimMotorInstance
 IAnimNode
@@ -2329,7 +2358,6 @@ IAnimParameterInstance
 IAnimState
 IAnimStateCondition
 IAnimStateMachine
-IAnimStateMachineInstance
 IAnimStateTransition
 IAnimTag
 IAnimTagSpanContainer
@@ -2371,6 +2399,7 @@ IKSOLVER_Fabrik
 IKSOLVER_Perlin
 IKSOLVER_TwoBone
 IKSYSTEMTYPE_Animgraph
+IKSYSTEMTYPE_None
 IKSYSTEMTYPE_SkeletonInstance
 IKSolverSettings_t
 IKSolverType
@@ -2447,6 +2476,7 @@ Intentionally vague touch behavior for %p
 Intercept point.
 Interpolation
 Invalid Bone
+Invalid access of deferred ConVarRef for '%s'
 Invalid compressed buffer size
 Invalid data for member '%s'
 Invalid data.
@@ -2688,14 +2718,12 @@ Move:m_flFacingHeading
 Move:m_flGoalDistance
 Move:m_flTargetMoveSpeed
 Move:m_vAcceleration
-Move:m_vAverageGroundPosition
 Move:m_vLookTarget
 Move:m_vMoveDir
 Move:m_vSlopeNormal
 MoveData
 Movement Limits
 MovementData
-MovementSettings
 Mover
 MoverNode
 N10Reflection12CTypeFactoryI17CMotionMetricBaseJEE13CFactoryMakerE
@@ -2804,6 +2832,7 @@ N10Reflection6Detail7ToBaseTI19IAnimStateConditionNS_6ObjectEEE
 N10Reflection6Detail7ToBaseTI20CAnimStateTransition20IAnimStateTransitionEE
 N10Reflection6Detail7ToBaseTI20CDampedPathAnimMotor18CBasePathAnimMotorEE
 N10Reflection6Detail7ToBaseTI20CPathStatusCondition23CAnimStateConditionBaseEE
+N10Reflection6Detail7ToBaseTI20CSingleFrameAnimNode13CAnimNodeBaseEE
 N10Reflection6Detail7ToBaseTI20CTimeRemainingMetric17CMotionMetricBaseEE
 N10Reflection6Detail7ToBaseTI20CVectorAnimParameter18CAnimParameterBaseEE
 N10Reflection6Detail7ToBaseTI20IAnimStateTransitionNS_6ObjectEEE
@@ -2832,6 +2861,7 @@ N10Reflection6Detail7ToBaseTI22CPathAnimMotorInstance22CBaseAnimMotorInstanceEE
 N10Reflection6Detail7ToBaseTI22CSkeletalInputAnimNode13CAnimNodeBaseEE
 N10Reflection6Detail7ToBaseTI22IAnimParameterInstanceNS_6ObjectEEE
 N10Reflection6Detail7ToBaseTI22IAnimationGraphBuilder15IAnimationGraphEE
+N10Reflection6Detail7ToBaseTI23CAnimGraphSettingsGroup23IAnimGraphSettingsGroupEE
 N10Reflection6Detail7ToBaseTI23CAnimStateConditionBase19IAnimStateConditionEE
 N10Reflection6Detail7ToBaseTI23CAnimationGraphInstance23IAnimationGraphInstanceEE
 N10Reflection6Detail7ToBaseTI23CChoreoAnimNodeInstance21CAnimNodeInstanceBaseEE
@@ -2842,10 +2872,13 @@ N10Reflection6Detail7ToBaseTI23CMotionMatchingAnimNode13CAnimNodeBaseEE
 N10Reflection6Detail7ToBaseTI23CMotionMatchingAnimNode23IMotionMatchingAnimNodeEE
 N10Reflection6Detail7ToBaseTI23CParameterAnimCondition23CAnimStateConditionBaseEE
 N10Reflection6Detail7ToBaseTI23CWayPointHelperAnimNode13CAnimNodeBaseEE
+N10Reflection6Detail7ToBaseTI23IAnimGraphSettingsGroupNS_6ObjectEEE
 N10Reflection6Detail7ToBaseTI23IAnimationGraphInstanceNS_6ObjectEEE
 N10Reflection6Detail7ToBaseTI24CDistanceRemainingMetric17CMotionMetricBaseEE
 N10Reflection6Detail7ToBaseTI24CSequenceFinishedAnimTag12CAnimTagBaseEE
 N10Reflection6Detail7ToBaseTI24CSequenceFinishedAnimTag24ISequenceFinishedAnimTagEE
+N10Reflection6Detail7ToBaseTI25CAnimGraphGeneralSettings23CAnimGraphSettingsGroupEE
+N10Reflection6Detail7ToBaseTI25CAnimGraphNetworkSettings23CAnimGraphSettingsGroupEE
 N10Reflection6Detail7ToBaseTI25CDirectionalBlendAnimNode13CAnimNodeBaseEE
 N10Reflection6Detail7ToBaseTI25CFollowAttachmentAnimNode13CAnimNodeBaseEE
 N10Reflection6Detail7ToBaseTI25CFootLockAnimNodeInstance21CAnimNodeInstanceBaseEE
@@ -2967,6 +3000,7 @@ N10Reflection6Detail9TypeInfoTI19IPathMetricInstanceEE
 N10Reflection6Detail9TypeInfoTI20CAnimStateTransitionEE
 N10Reflection6Detail9TypeInfoTI20CDampedPathAnimMotorEE
 N10Reflection6Detail9TypeInfoTI20CPathStatusConditionEE
+N10Reflection6Detail9TypeInfoTI20CSingleFrameAnimNodeEE
 N10Reflection6Detail9TypeInfoTI20CTimeRemainingMetricEE
 N10Reflection6Detail9TypeInfoTI20CVectorAnimParameterEE
 N10Reflection6Detail9TypeInfoTI20IAnimStateTransitionEE
@@ -2995,6 +3029,7 @@ N10Reflection6Detail9TypeInfoTI22CSkeletalInputAnimNodeEE
 N10Reflection6Detail9TypeInfoTI22IAnimParameterInstanceEE
 N10Reflection6Detail9TypeInfoTI22IAnimationGraphBuilderEE
 N10Reflection6Detail9TypeInfoTI22IFootstepLandedAnimTagEE
+N10Reflection6Detail9TypeInfoTI23CAnimGraphSettingsGroupEE
 N10Reflection6Detail9TypeInfoTI23CAnimStateConditionBaseEE
 N10Reflection6Detail9TypeInfoTI23CAnimationGraphInstanceEE
 N10Reflection6Detail9TypeInfoTI23CChoreoAnimNodeInstanceEE
@@ -3003,12 +3038,15 @@ N10Reflection6Detail9TypeInfoTI23CFacingHeadingConditionEE
 N10Reflection6Detail9TypeInfoTI23CMotionMatchingAnimNodeEE
 N10Reflection6Detail9TypeInfoTI23CParameterAnimConditionEE
 N10Reflection6Detail9TypeInfoTI23CWayPointHelperAnimNodeEE
+N10Reflection6Detail9TypeInfoTI23IAnimGraphSettingsGroupEE
 N10Reflection6Detail9TypeInfoTI23IAnimationGraphInstanceEE
 N10Reflection6Detail9TypeInfoTI23IChoreoAnimNodeInstanceEE
 N10Reflection6Detail9TypeInfoTI23IMotionMatchingAnimNodeEE
 N10Reflection6Detail9TypeInfoTI24CDistanceRemainingMetricEE
 N10Reflection6Detail9TypeInfoTI24CSequenceFinishedAnimTagEE
 N10Reflection6Detail9TypeInfoTI24ISequenceFinishedAnimTagEE
+N10Reflection6Detail9TypeInfoTI25CAnimGraphGeneralSettingsEE
+N10Reflection6Detail9TypeInfoTI25CAnimGraphNetworkSettingsEE
 N10Reflection6Detail9TypeInfoTI25CDirectionalBlendAnimNodeEE
 N10Reflection6Detail9TypeInfoTI25CFollowAttachmentAnimNodeEE
 N10Reflection6Detail9TypeInfoTI25CFootLockAnimNodeInstanceEE
@@ -3077,6 +3115,7 @@ N17CAnimFactoryBaseTI13CAnimNodeBaseE14CFactoryMakerTI19CLeanMatrixAnimNodeEE
 N17CAnimFactoryBaseTI13CAnimNodeBaseE14CFactoryMakerTI19CSpeedScaleAnimNodeEE
 N17CAnimFactoryBaseTI13CAnimNodeBaseE14CFactoryMakerTI19CStopAtGoalAnimNodeEE
 N17CAnimFactoryBaseTI13CAnimNodeBaseE14CFactoryMakerTI19CTurnHelperAnimNodeEE
+N17CAnimFactoryBaseTI13CAnimNodeBaseE14CFactoryMakerTI20CSingleFrameAnimNodeEE
 N17CAnimFactoryBaseTI13CAnimNodeBaseE14CFactoryMakerTI21CCycleControlAnimNodeEE
 N17CAnimFactoryBaseTI13CAnimNodeBaseE14CFactoryMakerTI21CSolveIKChainAnimNodeEE
 N17CAnimFactoryBaseTI13CAnimNodeBaseE14CFactoryMakerTI21CStateMachineAnimNodeEE
@@ -3279,6 +3318,7 @@ Plat_GetRawCallStack
 Plat_GetThreadIndex
 Plat_IsHighDPI
 Plat_IsInDebugSession
+Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_UUIDFromString
 Plat_UUIDToString
@@ -3358,6 +3398,7 @@ RenderSkeletonBone_t
 RenderSystemSurface001
 RenderUtils_001
 ReportClassError
+Requested Frame %i, Max Frame: %i
 Requested next step
 Reset Additive Child
 Reset Base Child
@@ -3439,7 +3480,6 @@ SOLVEIKCHAINANIMNODEDEBUGSETTING_Up
 SOLVEIKCHAINANIMNODEDEBUGSETTING_X_Axis_Circle
 SOLVEIKCHAINANIMNODEDEBUGSETTING_Y_Axis_Circle
 SOLVEIKCHAINANIMNODEDEBUGSETTING_Z_Axis_Circle
-SOLVEIKCHAINANIMNODESETTINGSOURCE_Default
 SOLVEIKCHAINANIMNODESETTINGSOURCE_Override
 SSE and SSE2 are required.
 SameCycleAsSource
@@ -3513,6 +3553,7 @@ SeqCmd_Transform
 SeqCmd_Worldspace
 SeqCmd_t
 SeqPoseSetting_t
+Sequence %s has zero duration; consider replacing this node with a Single Frame node for better perf
 Sequence Anims
 Sequence Finished Tag
 Sequence Names Prefix
@@ -3549,6 +3590,7 @@ SimSpace_Model
 SimSpace_World
 Simulated
 Single Blend Time
+Single Frame
 SingleBlendTime
 Skeletal Input node requires the model to have Skeletal Input Settings.  Please add a Skeletal Input Settings node to the model %s in ModelDoc
 Skeleton Instance
@@ -3623,6 +3665,7 @@ StrafeSpeed
 Stretch
 Strider
 String Tag
+Subtract node is missing a child.  Will use t-pose by default
 Sync Cycles
 SyncChildren
 Synchronize Children
@@ -3972,6 +4015,7 @@ animationsystem
 animationsystem/animationsysteminit
 animevents
 animgraph0
+animgraph1
 animgraph_footlock_calculate_tilt
 animgraph_footlock_debug_foot_index
 animgraph_footlock_debug_type
@@ -3984,7 +4028,6 @@ animgraph_footlock_use_hip_shift
 animgraph_footlock_use_twobone_solve
 animgraph_ik_debug
 animgraph_ik_locks_enabled
-animgraph_server_interp_compensation
 animgraph_slowdownonslopes_enabled
 archive
 attach_point
@@ -4006,7 +4049,6 @@ binary_bc
 binary_lz4
 bindPose
 blendamount
-blendindices
 blendlayer
 blendweight
 blendweights
@@ -4278,6 +4320,7 @@ lowprecisionuv1
 mWsEndEffectorInitial
 m_AnimOverlay
 m_AnimgraphParameterNamePosition
+m_Args
 m_AttachmentName
 m_AttachmentType
 m_Bone
@@ -4289,6 +4332,7 @@ m_Children
 m_Choices
 m_Color
 m_ColorScale
+m_Command
 m_ConeAxis
 m_ConeCutoff
 m_ConfigName
@@ -4336,6 +4380,7 @@ m_LiteralColor
 m_LockBoneInfluenceDriver
 m_MasterBlendAnimgraphParameterName
 m_MaterialGroupName
+m_MovementSettings
 m_Name
 m_NestedElements
 m_Operators
@@ -4403,7 +4448,6 @@ m_bBlockNonPathMovement
 m_bBlockWaningTags
 m_bBonesInWorldSpace
 m_bBonesOrientAlongPositiveX
-m_bBonesOrientedAlongPositiveX
 m_bCacheAttempted
 m_bCacheOk
 m_bCalculatePoseParameters
@@ -4414,6 +4458,7 @@ m_bCylepose
 m_bDebugDrawAfter
 m_bDebugDrawBefore
 m_bDebugDrawLockValues
+m_bDefault
 m_bDefaultValue
 m_bDelta
 m_bDestroy
@@ -4497,6 +4542,7 @@ m_bMatchTranslation
 m_bModulateStepHeight
 m_bMulti
 m_bNetwork
+m_bNetworkingEnabled
 m_bNoBlend
 m_bOffsetExistingPos
 m_bOnlyDrawInFastShadowPath
@@ -4673,7 +4719,6 @@ m_feet
 m_fetch
 m_fileName
 m_filePath
-m_finalLocalToWorld
 m_fingers
 m_flAbsOriginDropHeight
 m_flAbsOriginDropSpringStrength
@@ -4793,6 +4838,7 @@ m_flOutput1
 m_flOverrideTiltSpringStrength
 m_flPitchLimit
 m_flPosWeight
+m_flPosition
 m_flPredictionScale
 m_flPredictionTime
 m_flProgression
@@ -4898,7 +4944,6 @@ m_ikSolverType
 m_includedGroupArray
 m_includedGroupArray_Handle
 m_indexBuffer
-m_influenceFlags
 m_influenceNames
 m_influenceWeights
 m_inputList
@@ -4941,7 +4986,6 @@ m_morphArray
 m_morphCtrlWeightArray
 m_morphSet
 m_motionRange
-m_motorList
 m_motors
 m_movementArray
 m_nActiveMotorIndex
@@ -4988,6 +5032,7 @@ m_nFirstMultipleOverride_BackwardCompat
 m_nFlags
 m_nFrame
 m_nFrameCount
+m_nFrameIndex
 m_nFrameRangeSequence
 m_nFrames
 m_nFramesPerBlock
@@ -5043,6 +5088,7 @@ m_nSubCycles
 m_nTailFrame
 m_nTargetAxis
 m_nTotalElementCount
+m_nType
 m_nUniqueFrameIndex
 m_nUpType
 m_nVectorComponent
@@ -5067,10 +5113,12 @@ m_pBody
 m_pD3DSemanticName
 m_pData
 m_pJointConstraintData
+m_pMovementManager
 m_pName
 m_pParameterList
 m_pParent
 m_pSemantic
+m_pSettingsManager
 m_pTagManager
 m_pValue
 m_param
@@ -5136,6 +5184,7 @@ m_sensorRangeFile
 m_sequenceName
 m_sequenceParams
 m_sequences
+m_settingsGroups
 m_shaderName
 m_skeleton
 m_slaves
@@ -5160,6 +5209,7 @@ m_szScripts
 m_szVariableName
 m_tagBehavior
 m_tagBehaviors
+m_tagID
 m_tagSpans
 m_tags
 m_tail
@@ -5344,7 +5394,7 @@ notify
 numframes
 numsegments
 nwaysequence
-o Bone Weights  :: %d
+o Bone Weights :: %d non-zero weights
 o Channel :: %3d Pattern :: %3d Count :: %d
 o Default  Morph Ctrl Weight  :: %f
 o Explicit Morph Ctrl Weights :: %d
@@ -5462,6 +5512,9 @@ ss_added
 startframe
 static const TypeID CAddAnimNode::MyTypeID()
 static const TypeID CAimMatrixAnimNode::MyTypeID()
+static const TypeID CAnimGraphGeneralSettings::MyTypeID()
+static const TypeID CAnimGraphNetworkSettings::MyTypeID()
+static const TypeID CAnimGraphSettingsGroup::MyTypeID()
 static const TypeID CAnimNodeBase::MyTypeID()
 static const TypeID CAnimNodeInstanceBase::MyTypeID()
 static const TypeID CAnimParameterBase::MyTypeID()
@@ -5553,6 +5606,7 @@ static const TypeID CSequenceAnimNode::MyTypeID()
 static const TypeID CSequenceAnimNodeInstance::MyTypeID()
 static const TypeID CSequenceFinishedAnimTag::MyTypeID()
 static const TypeID CSetFacingAnimNode::MyTypeID()
+static const TypeID CSingleFrameAnimNode::MyTypeID()
 static const TypeID CSkeletalInputAnimNode::MyTypeID()
 static const TypeID CSlowDownOnSlopesAnimNode::MyTypeID()
 static const TypeID CSolveIKChainAnimNode::MyTypeID()
@@ -5573,6 +5627,7 @@ static const TypeID CTurnHelperAnimNode::MyTypeID()
 static const TypeID CTwoBoneIKAnimNode::MyTypeID()
 static const TypeID CVectorAnimParameter::MyTypeID()
 static const TypeID CWayPointHelperAnimNode::MyTypeID()
+static const TypeID IAnimGraphSettingsGroup::MyTypeID()
 static const TypeID IAnimMotor::MyTypeID()
 static const TypeID IAnimMotorInstance::MyTypeID()
 static const TypeID IAnimNode::MyTypeID()

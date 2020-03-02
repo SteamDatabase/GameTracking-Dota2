@@ -52,7 +52,6 @@ $ORIGIN
 (None)
 *
 *ZN24CDecalDrawDataRefCounted7ReleaseEvEUlvE_
-+inf
 ,
 , %s
 , parent:
@@ -61,7 +60,6 @@ $ORIGIN
 -1
 -avx
 -inf
--norefcheckaccess
 -sse2
 -sse3
 -sse4
@@ -88,6 +86,7 @@ $ORIGIN
 10IMeshUtils
 11CMeshSystem
 11CRefCountedI20CRefCountServiceBaseILb1E6CRefMTEE
+11CRenderMesh
 11IMeshSystem
 11IRefCounted
 11IVSSequence
@@ -150,6 +149,7 @@ $ORIGIN
 23IConCommandBaseAccessor
 24CSceneSkeletonObjectDesc
 25IVPhysicsLegacyKeyHandler
+27CModelConfigElement_Command
 27CSchemaUtlVectorManipulatorI10CUtlVectorI10CHitBoxSet10CUtlMemoryIS1_iEES1_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorI10CMorphData10CUtlMemoryIS1_iEES1_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorI10CTransform10CUtlMemoryIS1_iEES1_E
@@ -246,14 +246,15 @@ $ORIGIN
 <!-- kv3 encoding:%s:version{%s} format:%s:version{%s} -->
 <INVALID EXPRESSION>
 <INVALID_RBF_TYPE>
+<No schemasystem>
 <deferred>
+<no deferred ref found>
 <no failure reason set>
 <null>
 <unconnected>
 <unknown>
 =
 >
->nL>nL>nL>nL
 ?
 ?a`
 @@
@@ -300,6 +301,8 @@ ANIMATION_TYPE_FIXED_RATE
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 ATTACHMENT_INFLUENCE_FLAGS_NONE
 AbsolutePoseControl
+Access of unconnected ConVarRef
+Access of unconnected SplitScreenConVarRef
 Activity %s has %d sequences with a total weight of %d!
 AllocateAndLoad failed for '%s'
 AllocateAndLoad failed for '%s' (%s)
@@ -412,6 +415,8 @@ CAnimBone
 CAnimCycle
 CAnimDataChannelDesc
 CAnimKeyData
+CAnimMotorList
+CAnimMovementManager
 CAnimRetargetChainData
 CAnimRetargetData
 CAnimRetargetElementData
@@ -486,8 +491,10 @@ CMesh Cannot create packed input layout, because the bone indices are out of ran
 CModelConfig
 CModelConfigElement
 CModelConfigElement_AttachedModel
+CModelConfigElement_Command
 CModelConfigElement_RandomColor
 CModelConfigElement_RandomPick
+CModelConfigElement_SetBodygroup
 CModelConfigElement_SetMaterialGroup
 CModelConfigElement_SetRenderColor
 CModelConfigElement_UserPick
@@ -684,6 +691,7 @@ DevMsg(char const*, ...)
 Dominate(
 DotaCardGameClient_001
 Double-register of KV3 conversion (from '%s' to '%s')
+Double-save to Member '%s'
 DynamicConfigList
 ENCODING_TYPE_COUNT
 ENCODING_TYPE_OBJECT_SPACE
@@ -936,6 +944,7 @@ InstallChangeCallback ignoring duplicate change callback!!!
 InstallSchemaBindings
 Intentionally vague touch behavior for %p
 Internal inconsistency between the layout format and attribute is detected.Try changing the number of bones per vertex or the skin weighting, and send Sergiy a repro mesh with this error description.
+Invalid access of deferred ConVarRef for '%s'
 Invalid compressed buffer size
 Invalid data for member '%s'
 Invalid data.
@@ -963,6 +972,7 @@ JointMotion_t
 KV3 load transfer failed for mesh '%s': %s
 KV3 load transfer failed: %s
 KeyValueCache001
+KeyValues3
 KeyValuesSystem
 LOG_GENERAL
 LOOKUP_TYPE_COUNT
@@ -1213,6 +1223,7 @@ Plat_GetOSType
 Plat_GetThreadIndex
 Plat_IsHighDPI
 Plat_IsInDebugSession
+Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_UUIDFromString
 Plat_UUIDToString
@@ -1571,6 +1582,7 @@ anim_name_a
 anim_name_b
 animationsystem
 animgraph0
+animgraph1
 archive
 attach_point
 attachment_offset
@@ -1730,6 +1742,7 @@ fog_lighting
 fogcontributionstrength
 force
 format
+formats.cpp
 frame
 free
 g default
@@ -1737,6 +1750,7 @@ g_Tier1_BitWriteMasks
 g_Tier1_CRC32Table
 g_Tier1_CRC64Table
 g_Tier1_ExtraMasks
+g_hSkeletonMeshLayout
 g_pMemAlloc
 g_pThreadPool
 game
@@ -1793,6 +1807,7 @@ looping
 lowprecisionuv
 lowprecisionuv1
 m_AnimStrayRadii
+m_Args
 m_AttachmentName
 m_AttachmentType
 m_Attenuation0
@@ -1816,6 +1831,7 @@ m_CollisionPlanes
 m_CollisionSpheres
 m_Color
 m_ColorScale
+m_Command
 m_ConeAxis
 m_ConeCutoff
 m_Configs
@@ -1892,6 +1908,7 @@ m_Materials
 m_Mesh
 m_MorphLayers
 m_MorphSetData
+m_MotorList
 m_Name
 m_NestedElements
 m_NodeBases
@@ -1956,6 +1973,7 @@ m_attachments
 m_audioParams
 m_audioSounds
 m_axes
+m_bAcceptParentMaterialDrivenDecals
 m_bAdditive
 m_bApplyMinForce
 m_bCacheAttempted
@@ -1999,6 +2017,7 @@ m_bParticleFeathering
 m_bRemapPullForceToLife
 m_bRenderDiffuse
 m_bRenderSpecular
+m_bRenderTransmissive
 m_bRunForParentApplyKillList
 m_bScaleCurrent
 m_bScaleInitialRange
@@ -2406,7 +2425,6 @@ m_nTriangleOffset
 m_nTwin
 m_nType
 m_nUpType
-m_nValue
 m_nVectorComponent
 m_nVertexCount
 m_nWeight0
@@ -2426,7 +2444,9 @@ m_pBody
 m_pD3DSemanticName
 m_pFeModel
 m_pJointConstraintData
+m_pMemPool == nullptr
 m_pModelConfigList
+m_pMovementManager
 m_pName
 m_pParent
 m_pSemantic
@@ -2619,6 +2639,7 @@ min_angle
 model.cpp
 model_default_preview_sequence_name
 model_dump_convert_info
+model_imp.cpp
 model_name
 model_old_disk.cpp
 modeldoc0
@@ -2748,10 +2769,10 @@ remapping vertex %d[w%d] invalid: %d->? >= %d
 renderdiffuse
 rendermeshmgr.cpp
 renderspecular
+rendertransmissive
 resourcesystem
 rnd_down
 rnd_up
-root
 rootNode
 runspeed
 s offg cMeshusemtl initialShadingGroup
@@ -2888,5 +2909,6 @@ zero
 {}()':
 |B
 } %llu aggs, %s total data
+~CModel_Imp
 C
 D

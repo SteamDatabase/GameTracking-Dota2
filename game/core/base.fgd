@@ -639,6 +639,10 @@
 	input StartResilientPathFollow(string) : "Walks towards the specified path corner. Will resiliently restart the walk if it's interrupted for any reason."
 	input SetAnimGraphParameter(string) : "Set an animation graph parameter Format: <name=value>"
 	input SetEasingParameter(string) : "Set an easing parameter Format: <name=value>"
+	input EnableTeleportBuffer(void) : "Enable the teleport buffer around this NPC, if it's been disabled previously."
+	input DisableTeleportBuffer(void) : "Disable the teleport buffer around this NPC."
+	input EnableChoreoPhysProxy(void) : "Enable the phys proxy."
+	input DisableChoreoPhysProxy(void) : "Disable the phys proxy."
 ]
 
 @PointClass base(Targetname, Parentname) tags( Info ) iconsprite("editor/info_target.vmat") = info_npc_spawn_destination : 
@@ -1067,6 +1071,7 @@
 	toLocalPlayer(boolean) : "To Local Player" : "" : "Play the sound directly to the local player"
 	stopOnNew(boolean) : "Re-trigger Stops Last" : 1 : "Stop a previously playing event when a new one is started"
 	saveAndRestore(boolean) : "Save/Restore" : 0 : "This soundevent should be saved and restored."
+	sourceEntityAttachment(string) : "Entity Attachment Name" : : "If set, will play the soundevent from this attachment point."
 
 	// Inputs
 	input SetSourceEntity(string) : "Set the name of the entity to play the sound from. The sound will follow the entity as it moves."
@@ -1209,6 +1214,7 @@
 @PointClass base( Targetname, SndOpvarSetPointBaseAddition, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) = snd_opvar_set_point :
 	"Sets an opvar value on a library stack"
 [
+	dynamicEntityName(target_destination) : "Dynamic Entity Name" : "" : "Name of the dynamic prop_door_rotating_physics entity to check for dynamic factor calculation."
 	dynamicProxyPoint(local_point) : "Dynamic Proxy Point" : "" : "Position of a proxy point across a dynamic point to use for visiblity calculation. Make sure to set the Occlusion Radius such that it is entirely on one side of the dynamic object."
 	dynamicMaximumOcclusion(float) : "Dynamic Maximum Occlusion" : "1.0" : "Value when the dynamic occlusion is considered fully unoccluded and return 1."
 ]
@@ -2047,6 +2053,12 @@
 	inner_radius(float) : "Inner radius" : "0" : "If not zero, the LOS is calculated from a point intersecting this sphere."
 
 	pushscale(float) : "Physics push scale" : "1" : "Scale the applied physics force by this value."
+
+	ConvertToDebrisWhenPossible(choices) : "Convert physics props to debris when possible" : "0" =
+	[
+		"0" : "No"
+		"1" : "Yes"
+	]
 
 	// Inputs
 	input Explode(void) : "Trigger the explosion."
@@ -3562,6 +3574,8 @@
 	input ResetPosition(float) : "Set a new start position for our current location."
 	input SetSpeed(float) : "Set the speed and update immediately."
 	input TeleportToTarget(target_destination) : "Teleport to this entity's origin."
+	input SetMoveDistanceFromStart(float) : "Update the end position to be this distance from the start position."
+	input SetMoveDistanceFromEnd(float) : "Update the start position to be this distance from the end position."
 
 	// Outputs
 	output OnFullyOpen(void) : "Fired when the brush reaches the end position (starting position + (move direction * move distance))."
@@ -5707,6 +5721,9 @@
 	// Outputs
 	output NotifyMinLimitReached(void) : "The min limit has been reached."
 	output NotifyMaxLimitReached(void) : "The max limit has been reached."
+
+	output OnStartMoving(void) : "Fires if the attached objects start rotating around the hinge axis relatively to each other."
+	output OnStopMoving(void) : "Fires if the attached objects stip rotating around the hinge axis relatively to each other."
 ]
 
 
@@ -5738,6 +5755,9 @@
 	// Outputs
 	output NotifyMinLimitReached(void) : "The min limit has been reached."
 	output NotifyMaxLimitReached(void) : "The max limit has been reached."
+
+	output OnStartMoving(void) : "Fires if the attached objects start rotating around the hinge axis relatively to each other."
+	output OnStopMoving(void) : "Fires if the attached objects stip rotating around the hinge axis relatively to each other."
 ]
 
 
@@ -5795,6 +5815,7 @@
 	motorfrequency(float) : "Motor frequency" : "10" : "Range 0 - 30 (only used when driving the relative offset through the offset input)"
 	motordampingratio(float) : "Motor damping ratio" : "1" : "Range 0 - 1 (only used when driving the relative offset through the offset input)"
 	motormaxforcemultiplier(float) : "Motor max force" : "0" : "Measured in multiples (e.g. 10x) of the mass where zero means NO limit (only used when driving the relative offset through the offset input)"
+	useEntityPivot(boolean) : "Force Pivot" : 0 : "Force joint position as constraint pivot"
 	
 	// Inputs
 	input SetOffset(float) : "Normalized input to drive along the slide axis. E.g 0 = min limit and 1 = max limit"
@@ -6284,12 +6305,13 @@
 	massScale(float) [ group="Physics Properties" ] : "Mass Scale" : "0" : "A scale multiplier for the object's mass."
 	damagetoenablemotion(integer) [ group="Physics Properties" ] : "Health Level to Override Motion" : 0 : "If specified, this object will start motion disabled. Once its health has dropped below this specified amount, it will enable motion."
 	forcetoenablemotion(float) [ group="Physics Properties" ] : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
-	
+
 	puntsound(sound) [ group="Physics Properties" ] : "Sound to make when punted"
 
 	addon(string) [ group="Physics Properties" ] : "AI AddOn" : "" : "If specified this object will use this addon behavior when installed in a composite AI"
 	interactAs(string) [ group="Physics Properties" ] : "interactAs" : "" : "comma-separated list of interaction layers"
 	forcenavignore(boolean) [ group="Physics Properties" ] : "Force Nav Ignore" : "0" : "If set, NPCs will ignore this prop when navigating."
+	forcenpcexclude(boolean) [ group="Physics Properties" ] : "Force NPC Exclude" : "0" : "If set, NPC movement will ignore this prop"
 	auto_convert_back_from_debris(boolean) [ group="Physics Properties" ] : "Auto Convert back from Debris" : "1" : "If set, this prop will automatically convert back to interactive debris after coming to rest as Debris."
 
 	// Inputs

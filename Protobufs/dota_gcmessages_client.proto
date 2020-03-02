@@ -2581,6 +2581,7 @@ message CMsgGCToClientCavernCrawlMapPathCompleted {
 	optional uint32 event_id = 1;
 	optional uint32 hero_id_completed = 2;
 	repeated .CMsgGCToClientCavernCrawlMapPathCompleted.CompletedPathInfo completed_paths = 3;
+	optional uint32 map_variant = 4;
 }
 
 message CMsgGCToClientCavernCrawlMapUpdated {
@@ -2590,6 +2591,7 @@ message CMsgGCToClientCavernCrawlMapUpdated {
 message CMsgClientToGCCavernCrawlClaimRoom {
 	optional uint32 event_id = 1;
 	optional uint32 room_id = 2;
+	optional uint32 map_variant = 3;
 }
 
 message CMsgClientToGCCavernCrawlClaimRoomResponse {
@@ -2606,6 +2608,7 @@ message CMsgClientToGCCavernCrawlUseItemOnRoom {
 	optional uint32 event_id = 1;
 	optional uint32 room_id = 2;
 	optional uint32 item_type = 3;
+	optional uint32 map_variant = 4;
 }
 
 message CMsgClientToGCCavernCrawlUseItemOnRoomResponse {
@@ -2622,6 +2625,7 @@ message CMsgClientToGCCavernCrawlUseItemOnPath {
 	optional uint32 event_id = 1;
 	optional uint32 path_id = 2;
 	optional uint32 item_type = 3;
+	optional uint32 map_variant = 4;
 }
 
 message CMsgClientToGCCavernCrawlUseItemOnPathResponse {
@@ -2654,6 +2658,25 @@ message CMsgClientToGCCavernCrawlRequestMapStateResponse {
 		optional uint32 revealed_room_id = 2;
 	}
 
+	message MapVariant {
+		optional uint32 map_variant = 1;
+		optional fixed64 claimed_rooms_1 = 2;
+		optional fixed64 claimed_rooms_2 = 3;
+		optional fixed64 revealed_rooms_1 = 4;
+		optional fixed64 revealed_rooms_2 = 5;
+		optional fixed64 completed_paths_1 = 6;
+		optional fixed64 completed_paths_2 = 7;
+		optional fixed64 completed_paths_3 = 8;
+		optional fixed64 completed_paths_4 = 9;
+		optional fixed64 half_completed_paths_1 = 10;
+		optional fixed64 half_completed_paths_2 = 11;
+		optional fixed64 half_completed_paths_3 = 12;
+		optional fixed64 half_completed_paths_4 = 13;
+		repeated .CMsgClientToGCCavernCrawlRequestMapStateResponse.SwappedChallenge swapped_challenge = 14;
+		optional uint32 ultra_rare_reward_room_number = 15;
+		repeated .CMsgClientToGCCavernCrawlRequestMapStateResponse.TreasureMap treasure_map = 16;
+	}
+
 	enum Result {
 		SUCCESS = 0;
 		ERROR_UNKNOWN = 1;
@@ -2661,22 +2684,9 @@ message CMsgClientToGCCavernCrawlRequestMapStateResponse {
 	}
 
 	optional .CMsgClientToGCCavernCrawlRequestMapStateResponse.Result result = 1 [default = SUCCESS];
-	optional fixed64 claimed_rooms_1 = 2;
-	optional fixed64 claimed_rooms_2 = 3;
-	optional fixed64 revealed_rooms_1 = 4;
-	optional fixed64 revealed_rooms_2 = 5;
-	optional fixed64 completed_paths_1 = 6;
-	optional fixed64 completed_paths_2 = 7;
-	optional fixed64 completed_paths_3 = 8;
-	optional fixed64 completed_paths_4 = 12;
-	optional fixed64 half_completed_paths_1 = 13;
-	optional fixed64 half_completed_paths_2 = 14;
-	optional fixed64 half_completed_paths_3 = 15;
-	optional fixed64 half_completed_paths_4 = 16;
-	repeated .CMsgClientToGCCavernCrawlRequestMapStateResponse.SwappedChallenge swapped_challenge = 9;
-	repeated .CMsgClientToGCCavernCrawlRequestMapStateResponse.InventoryItem inventory_item = 10;
-	optional uint32 ultra_rare_reward_room_number = 11;
-	repeated .CMsgClientToGCCavernCrawlRequestMapStateResponse.TreasureMap treasure_map = 17;
+	optional uint32 available_map_variants_mask = 2;
+	repeated .CMsgClientToGCCavernCrawlRequestMapStateResponse.InventoryItem inventory_item = 3;
+	repeated .CMsgClientToGCCavernCrawlRequestMapStateResponse.MapVariant map_variants = 4;
 }
 
 message CMsgClientToGCCavernCrawlGetClaimedRoomCount {
@@ -2684,6 +2694,11 @@ message CMsgClientToGCCavernCrawlGetClaimedRoomCount {
 }
 
 message CMsgClientToGCCavernCrawlGetClaimedRoomCountResponse {
+	message MapVariant {
+		optional uint32 map_variant = 1;
+		optional uint32 count = 2;
+	}
+
 	enum Result {
 		SUCCESS = 0;
 		ERROR_UNKNOWN = 1;
@@ -2691,7 +2706,7 @@ message CMsgClientToGCCavernCrawlGetClaimedRoomCountResponse {
 	}
 
 	optional .CMsgClientToGCCavernCrawlGetClaimedRoomCountResponse.Result result = 1 [default = SUCCESS];
-	optional uint32 count = 2;
+	repeated .CMsgClientToGCCavernCrawlGetClaimedRoomCountResponse.MapVariant map_variants = 2;
 }
 
 message CMsgDOTAMutationList {
@@ -3198,20 +3213,6 @@ message CMsgClientToGCGetTicketCodesResponse {
 	repeated .CMsgClientToGCGetTicketCodesResponse.Code codes = 1;
 }
 
-message CMsgClientToGCGetUnderlordsCDKeyRequest {
-}
-
-message CMsgClientToGCGetUnderlordsCDKeyResponse {
-	enum EResponse {
-		Success = 0;
-		UnknownError = 1;
-		OutOfKeys = 2;
-	}
-
-	optional .CMsgClientToGCGetUnderlordsCDKeyResponse.EResponse result = 1 [default = Success];
-	repeated string cd_keys = 2;
-}
-
 message CMsgClientToGCSetFavoriteAllStarPlayer {
 	optional uint32 player_id = 1;
 	optional uint32 event_id = 2;
@@ -3256,4 +3257,42 @@ message CMsgClientToGCVerifyIntegrity {
 }
 
 message CMsgGCToClientVACReminder {
+}
+
+message CMsgClientToGCPullTabsRequest {
+	optional uint32 event_id = 1;
+}
+
+message CMsgGCToClientPullTabsResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+	}
+
+	optional .CMsgGCToClientPullTabsResponse.EResponse result = 1 [default = k_eInternalError];
+	optional .CMsgPullTabsData data = 2;
+}
+
+message CMsgClientToGCPullTabsRedeem {
+	optional uint32 event_id = 1;
+	optional uint32 board_id = 2;
+	optional uint32 hero_id = 3;
+}
+
+message CMsgGCToClientPullTabsRedeemResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eAlreadyGranted = 3;
+		k_eDisabled = 4;
+	}
+
+	optional .CMsgGCToClientPullTabsRedeemResponse.EResponse result = 1 [default = k_eInternalError];
+	optional uint32 event_id = 2;
+	optional uint32 board_id = 3;
+	optional uint32 hero_id = 4;
+	optional uint32 action_id = 5;
 }

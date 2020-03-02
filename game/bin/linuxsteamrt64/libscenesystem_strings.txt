@@ -106,12 +106,10 @@
 #%s/%s/+MultiGpu-TransferRenderTarget( To: %dx%d @ x: %d y: %d, From: %dx%d @ x: %d y: %d )
 #%s/%s/+SteamVrCompositor-TransferLeftEye( %dx%d @ (x: %d y: %d) )
 #%s/%s/+SteamVrCompositor-TransferRightEye( %dx%d @ x: %d y: %d) )
-#%s/%s/Render2DDebugOverlays
-#%s/%s/Render3DDebugOverlays
-#%s/%s/Resolves
 #%s/%s/UpdatePerViewConstantBuffer%d
 #%s/PrimaryContext frame( %d )
 #%s/RenderAView/RenderAView
+#%s/SetupLightingForView/SetupLightingForView
 #%s/UpdatePerViewConstantBuffers
 #%s/UpdatePerViewConstantBuffers%d
 #It contains connectivity part %d with %d vertices
@@ -141,6 +139,7 @@ $0option $1;
 $0rpc $1($4.$2) returns ($5.$3)
 $0}
 $ORIGIN
+$tI
 %
 %%%s
 %-120s
@@ -180,7 +179,6 @@ $ORIGIN
 %f is before m_SimulationState[%d].m_flSimulationTime %f
 %g
 %hd
-%hu
 %i %i %i %i
 %ld
 %lld
@@ -245,9 +243,9 @@ $ORIGIN
 *ZN13CLightBinner225AddEnvironmentMapsForViewEP10CSceneViewyyEUlP18CEnvMapSceneObjectE_
 *ZN13CLightBinner227AddLightProbeVolumesForViewEP10CSceneViewyyEUlP28CSceneLightProbeVolumeObjectE_
 *ZN14CLightBinnerVr19GatherVisibleLightsER23CUtlVectorFixedGrowableI15ConsiderLight_tLm256EES3_P10CSceneViewRK8CFrustumyyEUlP25CSceneLightObjectInternalE_
-*ZN14CLightBinnerVr40ShadowSetup_AllocateDumbShadowsForLightsEP10CSceneViewP11ISceneLayerRK8CFrustumyyiEUlP25CSceneLightObjectInternalE_
+*ZN14CLightBinnerVr34AllocateMixedShadowsForLocalLightsEP10CSceneViewP11ISceneLayerRK8CFrustumRK17FrustumGeometry_tyyiEUlP25CSceneLightObjectInternalE_
 *ZN16CLightBinnerCsgo19GatherVisibleLightsER23CUtlVectorFixedGrowableI15ConsiderLight_tLm256EES3_P10CSceneViewRK8CFrustumyyEUlP25CSceneLightObjectInternalE_
-*ZN16CLightBinnerCsgo40ShadowSetup_AllocateDumbShadowsForLightsEP10CSceneViewP11ISceneLayerRK8CFrustumyyiEUlP25CSceneLightObjectInternalE_
+*ZN16CLightBinnerCsgo34AllocateMixedShadowsForLocalLightsEP10CSceneViewP11ISceneLayerRK8CFrustumRK21FrustumGeometryCSGO_tyyiEUlP25CSceneLightObjectInternalE_
 *ZN26CBindlessFastPathPartition21EnsureEnvironmentMapsEvEUlP18CEnvMapSceneObjectE_
 *ZN32CBindlessFastPathSceneObjectDesc35EnsureLightProbeVolumeDescriptorSetEvEUlP28CSceneLightProbeVolumeObjectE_
 +++
@@ -278,7 +276,6 @@ $ORIGIN
 ->
 -avx
 -inf
--norefcheckaccess
 -scene_system_partitions
 -shadowTargetSize
 -shadowTargetSize Adjusting shadow target size to %d from %d
@@ -297,7 +294,7 @@ $ORIGIN
 ...<truncated>...
 ../common/protobuf_helpers.cpp
 ../public/ordered_constructor.h
-../public/scenesystem/sceneobject.h(2886): Material %s cannot render in mode %s but is being asked to
+../public/scenesystem/sceneobject.h(2919): Material %s cannot render in mode %s but is being asked to
 ../public/scenesystem/vertexformat.h
 ../public/tier0/tslist.h
 ../public/tier1/utl3dallocator.h
@@ -326,6 +323,7 @@ $ORIGIN
 ./google/protobuf/stubs/stringpiece.h
 ./google/protobuf/unknown_field_set.h
 ./google/protobuf/wire_format_lite_inl.h
+.0125
 .PLACEHOLDER_VALUE
 .dummy
 .exr
@@ -339,7 +337,6 @@ $ORIGIN
 0
 0 <= i
 0.0
-0.005
 0.1
 0.85
 00000000-0000-0000-0000-000000000000
@@ -351,11 +348,10 @@ $ORIGIN
 0x%p
 1
 1 1 1
-1 = visualize bounds, 2 = visualize sceneobject mesh materials, 3 = required texture size
+1 = visualize bounds, 2 = visualize sceneobject mesh materials, 3 = required texture size, 4 = bounds group
 1.2
 1.5
 1.8
-1024.0
 10CEntityMsg
 10CMsgQAngle
 10CMsgVector
@@ -443,6 +439,7 @@ $ORIGIN
 1DBlend
 2
 2.
+2.13
 2.2
 2.5
 20CBaseSceneObjectDesc
@@ -542,6 +539,7 @@ $ORIGIN
 38IMaxSwapChainDimensionsChangedListener
 3C
 4
+4.0
 4096.0f
 40ISceneAnimatableProceduralBoneTransforms
 41CCopySkyLightingReadTexturePixelsCallback
@@ -557,7 +555,6 @@ $ORIGIN
 8
 8.0
 8CFmtStrNILi256ELb0EE
-8CFmtStrNILi80ELb0EE
 8CFunctor
 8CMsgRGBA
 9
@@ -598,6 +595,7 @@ $ORIGIN
 <i>Not using PerViewConstantBuffer_t</i>
 <i>PerViewConstantBuffer_t</i>
 <i>Procedural Layer</i>
+<no deferred ref found>
 <no failure reason set>
 <none>
 <null>
@@ -786,6 +784,8 @@ ATI_DST16
 ATI_DST24
 ATTACHMENT_INFLUENCE_FLAGS_NONE
 AbsolutePoseControl
+Access of unconnected ConVarRef
+Access of unconnected SplitScreenConVarRef
 Actual    :
 Actual   :
 AddAllocatedMessage
@@ -886,7 +886,6 @@ BakedLODBuilderMgr001
 Base Spring;
 BaseIKRig
 BasePhysicsShape
-BatchDrawCalls
 Begin has already been called without an intervening render
 Begin to finish rendering views : %f
 BeginRenderingViews
@@ -925,6 +924,8 @@ CAmbientOcclusionProxySceneObjectDesc
 CAnimBone
 CAnimDataChannelDesc
 CAnimKeyData
+CAnimMotorList
+CAnimMovementManager
 CAnimRetargetChainData
 CAnimRetargetData
 CAnimRetargetElementData
@@ -1242,6 +1243,7 @@ CMemAllocSystemInitialize
 CMeshBuilderSceneObjectDesc
 CModelConfig
 CModelConfigElement
+CModelConfigElement_Command
 CModelConfigElement_UserPick
 CModelConfigList
 CMorphConstraint
@@ -1250,7 +1252,6 @@ COLLISION_MODE_PER_FRAME_PLANESET
 COLLISION_MODE_PER_PARTICLE_TRACE
 COLLISION_MODE_USE_NEAREST_TRACE
 COLORCORRECTION_VERSION_1
-COccluderSceneObjectDesc
 COrientConstraint
 CPPTYPE_BOOL
 CPPTYPE_DOUBLE
@@ -1327,7 +1328,7 @@ CThreadRWLock::WaitForRead()
 CThreadRWLock_FastRead::CThreadRWLock_FastRead()
 CThreadRWLock_FastRead::HandleFirstWriteLockTransition()
 CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
-CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int)
+CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int, char const*, int)
 CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::~CThreadSemaphore()
 CThreadSpinRWLock::LockForRead(char const*, int)
@@ -1362,7 +1363,6 @@ CUtlVector
 CVProfNode::EnterScope()
 CVProfNode::ExitScope()
 CVProfNode::GetSubNode(char const*, int, char const*, int)
-CVProfile::FindOrCreateCounter(char const*, CounterGroup_t)
 CVrSkeletalInputSettings
 CWristBone
 CXXABI_1.3
@@ -1475,6 +1475,7 @@ Cannot write a file
 ChangeCallbackOnChange
 ChangeCallbackOnChangeOrCreate
 ChangeObjectPartition
+ChangeSize
 CharacterDecalSystem
 CharacterDecalSystemManifest
 Check
@@ -1503,7 +1504,6 @@ Conditional Error: %s
 ConfigAttachedModel
 ConfigurationSystem_001
 ConnectInterfaces
-ConvertGammaToLinear
 Copy
 CopyAttrFrom
 CopyRenderTargetOutputsAndViewportFromPreviousLayer
@@ -1560,6 +1560,7 @@ DevMsg(char const*, ...)
 Directional lights are not supported by the LightBinner
 DirectionalLight
 Dist Cull
+Distance to cull the AO proxy as a factor of size
 Division or mod by zero: dividend.hi=
 Dominate(
 Don't lookup extension types if they aren't present (1).
@@ -1579,6 +1580,7 @@ Dump a list of the objects in a sceneworld (Usage: sc_dumpworld <world_index>)
 Dump debug info
 Dump the objects in a sceneworld into a 3d geoview buffer (Usage: sc_dumpworld3d <world_index>)
 DynamicConfigList
+E
 ERROR
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
@@ -1611,6 +1613,7 @@ Error: View "%s", layer "%s", render target "%s": Attempted to bind the back buf
 Error: View "%s", layer "%s", render target "%s": Attempted to resolve a non-MSAA render target to a MSAA texture!
 EventSystem001
 Exact
+Exceeded maximum number of environment maps: %i added to world, %i maximum
 Exceeded maximum protobuf size of 2GB:
 Expanded map entry type
 Expect a decimal number, got:
@@ -1657,7 +1660,6 @@ Extensions to non-lite types can only be declared in non-lite files.  Note that 
 FAILED_PRECONDITION
 FATAL
 FATAL ERROR: unable to register all schema data: %s
-FIXME
 F_ALPHA_TEST
 F_MORPH_SUPPORTED
 F_TRANSLUCENT
@@ -1830,6 +1832,7 @@ INVALID_ARGUMENT
 INVALID_CPPTYPE
 IQuickTime001
 ISceneObjectDesc
+If enabled, the camera's translation will be included in the projection matrix.
 Illegal jstype for int64, uint64, sint64, fixed64 or sfixed64 field:
 Import
 Import "
@@ -1854,6 +1857,7 @@ Integer out of range (
 Intentionally vague touch behavior for %p
 Interpreting non ascii codepoint %d.
 Invalid EXR header.
+Invalid access of deferred ConVarRef for '%s'
 Invalid channels format
 Invalid control characters encountered in text.
 Invalid data for member '%s'
@@ -1998,7 +2002,6 @@ MapValueRef::GetUInt32Value
 MapValueRef::GetUInt64Value
 MapValueRef::type MapValueRef is not initialized.
 Match ID
-Material Changes
 Material changes:
 MaterialParamBuffer_t
 MaterialParamFloat_t
@@ -2009,7 +2012,6 @@ MaterialParamVector_t
 MaterialParam_t
 MaterialResourceData_t
 MaterialUtils_001
-Materials Initial
 MathLib_Init
 MemAlloc_AllocFunc
 MemAlloc_FreeFunc
@@ -2314,8 +2316,6 @@ POSE_SPACE_MORPH
 POSITION
 POSIX
 PS3
-PSys Draw Calls
-PSys Rendered
 PVEC_TYPE_LITERAL
 PVEC_TYPE_LITERAL_COLOR
 PWL
@@ -2361,6 +2361,7 @@ Plat_GetThreadIndex
 Plat_IsHighDPI
 Plat_IsInDebugSession
 Plat_MSTime
+Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_UUIDFromString
 Plat_UUIDToString
@@ -2521,6 +2522,7 @@ SceneSystem
 SceneSystem/CMTAtlasChunkSize
 SceneSystem/CMTAtlasHeight
 SceneSystem/CMTAtlasWidth
+SceneSystem/CameraTranslationInProjection
 SceneSystem/CharacterDecals
 SceneSystem/CsgoDefaultShadowTextureHeight
 SceneSystem/CsgoDefaultShadowTextureWidth
@@ -2600,6 +2602,7 @@ SetRepeatedUInt64
 SetString
 SetUInt32
 SetUInt64
+SetupLightingForViewCsgo
 SetupLightingForViewVr
 ShadowMap "
 Shadowed spot lights in view: %d
@@ -2607,8 +2610,11 @@ Should not reach here.
 Show
 Show cost of lights in fog clipmap constant buffer. yellow = 1 cost, red = 6 cost
 Show light priority values. 1 = normal lights, 2 = cached lights.
+Show lights using the cached shadow atlas solely for transmissive lighting, rather than fog.
 Show occluder
+Show the indices of indexed lights
 Show the occluder depth buffer mip level. 0=off, 1=1st mip, 2=2nd mip, etc...
+Show the origin for LOD computation
 SimplePostProcessingLayer
 Simulated
 SkeletonBoneBounds_t
@@ -2670,6 +2676,7 @@ Submit dependent display list for dependent view
 Submit transform texture and other resource updates
 Submit update for auxiliary camera pos=
 Submit update for main camera pos=
+SubmitAllDisplayLists
 SubmitRenderLists
 Suggested
 Sun
@@ -2710,6 +2717,7 @@ ThreadMultiWait
 ThreadMultiWaitObjectSetDestroy
 ThreadSleep
 Thread_ProcessProceduralLayer
+Timer took %.4f
 To google::protobuf::internal::down_cast(From*) [with To = const google::protobuf::Message*, From = const google::protobuf::MessageLite]
 To google::protobuf::internal::down_cast(From*) [with To = const google::protobuf::UninterpretedOption*, From = const google::protobuf::Message]
 To google::protobuf::internal::down_cast(From*) [with To = google::protobuf::Message*, From = google::protobuf::MessageLite]
@@ -2786,6 +2794,7 @@ Usage is sc_setfloatattr <attrname> <value>
 Usage is sc_setintattr <attrname> <value>
 Usage scope:
 Use multiview instancing for stereo rendering.
+Use to set a single indexed light to black
 UserInfoChangeService_001
 Using 16-bit blend indices
 VApplication001
@@ -2945,6 +2954,7 @@ Wireframe2DLayout
 Wireframe3DLayout
 WorkshopSetup001
 World Filter
+WorldRenderer/EnvironmentMapCacheSize
 WorldRenderer/EnvironmentMapColorSpace
 WorldRenderer/EnvironmentMapFaceSize
 WorldRenderer/EnvironmentMapUseCubeArray
@@ -3041,6 +3051,7 @@ _setjmp
 _test_conversion_counter
 _z0
 `
+`@
 `jF
 a protocol
 abs( %s )
@@ -3061,6 +3072,7 @@ animatable.cpp
 animationLifeSpan
 animationScale
 animgraph0
+animgraph1
 ao_proxy_box_list
 ao_proxy_capsule_list
 archive
@@ -3140,6 +3152,7 @@ ceilf
 center
 channels
 char google::protobuf::StringPiece::operator[](google::protobuf::stringpiece_ssize_type) const
+char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag)
 cheat
 children
 chlist
@@ -3171,7 +3184,6 @@ control_point
 cos( %s )
 create_particle
 csgo_allow_time_sliced_shadow_map_rendering
-csgo_baked_sun_shadow_distance
 csgo_cubemap_normalization_max
 csgo_cubemap_normalization_roughness_begin
 csgo_directional_lightmaps
@@ -3179,9 +3191,14 @@ csgo_dither_scale
 csgo_dump_lights
 csgo_enable_cached_lights
 csgo_enable_lights
+csgo_kill_indexed_light
 csgo_max_lights
+csgo_shadow_map_culling
 csgo_show_light_fog_clipmap_cb_cost
 csgo_show_light_priority
+csgo_single_light_fast_path_sun_cascade_0_texels_per_world
+csgo_single_light_fast_path_sun_cascade_1_texels_per_world
+csgo_single_light_fast_path_sun_size_cull_threshold
 csgo_unlit_shadow_color
 csm_bias_override_0
 csm_bias_override_1
@@ -3240,6 +3257,8 @@ emitFromWorld
 enable_limit
 encoding
 enum
+envMapLayout
+envMapQuadLayout
 event_class
 event_keys
 eventindex
@@ -3438,7 +3457,6 @@ keyvalues.cpp
 kv3
 kv3format_manager.cpp
 l
-label: %s
 last_sniff
 ld-linux-x86-64.so.2
 len >= 0
@@ -3475,6 +3493,7 @@ lowprecisionuv
 lowprecisionuv1
 lseek
 m
+m_Args
 m_AttachmentName
 m_AttachmentType
 m_Attenuation0
@@ -3487,6 +3506,7 @@ m_Children
 m_Choices
 m_Color
 m_ColorScale
+m_Command
 m_ConeAxis
 m_ConeCutoff
 m_ConfigName
@@ -3521,6 +3541,7 @@ m_Joints
 m_LayerName
 m_LiteralColor
 m_MaterialGroupName
+m_MotorList
 m_Name
 m_NestedElements
 m_Operators
@@ -3581,6 +3602,7 @@ m_bParticleFeathering
 m_bRemapPullForceToLife
 m_bRenderDiffuse
 m_bRenderSpecular
+m_bRenderTransmissive
 m_bRunForParentApplyKillList
 m_bScaleCurrent
 m_bScaleInitialRange
@@ -3667,6 +3689,7 @@ m_flOpStrengthMaxScale
 m_flOpStrengthMinScale
 m_flOutput0
 m_flOutput1
+m_flPosition
 m_flPrecomputedMaxRange
 m_flRadius
 m_flRadiusScale
@@ -3821,6 +3844,7 @@ m_nStartInstance
 m_nTargetAxis
 m_nType
 m_nUpType
+m_nValue
 m_nVectorComponent
 m_nVertexCount
 m_nViewProducerIndex
@@ -3835,6 +3859,7 @@ m_pBody
 m_pD3DSemanticName
 m_pDesc
 m_pJointConstraintData
+m_pMovementManager
 m_pName
 m_pNext
 m_pObject
@@ -3946,13 +3971,13 @@ mat_tonemap_force_scale
 mat_tonemap_force_use_alpha
 mat_tonemap_uncap_exposure
 material_group
+materials/deferred_lights/envmaplight.vmat
 materials/deferred_lights/irradiancevolume.vmat
 materials/deferred_lights/pointlight.vmat
 materials/deferred_lights/spotlight.vmat
 materials/deferred_lights/spotlight_shadowed.vmat
 materials/deferred_lights/spotlight_volumeshadowed.vmat
 materials/deferred_lights/sunlight.vmat
-materials/dev/aoproxy_blit_cones.vmat
 materials/dev/cs_volumetric_fog.vmat
 materials/dev/debug_show_texture.vmat
 materials/dev/debug_solid.vmat
@@ -4003,7 +4028,6 @@ mempool.cpp
 memset
 mesh
 mesh.cpp
-meshUtilsKeyValues
 mesh_calculate_curvature_smooth_invert
 mesh_calculate_curvature_smooth_pass_count
 mesh_calculate_curvature_smooth_weight
@@ -4148,6 +4172,9 @@ ptr( 0x%p )
 ptr_ != __null
 q
 r_allow_morph_batching_on_base
+r_aoproxy_cull_dist
+r_aoproxy_min_dist
+r_aoproxy_min_dist_box
 r_cubemap_debug_colors
 r_dither_scale
 r_dopixelvisibility
@@ -4196,6 +4223,7 @@ rendertarget_scratch_8888_mip_%d_%d
 rendertarget_ssao_depth_%d_%d
 rendertargets
 rendertargettoken.cpp
+rendertransmissive
 repeated
 required
 resource
@@ -4251,6 +4279,7 @@ sc_force_materials_batchable
 sc_force_push_constant_update_every_draw
 sc_force_single_display_list_per_layer
 sc_force_submit_count
+sc_force_translation_in_projection
 sc_keep_all_layers
 sc_list_extradata_allocations
 sc_listworlds
@@ -4270,6 +4299,7 @@ sc_override_shadow_fade_max_dist
 sc_override_shadow_fade_min_dist
 sc_partitions_per_job
 sc_perdrawculling
+sc_precise_projection_to_world
 sc_queue_reflection_views_to_layers
 sc_reject_all_objects
 sc_rr_partitions_to_jobs
@@ -4280,6 +4310,7 @@ sc_setfloatattr
 sc_setintattr
 sc_shadow_depth_bias
 sc_shadow_depth_bias_clamp
+sc_shadow_depth_bias_state_override
 sc_shadow_slopescale_depth_bias
 sc_show_rejected_objects
 sc_show_rejected_objects_range
@@ -4304,8 +4335,8 @@ scenesysCone
 scenesysDodecahedron
 scenesystem
 scenesystem.cpp
-scenesystem.cpp(6302): Expecting 1 renderable pass for material "%s" but found %d!
-scenesystem.cpp(7619): Waited 500 ms for jobs to complete. Attempt to drain windows message queue. Jobs in queue = %d
+scenesystem.cpp(6390): Expecting 1 renderable pass for material "%s" but found %d!
+scenesystem.cpp(7706): Waited 500 ms for jobs to complete. Attempt to drain windows message queue. Jobs in queue = %d
 scenesystem.h
 scenesystemdebug
 sceneviewdebugoverlays.cpp
@@ -4607,6 +4638,7 @@ v %g %g %g
 v %g %g %g%s
 v2f
 value
+valveextensions.proto
 vanmgrph
 vb phys
 vector::_M_default_append
@@ -4684,10 +4716,6 @@ vpcf7
 vpcf8
 vpcf9
 vr_allow_time_sliced_shadow_map_rendering
-vr_aoproxy_cones
-vr_aoproxy_cull_threshold
-vr_aoproxy_dist_fade_end_scale
-vr_aoproxy_dist_fade_start_scale
 vr_camera_decay_roll_halflife
 vr_camera_decay_yaw_pitch_halflife
 vr_carry_type
@@ -4695,12 +4723,16 @@ vr_cubemap_normalization_max
 vr_cubemap_normalization_roughness_begin
 vr_directional_lightmaps
 vr_disable_view_override
-vr_dump_lights
 vr_enable_cached_lights
 vr_enable_lights
+vr_kill_indexed_light
 vr_max_lights
+vr_shadow_map_culling
+vr_show_indexed_light_indices
 vr_show_light_fog_clipmap_cb_cost
 vr_show_light_priority
+vr_show_lod_origin
+vr_show_nonfogging_cached_lights
 vr_single_light_fast_path_sun_cascade_0_texels_per_world
 vr_single_light_fast_path_sun_cascade_1_texels_per_world
 vr_single_light_fast_path_sun_size_cull_threshold

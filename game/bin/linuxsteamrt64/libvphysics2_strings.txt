@@ -19,6 +19,7 @@
 #f %d %d %d, original mesh: %d %d %d
 #ifdef DBGFLAG_ASSERT
 $ORIGIN
+$tIVScript
 %%%s
 %+.2f*%.1f in
 %-120s
@@ -26,6 +27,7 @@ $ORIGIN
 %-30s%14s%14s
 %.15lf
 %.2f -> %.2f @ %.2f
+%.3f behind, %d nodes, FeModel %s bytes, %s
 %02X
 %14s %-30s[%u]%s
 %6.2f %s
@@ -46,7 +48,6 @@ $ORIGIN
 %p
 %p: %s
 %s ! %s:%u:%u:%u
-%s %f %f %f %f %f %f %f %f %f
 %s %g %g %g %g %g %g %g %g %g
 %s %s
 %s %s %s 0
@@ -148,9 +149,9 @@ $ORIGIN
 -SolveTOI (%d fast bodies): %6.3f [ms] (%6.3f [ms])
 -aggs
 -avx
+-cloth
 -inf
 -mem
--norefcheckaccess
 -processheap
 -profiletraces
 -reset
@@ -185,6 +186,8 @@ $ORIGIN
 0.04
 0.05
 0.1
+0.7f
+0.95
 00000000-0000-0000-0000-000000000000
 0x%08X
 0x%08X %s,
@@ -198,6 +201,7 @@ $ORIGIN
 1000000
 10ConCommand
 11CRefCountedI20CRefCountServiceBaseILb1E6CRefMTEE
+11CRenderMesh
 11IVSSequence
 12CThreadEvent
 13CMorphSetData
@@ -221,8 +225,7 @@ $ORIGIN
 19CSchemaRegistration
 1DBlend
 2
-2000
-2019-12-06 11:50:31.259000
+2020-02-17 15:55:03.452000
 20CPostConnectCallback
 20CRefCountServiceBaseILb1E6CRefMTE
 20CResourceStreamFixed
@@ -233,6 +236,7 @@ $ORIGIN
 23CResourceStreamGrowable
 23IConCommandBaseAccessor
 25IVPhysicsLegacyKeyHandler
+27CModelConfigElement_Command
 27CSchemaUtlVectorManipulatorI10CUtlVectorI10CHitBoxSet10CUtlMemoryIS1_iEES1_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorI10CMorphData10CUtlMemoryIS1_iEES1_E
 27CSchemaUtlVectorManipulatorI10CUtlVectorI10CTransform10CUtlMemoryIS1_iEES1_E
@@ -348,6 +352,7 @@ $ORIGIN
 <font color="red">with</font>-<font color="blue">as</font>:
 <li> - because <font color="red">Query</font> interacts with %u <font color="blue">shape</font>'s layer%s:
 <li> - because shape interacts with %u <font color="red">Query</font>'s layer%s:
+<no deferred ref found>
 <no failure reason set>
 <null>
 <p> BUG IN ANALYSIS. SEND THIS RVD TO SERGIY </p>
@@ -402,12 +407,12 @@ $ORIGIN
 > -FLT_EPSILON
 ?
 ?a`
-?c%d m%d pt%d
 ?unsupported?
 @
 @ %.2f, %.2f, %.2f
 @?
 @@
+@A
 A
 A->B
 AABB_t
@@ -455,6 +460,8 @@ API Calls
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 ATTACHMENT_INFLUENCE_FLAGS_NONE
 AbsolutePoseControl
+Access of unconnected ConVarRef
+Access of unconnected SplitScreenConVarRef
 AcquireMask
 ActiveBodyList
 ActiveContactList
@@ -606,6 +613,8 @@ CAnimBone
 CAnimCycle
 CAnimDataChannelDesc
 CAnimKeyData
+CAnimMotorList
+CAnimMovementManager
 CAnimRetargetChainData
 CAnimRetargetData
 CAnimRetargetElementData
@@ -698,6 +707,7 @@ CMemAllocSystemInitialize
 CModelConfig
 CModelConfigElement
 CModelConfigElement_AttachedModel
+CModelConfigElement_Command
 CModelConfigElement_RandomColor
 CModelConfigElement_RandomPick
 CModelConfigElement_SetBodygroup
@@ -842,6 +852,7 @@ CResourceArray< RnSoftbodySpring_t > RnSoftbodyDescRefl_t::m_SpringsArray
 CResourceArray< RnTriangle_t > RnMeshRefl_t::m_Triangles
 CResourceArray< UtlHashHandle_t > RnWorldRefl_t::m_EndTouchEvents
 CResourceArray< UtlHashHandle_t > RnWorldRefl_t::m_PersistTouchEvents
+CResourceArray< Vector > FeModelRefl_t::m_LocalOffsets
 CResourceArray< Vector > FeMorphLayerRefl_t::m_InitPos
 CResourceArray< Vector > RnHullRefl_t::m_Vertices
 CResourceArray< Vector > RnMeshRefl_t::m_Vertices
@@ -1468,6 +1479,7 @@ GetResourceManifestCount
 GetResourceManifests
 GetStackTraceSymbolReflDesc
 GroupIndex
+HB
 HELPER_BONE
 HMDAvatar
 HammerMapLoader001
@@ -1547,7 +1559,7 @@ IntersectSegmentTriangle
 IntersectSphereHull
 IntersectionDictionaryRefl_t
 Invalid RecordedHitboxState_t
-Invalid blob for RnMesh_t::%s (%d,%d)
+Invalid access of deferred ConVarRef for '%s'
 Invalid collision attr index %u, must be below %d,
 Invalid collision attribute palette entry %u, expected below %d
 Invalid collision group %s
@@ -1597,6 +1609,7 @@ KeepInBounds
 KelagerBend %d
 KelagerBendCount
 KeyValueCache001
+KeyValues3
 KeyValuesSystem
 Keyframed
 Keyframed-Only
@@ -1635,6 +1648,7 @@ LoadPhysicsDebugMaterials
 LoadSurfaceProperties
 Local anchors: {%g,%g,%g}, {%g,%g,%g}
 LocalInertiaInv
+LocalOffsets
 Localize_001
 Locked
 LoggingSystem_IsChannelEnabled
@@ -2028,6 +2042,7 @@ Plat_GetPlatformError
 Plat_GetThreadIndex
 Plat_IsHighDPI
 Plat_IsInDebugSession
+Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_USTime
 Plat_UUIDFromString
@@ -2049,6 +2064,7 @@ PreviewBoneAttachedModel
 PreviewBoneMergedModel
 PreviewPreset
 PreviewPresetList
+Primal
 ProcessUpdaterStatusChanges
 Project
 Projectile
@@ -2507,6 +2523,7 @@ Single-threaded test:
 SkeletonBoneBounds_t
 Skipping %d items of total size %u bytes
 Skipping field %s (name hash 0x%X) size %u, expected %u
+SleepCounter
 SleepTime
 Slider: %.1f
 SlopeTrace
@@ -2582,6 +2599,7 @@ SurfacePropertiesStartup
 Suspicious: there is a joint between these two bodies
 SweepSingleConvex
 SwingLambda
+Sym. Spectrum {%g,%g,%g}
 Syntax Error at offset: %d
 TILT_TWIST
 TOI: Count
@@ -2637,6 +2655,7 @@ Tri %d verts %u,%u,%u
 Triangle Cache: %d (%d)
 TriangleCache
 TriangleMaterials
+Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference flag.
 Trigger <font color="red">Query</font>, common interaction flags
 Trigger <font color="red">Query</font>. Groups with notification, no solid contact
@@ -2660,7 +2679,6 @@ Unable to read resource file %s!
 Unable to write file '%s'
 Unexpected Keyword %s
 Unexpected end of file
-Unknown
 Unknown interaction layer: %s
 Unnamed[%d]
 Unrecognized flag name '%s'
@@ -2917,6 +2935,7 @@ Warning:  %s = '%s' is infinite, clamping value.
 Weld Joint: %s -> %s
 WorkshopSetup001
 World @%p has %d bodies, %d softbodies, %d joints, %d null joints, %d solver contacts, %d report contacts, %d entity pairs
+World @%p has %d softbodies:
 World Frame %d: at Origin: %d bodies, %d shapes
 World context should be set for any code path that wants to create debug shapes, otherwise debug rendering won't work
 WorldCollisionNodeCount
@@ -3012,6 +3031,7 @@ anim_name
 anim_name_a
 anim_name_b
 animgraph0
+animgraph1
 archive
 attach_point
 attachment_offset
@@ -3039,14 +3059,17 @@ bFrozenInLocalSpace
 bGoalAttractionSimplified
 bIsContinuousEnabled
 bIsLimitEnabled
+bIsMassCenterOverridden
 bIsSpeculativeEnabled
 bIsSwingLimitEnabled
 bIsTwistLimitEnabled
 bNew
 bOwnHull
 bOwnMesh
+bParallelIslands
 bParallelSolver
 bSimTransformsOutdated
+bSleepEnabled
 bStartInSolid
 bUpdate
 baselayer
@@ -3062,6 +3085,7 @@ bit %d
 bit field
 bit from PhysicsJointStateFlagsEnum_t
 blendamount
+blendindices
 blendweight
 blendweights
 blockLOS
@@ -3082,6 +3106,7 @@ bool RnBodyRefl_t::m_bDragEnabled
 bool RnBodyRefl_t::m_bEnabled
 bool RnBodyRefl_t::m_bGravityDisabled
 bool RnBodyRefl_t::m_bIsContinuousEnabled
+bool RnBodyRefl_t::m_bIsMassCenterOverridden
 bool RnBodyRefl_t::m_bIsSpeculativeEnabled
 bool RnBodyRefl_t::m_bSleeping
 bool RnConicalJointRefl_t::m_bIsSwingLimitEnabled
@@ -3104,6 +3129,8 @@ bool RnSoftbodyRefl_t::m_bFrozenInLocalSpace
 bool RnSoftbodyRefl_t::m_bGoalAttractionSimplified
 bool RnSoftbodyRefl_t::m_bGravityDisabled
 bool RnSoftbodyRefl_t::m_bSimTransformsOutdated
+bool RnSoftbodyRefl_t::m_bSleepEnabled
+bool RnWorldRefl_t::m_bParallelIslands
 bool RnWorldRefl_t::m_bParallelSolver
 bool RnWorldRefl_t::m_bSleeping
 both sides of collision in the same hierarchy must have self-collision and solid contacts enabled.Intersection disabled.
@@ -3205,6 +3232,7 @@ debugName
 debugphysics
 debugphysiscs
 default
+det = %g
 dissolving
 dme_position_map
 dmg.bullets
@@ -3502,6 +3530,7 @@ int RnDynamicTreeRefl_t::m_nProxyCount
 int RnSoftbodyRefl_t::m_nDebugSelection
 int RnSoftbodyRefl_t::m_nDebugSerial
 int RnSoftbodyRefl_t::m_nIndexInWorld
+int RnSoftbodyRefl_t::m_nSleepCounter
 int RnWorldRefl_t::m_nDelayedDeleteBodiesReady
 int RnWorldRefl_t::m_nDelayedDeleteContactsReady
 int RnWorldRefl_t::m_nDelayedDeleteJointsReady
@@ -3570,6 +3599,7 @@ looping
 lowprecisionuv
 lowprecisionuv1
 m_AnimStrayRadii
+m_Args
 m_AttachmentName
 m_AttachmentType
 m_AxialEdges
@@ -3588,6 +3618,7 @@ m_CollisionPlanes
 m_CollisionSpheres
 m_Color
 m_ColorScale
+m_Command
 m_ConeAxis
 m_ConeCutoff
 m_Configs
@@ -3666,6 +3697,7 @@ m_Materials
 m_Mesh
 m_MorphLayers
 m_MorphSetData
+m_MotorList
 m_Name
 m_NestedElements
 m_NodeBases
@@ -3725,6 +3757,7 @@ m_attachments
 m_audioParams
 m_audioSounds
 m_axes
+m_bAcceptParentMaterialDrivenDecals
 m_bAdditive
 m_bApplyMinForce
 m_bCacheAttempted
@@ -4261,6 +4294,7 @@ m_pLegacyStretchForce
 m_pLocalForce
 m_pLocalRotation
 m_pModelConfigList
+m_pMovementManager
 m_pName
 m_pNodeBases
 m_pNodeIntegrator
@@ -4487,6 +4521,7 @@ memmove
 memset
 merged planes
 mesh.cpp
+meshUtilsKeyValues
 mesh_calculate_curvature_smooth_invert
 mesh_calculate_curvature_smooth_pass_count
 mesh_calculate_curvature_smooth_weight
@@ -4634,6 +4669,7 @@ posxyz
 preMerge face 0
 preMerge face 1
 preferred_carryangles
+profileconcomm.cpp
 prop_data
 props
 proxies
@@ -4907,7 +4943,6 @@ use_additional_offset
 user
 utlstring.cpp
 utlsymbol.cpp
-v %f %f %f
 v %f %f %f#%d ComponentIndex %d, queue %d, angle %.1f; ring:
 v %g %g %g
 v %g %g %g%s
@@ -5043,6 +5078,7 @@ zD
 zero
 {
 {%.3f,%.3f,%.3f}
+{%.3f,%.3f,%.3f} v=%.3f
 {%.3f,%.3f,%.3f}, {%.3f,%.3f,%.3f}
 {%d,%d,%d}
 {}()'

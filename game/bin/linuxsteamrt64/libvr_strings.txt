@@ -34,6 +34,7 @@
 #[
 #f %d %d %d, original mesh: %d %d %d
 $ORIGIN
+$tI
 %%%s
 %-120s
 %-120s - %s
@@ -45,7 +46,6 @@ $ORIGIN
 %.2f MP / sec
 %.2f mm
 %.2f%%
-%.2f%s
 %.3f
 %.4f
 %01d
@@ -140,7 +140,6 @@ $ORIGIN
 -nohmd
 -nohmd      Renders through the VR code paths without using the HMD's tracking or display
 -nomultiview
--norefcheckaccess
 -scale
 -scale [x]  Available with either -vrdebug or -nohmd. Will scale window by float amount (0.5 is half width & height)
 -sse2
@@ -247,6 +246,7 @@ $ORIGIN
 25CVrPerfHUDDebugVisualizer
 25CVrReconstructionRenderer
 25CVrSubviewStencilRenderer
+26CEndRenderingSceneCallback
 28CBeginRenderingSceneCallback
 28CVRSetOverlayTextureCallback
 28CVRSetSkyboxOverrideCallback
@@ -257,6 +257,8 @@ $ORIGIN
 3.0
 30CPresentRenderTrackingCallback
 32CDisableNonBlockingInputCallback
+33CSignalFrameDiscontinuityCallback
+34CUpdateHmdDataFromHardwareCallback
 3C
 3CVr
 3IVr
@@ -279,6 +281,7 @@ $ORIGIN
 <INVALID_RBF_TYPE>
 <NO EXPRESSION>
 <deferred>
+<no deferred ref found>
 <no failure reason set>
 <null>
 <unconnected>
@@ -340,6 +343,8 @@ ATI_DST24
 ATTACHMENT_INFLUENCE_FLAGS_NONE
 AbsolutePoseControl
 AbsoluteTrackingToTracking
+Access of unconnected ConVarRef
+Access of unconnected SplitScreenConVarRef
 Acquired overlay %s has unsupported API type: %d
 Acquired overlay %s texture failed to be shared.
 Acquired overlay %s texture isn't available. (yet)
@@ -432,6 +437,8 @@ CAimConstraint
 CAnimBone
 CAnimDataChannelDesc
 CAnimKeyData
+CAnimMotorList
+CAnimMovementManager
 CAnimRetargetChainData
 CAnimRetargetData
 CAnimRetargetElementData
@@ -486,6 +493,7 @@ CMemAllocSystemInitialize
 CMesh Cannot create packed input layout, because the bone indices are out of range (0x%X)
 CModelConfig
 CModelConfigElement
+CModelConfigElement_Command
 CModelConfigElement_UserPick
 CModelConfigList
 CMorphConstraint
@@ -519,7 +527,7 @@ CThreadRWLock::WaitForRead()
 CThreadRWLock_FastRead::CThreadRWLock_FastRead()
 CThreadRWLock_FastRead::HandleFirstWriteLockTransition()
 CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
-CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int)
+CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int, char const*, int)
 CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::~CThreadSemaphore()
 CThreadSpinRWLock::LockForRead(char const*, int)
@@ -674,6 +682,7 @@ Controller at tracked device slot: %d %s
 Controller event vr::VREvent_%s, name = %-10s
 ConvertFloatToChannel: Trying to convert to a a float to a destation of byte size %d
 ConvertFloatToChannel: Trying to convert to a a normalized float to a destation of byte size %d
+ConvertGammaToLinear
 Converting display frequency from %f to %d / %d
 CopyAttrFrom
 Couldn't write Frame Timing data.
@@ -706,6 +715,7 @@ Display VR Perf HUD in HMD
 Display fidelity visualizer in VR Perf HUD (vr_perf_hud must be 1)
 Dominate(
 DotaCardGameClient_001
+Double-save to Member '%s'
 Driver high = 0x%x, low = 0x%x
 Dump the left-hand controller render data to an OBJ + TGA files
 DynamicConfigList
@@ -874,15 +884,15 @@ IKRigSimple
 IQuickTime001
 IVRApplications_007
 IVRChaperone_003
+IVRCompositor::%s() failed with error '%s'
 IVRCompositor::Submit() failed with error '%s'
-IVRCompositor_024
-IVRCompositor_025
+IVRCompositor_026
 IVRControlPanel::RegisterExternalWebRoot() failed with error '%s'
 IVRInputInternal_002
-IVRInput_007
+IVRInput_008
 IVRMailbox_001
 IVROverlayView_002
-IVROverlay_022
+IVROverlay_023
 IVRRenderModels_006
 IVRSystem_021
 IXrProto_001
@@ -907,6 +917,7 @@ Intentionally vague touch behavior for %p
 Internal inconsistency between the layout format and attribute is detected.Try changing the number of bones per vertex or the skin weighting, and send Sergiy a repro mesh with this error description.
 Invalid EXR header.
 Invalid `part number' in EXR header chunks.
+Invalid access of deferred ConVarRef for '%s'
 Invalid argument for DecodeEXRImage().
 Invalid argument for LoadDeepEXR
 Invalid argument for LoadEXR()
@@ -1011,6 +1022,7 @@ MaterialResourceData_t
 MaterialUtils_001
 MathLib_Init
 Measured GPU Speed:
+Median client cpu usage=%fms
 MemAlloc_AllocFunc
 MemAlloc_FreeFunc
 Mesh contains %d blend weights per vertex;  truncating to %d
@@ -1150,6 +1162,7 @@ Plat_IsHighDPI
 Plat_IsInDebugSession
 Plat_MessageBox
 Plat_RelativeTicks
+Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_TickDiffSec
 Plat_UUIDFromString
@@ -1304,6 +1317,8 @@ SteamVR initialized!
 SteamVR runtime is out of date!
 Stencil mask reduces rendering area by:
 Stereo FOV (H/V):
+Submit
+SubmitEye
 Submitting first frame to the compositor
 Subview Mode =
 Subview stencil mesh reduces rendering area by
@@ -1324,6 +1339,9 @@ ThreadGetCurrentId
 ThreadGetCurrentProcessId
 ThreadMultiWait
 ThreadSleep
+Throttling due to cpu usage: disabled
+Throttling due to cpu usage: off (median=%fms)
+Throttling due to cpu usage: on (median=%fms)
 ToolFramework2_002
 ToolGameSimulationDispatcher_001
 ToolGameSimulationSystem_001
@@ -1408,11 +1426,11 @@ VR - Error! SteamVR failed initialization with error code %s: "%s"!
 VR - GPU( %5.2f )
 VR - IdentifyApplicaton steam.app.450390 AFTER VR Init
 VR - IdentifyApplicaton steam.app.450390 BEFORE VR Init
-VR - IdleGPU( %4.2f ) + GPU( %5.2f ) + WaitVsync( %4.2f ) = Total %6.3f ms
 VR - Warning! IVRInput version %s unavailable.
 VR - Warning! SteamVR failed initialization with error code %s: "%s"!
 VR - Warning! VRChaperone failed initialization with error code %s: "%s"!
 VR - Warning! VrRenderModels failed initialization with error code %s: "%s"!
+VR - vr_test_nonblocking_hmd_input available
 VR GPU Compositor benchmark data not available.
 VR Multiview Instancing enabled.
 VR failure loading render model %s: %d
@@ -1642,7 +1660,6 @@ __tls_get_addr
 _edata
 _end
 _fini
-_modelbuilder_phys_%i.vphys
 _root_keyname
 _setjmp
 _test_conversion_counter
@@ -1667,6 +1684,7 @@ anim_name
 anim_name_a
 anim_name_b
 animgraph0
+animgraph1
 archive
 atan2
 attach_point
@@ -1805,6 +1823,7 @@ floor
 floorf
 fopen64
 force
+formats.cpp
 fprintf
 fputc
 frame
@@ -1906,6 +1925,7 @@ loop_in_action
 looping
 lowprecisionuv
 lowprecisionuv1
+m_Args
 m_AttachmentName
 m_AttachmentType
 m_Bone
@@ -1914,6 +1934,7 @@ m_Children
 m_Choices
 m_Color
 m_ColorScale
+m_Command
 m_ConeAxis
 m_ConeCutoff
 m_ConfigName
@@ -1945,6 +1966,7 @@ m_JointName
 m_Joints
 m_LiteralColor
 m_MaterialGroupName
+m_MotorList
 m_Name
 m_NestedElements
 m_Operators
@@ -2174,7 +2196,6 @@ m_nStartInstance
 m_nTargetAxis
 m_nType
 m_nUpType
-m_nValue
 m_nVectorComponent
 m_nVertexCount
 m_outerKnuckle1
@@ -2185,6 +2206,7 @@ m_outputWeightList
 m_pBody
 m_pD3DSemanticName
 m_pJointConstraintData
+m_pMovementManager
 m_pName
 m_pParent
 m_pSemantic
@@ -2367,7 +2389,6 @@ origin_relative
 osvr
 out of memory
 overlay
-pA
 parameter error
 parent of jiggle bone %u: %s
 particles/
@@ -2376,7 +2397,6 @@ pass %u
 pbucket->plinkLast->GetNext() == nullptr
 perftest_multigpu
 pervertexlighting
-phil_test
 phys_res
 physaggregatedata.cpp
 physgun_interactions
@@ -2658,19 +2678,19 @@ vpcf7
 vpcf8
 vpcf9
 vr.cpp
-vr.cpp(4493): ERROR! Unknown controller axis type %d!
-vr.cpp(5967): VR - Destroying old VB for Stenciling!
-vr.cpp(6012): VR - Error! VB handle is invalid in CVrStencilRenderer!
-vr.cpp(6156): VR - Destroying old VB for SubviewStenciling!
-vr.cpp(6498): VR - Error! VB handle is invalid in CVrSubviewStencilRenderer!
-vr.cpp(6679): VR - Destroying old IB for warping!
-vr.cpp(6757): VR - Error! VB handle is invalid in CVrWarpRenderer!
-vr.cpp(6766): VR - Error! IB handle is invalid in CVrWarpRenderer!
-vr.cpp(6916): VR - Destroying old VB for reconstruction eye %d!
-vr.cpp(6923): VR - Destroying old IB for reconstruction eye %d!
-vr.cpp(6944): VR - Destroying old IB for reconstruction!
-vr.cpp(7084): VR - Error! VB handle is invalid in CVrReconstructionRenderer!
-vr.cpp(7093): VR - Error! IB handle is invalid in CVrReconstructionRenderer!
+vr.cpp(4481): ERROR! Unknown controller axis type %d!
+vr.cpp(6219): VR - Destroying old VB for Stenciling!
+vr.cpp(6264): VR - Error! VB handle is invalid in CVrStencilRenderer!
+vr.cpp(6408): VR - Destroying old VB for SubviewStenciling!
+vr.cpp(6750): VR - Error! VB handle is invalid in CVrSubviewStencilRenderer!
+vr.cpp(6931): VR - Destroying old IB for warping!
+vr.cpp(7009): VR - Error! VB handle is invalid in CVrWarpRenderer!
+vr.cpp(7018): VR - Error! IB handle is invalid in CVrWarpRenderer!
+vr.cpp(7168): VR - Destroying old VB for reconstruction eye %d!
+vr.cpp(7175): VR - Destroying old IB for reconstruction eye %d!
+vr.cpp(7196): VR - Destroying old IB for reconstruction!
+vr.cpp(7336): VR - Error! VB handle is invalid in CVrReconstructionRenderer!
+vr.cpp(7345): VR - Error! IB handle is invalid in CVrReconstructionRenderer!
 vr_author_refpt vrfly_refpt_pos vrfly_refpt_ang anchor models/dev/gordon_at_desk.vmdl
 vr_black_level_clamp
 vr_carry_type
@@ -2709,8 +2729,8 @@ vr_ghost_decrement
 vr_ghost_increment
 vr_ghost_next
 vr_ghost_previous
+vr_gpu_flush_timer
 vr_info
-vr_interleaved_reprojection
 vr_loading_card_fg_offset_x
 vr_loading_card_fg_offset_y
 vr_loading_card_fg_offset_z
@@ -2726,7 +2746,6 @@ vr_no_transform
 vr_perf_hud
 vr_perf_hud_dist_from_eye
 vr_perf_hud_frame_time
-vr_perf_hud_gpu_mem
 vr_perf_hud_size_x
 vr_perf_hud_size_y
 vr_perf_test_capture
@@ -2743,6 +2762,7 @@ vr_print_controllers
 vr_render_target_scale
 vr_render_target_scale =
 vr_reprojection_cpu_auto
+vr_reprojection_cpu_auto_spew
 vr_save_render_model
 vr_shadows_debug
 vr_spew_fidelity_data

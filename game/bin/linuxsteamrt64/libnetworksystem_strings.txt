@@ -107,6 +107,7 @@ $0}
 $ORIGIN
 $tI
 %
+% 3d % 8d [%8.3f %%]
 %%%d.%ds
 %%s
 %-10s % 5d % 5d % 5d: %-20s: 0x%p encoding field %s %s%s: %s
@@ -120,6 +121,7 @@ $tI
 %.*g
 %.15lf
 %.1f
+%.3f %% of entities have non-zero metadata entries
 %02X
 %12.12s %21.21s[%d]
 %12.12s:  @ %.3f [%s]
@@ -139,12 +141,13 @@ $tI
 %d != %d
 %d %s %u,
 %d (%d peak) fields allocated in mempool
-%d == %u: %s
 %d bits
+%d of %d empty (%.3f %%)
 %d total.
 %d,'%s','%s',%d
 %d.%d.%d
 %d.%d.%d.%d:%d
+%d:  %s (%s) [ptr 0x%p] %s%s '%s'
 %g
 %g,
 %hu
@@ -231,6 +234,8 @@ $tI
 %s: %s exists only in %s
 %s: SendMessage reliable failed with k_EResultLimitExceeded, crashing connection.
 %s: SendMessage unreliable failed with k_EResultLimitExceeded, crashing connection.
+%s: rebasing delegate [ 0x%p -> 0x%p ]
+%s: shrinking removes delegate [0x%p]
 %s: string format requested %d chars
 %s:%d
 %s:%d reliable sequence
@@ -262,6 +267,7 @@ $tI
 %s| Virtual: %s; Abstract: %s; TrivialConstr: %s; TrivialDestr: %s
 %u
 %u serializers with %u fields (approx memory %llu / %llu in fields ) bytes (field size %d, serializer size %d)
+%x (int:%d, float:%f)
 &
 '
 '%s'
@@ -337,7 +343,6 @@ $tI
 -networkvar_validate
 -nodns
 -noip
--norefcheckaccess
 -perfectworld
 -sse2
 -sse3
@@ -610,9 +615,11 @@ $tI
 <%d>
 <>
 <deferred>
+<no deferred ref found>
 <no failure reason set>
 <null>
 <unconnected>
+<unknown>
 =
 = { <proto text format> }". To set fields within it, use syntax like "
 =%s
@@ -620,6 +627,7 @@ $tI
 >
 ?
 ???
+?color
 @
 @?
 @@min
@@ -668,6 +676,8 @@ ANIMATION_TYPE_FIXED_RATE
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 AbsolutePoseControl
 Accepting Steam Net connection %s
+Access of unconnected ConVarRef
+Access of unconnected SplitScreenConVarRef
 Activates/deactivates net message validation
 Actual    :
 Actual   :
@@ -682,6 +692,7 @@ AddInt32
 AddInt64
 AddMessage
 AddMultipleToTail
+AddOrUpdateFieldMetadata:  adding/updating %s with invalid array count %d!
 AddString
 AddToTail
 AddToTailGetPtr
@@ -772,6 +783,8 @@ C* google::protobuf::internal::scoped_ptr<C>::operator->() const [with C = googl
 C->D
 C->E
 CANCELLED
+CAnimMotorList
+CAnimMovementManager
 CAuthPhysBody
 CAuthPhysJoint
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
@@ -786,8 +799,6 @@ CDeltaCalculator::FieldCalcDelta fromBits
 CDeltaCalculator::FieldCalcDelta toBits
 CEntityIndex
 CEntitySystem::BuildEntityNetworking (%s build of %s) took %.3f msecs for %d out of %d classes
-CFieldMetadataPacker:  list not sorted
-CFieldMetadataPacker::AddOrUpdateFieldMetadata:  adding/updating %s with invalid array count %d!
 CFieldPath tracing ended
 CFieldPath tracing started
 CFlattenedSerializer::ApplyOverrides_R
@@ -1077,11 +1088,13 @@ CNetworkSerializer: Unable to find network encoder named %s!
 CNetworkSerializer::Init:  Couldn't find field %s in iterator for %s
 CNetworkSystem::BufferToBufferDecompress with improperly sized dest buffer (%u in, %llu needed)
 CNetworkSystem::BufferToBufferDecompress with improperly sized dest buffer (%u in, %u needed)
+CNetworkSystem::CloseAllSockets()
 CNetworkSystem::FlushPeerToPeerChannels
 CNetworkSystem::Init() m_SteamAPIContextClient.Init ( ) failed (no Steam?)
 CNetworkSystem::InitGameServer: CSteamGameServerAPIContext::Init Failed
 CNetworkSystem::InitGameServer: CSteamGameServerAPIContext::Init OK
 CNetworkSystem::SendToNsAddress ISteamNetworkingSockets::SendMessageToConnection %s returned %d when sending %d bytes
+CNetworkSystem::Shutdown()
 CNetworkSystem::ShutdownGameServer
 CNetworkedQuantizedFloat
 COLLISION_MODE_INITIAL_TRACE_DOWN
@@ -1117,7 +1130,7 @@ CThreadRWLock::WaitForRead()
 CThreadRWLock_FastRead::CThreadRWLock_FastRead()
 CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
 CThreadRWLock_FastRead::UnlockRead_LockForWrite()
-CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int)
+CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int, char const*, int)
 CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::~CThreadSemaphore()
 CThreadSpinRWLock::LockForRead(char const*, int)
@@ -1127,6 +1140,8 @@ CThreadSpinRWLock::UnlockWrite(char const*, int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
 CTransform
+CUniformRandomStream::CUniformRandomStream()
+CUniformRandomStream::SetSeed(int)
 CUtlBinaryBlock
 CUtlBuffer::VaPrintf: String overflowed buffer [%llu]
 CUtlLinkedList overflow! (exhausted index range)
@@ -1594,6 +1609,7 @@ InstallSchemaBindings
 Integer out of range (
 Intentionally vague touch behavior for %p
 Interpreting non ascii codepoint %d.
+Invalid access of deferred ConVarRef for '%s'
 Invalid control characters encountered in text.
 Invalid data for member '%s'
 Invalid data.
@@ -2002,6 +2018,7 @@ Plat_IsInDebugSession
 Plat_IsInTestMode
 Plat_MSTime
 Plat_RelativeTicks
+Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_TickDiffMilliSecF
 Plat_USTime
@@ -2081,7 +2098,6 @@ Q
 QAngle
 Quaternion
 QueueChange
-QueueDuplicate
 QueuedLoaderVersion001
 RESOURCE_EXHAUSTED
 RadianEuler
@@ -2226,6 +2242,7 @@ Source2Server001
 Source2ServerSerializers002
 Specified different usergroup proxies for %s
 Spew CSerializedEntity memory
+Spew CSerializedEntity metadata information
 Spew QoS interval data as we gather it
 Spew a warning if packet loss percentage is above this threshold
 Spew serializer counts
@@ -2435,6 +2452,7 @@ V_isnan
 V_localeconv
 V_logf
 V_powf
+V_qsort
 V_qsort_s
 V_sincosf
 V_sinf
@@ -2464,7 +2482,6 @@ Validate
 ValidateSerializedEntity:  %s [ent %d] invalid change '%s' for field %s (value '%s') on array that has metadata with only %d array elements!
 ValidateSerializedEntity:  metadata incorrect entry for %s [%d expected %d]
 ValidateSerializedEntity:  missing metadata entry for %s
-Validation Failed
 Value must be "true" or "false" for boolean option "
 Value must be identifier for boolean option "
 Value must be identifier for enum-valued option "
@@ -2481,7 +2498,6 @@ Value out of range for int64 option "
 Value out of range for uint32 option "
 Vector2D
 Vector4D
-VectorAligned
 VisBuilder_001
 W
 WARNING
@@ -2499,6 +2515,7 @@ WriteToBuffer Message %s is not initialized! Probably missing required fields!
 Writing %d bits for path %s of serializer %s entity %d, this will fail to parse
 X
 Y
+Y@
 Z
 [
 [ Net Message Info: %s ]
@@ -2605,6 +2622,7 @@ anim_name
 anim_name_a
 anim_name_b
 animgraph0
+animgraph1
 archive
 args were given.  Full format string was: "
 arguments.
@@ -2621,6 +2639,8 @@ attachment_offset
 attachment_type
 auto_unragdoll_duration
 available
+average metadata list is %f entries
+average non-zero list would be %f entries
 avg_latency_local
 avg_latency_net
 avg_latency_peer
@@ -2702,6 +2722,7 @@ conflicts with an existing oneof type.
 const google::protobuf::UnknownFieldSet& google::protobuf::UnknownField::group() const
 const string& google::protobuf::UnknownField::length_delimited() const
 contains invalid
+context(0x%p)
 control_point
 coord
 coord_integral
@@ -2756,7 +2777,6 @@ f == __null || dynamic_cast<To>(f) != __null
 faceMergeAngle
 failed to construct fake field from metadata %s::%s in %s
 false
-fc=%d, m=%d, sum=%d, bits=%u
 fflush
 field %s had different encoding for %d bits
 field %s had different spans [%d -> %d (%d)] vs. [%d -> %d (%d)]
@@ -2920,6 +2940,7 @@ incoming_data_bytespersecond
 incoming_sequence
 incoming_sequence_start
 index < 10
+index[%d]
 inet_addr
 inf
 infinity
@@ -2991,6 +3012,7 @@ m_JointConstraintPairs
 m_JointName
 m_Joints
 m_LiteralColor
+m_MotorList
 m_Name
 m_Operators
 m_PreEmissionOperators
@@ -3086,6 +3108,7 @@ m_nType
 m_nVectorComponent
 m_pBody
 m_pJointConstraintData
+m_pMovementManager
 m_pParent
 m_pszSnapshotName
 m_snapshotName
@@ -3181,6 +3204,7 @@ net_qosinterval_spew
 net_qospacketloss_percentage_threshold
 net_restrict_showmsg_socket
 net_serializedentitymemory
+net_serializedentitymetadatainfo
 net_showdrop
 net_showfragments
 net_showmsg
@@ -3212,6 +3236,7 @@ no
 no CSerializedEntity memory being used
 no cull rules
 no fastpath
+no metadata!
 non-parallel
 none
 normal
@@ -3521,6 +3546,7 @@ utlsymbol.cpp
 utlvector count
 value
 valve
+valveextensions.proto
 vanmgrph
 vector::_M_fill_insert
 vector::_M_insert_aux
