@@ -31,7 +31,6 @@ $ORIGIN
 %s / %s
 %s#%d
 %s%d
-%s%s
 %s+--
 %s+-- Schema Class: %s
 %s: %s
@@ -59,6 +58,7 @@ $ORIGIN
 -->
 -1
 -avx
+-enable_2gb_morphs
 -inf
 -sse2
 -sse3
@@ -70,12 +70,12 @@ $ORIGIN
 ../public/tier1/utlblockmemory.h
 ../public/tier1/utllinkedlist.h
 ../public/tier1/utlrbtree.h
-../public/tier1/utlsymbol.h
 ../public/tier1/utltshash.h
 ../public/tier2/fileutils.h
 0.0
 0.1
 00000000-0000-0000-0000-000000000000
+0123456789abcdef
 0x%08X %s,
 1 1 1
 1.0
@@ -97,6 +97,7 @@ $ORIGIN
 13CMeshInstance
 13CMeshRayTrace
 13CMorphSetData
+13CNoRefFunctor
 13IBaseSequence
 13IMeshRayTrace
 14CAimConstraint
@@ -118,7 +119,6 @@ $ORIGIN
 15CTier3AppSystemI10IMeshUtilsLi0EE
 15CTier3AppSystemI11IMeshSystemLi0EE
 16CDefaultAccessor
-16CModelMemoryPool
 16CMorphConstraint
 16CPointConstraint
 16CTwistConstraint
@@ -132,7 +132,6 @@ $ORIGIN
 18CMorphSetManagerV0
 18CPlaceholderConVar
 18CRenderMeshManager
-19CBoneConstraintBase
 19CModelConfigElement
 19CSchemaRegistration
 1DBlend
@@ -146,8 +145,10 @@ $ORIGIN
 21CUtlMultiJobProcessor
 22CSchemaInstallCallback
 22IToolsResourceListener
+23CKV3ResourceBlockHelper
 23IConCommandBaseAccessor
 24CSceneSkeletonObjectDesc
+25IAsyncProcessedDataResult
 25IVPhysicsLegacyKeyHandler
 27CModelConfigElement_Command
 27CSchemaUtlVectorManipulatorI10CUtlVectorI10CHitBoxSet10CUtlMemoryIS1_iEES1_E
@@ -238,7 +239,6 @@ $ORIGIN
 6CModel
 6ConVar
 7IConVar
-8CFmtStrNILi256ELb0EE
 8CFunctor
 9ISequence
 <
@@ -306,10 +306,9 @@ Access of unconnected SplitScreenConVarRef
 Activity %s has %d sequences with a total weight of %d!
 AllocateAndLoad failed for '%s'
 AllocateAndLoad failed for '%s' (%s)
-AllocateResource
-AllocateResource: Cannot find DATA block in resource %s!
-AllocateResource: Cannot find VBIB block in resource %s!
 AllocateResource: Error creating data for %s!
+AllocateResource: Error loading async data for %s
+AllocateResourceFromAsyncResult
 Angle;
 AnimAddLayer
 AnimAlign
@@ -354,13 +353,15 @@ AssetBrowserSystem_001
 AssetPreviewSystem_001
 AssetSystem001
 AssetSystemTest001
+AsyncProcessData: Cannot find data/vbib block in resource!
 Attempting to get the Skeletal Input settings from model %s, which doesn't have any.  Please add a Skeletal Input Settings node to the model in ModelDoc
 Attempting to get the movement settings from model %s, for which movement settings have not been set.  Please add a MovementSettings node to the model in ModelDoc
 B->C
 Bad KV3 data for '%s': %s
-Bad KV3 data for resource '%s': %s
+Bad KV3 data for resource: %s
 Bad KV3 data in control block for '%s': %s
-Bad KV3 mesh data for mesh '%s': %s
+Bad KV3 mesh data for mesh ('%s': %d): %s
+Bad KV3 mesh data for mesh: %s
 Bad VBIB block index for mesh (%s: %d)
 Bad VBIB block type for mesh (%s: %d)
 Bad block type for embedded animation data
@@ -388,7 +389,7 @@ Bad header: unrecognized encoding id
 Bad keyname
 Bad morph block index for mesh (%s: %d)
 Bad morph block type for mesh (%s: %d)
-Bad morph data for mesh (%s: %d)
+Bad morph data for mesh (%s)
 Bad sequence in GetSequenceActivityName() for model '%s'!
 Bad value
 BakedLODBuilderMgr001
@@ -422,6 +423,7 @@ CAnimRetargetData
 CAnimRetargetElementData
 CAnimUser
 CAnimationGroup
+CAssociateResourceBlockLoader::BlockingLoadResourceFileData: Trying to load an illegal resource name %s!
 CAttachment
 CAuthPhysBody
 CAuthPhysJoint
@@ -438,9 +440,11 @@ CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::ComposeFileName(char const*, char const*, char)
 CBufferString::Concat(char const*, char const*, ...)
 CBufferString::ExtendPath(char const*, char)
-CBufferString::ExtractFilePath(char const*)
+CBufferString::ExtractFileBase(char const*)
+CBufferString::ExtractFileExtension(char const*)
+CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::FixSlashes(char)
-CBufferString::FixupPathName()
+CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
@@ -450,13 +454,17 @@ CBufferString::Relinquish(CBufferString::EAllocationOption_t)
 CBufferString::RemoveAt(int, int)
 CBufferString::RemoveDotSlashes(char)
 CBufferString::RemoveFirstDir(CBufferString*)
+CBufferString::Replace(char const*, char const*, bool)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
-CBufferString::ShortenPath()
+CBufferString::ShortenPath(bool)
+CBufferString::StartsWith(char const*)
+CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::Swap(CBufferString&)
 CBufferString::ToLowerFast(int)
+CBufferString::TruncateAt(char const*, bool)
 CColorGradient
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
@@ -500,7 +508,7 @@ CModelConfigElement_SetMaterialGroup
 CModelConfigElement_SetRenderColor
 CModelConfigElement_UserPick
 CModelConfigList
-CModelTypeManager::NotifyManifestResourceFinished
+CModelTypeManager::FinalizeResource
 CMorphBundleData
 CMorphConstraint
 CMorphData
@@ -523,9 +531,7 @@ CPointConstraint
 CRenderBufferBinding
 CRenderMesh
 CRenderSkeleton
-CResourceArray
 CSceneObjectData
-CSisterResourceBlockLoader::BlockingLoadResourceFileData: Trying to load an illegal resource name %s!
 CStrongHandle
 CTSQueue corruption
 CThreadEvent::CThreadEvent(bool)
@@ -675,7 +681,7 @@ ConVarRef %s doesn't point to an existing ConVar
 ConfigAttachedModel
 ConfigurationSystem_001
 ConnectInterfaces
-Control block error for '%s': %s
+Control block error for '%s'
 ConvertFloatToChannel: Trying to convert to a a float to a destation of byte size %d
 ConvertFloatToChannel: Trying to convert to a a normalized float to a destation of byte size %d
 CovMatrix3
@@ -710,7 +716,6 @@ EditorDynamicConfig
 EmptyAnim
 Encountered bad skin weights, summing to %g (1.0 expected) at position %.3f %.3f %.3f
 EngineServiceMgr001
-EnvironmentMapBuilder_001
 EventSystem001
 Expected "="after member '%s'
 Expected '#'
@@ -850,6 +855,7 @@ FeCtrlOffset_t
 FeCtrlOsOffset_t
 FeCtrlSoftOffset_t
 FeEdgeDesc_t
+FeEffectDesc_t
 FeFitInfluence_t
 FeFitMatrix_t
 FeFitWeight_t
@@ -877,6 +883,8 @@ FeTaperedCapsuleRigid_t
 FeTaperedCapsuleStretch_t
 FeTreeChildren_t
 FeTri_t
+FeVertexMapBuild_t
+FeVertexMapDesc_t
 FeWeightedNode_t
 FeWorldCollisionParams_t
 FeetSettings
@@ -1065,12 +1073,12 @@ MemAlloc_AllocFunc
 MemAlloc_FreeFunc
 Mesh contains %d blend weights per vertex;  truncating to %d
 Mesh needs recompiling: '%s' (invalid version: %d)Browse to the corresponding model in asset browser, right click and select Full Recompile.
-MeshDrawPrimitiveFlags_t
 MeshSystem
 MeshSystem001
 MeshSystem::InitPosedProp: Bone mismatch between transforms out (%d) and transforms in skeleton (%d)
 MeshTranslucencyType_t
 Missing file '%s'
+Missing resource blocks for mesh (%s: %d)
 Model %s missing bone and flex counts (%d < %d), init %d
 Model %s: Attempted to attach attachment %s to an unknown bone %s!
 Model conversion: %d conversions in %.3fsec (%.3fms each)
@@ -1111,9 +1119,12 @@ MorphFlexControllerRemapType_t
 MorphLookupType_t
 MorphSetData_t
 MovementSettings
+N17CModelTypeManager23AsyncProcessDataResultsE
+N18CRenderMeshManager22AsyncProcessDataResultE
 N24CFieldPathHuffmanEncoder12InternalNodeE
 N24CFieldPathHuffmanEncoder5INodeE
 N24CFieldPathHuffmanEncoder8LeafNodeE
+N33CBaseIntrospectedToKV3TypeManager18AsyncProcessResultE
 N37CTypesafeIntrospectedToKV3TypeManagerILy1818520950E15PermModelData_tE26IKV3ResourceAllocatorUtilsE
 N37CTypesafeIntrospectedToKV3TypeManagerILy1818520950E15PermModelData_tE28IKV3ResourceDeallocatorUtilsE
 N37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE26IKV3ResourceAllocatorUtilsE
@@ -1143,8 +1154,8 @@ NetworkSystemVersion001
 NewNode
 Newline in string literal
 No Buffer
+No DATA block for resource
 No DATA block for resource '%s'
-No VBIB data for mesh %s!
 No valid format conversion from '%s' to '%s'
 NoPoseControl
 Not safe to 'new' this class due to alignment requirements
@@ -1201,7 +1212,6 @@ PermModelInfo_t::FlagEnum
 PhysFeModelDesc_t
 PhysSoftbodyDesc_t
 Physics interface checksum is 0x%08X, expected 0x%08X. One of the binaries is out of date, please rebuild %s.
-Physics2 Interface Old v0.5
 PhysicsBodyMarkup
 PhysicsBoneMarkup
 PhysicsBuilderMgr001
@@ -1224,6 +1234,7 @@ Plat_GetOSType
 Plat_GetThreadIndex
 Plat_IsHighDPI
 Plat_IsInDebugSession
+Plat_NeedsLowFragmentation
 Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_UUIDFromString
@@ -1345,8 +1356,6 @@ ThreadGetCurrentId
 ThreadMultiWaitObjectSetDestroy
 ThreadSleep
 ToolFramework2_002
-ToolGameSimulationDispatcher_001
-ToolGameSimulationSystem_001
 ToolSceneNodeFactory_001
 ToolScriptManager001
 ToolService_001
@@ -1398,9 +1407,8 @@ VMeshError
 VModelError
 VNewAsyncFileSystem001
 VP4003
-VPhysX Interface ResourceMgr v0.1
 VPhysXAggregateData_t
-VPhysXAggregateData_t::FLAG_IGNORE_SCALE
+VPhysXAggregateData_t::FLAG_IGNORE_SCALE_OBSOLETE_DO_NOT_USE
 VPhysXAggregateData_t::FLAG_IS_POLYSOUP_GEOMETRY
 VPhysXAggregateData_t::FLAG_LEVEL_COLLISION
 VPhysXAggregateData_t::VPhysXFlagEnum_t
@@ -1419,16 +1427,11 @@ VPhysXConstraintParams_t::FLAG0_SHIFT_BREAKABLE_FORCE
 VPhysXConstraintParams_t::FLAG0_SHIFT_BREAKABLE_TORQUE
 VPhysXConstraintParams_t::FLAG0_SHIFT_CONSTRAIN
 VPhysXConstraintParams_t::FLAG0_SHIFT_INTERPENETRATE
-VPhysXDiskMesh2_t
-VPhysXDiskShapeHeader_t
-VPhysXDiskShapeHeader_t::VERSION
-VPhysXDiskShapeHeader_t::VersinEnum_t
 VPhysXJoint_t
 VPhysXJoint_t::Flags_t
 VPhysXJoint_t::JOINT_FLAGS_BODY1_FIXED
 VPhysXJoint_t::JOINT_FLAGS_NONE
 VPhysXRange_t
-VPhysXShapeCompoundHeader2_t
 VPhysics2ShapeDef_t
 VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
@@ -1452,7 +1455,6 @@ V_PrettifyMem
 V_RemoveDotSlashes
 V_SetErrno
 V_StrTrim
-V_StripTrailingSlash
 V_UTF16ToUTF8
 V_UTF32ToUTF8
 V_UTF8CharsToUTF16
@@ -1502,7 +1504,6 @@ V_tier0_strstr
 V_vscprintf
 V_vsnprintf
 V_vsnprintfSize
-V_vsnprintfWarnTrunc
 V_wcstod
 V_wcstoi64
 VaPrintf
@@ -1524,6 +1525,7 @@ WorkshopSetup001
 WorldRendererBuilderMgr001
 WorldRendererMgr001
 Yaw;
+ZN26CParallelProcessorAbstractI18CParallelProcessorIi27CMemberFuncJobItemProcessorIi11CCallQueueTI8CTSQueueIP8CFunctorLb0EEES7_ELi1EEE3RunEvE13CStackFunctor
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy1818520950E15PermModelData_tE15AllocateAndLoadER23CKV3TransferLoadContextPK21ResourceBindingBase_tP29IRD_RegisterResourceDataUtilsE15CAllocatorUtils
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy1818520950E15PermModelData_tE24DeallocateDestroyCleanupEPvP25IResourceDeallocatorUtilsE17CDeallocatorUtils
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE15AllocateAndLoadER23CKV3TransferLoadContextPK21ResourceBindingBase_tP29IRD_RegisterResourceDataUtilsE15CAllocatorUtils
@@ -1533,20 +1535,17 @@ ZN37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE24Deall
 \"
 \"""
 \'
+\\
 \n
+\r
 \t
+\u00
 _@
 _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
-_V_ComposeFileName
-_V_ExtractFileExtension
-_V_ExtractFilePath
-_V_FileBase
-_V_MakeAbsolutePath
 _V_SetExtension
 _V_StringAfterPrefix
-_V_StripExtension
 _V_StripLastDir
 _V_strncat
 _V_strncmp
@@ -1850,6 +1849,7 @@ m_DefaultTargetSettings
 m_DynNodeFriction
 m_DynNodeVertexSet
 m_Edges
+m_Effects
 m_ElementName
 m_Elements
 m_Emitters
@@ -1918,6 +1918,7 @@ m_NodeIntegrator
 m_NodeInvMasses
 m_Nodes
 m_Operators
+m_Params
 m_ParticleBoneHash
 m_ParticleBoneName
 m_Particles
@@ -1964,8 +1965,11 @@ m_Tris
 m_TwistLimit
 m_Type
 m_UserFriendlyName
+m_VertexMapValues
+m_VertexMaps
 m_VertexSetNames
 m_Vertices
+m_Weights
 m_WorldCollisionNodes
 m_WorldCollisionParams
 m_aAngOffset
@@ -1977,8 +1981,6 @@ m_axes
 m_bAcceptParentMaterialDrivenDecals
 m_bAdditive
 m_bApplyMinForce
-m_bCacheAttempted
-m_bCacheOk
 m_bCanBatchWithDynamicShaderConstants
 m_bCastShadows
 m_bClamp
@@ -2057,7 +2059,6 @@ m_cRenderColor
 m_capsules
 m_chain
 m_collisionAttributes
-m_components
 m_constraints
 m_constraints2
 m_controls
@@ -2172,7 +2173,6 @@ m_flMaxForce
 m_flMaxMotionRadius
 m_flMaxPitch
 m_flMaxTorque
-m_flMaxVelocity
 m_flMaxYaw
 m_flMin
 m_flMinAngle
@@ -2206,7 +2206,6 @@ m_flRodVelocitySmoothRate
 m_flRotationOffset
 m_flScalePerParentParticle
 m_flShadowCascadeDistance
-m_flSkinWidth
 m_flSphereRadius
 m_flSplayMaxAngle
 m_flSplayMinAngle
@@ -2322,7 +2321,6 @@ m_nChildren
 m_nChoice
 m_nClusterSizeMax
 m_nClusterSizeMin
-m_nCollisionAttribute
 m_nCollisionAttributeIndex
 m_nCollisionMask
 m_nCollisionMode
@@ -2384,7 +2382,6 @@ m_nQuadCount2
 m_nRandomMode
 m_nRefCounter
 m_nReserved
-m_nReserved2
 m_nReservedUint8
 m_nRetargetStyle
 m_nRopeCount
@@ -2414,7 +2411,6 @@ m_nStartInstance
 m_nStaticNodeFlags
 m_nStaticNodes
 m_nSurfacePropertyIndex
-m_nSurfacepropertyIndices
 m_nTaperedCapsuleRigidIndex
 m_nTargetAxis
 m_nTargetIndex
@@ -2445,7 +2441,6 @@ m_pBody
 m_pD3DSemanticName
 m_pFeModel
 m_pJointConstraintData
-m_pMemPool == nullptr
 m_pModelConfigList
 m_pMovementManager
 m_pName
@@ -2499,7 +2494,6 @@ m_sceneObjects
 m_scrapeRough
 m_scrapeSmooth
 m_shaderName
-m_shape
 m_skeleton
 m_slaves
 m_snapshotName
@@ -2544,7 +2538,6 @@ m_twistLowLimitDamping
 m_twistLowLimitRestitution
 m_twistLowLimitSpring
 m_twistLowLimitValue
-m_types
 m_userArray
 m_vAngularTargetVelocity
 m_vBallOffset
@@ -2556,7 +2549,6 @@ m_vCentroid
 m_vConeApex
 m_vDiag
 m_vEndTrailTintFactor
-m_vEnds
 m_vEyePosition
 m_vForwardLS
 m_vHeelOffset
@@ -2640,7 +2632,6 @@ min_angle
 model.cpp
 model_default_preview_sequence_name
 model_dump_convert_info
-model_imp.cpp
 model_name
 model_old_disk.cpp
 modeldoc0
@@ -2693,6 +2684,7 @@ nDummy
 nEnd
 nListBegin
 nListEnd
+nMapOffset
 nMatrixNode
 nNodeX0
 nNodeX1
@@ -2702,12 +2694,14 @@ nParentNode
 nSide
 nTargetNode
 nTries < 10000000
+nVertexBase
 nVertexNode
 nVirtElem
 nWeight
 nan
 nav_attribute_avoid
 nav_data
+node
 none
 norm
 notconnected
@@ -2845,7 +2839,6 @@ use_additional_offset
 user
 utlbuffer.cpp
 utlstring.cpp
-utlsymbol.cpp
 v %g %g %g
 v %g %g %g%s
 v1x
@@ -2910,6 +2903,5 @@ zero
 {}()':
 |B
 } %llu aggs, %s total data
-~CModel_Imp
 C
 D

@@ -86,8 +86,6 @@
 "MapSize"
 "MutableRawRepeatedField"
 "e" must be followed by exponent.
-"is running without a known mod!Set the VMOD environment variable or run with -game to set the mod name.
-#%d
 #AppFramework_OutOfMemory
 #General_UnableToStartGame
 #It contains connectivity part %d with %d vertices
@@ -124,6 +122,8 @@ $gender
 %-120s
 %-120s - %s
 %.*g
+%.*s
+%.18g
 %.1f
 %02X
 %8.8s: %-5d entries, '%s', ...
@@ -144,14 +144,12 @@ $gender
 %lu
 %p
 %s
-%s (Color)
-%s (Material)
 %s * %s
 %s + %s
 %s - %s
 %s / %s
+%s#%d
 %s%d
-%s%s%s
 %s,
 %s.%u
 %s/
@@ -164,8 +162,6 @@ $gender
 %s:  } IGameSystem::LoopActivateAllSystems done
 %s:  } IGameSystem::LoopDeactivateAllSystems done
 %s: string format requested %d chars
-%s_color
-%s_matgrp
 %s_tempcontent
 %u
 &
@@ -225,6 +221,7 @@ $gender
 -dev
 -devcontent
 -dotatestmodels
+-enable_2gb_morphs
 -fpexcept
 -game
 -inf
@@ -247,8 +244,6 @@ $gender
 ... }
 ...<truncated>...
 ../../common/protobuf_helpers.cpp
-../../public/appframework/tier1app.h
-../../public/appframework/tier2app.h
 ../../public/ordered_constructor.h
 ../../public/tier1/utllinkedlist.h
 ../../public/tier1/utlrbtree.h
@@ -256,7 +251,6 @@ $gender
 ../public/tier1/utlblockmemory.h
 ../public/tier1/utllinkedlist.h
 ../public/tier1/utlrbtree.h
-../public/tier1/utlsymbol.h
 ..\content
 ..\src\shaders\
 ./google/protobuf/arena.h
@@ -322,6 +316,7 @@ $gender
 14CBaseAppSystemI18IPredictionDiffMgrE
 14CBaseAppSystemI19ISaveRestoreDataMgrE
 14CBaseAppSystemI20IGameSystem2HostHookE
+14CBaseAppSystemI25ISinglePlayerSharedMemoryE
 14CEmptySequence
 14CGameAppSystemI10IHostUtilsLi0EE
 14CGameAppSystemI12ISource2HostLi0EE
@@ -329,12 +324,14 @@ $gender
 14CGameAppSystemI18IDebugDrawQueueMgrLi0EE
 14CGameAppSystemI18IPredictionDiffMgrLi0EE
 14CGameAppSystemI20IGameSystem2HostHookLi0EE
+14CGameAppSystemI25ISinglePlayerSharedMemoryLi0EE
 14CGameModelInfo
 14CMsgPlayerInfo
 14ConCommandBase
 14IGameModelInfo
 15CAutoGameSystem
 15CMsg_CVars_CVar
+15CSPSharedMemory
 15CTestGameSystem
 15CTier0AppSystemI10IHostUtilsE
 15CTier0AppSystemI12ISource2HostE
@@ -344,6 +341,7 @@ $gender
 15CTier0AppSystemI18IPredictionDiffMgrE
 15CTier0AppSystemI19ISaveRestoreDataMgrE
 15CTier0AppSystemI20IGameSystem2HostHookE
+15CTier0AppSystemI25ISinglePlayerSharedMemoryE
 15CTier1AppSystemI10IHostUtilsLi0EE
 15CTier1AppSystemI12ISource2HostLi0EE
 15CTier1AppSystemI13IDotaMapUtilsLi0EE
@@ -352,6 +350,7 @@ $gender
 15CTier1AppSystemI18IPredictionDiffMgrLi0EE
 15CTier1AppSystemI19ISaveRestoreDataMgrLi0EE
 15CTier1AppSystemI20IGameSystem2HostHookLi0EE
+15CTier1AppSystemI25ISinglePlayerSharedMemoryLi0EE
 15CTier2AppSystemI10IHostUtilsLi0EE
 15CTier2AppSystemI12ISource2HostLi0EE
 15CTier2AppSystemI13IDotaMapUtilsLi0EE
@@ -360,6 +359,7 @@ $gender
 15CTier2AppSystemI18IPredictionDiffMgrLi0EE
 15CTier2AppSystemI19ISaveRestoreDataMgrLi0EE
 15CTier2AppSystemI20IGameSystem2HostHookLi0EE
+15CTier2AppSystemI25ISinglePlayerSharedMemoryLi0EE
 15CTier3AppSystemI10IHostUtilsLi0EE
 15CTier3AppSystemI12ISource2HostLi0EE
 15CTier3AppSystemI13IDotaMapUtilsLi0EE
@@ -368,7 +368,9 @@ $gender
 15CTier3AppSystemI18IPredictionDiffMgrLi0EE
 15CTier3AppSystemI19ISaveRestoreDataMgrLi0EE
 15CTier3AppSystemI20IGameSystem2HostHookLi0EE
+15CTier3AppSystemI25ISinglePlayerSharedMemoryLi0EE
 15IFootstepSounds
+15ISPSharedMemory
 16CDefaultAccessor
 16CLoopModeFactoryI21CLoopModeGameHostDotaE
 16CSource2HostBase
@@ -394,8 +396,6 @@ $gender
 2
 2.
 20CFootstepSoundsTable
-20CGameModelInfoClient
-20CGameModelInfoServer
 20CGameSystem2HostHook
 20CPostConnectCallback
 20IGameSystem2HostHook
@@ -404,6 +404,7 @@ $gender
 21CSurfacePropDataTableI17footstep_sounds_tE
 22CBaseGameSystemFactory
 22CDontUseThisGameSystem
+22CSPSharedMemoryManager
 22CSVCMsgList_GameEvents
 22CSchemaInstallCallback
 22CSimpleLoggingListener
@@ -416,6 +417,7 @@ $gender
 24CSchemaRegistration_host
 25CNETMsg_SpawnGroup_Unload
 25CSurfacePropDataTableBase
+25ISinglePlayerSharedMemory
 26CDefaultKeyValuesErrorSpew
 26CGameSystemEventDispatcher
 26IGameSystemEventDispatcher
@@ -440,7 +442,6 @@ $gender
 7
 7IConVar
 8
-8CFmtStrNILi256ELb0EE
 8CMsgRGBA
 9
 9ILoopMode
@@ -467,18 +468,18 @@ $gender
 <NO EXPRESSION>
 <NULL>
 <deferred>
+<empty>
 <no deferred ref found>
 <no failure reason set>
 <null>
 <unconnected>
+<unknown>
 =
 = { <proto text format> }". To set fields within it, use syntax like "
 =.=
 >
-?GameSystem2HostHook
 @
 @Aphysaggregatedata.cpp
-@spawn
 A file with this name is already in the pool.
 A protobuf object %s with a repeated field %s was used in a container, this will crash
 A protocol message was rejected because it was too big (more than
@@ -544,11 +545,9 @@ AddFloat
 AddInt32
 AddInt64
 AddMessage
-AddOnInfo
 AddString
 AddUInt32
 AddUInt64
-AddonInfo
 AddonsChangeDefaultWritePath
 AllocInternal
 AllowAddonDependencies
@@ -583,7 +582,6 @@ AnimationList
 AnimationSystemUtils_001
 AnimationSystem_001
 Application "
-Application unable to load gameinfo.gi file from directory "%s"!
 ApplicationInfo
 AssertMsg_ConditionFailed
 AssetBrowserSystem_001
@@ -615,6 +613,8 @@ Bad header format (malformed UUID)
 Bad header format (no closing marker)
 Bad header: invalid compression header
 Bad header: unrecognized encoding id
+Bad keyname
+Bad value
 BakedLODBuilderMgr001
 Base Spring;
 BaseIKRig
@@ -654,6 +654,7 @@ CAnimRetargetData
 CAnimRetargetElementData
 CAnimUser
 CAnimationGroup
+CAssociateResourceBlockLoader::BlockingLoadResourceFileData: Trying to load an illegal resource name %s!
 CAttachment
 CAuthPhysBody
 CAuthPhysJoint
@@ -667,10 +668,14 @@ CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::ComposeFileName(char const*, char const*, char)
 CBufferString::Concat(char const*, char const*, ...)
+CBufferString::DefaultExtension(char const*)
+CBufferString::EnsureCapacity(int, char**, bool, bool)
 CBufferString::ExtendPath(char const*, char)
-CBufferString::ExtractFilePath(char const*)
+CBufferString::ExtractFileBase(char const*)
+CBufferString::ExtractFileExtension(char const*)
+CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::FixSlashes(char)
-CBufferString::FixupPathName()
+CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
@@ -680,10 +685,13 @@ CBufferString::Relinquish(CBufferString::EAllocationOption_t)
 CBufferString::RemoveAt(int, int)
 CBufferString::RemoveDotSlashes(char)
 CBufferString::RemoveFirstDir(CBufferString*)
+CBufferString::Replace(char const*, char const*, bool)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
-CBufferString::ShortenPath()
+CBufferString::ShortenPath(bool)
+CBufferString::StartsWith(char const*)
+CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::Swap(CBufferString&)
 CBufferString::ToLowerFast(int)
@@ -943,11 +951,6 @@ CHitBoxSet
 CHitBoxSetList
 CMaterialDrawDescriptor
 CMemAllocSystemInitialize
-CModelConfig
-CModelConfigElement
-CModelConfigElement_Command
-CModelConfigElement_UserPick
-CModelConfigList
 CMorphConstraint
 COLLISION_MODE_INITIAL_TRACE_DOWN
 COLLISION_MODE_PER_FRAME_PLANESET
@@ -977,7 +980,6 @@ CRenderMesh
 CRenderSkeleton
 CResourceManifestPrerequisite
 CSceneObjectData
-CSisterResourceBlockLoader::BlockingLoadResourceFileData: Trying to load an illegal resource name %s!
 CStrongHandle
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
@@ -986,14 +988,9 @@ CThreadMutex::TryLock(char const*, int)
 CThreadRWLock::LockForWrite(char const*, int)
 CThreadRWLock::UnlockWrite(char const*, int)
 CThreadRWLock::WaitForRead()
-CThreadSpinRWLock::LockForRead(char const*, int)
-CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
-CThreadSpinRWLock::UnlockRead(char const*, int)
-CThreadSpinRWLock::UnlockWrite(char const*, int)
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
-CTier2AppSystemDict::LoadStartupManifestGroup
 CTiltTwistConstraint
 CTransform
 CTwistConstraint
@@ -1143,6 +1140,7 @@ DebugTextureInfo001
 Decompression failure
 Default
 Default value for an enum field must be an identifier.
+Default_Keys
 DegreeEuler
 DepthPassBatchID
 DevMsg
@@ -1163,8 +1161,6 @@ ERROR
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: Specified full path %s does not lie under the mod search path!)
 ERROR: Specified path %s could not be made content-relative
-ERROR: You are trying to mount addon '%s' but SetAllowAddonChanges is false which probably means you shouldn't be calling this directly.
-ERROR: You are trying to unmount addon '%s', but SetAllowAddonChanges is false which probably means you should be using calling this directly.
 EXECUTABLE_PATH
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
@@ -1184,7 +1180,6 @@ Enum value in map must define 0 as the first value.
 EnumOptions
 EnumValueOptions
 Enums must contain at least one value.
-EnvironmentMapBuilder_001
 Error
 Error loading %s: %s
 Error parsing text-format
@@ -1254,7 +1249,11 @@ Expected member name or '}'
 Expected string, got:
 Expected token
 Expected type of next member
+Expected value after =
 Expected value or ']'
+Expected value.
+Expected {
+Expected }
 Explicit default values are not allowed in proto3.
 Extension "
 Extension conflicts with extension already in database: extend
@@ -1280,10 +1279,7 @@ F_ALPHA_TEST
 F_MORPH_SUPPORTED
 F_TRANSLUCENT
 Failed to assign bool literal value
-Failed to convert KV3 to string; error: %s
 Failed to convert introspected block: %s
-Failed to determine base game directory from %s
-Failed to map from %s to content-path
 Failed to open file
 Failed to open file: %s
 False
@@ -1352,8 +1348,7 @@ GLIBC_2.3.4
 GLIBC_2.4
 GNU
 Game System %s is defined twice!
-GameModelInfoClient001
-GameModelInfoServer001
+GameModelInfo001
 GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameStartup
@@ -1361,9 +1356,6 @@ GameUIService_001
 Gaussian
 GenerateResourceNameFromFileName: Invalid extension specified in file name "%s"!
 GenericGameData
-GetAddonsContentDirectory: Failed to find CONTENTADDONS search path.
-GetAddonsDirectory: Failed to find ADDONS search path.
-GetAvailableAddonMaps failed to find any maps in the '%s' addon - trying fallback maps:
 GetBool
 GetCPUInformation
 GetCStringCharConversion
@@ -1373,7 +1365,6 @@ GetFloat
 GetInt32
 GetInt64
 GetMessage
-GetModelMaterialColor:  Available on client only!
 GetRawRepeatedField
 GetRepeatedBool
 GetRepeatedDouble
@@ -1397,6 +1388,7 @@ H
 HBm_influenceFlags
 HELPER_BONE
 HIGHDPI
+HO
 HammerMapLoader001
 HangWatchdog_IndicateActivity
 Has Collision;
@@ -1457,7 +1449,6 @@ Invalid public dependency index.
 Invalid request for mesh %d in model %s with %d entry remapping start table
 Invalid request for mesh %d in model %s with no remapping table
 Invalid request for mesh %d in model %s with no remapping table starts
-Invalid search path specified for 'game_language'. Search path '%s' does not contain '%s'
 Invalid strings::Substitute() format string: "
 Invalid symbol name:
 Invalid value for boolean field "
@@ -1479,7 +1470,6 @@ Key in map fields cannot be float/double, bytes or message types.
 KeyValueCache001
 KeyValues Error: %s in file %s
 KeyValues::ParseIncludedKeys: Couldn't load included keyvalue file %s
-KeyValues::RecursiveSaveToFile: TODO, missing code for TYPE_COLOR.
 KeyValues::SaveToFile: couldn't open file "%s" in path "%s".
 L
 LAYEREDGAMEROOT
@@ -1491,8 +1481,10 @@ Length;
 LightingBasis
 LightmapUV
 LightmapUVW
+Line %d at "%s":
 Line %d at "%s": %s
 Line %d col %d:
+Line %d:
 Line %d: %s
 Line %d: Invalid literal value "%s"
 Line %d: Invalid value "%s"
@@ -1534,7 +1526,6 @@ MNetworkPriority
 MNetworkRemoveAll
 MNetworkSerializer
 MNetworkUserGroup
-MODEL_CONFIG_ATTACHMENT_COUNT
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MapKey::GetBoolValue
@@ -1582,16 +1573,12 @@ MessageSets cannot have fields, only extensions.
 Messages can't have default values!
 Messages can't have default values.
 MethodOptions
-Mismatched CTier2AppSystemDict::SetAllowAddonChanges!!!
 Missing field: FileDescriptorProto.name.
 Missing file '%s'
 Missing name.
 Model %s missing bone and flex counts (%d < %d), init %d
 ModelCompile/UseShadowFastPathHeuristic
-ModelConfigAttachmentType_t
 ModelDocUtils001
-MountAddon: Failed to find ADDONS search path.
-MountAddonSearchPaths: Failed to find CONTENTADDONS search path.
 MovementSettings
 Multiple extension registrations for type "
 MutableMessage
@@ -1802,6 +1789,7 @@ POSIX
 PS3
 PVEC_TYPE_LITERAL
 PVEC_TYPE_LITERAL_COLOR
+PanoramaCoreStartup
 PanoramaTextServices001
 PanoramaUIClient001
 PanoramaUIEngine001
@@ -1810,7 +1798,6 @@ ParseFromString failed
 ParticleSystemMgr003
 PerVertexLighting
 Physics
-Physics2 Interface Old v0.5
 PhysicsBodyMarkup
 PhysicsBoneMarkup
 PhysicsBuilderMgr001
@@ -1853,6 +1840,7 @@ Plat_LoadModule
 Plat_LoadModuleRaw
 Plat_LoadSDL
 Plat_MessageBox
+Plat_NeedsLowFragmentation
 Plat_Printf
 Plat_RelativeTicks
 Plat_SetActiveWindow
@@ -1904,7 +1892,6 @@ RESOURCE_EXHAUSTED
 ROTATION
 RadianEuler
 RandomFloat
-RandomInt
 RandomSeed
 Reached an unintended state: CPPTYPE_MESSAGE
 Reached impossible case in HasBit().
@@ -1990,10 +1977,12 @@ SetRepeatedUInt64
 SetString
 SetUInt32
 SetUInt64
+Shared memory space %s (%i) still has %i references.
 Should not reach here.
 Show diff only.
 Show diff with matching filter substring only.
 Simulated
+SinglePlayerSharedMemory001
 SkeletonBoneBounds_t
 SlopeTrace
 SoundOpSystem001
@@ -2060,8 +2049,6 @@ To google::protobuf::internal::down_cast(From*) [with To = google::protobuf::Mes
 Tokenizer::ParseFloat() passed text that could not have been tokenized as a float:
 Tokenizer::ParseStringAppend() passed text that could not have been tokenized as a string:
 ToolFramework2_002
-ToolGameSimulationDispatcher_001
-ToolGameSimulationSystem_001
 ToolSceneNodeFactory_001
 ToolScriptManager001
 ToolService_001
@@ -2096,7 +2083,6 @@ Unexpected end of file
 Unexpected failure while serializing option submessage
 Unimplemented Map Reflection API.
 Unknown enumeration value of "
-UnmountAddon: Failed to find %s search path.
 Unrecognized flag name '%s'
 Unrecognized resource version (%d): %s
 Unrecognized syntax:
@@ -2130,7 +2116,6 @@ VMatrix
 VMediaFoundation001
 VNewAsyncFileSystem001
 VP4003
-VPhysX Interface ResourceMgr v0.1
 VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
@@ -2157,7 +2142,6 @@ V_RemoveDotSlashes
 V_SetErrno
 V_SplitString(char const*, char const*, CUtlVector<char*, CUtlMemory<char*, int> >&)
 V_StrTrim
-V_StripTrailingSlash
 V_UTF16ToUTF8
 V_UTF32ToUTF8
 V_UTF8CharsToUTF16
@@ -2207,7 +2191,6 @@ V_tier0_strstr
 V_vscprintf
 V_vsnprintf
 V_vsnprintfSize
-V_vsnprintfWarnTrunc
 V_wcstod
 V_wcstoi64
 Value must be "true" or "false" for boolean option "
@@ -2235,7 +2218,6 @@ VisBuilder_001
 W
 WARNING
 WARNING: Trying to create a CRenderContextPtr without a valid context.
-WARNING: You are trying to mount an addon (%s) in tools mode that is different from the addon tools mode was launched with (%s).
 WIN32
 WINDOWS
 WINXP
@@ -2276,16 +2258,12 @@ _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
 _V_ComposeFileName
-_V_DefaultExtension
-_V_ExtractFileExtension
 _V_ExtractFilePath
 _V_FileBase
-_V_FixupPathName
 _V_MakeAbsolutePath
 _V_SetExtension
 _V_StrSubst
 _V_StringAfterPrefix
-_V_StripExtension
 _V_StripLastDir
 _V_strncat
 _V_strncmp
@@ -2326,6 +2304,7 @@ _c
 _edata
 _end
 _fini
+_root_keyname
 _test_conversion_counter
 `
 a protocol
@@ -2361,7 +2340,6 @@ baselayer
 basic_string::_S_construct null not valid
 bentnormal
 bin/linuxsteamrt64
-bin/linuxsteamrt64/libtier0.so
 binary
 binary_auto
 binary_bc
@@ -2370,7 +2348,6 @@ blendamount
 blendweight
 blendweights
 blockLOS
-body_groups
 body_type
 bone_name
 bone_names
@@ -2417,8 +2394,8 @@ cloth_collision_layer3
 cloth_enable
 collision_group
 collision_prop
+color
 composite
-config_state
 configvalue.cpp
 conflicts with an existing enum type.
 conflicts with an existing field.
@@ -2602,6 +2579,7 @@ handindex
 headtype
 health
 health_override
+hero_picker
 host
 hurt_me
 hurt_them
@@ -2663,66 +2641,47 @@ lowprecisionuv1
 lseek
 lseek64
 m
-m_Args
-m_AttachmentName
-m_AttachmentType
 m_Bone
 m_ChainData
 m_Children
-m_Choices
 m_Color
 m_ColorScale
-m_Command
 m_ConeAxis
 m_ConeCutoff
-m_ConfigName
-m_Configs
 m_Constraints
 m_ControlRigData
 m_CullDataIndex
 m_DefaultSolverSettings
 m_DefaultTargetSettings
-m_ElementName
-m_Elements
 m_Emitters
 m_EndEffectorBone
 m_EndEffectorTargetBone
-m_EntityClass
 m_ForceGenerators
-m_Gradient
-m_GroupName
 m_HitBoxSets
 m_HitBoxes
 m_IKChains
 m_IkChain
 m_IkChains
 m_Initializers
-m_InstanceName
 m_JointConstraintData
 m_JointConstraintPairs
 m_JointName
 m_Joints
 m_LiteralColor
 m_LoopState
-m_MaterialGroupName
 m_MotorList
 m_Name
-m_NestedElements
 m_Operators
 m_PreEmissionOperators
 m_Renderers
 m_SolverSettingSource
 m_SolverType
 m_SourceFilename
-m_Stops
 m_TargetSettingSource
 m_TargetSource
-m_aAngOffset
 m_ankleBoneName
 m_attachments
 m_bApplyMinForce
-m_bCacheAttempted
-m_bCacheOk
 m_bCanBatchWithDynamicShaderConstants
 m_bClamp
 m_bDisableChild
@@ -2738,8 +2697,6 @@ m_bHasBakedLightingBasisInVertex
 m_bHasBakedLightingFromLightMap
 m_bHasBakedLightingFromVertexStream
 m_bHasCullingData
-m_bHideMaterialGroupInTools
-m_bHideRenderColorInTools
 m_bIgnoreRotation
 m_bInfluenceRootTransform
 m_bInitFromKilledParentParticles
@@ -2753,6 +2710,7 @@ m_bOffsetExistingPos
 m_bOnlyDrawInFastShadowPath
 m_bParticleFeathering
 m_bRemapPullForceToLife
+m_bRenderOnly
 m_bRunForParentApplyKillList
 m_bScaleCurrent
 m_bScaleInitialRange
@@ -2760,14 +2718,11 @@ m_bScaleInitialValue
 m_bScalePerParticle
 m_bSelected
 m_bThreadsActive
-m_bTopLevel
 m_bTrailBias
 m_bTranslationOnly
 m_bUseCompressedNormalTangent
 m_bUseHighestEndCP
 m_bUseShadowFastPath
-m_bUserSpecifiedColor
-m_bUserSpecifiedMaterialGroup
 m_bVisible
 m_bbox
 m_boneArray
@@ -2827,7 +2782,6 @@ m_flOpStrengthMaxScale
 m_flOpStrengthMinScale
 m_flOutput0
 m_flOutput1
-m_flPosition
 m_flRadius
 m_flRadiusScale
 m_flRadiusTaper
@@ -2855,7 +2809,6 @@ m_flags
 m_floatAttributes
 m_floatParams
 m_hBuffer
-m_hModel
 m_hSnapshot
 m_hingeAxis
 m_hitboxsets
@@ -2893,7 +2846,6 @@ m_nChainIndex
 m_nChainInvIndex
 m_nChainType
 m_nChannelElements
-m_nChoice
 m_nClientOutputFrames
 m_nClusterSizeMax
 m_nClusterSizeMin
@@ -2902,6 +2854,7 @@ m_nControlPoint
 m_nControlPointNumber
 m_nCount
 m_nCurrentTick
+m_nCurrentTickThisFrame
 m_nD3DSemanticIndex
 m_nDummy0
 m_nElement
@@ -3042,6 +2995,7 @@ manifest
 map keys are not unique
 map<$0, $1>
 map_entry should not be set explicitly. Use map<KeyType, ValueType> instead.
+map_options
 mapbuilder.nodraw
 mapbuilder.occluder
 maps
@@ -3050,7 +3004,6 @@ maps/%s.trm
 maps/%s.vhcg
 maps/*.*
 master_morph_weight
-material_group
 materials/error.vmat
 mathlib.cpp
 matrix3x4_t
@@ -3119,6 +3072,7 @@ nav_data
 network_connection.proto
 networkbasetypes.proto
 no
+node
 none
 norm
 not found
@@ -3248,7 +3202,6 @@ spawn_motion_disabled
 speeds
 springConstant
 sprintf
-sqrt
 sqrt( %s )
 sqrtf
 ss_added
@@ -3393,6 +3346,7 @@ texturescale
 the actual field type (for enums T should be the generated enum
 the global scope
 to
+tolower
 true
 turn_rate
 type does not match
@@ -3431,7 +3385,6 @@ useSmoothPaths
 use_additional_offset
 user
 utlstring.cpp
-utlsymbol.cpp
 v %g %g %g
 v %g %g %g%s
 value
@@ -3492,7 +3445,6 @@ vpks
 vpks/
 vr_carry_type
 vsnap
-vstdlib
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__si_class_type_info
 vtable for __cxxabiv1::__vmi_class_type_info
@@ -3526,4 +3478,4 @@ zero
 |
 }
 } %llu aggs, %s total data
-C
+CGameSystem2HostHook

@@ -119,6 +119,7 @@ $tI
 %-120s
 %-120s - %s
 %.*g
+%.*s
 %.15lf
 %.1f
 %.3f %% of entities have non-zero metadata entries
@@ -141,6 +142,7 @@ $tI
 %d != %d
 %d %s %u,
 %d (%d peak) fields allocated in mempool
+%d / %s "%s" thinking for %.02f ms!!!
 %d bits
 %d of %d empty (%.3f %%)
 %d total.
@@ -355,7 +357,6 @@ $tI
 ... }
 ...<truncated>...
 ../common/protobuf_helpers.cpp
-../public/networksystem/inetworkmessages.h
 ../public/networksystem/serializedentity.h
 ../public/ordered_constructor.h
 ../public/tier0/tslist.h
@@ -366,7 +367,7 @@ $tI
 ../public/tier1/utlrbtree.h
 ../public/tier1/utlsignalslot.h
 ../public/tier1/utlsortvector.h
-../public/tier1/utlsymbol.h
+../public/tier1/utlsymboltable.h
 ../public/tier1/utltshash.h
 ./google/protobuf/arena.h
 ./google/protobuf/arenastring.h
@@ -430,6 +431,7 @@ $tI
 13CNetMessagePBILin1E26NetMessageConnectionClosedL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILin1E27NetMessageConnectionCrashedL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILin1E32NetMessageSplitscreenUserChangedL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE
+13CNoRefFunctor
 13CSVCMsg_Print
 14CBaseAppSystemI14INetworkSystemE
 14CBaseAppSystemI19INetworkSystemUtilsE
@@ -560,7 +562,9 @@ $tI
 29CMsgServerNetworkStats_Player
 29NetMessageConnectionCrashed_t
 30CBidirMsg_RebroadcastGameEvent
+30CNetworkFieldChangedEventQueue
 30CSVCMsgList_GameEvents_event_t
+30INetworkFieldChangedEventQueue
 31ProtoFlattenedSerializerField_t
 32CFlattenedSerializerSpewFunc_Log
 32CNETMsg_SpawnGroup_LoadCompleted
@@ -579,6 +583,7 @@ $tI
 3C
 4
 4.0
+43CSVCMsg_PacketEntities_command_queue_info_t
 48CBidirMsg_RelayPacket_SignedDestinationAddress_t
 4C
 5
@@ -588,8 +593,6 @@ $tI
 7
 7IConVar
 8
-8CFmtStrNILi1024ELb0EE
-8CFmtStrNILi256ELb0EE
 8CFunctor
 8CMsgRGBA
 8CNetChan
@@ -788,14 +791,25 @@ CAnimMovementManager
 CAuthPhysBody
 CAuthPhysJoint
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
+CBufferString::ComposeFileName(char const*, char const*, char)
 CBufferString::Concat(char const*, char const*, ...)
+CBufferString::ExtractFileBase(char const*)
+CBufferString::ExtractFileExtension(char const*)
+CBufferString::ExtractFilePath(char const*, bool)
+CBufferString::FixSlashes(char)
 CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
+CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::Purge(int)
 CBufferString::Relinquish(CBufferString::EAllocationOption_t)
 CBufferString::RemoveAt(int, int)
+CBufferString::Replace(char const*, char const*, bool)
+CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
+CBufferString::StartsWith(char const*)
+CBufferString::StripExtension()
+CBufferString::Trim(char const*)
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CDeltaCalculator::FieldCalcDelta fromBits
@@ -1067,6 +1081,7 @@ CHECK failed: z.first != NULL:
 CHandle<
 CMemAllocSystemInitialize
 CMergedEntityOffsetBuilder::Expecting at least one bit in offset
+CMotionTransform
 CNetChan %p "%s" is naively talking to self
 CNetChan::ProcessConnectionIDHeader() Connection ID with system "%s" reset using id %X:%X. Was %X:%X
 CNetChan::ProcessConnectionIDHeader() received connection id header %X %X from "%s"
@@ -1116,10 +1131,12 @@ CPPTYPE_STRING
 CPPTYPE_UINT32
 CPPTYPE_UINT64
 CParticleSystemDefinition
+CPlayerSlot
 CSerializedEntities::CompareSerializedEntities field %d path's differ from '%s' to '%s'
 CSerializedEntities::CompareSerializedEntities from field %s not present in to
 CSerializedEntities::CompareSerializedEntities to field %s not present in from
 CSerializedEntities::CompareSerializedEntities:  to pointer is %s and from pointer is %s
+CSplitScreenSlot
 CStackPair
 CStrongHandle
 CTSQueue corruption
@@ -1130,11 +1147,11 @@ CThreadMultiWaitEvent::Set()
 CThreadRWLock::LockForWrite(char const*, int)
 CThreadRWLock::UnlockWrite(char const*, int)
 CThreadRWLock::WaitForRead()
-CThreadRWLock_FastRead::CThreadRWLock_FastRead()
+CThreadRWLock_FastRead::CThreadRWLock_FastRead(bool)
+CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
 CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
-CThreadRWLock_FastRead::UnlockRead_LockForWrite()
-CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int, char const*, int)
-CThreadSemaphore::Release(int, int*)
+CThreadRWLock_FastRead::UnlockRead_LockForWrite(char const*, int)
+CThreadRWLock_FastRead::UnlockWrite(char const*, int)
 CThreadSemaphore::~CThreadSemaphore()
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
@@ -1370,7 +1387,6 @@ Enum value in map must define 0 as the first value.
 EnumOptions
 EnumValueOptions
 Enums must contain at least one value.
-EnvironmentMapBuilder_001
 Error
 Error buffer for %s written to %s
 Error installing message handlers into a net channel: missing handlers in channel %s!
@@ -1997,7 +2013,6 @@ Path_RemoveAll failed for read only CFieldPath
 Path_SetCount
 Path_SetCount failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
 Peer To Peer
-Physics2 Interface Old v0.5
 PhysicsBodyMarkup
 PhysicsBoneMarkup
 PhysicsBuilderMgr001
@@ -2227,6 +2242,7 @@ SkipPropData_
 Socket '%s' bound to '%s' [%s]:
 Socket '%s' listening for %s on port %d:
 Socket '%s' listening for SDR on port %d virtual port %d
+SoundGuid_t
 SoundOpSystem001
 SoundOpSystemEdit001
 SoundService_001
@@ -2295,7 +2311,7 @@ SteamNetworkingSockets_Lib
 SteamNetworkingUtils003
 SteamNetworkingUtils_Lib
 SteamNetworkongSockets not yet initialized.  Queuing command '%s'
-SteamUser020
+SteamUser021
 SteamUtils009
 String field
 String literals cannot cross line boundaries.
@@ -2304,7 +2320,6 @@ StringPrintfVector currently only supports up to
 Summary of connection [%s]:
 Swap
 Symbol name "
-System
 T
 TCP/UDP Disabled.
 TRUE
@@ -2335,8 +2350,6 @@ Tokenizer::ParseFloat() passed text that could not have been tokenized as a floa
 Tokenizer::ParseStringAppend() passed text that could not have been tokenized as a string:
 Too many proxies for serializer %s.
 ToolFramework2_002
-ToolGameSimulationDispatcher_001
-ToolGameSimulationSystem_001
 ToolSceneNodeFactory_001
 ToolScriptManager001
 ToolService_001
@@ -2409,7 +2422,6 @@ VMatrix
 VMediaFoundation001
 VNewAsyncFileSystem001
 VP4003
-VPhysX Interface ResourceMgr v0.1
 VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
@@ -2428,7 +2440,6 @@ V_RemoveDotSlashes
 V_SetErrno
 V_SplitString(char const*, char const*, CUtlVector<char*, CUtlMemory<char*, int> >&)
 V_StrTrim
-V_StripTrailingSlash
 V_UTF16ToUTF8
 V_UTF32ToUTF8
 V_UTF8CharsToUTF16
@@ -2475,9 +2486,9 @@ V_strupper_fast
 V_swscanf
 V_tanf
 V_tier0_strstr
+V_uuid_t
 V_vsnprintf
 V_vsnprintfSize
-V_vsnprintfWarnTrunc
 V_wcstod
 V_wcstoi64
 VaPrintf
@@ -2520,6 +2531,8 @@ X
 Y
 Y@
 Z
+ZN26CParallelProcessorAbstractI18CParallelProcessorI30BuildFlattenedSerializerInfo_t27CMemberFuncJobItemProcessorIS1_37CBuildNetworkSerializerHierarchyOrderS3_ELi1EEE3RunEvE13CStackFunctor
+ZN26CParallelProcessorAbstractI18CParallelProcessorIN37CBuildNetworkSerializerHierarchyOrder12BuildEntry_tE27CMemberFuncJobItemProcessorIS2_S1_S1_ELi1EEE3RunEvE13CStackFunctor
 [
 [ Net Message Info: %s ]
 [$0]
@@ -2570,15 +2583,7 @@ _
 _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
-_V_ComposeFileName
-_V_ExtractFileExtension
-_V_ExtractFilePath
-_V_FileBase
-_V_MakeAbsolutePath
-_V_SetExtension
 _V_StringAfterPrefix
-_V_StripExtension
-_V_StripLastDir
 _V_strncat
 _V_strncmp
 _V_strncpy
@@ -2717,7 +2722,6 @@ collision_group
 collision_prop
 composite
 compressed
-configvalue.cpp
 conflicts with an existing enum type.
 conflicts with an existing field.
 conflicts with an existing nested message type.
@@ -3295,6 +3299,7 @@ pointer to struct
 pose_control
 pose_control_type
 possible match %d of %d:  %s %s.%s
+prediction_errors
 preferred_carryangles
 previous only
 pri(%u)
@@ -3356,8 +3361,11 @@ serializer(%s)
 serializing
 server
 server_can_execute
+server_cmd_queue
+server_cmd_queue_desired
 server_framerate
 server_framerate_stddev
+server_tick
 service $0 {
 service thread gave up on lock
 sfixed32
@@ -3380,6 +3388,7 @@ sprintf
 sqrt
 sqrtf
 ss_added
+starved_ticks
 std::_Rb_tree_decrement(std::_Rb_tree_node_base const*)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base*)
 std::_Rb_tree_increment(std::_Rb_tree_node_base const*)
@@ -3513,6 +3522,8 @@ text format contains deprecated field "
 texturescale
 the actual field type (for enums T should be the generated enum
 the global scope
+tick_interval
+time_dilation_percent
 to
 to missing
 true
@@ -3545,7 +3556,6 @@ use_additional_offset
 user
 utlbuffer.cpp
 utlstring.cpp
-utlsymbol.cpp
 utlvector count
 value
 valve
@@ -3625,6 +3635,7 @@ yaw_end
 yaw_start
 yes
 z
+zD
 zero
 {
 { ... };

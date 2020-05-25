@@ -88,15 +88,32 @@ message CDOTAMatchMetadata {
 			optional bool cavern_challenge_active = 12;
 			optional uint32 cavern_challenge_winnings = 13;
 			optional uint32 amount_wagered = 14;
-			optional uint32 team_wager_amount = 15;
 			optional uint32 periodic_point_adjustments = 16;
 			repeated .CDOTAMatchMetadata.Team.CavernChallengeResult cavern_challenge_map_results = 17;
 			optional uint32 cavern_challenge_plus_shard_winnings = 18;
 			repeated .CDOTAMatchMetadata.Team.ActionGrant actions_granted = 19;
 			optional uint32 cavern_crawl_map_variant = 20;
+			optional uint32 team_wager_bonus_pct = 21;
+			optional uint32 wager_streak_pct = 22;
+		}
+
+		message GauntletProgress {
+			optional uint32 gauntlet_tier = 2;
+			optional uint32 gauntlet_wins = 3;
+			optional uint32 gauntlet_losses = 4;
 		}
 
 		message Player {
+			message ContractProgress {
+				optional uint32 guild_id = 1;
+				optional uint32 event_id = 2;
+				optional uint32 challenge_instance_id = 3;
+				optional uint32 challenge_parameter = 4;
+				optional uint32 contract_stars = 5;
+				optional uint32 contract_slot = 6;
+				optional bool completed = 7;
+			}
+
 			optional uint32 account_id = 1;
 			repeated uint32 ability_upgrades = 2;
 			optional uint32 player_slot = 3;
@@ -141,6 +158,8 @@ message CDOTAMatchMetadata {
 			optional uint32 wards_dewarded = 44;
 			optional float stun_duration = 45;
 			optional .EDOTAMMRBoostType rank_mmr_boost_type = 46 [default = k_EDOTAMMRBoostType_None];
+			optional .CDOTAMatchMetadata.Team.GauntletProgress gauntlet_progress = 47;
+			repeated .CDOTAMatchMetadata.Team.Player.ContractProgress contract_progress = 48;
 		}
 
 		optional uint32 dota_team = 1;
@@ -155,6 +174,22 @@ message CDOTAMatchMetadata {
 		optional uint32 cm_penalty = 10;
 	}
 
+	message GuildChallengeProgress {
+		message IndividualProgress {
+			optional uint32 account_id = 1;
+			optional uint32 progress = 2;
+		}
+
+		optional uint32 guild_id = 1;
+		optional .EEvent event_id = 2 [default = EVENT_ID_NONE];
+		optional uint32 challenge_instance_id = 3;
+		optional uint32 challenge_parameter = 4;
+		optional uint32 challenge_timestamp = 5;
+		optional uint32 challenge_progress_at_start = 6;
+		optional uint32 challenge_progress_accumulated = 7;
+		repeated .CDOTAMatchMetadata.GuildChallengeProgress.IndividualProgress individual_progress = 8;
+	}
+
 	repeated .CDOTAMatchMetadata.Team teams = 1;
 	repeated .CLobbyTimedRewardDetails item_rewards = 2;
 	optional fixed64 lobby_id = 3;
@@ -164,6 +199,7 @@ message CDOTAMatchMetadata {
 	repeated .CMsgMatchTips match_tips = 7;
 	optional .CMsgMatchMatchmakingStats matchmaking_stats = 8;
 	optional .CMvpData mvp_data = 9;
+	repeated .CDOTAMatchMetadata.GuildChallengeProgress guild_challenge_progress = 10;
 }
 
 message CDOTAMatchPrivateMetadata {
@@ -181,8 +217,20 @@ message CDOTAMatchPrivateMetadata {
 					repeated .CDOTAMatchPrivateMetadata.Team.Player.CombatSegment.DamageByAbility.ByHeroTarget by_hero_targets = 2;
 				}
 
+				message HealingByAbility {
+					message ByHeroTarget {
+						optional uint32 hero_id = 1;
+						optional uint32 healing = 2;
+					}
+
+					optional uint32 source_unit_index = 3;
+					optional uint32 ability_id = 1;
+					repeated .CDOTAMatchPrivateMetadata.Team.Player.CombatSegment.HealingByAbility.ByHeroTarget by_hero_targets = 2;
+				}
+
 				optional int32 game_time = 1;
 				repeated .CDOTAMatchPrivateMetadata.Team.Player.CombatSegment.DamageByAbility damage_by_ability = 2;
+				repeated .CDOTAMatchPrivateMetadata.Team.Player.CombatSegment.HealingByAbility healing_by_ability = 3;
 			}
 
 			message BuffRecord {
@@ -197,6 +245,26 @@ message CDOTAMatchPrivateMetadata {
 				repeated .CDOTAMatchPrivateMetadata.Team.Player.BuffRecord.ByHeroTarget by_hero_targets = 2;
 			}
 
+			message GoldReceived {
+				optional uint32 creep = 1;
+				optional uint32 heroes = 2;
+				optional uint32 bounty_runes = 3;
+				optional uint32 passive = 4;
+				optional uint32 buildings = 5;
+				optional uint32 abilities = 6;
+				optional uint32 wards = 7;
+				optional uint32 other = 8;
+			}
+
+			message XPReceived {
+				optional uint32 creep = 1;
+				optional uint32 heroes = 2;
+				optional uint32 roshan = 3;
+				optional uint32 tome_of_knowledge = 4;
+				optional uint32 outpost = 5;
+				optional uint32 other = 6;
+			}
+
 			optional uint32 account_id = 1;
 			optional uint32 player_slot = 2;
 			optional bytes position_stream = 3;
@@ -208,6 +276,8 @@ message CDOTAMatchPrivateMetadata {
 			repeated float graph_assists = 9;
 			repeated float graph_lasthits = 10;
 			repeated float graph_denies = 11;
+			optional .CDOTAMatchPrivateMetadata.Team.Player.GoldReceived gold_received = 12;
+			optional .CDOTAMatchPrivateMetadata.Team.Player.XPReceived xp_received = 13;
 		}
 
 		message Building {

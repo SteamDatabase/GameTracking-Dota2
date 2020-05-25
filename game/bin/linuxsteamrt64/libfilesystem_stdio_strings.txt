@@ -16,6 +16,7 @@ $ORIGIN
 %-120s - %s
 %-20s "%s" %s%s
 %-20s %s
+%.18g
 %d_%d_%d_%d_%d.tmp
 %f %f %f %f
 %f elapsed w/o i/o
@@ -30,7 +31,6 @@ $ORIGIN
 %s%s%s crc=0x%x metadatasz=%d
 %s,
 %s, %s, %s
-%s.360%s
 %s/
 %s/%llu
 %s/%llu.vpk
@@ -47,25 +47,27 @@ $ORIGIN
 - %u
 ---------------
 ---FS%s:  %s %s (%.3f)
----FS%s:  close %s %p %i (%.3f)
----FS%s:  read %s %i %p (%.3f)
----FS%s:  write %s %i %p
+---FS%s:  close %s 0x%llX %i (%.3f)
+---FS%s:  read %s %i 0x%llX (%.3f)
+---FS%s:  write %s %i 0x%llX
+-async_memory_map
 -disable_auto_vpk_loading
 -fake_workshop_dir
 -log_opened_files
 -noasync
 -onethreadpool
+-recordPerfStats
 ...
 ../public/ordered_constructor.h
+../public/tier0/threadtools.h
 ../public/tier0/tslist.h
 ../public/tier1/utlblockmemory.h
 ../public/tier1/utlfixedmemory.h
 ../public/tier1/utllinkedlist.h
 ../public/tier1/utlrbtree.h
-../public/tier1/utlsymbol.h
+../public/tier1/utlsymboltable.h
 ../public/tier2/fileutils.h
 ./
-.360
 .\
 .bsp
 .zip
@@ -109,14 +111,13 @@ $ORIGIN
 17CFileSystem_Stdio
 17IAsyncFileRequest
 17IAsyncRequestBase
+17IMemoryMappedFile
 18CCountedStringPool
 18CFileAsyncWriteJob
 18CPlaceholderConVar
 18CStdFilesystemFile
 18FileAsyncRequest_t
-19CAsyncSearchRequest
 19CIODelayAlarmThread
-19IAsyncSearchRequest
 19IKeyValuesErrorSpew
 20CPostConnectCallback
 20CRefCountServiceBaseILb0E6CRefMTE
@@ -126,12 +127,15 @@ $ORIGIN
 22CSchemaInstallCallback
 23CFileAsyncAppendFileJob
 23IConCommandBaseAccessor
+24CMemoryMappedFileSection
 25CFileSystemReloadFileList
 26CDefaultKeyValuesErrorSpew
 26CFileAsyncDirectoryScanJob
+28CFioReadOnlyMemoryMappedFile
+28CPackedStoreMemoryMappedFile
+35CMemoryMappedFileSection_SelfDelete
 6ConVar
 7IConVar
-8CFmtStrNILi256ELb0EE
 9IFileList
 ;
 << NULL >>
@@ -164,6 +168,7 @@ AssetBrowserSystem_001
 AssetPreviewSystem_001
 AssetSystem001
 AssetSystemTest001
+Async I/O disabled from command line
 Async Request has not finished, unable to release (state=%i)
 Async result Status %d makes no sense
 AsyncIOCallBackHandler
@@ -207,16 +212,18 @@ CBaseFileSystem::Tell
 CBaseFileSystem::Write
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
 CBufferString::AppendFormat(char const*, ...)
+CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::ComposeFileName(char const*, char const*, char)
 CBufferString::Concat(char const*, char const*, ...)
-CBufferString::EnsureTrailingSlash(char)
+CBufferString::EnsureCapacity(int, char**, bool, bool)
+CBufferString::EnsureTrailingSlash(char, bool)
 CBufferString::ExtendPath(char const*, char)
 CBufferString::ExtractFileBase(char const*)
 CBufferString::ExtractFileExtension(char const*)
-CBufferString::ExtractFilePath(char const*)
+CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::ExtractFirstDir(char const*)
 CBufferString::FixSlashes(char)
-CBufferString::FixupPathName()
+CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
@@ -228,7 +235,7 @@ CBufferString::RemoveDotSlashes(char)
 CBufferString::RemoveFirstDir(CBufferString*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
-CBufferString::ShortenPath()
+CBufferString::ShortenPath(bool)
 CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::Swap(CBufferString&)
@@ -259,11 +266,12 @@ CThreadMultiWaitEvent::Set()
 CThreadRWLock::LockForWrite(char const*, int)
 CThreadRWLock::UnlockWrite(char const*, int)
 CThreadRWLock::WaitForRead()
-CThreadRWLock_FastRead::CThreadRWLock_FastRead()
+CThreadRWLock_FastRead::CThreadRWLock_FastRead(bool)
+CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
 CThreadRWLock_FastRead::HandleFirstWriteLockTransition()
 CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
-CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int, char const*, int)
-CThreadSemaphore::Release(int, int*)
+CThreadRWLock_FastRead::UnlockRead_LockForWrite(char const*, int)
+CThreadRWLock_FastRead::UnlockWrite(char const*, int)
 CThreadSemaphore::~CThreadSemaphore()
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
@@ -319,6 +327,12 @@ ERROR_BADPATHSPEC
 ERROR_BADPTR
 ERROR_BADUSERBUFFER
 ERROR_FAILURE
+ERROR_FAILURE[ABORT]
+ERROR_FAILURE[APPEND]
+ERROR_FAILURE[FINISH]
+ERROR_FAILURE[GET_RESULT]
+ERROR_FAILURE[SET_PRIORITY]
+ERROR_FAILURE[STATUS]
 ERROR_FILENAMETOOLONG
 ERROR_FILEOPEN
 ERROR_INVALIDFILENAME
@@ -339,9 +353,7 @@ EarlyInit_Tier0
 EconItemToolModel_001
 EnableWhitelistFileTracking
 EngineServiceMgr001
-EnvironmentMapBuilder_001
 EventSystem001
-Exceeded limit of number of vpk files supported (%d)!
 FATAL ERROR: unable to register all schema data: %s
 FCVAR_NEVER_AS_STRING
 FS:  Tried to Close NULL file handle!
@@ -387,7 +399,6 @@ GNU
 GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameUIService_001
-GetFileHandle
 GetInterfaceBase
 GetProfilingInfo
 GetResourceManifestCount
@@ -418,7 +429,6 @@ KV Conditional Evaluation Error
 KeyValueCache001
 KeyValues Error: %s in file %s
 KeyValues::ParseIncludedKeys: Couldn't load included keyvalue file %s
-KeyValues::RecursiveSaveToFile: TODO, missing code for TYPE_COLOR.
 KeyValues::SaveToFile: couldn't open file "%s" in path "%s".
 KeyValuesSystem
 KickOffFileJobs
@@ -441,6 +451,7 @@ MATCHFRAMEWORK_001
 MOD
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
+Manually releasing a completed request that has autorelease set
 MapListService_001
 MaterialUtils_001
 MemAlloc_AllocFunc
@@ -448,6 +459,7 @@ MemAlloc_FreeFunc
 MeshSystem001
 MeshUtils001
 ModelDocUtils001
+Modifying Async Filesystem Request after it has been submitted
 MustRead
 NULL
 NetworkClientService_001
@@ -470,7 +482,6 @@ PanoramaUIClient001
 PanoramaUIEngine001
 ParticleSystemMgr003
 Path ID:
-Physics2 Interface Old v0.5
 PhysicsBuilderMgr001
 Plat_CreateDirectory
 Plat_DebugPrint
@@ -487,6 +498,7 @@ Plat_IsFile
 Plat_IsHighDPI
 Plat_IsInDebugSession
 Plat_LoadModule
+Plat_NeedsLowFragmentation
 Plat_RelativeTicks
 Plat_RemoveDirectory
 Plat_RemoveFile
@@ -586,28 +598,23 @@ TestScriptMgr001
 TextLayout_001
 TextMessageMgr_001
 ThreadGetCurrentId
-ThreadGetPriority
 ThreadInMainThread
-ThreadSetPriority
 ThreadSleep
 ToolFramework2_002
-ToolGameSimulationDispatcher_001
-ToolGameSimulationSystem_001
 ToolSceneNodeFactory_001
 ToolScriptManager001
 ToolService_001
 Total Seconds: %.5f
 Tried to Seek NULL file handle!
-Tried to close unknown file pointer %p
-Tried to read %i bytes from unknown file pointer %p
-Tried to write %i bytes from unknown file pointer %p
+Tried to close unknown file pointer 0x%llX
+Tried to read %i bytes from unknown file pointer 0x%llX
+Tried to write %i bytes from unknown file pointer 0x%llX
 UNKNOWN
 UNKNOWN VALUE
 Unable to determine async job type (%d)
 Unable to remove %s!
 Unable to rename "%s" to "%s"!
 Unable to watch '%s'
-Unknown
 Unknown Path Class
 Unknown Request
 Unknown read error %d
@@ -640,7 +647,6 @@ VP4003
 VPK
 VPK directory for '%s' corrupt
 VPK signing not implemented
-VPhysX Interface ResourceMgr v0.1
 VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
@@ -664,7 +670,6 @@ V_RemoveDotSlashes
 V_SetErrno
 V_StrTrim
 V_StripFilename
-V_StripTrailingSlash
 V_UTF16ToUTF8
 V_UTF32ToUTF8
 V_UTF8CharsToUTF16
@@ -707,9 +712,9 @@ V_strtoui64
 V_strupper_fast
 V_swscanf
 V_tier0_strstr
+V_vscprintf
 V_vsnprintf
 V_vsnprintfSize
-V_vsnprintfWarnTrunc
 V_wcstod
 V_wcstoi64
 Valid Content Absolute Path
@@ -750,14 +755,10 @@ _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
 _V_ComposeFileName
-_V_ExtractFileExtension
 _V_ExtractFilePath
-_V_FileBase
-_V_FixupPathName
 _V_MakeAbsolutePath
 _V_StrSubst
 _V_StringAfterPrefix
-_V_StripExtension
 _V_StripLastDir
 _V_strncat
 _V_strncmp
@@ -823,10 +824,12 @@ dup
 externalFileAttribs
 extraFieldLength
 f
+false
 fcntl
 fdatasync
 fileCommentLength
 fileNameLength
+filenamesymboltable.cpp
 fileno_unlocked
 filesystem_buffer_size
 filesystem_max_stdio_read
@@ -886,12 +889,15 @@ memmove
 mempool.cpp
 memset
 min. %f
+mmap64
+munmap
 nCentralDirectoryEntries_ThisDisk
 nCentralDirectoryEntries_Total
 nTries < 10000000
 need to hook up zip for linux
 notconnected
 notify
+null
 numberOfTheDiskWithStartOfCentralDirectory
 numberOfThisDisk
 open64
@@ -952,6 +958,7 @@ strcmp
 strcpy
 strlen
 strrchr
+sysconf
 typeinfo for CThread
 typeinfo for CThreadSyncObject
 u64( %lld = 0x%llX )
@@ -961,7 +968,6 @@ unlink
 update
 user
 utlstring.cpp
-utlsymbol.cpp
 versionMadeBy
 versionNeededToExtract
 vpk:

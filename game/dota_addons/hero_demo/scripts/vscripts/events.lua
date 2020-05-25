@@ -215,7 +215,9 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 		return
 	end
 
-	CreateUnitByNameAsync( self.m_sHeroToSpawn, hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nENEMIES_TEAM, 
+	local hPlayer = PlayerResource:GetPlayer( data.PlayerID )
+
+	DebugCreateUnit( hPlayer, self.m_sHeroToSpawn, self.m_nENEMIES_TEAM, false,
 		function( hEnemy )
 			table.insert( self.m_tEnemiesList, hEnemy )
 			hEnemy:SetControllableByPlayer( self.m_nPlayerID, false )

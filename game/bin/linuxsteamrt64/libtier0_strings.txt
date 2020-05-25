@@ -13,15 +13,16 @@ $tI
 %0*llx: address after highest user-space virtual region
 %02d: %u:0x%llx
 %12.3f %12.2f
-%12s %12s
+%14.3f %12.2f
+%14s %10s
 %2d.%03d
 %2u - proc %2u (grp %u:%-2u / phy %u / cor %u / smt %u): max freq %llu
 %52.52s%12d%12.3f%12.3f%7.2f%12.3f%7.2f%12.3f%12.3f%12.3f%12.3f
-%6.2f
 %8.4f / %9.2f:  %s
 %8.4f / %9.2f:  Writing profile data to '%s'
 %8.8x-%4.4x-%4.4x-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x
 %8x-%4x-%4x-%2x%2x-%2x%2x%2x%2x%2x%2x
+%9.2f
 %9d
 %d
 %d frames sampled for %.2f seconds
@@ -206,7 +207,7 @@ $tI
 -- Profile scopes sorted by time (without children) --
 -- Summary --
 ---------
----------- --------
+---------- ------------
 ------------ ----------
 ------------ ------------
 -------------------------------------------
@@ -251,7 +252,6 @@ $tI
 ../public/tier0/globallist.h
 ../public/tier0/tslist.h
 .\
-.so
 //
 /e%s%s
 /etc/SUSE-release
@@ -298,6 +298,7 @@ $tI
 17CThreadSyncObject
 18CThreadManualEvent
 18IMemAlloc_Internal
+20IMobileEventListener
 22CPerfTraceDepotDefault
 22CSimpleLoggingListener
 22CStdMemAlloc_Data_Base
@@ -315,6 +316,7 @@ $tI
 28CStdMemAlloc_Data_StackStatsI9MemConfigILb0ELb0E27RuntimeAdditionalPropertiesELb0EE
 28CallStackStatStructDescFuncs
 29CDefaultLoggingResponsePolicy
+31CTier0MasterMobileEventListener
 31IForceSignalNumberIntoCallStack
 40CVProfileOutputColumn_AverageTimePerCall
 41CVProfileOutputColumn_AverageTimePerFrame
@@ -447,14 +449,14 @@ CBufferString::EnsureAddedCapacity(int, char**, bool, bool)
 CBufferString::EnsureCapacity(int, char**, bool, bool)
 CBufferString::EnsureLength(int, bool, int*)
 CBufferString::EnsureOwnedAllocation(CBufferString::EAllocationOption_t)
-CBufferString::EnsureTrailingSlash(char)
+CBufferString::EnsureTrailingSlash(char, bool)
 CBufferString::ExtendPath(char const*, char)
 CBufferString::ExtractFileBase(char const*)
 CBufferString::ExtractFileExtension(char const*)
-CBufferString::ExtractFilePath(char const*)
+CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::ExtractFirstDir(char const*)
 CBufferString::FixSlashes(char)
-CBufferString::FixupPathName()
+CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
 CBufferString::GetAllocChars(int, int)
 CBufferString::GetInsertPtr(int, int, bool, int*)
@@ -480,7 +482,7 @@ CBufferString::ReverseChars(int, int)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
-CBufferString::ShortenPath()
+CBufferString::ShortenPath(bool)
 CBufferString::StartsWith(char const*)
 CBufferString::StartsWith_FastCaseInsensitive(char const*)
 CBufferString::StrAppendFormat(char const*, ...)
@@ -600,7 +602,6 @@ CTestSuite::~CTestSuite()
 CThread::CThread()
 CThread::GetCurrentCThread()
 CThread::GetName()
-CThread::GetPriority() const
 CThread::GetResult()
 CThread::GetThreadHandle()
 CThread::Init()
@@ -610,7 +611,6 @@ CThread::Join(unsigned int)
 CThread::OnExit()
 CThread::Resume()
 CThread::SetName(char const*)
-CThread::SetPriority(int)
 CThread::Sleep(unsigned int)
 CThread::Start(unsigned int, ThreadPriorityEnum_t)
 CThread::Stop(int)
@@ -635,6 +635,7 @@ CThreadLocalScope::CScopeCreatedOrDestroyedHandler::CScopeCreatedOrDestroyedHand
 CThreadLocalScope::CScopeCreatedOrDestroyedHandler::~CScopeCreatedOrDestroyedHandler()
 CThreadLocalScope::CThreadLocalScope(ThreadHandle_t__*, bool)
 CThreadLocalScope::FindScopeForThreadHandle(ThreadHandle_t__*)
+CThreadLocalScope::FindScopeForThreadId(unsigned long long)
 CThreadLocalScope::GetScopeListMutex()
 CThreadLocalScope::IsLocalThreadScope() const
 CThreadLocalScope::SetThreadName(char const*)
@@ -658,12 +659,13 @@ CThreadRWLock::UnlockRead_LockForWrite(char const*, int)
 CThreadRWLock::UnlockWrite(char const*, int)
 CThreadRWLock::UnlockWrite_LockForRead(char const*, int)
 CThreadRWLock::WaitForRead()
-CThreadRWLock_FastRead::CThreadRWLock_FastRead()
+CThreadRWLock_FastRead::CThreadRWLock_FastRead(bool)
+CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
 CThreadRWLock_FastRead::HandleFirstWriteLockTransition()
 CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
-CThreadRWLock_FastRead::UnlockRead_LockForWrite()
-CThreadRWLock_FastRead::UnlockWrite_LockForRead()
-CThreadRWLock_FastRead::WaitForReadLockTransition(unsigned int, char const*, int)
+CThreadRWLock_FastRead::UnlockRead_LockForWrite(char const*, int)
+CThreadRWLock_FastRead::UnlockWrite(char const*, int)
+CThreadRWLock_FastRead::UnlockWrite_LockForRead(char const*, int)
 CThreadSemaphore::CThreadSemaphore(int, int, char const*, bool)
 CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::WaitImpl(unsigned int)
@@ -777,7 +779,6 @@ CVirtualMemorySnapshot::IsEqualRegion(CVirtualMemorySnapshot const*, CVirtualMem
 CVirtualMemorySnapshot::Purge()
 CVirtualMemorySnapshot::Report(int) const
 CVirtualMemorySnapshot::~CVirtualMemorySnapshot()
-CWorkerThread::BoostPriority()
 CWorkerThread::CWorkerThread()
 CWorkerThread::Call(unsigned int, unsigned int, bool, unsigned int (*)(unsigned int, CThreadEvent**, int, unsigned int))
 CWorkerThread::CallMaster(unsigned int, unsigned int)
@@ -916,6 +917,9 @@ Heap: standard allocator
 I
 IAssertionFailureListener::AssertionFailure()
 IMemAlloc::DumpStats: could not open output file %s
+IMobileEventListener::OnEnterHibernationState()
+IMobileEventListener::OnExitHibernationState()
+IMobileEventListener::OnLowMemoryNotification()
 Ignore All Asserts
 Ignore For 24 Hours
 Ignore This File
@@ -1093,10 +1097,6 @@ Plat_DisableIOBuffering
 Plat_EnableCustomerMachineMode
 Plat_EnableHeadlessMode
 Plat_EndWatchdogTimer
-Plat_EnterHibernation
-Plat_EnterHibernation()
-Plat_ExitHibernation
-Plat_ExitHibernation()
 Plat_ExitProcess
 Plat_FastVerifyHardwareKey
 Plat_FileExists
@@ -1128,6 +1128,7 @@ Plat_GetGlobalListRegistry
 Plat_GetLastGameInstanceMutex
 Plat_GetLocalTime
 Plat_GetMainWindowSwapChainScale
+Plat_GetMasterMobileEventHandler
 Plat_GetMemPageSize
 Plat_GetMiniDumpErrorString
 Plat_GetModuleFilename
@@ -1213,6 +1214,12 @@ Plat_QueueSteamLoginWithAccessCode
 Plat_ReconfigureWindow
 Plat_RefreshDPI
 Plat_RegisterSignalHandler
+Plat_RegistryDirectoryClose
+Plat_RegistryDirectoryOpenOrCreate
+Plat_RegistryReadInt
+Plat_RegistryReadString
+Plat_RegistryWriteInt
+Plat_RegistryWriteString
 Plat_RelativeTickFrequency
 Plat_RelativeTicks
 Plat_ReleaseMouseCapture
@@ -1297,9 +1304,9 @@ PushPopThread
 PushThread
 Qt_GetCustomAllocators
 RegisterAssertionFailureListener
-RegisterHibernationListener
 RegisterKeyValuesSystem
 RegisterLoggingChannel
+RegisterMobileEventListener
 Release
 ReleaseThreadHandle
 RemoveAssertionCallback
@@ -1419,6 +1426,7 @@ SDL_SetCursor
 SDL_SetHint
 SDL_SetRelativeMouseMode
 SDL_SetTextInputRect
+SDL_SetThreadPriority
 SDL_SetWindowBordered
 SDL_SetWindowDisplayMode
 SDL_SetWindowFullscreen
@@ -1539,7 +1547,8 @@ ThreadGetCurrentHandle
 ThreadGetCurrentId
 ThreadGetCurrentProcessHandle
 ThreadGetCurrentProcessId
-ThreadGetPriority
+ThreadGetDebugNameForThreadHandle
+ThreadGetDebugNameForThreadId
 ThreadGetProcessExitCode
 ThreadGetProcessPriority
 ThreadInMainThread
@@ -1603,7 +1612,7 @@ Unknown
 Unknown (invalid)
 UnknownOS
 UnregisterAssertionFailureListener
-UnregisterHibernationListener
+UnregisterMobileEventListener
 V
 VALVE_DISABLE_CLOCK_SPEED_CALCULATION
 VALVE_TESTMODE
@@ -1634,6 +1643,7 @@ V_FixupPathSpaceToUnderscore
 V_GetErrno
 V_GetFileExtension
 V_GetFileExtensionSafe
+V_GetPathOriginLength
 V_GetUTF8BytesNeeded(char const*, int)
 V_GetUTF8BytesNeeded(unsigned short const*, int)
 V_GetUTF8BytesNeeded(wchar_t const*, int)
@@ -1925,7 +1935,7 @@ Working set: %s
 Y
 [   func+child         func ]
 [   func+child       func ]
-[ func+child     func ]
+[ func+child         func ]
 [*]
 [/b]
 [/code]
@@ -2173,7 +2183,6 @@ pthread_cond_signal
 pthread_cond_timedwait
 pthread_cond_wait
 pthread_create
-pthread_getschedparam
 pthread_join
 pthread_kill
 pthread_mutex_destroy

@@ -434,7 +434,8 @@ AnimateDialogVariableIntAction.prototype.update = function ()
 		return false;
 
 	var ratio = ( now - this.startTimestamp ) / ( this.endTimestamp - this.startTimestamp );
-	this.panel.SetDialogVariableInt( this.dialogVariable, this.startValue + ( this.endValue - this.startValue ) * ratio );
+
+	this.panel.SetDialogVariableInt( this.dialogVariable, Math.floor(this.startValue + ( this.endValue - this.startValue ) * ratio ));
 	return true;
 }
 AnimateDialogVariableIntAction.prototype.finish = function ()

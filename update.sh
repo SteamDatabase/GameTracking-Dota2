@@ -7,6 +7,7 @@ echo "Processing Dota 2..."
 
 ProcessDepot ".so"
 ProcessVPK
+ProcessToolAssetInfo
 
 while IFS= read -r -d '' file
 do

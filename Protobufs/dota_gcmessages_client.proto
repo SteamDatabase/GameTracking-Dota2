@@ -54,24 +54,6 @@ enum EWeekendTourneyRichPresenceEvent {
 	k_EWeekendTourneyRichPresenceEvent_Eliminated = 3;
 }
 
-enum EDOTATriviaQuestionCategory {
-	k_EDOTATriviaQuestionCategory_AbilityIcon = 0;
-	k_EDOTATriviaQuestionCategory_AbilityCooldown = 1;
-	k_EDOTATriviaQuestionCategory_HeroAttributes = 2;
-	k_EDOTATriviaQuestionCategory_HeroMovementSpeed = 3;
-	k_EDOTATriviaQuestionCategory_TalentTree = 4;
-	k_EDOTATriviaQuestionCategory_HeroStats = 5;
-	k_EDOTATriviaQuestionCategory_ItemPrice = 6;
-	k_EDOTATriviaQuestionCategory_AbilitySound = 7;
-	k_EDOTATriviaQuestionCategory_InvokerSpells = 8;
-	k_EDOTATriviaQuestionCategory_AbilityManaCost = 9;
-	k_EDOTATriviaQuestionCategory_HeroAttackSound = 10;
-	k_EDOTATriviaQuestionCategory_AbilityName = 11;
-	k_EDOTATriviaQuestionCategory_ItemComponents = 12;
-	k_EDOTATriviaQuestionCategory_ItemLore = 13;
-	k_EDOTATriviaQuestionCategory_ItemPassives = 14;
-}
-
 enum EDOTATriviaAnswerResult {
 	k_EDOTATriviaAnswerResult_Success = 0;
 	k_EDOTATriviaAnswerResult_InvalidQuestion = 1;
@@ -127,6 +109,36 @@ enum ECoachTeammateRating {
 
 enum EPlayerCoachMatchFlag {
 	k_EPlayerCoachMatchFlag_EligibleForRewards = 1;
+}
+
+enum EUnderDraftResponse {
+	k_eInternalError = 0;
+	k_eSuccess = 1;
+	k_eNoGold = 2;
+	k_eInvalidSlot = 3;
+	k_eNoBenchSpace = 4;
+	k_eNoTickets = 5;
+	k_eEventNotOwned = 6;
+	k_eInvalidReward = 7;
+	k_eHasBigReward = 8;
+	k_eNoGCConnection = 9;
+	k_eTooBusy = 10;
+}
+
+enum ETeamFanContentStatus {
+	TEAM_FAN_CONTENT_STATUS_INVALID = 0;
+	TEAM_FAN_CONTENT_STATUS_PENDING = 1;
+	TEAM_FAN_CONTENT_STATUS_APPROVED = 2;
+	TEAM_FAN_CONTENT_STATUS_REJECTED = 3;
+}
+
+enum EDOTADraftTriviaAnswerResult {
+	k_EDOTADraftTriviaAnswerResult_Success = 0;
+	k_EDOTADraftTriviaAnswerResult_InvalidMatchID = 1;
+	k_EDOTADraftTriviaAnswerResult_AlreadyAnswered = 2;
+	k_EDOTADraftTriviaAnswerResult_InternalError = 3;
+	k_EDOTADraftTriviaAnswerResult_TriviaDisabled = 4;
+	k_EDOTADraftTriviaAnswerResult_GCDown = 5;
 }
 
 message CMsgClientSuspended {
@@ -226,7 +238,6 @@ message CMsgDOTAPopup {
 		MADE_ADMIN = 15;
 		NEED_TO_PURCHASE = 16;
 		SIGNON_MESSAGE = 17;
-		GUILD_KICKED = 18;
 		MATCHMAKING_REGION_OFFLINE = 19;
 		TOURNAMENT_GAME_NOT_FOUND = 21;
 		TOURNAMENT_GAME_HAS_LOBBY_ID = 22;
@@ -711,19 +722,19 @@ message CMatchPlayerTimedStatAverages {
 }
 
 message CMatchPlayerTimedStatStdDeviations {
-	optional float kills = 2;
-	optional float deaths = 3;
-	optional float assists = 4;
-	optional float net_worth = 5;
-	optional float last_hits = 6;
-	optional float denies = 7;
-	optional float item_value = 8;
-	optional float support_gold_spent = 9;
-	optional float camps_stacked = 10;
-	optional float wards_placed = 11;
-	optional float dewards = 12;
-	optional float triple_kills = 13;
-	optional float rampages = 14;
+	optional float kills = 2 [default = 1];
+	optional float deaths = 3 [default = 1];
+	optional float assists = 4 [default = 1];
+	optional float net_worth = 5 [default = 1];
+	optional float last_hits = 6 [default = 1];
+	optional float denies = 7 [default = 1];
+	optional float item_value = 8 [default = 1];
+	optional float support_gold_spent = 9 [default = 1];
+	optional float camps_stacked = 10 [default = 1];
+	optional float wards_placed = 11 [default = 1];
+	optional float dewards = 12 [default = 1];
+	optional float triple_kills = 13 [default = 1];
+	optional float rampages = 14 [default = 1];
 }
 
 message CMsgGCGetHeroTimedStatsResponse {
@@ -1439,6 +1450,8 @@ message CMsgGCToClientWageringResponse {
 	optional uint32 rank_wagers_max = 9;
 	optional uint32 prediction_tokens_remaining = 10;
 	optional uint32 prediction_tokens_max = 11;
+	optional uint32 bounties_remaining = 12;
+	optional uint32 bounties_max = 13;
 }
 
 message CMsgGCToClientWageringUpdate {
@@ -2156,23 +2169,9 @@ message CMsgDOTASetFavoriteTeam {
 	optional uint32 event_id = 2;
 }
 
-message CMsgDOTATriviaQuestion {
-	optional uint32 question_id = 1;
-	optional .EDOTATriviaQuestionCategory category = 2 [default = k_EDOTATriviaQuestionCategory_AbilityIcon];
-	optional uint32 timestamp = 3;
-	optional string question_value = 4;
-	repeated string answer_values = 5;
-	optional uint32 correct_answer_index = 6;
-}
-
 message CMsgDOTATriviaCurrentQuestions {
 	repeated .CMsgDOTATriviaQuestion questions = 1;
 	optional bool trivia_enabled = 2;
-}
-
-message CMsgDOTATriviaQuestionAnswersSummary {
-	optional bool summary_available = 1;
-	repeated uint32 picked_count = 2;
 }
 
 message CMsgDOTASubmitTriviaQuestionAnswer {
@@ -2732,6 +2731,7 @@ message CMsgClientToGCCavernCrawlGetClaimedRoomCountResponse {
 
 	optional .CMsgClientToGCCavernCrawlGetClaimedRoomCountResponse.Result result = 1 [default = SUCCESS];
 	repeated .CMsgClientToGCCavernCrawlGetClaimedRoomCountResponse.MapVariant map_variants = 2;
+	optional uint32 available_map_variants_mask = 3;
 }
 
 message CMsgDOTAMutationList {
@@ -3284,40 +3284,143 @@ message CMsgClientToGCVerifyIntegrity {
 message CMsgGCToClientVACReminder {
 }
 
-message CMsgClientToGCPullTabsRequest {
-	optional uint32 event_id = 1;
-}
-
-message CMsgGCToClientPullTabsResponse {
-	enum EResponse {
-		k_eInternalError = 0;
-		k_eSuccess = 1;
-		k_eTooBusy = 2;
-		k_eDisabled = 3;
-	}
-
-	optional .CMsgGCToClientPullTabsResponse.EResponse result = 1 [default = k_eInternalError];
-	optional .CMsgPullTabsData data = 2;
-}
-
-message CMsgClientToGCPullTabsRedeem {
-	optional uint32 event_id = 1;
-	optional uint32 board_id = 2;
-	optional uint32 hero_id = 3;
-}
-
-message CMsgGCToClientPullTabsRedeemResponse {
-	enum EResponse {
-		k_eInternalError = 0;
-		k_eSuccess = 1;
-		k_eTooBusy = 2;
-		k_eAlreadyGranted = 3;
-		k_eDisabled = 4;
-	}
-
-	optional .CMsgGCToClientPullTabsRedeemResponse.EResponse result = 1 [default = k_eInternalError];
+message CMsgClientToGCUnderDraftRequest {
+	optional uint32 account_id = 1;
 	optional uint32 event_id = 2;
-	optional uint32 board_id = 3;
-	optional uint32 hero_id = 4;
-	optional uint32 action_id = 5;
+}
+
+message CMsgClientToGCUnderDraftResponse {
+	optional .EUnderDraftResponse result = 1 [default = k_eInternalError];
+	optional uint32 account_id = 2;
+	optional uint32 event_id = 3;
+	optional .CMsgUnderDraftData draft_data = 4;
+}
+
+message CMsgClientToGCUnderDraftReroll {
+	optional uint32 event_id = 1;
+}
+
+message CMsgClientToGCUnderDraftRerollResponse {
+	optional .EUnderDraftResponse result = 1 [default = k_eInternalError];
+	optional uint32 event_id = 2;
+	optional .CMsgUnderDraftData draft_data = 3;
+}
+
+message CMsgClientToGCUnderDraftBuy {
+	optional uint32 event_id = 1;
+	optional uint32 slot_id = 2;
+}
+
+message CMsgGCToClientGuildUnderDraftGoldUpdated {
+	optional uint32 event_id = 1;
+}
+
+message CMsgClientToGCUnderDraftBuyResponse {
+	optional .EUnderDraftResponse result = 1 [default = k_eInternalError];
+	optional uint32 event_id = 2;
+	optional uint32 slot_id = 3;
+	optional .CMsgUnderDraftData draft_data = 4;
+}
+
+message CMsgClientToGCUnderDraftSell {
+	optional uint32 event_id = 1;
+	optional uint32 slot_id = 2;
+}
+
+message CMsgClientToGCUnderDraftSellResponse {
+	optional .EUnderDraftResponse result = 1 [default = k_eInternalError];
+	optional uint32 event_id = 2;
+	optional uint32 slot_id = 3;
+	optional .CMsgUnderDraftData draft_data = 4;
+}
+
+message CMsgClientToGCUnderDraftRedeemReward {
+	optional uint32 event_id = 1;
+	optional uint32 action_id = 2;
+}
+
+message CMsgClientToGCUnderDraftRedeemRewardResponse {
+	optional .EUnderDraftResponse result = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCUnderDraftRedeemSpecialReward {
+	optional uint32 event_id = 1;
+}
+
+message CMsgClientToGCUnderDraftRedeemSpecialRewardResponse {
+	optional .EUnderDraftResponse result = 1 [default = k_eInternalError];
+}
+
+message CMsgTeamFanContentStatus {
+	message TeamStatus {
+		optional string name = 1;
+		optional uint32 team_id = 2;
+		optional string logo_url = 3;
+		optional .ETeamFanContentStatus status = 4 [default = TEAM_FAN_CONTENT_STATUS_INVALID];
+		optional uint32 timestamp = 5;
+		optional string zip_url = 6;
+		optional uint64 ugc_logo = 7;
+	}
+
+	repeated .CMsgTeamFanContentStatus.TeamStatus team_status_list = 1;
+}
+
+message CMsgSetTeamFanContentStatus {
+	optional uint32 team_id = 1;
+	optional .ETeamFanContentStatus status = 2 [default = TEAM_FAN_CONTENT_STATUS_INVALID];
+}
+
+message CMsgSetTeamFanContentStatusResponse {
+	enum EResult {
+		k_eSuccess = 0;
+		k_eInternalError = 1;
+	}
+
+	optional .CMsgSetTeamFanContentStatusResponse.EResult result = 1 [default = k_eSuccess];
+}
+
+message CMsgDraftTrivia {
+	message DraftTriviaHeroInfo {
+		optional uint32 hero_id = 1;
+		optional uint32 role = 2;
+	}
+
+	message DraftTriviaMatchInfo {
+		repeated .CMsgDraftTrivia.DraftTriviaHeroInfo radiant_heroes = 1;
+		repeated .CMsgDraftTrivia.DraftTriviaHeroInfo dire_heroes = 2;
+	}
+
+	message PreviousResult {
+		optional bool voted_correctly = 1;
+		optional bool voted_radiant = 2;
+		optional .CMsgDraftTrivia.DraftTriviaMatchInfo match_hero_info = 3;
+		optional uint32 match_rank_tier = 4;
+		optional uint32 end_time = 5;
+		optional uint64 match_id = 6;
+	}
+
+	optional bool has_valid_match = 1;
+	optional .CMsgDraftTrivia.DraftTriviaMatchInfo match_hero_info = 2;
+	optional uint32 match_rank_tier = 3;
+	optional uint32 end_time = 4;
+	optional uint32 event_id = 5;
+	optional bool current_match_voted_radiant = 6;
+	optional .CMsgDraftTrivia.PreviousResult previous_result = 7;
+	optional uint32 current_streak = 8;
+}
+
+message CMsgClientToGCSubmitDraftTriviaMatchAnswer {
+	optional bool chose_radiant_as_winner = 1;
+	optional uint32 event_id = 2;
+	optional uint32 end_time = 3;
+}
+
+message CMsgClientToGCSubmitDraftTriviaMatchAnswerResponse {
+	optional .EDOTADraftTriviaAnswerResult result = 1 [default = k_EDOTADraftTriviaAnswerResult_Success];
+}
+
+message CMsgDraftTriviaVoteCount {
+	optional uint32 total_votes = 1;
+	optional uint32 radiant_votes = 2;
+	optional uint32 dire_votes = 3;
 }

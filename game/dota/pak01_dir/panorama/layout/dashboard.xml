@@ -6,13 +6,54 @@
 		<include src="s2r://panorama/styles/compendiums/compendium_styles.vcss_c" />
 	</styles>
 
-	<DOTADashboard class="InitialDisplay NotOnTodayPage" hittest="false">
+	<snippets>
+		<snippet name="SeasonRewardToast">
+			<Panel class="SeasonRewardToast">
+				<Image id="ToastImage" scaling="stretch-to-cover-preserve-aspect" />
+				<Panel class="RewardTextContainer" >
+					<Panel class="ToastLevelContainer">
+						<DOTAEventCrestImage id="EventCrest" class="ShieldIcon" />
+						<Label class="LevelLabel" text="#DOTA_SeasonPass_Toast_Reward_Level" />
+					</Panel>
+					<Label class="Title" text="#DOTA_SeasonPass_Toast_Rewards_Unlocked"/>
+					<Label class="Description" text="{s:description}"/>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="SeasonRewardEmoticonToast">
+			<Panel class="SeasonRewardToast Emoticon">
+				<DOTAEmoticon id="Emoticon" />
+				<Panel class="RewardTextContainer" >
+					<Panel class="ToastLevelContainer">
+						<DOTAEventCrestImage id="EventCrest" class="ShieldIcon" />
+						<Label class="LevelLabel" text="#DOTA_SeasonPass_Toast_Reward_Level" />
+					</Panel>
+					<Label class="Title" text="#DOTA_SeasonPass_Toast_Emoticon_Unlocked"/>
+					<Label class="Description" text="{s:description}"/>
+				</Panel>
+			</Panel>
+		</snippet>
+		<snippet name="SeasonRewardItemToast">
+			<Panel class="SeasonRewardToast Emoticon">
+				<DOTAEconItem id="MainImage" class="DisableInspect DisableEquipped" />
+				<Panel class="RewardTextContainer" >
+					<!-- no item / crest bar, todo, get that info -->
+					<Label class="Title" text="#DOTA_SeasonPass_Toast_Rewards_Unlocked"/>
+					<Label class="Description" text="{s:description}"/>
+				</Panel>
+			</Panel>
+		</snippet>
+		
+	</snippets>
+
+	<DOTADashboard class="InitialDisplay NoEmbedChatInPage" hittest="false">
 
 		<Panel id="DashboardCore">
 
 			<Panel id="DashboardBackground">
 				<Panel id="DashboardBackgroundInitContainer">
 					<Panel id="BackgroundImage"/>
+					<MoviePanel id="Outlanders" src="file://{resources}/videos/ti10_background.webm" repeat="true" autoplay="onload"  />
 					<DOTAScenePanel id="BackgroundMap" hittest="false" camera="shot_cameraA" map="backgrounds/dashboard_parallax_test" light="bp_light" renderdeferred="true" deferredalpha="false" particleonly="false" live-mode="high_end_only"/>
 					<Panel id="BackgroundVignette" />
 					<Panel id="TI7Glow"/>
@@ -32,10 +73,12 @@
 
 				<PageManager id="DashboardPages" hittest="false" />
 
-				<Panel id="JungleOverlay" hittest="false" hittestchildren="false">
-					<Panel id="JungleOverlayFlowersLeft" />
-					<Panel id="JungleOverlayFlowersRight" />
+				<Panel id="RocksOverlay" hittest="false" hittestchildren="false">
+					<Panel id="TI10RocksOverlayLeft" />
+					<Panel id="TI10RocksOverlayRight" />
 				</Panel>
+
+				
 
 				<Panel id="ExpiredTag">
 					<Label text="#DOTA_BattlePass_Expired"/>
@@ -47,7 +90,7 @@
 
 				<!-- clicking on the dashboard pages blocker closes the play tab -->
 				<Panel id="TopBarSecondaryContainer" hittest="false" >
-					<Panel id="BattlePassLogo" onactivate="DOTAShowBPInternational2019HomePage()" />
+					<Panel id="BattlePassLogo" onactivate="DOTAShowBPInternational2020HomePage()" />
 					<Panel id="TopBarSecondaryContent"  hittest="false" class="Hidden">
 						<Panel id="TopBarSecondaryTabs"  hittest="false" class="Hidden">
 							<!-- Added dynamically: -->
@@ -80,7 +123,9 @@
 				<DOTACustomLobby id="CustomLobby" />
 
 				<Panel id="SocialControls"  hittest="false">
+					
 					<Panel id="PartyHasLargeRankSpreadTooltip" class="InfoIcon" onmouseout="UIHideTextTooltip();" onmouseover="UIShowTextTooltip( #CompetitiveMMLargeRankSpreadWarning );"/>
+
 					<Panel id="OpenPartyContainer">
 						<Button id="CurrentPartyVisibilityButton" onactivate="DOTAPartyVisibilityButtonClicked();" onmouseout="DOTAPartyVisibilityButtonMouseOut();" onmouseover="DOTAPartyVisibilityButtonMouseOver();" >
 							<Panel id="OpenPartyFrame1" class="OpenPartyAnimation" hittest="false"/>
@@ -88,42 +133,67 @@
 							<Panel id="OpenPartyFrame3" class="OpenPartyAnimation" hittest="false"/>
 						</Button>
 					</Panel>
-					<Button id="FriendsButton" onactivate="DOTAFriendsButtonClicked();" onmouseout="DOTAFriendsButtonMouseOut();" onmouseover="DOTAFriendsButtonMouseOver();">
-						<Panel id="FriendsButtonContents" />
-					</Button>
+					
+					<Panel id="FriendsButtonContainer">
+						<Button id="FriendsButton" onactivate="DOTAFriendsButtonClicked();" onmouseout="DOTAFriendsButtonMouseOut();" onmouseover="DOTAFriendsButtonMouseOver();">
+							<Panel id="FriendsButtonContents" />
+						</Button>
+						<Panel id="OpenPartyNotification" >
+							<Label id="OpenPartyNotificationNumber" text="3" />
+						</Panel>
+					</Panel>
 
-					<Panel id="OpenPartyNotification" >
-						<Label id="OpenPartyNotificationNumber" text="3" />
+					<Panel id="GuildsContainer">
+
+						<Button id="GuildButton" onactivate="DOTAShowDefaultGuildPage()" onmouseover="DOTARequestGuildStatusVisible( true )" onmouseout="DOTARequestGuildStatusVisible( false )">
+							<DOTAGuildImage id="GuildImage" />
+							<Panel id="GuildBannerIcon" />
+							<Panel id="GuildFrame" />
+						</Button>
+
+						<Panel id="GuildNotifications" hittest="false" hittestchildren="false">
+							<Panel id="GuildInvitesNotification" class="GuildNotification">
+								<Label text="{d:guild_invite_count}" />
+							</Panel>
+							<Panel id="GuildContractsNotification" class="GuildNotification">
+								<Label text="{d:guild_available_contracts_count}" />
+							</Panel>
+						</Panel>
+
 					</Panel>
 
 					<Panel id="CurrentPartyContainer">
-						<Panel id="CurrentPartyReadyCheck">	
-							<Panel id="CurrentPartyReadyCheckHeader">
-								<Label id="CurrentPartyReadyCheckTitle" text="#DOTA_ReadyCheck" />
-								<Panel class="FillWidth" />
-								<Panel id="CurrentPartyReadyCheckClockImage" />
-								<Label id="CurrentPartyReadyCheckClock" class="MonoNumbersFont" text="{d:time_remaining}" />
-								<Label id="CurrentPartyReadyCheckFinished" text="#DOTA_Done" />
-							</Panel>	
-							<Label id="CurrentPartyReadyCheckStatus" text="#DOTA_ReadyCheck_Responses" />
+						
+						<Panel id="CurrentPartyContents">
+							<Panel id="CurrentPartyReadyCheck">
+								<Panel id="CurrentPartyReadyCheckHeader">
+									<Label id="CurrentPartyReadyCheckTitle" text="#DOTA_ReadyCheck" />
+									<Panel class="FillWidth" />
+									<Panel id="CurrentPartyReadyCheckClockImage" />
+									<Label id="CurrentPartyReadyCheckClock" class="MonoNumbersFont" text="{d:time_remaining}" />
+									<Label id="CurrentPartyReadyCheckFinished" text="#DOTA_Done" />
+								</Panel>
+								<Label id="CurrentPartyReadyCheckStatus" text="#DOTA_ReadyCheck_Responses" />
+							</Panel>
+
+							<Panel id="CurrentPartyMain">
+								<DOTAParty id="CurrentParty" class="CurrentParty" />
+								<Button id="PartyOpenMic" onactivate="DOTAPartyOpenMicButtonClicked()" onmouseout="UIHideTextTooltip()">
+									<Panel id="PartyOpenMicImage" />
+								</Button>
+							</Panel>
 						</Panel>
 
-						<Panel id="CurrentPartyMain">
-							<DOTAParty id="CurrentParty" class="CurrentParty" />
-							<Button id="PartyOpenMic" onactivate="DOTAPartyOpenMicButtonClicked()" onmouseout="UIHideTextTooltip()">
-								<Panel id="PartyOpenMicImage" />
-							</Button>	
-						</Panel>	
+						<Panel id="PendingInvitesSection">
+							<Button id="PendingInvites" onmouseover="DOTAShowPendingInvitesTooltip()" onmouseout="DOTAHidePendingInvitesTooltip()" onactivate="DOTAShowPendingInvitesContextMenu()">
+								<Label id="PendingInvitesLabel" text="+N" />
+							</Button>
+							<Panel id="PendingInvitesRadialSweepContainer" hittest="false">
+								<Panel id="PendingInvitesRadialSweep" class="RadialSweep" hittest="false"/>
+							</Panel>
+						</Panel>
+
 					</Panel>	
-
-					<Panel id="PendingInvitesSection">
-						<Button id="PendingInvites" onmouseover="DOTAShowPendingInvitesTooltip()" onmouseout="DOTAHidePendingInvitesTooltip()" onactivate="DOTAShowPendingInvitesContextMenu()">
-							<Label id="PendingInvitesLabel" text="+N" />
-						</Button>
-						<Panel id="PendingInvitesRadialSweepContainer" hittest="false">
-							<Panel id="PendingInvitesRadialSweep" class="RadialSweep" hittest="false"/>
-						</Panel>
-					</Panel>
 
 				</Panel>
 
@@ -268,6 +338,10 @@
 
 		<Panel id="FriendMenuContainer" hittest="false">
 			<DOTAFriendMenu id="FriendMenu" />
+		</Panel>
+		
+		<Panel id="GuildStatusContainer" hittest="false">
+			<DOTAGuildStatus id="GuildStatus" onmouseover="DOTARequestGuildStatusVisible( true )" onmouseout="DOTARequestGuildStatusVisible( false )" />
 		</Panel>
 
 		<!-- should appear on top of chat/friends during normal situations -->
