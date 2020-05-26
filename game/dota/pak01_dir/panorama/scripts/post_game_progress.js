@@ -936,7 +936,7 @@ AnimateCavernCrawlScreenAction.prototype.start = function ()
         }));
     })(this);
 
-	this.seq.actions.push( new AddScreenLinkAction( panel, 'CavernsProgress', '#DOTACavernCrawl_Title_TI2019' ) );
+	this.seq.actions.push( new AddScreenLinkAction( panel, 'CavernsProgress', '#DOTACavernCrawl_Title_TI2020' ) );
 
 	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
 	this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
