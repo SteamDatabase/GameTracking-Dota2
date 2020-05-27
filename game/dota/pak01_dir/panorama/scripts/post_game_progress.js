@@ -5471,14 +5471,14 @@ g_MVP_Accolade_TypeMap = {
 	254:
 	{	// kKillEaterEventType_Furion_EnemyHeroesTrapped
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEventType_Furion_EnemyHeroesTrapped",
-		ability_name: "courier_go_to_enemy_secretshop",
+		ability_name: "furion_sprout",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEventType_Furion_EnemyHeroesTrapped",
 	},
 	255:
 	{	// kKillEaterEventType_Pangolier_HeartpiercerKills
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEventType_Pangolier_HeartpiercerKills",
-		ability_name: "pangolier_heartpiercer",
+		ability_name: "pangolier_lucky_shot",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEventType_Pangolier_HeartpiercerKills",
 	},
