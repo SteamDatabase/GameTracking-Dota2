@@ -3069,7 +3069,13 @@ AnimateMVP2ScreenAction.prototype.start = function ()
                 }
                 else
                 {
-                    $.GetContextPanel().SpawnHeroInScenePanelByHeroId( map, mvpDetails.overrideheroid, "featured_hero" );
+					var econId = mvpDetails.overrideeconid;
+					if(econId == undefined)
+                    {
+						econId = -1;
+                    }
+
+                    $.GetContextPanel().SpawnHeroInScenePanelByHeroId( map, mvpDetails.overrideheroid, "featured_hero", econId );
                 }
 
                 //setup accolades for mvp
@@ -5629,8 +5635,11 @@ function TestMVP2Screen() {
 					slot: 3,
 					accountid: 174054,
 					guildid: 4,
-					heroname: 'npc_dota_hero_earthshaker',
-					overrideheroid: 7,
+					heroname: 'npc_dota_hero_wraithking', // just for display
+					// Find hero id in game\dota\scripts\npc\npc_heroes.txt
+					overrideheroid: 42,
+					// Find econ id in game\dota\scripts\items\items_game.txt
+					overrideeconid: 13456,
 					was_dire: false,
 					accolades: [
 						{ type: accolades[0], detail_value: 113 },
