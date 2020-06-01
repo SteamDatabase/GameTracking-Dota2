@@ -4791,28 +4791,28 @@ g_MVP_Accolade_TypeMap = {
 	148:
 	{	// kKillEaterEvent_ShadowFiend_RequiemMultiKills
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEvent_ShadowFiend_RequiemMultiKills",
-		ability_name: "bane_fiends_grip",
+		ability_name: "nevermore_requiem",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEvent_ShadowFiend_RequiemMultiKills",
 	},
 	149:
 	{	// kKillEaterEvent_ShadowFiend_QRazeKills
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEvent_ShadowFiend_QRazeKills",
-		ability_name: "bane_fiends_grip",
+		ability_name: "nevermore_shadowraze1",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEvent_ShadowFiend_QRazeKills",
 	},
 	150:
 	{	// kKillEaterEvent_ShadowFiend_WRazeKills
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEvent_ShadowFiend_WRazeKills",
-		ability_name: "nevermore_shadowraze1",
+		ability_name: "nevermore_shadowraze2",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEvent_ShadowFiend_WRazeKills",
 	},
 	151:
 	{	// kKillEaterEvent_ShadowFiend_ERazeKills
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEvent_ShadowFiend_ERazeKills",
-		ability_name: "bane_fiends_grip",
+		ability_name: "nevermore_shadowraze3",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEvent_ShadowFiend_ERazeKills",
 	},
