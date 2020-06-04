@@ -3179,7 +3179,7 @@ AnimateMVP2ScreenAction.prototype.start = function ()
 	this.seq.actions.push( new StopSkippingAheadAction() );
 	this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
 	this.seq.actions.push( new SwitchClassAction( mvp2ScreenPanel, 'current_screen', '' ) );
-	this.seq.actions.push( new SkippableAction( new WaitAction( 10.0 ) ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 7.0 ) ) );
 
 	this.seq.start();
 }
@@ -4672,7 +4672,7 @@ g_MVP_Accolade_TypeMap = {
 	131:
 	{	// kKillEaterEvent_Lifestealer_RageKills
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEvent_Lifestealer_RageKills",
-		ability_name: "alchemist_chemical_rage",
+		ability_name: "life_stealer_rage",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEvent_Lifestealer_RageKills",
 	},
