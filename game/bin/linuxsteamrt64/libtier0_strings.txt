@@ -38,6 +38,7 @@ $tI
 %s '%s'
 %s (%d) : %s
 %s (%i) : %s
+%s bytes used out of %s bytes available (%.2f%%)
 %s slot %d combined mask %u:0x%llx
 %s specified, allocating %d MB%s
 %s test: multithread interleaved push/pop, %s
@@ -71,11 +72,13 @@ $tI
 %s: invalid nStart %d (string %d)
 %s: invalid pointer byte count
 %s: invalid string pointer (string chars %d)
+%s: out of memory, falling back to regular allocators
 %s: requested conversion of %d chars
 %s: string format requested %d chars
 %s: string length overflows (is %d, adding %d)
 %s: unable to find %s in '%s'
 %s: unable to load '%s', error %d
+%u - %u
 %zu %zu %zu %zu %zu %zu %zu
 &
 &#039;
@@ -213,7 +216,6 @@ $tI
 -------------------------------------------
 ---------------------------------------------------- ----------- ----------- ----------- ------ ----------- ------ ----------- ----------- ----------- -----------
 --hint
--2GB
 -allowmultiple
 -assertbreak
 -clearassertstate
@@ -232,6 +234,12 @@ $tI
 -inset_left
 -inset_right
 -inset_top
+-lmvlow
+-lmvmax
+-lmvmemgb
+-lmvmemmb
+-lmvmin
+-lmvnoguard
 -mpi_worker
 -no_assert_dialog
 -noassert
@@ -245,6 +253,7 @@ $tI
 -start_resource_profiling
 -t
 -testmode
+-uselmv
 .%c
 ............|
 ../
@@ -399,6 +408,7 @@ Affinity preferences: no preferences, skipping assignment
 Affinity preferences: no-pref all-procs does not set affinity
 Affinity preferences: only one logical processor
 Affinity preferences: turned off for internal reason
+AllocUnlocked
 AllocateEvent
 Always Ignore
 Android
@@ -940,6 +950,8 @@ LOADING
 LOG_GENERAL
 Launch Debugger
 LengthOfMatchingPaths
+Lightweight memory verifier is ON (allocation sizes %s, %uMiB reserved, %s, %s)
+Lightweight verifier:
 Linux
 Linux 2.2
 Linux 2.4
@@ -1906,6 +1918,7 @@ VoidFnPtrLookup_Tier0
 W
 WARNING: Large alloc of %llu bytes of memory (limit %llu)
 WARNING: Large virtual reservation of %llu bytes of memory (limit %llu)
+WARNING: Unable to initialize verifier allocator
 WARNING: there were errors during information capture, this report may be incomplete
 WARNING: total wall clock time was %.2f seconds, results may be invalid
 WARNING: truncated input line
@@ -1933,6 +1946,7 @@ Windows Vista
 Windows XP
 Working set: %s
 Y
+Y@-2GB
 [   func+child         func ]
 [   func+child       func ]
 [ func+child         func ]
@@ -2115,8 +2129,10 @@ getrlimit64
 getrusage
 gettimeofday
 gmtime_r
+guard after
+guard before
+guard both
 hibernate.cpp
-high
 higher
 i
 iOS
@@ -2136,7 +2152,6 @@ libtier0.so
 linux
 localtime_r
 logging.cpp
-low
 lower
 macos
 malloc
@@ -2154,6 +2169,7 @@ nTries < 10000000
 nanosleep
 nexttoken
 no affinity...
+no guard
 nopref-all
 notify-send
 open
@@ -2167,6 +2183,8 @@ p?&quot;
 pass
 pclose
 physical id
+place high
+place low
 platform.cpp
 platform_sdl.cpp
 popen
