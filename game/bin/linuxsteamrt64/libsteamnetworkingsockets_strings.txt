@@ -213,6 +213,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 %s sent routing secret in msg 0x%02x.  Marking as fully trusted.  (Previous trust was %d)
 %s#%d (%s)
 %s%02X
+%s%lld
 %s%s
 %s(%d):
 %s(%d): OpenSSL internal error, assertion failed: %s
@@ -361,6 +362,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamdatagram_internal.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamnetworking_statsutils.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamnetworkingsockets_internal.h
+/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingmessages.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingsockets.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingsockets.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingsockets_sdr.cpp
@@ -700,6 +702,7 @@ Assertion Failed: !HasOverlappingRange( range, m_senderState.m_listReadyRetryRel
 Assertion Failed: !IsDevConfigValue( s_vecConfigValueTable[0]->m_eValue )
 Assertion Failed: !IsExternallyAllocated()
 Assertion Failed: !ListenSocket()
+Assertion Failed: !bEndToEnd
 Assertion Failed: !bFoundNextToTimeout
 Assertion Failed: !bFoundPendingAck
 Assertion Failed: !cert.m_authScope.IsEmpty()
@@ -860,6 +863,7 @@ Assertion Failed: d.m_nDirectPing <= k_nMaxReasonablePing || d.m_nDirectPing == 
 Assertion Failed: d.m_nID
 Assertion Failed: d.m_nIndirectPing <= k_nMaxReasonablePing
 Assertion Failed: eMode == k_eFindClient_Other
+Assertion Failed: eOldState == k_ESteamNetworkingConnectionState_Connected
 Assertion Failed: eReason > k_ESteamNetConnectionEnd_AppException_Max
 Assertion Failed: eReplyRequested != k_EStatsReplyRequest_NothingToSend
 Assertion Failed: false
@@ -952,6 +956,8 @@ Assertion Failed: m_connection.m_statsEndToEnd.m_usecTimeLastRecv > 0
 Assertion Failed: m_connection.m_unConnectionIDRemote != 0
 Assertion Failed: m_eClientType == k_EClientType_P2PConnection
 Assertion Failed: m_eConnectionState == k_ESteamNetworkingConnectionState_Dead
+Assertion Failed: m_eConnectionWireState == eOldState
+Assertion Failed: m_eConnectionWireState == k_ESteamNetworkingConnectionState_Dead
 Assertion Failed: m_eKeyType == x.m_eKeyType
 Assertion Failed: m_eNegotiatedCipher != k_ESteamNetworkingSocketsCipher_INVALID
 Assertion Failed: m_eNegotiatedCipher == k_ESteamNetworkingSocketsCipher_INVALID
@@ -1749,7 +1755,6 @@ Cannot deduce public IP.  Datacenter environment variables misconfigured!
 Cannot deserialize CMsgSteamNetworkingP2PRendezvous rejection?
 Cannot find session to mark as MRU!
 Cannot locate connection by handle to process connect request?
-Cannot locate gap, or processing packet multiple times
 Cannot post failure callback for non-SteamID-based P2P
 Cannot request a cert; we don't know our SteamID (yet?).
 Cannot set cert.  No private key?
@@ -1995,7 +2000,6 @@ End-to-end connection: connected
 End-to-end connection: connecting
 End-to-end connection: performing rendezvous
 End-to-end ping sample
-EndToEnd
 Enter PEM pass phrase:
 Enterprises
 Enum type "
@@ -2588,7 +2592,6 @@ N25SteamNetworkingSocketsLib27CSteamNetworkConnectionBaseE
 N25SteamNetworkingSocketsLib27CSteamNetworkConnectionPipeE
 N25SteamNetworkingSocketsLib28CSteamNetworkListenSocketP2PE
 N25SteamNetworkingSocketsLib28LinkStatsTrackerRelayOutsideE
-N25SteamNetworkingSocketsLib29CSteamNetworkListenSocketBaseE
 N25SteamNetworkingSocketsLib30CSteamNetworkingUtilsSteamBaseE
 N25SteamNetworkingSocketsLib30SteamNetworkingMessagesSessionE
 N25SteamNetworkingSocketsLib31CSteamNetworkingSocketsCallbackI23SteamServersConnected_tEE
@@ -2762,7 +2765,7 @@ No client identity
 No configured STUN servers
 No data
 No default value
-No dropped packets, pkt num %lld -> %lld, dup bit not set?  recvseq=%lld, lurch=%lld, ooo=%lld, mask=[0x%llx, 0x%llx].  (%s)
+No dropped packets, pkt num %lld, dup bit not set?  recvseq=%lld inorder=%lld, dup=%lld, lurch=%lld, ooo=%lld, %s.  (%s)
 No field named "uninterpreted_option" in the Options proto.
 No identity data
 No identity data is present
@@ -3020,7 +3023,6 @@ Problem     : Field is not the right type for this message:    Expected  :
 Proc-Type:
 Proc-Type: 4,
 Processed thinkers %d times -- probably one thinker keeps requesting an immediate wakeup call.
-Processing a packet multiple times
 Protobuf failed to parse
 Protobuf failed to parse CMsgSteamDatagramCertificateSigned
 Protobuf parse failed %s
@@ -3264,6 +3266,7 @@ SendMessageToUser
 SendMessages
 SendRateMax
 SendRateMin
+SendUDPacket
 Sender sent abs latest recv pkt number using %llx mod %llx, next send %llx
 Sender sent abs unreliable message number using %llx mod %llx, highest seen %llx
 Sender sent reliable stream pos using %llx mod %llx, expected next %llx
@@ -3358,7 +3361,6 @@ SteamNetworkingIPAddr_ToString
 SteamNetworkingIdentityFromProtobufMsg returned 0, but but we don't have any unknown fields?
 SteamNetworkingIdentity_ParseString
 SteamNetworkingIdentity_ToString
-SteamNetworkingMessagesSession::ConnectionStateChanged after detaching from connection?
 SteamNetworkingMessages_Lib
 SteamNetworkingSockets lock held for %.1fms.  (Performance warning).  %s
 SteamNetworkingSocketsCert_t
@@ -3439,7 +3441,6 @@ Tokenizer::ParseInteger() passed text that could not have been tokenized as an i
 Tokenizer::ParseStringAppend() passed text that could not have been tokenized as a string:
 Told peer to stop acking up to %lld, but latest packet we have sent is %lld
 Too many connections.
-Too many expected acks!  Either we're sending packts requiring acks too fast, or else we're not expiring them properly
 TracerPid:
 Trailer Field: 0x
 TransportChangeConfirm
@@ -3689,6 +3690,7 @@ ZLONG
 [%s] Cannot accept connection, current state is %d.
 [%s] Cannot accept connection; already closed by remote host.
 [%s] Cannot calculate metrics to %s, but we have a session
+[%s] Cannot locate gap, or processing packet %lld multiple times. %s | %s
 [%s] Cannot use unsigned cert; failing connection.
 [%s] Client switching active relay %s -> %s (msgID %d)
 [%s] ConnectionTimedOut didn't do what it is supposed to! (%d -> %d)
@@ -3699,6 +3701,7 @@ ZLONG
 [%s] Discarding inactive session %s.  %s
 [%s] End-to-end sequence number is duplicate or old, or fails to decrypt, but relay sequence number from %s is OK?  Dropping.
 [%s] End-to-end sequence number is duplicate or old, or fails to decrypt, but relay sequence number is OK?
+[%s] Expecting %d acks!  %04x=%lld %04x=%lld %04x=%lld ... %04x=%lld %04x=%lld %04x=%lld
 [%s] Forgetting relay session %s.  Last communication was %.1f seconds ago
 [%s] Front ping %d is greater than measured end-to-end ping %d.
 [%s] Got P2P signal from %s.  Wrong connection type!
@@ -3733,6 +3736,7 @@ ZLONG
 [%s] Our cert expires in %d seconds.
 [%s] P2P route through '%s' now forwarding to '%s%s', revision %d
 [%s] Packet data chunk failed to decrypt!  Could be tampering/spoofing or a bug.
+[%s] Packet gap bug.  %lld [%lld,%lld) %s | %s
 [%s] Peer acked our routes for revision %u, but our latest revision is %u!
 [%s] Peer appears to be using '%s' transport as primary
 [%s] Primary router %s going offline in %d seconds; seeking replacement
@@ -5185,6 +5189,7 @@ map_key must not name a repeated field.
 maskGenAlgorithm
 maskGenFunc
 maximum
+maxrecv=%lld, init=%lld, inorder=%lld, mask=%llx,%llx
 maxsize=
 md2
 md2WithRSAEncryption

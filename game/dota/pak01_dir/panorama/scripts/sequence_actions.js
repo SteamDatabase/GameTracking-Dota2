@@ -534,6 +534,51 @@ PlaySoundEffectAction.prototype.update = function ()
 	return false;
 }
 
+
+// ----------------------------------------------------------------------------
+//   PlaySoundAction
+// ----------------------------------------------------------------------------
+
+function PlaySoundAction( soundName )
+{
+	this.soundName = soundName;
+}
+PlaySoundAction.prototype = new BaseAction();
+
+PlaySoundAction.prototype.update = function ()
+{
+	PlayUISoundScript( this.soundName );
+	return false;
+}
+
+// ----------------------------------------------------------------------------
+//   PlaySoundForDurationAction
+// ----------------------------------------------------------------------------
+
+function PlaySoundForDurationAction( soundName, duration )
+{
+	this.soundName = soundName;
+	this.duration = duration;
+}
+PlaySoundForDurationAction.prototype = new BaseAction();
+
+PlaySoundForDurationAction.prototype.start = function ()
+{
+	this.soundEventGuid = PlayUISoundScript( this.soundName );
+
+	this.waitAction = new WaitAction( this.duration );
+	this.waitAction.start();
+}
+PlaySoundForDurationAction.prototype.update = function ()
+{
+	return this.waitAction.update();
+}
+PlaySoundForDurationAction.prototype.finish = function ()
+{
+	StopUISoundScript( this.soundEventGuid );
+	this.waitAction.finish();
+}
+
 // ----------------------------------------------------------------------------
 
 // Helper function to asynchronously tick a single action until it's finished, then call finish on it.
