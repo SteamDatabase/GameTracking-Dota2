@@ -1851,8 +1851,16 @@ g_MVP_Accolade_TypeMap = {
 	272:
 	{	// kKillEaterEventType_Snapfire_LizardBlobsKills
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEventType_Snapfire_LizardBlobsKills",
-		ability_name: "big_thunder_lizard_frenzy",
+		ability_name: "snapfire_mortimer_kisses",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEventType_Snapfire_LizardBlobsKills",
+	},
+	273:
+	{
+		// kKillEaterEventType_Snapfire_TwoHeroCookieStuns
+		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEventType_Snapfire_TwoHeroCookieStuns",
+		ability_name: "snapfire_firesnap_cookie",
+		gradient: "red",
+		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEventType_Snapfire_TwoHeroCookieStuns",
 	},
 }

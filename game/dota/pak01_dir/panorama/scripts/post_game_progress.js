@@ -2944,6 +2944,7 @@ AnimateMVP2ScreenAction.prototype.start = function ()
 		if (accolade == undefined)
 		{
 			$.Msg('No accolade of type ' + accolade_id.toString());
+			return null;
 		}
 
 		var gradient_colour = wasDire ? "red" : "green";
