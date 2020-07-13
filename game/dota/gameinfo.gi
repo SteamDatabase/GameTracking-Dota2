@@ -47,6 +47,8 @@
 
 			Mod					dota
 
+			Write				dota
+
 			AddonRoot			dota_addons
 
 			// Note: addon content is included in publiccontent by default.
@@ -77,7 +79,6 @@
 		"HasModAppSystems" "1"
 		"Capable64Bit" "1"
 		"UsesVGui" "0"
-		"UsesScaleform" "1"
 		"UsesPanorama" "1"
 		"PanoramaUIClientFromClient" "1" // IPanoramaUIClient is implemented by client.dll
 		"HasGameUI" "1" // dota uses gameui
@@ -133,6 +134,7 @@
 		"CMTAtlasHeight" "512"
 		"CMTAtlasChunkSize" "128"
 		"DrawParticleChildrenSeparateFromParents" "1"
+		"MaxAutoPartitions" "8"
 	}
 	
 	SoundSystem
@@ -157,6 +159,7 @@
 		"DefaultTextureScale"	"0.250000"
 		"DefaultSolidEntity"	"trigger_dota"
 		"DefaultPointEntity"	"info_player_start_dota"
+		"DefaultPathEntity"			"path_particle_rope"
 		"NavMarkupEntity"		"func_nav_markup"
 		"EnableDotaTools"		"1"
 		"DefaultGridTileSet"	"/maps/tilesets/radiant_basic.vmap"
@@ -177,7 +180,19 @@
 		"DefaultShader"			"global_lit_simple"
 		"ExpressionHelpUrl"		"https://intranet.valvesoftware.com/index.php/Source_2.0/Shader_Format#Shader.2FMaterial_Expression_Syntax"
 	}
+
+	ModelCompile
+	{
+		"UseShadowFastPathHeuristic"	"1"
+	}
 	
+	ModelDoc
+	{
+		"models_gamedata"			"models_gamedata.fgd"
+		"export_modeldoc"			"0"
+		"features"					"econitems;editorconfig"
+	}
+
 	ResourceCompiler
 	{
 		// Overrides of the default builders as specified in code, this controls which map builder steps
@@ -205,5 +220,11 @@
 		// cost per command buffer than software contexts so settings this higher reduces 
 		// overall number of command buffers.
 		"VulkanSceneSystemJobCost"		"2"
+	}
+
+	AnimationSystem
+	{
+		NumDecodeCaches "16"
+		DecodeCacheMemoryKB "512"
 	}
 }
