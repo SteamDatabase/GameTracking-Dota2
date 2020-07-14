@@ -132,13 +132,15 @@ $U
 %ls [wstring, len = %d]
 %s
 %s (path ID '%s')
+%s bytes for token lookup; %s bytes for instance info
 %s failed to localize: %s
-%s localization, %s tokens
+%s tokens; %s instances
 %s%d
 %s,
 %s/
 %s_[%s]
 ( def. "%s" )
+(%s from %u files; %s not file-based)
 (*%s*),
 *.*
 *.txt
@@ -229,12 +231,12 @@ CBufferString::Format(char const*, ...)
 CBufferString::GetInsertPtr(int, int, bool, int*)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
-CBufferString::Purge(int)
 CBufferString::Relinquish(CBufferString::EAllocationOption_t)
 CBufferString::RemoveAt(int, int)
 CBufferString::RemovePartialUTF8Tail(bool)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
+CBufferString::SetUnusable()
 CBufferString::ShortenPath(bool)
 CBufferString::StripExtension()
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
@@ -288,9 +290,8 @@ FATAL ERROR: unable to register all schema data: %s
 FCVAR_NEVER_AS_STRING
 Failed to read localization file %s
 File change watching failed for '%s', retraversing
-FindCompatibleSafe
-FindPluralCompatibleSafe
-FindPluralSafe
+FindPluralCompatibleImpl
+FindPluralImpl
 FindSafe
 FlattenedSerializersVersion001
 FontManager_001
@@ -316,7 +317,6 @@ HookUpConfigValue
 HostStateMgr001
 ILocalize::AddFile() failed to load file "%s".
 IQuickTime001
-Ignoring unsupported encoding in localization file '%s'
 InputService_001
 InputStackSystemVersion001
 InputSystemVersion001
@@ -331,6 +331,22 @@ KeyValuesSystem
 LANG
 LC_ALL
 LINUX
+LOCFAIL %s: '%s' gives multiple variants for :n
+LOCFAIL %s: '%s' has variants but does not have any token name variant flags (:g, :n, :p, etc.)
+LOCFAIL %s: '%s' indicates a gender specifier but doesn't provide one
+LOCFAIL %s: '%s' indicates gender but doesn't have valid gender flags
+LOCFAIL %s: '%s' indicates genders but doesn't have valid gender variants
+LOCFAIL %s: '%s' indicates plurals but doesn't have valid plural variants
+LOCFAIL %s: Too many variant values for '%s'
+LOCFAIL %s: Value for '%s' does not have required gender
+LOCFAIL %s: Value for '%s' has gendered variants but the token doesn't have :g or :n
+LOCFAIL %s: Value for '%s' has multiple variants with the same gender
+LOCFAIL %s: Value for '%s' must have all language-defined gender variants
+LOCFAIL %s: Value for '%s' must have the same gender for each variant
+LOCFAIL %s: Value for '%s' uses a gender not valid for the value language
+LOCFAIL: Ignoring unsupported encoding in localization file '%s'
+LOCFAIL: Tried to add empty loc token
+LOCWARN %s: value of '%s' matches English, possible unlocalized token
 LOC_Date_Today
 LOC_Date_Tomorrow
 LOC_Date_Yesterday
@@ -352,6 +368,7 @@ Loaded localization files:
 Localization key '%s' has a conditional that is too long. Truncating.
 Localization key '%s' has a value that is too long. Truncating.
 Localization key '%s' is too long. Truncating.
+Localization stats for %s data:
 Localization string too long: %d chars in '%.20s...'
 Localization watching these dirs for changes:
 Localize
@@ -420,6 +437,9 @@ RenderHardwareConfig002
 RenderService_001
 RenderSystemSurface001
 RenderUtils_001
+ResolvePluralCompatibleImpl
+ResolvePluralImpl
+ResolveToken
 ResourceCompilerSystem001
 ResourceHandleUtils001
 ResourceManifestRegistry001
@@ -461,7 +481,6 @@ TestFormatD
 TestFormatE
 TestScriptMgr001
 TextLayout_001
-TextMessageMgr_001
 ThreadGetCurrentId
 Tokens
 ToolFramework2_002
@@ -473,6 +492,7 @@ Unable to find localization token '%s'
 Unable to watch '%s'
 UserInfoChangeService_001
 VApplication001
+VAsyncFileSystem2_001
 VAvi001
 VBAllocTracker001
 VBaseFileSystem011
@@ -490,7 +510,6 @@ VGUI_ivgui008
 VMDLLIB001
 VMaterialSystem2_001
 VMediaFoundation001
-VNewAsyncFileSystem001
 VP4003
 VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
@@ -545,7 +564,9 @@ V_vsnprintf
 V_vsnprintfSize
 V_wcstod
 V_wcstoi64
-Valve_TestVariantsEnglishOnly
+Valve_TestGendersEnglishOnly_A:g
+Valve_TestGendersEnglishOnly_N:n
+Valve_TestPluralsEnglishOnly:p
 VisBuilder_001
 WARNING: CDirWatcher not implemented
 WARNING: Duplicate string token '%s' found in %s (original in %s)
@@ -557,7 +578,6 @@ WorkshopSetup001
 WorldRendererBuilderMgr001
 WorldRendererMgr001
 X360
-Y@
 [!$
 [$
 [%.3f server clamped to %.3f]
@@ -675,12 +695,15 @@ libtier0.so
 localize
 localize_imp.cpp
 lseek64
+ma
 max. %f
 memcpy
 memmove
 mempool.cpp
 memset
+mi
 min. %f
+mp
 nl
 nl_NL
 no
@@ -738,7 +761,7 @@ strcasecmp
 strchr
 strcmp
 strcpy
-string data: %s bytes (%s extra waste) in %s blocks
+string data: %s bytes (%s bytes of padding) in %s blocks
 strlen
 strrchr
 sv
@@ -748,6 +771,7 @@ tchinese
 text
 th_TH
 thai
+total memory allocated: %s bytes
 tr
 tr_TR
 turkish

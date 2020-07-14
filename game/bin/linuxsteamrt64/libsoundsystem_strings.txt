@@ -22,6 +22,7 @@ $tI
 %*s(%08x):Stopping: %s (%08x) : elapsed time: %.2fs
 %*sName: %s
 %*sName: %s%*sNameSpace: %s
+%*sOperator Stack: %s%*sOperator: %s
 %*sOperator Stack: %s%*sSize: %i
 %*sSoundEvent Hash: %d
 %*smixgroup: %s
@@ -117,6 +118,7 @@ $tI
 )
 *
 *SoundEvent Data*
+*ZN14CAsyncWaveData17StartAsyncLoadingERK17asyncwaveparams_tEUlP18IAsyncReadRequest220AsyncRequestStatus_tE_
 +
 +inf
 ,
@@ -570,6 +572,7 @@ AssetBrowserSystem_001
 AssetPreviewSystem_001
 AssetSystem001
 AssetSystemTest001
+Async read of %s failed: ERROR_FILEOPEN
 AsyncSoundQueue
 Atomic Type: %i
 Attack time (ms)
@@ -617,7 +620,6 @@ BentNormalData
 BinaryProperties_GetValue
 BlendList
 Block Max Count
-Blocking I/O hitch.  Freed memory while streaming in %s
 Blocks Events
 BodyGroup
 BodyGroupChoice
@@ -632,6 +634,7 @@ CAnimMotorList
 CAnimMovementManager
 CAsyncWavDataCache:  %i sounds total %s, %.2f %% of capacity
 CAudioMixThread
+CAudioMixThread::MixAudioFrame
 CAuthPhysBody
 CAuthPhysJoint
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
@@ -648,7 +651,6 @@ CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeRelativePath(char const*, char const*)
-CBufferString::Purge(int)
 CBufferString::Relinquish(CBufferString::EAllocationOption_t)
 CBufferString::RemoveAt(int, int)
 CBufferString::RemoveDotSlashes(char)
@@ -657,6 +659,7 @@ CBufferString::Replace(char const*, char const*, bool)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
+CBufferString::SetUnusable()
 CBufferString::ShortenPath(bool)
 CBufferString::StartsWith(char const*)
 CBufferString::StartsWith_FastCaseInsensitive(char const*)
@@ -664,6 +667,7 @@ CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::Swap(CBufferString&)
 CBufferString::ToLowerFast(int)
+CBufferString::Trim(char const*)
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CEntityIndex
@@ -729,7 +733,7 @@ CSosOperatorSystem::StartSoundEvent Unable to start soundevent %s
 CSosOperatorSystem::StartSoundEvent called with invalid soundevent hash
 CSosSoundEventGroupListSchema
 CSosSoundEventGroupSchema
-CSoundEvent: %sBase: %sStack: %sFields:
+CSoundEvent: %sBase: %sType: %sFields:
 CSoundEvent: Warning, soundevent_data selection field overrun
 CSoundSampler
 CSoundSampler: Key Groups: %i
@@ -815,6 +819,7 @@ C_INIT_RemapParticleCountToScalar
 C_INIT_RemapScalar
 C_INIT_RemapScalarToVector
 C_INIT_RemapSpeedToScalar
+C_INIT_RingWave
 C_INIT_RtEnvCull
 C_INIT_SequenceFromCP
 C_INIT_SequenceLifeTime
@@ -826,6 +831,7 @@ C_INIT_VelocityRadialRandom
 C_INIT_VelocityRandom
 C_OP_AttractToControlPoint
 C_OP_ContinuousEmitter
+C_OP_CurlNoiseForce
 C_OP_DistanceBetweenCPsToCP
 C_OP_DriveCPFromGlobalSoundFloat
 C_OP_EnableChildrenFromParentParticleCount
@@ -1078,6 +1084,7 @@ FilteredLinear
 Fixup corrupted .wav file if engine crashed during startmovie/endmovie, etc.
 FixupResourceName: Illegal full path passed in ("%s")!
 FixupResourceName: Illegal path, missing extension passed in ("%s")!
+Flag to enable spatial audio in Dota 2.
 FlattenedSerializersVersion001
 Flush all unlocked async audio data
 Flush and re-parse the sound operator system
@@ -1271,6 +1278,7 @@ MeshUtils001
 Mirror
 Missing file '%s'
 Missing wav file '%s'
+Mix value to blend spatial and non-spatial audio in Dota 2.
 MixGroup %s:
 MixGroup %s: %f : %f : %f : %f : %f
 MixLayer triggered %s:
@@ -1344,6 +1352,7 @@ PARAMDATA COMPARE FAIL: %s->%s : %s
 PARAMINFO COMPARE FAIL: %s->%s
 PARTICLE_DEPTH_FEATHERING_OFF
 PARTICLE_DEPTH_FEATHERING_ON_OPTIONAL
+PARTICLE_DIR_NOISE_CURL
 PARTICLE_SET_REPLACE_VALUE
 PARTICLE_SET_SCALE_CURRENT_VALUE
 PARTICLE_SET_SCALE_INITIAL_VALUE
@@ -1360,6 +1369,8 @@ PHRASE
 PLAINTEXT
 POSIX
 PS3
+PVEC_TYPE_CP_VALUE
+PVEC_TYPE_FLOAT_COMPONENTS
 PVEC_TYPE_LITERAL
 PVEC_TYPE_LITERAL_COLOR
 PanoramaTextServices001
@@ -1424,10 +1435,12 @@ PreviewPreset
 PreviewPresetList
 Prewview VMIX voice on the game graph, preview will be different!
 Print the data associated with the specified soundevent.
+Print the default public properties of a specified soundevent. Values do not reflect values set on the soundevent. For that see "snd_print_soundevent"
 Prints a list of currently available operators
 Prints a list of currently available stacks
 Prints a list of currently cached strings
 Prints a master list of currently exposed variables
+Prints an operator from a stack
 Prints the current stack execution list
 Prints the current state of the groups system
 Prints the current state of tool properties.
@@ -1534,7 +1547,6 @@ SOUNDEVENT COMPARE SUCCESS: %s->%s
 SSE and SSE2 are required.
 STACK COMPARE FAIL: %s->%s
 S_Init( finish )
-S_MixAsync
 S_MixSampleFrames
 S_UpdateVoicesPerFrame
 SceneSystem_002
@@ -1639,6 +1651,7 @@ Stack execution list overflow!
 Start Sound Event: %s
 StartTime: %f
 Starts a specified soundevent
+Starts a specified soundevent at the given position
 Starts the specified arrangement.
 Static
 StatsService_001
@@ -1674,7 +1687,6 @@ TestFormatD
 TestFormatE
 TestScriptMgr001
 TextLayout_001
-TextMessageMgr_001
 The soundsystem requires the filesystem to run!
 ThreadGetCurrentId
 ThreadJoin
@@ -1739,13 +1751,16 @@ Update SoundEvent: %s
 Usage:  playdelay delay_in_msec (negative to skip ahead) soundname
 Usage:  snd_compare_soundevents soundevent1 soundevent2
 Usage:  snd_print_soundevent <soundeventname>
+Usage:  snd_print_soundevent_default_public_properties <soundeventname>
 Usage:  snd_remove_soundevent <soundeventname>
 Usage:  snd_sos_get_operator_field <stackname> <operator> <field>
 Usage:  snd_sos_print_exec_list
 Usage:  snd_sos_print_operator_stack <stackname>
+Usage:  snd_sos_print_operator_stack <stackname> <operator>
 Usage:  snd_sos_resolve_execute_operator <stackname> <operator>
 Usage:  snd_sos_set_operator_field <stackname> <operator> <field> <index> <float>
 Usage:  snd_sos_start_soundevent <eventname> <ent id)
+Usage:  snd_sos_start_soundevent <eventname> <x> <y> <z>
 Usage:  snd_sos_stop_soundevent_guid <guid>
 Usage:  snd_sos_stop_soundevent_index <index>
 Usage: movie_fixwave wavname
@@ -1757,6 +1772,7 @@ UserInfoChangeService_001
 V
 VALUES
 VApplication001
+VAsyncFileSystem2_001
 VAvi001
 VBAllocTracker001
 VBaseFileSystem011
@@ -1783,7 +1799,6 @@ VMediaFoundation001
 VMixEditTool001
 VMixStartup
 VMixTableInit
-VNewAsyncFileSystem001
 VP4003
 VPROCESSOR_DELAY
 VPROCESSOR_DYNAMICS
@@ -1994,6 +2009,7 @@ __gmon_start__
 __memcpy_chk
 __move_to_end
 __oldschema_object_name
+__pthread_key_create
 __remap_input
 __remap_input1
 __remap_input2
@@ -2174,7 +2190,9 @@ dmg.club
 dmg.explosive
 dmg.fire
 dota2
+dota_enable_spatial_audio
 dota_ground_under_water
+dota_spatial_audio_mix
 dry
 dsp: %3.2f
 dsp_automatic
@@ -2604,6 +2622,9 @@ m_EditorPreview
 m_Emitters
 m_EndEffectorBone
 m_EndEffectorTargetBone
+m_FloatComponentX
+m_FloatComponentY
+m_FloatComponentZ
 m_ForceGenerators
 m_IKChains
 m_IkChain
@@ -2614,6 +2635,8 @@ m_JointConstraintPairs
 m_JointName
 m_Joints
 m_LiteralColor
+m_LocalCoordinateSystemSpeedMax
+m_LocalCoordinateSystemSpeedMin
 m_MixCommands
 m_MotorList
 m_Name
@@ -2672,6 +2695,10 @@ m_curves
 m_fForceAmount
 m_fForceAmountMin
 m_fLifespanScaleExp
+m_fRadiusMax
+m_fRadiusMin
+m_fSpeedMax
+m_fSpeedMin
 m_feedbackFilter
 m_flAttackTimeMS
 m_flBandwidth
@@ -2698,6 +2725,9 @@ m_flFreqRangeEnd
 m_flFreqRangeStart
 m_flHoldTimeMS
 m_flInitFromKilledParentParticles
+m_flInitialRadius
+m_flInitialSpeedMax
+m_flInitialSpeedMin
 m_flInput0
 m_flInput1
 m_flLimiterRatio
@@ -2721,6 +2751,7 @@ m_flRandomMax
 m_flRandomMin
 m_flRatio
 m_flReleaseTimeMS
+m_flRoll
 m_flScalePerParentParticle
 m_flSend
 m_flSendFacingDSP
@@ -2731,11 +2762,13 @@ m_flStartTime
 m_flStartTimeMax
 m_flSystemVolumeFadeRate
 m_flTailAlphaScale
+m_flThickness
 m_flTime
 m_flTimeScale
 m_flValue
 m_flVolume
 m_flWidth
+m_flYaw
 m_fldBModGain
 m_fldBUnvoicedGain
 m_fldbCompressionThreshold
@@ -2781,9 +2814,12 @@ m_nMapType
 m_nMaxCount
 m_nMinParticlesToEmit
 m_nMixGroups
+m_nNoiseType
 m_nOpScaleCP
 m_nOpStrengthScaleSeed
 m_nOutgoingTangent
+m_nOverrideCP
+m_nOverrideCP2
 m_nParticlesToEmit
 m_nProcType
 m_nProcessorType
@@ -2819,7 +2855,9 @@ m_spline
 m_stages
 m_tangents
 m_trackName
+m_useCurl
 m_vActions
+m_vCPValueScale
 m_vDomainMaxs
 m_vDomainMins
 m_vEndTrailTintFactor
@@ -3287,6 +3325,7 @@ snd_print_samplers
 snd_print_sequences
 snd_print_soundevent
 snd_print_soundevent %s
+snd_print_soundevent_default_public_properties
 snd_rear_headphone_position
 snd_rear_stereo_speaker_position
 snd_rear_surround_speaker_position
@@ -3322,6 +3361,7 @@ snd_sos_print_field_references
 snd_sos_print_full_field_info
 snd_sos_print_groups
 snd_sos_print_operator_stack
+snd_sos_print_operator_stack_opeator
 snd_sos_print_operator_stacks
 snd_sos_print_operators
 snd_sos_print_stack_exec_list
@@ -3358,6 +3398,7 @@ snd_sos_show_voice_elapsed_time
 snd_sos_soundevent_filter
 snd_sos_soundevent_profile
 snd_sos_start_soundevent
+snd_sos_start_soundevent_at_pos
 snd_sos_stop_all_soundevents
 snd_sos_stop_soundevent_guid
 snd_sos_stop_soundevent_index
@@ -3444,6 +3485,8 @@ startVoice
 start_beat
 start_offset
 start_vsnd
+std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()
+std::_Sp_counted_ptr<decltype(nullptr), (__gnu_cxx::_Lock_policy)2>::_M_dispose()
 step
 stopSubvoice
 stopVoice
@@ -3578,6 +3621,7 @@ vpcf23
 vpcf24
 vpcf25
 vpcf26
+vpcf27
 vpcf3
 vpcf4
 vpcf5

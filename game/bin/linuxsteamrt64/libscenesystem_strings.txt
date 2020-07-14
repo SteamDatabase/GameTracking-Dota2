@@ -248,6 +248,7 @@ $tI
 +++
 +++ %s:
 +++ %s[%d]:
++inf
 +x east
 +y north
 +z up
@@ -291,7 +292,6 @@ $tI
 ...<truncated>...
 ../common/protobuf_helpers.cpp
 ../public/ordered_constructor.h
-../public/scenesystem/sceneobject.h(2914): Material %s cannot render in mode %s but is being asked to
 ../public/scenesystem/vertexformat.h
 ../public/tier0/tslist.h
 ../public/tier1/utl3dallocator.h
@@ -345,7 +345,7 @@ $tI
 0x%p
 1
 1 1 1
-1 = visualize bounds, 2 = visualize sceneobject mesh materials, 3 = required texture size, 4 = bounds group
+1 = visualize bounds, 2 = visualize sceneobject mesh materials, 3 = required texture size, 4 = bounds group, 5 = LOD
 1.2
 1.5
 1.8
@@ -390,7 +390,7 @@ $tI
 14ITonemapSystem
 14IVolumetricFog
 15CMemberFunctor1IP26CParallelProcessorAbstractI18CParallelProcessorIP12CSceneObject21CFuncJobItemProcessorIS3_ELi1EEEMS7_FviEi12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
-15CMemberFunctor1IP26CParallelProcessorAbstractI18CParallelProcessorIi27CMemberFuncJobItemProcessorIi11CCallQueueTI8CTSQueueIP8CFunctorLb0EEES8_ELi1EEEMSB_FviEi12CRefCounted1IS5_20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
+15CMemberFunctor1IP26CParallelProcessorAbstractI18CParallelProcessorIi27CMemberFuncJobItemProcessorIi10CCallQueueS3_ELi1EEEMS6_FviEi12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor6IP13CSOAContainerMS0_FviiiiiDv4_fEiiiiiS2_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMsg_CVars_CVar
 15CTier0AppSystemI11ISceneUtilsE
@@ -490,7 +490,6 @@ $tI
 26CAnimatableSceneObjectDesc
 26CDefaultKeyValuesErrorSpew
 26ICommandCompletionCallback
-26IReadTexturePixelsCallback
 27CDirectionalLightObjectDesc
 27CLightProbeVolumeObjectDesc
 27CMeshBuilderSceneObjectDesc
@@ -502,7 +501,6 @@ $tI
 27CSchemaUtlVectorManipulatorI10CUtlVectorIf10CUtlMemoryIfiEEfE
 27CSchemaUtlVectorManipulatorI10CUtlVectorIj10CUtlMemoryIjiEEjE
 28CBindlessFastPathSceneObject
-28CGenerateMipsProceduralLayer
 28CSceneLightProbeVolumeObject
 28CTextureBarrierLayerRenderer
 28CTextureDisplayLayerRenderer
@@ -531,7 +529,6 @@ $tI
 34CSimplePostProcessingLayerRenderer
 35CInputLayoutRegistration_sm_hLayout
 37CAmbientOcclusionProxySceneObjectDesc
-37CCopySkyLightingPixelsProceduralLayer
 38IMaxSwapChainDimensionsChangedListener
 3C
 4
@@ -539,7 +536,6 @@ $tI
 4096.0f
 40CFunctor_SceneSystem_Thread_DrawDrawList
 40ISceneAnimatableProceduralBoneTransforms
-41CCopySkyLightingReadTexturePixelsCallback
 43CFunctor_SceneSystem_Thread_RenderPartition
 4C
 4CMDL
@@ -635,7 +631,9 @@ $tI
 <td>LAYERFLAGS_DEBUG_BREAK_ON_RENDERING</td>
 <td>LAYERFLAGS_DEBUG_BREAK_ON_SUBMISSION</td>
 <td>LAYERFLAGS_DISCARD_COLOR_BUFFERS</td>
+<td>LAYERFLAGS_DISCARD_COLOR_BUFFERS_STORE</td>
 <td>LAYERFLAGS_DISCARD_DEPTH_STENCIL_BUFFER</td>
+<td>LAYERFLAGS_DISCARD_DEPTH_STENCIL_BUFFER_STORE</td>
 <td>LAYERFLAGS_DOESNT_MODIFY_COLOR_BUFFERS</td>
 <td>LAYERFLAGS_DOESNT_MODIFY_DEPTH_STENCIL_BUFFER</td>
 <td>LAYERFLAGS_DO_NOT_SORT</td>
@@ -653,6 +651,7 @@ $tI
 <td>LAYERFLAGS_PRIMARY_TARGET_OUTPUT</td>
 <td>LAYERFLAGS_READONLY_DEPTH_STENCIL</td>
 <td>LAYERFLAGS_READONLY_DEPTH_STENCIL_NORESOLVE</td>
+<td>LAYERFLAGS_SORT_ACROSS_PARTITIONS</td>
 <td>MATERIAL_SUPPORTS_SHADOWS</td>
 <td>NEEDS_DIRTY_UPDATE</td>
 <td>NEEDS_DYNAMIC_REFLECTION_MAP</td>
@@ -937,6 +936,7 @@ CAttachment
 CAuthPhysBody
 CAuthPhysJoint
 CBaseConstraint
+CBindlessFastPathPartition::EnsureEnvironmentMaps() - Number of environment maps exceeds maximum (%d), skipping additional environment maps.
 CBindlessFastPathPartition::EnsureGPUResources - insufficient descriptor set support. CWorldNode::CanUseBindlessDesc() needs to filter before getting here.
 CBindlessFastPathSceneObjectDesc
 CBoneConstraintBase
@@ -958,7 +958,6 @@ CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeRelativePath(char const*, char const*)
-CBufferString::Purge(int)
 CBufferString::Relinquish(CBufferString::EAllocationOption_t)
 CBufferString::RemoveAt(int, int)
 CBufferString::RemoveDotSlashes(char)
@@ -967,12 +966,14 @@ CBufferString::Replace(char const*, char const*, bool)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
+CBufferString::SetUnusable()
 CBufferString::ShortenPath(bool)
 CBufferString::StartsWith(char const*)
 CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::Swap(CBufferString&)
 CBufferString::ToLowerFast(int)
+CBufferString::Trim(char const*)
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CConstraintSlave
@@ -1339,6 +1340,7 @@ CThreadSemaphore::~CThreadSemaphore()
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
+CThreadedJob::Abort(bool)
 CTiltTwistConstraint
 CTonemapRenderer needs to use a layer which has had a render attribute called "ColorBuffer" set!
 CTonemapSystem::GenerateRendererData ran out of buckets!!
@@ -1405,6 +1407,7 @@ C_INIT_RemapParticleCountToScalar
 C_INIT_RemapScalar
 C_INIT_RemapScalarToVector
 C_INIT_RemapSpeedToScalar
+C_INIT_RingWave
 C_INIT_RtEnvCull
 C_INIT_SequenceFromCP
 C_INIT_SequenceLifeTime
@@ -1416,6 +1419,7 @@ C_INIT_VelocityRadialRandom
 C_INIT_VelocityRandom
 C_OP_AttractToControlPoint
 C_OP_ContinuousEmitter
+C_OP_CurlNoiseForce
 C_OP_DistanceBetweenCPsToCP
 C_OP_DriveCPFromGlobalSoundFloat
 C_OP_EnableChildrenFromParentParticleCount
@@ -1530,6 +1534,7 @@ D24X4S4
 D24X8
 D24X8_SHADOW
 D32
+D32FS8
 DATA_LOSS
 DEADLINE_EXCEEDED
 DEFAULT_WRITE_PATH
@@ -1857,6 +1862,9 @@ Intentionally vague touch behavior for %p
 Interpreting non ascii codepoint %d.
 Invalid EXR header.
 Invalid access of deferred ConVarRef for '%s'
+Invalid bone and flex counts for model %s, %d meshes but %d counts
+Invalid bone remap for mesh %d on model %s, meshBone[%d] = modelBone[%d], valid modelBone range[0, %d]
+Invalid boneAndFlexCounts mesh %d on model %s, %d expected %d
 Invalid channels format
 Invalid control characters encountered in text.
 Invalid data for member '%s'
@@ -1865,14 +1873,19 @@ Invalid data width value
 Invalid data.
 Invalid escape sequence in string literal.
 Invalid file descriptor data passed to EncodedDescriptorDatabase::Add().
+Invalid flex control remap for mesh %d on model %s, meshFlexCtrl[%d] = modelFlexCtrl[%d], valid modelFlexCtrl range[0, %d]
 Invalid float number:
 Invalid header
+Invalid hitbox bone remap for mesh %d on model %s, meshHitboxBone[%d] = modelBone[%d], valid modelBone range[0, %d]
 Invalid key for map field.
 Invalid magic number
 Invalid member name '%s'
 Invalid message set extension.
 Invalid proto descriptor for file "
 Invalid public dependency index.
+Invalid remapping table for model %s, has %d meshes but %d remapping starts
+Invalid remapping table size for mesh %d on model %s, need %d entries, only %d
+Invalid remapping table starts for mesh %d on model %s, %d expected %d
 Invalid request for mesh %d in model %s with %d entry remapping start table
 Invalid request for mesh %d in model %s with no remapping table
 Invalid request for mesh %d in model %s with no remapping table starts
@@ -2210,6 +2223,7 @@ No Buffer
 No default value
 No field named "uninterpreted_option" in the Options proto.
 NoPoseControl
+Nodes
 Non-repeated Any specified multiple times.
 Non-repeated field "
 Non-windows platforms don't support loading of JPG images
@@ -2291,6 +2305,7 @@ PARALLEL_PROCESS utlsoacontainer.cpp:2533
 PARENT
 PARTICLE_DEPTH_FEATHERING_OFF
 PARTICLE_DEPTH_FEATHERING_ON_OPTIONAL
+PARTICLE_DIR_NOISE_CURL
 PARTICLE_SET_REPLACE_VALUE
 PARTICLE_SET_SCALE_CURRENT_VALUE
 PARTICLE_SET_SCALE_INITIAL_VALUE
@@ -2313,6 +2328,8 @@ POSE_SPACE_MORPH
 POSITION
 POSIX
 PS3
+PVEC_TYPE_CP_VALUE
+PVEC_TYPE_FLOAT_COMPONENTS
 PVEC_TYPE_LITERAL
 PVEC_TYPE_LITERAL_COLOR
 PWL
@@ -2536,7 +2553,6 @@ SceneSystem/CsgoLightBinnerMaxLights
 SceneSystem/CsgoLightBinnerSingleLightFastPath
 SceneSystem/CubemapFog
 SceneSystem/DisableShadowFullSort
-SceneSystem/DynamicSkyLighting
 SceneSystem/HDRFrameBuffer
 SceneSystem/MaxAutoPartitions
 SceneSystem/NoSunLightManager
@@ -2622,19 +2638,6 @@ SimplePostProcessingLayer
 Simulated
 SkeletonBoneBounds_t
 SkinnedObject
-SkyLightingSamples
-SkyLightingTransmitterPositions
-SkyMap
-SkyMapForwardLightSetup
-SkyMapGenerateMips
-SkyMapInnerSkyRender
-SkyMapLightingColor
-SkyMapOuterSkyRender
-SkyMapRenderColor
-SkyMapRenderTarget
-SkyMapSampleLighting
-SkyMapSampleLightingReadPixels
-SkyMapSkyRender
 Skybox
 SlopeTrace
 Someone needed to call WaitForRenderingToComplete()!!!!!
@@ -2704,7 +2707,6 @@ TestFormatE
 TestScriptMgr001
 TextFormat::Parser for Any supports only type.googleapis.com and type.googleprod.com, but found "
 TextLayout_001
-TextMessageMgr_001
 The JSON camel-case name of field "
 The first enum value must be zero in proto3.
 The type parameter T in RepeatedFieldRef<T> API doesn't match
@@ -2799,6 +2801,7 @@ Use to set a single indexed light to black
 UserInfoChangeService_001
 Using 16-bit blend indices
 VApplication001
+VAsyncFileSystem2_001
 VAvi001
 VBAllocTracker001
 VBaseFileSystem011
@@ -2817,7 +2820,6 @@ VMDLLIB001
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
-VNewAsyncFileSystem001
 VP4003
 VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
@@ -2970,7 +2972,7 @@ Y
 Yaw;
 Z
 ZN26CParallelProcessorAbstractI18CParallelProcessorIP12CSceneObject21CFuncJobItemProcessorIS2_ELi1EEE3RunEvE13CStackFunctor
-ZN26CParallelProcessorAbstractI18CParallelProcessorIi27CMemberFuncJobItemProcessorIi11CCallQueueTI8CTSQueueIP8CFunctorLb0EEES7_ELi1EEE3RunEvE13CStackFunctor
+ZN26CParallelProcessorAbstractI18CParallelProcessorIi27CMemberFuncJobItemProcessorIi10CCallQueueS2_ELi1EEE3RunEvE13CStackFunctor
 [
 [$0]
 [%.3f server clamped to %.3f]
@@ -3508,6 +3510,9 @@ m_Emitters
 m_EndEffectorBone
 m_EndEffectorTargetBone
 m_Falloff
+m_FloatComponentX
+m_FloatComponentY
+m_FloatComponentZ
 m_ForceGenerators
 m_HitBoxSets
 m_HitBoxes
@@ -3521,6 +3526,8 @@ m_JointName
 m_Joints
 m_LayerName
 m_LiteralColor
+m_LocalCoordinateSystemSpeedMax
+m_LocalCoordinateSystemSpeedMin
 m_MotorList
 m_Name
 m_Operators
@@ -3619,6 +3626,10 @@ m_fAlpha
 m_fForceAmount
 m_fForceAmountMin
 m_fLifespanScaleExp
+m_fRadiusMax
+m_fRadiusMin
+m_fSpeedMax
+m_fSpeedMin
 m_fingers
 m_flBakeLightIndexScale
 m_flBiasParameter
@@ -3643,6 +3654,9 @@ m_flFingerWeight
 m_flFogContributionStength
 m_flFootLength
 m_flInitFromKilledParentParticles
+m_flInitialRadius
+m_flInitialSpeedMax
+m_flInitialSpeedMin
 m_flInput0
 m_flInput1
 m_flLightSourceDim0
@@ -3661,6 +3675,7 @@ m_flOpStrengthMaxScale
 m_flOpStrengthMinScale
 m_flOutput0
 m_flOutput1
+m_flPitch
 m_flPrecomputedMaxRange
 m_flRadius
 m_flRadiusScale
@@ -3668,8 +3683,10 @@ m_flRadiusTaper
 m_flRandomMax
 m_flRandomMin
 m_flRealTime
+m_flRoll
 m_flScalePerParentParticle
 m_flShadowCascadeDistance
+m_flShapeRadius
 m_flSphereRadius
 m_flSplayMaxAngle
 m_flSplayMinAngle
@@ -3677,11 +3694,13 @@ m_flStartFadeDistanceSquared
 m_flStartTime
 m_flStartTimeMax
 m_flTailAlphaScale
+m_flThickness
 m_flTraceHeight
 m_flTraceRadius
 m_flUvDensity
 m_flValue
 m_flWeight
+m_flYaw
 m_flags
 m_flexControllers
 m_floatAttributes
@@ -3775,6 +3794,7 @@ m_nMeshGroupMaskSmall
 m_nMinParticlesToEmit
 m_nMultisampleNumSamples
 m_nNameHash
+m_nNoiseType
 m_nNumMipLevels
 m_nNumObjects <= V_ARRAYSIZE( m_objectReferences )
 m_nNumObjects >= 0
@@ -3784,6 +3804,8 @@ m_nOffset
 m_nOpScaleCP
 m_nOpStrengthScaleSeed
 m_nOriginalRenderableFlags
+m_nOverrideCP
+m_nOverrideCP2
 m_nPVSFlags
 m_nPVSMasks
 m_nParticlesToEmit
@@ -3804,6 +3826,7 @@ m_nShadowCascadeCount
 m_nShadowCascadeResolution
 m_nShadowHeight
 m_nShadowWidth
+m_nShapeType
 m_nSizeCullBloat
 m_nSlaveAxis
 m_nSlaveChannel
@@ -3877,9 +3900,11 @@ m_textureParams
 m_tipParentBoneName
 m_toeBoneName
 m_transform
+m_useCurl
 m_userArray
 m_vBallOffset
 m_vBasePosition
+m_vCPValueScale
 m_vCapsulePos1
 m_vCapsulePos2
 m_vConeApex
@@ -3939,7 +3964,6 @@ mat_tonemap_force_scale
 mat_tonemap_force_use_alpha
 mat_tonemap_uncap_exposure
 materials/deferred_lights/envmaplight.vmat
-materials/deferred_lights/irradiancevolume.vmat
 materials/deferred_lights/pointlight.vmat
 materials/deferred_lights/spotlight.vmat
 materials/deferred_lights/spotlight_shadowed.vmat
@@ -3966,7 +3990,6 @@ materials/dev/occlusionproxy_debugdraw.vmat
 materials/dev/primary_white.vmat
 materials/dev/primary_white_trans.vmat
 materials/dev/reflectivity_90.vmat
-materials/dev/sky_lighting.vmat
 materials/dev/ssao_convert_depth.vmat
 materials/dev/ssao_downsample_depth.vmat
 materials/dev/ssao_scalable_ao.vmat
@@ -4053,7 +4076,6 @@ need dictionary
 network_connection.proto
 networkbasetypes.proto
 no
-node
 nomsaa + msaa copies
 nomsaa copy
 none
@@ -4141,6 +4163,7 @@ pthread_once
 ptr( 0x%p )
 ptr_ != __null
 q
+quadLayout
 r_allow_morph_batching_on_base
 r_aoproxy_cull_dist
 r_aoproxy_min_dist
@@ -4153,7 +4176,6 @@ r_fallback_texture_lod_scale
 r_indirect_specular_force_scale
 r_lightBinnerFarPlane
 r_light_probe_volume_debug_colors
-r_lpv_gi_scale
 r_morphing_enabled
 r_occluder_overlay
 r_pixelvisibility_partial
@@ -4225,7 +4247,6 @@ sc_cache_envmap_lpv_lookup
 sc_check_world
 sc_disableThreading
 sc_disable_culling_boxes
-sc_disable_dynamic_sky_lighting
 sc_disable_procedural_layer_rendering
 sc_disable_shadow_fastpath
 sc_disable_shadow_materials
@@ -4304,8 +4325,8 @@ scenesysCone
 scenesysDodecahedron
 scenesystem
 scenesystem.cpp
-scenesystem.cpp(6484): Expecting 1 renderable pass for material "%s" but found %d!
-scenesystem.cpp(7761): Waited 500 ms for jobs to complete. Attempt to drain windows message queue. Jobs in queue = %d
+scenesystem.cpp(6493): Expecting 1 renderable pass for material "%s" but found %d!
+scenesystem.cpp(7770): Waited 500 ms for jobs to complete. Attempt to drain windows message queue. Jobs in queue = %d
 scenesystem.h
 scenesystemdebug
 sceneviewdebugoverlays.cpp
@@ -4596,6 +4617,7 @@ user
 utils/characterdecalrenderer.cpp
 utils/scalable_ambient_obscurance.cpp
 utils/sceneutils.cpp
+utils/sceneutils.h(70): Material %s cannot render in mode %s but is being asked to
 utils/tonemapsystem.cpp
 utils/volumetricfog.cpp
 utlbuffer.cpp
@@ -4675,6 +4697,7 @@ vpcf23
 vpcf24
 vpcf25
 vpcf26
+vpcf27
 vpcf3
 vpcf4
 vpcf5

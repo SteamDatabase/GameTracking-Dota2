@@ -215,7 +215,6 @@ $tIVScript
 1000000
 10ConCommand
 11CRefCountedI20CRefCountServiceBaseILb1E6CRefMTEE
-11CRenderMesh
 11IVSSequence
 12CThreadEvent
 13CMorphSetData
@@ -240,7 +239,8 @@ $tIVScript
 19CSchemaRegistration
 1DBlend
 2
-2020-07-08 06:54:56.992000
+2000
+2020-07-09 16:36:44.328000
 20CPostConnectCallback
 20CRefCountServiceBaseILb1E6CRefMTE
 20CResourceStreamFixed
@@ -666,7 +666,6 @@ CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeRelativePath(char const*, char const*)
-CBufferString::Purge(int)
 CBufferString::Relinquish(CBufferString::EAllocationOption_t)
 CBufferString::RemoveAt(int, int)
 CBufferString::RemoveDotSlashes(char)
@@ -675,12 +674,14 @@ CBufferString::Replace(char const*, char const*, bool)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
+CBufferString::SetUnusable()
 CBufferString::ShortenPath(bool)
 CBufferString::StartsWith(char const*)
 CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::Swap(CBufferString&)
 CBufferString::ToLowerFast(int)
+CBufferString::Trim(char const*)
 CColorGradient
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
@@ -1001,21 +1002,24 @@ CRnWorld
 CRnWorld::RecordApiCall
 CSceneObjectData
 CSoftbodyEffect
+CSoftbodyEffectDampenVelocity
 CSoftbodyEffectGravity
 CSoftbodyEffectPressurize
 CSoftbodyEffectProperty
+CSoftbodyEffectSkinnedCollider
 CSoftbodyEffectWind
 CStrongHandle
 CTSQueue corruption
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
 CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
-CThreadMultiWaitEvent::Set()
 CThreadRWLock::LockForWrite(char const*, int)
 CThreadRWLock::UnlockWrite(char const*, int)
 CThreadRWLock::WaitForRead()
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
+CThreadedJob::Abort(bool)
+CThreadedJob::Execute()
 CTiltTwistConstraint
 CTransform
 CTransformUnaligned RecordedCaspuleSweepResultRefl_t::m_XForm1
@@ -1116,6 +1120,7 @@ C_INIT_RemapParticleCountToScalar
 C_INIT_RemapScalar
 C_INIT_RemapScalarToVector
 C_INIT_RemapSpeedToScalar
+C_INIT_RingWave
 C_INIT_RtEnvCull
 C_INIT_SequenceFromCP
 C_INIT_SequenceLifeTime
@@ -1127,6 +1132,7 @@ C_INIT_VelocityRadialRandom
 C_INIT_VelocityRandom
 C_OP_AttractToControlPoint
 C_OP_ContinuousEmitter
+C_OP_CurlNoiseForce
 C_OP_DistanceBetweenCPsToCP
 C_OP_DriveCPFromGlobalSoundFloat
 C_OP_EnableChildrenFromParentParticleCount
@@ -1278,6 +1284,7 @@ Cubic
 Currently allocated agg data: {
 Cycle or diamond double-reference to '%s'
 DISCRETE_SIM
+DampenMultiplier
 Damping %.2f linear, %.2f angular
 DampingMultiplier
 Data format %d!=%d unexpected
@@ -1454,6 +1461,7 @@ FeNodeBase_t
 FeNodeIntegrator_t
 FeNodeReverseOffset_t
 FeNodeWindBase_t
+FeNodeWindBase_t: degenerate node, wind cannot be computed
 FeQuad_t
 FeRigidColliderIndices_t
 FeRodConstraint_t
@@ -1616,16 +1624,24 @@ IntersectionDictionaryRefl_t
 Invalid RecordedHitboxState_t
 Invalid access of deferred ConVarRef for '%s'
 Invalid blob for RnMesh_t::%s (%d,%d)
+Invalid bone and flex counts for model %s, %d meshes but %d counts
+Invalid bone remap for mesh %d on model %s, meshBone[%d] = modelBone[%d], valid modelBone range[0, %d]
+Invalid boneAndFlexCounts mesh %d on model %s, %d expected %d
 Invalid collision attr index %u, must be below %d,
 Invalid collision attribute palette entry %u, expected below %d
 Invalid collision group %s
 Invalid compressed buffer size
 Invalid data for member '%s'
 Invalid data.
+Invalid flex control remap for mesh %d on model %s, meshFlexCtrl[%d] = modelFlexCtrl[%d], valid modelFlexCtrl range[0, %d]
 Invalid header
+Invalid hitbox bone remap for mesh %d on model %s, meshHitboxBone[%d] = modelBone[%d], valid modelBone range[0, %d]
 Invalid interaction layer %s
 Invalid layer %s
 Invalid member name '%s'
+Invalid remapping table for model %s, has %d meshes but %d remapping starts
+Invalid remapping table size for mesh %d on model %s, need %d entries, only %d
+Invalid remapping table starts for mesh %d on model %s, %d expected %d
 Invalid request for mesh %d in model %s with %d entry remapping start table
 Invalid request for mesh %d in model %s with no remapping table
 Invalid request for mesh %d in model %s with no remapping table starts
@@ -1809,7 +1825,6 @@ Merge Faces
 Merged face
 Mesh %d verts %d tris %g diameter
 Mesh Shape[%d]
-Mesh triangle material index %d>=%d is out of bounds
 Mesh%d.obj
 Mesh-Mesh
 MeshCastBox
@@ -1961,6 +1976,7 @@ PA
 PARENT
 PARTICLE_DEPTH_FEATHERING_OFF
 PARTICLE_DEPTH_FEATHERING_ON_OPTIONAL
+PARTICLE_DIR_NOISE_CURL
 PARTICLE_SET_REPLACE_VALUE
 PARTICLE_SET_SCALE_CURRENT_VALUE
 PARTICLE_SET_SCALE_INITIAL_VALUE
@@ -2001,6 +2017,8 @@ PSEUDO_SHAPE_COMPOUND
 PSEUDO_SHAPE_COUNT
 PSEUDO_SHAPE_NONE
 PULLEY
+PVEC_TYPE_CP_VALUE
+PVEC_TYPE_FLOAT_COMPONENTS
 PVEC_TYPE_LITERAL
 PVEC_TYPE_LITERAL_COLOR
 Pair Flags (%d) include INTERSECTION_PAIR_TRIGGER.+Always Notify on Touch Found or Lost
@@ -2597,11 +2615,13 @@ Slider: %.1f
 SlopeTrace
 Snoop
 Softbodies
+SoftbodyEffectDampenVelocityRefl_t
 SoftbodyEffectGravityRefl_t
 SoftbodyEffectPressurizeRefl_t
 SoftbodyEffectPropertyRefl_t
 SoftbodyEffectPropertyRefl_t RnSoftbodyRefl_t::m_Effects
 SoftbodyEffectRefl_t
+SoftbodyEffectSkinnedColliderRefl_t
 SoftbodyEffectStiffenRefl_t
 SoftbodyEffectWindRefl_t
 SoftbodyEffects
@@ -2698,7 +2718,6 @@ TestFormatD
 TestFormatE
 TestScriptMgr001
 TextLayout_001
-TextMessageMgr_001
 The <font color="red">Query</font> is Hitbox Query. The shape has Ignores For Hitbox Test flag. <b>No</b> Hit.
 The file was saved in format subversion %d, this binary is compiled with subversion %d. No migration path found.
 There is a %s [%d]
@@ -2786,6 +2805,7 @@ Used Layers:
 UserData
 UserInfoChangeService_001
 Using 16-bit blend indices
+VAsyncFileSystem2_001
 VAvi001
 VBAllocTracker001
 VBaseFileSystem011
@@ -2805,7 +2825,6 @@ VMDLLIB001
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
-VNewAsyncFileSystem001
 VP4003
 VPHYSICS_CREATE_AUX_WORLD
 VPHYSICS_CREATE_CLIENT_WORLD
@@ -3131,6 +3150,7 @@ bEnableSprings
 bFrozen
 bFrozenInLocalSpace
 bGoalAttractionSimplified
+bHasScale
 bIsContinuousEnabled
 bIsLimitEnabled
 bIsMassCenterOverridden
@@ -3186,6 +3206,7 @@ bool RnBodyRefl_t::m_bSleeping
 bool RnConicalJointRefl_t::m_bIsSwingLimitEnabled
 bool RnConicalJointRefl_t::m_bIsTwistLimitEnabled
 bool RnHullShapeRefl_t::m_bOwnHull
+bool RnMeshShapeRefl_t::m_bHasScale
 bool RnMeshShapeRefl_t::m_bOwnMesh
 bool RnPrismaticJointRefl_t::m_bIsLimitEnabled
 bool RnRevoluteJointRefl_t::m_bIsLimitEnabled
@@ -3358,7 +3379,6 @@ fadetime
 false
 ff9966;">Can <b>Not</b> Collide: same body</div><span>Both shapes belong to the same body %d <i>%s</i>. Do not collide.</span>
 ff9966;">Can <b>Not</b> Collide: same shape</div><span>Hm, it's the same shape, it cannot collide with itself</span>
-fff?v%d:%d
 ffffcc
 flAlpha
 flAnimationForceAttraction
@@ -3512,6 +3532,7 @@ float RnWeldJointRefl_t::m_flMaxTorque
 float RnWorldRefl_t::m_flAirDensity
 float RnWorldRefl_t::m_flSimulationTimeElapsed
 float RnWorldRefl_t::m_flSoftbodyGroundTraceRaise
+float SoftbodyEffectDampenVelocityRefl_t::m_flDampenMultiplier
 float SoftbodyEffectPressurizeRefl_t::m_flPressure
 float SoftbodyEffectRefl_t::m_flEndTime
 float SoftbodyEffectRefl_t::m_flIntensity
@@ -3753,6 +3774,9 @@ m_FlexControllers
 m_FlexDesc
 m_FlexOps
 m_FlexRules
+m_FloatComponentX
+m_FloatComponentY
+m_FloatComponentZ
 m_FollowNodes
 m_ForceGenerators
 m_Frame1
@@ -3789,6 +3813,8 @@ m_KelagerBends
 m_LegacyStretchForce
 m_LinearLimit
 m_LiteralColor
+m_LocalCoordinateSystemSpeedMax
+m_LocalCoordinateSystemSpeedMin
 m_LocalForce
 m_LocalInertiaInv.c1
 m_LocalInertiaInv.c2
@@ -3986,6 +4012,10 @@ m_embeddedKeyvalues
 m_fForceAmount
 m_fForceAmountMin
 m_fLifespanScaleExp
+m_fRadiusMax
+m_fRadiusMin
+m_fSpeedMax
+m_fSpeedMin
 m_fingers
 m_flAddWorldCollisionRadius
 m_flAlongDamping
@@ -4044,6 +4074,9 @@ m_flGameMass
 m_flGravityScale
 m_flInertiaScale
 m_flInitFromKilledParentParticles
+m_flInitialRadius
+m_flInitialSpeedMax
+m_flInitialSpeedMin
 m_flInput0
 m_flInput1
 m_flInternalPressure
@@ -4098,6 +4131,7 @@ m_flOpStrengthMaxScale
 m_flOpStrengthMinScale
 m_flOutput0
 m_flOutput1
+m_flPitch
 m_flPitchBounce
 m_flPitchDamping
 m_flPitchFriction
@@ -4115,8 +4149,10 @@ m_flRandomMin
 m_flReferenceMass
 m_flRestLength
 m_flRodVelocitySmoothRate
+m_flRoll
 m_flRotationOffset
 m_flScalePerParentParticle
+m_flShapeRadius
 m_flSphereRadius
 m_flSplayMaxAngle
 m_flSplayMinAngle
@@ -4127,6 +4163,7 @@ m_flStaticImpactVolume
 m_flStiffness
 m_flSwingLimit
 m_flTailAlphaScale
+m_flThickness
 m_flTipMass
 m_flTraceHeight
 m_flTraceRadius
@@ -4143,6 +4180,7 @@ m_flWindage
 m_flXY
 m_flXZ
 m_flYZ
+m_flYaw
 m_flYawBounce
 m_flYawDamping
 m_flYawFriction
@@ -4285,10 +4323,13 @@ m_nNext
 m_nNode
 m_nNodeBaseJiggleboneDependsCount
 m_nNodeCount
+m_nNoiseType
 m_nOldPointer
 m_nOpScaleCP
 m_nOpStrengthScaleSeed
 m_nOrigin
+m_nOverrideCP
+m_nOverrideCP2
 m_nParent
 m_nParticle
 m_nParticlesToEmit
@@ -4312,6 +4353,7 @@ m_nScaleCPField
 m_nScaleControlPoint
 m_nScaleControlPointField
 m_nSetMethod
+m_nShapeType
 m_nSimdQuadCount1
 m_nSimdQuadCount2
 m_nSimdTriCount1
@@ -4517,11 +4559,13 @@ m_twistLowLimitDamping
 m_twistLowLimitRestitution
 m_twistLowLimitSpring
 m_twistLowLimitValue
+m_useCurl
 m_userArray
 m_vAngularTargetVelocity
 m_vAngularVelocity
 m_vBallOffset
 m_vBasePosition
+m_vCPValueScale
 m_vCapsulePos1
 m_vCapsulePos2
 m_vCentroid
@@ -4688,7 +4732,6 @@ nav_attribute_avoid
 nav_data
 never
 no-gravity
-node
 node %u
 node %u '%s'
 nodraw
@@ -4963,6 +5006,7 @@ uint16 RnSoftbodyRefl_t::m_nQuadVelocitySmoothIterations
 uint16 RnSoftbodyRefl_t::m_nRodVelocitySmoothIterations
 uint16 RnSolverJointRefl_t::m_nJointIndexInWorld
 uint16 RnSolverJointRefl_t::m_nStateFlags
+uint16 SoftbodyEffectSkinnedColliderRefl_t::m_nNodes[ 6 ]
 uint16[3]
 uint32
 uint32 ConnHierarchyRefl_t::m_nFlags
@@ -5053,6 +5097,7 @@ utlstring.cpp
 v %f %f %f#%d ComponentIndex %d, queue %d, angle %.1f; ring:
 v %g %g %g
 v %g %g %g%s
+v%d:%d
 v1x
 v2
 v=%.1f
@@ -5124,6 +5169,7 @@ vpcf23
 vpcf24
 vpcf25
 vpcf26
+vpcf27
 vpcf3
 vpcf4
 vpcf5

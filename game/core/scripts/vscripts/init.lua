@@ -31,7 +31,6 @@ require "core.coreinit"
 require "utils.utilsinit"
 require "framework.frameworkinit"
 require "framework.entities.entitiesinit"
-require "game.globalsystems.timeofday_init"
 require "game.gameinit"
 
 function DumpScriptBindings()

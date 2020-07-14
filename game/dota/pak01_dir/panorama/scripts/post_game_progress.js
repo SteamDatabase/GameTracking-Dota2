@@ -1296,17 +1296,17 @@ AnimateCavernCrawlSubpanelAction.prototype.finish = function ()
 //-----------------------------------------------------------------------------
 // Event game bp progress
 //-----------------------------------------------------------------------------
-function AnimateEventGameSubpanelAction( panel, ownerPanel, event_game, startingPoints ) {
+function AnimateEventGameTI9SubpanelAction( panel, ownerPanel, event_game_ti9, startingPoints ) {
     var kWinPointsBase = 300;
 
     this.panel = panel;
     this.ownerPanel = ownerPanel;
     this.startingPoints = startingPoints;
-    this.total_points = event_game.bp_amount;
-    this.show_win = ( event_game.win_points > 0 );
-    this.show_loss = ( event_game.loss_points > 0 );
-    this.show_daily_bonus = ( event_game.win_points > kWinPointsBase );
-    this.show_treasure = ( event_game.treasure_points > 0 );
+    this.total_points = event_game_ti9.bp_amount;
+    this.show_win = ( event_game_ti9.win_points > 0 );
+    this.show_loss = ( event_game_ti9.loss_points > 0 );
+    this.show_daily_bonus = ( event_game_ti9.win_points > kWinPointsBase );
+    this.show_treasure = ( event_game_ti9.treasure_points > 0 );
 
     panel.AddClass( 'Visible' );
 
@@ -1333,14 +1333,14 @@ function AnimateEventGameSubpanelAction( panel, ownerPanel, event_game, starting
     var panelXPCircle = panel.FindChildInLayoutFile( "XPCircleContainer" );
     panelXPCircle.BLoadLayoutSnippet( 'BattlePassXPCircle' );
 
-    panel.SetDialogVariableInt( "win_points", event_game.win_points > kWinPointsBase ? kWinPointsBase : event_game.win_points );
-    panel.SetDialogVariableInt( "bonus_points", event_game.win_points - kWinPointsBase );
-	panel.SetDialogVariableInt( "loss_points",  event_game.loss_points );
-    panel.SetDialogVariableInt( "treasure_points", event_game.treasure_points );
+    panel.SetDialogVariableInt( "win_points", event_game_ti9.win_points > kWinPointsBase ? kWinPointsBase : event_game_ti9.win_points );
+    panel.SetDialogVariableInt( "bonus_points", event_game_ti9.win_points - kWinPointsBase );
+	panel.SetDialogVariableInt( "loss_points",  event_game_ti9.loss_points );
+    panel.SetDialogVariableInt( "treasure_points", event_game_ti9.treasure_points );
 
-    var progressMax = event_game.weekly_cap_total;
-    var progressEnd = progressMax - event_game.weekly_cap_remaining;
-    var progressStart = progressEnd - event_game.bp_amount;
+    var progressMax = event_game_ti9.weekly_cap_total;
+    var progressEnd = progressMax - event_game_ti9.weekly_cap_remaining;
+    var progressStart = progressEnd - event_game_ti9.bp_amount;
 
     panel.SetDialogVariableInt( "weekly_progress", progressEnd );
     panel.SetDialogVariableInt( "weekly_complete_limit", progressMax );
@@ -1352,9 +1352,9 @@ function AnimateEventGameSubpanelAction( panel, ownerPanel, event_game, starting
 
 }
 
-AnimateEventGameSubpanelAction.prototype = new BaseAction();
+AnimateEventGameTI9SubpanelAction.prototype = new BaseAction();
 
-AnimateEventGameSubpanelAction.prototype.start = function () {
+AnimateEventGameTI9SubpanelAction.prototype.start = function () {
     this.seq = new RunSequentialActions();
     this.seq.actions.push( new AddClassAction( this.panel, 'BecomeVisible' ) );
     this.seq.actions.push( new SkippableAction( new WaitAction( g_DelayAfterStart ) ) );
@@ -1396,13 +1396,120 @@ AnimateEventGameSubpanelAction.prototype.start = function () {
 
     this.seq.start();
 }
-AnimateEventGameSubpanelAction.prototype.update = function () {
+AnimateEventGameTI9SubpanelAction.prototype.update = function () {
     return this.seq.update();
 }
-AnimateEventGameSubpanelAction.prototype.finish = function () {
+AnimateEventGameTI9SubpanelAction.prototype.finish = function () {
     this.seq.finish();
 }
 
+//-----------------------------------------------------------------------------
+// Event game bp progress
+//-----------------------------------------------------------------------------
+function AnimateEventGameTI10SubpanelAction(panel, ownerPanel, event_game_ti10, startingPoints)
+{
+    this.panel = panel;
+    this.ownerPanel = ownerPanel;
+    this.startingPoints = startingPoints;
+    this.total_points = event_game_ti10.bp_amount;
+    this.premium_starting_points = event_game_ti10.premium_start;
+    this.premium_progress = event_game_ti10.bonus_premium_amount;
+    this.show_weekly_progress = (event_game_ti10.bp_amount > 0 );
+    this.show_premium_weekly_progress = (event_game_ti10.bonus_premium_amount > 0);
+
+    panel.AddClass( 'Visible' );
+
+    var panelXPCircle = panel.FindChildInLayoutFile( "XPCircleContainer" );
+    panelXPCircle.BLoadLayoutSnippet( 'BattlePassXPCircle' );
+
+    panel.SetDialogVariableInt("win_points", event_game_ti10.bp_amount);
+
+    var nPremiumPoints = event_game_ti10.premium_amount;
+    var nExtraPremiumPoints = 0;
+    if (event_game_ti10.bonus_premium_amount > 0)
+    {
+        nExtraPremiumPoints = event_game_ti10.premium_amount - event_game_ti10.bonus_premium_amount;
+        nPremiumPoints = event_game_ti10.bonus_premium_amount;
+    }
+
+    panel.SetDialogVariableInt("premium_points", nPremiumPoints );
+    panel.SetDialogVariableInt("extra_premium_points", nExtraPremiumPoints );
+    panel.SetHasClass('HasExtraPremiumPoints', nExtraPremiumPoints > 0 );
+    panel.SetHasClass('HasBonusPremiumPoints', event_game_ti10.bonus_premium_amount > 0);
+
+    var progressMax = event_game_ti10.bp_max;
+    var progressStart = event_game_ti10.bp_start;
+    var progressEnd = this.total_points + event_game_ti10.bp_start;
+
+    panel.SetDialogVariableInt( "weekly_progress", this.total_points );
+    panel.SetDialogVariableInt( "weekly_start_value", progressStart );
+    panel.SetDialogVariableInt( "weekly_complete_limit", progressMax );
+
+    var progressBar = panel.FindChildInLayoutFile( "EventGameWeeklyProgress" );
+    progressBar.max = Math.max( progressMax, 1 );
+    progressBar.lowervalue = progressStart;
+    progressBar.uppervalue = progressEnd;
+ 
+    panel.SetDialogVariableInt("weekly_premium_progress", event_game_ti10.bonus_premium_amount );
+    panel.SetDialogVariableInt("weekly_premium_start_value", event_game_ti10.premium_start );
+    panel.SetDialogVariableInt("weekly_premium_complete_limit", event_game_ti10.premium_max);
+
+    var progressBar = panel.FindChildInLayoutFile("EventGameWeeklyPremiumProgress");
+    progressBar.max = Math.max( event_game_ti10.premium_max, 1 );
+    progressBar.lowervalue = event_game_ti10.premium_start;
+    progressBar.uppervalue = progressBar.lowervalue;
+}
+
+AnimateEventGameTI10SubpanelAction.prototype = new BaseAction();
+
+AnimateEventGameTI10SubpanelAction.prototype.start = function ()
+{
+    this.seq = new RunSequentialActions();
+    this.seq.actions.push( new AddClassAction( this.panel, 'BecomeVisible' ) );
+    this.seq.actions.push( new SkippableAction( new WaitAction( g_DelayAfterStart ) ) );
+
+    if ( this.show_premium_weekly_progress )
+    {
+        this.seq.actions.push(new AddClassAction(this.panel, 'EventGame_ShowWeeklyPremiumProgress'));
+        this.seq.actions.push(new SkippableAction(new WaitAction(g_SubElementDelay)));
+    }
+
+    if (this.show_weekly_progress)
+    {
+        this.seq.actions.push(new AddClassAction(this.panel, 'EventGame_ShowWeeklyProgress'));
+        this.seq.actions.push(new SkippableAction(new WaitAction(g_SubElementDelay)));
+    }
+
+    var panel = this.panel;
+    var ownerPanel = this.ownerPanel;
+    var total_points = this.total_points;
+    var startingPoints = this.startingPoints;
+    this.seq.actions.push(new RunFunctionAction(function ()
+    {
+        UpdateSubpanelTotalPoints( panel, ownerPanel, total_points, startingPoints, false );
+    } ) );
+
+    if (this.show_premium_weekly_progress)
+    {
+        this.seq.actions.push(new SkippableAction(new WaitAction(0.2)));
+        this.seq.actions.push(new AddClassAction(this.panel, 'EventGame_ShowWeeklyPremiumBonus'));
+
+        (function (me) {
+            me.seq.actions.push(new RunFunctionAction(function () {
+                var progressBar = me.panel.FindChildInLayoutFile("EventGameWeeklyPremiumProgress");
+                progressBar.uppervalue = me.premium_starting_points + me.premium_progress;
+            }));
+        })(this);
+    }
+
+    this.seq.start();
+}
+AnimateEventGameTI10SubpanelAction.prototype.update = function () {
+    return this.seq.update();
+}
+AnimateEventGameTI10SubpanelAction.prototype.finish = function () {
+    this.seq.finish();
+}
 
 //-----------------------------------------------------------------------------
 // Animates daily challenge subpanel
@@ -1813,15 +1920,25 @@ AnimateBattlePassScreenAction.prototype.start = function ()
 	var panelCount = 0;
 	var kMaxPanels = 6;
 
-	if ( this.data.battle_pass_progress.event_game != null )
+	if ( this.data.battle_pass_progress.event_game_ti9 != null )
 	{
-	    var eventPanel = panel.FindChildInLayoutFile( "BattlePassEventGameProgress" );
-	    var subpanelAction = new AnimateEventGameSubpanelAction( eventPanel, panel, this.data.battle_pass_progress.event_game, startingPointsToAdd );
+        var eventPanel = panel.FindChildInLayoutFile( "BattlePassEventGameTI9Progress" );
+        var subpanelAction = new AnimateEventGameTI9SubpanelAction( eventPanel, panel, this.data.battle_pass_progress.event_game_ti9, startingPointsToAdd );
 	    startingPointsToAdd += subpanelAction.total_points;
 	    subPanelActions.actions.push( subpanelAction );
 	    if ( ++panelCount > kMaxPanels )
 	        eventPanel.RemoveClass( 'Visible' );
 	}
+
+    if ( this.data.battle_pass_progress.event_game_ti10 != null )
+    {
+        var eventPanel = panel.FindChildInLayoutFile("BattlePassEventGameTI10Progress");
+        var subpanelAction = new AnimateEventGameTI10SubpanelAction(eventPanel, panel, this.data.battle_pass_progress.event_game_ti10, startingPointsToAdd);
+        startingPointsToAdd += subpanelAction.total_points;
+        subPanelActions.actions.push(subpanelAction);
+        if (++panelCount > kMaxPanels)
+            eventPanel.RemoveClass('Visible');
+    }
 
 	if ( this.data.battle_pass_progress.cavern_crawl != null )
 	{
@@ -3421,14 +3538,25 @@ function TestAnimateBattlePass()
 				bp_amount: 375,
 			},
 			
-			event_game:
+ //           event_game_ti9:
+ //           {
+ //               bp_amount: 1200,
+ //               win_points: 1000,
+ //               loss_points: 0,
+ //               treasure_points: 200,
+ //               weekly_cap_remaining: 1000,
+ //               weekly_cap_total: 3000,
+ //           },
+ //
+            event_game_ti10:
             {
                 bp_amount: 1200,
-                win_points: 1000,
-                loss_points: 0,
-                treasure_points: 200,
-                weekly_cap_remaining: 1000,
-                weekly_cap_total: 3000,
+                premium_amount: 500,
+                bonus_premium_amount: 500,
+                bp_start: 350,
+                bp_max: 2000,
+                premium_start: 2250,
+                premium_max: 2500,
             },
 
 			//daily_challenge:

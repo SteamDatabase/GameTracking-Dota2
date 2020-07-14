@@ -66,3 +66,13 @@ function originalStyle() {
     $( '#ModelBackground' ).FireEntityInput( 'qop_arcana_alt', 'SetActivity', 'ACT_BARNACLE_CHEW' );
     $.Schedule(0.5, function () { $('#ModelBackground').FireEntityInput('qop_arcana_alt', "Disable", '0'); } );
 }
+
+function closeQueenOfPainDebutPage()
+{
+    $.GetContextPanel().RemoveClass('ShowingAlternateStyle');
+    if ( g_Toggle )
+    {
+        CameraToggle();
+    }
+    $.DispatchEvent( 'DOTAShowHomePage' );
+}
