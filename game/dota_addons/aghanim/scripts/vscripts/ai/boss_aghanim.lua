@@ -52,6 +52,8 @@ function CBossAghanim:constructor( hUnit, flInterval )
 		self.PHASE_STAFF_BEAMS,
 	}
 
+	self.flInitialAcquireRange = 5000
+	self.flAggroAcquireRange = 5000
 	self.nPhaseIndex = 1
 	self.nNumAttacksBeforeTeleport = self.nCurrentAttacksBetweenTeleport
 	self.bReturnHome = true

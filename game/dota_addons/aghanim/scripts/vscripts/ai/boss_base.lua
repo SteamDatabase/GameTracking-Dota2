@@ -18,6 +18,8 @@ function CBossBase:constructor( hUnit, flInterval )
 	self.Encounter = nil
 	self.bSeenAnyEnemy = false
 	self.nLastHealthPct = 10000
+	self.flInitialAcquireRange = 1800
+	self.flAggroAcquireRange = 4500
 
 	self:SetupAbilitiesAndItems()
 
@@ -47,16 +49,16 @@ function CBossBase:OnBaseThink()
 	Order = nil
 
 	if self.Encounter == nil or self.Encounter:HasStarted() == false then
-		goto idle
+		return 0.01
 	end
 
 	if GameRules:IsGamePaused() then
 		return 0.01
 	end
 
-	flRange = 1800
+	local flRange = self.flInitialAcquireRange
 	if self.bSeenAnyEnemy == true then
-		flRange = 4500
+		flRange = self.flAggroAcquireRange
 	end
 	self.hPlayerHeroes = GetVisibleEnemyHeroesInRange( self.me, flRange )
 	

@@ -152,9 +152,15 @@ function modifier_aghanim_spell_swap_crystal:OnAttacked( params )
 	if IsServer() then
 		if self:GetParent() == params.target then
 			local nDamage = 0
-			if params.attacker and params.attacker:IsRealHero() then
+			if params.attacker then
+				local bDeathWard = params.attacker:FindModifierByName( "modifier_aghsfort_witch_doctor_death_ward" ) ~= nil
+				local bValidAttacker = params.attacker:IsRealHero() or bDeathWard
+				if not bValidAttacker then
+					return 0
+				end
+			
 				nDamage = 2
-				if params.attacker:FindModifierByName( "modifier_aghsfort_snapfire_lil_shredder_buff" ) then
+				if params.attacker:FindModifierByName( "modifier_aghsfort_snapfire_lil_shredder_buff" ) or bDeathWard then
 					nDamage = 1
 				end
 

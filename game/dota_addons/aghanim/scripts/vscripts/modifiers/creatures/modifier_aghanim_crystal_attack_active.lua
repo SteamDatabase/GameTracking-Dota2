@@ -6,13 +6,19 @@ function modifier_aghanim_crystal_attack_active:GetEffectName()
 	return "particles/creatures/aghanim/aghanim_pulse_ambient.vpcf"; 
 end
 
+---------------------------------------------------------------------------
+
+function modifier_aghanim_crystal_attack_active:IsPurgable()
+	return false
+end
+
 --------------------------------------------------------------------------------
 
 function modifier_aghanim_crystal_attack_active:OnCreated( kv )
 	self.pulse_radius = self:GetAbility():GetSpecialValueFor( "pulse_radius" )
 	self.pulse_damage = self:GetAbility():GetSpecialValueFor( "pulse_damage" )
-	self.debuff_duration = 	self:GetAbility():GetSpecialValueFor( "debuff_duration" )
-	self.pulse_damage_pct = 	self:GetAbility():GetSpecialValueFor( "pulse_damage_pct" )
+	self.debuff_duration = self:GetAbility():GetSpecialValueFor( "debuff_duration" )
+	self.pulse_damage_pct = self:GetAbility():GetSpecialValueFor( "pulse_damage_pct" )
 end
 
 --------------------------------------------------------------------------------

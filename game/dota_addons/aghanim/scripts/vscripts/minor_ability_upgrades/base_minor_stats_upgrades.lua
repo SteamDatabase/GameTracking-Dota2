@@ -62,14 +62,16 @@ local Stats =
 		 special_value_name = "bonus_health",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		 value = 150,
-	},	
-	{	
+	},
+	--[[
+	{
 		 description = "aghsfort_minor_stat_upgrade_bonus_mana",
 		 ability_name = "aghsfort_minor_stats_upgrade",
 		 special_value_name = "bonus_mana",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		 value = 150,
-	},	
+	},
+	]]
 	{	
 		 description = "aghsfort_minor_stat_upgrade_bonus_attack_speed",
 		 ability_name = "aghsfort_minor_stats_upgrade",

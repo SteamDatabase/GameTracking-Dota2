@@ -18,6 +18,8 @@ function Spawn( entityKeyValues )
 
 	thisEntity.flThrowTimer = 0.0 -- externally updated
 
+	thisEntity.fLongWaitTime = 15
+
 	thisEntity.fEnemySearchRange = 2500
 	thisEntity.fRockSearchRange = 2500
 
@@ -51,10 +53,6 @@ function StoreggaThink()
 	local enemies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, thisEntity.fEnemySearchRange, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE + DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_CLOSEST, false )
 	local rocks = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, thisEntity.fRockSearchRange, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_CREEP, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE + DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_CLOSEST, false )
 
-	if #enemies == 0 then
-		return 0.1
-	end
-
 	local nEnemiesAliveInRange = 0
 	for i = 1, #enemies do
 		local enemy = enemies[ i ]
@@ -62,6 +60,7 @@ function StoreggaThink()
 			if enemy:IsRealHero() and enemy:IsAlive() then
 				nEnemiesAliveInRange = nEnemiesAliveInRange + 1
 				if enemy:FindModifierByName( "modifier_storegga_grabbed_debuff" ) ~= nil then
+					--printf( "removed %s from enemies table", enemy:GetUnitName() )
 					table.remove( enemies, i )
 				end
 			end
@@ -76,12 +75,12 @@ function StoreggaThink()
 	if hGrabbedEnemyBuff == nil then
 		if GrabAbility ~= nil and GrabAbility:IsFullyCastable() then
 			if hNearestEnemy ~= nil and nEnemiesAliveInRange > 1 and RandomInt( 0, 1 ) == 0 then
-				printf( "Grab the nearest enemy (%s)", hNearestEnemy:GetUnitName() )
+				printf( "  Grab the nearest enemy (%s)", hNearestEnemy:GetUnitName() )
 				return CastGrab( hNearestEnemy )
 			elseif #rocks > 0 then
 				local hRandomRock = rocks[ RandomInt( 1, #rocks ) ] 
 				if hRandomRock ~= nil then
-					printf( "Grab a random rock" )
+					printf( "  Grab a random rock" )
 					return CastGrab( hRandomRock )
 				end
 			end
@@ -92,15 +91,44 @@ function StoreggaThink()
 		if GameRules:GetGameTime() > thisEntity.flThrowTimer and hGrabbedTarget ~= nil then
 			if ThrowAbility ~= nil and ThrowAbility:IsFullyCastable() then
 				if hFarthestEnemy ~= nil then
-					printf( "Throw at the farthest enemy; pos: %s", hFarthestEnemy:GetOrigin() )
+					printf( "  Throw at the farthest enemy; pos: %s", hFarthestEnemy:GetOrigin() )
 					return CastThrow( hFarthestEnemy:GetOrigin() )
 				elseif #rocks > 0 then
 					local hFarthestRock = rocks[ #rocks ]
 					if hFarthestRock ~= nil then
-						printf( "Throw at the farthest.. rock?; pos: %s", hFarthestRock:GetOrigin() )
+						printf( "  Throw at the farthest.. rock?; pos: %s", hFarthestRock:GetOrigin() )
 						return CastThrow( hFarthestRock:GetOrigin() )
 					end
-				end	
+				elseif GameRules:GetGameTime() > ( thisEntity.flThrowTimer + thisEntity.fLongWaitTime ) then
+					printf( "  a lot of time has passed and we're still holding onto an object, so just throw it somewhere pathable" )
+
+					-- If I've been waiting too long, throw grabbed object at some random location
+					local nMaxDistance = 1400
+					local vRandomThrowPos = nil
+
+					local nMaxAttempts = 7
+					local nAttempts = 0
+
+					repeat
+						if nAttempts > nMaxAttempts then
+							vRandomThrowPos = nil
+							printf( "WARNING - storegga - failed to find valid position for throw target pos" )
+							break
+						end
+
+						local vPos = thisEntity:GetAbsOrigin() + RandomVector( nMaxDistance )
+						vRandomThrowPos = FindPathablePositionNearby( vPos, 0, 500 )
+						nAttempts = nAttempts + 1
+					until ( GridNav:CanFindPath( thisEntity:GetOrigin(), vRandomThrowPos ) )
+					--until ( GameRules.Aghanim:GetCurrentRoom():IsInRoomBounds( vRandomThrowPos ) )
+
+					if vRandomThrowPos == nil then
+						printf( "  never found a good random pos to throw to, so just use my own origin" )
+						vRandomThrowPos = thisEntity:GetAbsOrigin()
+					end
+
+					return CastThrow( vRandomThrowPos )
+				end
 			end
 		end
 	end
