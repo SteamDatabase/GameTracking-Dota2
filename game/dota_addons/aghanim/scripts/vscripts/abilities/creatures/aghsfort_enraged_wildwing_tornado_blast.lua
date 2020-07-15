@@ -74,7 +74,10 @@ end
 function aghsfort_enraged_wildwing_tornado_blast:OnProjectileThink( vLocation )
 	if GameRules:GetGameTime() - self.flLastThinkTime >= self.spawn_interval then 
 		self.flLastThinkTime = GameRules:GetGameTime()
-		self:SpawnHarpy(vLocation)
+
+		if self:GetCaster().Encounter and self:GetCaster().Encounter:GetRoom() and self:GetCaster().Encounter:GetRoom():IsInRoomBounds( vLocation ) then
+			self:SpawnHarpy(vLocation)
+		end
 	end
 end
 

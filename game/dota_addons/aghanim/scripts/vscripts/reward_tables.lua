@@ -205,7 +205,6 @@ _G.PRICED_ITEM_REWARD_LIST =
 	item_bear_cloak = 750,
 	item_winter_embrace = 750,
 	item_poor_mans_shield = 750,
-	item_helm_of_the_undying = 800,
 	
 	--item_creed_of_omniscience = 750,
 

@@ -171,7 +171,7 @@ function CMapEncounter_NagaSiren:CheckForCompletion()
 		return false
 	end
 
-	if nCurrentValue == self.nEnemies and self.nMinesDestroyed == self.nMinesToDestroy then
+	if nCurrentValue >= self.nEnemies and self.nMinesDestroyed == self.nMinesToDestroy then
 		return true
 	end
 	return false
@@ -245,6 +245,11 @@ function CMapEncounter_NagaSiren:OnEntityKilled( event )
 		return
 	end
 
+	local killedUnit = EntIndexToHScript( event.entindex_killed )
+	if killedUnit == nil or killedUnit:GetTeam() == DOTA_TEAM_GOODGUYS then
+		return
+	end
+
 	if killedUnit:IsCreature() == true then
 		if killedUnit:GetUnitName() == "npc_dota_underwater_mine" then
 			local nCurrentValue = self:GetEncounterObjectiveProgress( "destroy_all_mines" )
@@ -256,7 +261,9 @@ function CMapEncounter_NagaSiren:OnEntityKilled( event )
 				local nCurrentValue = self:GetEncounterObjectiveProgress( "defeat_all_enemies" )
 				self:UpdateEncounterObjective( "defeat_all_enemies", nCurrentValue, self.nEnemies )
 			end
-		else
+		elseif killedUnit:GetUnitName() == "npc_dota_creature_slark_peon" or
+			killedUnit:GetUnitName() == "npc_dota_creature_naga_siren_illusion" or
+			killedUnit:GetUnitName() == "npc_dota_creature_naga_siren_boss" then
 			local nCurrentValue = self:GetEncounterObjectiveProgress( "defeat_all_enemies" )
 			self:UpdateEncounterObjective( "defeat_all_enemies", nCurrentValue + 1, self.nEnemies )
 			if not self.bSongUsed then

@@ -89,8 +89,11 @@ function boss_timbersaw_timber_chain:OnProjectileThink( vLocation )
 			if #hTrees > 0 then
 				for _,Tree in pairs ( hTrees ) do
 					if Tree and Tree:IsStanding() then
-						self:OnProjectileHit( Tree, Tree:GetAbsOrigin() )
-						return
+						local vTreeOrigin = Tree:GetAbsOrigin()
+						if self:GetCaster().Encounter and self:GetCaster().Encounter:GetRoom() and self:GetCaster().Encounter:GetRoom():IsInRoomBounds( vTreeOrigin ) then
+							self:OnProjectileHit( Tree, vTreeOrigin )
+							return
+						end
 					end
 				end
 			end
