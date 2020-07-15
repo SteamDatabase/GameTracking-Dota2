@@ -302,7 +302,7 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_weaver"] =
   "aghsfort_special_weaver_shukuchi_heal",
   "aghsfort_special_weaver_shukuchi_attack_on_completion",
   "aghsfort_special_weaver_shukuchi_swarm",
-  "aghsfort_special_weaver_shukuchi_greater_invisibility",
+  --"aghsfort_special_weaver_shukuchi_greater_invisibility",
 
   "aghsfort_special_weaver_time_lapse_allies",
   "aghsfort_special_weaver_time_lapse_restoration",
