@@ -20,6 +20,10 @@ function modifier_monster_leash:OnCreated( kv )
 	if IsServer() then
 		self.flKillStartTime = -1
 		self.bAddedGem = false
+		
+		self.bProvideVision = false
+		self.fProvideVisionTime = 240
+
 		self:StartIntervalThink( 0.01 )
 	end
 end
@@ -39,6 +43,14 @@ function modifier_monster_leash:OnIntervalThink()
 		hEncounter:HasStarted() == true and ( ( GameRules:GetGameTime() - hEncounter:GetStartTime() ) > 150 ) then
 		self.bAddedGem = true
 		self:GetParent():AddNewModifier( self:GetParent(), nil, "modifier_detect_invisible", {} )
+	end
+
+	-- Provide vision if the room has gone on for too long - helps to protect against enemies getting lost or stuck
+	if self.bProvideVision == false and
+		hEncounter:HasStarted() == true and ( ( GameRules:GetGameTime() - hEncounter:GetStartTime() ) > self.fProvideVisionTime ) then
+
+		self.bProvideVision = true
+		self:GetParent():AddNewModifier( thisEntity, nil, "modifier_provide_vision", { duration = -1 } )
 	end
 
 	local vOrigin = self:GetParent():GetAbsOrigin()

@@ -142,10 +142,10 @@ end
 function CMapEncounter_Aghanim:IntroduceBoss( hEncounteredBoss )
 	CMapEncounter_BossBase.IntroduceBoss( self, hEncounteredBoss )
 
-	local hRelays = self:GetRoom():FindAllEntitiesInRoomByName( "aghanim_gate_close_relay", false )
-	for _, hRelay in pairs( hRelays ) do
-		hRelay:Trigger( nil, nil )
-	end
+	-- local hRelays = self:GetRoom():FindAllEntitiesInRoomByName( "aghanim_gate_close_relay", false )
+	-- for _, hRelay in pairs( hRelays ) do
+	-- 	hRelay:Trigger( nil, nil )
+	-- end
 
 	local hTriggers = self:GetRoom():FindAllEntitiesInRoomByName( "aghanim_boss_room_bounds", false )
 	local hTeleportPositions = self:GetRoom():FindAllEntitiesInRoomByName( "teleport_players", false )

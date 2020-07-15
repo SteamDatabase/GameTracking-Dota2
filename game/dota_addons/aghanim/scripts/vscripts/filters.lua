@@ -61,6 +61,7 @@ function CAghanim:ModifierGainedFilter( filterTable )
 		"modifier_stunned",
 		"modifier_bashed",
 		"modifier_aghsfort_tusk_walrus_punch_air_time",
+		"modifier_aghsfort_mars_spear_stun",
 	}
 
 	local hParent = EntIndexToHScript( filterTable[ "entindex_parent_const" ] )

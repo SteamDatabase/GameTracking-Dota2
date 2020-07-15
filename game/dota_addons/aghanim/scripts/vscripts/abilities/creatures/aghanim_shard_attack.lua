@@ -251,7 +251,7 @@ function aghanim_shard_attack:LaunchCrystals( vVel, flDist, flRadius )
 		Source = self:GetCaster(),
 		iUnitTargetTeam = DOTA_UNIT_TARGET_TEAM_ENEMY,
 		iUnitTargetType = DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC,
-		fExpireTime = GameRules:GetGameTime() + 6.0,
+		fExpireTime = GameRules:GetGameTime() + 10.0,
 	}
 
 	return ProjectileManager:CreateLinearProjectile( info )
