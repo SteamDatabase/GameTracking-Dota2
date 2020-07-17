@@ -5,7 +5,7 @@ LinkLuaModifier( "modifier_aghanim_shard_attack", "modifiers/creatures/modifier_
 _G.PATTERN_SPIRAL = 0
 _G.PATTERN_REBOUND = 1
 _G.PATTERN_JITTER = 2
-_G.CAST_ESCLATION_PCT = 20
+_G.CAST_ESCLATION_PCT = 17
 
 _G.FAST_COLOR = Vector( 0, 0, 255 )
 _G.SLOW_COLOR = Vector( 350, 0, 0 ) -- looks weird, but it's because it can't go to 0 speed

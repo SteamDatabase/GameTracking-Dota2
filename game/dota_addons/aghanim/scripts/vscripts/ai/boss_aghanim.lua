@@ -42,8 +42,10 @@ function CBossAghanim:constructor( hUnit, flInterval )
 
 	self.nSpellSwapPct = 75
 	self.bSpellSwapEnabled = false
-	self.nShardAttackPct = 35
+	self.nShardAttackPct = 40
 	self.bShardAttackEnabled = false
+	self.nLevelUpPct = 50
+	self.bHasLeveledUp = false
 
 	self.AllowedPhases = 
 	{
@@ -189,6 +191,12 @@ function CBossAghanim:OnHealthPercentThreshold( nPct )
 		self.nNumAttacksBeforeTeleport = 0
 		self.bReturnHome = true
 	end
+
+	if nPct < self.nLevelUpPct and self.bHasLeveledUp == false then
+		self.bHasLeveledUp = true
+		self.me:CreatureLevelUp( 1 )
+	end
+	
 
 	if nPct < self.nShardAttackPct and self.bShardAttackEnabled == false then
 		self.nCurrentAttacksBetweenTeleport = math.max( 1, self.nCurrentAttacksBetweenTeleport - self.ENRAGE_LESS_ATTACKS_BETWEEN_TELEPORT )

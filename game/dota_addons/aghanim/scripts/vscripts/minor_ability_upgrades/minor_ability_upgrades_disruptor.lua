@@ -53,7 +53,7 @@ local Disruptor =
 		 ability_name = "aghsfort_disruptor_glimpse",
 		 special_value_name = "bonus_damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 20,
+		 value = 30,
 	},
 
 	{
@@ -92,7 +92,7 @@ local Disruptor =
 		ability_name = "aghsfort_disruptor_static_storm",
 		special_value_name = "duration",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 1.5,
+		value = 1.25,
 	},
 
 	{

@@ -51,7 +51,7 @@ local Sniper =
 		ability_name = "aghsfort_sniper_headshot",
 		special_value_name = "damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 35,
+		value = 30,
 	},
 
 	{
@@ -91,7 +91,7 @@ local Sniper =
 		ability_name = "aghsfort_sniper_take_aim",
 		special_value_name = "bonus_attack_range",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 75,
+		value = 50,
 	},
 
 	{

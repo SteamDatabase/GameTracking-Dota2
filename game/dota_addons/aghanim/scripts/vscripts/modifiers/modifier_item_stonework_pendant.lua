@@ -16,6 +16,7 @@ end
 
 function modifier_item_stonework_pendant:OnCreated( kv )
 	self.spell_lifesteal = self:GetAbility():GetSpecialValueFor( "spell_lifesteal" )
+	self.hp_cost_multiplier = self:GetAbility():GetSpecialValueFor( "hp_cost_multiplier" )
 	self.flBonusHP = self:GetParent():GetMaxMana()
 	self.flBonusHPRegen = self:GetParent():GetManaRegen()
 	if IsServer() then
@@ -118,5 +119,5 @@ end
 --------------------------------------------------------------------------------
 
 function modifier_item_stonework_pendant:GetModifierSpellsRequireHP( params )
-	return 2.0
+	return self.hp_cost_multiplier
 end 

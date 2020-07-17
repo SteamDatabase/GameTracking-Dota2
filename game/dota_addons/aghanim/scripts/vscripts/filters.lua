@@ -66,6 +66,11 @@ function CAghanim:ModifierGainedFilter( filterTable )
 
 	local hParent = EntIndexToHScript( filterTable[ "entindex_parent_const" ] )
 	if hParent ~= nil and hParent.bAbsoluteNoCC ~= nil and hParent.bAbsoluteNoCC == true then
+		if hParent.bNoNullifier ~= nil and hParent.bNoNullifier == true then
+			table.insert( BlackListModiifers, "modifier_item_nullifier_mute" ) 
+			table.insert( BlackListModiifers, "modifier_item_nullifier_slow" ) 
+		end
+
 		local bModifierInBlacklist = false
 		for _,szModifierName in pairs ( BlackListModiifers ) do
 			if szModifierName == filterTable[ "name_const" ] then
@@ -73,6 +78,7 @@ function CAghanim:ModifierGainedFilter( filterTable )
 				break
 			end
 		end
+
 		if bModifierInBlacklist then
 			local vMaxs = hParent:GetBoundingMaxs()
 			local vMins = hParent:GetBoundingMins()

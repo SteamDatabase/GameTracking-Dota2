@@ -43,7 +43,7 @@ local Magnus =
 		ability_name = "aghsfort_magnataur_empower",
 		special_value_name = "bonus_damage_pct",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 10,
+		value = 5,
 	},
 
 	{
@@ -51,7 +51,7 @@ local Magnus =
 		ability_name = "aghsfort_magnataur_empower",
 		special_value_name = "cleave_damage_pct",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 15,
+		value = 10,
 	},
 
 	{
@@ -75,7 +75,7 @@ local Magnus =
 		ability_name = "aghsfort_magnataur_skewer",
 		special_value_name = "slow_pct",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 20,
+		value = 25,
 	},
 
 	{

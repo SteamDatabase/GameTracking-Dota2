@@ -257,7 +257,7 @@ _G.PRICED_ITEM_REWARD_LIST =
 	item_watchers_gaze = 4250,
 	item_guardian_shell = 4250,
 
-	item_force_boots = 4500,
+	
 	item_ex_machina = 4500,
 	item_mirror_shield = 4750,
 	item_wand_of_the_brine = 4750,
@@ -265,7 +265,8 @@ _G.PRICED_ITEM_REWARD_LIST =
 
 	item_treads_of_ermacor = 5000,
 	item_demonicon = 5000,
-	item_slippers_of_the_abyss = 5000,
+	item_force_boots = 5500,
+	item_slippers_of_the_abyss = 5500,
 	item_apex = 6000,
 	item_desolator_2 = 6000,
 }

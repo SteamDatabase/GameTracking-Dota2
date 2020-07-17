@@ -215,7 +215,8 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_ursa"] =
 
    "aghsfort_special_ursa_fury_swipes_armor_reduction",
 
-   "aghsfort_special_ursa_enrage_magic_immunity",
+   --"aghsfort_special_ursa_enrage_magic_immunity",
+   "aghsfort_special_ursa_enrage_allies",
    "aghsfort_special_ursa_enrage_fear",
    "aghsfort_special_ursa_enrage_armor",
    "aghsfort_special_ursa_enrage_attack_speed",

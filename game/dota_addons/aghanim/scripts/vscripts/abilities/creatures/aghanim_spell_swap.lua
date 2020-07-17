@@ -112,9 +112,21 @@ function aghanim_spell_swap:OnSpellStart()
 		self.Heroes = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 5000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_CLOSEST, false )
 		for k,hHero in pairs ( self.Heroes ) do
 			if hHero ~= nil and hHero:IsRealHero() then
-				
-				hHero:AddNewModifier( self:GetCaster(), self, "modifier_arc_warden_spark_wraith_purge", { duration = self:GetChannelTime() } )
 
+				local nNumAghDummies = 0
+				for j=1,4 do		
+					local szName = tostring( "aghanim_empty_spell" .. j )
+					local hDummyAbility = hHero:FindAbilityByName( szName )
+					if hDummyAbility then
+						nNumAghDummies = nNumAghDummies + 1
+					end
+				end	
+
+				if nNumAghDummies == 4 then
+					print( "I have 4 agh dummies!  Getting slowed." )
+					hHero:AddNewModifier( self:GetCaster(), self, "modifier_arc_warden_spark_wraith_purge", { duration = self:GetChannelTime() } )
+				end
+				
 				local nBeamFX = ParticleManager:CreateParticle( "particles/creatures/aghanim/aghanim_spell_swap_beam.vpcf", PATTACH_CUSTOMORIGIN, self:GetCaster() )
 
 				local szAttachment = "attach_hand_R"

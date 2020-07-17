@@ -55,7 +55,13 @@ local Omniknight =
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		 value = 40,
 	},
-
+	{
+		 description = "aghsfort_omniknight_purification_flat_cast_range",
+		 ability_name = "aghsfort_omniknight_purification",
+		 special_value_name = "cast_range",
+		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		 value = 100,
+	},
 
 	{
 		 description = "aghsfort_omniknight_purification_flat_radius",

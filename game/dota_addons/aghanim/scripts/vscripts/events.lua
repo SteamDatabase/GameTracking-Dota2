@@ -704,16 +704,6 @@ end
 
 function CAghanim:OnItemPickedUp( event )
 	local item = EntIndexToHScript( event.ItemEntityIndex )
-
-	local hero = nil
-	if event.HeroEntityIndex then
-		hero = EntIndexToHScript( event.HeroEntityIndex )
-	end
-
-	if item and hero and item:GetAbilityName() ~= "item_tombstone" then
-		item:SetPurchaser( hero )
-	end
-
 	if event.PlayerID ~= nil and item ~= nil and item:GetAbilityName() == "item_bag_of_gold" then
 		self:RegisterGoldBagCollectedStat( event.PlayerID )
 	end

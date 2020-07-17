@@ -55,7 +55,7 @@ function PhoenixThink()
 		end
 	end
 
-	local fHealthThresholdPctIcarus = 75
+	local fHealthThresholdPctIcarus = 90
 	if thisEntity:GetHealthPercent() <= fHealthThresholdPctIcarus and thisEntity.hIcarusDiveAbility and thisEntity.hIcarusDiveAbility:IsFullyCastable() then
 		local hRandomDiveTarget = hDiveRangeEnemies[ RandomInt( 1, #hDiveRangeEnemies ) ]
 		return CastIcarusDive( hRandomDiveTarget:GetAbsOrigin() )

@@ -28,6 +28,7 @@ function aghanim_summon_portals:Precache( context )
 	self.nMode = 0
 	self.nDepthRemaining = 20
 	self.nPortals = 0
+	self.nNumPortalsThisCast = 0
 	self.flPortalSummmonTime = self:GetSpecialValueFor( "portal_time" )
 	self.flStartGestureTime = 999999999999
 	
@@ -79,10 +80,16 @@ function aghanim_summon_portals:OnChannelThink( flInterval )
 	if IsServer() then
 		if self.nPortals > 0 and GameRules:GetGameTime() > self.flNextPortalTime then
 			self.flNextPortalTime = GameRules:GetGameTime() + self.flPortalInterval
-			if self.nMode == self.PORTAL_MODE_ALL_SPEARS then
+			if self.nNumPortalsInLine > 0 then
 				self:CreateNextPortalAlongLine()
-			else
+				self.nNumPortalsInLine = self.nNumPortalsInLine - 1
+				self.nNumPortalsThisCast = self.nNumPortalsThisCast + 1
+			end
+
+			if self.nNumPortalsNearHeroes > 0 then
 				self:CreateNearHeroPortal()
+				self.nNumPortalsNearHeroes = self.nNumPortalsNearHeroes - 1
+				self.nNumPortalsThisCast = self.nNumPortalsThisCast + 1
 			end
 		end
 
@@ -122,45 +129,27 @@ function aghanim_summon_portals:OnSpellStart()
 		self.nDepthRemaining = self:GetSpecialValueFor( "total_portal_depth" )
 		self.nLastPortalMode = self.nMode
 		self.nMode = self:GetPortalMode()
+
+		self.nNumPortalsThisCast = 0
+
+		self.nNumPortalsInLine = self:GetSpecialValueFor( "base_portals" ) 
+		self.nNumPortalsNearHeroes = self.nPortals - self.nNumPortalsInLine
+
 		if self.nMode == self.PORTAL_MODE_ALL_SPEARS then
 			local vMidPoint = nil
 			
 			local vLineDir = nil
 			self.Heroes = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 5000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_CLOSEST, false )
-			--if #self.Heroes == 0 then
+		
 			vMidPoint = self:GetCaster():GetAbsOrigin() + self:GetCaster():GetForwardVector() * 500
 			vLineDir = self:GetCaster():GetRightVector()
-			-- else
-			-- 	for _,Hero in pairs ( self.Heroes ) do
-			-- 		if vMidPoint == nil then
-			-- 			vMidPoint = Hero:GetAbsOrigin()
-			-- 		else
-			-- 			vMidPoint = vMidPoint + Hero:GetAbsOrigin()
-			-- 		end
-
-			-- 		vMidPoint = vMidPoint + self:GetCaster():GetAbsOrigin()
-			-- 	end
-
-			-- 	vMidPoint = vMidPoint / ( #self.Heroes * 2 )
-
-			-- 	local vClosestHeroPos = nil
-			-- 	local vFarthestHeroPos = nil 
-
-			-- 	vClosestHeroPos = self.Heroes[1]:GetAbsOrigin()
-			-- 	vFarthestHeroPos = self.Heroes[#self.Heroes]:GetAbsOrigin()
-			-- 	if vClosestHeroPos == vFarthestHeroPos then
-			-- 		vClosestHeroPos = self:GetCaster():GetAbsOrigin()
-			-- 	end
-
-			-- 	vLineDir = vFarthestHeroPos - vClosestHeroPos
-			-- end
 
 			vLineDir.z = 0.0
 			vLineDir = vLineDir:Normalized()
 
-			local nPortalsRemaining = self.nPortals - 1 
+			local nPortalsRemaining = self.nNumPortalsInLine - 1 
 			local flLineStep = 450
-			local flTotalLineDist = flLineStep * self.nPortals
+			local flTotalLineDist = flLineStep * self.nNumPortalsInLine
 			local vFirstPortalPos = vMidPoint - ( vLineDir * ( flLineStep * nPortalsRemaining  / 2 )  )
 
 			self.SpearLinePositions = {}
@@ -232,20 +221,8 @@ end
 -------------------------------------------------------------------------------
 
 function aghanim_summon_portals:GetPortalMode()
-	if IsServer() then
-		if 1 then
-			return self.PORTAL_MODE_ALL_SPEARS
-		end
-
-		if self:GetCaster():GetHealthPercent() < 33 then
-			return RandomInt( self.PORTAL_MODE_ALL_SPEARS, self.PORTAL_MODE_BOTH )
-		end
-
-		if self.nLastPortalMode == self.PORTAL_MODE_ALL_SPEARS then
-			return self.PORTAL_MODE_ALL_ENEMIES
-		else
-			return self.PORTAL_MODE_ALL_SPEARS
-		end
+	if IsServer() then	
+		return self.PORTAL_MODE_ALL_SPEARS		
 	end
 	return 0
 end
@@ -254,6 +231,11 @@ end
 
 function aghanim_summon_portals:CreateNearHeroPortal()
 	if IsServer() then
+		local nCountLeft = self.nNumPortalsNearHeroes 
+		if nCountLeft <= 0 then
+			return
+		end
+
 		local Heroes = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 5000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_CLOSEST, false )
 		if #Heroes == 0 then
 			return
@@ -264,25 +246,22 @@ function aghanim_summon_portals:CreateNearHeroPortal()
 			return
 		end
 
-		local vPos = hTarget:GetAbsOrigin() + RandomVector( 1 ) * RandomFloat( self:GetSpecialValueFor( "min_portal_offset" ), self:GetSpecialValueFor( "max_portal_offset" ) )
-		local nMode = self.nMode
-		if self.nMode == self.PORTAL_MODE_BOTH then
-			self.nMode = RandomInt( self.PORTAL_MODE_ALL_SPEARS, self.PORTAL_MODE_ALL_ENEMIES )
+		local vToAghanim = self:GetCaster():GetAbsOrigin() - hTarget:GetAbsOrigin() 
+		vToAghanim.z = 0.0
+		vToAghanim = vToAghanim:Normalized()
+
+		local vPos = hTarget:GetAbsOrigin() - vToAghanim * RandomFloat( self:GetSpecialValueFor( "min_portal_offset" ), self:GetSpecialValueFor( "max_portal_offset" ) )
+		if GridNav:CanFindPath( hTarget:GetAbsOrigin(), vPos ) == false then
+			return
 		end
 
-		local nDepthOfPortal = RandomInt( 2, self.nDepthRemaining )
-		self.nDepthRemaining = math.max( 2, self.nDepthRemaining - nDepthOfPortal )
-
-		local flDuration = self.flPortalSummmonTime
-		if self.bSynchedPortalRelease == true then
-			flDuration = ( self:GetChannelStartTime() + self:GetChannelTime() ) - GameRules:GetGameTime()
-		end
+		local flDuration = 0.5 + ( self:GetChannelStartTime() + self:GetChannelTime() ) - GameRules:GetGameTime() - ( nCountLeft * 0.3 )
 
 		local kv =
 		{
 			duration = flDuration,
-			mode = self.nMode,
-			depth = nDepthOfPortal,
+			mode = self.PORTAL_MODE_ALL_SPEARS,
+			depth = 0,
 			target_entindex = hTarget:entindex(),
 		}
 
@@ -318,7 +297,7 @@ function aghanim_summon_portals:CreateNextPortalAlongLine()
 			return
 		end
 
-		local flDuration =  ( self:GetChannelStartTime() + self:GetChannelTime() ) - GameRules:GetGameTime() - ( nCountLeft * 0.3 )
+		local flDuration = 0.5 + ( self:GetChannelStartTime() + self:GetChannelTime() ) - GameRules:GetGameTime() - ( nCountLeft * 0.3 )
 		table.remove( self.SpearLinePositions, 1 )
 
 		local kv =

@@ -29,7 +29,7 @@ local Tusk =
 		 ability_name = "aghsfort_tusk_ice_shards",
 		 special_value_name = "shard_duration",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 1.0,
+		 value = 0.5,
 	},
 
 	{
@@ -110,7 +110,7 @@ local Tusk =
 		 ability_name = "aghsfort_tusk_walrus_punch",
 		 special_value_name = "crit_multiplier",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 100,
+		 value = 75,
 	},
 
 	{

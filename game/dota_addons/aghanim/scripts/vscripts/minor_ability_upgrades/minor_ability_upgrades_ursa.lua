@@ -43,7 +43,7 @@ local Ursa =
 		ability_name = "aghsfort_ursa_earthshock",
 		special_value_name = "movement_slow",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 15,
+		value = 20,
 	},
 
 	{

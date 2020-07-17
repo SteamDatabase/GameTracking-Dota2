@@ -13,7 +13,7 @@ local WinterWyvern =
 		 ability_name = "aghsfort_winter_wyvern_arctic_burn",
 		 special_value_name = "duration",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 4.0,
+		 value = 1.0,
 	},
 
 	{

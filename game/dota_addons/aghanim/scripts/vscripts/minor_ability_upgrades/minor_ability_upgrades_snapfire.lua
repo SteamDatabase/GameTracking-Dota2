@@ -77,7 +77,7 @@ local Snapfire =
 		 ability_name = "aghsfort_snapfire_firesnap_cookie",
 		 special_value_name = "impact_radius",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 75,
+		 value = 85,
 	},
 
 	{

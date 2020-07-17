@@ -52,7 +52,13 @@ function modifier_item_bogduggs_lucky_femur:OnAbilityFullyCast( params )
 			return 0
 		end
 
+		if self:GetAbility() == nil or self:GetAbility():IsCooldownReady() == false then
+			return 0
+		end
+
 		if Ability:IsRefreshable() and Ability:IsItem() == false and RollPercentage( self.refresh_pct ) then
+			self:GetAbility():StartCooldown( Ability:GetCooldown( -1 ) )
+
 			Ability:EndCooldown()
 			local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_ogre_magi/ogre_magi_multicast.vpcf", PATTACH_OVERHEAD_FOLLOW, self:GetParent() )
 			ParticleManager:SetParticleControl( nFXIndex, 1, Vector( 1, 2, 1 ) )

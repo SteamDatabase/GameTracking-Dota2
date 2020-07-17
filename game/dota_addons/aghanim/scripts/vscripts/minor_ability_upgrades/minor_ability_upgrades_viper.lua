@@ -102,7 +102,7 @@ local Viper =
 		 ability_name = "aghsfort_viper_corrosive_skin",
 		 special_value_name = "bonus_magic_resistance",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 8,
+		 value = 5,
 	},
 
 	{

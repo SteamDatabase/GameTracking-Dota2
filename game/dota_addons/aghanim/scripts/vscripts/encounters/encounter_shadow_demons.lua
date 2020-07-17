@@ -216,6 +216,15 @@ function CMapEncounter_ShadowDemons:OnSpawnerFinished( hSpawner, hSpawnedUnits )
 				end
 			end
 		end
+
+		for _,hSpawnedUnit in pairs( hSpawnedUnits ) do
+			if hSpawnedUnit:GetUnitName() == "npc_dota_creature_doom" then
+				EmitSoundOn( "encounter_shadow_demons.doom.intro", hSpawnedUnit )
+				--printf( "Set initial goal entity for unit \"%s\" to \"%s\"", hSpawnedUnit:GetUnitName(), hero:GetUnitName() )
+				hSpawnedUnit:SetInitialGoalEntity( hero )
+			end
+		end
+
 	end
 end
 
