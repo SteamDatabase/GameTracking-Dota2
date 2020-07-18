@@ -77,10 +77,15 @@ end
 ---------------------------------------------------------------------------
 -- ShuffleListInPlace
 ---------------------------------------------------------------------------
-function ShuffleListInPlace( list )
+function ShuffleListInPlace( list, hRandomStream )
 	local count = #list
 	for i = 1, count do
-		local j = RandomInt( 1, #list )
+		local j = 0
+		if hRandomStream == nil then
+			j = RandomInt( 1, #list )
+		else
+			j = hRandomStream:RandomInt( 1, #list )
+		end
 		list[i] , list[j] = list[j] , list[i]
 	end
 end
@@ -142,14 +147,6 @@ function deepcopy(orig)
 	return copy
 end
 
----------------------------------------------------------------------------
--- Roll Percent Chance
----------------------------------------------------------------------------
-function RollPercentChance( nChance )
-	local bOutcome = RandomInt( 0, 100 ) > ( 100 - nChance )
-
-	return bOutcome
-end
 
 ---------------------------------------------------------------------------
 -- Table functions

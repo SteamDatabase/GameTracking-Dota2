@@ -75,8 +75,8 @@ function CMapEncounter_Morphlings_B:constructor( hRoom, szEncounterName )
 
 	-- szSpawnerNameInput, nPortalHealthInput, flSummonTimeInput, flScaleInput, rgUnitsInfoInput
 
-	local nSmallPortalHealth = 15 * hRoom:GetDepth()
-	local nBigPortalHealth = 50 * hRoom:GetDepth()
+	local nSmallPortalHealth = 12 * hRoom:GetDepth()
+	local nBigPortalHealth = 40 * hRoom:GetDepth()
 
 	self:AddPortalSpawnerV2( CPortalSpawnerV2( self.szPeonPortalV2, self.szPeonPortalV2, nSmallPortalHealth, 6, 0.7,
 		{

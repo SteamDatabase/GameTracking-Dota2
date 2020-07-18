@@ -111,7 +111,7 @@ function CMapEncounter_PenguinsTransition:Start()
 	self.fCoinPileCreationInterval = 0.5
 	self.fNextCoinPileSpawn = GameRules:GetGameTime() + self.fCoinPileCreationInterval
 
-	local nTotalGold = 4000 -- this is probably not needed since we have the self.nGoldForBags value
+	local nTotalGold = 5000 -- this is probably not needed since we have the self.nGoldForBags value
 	self.nTotalGoldBagsToSpawn = 475
 	self.nGoldPerBag = nTotalGold / self.nTotalGoldBagsToSpawn
 	--printf( "Start - self.nGoldPerBag: %d", self.nGoldPerBag )

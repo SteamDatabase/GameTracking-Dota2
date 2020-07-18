@@ -39,6 +39,43 @@ function GetPricedNeutralItems( nRoomDepth, bElite )
 	return vecPossibleItems
 end
 
+
+function GetRandomUnique( hRandomStream, Array, BlacklistValues )
+	if Array == nil then
+		return nil
+	end
+
+	--PrintTable( Array, "Array:" )
+	--PrintTable( BlacklistValues, "BlacklistValues:" )
+
+	local Whitelist = {}
+	if BlacklistValues == nil then
+		Whitelist = Array
+	else
+		for _,Value in pairs(Array) do
+			if not TableContainsValue( BlacklistValues, Value ) then	
+				table.insert(Whitelist, Value)
+			end
+		end
+	end
+
+	local bIgnoreBlacklist = false
+	if #Whitelist < 1 then
+		bIgnoreBlacklist = true
+		Whitelist = Array
+	end
+	
+	local Candidate = nil
+	nIndex = hRandomStream:RandomInt(1,#Whitelist)
+	Candidate = Whitelist[ nIndex ]
+
+	if bIgnoreBlacklist then
+		printf("WARNING: GetRandomUnique returning array[%d] = %s, ignoring blacklist.", nIndex, Candidate)
+	end
+	
+	return Candidate
+end
+
 function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalExcludeList )
 
 	local vecRewardStruct = nil	
@@ -71,24 +108,14 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 
 	vecRewardStruct = ROOM_REWARDS[ "depth_" .. nRoomDepth].normal
 
---[[	if nRoomType ~= ROOM_TYPE_TRAPS then
-		if bElite then 
-			vecRewardStruct = ROOM_REWARDS[ "depth_" .. nRoomDepth].elite
-		else
-			vecRewardStruct = ROOM_REWARDS[ "depth_" .. nRoomDepth].normal
-		end
-	else
-		vecRewardStruct = ROOM_REWARDS[ "traps" ].normal
-	end
---]]
-	--printf("room substr = %s, bElite = %s, reward struct = %s", szRoomSubstr, bElite, vecRewardStruct )
+	local hHeroRandomStream = GameRules.Aghanim:GetHeroRandomStream( nPlayerID )
 
 	-- first, choose the appropriate reward tier for each option
 	local vecGeneratedRewardTiers = {}
 
 	for _,aRewardDef in pairs( vecRewardStruct ) do
 
-		local flRoll = RandomFloat(0, 100.0)
+		local flRoll = hHeroRandomStream:RandomFloat(0, 100.0)
 		local flThreshold = 0.0
 
 		for eRewardTier,flPct in pairs( aRewardDef ) do
@@ -105,7 +132,7 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 	end
 
 	-- shuffle the chosen reward tiers so that progressive probabilities are randomized
-	ShuffleListInPlace( vecGeneratedRewardTiers )
+	ShuffleListInPlace( vecGeneratedRewardTiers, hHeroRandomStream )
 
 	-- exclude any item or ability they've learned, chosen, have in inventory or are externally marked for exclusion
 	local vecAbilitiesToExclude = GetPlayerAbilitiesAndItems( nPlayerID )
@@ -115,19 +142,8 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 		if RewardChoice and RewardChoice["ability_name"] and RewardChoice["reward_type"] ~= "REWARD_TYPE_MINOR_ABILITY_UPGRADE" and RewardChoice["reward_type"] ~= "REWARD_TYPE_MINOR_STATS_UPGRADE" then
 			table.insert( vecAbilitiesToExclude, RewardChoice["ability_name"] )
 		end
-
-		-- also exclude neutral items i was offered but did not choose.
-		local RewardOptions = CustomNetTables:GetTableValue( "reward_options", tostring(ii) )
-		local RewardOption = RewardOptions and RewardOptions[ tostring( nPlayerID ) ] or nil
-		if RewardOption then
-			for _,Reward in pairs ( RewardOption ) do
-				if Reward[ "reward_type" ] == "REWARD_TYPE_ITEM" and Reward[ "ability_name" ] then
-					--print( "excluding choice of " .. Reward[ "ability_name" ] )
-					table.insert( vecAbilitiesToExclude, RewardOption["ability_name"] )
-				end
-			end
-		end
 	end
+
 	for _,ExcludeAbility in pairs(vecExternalExcludeList) do
 		table.insert( vecAbilitiesToExclude, ExcludeAbility )
 	end
@@ -144,7 +160,7 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 	
 		local aRewardTierDef = RebalanceRewards( REWARD_TIER_TABLE[eRewardTier], vecGeneratedRewards )
 
-		local flRoll = RandomFloat(0, 100.0)
+		local flRoll = hHeroRandomStream:RandomFloat(0, 100.0)
 		local flThreshold = 0.0
 		local MinorAbilityUpgrade = nil
 		local MinorStatsUpgrade = nil
@@ -157,30 +173,11 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 				local szAbilityName = nil
 				local nQuantity = nil
 
-				if eRewardType == "REWARD_TYPE_GOLD" then
-					if USE_PRICED_REWARDS == true then
-						local nMinValue, nMaxValue = GetMinMaxGoldChoiceReward( nRoomDepth, bElite )
-						nQuantity = math.random( nMinValue, nMaxValue )
-					else
-						local aRewardResultDef = GOLD_REWARD_LIST[ eRewardTier ]
-						nQuantity = RandomInt( aRewardResultDef[1], aRewardResultDef[2] )
-					end
-				elseif  eRewardType == "REWARD_TYPE_EXTRA_LIVES" then
-					nQuantity = 1
-				elseif eRewardType == "REWARD_TYPE_ITEM" then
-					if USE_PRICED_REWARDS == true then
-						local vecPossibleItems = GetPricedNeutralItems( nRoomDepth, bHardRoom )
-						local vecFilteredItems = GameRules.Aghanim:FilterPreviouslyDroppedItems( vecPossibleItems )
-						szAbilityName = GetRandomUnique( vecFilteredItems, vecAbilitiesToExclude )
-					else
-						local vecItemRewards = ITEM_REWARD_LIST[ eRewardTier ]
-						szAbilityName = GetRandomUnique( vecItemRewards, vecAbilitiesToExclude )						
-					end
-				elseif eRewardType == "REWARD_TYPE_ABILITY_UPGRADE" then
-					szAbilityName = GetRandomUnique( SPECIAL_ABILITY_UPGRADES[szHeroName], vecAbilitiesToExclude )
+				if eRewardType == "REWARD_TYPE_ABILITY_UPGRADE" then
+					szAbilityName = GetRandomUnique( hHeroRandomStream, SPECIAL_ABILITY_UPGRADES[szHeroName], vecAbilitiesToExclude )
 					iRewardRarity = 2
 				elseif eRewardType == "REWARD_TYPE_MINOR_ABILITY_UPGRADE" then
-					local k = math.random( 1, #MinorUpgrades )
+					local k = hHeroRandomStream:RandomInt( 1, #MinorUpgrades )
 					local Upgrade = MinorUpgrades[ k ]
 					table.remove( MinorUpgrades, k )
 					MinorAbilityUpgrade = deepcopy( Upgrade )
@@ -190,7 +187,7 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 					end
 					--table.insert( vecMinorAbilityIDsToExclude, MinorAbilityUpgrade[ "id" ] ) 
 				elseif eRewardType == "REWARD_TYPE_MINOR_STATS_UPGRADE" then
-					local k = math.random( 1, #MinorStatsUpgrades )
+					local k = hHeroRandomStream:RandomInt( 1, #MinorStatsUpgrades )
 					local StatsUpgrade = MinorStatsUpgrades[ k ]
 					table.remove( MinorStatsUpgrades, k )
 					MinorStatsUpgrade = deepcopy( StatsUpgrade )
@@ -198,14 +195,6 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 						print( "Elite Room, increasing expected value of stats upgrade from " .. MinorStatsUpgrade[ "value" ] .. " to " .. MinorStatsUpgrade[ "value" ] * ELITE_VALUE_MODIFIER )
 						MinorStatsUpgrade[ "value" ] = MinorStatsUpgrade[ "value" ] * ELITE_VALUE_MODIFIER
 					end
-				elseif eRewardType == "REWARD_TYPE_AURA" then
-					szAbilityName = GetRandomUnique( AURA_REWARD_LIST, vecAbilitiesToExclude )	
-					-- don't let multiple team members roll the same aura
-					table.insert( vecExternalExcludeList, szAbilityName )
-				elseif eRewardType == "REWARD_TYPE_TEMP_BUFF" then
-					szAbilityName = GetRandomUnique( TEMP_BUFF_REWARD_LIST, vecAbilitiesToExclude )	
-					-- don't let multiple team members roll the same temp buff
-					table.insert( vecExternalExcludeList, szAbilityName )
 				end
 
 				if szAbilityName ~= nil then
@@ -291,30 +280,10 @@ function TestRoomRewardConsoleCommand( cmdName, szRoomDepth, szIsElite, szIsTrap
 
 end
 
--- right now we just blacklist gold or lives rewards if they've already been chosen
--- but we could reduce relative probabilities of duplicates too
 function RebalanceRewards( aRewardDef, vecPreviouslyGeneratedRewards )
 
 	local aRebalancedRewardDef = deepcopy( aRewardDef )
-
-	--printf("rebalancing rewards")
-	--DeepPrintTable(aRewardDef)
-	
-	for _,aPreviouslyGeneratedReward in pairs(vecPreviouslyGeneratedRewards) do
-
-		local ePrevRewardType = aPreviouslyGeneratedReward["reward_type"]
-
-		if ePrevRewardType == "REWARD_TYPE_GOLD" or ePrevRewardType == "REWARD_TYPE_EXTRA_LIVES" or ePrevRewardType == "REWARD_TYPE_ITEM" then
-			aRebalancedRewardDef[ePrevRewardType] = nil
-		end
-
-	end
-
 	NormalizeFloatArrayInPlace( aRebalancedRewardDef, 100.0 )
-
-	--DeepPrintTable(aRebalancedRewardDef)
-	--printf("done rebalancing rewards")
-
 	return aRebalancedRewardDef
 
 end
@@ -363,40 +332,14 @@ function GrantRewards( nPlayerID, szRoomDepth, aReward )
 	local bEliteReward = aReward["elite"] == 1
 
 
-	--local eRewardTier = aReward["reward_tier"]
-
-	if eRewardType == "REWARD_TYPE_ITEM" then
-		GrantItemDropToHero( hPlayerHero, szAbilityName )
-		GameRules.Aghanim:MarkNeutralItemAsDropped( szAbilityName )
-	elseif eRewardType == "REWARD_TYPE_GOLD" then
-		PlayerResource:ModifyGold( nPlayerID, nQuantity, true, DOTA_ModifyGold_Unspecified )
-	elseif eRewardType == "REWARD_TYPE_EXTRA_LIVES" then
-		hPlayerHero.nRespawnsRemaining = math.min( AGHANIM_MAX_LIVES, hPlayerHero.nRespawnsRemaining + nQuantity )
-		hPlayerHero:SetRespawnsDisabled( hPlayerHero.nRespawnsRemaining == 0 )
-
-		CustomGameEventManager:Send_ServerToPlayer( hPlayerHero:GetPlayerOwner(), "gained_life", {} )
-		CustomNetTables:SetTableValue( "respawns_remaining", string.format( "%d", hPlayerHero:entindex() ),  { respawns = hPlayerHero.nRespawnsRemaining } )
-	elseif eRewardType == "REWARD_TYPE_ABILITY_UPGRADE" then
+	--local eRewardTier = aReward["reward_tier"
+	if eRewardType == "REWARD_TYPE_ABILITY_UPGRADE" then
 		local data = {}
 		data["PlayerID"] = nPlayerID
         data["AbilityName"] = szAbilityName
         data["LevelReward"] = true
 		CAghanim:OnAbilityUpgradeButtonClicked(1, data)
 		GameRules.Aghanim:GetAnnouncer():OnRewardSelected( hPlayerHero, tonumber( szRoomDepth ), eRewardType, szAbilityName )
-	elseif eRewardType == "REWARD_TYPE_AURA" then
-		local hNewAbility = hPlayerHero:AddAbility( szAbilityName )
-		if ( hNewAbility ) then
-			-- Grants and upgrades the ability
-			printf("upgrading ability %s %s", szAbilityName, hNewAbility)
-			hNewAbility:UpgradeAbility( false )
-		end
-	elseif eRewardType == "REWARD_TYPE_TEMP_BUFF" then
-		local hNewAbility = hPlayerHero:AddAbility( szAbilityName )
-		if ( hNewAbility ) then
-			-- Grants and upgrades the ability
-			printf("upgrading ability %s %s", szAbilityName, hNewAbility)
-			hNewAbility:UpgradeAbility( false )
-		end
 	elseif eRewardType == "REWARD_TYPE_MINOR_ABILITY_UPGRADE" then
 		local Upgrade = deepcopy( MINOR_ABILITY_UPGRADES[ hPlayerHero:GetUnitName() ][ aReward[ "id" ] ] )
 		if bEliteReward then

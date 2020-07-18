@@ -32,6 +32,15 @@ function CMapRoom:constructor( szRoomName, nRoomType, nDepth, vMins, vMaxs, vOri
 	self.bHasCrystal = false
 	self.nPlayerChosenExitDirection = ROOM_EXIT_INVALID
 	self.nPlayerEntranceDirection = ROOM_EXIT_INVALID
+
+	self.hRandomStream = CreateUniformRandomStream( GameRules.Aghanim:GetRandomSeed() + MakeStringToken( szRoomName ) )
+	self.bDisplayHiddenAsElite = ( self:RoomRandomInt( 1, 4 ) == 1 )
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:ShouldDisplayHiddenAsElite( )
+	return self.bDisplayHiddenAsElite
 end
 
 --------------------------------------------------------------------------------
@@ -297,7 +306,7 @@ function CMapRoom:LoadExitRooms()
 					if GameRules.Aghanim:IsMapFlipped() and EncounterData.szFlippedMapNames ~= nil then
 						mapList = EncounterData.szFlippedMapNames
 					end					
-					local szMapName = mapList[ math.random( 1, #mapList ) ]
+					local szMapName = mapList[ self:RoomRandomInt( 1, #mapList ) ]
 					ExitRoom.szMapName = szMapName
 
 					ExitRoom.vOrigin.z = self.vOrigin.z + self:GetNeighboringRoomHeightDifference( nExitDirection ) 
@@ -823,4 +832,16 @@ end
 
 function CMapRoom:HasCrystal()
 	return self.bHasCrystal
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:RoomRandomInt( nMinInt, nMaxInt )
+	return self.hRandomStream:RandomInt( nMinInt, nMaxInt )
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:RoomRandomFloat( flMin, flMin )
+	return self.hRandomStream:RandomFloat( flMin, flMin )
 end

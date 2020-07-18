@@ -157,6 +157,8 @@ function CAghanim:InitGameMode()
 	self.bHasSetNewPlayers = false
 	self.bHasInitializedSpectatorCameras = false
 	self.AghanimSummons = {}
+	self.hMapRandomStream = CreateUniformRandomStream( self.nSeed )
+	self.hPlayerRandomStreams = {}
 
 	math.randomseed( self.nSeed )
 
@@ -299,12 +301,17 @@ function CAghanim:InitGameMode()
 	-- Listener for reward choice	
 	CustomGameEventManager:RegisterListener( "reward_choice", function(...) return OnRewardChoice( ... ) end )
 
-	local nCustomGameDifficulty = GameRules:GetCustomGameDifficulty()
-	if nCustomGameDifficulty > 0 then
-		print( "Lobby game difficulty is " .. nCustomGameDifficulty )
-		self:SetAscensionLevel( nCustomGameDifficulty - 1 )
+	if self.bIsInTournamentMode == true then
+		self:SetAscensionLevel( 1 )
+		print( "Tournament game difficulty is " .. self:GetAscensionLevel() )
+	else		
+		local nCustomGameDifficulty = GameRules:GetCustomGameDifficulty()
+		if nCustomGameDifficulty > 0 then
+			print( "Lobby game difficulty is " .. nCustomGameDifficulty )
+			self:SetAscensionLevel( nCustomGameDifficulty - 1 )
+		end
 	end
-	
+		
 	-- Create announcer Unit
 	local dummyTable = 
 	{ 	
@@ -315,6 +322,32 @@ function CAghanim:InitGameMode()
 
 	self:InitializeMetagame()
 	self.BristlebackItems = {}
+end
+
+--------------------------------------------------------------------------------
+
+function CAghanim:GetRandomSeed( )
+	return self.nSeed
+end
+
+--------------------------------------------------------------------------------
+
+function CAghanim:GetHeroRandomStream( nPlayerID )
+
+	local hStream = self.hPlayerRandomStreams[ tostring( nPlayerID ) ]
+	if hStream ~= nil then
+		return hStream
+	end
+
+	local nHeroID = PlayerResource:GetSelectedHeroID( nPlayerID )
+	if nHeroID == 0 then
+		print( "GetHeroRandomStream: Warning! Encountered hero id " .. nHeroID )
+	end
+
+	local hStream = CreateUniformRandomStream( self.nSeed + nHeroID )
+	self.hPlayerRandomStreams[ tostring( nPlayerID ) ] = hStream
+	return hStream
+
 end
 
 --------------------------------------------------------------------------------
@@ -550,7 +583,7 @@ function CAghanim:ReassignTrapRoomToNormalEncounter( nAct )
 	end
 		
 	if #vecEncounterOptions > 0 then
-		local nPick = math.random( 1, #vecEncounterOptions )
+		local nPick = self.hMapRandomStream:RandomInt( 1, #vecEncounterOptions )
 		--print( "Replacing trap encounter " .. hRoom:GetEncounterName() .. " with encounter " .. vecEncounterOptions[nPick] .. " in room " .. hRoom:GetName() )
 		hRoom:AssignEncounter( vecEncounterOptions[nPick] )
 		hRoom:GetEncounter():SelectAscensionAbilities()
@@ -720,7 +753,7 @@ function CAghanim:SetAscensionLevel( nLevel )
 			if #vecEliteRooms[nAct] == 0 then
 				break
 			end
-			local nPick = math.random( 1, #vecEliteRooms[nAct] )
+			local nPick = self.hMapRandomStream:RandomInt( 1, #vecEliteRooms[nAct] )
 
 			local szEliteRoom = vecEliteRooms[nAct][nPick]
 			--print( "Selecting elite room " ..  szEliteRoom )
@@ -821,7 +854,7 @@ end
 -- Assign room reward
 function CAghanim:AssignRoomReward( szRoomName, RewardPossibilites )
 
-	local flRoll = RandomFloat( 0, 100.0 )
+	local flRoll = self.hMapRandomStream:RandomFloat( 0, 100.0 )
 	local flThreshold = 0.0
 
 	for k,v in pairs( RewardPossibilites ) do
@@ -855,7 +888,7 @@ end
 -- Allocates the room layout
 function CAghanim:AllocateRoomLayout()
 
-	self.bMapFlipped = false --( math.random( 0, 1 ) == 1 )
+	self.bMapFlipped = false --( self.hMapRandomStream:RandomInt( 0, 1 ) == 1 )
 
 	local vecPotentialTrapRooms = { {}, {}, {} }
 	local vecHiddenRooms = { {}, {}, {} } 
@@ -883,7 +916,7 @@ function CAghanim:AllocateRoomLayout()
 		local nGoldValue = ENCOUNTER_DEPTH_GOLD_REWARD[ roomDef.nDepth + 1 ]
 
 		local RewardPossibilites = deepcopy( ROOM_CHOICE_REWARDS )
-		ShuffleListInPlace( RewardPossibilites )
+		ShuffleListInPlace( RewardPossibilites, self.hMapRandomStream )
 
 		-- If the side exit was previously assigned, remove it from the list of possible rewards
 		if self.RoomRewards[ roomDef.exit_side ] ~= nil then
@@ -940,7 +973,7 @@ function CAghanim:AllocateRoomLayout()
 
 		-- Assign trap rooms
 		for nTrapRoom=1, MAP_TRAP_ROOMS_PER_ACT[nAct] do
-			local nPick = math.random( 1, #vecPotentialTrapRooms[nAct] )
+			local nPick = self.hMapRandomStream:RandomInt( 1, #vecPotentialTrapRooms[nAct] )
 			--print( "Selecting trap room option " ..  vecPotentialTrapRooms[nAct][nPick] )
 			self.rooms[ vecPotentialTrapRooms[nAct][nPick] ].nRoomType = ROOM_TYPE_TRAPS
 			table.remove( vecPotentialTrapRooms[nAct], nPick )		
@@ -948,7 +981,7 @@ function CAghanim:AllocateRoomLayout()
 
 		-- Assign hidden rooms
 		for nHiddenRoom=1, MAP_HIDDEN_ENCOUNTERS_PER_ACT[nAct] do
-			local nPick = math.random( 1, #vecHiddenRooms[nAct] )
+			local nPick = self.hMapRandomStream:RandomInt( 1, #vecHiddenRooms[nAct] )
 			local szHiddenRoomName = vecHiddenRooms[nAct][nPick]
 			--print( "Selecting hidden room option " ..  szHiddenRoomName )
 			self.rooms[ szHiddenRoomName ]:SetHidden( )
@@ -972,7 +1005,7 @@ function CAghanim:AllocateRoomLayout()
 			nNumCrystalsPerAct = 1
 		end
 		for nCrystalRoom=1,nNumCrystalsPerAct do
-			local nPick = math.random( 1, #vecPotentialTrapRooms[nAct] )
+			local nPick = self.hMapRandomStream:RandomInt( 1, #vecPotentialTrapRooms[nAct] )
 			self.rooms[ vecPotentialTrapRooms[nAct][nPick] ].bHasCrystal = true
 			print( "assigning " .. vecPotentialTrapRooms[nAct][nPick] .. " a crystal " ) 
 			table.remove( vecPotentialTrapRooms[nAct], nPick )
@@ -1073,7 +1106,7 @@ function CAghanim:AssignEncountersToRooms()
 		end
 		
 		if #vecEncounterOptions > 0 then
-			local nPick = math.random( 1, #vecEncounterOptions )
+			local nPick = self.hMapRandomStream:RandomInt( 1, #vecEncounterOptions )
 			room:AssignEncounter( vecEncounterOptions[nPick] )
 			vecAlreadySelectedEncounters[ vecEncounterOptions[nPick] ] = true
 		else
@@ -1226,7 +1259,7 @@ function CAghanim:GetExitOptionData( nOptionNumber )
 		exitData.szEncounterPreviewUnit = "models/ui/exclamation/questionmark.vmdl"
 		exitData.flEncounterPreviewModelScale = 0.0015
 		if exitData.nEncounterType == ROOM_TYPE_TRAPS then
-			exitData.bIsEliteEncounter = ( math.random( 1, 4 ) == 1 )
+			exitData.bIsEliteEncounter = hRequestedExit:ShouldDisplayHiddenAsElite()
 		end
 		exitData.nEncounterType = ROOM_TYPE_ENEMY
 		exitData.flZOffset = 25
@@ -1479,14 +1512,14 @@ end
 
 --------------------------------------------------------------------------------
 
-function CAghanim:RollRandomNeutralItemDrops()
+function CAghanim:RollRandomNeutralItemDrops( hEncounter )
 	if self.nNumNeutralItems <= 0 then
 		return 0
 	end
 
 	local nPctChance = ( 100 * self.nNumNeutralItems ) / self.nNumViableRoomsForItems
 	local nItemsToDrop = 0
-	while math.random( 1, 100 ) < nPctChance do
+	while hEncounter:RoomRandomInt( 1, 100 ) < nPctChance do
 		nItemsToDrop = nItemsToDrop + 1
 
 		if nItemsToDrop == 2 then
@@ -1510,7 +1543,9 @@ end
 
 --------------------------------------------------------------------------------
 
-function CAghanim:PrepareNeutralItemDrop( nDepth, bElite )
+function CAghanim:PrepareNeutralItemDrop( hRoom, bElite )
+
+	local nDepth = hRoom:GetDepth()
 	local vecPotentialItems = GetPricedNeutralItems( nDepth, bElite )
 	local vecFilteredItems = GameRules.Aghanim:FilterPreviouslyDroppedItems( vecPotentialItems )
 
@@ -1524,7 +1559,7 @@ function CAghanim:PrepareNeutralItemDrop( nDepth, bElite )
 		end
 	end
 
-	local szItemDrop = vecFilteredItems[ math.random( 1, #vecFilteredItems ) ]
+	local szItemDrop = vecFilteredItems[ hRoom:RoomRandomInt( 1, #vecFilteredItems ) ]
 	if szItemDrop == nil then
 		return nil
 	end

@@ -18,7 +18,7 @@ function CMapEncounter_MortyTransition:constructor( hRoom, szEncounterName )
 	LinkLuaModifier( "modifier_morty_start_passive", "modifiers/creatures/modifier_morty_start_passive", LUA_MODIFIER_MOTION_NONE )
 	LinkLuaModifier( "modifier_ride_morty", "modifiers/modifier_ride_morty", LUA_MODIFIER_MOTION_BOTH )
 
-	self.nGoldPerBag = 20
+	self.nGoldPerBag = 25
 	self.flMortyTimeLimit = 45.0
 
 	self:AddSpawner( CDotaSpawner( "morty_spawner", "morty_spawner",

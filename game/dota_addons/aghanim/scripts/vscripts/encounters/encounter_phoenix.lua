@@ -130,7 +130,7 @@ function CMapEncounter_Phoenix:OnSpawnerFinished( hSpawner, hSpawnedUnits )
 		return
 	end
 
-	if hSpawner.szSpawnerName == self.szPortal then
+	if hSpawner.szSpawnerName == self.szEmberPortal or hSpawner.szSpawnerName == self.szPhoenixPortal then
 		if hSpawner.schedule then
 			local nCurrentValue = self:GetEncounterObjectiveProgress( "survive_waves" )
 			self:UpdateEncounterObjective( "survive_waves", nCurrentValue + 1, nil )
