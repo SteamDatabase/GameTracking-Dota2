@@ -207,6 +207,8 @@ function CMapEncounter_MortyTransition:OnPlayerRideMorty( nPlayerID, hMorty )
 			WorldTextHint["location_z"] = vLocation.z
 			CustomGameEventManager:Send_ServerToPlayer( PlayerResource:GetPlayer( hMorty:GetPlayerOwnerID() ), "start_world_text_hint", WorldTextHint )
 		end
+
+		EmitGlobalSound( "BonusRoom.ParadeMusicLoop" )
 	end
 end
 
@@ -245,6 +247,8 @@ function CMapEncounter_MortyTransition:OnComplete()
 			UTIL_Remove( GoldBag )
 		end
 	end
+
+	StopGlobalSound( "BonusRoom.ParadeMusicLoop" )
 end
 
 ---------------------------------------------------------

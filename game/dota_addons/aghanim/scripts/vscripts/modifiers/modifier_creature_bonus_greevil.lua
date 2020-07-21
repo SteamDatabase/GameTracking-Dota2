@@ -87,7 +87,7 @@ function modifier_creature_bonus_greevil:OnTakeDamage( params )
 			self.flAccumDamage = self.flAccumDamage + flDamage
 			if self.flAccumDamage >= 100 then
 				local newItem = CreateItem( "item_bag_of_gold", nil, nil )
-				local nGoldAmount = 50
+				local nGoldAmount = 44
 				newItem:SetPurchaseTime( 0 )
 				newItem:SetCurrentCharges( nGoldAmount )
 					

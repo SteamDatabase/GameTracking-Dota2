@@ -74,6 +74,9 @@
 		"GameUIFromClient" "1"  // AND that gameui comes from client.dll
 		"URLName" "dota2"
 		"UsesBink" "0"
+
+		"SupportsVulkanParticleOptimizations" "1"
+
 		"RenderingPipeline"
 		{
 			"SkipPostProcessing" "1"

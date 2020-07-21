@@ -13,7 +13,7 @@ local Witch_Doctor =
 		 ability_name = "aghsfort_witch_doctor_voodoo_restoration",
 		 special_value_name = "mana_per_second",
 		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
+		 value = -15,
 	},
 
 	{

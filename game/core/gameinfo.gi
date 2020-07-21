@@ -73,9 +73,20 @@
 		"NavMarkupEntity"		"func_nav_markup"
 	}
 
+	SoundTool
+	{
+		"DefaultSoundEventType" "core_simple_3d"
+	}
+
 	RenderPipelineAliases
 	{
 		"Tools"			"Forward"
 		"EnvMapBake"	"Forward"
+	}
+
+	ModelDoc
+	{
+		"models_gamedata"	"models_base.fgd"
+		"features"			"animgraph"
 	}
 }

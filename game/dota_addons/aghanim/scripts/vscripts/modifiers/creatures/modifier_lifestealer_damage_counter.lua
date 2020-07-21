@@ -11,18 +11,19 @@ end
 
 function modifier_lifestealer_damage_counter:OnCreated( kv )
 	if IsServer() then
-		self.damage_threshold = self:GetAbility():GetSpecialValueFor( "damage_threshold" )
+		self.damage_threshold_pct_of_max = self:GetAbility():GetSpecialValueFor( "damage_threshold_pct_of_max" )
 		self.enrage_duration = self:GetAbility():GetSpecialValueFor( "enrage_duration" )
 		self.damage_counter_tiers = self:GetAbility():GetSpecialValueFor( "damage_counter_tiers" )
 		self.time_before_reduction = self:GetAbility():GetSpecialValueFor( "time_before_reduction" )
 
 		self.nRecentDamageTaken = kv.damage or 0
 		self.nOverheadParticleTier = 0
-		self.nDamagePerTier = self.damage_threshold / self.damage_counter_tiers
+		self.nDamageThreshold = self:GetParent():GetMaxHealth() * ( self.damage_threshold_pct_of_max / 100 )
+		self.nDamagePerTier = self.nDamageThreshold / self.damage_counter_tiers
 		self.fLastDamageTakenTime = GameRules:GetGameTime()
 		self.fLastReductionTime = GameRules:GetGameTime()
 
-		--printf( "self.nDamagePerTier: %d", self.nDamagePerTier )
+		--printf( "self.nDamageThreshold: %d; self.nDamagePerTier: %d", self.nDamageThreshold, self.nDamagePerTier )
 
 		-- Created overhead particle
 		local vPos = Vector( 0, 0, 0 )
@@ -101,7 +102,7 @@ function modifier_lifestealer_damage_counter:OnTakeDamage( params )
 				self:IncrementOverheadParticle( nTier )
 			end
 
-			if self.nRecentDamageTaken >= self.damage_threshold then
+			if self.nRecentDamageTaken >= self.nDamageThreshold then
 				if not ( hToothy:IsSilenced() or hToothy:IsStunned() or hToothy:IsHexed() or hToothy:IsFrozen() ) then
 					hToothy:AddNewModifier( hToothy, self:GetAbility(), "modifier_lifestealer_enraged", { duration = self.enrage_duration } )
 					self:Destroy()

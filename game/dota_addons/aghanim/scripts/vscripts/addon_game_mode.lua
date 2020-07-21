@@ -136,6 +136,7 @@ function CAghanim:InitGameMode()
 	self.bIsInTournamentMode = false
 	self.nSeed = 0
 	self.bFastTestEncounter = false
+	self.flExpeditionStartTime = 0
 
 	if GameRules:GetGameModeEntity():GetEventWindowStartTime() > 0 then
 		self.nSeed = GameRules:GetGameModeEntity():GetEventGameSeed()
@@ -265,6 +266,12 @@ function CAghanim:InitGameMode()
 	-- Used to display the blessings
 	CustomNetTables:SetTableValue( "game_global", "blessings", {} )
 
+	local nTournamentSeed = 0
+	if self.bIsInTournamentMode == true then
+		nTournamentSeed = self.nSeed
+	end
+	CustomNetTables:SetTableValue( "game_global", "tournament_mode", { tostring( nTournamentSeed ) } )
+
 	-- parse dev mode starting flags
 	self._bDevMode = (GameRules:GetGameSessionConfigValue("DevMode", "false") == "true")
 	self._szDevHero = GameRules:GetGameSessionConfigValue("DevHero", nil)
@@ -328,6 +335,19 @@ end
 
 function CAghanim:GetRandomSeed( )
 	return self.nSeed
+end
+
+--------------------------------------------------------------------------------
+
+function CAghanim:SetExpeditionStartTime( flStartTime )
+	self.flExpeditionStartTime = flStartTime
+	CustomNetTables:SetTableValue( "game_global", "expedition_start_time", { tostring( flStartTime ) } )
+end
+
+--------------------------------------------------------------------------------
+
+function CAghanim:GetExpeditionStartTime( )
+	return self.flExpeditionStartTime
 end
 
 --------------------------------------------------------------------------------
@@ -898,7 +918,17 @@ function CAghanim:AllocateRoomLayout()
 	self.rooms = {}
 	self.RoomRewards = {}
 
-	for k,roomDef in pairs(MAP_ATLAS) do
+	-- We must sort the map alphabetically by room name, otherwise it is possible
+	-- to get rooms with the same room reward at both exits, specifically which only happens
+	-- at depth 4. It can happen if for example a3_3a's exits are assigned first, 
+	-- then a3_3c's are assigned before a3_3b. The assignment at a3_3c doesn't know about
+	-- the constraint place on a3_3b's exits by a3_3a. By doing it alphabetically, we avoid this problem case
+	local sortedRoomDefs = {}
+    for roomDef in pairs(MAP_ATLAS) do table.insert(sortedRoomDefs, roomDef) end
+    table.sort(sortedRoomDefs)
+    for _, n in ipairs(sortedRoomDefs) do
+		local roomDef = MAP_ATLAS[n]
+
 		local fHeightOffset = 512
 		local vCenter = Vector( roomDef.vCenter.x, roomDef.vCenter.y, roomDef.vCenter.z + fHeightOffset )
 		if self.bMapFlipped then
@@ -917,6 +947,9 @@ function CAghanim:AllocateRoomLayout()
 
 		local RewardPossibilites = deepcopy( ROOM_CHOICE_REWARDS )
 		ShuffleListInPlace( RewardPossibilites, self.hMapRandomStream )
+
+		-- Have to normalize since the original set of rewards is *not* exactly normalized
+		NormalizeFloatArrayInPlace( RewardPossibilites, 100.0 )
 
 		-- If the side exit was previously assigned, remove it from the list of possible rewards
 		if self.RoomRewards[ roomDef.exit_side ] ~= nil then

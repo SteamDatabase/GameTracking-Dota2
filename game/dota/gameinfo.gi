@@ -1,7 +1,9 @@
 "GameInfo"
 {
-	game 		"Dota 2"
-	title 		"Dota 2"
+	//
+	// gameinfo.gi is the non-branch-varying content and can be integrated between branches.
+	// Branch-varying info, such as the game/title and app IDs, is in gameinfo_branchspecific.gi.
+	//
 
 	gamelogo 1
 	type		multiplayer_only
@@ -16,10 +18,6 @@
 
 	FileSystem
 	{
-		SteamAppId				570
-		BreakpadAppId			373300	// Report crashes under beta DLC, not the S1 game.  Delete this when all clients are switched to S2
-		BreakpadAppId_Tools		375360  // Use a separate bucket of buckets for "-tools" crashes so that they don't get drowned out by game crashes. Falls back to BreakpadAppId/SteamAppId if missing
-		
 		//
 		// The code that loads this file automatically does a few things here:
 		//
@@ -77,7 +75,7 @@
 			"tools" "ToolsUtil" // Meant to be used to render tools sceneobjects that are mod-independent, like the origin grid
 		}
 	}
-	 
+
 	Engine2
 	{
 		"HasModAppSystems" "1"
@@ -107,16 +105,18 @@
 		// bypass this limit so we can be fairly conservative.
 		"ReserveWarnMB" "64"
 
+		"SupportsVulkanParticleOptimizations" "1"
+
 		"RenderingPipeline"
 		{
 			"SkipPostProcessing" "1"
 			"SupportsMSAA" "0"
 		}
-		
+
 		"BugBait"
 		{
 			// Used by 'bug:' in chat to normalize report settings during playtests
-			"Owner" "triage*" 
+			"Owner" "triage*"
 			"Severity" "high"
 			"Priority" "none"
 			"Category" "---"
@@ -143,7 +143,7 @@
 	
 	SoundSystem
 	{
-		"DisableSteamAudio" "1"
+		"SteamAudioEnabled" "0"
 		"DefaultWindowsXAudio" "1"
 	}
 
@@ -153,28 +153,29 @@
 		"ToolsDir"	"../sdktools"	// NOTE: Default Tools path. This is relative to the mod path.
 		"DeveloperHelpURL" "https://developer.valvesoftware.com/wiki/Dota_2_Workshop_Tools"
 		"ToolsProductName" "Dota2 Workshop Tools"
+		"HideCoreMod"	"1"
 	}
-	
+
 	Hammer
 	{
-		"fgd"					"dota.fgd"	// NOTE: This is relative to the 'mod' path.
-		"GameFeatureSet"		"Dota"
-		"LoadScriptEntities"	"0"
-		"DefaultTextureScale"	"0.250000"
-		"DefaultSolidEntity"	"trigger_dota"
-		"DefaultPointEntity"	"info_player_start_dota"
+		"fgd"						"dota.fgd"	// NOTE: This is relative to the 'mod' path.
+		"GameFeatureSet"			"Dota"
+		"LoadScriptEntities"		"0"
+		"DefaultTextureScale"		"0.250000"
+		"DefaultSolidEntity"		"trigger_dota"
+		"DefaultPointEntity"		"info_player_start_dota"
 		"DefaultPathEntity"			"path_particle_rope"
-		"NavMarkupEntity"		"func_nav_markup"
-		"EnableDotaTools"		"1"
-		"DefaultGridTileSet"	"/maps/tilesets/radiant_basic.vmap"
-		"DefaultGridTileSet2"	"/maps/tilesets/dire_basic.vmap"
-		"DotaMaxTrees"			"8000"
-		"AddonMapCommand"		"dota_launch_custom_game"
-		"PostMapLoadCommands"	"jointeam good" // Commands sent to the console by hammer after it finishes building a map and loads it
-		"RequiredGameEntities"	"info_player_start_goodguys|info_player_start_dota; info_player_start_badguys|info_player_start_dota; env_global_light; ent_dota_game_events"
-		"UnitsFiles"			"scripts/npc/npc_units.txt; scripts/npc/npc_units_custom.txt; scripts/npc/npc_heroes.txt"
-		"ItemsFiles"			"scripts/npc/items.txt; scripts/npc/npc_items_custom.txt"
-		"OverlayBoxSize"		"16"
+		"NavMarkupEntity"			"func_nav_markup"
+		"EnableDotaTools"			"1"
+		"DefaultGridTileSet"		"/maps/tilesets/radiant_basic.vmap"
+		"DefaultGridTileSet2"		"/maps/tilesets/dire_basic.vmap"
+		"DotaMaxTrees"				"8000"
+		"AddonMapCommand"			"dota_launch_custom_game"
+		"PostMapLoadCommands"		"jointeam good" // Commands sent to the console by hammer after it finishes building a map and loads it
+		"RequiredGameEntities"		"info_player_start_goodguys|info_player_start_dota; info_player_start_badguys|info_player_start_dota; env_global_light; ent_dota_game_events"
+		"UnitsFiles"				"scripts/npc/npc_units.txt; scripts/npc/npc_units_staging.txt; scripts/npc/npc_units_custom.txt; scripts/npc/npc_heroes.txt; scripts/npc/npc_heroes_staging.txt"
+		"ItemsFiles"				"scripts/npc/items.txt; scripts/npc/items_staging.txt; scripts/npc/npc_items_custom.txt"
+		"OverlayBoxSize"			"16"
 		"TileGridBlendOrderBGRA"	"1"
 		"TileGridBlendDefaultColor"	"0 255 0"
 	}
@@ -203,7 +204,7 @@
 		// will be run when resource compiler is run for a map without specifiying any specific map builder
 		// steps. Additionally this controls which builders are displayed in the hammer build dialog.
 		DefaultMapBuilders
-		{			
+		{
 			"light"		"0"	// Dota does not use baked lighting
 			"envmap"	"0"	// Dota doesn't generate environment maps from the map
 			"gridnav"	"1"	// Dota generates its grid navigation data by default

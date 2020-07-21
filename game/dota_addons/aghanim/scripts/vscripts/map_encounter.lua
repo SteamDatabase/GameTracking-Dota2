@@ -592,6 +592,9 @@ function CMapEncounter:Start()
 		self.nNumFragmentsToDrop = GameRules.Aghanim:RollRandomFragmentDrops()
 	end
 
+	self.ClientData[ "start_time" ] = self:GetStartTime() - GameRules.Aghanim:GetExpeditionStartTime()
+	CustomNetTables:SetTableValue( "encounter_state", "depth_started", { tostring( self.hRoom:GetDepth() ) } )
+	self:UpdateClient()
 end
 
 --------------------------------------------------------------------------------
@@ -2137,12 +2140,12 @@ function CMapEncounter:ResetHeroState()
 					CenterCameraOnUnit( nPlayerID, hPlayerHero )
 				end
 
-				--				   PositiveBuffs, NegativeBuffs, FrameOnly, RemoveStuns, RemoveExceptions
-				hPlayerHero:Purge( false,		  true,			 false,		true,		 false )
-
 				-- make the players invulnerable for a few seconds after winning - just generally protecting them from stuff that might be lingering in the room
 				hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_invulnerable", { duration = 5 } )
 
+				--				   PositiveBuffs, NegativeBuffs, FrameOnly, RemoveStuns, RemoveExceptions
+				hPlayerHero:Purge( false,		  true,			 false,		true,		 false )
+		
 				hPlayerHero:SetHealth( hPlayerHero:GetMaxHealth() )
 				hPlayerHero:SetMana( hPlayerHero:GetMaxMana() )
 			end
@@ -2272,11 +2275,11 @@ function CMapEncounter:CreateRewardCrate()
 	hRewardCrate.RoomReward = {}
 	hRewardCrate.nDepth = self.hRoom:GetDepth()
 	hRewardCrate.nEliteRank = self.hRoom:GetEliteRank()
-	self:AddRewardItemsToCrate( hRewardCrate, false )
 
 	if self.hRoom:GetType() == ROOM_TYPE_ENEMY then
 		local nNumItemsToDrop = self.nNumItemsToDrop
-		if ( nNumItemsToDrop == 0 ) and GameRules.Aghanim:GetTestEncounterDebugRoom() ~= nil then
+		if ( nNumItemsToDrop == 0 ) and hDebugRoom ~= nil then
+			-- Must do this here because when debugging, we don't actually start encounters we skip
 			nNumItemsToDrop = GameRules.Aghanim:RollRandomNeutralItemDrops()
 		end
 
@@ -2297,6 +2300,11 @@ function CMapEncounter:CreateRewardCrate()
 			end
 		end
 	end
+
+	-- NOTE: This must happen *after* RollRandomNeutralItemDrops above to ensure reproduceability of neutral drops
+	-- Basically, all rolls related to neutral drops must occur between encounter Start + now [with no other rolls for anything else]
+	-- Then we can do more rolls for neutral items to be placed in the treasure
+	self:AddRewardItemsToCrate( hRewardCrate, false )
 
 	if self.hRoom:GetType() == ROOM_TYPE_ENEMY or self.hRoom:GetType() == ROOM_TYPE_TRAPS then
 		-- Spawn any un-dropped Arcance Fragments

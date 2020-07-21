@@ -165,6 +165,8 @@ function CMapEncounter_StartingRoom:OnTriggerStartTouch( event )
 			if self.nPlayersReady == #vecPlayers then
 
 				self.bAllButtonsReady = true
+				GameRules.Aghanim:SetExpeditionStartTime( GameRules:GetGameTime() )
+
 				self:GenerateRewards()
 
 				-- We want to announce rewards during the starting room

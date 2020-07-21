@@ -166,6 +166,10 @@ _G.ASCENSION_ABILITIES =
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
 		nCastBehavior = ASCENSION_CAST_ON_LOW_HEALTH,
 		flHealthPercent = 25,
+		vecBlacklistedEncounters = 
+		{
+			"encounter_brewmaster",
+		}			
 	},
 
 	ascension_armor =

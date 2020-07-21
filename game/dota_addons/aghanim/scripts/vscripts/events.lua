@@ -29,7 +29,7 @@ end
 ---------------------------------------------------------
 
 function CAghanim:OnGameStarted()
-	--SendToServerConsole( "say SEED: " .. self.nSeed .. " ASC LEVEL: " .. self:GetAscensionLevel() )
+	print( "SEED: " .. self.nSeed .. " ASC LEVEL: " .. self:GetAscensionLevel() )
 end
 
 ---------------------------------------------------------
@@ -62,12 +62,20 @@ function CAghanim:AddResultToSignOut()
 
 	-- we may want to subtract hero pick time or do something more complicated here
 	local flGameTime = GameRules:GetGameTime()
+	if self:IsInTournamentMode() then
+		if self.bWonGame == false then
+			flGameTime = self:GetCurrentRoom():GetEncounter():GetStartTime() - self:GetExpeditionStartTime()
+		else
+			flGameTime = flGameTime - self:GetExpeditionStartTime()
+		end		
+	end	
 	self.SignOutTable["game_time"] = flGameTime
 	printf("GAME TIME: %f", flGameTime )
 	
 	local unScore = self:GetLeaderboardScore( self.SignOutTable )
 	self.SignOutTable["score"] = unScore
 	printf("GAME SCORE (lower is better): %d", unScore )
+	CustomNetTables:SetTableValue( "game_global", "tournament_end_score", { won_game=self.bWonGame, end_time=flGameTime, score=tostring( unScore ) } )
 
 	-- only add leaderboard score message to signout if we're in an event window and have a custom seed
 	if self.SignOutTable["event_window_start_time"] > 0 and GameRules:GetGameModeEntity():GetEventGameSeed() > 0 then

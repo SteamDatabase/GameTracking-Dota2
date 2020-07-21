@@ -97,6 +97,7 @@ function modifier_aghanim_passive:OnDeathPrevented( params )
 			for nPlayerID = 0,AGHANIM_PLAYERS-1 do
 				local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 				if hPlayerHero then
+					hPlayerHero:RemoveModifierByName( "modifier_eul_cyclone" )
 					hPlayerHero:AddNewModifier( self:GetCaster(), self:GetAbility(), "modifier_invulnerable", { duration = -1 } )
 				end
 			end

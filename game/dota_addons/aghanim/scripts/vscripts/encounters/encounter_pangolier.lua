@@ -65,6 +65,17 @@ function CMapEncounter_Pangolier:OnEncounterLoaded()
 	self:SetupBristlebackShop( false )
 end
 
+function CMapEncounter_Pangolier:Start()
+	CMapEncounter_BonusBase.Start( self )
+
+	for nPlayerID = 0, AGHANIM_PLAYERS - 1 do
+		local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
+		if hPlayerHero then
+			hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_bonus_room_start", {} )
+		end
+	end
+end
+
 --------------------------------------------------------------------------------
 
 function CMapEncounter_Pangolier:Transform()
@@ -78,6 +89,7 @@ function CMapEncounter_Pangolier:Transform()
 			if hAbility ~= nil then
 				PlayerResource:SetCameraTarget( hHero:GetPlayerOwnerID(), hHero )
 				PlayerResource:SetOverrideSelectionEntity( hHero:GetPlayerOwnerID(), hHero )
+				hHero:RemoveModifierByName( "modifier_bonus_room_start" )
 				hHero:AddNewModifier( hHero, hAbility, "modifier_pango_bonus", { duration = -1 } )
 				hHero:CastAbilityNoTarget( hAbility, hHero:GetPlayerOwnerID() )		
 				--hHero:AddNewModifier( hHero, hAbility, "modifier_pangolier_gyroshell", { duration = -1 } )
@@ -180,6 +192,7 @@ function CMapEncounter_Pangolier:OnTriggerStartTouch( event )
 				self:GetSpawner( "spawner_captain" ):SpawnUnits()
 				self:StartBonusRound( 41.2 ) -- account for gyroshell cast time
 				self:Transform()
+				EmitGlobalSound( "BonusRoom.ChaseMusicLoop" )
 			end
 		end
 	end
@@ -232,6 +245,8 @@ function CMapEncounter_Pangolier:OnComplete()
 	if self.bCogsSpawned then
 		self:RemoveCogs()
 	end
+
+	StopGlobalSound( "BonusRoom.ChaseMusicLoop" )
 end
 
 --------------------------------------------------------------------------------
