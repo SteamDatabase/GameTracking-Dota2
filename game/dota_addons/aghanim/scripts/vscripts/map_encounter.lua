@@ -58,6 +58,8 @@ function CMapEncounter:constructor( hRoom, szEncounterName )
 	self.SpawnedExplosiveBarrels = {}
 
 	self.bCalculateRewardsFromUnitCount = false
+	self.hTreasureRandomStream = nil
+	self.hTreasureList = {}
 
 	local nTotalGoldReward = self:GetTotalGoldRewardPerPlayer()
 	self.nGoldReward = nTotalGoldReward
@@ -121,6 +123,21 @@ end
 function CMapEncounter:RoomRollPercentage( nChance )
 	local bOutcome = self:RoomRandomInt( 1, 100 ) <= nChance
 	return bOutcome
+end
+
+---------------------------------------------------------------------------
+
+function CMapEncounter:GetTreasureRandomStream( )
+	if self.hTreasureRandomStream == nil then
+		self.hTreasureRandomStream = CreateUniformRandomStream( GameRules.Aghanim:GetRandomSeed() + MakeStringToken( self:GetRoom():GetName() ) )
+	end
+	return self.hTreasureRandomStream
+end
+
+---------------------------------------------------------------------------
+
+function CMapEncounter:RegisterTreasureItem( hTreasureItem )
+	table.insert( self.hTreasureList, hTreasureItem )
 end
 
 --------------------------------------------------------------------------------
@@ -659,6 +676,8 @@ function CMapEncounter:SpawnChests()
 						hUnit.fTrapChance = chestData.fTrapChance
 						hUnit.nTrapLevel = chestData.nTrapLevel
 						hUnit.szTraps = chestData.szTraps
+						hUnit.Encounter = self
+						self:RegisterTreasureItem( hUnit )
 					else
 						printf( "ERROR -- CMapEncounter:SpawnChests: Failed to spawn chest named \"%s\"", chestData.szNPCName )
 					end
@@ -1001,6 +1020,12 @@ end
 function CMapEncounter:OnComplete()
 	GameRules.Aghanim:GetAnnouncer():OnEncounterComplete( self )
 	
+	-- Delete any unclaimed treasures
+	for i=1,#self.hTreasureList do
+		UTIL_Remove( self.hTreasureList[i] )
+	end
+	self.hTreasureList = {}
+
 	self:RegisterSummonForAghanim()
 	
 	--CustomNetTables:SetTableValue( "room_data", "status", { complete=true } )
@@ -1869,15 +1894,15 @@ function CMapEncounter:DropNeutralItemFromUnit( hVictim, hAttacker, bAnnounce )
 
 	if hHero == nil or hVictim == nil then
 		print( "ERROR, trying to drop neutral item without a valid hero and victim" )
-		return
+		return nil
 	end
 
 	local szItemDrop = GameRules.Aghanim:PrepareNeutralItemDrop( self.hRoom, false )
 	if szItemDrop == nil then
-		return
+		return nil
 	end
 
-	DropNeutralItemAtPositionForHero( szItemDrop, hVictim:GetAbsOrigin(), hHero, -1, true )
+	local hItem = DropNeutralItemAtPositionForHero( szItemDrop, hVictim:GetAbsOrigin(), hHero, -1, true )
 	-- local newItem = CreateItem( szItemDrop, nil, nil )
 	-- newItem:SetPurchaseTime( 0 )
 	
@@ -1906,6 +1931,8 @@ function CMapEncounter:DropNeutralItemFromUnit( hVictim, hAttacker, bAnnounce )
 	-- 		FireGameEvent( "dota_combat_event_message", gameEvent )
 	-- 	end
 	-- end
+
+	return hItem
 end
 
 --------------------------------------------------------------------------------

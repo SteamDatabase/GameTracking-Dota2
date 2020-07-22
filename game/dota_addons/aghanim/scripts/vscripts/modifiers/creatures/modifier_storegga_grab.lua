@@ -44,9 +44,11 @@ function modifier_storegga_grab:OnIntervalThink()
 	
 		local hBuff = self:GetCaster():AddNewModifier( self:GetCaster(), self:GetAbility(), "modifier_storegga_grabbed_buff", {} )
 		if hBuff ~= nil then
-			self:GetCaster().flThrowTimer = GameRules:GetGameTime() + RandomFloat( self.min_hold_time, self.max_hold_time )
+			local flHoldTime = RandomFloat( self.min_hold_time, self.max_hold_time )
+			self:GetCaster().flThrowTimer = GameRules:GetGameTime() + flHoldTime
 			hBuff.hThrowObject = self.hTarget
-			self.hTarget:AddNewModifier( self:GetCaster(), self:GetAbility(), "modifier_storegga_grabbed_debuff", {} )		
+			self.hTarget:AddNewModifier( self:GetCaster(), self:GetAbility(), "modifier_storegga_grabbed_debuff", { hold_time = flHoldTime + 10.0  } )		
+			
 		end
 		self:Destroy()
 		return

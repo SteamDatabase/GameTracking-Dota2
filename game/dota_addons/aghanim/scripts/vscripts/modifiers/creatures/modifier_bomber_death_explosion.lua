@@ -33,7 +33,7 @@ function modifier_bomber_death_explosion:OnCreated()
 			self:GetParent():StartGesture( ACT_DOTA_VICTORY )
 		else
 			local nOverheadFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_gyrocopter/gyro_guided_missile_target.vpcf", PATTACH_OVERHEAD_FOLLOW, self:GetParent() )
-			self:AddParticle( nOverheadFX, false, false, -1, false, false )
+			self:AddParticle( nOverheadFX, true, false, -1, false, false )
 		end
 
 		local radius = self:GetAbility():GetSpecialValueFor( "radius" )

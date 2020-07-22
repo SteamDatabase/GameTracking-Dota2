@@ -28,9 +28,17 @@ function modifier_storegga_grabbed_debuff:OnCreated( kv )
 			return
 		end
 
+		self.hold_time = kv.hold_time
+		--print( "hold_time" .. self.hold_time )
+
 		self.nProjHandle = -1
 		self.flTime = 0.0
 		self.flHeight = 0.0
+
+		self.impact_radius = self:GetAbility():GetSpecialValueFor( "impact_radius" )
+
+		self.bDropped = false
+		self:StartIntervalThink( self.hold_time )
 	end
 end
 
@@ -68,13 +76,42 @@ end
 
 --------------------------------------------------------------------------------
 
+function modifier_storegga_grabbed_debuff:OnIntervalThink()
+	if IsServer() then	
+		if self.bDropped == false then
+			self.bDropped = true
+			print ( "modifier_storegga_grabbed_debuff:OnIntervalThink dropped" )
+			self:GetCaster():RemoveModifierByName( "modifier_storegga_grabbed_buff" )
+
+			self.nProjHandle = -2 
+			self.flTime = 0.5
+			self.flHeight = GetGroundHeight( self:GetParent():GetAbsOrigin(), self:GetParent() )
+
+			self:StartIntervalThink( self.flTime )
+			return
+		else
+			local vLocation = GetGroundPosition( self:GetParent():GetAbsOrigin(), self:GetParent() )
+			
+			local nFXIndex = ParticleManager:CreateParticle( "particles/creatures/ogre/ogre_melee_smash.vpcf", PATTACH_WORLDORIGIN, self:GetParent() )
+			ParticleManager:SetParticleControl( nFXIndex, 0, vLocation )
+			ParticleManager:SetParticleControl( nFXIndex, 1, Vector( self.impact_radius, self.impact_radius, self.impact_radius ) )
+			ParticleManager:ReleaseParticleIndex( nFXIndex )
+
+			EmitSoundOnLocationWithCaster( vLocation, "Ability.TossImpact", self:GetCaster() )
+			self:Destroy()
+		end	
+	end
+end
+
+--------------------------------------------------------------------------------
+
 function modifier_storegga_grabbed_debuff:UpdateHorizontalMotion( me, dt )
 	if IsServer() then
-		local vLocation = nil
+		local vLocation = me:GetAbsOrigin()
 		if self.nProjHandle == -1 then
 			local attach = self:GetCaster():ScriptLookupAttachment( "attach_attack2" )
 			vLocation = self:GetCaster():GetAttachmentOrigin( attach )
-		else
+		elseif self.nProjHandle ~= -2 then
 			vLocation = ProjectileManager:GetLinearProjectileLocation( self.nProjHandle )
 		end
 		vLocation.z = 0.0

@@ -149,7 +149,7 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter_Storegga:GetBossIntroGesture()
-	return ACT_TINY_GROWL
+	return ACT_DOTA_SPAWN
 end
 
 --------------------------------------------------------------------------------

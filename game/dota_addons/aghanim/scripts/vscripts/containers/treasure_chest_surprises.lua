@@ -11,6 +11,10 @@ function CAghanim:ChooseTreasureSurprise( hPlayerHero, hTreasureEnt )
 		return
 	end
 
+	if hTreasureEnt.Encounter == nil then
+		printf( "ERROR -- ChooseTreasureSurprise(): No encounter on the treasure!" )
+	end
+
 	if hTreasureEnt.fNeutralItemChance == nil then
 		printf( "ERROR -- ChooseTreasureSurprise(): No fNeutralItemChance specified for this chest." )
 	end
@@ -43,30 +47,30 @@ function CAghanim:ChooseTreasureSurprise( hPlayerHero, hTreasureEnt )
 	local fItemThreshold = fNeutralItemThreshold - hTreasureEnt.fItemChance
 	local fTrapThreshold = fItemThreshold - hTreasureEnt.fTrapChance
 
-	local fRandRoll = RandomFloat( 0, 1 )
+	local hRandStream = hTreasureEnt.Encounter:GetTreasureRandomStream()
+	local fRandRoll = hRandStream:RandomFloat( 0, 1 )
 
-	--[[
 	printf( "----------------------------------------" )
 	printf( "fRandRoll: %.2f", fRandRoll )
 	printf( "fItemThreshold: %.2f", fItemThreshold )
 	printf( "fNeutralItemThreshold: %.2f", fNeutralItemThreshold )
 	printf( "fTrapThreshold: %.2f", fTrapThreshold )
-	]]
+
 
 	if fRandRoll >= fNeutralItemThreshold then
-		self:CreateTreasureNeutralItemDrop( hPlayerHero, hTreasureEnt )
+		self:CreateTreasureNeutralItemDrop( hPlayerHero, hTreasureEnt, hRandStream )
 		--printf( "fRandRoll (%.2f) >= fNeutralItemThreshold (%.2f)", fRandRoll, fNeutralItemThreshold )
 		return
 	elseif fRandRoll >= fItemThreshold then
-		self:CreateTreasureItemDrop( hPlayerHero, hTreasureEnt )
+		self:CreateTreasureItemDrop( hPlayerHero, hTreasureEnt, hRandStream )
 		--printf( "fRandRoll (%.2f) >= fItemThreshold (%.2f)", fRandRoll, fItemThreshold )
 		return
 	elseif fRandRoll >= fTrapThreshold then
-		self:ChooseTreasureTrap( hPlayerHero, hTreasureEnt )
+		self:ChooseTreasureTrap( hPlayerHero, hTreasureEnt, hRandStream )
 		--printf( "fRandRoll (%.2f) >= fTrapThreshold (%.2f)", fRandRoll, fTrapThreshold )
 		return
 	else
-		self:CreateTreasureGoldDrop( hPlayerHero, hTreasureEnt )
+		self:CreateTreasureGoldDrop( hPlayerHero, hTreasureEnt, hRandStream )
 		--printf( "else drop gold, fRandRoll was %.2f", fRandRoll )
 		return
 	end
@@ -74,50 +78,51 @@ end
 
 ---------------------------------------------------------------------------
 
-function CAghanim:CreateTreasureNeutralItemDrop( hPlayerHero, hTreasureEnt )
+function CAghanim:CreateTreasureNeutralItemDrop( hPlayerHero, hTreasureEnt, hRandStream )
 	printf( "CreateTreasureNeutralItemDrop" )
-
-	local nNeutralItemsToDrop = RandomInt( hTreasureEnt.nMinNeutralItems, hTreasureEnt.nMaxNeutralItems )
-
+	local nNeutralItemsToDrop = hRandStream:RandomInt( hTreasureEnt.nMinNeutralItems, hTreasureEnt.nMaxNeutralItems )
 	for i = 1, nNeutralItemsToDrop do
-		local hCurrentEncounter = self:GetCurrentRoom():GetEncounter()
-		hCurrentEncounter:DropNeutralItemFromUnit( hTreasureEnt, hPlayerHero, true )
+		local hItem = hTreasureEnt.Encounter:DropNeutralItemFromUnit( hTreasureEnt, hPlayerHero, true )
+		hTreasureEnt.Encounter:RegisterTreasureItem( hItem )
 	end
 end
 
 ---------------------------------------------------------------------------
 
-function CAghanim:CreateTreasureItemDrop( hPlayerHero, hTreasureEnt )
+function CAghanim:CreateTreasureItemDrop( hPlayerHero, hTreasureEnt, hRandStream )
 	printf( "CreateTreasureItemDrop" )
-	if hTreasureEnt ~= nil and hTreasureEnt.Items ~= nil then
-		local nItemsToDrop = RandomInt( hTreasureEnt.nMinItems, hTreasureEnt.nMaxItems )
-
-		for i = 1, nItemsToDrop do
-			local nRandomIndex = RandomInt( 1, #hTreasureEnt.Items )
-			local newItem = CreateItem( hTreasureEnt.Items[ nRandomIndex ], nil, nil )
-			local drop = CreateItemOnPositionForLaunch( hTreasureEnt:GetAbsOrigin(), newItem )
-
-			local vPos = self:GetChestRewardSpawnPos( hTreasureEnt )
-
-			newItem:LaunchLootInitialHeight( false, 0, 200, 0.75, vPos )
-
-			EmitSoundOn( "Dungeon.TreasureItemDrop", hTreasureEnt )
-
-			local gameEvent = {}
-			gameEvent["player_id"] = hPlayerHero:GetPlayerID()
-			gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
-			gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_" .. newItem:GetAbilityName()
-			gameEvent["message"] = "#Dungeon_FoundChestItem"
-			FireGameEvent( "dota_combat_event_message", gameEvent )
-		end
+	if hTreasureEnt == nil or hTreasureEnt.Items == nil then
+		return
 	end
+
+	local nItemsToDrop = hRandStream:RandomInt( hTreasureEnt.nMinItems, hTreasureEnt.nMaxItems )
+	for i = 1, nItemsToDrop do
+		local nRandomIndex = hRandStream:RandomInt( 1, #hTreasureEnt.Items )
+		local newItem = CreateItem( hTreasureEnt.Items[ nRandomIndex ], nil, nil )
+		local drop = CreateItemOnPositionForLaunch( hTreasureEnt:GetAbsOrigin(), newItem )
+		hTreasureEnt.Encounter:RegisterTreasureItem( drop )
+
+		local vPos = self:GetChestRewardSpawnPos( hTreasureEnt )
+
+		newItem:LaunchLootInitialHeight( false, 0, 200, 0.75, vPos )
+
+		EmitSoundOn( "Dungeon.TreasureItemDrop", hTreasureEnt )
+
+		local gameEvent = {}
+		gameEvent["player_id"] = hPlayerHero:GetPlayerID()
+		gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
+		gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_" .. newItem:GetAbilityName()
+		gameEvent["message"] = "#Dungeon_FoundChestItem"
+		FireGameEvent( "dota_combat_event_message", gameEvent )
+	end
+
 end
 
 ---------------------------------------------------------------------------
 
-function CAghanim:ChooseTreasureTrap( hPlayerHero, hTreasureEnt )
+function CAghanim:ChooseTreasureTrap( hPlayerHero, hTreasureEnt, hRandStream )
 	printf( "ChooseTreasureTrap" )
-	local szTrapToUse = hTreasureEnt.szTraps[ RandomInt( 1, #hTreasureEnt.szTraps ) ]
+	local szTrapToUse = hTreasureEnt.szTraps[ hRandStream:RandomInt( 1, #hTreasureEnt.szTraps ) ]
 	--printf( "szTrapToUse == \"%s\"", szTrapToUse )
 
 	if szTrapToUse == "creature_techies_land_mine" then
@@ -206,7 +211,7 @@ end
 
 ---------------------------------------------------------------------------
 
-function CAghanim:CreateTreasureGoldDrop( hPlayerHero, hTreasureEnt )
+function CAghanim:CreateTreasureGoldDrop( hPlayerHero, hTreasureEnt, hRandStream )
 	printf( "CreateTreasureGoldDrop" )
 
 	local nDepth = self:GetCurrentRoom():GetDepth()
@@ -214,10 +219,12 @@ function CAghanim:CreateTreasureGoldDrop( hPlayerHero, hTreasureEnt )
 
 	local newItem = CreateItem( "item_bag_of_gold", nil, nil )
 	newItem:SetPurchaseTime( 0 )
-	local nGoldToDrop = math.random( nMinGold, nMaxGold )
+
+	local nGoldToDrop = hRandStream:RandomInt( nMinGold, nMaxGold )
 	newItem:SetCurrentCharges( nGoldToDrop )
 
 	local drop = CreateItemOnPositionSync( hTreasureEnt:GetAbsOrigin(), newItem )
+	hTreasureEnt.Encounter:RegisterTreasureItem( drop )
 
 	local vPos = self:GetChestRewardSpawnPos( hTreasureEnt )
 
