@@ -1,12 +1,12 @@
 local Witch_Doctor =
 {
-	{
-		 description = "aghsfort_witch_doctor_paralyzing_cask_manacost",
-		 ability_name = "aghsfort_witch_doctor_paralyzing_cask",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_witch_doctor_paralyzing_cask_manacost",
+	-- 	 ability_name = "aghsfort_witch_doctor_paralyzing_cask",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_witch_doctor_voodoo_restoration_manacost",
@@ -16,20 +16,20 @@ local Witch_Doctor =
 		 value = -15,
 	},
 
-	{
-		 description = "aghsfort_witch_doctor_maledict_manacost",
-		 ability_name = "aghsfort_witch_doctor_maledict",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
-	{
-		 description = "aghsfort_witch_doctor_death_ward_manacost",
-		 ability_name = "aghsfort_witch_doctor_death_ward",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},	
+	-- {
+	-- 	 description = "aghsfort_witch_doctor_maledict_manacost",
+	-- 	 ability_name = "aghsfort_witch_doctor_maledict",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
+	-- {
+	-- 	 description = "aghsfort_witch_doctor_death_ward_manacost",
+	-- 	 ability_name = "aghsfort_witch_doctor_death_ward",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },	
 	{
 		 description = "aghsfort_witch_doctor_paralyzing_cask_cooldown",
 		 ability_name = "aghsfort_witch_doctor_paralyzing_cask",
@@ -139,13 +139,13 @@ local Witch_Doctor =
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		 value = 50,
 	},
-	{
-		 description = "aghsfort_witch_doctor_death_ward_flat_bounce_radius",
-		 ability_name = "aghsfort_witch_doctor_death_ward",
-		 special_value_name = "bounce_radius",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 150,
-	},
+	-- {
+	-- 	 description = "aghsfort_witch_doctor_death_ward_flat_bounce_radius",
+	-- 	 ability_name = "aghsfort_witch_doctor_death_ward",
+	-- 	 special_value_name = "bounce_radius",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+	-- 	 value = 150,
+	-- },
 	{
 		 description = "aghsfort_witch_doctor_death_ward_flat_bounces",
 		 ability_name = "aghsfort_witch_doctor_death_ward",

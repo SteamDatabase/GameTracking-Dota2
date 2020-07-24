@@ -48,13 +48,13 @@ local Viper =
 		 value = 1,
 	},
 
-	{
-		 description = "aghsfort_viper_nethertoxin_pct_mana_cost",
-		 ability_name = "aghsfort_viper_nethertoxin",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_viper_nethertoxin_pct_mana_cost",
+	-- 	 ability_name = "aghsfort_viper_nethertoxin",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 
 	{
@@ -129,13 +129,13 @@ local Viper =
 		 value = 12,
 	},
 
-	{
-		 description = "aghsfort_viper_viper_strike_pct_mana_cost",
-		 ability_name = "aghsfort_viper_viper_strike",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_viper_viper_strike_pct_mana_cost",
+	-- 	 ability_name = "aghsfort_viper_viper_strike",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_viper_viper_strike_duration",

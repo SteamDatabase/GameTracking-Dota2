@@ -7,13 +7,13 @@ local Magnus =
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		 value = 75,
 	},
-	{
-		 description = "aghsfort_magnataur_shockwave_flat_shock_width",
-		 ability_name = "aghsfort_magnataur_shockwave",
-		 special_value_name = "shock_width",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 50,
-	},
+	-- {
+	-- 	 description = "aghsfort_magnataur_shockwave_flat_shock_width",
+	-- 	 ability_name = "aghsfort_magnataur_shockwave",
+	-- 	 special_value_name = "shock_width",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+	-- 	 value = 50,
+	-- },
 
 	{
 		 description = "aghsfort_magnataur_shockwave_flat_slow_duration",
@@ -67,16 +67,16 @@ local Magnus =
 		ability_name = "aghsfort_magnataur_skewer",
 		special_value_name = "skewer_damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 70,
+		value = 85,
 	},
 
-	{
-		description = "aghsfort_magnataur_skewer_flat_slow_pct",
-		ability_name = "aghsfort_magnataur_skewer",
-		special_value_name = "slow_pct",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 25,
-	},
+	-- {
+	-- 	description = "aghsfort_magnataur_skewer_flat_slow_pct",
+	-- 	ability_name = "aghsfort_magnataur_skewer",
+	-- 	special_value_name = "slow_pct",
+	-- 	operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+	-- 	value = 25,
+	-- },
 
 	{
 		description = "aghsfort_magnataur_skewer_pct_cooldown",
@@ -94,13 +94,13 @@ local Magnus =
 		value = 12,
 	},
 
-	{
-		description = "aghsfort_magnataur_reverse_polarity_pct_mana_cost",
-		ability_name = "aghsfort_magnataur_reverse_polarity",
-		special_value_name = "mana_cost",
-		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		value = 15,
-	},
+	-- {
+	-- 	description = "aghsfort_magnataur_reverse_polarity_pct_mana_cost",
+	-- 	ability_name = "aghsfort_magnataur_reverse_polarity",
+	-- 	special_value_name = "mana_cost",
+	-- 	operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	value = 15,
+	-- },
 
 	{
 		description = "aghsfort_magnataur_reverse_polarity_flat_damage",

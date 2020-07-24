@@ -2210,7 +2210,22 @@ function CMapEncounter:ResetHeroState()
 			local nFXIndex = ParticleManager:CreateParticle( "particles/items2_fx/refresher.vpcf", PATTACH_CUSTOMORIGIN, hPlayerHero )
 			ParticleManager:SetParticleControlEnt( nFXIndex, 0, hPlayerHero, PATTACH_POINT_FOLLOW, "attach_hitloc", hPlayerHero:GetAbsOrigin(), true )
 			ParticleManager:ReleaseParticleIndex( nFXIndex )
-			
+
+			-- Hack to cap Big Game Hunter gains per encounter
+			if hPlayerHero:GetUnitName() == "npc_dota_hero_sniper" then
+				printf( "Limiter - looking at Sniper hPlayerHero" )
+				local hBigGameHunterAbility = hPlayerHero:FindAbilityByName( "aghsfort_special_sniper_assassinate_killshot" )
+				if hBigGameHunterAbility ~= nil and hBigGameHunterAbility:GetLevel() > 0 then
+					printf( "found Big Game Hunter ability" )
+					local hLimiterBuff = hPlayerHero:FindModifierByName( "modifier_sniper_big_game_hunter_limiter" )
+					if hLimiterBuff == nil then
+						hLimiterBuff = hPlayerHero:AddNewModifier( hPlayerHero, hBigGameHunterAbility, "modifier_sniper_big_game_hunter_limiter", { duration = -1 } )
+					end
+					local nStacks = hBigGameHunterAbility:GetSpecialValueFor( "value2" )
+					--printf( "reset limiter buff to %d stacks," nStacks )
+					hLimiterBuff:SetStackCount( nStacks )
+				end
+			end
 		end	
 	end
 end

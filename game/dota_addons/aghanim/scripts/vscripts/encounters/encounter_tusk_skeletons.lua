@@ -114,8 +114,12 @@ function CMapEncounter_TuskSkeletons:OnEncounterLoaded()
 		self.hFriend:CreatureLevelUp( nAscLevel )
 
 		self.vGoalPos = self.hFriend:GetAbsOrigin()
+
+		self.hFriend.Encounter = self
+		self.hFriend:AddNewModifier( self.hFriend, nil, "modifier_monster_leash", {} )
+
 	else
-		printf( "WARNING - Failed to spawn the objective entity!" )
+		printf( "WARNING - Failed to spawn GARY!" )
 		return
 	end
 
@@ -149,14 +153,20 @@ function CMapEncounter_TuskSkeletons:OnSpawnerFinished( hSpawner, hSpawnedUnits 
 		end
 	end
 
+	local heroes = FindRealLivingEnemyHeroesInRadius( DOTA_TEAM_BADGUYS, self.hRoom:GetOrigin(), FIND_UNITS_EVERYWHERE )
+	--print( heroes )
+
 	for _, hSpawnedUnit in pairs ( hSpawnedUnits ) do
 		if self.hFriend ~= nil and ( not self.hFriend:IsNull() ) and self.hFriend:IsAlive() then
 			hSpawnedUnit:SetInitialGoalEntity( self.hFriend )
 		else
-			if self.hObjectiveEnts[ 1 ] ~= nil and self.hObjectiveEnts[ 1 ]:IsNull() == false then
-				hSpawnedUnit:SetInitialGoalPosition( self.hObjectiveEnts[ 1 ]:GetOrigin() )
-			else
-				hSpawnedUnit:SetInitialGoalPosition( self.vGoalPos )
+			local hero = heroes[RandomInt(1, #heroes)]
+			if hero ~= nil then
+				printf( "Set initial goal entity for unit \"%s\" to \"%s\"", hSpawnedUnit:GetUnitName(), hero:GetUnitName() )
+				hSpawnedUnit:SetInitialGoalEntity( hero )
+			elseif #self.hObjectiveEnts > 0 then
+				print( "Can't find a hero to attack - setting a goal position to Objective Entity" )
+				hSpawnedUnit:SetInitialGoalPosition( self.hObjectiveEnts[1]:GetOrigin() )
 			end
 		end
 	end

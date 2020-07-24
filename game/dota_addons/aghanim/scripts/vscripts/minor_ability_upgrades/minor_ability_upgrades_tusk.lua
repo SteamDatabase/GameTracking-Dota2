@@ -8,13 +8,13 @@ local Tusk =
 		 value = 80,
 	},
 
-	{
-		 description = "aghsfort_tusk_ice_shards_pct_mana_cost",
-		 ability_name = "aghsfort_tusk_ice_shards",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_tusk_ice_shards_pct_mana_cost",
+	-- 	 ability_name = "aghsfort_tusk_ice_shards",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_tusk_ice_shards_pct_cooldown",
@@ -48,13 +48,13 @@ local Tusk =
 		 value = 90,
 	},
 
-	{
-		 description = "aghsfort_tusk_snowball_flat_snowball_speed",
-		 ability_name = "aghsfort_tusk_snowball",
-		 special_value_name = "snowball_speed",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 100,
-	},
+	-- {
+	-- 	 description = "aghsfort_tusk_snowball_flat_snowball_speed",
+	-- 	 ability_name = "aghsfort_tusk_snowball",
+	-- 	 special_value_name = "snowball_speed",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+	-- 	 value = 100,
+	-- },
 
 	{
 		 description = "aghsfort_tusk_snowball_flat_stun_duration",
@@ -121,13 +121,13 @@ local Tusk =
 		 value = 2.0,
 	},
 
-	{
-		 description = "aghsfort_tusk_walrus_punch_flat_move_slow",
-		 ability_name = "aghsfort_tusk_walrus_punch",
-		 special_value_name = "move_slow",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 30,
-	},
+	-- {
+	-- 	 description = "aghsfort_tusk_walrus_punch_flat_move_slow",
+	-- 	 ability_name = "aghsfort_tusk_walrus_punch",
+	-- 	 special_value_name = "move_slow",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+	-- 	 value = 30,
+	-- },
 
 	--{
 	--	 description = "aghsfort_tusk_walrus_punch_flat_air_time",

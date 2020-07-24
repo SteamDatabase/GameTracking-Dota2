@@ -81,7 +81,7 @@ function SelectNewTarget( )
 	end
 
 	thisEntity.hTarget = hNewTarget
-	thisEntity.nextTargetTime = GameRules:GetGameTime() + 10	-- Keep on this guy for 10 seconds at least
+	thisEntity.nextTargetTime = GameRules:GetGameTime() + 8	-- Keep on this target for 8 seconds at least
 
 	if thisEntity.hTarget ~= nil then
 		hCurrentEncounter.activeTargets[ tostring( thisEntity.hTarget:entindex() ) ] = true

@@ -91,7 +91,7 @@ local Stats =
 		 ability_name = "aghsfort_minor_stats_upgrade",
 		 special_value_name = "bonus_evasion",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 5,
+		 value = 6,
 	},	
 	{	
 		 description = "aghsfort_minor_stat_upgrade_bonus_magic_resist",

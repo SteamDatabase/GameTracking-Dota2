@@ -93,7 +93,7 @@ local Snapfire =
 		 ability_name = "aghsfort_snapfire_lil_shredder",
 		 special_value_name = "damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 20,
+		 value = 15,
 	},
 
 	{
@@ -142,14 +142,6 @@ local Snapfire =
 		 special_value_name = "burn_damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		 value = 35,
-	},
-
-	{
-		 description = "aghsfort_snapfire_mortimer_kisses_flat_move_slow_pct",
-		 ability_name = "aghsfort_snapfire_mortimer_kisses",
-		 special_value_name = "move_slow_pct",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 15,
 	},
 
 	{

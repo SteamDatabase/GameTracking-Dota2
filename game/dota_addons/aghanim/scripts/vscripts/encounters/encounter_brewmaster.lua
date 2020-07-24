@@ -111,7 +111,7 @@ function CMapEncounter_Brewmaster:OnSpawnerFinished( hSpawner, hSpawnedUnits )
 	end
 
 	--print( "CMapEncounter_Brewmaster:OnSpawnerFinished" )
-	local heroes = FindRealLivingEnemyHeroesInRadius( DOTA_TEAM_BADGUYS, self.hRoom:GetOrigin(), 1000 )
+	local heroes = FindRealLivingEnemyHeroesInRadius( DOTA_TEAM_BADGUYS, self.hRoom:GetOrigin(), FIND_UNITS_EVERYWHERE )
 	if #heroes > 0 then
 		for _,hSpawnedUnit in pairs( hSpawnedUnits ) do
 			local hero = heroes[RandomInt(1, #heroes)]

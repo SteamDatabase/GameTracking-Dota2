@@ -24,10 +24,75 @@ _G.MINOR_ABILITY_UPGRADES =
    base_stats_upgrades = require( "minor_ability_upgrades/base_minor_stats_upgrades" ),
 }
 
+_G.STAT_UPGRADE_EXCLUDES =
+{
+   npc_dota_hero_omniknight =
+   {
+      "aghsfort_minor_stat_upgrade_bonus_attack_speed",
+   },
+
+   npc_dota_hero_magnataur = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_health",
+   },
+   
+   npc_dota_hero_winter_wyvern = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_evasion",
+   },
+
+   npc_dota_hero_disruptor =
+   {
+      "aghsfort_minor_stat_upgrade_bonus_evasion",
+   },
+
+   npc_dota_hero_snapfire = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_evasion",
+   },
+
+   npc_dota_hero_tusk = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_health",
+   },
+
+   npc_dota_hero_ursa = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_spell_amp",
+   },
+
+   npc_dota_hero_sniper = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_evasion",
+   },
+
+   npc_dota_hero_mars = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_health",
+   },
+
+   npc_dota_hero_viper = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_magic_resist",
+   },
+
+   npc_dota_hero_weaver = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_spell_amp",
+   },
+
+   npc_dota_hero_witch_doctor = 
+   {
+      "aghsfort_minor_stat_upgrade_bonus_attack_damage",
+      "aghsfort_minor_stat_upgrade_bonus_evasion",
+   },
+}
+
+-- NOTE: These are substrings to search for in SPECIAL_ABILITY_UPGRADES
 _G.ULTIMATE_ABILITY_NAMES =
 {
    npc_dota_hero_omniknight = "omniknight_guardian_angel",
-   npc_dota_hero_magnataur = "magnataur_reverse_polarity_radius",
+   npc_dota_hero_magnataur = "magnataur_reverse_polarity",
    npc_dota_hero_phantom_assassin = "phantom_assassin_coup_de_grace",
    npc_dota_hero_winter_wyvern = "winter_wyvern_winters_curse",
    npc_dota_hero_disruptor = "disruptor_static_storm",
@@ -36,7 +101,7 @@ _G.ULTIMATE_ABILITY_NAMES =
    npc_dota_hero_ursa = "ursa_enrage",
    npc_dota_hero_sniper = "sniper_assassinate",
    npc_dota_hero_mars = "mars_arena_of_blood",
-   npc_dota_hero_viper = "viper_viper_strike",
+   npc_dota_hero_viper = "_strike", -- Not "viper_viper_strike" because the viper strike names in SPECIAL_ABILITY_UPGRADES are wierd
    npc_dota_hero_weaver = "weaver_time_lapse",
    npc_dota_hero_witch_doctor = "witch_doctor_death_ward",
 }
@@ -164,7 +229,7 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_snapfire"] =
 {
    "aghsfort_special_snapfire_scatterblast_double_barrel",
    "aghsfort_special_snapfire_scatterblast_knockback",
-   "aghsfort_special_snapfire_scatterblast_fullrange_pointblank",
+  -- "aghsfort_special_snapfire_scatterblast_fullrange_pointblank",
    "aghsfort_special_snapfire_scatterblast_barrage",
 
    "aghsfort_special_snapfire_firesnap_cookie_multicookie",
@@ -205,20 +270,24 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_ursa"] =
 {
    "aghsfort_special_ursa_earthshock_invis",
    "aghsfort_special_ursa_earthshock_knockback",
-   "aghsfort_special_ursa_earthshock_miss_chance",
-   --"aghsfort_special_ursa_earthshock_apply_fury_swipes", -- bugged
+   "aghsfort_special_ursa_earthshock_apply_fury_swipes", 
+   "aghsfort_special_ursa_earthshock_overpower_stack",
+   --"aghsfort_special_ursa_earthshock_miss_chance",
 
    "aghsfort_special_ursa_overpower_crit",
    "aghsfort_special_ursa_overpower_evasion",
    "aghsfort_special_ursa_overpower_cleave",
-   "aghsfort_special_ursa_overpower_taunt",
+  -- "aghsfort_special_ursa_overpower_taunt",
 
    "aghsfort_special_ursa_fury_swipes_armor_reduction",
+   "aghsfort_special_ursa_fury_swipes_lifesteal",
+   "aghsfort_special_ursa_fury_swipes_ursa_minor",
 
    --"aghsfort_special_ursa_enrage_magic_immunity",
    "aghsfort_special_ursa_enrage_allies",
    "aghsfort_special_ursa_enrage_fear",
-   "aghsfort_special_ursa_enrage_armor",
+   --"aghsfort_special_ursa_enrage_armor",
+   "aghsfort_special_ursa_enrage_earthshock",
    "aghsfort_special_ursa_enrage_attack_speed",
 }
 
@@ -240,7 +309,7 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_sniper"] =
 
    "aghsfort_special_sniper_assassinate_buckshot",
    "aghsfort_special_sniper_assassinate_original_scepter",
-   "aghsfort_special_sniper_assassinate_killshot_buff",
+   "aghsfort_special_sniper_assassinate_killshot",
 }
 
 SPECIAL_ABILITY_UPGRADES["npc_dota_hero_mars"] = 
@@ -253,9 +322,9 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_mars"] =
    "aghsfort_special_mars_gods_rebuke_stun",
    "aghsfort_special_mars_gods_rebuke_strength_buff",
 
-   --"aghsfort_special_mars_bulwark_counter_rebuke",
+   "aghsfort_special_mars_bulwark_counter_rebuke",
    --"aghsfort_special_mars_bulwark_healing",
-   "aghsfort_special_mars_bulwark_return",
+   --"aghsfort_special_mars_bulwark_return",
    "aghsfort_special_mars_bulwark_spears",
    "aghsfort_special_mars_bulwark_soldiers",
 
@@ -294,7 +363,7 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_weaver"] =
    "aghsfort_special_weaver_geminate_attack_splitshot",
    "aghsfort_special_weaver_geminate_attack_applies_swarm",  
    "aghsfort_special_weaver_geminate_attack_lifesteal",
-   "aghsfort_special_weaver_geminate_attack_knockback",
+  -- "aghsfort_special_weaver_geminate_attack_knockback",
 
 
 

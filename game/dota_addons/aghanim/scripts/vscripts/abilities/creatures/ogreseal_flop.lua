@@ -74,7 +74,7 @@ function ogreseal_flop:TryToDamage()
 						attacker = self:GetCaster(),
 						ability = self,
 						damage = damage,
-						damage_type = DAMAGE_TYPE_PHYSICAL,
+						damage_type = self:GetAbilityDamageType(),
 					}
 					ApplyDamage( DamageInfo )
 					if enemy:IsAlive() == false then

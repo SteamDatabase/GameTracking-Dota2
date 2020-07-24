@@ -64,7 +64,7 @@ function PhoenixThink()
 	local hSupernovaRangeEnemies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, thisEntity.fSupernovaRange, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
 
 	if #hSupernovaRangeEnemies > 0 then
-		local fHealthThresholdPctSupernova = 50
+		local fHealthThresholdPctSupernova = 40
 		if thisEntity:GetHealthPercent() <= fHealthThresholdPctSupernova and thisEntity.hSupernovaAbility and thisEntity.hSupernovaAbility:IsFullyCastable() then
 			local hNearestTarget = hSupernovaRangeEnemies[ 1 ]
 			return CastSupernova( hNearestTarget )

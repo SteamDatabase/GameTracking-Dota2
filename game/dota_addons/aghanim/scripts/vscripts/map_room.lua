@@ -372,8 +372,11 @@ function CMapRoom:OpenExit( szExitDir, vSmallExitLocation )
 
 	-- NOTE: Do not break in the loop; necessary for double N exits in the main map
 	local roomUnlockList = self:FindAllEntitiesInRoomByName( "room_unlock_" .. szExitDir, true )
+	if #roomUnlockList == 0 then
+		print( "ERROR: Unable to find entity room_unlock_" .. szExitDir .. " in room  " .. self:GetName() )
+	end		
 	for i=1, #roomUnlockList do
-		--print( "Triggering " .. self:GetName() .. " room_unlock_" .. szExitDir .. " on ent " .. roomUnlockList[i]:entindex() .. " h " .. roomUnlockList[i]:GetSpawnGroupHandle() )
+		print( "Triggering " .. self:GetName() .. " room_unlock_" .. szExitDir .. " on ent " .. roomUnlockList[i]:entindex() .. " h " .. roomUnlockList[i]:GetSpawnGroupHandle() )
 		roomUnlockList[i]:Trigger( nil, nil )
 	end
 

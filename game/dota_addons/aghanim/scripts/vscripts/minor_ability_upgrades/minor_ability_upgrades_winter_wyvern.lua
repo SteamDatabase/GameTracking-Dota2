@@ -64,13 +64,13 @@ local WinterWyvern =
 		 value = 100,
 	},
 
-	{
-		 description = "aghsfort_winter_wyvern_splinter_blast_pct_mana_cost",
-		 ability_name = "aghsfort_winter_wyvern_splinter_blast",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_winter_wyvern_splinter_blast_pct_mana_cost",
+	-- 	 ability_name = "aghsfort_winter_wyvern_splinter_blast",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_winter_wyvern_splinter_blast_pct_cooldown",
@@ -121,13 +121,13 @@ local WinterWyvern =
 		 value = 12,
 	},
 
-	{
-		 description = "aghsfort_winter_wyvern_winters_curse_pct_manacost",
-		 ability_name = "aghsfort_winter_wyvern_winters_curse",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_winter_wyvern_winters_curse_pct_manacost",
+	-- 	 ability_name = "aghsfort_winter_wyvern_winters_curse",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_winter_wyvern_winters_curse_flat_bonus_attack_speed",

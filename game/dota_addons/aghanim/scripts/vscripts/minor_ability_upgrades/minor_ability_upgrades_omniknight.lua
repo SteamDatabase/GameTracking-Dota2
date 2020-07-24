@@ -8,21 +8,21 @@ local Omniknight =
 		 value = 15,
 	},
 
-	{
-		 description = "aghsfort_omniknight_repel_manacost",
-		 ability_name = "aghsfort_omniknight_repel",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_omniknight_repel_manacost",
+	-- 	 ability_name = "aghsfort_omniknight_repel",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
-	{
-		 description = "aghsfort_omniknight_guardian_angel_manacost",
-		 ability_name = "aghsfort_omniknight_guardian_angel",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_omniknight_guardian_angel_manacost",
+	-- 	 ability_name = "aghsfort_omniknight_guardian_angel",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_omniknight_purification_cooldown",

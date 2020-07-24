@@ -149,7 +149,17 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 	end
 
 	local MinorUpgrades = deepcopy( MINOR_ABILITY_UPGRADES[ szHeroName ] )
-	local MinorStatsUpgrades = deepcopy( MINOR_ABILITY_UPGRADES ["base_stats_upgrades"])
+	local MinorStatsUpgrades = deepcopy( MINOR_ABILITY_UPGRADES[ "base_stats_upgrades" ] )
+	for nStatUpgrade=#MinorStatsUpgrades,1,-1 do
+		local Upgrade = MinorStatsUpgrades[ nStatUpgrade ]
+		for k,v in pairs ( STAT_UPGRADE_EXCLUDES[ szHeroName ] ) do
+			if Upgrade[ "description" ] == v then
+				print( "blacklisting stat upgrade " .. v .. " for hero " .. szHeroName )
+				table.remove( MinorStatsUpgrades, nStatUpgrade )
+				break
+			end
+		end
+	end
 
 	-- then for each option, roll a reward type, and don't repeat types
 	local vecGeneratedRewards = {}

@@ -1,12 +1,12 @@
 local Disruptor =
 {
-	{
-		 description = "aghsfort_disruptor_thunder_strike_pct_mana_cost",
-		 ability_name = "aghsfort_disruptor_thunder_strike",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_disruptor_thunder_strike_pct_mana_cost",
+	-- 	 ability_name = "aghsfort_disruptor_thunder_strike",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_disruptor_thunder_strike_pct_cooldown",
@@ -77,7 +77,7 @@ local Disruptor =
 		ability_name = "aghsfort_disruptor_kinetic_field",
 		special_value_name = "duration",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 1.0,
+		value = 0.5,
 	},
 
 	{
@@ -95,13 +95,13 @@ local Disruptor =
 		value = 1.25,
 	},
 
-	{
-		description = "aghsfort_disruptor_static_storm_pct_mana_cost",
-		ability_name = "aghsfort_disruptor_static_storm",
-		special_value_name = "mana_cost",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 15,
-	},
+	-- {
+	-- 	description = "aghsfort_disruptor_static_storm_pct_mana_cost",
+	-- 	ability_name = "aghsfort_disruptor_static_storm",
+	-- 	special_value_name = "mana_cost",
+	-- 	operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+	-- 	value = 15,
+	-- },
 
 	{
 		description = "aghsfort_disruptor_static_storm_pct_cooldown",

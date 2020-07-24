@@ -8,13 +8,13 @@ local Ursa =
 		value = 75,
 	},
 
-	{
-		description = "aghsfort_ursa_earthshock_percent_mana_cost",
-		ability_name = "aghsfort_ursa_earthshock",
-		special_value_name = "mana_cost",
-		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		value = 15,
-	},
+	-- {
+	-- 	description = "aghsfort_ursa_earthshock_percent_mana_cost",
+	-- 	ability_name = "aghsfort_ursa_earthshock",
+	-- 	special_value_name = "mana_cost",
+	-- 	operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	value = 15,
+	-- },
 
 	{
 		description = "aghsfort_ursa_earthshock_flat_radius",

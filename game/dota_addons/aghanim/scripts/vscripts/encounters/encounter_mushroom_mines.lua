@@ -18,8 +18,8 @@ function CMapEncounter_MushroomMines:constructor( hRoom, szEncounterName )
 	self.nNumShroomGiantSpawners = 3
 
 	self.fShamanSpawnTimer = -1.0
-	self.fShamanRespawnTimeMin = 3.0
-	self.fShamanRespawnTimeMax = 7.0
+	self.fShamanRespawnTimeMin = 4.0
+	self.fShamanRespawnTimeMax = 8.0
 
 	self:SetCalculateRewardsFromUnitCount( true )
 

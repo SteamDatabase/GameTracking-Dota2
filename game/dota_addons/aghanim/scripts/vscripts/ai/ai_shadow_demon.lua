@@ -44,44 +44,73 @@ function ShadowDemonThink()
 		return HoldPosition()
 	end
 
-	local hAttackTarget = nil
-	local hApproachTarget = nil
+	local bDisruptionReady = false
+	if GameRules:GetGameTime() > thisEntity.flDisruptionDelayTime and thisEntity.hDisruptionAbility ~= nil and thisEntity.hDisruptionAbility:IsFullyCastable() then
+		--print( 'Disruption ready' )
+		bDisruptionReady = true
+	end	
+
+	local hBestEnemy = nil
+	local hDoomedEnemy = nil
+
+	-- grab the closest enemy from our list, but if our disruption is ready make sure we skip over the target if it is DOOMED
 	for _, hEnemy in pairs( hEnemies ) do
 		if hEnemy ~= nil and hEnemy:IsAlive() then
-			local flDist = ( hEnemy:GetOrigin() - thisEntity:GetOrigin() ):Length2D()
-			if flDist < thisEntity.flRetreatRange then
-				if ( thisEntity.fTimeOfLastRetreat and ( GameRules:GetGameTime() < thisEntity.fTimeOfLastRetreat + 3 ) ) then
-					-- We already retreated recently, so just attack
-					hAttackTarget = hEnemy
+
+			if bDisruptionReady == true then
+				local hDoomBuff = hEnemy:FindModifierByName( "modifier_doom_bringer_doom" )
+				if hDoomBuff then
+					print( 'skipping over the DOOMED enemy as our potential target' )
+					hDoomedEnemy = hEnemy
+					goto continue
 				else
-					return Retreat( hEnemy )
+					return CastDisruption( hEnemy )
 				end
 			end
-			if flDist <= thisEntity.flAttackRange then
-				hAttackTarget = hEnemy
-			end
-			if flDist > thisEntity.flAttackRange then
-				hApproachTarget = hEnemy
-			end
+
+			-- ATTACK/APPROACH target
+			return TargetEnemy( hEnemy )
 		end
+
+		::continue::
+	end
+
+	-- if we're still here then the doomed enemy is the only one that could be a target
+	if hDoomedEnemy ~= nil then
+		-- ATTACK/APPROACH doomed enemy
+		return TargetEnemy( hDoomedEnemy )
+	end
+
+	return 0.5
+end
+
+--------------------------------------------------------------------------------
+
+function TargetEnemy( hEnemy )
+	local hAttackTarget = nil
+	local hApproachTarget = nil
+
+	local flDist = ( hEnemy:GetOrigin() - thisEntity:GetOrigin() ):Length2D()
+	if flDist < thisEntity.flRetreatRange then
+		if ( thisEntity.fTimeOfLastRetreat and ( GameRules:GetGameTime() < thisEntity.fTimeOfLastRetreat + 3 ) ) then
+			-- We already retreated recently, so just attack
+			hAttackTarget = hEnemy
+		else
+			return Retreat( hEnemy )
+		end
+	end
+
+	if flDist <= thisEntity.flAttackRange then
+		hAttackTarget = hEnemy
+	end
+	if flDist > thisEntity.flAttackRange then
+		hApproachTarget = hEnemy
 	end
 
 	if hAttackTarget == nil and hApproachTarget ~= nil then
 		return Approach( hApproachTarget )
 	end
 
-	if thisEntity.hDisruptionAbility ~= nil and thisEntity.hDisruptionAbility:IsFullyCastable() then
-		--print( 'disruption check' )
-		if GameRules:GetGameTime() > thisEntity.flDisruptionDelayTime and hAttackTarget then
-			--print( 'Shadow Demon using Disruption on ENEMY!' )
-			return CastDisruption( hAttackTarget )
-		end
-	end
---[[
-	if hAttackTarget and thisEntity.hShadowPoisonAbility ~= nil and thisEntity.hShadowPoisonAbility:IsFullyCastable() then
-		return CastPoison( hAttackTarget )
-	end
---]]
 	if hAttackTarget then
 		thisEntity:FaceTowards( hAttackTarget:GetOrigin() )
 		--return HoldPosition()

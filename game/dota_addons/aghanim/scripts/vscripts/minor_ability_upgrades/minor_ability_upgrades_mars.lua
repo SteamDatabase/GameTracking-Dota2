@@ -1,12 +1,12 @@
 local Mars =
 {
-	{
-		 description = "aghsfort_mars_spear_percent_manacost",
-		 ability_name = "aghsfort_mars_spear",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_mars_spear_percent_manacost",
+	-- 	 ability_name = "aghsfort_mars_spear",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_mars_spear_percent_cooldown",
@@ -33,13 +33,13 @@ local Mars =
 	},
 
 
-	{
-		 description = "aghsfort_mars_gods_rebuke_percent_manacost",
-		 ability_name = "aghsfort_mars_gods_rebuke",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_mars_gods_rebuke_percent_manacost",
+	-- 	 ability_name = "aghsfort_mars_gods_rebuke",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_mars_gods_rebuke_percent_cooldown",
@@ -74,13 +74,13 @@ local Mars =
 		value = 10,
 	},
 
-	{
-		description = "aghsfort_mars_bulwark_damage_reduction_sides",
-		ability_name = "aghsfort_mars_bulwark",
-		special_value_name = "physical_damage_reduction_side",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 10,
-	},
+	-- {
+	-- 	description = "aghsfort_mars_bulwark_damage_reduction_sides",
+	-- 	ability_name = "aghsfort_mars_bulwark",
+	-- 	special_value_name = "physical_damage_reduction_side",
+	-- 	operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+	-- 	value = 10,
+	-- },
 	{
 		 description = "aghsfort_mars_bulwark_percent_cooldown",
 		 ability_name = "aghsfort_mars_bulwark",
@@ -104,13 +104,13 @@ local Mars =
 		value = 1.0,
 	},
 
-	{
-		 description = "aghsfort_mars_arena_of_blood_manacost",
-		 ability_name = "aghsfort_mars_arena_of_blood",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
-	},
+	-- {
+	-- 	 description = "aghsfort_mars_arena_of_blood_manacost",
+	-- 	 ability_name = "aghsfort_mars_arena_of_blood",
+	-- 	 special_value_name = "mana_cost",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = 15,
+	-- },
 
 	{
 		 description = "aghsfort_mars_arena_of_blood_cooldown",

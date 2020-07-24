@@ -75,8 +75,8 @@ function CMapEncounter_Morphlings_B:constructor( hRoom, szEncounterName )
 
 	-- szSpawnerNameInput, nPortalHealthInput, flSummonTimeInput, flScaleInput, rgUnitsInfoInput
 
-	local nSmallPortalHealth = 12 * hRoom:GetDepth()
-	local nBigPortalHealth = 40 * hRoom:GetDepth()
+	local nSmallPortalHealth = 10 * hRoom:GetDepth()
+	local nBigPortalHealth = 35 * hRoom:GetDepth()
 
 	self:AddPortalSpawnerV2( CPortalSpawnerV2( self.szPeonPortalV2, self.szPeonPortalV2, nSmallPortalHealth, 6, 0.7,
 		{
@@ -93,7 +93,7 @@ function CMapEncounter_Morphlings_B:constructor( hRoom, szEncounterName )
 			{
 				EntityName = "npc_dota_creature_morphling_big",
 				Team = DOTA_TEAM_BADGUYS,
-				Count = 2,
+				Count = 1,
 				PositionNoise = 0.0,
 			},
 		} ) )

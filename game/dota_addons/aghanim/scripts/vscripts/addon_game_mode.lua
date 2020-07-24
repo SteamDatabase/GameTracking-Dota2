@@ -108,7 +108,6 @@ end
 --------------------------------------------------------------------------------
 
 function LinkModifiers()
--- This is the modifier that pukeeps morty in the level
 	LinkLuaModifier( "modifier_bonus_room_start", "modifiers/modifier_bonus_room_start", LUA_MODIFIER_MOTION_NONE )
 	LinkLuaModifier( "modifier_morty_leash", "modifiers/modifier_morty_leash", LUA_MODIFIER_MOTION_NONE )
 	LinkLuaModifier( "modifier_provides_fow_position", "modifiers/modifier_provides_fow_position", LUA_MODIFIER_MOTION_NONE )
@@ -117,6 +116,7 @@ function LinkModifiers()
 	LinkLuaModifier( "modifier_boss_intro", "modifiers/modifier_boss_intro", LUA_MODIFIER_MOTION_NONE )
 	LinkLuaModifier( "modifier_attack_speed_unslowable", "modifiers/modifier_attack_speed_unslowable", LUA_MODIFIER_MOTION_NONE )
 	LinkLuaModifier( "modifier_move_speed_unslowable", "modifiers/modifier_move_speed_unslowable", LUA_MODIFIER_MOTION_NONE )
+	LinkLuaModifier( "modifier_sniper_big_game_hunter_limiter", "modifiers/modifier_sniper_big_game_hunter_limiter", LUA_MODIFIER_MOTION_NONE )
 end
 
 
@@ -309,7 +309,7 @@ function CAghanim:InitGameMode()
 	CustomGameEventManager:RegisterListener( "reward_choice", function(...) return OnRewardChoice( ... ) end )
 
 	if self.bIsInTournamentMode == true then
-		self:SetAscensionLevel( 1 )
+		self:SetAscensionLevel( 2 )
 		print( "Tournament game difficulty is " .. self:GetAscensionLevel() )
 	else		
 		local nCustomGameDifficulty = GameRules:GetCustomGameDifficulty()
@@ -1037,11 +1037,22 @@ function CAghanim:AllocateRoomLayout()
 		if nAct == 3 then
 			nNumCrystalsPerAct = 1
 		end
+
+		local crystalDepthsAssigned = {}
 		for nCrystalRoom=1,nNumCrystalsPerAct do
-			local nPick = self.hMapRandomStream:RandomInt( 1, #vecPotentialTrapRooms[nAct] )
-			self.rooms[ vecPotentialTrapRooms[nAct][nPick] ].bHasCrystal = true
-			print( "assigning " .. vecPotentialTrapRooms[nAct][nPick] .. " a crystal " ) 
-			table.remove( vecPotentialTrapRooms[nAct], nPick )
+			local bAssigned = false
+			while bAssigned == false do
+				local nPick = self.hMapRandomStream:RandomInt( 1, #vecPotentialTrapRooms[nAct] )
+				local szCrystalRoom = vecPotentialTrapRooms[nAct][nPick] 
+				local nDepth = self.rooms[ szCrystalRoom ]:GetDepth()
+				if crystalDepthsAssigned[ tostring(nDepth) ] == nil then
+					self.rooms[ szCrystalRoom ].bHasCrystal = true
+					print( "assigning " .. szCrystalRoom .. " a crystal " ) 
+					crystalDepthsAssigned[ tostring(nDepth) ] = true
+					bAssigned = true
+				end
+				table.remove( vecPotentialTrapRooms[nAct], nPick )
+			end
 		end
 	end
 

@@ -50,15 +50,15 @@ function CMapEncounter_BabyOgres:constructor( hRoom, szEncounterName )
 			Count = 2,
 		},
 		{
-			Time = 25,
+			Time = 24,
 			Count = 3,
 		},
 		{
-			Time = 45,
+			Time = 43,
 			Count = 3,
 		},
 		{
-			Time = 65,
+			Time = 62,
 			Count = 4,
 		},
 	}
