@@ -33,11 +33,13 @@ function item_life_rune:OnSpellStart()
 			CustomNetTables:SetTableValue( "respawns_remaining", string.format( "%d", self:GetCaster():entindex() ), { respawns = self:GetCaster().nRespawnsRemaining } )
 
 			local gameEvent = {}
-			gameEvent["player_id"] = self:GetCaster():GetPlayerOwner():GetPlayerID()
-			gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
-			gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_item_life_rune"
-			gameEvent["message"] = "#Dungeon_FoundLifeRune"
-			FireGameEvent( "dota_combat_event_message", gameEvent )
+			if hPlayer then
+				gameEvent["player_id"] = hPlayer:GetPlayerID()
+				gameEvent["team_number"] = DOTA_TEAM_GOODGUYS
+				gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_item_life_rune"
+				gameEvent["message"] = "#Dungeon_FoundLifeRune"
+				FireGameEvent( "dota_combat_event_message", gameEvent )
+			end
 		end
 		self:SpendCharge()
 	end

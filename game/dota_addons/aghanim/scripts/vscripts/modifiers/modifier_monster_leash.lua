@@ -23,7 +23,6 @@ function modifier_monster_leash:OnCreated( kv )
 		
 		self.bProvideVision = false
 		self.fProvideVisionTime = TIME_BEFORE_PROVIDE_VISION
-		self.vLastValidPos = self:GetParent():GetAbsOrigin()
 
 		self:StartIntervalThink( 0.01 )
 	end
@@ -58,41 +57,20 @@ function modifier_monster_leash:OnIntervalThink()
 
 	end
 
-	-- Only do more expensive checks for bosses + captains
-	local bValidPosition = true
-	if self:GetParent():IsBoss() or self:GetParent():IsConsideredHero() then
-		bValidPosition = IsUnitInValidPosition( self:GetParent() )
-	end
-
 	local vOrigin = self:GetParent():GetAbsOrigin()
-	if vOrigin.z <= -1000 then
-		bValidPosition = false
+	local vClampedPos = hEncounter:GetRoom():ClampPointToRoomBounds( vOrigin, 128.0 )
+	if vOrigin ~= vClampedPos then
+		FindClearSpaceForUnit( self:GetParent(), vClampedPos, true )
 	end
 
-	local vClampedPos = hEncounter:GetRoom():ClampPointToRoomBounds( vOrigin, 128.0 )
-	local bIsInRoom = ( vOrigin == vClampedPos )
-
-	if bIsInRoom == true and bValidPosition == true then
+	if vOrigin.z > -1000 then
 		self.flKillStartTime = -1
-		self.vLastValidPos = self:GetParent():GetAbsOrigin()
 		return
 	end
 
 	if self.flKillStartTime < 0 then
 		self.flKillStartTime = GameRules:GetGameTime()
 	end
-
-	if bIsInRoom == false then
-		self:GetParent():SetAbsOrigin( vClampedPos )
-	end
-
-	-- For flying or non-motioncontrolled entities, be more generous
-	if bValidPosition == false then
-		local bIsMotionControlled = self:GetParent():IsCurrentlyHorizontalMotionControlled() == true or self:GetParent():IsCurrentlyVerticalMotionControlled() == true
-		if self:GetParent():HasFlyMovementCapability() == false and bIsMotionControlled == false then
-			FindClearSpaceForUnit( self:GetParent(), self.vLastValidPos, true )
-		end
-	end		
 
 	--print ("killcountdown = ", self.killcountdown )
 	-- only kill the unit if they are in a bad position for 3 seconds, 
