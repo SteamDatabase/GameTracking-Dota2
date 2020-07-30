@@ -17,13 +17,13 @@ local Weaver =
 		 value = 12,
 	},
 
-	{
-		 description = "aghsfort_weaver_the_swarm_flat_attack_rate",
-		 ability_name = "aghsfort_weaver_the_swarm",
-		 special_value_name = "attack_rate",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = -0.15,
-	},
+	-- {
+	-- 	 description = "aghsfort_weaver_the_swarm_flat_attack_rate",
+	-- 	 ability_name = "aghsfort_weaver_the_swarm",
+	-- 	 special_value_name = "attack_rate",
+	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+	-- 	 value = -15,
+	-- },
 
 	{
 		 description = "aghsfort_weaver_the_swarm_flat_count",

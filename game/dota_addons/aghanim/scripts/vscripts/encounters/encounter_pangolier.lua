@@ -89,10 +89,16 @@ function CMapEncounter_Pangolier:Transform()
 			if hAbility ~= nil then
 				PlayerResource:SetCameraTarget( hHero:GetPlayerOwnerID(), hHero )
 				PlayerResource:SetOverrideSelectionEntity( hHero:GetPlayerOwnerID(), hHero )
-				hHero:RemoveModifierByName( "modifier_bonus_room_start" )
 				hHero:AddNewModifier( hHero, hAbility, "modifier_pango_bonus", { duration = -1 } )
-				hHero:CastAbilityNoTarget( hAbility, hHero:GetPlayerOwnerID() )		
-				--hHero:AddNewModifier( hHero, hAbility, "modifier_pangolier_gyroshell", { duration = -1 } )
+
+				local vDir = hHero:GetForwardVector()
+				local vTargetPos = hHero:GetAbsOrigin() + vDir
+				local kv = {}
+				kv[ "duration" ] = -1
+				kv[ "vTargetX" ] = vTargetPos.x
+				kv[ "vTargetY" ] = vTargetPos.y
+				kv[ "vTargetZ" ] = vTargetPos.z
+				hHero:AddNewModifier( hHero, hAbility, "modifier_pangolier_gyroshell", kv )
 			else
 				printf( "Start - Can't find ability" )
 			end
@@ -238,6 +244,7 @@ function CMapEncounter_Pangolier:OnComplete()
 			hHero:RemoveAbility( "pangolier_gyroshell" )
 			hHero:RemoveModifierByName( "modifier_pangolier_gyroshell" )
 			hHero:RemoveModifierByName( "modifier_pango_bonus" )
+			hHero:RemoveModifierByName( "modifier_bonus_room_start" )
 			PlayerResource:SetCameraTarget( hHero:GetPlayerOwnerID(), nil )
 			PlayerResource:SetOverrideSelectionEntity( hHero:GetPlayerOwnerID(), nil )
 		end

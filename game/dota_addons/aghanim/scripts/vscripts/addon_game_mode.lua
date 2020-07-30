@@ -309,7 +309,7 @@ function CAghanim:InitGameMode()
 	CustomGameEventManager:RegisterListener( "reward_choice", function(...) return OnRewardChoice( ... ) end )
 
 	if self.bIsInTournamentMode == true then
-		self:SetAscensionLevel( 2 )
+		self:SetAscensionLevel( 3 )
 		print( "Tournament game difficulty is " .. self:GetAscensionLevel() )
 	else		
 		local nCustomGameDifficulty = GameRules:GetCustomGameDifficulty()
@@ -1493,6 +1493,17 @@ function CAghanim:AddMinorAbilityUpgrade( hHero, upgradeTable )
 		return
 	end
 	Buff:ForceRefresh()
+
+	local hAbility = hHero:FindAbilityByName( upgradeTable[ "ability_name"] )
+	if hAbility ~= nil then
+		if hAbility:GetIntrinsicModifierName() ~= nil then
+			local hIntrinsicModifier = hHero:FindModifierByName( hAbility:GetIntrinsicModifierName() )
+			if hIntrinsicModifier then
+				print( "Force Refresh intrinsic modifier after minor upgrade" )
+				hIntrinsicModifier:ForceRefresh()
+			end
+		end
+	end
 end
 --------------------------------------------------------------------------------
 

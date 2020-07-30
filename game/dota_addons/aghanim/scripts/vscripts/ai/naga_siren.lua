@@ -8,7 +8,7 @@ function Spawn( entityKeyValues )
 	thisEntity:SetContextThink( "AIThink", AIThink, 0.25 )
     behaviorSystem = AICore:CreateBehaviorSystem( thisEntity, { BehaviorNone, BehaviorMirrorImage, BehaviorEnsnare, BehaviorRipTide, BehaviorSong, BehaviorRunAway } )
 	
-    -- Turn on Radiance
+    --[[ Turn on Radiance
 	for i = 0, DOTA_ITEM_MAX - 1 do
 		local item = thisEntity:GetItemInSlot( i )
 		if item and item:GetAbilityName() == "item_radiance" then
@@ -21,6 +21,7 @@ function Spawn( entityKeyValues )
 		AbilityIndex = thisEntity.RadianceAbility:entindex(),
 		Queue = false,
 	})
+	]]
 end
 
 function AIThink() -- For some reason AddThinkToEnt doesn't accept member functions

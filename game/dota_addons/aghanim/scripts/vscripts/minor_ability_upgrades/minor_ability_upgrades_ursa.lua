@@ -5,7 +5,7 @@ local Ursa =
 		ability_name = "aghsfort_ursa_earthshock",
 		special_value_name = "impact_damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 75,
+		value = 100,
 	},
 
 	-- {
@@ -24,6 +24,7 @@ local Ursa =
 		value = 75,
 	},
 
+	--[[
 	{
 		description = "aghsfort_ursa_earthshock_percent_cooldown",
 		ability_name = "aghsfort_ursa_earthshock",
@@ -31,6 +32,8 @@ local Ursa =
 		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
 		value = 12,
 	},
+	]]
+
 	{
 		description = "aghsfort_ursa_earthshock_flat_hop_distance",
 		ability_name = "aghsfort_ursa_earthshock",

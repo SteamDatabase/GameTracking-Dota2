@@ -115,19 +115,22 @@ function aghsfort_enraged_wildwing_tornado_blast:SpawnHarpy( vLocation )
 	 		local hHarpy = CreateUnitByName( "npc_aghsfort_creature_tornado_harpy", vLocation, true, self:GetCaster(), self:GetCaster(), self:GetCaster():GetTeamNumber() )
 	 		local nMaxDistance = 200
 	 		local vLoc = FindPathablePositionNearby(vLocation, 150, nMaxDistance )
-	 		if hHarpy ~= nil then 
-				hHarpy:SetInitialGoalEntity( self:GetCaster().hInitialGoalEntity )
-				hHarpy:SetDeathXP( 0 )
-				hHarpy:SetMinimumGoldBounty( 0 )
-				hHarpy:SetMaximumGoldBounty( 0 )
+			if self:GetCaster().Encounter and self:GetCaster().Encounter:GetRoom() and self:GetCaster().Encounter:GetRoom():IsInRoomBounds( vLoc ) then
+				
+		 		if hHarpy ~= nil then 
+					hHarpy:SetInitialGoalEntity( self:GetCaster().hInitialGoalEntity )
+					hHarpy:SetDeathXP( 0 )
+					hHarpy:SetMinimumGoldBounty( 0 )
+					hHarpy:SetMaximumGoldBounty( 0 )
 
-				local kv =
-				{
-					vLocX = vLoc.x,
-					vLocY = vLoc.y,
-					vLocZ = vLoc.z,
-				}
-				hHarpy:AddNewModifier( self:GetCaster(), self, "modifier_frostivus2018_broodbaby_launch", kv )
+					local kv =
+					{
+						vLocX = vLoc.x,
+						vLocY = vLoc.y,
+						vLocZ = vLoc.z,
+					}
+					hHarpy:AddNewModifier( self:GetCaster(), self, "modifier_frostivus2018_broodbaby_launch", kv )
+				end
 			end
 		end
 		
