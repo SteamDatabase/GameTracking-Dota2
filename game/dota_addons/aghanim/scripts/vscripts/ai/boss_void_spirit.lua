@@ -84,6 +84,10 @@ function CBossVoidSpirit:OnBossVoidSpiritThink()
 		return 0.1
 	end
 
+	if self.me:IsChanneling() then
+		return 0.1
+	end
+
 	-- Am I in Dissimilate?
 	if self.fDissimilateStartTime and ( GameRules:GetGameTime() < ( self.fDissimilateStartTime + self.fDissimilatePhaseDuration ) ) then
 		--printf( "I'm in Dissimilate phase, game time: %.2f; dissimilate start time: %.2f; dissimilate phase duration: %.2f", GameRules:GetGameTime(), self.fDissimilateStartTime, self.fDissimilatePhaseDuration )
