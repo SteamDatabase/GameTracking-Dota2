@@ -212,7 +212,6 @@ $tIVScript
 1.0f
 1.2
 1000
-1000000
 10ConCommand
 11CRefCountedI20CRefCountServiceBaseILb1E6CRefMTEE
 11IVSSequence
@@ -240,7 +239,7 @@ $tIVScript
 1DBlend
 2
 2000
-2020-07-14 17:34:46.038000
+2020-07-28 14:14:05.750000
 20CPostConnectCallback
 20CRefCountServiceBaseILb1E6CRefMTE
 20CResourceStreamFixed
@@ -333,7 +332,6 @@ $tIVScript
 36CModelConfigElement_SetMaterialGroup
 3C
 4
-5B<
 6ConVar
 7IConVar
 99ccff;"><b>No</b> Collision
@@ -478,6 +476,7 @@ API Calls
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 ATTACHMENT_INFLUENCE_FLAGS_NONE
 AbsolutePoseControl
+Accelerate
 Access of unconnected ConVarRef
 Access of unconnected SplitScreenConVarRef
 AcquireMask
@@ -1010,6 +1009,7 @@ CSoftbodyEffectGravity
 CSoftbodyEffectPressurize
 CSoftbodyEffectProperty
 CSoftbodyEffectSkinnedCollider
+CSoftbodyEffectSpeedup
 CSoftbodyEffectWind
 CStrongHandle
 CTSQueue corruption
@@ -1479,6 +1479,7 @@ FeSoftParent_t
 FeSourceEdge_t
 FeSphereRigid_t
 FeSpringIntegrator_t
+FeStiffHingeBuild_t
 FeTaperedCapsuleRigid_t
 FeTaperedCapsuleStretch_t
 FeTreeChildren_t
@@ -2631,6 +2632,7 @@ SoftbodyEffectPressurizeRefl_t
 SoftbodyEffectPropertyRefl_t
 SoftbodyEffectPropertyRefl_t RnSoftbodyRefl_t::m_Effects
 SoftbodyEffectSkinnedColliderRefl_t
+SoftbodyEffectSpeedupRefl_t
 SoftbodyEffectStiffenRefl_t
 SoftbodyEffectWindRefl_t
 SoftbodyEffects
@@ -2734,6 +2736,7 @@ Thin Plate
 ThreadGetCurrentId
 ThreadSleep
 TickCount
+TimeStepMultiplier
 ToolFramework2_002
 ToolSceneNodeFactory_001
 ToolScriptManager001
@@ -3275,8 +3278,6 @@ cl_jiggle_bone_invert
 cl_jiggle_bone_sanity
 client
 clientcmd_can_execute
-cloth_airdrag
-cloth_airdrag_override
 cloth_approximate_collide
 cloth_batch
 cloth_collide
@@ -3289,8 +3290,6 @@ cloth_damping_multiplier
 cloth_debug
 cloth_debug_draw_nodepth_alpha
 cloth_enable
-cloth_expairdrag
-cloth_expquadairdrag
 cloth_ground_offset
 cloth_ground_plane_thickness
 cloth_guard_threshold
@@ -3300,10 +3299,8 @@ cloth_legacy_stretch_force
 cloth_legacy_support
 cloth_max_ticks_per_frame
 cloth_node_debug_axis_length
-cloth_node_velocity_limit
 cloth_quad_smooth_iterations
 cloth_quad_smooth_rate
-cloth_quadairdrag
 cloth_quasistatic_iters
 cloth_reload_immediately
 cloth_resim_after
@@ -3508,16 +3505,15 @@ float RnSoftbodyRefl_t::m_flClothScale
 float RnSoftbodyRefl_t::m_flDampingMultiplier
 float RnSoftbodyRefl_t::m_flExpAirDrag
 float RnSoftbodyRefl_t::m_flExpQuadAirDrag
-float RnSoftbodyRefl_t::m_flExpRodAirDrag
 float RnSoftbodyRefl_t::m_flGravityScale
 float RnSoftbodyRefl_t::m_flLastTimestep
 float RnSoftbodyRefl_t::m_flModelScale
 float RnSoftbodyRefl_t::m_flQuadVelocitySmoothRate
 float RnSoftbodyRefl_t::m_flRodVelocitySmoothRate
 float RnSoftbodyRefl_t::m_flSurfaceStretch
+float RnSoftbodyRefl_t::m_flTimeStepMultiplier
 float RnSoftbodyRefl_t::m_flVelAirDrag
 float RnSoftbodyRefl_t::m_flVelQuadAirDrag
-float RnSoftbodyRefl_t::m_flVelRodAirDrag
 float RnSphericalJointRefl_t::m_flMotorDampingRatio
 float RnSphericalJointRefl_t::m_flMotorFrequency
 float RnSphericalJointRefl_t::m_flMotorMaxTorque
@@ -3543,6 +3539,7 @@ float SoftbodyEffectRefl_t::m_flIntensity
 float SoftbodyEffectRefl_t::m_flLifeTime
 float SoftbodyEffectRefl_t::m_flPeakTime
 float SoftbodyEffectRefl_t::m_flTailTime
+float SoftbodyEffectSpeedupRefl_t::m_flSpeedup
 float SoftbodyEffectStiffenRefl_t::m_flStiffenBias
 float SoftbodyEffectWindRefl_t::m_flAirToClothDensity
 float abap = Dot( ab, ap );
@@ -3560,13 +3557,12 @@ float32
 float32 FeModelRefl_t::m_flAddWorldCollisionRadius
 float32 FeModelRefl_t::m_flDefaultExpAirDrag
 float32 FeModelRefl_t::m_flDefaultExpQuadAirDrag
-float32 FeModelRefl_t::m_flDefaultExpRodAirDrag
 float32 FeModelRefl_t::m_flDefaultGravityScale
 float32 FeModelRefl_t::m_flDefaultSurfaceStretch
 float32 FeModelRefl_t::m_flDefaultThreadStretch
+float32 FeModelRefl_t::m_flDefaultTimeDilation
 float32 FeModelRefl_t::m_flDefaultVelAirDrag
 float32 FeModelRefl_t::m_flDefaultVelQuadAirDrag
-float32 FeModelRefl_t::m_flDefaultVelRodAirDrag
 float32 FeModelRefl_t::m_flInternalPressure
 float32 FeModelRefl_t::m_flLocalForce
 float32 FeModelRefl_t::m_flLocalRotation
@@ -4058,13 +4054,12 @@ m_flDamping
 m_flDampingRatio
 m_flDefaultExpAirDrag
 m_flDefaultExpQuadAirDrag
-m_flDefaultExpRodAirDrag
 m_flDefaultGravityScale
 m_flDefaultSurfaceStretch
 m_flDefaultThreadStretch
+m_flDefaultTimeDilation
 m_flDefaultVelAirDrag
 m_flDefaultVelQuadAirDrag
-m_flDefaultVelRodAirDrag
 m_flDefaultVolumetricSolveAmount
 m_flDistance
 m_flDuration
@@ -4284,6 +4279,7 @@ m_nCollisionAttributeIndex
 m_nCollisionMask
 m_nCollisionMode
 m_nCollisionPlaneIndex
+m_nCollisionSphereInclusiveCount
 m_nCollisionSphereIndex
 m_nControlPoint
 m_nControlPointNumber
