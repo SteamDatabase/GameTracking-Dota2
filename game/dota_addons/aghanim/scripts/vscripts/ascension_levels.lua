@@ -34,6 +34,19 @@ _G.ASCENSION_TARGET_CLUMPED_PLAYER = 3
 --	"ascension_extra_fast",
 --}
 
+_G.TRIALS_ASCENSION_ABILITIES =
+{
+	"ascension_bulwark",
+	"ascension_armor",
+	"ascension_plasma_field",
+}
+
+_G.TRIALS_BOSS_ASCENSION_ABILITIES = 
+{
+	"ascension_armor",
+	"ascension_bulwark",
+}
+
 _G.ASCENSION_ABILITIES =
 {
 --	example_ability_name =

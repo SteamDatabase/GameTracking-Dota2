@@ -161,6 +161,13 @@ function CMapEncounter:SelectAscensionAbilities( )
 	self.ClientData[ "total_difficulty" ] = 0
 
 	if self:GetRoom():GetType() ~= ROOM_TYPE_ENEMY then
+		if self:GetRoom():GetType() == ROOM_TYPE_BOSS and GameRules.Aghanim.bIsInTournamentMode and #TRIALS_BOSS_ASCENSION_ABILITIES > 0 then
+			for i=1,#TRIALS_BOSS_ASCENSION_ABILITIES do
+				print( "Encounter " .. self.szEncounterName .. " added trial ascension ability " .. TRIALS_BOSS_ASCENSION_ABILITIES[i] )
+				table.insert( self.AscensionAbilities, TRIALS_BOSS_ASCENSION_ABILITIES[i] )
+				self.ClientData[ "ascension_abilities" ][ tostring(i) ] = TRIALS_BOSS_ASCENSION_ABILITIES[i]
+			end
+		end
 		return
 	end
 
@@ -175,42 +182,60 @@ function CMapEncounter:SelectAscensionAbilities( )
 
 	local vecAbilityOptions = {}
 	local vecEliteAbilityOptions = {}
-	for abilityName,hPossibleAbility in pairs( ASCENSION_ABILITIES ) do
-		if hPossibleAbility.vecBlacklistedEncounters ~= nil then
-			for i=1,#hPossibleAbility.vecBlacklistedEncounters do
-				local szBlacklisted = hPossibleAbility.vecBlacklistedEncounters[i]
-				if szBlacklisted == self.szEncounterName then
-					--print( "Encounter " .. self.szEncounterName .. " blacklisted " .. abilityName )
+
+	if GameRules.Aghanim.bIsInTournamentMode and #TRIALS_ASCENSION_ABILITIES > 0 then
+		print( "Using trials forced ascension abilities" )
+		for _,szTrialAbilityName in pairs( TRIALS_ASCENSION_ABILITIES ) do
+			for abilityName,hPossibleAbility in pairs( ASCENSION_ABILITIES ) do
+				if abilityName == szTrialAbilityName then
+					if hPossibleAbility.bEliteOnly == true then
+						table.insert( vecEliteAbilityOptions, abilityName )
+					else
+						table.insert( vecAbilityOptions, abilityName )
+					end
+				end	
+			end
+		end
+	else
+		for abilityName,hPossibleAbility in pairs( ASCENSION_ABILITIES ) do
+			if hPossibleAbility.vecBlacklistedEncounters ~= nil then
+				for i=1,#hPossibleAbility.vecBlacklistedEncounters do
+					local szBlacklisted = hPossibleAbility.vecBlacklistedEncounters[i]
+					if szBlacklisted == self.szEncounterName then
+						--print( "Encounter " .. self.szEncounterName .. " blacklisted " .. abilityName )
+						goto continue
+					end
+				end
+			end
+
+			if hPossibleAbility.nRestrictToAct ~= nil then 
+				if hPossibleAbility.nRestrictToAct ~= self:GetRoom():GetAct() then
+					goto continue
+				end
+
+				if hPossibleAbility.szRequiredBoss ~= nil and hPossibleAbility.szRequiredBoss ~= GameRules.Aghanim:GetBossUnitForAct( hPossibleAbility.nRestrictToAct ) then
 					goto continue
 				end
 			end
-		end
 
-		if hPossibleAbility.nRestrictToAct ~= nil then 
-			if hPossibleAbility.nRestrictToAct ~= self:GetRoom():GetAct() then
+			if hPossibleAbility.nMinAscensionLevel ~= nil and hPossibleAbility.nMinAscensionLevel > nAscensionLevel then
 				goto continue
 			end
 
-			if hPossibleAbility.szRequiredBoss ~= nil and hPossibleAbility.szRequiredBoss ~= GameRules.Aghanim:GetBossUnitForAct( hPossibleAbility.nRestrictToAct ) then
+			if hPossibleAbility.nMaxAscensionLevel ~= nil and hPossibleAbility.nMaxAscensionLevel < nAscensionLevel then
 				goto continue
 			end
-		end
 
-		if hPossibleAbility.nMinAscensionLevel ~= nil and hPossibleAbility.nMinAscensionLevel > nAscensionLevel then
-			goto continue
+			if hPossibleAbility.bEliteOnly == true then
+				table.insert( vecEliteAbilityOptions, abilityName )
+			else
+				table.insert( vecAbilityOptions, abilityName )
+			end
+			::continue::
 		end
-
-		if hPossibleAbility.nMaxAscensionLevel ~= nil and hPossibleAbility.nMaxAscensionLevel < nAscensionLevel then
-			goto continue
-		end
-
-		if hPossibleAbility.bEliteOnly == true then
-			table.insert( vecEliteAbilityOptions, abilityName )
-		else
-			table.insert( vecAbilityOptions, abilityName )
-		end
-		::continue::
 	end
+
+	
 
 	-- Force specific abilities
 	local nStart = 1
@@ -1427,7 +1452,7 @@ function CMapEncounter:AddAscensionAbilities( hEnemyCreature )
 		hAbility:UpgradeAbility( true )
 
 		-- Bosses do not use ascension modifiers, but do want general ascension scaling for their minions.
-		if self.hRoom:GetType() == ROOM_TYPE_BOSS then
+		if self.hRoom:GetType() == ROOM_TYPE_BOSS and ( GameRules.Aghanim.bIsInTournamentMode == false or #TRIALS_BOSS_ASCENSION_ABILITIES == 0 ) then
 			if nAbilityLevel > 0 then
 				hEnemyCreature:CreatureLevelUp( nAbilityLevel )
 			end

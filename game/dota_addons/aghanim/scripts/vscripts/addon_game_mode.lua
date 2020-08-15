@@ -309,7 +309,7 @@ function CAghanim:InitGameMode()
 	CustomGameEventManager:RegisterListener( "reward_choice", function(...) return OnRewardChoice( ... ) end )
 
 	if self.bIsInTournamentMode == true then
-		self:SetAscensionLevel( 3 )
+		self:SetAscensionLevel( 2 )
 		print( "Tournament game difficulty is " .. self:GetAscensionLevel() )
 	else		
 		local nCustomGameDifficulty = GameRules:GetCustomGameDifficulty()

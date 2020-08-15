@@ -45,6 +45,19 @@ function modifier_minor_ability_upgrades:OnRefresh( kv )
 	else
 		self:GetParent().MinorAbilityUpgrades = CustomNetTables:GetTableValue( "minor_ability_upgrades", tostring( self:GetParent():GetPlayerOwnerID() ) )
 	end
+
+	
+	if self:GetParent().MinorAbilityUpgrades ~= nil then
+		for _,AbilityUpgrade in pairs ( self:GetParent().MinorAbilityUpgrades ) do
+			if AbilityUpgrade then
+				for _,SpecialValueUpgrade in pairs ( AbilityUpgrade ) do
+					if SpecialValueUpgrade and SpecialValueUpgrade[ "cached_result" ] ~= nil then
+						SpecialValueUpgrade[ "cached_result" ] = {}
+					end
+				end
+			end
+		end
+	end
 end
 
 -----------------------------------------------------------------------
@@ -127,11 +140,17 @@ function modifier_minor_ability_upgrades:GetModifierOverrideAbilitySpecialValue(
 				flAddResult = flAddResult + Upgrade[ "value" ]
 			end
 			if Upgrade[ "operator" ] == MINOR_ABILITY_UPGRADE_OP_MUL then
-				flMulResult = flMulResult * ( 1.0 - ( Upgrade[ "value" ] / 100.0 ) )
+				--print( "BEFORE: " .. szSpecialValueName .. " flMulResult: " .. flMulResult )
+					
+				flMulResult = flMulResult * ( 1.0 + ( Upgrade[ "value" ] / 100.0 ) )
+			
+				--print( szSpecialValueName .. " flMulResult: " .. flMulResult )
 			end
 		end
 
-		flMulResult = 1.0 + ( 1.0 - flMulResult )
+		--print( "Before Final " .. szSpecialValueName .. " flMulResult: " .. flMulResult )
+		--flMulResult = ( 1.0 + ( 1.0 - flMulResult ) / 100.0 )
+		--print( "Final " .. szSpecialValueName .. " flMulResult: " .. flMulResult )
 
 		local flResult = ( flBaseValue + flAddResult ) * flMulResult
 		if SpecialValueUpgrades[ "cached_result" ] == nil then

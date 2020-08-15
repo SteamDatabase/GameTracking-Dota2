@@ -107,7 +107,7 @@ local Disruptor =
 		description = "aghsfort_disruptor_static_storm_pct_cooldown",
 		ability_name = "aghsfort_disruptor_static_storm",
 		special_value_name = "cooldown",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
 		value = 12,
 	},
 
