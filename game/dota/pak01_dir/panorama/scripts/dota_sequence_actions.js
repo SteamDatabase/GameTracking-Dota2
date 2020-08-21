@@ -1,9 +1,16 @@
 // Dota specific sequence actions
 
-// Action to animate an integer dialog variable over some duration of seconds
+// ----------------------------------------------------------------------------
+//  LerpRotateAction
+// 
+//  Action to lerp the rotation parameters of a Scene Panel
+// ----------------------------------------------------------------------------
 function LerpRotateAction(panel, yawMinStart, yawMaxStart, pitchMinStart, pitchMaxStart, yawMinEnd, yawMaxEnd, pitchMinEnd, pitchMaxEnd, seconds)
 {
+	LerpAction.call( this, seconds );
+
 	this.panel = panel;
+
 	this.yawMinStart = yawMinStart;
 	this.yawMaxStart = yawMaxStart;
 	this.pitchMinStart = pitchMinStart;
@@ -12,35 +19,45 @@ function LerpRotateAction(panel, yawMinStart, yawMaxStart, pitchMinStart, pitchM
 	this.yawMaxEnd = yawMaxEnd;
 	this.pitchMinEnd = pitchMinEnd;
 	this.pitchMaxEnd = pitchMaxEnd;
-	this.seconds = seconds;
 }
-LerpRotateAction.prototype = new BaseAction();
-LerpRotateAction.prototype.start = function ()
+LerpRotateAction.prototype = new LerpAction();
+LerpRotateAction.prototype.applyProgress = function ( progress )
 {
-	this.startTimestamp = Date.now();
-	this.endTimestamp = this.startTimestamp + this.seconds * 1000;
+	this.panel.SetRotateParams(
+        Lerp(progress, this.yawMinStart, this.yawMinEnd),
+        Lerp(progress, this.yawMaxStart, this.yawMaxEnd),
+        Lerp(progress, this.pitchMinStart, this.pitchMinEnd),
+        Lerp(progress, this.pitchMaxStart, this.pitchMaxEnd)
+    );
 }
-LerpRotateAction.prototype.update = function ()
-{
-	var now = Date.now();
-	if (now >= this.endTimestamp)
-		return false;
 
-	var ratio = (now - this.startTimestamp) / (this.endTimestamp - this.startTimestamp);
-	this.panel.SetRotateParams(
-        Lerp(ratio, this.yawMinStart, this.yawMinEnd),
-        Lerp(ratio, this.yawMaxStart, this.yawMaxEnd),
-        Lerp(ratio, this.pitchMinStart, this.pitchMinEnd),
-        Lerp(ratio, this.pitchMaxStart, this.pitchMaxEnd)
-    );
-	return true;
-}
-LerpRotateAction.prototype.finish = function ()
+
+// ----------------------------------------------------------------------------
+//  LerpDepthOfFieldAction
+// 
+//  Action to lerp the Depth of Field parameters of a Scene Panel
+// ----------------------------------------------------------------------------
+function LerpDepthOfFieldAction(panel, cameraName, nearBlurryDistanceStart, nearCrispDistanceStart, farCrispDistanceStart, farBlurryDistanceStart, nearBlurryDistanceEnd, nearCrispDistanceEnd, farCrispDistanceEnd, farBlurryDistanceEnd, seconds)
 {
-	this.panel.SetRotateParams(
-        this.yawMinEnd,
-        this.yawMaxEnd,
-        this.pitchMinEnd,
-        this.pitchMaxEnd
-    );
+	LerpAction.call( this, seconds );
+
+	this.panel = panel;
+	this.cameraName = cameraName;
+
+	this.nearBlurryDistanceStart = nearBlurryDistanceStart;
+	this.nearCrispDistanceStart = nearCrispDistanceStart;
+	this.farCrispDistanceStart = farCrispDistanceStart;
+	this.farBlurryDistanceStart = farBlurryDistanceStart;
+	this.nearBlurryDistanceEnd = nearBlurryDistanceEnd;
+	this.nearCrispDistanceEnd = nearCrispDistanceEnd;
+	this.farCrispDistanceEnd = farCrispDistanceEnd;
+	this.farBlurryDistanceEnd = farBlurryDistanceEnd;
+}
+LerpDepthOfFieldAction.prototype = new LerpAction();
+LerpDepthOfFieldAction.prototype.applyProgress = function ( progress )
+{
+	this.panel.FireEntityInput( this.cameraName, 'SetDOFNearBlurry', Lerp( progress, this.nearBlurryDistanceStart, this.nearBlurryDistanceEnd ) );
+	this.panel.FireEntityInput( this.cameraName, 'SetDOFNearCrisp', Lerp( progress, this.nearCrispDistanceStart, this.nearCrispDistanceEnd ) );
+	this.panel.FireEntityInput( this.cameraName, 'SetDOFFarCrisp', Lerp( progress, this.farCrispDistanceStart, this.farCrispDistanceEnd ) );
+	this.panel.FireEntityInput( this.cameraName, 'SetDOFFarBlurry', Lerp( progress, this.farBlurryDistanceStart, this.farBlurryDistanceEnd ) );
 }

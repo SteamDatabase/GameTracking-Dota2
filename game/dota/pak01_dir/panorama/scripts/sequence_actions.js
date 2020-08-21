@@ -580,6 +580,42 @@ PlaySoundForDurationAction.prototype.finish = function ()
 }
 
 // ----------------------------------------------------------------------------
+//   LerpAction
+//
+//   Base class that you can override an applyProgress for to do a simple Lerp
+//   over X seconds.
+// ----------------------------------------------------------------------------
+
+function LerpAction(seconds)
+{
+	this.seconds = seconds;
+}
+LerpAction.prototype = new BaseAction();
+LerpAction.prototype.start = function ()
+{
+	this.startTimestamp = Date.now();
+	this.endTimestamp = this.startTimestamp + this.seconds * 1000;
+}
+LerpAction.prototype.update = function ()
+{
+	var now = Date.now();
+	if (now >= this.endTimestamp)
+		return false;
+
+	var ratio = (now - this.startTimestamp) / (this.endTimestamp - this.startTimestamp);
+	this.applyProgress( ratio );
+	return true;
+}
+LerpAction.prototype.finish = function ()
+{
+	this.applyProgress( 1.0 );
+}
+LerpAction.prototype.applyProgress = function ( progress )
+{
+	// Override this method to apply your progress
+}
+
+// ----------------------------------------------------------------------------
 
 // Helper function to asynchronously tick a single action until it's finished, then call finish on it.
 function UpdateSingleActionUntilFinished( action )
