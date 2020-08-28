@@ -112,6 +112,9 @@ end
 --------------------------------------------------------------------------------
 
 function modifier_creature_bonus_chicken:TeleportOut()
+	-- make sure we're not leashed by slark
+	self:GetParent():RemoveModifierByName( "modifier_aghsfort_slark_pounce_leash" )
+
 	local tower = Entities:FindByName( nil, "bonus_chicken_tp_target" )
 	if tower == nil then
 		self:GetParent():ForceKill( false )
