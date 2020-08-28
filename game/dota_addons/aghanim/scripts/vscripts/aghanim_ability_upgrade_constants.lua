@@ -18,8 +18,9 @@ _G.MINOR_ABILITY_UPGRADES =
    npc_dota_hero_weaver = require( "minor_ability_upgrades/minor_ability_upgrades_weaver" ),
    npc_dota_hero_omniknight = require( "minor_ability_upgrades/minor_ability_upgrades_omniknight" ),
    npc_dota_hero_witch_doctor = require( "minor_ability_upgrades/minor_ability_upgrades_witch_doctor" ),
-
-
+   npc_dota_hero_templar_assassin = require( "minor_ability_upgrades/minor_ability_upgrades_templar_assassin" ),
+   npc_dota_hero_slark = require( "minor_ability_upgrades/minor_ability_upgrades_slark" ),
+   npc_dota_hero_queenofpain = require( "minor_ability_upgrades/minor_ability_upgrades_queenofpain" ),
    --non hero specific upgrades (bonus HP/mana/damage/etc.)
    base_stats_upgrades = require( "minor_ability_upgrades/base_minor_stats_upgrades" ),
 }
@@ -86,6 +87,18 @@ _G.STAT_UPGRADE_EXCLUDES =
       "aghsfort_minor_stat_upgrade_bonus_attack_damage",
       "aghsfort_minor_stat_upgrade_bonus_evasion",
    },
+
+   npc_dota_hero_queenofpain = 
+   {
+   },
+
+   npc_dota_hero_templar_assassin = 
+   {
+   },
+
+   npc_dota_hero_slark = 
+   {
+   },
 }
 
 -- NOTE: These are substrings to search for in SPECIAL_ABILITY_UPGRADES
@@ -104,6 +117,9 @@ _G.ULTIMATE_ABILITY_NAMES =
    npc_dota_hero_viper = "_strike", -- Not "viper_viper_strike" because the viper strike names in SPECIAL_ABILITY_UPGRADES are wierd
    npc_dota_hero_weaver = "weaver_time_lapse",
    npc_dota_hero_witch_doctor = "witch_doctor_death_ward",
+   npc_dota_hero_queenofpain = "queenofpain_sonic_wave",
+   npc_dota_hero_templar_assassin = "templar_assassin_psionic_trap",
+   npc_dota_hero_slark = "slark_shadow_dance",
 }
 
 -- Lists for ability upgrades go here
@@ -402,4 +418,404 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_witch_doctor"] =
    "aghsfort_special_witch_doctor_death_ward_splitshot",
    "aghsfort_special_witch_doctor_death_ward_damage_resist",
    --"aghsfort_special_witch_doctor_death_ward_bounce",
+}
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_queenofpain"] =
+{
+   "aghsfort_special_queenofpain_shadow_strike_on_attack",
+   "aghsfort_special_queenofpain_shadow_strike_chain",
+   "aghsfort_special_queenofpain_shadow_strike_scream",
+
+   "aghsfort_special_queenofpain_blink_generates_scream",
+   "aghsfort_special_queenofpain_blink_attack_speed",
+   "aghsfort_special_queenofpain_blink_shadow_strike",
+
+   "aghsfort_special_queenofpain_scream_of_pain_resets_blink",
+   "aghsfort_special_queenofpain_scream_of_pain_restores_caster",
+   "aghsfort_special_queenofpain_scream_of_pain_knockback",
+
+   "aghsfort_special_queenofpain_sonic_wave_trail",
+   "aghsfort_special_queenofpain_sonic_wave_circle",
+   "aghsfort_special_queenofpain_sonic_wave_attack_buff",
+}
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_templar_assassin"] = 
+{
+
+   "aghsfort_special_templar_assassin_refraction_allies",
+   "aghsfort_special_templar_assassin_refraction_kill_refresh",
+  -- "aghsfort_special_templar_assassin_refraction_counter_attack",
+   "aghsfort_special_templar_assassin_refraction_detonate_trap",
+
+
+   "aghsfort_special_templar_assassin_meld_attack_on_activation",
+   "aghsfort_special_templar_assassin_meld_teleport",
+   "aghsfort_special_templar_assassin_meld_refraction_on_kill", 
+   
+
+   --"aghsfort_special_templar_assassin_psi_blades_autoattack",
+   "aghsfort_special_templar_assassin_psi_blades_trap",
+   "aghsfort_special_templar_assassin_psi_blades_splash", 
+
+   "aghsfort_special_templar_assassin_psionic_trap_area_attack",
+   "aghsfort_special_templar_assassin_psionic_trap_damage_heals",
+   "aghsfort_special_templar_assassin_psionic_trap_multipulse",
+   
+}
+
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_slark"] =
+{
+   "aghsfort_special_slark_dark_pact_essence_shift",
+   "aghsfort_special_slark_dark_pact_push_stun",
+   --"aghsfort_special_slark_dark_pact_dispells_allies",
+   "aghsfort_special_slark_dark_pact_unit_target",
+
+   "aghsfort_special_slark_pounce_attack_all",
+   "aghsfort_special_slark_pounce_projectiles",
+   "aghsfort_special_slark_pounce_leashed_bonus",
+
+   "aghsfort_special_slark_essence_shift_aoe_attack",
+   "aghsfort_special_slark_essence_shift_leash_chance",
+   "aghsfort_special_slark_essence_shift_allied_buff",
+
+   "aghsfort_special_slark_shadow_dance_essence_shift_bonus",
+   "aghsfort_special_slark_shadow_dance_dark_pact_pulses",
+   "aghsfort_special_slark_shadow_dance_leash",
+
+}
+
+require( "items/item_small_scepter_fragment" )
+
+_G.PURCHASABLE_SHARDS = {}
+
+--Disruptor
+item_aghsfort_disruptor_thunder_strike_flat_strikes = item_small_scepter_fragment
+item_aghsfort_disruptor_thunder_strike_flat_strike_damage = item_small_scepter_fragment
+item_aghsfort_disruptor_glimpse_flat_bonus_damage = item_small_scepter_fragment
+item_aghsfort_disruptor_glimpse_flat_cast_radius = item_small_scepter_fragment
+item_aghsfort_disruptor_kinetic_field_flat_duration = item_small_scepter_fragment
+item_aghsfort_disruptor_kinetic_field_formation_time = item_small_scepter_fragment
+item_aghsfort_disruptor_static_storm_flat_duration = item_small_scepter_fragment
+item_aghsfort_disruptor_static_storm_flat_damage_max = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_disruptor" ] =
+{
+   "item_aghsfort_disruptor_thunder_strike_flat_strikes",
+   "item_aghsfort_disruptor_thunder_strike_flat_strike_damage",
+   "item_aghsfort_disruptor_glimpse_flat_bonus_damage",
+   "item_aghsfort_disruptor_glimpse_flat_cast_radius",
+   "item_aghsfort_disruptor_kinetic_field_flat_duration",
+   "item_aghsfort_disruptor_kinetic_field_formation_time",
+   "item_aghsfort_disruptor_static_storm_flat_duration",
+   "item_aghsfort_disruptor_static_storm_flat_damage_max",
+}
+
+--Magnus
+item_aghsfort_magnataur_shockwave_flat_damage = item_small_scepter_fragment
+item_aghsfort_magnataur_shockwave_pct_mana_cost = item_small_scepter_fragment
+item_aghsfort_magnataur_empower_flat_damage = item_small_scepter_fragment
+item_aghsfort_magnataur_empower_flat_cleave = item_small_scepter_fragment
+item_aghsfort_magnataur_skewer_flat_damage = item_small_scepter_fragment
+item_aghsfort_magnataur_skewer_pct_cooldown = item_small_scepter_fragment
+item_aghsfort_magnataur_reverse_polarity_flat_damage = item_small_scepter_fragment
+item_aghsfort_magnataur_reverse_polarity_flat_radius = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_magnataur" ] =
+{
+   "item_aghsfort_magnataur_shockwave_flat_damage",
+   "item_aghsfort_magnataur_shockwave_pct_mana_cost",
+   "item_aghsfort_magnataur_empower_flat_damage",
+   "item_aghsfort_magnataur_empower_flat_cleave",
+   "item_aghsfort_magnataur_skewer_flat_damage",
+   "item_aghsfort_magnataur_skewer_pct_cooldown",
+   "item_aghsfort_magnataur_reverse_polarity_flat_damage",
+   "item_aghsfort_magnataur_reverse_polarity_flat_radius",
+}
+
+--Mars
+item_aghsfort_mars_spear_flat_damage = item_small_scepter_fragment
+item_aghsfort_mars_spear_flat_stun_duration = item_small_scepter_fragment
+item_aghsfort_mars_gods_rebuke_percent_cooldown = item_small_scepter_fragment
+item_aghsfort_mars_gods_rebuke_flat_crit_mult = item_small_scepter_fragment
+item_aghsfort_mars_bulwark_damage_reduction_front = item_small_scepter_fragment
+item_aghsfort_mars_bulwark_active_duration = item_small_scepter_fragment
+item_aghsfort_mars_arena_of_blood_duration = item_small_scepter_fragment
+item_aghsfort_mars_arena_of_blood_spear_damage = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_mars" ] =
+{
+   "item_aghsfort_mars_spear_flat_damage",
+   "item_aghsfort_mars_spear_flat_stun_duration",
+   "item_aghsfort_mars_gods_rebuke_percent_cooldown",
+   "item_aghsfort_mars_gods_rebuke_flat_crit_mult",
+   "item_aghsfort_mars_bulwark_damage_reduction_front",
+   "item_aghsfort_mars_bulwark_active_duration",
+   "item_aghsfort_mars_arena_of_blood_duration",
+   "item_aghsfort_mars_arena_of_blood_spear_damage",
+}
+
+--Omni
+item_aghsfort_omniknight_purification_manacost = item_small_scepter_fragment
+item_aghsfort_omniknight_purification_flat_heal = item_small_scepter_fragment
+item_aghsfort_omniknight_repel_flat_duration = item_small_scepter_fragment
+item_aghsfort_omniknight_repel_flat_damage_reduction = item_small_scepter_fragment
+item_aghsfort_omniknight_degen_aura_flat_radius = item_small_scepter_fragment
+item_aghsfort_omniknight_degen_aura_flat_move_speed_bonus = item_small_scepter_fragment
+item_aghsfort_omniknight_guardian_angel_flat_duration = item_small_scepter_fragment
+item_aghsfort_omniknight_guardian_angel_cooldown = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_omniknight" ] =
+{
+   "item_aghsfort_omniknight_purification_manacost",
+   "item_aghsfort_omniknight_purification_flat_heal",
+   "item_aghsfort_omniknight_repel_flat_duration",
+   "item_aghsfort_omniknight_repel_flat_damage_reduction",
+   "item_aghsfort_omniknight_degen_aura_flat_radius",
+   "item_aghsfort_omniknight_degen_aura_flat_move_speed_bonus",
+   "item_aghsfort_omniknight_guardian_angel_flat_duration",
+   "item_aghsfort_omniknight_guardian_angel_cooldown",
+}
+
+-- Queen Of Pain
+item_aghsfort_queenofpain_shadow_strike_strike_damage = item_small_scepter_fragment
+item_aghsfort_queenofpain_shadow_strike_dot_damage = item_small_scepter_fragment
+item_aghsfort_queenofpain_blink_percent_cooldown = item_small_scepter_fragment
+item_aghsfort_queenofpain_blink_range = item_small_scepter_fragment
+item_aghsfort_queenofpain_scream_of_pain_damage = item_small_scepter_fragment
+item_aghsfort_queenofpain_scream_of_pain_radius = item_small_scepter_fragment
+item_aghsfort_queenofpain_sonic_wave_percent_cooldown = item_small_scepter_fragment
+item_aghsfort_queenofpain_sonic_wave_damage = item_small_scepter_fragment
+
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_queenofpain" ] =
+{
+   "item_aghsfort_queenofpain_shadow_strike_strike_damage",
+   "item_aghsfort_queenofpain_shadow_strike_dot_damage",
+   "item_aghsfort_queenofpain_blink_percent_cooldown",
+   "item_aghsfort_queenofpain_blink_range",
+   "item_aghsfort_queenofpain_scream_of_pain_damage",
+   "item_aghsfort_queenofpain_scream_of_pain_radius",
+   "item_aghsfort_queenofpain_sonic_wave_percent_cooldown",
+   "item_aghsfort_queenofpain_sonic_wave_damage",
+}
+
+--Slark
+item_aghsfort_slark_dark_pact_cooldown = item_small_scepter_fragment
+item_aghsfort_slark_dark_pact_total_damage = item_small_scepter_fragment
+item_aghsfort_slark_pounce_distance = item_small_scepter_fragment
+item_aghsfort_slark_pounce_damage = item_small_scepter_fragment
+item_aghsfort_slark_essence_shift_agi_gain = item_small_scepter_fragment
+item_aghsfort_slark_essence_shift_max_stacks = item_small_scepter_fragment
+item_aghsfort_slark_shadow_dance_duration = item_small_scepter_fragment
+item_aghsfort_slark_shadow_dance_bonus_bonus_regen_pct = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_slark" ] =
+{
+   "item_aghsfort_slark_dark_pact_cooldown",
+   "item_aghsfort_slark_dark_pact_total_damage",
+   "item_aghsfort_slark_pounce_distance",
+   "item_aghsfort_slark_pounce_damage",
+   "item_aghsfort_slark_essence_shift_agi_gain",
+   "item_aghsfort_slark_essence_shift_max_stacks",
+   "item_aghsfort_slark_shadow_dance_duration",
+   "item_aghsfort_slark_shadow_dance_bonus_bonus_regen_pct",
+}
+
+--Snapfire
+item_aghsfort_snapfire_scatterblast_flat_damage = item_small_scepter_fragment
+item_aghsfort_snapfire_scatterblast_pct_cooldown = item_small_scepter_fragment
+item_aghsfort_snapfire_firesnap_cookie_flat_impact_damage = item_small_scepter_fragment
+item_aghsfort_snapfire_firesnap_cookie_flat_stun_duration = item_small_scepter_fragment
+item_aghsfort_snapfire_lil_shredder_flat_damage = item_small_scepter_fragment
+item_aghsfort_snapfire_lil_shredder_flat_attacks = item_small_scepter_fragment
+item_aghsfort_snapfire_mortimer_kisses_flat_projectile_count = item_small_scepter_fragment
+item_aghsfort_snapfire_mortimer_kisses_flat_burn_damage = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_snapfire" ] =
+{
+   "item_aghsfort_snapfire_scatterblast_flat_damage",
+   "item_aghsfort_snapfire_scatterblast_pct_cooldown",
+   "item_aghsfort_snapfire_firesnap_cookie_flat_impact_damage",
+   "item_aghsfort_snapfire_firesnap_cookie_flat_stun_duration",
+   "item_aghsfort_snapfire_lil_shredder_flat_damage",
+   "item_aghsfort_snapfire_lil_shredder_flat_attacks",
+   "item_aghsfort_snapfire_mortimer_kisses_flat_projectile_count",
+   "item_aghsfort_snapfire_mortimer_kisses_flat_burn_damage",
+}
+
+--Sniper
+item_aghsfort_sniper_shrapnel_flat_damage = item_small_scepter_fragment
+item_aghsfort_sniper_shrapnel_flat_radius = item_small_scepter_fragment
+item_aghsfort_sniper_shrapnel_duration = item_small_scepter_fragment
+item_aghsfort_sniper_headshot_flat_damage = item_small_scepter_fragment
+item_aghsfort_sniper_headshot_proc_chance = item_small_scepter_fragment
+item_aghsfort_sniper_take_aim_flat_bonus_attack_range = item_small_scepter_fragment
+item_aghsfort_sniper_assassinate_flat_damage = item_small_scepter_fragment
+item_aghsfort_sniper_assassinate_percent_cast_point = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_sniper" ] =
+{
+   "item_aghsfort_sniper_shrapnel_flat_damage",
+   "item_aghsfort_sniper_shrapnel_flat_radius",
+   "item_aghsfort_sniper_shrapnel_duration",
+   "item_aghsfort_sniper_headshot_flat_damage",
+   "item_aghsfort_sniper_headshot_proc_chance",
+   "item_aghsfort_sniper_take_aim_flat_bonus_attack_range",
+   "item_aghsfort_sniper_assassinate_flat_damage",
+   "item_aghsfort_sniper_assassinate_percent_cast_point",
+}
+
+--Templar Assassin
+item_aghsfort_templar_assassin_refraction_instances = item_small_scepter_fragment
+item_aghsfort_templar_assassin_refraction_bonus_damage = item_small_scepter_fragment
+item_aghsfort_templar_assassin_meld_bonus_damage = item_small_scepter_fragment
+item_aghsfort_templar_assassin_meld_bonus_armor = item_small_scepter_fragment
+item_aghsfort_templar_assassin_psi_blades_bonus_attack_range = item_small_scepter_fragment
+item_aghsfort_templar_assassin_psi_blades_attack_spill_width = item_small_scepter_fragment
+item_aghsfort_templar_assassin_psionic_trap_max_traps = item_small_scepter_fragment
+item_aghsfort_templar_assassin_psionic_trap_trap_damage = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_templar_assassin" ] =
+{
+   "item_aghsfort_templar_assassin_refraction_instances",
+   "item_aghsfort_templar_assassin_refraction_bonus_damage",
+   "item_aghsfort_templar_assassin_meld_bonus_damage",
+   "item_aghsfort_templar_assassin_meld_bonus_armor",
+   "item_aghsfort_templar_assassin_psi_blades_bonus_attack_range",
+   "item_aghsfort_templar_assassin_psi_blades_attack_spill_width",
+   "item_aghsfort_templar_assassin_psionic_trap_max_traps",
+   "item_aghsfort_templar_assassin_psionic_trap_trap_damage",
+}
+
+--Tusk
+item_aghsfort_tusk_ice_shards_flat_damage = item_small_scepter_fragment
+item_aghsfort_tusk_ice_shards_flat_shard_duration = item_small_scepter_fragment
+item_aghsfort_tusk_snowball_flat_snowball_damage = item_small_scepter_fragment
+item_aghsfort_tusk_snowball_flat_stun_duration = item_small_scepter_fragment
+item_aghsfort_tusk_tag_team_flat_damage = item_small_scepter_fragment
+item_aghsfort_tusk_tag_team_pct_cooldown = item_small_scepter_fragment
+item_aghsfort_tusk_walrus_punch_pct_cooldown = item_small_scepter_fragment
+item_aghsfort_tusk_walrus_punch_flat_crit_multiplier = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_tusk" ] =
+{
+   "item_aghsfort_tusk_ice_shards_flat_damage",
+   "item_aghsfort_tusk_ice_shards_flat_shard_duration",
+   "item_aghsfort_tusk_snowball_flat_snowball_damage",
+   "item_aghsfort_tusk_snowball_flat_stun_duration",
+   "item_aghsfort_tusk_tag_team_flat_damage",
+   "item_aghsfort_tusk_tag_team_pct_cooldown",
+   "item_aghsfort_tusk_walrus_punch_pct_cooldown",
+   "item_aghsfort_tusk_walrus_punch_flat_crit_multiplier",
+}
+
+--Ursa
+item_aghsfort_ursa_earthshock_flat_damage = item_small_scepter_fragment
+item_aghsfort_ursa_earthshock_flat_radius = item_small_scepter_fragment
+item_aghsfort_ursa_overpower_flat_max_attacks = item_small_scepter_fragment
+item_aghsfort_ursa_overpower_percent_cooldown = item_small_scepter_fragment
+item_aghsfort_ursa_fury_swipes_flat_damage_per_stack = item_small_scepter_fragment
+item_aghsfort_ursa_fury_swipes_flat_max_swipe_stack = item_small_scepter_fragment
+item_aghsfort_ursa_enrage_flat_duration = item_small_scepter_fragment
+item_aghsfort_ursa_enrage_percent_cooldown = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_ursa" ] =
+{
+   "item_aghsfort_ursa_earthshock_flat_damage",
+   "item_aghsfort_ursa_earthshock_flat_radius",
+   "item_aghsfort_ursa_overpower_flat_max_attacks",
+   "item_aghsfort_ursa_overpower_percent_cooldown",
+   "item_aghsfort_ursa_fury_swipes_flat_damage_per_stack",
+   "item_aghsfort_ursa_fury_swipes_flat_max_swipe_stack",
+   "item_aghsfort_ursa_enrage_flat_duration",
+   "item_aghsfort_ursa_enrage_percent_cooldown",
+}
+
+--Viper
+item_aghsfort_viper_poison_attack_damage = item_small_scepter_fragment
+item_aghsfort_viper_poison_attack_magic_resistance = item_small_scepter_fragment
+item_aghsfort_viper_nethertoxin_max_damage = item_small_scepter_fragment
+item_aghsfort_viper_nethertoxin_radius = item_small_scepter_fragment
+item_aghsfort_viper_corrosive_skin_bonus_magic_resistance = item_small_scepter_fragment
+item_aghsfort_viper_corrosive_skin_damage = item_small_scepter_fragment
+item_aghsfort_viper_viper_strike_duration = item_small_scepter_fragment
+item_aghsfort_viper_viper_strike_damage = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_viper" ] =
+{
+   "item_aghsfort_viper_poison_attack_damage",
+   "item_aghsfort_viper_poison_attack_magic_resistance",
+   "item_aghsfort_viper_nethertoxin_max_damage",
+   "item_aghsfort_viper_nethertoxin_radius",
+   "item_aghsfort_viper_corrosive_skin_bonus_magic_resistance",
+   "item_aghsfort_viper_corrosive_skin_damage",
+   "item_aghsfort_viper_viper_strike_duration",
+   "item_aghsfort_viper_viper_strike_damage",
+}
+
+--Weaver
+item_aghsfort_weaver_the_swarm_flat_armor_reduction = item_small_scepter_fragment
+item_aghsfort_weaver_the_swarm_flat_damage = item_small_scepter_fragment
+item_aghsfort_weaver_the_swarm_percent_cooldown = item_small_scepter_fragment
+item_aghsfort_weaver_shukuchi_flat_damage = item_small_scepter_fragment
+item_aghsfort_weaver_shukuchi_duration = item_small_scepter_fragment
+item_aghsfort_weaver_geminate_attack_cooldown = item_small_scepter_fragment
+item_aghsfort_weaver_geminate_attack_flat_bonus_damage = item_small_scepter_fragment
+item_aghsfort_weaver_time_lapse_cooldown = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_weaver" ] =
+{
+   "item_aghsfort_weaver_the_swarm_flat_armor_reduction",
+   "item_aghsfort_weaver_the_swarm_flat_damage",
+   "item_aghsfort_weaver_the_swarm_percent_cooldown",
+   "item_aghsfort_weaver_shukuchi_flat_damage",
+   "item_aghsfort_weaver_shukuchi_duration",
+   "item_aghsfort_weaver_geminate_attack_cooldown",
+   "item_aghsfort_weaver_geminate_attack_flat_bonus_damage",
+   "item_aghsfort_weaver_time_lapse_cooldown",
+}
+
+--Winter Wyvern
+item_aghsfort_winter_wyvern_arctic_burn_flat_damage = item_small_scepter_fragment
+item_aghsfort_winter_wyvern_arctic_burn_flat_duration = item_small_scepter_fragment
+item_aghsfort_winter_wyvern_splinter_blast_flat_radius = item_small_scepter_fragment
+item_aghsfort_winter_wyvern_splinter_blast_flat_damage = item_small_scepter_fragment
+item_aghsfort_winter_wyvern_cold_embrace_flat_heal_percentage = item_small_scepter_fragment
+item_aghsfort_winter_wyvern_cold_embrace_pct_cooldown = item_small_scepter_fragment
+item_aghsfort_winter_wyvern_winters_curse_flat_duration = item_small_scepter_fragment
+item_aghsfort_winter_wyvern_winters_curse_pct_cooldown = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_winter_wyvern" ] =
+{
+   "item_aghsfort_winter_wyvern_arctic_burn_flat_damage",
+   "item_aghsfort_winter_wyvern_arctic_burn_flat_duration",
+   "item_aghsfort_winter_wyvern_splinter_blast_flat_radius",
+   "item_aghsfort_winter_wyvern_splinter_blast_flat_damage",
+   "item_aghsfort_winter_wyvern_cold_embrace_flat_heal_percentage",
+   "item_aghsfort_winter_wyvern_cold_embrace_pct_cooldown",
+   "item_aghsfort_winter_wyvern_winters_curse_flat_duration",
+   "item_aghsfort_winter_wyvern_winters_curse_pct_cooldown",
+}
+
+--WD
+item_aghsfort_witch_doctor_voodoo_restoration_manacost = item_small_scepter_fragment
+item_aghsfort_witch_doctor_voodoo_restoration_flat_heal = item_small_scepter_fragment
+item_aghsfort_witch_doctor_paralyzing_cask_flat_damage = item_small_scepter_fragment
+item_aghsfort_witch_doctor_paralyzing_cask_flat_bounces = item_small_scepter_fragment
+item_aghsfort_witch_doctor_maledict_flat_ticks = item_small_scepter_fragment
+item_aghsfort_witch_doctor_maledict_flat_max_bonus_damage = item_small_scepter_fragment
+item_aghsfort_witch_doctor_death_ward_flat_damage = item_small_scepter_fragment
+item_aghsfort_witch_doctor_death_ward_flat_channel_duration = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_witch_doctor" ] =
+{
+   "item_aghsfort_witch_doctor_voodoo_restoration_manacost",
+   "item_aghsfort_witch_doctor_voodoo_restoration_flat_heal",
+   "item_aghsfort_witch_doctor_paralyzing_cask_flat_damage",
+   "item_aghsfort_witch_doctor_paralyzing_cask_flat_bounces",
+   "item_aghsfort_witch_doctor_maledict_flat_ticks",
+   "item_aghsfort_witch_doctor_maledict_flat_max_bonus_damage",
+   "item_aghsfort_witch_doctor_death_ward_flat_damage",
+   "item_aghsfort_witch_doctor_death_ward_flat_channel_duration",
 }

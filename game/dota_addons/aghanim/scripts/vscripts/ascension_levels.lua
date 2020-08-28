@@ -1,12 +1,12 @@
 
 _G.EXTRA_ABILITIES_PER_ASCENSION_LEVEL =
 {
-	0, 1, 2, 3, 4
+	0, 1, 2, 3, 4, 5,
 }
 
 _G.ELITE_ABILITIES_PER_ASCENSION_LEVEL =
 {
-	1, 1, 1, 1, 2
+	1, 1, 1, 1, 1, 1,
 }
 
 -- Ascension ability type
@@ -36,15 +36,21 @@ _G.ASCENSION_TARGET_CLUMPED_PLAYER = 3
 
 _G.TRIALS_ASCENSION_ABILITIES =
 {
-	"ascension_bulwark",
-	"ascension_armor",
-	"ascension_plasma_field",
 }
 
 _G.TRIALS_BOSS_ASCENSION_ABILITIES = 
 {
+}
+
+_G.APEX_BOSS_ASCENSION_ABILITIES =
+{
 	"ascension_armor",
 	"ascension_bulwark",
+	"ascension_magic_resist",
+	"ascension_heal_suppression",
+	"ascension_chilling_touch",
+	"aghsfort_ascension_magnetic_field",
+	"ascension_damage",
 }
 
 _G.ASCENSION_ABILITIES =
@@ -73,23 +79,7 @@ _G.ASCENSION_ABILITIES =
 		}
 	},
 
---[[
-	ascension_temple_guardian_wrath =
-	{
-		nType = ASCENSION_ABILITY_GLOBAL,
-		nRestrictToAct = 1,
-		szRequiredBoss = "npc_dota_creature_temple_guardian",
-		bEliteOnly = true,
-	},
-
-	ascension_timbersaw_chakram_dance =
-	{
-		nType = ASCENSION_ABILITY_GLOBAL,
-		nRestrictToAct = 1,
-		szRequiredBoss = "npc_dota_boss_timbersaw",
-		bEliteOnly = true,
-	},	
-]]--
+	
 	ascension_plasma_field =
 	{
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
@@ -125,7 +115,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_dire_siege",
-		},	
+		},
 	},
 
 
@@ -145,17 +135,6 @@ _G.ASCENSION_ABILITIES =
 	{
 		nType = ASCENSION_ABILITY_ALL_UNITS,
 	},
-
-	--[[
-	ascension_crit =
-	{
-		nType = ASCENSION_ABILITY_ALL_UNITS,
-		vecBlacklistedEncounters = 
-		{
-			"encounter_zealot_scarabs",
-		}
-	},
-	]]
 
 	ascension_extra_fast =
 	{
@@ -182,7 +161,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_brewmaster",
-		}			
+		}
 	},
 
 	ascension_armor =
@@ -196,7 +175,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_mushroom_mines",
-		}		
+		}
 	},
 
 	ascension_attack_speed =
@@ -215,6 +194,7 @@ _G.ASCENSION_ABILITIES =
 	{
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
 		nCastBehavior = ASCENSION_CAST_ON_TAKE_MAGIC_DAMAGE,
+		bEliteOnly = true,
 	},
 
 	ascension_armor_sapping =
@@ -233,18 +213,74 @@ _G.ASCENSION_ABILITIES =
 	{
 		bEliteOnly = true,
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
-	},	
+	},
 
 	aghsfort_ascension_silence =
 	{
-		bEliteOnly = true,
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
 		nCastBehavior = ASCENSION_CAST_ON_NEARBY_ENEMY,
 		nRange = 400,
-	},		
+	},
 
 	aghsfort_ascension_magnetic_field =
 	{
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
-	},		
+	},
+
+	ascension_embiggen =
+	{
+		nType = ASCENSION_ABILITY_ALL_UNITS,
+		nCastBehavior = ASCENSION_CAST_ON_DEATH,
+		nTargetType = ASCENSION_TARGET_ATTACKER,
+		vecBlacklistedEncounters =
+		{
+			"encounter_bombers",
+			"encounter_alchemist",
+			"encounter_fire_roshan",
+		}
+	},
+
+	ascension_vengeance =
+	{
+		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
+		nCastBehavior = ASCENSION_CAST_ON_DEATH,
+		nTargetType = ASCENSION_TARGET_ATTACKER,
+		vecBlacklistedEncounters =
+		{
+			"encounter_alchemist",
+			"encounter_fire_roshan",
+		}
+	},
+
+	aghsfort_ascension_invis =
+	{
+		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
+		nCastBehavior = ASCENSION_CAST_ON_NEARBY_ENEMY,
+		nRange = 800,
+	},
+
+	--[[
+	ascension_impatient =
+	{
+		nType = ASCENSION_ABILITY_ALL_UNITS,
+		vecBlacklistedEncounters =
+		{
+			"encounter_hellbears_portal_v3",
+			"encounter_morphlings_b",
+			"encounter_warlocks",
+			"encounter_mirana",
+			"encounter_legion_commander",
+			"encounter_bandits",
+		}
+	},
+	]]
+
+	ascension_meteoric =
+	{
+		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
+		nCastBehavior = ASCENSION_CAST_WHEN_COOLDOWN_READY,
+		nTargetType = ASCENSION_TARGET_CLUMPED_PLAYER,
+		bEliteOnly = true,
+	},
+
 }

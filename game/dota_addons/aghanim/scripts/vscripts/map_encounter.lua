@@ -161,11 +161,21 @@ function CMapEncounter:SelectAscensionAbilities( )
 	self.ClientData[ "total_difficulty" ] = 0
 
 	if self:GetRoom():GetType() ~= ROOM_TYPE_ENEMY then
-		if self:GetRoom():GetType() == ROOM_TYPE_BOSS and GameRules.Aghanim.bIsInTournamentMode and #TRIALS_BOSS_ASCENSION_ABILITIES > 0 then
-			for i=1,#TRIALS_BOSS_ASCENSION_ABILITIES do
-				print( "Encounter " .. self.szEncounterName .. " added trial ascension ability " .. TRIALS_BOSS_ASCENSION_ABILITIES[i] )
-				table.insert( self.AscensionAbilities, TRIALS_BOSS_ASCENSION_ABILITIES[i] )
-				self.ClientData[ "ascension_abilities" ][ tostring(i) ] = TRIALS_BOSS_ASCENSION_ABILITIES[i]
+		if self:GetRoom():GetType() == ROOM_TYPE_BOSS then
+			if GameRules.Aghanim.bIsInTournamentMode and #TRIALS_BOSS_ASCENSION_ABILITIES > 0 then
+				for i=1,#TRIALS_BOSS_ASCENSION_ABILITIES do
+					print( "Encounter " .. self.szEncounterName .. " added trial ascension ability " .. TRIALS_BOSS_ASCENSION_ABILITIES[i] )
+					table.insert( self.AscensionAbilities, TRIALS_BOSS_ASCENSION_ABILITIES[i] )
+					self.ClientData[ "ascension_abilities" ][ tostring(i) ] = TRIALS_BOSS_ASCENSION_ABILITIES[i]
+				end
+			else
+
+				if GameRules.Aghanim:GetAscensionLevel() == AGHANIM_ASCENSION_APEX_MAGE then
+					local nIndex = self:RoomRandomInt( 1, #APEX_BOSS_ASCENSION_ABILITIES )
+					print( "Encounter " .. self.szEncounterName .. " added boss ascension ability " .. APEX_BOSS_ASCENSION_ABILITIES[ nIndex ] )
+					table.insert( self.AscensionAbilities, APEX_BOSS_ASCENSION_ABILITIES[ nIndex ] )
+					self.ClientData[ "ascension_abilities" ][ 1 ] = APEX_BOSS_ASCENSION_ABILITIES[ nIndex ]
+				end
 			end
 		end
 		return
@@ -1452,13 +1462,16 @@ function CMapEncounter:AddAscensionAbilities( hEnemyCreature )
 		hAbility:UpgradeAbility( true )
 
 		-- Bosses do not use ascension modifiers, but do want general ascension scaling for their minions.
-		if self.hRoom:GetType() == ROOM_TYPE_BOSS and ( GameRules.Aghanim.bIsInTournamentMode == false or #TRIALS_BOSS_ASCENSION_ABILITIES == 0 ) then
-			if nAbilityLevel > 0 then
-				hEnemyCreature:CreatureLevelUp( nAbilityLevel )
+		if self.hRoom:GetType() == ROOM_TYPE_BOSS then
+			if ( GameRules.Aghanim.bIsInTournamentMode == false or #TRIALS_BOSS_ASCENSION_ABILITIES == 0 ) and GameRules.Aghanim:GetAscensionLevel() < AGHANIM_ASCENSION_APEX_MAGE then
+				if nAbilityLevel > 0 then
+					hEnemyCreature:CreatureLevelUp( nAbilityLevel )
+				end
+				return
 			end
-			return
 		end
 	end
+	
 
 	for i=1,#self.AscensionAbilities do
 
@@ -1481,7 +1494,7 @@ function CMapEncounter:AddAscensionAbilities( hEnemyCreature )
 			goto continue
 		end
 
-		--print( "Ascension adding ability " .. self.AscensionAbilities[i] .. " to unit " .. hEnemyCreature:GetUnitName() )
+		print( "Ascension adding ability " .. self.AscensionAbilities[i] .. " to unit " .. hEnemyCreature:GetUnitName() )
 		hAbility = hEnemyCreature:AddAbility( self.AscensionAbilities[i] )
 		hAbility:UpgradeAbility( true )
 
@@ -2729,6 +2742,29 @@ function CMapEncounter:SetupBristlebackShop( bRepopulateNeutralItems )
 
 			table.insert( GameRules.Aghanim.BristlebackItems, szItemName )
 			GameRules.Aghanim:MarkNeutralItemAsDropped( szItemName )
+		end
+
+		for nPlayerID = 0, AGHANIM_PLAYERS - 1 do 
+			local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
+			if hPlayerHero then
+				local PurchasableShards = PURCHASABLE_SHARDS[ hPlayerHero:GetUnitName() ]
+				if PurchasableShards then
+					local PossibleShards = shallowcopy( PurchasableShards )
+					local nRemainingShards = 3
+					while nRemainingShards > 0 do
+						local nShardIndex = self:RoomRandomInt( 1, #PossibleShards )
+						local szShardName = PossibleShards[ nShardIndex ]
+						if szShardName then
+							GameRules:GetGameModeEntity():AddItemToCustomShop( szShardName, "boss_shop", hPlayerHero:GetUnitName() )
+							GameRules:IncreaseItemStock( DOTA_TEAM_GOODGUYS, szShardName, 1, -1 )
+							table.remove( PossibleShards, nShardIndex )
+							table.insert( GameRules.Aghanim.BristlebackItems, szShardName )
+						end
+
+						nRemainingShards = nRemainingShards - 1
+					end
+				end 
+			end
 		end
 	end
 

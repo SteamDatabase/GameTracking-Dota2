@@ -137,6 +137,7 @@ function CAghanim:InitGameMode()
 	self.nSeed = 0
 	self.bFastTestEncounter = false
 	self.flExpeditionStartTime = 0
+	self.bInVictorySequence = false
 
 	if GameRules:GetGameModeEntity():GetEventWindowStartTime() > 0 then
 		self.nSeed = GameRules:GetGameModeEntity():GetEventGameSeed()
@@ -309,7 +310,7 @@ function CAghanim:InitGameMode()
 	CustomGameEventManager:RegisterListener( "reward_choice", function(...) return OnRewardChoice( ... ) end )
 
 	if self.bIsInTournamentMode == true then
-		self:SetAscensionLevel( 2 )
+		self:SetAscensionLevel( AGHANIM_TRIAL_ASCENSION )
 		print( "Tournament game difficulty is " .. self:GetAscensionLevel() )
 	else		
 		local nCustomGameDifficulty = GameRules:GetCustomGameDifficulty()
@@ -808,7 +809,7 @@ end
 --------------------------------------------------------------------------------
 
 function CAghanim:GetMaxAllowedAscensionLevel( )
-	return 3	
+	return AGHANIM_ASCENSION_APEX_MAGE	
 end 
 
 --------------------------------------------------------------------------------
@@ -1572,6 +1573,10 @@ function CAghanim:RollRandomNeutralItemDrops( hEncounter )
 		return 0
 	end
 
+	if hEncounter == nil then
+		return 0
+	end
+
 	local nPctChance = ( 100 * self.nNumNeutralItems ) / self.nNumViableRoomsForItems
 	local nItemsToDrop = 0
 	while hEncounter:RoomRandomInt( 1, 100 ) < nPctChance do
@@ -1931,7 +1936,7 @@ function CAghanim:_CheckForDefeat()
 		end
 	end
 
-	if bAnyHeroesAlive == false then
+	if bAnyHeroesAlive == false and self.bInVictorySequence == false then
 		printf("======== ENDING GAME ==========\n");
 		self:GetAnnouncer():OnGameLost()
 		GameRules.Aghanim:OnGameFinished()

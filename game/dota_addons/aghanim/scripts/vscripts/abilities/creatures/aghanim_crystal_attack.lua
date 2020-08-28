@@ -46,7 +46,7 @@ function aghanim_crystal_attack:OnSpellStart()
 		self.explosion_radius = self:GetSpecialValueFor( "explosion_radius" ) 
 		self.pulse_radius = self:GetSpecialValueFor( "pulse_radius" ) 
 
-		local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 10000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_FARTHEST, false )
+		local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 10000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS, FIND_FARTHEST, false )
 		
 		local nCrystalsLeft = CRYSTAL_ATTACKS_PHASE[ self.nPhase ] + 1
 		for _,enemy in pairs( enemies ) do

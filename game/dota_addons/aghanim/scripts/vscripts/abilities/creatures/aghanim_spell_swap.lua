@@ -109,7 +109,7 @@ function aghanim_spell_swap:OnSpellStart()
 		EmitSoundOn( "Hero_Pugna.LifeDrain.Cast", self:GetCaster() )
 		EmitSoundOn( "Hero_Pugna.LifeDrain.Loop", self:GetCaster() )
 
-		self.Heroes = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 5000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_CLOSEST, false )
+		self.Heroes = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 5000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE + DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS, FIND_CLOSEST, false )
 		for k,hHero in pairs ( self.Heroes ) do
 			if hHero ~= nil and hHero:IsRealHero() then
 

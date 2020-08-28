@@ -77,7 +77,7 @@ local Tusk =
 		 ability_name = "aghsfort_tusk_tag_team",
 		 special_value_name = "bonus_damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 25,
+		 value = 20,
 	},
 
 	{

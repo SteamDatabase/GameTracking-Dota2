@@ -81,7 +81,7 @@ end
 
 function modifier_aghanim_passive:GetMinHealth( params )
 	if IsServer() then
-		if GameRules.Aghanim:GetAscensionLevel() < 3 then
+		if GameRules.Aghanim:GetAscensionLevel() < 4 then
 			return math.floor( self:GetParent():GetMaxHealth() * 0.1 )
 		end
 	end
@@ -111,9 +111,10 @@ function modifier_aghanim_passive:OnDeathPrevented( params )
 			self:GetParent():Purge( false, true, false, true, true )
 			--self:GetParent():SetAbsAngles( 0, 270, 0 )
 			self:GetParent().AI.Encounter:BeginVictorySequence()
+			GameRules.Aghanim.bInVictorySequence = true
 			
 			EmitSoundOn( "Aghanim.ShardAttack.Channel", self:GetCaster() )
-			if GameRules.Aghanim:GetAscensionLevel() < 3 then 	
+			if GameRules.Aghanim:GetAscensionLevel() < 4 then 	
 				self:GetParent():StartGestureFadeWithSequenceSettings( ACT_DOTA_CAST_ABILITY_3 )
 			else
 				self:GetParent():StartGestureFadeWithSequenceSettings( ACT_DOTA_SPAWN )
@@ -131,7 +132,7 @@ function modifier_aghanim_passive:OnIntervalThink()
 	if IsServer() then
 		 
 		if self.nOutroPhase == 1 then
-			if GameRules.Aghanim:GetAscensionLevel() < 3 then 
+			if GameRules.Aghanim:GetAscensionLevel() < 4 then 
 				EmitSoundOn( "Aghanim.ShardAttack.Wave", self:GetCaster() )
 				local nFXIndex = ParticleManager:CreateParticle( "particles/creatures/aghanim/aghanim_self_dmg.vpcf", PATTACH_CUSTOMORIGIN, self:GetParent() )
 				ParticleManager:SetParticleControlEnt( nFXIndex, 0, self:GetParent(), PATTACH_POINT_FOLLOW, "attach_hitloc", self:GetParent():GetAbsOrigin(), true )

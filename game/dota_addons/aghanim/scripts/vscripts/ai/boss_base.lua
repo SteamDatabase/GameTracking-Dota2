@@ -56,6 +56,10 @@ function CBossBase:OnBaseThink()
 		return 0.01
 	end
 
+	if self.me:IsChanneling() then
+		return 0.1
+	end
+
 	local flRange = self.flInitialAcquireRange
 	if self.bSeenAnyEnemy == true then
 		flRange = self.flAggroAcquireRange

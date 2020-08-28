@@ -17,6 +17,9 @@ _G.MAP_ATLAS_ELITE_ROOMS_PER_ACT =
 	{
 		3, 3, 3
 	},	
+	{
+		3, 4, 4
+	},	
 }
 _G.MAP_TRAP_ROOMS_PER_ACT =
 {

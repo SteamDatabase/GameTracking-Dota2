@@ -81,7 +81,7 @@ function CAnnouncerAghanim:Speak( flDelay, bForce, hCriteriaTable )
 
 	-- Add standard criteria all speech has
 	hCriteriaTable[ "has_new_players" ] = ( GameRules.Aghanim:HasAnyNewPlayers() == true ) and ( GameRules.Aghanim:IsInTournamentMode() == false )
-	hCriteriaTable[ "ascension_level" ] = GameRules.Aghanim:GetAscensionLevel()
+	hCriteriaTable[ "ascension_level" ] = math.min( 3, GameRules.Aghanim:GetAscensionLevel() )
 	hCriteriaTable[ "tournament_mode" ] = GameRules.Aghanim:IsInTournamentMode()
 
 	local hSpeakingUnit = self.me

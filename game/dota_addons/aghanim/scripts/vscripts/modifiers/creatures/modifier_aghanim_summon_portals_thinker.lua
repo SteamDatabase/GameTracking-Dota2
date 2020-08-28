@@ -182,7 +182,7 @@ function modifier_aghanim_summon_portals_thinker:LaunchSpear()
 		end
 
 		local hSpear = self:GetCaster():FindAbilityByName( "aghanim_spear" )
-		if hSpear and self.hTarget then
+		if hSpear and self.hTarget and self.hTarget:IsNull() == false then
 			hSpear:EndCooldown()
 
 			EmitSoundOn(  "SeasonalConsumable.TI10.Portal.Emit", self:GetParent() )
