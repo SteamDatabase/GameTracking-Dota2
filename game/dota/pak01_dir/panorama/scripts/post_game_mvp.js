@@ -7,11 +7,8 @@ function AnimateMVP2TabAction( data )
 
 AnimateMVP2TabAction.prototype = new BaseAction();
 
-AnimateMVP2TabAction.prototype.start = function ()
+AnimateMVP2TabAction.prototype.init = function( mvp2ScreenPanel )
 {
-	// Create the screen and do a bunch of initial setup
-	var mvp2ScreenPanel = $.GetContextPanel().FindPanelInLayoutFile( 'DetailsMVPInner' );
-
 	var mapContainer = mvp2ScreenPanel.FindChildInLayoutFile("MVPMapContainer");
 
 	var mvpDetails = this.data.mvp2.mvps[0];
@@ -37,18 +34,18 @@ AnimateMVP2TabAction.prototype.start = function ()
 	//helper for accolades
 	var addAccolade = function (nAccoladeIndex, accoladeObject, accoladeContainer, wasDire)
 	{
-		var accolade_panel = $.CreatePanel( 'Panel', accoladeContainer, '' );
-		accolade_panel.BLoadLayoutSnippet('MVPAccolade');
-
 		var accolade_id = accoladeObject.type;
-		var accolade_value = accoladeObject.detail_value;
 		var accolade = g_MVP_Accolade_TypeMap[accolade_id];
-
 		if (accolade == undefined)
 		{
 			$.Msg('No accolade of type ' + accolade_id.toString());
 			return null;
 		}
+
+		var accolade_panel = $.CreatePanel( 'Panel', accoladeContainer, '' );
+		accolade_panel.BLoadLayoutSnippet('MVPAccolade');
+
+		var accolade_value = accoladeObject.detail_value;
 
 		var gradient_colour = wasDire ? "red" : "green";
 		accolade_panel.FindChildInLayoutFile('gradient').AddClass('mvp_gradient_' + gradient_colour);
@@ -91,8 +88,11 @@ AnimateMVP2TabAction.prototype.start = function ()
 	// Setup the sequence of actions to animate the screen
 	this.seq = new RunSequentialActions();
 	
-	//this.seq.actions.push( new AddScreenLinkAction( mvp2ScreenPanel, 'MVPProgress', '#DOTAMVP2_TitleLink' ) );
-	//this.seq.actions.push( new AddClassAction( mvp2ScreenPanel, 'ShowScreen' ) );
+	if ( this.data.bProgressVersion )
+	{
+		this.seq.actions.push( new AddScreenLinkAction( mvp2ScreenPanel, 'MVPProgress', '#DOTAMVP2_TitleLink' ) );
+		this.seq.actions.push( new AddClassAction( mvp2ScreenPanel, 'ShowScreen' ) );
+	}
 
 	// Wait for map to load
 	this.seq.actions.push( new WaitForClassAction( map, 'SceneLoaded' ) );
@@ -209,10 +209,16 @@ AnimateMVP2TabAction.prototype.start = function ()
 		} )
 	);
 
-	this.seq.actions.push( new WaitAction(0.5));
+	if ( this.data.bProgressVersion )
+		this.seq.actions.push( new SkippableAction( new WaitAction(0.5)));
+	else
+		this.seq.actions.push( new WaitAction(0.5));
 	var honorableMentionsContainer = mvp2ScreenPanel.FindChildInLayoutFile('HonorableMentionsContainer');
 	this.seq.actions.push( new AddClassAction( honorableMentionsContainer, 'HMAnimateIn') );
-	this.seq.actions.push( new WaitAction(0.5));
+	if ( this.data.bProgressVersion )
+		this.seq.actions.push( new SkippableAction( new WaitAction(0.5)));
+	else
+		this.seq.actions.push( new WaitAction(0.5));
 	this.seq.actions.push( new RunFunctionAction( function () 
 	{
 		mvpPanel.AddClass('MVPDetailsAnimateIn');
@@ -234,18 +240,32 @@ AnimateMVP2TabAction.prototype.start = function ()
 	this.seq.actions.push( new WaitAction(0.5) );
 	this.seq.actions.push( new PlaySoundAction("ui_hero_select_slide_late"));
 
-	//this.seq.actions.push( new WaitAction(0.5));
+	if ( this.data.bProgressVersion )
+	{
+		this.seq.actions.push( new SkippableAction( new WaitAction(0.5)));
 
-	//this.seq.actions.push( new WaitAction( 1.5 ) );
-	//this.seq.actions.push( new SwitchClassAction( mvp2ScreenPanel, 'current_screen', '' ) );
-	//this.seq.actions.push( new WaitAction( 10.0 ) );
+		this.seq.actions.push( new StopSkippingAheadAction() );
+		this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
+		this.seq.actions.push( new SwitchClassAction( mvp2ScreenPanel, 'current_screen', '' ) );
+		this.seq.actions.push( new SkippableAction( new WaitAction( 7.0 ) ) );
+	}
 
 	this.seq.start();
 }
+
+AnimateMVP2TabAction.prototype.start = function ()
+{
+	// Create the screen and do a bunch of initial setup
+	var mvp2ScreenPanel = $.GetContextPanel().FindPanelInLayoutFile( 'DetailsMVPInner' );
+
+	this.init( mvp2ScreenPanel );
+}
+
 AnimateMVP2TabAction.prototype.update = function ()
 {
 	return this.seq.update();
 }
+
 AnimateMVP2TabAction.prototype.finish = function ()
 {
 	this.seq.finish();

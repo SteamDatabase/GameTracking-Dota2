@@ -29,7 +29,7 @@ local Mars =
 		 ability_name = "aghsfort_mars_spear",
 		 special_value_name = "stun_duration",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 0.5,
+		 value = 0.75,
 	},
 
 

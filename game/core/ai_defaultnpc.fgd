@@ -1,0 +1,220 @@
+//===================== Copyright (c) Valve Corporation. All Rights Reserved. ======================
+//
+// Defines AI classes for games that use CAI_DefaultNPC.
+//
+//==================================================================================================
+
+@include "ai_basenpc.fgd"
+
+@BaseClass base(BaseNPC) color(0 200 200) = DefaultNPC
+[
+	spawnasragdoll(choices) [ group="NPC Properties" ] : "Spawn as Temp Ragdoll" : 0 : "Specifies if the NPC will spawn as a temporary ragdoll and the behavior after becoming a ragdoll." =
+	[
+		0 : "Disabled"
+		1 : "Ragdoll and get up when settled"
+		2 : "Ragdoll and remain ragdoll"
+	]
+
+	// Outputs
+	output OnFoundPlayer(string) : "Fired when this NPC establishes line of sight to its enemy, and that enemy is a player (outputs player entity)."
+	output OnHearWorld(void) : "Fired when this NPC hears a sound (other than combat or the player)."
+	output OnHearPlayer(void) : "Fired when this NPC hears the player."
+	output OnHearCombat(void) : "Fired when this NPC hears combat sounds."
+	output OnUnragdollFinished(void) : "This NPC just finished getting up after being a ragdoll."
+
+	// Inputs
+	input IgnoreDangerSounds(float) : "Ignore danger sounds for the specified number of seconds."
+	input BecomeTemporaryRagdoll(float) : "Become a temporary ragdoll that then can be later unrgadolled."
+	input StopTemporaryRagdoll(void) : "Rise from your grave."
+	input StopTemporaryRagdollAndSetEnemy(string) : "Rise from your grave to attack an enemy. Animgraph NPCs will turn to face the enemy during their unragdoll. Parameter is the enemy, usually the !activator on the trigger that's firing this input."
+	input StartResilientPathFollow(string) : "Walks towards the specified path corner. Will resiliently restart the walk if it's interrupted for any reason."
+	input EnableTeleportBuffer(void) : "Enable the teleport buffer around this NPC, if it's been disabled previously."
+	input DisableTeleportBuffer(void) : "Disable the teleport buffer around this NPC."
+]
+
+@BaseClass base(DefaultNPC) = TalkNPC
+[
+	UseSentence(string) : "Use Sentence"
+	UnUseSentence(string) : "Un-Use Sentence"
+
+	DontUseSpeechSemaphore(choices) : "Don't Use Speech Semaphore" : 0 : "Friendly NPCs are not allowed to speak if another friendly NPC is speaking. In some cases we don't want speaking NPCs to prevent other NPCs from speaking (for instance, if there is a friendly NPC speaking for a long time on a monitor). To make this NPC not prevent other NPCs from talking, make it not grab the semaphore when it speaks." =
+	[
+		0 : "No (Use speech semaphore)"
+		1 : "Yes (Don't use speech semaphore)"
+	]
+
+	input SpeakResponseConcept(string) : "Speak the specified response concept."
+	input CancelSpeech(void) : "Cancel any speech that the NPC is currently speaking."
+]
+
+@BaseClass = RappelNPC
+[
+	waitingtorappel(boolean) : "Waiting to Rappel?" : "No" : "If yes, this NPC spawns suspended in air and awaits a BeginRappel input. It will then spawn a zipline and slide down. When it hits the ground, NPC will cut away the line and try to move forward a few feet to make room for the next NPC. The NPC will not attempt to clear its landing space if it cannot do so by taking a few steps forward"
+
+	// Inputs
+	input BeginRappel(void) : "BeginRappel"
+
+	// Outputs
+	output OnRappelTouchdown(void) : "Fires when done rappeling"
+]
+
+@BaseClass base(DefaultNPC) = PlayerCompanion
+[
+	input OutsideTransition(void) : "Use this input to teleport the NPC to a hintnode with the Player Squad Transition Point hint type."
+	input EnableAlwaysTransition(void) : "Enable the 'always transition' behavior"
+	input DisableAlwaysTransition(void) : "Disable the 'always transition' behavior"
+	
+	input EnableSpeakWhileScripting(void) : "Allow this NPC to speak responses while in a scripted sequence or while StartScripting is active."
+	input DisableSpeakWhileScripting(void) : "Cancels this NPC's ability to speak responses while in a scripted sequence or while StartScripting is active if it was previously enabled by EnableSpeakWhileScripting."
+	
+	AlwaysTransition(boolean) : "Always transition" : "No" : "If yes, this NPC will always teleport to a Player Squad Transition Point if they're not within the trigger_transition volume."
+
+	DontPickupWeapons(boolean) : "Prevent picking up weapons?" : "No" : "If yes, this NPC will NOT be allowed to pick up weapons they find on the ground."
+
+	GameEndAlly(boolean) : "Is this a vital ally?" : "No" : "If yes, this NPC will cause the game to end if killed."
+
+	input MakeGameEndAlly(void) : "Make this NPC a game end ally."
+	input MakeRegularAlly(void) : "Make this NPC a regular ally."
+
+	input EnableWeaponPickup(void) : "Enable Weapon Pickup"
+	input DisableWeaponPickup(void) : "Disable Weapon Pickup"
+
+	input GiveWeapon(string) : "Gives the NPC a weapon of the specified entity name."
+	
+	input SetReadinessPanic(void) : "Set readiness to panic state (Special)"
+	input SetReadinessLow(void) : "Set readiness to calmest state (Bored)"
+	input SetReadinessMedium(void) : "Set readiness to moderate (Alert)"
+	input SetReadinessHigh(void) : "Set readiness to highest. (Combat imminent)"
+	input LockReadiness(float) : "Lock readiness at current setting for x seconds -1 = forever, 0 = unlock now"
+	
+	input ClearAllOutputs(void) : "Obliterate every output that this NPC has."
+
+	output OnWeaponPickup(void) : "Fires when this NPC picks a weapon off the ground or a gun rack."
+]
+
+@BaseClass base( DefaultNPC ) = BaseHelicopter
+[
+	InitialSpeed(string) : "Initial Speed" : "0" : "Sets the helicopter's desired speed that it should try to reach as soon as it's spawned."
+	target(target_destination) : "Target path_track" : : "(Optional) The name of a path_track entity that this NPC will fly to after spawning."
+
+	// Inputs
+	input MoveTopSpeed(void) : "The helicopter will immediately move at top speed toward its current goal, or in its current orientation if it's on top of its goal."
+	input MoveSpecifiedSpeed(float): "The helicopter will immediately move at the specified speed (you provide this as parameter override in units per second) towards its current goal."
+	input SetMaxSpeed(float): "Change the helicopter's max speed."
+	input ChangePathCorner(target_destination) : "Tell the helicopter to move to a path corner on a new path."
+	input SelfDestruct(void) : "Self Destruct."
+	input Activate(void) : "Activate. Use to wake up a helicopter that spawned with the 'Await Input' spawnflag on."
+	input SetTrack(target_destination) : "Set a track for the helicopter to adhere to. The helicopter will do nothing if he's on the same path, and will move to the closest point on the specified track if he's on a different path."
+	input FlyToSpecificTrackViaPath(target_destination) : "The helicopter will first fly to the closest point on the path if he's on a different path. Then he'll fly along the path to the specified track point."
+	input StartPatrol(void) : "Start patrolling back and forth along the current track."
+	input StopPatrol(void) : "Stop patrolling back and forth along the track. This will cause the helicopter to come to rest at the track which he's currently flying toward."
+	input ChooseFarthestPathPoint(void) : "When tracking an enemy, choose the point on the path furthest from the enemy, but still in firing range."
+	input ChooseNearestPathPoint(void) : "When tracking an enemy, choose the point on the path nearest from the enemy."
+	input StartBreakableMovement(void) : "The helicopter is now allowed to disobey direct commands to go to particular points if he senses an enemy. He will move to the closest point (or farthest point, if ChooseFarthestPathPoint is used), on the path if he senses an enemy."
+	input StopBreakableMovement(void) : "The helicopter can not disobey direct commands. He will continue to fly along his patrol path or to his specified target even if he senses an enemy."
+
+	spawnflags(Flags) =
+	[
+		// AWAIT INPUT will make the helicopter spawn disabled, awaiting 
+		// the "Activate" input to start acting.
+		32 : "No Rotorwash" : 0
+		64 : "Await Input" : 0
+	]
+]
+
+
+@PointClass base(DefaultNPC, Parentname, RenderFields, Shadow, Studiomodel) tags( Choreo ) studio() model_archetypes(generic_actor_model) = generic_actor : "Generic Actor NPC"
+[
+	hull_name(choices) : "Hull type" : "Human" =
+	[
+		"HUMAN_HULL" : "Human"
+		"WIDE_HUMAN_HULL" : "Wide"
+		"TINY_HULL" : "Tiny"
+		"MEDIUM_HULL" : "Medium"
+		"LARGE_HULL" : "Large"
+	]
+	footstep_script(string) : "Footstep script" : ""
+	act_as_flyer(choices) : "Act as a Flyer?" : 0 =
+	[
+		0 : "No, obey gravity"
+		1 : "Yes, don't apply gravity on spawn"
+	]
+
+	is_friendly_npc(boolean) : "Friendly NPC? (Prevent Player Attacking)" : 0 : "Set for the NPC to notify the game is it friendly and players should not be allowed to attack it"
+
+	input EnableIsFriendlyNPC(void)
+	input DisableIsFriendlyNPC(void)
+]
+
+@PointClass base(DefaultNPC, Parentname) tags( PropDynamic ) model() model_archetypes(animated_model) = npc_furniture : 
+	"An entity used for non-NPCs that need to synchronise their animation with an NPC in a scripted_sequence. Usually a piece"+
+	"of furniture or door that an NPC needs to manipulate within a scripted_sequence."
+[
+	model(studio) : "Model"
+	input DisablePlayerCollision(void) : "Disable collisions against the player."
+	input EnablePlayerCollision(void) : "Enable collisions against the player."
+
+	has_animated_face(Choices) : "Has Animated Face" : 0 : "Does this entity have an animated face?" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	furniture_physics(boolean) : "Furniture Physics" : 0 : "Create (kinematic) physics for the furniture. (By default npc_furniture is nonsolid to avoid unintentional interactions with any co-actors.)"
+	lightingorigin(target_destination) : "Lighting Origin" : "" : "Select an entity to specify a location to sample lighting from, instead of using this entity's origin."
+]
+
+@NPCClass base(Parentname, DefaultNPC) iconsprite("editor/bullseye.vmat") color(255 0 0) = npc_bullseye : "Bullseye"
+[
+	// Unlike other NPCs level designers are allowed to set the health on bullseyes
+	health(Integer) : "Health" : 35
+
+	minangle(string) : "Minimum Angle" : "360" : "Angle from the bullseye required for bullseye to be a valid enemy"
+	mindist(string) : "Minimum Distance" : "0" : "Distance from the bullseye required for bullseye to be a valid enemy"
+
+	autoaimradius(float) : "Autoaim Radius" : "0" : "Radius of autoaim influence. Use ent_autoaim <picker> to visualize."
+
+	spawnflags(Flags) = 
+	[
+		65536   : "Not Solid" : 0
+		131072  : "Take No Damage" : 0
+		262144  : "Enemy Damage Only" : 0
+		524288  : "Bleed" : 0
+		1048576 : "Perfect Accuracy" : 0
+		2097152 : "Collide against physics objects (Creates VPhysics Shadow)" : 0
+	]
+	output OnTargeted(void) : "Fires when targeted"
+	output OnReleased(void) : "Fires when no longer targeted"
+]
+
+@NPCClass base(Parentname, DefaultNPC) iconsprite("editor/enemyfinder.vmat") color(255 150 0) = npc_enemyfinder : "EnemyFinder"
+[
+	spawnflags(flags) =
+	[
+		65536 : "Check Visibility" : 1
+		131072 : "APC Visibility checks" : 0
+		262144 : "Short memory" : 0
+		524288  : "Can be an enemy" : 0
+	]
+	FieldOfView(string) : "FieldOfView" : "0.2" : "How far to look (1.0 = straight ahead, 0.0 = +/- 90 degrees, -1.0 = all directions)"
+	MinSearchDist(integer) : "Min Search Dist" : 0
+	MaxSearchDist(integer) : "Max Search Dist" : 2048
+
+	freepass_timetotrigger(float) : "Player pass issue time" : 0 : "Amount of time an enemy is hidden after which a 'free pass' on reaquire is granted"
+	freepass_duration(float) : "Player pass duration" : 0 : "After granted 'free pass', the amount of time a target is allowed before reaquire"
+	freepass_movetolerance(float) : "Player pass move tolerance" : 120 : "After granted 'free pass', the distance the target is allowed to move before reaquire"
+	freepass_refillrate(float) : "Player pass refill rate" : "0.5" : "After free pass begins expiring, how much the time the target gets back for every second they hide again"
+	freepass_peektime(float) : "Player pass peek time" : 0 : "How long targets in cover are allowed to peek without penalty"
+
+	StartOn(boolean) : "Start On" : 1
+
+	// Inputs
+	input TurnOn(void) : "Turn on: Look for enemies"
+	input TurnOff(void) : "Turn off: Stop looking for enemies"
+
+	output OnLostEnemies(void) : "Fires when the enemy finder has no enemies."
+	output OnAcquireEnemies(void) : "Fires when the enemy finder acquires enemies."
+]
+
+
+
+

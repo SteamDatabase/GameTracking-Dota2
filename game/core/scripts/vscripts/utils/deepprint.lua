@@ -141,7 +141,24 @@ function _DeepToString(debugInstance, prefix)
                 string_accum = string_accum .. prefix .. (is_array and "]" or "}") .. "\n"
             end
         else 
-            string_accum = string_accum .. prefix .. idx .. "\t= " .. (type(data_value) == "string" and ("\"" .. data_value .. "\"") or data_value) .. "\n"
+            local string_value = data_value
+
+            if type(data_value) == 'string' then
+                string_value = '"' .. data_value .. '"'
+            elseif type(data_value) == 'userdata' then
+                local mtable = getmetatable(data_value)
+
+                if mtable ~= nil and mtable['__name'] ~= nil then
+                    local name = mtable['__name']
+                    string_value = '(userdata: ' .. name .. ')'
+                else
+                    string_value = '(' .. tostring(data_value) .. ')'
+                end
+            else
+                string_value = '(' .. tostring(data_value) .. ')'
+            end
+
+            string_accum = string_accum .. prefix .. idx .. "\t= " .. string_value  .. "\n"
         end
     end
     if prefix == "   " then 
