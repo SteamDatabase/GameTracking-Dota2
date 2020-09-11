@@ -210,6 +210,8 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 %s destroyed (%s)
 %s downtime warning expired; assumed back online.
 %s isn't valid SteamID for identity.
+%s not found in %s.
+%s says: %s
 %s sent routing secret in msg 0x%02x.  Marking as fully trusted.  (Previous trust was %d)
 %s#%d (%s)
 %s#%d (via %s %s)
@@ -284,6 +286,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 *N6google8protobuf12_GLOBAL__N_123AggregateErrorCollectorE
 *N6google8protobuf12_GLOBAL__N_123GeneratedMessageFactoryE
 *N6google8protobuf12_GLOBAL__N_129FieldValuePrinterUtf8EscapingE
+*ZN25SteamNetworkingSocketsLib24CSteamNetworkingUtilsSDR23BeginFetchNetworkConfigEbEUlPNS_14HTTPResponse_tEE_
 *ZN25SteamNetworkingSocketsLib26CConnectionTransportP2PICE14OnRouteChangedEvE20RunRouteStateChanged
 *ZN25SteamNetworkingSocketsLib26CConnectionTransportP2PICE22OnWritableStateChangedEvE23RunWritableStateChanged
 *ZN25SteamNetworkingSocketsLib26CConnectionTransportP2PICE24OnLocalCandidateGatheredE17EICECandidateTypePKcE20RunIceCandidateAdded
@@ -363,6 +366,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamdatagram_internal.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamnetworking_statsutils.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamnetworkingsockets_internal.h
+/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/../steamnetworkingsockets_thinker.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingmessages.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingsockets.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworkingsockets/clientlib/csteamnetworkingsockets.h
@@ -427,6 +431,7 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 22CEC25519PrivateKeyBase
 22CMsgICERendezvous_Auth
 23CECKeyExchangePublicKey
+23ISteamNetworkingSockets
 24CCryptoKeyBase_RawBuffer
 24CECKeyExchangePrivateKey
 24ISteamNetworkingMessages
@@ -570,7 +575,6 @@ $tI/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/steamnetworking
 >g*
 ?
 ???
-?GetHostedDedicatedServerPort
 ?g*
 @
 @%04x
@@ -682,7 +686,7 @@ After sending stats, we still want to send for reason '%s'!
 Ag*
 All apps excluded by auth chain!
 All pops excluded by auth chain!
-Already have a listen socket on P2P virtual port %d
+Already have a listen socket on P2P vport %d
 Already have a ticket for server '%s' vport %d with expiry at %u.  Discarding ticket with expiry at %u
 Already have a ticket for server '%s' with older expiry %u.  Discarding and replacing with new ticket expiring at %u
 Already saw decimal point or exponent; can't have another one.
@@ -695,6 +699,7 @@ Any language
 App %u is using legacy (unencrypted) server addresses in tickets
 App did not respond to Messages session request in time, discarding.
 App didn't accept or close incoming connection in time.
+App ignored P2P connect request from %s on vport %d
 AppIDs . . :
 Application closed connection
 Application closed connection in an unusual way
@@ -731,7 +736,6 @@ Assertion Failed: !m_bHaveLowLevelRef
 Assertion Failed: !m_bPassive
 Assertion Failed: !m_connection.m_bConnectionInitiatedRemotely
 Assertion Failed: !m_connectionConfig.m_SymmetricConnect.IsLocked()
-Assertion Failed: !m_identity.IsInvalid()
 Assertion Failed: !m_identityRemote.IsInvalid()
 Assertion Failed: !m_mapInFlightPacketsByPktNum.empty()
 Assertion Failed: !m_msgICESessionSummary.has_local_candidate_types()
@@ -858,7 +862,6 @@ Assertion Failed: cbPkt == pEnd - pkt
 Assertion Failed: cbPkt >= 1
 Assertion Failed: cbSegData > 0
 Assertion Failed: cbSegData > 0 || ( cbSegData == 0 && pMsg->m_cbSize == 0 )
-Assertion Failed: cbSegmentSize > 0
 Assertion Failed: cbSegmentSize >= 0
 Assertion Failed: cbSend <= sizeof(pkt)
 Assertion Failed: cbSent > 0
@@ -971,7 +974,6 @@ Assertion Failed: m->m_conn == m_hConnectionSelf
 Assertion Failed: m.m_nIndirectPing >= 0
 Assertion Failed: m_CertStatus.m_eAvail != k_ESteamNetworkingAvailability_NeverTried
 Assertion Failed: m_CertStatus.m_eAvail == k_ESteamNetworkingAvailability_Current
-Assertion Failed: m_CertStatus.m_eAvail == k_ESteamNetworkingAvailability_NeverTried
 Assertion Failed: m_Put >= 0
 Assertion Failed: m_TotalElements != InvalidIndex()
 Assertion Failed: m_arMarker[n-1].m_nID != m_arMarker[n].m_nID
@@ -1048,6 +1050,7 @@ Assertion Failed: m_pLast->m_links.m_pNext == nullptr
 Assertion Failed: m_pMaxOut >= m_pOut
 Assertion Failed: m_pMemory
 Assertion Failed: m_pOut <= m_pMaxOut
+Assertion Failed: m_pOuter && m_method
 Assertion Failed: m_pParentListenSocket == nullptr
 Assertion Failed: m_pParentListenSocket == nullptr || m_pSteamNetworkingSocketsInterface == m_pParentListenSocket->m_pSteamNetworkingSocketsInterface
 Assertion Failed: m_pPartner
@@ -1393,7 +1396,6 @@ Assertion Failed: usecTimeoutDuration > 0
 Assertion Failed: usecWhen > 0
 Assertion Failed: whenEnded >= m_usecWhenSelected
 Assertion Failed: x != kInvalidItem
-AsyncCertRequest
 Attempt #%d to fetch config from %s
 Attempt to register more config values after table is already initialized
 Attempting
@@ -1401,7 +1403,6 @@ Attempting to connect via steam datagram using unsigned ticket, as per steamdata
 Attemt to send packet, but socket has been closed!
 Aug
 Auth ticket failed to parse.  %s
-AuthStatus (%s interface):  %s  (%s)
 AuthStatus (%s):  %s  (%s)
 AuthenticAMD
 Authority Information Access
@@ -1808,7 +1809,7 @@ Cannot connect to proxied gameserver %s via steam datagram.  Library has not bee
 Cannot connect to proxied gameserver %s via steam datagram.  We don't have an authorization ticket!
 Cannot create IPv4 connection.  %s
 Cannot create P2P connection to %s.  %s
-Cannot create P2P connection to local identity %s.  We are not listening on virtual port %d
+Cannot create P2P connection to local identity %s.  We are not listening on vport %d
 Cannot create P2P connection.  %s
 Cannot create SDR connection to hosted dedicated server.  %s
 Cannot create hosted dedicated server listen socket.  %s
@@ -1824,6 +1825,7 @@ Cannot talk to any relays. Check Internet connection
 Cannot use specific IP address.
 Cert allows POPID %s, but CA trust chain does not
 Cert allows appid %u, but CA trust chain does not
+Cert already invalid / expired?
 Cert does not authorize us for App %u
 Cert expired %d seconds ago.  Discarding and requesting another
 Cert expired %lld seconds ago
@@ -1931,6 +1933,7 @@ CreateListenSocketP2P
 CreatePollGroup
 CreateSocketPair
 CreateSteamNetworkingMessages
+CreateWebRTCICESession
 Created
 CrlID
 Crypt info failed protobuf decode
@@ -2091,6 +2094,7 @@ Expected string.
 Expecting ack for wire seq 0x%4x, with two different send timestamps %llx and %llx
 Expecting:
 Experimental
+Expired
 Expires. . :
 Expiring packet gap, which had pending NACK
 Extended OCSP Status
@@ -2134,6 +2138,7 @@ Failed to create UDP socket to talk to %s.  %s
 Failed to create connection to '%s' for new messages session
 Failed to create/find poll group
 Failed to determine our public address via STUN
+Failed to dlopen %s.  %s
 Failed to get cert from steam
 Failed to initialize SDR client functionality.  %s
 Failed to initialize SDR network access functionality.  %s
@@ -2152,6 +2157,7 @@ Failed to set socket for dual stack (IPV6_V6ONLY=0).  Error code 0x%08X.  Contin
 Failed to set socket nonblocking mode.  Error code 0x%08x.
 Failed to set socket recv buffer size.  Error code 0x%08x.
 Failed to set socket send buffer size.  Error code 0x%08x.
+Failed to start accepting P2P connect request from %s on vport %d; %s
 Failed to varint decode size of stats blob
 FakePacketDup_Recv
 FakePacketDup_Send
@@ -2288,6 +2294,7 @@ GetEnum
 GetFloat
 GetGameCoordinatorServerLogin
 GetHTTPResponseBodyData failed
+GetHostedDedicatedServerPort
 GetIdentity
 GetInt32
 GetInt64
@@ -2376,17 +2383,18 @@ ISSUING_DIST_POINT
 ISteamHTTP::CreateHTTPRequest failed
 ISteamHTTP::SendHTTPRequest failed
 ISteamHTTP::SetHTTPRequestHeaderValue failed
+ISteamHTTPDestroyed while request in flight
 ISteamNetworkingSocketsSerialized::GetCertAsync failed
 Identity %s isn't valid for Messages sessions.  (Only SteamIDs currently supported).
 Identity is blank
 Ig*
-Ignoring P2P CMsgSteamDatagramConnectRequest from %s on virtual port %d; %s
 Ignoring P2P CMsgSteamDatagramConnectRequest from %s; can't get NetworkingMessages interface!
 Ignoring P2P CMsgSteamDatagramConnectRequest from %s; missing required fields
-Ignoring P2P CMsgSteamDatagramConnectRequest from %s; we're not listening on virtual port %d
+Ignoring P2P CMsgSteamDatagramConnectRequest from %s; we're not listening on vport %d
 Ignoring P2P connect request through Steam backend from %s; no virual_port!
 Ignoring P2P connection request from %s.  We cannot accept it since we don't have a cert yet!
 Ignoring P2P signal from %s.  For our cxn #%u, they first used remote cxn #%u, not using #%u
+Ignoring P2P signal from '%s', no local identity
 Ignoring P2P signal from '%s', unknown remote connection #%u
 Ignoring P2PFailure notification about unknown ConnectionID %u from %s
 Ignoring P2PRendezvous from %s to unknown connection #%u
@@ -2547,12 +2555,12 @@ Malformed CMsgSteamDatagramNoSession.  Missing / invalid relay session.  [ %s ]
 Malformed MsgSteamDatagramDataRouterToClient from %s: Failed to varint decode size of stats message
 Malformed MsgSteamDatagramDataRouterToClient from %s: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %d, packet size %d
 Malformed MsgSteamDatagramDataRouterToClient from %s: packet too small
-Malformed MsgSteamDatagramDataRouterToClient from %s: stats message size doesn't make sense.  Stats message size %d, packet size %d
+Malformed MsgSteamDatagramDataRouterToClient from %s: stats message size doesn't make sense.  Stats message size %u, packet size %d
 Malformed MsgSteamDatagramDataRouterToServer: Failed to varint decode size of stats message
 Malformed MsgSteamDatagramDataRouterToServer: Flags indicate presence of TimeSincePrev, but no room for it.  Stats message size %d, packet size %d
 Malformed MsgSteamDatagramDataRouterToServer: packet too small
 Malformed MsgSteamDatagramDataRouterToServer: protobuf failed to parse inline stats message
-Malformed MsgSteamDatagramDataRouterToServer: stats message size %d doesn't make sense.
+Malformed MsgSteamDatagramDataRouterToServer: stats message size %u doesn't make sense.
 Management
 Mar
 Mask Algorithm:
@@ -2635,6 +2643,7 @@ N25SteamNetworkingSocketsLib20CConnectionTransportE
 N25SteamNetworkingSocketsLib20LinkStatsTrackerBaseE
 N25SteamNetworkingSocketsLib21CDedicatedBoundSocketE
 N25SteamNetworkingSocketsLib21CSteamNetworkingUtilsE
+N25SteamNetworkingSocketsLib22ScheduledMethodThinkerINS_23CSteamNetworkingSocketsEEE
 N25SteamNetworkingSocketsLib23CConnectionTransportUDPE
 N25SteamNetworkingSocketsLib23CSteamNetworkingSocketsE
 N25SteamNetworkingSocketsLib24CSDRServerPhysicalSocketE
@@ -2654,6 +2663,7 @@ N25SteamNetworkingSocketsLib27CConnectionTransportUDPBaseE
 N25SteamNetworkingSocketsLib27CSteamNetworkConnectionBaseE
 N25SteamNetworkingSocketsLib27CSteamNetworkConnectionPipeE
 N25SteamNetworkingSocketsLib28CSteamNetworkListenSocketP2PE
+N25SteamNetworkingSocketsLib29CSteamNetworkListenSocketBaseE
 N25SteamNetworkingSocketsLib30CSteamNetworkingUtilsSteamBaseE
 N25SteamNetworkingSocketsLib30SteamNetworkingMessagesSessionE
 N25SteamNetworkingSocketsLib31CSteamNetworkingSocketsCallbackI23SteamServersConnected_tEE
@@ -3148,6 +3158,7 @@ RSA_blinding
 Ranges should not overlap in this map!
 Reached an unintended state: CPPTYPE_MESSAGE
 Reading dangerously large protocol message.  If the message turns out to be larger than
+ReallyAsyncCertRequest
 ReceiveMessagesOnChannel
 ReceiveMessagesOnConnection
 ReceiveMessagesOnPollGroup
@@ -3174,7 +3185,6 @@ Received unexpected 'no connection'
 Received unexpected 'no connection' from peer
 Received unexpected P2P 'no connection' signal
 Received unknown control message %d from %s
-Received unreliable msg %lld offset %d twice.  Sizes %d,%d
 ReceivedP2PSignal
 Recv %s stats from %s for %s:%s
 RecvP2PBadRoute
@@ -3303,7 +3313,6 @@ SNP decode first reliable stream pos underflow.  %llx mod %llx, expected next %l
 SNP decode overrun %d bytes for %s segment data.
 SNP decode overrun, %d bytes for %s
 SNP decode unreliable msgnum underflow.  %llx mod %llx, highest seen %llx
-SNP expiring unreliable segments for msg %lld, while receiving unreliable segments for msg %lld
 SNP stop waiting reduced %lld (pkt %lld) -> %lld (pkt %lld)
 SSL CA
 SSL Client
@@ -3357,6 +3366,7 @@ SetAllocatedMessage
 SetBool
 SetCertificate
 SetCertificate: We are not currently able to verify our own cert!  %s.  Continuing anyway!
+SetCertificateAndPrivateKey
 SetConfigValue
 SetConnectionName
 SetConnectionPollGroup
@@ -3761,6 +3771,7 @@ ZLONG
 [%s] %s=%s
 [%s] Abandoning attempt to migrate to %s, relay is shutting down soon.
 [%s] AcceptConnection put the connection into state %d
+[%s] Accepting connection, transitioning to 'finding route' state
 [%s] Accepting inbound connection implicitly, based on matching outbound connect request
 [%s] Active sessions changed and we are controlling agent.  Triggering rebuild of routes message.
 [%s] After sending stats, we still need to send for %s
@@ -3805,6 +3816,7 @@ ZLONG
 [%s] Ignoring request by %s to migrate to %s.  We already know that relay is shutting down very soon.
 [%s] Ignoring request by %s to migrate to %s.  We don't recognize that target address in the network config.
 [%s] Ignoring request by %s to migrate to %s.  We had problems communicating with that relay %.1fs ago.
+[%s] Ignoring unreliable segment with invalid offset %u size %d
 [%s] Ignoring/abandoning migration request.  Current primary %s is requesting to send us to %s, but our migration target is %s?
 [%s] Ignoring/abandoning migration request.  Current primary %s no longer has a request active
 [%s] Ignoring/abandoning migration request.  SDR client deactivated, or no primary selected
@@ -3815,6 +3827,7 @@ ZLONG
 [%s] No relevant changes to routing messsage, revision %d.
 [%s] Not using STUN servers as per P2P_Transport_ICE_Enable
 [%s] Our cert expires in %d seconds.
+[%s] P2P connect request actively rejected by app, sending rejection (%s)
 [%s] P2P route through '%s' now forwarding to '%s%s', revision %d
 [%s] Packet data chunk failed to decrypt!  Could be tampering/spoofing or a bug.
 [%s] Packet gap bug.  %lld [%lld,%lld) %s | %s
@@ -3838,7 +3851,9 @@ ZLONG
 [%s] Received Stats while in state %d.  Rejecting packet with ConnectionClosed message.
 [%s] Received data packet while in state %d.  Rejecting packet with ConnectionClosed message.
 [%s] Received data packet while in the 'connecting' state.  Dropping packet; resending ConnctRequest
+[%s] Received incoming P2P connect request; awaiting app to accept connection
 [%s] Received request to migrate to %s from %s.
+[%s] Received unreliable msg %lld segment offset %d twice.  Sizes %d,%d, last=%d,%d
 [%s] Recv P2PRendezvous
 [%s] Recv UDP stats:%s
 [%s] RecvMessage MsgNum=%lld sz=%d
@@ -3852,6 +3867,7 @@ ZLONG
 [%s] Route through '%s' is '%s%s'
 [%s] Route through '%s' is now '%s%s' (was '%s%s')
 [%s] Routes through '%s' to '%s%s'  lost.  No P2P route available through that cluster
+[%s] SNP expiring unreliable segments for msg %lld, while receiving unreliable segments for msg %lld
 [%s] Selected '%s' transport (ping=%d, score=%d+%d)
 [%s] Selecting %s as backup #%d (%s)
 [%s] Selecting %s as primary.  (%s)
@@ -3871,7 +3887,7 @@ ZLONG
 [%s] Sequence number from relay is duplicate or old, and end-to-end sequence number is duplicate or old or fails to decrypt
 [%s] Sequence number from relay is duplicate or old, but end-to-end sequence number is OK?
 [%s] Set remote auth to %s / %s
-[%s] Setting SymmetricConnect=1 because it is enabled on listen socket on virtual port %d.  To avoid this warning, specify the option on connection creation
+[%s] Setting SymmetricConnect=1 because it is enabled on listen socket on vport %d.  To avoid this warning, specify the option on connection creation
 [%s] Should not be trying to acccept this connection, it was not initiated remotely.
 [%s] Shouldn't be rbeuilding routing message - basic routing data is dirty for reason '%s'
 [%s] Started migration to %s at request of current primary %s
@@ -3916,6 +3932,7 @@ ZLONG
 [%s] messages session %s: %d %s
 [%s] packet number not properly initialized!
 [%s] pkt %lld %s, queueing retry of reliable range [%lld,%lld)
+[%s] problem (%d) %s, but connection already dead (%d %d %s)
 [%s] problem detected locally (%d): %s
 [%s] received %s packet from %s which should confirm end-to-end connectivity.
 [%s] received e2e stats while in Connecting state.  Resending ConnectRequest.
@@ -4606,6 +4623,12 @@ distinguishedName
 distpoint
 dl_iterate_phdr
 dl_iterate_phdr@@GLIBC_2.2.5
+dlerror
+dlerror@@GLIBC_2.2.5
+dlopen
+dlopen@@GLIBC_2.2.5
+dlsym
+dlsym@@GLIBC_2.2.5
 dmdName
 dmp1
 dmq1
@@ -4800,7 +4823,6 @@ g*
 g_eAvailNetworkConfig is Current, but failed to select random relay to probe?
 g_mapConnections corruption!
 g_mapIncomingP2PConnections bookkeeping mismatch
-gameserver
 gcm128.c
 gen:
 generate cryptogram
@@ -5249,10 +5271,12 @@ lhash.c
 lhs
 lib(%lu)
 libc.so.6
+libdl.so.2
 libm.so.6
 libpthread.so.0
 librt.so.1
 libstdc++.so.6
+libsteamwebrtc.so
 line
 listen
 localKeyID
@@ -5999,7 +6023,7 @@ sslv23
 stack.c
 standalone
 stateOrProvinceName
-stats message size doesn't make sense.  Stats message size %d, packet size %d
+stats message size doesn't make sense.  Stats message size %u, packet size %d
 stats.life
 stats.rate
 std::_Hash_bytes(void const*, unsigned long, unsigned long)
