@@ -250,6 +250,21 @@ RunFunctionAction.prototype.update = function ()
 }
 
 
+function WaitForConditionAction( f )
+{
+	this.f = f;
+	this.argsArray = [];
+	for ( var i  = 1; i < arguments.length; ++i )
+	{
+		this.argsArray.push( arguments[i] );
+	}
+}
+WaitForConditionAction.prototype = new BaseAction();
+WaitForConditionAction.prototype.update = function()
+{
+	return !this.f.apply( null, this.argsArray );	
+}
+
 // Action to wait for some amount of seconds before resuming
 function WaitAction( seconds )
 {
@@ -258,11 +273,11 @@ function WaitAction( seconds )
 WaitAction.prototype = new BaseAction();
 WaitAction.prototype.start = function ()
 {
-	this.endTimestamp = Date.now() + this.seconds * 1000.0;
+	this.endTimestamp = Game.Time() + this.seconds;
 }
 WaitAction.prototype.update = function ()
 {
-	return Date.now() < this.endTimestamp;
+	return Game.Time() < this.endTimestamp;
 }
 
 // Action to wait a single frame
@@ -424,12 +439,12 @@ function AnimateDialogVariableIntAction( panel, dialogVariable, start, end, seco
 AnimateDialogVariableIntAction.prototype = new BaseAction();
 AnimateDialogVariableIntAction.prototype.start = function ()
 {
-	this.startTimestamp = Date.now();
-	this.endTimestamp = this.startTimestamp + this.seconds * 1000;
+	this.startTimestamp = Game.Time();
+	this.endTimestamp = this.startTimestamp + this.seconds;
 }
 AnimateDialogVariableIntAction.prototype.update = function ()
 {
-	var now = Date.now();
+	var now = Game.Time();
 	if ( now >= this.endTimestamp )
 		return false;
 
@@ -469,12 +484,12 @@ function AnimateProgressBarAction( progressBar, startValue, endValue, seconds )
 AnimateProgressBarAction.prototype = new BaseAction();
 AnimateProgressBarAction.prototype.start = function ()
 {
-	this.startTimestamp = Date.now();
-	this.endTimestamp = this.startTimestamp + this.seconds * 1000;
+	this.startTimestamp = Game.Time();
+	this.endTimestamp = this.startTimestamp + this.seconds;
 }
 AnimateProgressBarAction.prototype.update = function ()
 {
-	var now = Date.now();
+	var now = Game.Time();
 	if ( now >= this.endTimestamp )
 		return false;
 
@@ -499,12 +514,12 @@ function AnimateProgressBarWithMiddleAction( progressBar, startValue, endValue, 
 AnimateProgressBarWithMiddleAction.prototype = new BaseAction();
 AnimateProgressBarWithMiddleAction.prototype.start = function ()
 {
-	this.startTimestamp = Date.now();
-	this.endTimestamp = this.startTimestamp + this.seconds * 1000;
+	this.startTimestamp = Game.Time();
+	this.endTimestamp = this.startTimestamp + this.seconds;
 }
 AnimateProgressBarWithMiddleAction.prototype.update = function ()
 {
-	var now = Date.now();
+	var now = Game.Time();
 	if ( now >= this.endTimestamp )
 		return false;
 
@@ -593,12 +608,12 @@ function LerpAction(seconds)
 LerpAction.prototype = new BaseAction();
 LerpAction.prototype.start = function ()
 {
-	this.startTimestamp = Date.now();
-	this.endTimestamp = this.startTimestamp + this.seconds * 1000;
+	this.startTimestamp = Game.Time();
+	this.endTimestamp = this.startTimestamp + this.seconds;
 }
 LerpAction.prototype.update = function ()
 {
-	var now = Date.now();
+	var now = Game.Time();
 	if (now >= this.endTimestamp)
 		return false;
 

@@ -2140,10 +2140,41 @@ AnimateDiretideRewardsScreenAction.prototype = new BaseAction();
 
 AnimateDiretideRewardsScreenAction.prototype.start = function()
 {
+	var rootPanel = $( '#Diretide2020RewardsScreen' );
+	if ( rootPanel !== null )
+	{
+		rootPanel.DeleteAsync( 0 );
+		rootPanel = null;
+	}
+
 	var rootPanel = StartNewScreen( 'Diretide2020RewardsScreen' );
 	rootPanel.BLoadLayout( 'file://{resources}/layout/diretide/post_game_diretide.xml', false, false );
  	this.seq = rootPanel.CreatePostgameAction( this.data );
 	this.seq.start();
+	var screenLinksContainer = $.GetContextPanel().GetParent().FindPanelInLayoutFile( 'ProgressScreenButtons' );
+	if ( screenLinksContainer.FindChildInLayoutFile( 'DireTide' ) === null )
+	{
+		var link = $.CreatePanel( 'Button', screenLinksContainer, 'DireTide' );
+		link.AddClass( 'ProgressScreenButton' );
+		link.AddClass( 'DiretideProgress' );
+		var me = this;
+		link.SetPanelEvent( 'onactivate', function ()
+		{
+
+			$.DispatchEvent( 'DOTAPostGameProgressShowSummary', rootPanel );
+			var seq = new RunSequentialActions();
+			seq.actions.push( new RunFunctionAction( function () 
+			{
+				screenLinksContainer.enabled = false;
+			}));		
+			seq.actions.push( me );
+			seq.actions.push( new RunFunctionAction( function () 
+			{
+				screenLinksContainer.enabled = true;
+			}));		
+			RunSingleAction( seq );
+		} );
+	}
 }
 
 AnimateDiretideRewardsScreenAction.prototype.update = function ()
@@ -2462,28 +2493,50 @@ function TestAnimateDiretideProgress()
 	var data =
 	{
 		hero_id: 87,
+		player_slot: 3,
 		diretide_rewards_progress:
         {
-			match_id: '1000030075005',
+			match_id: '1000030665004',
 			awards : 
 			[
 				{
-					award_name: 'Finished Match',
-					award_amount: 10,
-					award_player_slots : [ 0, 1, 2, 3, 4, 128, 129, 130, 131, 132]
+					award_name: '#DOTA_Diretide_Candy_Reason7',
+					award_amounts: [ 35 ],
+					award_player_slots : [ 2 ]
 				},
 				{
-					award_name: 'Ate a Taco!',
-					award_amount: 25,
-					award_player_slots : [ 1, 2, 132 ]
-				}
+					award_name: '#DOTA_Diretide_Candy_Reason2',
+					award_amounts: [ 25, 25, 25, 25, 25 ],
+					award_player_slots : [ 0, 1, 2, 3, 4 ]
+				},
+				{
+					award_name: '#DOTA_Diretide_Candy_Reason9',
+					award_amounts: [ 25, 125, 45 ],
+					award_player_slots : [ 1, 2, 3 ]
+				},
+				{
+					award_name: '#DOTA_Diretide_Candy_Reason1',
+					award_amounts: [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+					award_player_slots : [ 0, 1, 2, 3, 4, 128, 129, 130, 131, 132]				
+				},
 			],
 
 			items :
 			[
 				{
-					item_id: 13796, /* Treasure 3 */
-					item_player_slot: 2
+					item_id: 13780, /* Treasure 3 */
+					item_player_slot: 1,
+					item_image: ""
+				},
+				{
+					item_id: 17626, /* Treasure 3 */
+					item_player_slot: 2,
+					item_image: ""
+				},
+				{
+					item_id: 13812,
+					item_player_slot: 2,
+					item_image: "file://{images}/events/diretide/candycount.png"
 				}
 			],
 			
@@ -2493,89 +2546,69 @@ function TestAnimateDiretideProgress()
 					player_slot: 0,
                     player_name: 'Eric L',
                     event_points: 0,
-					event_id: 25,
-					team: 2,
                     account_id: 85501006,
 					owns_event: 0
                 },
                 {
 					player_slot: 1,
 					player_name: 'Greg',
-                    event_points: 80,
-                    event_id: 25,
-					team: 2,
+                    event_points: 450,
                     account_id: 146131,
 					owns_event: 1
                 },
                 {
 					player_slot: 2,
                     event_points: 45,
-                    event_id: 25,
                     player_name: 'AlexF',
-					team: 2,
                     account_id: 156258214,
 					owns_event: 1
                 },
                 {
 					player_slot: 3,
                     event_points: 92,
-                    event_id: 25,
                     player_name: 'bradm',
-					team: 2,
                     account_id: 85501369,
 					owns_event: 1
                 },
                 {
 					player_slot: 4,
                     event_points: 11,
-                    event_id: 25,
                     player_name: 'anishc',
-					team: 2,
                     account_id: 85501621,
 					owns_event: 0
 				},
 				{
 					player_slot: 128,
                     event_points: 60,
-					event_id: 25,
                     player_name: 'BoyangZ',
-					team: 3,
                     account_id: 85501128,
 					owns_event: 0
                 },
                 {
 					player_slot: 129,
                     event_points: 0,
-                    event_id: 25,
                     player_name: 'irvz',
-					team: 3,
                     account_id: 85502069,
 					owns_event: 1
                 },
                 {
 					player_slot: 130,
                     event_points: 22,
-                    event_id: 25,
                     player_name: 'CameronC',
-					team: 3,
                     account_id: 85501829,
 					owns_event: 1
                 },
                 {
 					player_slot: 131,
                     event_points: 50,
-                    event_id: 25,
                     player_name: 'Alireza',
-					team: 3,
                     account_id: 170021,
 					owns_event: 1
                 },
                 {
 					player_slot: 132,
-                    event_points: 67,
-                    event_id: 25,
+                    event_points: 5067,
                     player_name: 'philco',
-					team: 3,
                     account_id: 70071,
 					owns_event: 0
                 }

@@ -17,7 +17,7 @@ function CreateProgressAnimationSequence( data )
 
 	if ( data.diretide_rewards_progress != null )
 	{
-		seq.actions.push( new AnimateDiretideRewardsScreenAction( data ) );
+		seq.actions.push( new AnimateDiretideRewardsScreenAction( data ) ); 
 	}
 
 	if ( data.mvp2 != null )

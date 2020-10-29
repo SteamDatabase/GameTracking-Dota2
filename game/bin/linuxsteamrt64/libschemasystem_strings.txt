@@ -124,6 +124,9 @@ $ORIGIN
 32CSchemaRegistration_resourcefile
 32CSchemaRegistration_schemasystem
 32CSchemaType_Atomic_CollectionOfT
+35CExampleSchemaVData_PolymorphicBase
+39CExampleSchemaVData_PolymorphicDerivedA
+39CExampleSchemaVData_PolymorphicDerivedB
 6ConVar
 7IConVar
 ::
@@ -136,6 +139,7 @@ $ORIGIN
 <unconnected>
 <unknown>
 =
+?
 A->B
 AE_ACTION_SET_TURN_RATE_SCALE
 AE_BLIND_ZOMBIE_SNIFF
@@ -224,12 +228,19 @@ BreakPieceEmbedded
 BreakPieceExternal
 C->D
 C->E
-CAnimMotorList
+CAddAnimNode
+CAimMatrixAnimNode
 CAnimMovementManager
+CAnimNodeConnection
+CAnimNodeManager
+CAnimState
+CAnimationGraph
 CAuthPhysBody
 CAuthPhysJoint
 CBitVec
+CBlendAnimNode
 CBlockCompress::FastDecompress(unsigned char const*, unsigned int, unsigned char*, unsigned int)
+CBoneMaskAnimNode
 CBufferString
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::Concat(char const*, char const*, ...)
@@ -243,29 +254,54 @@ CBufferString::SetUnusable()
 CBufferString::StartsWith(char const*)
 CBufferString::Trim(char const*)
 CBufferStringN
+CChoiceAnimNode
+CChoreoAnimNode
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
+CCycleControlAnimNode
+CDirectPlaybackAnimNode
 CEntityHandle
 CEntityIndex
+CExampleSchemaVData_Monomorphic
+CExampleSchemaVData_PolymorphicBase
+CExampleSchemaVData_PolymorphicDerivedA
+CExampleSchemaVData_PolymorphicDerivedB
+CFollowAttachmentAnimNode
+CFollowPathAnimNode
+CFootLockAnimNode
+CFootStepTriggerAnimNode
+CGroundIKSolveAnimNode
 CHandle
+CHitReactAnimNode
+CJiggleBoneAnimNode
+CLookAtAnimNode
 CMemAllocSystemInitialize
 CMotionTransform
+CMoverAnimNode
 COLLISION_MODE_INITIAL_TRACE_DOWN
 COLLISION_MODE_PER_FRAME_PLANESET
 COLLISION_MODE_PER_PARTICLE_TRACE
 COLLISION_MODE_USE_NEAREST_TRACE
 COLORCORRECTION_VERSION_1
 CParticleSystemDefinition
+CPathHelperAnimNode
 CPlayerSlot
 CRC32_ProcessBuffer
 CResourceArray
 CResourcePointer
 CResourceString
 CResourceToKV3 encountered a non-array char... (%s)
-CSchemaSystemInternalRegistration
+CRootAnimNode
 CSchemaType
+CSelectorAnimNode
+CSetFacingAnimNode
+CSlowDownOnSlopesAnimNode
+CSolveIKChainAnimNode
+CSpeedScaleAnimNode
 CSplitScreenSlot
 CSplitString::Construct(char const*, char const**, int)
+CStopAtGoalAnimNode
+CSubtractAnimNode
 CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadRWLock_FastRead::CThreadRWLock_FastRead(bool)
 CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
@@ -280,7 +316,8 @@ CThreadSpinRWLock::UnlockWrite(char const*, int)
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
-CTransformScaled
+CTurnHelperAnimNode
+CTwoBoneIKAnimNode
 CUtlBinaryBlock::SetLength(int)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
 CUtlBuffer::AddNullTermination()
@@ -313,6 +350,7 @@ CUtlMemoryPoolBase::Free(void*)
 CUtlMemoryPoolBase::~CUtlMemoryPoolBase()
 CUtlRBTree overflow with %u elements!
 CUtlReference
+CUtlScratchMemoryPool::AllocAligned(int, int)
 CUtlString::Append(char const*)
 CUtlString::Format(char const*, ...)
 CUtlString::FreeMemoryBlock()
@@ -332,11 +370,13 @@ CUtlSymbolTable::~CUtlSymbolTable()
 CUtlVector
 CUtlVectorFixed
 CUtlVectorFixedGrowable
+CWayPointHelperAnimNode
 CXXABI_1.3
 C_INIT_AddVectorToVector
 C_INIT_AgeNoise
 C_INIT_CreateFromCPs
 C_INIT_CreateInEpitrochoid
+C_INIT_CreateOnModel
 C_INIT_CreateOnModelAtHeight
 C_INIT_CreateSequentialPath
 C_INIT_CreateWithinSphere
@@ -375,6 +415,7 @@ C_INIT_RtEnvCull
 C_INIT_SequenceFromCP
 C_INIT_SequenceLifeTime
 C_INIT_SetHitboxToClosest
+C_INIT_SetHitboxToModel
 C_INIT_SetRigidAttachment
 C_INIT_VelocityFromCP
 C_INIT_VelocityFromNormal
@@ -398,8 +439,11 @@ C_OP_RemapBoundingVolumetoCP
 C_OP_RemapCPtoCP
 C_OP_RemapModelVolumetoCP
 C_OP_RenderModels
+C_OP_RenderRopes
 C_OP_RenderSprites
+C_OP_RenderStandardLight
 C_OP_RenderTrails
+C_OP_RenderVRHapticEvent
 C_OP_RepeatedTriggerChildGroup
 C_OP_SetCPOrientationToPointAtCP
 C_OP_SetControlPointFieldToWater
@@ -455,6 +499,7 @@ Decompression failure
 Default
 DevMsg(char const*, ...)
 DotaCardGameClient_001
+Double-save to Member '%s'
 DynamicConfigList
 ERROR: CResourceToKV3 failed to DeduceDerivedTypeFromDisk
 ERROR: CResourceToKV3 failed to resolve extref  %016llX
@@ -632,9 +677,31 @@ OuterOffset
 PARTICLE_DEPTH_FEATHERING_OFF
 PARTICLE_DEPTH_FEATHERING_ON_OPTIONAL
 PARTICLE_DIR_NOISE_CURL
+PARTICLE_ENDCAP_ALWAYS_ON
+PARTICLE_ENDCAP_ENDCAP_OFF
+PARTICLE_ENDCAP_ENDCAP_ON
+PARTICLE_LIGHT_TYPE_FX
+PARTICLE_LIGHT_TYPE_POINT
+PARTICLE_LIGHT_TYPE_SPOT
+PARTICLE_ORIENTATION_ALIGN_TO_PARTICLE_NORMAL
+PARTICLE_ORIENTATION_FULL_3AXIS_ROTATION
+PARTICLE_ORIENTATION_SCREENALIGN_TO_PARTICLE_NORMAL
+PARTICLE_ORIENTATION_SCREEN_ALIGNED
+PARTICLE_ORIENTATION_SCREEN_Z_ALIGNED
+PARTICLE_ORIENTATION_WORLD_Z_ALIGNED
+PARTICLE_OUTPUT_BLEND_MODE_ADD
+PARTICLE_OUTPUT_BLEND_MODE_ALPHA
+PARTICLE_OUTPUT_BLEND_MODE_LIGHTEN
+PARTICLE_OUTPUT_BLEND_MODE_MOD2X
 PARTICLE_SET_REPLACE_VALUE
 PARTICLE_SET_SCALE_CURRENT_VALUE
 PARTICLE_SET_SCALE_INITIAL_VALUE
+PARTICLE_SORTING_CREATION_TIME
+PARTICLE_SORTING_NEAREST
+PARTICLE_VRHAND_CP
+PARTICLE_VRHAND_CP_OBJECT
+PARTICLE_VRHAND_LEFT
+PARTICLE_VRHAND_RIGHT
 PF_BIAS_TYPE_EXPONENTIAL
 PF_MAP_TYPE_MULT
 PF_MAP_TYPE_REMAP
@@ -666,8 +733,8 @@ PhysicsShapeMesh
 PhysicsShapeSphere
 Plat_DebugPrint
 Plat_ExitProcess
-Plat_GetEnv
 Plat_GetModuleProcAddress
+Plat_HasEnv
 Plat_IsInDebugSession
 Plat_LoadModule
 Plat_SetDenormalsAreZero
@@ -709,8 +776,19 @@ ResourceHandleUtils001
 ResourceId_t
 ResourceManifestRegistry001
 ResourceSystem013
+SEQUENCE_COMBINE_MODE_ALPHA_FROM0_RGB_FROM_1
+SEQUENCE_COMBINE_MODE_ALPHA_FROM1_RGB_FROM_0
+SEQUENCE_COMBINE_MODE_REPLICATEALPHA1
+SEQUENCE_COMBINE_MODE_USE_SEQUENCE_0
+SEQUENCE_COMBINE_MODE_USE_SEQUENCE_1
+SEQUENCE_COMBINE_MODE_WEIGHTED_BLEND
 SOURCE2_NO_BUNDLES
 SOURCE2_USE_BUNDLES
+SPRITECARD_TEXTURE_ANIMMOTIONVEC
+SPRITECARD_TEXTURE_CHANNEL_MIX_A
+SPRITECARD_TEXTURE_CHANNEL_MIX_RGB
+SPRITECARD_TEXTURE_CHANNEL_MIX_RGBA
+SPRITECARD_TEXTURE_NORMALMAP
 SSE and SSE2 are required.
 SceneSystem_002
 SceneUtils_001
@@ -761,7 +839,6 @@ ThreadSleep
 ThreeState_t
 ToolFramework2_002
 ToolSceneNodeFactory_001
-ToolScriptManager001
 ToolService_001
 Top %u metadata item counts:
 Trailing Data
@@ -816,6 +893,14 @@ VScriptDbg
 VScriptManager010
 VStringTokenSystem001
 VTable?
+V_LZ4_compressBound
+V_LZ4_compress_HC_continue
+V_LZ4_createStreamHC
+V_LZ4_decoderRingBufferSize
+V_LZ4_decompress_safe
+V_LZ4_decompress_safe_continue
+V_LZ4_freeStreamHC
+V_LZ4_resetStreamHC_fast
 V_PrettifyNum
 V_UTF16ToUTF8
 V_acosf
@@ -863,7 +948,6 @@ WARNING: Unknown schema class '%s' referenced.
 Warning
 Warning:  %s = '%s' is infinite, clamping value.
 WeightList
-WorkshopSetup001
 WorldRendererMgr001
 Y@UnknownSchemaType
 Yes
@@ -907,6 +991,7 @@ anim_name_b
 animationsystem
 animgraph0
 animgraph1
+animgraph2
 archive
 attach_point
 attachment
@@ -934,11 +1019,9 @@ breakable_skin
 burst_randomize
 burst_scale
 cable
-calloc
 cantdie
 center
 cheat
-children
 client
 clientcmd_can_execute
 cloth_collide
@@ -984,7 +1067,6 @@ fltx4
 force
 format
 frame
-free
 friction
 g_BitBuf_BitWriteMasks
 g_BitBuf_ExtraMasks
@@ -1011,7 +1093,6 @@ is_debris
 kv3
 kv3format_manager.cpp
 last_sniff
-ld-linux-x86-64.so.2
 length
 libc.so.6
 libm.so.6
@@ -1064,6 +1145,7 @@ m_Operators
 m_PreEmissionOperators
 m_QAngle
 m_Quaternion
+m_QuaternionAligned
 m_RadianEuler
 m_Renderers
 m_ResourceTypes
@@ -1071,10 +1153,15 @@ m_SolverSettingSource
 m_SolverType
 m_TargetSettingSource
 m_TargetSource
+m_TextureControls
 m_Vector
 m_Vector2D
 m_Vector4D
 m_VectorAligned
+m_additiveChildID
+m_additiveInput
+m_bAdditive
+m_bAdditiveAlpha
 m_bApplyMinForce
 m_bDisableChild
 m_bDisableOperator
@@ -1082,7 +1169,12 @@ m_bDoBonesOrientAlongPositiveX
 m_bFitCycleToLifetime
 m_bForceLoopingAnimation
 m_bInitFromKilledParentParticles
+m_bLightenMode
 m_bLocalSpace
+m_bMaxLuminanceBlendingSequence1
+m_bMod2X
+m_bMotionVectors
+m_bNormalMap
 m_bOffsetExistingPos
 m_bParticleFeathering
 m_bRemapPullForceToLife
@@ -1093,6 +1185,14 @@ m_bScaleInitialValue
 m_bScalePerParticle
 m_bTrailBias
 m_bUseHighestEndCP
+m_baseChildID
+m_baseInput
+m_baseInputConnection
+m_child1ID
+m_child2ID
+m_childID
+m_childNodeID
+m_children
 m_colorCorrectionVolumeData
 m_container
 m_fForceAmount
@@ -1102,6 +1202,8 @@ m_fRadiusMax
 m_fRadiusMin
 m_fSpeedMax
 m_fSpeedMin
+m_flAnimationRate
+m_flAnimationRate2
 m_flBiasParameter
 m_flClusterCooldown
 m_flClusterCooldownMax
@@ -1114,6 +1216,13 @@ m_flDuration
 m_flEmissionDuration
 m_flEmissionScale
 m_flEmitRate
+m_flFinalTextureOffsetU
+m_flFinalTextureOffsetV
+m_flFinalTextureScaleU
+m_flFinalTextureScaleV
+m_flFinalTextureUVRotation
+m_flHitBoxScale
+m_flHitboxScale
 m_flInitFromKilledParentParticles
 m_flInitialRadius
 m_flInitialSpeedMax
@@ -1134,13 +1243,29 @@ m_flRandomMax
 m_flRandomMin
 m_flRoll
 m_flScalePerParentParticle
+m_flSequence0AlphaWeight
+m_flSequence0RGBWeight
+m_flSequence1AlphaWeight
+m_flSequence1RGBWeight
 m_flStartTime
 m_flStartTimeMax
 m_flTailAlphaScale
+m_flTextureBlend
 m_flThickness
 m_flYaw
+m_flZoomAmount0
+m_flZoomAmount1
+m_flZoomMax
+m_flZoomScale
 m_frameData
+m_hMotionVectorsTexture
+m_hNormalTexture
 m_hSnapshot
+m_hTexture
+m_id
+m_inputConnection
+m_inputConnection1
+m_inputConnection2
 m_keyValuesData
 m_matrix3x4_t
 m_matrix3x4a_t
@@ -1155,14 +1280,23 @@ m_nClusterSizeMin
 m_nCollisionMode
 m_nControlPoint
 m_nControlPointNumber
+m_nDerivedA
+m_nDerivedB
+m_nExample1
+m_nExample2
 m_nFeatheringMode
 m_nFirstMultipleOverride_BackwardCompat
+m_nHand
 m_nIncrement
+m_nLightType
 m_nMapType
 m_nMinParticlesToEmit
 m_nNoiseType
+m_nOpEndCapState
 m_nOpScaleCP
 m_nOpStrengthScaleSeed
+m_nOrientationType
+m_nOutputBlendMode
 m_nOverrideCP
 m_nOverrideCP2
 m_nParticlesToEmit
@@ -1172,9 +1306,17 @@ m_nScaleCPComponent
 m_nScaleCPField
 m_nScaleControlPoint
 m_nScaleControlPointField
+m_nSequenceCombineMode
 m_nSetMethod
+m_nSortMethod
+m_nTextureChannels
+m_nTextureType
 m_nType
 m_nVectorComponent
+m_nodeID
+m_nodeManager
+m_nodes
+m_outputID
 m_pBody
 m_pJointConstraintData
 m_pKeyValues
@@ -1183,16 +1325,20 @@ m_pParent
 m_pszSnapshotName
 m_snapshotName
 m_stringToken
+m_subtractChildID
+m_subtractInputConnection
 m_useCurl
 m_vCPValueScale
 m_vEndTrailTintFactor
 m_vLiteralValue
 m_value
 m_vecColorScale
+m_vecHitBoxScale
 m_vecTailColorScale
-malloc
+m_vecTexturesInput
 master_morph_weight
 material
+materials/particle/base_sprite.vtex
 materialsystem2
 mathlib.cpp
 max. %f
@@ -1260,6 +1406,7 @@ operator new[](unsigned long)
 operator new[](unsigned long, std::nothrow_t const&)
 origin_max_delta
 origin_relative
+panorama
 particles
 particles/
 persistent
@@ -1377,7 +1524,11 @@ vpcf24
 vpcf25
 vpcf26
 vpcf27
+vpcf28
+vpcf29
 vpcf3
+vpcf30
+vpcf31
 vpcf4
 vpcf5
 vpcf6

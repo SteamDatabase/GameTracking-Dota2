@@ -15,53 +15,6 @@ enum EPoorNetworkConditionsType {
 	k_EPoorNetworkConditions_ExcessBadQosIntervals = 3;
 }
 
-enum EAbilityAbuseType {
-	k_EAbilityAbuseType_None = 0;
-	k_EAbilityAbuseType_Io_Relocate = 1;
-	k_EAbilityAbuseType_Chen_Test_Of_Faith = 2;
-	k_EAbilityAbuseType_Bane_Nightmare = 3;
-	k_EAbilityAbuseType_Bloodseeker_Bloodrage = 4;
-	k_EAbilityAbuseType_Outworld_Astral_Imprisonment = 5;
-	k_EAbilityAbuseType_Shadow_Demon_Disruption = 6;
-	k_EAbilityAbuseType_Grimstroke_InkSwell = 7;
-}
-
-enum EIntentionalFeedingType {
-	k_EIntentionalFeedingType_None = 0;
-	k_EIntentionalFeedingType_ExcessiveDeaths = 1;
-	k_EIntentionalFeedingType_MultipleCourierPurchases = 2;
-	k_EIntentionalFeedingType_MultipleCourierDeaths = 4;
-	k_EIntentionalFeedingType_LowActivity = 8;
-	k_EIntentionalFeedingType_LowDamage = 16;
-	k_EIntentionalFeedingType_HighUnspentGold = 32;
-	k_EIntentionalFeedingType_SoldTooMuchItemValue = 64;
-	k_EIntentionalFeedingType_TooManyDroppedItems = 128;
-	k_EIntentionalFeedingType_ExcessiveTowerDamage = 256;
-	k_EIntentionalFeedingType_LastHitsDenies = 512;
-	k_EIntentionalFeedingType_XPPM = 1024;
-	k_EIntentionalFeedingType_SuspiciousOrders = 2048;
-}
-
-enum ESuspiciousActivity {
-	k_ESuspiciousActivity_VAC_MultipleInstances = 1;
-	k_ESuspiciousActivity_IntentionalFeeding = 100;
-	k_ESuspiciousActivity_SuspectedBotFarming = 101;
-	k_ESuspiciousActivity_AttemptedToCrashServer = 102;
-}
-
-enum ESuspiciousBuildType {
-	k_ESuspiciousBuildType_None = 0;
-	k_ESuspiciousBuildType_NoGoldSpent = 1;
-	k_ESuspiciousBuildType_NoItems = 2;
-	k_ESuspiciousBuildType_NoSignificantItems = 3;
-	k_ESuspiciousBuildType_TooManyBoots = 4;
-	k_ESuspiciousBuildType_Bot1 = 101;
-	k_ESuspiciousBuildType_Bot2 = 102;
-	k_ESuspiciousBuildType_Bot3 = 103;
-	k_ESuspiciousBuildType_Bot4 = 104;
-	k_ESuspiciousBuildType_Bot5 = 105;
-}
-
 message CMsgPoorNetworkConditions {
 	message Player {
 		optional uint32 account_id = 1;
@@ -236,18 +189,6 @@ message CMsgSignOutGameplayStats {
 	}
 
 	repeated .CMsgSignOutGameplayStats.CTeam teams = 1;
-}
-
-message CMsgSignOutReportActivityMarkers {
-	message Marker {
-		optional uint32 game_time_s = 1;
-		optional uint32 target_account_id = 2;
-		optional uint32 reporter_account_id = 3;
-		optional .EDOTAReportMarkerType marker_type = 4 [default = k_EDOTAReportMarkerType_Unknown];
-		optional string comment = 5;
-	}
-
-	repeated .CMsgSignOutReportActivityMarkers.Marker markers = 1;
 }
 
 message CMsgGameMatchSignOut {
@@ -506,6 +447,9 @@ message CMsgGameMatchSignoutResponse {
 	optional .CMsgDOTAMatch match_details = 8;
 	repeated .CMsgGameMatchSignoutResponse.PlayerMetadata players_metadata = 9;
 	optional .CMvpData mvp_data = 10;
+	optional fixed64 ow_private_key = 11;
+	optional fixed32 ow_salt = 12;
+	optional uint64 ow_replay_id = 13;
 }
 
 message CMsgTimedRewardContainer {
@@ -893,14 +837,6 @@ message CMsgServerToGCVictoryPredictions {
 	}
 
 	repeated .CMsgServerToGCVictoryPredictions.Record records = 1;
-}
-
-message CMsgSuspiciousActivity {
-	optional uint32 account_id = 1;
-	optional .ESuspiciousActivity activity = 2 [default = k_ESuspiciousActivity_VAC_MultipleInstances];
-	optional sint32 intdata1 = 3;
-	optional sint32 intdata2 = 4;
-	optional uint32 time = 5;
 }
 
 message CMsgServerToGCRequestStatus {
@@ -1399,9 +1335,16 @@ message CMsgServerToGCGetGuildContractsResponse {
 }
 
 message CMsgMatchDiretideCandy {
+	message CandyDetails {
+		optional uint32 amount = 1;
+		optional uint32 audit = 2;
+	}
+
 	message PlayerCandy {
 		optional uint32 account_id = 1;
 		optional uint32 candy_amount = 3;
+		optional bool consumes_periodic_resource = 4;
+		repeated .CMsgMatchDiretideCandy.CandyDetails candy_breakdown = 5;
 	}
 
 	repeated .CMsgMatchDiretideCandy.PlayerCandy player_candy_data = 1;
