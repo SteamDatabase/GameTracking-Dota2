@@ -14,6 +14,12 @@ end
 
 --------------------------------------------------------------------------------
 
+function hero_candy_bucket:IsStealable()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function hero_candy_bucket:GetIntrinsicModifierName()
 	return "modifier_hero_candy_bucket"
 end
