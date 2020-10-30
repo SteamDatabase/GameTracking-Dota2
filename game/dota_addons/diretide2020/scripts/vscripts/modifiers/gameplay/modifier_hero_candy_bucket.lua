@@ -39,8 +39,6 @@ function modifier_hero_candy_bucket:OnCreated( kv )
 
 	if IsServer() == true then
 		self.fStatCalcInterval = 0.2
-		self.nHealthLost = 0
-		self.nCurCandy = 0
 	else
 		self.nParticleFX = -1
 	end
@@ -93,7 +91,6 @@ function modifier_hero_candy_bucket:OnDeath( params )
 	if IsServer() then
 		if params.unit == self:GetParent() and params.unit:IsReincarnating() == false then
 			self:DropCandy( params.attacker )
-			self.nHealthLost = 0
 		end
 	end
 
@@ -103,8 +100,7 @@ end
 --------------------------------------------------------------------------------
 
 function modifier_hero_candy_bucket:GetModifierExtraHealthPercentage( params )
-	-- we use the stored candy value so we have control over when maxhealth changes.
-	local nReduction = ( -self.max_hp_penalty_per_charge * self.nCurCandy )
+	local nReduction = ( -self.max_hp_penalty_per_charge * self:GetAbility():GetCandy() )
 	if nReduction < -90 then
 		nReduction = -90
 	end
@@ -121,29 +117,15 @@ function modifier_hero_candy_bucket:OnIntervalThink()
 	if IsServer() == true then
 		if self.fNextStatCalcTime == nil or self.fNextStatCalcTime <= GameRules:GetDOTATime( false, true ) then
 			-- This is crap, doing it because GetModifierExtraHealthPercentage isn't being called at the right times
-			-- Note that our call for that will be constant until *this* value changes, which means
-			-- we have control over when the maxhealth changes from candy.
-			self.nCurCandy = nCandy
-
-			local nOldHealth = self:GetParent():GetHealth()
+			local nHealth = self:GetParent():GetHealth()
 			local nOldMax = self:GetParent():GetMaxHealth()
 
 			self:GetParent():CalculateStatBonus()
 
-			local nNewHealth = self:GetParent():GetHealth()
 			local nNewMax = self:GetParent():GetMaxHealth()
-			-- something later actually does the clamping? So we have to clamp here.
-			nNewHealth = math.min( nNewHealth, nNewMax )
-
-			if nNewHealth < nOldHealth then
-				-- they're all ints, but let's be safe because why not.
-				self.nHealthLost = self.nHealthLost + math.floor( nOldHealth - nNewHealth )
-				--printf("Lost health! Old health %d, new health %d, delta %d so total lost now %d", nOldHealth, nNewHealth, nOldHealth - nNewHealth, self.nHealthLost)
-			elseif self.nHealthLost > 0 and nNewMax > nOldMax then
-				local nHeal = math.min( self.nHealthLost, math.min( nNewMax - nNewHealth, nNewMax - nOldMax ) )
-				--printf("Healing back up. Total health lost %d, clamped heal %d (health %d, max %d) so new desired %d", self.nHealthLost, nHeal, nNewHealth, nNewMax, nNewHealth + nHeal)
-				self:GetParent():ModifyHealth( nNewHealth + nHeal, nil, false, 0 )
-				self.nHealthLost = self.nHealthLost - nHeal
+			if nNewMax > nOldMax then
+				local fRatio = nNewMax / nOldMax
+				self:GetParent():Heal( ( fRatio - 1.0 ) * nHealth, self:GetParent() )
 			end
 
 			self.fNextStatCalcTime = GameRules:GetDOTATime( false, true ) + self.fStatCalcInterval

@@ -276,7 +276,7 @@ function hero_candy_bucket:OnProjectileHit_ExtraData( hTarget, vLocation, kv )
 		end
 
 		if hTarget ~= nil and hTarget ~= self:GetCaster() then
-			local nCandyCount = math.min( kv.amount, self:GetCandy() ) -- spoiler: yes, we *do* need the guard.
+			local nCandyCount = kv.amount -- do we need a guard here, of math.min( kv.amount, self:GetCandy() ) ?
 
 			if hTarget:IsRealHero() then
 				local hTargetBucket = hTarget:FindAbilityByName( "hero_candy_bucket" )
