@@ -412,7 +412,7 @@ function CDiretide:RefreshPlayers()
 								hAbility:EndCooldown()
 								hAbility:RefreshCharges()
 							end
-							hAbility:RefreshIntrinsicModifier()
+							-- DO NOT DO THIS without testing if ability is trained/etc. hAbility:RefreshIntrinsicModifier()
 						end
 					end
 
