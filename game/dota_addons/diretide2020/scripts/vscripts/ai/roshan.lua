@@ -38,6 +38,8 @@ function RoshanThink()
 		return ReturnHome()
 	end
 
+	thisEntity.hTrickOrTreatTarget:RemoveModifierByName( "modifier_smoke_of_deceit" )
+
 	if thisEntity.nTreatMode == ROSHAN_TRICK_OR_TREAT_MODE_REQUEST then
 		return RequestTreat( thisEntity.hTrickOrTreatTarget )
 	end

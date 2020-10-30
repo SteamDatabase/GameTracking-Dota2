@@ -23,7 +23,7 @@ function CDiretide:OnThink()
 	local nRoshanCandy = 0
 	local bRoshanNearPlayer = false
 	local nTrickOrTreatMode = ROSHAN_TRICK_OR_TREAT_MODE_NONE
-	if self.hRoshan ~= nil then
+	if self.hRoshan ~= nil and self.hRoshan:IsNull() == false then
 		nTrickOrTreatMode = self.hRoshan.nTreatMode
 		if self.hRoshan.hTrickOrTreatTarget ~= nil then
 			nTrickOrTreatHeroID = self.hRoshan.hTrickOrTreatTarget:GetHeroID()

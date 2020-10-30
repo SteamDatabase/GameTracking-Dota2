@@ -113,25 +113,23 @@ function CDiretide:OnEntityHurt( event )
 	end
 
 	if hHurtUnit:IsBuilding() and hAttacker ~= nil and hAttacker:IsNull() == false and ( hHurtUnit:GetTeamNumber() == DOTA_TEAM_GOODGUYS or hHurtUnit:GetTeamNumber() == DOTA_TEAM_BADGUYS ) then
-		if hAttacker:GetPlayerOwner() ~= nil then
+		if hAttacker:IsOwnedByAnyPlayer() ~= nil then
 			local nCandy = math.min( self:ShouldBuildingEmitCandy( hHurtUnit, event.damage ), self:GetTeamCandy( hHurtUnit:GetTeamNumber() ) )
 			if nCandy > 0 then
-				if hAttacker and hAttacker:IsOwnedByAnyPlayer() then
-					local hAttackerHero = nil
-					if hAttacker:IsRealHero() then
-						hAttackerHero = hAttacker
-					else
-						local hPlayer = hAttacker:GetPlayerOwner()
-						if hPlayer then
-							hAttackerHero = hPlayer:GetAssignedHero()
-						end
+				local hAttackerHero = nil
+				if hAttacker:IsRealHero() then
+					hAttackerHero = hAttacker
+				else
+					local hPlayer = hAttacker:GetPlayerOwner()
+					if hPlayer then
+						hAttackerHero = hPlayer:GetAssignedHero()
 					end
+				end
 
-					if hAttackerHero ~= nil then
-						if self.bAwardedFirstCandySteal == false then
-							PlayerResource:AddCandyEvent( hAttackerHero:GetPlayerID(), 7 )	-- k_ECandyReasonEventGameFirstCandySteal
-							self.bAwardedFirstCandySteal = true
-						end
+				if hAttackerHero ~= nil then
+					if self.bAwardedFirstCandySteal == false then
+						PlayerResource:AddCandyEvent( hAttackerHero:GetPlayerID(), 7 )	-- k_ECandyReasonEventGameFirstCandySteal
+						self.bAwardedFirstCandySteal = true
 					end
 				end
 
@@ -146,7 +144,7 @@ function CDiretide:OnEntityHurt( event )
 					end
 				end
 			end
-		else
+		elseif hAttacker:GetTeamNumber() == DOTA_TEAM_GOODGUYS or hAttacker:GetTeamNumber() == DOTA_TEAM_BADGUYS then
 			-- Creeps disappear when they attack the home bucket, taking (some amount) of candy with them.
 			if hHurtUnit:GetUnitName() == "home_candy_bucket" then
 				-- FIXME for now just using precomputed candy amount, later we want this to be variable.

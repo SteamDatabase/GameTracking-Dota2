@@ -8,6 +8,12 @@ LinkLuaModifier( "modifier_candy_eaten_recently", "modifiers/gameplay/modifier_c
 
 --------------------------------------------------------------------------------
 
+function hero_candy_bucket:ProcsMagicStick()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function hero_candy_bucket:IsRefreshable()
 	return false
 end
@@ -30,7 +36,6 @@ function hero_candy_bucket:GetCandy()
 	local nCharges = self:GetCurrentAbilityCharges()
 	if nCharges > 999 then -- will detect the default of 9999
 		nCharges = 0
-		self:SetCurrentAbilityCharges( 0 )
 	end
 	return nCharges
 end

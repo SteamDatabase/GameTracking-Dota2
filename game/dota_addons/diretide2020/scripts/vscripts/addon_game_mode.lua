@@ -406,10 +406,13 @@ function CDiretide:RefreshPlayers()
 
 					for i = 0,DOTA_MAX_ABILITIES-1 do
 						local hAbility = hHero:GetAbilityByIndex( i )
-						if hAbility and hAbility:IsRefreshable() then
-							hAbility:SetFrozenCooldown( false )
-							hAbility:EndCooldown()
-							hAbility:RefreshCharges()
+						if hAbility then
+							if hAbility:IsRefreshable() then
+								hAbility:SetFrozenCooldown( false )
+								hAbility:EndCooldown()
+								hAbility:RefreshCharges()
+							end
+							hAbility:RefreshIntrinsicModifier()
 						end
 					end
 
@@ -1267,9 +1270,9 @@ function CDiretide:EndRound( nScoringTeam )
 			-- Remove all temporary modifiers
 			local hBuffs = Hero:FindAllModifiers()
 			for _, hBuff in pairs( hBuffs ) do
-				if hBuff ~= nil then
-					if hBuff:GetDuration() > 0 then
-						--printf( "Destroying buff named %s", hBuff:GetModifierName() )
+				if hBuff ~= nil and hBuff:IsNull() == false then
+					if hBuff:GetDuration() > 0 and hBuff:DestroyOnExpire() then
+						--printf( "Destroying buff named %s", hBuff:GetName() )
 						hBuff:Destroy()
 					end
 				end
