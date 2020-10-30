@@ -117,14 +117,17 @@ function modifier_hero_candy_bucket:OnIntervalThink()
 	if IsServer() == true then
 		if self.fNextStatCalcTime == nil or self.fNextStatCalcTime <= GameRules:GetDOTATime( false, true ) then
 			-- This is crap, doing it because GetModifierExtraHealthPercentage isn't being called at the right times
+			local nHealth = self:GetParent():GetHealth()
+			local nOldMax = self:GetParent():GetMaxHealth()
+
 			self:GetParent():CalculateStatBonus()
 
-			if self.nPrevCount > nCandy then
-				local fHealthPerCharge = self:GetParent():GetBaseMaxHealth() * ( self.max_hp_penalty_per_charge / 100 )
-				local fHealthGain = fHealthPerCharge * ( self.nPrevCount - nCandy )
-				--printf( "fHealthPerCharge: %.2f, self.nPrevCount: %d, self:GetAbility():GetCurrentCharges(): %d, fHealthGain: %.2f", fHealthPerCharge, self.nPrevCount, self:GetAbility():GetCurrentCharges(), fHealthGain )
-				self:GetParent():Heal( fHealthGain, self:GetParent() )
+			local nNewMax = self:GetParent():GetMaxHealth()
+			if nNewMax > nOldMax then
+				local fRatio = nNewMax / nOldMax
+				self:GetParent():Heal( ( fRatio - 1.0 ) * nHealth, self:GetParent() )
 			end
+
 			self.fNextStatCalcTime = GameRules:GetDOTATime( false, true ) + self.fStatCalcInterval
 			self.nPrevCount = nCandy
 		end

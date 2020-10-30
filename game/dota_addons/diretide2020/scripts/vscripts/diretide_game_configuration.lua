@@ -23,6 +23,12 @@ function CDiretide:SetupGameConfiguration()
 	end
 	GameRules:SetUseUniversalShopMode( true )
 	GameRules:SetStartingGold( 1000 )
+	for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
+		if PlayerResource:IsValidPlayerID( nPlayerID ) then
+			PlayerResource:SetGold( nPlayerID, 1000, false )
+		end
+	end
+
 	--GameRules:SetCustomGameSetupAutoLaunchDelay( 10 )
 	GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_GOODGUYS, DIRETIDE_PLAYERS_PER_TEAM )
 	GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_BADGUYS, DIRETIDE_PLAYERS_PER_TEAM )
@@ -140,7 +146,7 @@ function CDiretide:AssignTeams()
 	for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 		if PlayerResource:IsValidPlayerID( nPlayerID ) then
 			local nTeam = PlayerResource:GetTeam( nPlayerID )
-			local nTeamCustom = PlayerResource:GetCustomTeamAssignment( nPlayerID )
+			local nTeamCustom = PlayerResource:GetCustomTeamAssignment( nPlayerID )			
 			if nTeamCustom == DOTA_TEAM_GOODGUYS then
 				nRadiant = nRadiant + 1
 			elseif nTeamCustom == DOTA_TEAM_BADGUYS then
@@ -165,7 +171,7 @@ function CDiretide:AssignTeams()
 			if nTeam ~= DOTA_TEAM_GOODGUYS and nTeam ~= DOTA_TEAM_BADGUYS and nTeamCustom ~= DOTA_TEAM_GOODGUYS and nTeamCustom ~= DOTA_TEAM_BADGUYS then
 				local nTeamNumber = ( nRadiant > nDire and DOTA_TEAM_BADGUYS ) or DOTA_TEAM_GOODGUYS
 				
-				--print( "Assigning player " .. nPlayerID .. " to " .. nTeamNumber )
+				print( "Assigning player " .. nPlayerID .. " to " .. nTeamNumber )
 				PlayerResource:SetCustomTeamAssignment( nPlayerID, nTeamNumber )
 				
 				if nTeamNumber == DOTA_TEAM_GOODGUYS then
