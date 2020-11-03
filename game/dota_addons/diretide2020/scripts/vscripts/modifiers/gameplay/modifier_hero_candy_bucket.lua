@@ -103,8 +103,14 @@ end
 --------------------------------------------------------------------------------
 
 function modifier_hero_candy_bucket:GetModifierExtraHealthPercentage( params )
+	local nCandy = 0
+	if IsServer() == true and self.nCurCandy ~= nil then
+		nCandy = self.nCurCandy
+	else
+		nCandy = self:GetAbility():GetCandy()
+	end
 	-- we use the stored candy value so we have control over when maxhealth changes.
-	local nReduction = ( -self.max_hp_penalty_per_charge * self.nCurCandy )
+	local nReduction = ( -self.max_hp_penalty_per_charge * nCandy )
 	if nReduction < -90 then
 		nReduction = -90
 	end

@@ -114,7 +114,11 @@ function CDiretide:OnEntityHurt( event )
 
 	if hHurtUnit:IsBuilding() and hAttacker ~= nil and hAttacker:IsNull() == false and ( hHurtUnit:GetTeamNumber() == DOTA_TEAM_GOODGUYS or hHurtUnit:GetTeamNumber() == DOTA_TEAM_BADGUYS ) then
 		if hAttacker:IsOwnedByAnyPlayer() then
-			local nCandy = math.min( self:ShouldBuildingEmitCandy( hHurtUnit, event.damage ), self:GetTeamCandy( hHurtUnit:GetTeamNumber() ) )
+			local fDamage = event.damage
+			if hAttacker:IsHero() == false then
+				fDamage = fDamage * 0.25
+			end
+			local nCandy = math.min( self:ShouldBuildingEmitCandy( hHurtUnit, fDamage ), self:GetTeamCandy( hHurtUnit:GetTeamNumber() ) )
 			if nCandy > 0 then
 				local hAttackerHero = nil
 				if hAttacker:IsRealHero() then
