@@ -1284,6 +1284,9 @@ function CDiretide:EndRound( nScoringTeam )
 			Hero:RemoveModifierByName( "modifier_wisp_spirits" )
 			Hero:RemoveModifierByName( "modifier_beastmaster_wild_axes" )
 			Hero:RemoveModifierByName( "modifier_life_stealer_infest" )
+			Hero:RemoveModifierByName( "modifier_pudge_rot" )
+			Hero:RemoveModifierByName( "modifier_kunkka_x_marks_the_spot_marker" )
+			Hero:RemoveModifierByName( "modifier_kunkka_x_marks_the_spot" )
 
 			Hero:AddNewModifier( Hero, nil, "modifier_hero_post_round", { duration = 2.0 } )
 
@@ -1305,7 +1308,15 @@ function CDiretide:EndRound( nScoringTeam )
 	local vecThinkers = Entities:FindAllByClassname( "npc_dota_thinker" )
 	if vecThinkers ~= nil then
 		for _, hThinker in ipairs( vecThinkers ) do
-			hThinker:RemoveModifierByName( "modifier_dark_seer_wall_of_replica" ) -- will kill thinker since the modifier's OnDestroy does so.
+			if hThinker ~= nil and hThinker:IsNull() == false then
+				local hBuff = hThinker:FindModifierByName( "modifier_kunkka_x_marks_the_spot_thinker" )
+				if hBuff ~= nil and hBuff:IsNull() == false then
+					hBuff:GetCaster():UnHideAbilityToSlot( "kunkka_x_marks_the_spot", "kunkka_return" )
+					UTIL_Remove( hThinker )
+				else
+					hThinker:RemoveModifierByName( "modifier_dark_seer_wall_of_replica" ) -- will kill thinker since the modifier's OnDestroy does so.
+				end
+			end
 		end
 	end
 
@@ -1564,6 +1575,9 @@ function CDiretide:ResetRoshan()
 
 	self.nQueueRoshanForTeam = nil
 
+	-- JUST IN CASE let's kill the soundloop on all players.
+	self:KillRoshanChaseSound()
+
 	self.hRoshan:SetAbsAngles( 0, 270, 0 )
 	self.hRoshan.nCandyAttackTeam = nil
 	self.hRoshan.nTrickOrTreatTeam = 0
@@ -1621,8 +1635,23 @@ end
 
 --------------------------------------------------------------------------------
 
+function CDiretide:KillRoshanChaseSound()
+	-- JUST IN CASE let's kill the soundloop on all players.
+	for nPlayerID = 0, DOTA_MAX_PLAYERS-1 do
+		local hPlayer = PlayerResource:GetPlayer( nPlayerID )
+		if hPlayer ~= nil then
+			StopSoundEvent( "RoshanTarget.Loop", hPlayer )
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+
 function CDiretide:TrickOrTreatToTeam( nTeam, bIncrementCounter )
 	self.hRoshan.nTrickOrTreatTeam = 0 -- we'll set this later, if we succeed
+
+	-- JUST IN CASE let's kill the soundloop on all players.
+	self:KillRoshanChaseSound()
 
 	-- catch running this during round ending
 	if self:IsRoundInProgress() == false then
