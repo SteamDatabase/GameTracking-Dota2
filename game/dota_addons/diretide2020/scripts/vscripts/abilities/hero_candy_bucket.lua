@@ -98,7 +98,7 @@ function hero_candy_bucket:CastFilterResultTarget( hTarget )
 		return UF_FAIL_CUSTOM
 	end
 
-	if hTarget:IsCreep() then
+	if hTarget:IsBuilding() == false and ( hTarget:IsCreep() or hTarget:IsCreepHero() ) then
 		return UF_FAIL_CUSTOM
 	end
 
@@ -151,7 +151,7 @@ function hero_candy_bucket:GetCustomCastErrorTarget( hTarget )
 		return "#dota_hud_error_cant_cast_on_enemy"
 	end
 
-	if hTarget:IsCreep() then
+	if hTarget:IsBuilding() == false and ( hTarget:IsCreep() or hTarget:IsCreepHero() ) then
 		return "#dota_hud_error_cant_cast_on_creep"
 	end
 
