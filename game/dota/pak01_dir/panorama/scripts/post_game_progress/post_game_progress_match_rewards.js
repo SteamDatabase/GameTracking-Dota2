@@ -460,6 +460,13 @@ AnimateMatchRewardsScreenAction.prototype.start = function ()
 			nCurrentShards += dotaPlusProgress.role_call_shard_reward;
 		}
 
+		if ( dotaPlusProgress.max_level_hero_challenge_shard_reward > 0 )
+		{
+			this.seq.actions.push( new AnimateShardRewardAction( panel, '#DOTA_PlusPostGame_MaxLevelHeroChallenge', dotaPlusProgress.max_level_hero_challenge_shard_reward, nTotalEarned, nCurrentShards ) );
+			nTotalEarned += dotaPlusProgress.max_level_hero_challenge_shard_reward;
+			nCurrentShards += dotaPlusProgress.max_level_hero_challenge_shard_reward;
+		}
+
 		this.seq.actions.push( new StopSkippingAheadAction() );
 	}
 
@@ -587,11 +594,14 @@ function TestAnimateMatchRewards()
 	{
 		hero_id: 6,
 
-		hero_badge_xp_start: 22850,
+		// hero_badge_xp_start: 22850,
 
 		/* Uncomment to test what happens if leveling is plus restricted. */
 		// hero_badge_xp_start: 2500,
 		// hero_badge_xp_cap: 2749,
+
+		/* Uncomment to test what happens at max level */
+		hero_badge_xp_start: 71850,
 
 	    hero_badge_progress:
 		[
@@ -679,6 +689,7 @@ function TestAnimateMatchRewards()
 			victory_prediction_shard_reward: 20,
 			guild_contracts_shard_reward: 250,
 			role_call_shard_reward: 50,
+			max_level_hero_challenge_shard_reward: 250,
 		},
 
 		guild_progress:

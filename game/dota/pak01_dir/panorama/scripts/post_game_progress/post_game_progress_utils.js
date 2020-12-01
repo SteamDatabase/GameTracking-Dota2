@@ -10,7 +10,7 @@ const HERO_BADGE_LEVEL_REWARD_CHAT_WHEEL = 1;
 const HERO_BADGE_LEVEL_REWARD_CURRENCY = 2;
 
 // Keep in sync with the version in dota_plus.h
-const k_unMaxHeroRewardLevel = 25;
+const k_unMaxHeroRewardLevel = 30;
 
 // ----------------------------------------------------------------------------
 //   Screen Handling functions
