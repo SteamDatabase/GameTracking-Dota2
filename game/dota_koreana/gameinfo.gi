@@ -94,7 +94,7 @@
 
 	SceneSystem
 	{
-		"NoSunLightManager" "1"
+		"SunLightManagerCount" "0"
 	}
 
 	ToolsEnvironment

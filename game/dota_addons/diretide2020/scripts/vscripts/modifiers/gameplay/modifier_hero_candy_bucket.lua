@@ -134,7 +134,7 @@ function modifier_hero_candy_bucket:OnIntervalThink()
 			local nOldHealth = self:GetParent():GetHealth()
 			local nOldMax = self:GetParent():GetMaxHealth()
 
-			self:GetParent():CalculateStatBonus()
+			self:GetParent():CalculateStatBonus( false )
 
 			local nNewHealth = self:GetParent():GetHealth()
 			local nNewMax = self:GetParent():GetMaxHealth()

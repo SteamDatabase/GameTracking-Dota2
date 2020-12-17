@@ -391,7 +391,7 @@ function CDiretide:OnNPCSpawned_PlayerHero( event )
 
 		-- Heroes were spawning with missing health when they had died with the candy max hp debuff.
 		-- Seemed to be due to timing of when their max hp changed.
-		hPlayerHero:CalculateStatBonus()
+		hPlayerHero:CalculateStatBonus( false )
 
 		local flHealAmount = hPlayerHero:GetMaxHealth()
 		hPlayerHero:Heal( flHealAmount, hPlayerHero )

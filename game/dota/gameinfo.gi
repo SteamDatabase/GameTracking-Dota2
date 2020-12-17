@@ -105,8 +105,7 @@
 		// bypass this limit so we can be fairly conservative.
 		"ReserveWarnMB" "64"
 
-		// FIXME : Doesn't work with texture layer changes.
-		"SupportsVulkanParticleOptimizations" "0"
+		"SupportsVulkanParticleOptimizations" "1"
 
 		"RenderingPipeline"
 		{
@@ -133,7 +132,7 @@
 
 	SceneSystem
 	{
-		"NoSunLightManager" "1"
+		"SunLightManagerCount" "0"
 		"TransformTextureRowCount" "256"
 		"CMTAtlasWidth" "512"
 		"CMTAtlasHeight" "512"

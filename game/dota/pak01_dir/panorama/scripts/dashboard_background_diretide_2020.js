@@ -130,26 +130,10 @@ var RunEatAnimation = function ()
     RunSingleAction(seq);
 }
 
-
-// todo(ericl): can probably just expose this from C++
-var FindAncestor = function ( startPanel, ancestorID )
-{
-    var curPanel = startPanel.GetParent();
-    while ( curPanel )
-    {
-        if ( curPanel.id == ancestorID )
-            return curPanel;
-
-        curPanel = curPanel.GetParent();
-    }
-
-    return null;
-}
-
 var GetActivePageType = function ()
 {
     // todo(ericl): This is a kinda terrible way to do this.
-    var dashboard = FindAncestor( $.GetContextPanel(), "Dashboard" );
+    var dashboard = $.GetContextPanel().FindAncestor( "Dashboard" );
     var pageManager = dashboard.FindChildInLayoutFile( "DashboardPages" );
     for ( var i = 0; i < pageManager.GetChildCount(); ++i )
     {

@@ -2536,7 +2536,7 @@ function TestAnimateDiretideProgress()
 				{
 					item_id: 13812,
 					item_player_slot: 2,
-					item_image: "file://{images}/events/diretide/candycount.png"
+					item_image: "file://{images}/events/diretide/spray.png"
 				}
 			],
 			

@@ -111,7 +111,13 @@
 	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : ""
 	
-	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity."
+	disableshadows(choices) [ group="Render Properties" ] : "Cast Shadows" : 0 : "Used to disable shadow casting from this entity." = 
+	[
+		0: "Enabled"
+		1: "No Shadows"
+		2: "Only Realtime Shadows"
+		3: "Only Baked Shadows"
+	]
 
 	// Inputs
 	input Skin(integer) : "Changes the model skin to the specified number."
@@ -193,7 +199,13 @@
 
 @BaseClass = Shadow
 [
-	disableshadows(boolean) [ group="Misc" ] : "Disable shadows" : 0
+	disableshadows(choices) [ group="Render Properties" ] : "Cast Shadows" : 0 : "Used to disable shadow casting from this entity." = 
+	[
+		0: "Enabled"
+		1: "No Shadows"
+		2: "Only Realtime Shadows"
+		3: "Only Baked Shadows"
+	]
 
 	input DisableShadow(void) : "Turn shadow off."
 	input EnableShadow(void) : "Turn shadow on."
@@ -1291,7 +1303,12 @@
 //
 //-------------------------------------------------------------------------
 
-@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, CanBeClientOnly) model() model_archetypes(animated_model) = cycler :
+@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, CanBeClientOnly) model()
+	metadata
+	{
+		model_archetypes = [ "animated_model" ]
+	}
+= cycler :
 	"An entity used to display a model for testing purposes. Shooting it with cycle through the model's animations."
 [
 	spawnflags(flags) =
@@ -1327,7 +1344,12 @@
 ]
 
 
-@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, Studiomodel) model() model_archetypes(animated_model) = func_orator : 
+@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, Studiomodel) model()
+	metadata
+	{
+		model_archetypes = [  "animated_model" ]
+	}
+= func_orator : 
 	"A very simple model entity that has animations and response rules."
 [
 	spawnflags(flags) =
@@ -1583,6 +1605,7 @@
 	"An entity that creates an explosion at its origin. If the no-damage spawnflag is set, the explosion won't be visible, but will apply force to any physics objects within its radius."
 [
 	magnitude(string) : "Magnitude" : "100" : "Amount of physics force applied by the explosion."
+	damage(string) : "Damage" : "0" : "If specified, amount of damage to deal. If unspecified, magnitude is used as the damage."
 	radius(string) : "Clamp Radius (0 = auto)" : "0" : "If specified, the radius in which the explosion damages entities. If unspecified, the radius will be based on the magnitude."
 	targetentityname(target_destination) : "Limit to Entity" : "" : "If specified, the explosion will only affect the matching entity."
 	explodeonspawn(boolean) : "Explode on spawn" : "Performs the physics explosion immediately upon spawning."
@@ -2628,7 +2651,7 @@
 	start_active(boolean) : "Start Active?" : 1
 
 	snapshot_file(resource:vsnap) { enabled={ variable="snapshot_mesh" value="0" } } : "Particle Snapshot File" : "" : "Name of .VSNAP (Particle Snapshot File) to be loaded and used by this particle system (e.g. 'smoke_snapshot1')"
-	snapshot_mesh(node_id) : "Particle Snapshot Mesh" : "" : "Id of a mesh in the map to be used to generate a particle snapshot, if specified Particle Snapshot File is ignored."
+	snapshot_mesh(node_id) : "Particle Snapshot Node" : "" : "Id of a node in the map to be used to generate a particle snapshot, if specified Particle Snapshot File is ignored."
 
 	cpoint0(target_destination) [ group="Control Points" ] : "Control Point 0" : : "If set, control point 0 of the effect will be at this entity's location. (Otherwise it is at the info_particle_system origin)"
 	cpoint1(target_destination) [ group="Control Points" ]  : "Control Point 1" : : "If set, control point 1 of the effect will be at this entity's location."
@@ -4807,10 +4830,6 @@
 	output OnDamaged(void) : "Fired when this entity is damaged."
 	output OnAwakened(void) : "Fired when this entity becomes awake (collision/force is applied)."
 	output OnMotionEnabled(void) : "Fired when motion is enabled due to damage/physcannon/force."
-	output OnPhysGunPickup(void) : "Fired when a player picks this object up, either with the physgun or +USE."
-	output OnPhysGunPunt(void) : "Fired when a player punts this object with the physgun."
-	output OnPhysGunOnlyPickup(void) : "Fired when a player picks this object up WITH THE PHYSGUN. +USE pickups do not fire this output."
-	output OnPhysGunDrop(void) : "Fired when a player drops this object."
 	output OnPlayerUse(void) : "Fired when the player tries to +USE the physbox. This output will fire only if the Generate output on +USE spawnflag is set."
 	output OnStartTouch(void) : "Fired when it touches with another entity. Activator is the other entity."
 ]
@@ -5351,7 +5370,15 @@
 		3: "Use oriented Box"
 		6: "Use VPhysics"
 	]
-	disableshadows(boolean) [ group="Render Properties" ] : "Disable Shadows" : 0
+
+	disableshadows(choices) [ group="Render Properties" ] : "Cast Shadows" : 0 : "Used to disable shadow casting fromthis entity." = 
+	[
+		0: "Enabled"
+		1: "No Shadows"
+		2: "Only Realtime Shadows"
+		3: "Only Baked Shadows"
+	]
+
 	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist/Pixels" : -1 : "Distance at which the prop starts to fade (<0 = subtract from fademaxdist)."
 	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist/Pixels" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out)."
 	fadescale(float) [ group="Render Properties" ] : "Fade Scale" : 1 : "If you specify a fade in the worldspawn, or if the engine is running under low end/medium end/XBox360, then the engine will forcibly fade out props even if fademindist/fademaxdist isn't specified." +
@@ -5450,7 +5477,12 @@
 	model(studio) : "World model"
 ]
 
-@PointClass base(PosableSkeleton) tags( PropStatic ) color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static) model_archetypes(static_prop_model) = prop_static
+@PointClass base(PosableSkeleton) tags( PropStatic ) color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static) 
+	metadata
+	{
+		model_archetypes = [ "static_prop_model" ]
+	}
+= prop_static
 [
 	model(resource:model) [report] : "World Model"
 	solid(choices) : "Collisions" : 6 =
@@ -5460,7 +5492,15 @@
 		3: "Use oriented Box"
 		6: "Use VPhysics"
 	]
-	disableshadows(boolean) [ group="Render Properties" ] : "Disable Shadows" : 0
+	
+	disableshadows(choices) [ group="Render Properties" ] : "Cast Shadows" : 0 : "Used to disable shadow casting from this entity." = 
+	[
+		0: "Enabled"
+		1: "No Shadows"
+		2: "Only Realtime Shadows"
+		3: "Only Baked Shadows"
+	]
+
 	screenspacefade(boolean) [ group="Render Properties" ] : "Screen Space Fade" : 0 : "The method by which the fading distance should be determined. If 'No', the fade distances is the distance from the player's view to the object, in inches. If 'Yes', the fade distance is the size of the object onscreen, in pixels."
 
 	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
@@ -5515,12 +5555,13 @@
 ]
 
 
-@PointClass base(prop_dynamic_base, EnableDisable) sphere(fademindist) sphere(fademaxdist) model() model_archetypes(animated_model)
+@PointClass base(prop_dynamic_base, EnableDisable) sphere(fademindist) sphere(fademaxdist) model()
 	metadata
 	{
-	entity_tool_name = "Dynamic Prop"
-	entity_tool_group = "Content"
-	entity_tool_tip = "Adds a dynamic model - use this for models that have animation or movement"
+		model_archetypes = [ "animated_model" ]
+		entity_tool_name = "Dynamic Prop"
+		entity_tool_group = "Content"
+		entity_tool_tip = "Adds a dynamic model - use this for models that have animation or movement"
 	}
 = prop_dynamic :
 	"A prop that can be placed in hierarchy and can play animations and/or simulate cloth. It can also be configured to break when it takes enough damage. "+
@@ -5609,10 +5650,6 @@
 	// Outputs
 	output OnMotionEnabled(void) : "Fired when motion is enabled on this prop, either via 'Health Level to Override Motion' or from the EnableMotion input."
 	output OnAwakened(void) : "Fired when this entity becomes awake (collision/force is applied to it while it's asleep)."
-	output OnPhysGunPickup(void) : "Fired when the player picks up the prop with the physcannon or +USE."
-	output OnPhysGunPunt(void) : "Fired when a player punts this object with the physgun."
-	output OnPhysGunOnlyPickup(void) : "Fired when a player picks this object up WITH THE PHYSGUN. +USE pickups do not fire this output."
-	output OnPhysGunDrop(void) : "Fired when the player drops the prop with the physcannon or USE."
 	output OnPlayerUse(void) : "Fired when the player tries to +USE the prop. This output will fire only if the Generate output on +USE spawnflag is set."
 	output OnPlayerPickup(void) : "Fired whenever the player picks up this prop (with the physcannon or with +USE)."
 	output OnOutOfWorld(void) : "Fired whenever the prop is out of the allowed world bounds."
@@ -5633,7 +5670,12 @@
 	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Will only be lit by lights affecting this group."
 ]
 
-@PointClass base(BasePropPhysics, RenderFields, BasePhysicsSimulated) model() sphere(fademindist) sphere(fademaxdist) model_archetypes(physics_prop_model,breakable_prop_model) = prop_physics :
+@PointClass base(BasePropPhysics, RenderFields, BasePhysicsSimulated) model() sphere(fademindist) sphere(fademaxdist) 
+	metadata
+	{
+		model_archetypes = [ "physics_prop_model", "breakable_prop_model" ]
+	}
+= prop_physics :
 	"A prop that physically simulates as a single rigid body. It can be constrained to other physics objects using hinges "+
 	"or other constraints. It can also be configured to break when it takes enough damage. "+
 	"Note that the health of the object will be overridden by the health inside the model, to ensure consistent health game-wide. "+
@@ -7306,8 +7348,14 @@
 @CableClass base( Targetname, Parentname, Global, RenderFields, Glow, EnableDisable) sphere(fademindist) sphere(fademaxdist) = cable_dynamic
 [
 	secondary_material(material) : "Secondary Material" : "" : "Optional secondary material, can be selected using Skin(1)"
-	lightingorigin(target_destination) : "Lighting Origin" : "" : "Select an entity to specify a location to sample lighting from, instead of using this entity's origin."
-	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity."
+	lightingorigin(target_destination) [ group="Render Properties" ] : "Lighting Origin" : "" : "Select an entity to specify a location to sample lighting from, instead of using this entity's origin."
+	disableshadows(choices) [ group="Render Properties" ] : "Cast Shadows" : 0 : "Used to disable shadow casting from this entity." = 
+	[
+		0: "Enabled"
+		1: "No Shadows"
+		2: "Only Realtime Shadows"
+		3: "Only Baked Shadows"
+	]
 
 	// Inputs
 	input TurnOn(void) : "Make the prop visible."

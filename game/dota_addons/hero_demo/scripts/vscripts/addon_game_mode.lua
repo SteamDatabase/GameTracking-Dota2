@@ -64,6 +64,7 @@ function CHeroDemo:InitGameMode()
 	GameRules:SetUseUniversalShopMode( true )
 	GameRules:SetPreGameTime( 0 )
 	GameRules:SetCustomGameSetupTimeout( 0 ) -- skip the custom team UI with 0, or do indefinite duration with -1
+	GameRules:SetTimeOfDay( 0.251 )
 
 	GameMode:SetContextThink( "HeroDemo:GameThink", function() return self:GameThink() end, 0 )
 

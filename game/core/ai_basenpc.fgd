@@ -261,9 +261,11 @@
 // NPCs
 //
 //-------------------------------------------------------------------------
-@BaseClass base(Targetname, RenderFields, DamageFilter, ResponseContext, Shadow, PosableSkeleton) color(0 200 200) = BaseNPC
+@BaseClass base(Targetname, RenderFields, DamageFilter, ResponseContext, Shadow, PosableSkeleton) 
+	color(0 200 200) 
+= BaseNPC
 [
-	target(target_destination) [ group="NPC Properties" ] : "Target Path Corner" : : "If set, the name of a path corner entity that this NPC will walk to, after spawning."
+	subclass_name( vdata_choice:scripts/npc_units.vdata ) : "Unit Name" : "" : "Name of the NPC Unit."
 	squadname(String) [ group="NPC Properties" ] : "Squad Name" : : "NPCs that are in the same squad (i.e. have matching squad names) will share information about enemies, and will take turns attacking and covering each other."
 	hintgroup(String) [ group="NPC Properties" ] : "Hint Group" : "" : "Hint groups are used by NPCs to restrict their hint-node searching to a subset of the map's hint nodes. Only hint nodes with matching hint group names will be considered by this NPC."
 
@@ -348,7 +350,6 @@
 	input GagDisable(void) : "Turn off the NPC Gag flag."
 	input UpdateEnemyMemory(string) : "Update (or Create) this NPC's memory of an enemy and its location"
 	input BecomeRagdoll(void) : "This NPC will instantly become a ragdoll with ZERO force (just go limp). OnDeath, OnHalfHealth, etc. Outputs will **NOT** BE FIRED."
-	input WalkTowardsTarget(target_destination) : "Walks towards a target."
 	input SetEasingParameter(string) : "Set an easing parameter Format: <name=value>"
 ]
 
@@ -496,108 +497,8 @@
 	NPCTargetname(string) : "Childrens' Name"
 	NPCSquadname(string) : "Childrens' Squad Name"
 	NPCHintGroup(string) : "Childrens' Hint Group"
-	
-	additionalequipment(choices) : "Weapons" : "0" =
-	[
-		"weapon_pistol" : "Pistol"
-		"weapon_ar2" : "AR2"
-		"weapon_shotgun" : "Shotgun"
-		"weapon_smg1" : "SMG1"
-		"weapon_stunstick" : "Stun Stick"
-		"weapon_annabelle"	:"Grigori's Shotgun"
-		"0" : "Nothing"
-	]
 ]
 
-
-//-------------------------------------------------------------------------
-//
-// NPC Scripting Entities
-//
-//-------------------------------------------------------------------------
-@BaseClass base(Targetname, Parentname) color(255 0 255) sphere(m_flRadius) = BaseScripted
-[
-	m_iszEntity(target_destination) : "Target NPC" : : "The name or class name (such as 'npc_zombie') of an NPC to use for this script."
-	m_iszIdle(sequence) : "Pre Action Idle Animation" : "" : "The name of the sequence (such as 'idle01') or activity (such as 'ACT_IDLE') to play before the action animation if the NPC must wait for the script to be triggered. Use 'Start on Spawn' flag or MoveToPosition input to play this idle animation."
-	m_iszEntry(sequence) : "Entry Animation" : "" : "The name of the sequence (such as 'reload02') or activity (such as 'ACT_RELOAD') to play when the sequence starts, before transitioning to play the main action sequence."
-	m_iszPlay(sequence) : "Action Animation" : "" : "The name of the main sequence (such as 'reload02') or activity (such as 'ACT_RELOAD') to play."
-	m_iszPostIdle(sequence) : "Post Action Idle Animation" : "" : "The name of the sequence (such as 'idle01') or activity (such as 'ACT_IDLE') to play after the action animation."
-	m_iszCustomMove(sequence) : "Custom Move Animation" : "" : "Used in conjunction with the 'Custom movement' setting for the 'Move to Position' property, specifies the sequence (such as 'crouch_run01') or activity (such as 'ACT_RUN') to use while moving to the scripted position."
-	sync_group(string) : "Synchronization Group" : : "If set, identifier used to match other scripted sequences to synchronze with (alternative to name-based sync)"
-	m_bLoopActionSequence(boolean) : "Loop Action Animation?" : 0
-	m_bSynchPostIdles(boolean) : "Synch Post Idles?" : 0
-	m_bAllowCustomInterruptConditions(boolean) : "Allow custom interrupt conditions to be set." : 0
-	conflict_response(choices) : "Script Conflict Response" : 0 : "What to do if this scripted sequence begins and the actor is already executing a scripted sequence." = 
-	[
-		0 : "Enqueue"
-		1 : "Interrupt"
-	] 
-	m_nGroundIKPreference(choices) : "Ground IK Preference" : 0 : "If this NPC has ground IK; whether we disable it for the playthrough of the sequence or not." = 
-	[
-		0 : "No change"
-		1 : "Disable for this sequence"
-	] 
-
-	m_flRadius(integer) : "Search Radius (0=everywhere)" : 0 : "Radius to search within for an NPC to use. 0 searches everywhere."
-	m_flRepeat(integer) : "Repeat Rate ms" : 0
-	m_fMoveTo(Choices) : "Move to Position" : 1 =
-	[
-		0 : "No"
-		1 : "Walk"
-		2 : "Run"
-		3 : "Custom movement"
-		4 : "Instantaneous"
-		5 : "No - Turn to Face"
-	]
-	m_iszNextScript(target_destination) : "Next Script" : : "The name of the script to run immediately after this script completes. The NPC will not return to AI between the two scripts."
-	m_bIgnoreGravity(boolean) : "Ignore Gravity on NPC during script" : 0 : "If this is set to 'Yes', the NPC will not be subject to gravity while playing this script."
-
-	m_bDisableNPCCollisions(boolean) : "Disable NPC collisions during script" : 0 : "Useful for when NPCs playing scripts must interpenetrate while riding on trains, elevators, etc. This only disables collisions between the NPCs in the script and must be enabled on BOTH scripted_sequences."
-	m_bKeepAnimgraphLockedPost(boolean) : "Keep Animgraph Locked after script" : 0 : "If set, the animgraph will remain locked in the Direct Playback node after this sequence finishes. This is only useful if you have a 'Next Script' set, and you don't want the animgraph to return to Idle during the transition. Note that the 'Next Script' cannot require the NPC to animate/move to it, because the NPC will be unable to move while in the Direct Playback node. In that case, or if you have no 'Next Script' set, selecting this will simply cause the NPC to freeze after it finishes the sequence."
-
-	// Inputs
-	input BeginSequence(void) : "Summons an NPC to act out the scripted sequence."
-	input MoveToPosition(void) : "Summons an NPC to the script location. They will play their scripted idle (or ACT_IDLE if none is specified) until BeginSequence is triggered."
-	input CancelSequence(void) : "Stops the scripted sequence. If fired after a sequence starts, this input will not take effect until the NPC finishes playing the scripted action animation."
-	input SetActionSequence(string) : "Sets the name of the action sequence that will play when the action sequence plays. Can be used for branching sequences."
-
-	// Outputs
-	output OnBeginSequence(void) : "Fires when the scripted sequence begins playing."
-	output OnActionStartOrLoop(void) : "Fires when the action animation begins playing and each time it loops."
-	output OnEndSequence(void) : "Fires when the action animation completes."
-	output OnCancelSequence(void) : "Fires when the sequence is cancelled."
-	output OnCancelFailedSequence(void) : "Fires when the sequence is cancelled without ever playing (OnCancelSequence will also fire)."
-	output OnScriptEvent01(void) : "Fires when an AE_SCRIPT_EVENT_FIREEVENT anim event occurs while playing the script."
-	output OnScriptEvent02(void) : "Fires when an AE_SCRIPT_EVENT_FIREEVENT anim event occurs while playing the script."
-	output OnScriptEvent03(void) : "Fires when an AE_SCRIPT_EVENT_FIREEVENT anim event occurs while playing the script."
-	output OnScriptEvent04(void) : "Fires when an AE_SCRIPT_EVENT_FIREEVENT anim event occurs while playing the script."
-	output OnScriptEvent05(void) : "Fires when an AE_SCRIPT_EVENT_FIREEVENT anim event occurs while playing the script."
-	output OnScriptEvent06(void) : "Fires when an AE_SCRIPT_EVENT_FIREEVENT anim event occurs while playing the script."
-	output OnScriptEvent07(void) : "Fires when an AE_SCRIPT_EVENT_FIREEVENT anim event occurs while playing the script."
-	output OnScriptEvent08(void) : "Fires when an AE_SCRIPT_EVENT_FIREEVENT anim event occurs while playing the script."
-]
-
-@PointClass base(Targetname, Parentname) tags( AI ) iconsprite("editor/info_target.vmat") tags( Choreo ) = scripted_target : "Scripted Target"
-[
-	StartDisabled(boolean) : "Start Disabled" : 1
-
-	m_iszEntity(npcclass) : "Target NPC"
-	m_flRadius(integer) : "Search Radius (0=everywhere)" : 0 : "Radius to search within for an NPC to use. 0 searches everywhere."
-
-	MoveSpeed(integer) : "Move Speed" : 5			// How quickly should target move between scripted targets
-	PauseDuration(integer) : "Pause Duration" : 0		// How long should target pause at scripted target
-	EffectDuration(integer) : "Effect Duration" : 2		// How long should any associated effect last
-
-	target(target_destination) : "Next Target"		// Next scripted target
-
-	// Inputs
-	input Enable(void) : "Enable this entity"
-	input Disable(void) : "Disable this entity"
-
-	// Outputs
-	output AtTarget(void) : "Fires when NPC reaches this target"
-	output LeaveTarget(void) : "Fires when NPC leaves this target"
-]
 
 @BaseClass base(Targetname) tags( AI ) iconsprite("editor/ai_relationship.vmat") sphere() = base_ai_relationship : 
 	"AI Relationship - Sets relationships between groups of NPCs in the AI."
@@ -1281,116 +1182,6 @@
 ]
 
 
-@PointClass base(BaseScripted, DXLevelChoice) editormodel("models/editor/scripted_sequence.vmdl") tags( Choreo ) sphere(m_flRadius) sequenceList( entity, "m_iszEntity" ) = scripted_sequence :
-	"Grabs an NPC and makes them play a specified set of animations. The NPC can be told to move to the scripted sequence position or can "+
-	"be told to play the script wherever they currently are. "+
-	"Multiple scripted sequences of the same name (or sync group, if specified) will frame-synchronize in the action animation once all the actors have moved to position. "+
-	"This allows tight interaction between actors (one actor grabbing another, hitting them, etc.) The flow is as follows:<br><br>"+
-	"1) Move to position using the specified movement animation. If 'Move to Position' is set to NONE, skip to step 2.<br>"+
-	"2) If forced to wait for another actor to move to position, play the pre-action idle animation, otherwise skip to step 3. If there is no pre-action idle specified, ACT_IDLE is used.<br>"+
-	"3) Fire the OnBeginSequence output.<br>"+
-	"4) Play the action animation. If no action animation is specified, skip to step 5.<br>"+
-	"5) Play the post-action idle animation. If none is specified, skip to step 6. If the 'Loop in Post Idle' spawnflag is set, keep playing the post-action idle until the script is cancelled. If no post-action idle animation is specified, ACT_IDLE is used.<br>"+
-	"6) Fire the OnEndSequence output.<br>"+
-	"7) If a next script to play is specified, hand the NPC to the next script and repeat this process for that script.<br><br>"+
-	"The MoveToPosition input runs steps 1 and 2, then waits while playing the pre-action idle animation until the BeginSequence input is received.<br><br>"+
-	"If the sequence has motion extraction in it, set the 'Don't Teleport NPC On End' spawnflag."
-[
-	spawnflags(Flags) = 
-	[
-		4 : "Repeatable" : 0
-		8 : "Leave Corpse (if not, fade)" : 0
-		16 : "Start on Spawn" : 0
-		32: "No Interruptions" : 0
-		64: "Override AI" : 0
-		128: "Don't Teleport NPC On End" : 0
-		256: "Loop in Post Idle" : 0
-		512: "Priority Script" : 0
-		2048: "Hide Debug Complaints" : 0
-		4096: "Allow other NPC actors to continue after this NPC actor's death" : 0
-	]
-
-	onplayerdeath(choices) : "On player death" : 0 : "What this entity should do if the player dies." =
-	[
-		0 : "Do Nothing"
-		1 : "Cancel Script and return to AI"
-	]
-
-	onnpcdeath(choices) : "On NPC actor death" : 0 : "What the NPC performing this script should do if it dies." =
-	[
-		0 : "LEGACY - Use old settings"
-		1 : "Ragdoll immediately"
-		2 : "Perform a death animation"
-	]
-
-	prevent_update_yaw_on_finish(choices) : "Prevent Yaw Update on Finish" : 0 : "By default, when finishing the sequence, the NPC has its ideal yaw updated to maintain the current forward facing. This allows you to prevent that if you want to return to the facing prior to starting the sequence." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-
-	ensure_on_navmesh_on_finish(choices) : "Ensure on Nav Mesh on Finish" : 1 : "When finishing the sequence, if the NPC uses the navmesh, ensure the NPC is on a valid location on the navmesh." =
-	[
-		0 : "No"
-		1 : "Yes"
-	]
-]
-
-
-@PointClass base(Targetname) tags( Choreo ) sphere(m_flRadius) color(255 0 255) iconsprite("editor/aiscripted_schedule") = aiscripted_schedule :
-	"Issues a command to an NPC without taking the NPC out of its AI. This does not seize control of the NPC as " +
-	"a scripted_sequence does" 
-[
-	m_iszEntity(target_destination) : "Target NPC" : : "The name or classname of an NPC to use."
-	m_flRadius(integer) : "Search Radius (0=everywhere)" : 0 : "Radius to search within for an NPC to use. 0 searches everywhere."
-
-	graball(boolean)  : "All in radius" : 0: "Whether to grab all matching NPCs in the specified radius, instead of just one"
-
-	spawnflags(Flags) = 
-	[
-		4 : "Repeatable" : 1
-		1024 : "Search Cyclically" : 0
-		2048 : "Don't Complain" : 0
-	]
-
-	forcestate(choices) : "AI state to set" : 0 =
-	[
-		0 : "<None>"
-		1 : "Set state to IDLE"
-		2 : "Set state to ALERT"
-		3 : "Set state to COMBAT"
-	]
-		
-	schedule(choices) : "Schedule to run" : 1 =
-	[
-		0 : "<None>"
-		1 : "Walk to Goal Entity"
-		2 : "Run to Goal Entity"
-		3 : "Set enemy to Goal Entity"
-		4 : "Walk Goal Path"
-		5 : "Run Goal Path"
-		6 : "Set enemy to Goal Entity AND Run to Goal Entity"
-		7 : "Set enemy to Goal Entity AND Walk to Goal Entity"
-	]
-	
-	interruptability(choices) : "Interruptability" : 0 =
-	[
-		0 : "General"
-		1 : "Damage or Death"
-		2 : "Death"
-		3 : "Combat"
-	]
-
-	resilient(boolean) : "Reacquire after break" : 0 : "If set on a walk/run schedule, once the NPC returns to idling, it'll resume the walk/run until reaching the target, even if it previously broke out of the schedule due to the Interruptability choices."
-
-	goalent(target_destination) : "Goal entity" : : "Provides the name of a schedule-specific goal entity (see 'Schedule to run')"
-
-	// Inputs
-	input StartSchedule(void) : "Starts the scripted schedule. This will first locate an NPC that matches the given target, then tell the NPC to run the specified schedule."
-	input StopSchedule(void) : "Stops the scripted schedule. Will attempt to stop any NPC that appears to be running this scripted schedule."
-]
-
-
 @PointClass base(Targetname,ResponseContext,EnableDisable) tags( AI ) = ai_speechfilter : 
 	"An entity that can be used to control the idle speech patterns of a set of NPCs."
 [
@@ -1578,4 +1369,11 @@
 	input SetAnimationTarget(string) : "Set the animation target to use. An empty string will disable the puppet."
 ]
 
+@PointClass base(Targetname) = ai_point_of_interest
+[
+	StartDisabled(boolean) : "Start Disabled" : 0
 
+	// Inputs 
+	input Enable(void) : "Enable"
+	input Disable(void) : "Disable"
+]
