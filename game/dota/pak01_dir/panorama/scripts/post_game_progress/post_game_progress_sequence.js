@@ -15,10 +15,7 @@ function CreateProgressAnimationSequence( data )
 		GetScreenLinksContainer().enabled = false;
 	}));
 
-	if ( data.diretide_rewards_progress != null )
-	{
-		seq.actions.push( new AnimateDiretideRewardsScreenAction( data ) ); 
-	}
+	
 
 	if ( data.mvp2 != null )
 	{
