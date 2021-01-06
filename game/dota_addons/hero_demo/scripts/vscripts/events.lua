@@ -175,11 +175,11 @@ end
 -- ButtonEvent: OnInvulnerabilityButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnInvulnerabilityButtonPressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
 	if hPlayerHero == nil then
 		return
 	end
 
-	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
 	local hAllPlayerUnits = {}
 	hAllPlayerUnits = hPlayerHero:GetAdditionalOwnedUnits()
 	hAllPlayerUnits[ #hAllPlayerUnits + 1 ] = hPlayerHero
