@@ -304,6 +304,8 @@ message CMsgDOTAReportsRemainingResponse {
 	optional uint32 num_negative_reports_remaining = 2;
 	optional uint32 num_positive_reports_total = 3;
 	optional uint32 num_negative_reports_total = 4;
+	optional uint32 num_comms_reports_remaining = 5;
+	optional uint32 num_comms_reports_total = 6;
 }
 
 message CMsgDOTASubmitPlayerReport {
@@ -3504,7 +3506,8 @@ message CMsgClientToGCGetOWMatchDetailsResponse {
 message CMsgClientToGCSubmitOWConviction {
 	optional uint64 overwatch_replay_id = 1;
 	optional uint32 target_player_slot = 2;
-	optional .EOverwatchConviction conviction = 3 [default = k_EOverwatchConviction_None];
+	optional .EOverwatchConviction cheating_conviction = 3 [default = k_EOverwatchConviction_None];
+	optional .EOverwatchConviction griefing_conviction = 4 [default = k_EOverwatchConviction_None];
 }
 
 message CMsgClientToGCSubmitOWConvictionResponse {
@@ -3516,6 +3519,7 @@ message CMsgClientToGCSubmitOWConvictionResponse {
 		k_eNotPermitted = 4;
 		k_eInvalidReplayID = 5;
 		k_eInvalidConviction = 6;
+		k_eInvalidPlayerSlot = 7;
 	}
 
 	optional .CMsgClientToGCSubmitOWConvictionResponse.EResponse result = 1 [default = k_eInternalError];
@@ -3538,4 +3542,58 @@ message CMsgClientToGCChinaSSAAcceptedResponse {
 
 message CMsgGCToClientOverwatchCasesAvailable {
 	optional fixed32 expire_time = 1;
+}
+
+message CMsgClientToGCStartWatchingOverwatch {
+	optional uint64 overwatch_replay_id = 1;
+	optional uint32 target_player_slot = 2;
+}
+
+message CMsgClientToGCStopWatchingOverwatch {
+	optional uint64 overwatch_replay_id = 1;
+	optional uint32 target_player_slot = 2;
+}
+
+message CMsgClientToGCGetDPCFavorites {
+}
+
+message CMsgClientToGCGetDPCFavoritesResponse {
+	message Favorite {
+		optional .EDPCFavoriteType favorite_type = 1 [default = FAVORITE_TYPE_ALL];
+		optional uint32 favorite_id = 2;
+	}
+
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalidRequest = 5;
+	}
+
+	optional .CMsgClientToGCGetDPCFavoritesResponse.EResponse result = 1 [default = k_eInternalError];
+	repeated .CMsgClientToGCGetDPCFavoritesResponse.Favorite favorites = 2;
+}
+
+message CMsgClientToGCSetDPCFavoriteState {
+	optional .EDPCFavoriteType favorite_type = 1 [default = FAVORITE_TYPE_ALL];
+	optional uint32 favorite_id = 2;
+	optional bool enabled = 3;
+}
+
+message CMsgClientToGCSetDPCFavoriteStateResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eFavoriteTypeOutOfRange = 2;
+		k_eLockFailed = 3;
+		k_eAlreadyFavorited = 4;
+		k_eAlreadyUnfavorited = 5;
+		k_eInsertRecordFailed = 6;
+		k_eRemoveRecordFailed = 7;
+		k_eTimeout = 8;
+	}
+
+	optional .CMsgClientToGCSetDPCFavoriteStateResponse.EResponse result = 1 [default = k_eInternalError];
 }

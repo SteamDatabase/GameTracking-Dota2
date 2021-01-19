@@ -142,6 +142,7 @@ $ORIGIN
 *** IL "%s": Unable to create input layout; layout has %d fields, which is more than %d!
 *** VB "%s": Tried to lock a GPU-only buffer!
 *** VB "%s": Tried to lock too much memory (%d>%d)!
+*** VB "%s": Tried to lock too much memory for subregion (%d>%d)!
 *0"Z
 *St19_Sp_counted_deleterIPhZN3Etc13EncodeMipmapsEPfjjNS1_5Image6FormatENS1_11ErrorMetricEfjjjjPNS1_8RawImageEPibEUlS0_E_SaIiELN9__gnu_cxx12_Lock_policyE2EE
 *ZN19CTextureManagerBase26MN_CacheRequestedResourcesER10CUtlVectorINS_15ToCacheHandle_tE10CUtlMemoryIS1_iEEEUlP25IAsyncResourceDataRequestSt10unique_ptrI25IAsyncProcessedDataResultSt14default_deleteIS9_EEE_
@@ -241,6 +242,17 @@ $ORIGIN
 -vulkan
 .
 ..
+../public/ordered_constructor.h
+../public/tier0/memstack.h
+../public/tier0/tslist.h
+../public/tier0/utlblockmemory.h
+../public/tier0/utlfixedmemory.h
+../public/tier0/utlleanvector.h
+../public/tier0/utllinkedlist.h
+../public/tier0/utlrbtree.h
+../public/tier0/utltshash.h
+./inputlayoutbase.h
+./renderresource.h
 .[\()*+?{|^$
 .[\*^$
 .exr
@@ -258,17 +270,6 @@ $ORIGIN
 //ATTRIBMAP-
 /P8i
 /\
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/ordered_constructor.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/memstack.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/tslist.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlblockmemory.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlfixedmemory.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlleanvector.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utllinkedlist.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlrbtree.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utltshash.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/rendersystem/inputlayoutbase.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/rendersystem/renderresource.h
 /home/timo/source2/main/src/thirdparty/etc2comp/EtcLib/./EtcCodec/EtcBlock4x4Encoding.h
 /home/timo/source2/main/src/thirdparty/etc2comp/EtcLib/EtcCodec/EtcBlock4x4.cpp
 /home/timo/source2/main/src/thirdparty/etc2comp/EtcLib/EtcCodec/EtcBlock4x4Encoding.h
@@ -380,7 +381,6 @@ $ORIGIN
 20CPostConnectCallback
 20CRefCountServiceBaseILb1E6CRefMTE
 20CRenderDeviceMgrBase
-20CTextureManagerGLNew
 20IMobileEventListener
 20IResourceTypeManager
 21CRenderHardwareConfig
@@ -782,6 +782,7 @@ ConVarRef %s doesn't point to an existing ConVar
 ConcatentateInputLayouts
 ConfigurationSystem_001
 ConnectInterfaceSingletons
+ConvertGammaToLinear
 Copyright (C) 2010, Thomas G. Lane, Guido Vollbeding
 Core
 Corrupt JPEG data: %u extraneous bytes before marker 0x%02x
@@ -3401,6 +3402,7 @@ MainDs
 MainGs
 MainHs
 MainPs
+MainRtx
 MainVs
 Malformed iCCP chunk
 Malformed iTXt chunk
@@ -3417,7 +3419,6 @@ Max Tess Eval Texture Image Units : %d
 Max Texture Dimensions : %d x %d
 Max Vertex Texture Image Units : %d
 MaxDeviceID
-Maximum device access threads: %u
 Maximum resolution for top mip level in streaming textures. -1 = ignored.
 Maximum supported image dimension is %u pixels
 May
@@ -3799,9 +3800,11 @@ RGBA8888_LINEAR
 RGBX555
 RGBX8888
 RST%d
+RTX
 RandomFloat
 RandomInt
 RandomSeed
+Raytracing Shader
 Read failed on temporary file
 Read from EMS failed
 Read from XMS failed
@@ -3986,7 +3989,7 @@ Sys
 TERMVALUE
 TEX read request: %d KB; %s
 TEX: %u textures, %.2f MB
-TEXMAN: %s MarkTextureBitsLoadRequired (%s)
+TEXMAN: %s LoadStreamingData (%s)
 TEXMAN: %s MarkTextureBitsLoaded (%s)
 TEXMAN: %s loaded %s %i/%i mips (%ix%i / %ix%i) of %s (%i bytes)
 TEXMAN: Abandoning job in %s
@@ -4367,6 +4370,7 @@ _gs
 _hs
 _ps
 _psrs
+_rtx
 _setjmp
 _tools.txt
 _vs
@@ -4556,11 +4560,16 @@ generic
 gl/dynamicbuffermgrgl.cpp
 gl/rendercontextgl.cpp
 gl/renderdevicegl.cpp
+gl/renderdevicegl.cpp(1568):
+gl/renderdevicegl.cpp(1603):
+gl/renderdevicegl.cpp(1683):
+gl/renderdevicegl.cpp(2146):
 gl/renderdevicegl.cpp(2153):
-gl/renderdevicegl.cpp(2206):
-gl/renderdevicegl.cpp(599):
-gl/renderdevicegl.cpp(715):
-gl/renderdevicegl.cpp(733):
+gl/renderdevicegl.cpp(2199):
+gl/renderdevicegl.cpp(454):
+gl/renderdevicegl.cpp(592):
+gl/renderdevicegl.cpp(708):
+gl/renderdevicegl.cpp(726):
 gl/renderthreadgl.cpp(1883):
 gl/togl/cglmtex.cpp
 gl/togl/glmdisplaydb.cpp
@@ -5005,6 +5014,7 @@ left-square-bracket
 lerp
 less-than-sign
 libSDL2-2.0.so.0
+lib_6_4
 libc.so.6
 libdl.so.2
 libm.so.6
@@ -5196,7 +5206,7 @@ out float4 gl_Position
 out gl_PerVertex { vec4 gl_Position; out float gl_ClipDistance[1]; };
 out of memory
 out vec4 gl_Position
-pA*** VB "%s": Tried to lock too much memory for subregion (%d>%d)!
+pA
 parameter error
 pass %u
 pbucket->plinkLast->GetNext() == nullptr
@@ -5615,15 +5625,15 @@ tessfactor
 texcoord
 text compression mode is out of range
 texturebase.cpp
-texturebase.cpp(1902):Error loading texture: %s
-texturebase.cpp(2839):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2862):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2873):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2884):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2895):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2916):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2927):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(2938):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2226):Error loading texture: %s
+texturebase.cpp(3214):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3237):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3248):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3259):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3270):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3291):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3302):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3313):ResourceHandleToData( %s ) failed! Falling back to error texture!
 three
 tier0
 tilde
@@ -5714,8 +5724,8 @@ vertical-tab
 vfx_common.cpp
 vfx_dx11
 vfx_dx9
-vfx_gl
 vfx_shader_file.cpp
+vfx_vulkan_gl
 vfxc
 video.cfg
 video_version

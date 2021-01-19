@@ -23,6 +23,7 @@
 #%s/%s/Resolves
 #%s/%s/UpdatePerViewConstantBuffer%d
 #%s/PrimaryContext frame( %d )
+#%s/RenderAView/LightSetup
 #%s/SetupLightingForView/SetupLightingForView
 #%s/UpdatePerViewConstantBuffers
 #%s/UpdatePerViewConstantBuffers%d
@@ -92,11 +93,10 @@ $tI
 ) in %s batchlists
 *** Skip layer '%s'
 *ZL29InitForFrustum_DebugRendering17ESceneObjectFlagsS_P10CSceneViewEUlP25CSceneLightObjectInternalE_
-*ZN13CLightBinner222GatherBarnLightsInViewEPK10ISceneView17ESceneObjectFlagsS3_EUlP21CSceneBarnLightObjectE_
 *ZN13CLightBinner225AddEnvironmentMapsForViewEP10CSceneView17ESceneObjectFlagsS2_EUlP18CEnvMapSceneObjectE_
 *ZN13CLightBinner227AddLightProbeVolumesForViewEP10CSceneView17ESceneObjectFlagsS2_EUlP28CSceneLightProbeVolumeObjectE_
-*ZN18CSingleLightBinner19GatherVisibleLightsER23CUtlVectorFixedGrowableI15ConsiderLight_tLm256EEP10CSceneViewRK8CFrustum17ESceneObjectFlagsS9_EUlP25CSceneLightObjectInternalE_
-*ZN18CSingleLightBinner34AllocateMixedShadowsForLocalLightsEP10CSceneViewRK8CFrustumRK17FrustumGeometry_t17ESceneObjectFlagsS8_iEUlP25CSceneLightObjectInternalE_
+*ZN18CSingleLightBinner18GatherHammerLightsEvEUlP25CSceneLightObjectInternalE_
+*ZN18CSingleLightBinner19GatherIndexedLightsEvEUlP25CSceneLightObjectInternalE_
 *ZN26CBindlessFastPathPartition21EnsureEnvironmentMapsEvEUlP18CEnvMapSceneObjectE_
 *ZN32CBindlessFastPathSceneObjectDesc25UpdateLightProbeVolumeSetEP31LightProbeVolumeDescriptorSet_tP26CBindlessFastPathPartitionEUlP28CSceneLightProbeVolumeObjectE_
 +x east
@@ -125,24 +125,24 @@ $tI
 -tools
 -y south
 -z down
+../public/ordered_constructor.h
+../public/scenesystem/vertexformat.h
+../public/tier0/tslist.h
+../public/tier0/utl3dallocator.h
+../public/tier0/utlblockmemory.h
+../public/tier0/utlhashdict.h
+../public/tier0/utlleanvector.h
+../public/tier0/utllinkedlist.h
+../public/tier0/utlmultilist.h
+../public/tier0/utlrbtree.h
+../public/tier0/utlsymboltable.h
+../public/tier0/utltshash.h
 .exr
 .jpg
 .png
 .psd
 .tif
 /
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/ordered_constructor.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/scenesystem/vertexformat.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/tslist.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utl3dallocator.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlblockmemory.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlhashdict.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlleanvector.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utllinkedlist.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlmultilist.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlrbtree.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utlsymboltable.h
-/home/buildbot/buildslave/source2_dota_rel_linuxsteamrt64/build/src/public/tier0/utltshash.h
 0.0
 0.1
 0.25
@@ -166,7 +166,6 @@ $tI
 11ISceneUtils
 11ISceneWorld
 11IVSSequence
-12
 125 130 135
 128
 12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE
@@ -255,6 +254,7 @@ $tI
 22CSceneAnimatableObject
 22CSchemaInstallCallback
 22CVolumetricFogRenderer
+22IToolsResourceListener
 23CCharacterDecalRenderer
 23CFullscreenQuadRenderer
 23CMeshBuilderSceneObject
@@ -275,6 +275,7 @@ $tI
 25CSceneLightObjectInternal
 25CSingleLightBinnerFactory
 26CAnimatableSceneObjectDesc
+26CBarnLightObjectDescSingle
 26CSpotLightObjectDescSingle
 26ICommandCompletionCallback
 27CDirectionalLightObjectDesc
@@ -316,6 +317,7 @@ $tI
 4096.0f
 40ISceneAnimatableProceduralBoneTransforms
 43CFunctor_SceneSystem_Thread_RenderViewLayer
+46CBindlessFastPathParitionToolsResourceListener
 4C
 4CMDL
 4IPVS
@@ -401,7 +403,6 @@ $tI
 <td>LAYERFLAGS_NEEDS_FULLSORT</td>
 <td>LAYERFLAGS_NEEDS_PER_VIEW_LIGHTING_CONSTANTS</td>
 <td>LAYERFLAGS_NEVER_REMOVE</td>
-<td>LAYERFLAGS_NO_APP_TILING</td>
 <td>LAYERFLAGS_PRESERVE_COLOR_BUFFERS</td>
 <td>LAYERFLAGS_PRESERVE_DEPTH_BUFFER</td>
 <td>LAYERFLAGS_PRESERVE_STENCIL_BUFFER</td>
@@ -501,6 +502,10 @@ Alloc
 AllocInternal
 Allocating new transform texture!
 Allow time-sliced shadow buffer rendering when enabled via gameinfo.gi
+AllowSubrectResolve
+AmbientLightingSHB
+AmbientLightingSHG
+AmbientLightingSHR
 Angle;
 AnimGraphEditorUtils001
 AnimVRFinger_t
@@ -547,6 +552,8 @@ BGRA8888_LINEAR
 BGRX8888_LINEAR
 Bad KV3 data for '%s': %s
 BakedLODBuilderMgr001
+BakedLightShadowCache
+BakedLightingConstantBuffer_t
 Barn Light View
 BarnLight
 BarnLightObjectDesc
@@ -558,11 +565,14 @@ BenchmarkService001
 BinaryProperties_GetValue
 BindlessFastPathDesc
 BindlessFastPathManifest
+BindlessFastPathPushConstants_t
 BindlessFastPathSceneObject
+BlueNoise
 BoneChannel
 BreakOnDelete:
 BreakOnDraw:
 C
+C6FaceSkyboxObjectDesc
 CAimConstraint
 CAmbientOcclusionProxySceneObjectDesc
 CAnimBone
@@ -578,8 +588,8 @@ CAnimationDecodeContext::AddAnimationDecodeDesc ran out of allocator memory (3)
 CAnimationGroup
 CAssociateResourceBlockLoader::BlockingLoadResourceFileData: Trying to load an illegal resource name %s!
 CAttachment
+CBarnLightObjectDescSingle
 CBaseConstraint
-CBaseSceneObjectDesc
 CBindlessFastPathPartition::EnsureEnvironmentMaps() - Number of environment maps exceeds maximum (%d), skipping additional environment maps.
 CBindlessFastPathPartition::EnsureGPUResources - insufficient descriptor set support. CWorldNode::CanUseBindlessDesc() needs to filter before getting here.
 CBindlessFastPathSceneObjectDesc
@@ -808,6 +818,8 @@ CVrSkeletalInputSettings
 CWristBone
 CXXABI_1.3
 CXXABI_1.3.3
+CacheShadowMask
+CacheShadowTexture
 Can't bake cube maps unless you use -tools or -dev
 Can't read a rendertarget from a view with a higher priority.
 Cannot add a resolve layer as the first layer in a view!
@@ -819,6 +831,8 @@ ChangeCallbackOnChange
 ChangeCallbackOnChangeOrCreate
 ChangeSize
 Changing MeshGroupMask when PrunUnusedMeshGroups is set, after the sceneobject has been created (the groups have already been discarded)
+Changing sc_layer_batch_threshold from %d -> %d.
+Changing sc_layer_batch_threshold_fullsort from %d -> %d.
 CharacterDecalSystem
 CharacterDecalSystemManifest
 CharacterSetBuild
@@ -850,6 +864,9 @@ CreateInterface
 CreatePerViewLightingConstantBuffer
 CubeMapDebugColors
 Cubic
+CullFront
+CustomShadowPipeline
+CustomTexture2
 D15S1
 D16
 D16_SHADOW
@@ -865,6 +882,26 @@ DXT1_ONEBITALPHA
 DXT3
 DXT5
 DXT5_NM
+D_BAKED_LIGHTING_FROM_LIGHTMAP
+D_BAKED_LIGHTING_FROM_PROBE
+D_BAKED_LIGHTING_FROM_VERTEX_STREAM
+D_COMPOSITETYPE
+D_COMPRESSED_NORMALS_AND_TANGENTS
+D_ENABLE_INDIRECT
+D_ENABLE_VOLUMETRIC_FOG
+D_FLOAT_INTERMEDIATE_TEXTURES
+D_JITTER
+D_MULTIVIEW_INSTANCING_STRIDE
+D_NO_ZTEST
+D_OPAQUE_FADE
+D_PASS
+D_SCENE_DEPTH_MSAA
+D_SHADOW_PASS
+D_SPECULAR_CUBEMAP_IS_ROTATED
+D_SPECULAR_CUBEMAP_PROJECTION_MODE
+D_TEMPORAL_INTEGRATE
+D_USE_INSTANCE_TRANSFORM
+D_WRITE_DEPTH_TO_COLOR
 Data size too short
 DebugInfoLayerRenderBuffers
 DebugInfoLayerRenderColorizeSplits
@@ -879,6 +916,7 @@ DecalRenderingView
 Default
 DeleteObjectForReal
 DeleteSceneObject
+DepthModeRequiresPushConstantUpdate
 DevMsg
 Directional lights are not supported by the LightBinner
 DirectionalLight
@@ -897,6 +935,8 @@ DrawShadowMapsForLight
 Dump a list of the objects in a sceneworld (Usage: sc_dumpworld <world_index>)
 Dump debug info
 Dump the objects in a sceneworld into a 3d geoview buffer (Usage: sc_dumpworld3d <world_index>)
+DynamicAmbientOcclusion
+DynamicAmbientOcclusionDepth
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: Specified full path %s does not lie under the mod search path!)
 ERROR: Specified path %s could not be made content-relative
@@ -911,7 +951,9 @@ Engine2/RenderingPipeline/OpaqueFade
 Engine2/RenderingPipeline/ShadowDepthCullFront
 EngineServiceMgr001
 EnsureCapacity
+EnvDepthMapArray
 EnvMap
+EnvMapArray
 Error: View "%s", layer "%s", render target "%s": Attempted to bind the back buffers of two different swap chains in a single layer!
 Error: View "%s", layer "%s", render target "%s": Attempted to resolve a non-MSAA render target to a MSAA texture!
 EventSystem001
@@ -926,6 +968,7 @@ Failed to parse attribute
 Failed to parse channel info
 Failed to read attribute.
 Failed to save unsupported class
+FarPlaneOverride
 FeetSettings
 File size is zero :
 File size too short
@@ -940,6 +983,7 @@ FixupResourceName: Illegal full path passed in ("%s")!
 FixupResourceName: Illegal path, missing extension passed in ("%s")!
 FlattenedSerializersVersion001
 Flexible;
+FlipFrustumX
 FloatBitMap::DownsampleNiceFiltered
 FloatBitMap::QuarterSize
 FloatBitMap::QuarterSizeBlocky
@@ -951,9 +995,13 @@ FloatBitMap_t::LoadFromFloatBitmap: Received improper bitmap size, skipping!
 FloatBitMap_t::WriteToBuffer: Received improper buffer size %s (expecting %s), skipping!
 Fog Clipmaps - insufficient shadow atlas space %d units centered on (setpos %d %d %d) - some lighting will be missing from the fog - vr_show_light_fog_clipmap_cb_cost
 Fog Clipmaps - too many lights (%d - max: %d) %d units centered on (setpos %d %d %d) - some lighting will be missing from fog - use vr_show_light_fog_clipmap_cb_cost
+FogEndScale
 FogLightView
+FogMaxDensityScale
 FontManager_001
+ForceFullResolve
 FragmentIndex
+FrameBufferCopyTexture
 FvP12CSceneObjectE
 G channel not found
 G channel not found!
@@ -1004,12 +1052,14 @@ Has Collision;
 HashString
 HelpSystem_001
 Hide
+HighPrecisionLightingOffset
 HookUpConfigValue
 HostStateMgr001
 IA88
 INVALID
 IQuickTime001
 If enabled, the camera's translation will be included in the projection matrix.
+InLightingTexture
 InfoForResourceTypeCAnimData
 InitForView
 InputService_001
@@ -1022,6 +1072,7 @@ InstallTemplateViewFactory
 Insufficient data length.
 Insufficient data size.
 Intentionally vague touch behavior for %p
+InvRenderTargetDim
 Invalid EXR header.
 Invalid access of deferred ConVarRef for '%s'
 Invalid bone and flex counts for model %s, %d meshes but %d counts
@@ -1043,6 +1094,8 @@ Invalid tile size x :
 Invalid tile size y :
 Inverse Multi Quadratic
 Invert Axes;
+IsFirstRender
+IsLeftEye
 JIGGLE_BONE
 K
 KMeansQuantization
@@ -1073,15 +1126,24 @@ LINEAR_I8
 LINEAR_RGB888
 LINEAR_RGBA16161616
 LINEAR_RGBA8888
+LODScreenWidthInPixels
 LOG_GENERAL
 Leaked drawlists : %d!!!!!
 Length;
 Light Cookies
 LightBinnerVr_%d
+LightCookieTexture
+LightDepthBuffer
+LightGroup
+LightIrradianceSamples
 LightProbeVolumeDebugColors
 LightProbeVolumeDesc
+LightProbeVolumeTexture
+LightProbeVolumeTextureDirectLightIndices
+LightProbeVolumeTextureDirectLightScalars
 LightmapUV
 LightmapUVW
+Lights in view (unshadowed/shadowed): %d/%d omni, %d/%d spot, %d/%d barn
 Linear
 List all the active sceneworlds
 List the object class names known by scenesystem
@@ -1110,6 +1172,7 @@ MATCHFRAMEWORK_001
 MDefaultString
 MESH_DRAW_FLAGS_DRAW_LAST
 MESH_DRAW_FLAGS_NONE
+MKV3TransferName
 MNetworkBitCount
 MNetworkChangeCallback
 MNetworkEncoder
@@ -1149,6 +1212,16 @@ MonitorSceneObjectDesc
 MoveLayerToBeAfterLabel
 MoveLayerToBeAfterLayer
 MovementSettings
+MultiGpuMask
+MultiGpuMutex
+MultiGpuTransfer
+MultiGpuTransferBackBuffer
+MultiGpuTransferDstGpu
+MultiGpuTransferRenderTargetDst
+MultiGpuTransferRenderTargetSrc
+MultiGpuTransferSrcGpu
+MultiGpuTransferSrcRectX
+MultiGpuTransferSrcRectY
 MurmurHash2
 MurmurHash2LowerCase(char const*, int, unsigned int)
 MurmurHash2LowerCase(char const*, unsigned int)
@@ -1194,6 +1267,7 @@ Normalize3ComponentVectorInAttributes
 Normalized3x3SobelEdgeFilterFrom
 Not Available
 Not Used
+NumEyes
 Number of cull boxes: %d
 Number of display lists submitted:
 Number of draws backface-culled:
@@ -1223,8 +1297,12 @@ ObjectLists use %ikb w/%ikb waste, reclaimed %ikb of unused
 OmniLight
 Only DXT1/DXT5 online texture compression supported.
 Opaque
+Org(%.3f,%.3f,%.3f) Ang(%.3f,%.3f,%.3f)
 Original
 OrthoLight
+OutLightingClipmap
+OutLightingFroxelTexture
+OutScatteringTexture
 Output memory size is zero
 Override. Old default was 3.0
 Override. Old default was 45.
@@ -1245,8 +1323,18 @@ PanoramaUIClient001
 PanoramaUIEngine001
 ParseEXRHeaderFromMemory failed! Error message: %s
 ParseRenderTargetTokens
+ParticleShadowBuffer
 ParticleSystemMgr003
+PerBatchEnvMapConstantBuffer_t
+PerBatchLightProbeVolumeConstantBuffer_t
+PerLayerConstantBuffer_t
 PerVertexLighting
+PerViewBarnLightConstantBuffer_t
+PerViewConstantBuffer_t
+PerViewLightData_t
+PerViewLightingConstantBufferCPU_t
+PerViewLightingConstantBufferSingle_t
+PerViewRuntimeFastPathLightingConstantBuffer_t
 Pf%d %d-1.000000
 Physics
 PhysicsBuilderMgr001
@@ -1320,12 +1408,18 @@ RandomFloat
 RandomInt
 RandomSeed
 Reflection Render View
+ReflectionMapDescriptor_t
+ReflectionMapTexture
 ReflectionStencil
 Refraction
 Refraction Render View
+RefractionClipPlaneAdjust
+RefractionMapTexture
+RefractionReflectionAlreadyRendered
 RegisterAllModuleData
 RegisterConfigValue: Unknown error constructing config value "%s"!
 RegisterStringToken
+RelativeViewport
 Release
 RemapValClamped(
 Render
@@ -1344,8 +1438,11 @@ RenderDeviceMgr001
 RenderHardwareConfig002
 RenderLayerDrawListPart
 RenderPrimitiveType_t
+RenderReflections
+RenderSSAO
 RenderService_001
 RenderSkeletonBone_t
+RenderStencilReflection
 RenderSystemSurface001
 RenderUtils_001
 RenderingPipeline
@@ -1368,6 +1465,7 @@ SaveKV3Text_ToString(KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlString*
 Scale factor for requested texture size (texture streaming)
 Scale factor for requested texture size (texture streaming) - used for geo that doesn't have a precomputed UV density measure
 Scene World %3d: 0x%p %40s [%4d objects]
+SceneDepth
 SceneObjects drawn:
 SceneSystem
 SceneSystem/AssertViewportWithinFramebuffer
@@ -1382,6 +1480,8 @@ SceneSystem/DefaultShadowTextureWidth
 SceneSystem/DisableShadowFullSort
 SceneSystem/EnvmapInfoStoredInExtraShaderData
 SceneSystem/HDRFrameBuffer
+SceneSystem/LayerBatchThreshold
+SceneSystem/LayerBatchThresholdFullsort
 SceneSystem/NonTexturedGradientFog
 SceneSystem/PointLightShadowsEnabled
 SceneSystem/SingleLightBinner
@@ -1415,14 +1515,22 @@ Scenesystem/ShadowDepthMasks
 SchemaSystem_001
 SchemaTestExternal_One_001
 SchemaTestExternal_Two_001
+ScreenSpaceQuad
+SecondaryViewIndex
 SerializedEntitiesVersion001
 ServerUploadGameStats001
 Set a float attribute which will be visible to all rendering (Usage: sc_setfloatattr <attrname> <value>)
 Set an integer attribute which will be visible to all rendering (Usage: sc_setintattr <attrname> <value>)
 SetupConstantBuffer
 SetupLightingForView
+ShadowAtlasHeight
+ShadowAtlasWidth
+ShadowDepthBuffer
+ShadowDepthBufferNoCmp
 ShadowMap "
-Shadowed spot lights in view: %d
+ShadowMaskBuffer
+ShadowStrength
+SheetTexture
 Show
 Show cost of lights in fog clipmap constant buffer. yellow = 1 cost, red = 6 cost
 Show light priority values. 1 = normal lights, 2 = cached lights.
@@ -1433,6 +1541,7 @@ Simulated
 SkeletonBoneBounds_t
 SkinnedObject
 Skybox
+SlopeScaleDepthBias
 SlopeTrace
 Someone needed to call WaitForRenderingToComplete()!!!!!
 SoundOpSystem001
@@ -1451,8 +1560,12 @@ Source2GameEntities001
 Source2Host001
 Source2Server001
 Source2ServerSerializers002
+SourceMorphAtlas
 Spherical %sStrength %.2fExponent %.2f
+SplitProjMatrix0
+SplitProjMatrix1
 SpotLight
+SpotLightShadowZBuffer
 SpotShadowDepth
 SpotShadowDepth_Atlas%d.vtex
 St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
@@ -1460,13 +1573,19 @@ St16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
 St19_Sp_make_shared_tag
 St23_Sp_counted_ptr_inplaceI10CUtlVectorI20CMeshDrawPrimitive_t10CUtlMemoryIS1_iEESaIS4_ELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceI13CViewDrawListSaIS0_ELN9__gnu_cxx12_Lock_policyE2EE
+Stack depth limit hit (%d)
 StatsService_001
 SteamAudio001
+SteamVrCompositorLeftDepthRt
+SteamVrCompositorLeftRt
+SteamVrCompositorRightDepthRt
+SteamVrCompositorRightRt
+SteamVrCompositorRtHeight
+SteamVrCompositorRtWidth
 Stencil Reflection Render View
 Stencil bit allocation failed
 Stencil bit dependency satisfied (bit %d)
 Stencil dependency layer : %s
-StencilReflection
 StrReplaceChar
 Submit all display lists
 Submit clear screen for layer
@@ -1475,12 +1594,16 @@ Submit transform texture and other resource updates
 Submit update for auxiliary camera pos=
 Submit update for main camera pos=
 SubmitAllDisplayLists
+SubmitDepthResolve
 SubmitRenderLists
 Suggested
 Sun
 SunShadow
 SunShadow%u
 SunShadowClear
+SunlightManagerIndex
+SupportsBindlessFastPath
+SupportsReadOnlyDepthBufferAccess
 Syntax Error at offset: %d
 T: %7.3f
 TILT_TWIST
@@ -1501,6 +1624,7 @@ ThreadSleep
 Thread_ProcessProceduralLayer
 Thread_RenderSceneDrawList
 Thread_RenderViewLayer
+TimeSlicedShadowMapRendering
 Timer took %.4f
 Toggle display of box around text
 Toggles drawing of aggregate meshes
@@ -1517,7 +1641,10 @@ Too many shadowed spot lights in the scene!  Some will be removed!
 ToolFramework2_002
 ToolSceneNodeFactory_001
 ToolService_001
+ToolsAmbientLighting
 Total : %d (%ukb)
+TotalLightTexture
+TransformTexture
 Translucent
 TranslucentScreenSpace
 Triangles rendered:
@@ -1535,7 +1662,6 @@ Unknown compression type.
 Unknown object class type %s
 Unrecognized command %d in scene system debugger command
 Unrecognized resource version (%d): %s
-Unshadowed spot lights in view: %d
 Unsupported ETC image format %d.
 Update
 UpdateBarnLightConstantBuffer
@@ -1567,6 +1693,7 @@ VGUI_Scheme010
 VGUI_Surface032
 VGUI_System010
 VGUI_ivgui008
+VGuiTexture
 VMDLLIB001
 VMaterialSystem2_001
 VMediaFoundation001
@@ -1645,13 +1772,15 @@ VertexUVPosColorNormalAndTangent_t
 VertexUVPos_t
 VertexWireFrame2D_t
 VertexWireFrame_t
+VguiStencilRef
 View "%s": %d layers
 View "%s": %d render target usage
 View "%s": %d render targets
 VisBuilder_001
+VolumetricFogConstantBuffer_t
 VolumetricFogManifest
-WARNING: Directional lights not supported by the light binner!
 WARNING: Trying to create a CRenderContextPtr without a valid context.
+WARNING: Unrecognized bone "%s"
 Warning
 Warning:  %s = '%s' is infinite, clamping value.
 Wireframe2DLayout
@@ -1676,12 +1805,32 @@ ZN26CParallelProcessorAbstractI22CParallelLoopProcessorI13CViewDrawList31CLoopMe
 [
 [%.3f server clamped to %.3f]
 [DUMP: Scene World %d: 0x%p '%s': %d objects]
+[idx=%d] "%s"
+_BindlessFastCB_PS_t
+_BindlessFastCB_VS_t
+_BindlessFastEnvMapCB_PS_t
 _BoundTexture%d
 _BoundTextureSrgb%d
 _Dup
 _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
+_TexBarrierRT0
+_TexBarrierRT1
+_TexBarrierRT10
+_TexBarrierRT11
+_TexBarrierRT12
+_TexBarrierRT13
+_TexBarrierRT14
+_TexBarrierRT15
+_TexBarrierRT2
+_TexBarrierRT3
+_TexBarrierRT4
+_TexBarrierRT5
+_TexBarrierRT6
+_TexBarrierRT7
+_TexBarrierRT8
+_TexBarrierRT9
 _V_SetExtension
 _V_StringAfterPrefix
 _V_StripLastDir
@@ -1727,12 +1876,14 @@ advanced to state %d at %f
 after solve err=%f
 after sort
 aggregate
+alphatest
 ambientocclusionproxy.cpp
 animatable.cpp
 ao_proxy_box_list
 ao_proxy_capsule_list
 archive
 auto alias
+bStereoRendering
 baselayer
 basic_string::_S_construct null not valid
 because aux mask=
@@ -1747,6 +1898,7 @@ bindless_procedural.vmat
 bindlessfastpathdesc.cpp
 binner_shadow_depthDS.vtex
 binner_shadow_depthRT.vtex
+blank
 blendindices
 blendweight
 blendweights
@@ -1755,7 +1907,9 @@ bonename
 box2i
 buf error
 calloc
+cameraIndex
 cannot allocate transform texture
+castshadows
 ceil
 ceilf
 channels
@@ -1798,6 +1952,7 @@ data_height =
 debugoverlay_draw_current
 debugoverlay_ignore_source
 debugoverlay_show_text_outline
+default
 depthTarget
 dev
 dimensions
@@ -1806,6 +1961,7 @@ displayWindow
 dl_iterate_phdr
 dme_position_map
 draw2D
+drawShadows
 drawmaterialquad2
 drawspotlights
 eikonal
@@ -1837,6 +1993,8 @@ fog_color
 fog_hdrcolorscale
 fog_lighting_clipmap_%d.vtex
 fog_override
+fogscale
+fogshadows
 fopen64
 formats.cpp
 fputc
@@ -1852,9 +2010,35 @@ g_BitBuf_BitWriteMasks
 g_BitBuf_ExtraMasks
 g_Mathlib_GammaToLinearByteTable
 g_VProfCurrentProfile
+g_bCubemapNormalization
+g_bDisableNormalMapping
+g_bShowLPVVoxels
 g_bUpdateStringTokenDatabase
+g_bindlessFastPathSet
+g_lightProbeVolumeSet
+g_lightingSet
+g_nFirstView
+g_nJitterOffset
+g_nToolsVisMode
 g_pMemAlloc
 g_pThreadPool
+g_tFogIndirect
+g_tLastFrameFogVolume
+g_tLightingClipmap0
+g_tLightingClipmap1
+g_tLightingClipmap2
+g_tNoise
+g_vFogBoundingBoxInvMinScaleWithBias0
+g_vFogBoundingBoxInvMinScaleWithBias1
+g_vFogBoundingBoxInvMinScaleWithBias2
+g_vFogClipmapIndirectBBOffset
+g_vFogClipmapUVBiasScale0
+g_vFogClipmapUVBiasScale1
+g_vFogClipmapUVBiasScale2
+g_vFogClipmapUVWOffset0
+g_vFogClipmapUVWOffset1
+g_vFogClipmapUVWOffset2
+g_vIndirectBBScale_flIndirectStrength
 game
 generic
 idle
@@ -2223,10 +2407,9 @@ operator new[](unsigned long)
 operator new[](unsigned long, std::nothrow_t const&)
 original
 out of memory
-outputcolor
-outputdepth
+outputColor
+outputDepth
 overlay
-pA
 parameter error
 parent of jiggle bone %u: %s
 particle_cloth_experimental_support
@@ -2244,6 +2427,7 @@ position
 postprocess
 posxyz
 prev layer not found
+previewLightMaps
 ptestbed
 pthread_mutex_destroy
 pthread_mutex_init
@@ -2283,6 +2467,11 @@ r_stereo_multiview_instancing
 r_texture_lod_scale
 rb
 realloc
+reflection_clip_plane
+reflection_outputcolor
+reflection_outputdepth
+refraction_clip_plane
+refraction_outputcolor
 remapping vertex %d[w%d] invalid: %d->%d >= %d
 remapping vertex %d[w%d] invalid: %d->? >= %d
 renderingpipelines
@@ -2380,6 +2569,7 @@ scenegfxresources.cpp
 scenelayer.cpp
 scenelight.cpp
 sceneobject_h
+sceneobject_methods.cpp
 scenesimpleidx
 scenesimplevb
 scenesysBox
@@ -2388,9 +2578,9 @@ scenesysDodecahedron
 scenesysPyramid
 scenesystem
 scenesystem.cpp
-scenesystem.cpp(3382):
-scenesystem.cpp(5706): Expecting 1 renderable pass for material "%s" but found %d!
-scenesystem.cpp(6926): Waited 500 ms for jobs to complete. Attempt to drain windows message queue.
+scenesystem.cpp(3393):
+scenesystem.cpp(5701): Expecting 1 renderable pass for material "%s" but found %d!
+scenesystem.cpp(6921): Waited 500 ms for jobs to complete. Attempt to drain windows message queue.
 scenesystem.h
 scenesystemdebug
 scenetextureset_%d
@@ -2410,6 +2600,7 @@ shadowcache.cpp
 shadowcolor
 shadowdepth
 sharpStartAngle
+showLightmapTexels
 sin( %s )
 singleplayer
 singletons.cpp
@@ -2534,6 +2725,7 @@ typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
 unrecognized string in token spec %s
 unspecified
+updateFogLights
 useMotionDamping
 useSmoothPaths
 user
@@ -2554,6 +2746,7 @@ vector::_M_emplace_back_aux
 vector::_M_range_insert
 version error
 vertexbuffer
+view.bIsToolView
 vn %g %g %g
 void std::vector<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > >::_M_emplace_back_aux<std::vector<unsigned long, std::allocator<unsigned long> > const&>(std::vector<unsigned long, std::allocator<unsigned long> > const&)
 void std::vector<unsigned char, std::allocator<unsigned char> >::_M_emplace_back_aux<unsigned char const&>(unsigned char const&)
@@ -2575,6 +2768,8 @@ volume_fog_show_volumes
 volume_fog_vr_single_dispatch
 volume_fog_width
 volumetric_fog.vtex
+vrDepthResolve
+vrRefractColor
 vr_allow_time_sliced_shadow_map_rendering
 vr_camera_decay_roll_halflife
 vr_camera_decay_yaw_pitch_halflife
@@ -2608,6 +2803,8 @@ vtable for std::basic_streambuf<char, std::char_traits<char> >
 vtable for std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >
 vtable for std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >
 walkspeed
+waterDepth
+waterStart
 wb
 wellknown_black_1x1
 wellknown_black_2x2x2
@@ -2621,10 +2818,11 @@ wellknown_transparent_black_1x1
 wellknown_transparent_black_array_1x1
 wellknown_white_1x1
 wellknown_white_array_1x1x1
+wireframeColor
 wt
-yes
 z>
 zC
 zD
 } %llu aggs, %s total data
+A
 C

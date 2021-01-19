@@ -105,7 +105,8 @@
 		// bypass this limit so we can be fairly conservative.
 		"ReserveWarnMB" "64"
 
-		"SupportsVulkanParticleOptimizations" "1"
+		"DefaultRenderSystem"					"-vulkan" [ $LINUX || $OSX ] // macOS/Linux default to Vulkan
+		"SupportsVulkanParticleOptimizations"	"1"
 
 		"RenderingPipeline"
 		{
@@ -139,6 +140,7 @@
 		"CMTAtlasChunkSize" "128"
 		"DrawParticleChildrenSeparateFromParents" "1"
 		"MaxAutoPartitions" "8"
+		"LayerBatchThreshold" "512" [ $OSX && $CPU_EMULATED ] // Apple M1 - increase sc_layer_batch_threshold from 128 -> 512. Reduces TBDR memory bandwidth.
 	}
 	
 	SoundSystem
@@ -227,5 +229,16 @@
 	Particles
 	{
 		"GameSupportsLegacyShaders"	"1"
+	}
+
+	Panorama
+	{
+		"UsesSvg" "1"
+	}
+
+	RenderSystem
+	{
+		"VulkanUseSecondaryCommandBuffers"	"1" // Use secondary command buffers for more efficiency on tiled based renderers. All platforms to limit configurations.
+		"VulkanSteamShaderCache"			"1"
 	}
 }
