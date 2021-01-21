@@ -198,6 +198,7 @@ AnimateMatchRewardsScreenAction.prototype.start = function ()
 
 	// Setup the sequence of actions to animate the screen
 	this.seq = new RunSequentialActions();
+	this.seq.actions.push( new RunFunctionAction( function () { $.DispatchEvent( 'DOTASetDashboardBackgroundVisible', false ); } ) );
 	this.seq.actions.push( new AddClassAction( panel, 'ShowScreen' ) );
 	this.seq.actions.push( new AddScreenLinkAction( panel, 'MatchRewardsProgress', '#DOTA_MatchRewards' ) );
 	this.seq.actions.push( new WaitAction( 0.5 ) );
@@ -575,6 +576,7 @@ AnimateMatchRewardsScreenAction.prototype.start = function ()
 	this.seq.actions.push( new SkippableAction( new WaitAction( 1.0 ) ) );
 	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
 	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
+	this.seq.actions.push( new RunFunctionAction( function () { $.DispatchEvent( 'DOTASetDashboardBackgroundVisible', true ); } ) );
 
 	this.seq.start();
 }

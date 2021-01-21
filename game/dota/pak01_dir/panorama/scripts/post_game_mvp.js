@@ -90,6 +90,7 @@ AnimateMVP2TabAction.prototype.init = function( mvp2ScreenPanel )
 	
 	if ( this.data.bProgressVersion )
 	{
+		this.seq.actions.push( new RunFunctionAction( function () { $.DispatchEvent( 'DOTASetDashboardBackgroundVisible', false ); } ) );
 		this.seq.actions.push( new AddScreenLinkAction( mvp2ScreenPanel, 'MVPProgress', '#DOTAMVP2_TitleLink' ) );
 		this.seq.actions.push( new AddClassAction( mvp2ScreenPanel, 'ShowScreen' ) );
 	}
@@ -110,7 +111,7 @@ AnimateMVP2TabAction.prototype.init = function( mvp2ScreenPanel )
 				mvpPanel.SetDialogVariableInt("user_account_id", mvpDetails.accountid );
 				mvpPanel.SetDialogVariable("hero", $.Localize('#' + mvpDetails.heroname));
 
-				if (mvpDetails.guildid != undefined)
+				if ( mvpDetails.guildid != undefined && mvpDetails.guildid != 0 )
 				{
 					mvpPanel.FindChildInLayoutFile('GuildImage').guildid = mvpDetails.guildid;
 					mvpPanel.SetDialogVariableInt("user_guild_id", mvpDetails.guildid);
@@ -164,7 +165,7 @@ AnimateMVP2TabAction.prototype.init = function( mvp2ScreenPanel )
 				var honorableMentionPanel = $.CreatePanel('Panel', honorableMentions, '');
 				honorableMentionPanel.BLoadLayoutSnippet('HonorableMention');
 				honorableMentionPanel.SetDialogVariableInt("user_account_id", honorableMentionData.accountid);
-				if (honorableMentionData.guildid != undefined)
+				if ( honorableMentionData.guildid != undefined && honorableMentionData.guildid != 0 )
 				{
 					honorableMentionPanel.SetDialogVariableInt("user_guild_id", honorableMentionData.guildid);
 				}
@@ -248,6 +249,7 @@ AnimateMVP2TabAction.prototype.init = function( mvp2ScreenPanel )
 		this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
 		this.seq.actions.push( new SwitchClassAction( mvp2ScreenPanel, 'current_screen', '' ) );
 		this.seq.actions.push( new SkippableAction( new WaitAction( 7.0 ) ) );
+		this.seq.actions.push( new RunFunctionAction( function () { $.DispatchEvent( 'DOTASetDashboardBackgroundVisible', true ); } ) );
 	}
 
 	this.seq.start();
