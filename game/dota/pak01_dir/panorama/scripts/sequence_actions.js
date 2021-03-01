@@ -399,6 +399,21 @@ SwitchClassAction.prototype.update = function ()
 	return false;
 }
 
+
+// Action to trigger a class on a panel
+function TriggerClassAction( panel, panelClass )
+{
+	this.panel = panel;
+	this.panelClass = panelClass;
+}
+TriggerClassAction.prototype = new BaseAction();
+TriggerClassAction.prototype.update = function ()
+{
+	this.panel.TriggerClass( this.panelClass );
+	return false;
+}
+
+
 // Action to wait for a class to appear on a panel
 function WaitForClassAction( panel, panelClass )
 {
@@ -456,6 +471,21 @@ AnimateDialogVariableIntAction.prototype.update = function ()
 AnimateDialogVariableIntAction.prototype.finish = function ()
 {
 	this.panel.SetDialogVariableInt( this.dialogVariable, this.endValue );
+}
+
+
+// Action to set a string dialog variable
+function SetDialogVariableStringAction( panel, dialogVariable, value )
+{
+	this.panel = panel;
+	this.dialogVariable = dialogVariable;
+	this.value = value;
+}
+SetDialogVariableStringAction.prototype = new BaseAction();
+SetDialogVariableStringAction.prototype.update = function ()
+{
+	this.panel.SetDialogVariable( this.dialogVariable, this.value );
+	return false;
 }
 
 

@@ -54,6 +54,11 @@ AnimateHeroBadgeXPIncreaseActionOld.prototype.start = function ()
 			row.SetDialogVariable( 'challenge_name', this.progress.challenge_description );
 			row.SwitchClass( 'challenge_stars', "StarsEarned_" + this.progress.challenge_stars );
 		}
+		else if( this.progress.xp_type == HERO_BADGE_XP_TYPE_RELIC_LEVELS )
+		{
+			row.BLoadLayoutSnippet( 'HeroBadgeProgressRow' );
+			row.SetDialogVariable( 'xp_type', $.Localize( '#DOTA_PlusPostGame_RelicLevels' ) );
+		}
 		else
 		{
 			$.Msg( "Unknown XP type: " + this.progress.xp_type );
@@ -508,6 +513,10 @@ function TestAnimateHeroBadgeLevel()
 			{
 			    xp_type: HERO_BADGE_XP_TYPE_MATCH_WON,
 			    xp_amount: 50
+			},
+			{
+				xp_type: HERO_BADGE_XP_TYPE_RELIC_LEVELS,
+				xp_amount: 20
 			},
 			{
 			    xp_type: HERO_BADGE_XP_TYPE_CHALLENGE_COMPLETED,
