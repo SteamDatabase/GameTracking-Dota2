@@ -186,7 +186,6 @@
 		"MEDIUM_HULL" : "Medium"
 		"LARGE_HULL" : "Large"
 	]
-	footstep_script(string) : "Footstep script" : ""
 	act_as_flyer(choices) : "Act as a Flyer?" : 0 =
 	[
 		0 : "No, obey gravity"
@@ -420,6 +419,39 @@
 	]
 ]
 
+@PointClass base(Targetname) tags( Choreo ) color(255 0 255) iconsprite("editor/aiscripted_schedule") = ai_scripted_idle :
+	"Forces an NPC to idle (optionally at a specified location), allowing you to control what will interrupt it."
+[
+	m_iszNPC(target_destination) : "Target NPC(s)" : : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to idle."
+	m_iszTarget(target_destination) : "Target Destination" : "" : "An optional entity that marks the position at which the NPC should idle. If left blank, the NPC will idle where it currently is."
+
+	resilient(choices) : "Reacquire after break" : 1 : "If set, once the NPC has nothing important to do, it'll return to idling, even if it previously broke out of the schedule due to the Interruptability choices." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	switchidletoalert(choices) : "Switch To Alert State if Idle" : 0 : "If the commanded NPC(s) is in Idle state, switch them to Alert state." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	interruptability(choices) : "Interruptability" : 0 : "Sets what kind of events can interrupt an NPC that's performing this idle. Note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
+	[
+		0 : "Everything that usually interrupts AI"
+		3 : "Direct Combat (Seeing enemies, taking damage, etc)"
+		1 : "Only Taking Damage"
+		2 : "Nothing"
+	]
+	
+	// Inputs
+	input StartIdle(void) : "Starts all target NPC(s) idling, potentially to the target destination if it's specified and they're not on it."
+	input StopIdle(void) : "Stops all target NPCs that are performing this idle."
+
+	// Outputs
+	output OnFailedToPerform(string) : "Fired when any target NPC(s) fails to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
+]
 
 @PointClass base(Targetname) tags( Choreo ) color(255 0 255) iconsprite("editor/ai_scripted_moveto") = ai_scripted_moveto :
 	"Forces an NPC to move to a specified destination entity."

@@ -91,8 +91,13 @@ while [ $STATUS -eq 42 ]; do
 		echo set disable-randomization off >> "$ARGSFILE"
 		unset LD_PRELOAD
 
+		echo set env LD_LIBRARY_PATH=$LD_LIBRARY_PATH >> "$ARGSFILE"
+		echo show env LD_LIBRARY_PATH >> "$ARGSFILE"
+		unset LD_LIBRARY_PATH
+
 		echo run $@ >> "$ARGSFILE"
 		echo show args >> "$ARGSFILE"
+
 		${GAME_DEBUGGER} "${GAMEROOT}"/${GAMEEXE} -x "$ARGSFILE"
 		rm "$ARGSFILE"
 	elif [ "${GAME_DEBUGGER}" == "lldb" ]; then

@@ -782,7 +782,7 @@ end
 
 function CTutorialBasics:_HeroMoveTip()
 	CustomUI:DynamicHud_Destroy( -1, "tutorial_tip" )
-	self:_CreateInfoDialog( "RightClickImage", { TitleTextVar = "basics_MovingYourHeroTitle", BodyTextVar = "basics_MovingYourHeroBody" } )
+	self:_CreateInfoDialog( "RightClickImage", { TitleTextVar = "basics_MovingYourHeroTitle", BodyTextVar = "" } )
 	CustomGameEventManager:Send_ServerToAllClients( "set_custom_info_string", {customBody="#basics_MovingYourHeroBody", keyname="%dota_camera_follow%" } )
 end	
 
@@ -1042,7 +1042,7 @@ end
 function CTutorialBasics:_CastQuest()
 	self:_SetGameFrozen( false )
 	CustomUI:DynamicHud_Destroy( -1, "tutorial_tip" )
-	CustomUI:DynamicHud_Create( -1, "tutorial_objective", "file://{resources}/layout/custom_game/tutorial_objective.xml", { TitleTextVar = "basics_objective_CastSpellTitle", BodyTextVar = "basics_objective_CastSpellBody" } )
+	CustomUI:DynamicHud_Create( -1, "tutorial_objective", "file://{resources}/layout/custom_game/tutorial_objective.xml", { TitleTextVar = "basics_objective_CastSpellTitle", BodyTextVar = "" } )
 	CustomGameEventManager:Send_ServerToAllClients( "set_custom_objective_string", {customBody="#basics_objective_CastSpellBody", keyname="%dota_ability_execute 0%" } )
 end
 
@@ -1050,7 +1050,7 @@ function CTutorialBasics:_CompleteCastQuest()
 	self._bPreventTowerDamage = false
 	EmitGlobalSound( "Tutorial.TaskProgress" )
 	CustomUI:DynamicHud_Destroy( -1, "tutorial_objective" )
-	CustomUI:DynamicHud_Create( -1, "tutorial_objective_completed", "file://{resources}/layout/custom_game/tutorial_objective_completed.xml", { TitleTextVar = "basics_objective_CastSpellTitle", BodyTextVar = "basics_objective_CastSpellBody" } )
+	CustomUI:DynamicHud_Create( -1, "tutorial_objective_completed", "file://{resources}/layout/custom_game/tutorial_objective_completed.xml", { TitleTextVar = "basics_objective_CastSpellTitle", BodyTextVar = "" } )
 	CustomGameEventManager:Send_ServerToAllClients( "set_custom_objective_string", {customBody="#basics_objective_CastSpellBody", keyname="%dota_ability_execute 0%" } )
 end
 

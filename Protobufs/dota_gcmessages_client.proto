@@ -72,6 +72,7 @@ enum EPurchaseHeroRelicResult {
 	k_EPurchaseHeroRelicResult_PurchaseNotAllowed = 4;
 	k_EPurchaseHeroRelicResult_InvalidRelic = 5;
 	k_EPurchaseHeroRelicResult_AlreadyOwned = 6;
+	k_EPurchaseHeroRelicResult_InvalidRarity = 7;
 }
 
 enum EDevEventRequestResult {
@@ -101,17 +102,6 @@ enum ESupportEventRequestResult {
 	k_ESupportEventRequestResult_TransactionFailed = 13;
 }
 
-enum ECoachTeammateRating {
-	k_ECoachTeammateRating_None = 0;
-	k_ECoachTeammateRating_Positive = 1;
-	k_ECoachTeammateRating_Negative = 2;
-	k_ECoachTeammateRating_Abusive = 3;
-}
-
-enum EPlayerCoachMatchFlag {
-	k_EPlayerCoachMatchFlag_EligibleForRewards = 1;
-}
-
 enum EUnderDraftResponse {
 	k_eInternalError = 0;
 	k_eSuccess = 1;
@@ -130,8 +120,7 @@ enum EUnderDraftResponse {
 enum ETeamFanContentStatus {
 	TEAM_FAN_CONTENT_STATUS_INVALID = 0;
 	TEAM_FAN_CONTENT_STATUS_PENDING = 1;
-	TEAM_FAN_CONTENT_STATUS_APPROVED = 2;
-	TEAM_FAN_CONTENT_STATUS_REJECTED = 3;
+	TEAM_FAN_CONTENT_STATUS_EVALUATED = 2;
 }
 
 enum EDOTADraftTriviaAnswerResult {
@@ -2412,23 +2401,6 @@ message CMsgGCRequestSkillUpRecommendationsResponse {
 	repeated .CMsgGCRequestSkillUpRecommendationsResponse.AbilitySelection abilities = 1;
 }
 
-message CMsgClientToGCRecycleHeroRelic {
-	repeated uint64 item_ids = 1;
-}
-
-message CMsgClientToGCRecycleHeroRelicResponse {
-	enum Result {
-		SUCCESS = 1;
-		ERROR_INTERNAL = 2;
-		ERROR_FAILED_TO_FIND_HERO_RELIC = 3;
-		ERROR_ITEM_NOT_HERO_RELIC = 4;
-		ERROR_FAILED_EVENT_NOT_OWNED = 5;
-	}
-
-	optional .CMsgClientToGCRecycleHeroRelicResponse.Result result = 1 [default = SUCCESS];
-	optional uint32 dust_amount = 2;
-}
-
 message CMsgPurchaseHeroRelic {
 	optional uint32 hero_id = 1;
 	optional uint32 kill_eater_type = 2;
@@ -2440,6 +2412,7 @@ message CMsgPurchaseHeroRelicResponse {
 
 message CMsgPurchaseHeroRandomRelic {
 	optional uint32 hero_id = 1;
+	optional .EHeroRelicRarity relic_rarity = 2 [default = HERO_RELIC_RARITY_INVALID];
 }
 
 message CMsgPurchaseHeroRandomRelicResponse {
@@ -3146,77 +3119,6 @@ message CMsgClientToGCRequestPlayerHeroRecentAccomplishmentsResponse {
 
 	optional .CMsgClientToGCRequestPlayerHeroRecentAccomplishmentsResponse.EResponse result = 1 [default = k_eInternalError];
 	optional .CMsgPlayerHeroRecentAccomplishments hero_accomplishments = 2;
-}
-
-message CMsgPlayerCoachMatch {
-	optional uint64 match_id = 1;
-	optional .EMatchOutcome match_outcome = 2 [default = k_EMatchOutcome_Unknown];
-	optional uint32 coached_team = 3;
-	optional fixed32 start_time = 4;
-	optional uint32 duration = 5;
-	repeated .ECoachTeammateRating teammate_ratings = 6;
-	optional uint32 coach_flags = 7;
-}
-
-message CMsgClientToGCRequestPlayerCoachMatches {
-}
-
-message CMsgClientToGCRequestPlayerCoachMatchesResponse {
-	enum EResponse {
-		k_eInternalError = 0;
-		k_eSuccess = 1;
-		k_eTooBusy = 2;
-		k_eDisabled = 3;
-	}
-
-	optional .CMsgClientToGCRequestPlayerCoachMatchesResponse.EResponse result = 1 [default = k_eInternalError];
-	repeated .CMsgPlayerCoachMatch coach_matches = 2;
-}
-
-message CMsgClientToGCRequestPlayerCoachMatch {
-	optional uint64 match_id = 1;
-}
-
-message CMsgClientToGCRequestPlayerCoachMatchResponse {
-	enum EResponse {
-		k_eInternalError = 0;
-		k_eSuccess = 1;
-		k_eTooBusy = 2;
-		k_eDisabled = 3;
-	}
-
-	optional .CMsgClientToGCRequestPlayerCoachMatchResponse.EResponse result = 1 [default = k_eInternalError];
-	optional .CMsgPlayerCoachMatch coach_match = 2;
-}
-
-message CMsgClientToGCSubmitCoachTeammateRating {
-	optional uint64 match_id = 1;
-	optional uint32 coach_account_id = 2;
-	optional .ECoachTeammateRating rating = 3 [default = k_ECoachTeammateRating_None];
-	optional string reason = 4;
-}
-
-message CMsgClientToGCSubmitCoachTeammateRatingResponse {
-	enum EResponse {
-		k_eInternalError = 0;
-		k_eSuccess = 1;
-		k_eTooBusy = 2;
-		k_eDisabled = 3;
-		k_eInvalidInput = 4;
-		k_eAlreadySubmitted = 5;
-		k_eVotingFinished = 6;
-		k_ePlayerNotInMatch = 7;
-		k_eCoachNotInMatch = 8;
-		k_ePlayerNotOnCoachTeam = 9;
-		k_ePlayerInSamePartyAsCoach = 10;
-		k_eMatchNotEligible = 11;
-	}
-
-	optional .CMsgClientToGCSubmitCoachTeammateRatingResponse.EResponse result = 1 [default = k_eInternalError];
-}
-
-message CMsgGCToClientCoachTeammateRatingsChanged {
-	optional .CMsgPlayerCoachMatch coach_match = 1;
 }
 
 message CMsgClientToGCSubmitPlayerMatchSurvey {

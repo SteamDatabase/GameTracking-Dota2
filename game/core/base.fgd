@@ -125,6 +125,7 @@
 	input EnableShadow(void) : "Turn shadow on."
 	input AlternativeSorting(bool) : "Used to attempt to fix sorting problems when rendering. True activates, false deactivates"
 	input SetRenderAttribute(string) : "Set the value of a render attribute used in material dynamic expressions. Examples: $myfloat=0.25 $myfloat4=1.0,0.0,1.0,1.0"
+	input ClearRenderAttribute(string) : "Remove a render attribute previously set by SetRenderAttribute, restoring it to its previous value."
 
 	// Outputs
 	output OnIgnite(void) : "Fired when this object catches fire."
@@ -957,23 +958,29 @@
 	]
 ]
 
-@PointClass base(Targetname) color(255 0 0) = env_sun : 
+@PointClass base(Targetname) color(255 255 255) 
+	editormodel( "models/editor/light_environment", lightModeTint, "124 255 157", "255 64 64" )
+	iconsprite
+	{
+		image = "materials/editor/env_sun.vmat"
+		tintKey = "color"
+	}	
+	helper_env_sun() = env_sun : 
 	"An entity to control & draw a sun effect in the sky."
 [
-	target(target_destination) : "Viewer entity" : : "Name of an entity used to determine where the sun is in the skybox. The sun should be lined up on a line from this entity to the env_sun entity."
-	
-	use_angles(boolean) : "UseAngles" : 0 : "The old way to orient env_sun is to point it at a target. The new way is to specify the angles. If you use the new way, set this property to YES."
-
-	rendercolor(color255) : "Sun Color (R G B)" : "100 80 80"
-	overlaycolor(color255) : "Overlay Color (R G B)" : "0 0 0" : "A value of 0 0 0 will act the old way."
-	
-	size(integer) : "Size" : 16
-	overlaysize(integer) : "Overlay Size" : -1 : "A value of -1 means the overlay will act the old way."
-	
-	material(sprite) : "Material Name" : "materials/sprites/light_glow02_add_noz" : "Material of the inner glow."
-	overlaymaterial(sprite) : "Overlay Material Name" : "materials/sprites/light_glow02_add_noz" : "Material of the overlay glow."
-
-	HDRColorScale(float) : "HDR color scale." : "1.0" : "float value to multiply sprite color by when running in HDR mode."
+	 effect_name(particlesystem) [report] : "Particle Sun flare" : "particles/environment/env_sun_clear.vpcf"
+	 effect_namess(particlesystem) [report] : "Sceenspace effect (addition)" : "" : "particles/environment/env_sun_screenspace_flare.vpcf"
+	 full_luminositycolorvalue(boolean) : "Remap to Max Luminosity" : 1 : "Regardless of color Value set to max luminocity. This is mainly for additive things like the sun"
+	 colortint(color255) : "Sun Color (R G B)" : "100 80 80"
+	 scale(float) : "Size" : "16.0" : "Increased control on scaling the sun in the particle system. This read into control point 17 which should drive the system."
+	 rotation(float) : "Sprite Rotation" : "0.0" : "Rotate the sprite. passed to Particle through Control point 15"
+	 alphascale(float) : "Core Alpha" : "0.0" : "Rotate the sprite. passed to Particle through Control point 18 x"
+	 alphahdr(float) : "Hdr Alpha" : "0.0" : "Rotate the sprite. passed to Particle through Control point 18 y"
+	 alphahaze(float) : "Haze Alpha" : "0.0" : "Alpha sprite. passed to Particle through Control point 18 z"
+	 selfillumscale(float) : "HDR color scale" : "1.0" : "float value to multiply sprite color by when running in HDR mode. Cp 17 y."
+	 hazescale(float) : "Haze Scale" : "1.0" : "additional control for creating things like haze. Treat this like another float input on cp 17 z."
+	 mapfarz(integer) : "Map Farz" : "10000" : "The farz set in the map's env_fog_controller. this is to help preview for size in hammer only. Not used in game. "
+	 farzscale(float) : "FarZ Scale" : ".9" : "Default is .9, it will let you scale the distance of the sun to the player incase of fog fading out the sun.  "
 
 	// Inputs
 	input TurnOn(void) : "Enable sun rendering."
@@ -1304,7 +1311,7 @@
 //
 //-------------------------------------------------------------------------
 
-@PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, CanBeClientOnly) model()
+@PointClass base(Targetname, Parentname, CanBeClientOnly, RenderFxChoices, RenderFields) model()
 	metadata
 	{
 		model_archetypes = [ "animated_model" ]
@@ -3578,8 +3585,8 @@
 	"If the input value is greater than the compare value, the OnGreaterThan output is fired with the input value."
 [
 	// Keys
-	InitialValue(integer) : "Initial value" : : "Initial value for the input value."
-	CompareValue(integer) : "Compare value" : : "The value to compare against."
+	InitialValue(float) : "Initial value" : : "Initial value for the input value."
+	CompareValue(float) : "Compare value" : : "The value to compare against."
 	
 	// Inputs
 	input SetValue(float) : "Set the value that will be compared against the compare value."
@@ -5190,6 +5197,14 @@
 	output NotifyForceReachedZ(void) : "The requested force has been reached on the Z axis.  Won't fire if force min time is zero."
 ]
 
+@PointClass base(TwoObjectPhysics) editormodel("models/editor/axis_helper_thick") tags( Physics ) = phys_splineconstraint :
+	"Constrain an entity to a spline."
+[
+	spawnflags(flags) =
+	[
+	]
+]
+
 @PointClass base(Targetname) size(-8 -8 -8, 8 8 8) color(0 0 255) tags( Physics ) = phys_convert : 
 	"Turns an arbitrary entity into a physically simulated entity. i.e. brush entities will behave like func_physbox, model entities behave like prop_physics."
 [
@@ -5367,7 +5382,7 @@
 	]
 ]
 
-@BaseClass base(Parentname, Global, Studiomodel, BreakableProp, SystemLevelChoice, RenderFields, Glow) tags( PropDynamic ) = prop_dynamic_base
+@BaseClass base(Parentname, CanBeClientOnly, Global, Studiomodel, BreakableProp, SystemLevelChoice, RenderFields, Glow) tags( PropDynamic ) = prop_dynamic_base
 [
 	solid(choices) : "Collisions" : 6 =
 	[
@@ -5434,7 +5449,7 @@
 	updatechildren(boolean) : "Update children" : 0 : "Update touches for any children that are attached to attachment points as this prop animates. "+
 		"This allows SetParentAttached triggers or func_brushes to touch properly."
 
-	use_animgraph(boolean) : "Allow Animgraph" : 0 : "Allow this entity to use its animgraph"
+	use_animgraph(boolean) : "Allow Animgraph" : 1 : "Allow this entity to use its animgraph"
 
 	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "0" : "Create a navigation obstacle to assist NPC pathfinding"
 
@@ -5485,6 +5500,7 @@
 	detailgeometry(boolean) : "Detail Geometry" : 0 : "If true this geometry is not important for precomputed lighting"	
 	visoccluder(boolean) : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility"	
 	baketoworld(boolean) : "Bake To World" : 0 : "If true this geometry will be baked into the world geometry of the map so that the model is not referenced at runtime."
+	disablemerging(boolean) : "Disable Mesh Merging" : 0 : "If true this will not be merged with other geometry during map compile (reduces rendering efficiency)."
 	renderamt(integer) [ group="Render Properties" ] : "Alpha" : 255 : "Alpha of the fade, where 0 = fully transparent and 255 = fully opaque." 
 	rendercolor(color255) : "Color (R G B)" : "255 255 255"
 	lightingorigin(target_destination) [ group="Render Properties" ]: "Lighting Origin" : "" : "Select a an entity to specify a location to sample lighting from, instead of using this entity's bounding box center."
@@ -5758,26 +5774,27 @@
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 ]
 
-
-@SolidClass base(Targetname, Parentname) = func_precipitation : 
-	"A brush entity that creates rain and snow inside its volume."
+@SolidClass base(Trigger) = func_precipitation :
+	"A brush entity that creates precipitation inside its volume."
 [
-	renderamt(integer) : "Density (0-100%)" : 100	
-	preciptype(choices) : "Precipitation Type" : 4 =	
+	spawnflags(flags) = 
 	[
-		4 : "Particle Rain"
-		5 : "Particle Ash"
-		6 : "Particle Rainstorm"
-		7 : "Particle Bugs"
-		8 : "Particle Smoke"
-		9 : "Particle Snow"
-		10 : "Particle Xen Particulate"
-		11 : "Particle Dust Motes"
-		12 : "Particle Embers"
-		13 : "Particle Ground Fog"
+		1: "Clients" : 1
+		2: "NPCs" : 0
+		4: "Pushables": 0
+		8: "Physics Objects" : 0
+		16: "Only player ally NPCs" : 0
+		32: "Only clients in vehicles" : 0
+		64: "Everything (not including physics debris)" : 1
+		512: "Only clients *not* in vehicles" : 0
+		1024: "Physics debris" : 0
+		2048: "Only NPCs in vehicles (respects player ally flag)" : 0
+		4096: "Correctly account for object mass (trigger_push used to assume 100Kg) and multiple component physobjs (car, blob...)" : 1
+		8192: "Ignore client's hands" : 0
 	]
+	subclass_name( subclass_choice:scripts/precipitation.vdata ) : "Precipitation Subclass" : "" : "The Type of Precipitation."
+	renderamt(integer) : "Density (0-100%)" : 100	
 ]
-
 
 @SolidClass base(Targetname, Parentname) = func_precipitation_blocker : 
 	"A brush entity that prevents rain and snow inside its volume."
@@ -7338,6 +7355,7 @@
 	input EnableShadow(void) : "Turn shadow on."
 	input AlternativeSorting(bool) : "Used to attempt to fix sorting problems when rendering. True activates, false deactivates"
 	input SetRenderAttribute(string) : "Set the value of a render attribute used in material dynamic expressions. Examples: $myfloat=0.25 $myfloat4=1.0,0.0,1.0,1.0"
+	input ClearRenderAttribute(string) : "Remove a render attribute previously set by SetRenderAttribute, restoring it to its previous value."
 ]
 
 
@@ -7399,3 +7417,9 @@
 ]
 
 //==================================================================================================
+@SolidClass base(Trigger)
+ = trigger_buoyancy : "A volumetric trigger that affects the motion of vphysics objects that touch it by applying buoyancy to them."
+[
+	SetFluidDensity(float) : "Fluid density, kg/liter" : "1.0"
+	input SetFluidDensity(float) : "Fluid density, kg/liter"
+]
