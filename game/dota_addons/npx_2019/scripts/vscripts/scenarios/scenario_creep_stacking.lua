@@ -60,6 +60,9 @@ function CDotaNPXScenario_CreepStacking:SetupScenario()
 	GameRules:GetGameModeEntity():SetWeatherEffectsDisabled( true )
 
 	self.bAttackCamp3IsActive = false
+	self.flStartCount = 0.0
+	self.flAttackCount = 0.0
+	self.bFinalTaskStarted = false
 
 	self.AlchemistSpawner = CDotaSpawner( "teammate_spawner", 
 	{
@@ -180,7 +183,6 @@ function CDotaNPXScenario_CreepStacking:SetupTasks()
 			DisableRelay = "camp_trigger_disable_relay",
 			GoalLocation = self.hHeroLoc2:GetAbsOrigin(),
 			GoalDistance = 200,
-			TimeRequirement = false,
 		},
 		CheckTaskStart =
 		function() 
@@ -220,6 +222,8 @@ function CDotaNPXScenario_CreepStacking:SetupStage2()
 	end )
 	self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 9, function()
 		self:Fade( 1 )
+	end )
+	self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 10, function()
 		self:SetupStage3()
 	end )
 end
@@ -299,26 +303,48 @@ function CDotaNPXScenario_CreepStacking:SetupStage3Tasks()
 		end,
 	}, self ), 0.0 )
 
-	local leadNeutralCreep3 = rootTask:AddTask( CDotaNPXTask_StackTarget( {
-		TaskName = "lead_neutral_creep_3",
-		TaskType = "task_stack_target",
-		UseHints = true,
-		TaskParams =
-		{
-			EntityName = "npc_dota_neutral_kobold",
-			CampTrigger = "camp_trigger",
-			EnableRelay = "camp_trigger_enable_relay",
-			DisableRelay = "camp_trigger_disable_relay",
-			GoalLocation = self.hHeroLoc2:GetAbsOrigin(),
-			GoalDistance = 200,
-			TimeRequirement = true,
-		},
-		CheckTaskStart =
-		function() 
-			return GameRules.DotaNPX:IsTaskComplete( "attack_neutral_creep_3" )
-		end,
-	}, self ), 0.0 )
+end
 
+--------------------------------------------------------------------
+
+function CDotaNPXScenario_CreepStacking:SetupFinalTask()
+	if self.bFinalTaskStarted == false then
+		self.bFinalTaskStarted = true
+		self.bAttackCamp3IsActive = false
+		self.flAttackCount = GameRules:GetDOTATime( false, false )
+		self.flRemainingCount = 10 - ( self.flAttackCount - self.flStartCount )
+		print( "Remaining Time = " .. self.flRemainingCount )
+		print("Setting up Final Task")
+
+		local rootTask = CDotaNPXTask_Sequence( {
+			TaskName = "root",
+			Hidden = true,
+		}, self )
+		table.insert( self.Tasks, rootTask )
+		rootTask.CheckTaskStart = function() return true end
+
+		-- Final Task
+		local leadNeutralCreep3 = rootTask:AddTask( CDotaNPXTask_StackTarget( {
+			TaskName = "lead_neutral_creep_3",
+			TaskType = "task_stack_target",
+			UseHints = true,
+			TaskParams =
+			{
+				EntityName = "npc_dota_neutral_kobold",
+				CampTrigger = "camp_trigger",
+				EnableRelay = "camp_trigger_enable_relay",
+				DisableRelay = "camp_trigger_disable_relay",
+				GoalLocation = self.hHeroLoc2:GetAbsOrigin(),
+				GoalDistance = 200,
+				TimeRequirement = self.flRemainingCount,
+			},
+			CheckTaskStart =
+			function() 
+				--return GameRules.DotaNPX:IsTaskComplete( "attack_neutral_creep_3" )
+				return true
+			end,
+		}, self ), 0.0 )
+	end
 end
 
 --------------------------------------------------------------------
@@ -371,31 +397,19 @@ function CDotaNPXScenario_CreepStacking:OnTaskCompleted( event )
 				self:SetupStage2()
 			end )
 		end
-	elseif event.task_name == "move_to_location_2" then
-		local vCampPos = self.hNeutralLoc1:GetAbsOrigin()
-		SendToConsole( "dota_camera_lerp_position " .. vCampPos.x .. " " .. vCampPos.y .. " " .. 1 )
-		self:SpawnNeutralCreeps()
-	elseif event.task_name == "lead_neutral_creep_2" then
-		self:SpawnNewNeutralCamp()
-		local vCampPos = self.hNeutralLoc1:GetAbsOrigin()
-		SendToConsole( "dota_camera_lerp_position " .. vCampPos.x .. " " .. vCampPos.y .. " " .. 1 )
-		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 2, function()
-			self:Fade( 1 )
-		end )
-		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 3, function()
-			self:SetupStage3()
-		end )
 	elseif event.task_name == "move_to_location_3" then
 		self.nCheckpoint = 1
 		local vCampPos = self.hNeutralLoc1:GetAbsOrigin()
 		SendToConsole( "dota_camera_lerp_position " .. vCampPos.x .. " " .. vCampPos.y .. " " .. 1 )
 		self:SpawnNeutralCreeps()
 		self:ShowStackTimer( 50, 10 )
+		self.flStartCount = GameRules:GetDOTATime( false, false )
 	elseif event.task_name == "attack_neutral_creep_3" then
-		self.bAttackCamp3IsActive = false
+		self:SetupFinalTask()
 	elseif event.task_name == "lead_neutral_creep_3" then
 		if event.success == 1 then
 			--self:EndHintWorldText( self.hTimerLoc:GetAbsOrigin() ) 
+			self:ShowWizardTip( "scenario_creep_stacking_wizard_tip_farming_stacks", 10.0 )
 			self:SpawnNewNeutralCamp()
 			local vCampPos = self.hNeutralLoc1:GetAbsOrigin()
 			SendToConsole( "dota_camera_lerp_position " .. vCampPos.x .. " " .. vCampPos.y .. " " .. 1 )
@@ -438,8 +452,8 @@ end
 ----------------------------------------------------------------------------
 
 function CDotaNPXScenario_CreepStacking:CheckCampStatus()
-	print( "Failed to attack creep in time" )
 	if self.bAttackCamp3IsActive == true then
+		print( "Failed to attack creep in time" )
 		self:OnScenarioComplete( false, "scenario_creep_pulling_failure_did_not_attack_in_time" )
 	end
 end

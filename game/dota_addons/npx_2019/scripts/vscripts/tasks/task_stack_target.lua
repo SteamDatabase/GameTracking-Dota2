@@ -62,19 +62,22 @@ end
 
 function CDotaNPXTask_StackTarget:OnThink()
 	CDotaNPXTask.OnThink(self)
+	if GameRules:IsGamePaused() then
+		return
+	end
 	--print( self.nCreepsInCamp .. " units still in camp" )
 	if self.bIsComplete == false then
 		if self.hTaskInfo.TaskParams.TimeRequirement then
-			-- What is the tick count?
-			self.nCounter = self.nCounter + 0.16
+			-- NPX_THINK_TIME = 0.1
+			self.nCounter = self.nCounter + NPX_THINK_TIME
 			--print( self.nCounter )
 		end
-		if self.hTarget ~= nil and self.hTarget:IsAlive() then
+		if self.hTarget and self.hTarget:IsAlive() then
 			-- Need to initialize the trigger or it starts at nCounter = 0
 			if self.bTriggerInitialized then
 				if self.nCreepsInCamp == 0 then
 					if self.hTaskInfo.TaskParams.TimeRequirement then
-						if self.nCounter > 9 then
+						if self.nCounter > self.hTaskInfo.TaskParams.TimeRequirement then
 							self:CompleteTask( true )
 							self.bIsComplete = true
 						end
@@ -83,8 +86,9 @@ function CDotaNPXTask_StackTarget:OnThink()
 						self.bIsComplete = true
 					end
 				else
+					--print( self.nCreepsInCamp .. " units still in camp" )
 					if self.hTaskInfo.TaskParams.TimeRequirement then
-						if self.nCounter > 9 then
+						if self.nCounter > self.hTaskInfo.TaskParams.TimeRequirement then
 							self:CompleteTask( false, false, "task_fail_stack_target_out_of_time" )
 							self.bIsComplete = true
 						end
@@ -92,7 +96,7 @@ function CDotaNPXTask_StackTarget:OnThink()
 				end
 			end
 		else
-			print( "Target unit died" )
+			--print( "Target unit died" )
 			self:CompleteTask( false, false, "task_fail_stack_target_unit_died" )
 		end
 	end
