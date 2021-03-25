@@ -42,6 +42,7 @@ function CDotaNPXScenario_CreepPulling:InitScenarioKeys()
 		ScenarioTimeLimit = 0, -- Timed.
 	}
 
+	self.nCheckpoint = 0
 end
 
 --------------------------------------------------------------------
@@ -56,6 +57,9 @@ function CDotaNPXScenario_CreepPulling:SetupScenario()
 	GameRules:SetTimeOfDay( 0.75 ) -- Daytime
 	GameRules:GetGameModeEntity():SetDaynightCycleDisabled( true ) -- Always daytime
 	GameRules:SetHeroRespawnEnabled( false ) -- No respawn
+	GameRules:GetGameModeEntity():SetAnnouncerDisabled( true )
+	GameRules:GetGameModeEntity():SetKillingSpreeAnnouncerDisabled( true )
+	GameRules:GetGameModeEntity():SetWeatherEffectsDisabled( true )
 
 	self.bTriggerIsActive = false
 
@@ -66,6 +70,25 @@ end
 
 function CDotaNPXScenario_CreepPulling:OnSetupComplete()
 	CDotaNPXScenario.OnSetupComplete( self )
+
+	if self.nCheckpoint == 1 then
+		printf( "CHECKPOINT 1" )
+		self:SetupStage1Tasks()
+	elseif self.nCheckpoint == 2 then
+		printf( "CHECKPOINT 2" )
+		local bForceStart = true
+		self:CheckpointSkipCompleteTask( "move_to_location_1", true, bForceStart )
+		self:CheckpointSkipCompleteTask( "attack_neutral_creep_1", true )
+		self:CheckpointSkipCompleteTask( "lead_neutral_creep_1", true )
+		self:SetupStage2()
+	elseif self.nCheckpoint == 3 then
+		printf( "CHECKPOINT 3" )
+		local bForceStart = true
+		self:CheckpointSkipCompleteTask( "move_to_location_2", true, bForceStart )
+		self:CheckpointSkipCompleteTask( "attack_neutral_creep_2", true )
+		self:CheckpointSkipCompleteTask( "lead_neutral_creep_2", true )
+		self:SetupStage3()
+	end
 end
 
 --------------------------------------------------------------------
@@ -74,14 +97,17 @@ function CDotaNPXScenario_CreepPulling:OnHeroFinishSpawn( hHero, hPlayer )
 	CDotaNPXScenario.OnHeroFinishSpawn( self, hHero, hPlayer )
 	self.hHero = hHero
 	self.hHero:SetAbilityPoints( 0 )
-	self:ShowWizardTip( "scenario_creep_pulling_wizard_tip_intro1", 5.0 )
-	--self:BlockPlayer( true )
-	self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 5, function()
-		self:ShowWizardTip( "scenario_creep_pulling_wizard_tip_intro2", 5.0 )
-	end )
-	self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 10, function()
-		self:SetupDemoGood()
-	end )
+
+	if self.nCheckpoint == 0 then
+		self:ShowWizardTip( "scenario_creep_pulling_wizard_tip_intro1", 5.0 )
+		--self:BlockPlayer( true )
+		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 5, function()
+			self:ShowWizardTip( "scenario_creep_pulling_wizard_tip_intro2", 5.0 )
+		end )
+		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 10, function()
+			self:SetupDemoGood()
+		end )
+	end
 end
 
 --------------------------------------------------------------------
@@ -528,8 +554,19 @@ end
 
 function CDotaNPXScenario_CreepPulling:OnTaskCompleted( event )
 	CDotaNPXScenario.OnTaskCompleted( self, event )
+	local Task = self:GetTask( event.task_name )
+	if Task == nil then
+		return
+	end
+
+	if event.checkpoint_skip == 1 then
+		printf( "Checkpoint Skipping past the task completed logic for \"%s\"", Task:GetTaskName() )
+		return
+	end
+
 	if event.task_name == "move_to_location_1" then
 		self:SpawnSingleCreep()
+		self.nCheckpoint = 1
 	elseif event.task_name == "lead_neutral_creep_1" then
 		if event.success == 1 then
 			self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 1, function()
@@ -543,6 +580,7 @@ function CDotaNPXScenario_CreepPulling:OnTaskCompleted( event )
 		self:SpawnSingleCreepMoving()
 		self:ShowWizardTip( "scenario_creep_pulling_wizard_tip_negative", 15.0 )
 		--self:HintWorldText( self.hHintLoc2:GetAbsOrigin(), "pulling_time", 89, -1 )
+		self.nCheckpoint = 2
 	elseif event.task_name == "lead_neutral_creep_2" then
 		if event.success == 1 then
 			self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 1, function()
@@ -555,11 +593,14 @@ function CDotaNPXScenario_CreepPulling:OnTaskCompleted( event )
 	elseif event.task_name == "move_to_location_3" then
 		self:SpawnNeutralCreeps()
 		self:SpawnCreepWaveMoving()
+		self.nCheckpoint = 3
 	elseif event.task_name == "lead_neutral_creep_3" then
-		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 1, function()
-			self:SetupEnding()
-			self:OnScenarioRankAchieved( 1 )
-		end )
+		if event.success == 1 then
+			self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 1, function()
+				self:SetupEnding()
+				self:OnScenarioRankAchieved( 1 )
+			end )
+		end
 	end
 end
 

@@ -137,12 +137,10 @@ function CDotaNPXScenario_Warding:InitScenarioKeys()
 					self:CheckpointSkipCompleteTask( "buy_observer_ward", true, bForceStart )
 					self:CheckpointSkipCompleteTask( "buy_sentry_ward", true )
 					self:CheckpointSkipCompleteTask( "move_to_location_1", true )
-					self:CheckpointSkipCompleteTask( "place_obs_ward_1", true )
-					self:CheckpointSkipCompleteTask( "move_to_location_2", true )
 
 					if self:GetPlayerHero() ~= nil then
 						LearnHeroAbilities( self:GetPlayerHero(), {} )
-						self:GetPlayerHero():AddItemByName( "item_tranquil_boots" )
+						self:GetPlayerHero():AddItemByName( "item_boots" )
 						self:GetPlayerHero():AddItemByName( "item_ward_sentry" )
 
 						local hCheckpoints = Entities:FindAllByName( "hero_location_1" )
@@ -204,6 +202,9 @@ function CDotaNPXScenario_Warding:SetupScenario()
 	GameRules:GetGameModeEntity():SetDaynightCycleDisabled( true ) -- Always daytime
 	GameRules:SetHeroRespawnEnabled( false ) -- No respawn
 	GameRules:SetUseUniversalShopMode( true ) -- Universal Shop
+	GameRules:GetGameModeEntity():SetAnnouncerDisabled( true )
+	GameRules:GetGameModeEntity():SetKillingSpreeAnnouncerDisabled( true )
+	GameRules:GetGameModeEntity():SetWeatherEffectsDisabled( true )
 	GameRules:SetItemStockCount( 1, DOTA_TEAM_GOODGUYS, "item_ward_observer", -1 ) -- Always have 1 Observer Ward in the Shop
 	GameRules:SetItemStockCount( 1, DOTA_TEAM_GOODGUYS, "item_ward_sentry", -1 ) -- Always have 1 Sentry Ward in the Shop
 

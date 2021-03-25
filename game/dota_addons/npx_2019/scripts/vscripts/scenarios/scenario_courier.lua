@@ -189,6 +189,9 @@ function CDotaNPXScenario_Courier:SetupScenario()
 	GameRules:SetTimeOfDay( 0.75 ) -- Daytime
 	GameRules:GetGameModeEntity():SetDaynightCycleDisabled( true ) -- Always daytime
 	GameRules:SetHeroRespawnEnabled( false ) -- No respawn
+	GameRules:GetGameModeEntity():SetAnnouncerDisabled( true )
+	GameRules:GetGameModeEntity():SetKillingSpreeAnnouncerDisabled( true )
+	GameRules:GetGameModeEntity():SetWeatherEffectsDisabled( true )
 
 	Tutorial:StartTutorialMode()
 	Tutorial:SetItemGuide( "courier" )

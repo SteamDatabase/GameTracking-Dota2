@@ -40,6 +40,7 @@ function CDotaNPXScenario_CreepStacking:InitScenarioKeys()
 		ScenarioTimeLimit = 0, -- Not Timed.
 	}
 
+	self.nCheckpoint = 0
 end
 
 --------------------------------------------------------------------
@@ -54,6 +55,9 @@ function CDotaNPXScenario_CreepStacking:SetupScenario()
 	GameRules:SetTimeOfDay( 0.75 ) -- Daytime
 	GameRules:GetGameModeEntity():SetDaynightCycleDisabled( true ) -- Always daytime
 	GameRules:SetHeroRespawnEnabled( false ) -- No respawn
+	GameRules:GetGameModeEntity():SetAnnouncerDisabled( true )
+	GameRules:GetGameModeEntity():SetKillingSpreeAnnouncerDisabled( true )
+	GameRules:GetGameModeEntity():SetWeatherEffectsDisabled( true )
 
 	self.bAttackCamp3IsActive = false
 
@@ -91,6 +95,15 @@ end
 function CDotaNPXScenario_CreepStacking:OnSetupComplete()
 	CDotaNPXScenario.OnSetupComplete( self )
 	GameRules:GetGameModeEntity():SetHUDVisible( DOTA_HUD_VISIBILITY_TOP_TIMEOFDAY, false )
+
+	if self.nCheckpoint == 1 then
+		printf( "CHECKPOINT 1" )
+		local bForceStart = true
+		self:CheckpointSkipCompleteTask( "move_to_location_1", true, bForceStart )
+		self:CheckpointSkipCompleteTask( "attack_neutral_creep_1", true )
+		self:CheckpointSkipCompleteTask( "lead_neutral_creep_1", true )
+		self:SetupStage3()
+	end
 end
 
 --------------------------------------------------------------------
@@ -199,13 +212,13 @@ function CDotaNPXScenario_CreepStacking:SetupStage2()
 	self:BlockPlayer( true )
 	local vLoc = self.hNeutralLoc1:GetAbsOrigin()
 	SendToConsole( "dota_camera_lerp_position " .. vLoc.x .. " " .. vLoc.y .. " " .. 1 )
-	self:ShowStackTimer( 55, 10 )
+	self:ShowStackTimer( 55, 8 )
 	--self:SetupStage2Tasks()
 	self:ShowWizardTip( "scenario_creep_stacking_wizard_tip_respawn", 15.0 )
 	self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 4, function()
 		self:SpawnNewNeutralCamp()
 	end )
-	self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 15, function()
+	self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 9, function()
 		self:Fade( 1 )
 		self:SetupStage3()
 	end )
@@ -332,6 +345,15 @@ end
 
 function CDotaNPXScenario_CreepStacking:OnTaskCompleted( event )
 	CDotaNPXScenario.OnTaskCompleted( self, event )
+	local Task = self:GetTask( event.task_name )
+	if Task == nil then
+		return
+	end
+
+	if event.checkpoint_skip == 1 then
+		printf( "Checkpoint Skipping past the task completed logic for \"%s\"", Task:GetTaskName() )
+		return
+	end
 
 	if event.task_name == "move_to_location_1" then
 		local vCampPos = self.hNeutralLoc1:GetAbsOrigin()
@@ -364,6 +386,7 @@ function CDotaNPXScenario_CreepStacking:OnTaskCompleted( event )
 			self:SetupStage3()
 		end )
 	elseif event.task_name == "move_to_location_3" then
+		self.nCheckpoint = 1
 		local vCampPos = self.hNeutralLoc1:GetAbsOrigin()
 		SendToConsole( "dota_camera_lerp_position " .. vCampPos.x .. " " .. vCampPos.y .. " " .. 1 )
 		self:SpawnNeutralCreeps()
@@ -371,17 +394,19 @@ function CDotaNPXScenario_CreepStacking:OnTaskCompleted( event )
 	elseif event.task_name == "attack_neutral_creep_3" then
 		self.bAttackCamp3IsActive = false
 	elseif event.task_name == "lead_neutral_creep_3" then
-		--self:EndHintWorldText( self.hTimerLoc:GetAbsOrigin() ) 
-		self:SpawnNewNeutralCamp()
-		local vCampPos = self.hNeutralLoc1:GetAbsOrigin()
-		SendToConsole( "dota_camera_lerp_position " .. vCampPos.x .. " " .. vCampPos.y .. " " .. 1 )
-		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 2, function()
-			self:SpawnTeammate()
-		end )
-		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 10, function()
-			self:SetupEnding()
-			self:OnScenarioRankAchieved( 1 )
-		end )
+		if event.success == 1 then
+			--self:EndHintWorldText( self.hTimerLoc:GetAbsOrigin() ) 
+			self:SpawnNewNeutralCamp()
+			local vCampPos = self.hNeutralLoc1:GetAbsOrigin()
+			SendToConsole( "dota_camera_lerp_position " .. vCampPos.x .. " " .. vCampPos.y .. " " .. 1 )
+			self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 2, function()
+				self:SpawnTeammate()
+			end )
+			self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 10, function()
+				self:SetupEnding()
+				self:OnScenarioRankAchieved( 1 )
+			end )
+		end
 	end
 end
 
