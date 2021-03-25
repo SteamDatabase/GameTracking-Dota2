@@ -225,7 +225,7 @@ function CDotaNPXScenario_Courier:OnTaskStarted( event )
 	self:HideUIHint()
 	if event.task_name == "buy_ogre_club" then
 		-- Show UI Hint for Shop Button here
-		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 2, function ()
+		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 3, function ()
 			self:ShowUIHint( "ShopButton", "scenario_courier_ui_tip_click_to_open_shop", 0.0, nil)
 		end )
 		--self:HintWorldText( self.hHeroHint:GetAbsOrigin(), "open_shop", 89, -1 )
