@@ -475,8 +475,6 @@ function CDotaNPXScenario_GlimmerCape:OnTaskCompleted( event )
 
 	if Task:GetTaskName() == "intro_delay" then
 		
-		self:GetPlayerHero():AddNewModifier( self:GetPlayerHero(), nil, "modifier_command_restricted", { duration = 2 } )
-
 		local hEscapeTrigger = Entities:FindByName( nil, "escape_trigger" )
 		if hEscapeTrigger then
 			SendToConsole( "dota_camera_lerp_position " .. hEscapeTrigger:GetAbsOrigin().x .. " " .. hEscapeTrigger:GetAbsOrigin().y .. " " .. 1 )
@@ -611,6 +609,11 @@ function CDotaNPXScenario_GlimmerCape:OnTaskStarted( event )
 	local Task = self:GetTask( event.task_name )
 	if Task == nil then
 		return
+	end
+
+	-- command restrict the player at the start of the scenario
+	if Task:GetTaskName() == "intro_delay" and self.szCheckpointTaskName == nil then
+		self:GetPlayerHero():AddNewModifier( self:GetPlayerHero(), nil, "modifier_command_restricted", { duration = 5 } )	
 	end
 
 	if Task:GetTaskName() == "move_to_escape" then
