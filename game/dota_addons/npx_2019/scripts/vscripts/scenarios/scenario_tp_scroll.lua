@@ -117,6 +117,10 @@ function CDotaNPXScenario_TP_Scroll:SetupScenario()
 	Tutorial:StartTutorialMode()
 	Tutorial:SetItemGuide( "item_build_tp_scroll" )
 	
+	for _,hBlocker in pairs ( Entities:FindAllByClassname( "tutorial_npc_blocker" ) ) do
+		hBlocker:SetEnabled( true )
+	end
+	
 	for _,hTower in ipairs( Entities:FindAllByClassname( "npc_dota_tower" ) ) do
 		if hTower:GetTeam() == DOTA_TEAM_GOODGUYS then
 			self.hTower = hTower
@@ -124,12 +128,15 @@ function CDotaNPXScenario_TP_Scroll:SetupScenario()
 			break
 		end
 	end
+	
+	ListenToGameEvent( "dota_hero_teleport_to_unit", Dynamic_Wrap( CDotaNPXScenario_TP_Scroll, "OnTeleportToUnit" ), self )
 end
 
 --------------------------------------------------------------------
 
 function CDotaNPXScenario_TP_Scroll:OnHeroFinishSpawn( hHero, hPlayer )
 	self.hHero = hHero
+	self.vStart = hHero:GetAbsOrigin()
 
 	for i=0,DOTA_MAX_ABILITIES-1 do
 		local hAbility = hHero:GetAbilityByIndex(i)
@@ -255,6 +262,29 @@ function CDotaNPXScenario_TP_Scroll:OnEntityKilled( hVictim, hKiller, hInflictor
 		self:ScheduleFunctionAtGameTime(GameRules:GetDOTATime( false, false ) + 2.0, function()
 			self:OnScenarioComplete( false )
 		end )
+	end
+end
+
+--------------------------------------------------------------------
+
+function CDotaNPXScenario_TP_Scroll:OnTeleportToUnit( event )
+	if self:GetTask( "buy_two_tp" ):IsActive() then
+		self.hHero:SetAbsOrigin( self.vStart )
+		
+		local hTP = self.hHero:FindItemInInventory( "item_tpscroll" )
+		if hTP then
+			hTP:SetCurrentCharges( hTP:GetCurrentCharges() + 1 )
+			hTP:EndCooldown()
+		else
+			hTP = self.hHero:AddItemByName( "item_tpscroll" )
+			if hTP then
+				hTP:SetCurrentCharges( 1 )
+				hTP:EndCooldown()
+			end
+		end
+
+		self:ShowWizardTip( "scenario_tp_scroll_wizard_tip_wait", 15.0 )
+		EmitGlobalSound( "General.InvalidTarget_Invulnerable" )
 	end
 end
 
