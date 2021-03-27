@@ -853,7 +853,7 @@ function CDOTANPXScenario_Economy:IntroduceScenario()
 		self.hPlayerHero:SetForceAttackTarget( self.SfSpawner:GetSpawnedUnits()[1] )
 		self.hPlayerHero:SetHealth( self.hPlayerHero:GetMaxHealth() / 2 )
 		self.hPlayerHero:AddNewModifier( self.hPlayerHero, nil, "modifier_command_restricted", { duration = 5 } )
-
+		self.hPlayerHero:AddNewModifier( self.hPlayerHero, nil, "modifier_kill", { duration = 5 } )
 		self:IntroduceUnit( self.SfSpawner:GetSpawnedUnits()[1], 10.0, 30, 90, 600, 0.1, 120 )
 	end	
 
