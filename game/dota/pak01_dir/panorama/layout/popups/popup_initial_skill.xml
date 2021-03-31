@@ -6,10 +6,34 @@
 	</styles>
 
 	<script>
+		g_TimePerTip = 10;
+		g_NumTips = 4;
+		
+		g_hScheduledSkipWizardTip = null;
+		g_bQuestionnaireShown = false;
+		
 		function ShowQuestionnaire()
 		{
-			$('#WelcomeToDota').AddClass('Hide');
-			$('#Questionnaire').AddClass('Show');
+			if( !$('#Questionnaire').BHasClass('Show') )
+			{
+				$('#WelcomeToDota').AddClass('Hide');
+				$('#Questionnaire').AddClass('Show');
+			}
+		}
+		
+		function SkipWizardTip()
+		{
+			$.DispatchEvent('DOTAHideHelpTip', true);
+		}
+		
+		function ScheduleSkipWizardTip()
+		{
+			if( g_hScheduledSkipWizardTip != null )
+			{
+				$.CancelScheduled( g_hScheduledSkipWizardTip );
+			}
+			
+			$.Schedule( g_TimePerTip, SkipWizardTip );
 		}
 	
 		$.RegisterForUnhandledEvent( 'DOTATipDismissed', function ( tipName ) 
@@ -18,18 +42,22 @@
 			{
 				ShowQuestionnaire();
 			}
+			
+			ScheduleSkipWizardTip();
 		} );
-		
 		
 		function OnLoad()
 		{
 			$('#Background').AddClass('Shown');
 			$('#WelcomeToDota').RemoveClass('Hidden');
+			
+			ScheduleSkipWizardTip();
+			
+			$.Schedule( g_TimePerTip * (g_NumTips+1), ShowQuestionnaire );
 		}
-		
 	</script>
 	
-	<PopupInitialSkill class="PopupPanel Hidden" dimbackground="true" onload="OnLoad()" onactivate="DOTAHideHelpTip(true);">
+	<PopupInitialSkill class="PopupPanel Hidden" dimbackground="true" onload="OnLoad()" onactivate="SkipWizardTip();">
 		<Panel id="Background"/>
 		<Panel id="IntroBackgroundTint">
 			<Image id="DotaLogo" src="s2r://panorama/images/dota_logo_and_text_png.vtex" />
