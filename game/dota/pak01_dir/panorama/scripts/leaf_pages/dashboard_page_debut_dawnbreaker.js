@@ -162,7 +162,7 @@ var RunPageAnimation = function ()
     seq.actions.push(new LerpRotateAction($('#ModelBackground'), 0, 0, 0, 0, -3, 6, 0, 0, 3.0));
     
     // queue the loopable idle 
-    seq.actions.push(new WaitAction(8.5));
+    seq.actions.push(new WaitAction(5.5));
     seq.actions.push( new RunFunctionAction( function() { $('#ModelBackground').FireEntityInput( 'valora', "SetAnimation", 'battlemaiden_debut_idle' ); }));
 
        
