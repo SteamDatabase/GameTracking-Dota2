@@ -151,12 +151,12 @@
 #%s/%s/+MultiGpu-Mutex( %d -> %d )
 #%s/%s/+MultiGpu-ResetMask( 0x%x )
 #%s/%s/+MultiGpu-SetCBuffer
+#%s/%s/+MultiGpu-SetMask( 0x%x )
 #%s/%s/+MultiGpu-SetMaskForLayer( 0x%x )
 #%s/%s/+MultiGpu-TransferBackBuffer( %dx%d @ x: %d y: %d )
 #%s/%s/+MultiGpu-TransferRenderTarget( To: %dx%d @ x: %d y: %d, From: %dx%d @ x: %d y: %d )
 #%s/%s/+SteamVrCompositor-TransferLeftEye( %dx%d @ (x: %d y: %d) )
 #%s/%s/+SteamVrCompositor-TransferRightEye( %dx%d @ x: %d y: %d) )
-#%s/%s/Resolves
 #%s/%s/UpdatePerViewConstantBuffer%d
 #%s/PrimaryContext frame( %d )
 #%s/RenderAView/LightSetup
@@ -343,6 +343,7 @@ $tI
 *ZN13CLightBinner225DebugLightProbeVolumeGridEP10CSceneViewEUlP28CSceneLightProbeVolumeObjectE0_
 *ZN13CLightBinner225DebugLightProbeVolumeGridEP10CSceneViewEUlP28CSceneLightProbeVolumeObjectE_
 *ZN13CLightBinner227AddLightProbeVolumesForViewEP10CSceneView17ESceneObjectFlagsS2_iEUlP28CSceneLightProbeVolumeObjectE_
+*ZN15CLightBinnerGPU18GatherHammerLightsEvEUlP25CSceneLightObjectInternalE_
 *ZN18CSingleLightBinner18GatherHammerLightsEvEUlP25CSceneLightObjectInternalE_
 *ZN18CSingleLightBinner19GatherIndexedLightsEvEUlP25CSceneLightObjectInternalE_
 *ZN26CBindlessFastPathPartition21EnsureEnvironmentMapsEvEUlP18CEnvMapSceneObjectE_
@@ -402,7 +403,7 @@ $tI
 ../public/tier0/utlrbtree.h
 ../public/tier0/utlsymboltable.h
 ../public/tier0/utltshash.h
-.@utils/../sceneview.h
+.@
 .exr
 .jpg
 .psd
@@ -431,7 +432,6 @@ $tI
 0x%08X "%s" Pos (%d,%d) Size (%d,%d) Collapsed=%d
 0x%08X %s,
 0x%08X,%d
-1 1 1
 1 = visualize bounds, 2 = visualize sceneobject mesh materials, 3 = required texture size, 4 = bounds group, 5 = LOD
 1. I am selectable
 1.2
@@ -455,13 +455,11 @@ $tI
 123.456
 1234
 123456
-125 130 135
 128 128 128
 12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE
 12CSceneObject
 12CSceneSystem
 12CShadowAtlas
-12CThreadEvent
 12ILightBinner
 12ISceneSystem
 13CImGuiWrapper
@@ -479,6 +477,7 @@ $tI
 14ITonemapSystem
 14IVolumetricFog
 15CLightBinnerCPU
+15CLightBinnerGPU
 15CMemberFunctor1IP12CSceneSystemMS0_FvP10CSceneViewES3_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor1IP26CParallelProcessorAbstractI18CParallelProcessorIP12CSceneObject21CFuncJobItemProcessorIS3_ELi1EEEMS7_FviEi12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor1IP26CParallelProcessorAbstractI22CParallelLoopProcessorI13CViewDrawList31CLoopMemberFuncJobItemProcessorIS2_12CSceneSystemS4_EEEMS7_FviEi12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
@@ -496,12 +495,14 @@ $tI
 160
 16CDefaultAccessor
 16CLightObjectDesc
+16CSunLightManager
 16CTonemapRenderer
 16ICommandCallback
 16ISceneObjectDesc
 17CSceneLightObject
 17CSkyBoxObjectDesc
 17CTimestampManager
+17IGenericInterface
 18
 18C6FaceSkyboxObject
 18CEnvMapSceneObject
@@ -519,7 +520,6 @@ $tI
 19CSchemaRegistration
 19CSimpleQuadRenderer
 19ILightBinnerFactory
-19ISceneLightListener
 2
 2,345 bytes
 2. I am selectable
@@ -554,11 +554,13 @@ $tI
 22C6FaceSkyboxObjectDesc
 22CEnvMapLightObjectDesc
 22CLightBinnerCPUFactory
+22CLightBinnerGPUFactory
 22CSceneAnimatableObject
 22CSchemaInstallCallback
 22CVolumetricFogRenderer
 22IToolsResourceListener
 23
+23CBarnLightObjectDescGPU
 23CCharacterDecalRenderer
 23CFullscreenQuadRenderer
 23CMeshBuilderSceneObject
@@ -566,18 +568,34 @@ $tI
 23CSSAOProceduralRenderer
 23CSceneViewDebugOverlays
 23CSpotLightObjectDescCPU
+23CSpotLightObjectDescGPU
 23ICharacterDecalRenderer
 23IConCommandBaseAccessor
 23ISceneViewDebugOverlays
 24 Hour Clock
 240
 24CPointLightObjectDescCPU
+24CPointLightObjectDescGPU
 24CVConCommandMessageScene
 24IProceduralLayerRenderer
 25%
 25CAggregateSceneObjectDesc
 25CConCommandMemberAccessorI12CSceneSystemE
 25CEnvMapLightObjectDescCPU
+25CEnvMapLightObjectDescGPU
+25CKV3TransferDefaultHelperI13SceneViewId_tE
+25CKV3TransferDefaultHelperI17CSSDSMsg_EndFrameE
+25CKV3TransferDefaultHelperI17CSSDSMsg_PreLayerE
+25CKV3TransferDefaultHelperI18CSSDSMsg_LayerBaseE
+25CKV3TransferDefaultHelperI18CSSDSMsg_PostLayerE
+25CKV3TransferDefaultHelperI19AnimationSnapshot_tE
+25CKV3TransferDefaultHelperI19CSSDSMsg_ViewRenderE
+25CKV3TransferDefaultHelperI19CSSDSMsg_ViewTargetE
+25CKV3TransferDefaultHelperI21CSSDSEndFrameViewInfoE
+25CKV3TransferDefaultHelperI23AnimationSnapshotBase_tE
+25CKV3TransferDefaultHelperI23CSSDSMsg_ViewTargetListE
+25CKV3TransferDefaultHelperI26AnimationDecodeDebugDump_tE
+25CKV3TransferDefaultHelperI33AnimationDecodeDebugDumpElement_tE
 25CSceneLPVSampleGridObject
 25CSceneLightObjectInternal
 25CSingleLightBinnerFactory
@@ -616,6 +634,7 @@ $tI
 3 (tab skip)
 3. I am not selectable
 30
+30CDirectionalLightObjectDescGPU
 30CProjectedDecalSceneObjectDesc
 30ISceneLightProbeVolumeListener
 31
@@ -627,6 +646,7 @@ $tI
 33CAmbientOcclusionProxySceneObject
 33CDirectionalLightObjectDescSingle
 34CSimplePostProcessingLayerRenderer
+35
 35CInputLayoutRegistration_sm_hLayout
 35CSceneLPVSampleGridObjectDescriptor
 36
@@ -829,7 +849,6 @@ $tI
 @@
 @A
 @DE
-@Lff"D
 @@
 A
 A Rather Long Title
@@ -909,6 +928,7 @@ All those beautiful files will be deleted.This operation cannot be undone!
 AllHovered: %s
 Alloc
 AllocInternal
+AllocateRenderTarget: Does not work to pass pOtherView == this!
 Allocating new transform texture!
 Allow time-sliced shadow buffer rendering when enabled via gameinfo.gi
 Also see Style->Rendering for rendering options.
@@ -1023,6 +1043,8 @@ BakedLODBuilderMgr001
 Banana
 Bar Plot
 Bar Plots
+Barn Light Mixed Shadow
+Barn Light Shadow
 Barn Light View
 BarnLight
 BarnLightObjectDesc
@@ -1095,6 +1117,7 @@ By default, anti-aliased lines are turned OFF.
 By default, colors are given to ColorEdit and ColorPicker in RGB, but ImGuiColorEditFlags_InputHSVallows you to store colors as HSV and pass them to ColorEdit and ColorPicker as HSV. This comes with theadded benefit that you can manipulate hue values with the picker even when saturation or value are zero.
 By default, labels are in UTC time but can be set to use local time instead.
 By default, right-clicking over a TableHeadersRow()/TableHeader() line will open the default context-menu.Using ImGuiTableFlags_ContextMenuInBody we also allow right-clicking over columns body.
+C
 C++ lambdas can be passed as function pointers as well!
 C1
 C3
@@ -1118,6 +1141,7 @@ CAnimationDecodeContext::AddAnimationDecodeDesc ran out of allocator memory (3)
 CAnimationGroup
 CAssociateResourceBlockLoader::BlockingLoadResourceFileData: Trying to load an illegal resource name %s!
 CAttachment
+CBarnLightObjectDescGpu
 CBarnLightObjectDescSingle
 CBaseConstraint
 CBindlessFastPathPartition::EnsureEnvironmentMaps() - Number of environment maps exceeds maximum (%d), skipping additional environment maps.
@@ -1161,11 +1185,13 @@ CConstraintSlave
 CConstraintTarget
 CDebugLayerRenderer::ShowRenderTargets GetMode("Default") == NULL? Can't Render with material %s!
 CDebugTextObjectDesc
+CDirectionalLightObjectDescGpu
 CDirectionalLightObjectDescSingle
 CDrawCullingData
 CEntityIndex
 CEnvMapLightObjectDesc
 CEnvMapLightObjectDescCPU
+CEnvMapLightObjectDescGpu
 CEnvMapLightObjectDescSingle
 CFF
 CFingerBone
@@ -1200,7 +1226,6 @@ CParentConstraint
 CPlayerSlot
 CPointConstraint
 CPointLightObjectDescCPU
-CPointLightObjectDescSingle
 CProjectedDecalSceneObjectDesc
 CRC32_ProcessBuffer
 CRC64_ProcessBuffer
@@ -1226,6 +1251,12 @@ CSceneViewDebugOverlays::Render3DLineOverlay GetMode("Default") == NULL? Can't R
 CSceneViewDebugOverlays::Render3DTriangleOverlay GetMode("Default") == NULL? Can't Render with material %s
 CSceneViewDebugOverlays::Render3DVectorTextOverlays GetMode("Default") == NULL? Can't Render with material %s!
 CSceneViewDebugOverlays::RenderTextureOverlays GetMode("Default") == NULL? Can't Render with material %s!
+CScratchRenderTargetSystem::AllocateRenderTarget: Encountered two different specs for the same render target "%s"!
+CScratchRenderTargetSystem::AllocateRenderTarget: Scratch RT for "%s" already allocated in this view. Move this allocation earlier!
+CScratchRenderTargetSystem::AllocateRenderTarget: Tried to specify RENDER_MULTISAMPLE_INVALID! "%s"
+CScratchRenderTargetSystem::AllocateRenderTarget: invalid other view render target for "%s"!
+CScratchRenderTargetSystem::AllocateRenderTarget: invalid other view target for "%s"!
+CScratchRenderTargetSystem::AllocateRenderTarget: invalid texture handle for "%s"!
 CScratchRenderTargetSystem::FindOrCreateRenderTarget: Encountered two different specs for the same render target "%s"!
 CScratchRenderTargetSystem::FindOrCreateRenderTarget: Tried to reference unknown render target name "%s"!
 CScratchRenderTargetSystem::FindOrCreateRenderTarget: Tried to specify RENDER_MULTISAMPLE_INVALID! "%s"
@@ -1237,11 +1268,10 @@ CScratchRenderTargetSystem::GetRenderTargetInfo cannot work until FinishRenderin
 CSimpleQuadRenderer
 CSingleLightBinner
 CSingleLightBinner: Unsupported NumBakedLights %d
-CSparseMatrix::SetDimensions(int, int)
-CSparseMatrix::SetElement(int, int, float)
 CSplitScreenSlot
 CSplitString::Construct(char const*, char const**, int)
 CSpotLightObjectDescCPU
+CSpotLightObjectDescGpu
 CSpotLightObjectDescSingle
 CStrAutoEncode::Clear()
 CStrAutoEncode::Copy(CStrAutoEncode const&)
@@ -1710,8 +1740,8 @@ Dump the objects in a sceneworld into a 3d geoview buffer (Usage: sc_dumpworld3d
 EEEE
 EMG %d
 EMG Signal
+ERROR! Cannot load GpuLightBinnerManifest
 ERROR! Cannot load ImGuiRendererManifest
-ERROR! Cannot load SingleLightBinnerManifest
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: Specified full path %s does not lie under the mod search path!)
 ERROR: Specified path %s could not be made content-relative
@@ -1738,6 +1768,7 @@ Enable logarithmic editing (more precision for small values).
 Enable outer-most padding (default if ImGuiTableFlags_BordersOuterV is set)
 Enable resizing of windows from their edges and from the lower-left corner.This requires (io.BackendFlags & ImGuiBackendFlags_HasMouseCursors) because it needs mouse cursor feedback.
 Enable turning DragXXX widgets into text input with a simple mouse click-release (without moving).
+EncodeRGBM
 EndTimestamp
 Engine2
 Engine2/RenderingPipeline/AmbientOcclusionProxies
@@ -1784,6 +1815,7 @@ Extend hit area to all available width instead of allowing more items to be laid
 F
 FATAL ERROR: unable to register all schema data: %s
 FFFF
+Failed to allocate scratch rendertarget for %s from pool. The following pool entries were matches:
 Failed to allocate space for morph!
 Failed to convert introspected block: %s
 Failed to get material pointer for world node draw call. (material name: %s)
@@ -1862,6 +1894,7 @@ Focus on 3
 Focus on X
 Focus on Y
 Focus on Z
+FogLightBinnerSetup
 FogLightView
 Folder
 Font
@@ -1933,10 +1966,13 @@ GetRenderTargetTexture cannot work until FinishRenderingViews is called!
 GetResourceManifestCount
 GetResourceManifests
 Global Alpha
+GlobalEnvironmentMapConstantBuffer_t
 Glyphs
 Glyphs (%d)
 Got request to send CSceneSystemStats to vconsole
 Gpu Mem
+GpuLightBinnerManifest
+GpuLightBinnerStartupManifest
 GrabMinSize
 GrabRounding
 Gradient
@@ -1950,6 +1986,7 @@ H: %.3f, S: %.3f, V: %.3f
 H: %.3f, S: %.3f, V: %.3f, A: %.3f
 H:%0.3f
 H:%3d
+HB
 HC
 HD
 HELP
@@ -2284,6 +2321,7 @@ Layout & Scrolling
 Leaked drawlists : %d!!!!!
 Left
 Left-click drag on axis labels to pan an individual axis.
+Left-click drag within the plot area to pan X and Y axes.
 Left-click while box selecting to cancel the selection.
 Legacy Columns API
 LegendBg
@@ -2297,8 +2335,6 @@ Length;
 Lettuce
 Light
 Light Cookies
-LightBinnerStartupManifest
-LightBinnerVr_%d
 LightProbeVolumeDebugColors
 LightProbeVolumeDesc
 LightmapUV
@@ -2361,9 +2397,9 @@ LowerEyelid(
 M:0.000
 M:000
 MATCHFRAMEWORK_001
-MDefaultString
 MESH_DRAW_FLAGS_DRAW_LAST
 MESH_DRAW_FLAGS_NONE
+MGetKV3ClassDefaults
 MKV3TransferName
 MMMM
 MOD
@@ -2670,6 +2706,7 @@ Output flags:
 Output memory size is zero
 Outside
 Overlapping
+Override default setting for HDR rendering.
 Override. Old default was 3.0
 Override. Old default was 45.
 Override. Old value was 1.0
@@ -2706,6 +2743,7 @@ Pastel
 Pauciloquent
 Pear
 PerVertexLighting
+PerViewLightingConstantBufferGPU_t
 PerViewLightingConstantBufferSingle_t
 PerViewRuntimeFastPathLightingConstantBuffer_t
 Pf%d %d-1.000000
@@ -3027,6 +3065,12 @@ SceneSystem/DefaultShadowTextureHeight
 SceneSystem/DefaultShadowTextureWidth
 SceneSystem/DisableShadowFullSort
 SceneSystem/GPU Profiler
+SceneSystem/GpuLightBinner
+SceneSystem/GpuLightBinnerCachedShadowMapHeight
+SceneSystem/GpuLightBinnerCachedShadowMapTileSize
+SceneSystem/GpuLightBinnerCachedShadowMapWidth
+SceneSystem/GpuLightBinnerNumBarnLights
+SceneSystem/GpuLightBinnerRenderStaticGeoToSunLightCSM
 SceneSystem/HDRFrameBuffer
 SceneSystem/LayerBatchThreshold
 SceneSystem/LayerBatchThresholdFullsort
@@ -3040,7 +3084,6 @@ SceneSystem/SingleLightBinner
 SceneSystem/SingleLightBinnerCachedShadowMapHeight
 SceneSystem/SingleLightBinnerCachedShadowMapTileSize
 SceneSystem/SingleLightBinnerCachedShadowMapWidth
-SceneSystem/SingleLightBinnerGpuLightBinning
 SceneSystem/SingleLightBinnerNumBarnLights
 SceneSystem/SingleLightBinnerRenderStaticGeoToSunLightCSM
 SceneSystem/SkipLoadingRenderingPipelines
@@ -3159,8 +3202,6 @@ Show Tooltip
 Show Trailing TabItemButton()
 Show cost of lights in fog clipmap constant buffer. yellow = 1 cost, red = 6 cost
 Show indented items
-Show light priority values. 1 = normal lights, 2 = cached lights.
-Show lights using the cached shadow atlas solely for transmissive lighting, rather than fog.
 Show step buttons
 Show tables rectangles
 Show the indices of indexed lights
@@ -3178,7 +3219,6 @@ SimplePostProcessingLayer
 Simulated
 Sin
 Single call to TextUnformatted()
-SingleLightBinnerManifest
 Six
 Size all columns to default###SizeAll
 Size all columns to fit###SizeAll
@@ -3757,7 +3797,7 @@ Y-Axis %d
 Y-Axis 1
 Y-Axis 2
 Y-Axis 3
-Y@
+Y@6IImGui
 YAxis
 YAxis2
 YAxis3
@@ -3969,6 +4009,7 @@ combo 2 (one-liner)
 combo 3 (array)
 combo 4 (function)
 compression
+configvalue.cpp
 cos( %s )
 csm_bias_override_0
 csm_bias_override_1
@@ -4089,14 +4130,14 @@ float1
 float32
 float64
 floatbitmap.cpp
-floatbitmap.cpp(136): Unknown gamma type "%s"!
-floatbitmap.cpp(2612): Error calling TGALoader::GetInfo( %s )
-floatbitmap.cpp(2623): Error loading %s
-floatbitmap.cpp(2646): Error! Unknown file type for %s
-floatbitmap.cpp(2665): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
-floatbitmap.cpp(314): Conversion not supported yet!
-floatbitmap.cpp(398): Conversion not supported yet!
-floatbitmap.cpp(952): Unsupported color format "%s", skipping!
+floatbitmap.cpp(135): Unknown gamma type "%s"!
+floatbitmap.cpp(2611): Error calling TGALoader::GetInfo( %s )
+floatbitmap.cpp(2622): Error loading %s
+floatbitmap.cpp(2645): Error! Unknown file type for %s
+floatbitmap.cpp(2664): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
+floatbitmap.cpp(313): Conversion not supported yet!
+floatbitmap.cpp(397): Conversion not supported yet!
+floatbitmap.cpp(951): Unsupported color format "%s", skipping!
 floor
 floorf
 fltx4
@@ -4211,13 +4252,23 @@ kern
 key
 l
 label
+lb_allow_time_sliced_shadow_map_rendering
 lb_bin_slices
+lb_convert_to_barn_lights_falloff_match_point
+lb_cubemap_normalization_max
+lb_cubemap_normalization_roughness_begin
 lb_debug_silhouette
 lb_debug_tiles
 lb_enable_baked_shadows
 lb_enable_binning
 lb_enable_envmaps
 lb_enable_lights
+lb_shadow_map_culling
+lb_show_light_fog_clipmap_cb_cost
+lb_sun_csm_base_texels_per_world
+lb_sun_csm_size_cull_threshold
+lb_sun_csm_texels_per_world_divisor
+lb_sun_csm_vignette
 lb_tile_pixels
 lb_use_illumination_silhouette
 ld-linux-x86-64.so.2
@@ -4229,6 +4280,7 @@ libscenesystem.so
 libstdc++.so.6
 libtier0.so
 lightbinner_2.cpp
+lightbinner_gpu.cpp
 lightbinner_single.cpp
 lightbinner_total_data_%d.vtex
 lighting_array_fog_RT1.vtex
@@ -4410,7 +4462,6 @@ m_nTargetAxis
 m_nType
 m_nUpType
 m_nVertexCount
-m_nViewId
 m_nWidth
 m_name
 m_outerKnuckle1
@@ -4659,6 +4710,7 @@ r_aoproxy_cull_dist
 r_aoproxy_min_dist
 r_aoproxy_min_dist_box
 r_cubemap_debug_colors
+r_directional_lightmaps
 r_dither_scale
 r_dopixelvisibility
 r_draw_animatables
@@ -4756,6 +4808,7 @@ sc_force_materials_batchable
 sc_force_push_constant_update_every_draw
 sc_force_single_display_list_per_layer
 sc_force_translation_in_projection
+sc_hdr_enabled_override
 sc_keep_all_layers
 sc_layer_batch_threshold
 sc_layer_batch_threshold_fullsort
@@ -4805,14 +4858,15 @@ scenelpvdebuggrid.cpp
 sceneobject_h
 scenesimpleidx
 scenesimplevb
+scenesunlight.cpp
 scenesysBox
 scenesysCone
 scenesysDodecahedron
 scenesysPyramid
 scenesystem
 scenesystem.cpp
-scenesystem.cpp(5721): Expecting 1 renderable pass for material "%s" but found %d!
-scenesystem.cpp(6942): Waited 500 ms for jobs to complete. Attempt to drain windows message queue.
+scenesystem.cpp(5704): Expecting 1 renderable pass for material "%s" but found %d!
+scenesystem.cpp(6922): Waited 500 ms for jobs to complete. Attempt to drain windows message queue.
 scenesystem.h
 scenesystemdebug
 scenetextureset_%d
@@ -5097,27 +5151,8 @@ volume_fog_show_volumes
 volume_fog_vr_single_dispatch
 volume_fog_width
 volumetric_fog.vtex
-vr_allow_time_sliced_shadow_map_rendering
-vr_camera_decay_roll_halflife
-vr_camera_decay_yaw_pitch_halflife
-vr_convert_to_barn_lights
-vr_convert_to_barn_lights_falloff_match_point
-vr_cubemap_normalization_max
-vr_cubemap_normalization_roughness_begin
-vr_directional_lightmaps
 vr_disable_view_override
-vr_enable_lights
-vr_shadow_map_culling
 vr_show_indexed_light_indices
-vr_show_light_fog_clipmap_cb_cost
-vr_show_light_priority
-vr_show_nonfogging_cached_lights
-vr_single_light_fast_path_sun_cascade_0_texels_per_world
-vr_single_light_fast_path_sun_cascade_1_texels_per_world
-vr_single_light_fast_path_sun_cascade_vignette
-vr_single_light_fast_path_sun_size_cull_threshold
-vr_spectator_remove_roll_halflife
-vr_unlit_shadow_color
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__function_type_info
 vtable for __cxxabiv1::__pointer_type_info

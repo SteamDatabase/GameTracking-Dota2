@@ -32,7 +32,7 @@ function CDotaNPXScenario_Items:InitScenarioKeys()
 		ForceHero 			= "npc_dota_hero_rubick",
 		Team 				= DOTA_TEAM_GOODGUYS,
 		StartingHeroLevel	= 1,
-		StartingGold		= 90,
+		StartingGold		= GetCostOfItem( "item_tango" ),
 		StartingItems 		=
 		{
 		},
@@ -306,7 +306,7 @@ function CDotaNPXScenario_Items:OnTaskStarted( event )
 		--self:ShowWizardTip( "scenario_items_wizard_tip_unlock", 15.0 )
 	elseif event.task_name == "buy_aether_lens" then
 		self.nStage = 3
-		self.hHero:SetGold( 520, true )
+		self.hHero:SetGold( GetCostOfItem( "item_recipe_aether_lens" ), true )
 		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "recipe_aether", 89, -1 )
 		self:ShowWizardTip( "scenario_items_wizard_tip_recipe", 15.0 )
 	elseif event.task_name == "unlock_boots" then
@@ -314,7 +314,7 @@ function CDotaNPXScenario_Items:OnTaskStarted( event )
 		self:ShowItemHint( "item_boots" )
 		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "unlock_boots", 89, -1 )
 	elseif event.task_name == "buy_boots_of_travel" then
-		self.hHero:SetGold( 2000, true )
+		self.hHero:SetGold( GetCostOfItem( "item_recipe_travel_boots" ), true )
 		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "recipe_travel", 89, -1 )
 	end
 end

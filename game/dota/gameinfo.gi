@@ -166,7 +166,6 @@
 		"DefaultTextureScale"		"0.250000"
 		"DefaultSolidEntity"		"trigger_dota"
 		"DefaultPointEntity"		"info_player_start_dota"
-		"DefaultPathEntity"			"path_particle_rope"
 		"NavMarkupEntity"			"func_nav_markup"
 		"EnableDotaTools"			"1"
 		"DefaultGridTileSet"		"/maps/tilesets/radiant_basic.vmap"

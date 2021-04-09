@@ -37,7 +37,7 @@ function CDotaNPXScenario_Warding:InitScenarioKeys()
 		StrategyTime 		= 0.0,
 		ForceHero 			= "npc_dota_hero_lich",
 		Team 				= DOTA_TEAM_GOODGUYS,
-		StartingGold		= 75,
+		StartingGold		= GetCostOfItem( "item_ward_sentry" ),
 		StartingItems 		=
 		{
 			"item_boots",

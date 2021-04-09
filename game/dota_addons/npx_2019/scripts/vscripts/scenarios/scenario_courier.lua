@@ -25,7 +25,7 @@ function CDotaNPXScenario_Courier:InitScenarioKeys()
 		ForceHero 			= "npc_dota_hero_night_stalker",
 		Team 				= DOTA_TEAM_GOODGUYS,
 		StartingHeroLevel	= 8,
-		StartingGold		= 1000,
+		StartingGold		= GetCostOfItem( "item_ogre_axe" ),
 		StartingItems 		=
 		{
 			"item_phase_boots",
@@ -65,8 +65,8 @@ function CDotaNPXScenario_Courier:SetupTasks()
 	self.hSecretShopHint = Entities:FindByName( nil, "secret_shop_hint_location" )
 	self.hHeroHint = Entities:FindByName( nil, "hero_hint_location" )
 	self.bCourierHasBeenUsed = false
-	self.nGoldForStaff = 1000
-	self.nGoldForBooster = 1200
+	self.nGoldForStaff = GetCostOfItem( "item_staff_of_wizardry" )
+	self.nGoldForBooster = GetCostOfItem( "item_point_booster" )
 	self.bCheckForCompletion = false
 
 	local buyOgreClub = rootTask:AddTask( CDotaNPXTask_BuyItem( {

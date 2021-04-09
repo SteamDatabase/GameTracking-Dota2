@@ -972,15 +972,15 @@
 	 effect_namess(particlesystem) [report] : "Sceenspace effect (addition)" : "" : "particles/environment/env_sun_screenspace_flare.vpcf"
 	 full_luminositycolorvalue(boolean) : "Remap to Max Luminosity" : 1 : "Regardless of color Value set to max luminocity. This is mainly for additive things like the sun"
 	 colortint(color255) : "Sun Color (R G B)" : "100 80 80"
-	 scale(float) : "Size" : "16.0" : "Increased control on scaling the sun in the particle system. This read into control point 17 which should drive the system."
-	 rotation(float) : "Sprite Rotation" : "0.0" : "Rotate the sprite. passed to Particle through Control point 15"
-	 alphascale(float) : "Core Alpha" : "0.0" : "Rotate the sprite. passed to Particle through Control point 18 x"
-	 alphahdr(float) : "Hdr Alpha" : "0.0" : "Rotate the sprite. passed to Particle through Control point 18 y"
-	 alphahaze(float) : "Haze Alpha" : "0.0" : "Alpha sprite. passed to Particle through Control point 18 z"
-	 selfillumscale(float) : "HDR color scale" : "1.0" : "float value to multiply sprite color by when running in HDR mode. Cp 17 y."
-	 hazescale(float) : "Haze Scale" : "1.0" : "additional control for creating things like haze. Treat this like another float input on cp 17 z."
-	 mapfarz(integer) : "Map Farz" : "10000" : "The farz set in the map's env_fog_controller. this is to help preview for size in hammer only. Not used in game. "
-	 farzscale(float) : "FarZ Scale" : ".9" : "Default is .9, it will let you scale the distance of the sun to the player incase of fog fading out the sun.  "
+	 scale(float) : "Size" : "4.0" : "Increased control on scaling the sun in the particle system. This read into control point 17 which should drive the system."
+	 selfillumscale(float) : "HDR color scale (0-10)" : 4 : "float value to multiply sprite color by when running in HDR mode. Cp 17 y."
+	 hazescale(float) : "Haze Scale (0-10)" : 4 : "additional control for creating things like haze. Treat this like another float input on cp 17 z."
+	 rotation(float) [ group="Advanced Properties" ] : "Sprite Rotation" : "0.0" : "Rotate the sprite. passed to Particle through Control point 15"
+	 alphascale(float) [ group="Advanced Properties" ] : "Core Alpha" : "1.0" : "Rotate the sprite. passed to Particle through Control point 18 x"
+	 alphahdr(float) [ group="Advanced Properties" ] : "Hdr Alpha" : "1.0" : "Rotate the sprite. passed to Particle through Control point 18 y"
+	 alphahaze(float) [ group="Advanced Properties" ] : "Haze Alpha" : "1.0" : "Alpha sprite. passed to Particle through Control point 18 z"
+	 mapfarz(integer) [ group="Advanced Properties" ] : "Map Farz" : 10000 : "The farz set in the map's env_fog_controller. this is to help preview for size in hammer only. Not used in game. "
+	 farzscale(float) [ group="Advanced Properties" ] : "FarZ Scale" : ".95" : "Default is .9, it will let you scale the distance of the sun to the player incase of fog fading out the sun.  "
 
 	// Inputs
 	input TurnOn(void) : "Enable sun rendering."
@@ -2604,7 +2604,7 @@
 [
 ]
 
-@PointClass tags( Info ) base(Targetname, Parentname) iconsprite("editor/info_target.vmat") = info_target : 
+@PointClass tags( Info ) base(Targetname, Parentname) editormodel("models/editor/info_target") iconsprite( "editor/icon_empty.vmat" ) = info_target : 
 	"An entity that does nothing. Very useful as a positioning entity for other entities to refer to (i.e. the endpoint of an env_beam)"
 [
 	spawnflags( Flags ) =
@@ -5500,6 +5500,7 @@
 	detailgeometry(boolean) : "Detail Geometry" : 0 : "If true this geometry is not important for precomputed lighting"	
 	visoccluder(boolean) : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility"	
 	baketoworld(boolean) : "Bake To World" : 0 : "If true this geometry will be baked into the world geometry of the map so that the model is not referenced at runtime."
+	terrainlighting(boolean) { enabled={ variable="baketoworld" value="1" } }: "Terrain Lighting" : 0 : "If true this geometry will bake the terrain lightmap data and normal for lighting."
 	disablemerging(boolean) : "Disable Mesh Merging" : 0 : "If true this will not be merged with other geometry during map compile (reduces rendering efficiency)."
 	renderamt(integer) [ group="Render Properties" ] : "Alpha" : 255 : "Alpha of the fade, where 0 = fully transparent and 255 = fully opaque." 
 	rendercolor(color255) : "Color (R G B)" : "255 255 255"
@@ -5507,6 +5508,7 @@
 	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Will only be lit by lights affecting this group."
 	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"	
 	precomputelightprobes(boolean) [ group="Render Properties" ] : "Precompute Light Probes" : 1 : "Pre-compute environment map and light probe volume used on this object."
+	bakelightdoublesided(boolean) [ group = "Render Properties" ] : "Bake Lighting As If Double-Sided" : 0 : "Bake lighting as if this were double-sided geometry. Useful on geometry with pre-culled backfaces whose neighbors have lighting errors caused by saw-too-many-backfaces sample invalidation."
 	materialoverride(material) [ group="Render Properties" ] : "Override Material" : ""
 	disableinlowquality(boolean) [ group="Render Properties" ] : "Disable in low quality mode" : 0 : "Do not render this prop when using the lowest quality video settings, it is an non-essential detail."
 	lightmapscalebias(choices) [ group="Render Properties" ] : "Lightmap Scale Bias" : 0 : "Use to scale the resolution of the lightmap for this object." =
@@ -7300,10 +7302,46 @@
 	]
 ]
 
+
+@PathNodeClass
+	metadata
+	{
+		editor_only = true
+	}
+= path_node_generic
+[
+]
+
+
+@PathClass 
+	metadata
+	{
+		editor_only = true
+		path_node_class = "path_node_generic"
+	}
+= path_generic
+[
+]
+
+
+@PathNodeClass
+	metadata
+	{
+		editor_only = true
+	}
+= path_node_particle_rope
+[
+	radius_scale(float) : "Radius Scale" : "1.0" : "Radius multiplier value"
+	color_tint(color255) : "Color Tint" : "255 255 255"
+	pin_enabled(bool) : "Pin Enabled" : "1" : "If enabled, the rope simulation treats this node a locaiton to which the rope is attached."
+]
+
+
 @PathClass base(Targetname) tags( Particles ) particle_rope() 
 	metadata
 	{
 		default_interpolation = "linear"
+		path_node_class = "path_node_particle_rope"
 	}
 = path_particle_rope
 [
@@ -7327,12 +7365,36 @@
 	input DisablePin( string ) : "Disable the contraint which pins a particle to the specified path node."
 ]
 
-@CableClass = cable_static
+
+@PathNodeClass
+	metadata
+	{
+		editor_only = true
+	}
+= path_node_cable
+[
+	radius_scale(float) : "Radius Scale" : "1.0" : "Radius multiplier value"
+	color_tint(color255) : "Color Tint" : "255 255 255"
+]
+
+@CableClass
+	metadata
+	{
+		editor_only = true
+		path_node_class = "path_node_cable"
+	}
+= cable_static
 [
 
 ]
 
-@CableClass base( Targetname, Parentname, Global, RenderFields, Glow, EnableDisable) sphere(fademindist) sphere(fademaxdist) = cable_dynamic
+
+@CableClass base( Targetname, Parentname, Global, RenderFields, Glow, EnableDisable) sphere(fademindist) sphere(fademaxdist)
+	metadata
+	{
+		path_node_class = "path_node_cable"
+	}
+= cable_dynamic
 [
 	secondary_material(material) : "Secondary Material" : "" : "Optional secondary material, can be selected using Skin(1)"
 	lightingorigin(target_destination) [ group="Render Properties" ] : "Lighting Origin" : "" : "Select an entity to specify a location to sample lighting from, instead of using this entity's origin."
