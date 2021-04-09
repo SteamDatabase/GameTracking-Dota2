@@ -513,7 +513,7 @@ function CDOTANPXScenario_Economy:SetupTask_EarnLevelsAndExperience()
 		TaskName = "learn_a_talent",
 		TaskParams = 
 		{
-			AbilityName = "special_bonus_strength_7",
+			AbilityName = "special_bonus_attack_speed_15",
 			WhiteList = true,
 		},
 	}, self ), 2 )
