@@ -264,7 +264,7 @@ end
 function CHeroDemo:OnMaxLevelEnemyButtonPressed( eventSourceIndex )
 	for k, v in pairs( self.m_tEnemiesList ) do
 		if self.m_tEnemiesList[ k ]:IsRealHero() then
-			self.m_tEnemiesList[ k ]:AddExperience( 32400, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
+			self.m_tEnemiesList[ k ]:AddExperience( 56045, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
 		end
 	end
 
