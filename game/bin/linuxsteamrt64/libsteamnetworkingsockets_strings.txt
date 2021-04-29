@@ -255,7 +255,7 @@ $tIAssertion Failed: route.m_idxClusterLocal == pClusterData->m_idxInConfig
 %s------%s%s
 %s------%s--%s%s
 %s/%u
-%s/ISteamApps/GetSDRConfig/v1?appid=%u&partner=%s
+%s/ISteamApps/GetSDRConfig/v1?appid=%u
 %s: (%d bit)
 %s:%d
 %s=%lld
@@ -386,6 +386,7 @@ $tIAssertion Failed: route.m_idxClusterLocal == pClusterData->m_idxInConfig
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/common/steammessages_gamenetworkingui.pb.cc
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/common/steamnetworkingsockets_messages.pb.cc
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/common/steamnetworkingsockets_messages_udp.pb.cc
+/home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/common/urlhelper_webapihost.cpp
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/external/protobuf-2.6.1/src/google/protobuf/repeated_field.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/public/tier1/netadr.h
 /home/buildbot/buildslave/sdr_public_ubuntu64_linux/build/src/public/tier1/utlbuffer.h
@@ -605,6 +606,7 @@ $tIAssertion Failed: route.m_idxClusterLocal == pClusterData->m_idxInConfig
 >g*
 ?
 ???
+?CSDRHTTPRequest::Think
 ?g*
 @
 @%04x
@@ -746,6 +748,7 @@ Assertion Failed: !ListenSocket()
 Assertion Failed: !bDefaultSignaling
 Assertion Failed: !bFoundNextToTimeout
 Assertion Failed: !bFoundPendingAck
+Assertion Failed: !bUsePartnerWebAPI
 Assertion Failed: !cert.m_authScope.IsEmpty()
 Assertion Failed: !cert.m_signed_data.empty()
 Assertion Failed: !connectionLock.IsLocked()
@@ -756,7 +759,6 @@ Assertion Failed: !g_mapPollGroups.IsValidIndex( idx )
 Assertion Failed: !g_mapRelayServersByAddr.IsValidIndex( idxServer )
 Assertion Failed: !g_mapSessionsByConnection.HasElement( pConn->m_hConnectionSelf )
 Assertion Failed: !g_mapSharedClusterData[ hCluster ]->m_pConfig
-Assertion Failed: !g_sLauncherPartner.empty()
 Assertion Failed: !has_element( g_vecSDRClients, m_pTransportP2PSDR )
 Assertion Failed: !identityRemote.IsInvalid()
 Assertion Failed: !m_bCanceled
@@ -894,6 +896,7 @@ Assertion Failed: cbPkt == int( sizeof(*hdr) + nMsgLength )
 Assertion Failed: cbPkt == pEnd - pkt
 Assertion Failed: cbPkt >= 1
 Assertion Failed: cbPlainText < 64
+Assertion Failed: cbPubKey == sizeof(data)
 Assertion Failed: cbSegData > 0
 Assertion Failed: cbSegData > 0 || ( cbSegData == 0 && pMsg->m_cbSize == 0 )
 Assertion Failed: cbSegmentSize >= 0
@@ -937,9 +940,9 @@ Assertion Failed: g_SteamDatagramNetwork.FindRelayPOPByAddress( adr ) == pCluste
 Assertion Failed: g_SteamDatagramNetwork.m_nRevision != SteamDatagramNetwork::k_nRevision_None
 Assertion Failed: g_SteamDatagramNetwork.m_nRevision == nOldRevision
 Assertion Failed: g_SteamDatagramNetwork.m_vecPOPs.size() == g_vecCachedCachedDataCenterRoutes.size()
-Assertion Failed: g_eAvailNetworkConfig != k_ESteamNetworkingAvailability_NeverTried
 Assertion Failed: g_eAvailNetworkConfig != k_ESteamNetworkingAvailability_Previously
 Assertion Failed: g_eUniverse != k_EUniverseInvalid
+Assertion Failed: g_eUniverse == k_EUniverseInvalid || g_eUniverse == eUniverse
 Assertion Failed: g_mapMessagesInterfaceByListenSocket[idx] == this
 Assertion Failed: g_mapP2PConnectionsByRemoteInfo.Key( m_idxMapP2PConnectionsByRemoteInfo ) == key
 Assertion Failed: g_mapP2PConnectionsByRemoteInfo[ m_idxMapP2PConnectionsByRemoteInfo ] == this
@@ -1335,6 +1338,7 @@ Assertion Failed: pPayloadPtr <= pPayloadEnd
 Assertion Failed: pPayloadPtr+seg.m_cbSegSize <= pPayloadEnd
 Assertion Failed: pPollFDs[idx].fd == s_hSockWakeThreadRead
 Assertion Failed: pPrimarySession->m_pServer->m_usecTimeLastRecv > 0
+Assertion Failed: pPubKey->m_eTrust == k_ETrust_Revoked
 Assertion Failed: pPublicKey->GetKeyType() == k_ECryptoKeyTypeKeyExchangePublic
 Assertion Failed: pPublicKey->GetKeyType() == k_ECryptoKeyTypeSigningPublic
 Assertion Failed: pQueue->m_pFirst
@@ -1806,7 +1810,6 @@ CRL_DIST_POINTS
 CRLissuer
 CRYPTO lib
 CSDRHTTPRequest::Cancel
-CSDRHTTPRequest::Think
 CSDRServerPhysicalSocket::BInit
 CSDRServerPhysicalSocket::Think
 CSPName
@@ -1843,7 +1846,6 @@ Callback_MessagesSessionFailed
 Callback_MessagesSessionRequest
 Callback_RelayNetworkStatusChanged
 Callbacks backing up and not being checked.  Need to check them more frequently!
-Called SteamDatagramClient_SetLauncher called after library already initialized!
 Can't BackUp() after failed Next().
 Can't back up over more bytes than were returned by the last call to Next().
 Can't create a P2P listen socket on a 'user' interface in a hosted dedicated server
@@ -1900,16 +1902,18 @@ Cert failed protobuf parse
 Cert failure %d: %s
 Cert failure: %s
 Cert has invalid identity.  %s
+Cert has invalid key type %d
 Cert has invalid public key
 Cert has no expiry
+Cert has untrusted public key.  %s
 Cert is bound to particular identity; doesn't go in the cert store
 Cert is for identity '%s'.  We are '%s'
 Cert is not authorized for POPID %s, only %s
 Cert is not authorized for POPID %s, only %s (and %d more)
 Cert is not authorized for appid %u, only %u
 Cert is not authorized for appid %u, only %u (and %d more)
-Cert is not restricted by POPID, by CA trust chain is, and does not authorize %s
-Cert is not restricted by appid, by CA trust chain is, and does not authorize %u
+Cert is not restricted by POPID, but CA trust chain is, and does not authorize %s
+Cert is not restricted by appid, but CA trust chain is, and does not authorize %u
 Cert isn't a valid PEM-like text block
 Cert must be bound to an AppID.
 Cert public key does not match our private key
@@ -2273,6 +2277,7 @@ Fatal Assertion Failed: urandom_result > 0 || ( urandom_result < 0 && errno == E
 Fatal Assertion Failed: x.GetRawData( tmp ) == cbData
 Feb
 Feel free to add support for more if you need it.
+Fetching public config, but we don't know the realm.  This won't work in China!
 Fg*
 Field       :
 Field "
@@ -2482,6 +2487,7 @@ Ignoring invalid forced relay address '%s'
 Ignoring nonsensical migration request from %s to migrate to %s, which is his own address
 Ignoring ping override for unknown cluster '%s'
 Ignoring stray packet from %s received on port %d.  Should only be talking to %s on that port.
+Ignoring unknown control message %d from %s
 Ignoring unsolicited/spoofed/late packet from %s.
 Ignoring weird timestamp %llu in ChallengeReply, current time is %llu.
 Ignoring weird timestamp %llu in ConnectOK, current time is %llu, remote delay was %lld.
@@ -2761,6 +2767,7 @@ N25SteamNetworkingSocketsLib27CConnectionTransportUDPBaseE
 N25SteamNetworkingSocketsLib27CSteamNetworkConnectionBaseE
 N25SteamNetworkingSocketsLib27CSteamNetworkConnectionPipeE
 N25SteamNetworkingSocketsLib28CSteamNetworkListenSocketP2PE
+N25SteamNetworkingSocketsLib29CSteamNetworkListenSocketBaseE
 N25SteamNetworkingSocketsLib30CSteamNetworkingUtilsSteamBaseE
 N25SteamNetworkingSocketsLib30ScheduledMethodThinkerLockableINS_27CConnectionTransportP2PBaseEEE
 N25SteamNetworkingSocketsLib30ScheduledMethodThinkerLockableINS_27CConnectionTransportSDRBaseEEE
@@ -3281,6 +3288,7 @@ Ranges should not overlap in this map!
 Reached an unintended state: CPPTYPE_MESSAGE
 Reading dangerously large protocol message.  If the message turns out to be larger than
 ReallyAsyncCertRequest
+Realm changing %d -> %d?
 ReceiveMessagesOnChannel
 ReceiveMessagesOnConnection
 ReceiveMessagesOnPollGroup
@@ -3302,7 +3310,6 @@ Received successful communication from Steam Datagram routing cluster.
 Received unexpected 'no connection'
 Received unexpected 'no connection' from peer
 Received unexpected P2P 'no connection' signal
-Received unknown control message %d from %s
 ReceivedP2PSignal
 Recv %s stats from %s for %s:%s
 RecvP2PBadRoute
@@ -3552,7 +3559,6 @@ SteamDatagramClient_Init_InternalV9
 SteamDatagramClient_Internal_SteamAPIKludge
 SteamDatagramClient_Kill
 SteamDatagramClient_SetAppID
-SteamDatagramClient_SetLauncher
 SteamDatagramClient_SetUniverse
 SteamDatagramServer_Init
 SteamDatagramServer_Init called more than once.
@@ -3974,7 +3980,7 @@ ZLONG
 [%s] Our cert expires in %d seconds.
 [%s] P2P connect request actively rejected by app, sending rejection (%s)
 [%s] P2P route through '%s' now forwarding to '%s%s', revision %d
-[%s] Packet data chunk failed to decrypt!  Could be tampering/spoofing or a bug.
+[%s] Packet %lld (0x%x) decrypt failed (tampering/spoofing/bug)! mpath%d
 [%s] Packet gap bug.  %lld [%lld,%lld) %s
 [%s] Parsed relay auth ticket from server.  %d bytes%s
 [%s] Peer acked our routes for revision %u, but our latest revision is %u!
@@ -5091,9 +5097,10 @@ host
 hosted_server_ticket with no CA key id must be in COnnectOK signal, with cert
 houseIdentifier
 http://10.1.1.18:8282
-http://api.steampowered.tnkjmec.com
 https://127.0.0.1:8283
+https://api-china.beta.valve.org
 https://api.beta.steampowered.com
+https://api.steamchina.com
 https://api.steampowered.com
 https://partner.steam-api.com
 i
@@ -5438,7 +5445,7 @@ leading_comments
 length is greater than %ld
 lhash.c
 lhs
-lib Apr  6 2021 23:58:46
+lib Apr 22 2021 21:54:56
 lib(%lu)
 libc.so.6
 libdl.so.2
@@ -5686,7 +5693,6 @@ pcy_tree.c
 pem_lib.c
 pem_oth.c
 pending_callbacks
-perfectworld
 permitted
 permittedSubtrees
 personalSignature
@@ -6502,7 +6508,6 @@ value.single
 value.unknown
 value.x509cert
 value.x509crl
-valve
 vector::_M_default_append
 vector::_M_emplace_back_aux
 vector::_M_insert_aux
