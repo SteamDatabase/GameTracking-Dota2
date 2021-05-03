@@ -1,46 +1,48 @@
 <root>
-	<styles>
-		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
-		<include src="s2r://panorama/styles/dashboard_page_shared.vcss_c" />
-		<include src="s2r://panorama/styles/dashboard_page_team_fan_content.vcss_c" />
-	</styles>
+  <styles>
+    <include src="s2r://panorama/styles/dotastyles.vcss_c" />
+    <include src="s2r://panorama/styles/dashboard_page_shared.vcss_c" />
+    <include src="s2r://panorama/styles/dashboard_page_team_fan_content.vcss_c" />
+  </styles>
 
-	<snippets>
-		
-		<snippet name="TeamStatus">
-			<Panel class="TeamStatus">
+  <snippets>
+    
+    <snippet name="TeamStatus">
+      <Panel class="TeamStatus">
 
         <DOTATeamImage id="Logo" teamimagestyle="squaremedium"/>
-				<Panel id="NameBlock">
-					<Label id="Name" text="{s:name}"/>
-					<Label id="TeamID" text="TeamID {i:team_id}"/>
-				</Panel>
-				<Label id="UpdateTime" text="{t:l:timestamp}"/>
-				<Panel id="StatusButton">
-					<Label text="{s:status}"/>
-				</Panel>
-			</Panel>
-		</snippet>
-
-		<snippet name="TeamContentElement">
-			<Panel class="TeamContentElement">
-				<Panel id="ElementContainer">
-					<!-- Dynamically inserted -->
-				</Panel>
-				<Label class="ElementNew" text="New!"/>
-				<Label class="ElementUpdated" text="Updated!"/>
-        <Panel class="ApproveRejectContainer">
-          <Label id="ApproveButton" class="EvaluateButton Approve" text="Approve"/>
-          <Label id="RejectButton" class="EvaluateButton Reject" text="Reject"/>
+        <Panel id="NameBlock">
+          <Label id="Name" text="{s:name}"/>
+          <Label id="TeamID" text="TeamID {i:team_id}"/>
         </Panel>
-			</Panel>
-		</snippet>
-	
-	</snippets>
+        <Label id="UpdateTime" text="{t:l:timestamp}"/>
+        <Panel id="StatusButton">
+          <Label text="{s:status}"/>
+        </Panel>
+      </Panel>
+    </snippet>
 
-	<DOTATeamFanContentPage class="DashboardPage SafeDashboardPage">
-		<Label id="Title" text="Team Fan Content Evaluator" />
-		<Label id="SubTitle" text="This page lets you evaluate the content that's been submitted by teams, approve elements of it, and auto-generate the event actions into a changelist that you can submit."/>
+    <snippet name="TeamContentElement">
+      <Panel class="TeamContentElement">
+        <Panel id="ElementContainer">
+          <!-- Dynamically inserted -->
+        </Panel>
+        <Label class="ElementName" text="{s:asset_name}"/>
+        <Label class="ElementNew" text="New!"/>
+        <Label class="ElementUpdated" text="Updated!"/>
+        <Label class="ElementRejected" text="Rejected"/>
+        <Panel class="ApproveRejectContainer">
+            <Label id="ApproveButton" class="EvaluateButton Approve" text="Approve"/>
+            <Label id="RejectButton" class="EvaluateButton Reject" text="Reject"/>
+        </Panel>
+      </Panel>
+    </snippet>
+  
+  </snippets>
+
+  <DOTATeamFanContentPage class="DashboardPage SafeDashboardPage">
+    <Label id="Title" text="Team Fan Content Evaluator" />
+    <Label id="SubTitle" text="This page lets you evaluate the content that's been submitted by teams, approve elements of it, and auto-generate the event actions into a changelist that you can submit."/>
 
     <Panel id="LoadingTeams" class="MajorStateElement">
       <Label text="Loading Team Status..."/>
@@ -49,15 +51,21 @@
     <Panel id="TeamStatusList">
       <!-- Dynamically filled with TeamStatus -->
     </Panel>
-		
-		<Panel id="TeamSelectedContainer">
+      
+      <Panel id="TeamSelectedContainer">
 
       <Panel id="LoadingZipfile" class="MajorStateElement">
         <Label text="Loading Content Zipfile..."/>
       </Panel>
 
+      <Panel id="MissingZipfile" class="MajorStateElement">
+        <Label text="Zipfile is missing."/>
+        <Label id="BackToTeams" text="Back to Team List" onactivate="DOTATeamContentSelectTeam(0)"/>
+      </Panel>
+
       <Panel id="InvalidZipfile" class="MajorStateElement">
         <Label text="Zipfile has no valid content."/>
+        <Label id="BackToTeams" text="Back to Team List" onactivate="DOTATeamContentSelectTeam(0)"/>
       </Panel>
 
       <Panel id="SelectedTeam">
@@ -65,34 +73,74 @@
           <Label id="BackToTeams" text="Back to Team List" onactivate="DOTATeamContentSelectTeam(0)"/>
           <Label id="SelectedTeamName" text="{s:selected_team_name}"/>
         </Panel>
+        <Panel class="MiddleSection" >
+          <Label id="QuickSubmit" text="Import Just Logos and Players" onactivate="DOTATeamContentQuickSubmit()" onmouseover="UIShowTextTooltip( 'Import just the team logos and player images.  This will not import any of the other assets, and will not mark the team assets as evaluated.' )" onmouseout="UIHideTextTooltip()"/>
+          <Label id="SubmitButton" text="Submit Team Content" onactivate="DOTATeamContentSubmit( true )"/>
+        </Panel>
         <Panel class="RightSection">
           <Label id="ApprovedCount" text="Approved: {i:num_approved}"/>
           <Label id="RejectedCount" text="Rejected: {i:num_rejected}"/>
           <Label id="ToEvaluateCount" text="Needing Evaluation: {i:num_needing_evaluation}"/>
-        </Panel>"
+        </Panel>
+      </Panel>
+
+      <Panel id="SubmittingAssets" class="MajorStateElement">
+        <Label text="Submitting Assets: {s:progress_string}"/>
       </Panel>
 
       <Panel id="TeamContentListContainer">
 
-				<Panel id="TeamContentContainerLogo" class="TeamContentContainerCategory">
-					<Label class="TeamContentHeaderLabel" text="Team Logo"/>
-					<Panel id="ContentElementsContainer" class="ContentElementsContainer">
-						<!-- Dynamically populated with TeamContentElement -->
-					</Panel>
-				</Panel>
+        <Panel id="TeamContentContainerLogoPNG" class="TeamContentContainerCategory">
+          <Label class="TeamContentHeaderLabel" text="Team Logo (PNG)"/>
+          <Panel id="ContentElementsContainer" class="ContentElementsContainer">
+            <!-- Dynamically populated with TeamContentElement -->
+          </Panel>
+        </Panel>
 
-				<Panel id="TeamContentContainerPlayer" class="TeamContentContainerCategory">
-					<Label class="TeamContentHeaderLabel" text="Player Images"/>
-					<Panel id="ContentElementsContainer" class="ContentElementsContainer">
-						<!-- Dynamically populated with TeamContentElement -->
-					</Panel>
-				</Panel>
+        <Panel id="TeamContentContainerLogoSVG" class="TeamContentContainerCategory">
+          <Label class="TeamContentHeaderLabel" text="Team Logo (SVG)"/>
+          <Panel id="ContentElementsContainer" class="ContentElementsContainer">
+            <!-- Dynamically populated with TeamContentElement -->
+          </Panel>
+        </Panel>
+        
+        <Panel id="TeamContentContainerPlayers" class="TeamContentContainerCategory">
+          <Label class="TeamContentHeaderLabel" text="Player Images"/>
+          <Panel id="ContentElementsContainer" class="ContentElementsContainer">
+            <!-- Dynamically populated with TeamContentElement -->
+          </Panel>
+        </Panel>
 
-			</Panel>
-	
-		</Panel>
-		
-	
-	</DOTATeamFanContentPage>
-	
+        <Panel id="TeamContentContainerSprays" class="TeamContentContainerCategory">
+          <Label class="TeamContentHeaderLabel" text="Sprays"/>
+          <Panel id="ContentElementsContainer" class="ContentElementsContainer">
+            <!-- Dynamically populated with TeamContentElement -->
+          </Panel>
+        </Panel>
+
+        <Panel id="TeamContentContainerEmoticons" class="TeamContentContainerCategory">
+          <Label class="TeamContentHeaderLabel" text="Emoticons"/>
+          <Panel id="ContentElementsContainer" class="ContentElementsContainer">
+            <!-- Dynamically populated with TeamContentElement -->
+          </Panel>
+        </Panel>
+
+        <Panel id="TeamContentContainerVoiceLines" class="TeamContentContainerCategory">
+          <Label class="TeamContentHeaderLabel" text="Voice Lines"/>
+          <Panel id="ContentElementsContainer" class="ContentElementsContainer">
+            <!-- Dynamically populated with TeamContentElement -->
+          </Panel>
+        </Panel>
+
+        <Panel id="TeamContentContainerWallpapers" class="TeamContentContainerCategory">
+          <Label class="TeamContentHeaderLabel" text="Wallpapers"/>
+          <Panel id="ContentElementsContainer" class="ContentElementsContainer">
+            <!-- Dynamically populated with TeamContentElement -->
+          </Panel>
+        </Panel>
+
+      </Panel>
+    </Panel>
+  </DOTATeamFanContentPage>
+  
 </root>
