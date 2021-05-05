@@ -90,7 +90,7 @@
 		"UsesBink" "0"
         "MaxNetworkableEntities" "10000"
         "MaxNonNetworkableEntities" "10000"
-        "DefaultDXVersion" "9"
+        "DefaultDXVersion" "11"
         // The shader binary cache on Linux can be over 100MB so
         // we have to allow very large allocations.
 		"AllocWarnMB_linuxsteamrt64" "200"
