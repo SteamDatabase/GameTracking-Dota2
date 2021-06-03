@@ -907,61 +907,25 @@ message CMsgDOTASeasonAchievements {
 	repeated .CMsgDOTASeasonAchievements.Achievement achievements = 1;
 }
 
-message CMsgDOTASeasonPredictions {
-	message Choice {
-		optional uint32 value = 1;
-		optional string name = 2;
-		optional uint32 min_raw_value = 3;
-		optional uint32 max_raw_value = 4;
-	}
+message CMsgPredictionChoice {
+	optional uint32 value = 1;
+	optional string name = 2;
+	optional uint32 min_raw_value = 3;
+	optional uint32 max_raw_value = 4;
+}
 
-	message Answers {
-		optional uint32 answer_id = 1;
-	}
-
+message CMsgInGamePrediction {
 	message QueryKeyValues {
 		optional string name = 1;
 		optional string value = 2;
 	}
 
-	message Prediction {
-		optional .CMsgDOTASeasonPredictions.ePredictionType type = 1 [default = Generic];
-		optional string question = 2;
-		repeated .CMsgDOTASeasonPredictions.Choice choices = 3;
-		optional uint32 selection_id = 4;
-		optional uint32 start_date = 5;
-		optional uint32 lock_date = 6;
-		optional uint32 reward = 7;
-		optional .CMsgDOTASeasonPredictions.eAnswerType answer_type = 8 [default = SingleInt];
-		optional uint32 answer_id = 9;
-		repeated .CMsgDOTASeasonPredictions.Answers answers = 10;
-		optional string query_name = 11;
-		optional uint32 lock_on_selection_id = 13;
-		optional uint32 lock_on_selection_value = 14;
-		optional bool lock_on_selection_set = 15;
-		optional bool use_answer_value_ranges = 16;
-		optional .ELeagueRegion region = 17 [default = LEAGUE_REGION_UNSET];
-		repeated .ELeaguePhase phases = 18;
+	enum ERawValueType_t {
+		Number = 0;
+		Time = 1;
 	}
 
-	message InGamePrediction {
-		optional uint32 id = 1;
-		optional string name = 2;
-		optional .CMsgDOTASeasonPredictions.ePredictionType type = 3 [default = Generic];
-		optional .CMsgDOTASeasonPredictions.eRandomSelectionGroup_t group = 4 [default = EarlyGame];
-		optional string question = 5;
-		repeated .CMsgDOTASeasonPredictions.Choice choices = 6;
-		repeated string required_heroes = 7;
-		optional string query_name = 8;
-		repeated .CMsgDOTASeasonPredictions.QueryKeyValues query_values = 9;
-		optional .CMsgDOTASeasonPredictions.eResolutionType_t answer_resolution_type = 10 [default = InvalidQuery];
-		optional uint32 points_to_grant = 11;
-		optional uint32 reward_action = 12;
-		optional uint32 debug_force_selection = 13;
-		optional .CMsgDOTASeasonPredictions.eRawValueType_t raw_value_type = 14 [default = Number];
-	}
-
-	enum ePredictionType {
+	enum EPredictionType {
 		Generic = 0;
 		Hero = 1;
 		Team = 2;
@@ -971,18 +935,7 @@ message CMsgDOTASeasonPredictions {
 		QualifiersTeam = 6;
 	}
 
-	enum eAnswerType {
-		SingleInt = 0;
-		SingleFloat = 1;
-		MultipleInt = 2;
-		MultipleFloat = 3;
-		AnswerTeam = 4;
-		SingleTime = 5;
-		MultipleTime = 6;
-		NoAnswer = 7;
-	}
-
-	enum eResolutionType_t {
+	enum EResolutionType_t {
 		InvalidQuery = 0;
 		FirstToPassQuery = 1;
 		LastToPassQuery = 2;
@@ -994,22 +947,89 @@ message CMsgDOTASeasonPredictions {
 		MinTeamSumToPassQuery = 8;
 	}
 
-	enum eRandomSelectionGroup_t {
+	enum ERandomSelectionGroup_t {
 		EarlyGame = 0;
 		MidGame = 1;
 		LateGame = 2;
 		Count = 3;
 	}
 
-	enum eRawValueType_t {
-		Number = 0;
-		Time = 1;
+	optional uint32 id = 1;
+	optional string name = 2;
+	optional .CMsgInGamePrediction.EPredictionType type = 3 [default = Generic];
+	optional .CMsgInGamePrediction.ERandomSelectionGroup_t group = 4 [default = EarlyGame];
+	optional string question = 5;
+	repeated .CMsgPredictionChoice choices = 6;
+	repeated string required_heroes = 7;
+	optional string query_name = 8;
+	repeated .CMsgInGamePrediction.QueryKeyValues query_values = 9;
+	optional .CMsgInGamePrediction.EResolutionType_t answer_resolution_type = 10 [default = InvalidQuery];
+	optional uint32 points_to_grant = 11;
+	optional uint32 reward_action = 12;
+	optional uint32 debug_force_selection = 13;
+	optional .CMsgInGamePrediction.ERawValueType_t raw_value_type = 14 [default = Number];
+}
+
+message CMsgDOTASeasonPredictions {
+	message Prediction {
+		message Answers {
+			optional uint32 answer_id = 1;
+		}
+
+		enum EPredictionType {
+			Generic = 0;
+			Hero = 1;
+			Team = 2;
+			Player = 3;
+			Special = 4;
+			YesNo = 5;
+			QualifiersTeam = 6;
+		}
+
+		enum EAnswerType {
+			SingleInt = 0;
+			SingleFloat = 1;
+			MultipleInt = 2;
+			MultipleFloat = 3;
+			AnswerTeam = 4;
+			SingleTime = 5;
+			MultipleTime = 6;
+			NoAnswer = 7;
+		}
+
+		optional .CMsgDOTASeasonPredictions.Prediction.EPredictionType type = 1 [default = Generic];
+		optional string question = 2;
+		repeated .CMsgPredictionChoice choices = 3;
+		optional uint32 selection_id = 4;
+		optional uint32 start_date = 5;
+		optional uint32 lock_date = 6;
+		optional uint32 reward = 7;
+		optional .CMsgDOTASeasonPredictions.Prediction.EAnswerType answer_type = 8 [default = SingleInt];
+		optional uint32 answer_id = 9;
+		repeated .CMsgDOTASeasonPredictions.Prediction.Answers answers = 10;
+		optional string query_name = 11;
+		optional uint32 lock_on_selection_id = 13;
+		optional uint32 lock_on_selection_value = 14;
+		optional bool lock_on_selection_set = 15;
+		optional bool use_answer_value_ranges = 16;
+		optional .ELeagueRegion region = 17 [default = LEAGUE_REGION_UNSET];
+		repeated .ELeaguePhase phases = 18;
+		optional .EEvent reward_event = 19 [default = EVENT_ID_NONE];
 	}
 
 	repeated .CMsgDOTASeasonPredictions.Prediction predictions = 1;
-	repeated .CMsgDOTASeasonPredictions.InGamePrediction in_game_predictions = 2;
+	repeated .CMsgInGamePrediction in_game_predictions = 2;
 	optional uint32 in_game_prediction_count_per_game = 3;
 	optional uint32 in_game_prediction_voting_period_minutes = 4;
+}
+
+message CMsgAvailablePredictions {
+	message MatchPrediction {
+		optional uint64 match_id = 1;
+		repeated .CMsgInGamePrediction predictions = 2;
+	}
+
+	repeated .CMsgAvailablePredictions.MatchPrediction match_predictions = 1;
 }
 
 message CMsgDOTAMatch {
