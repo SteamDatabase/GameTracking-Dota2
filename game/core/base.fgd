@@ -575,7 +575,7 @@
 	[
 		1: "Clients" : 1
 		2: "NPCs" : 0
-		4: "Pushables": 0
+		4: "Projectiles": 0
 		8: "Physics Objects" : 0
 		16: "Only player ally NPCs" : 0
 		32: "Only clients in vehicles" : 0
@@ -811,7 +811,8 @@
 	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
 	operatorName(string) : "Operator Name" : "" : "The name of the operator the OpVar is in"
 	opvarName(string) : "OpVar Name" : "" : "The name of the OpVar to change"
-	opvarArrayIndex(integer) : "OpVar Index" : "" : "Index of the OpVar array to set"
+	opvarUseAutoCompare(bool) : "Use Auto Compare" : "0" : "All entities that point to the same opvar and have this selected will automatically have their values compared and the largest set to the opvar value"
+	opvarArrayIndex(integer){ enabled={ variable="opvarUseAutoCompare" value="0" } } : "OpVar Index" : "" : "Index of the OpVar array to set"
 	distanceMapMin(float) : "Distance Map Minimum" : "" : "Minimum value to map distance to"
 	distanceMapMax(float) : "Distance Map Maximum" : "" : "Maximum value to map distance to"
 	occlusionRadius(float) : "Occlusion Radius" : "" : "Size of the occlusion sphere"
@@ -885,6 +886,28 @@
 
 @PointClass base( Targetname, snd_opvar_set_aabb ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_inner_mins, box_inner_maxs ) box_oriented( box_outer_mins, box_outer_maxs ) = snd_opvar_set_obb :
 [
+]
+
+@PointClass base( Targetname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb
+[
+	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
+	operatorName(string) : "Operator Name" : "" : "The name of the operator the OpVar is in"
+	opvarName(string) : "OpVar Name" : "" : "The name of the OpVar to change"
+	opvarUseAutoCompare(bool) : "Use Auto Compare" : "0" : "All entities that point to the same opvar and have this selected will automatically have their values compared and the largest set to the opvar value"
+	opvarArrayIndex(integer){ enabled={ variable="opvarUseAutoCompare" value="0" } } : "OpVar Index" : "" : "Index of the OpVar array to set"
+	wind_min(float) : "Minimum Wind Value" : "0.0" : "Minimum value of env_wind"
+	wind_max(float) : "Maximum Wind Value" : "1.0" : "Maximum value of env_wind"
+	wind_map_min(float) : "Minimum Wind Map Value" : "0.0" : "Minimum value to map env_wind to opvar"
+	wind_map_max(float) : "Maximum Wind Map Value" : "1.0" : "Maximum value to map env_wind to opvar"
+	box_mins(vector) : "Box Mins" : "-32 -32 -32"
+	box_maxs(vector) : "Box Maxs" : "32 32 32"	
+	
+	// inputs
+	input SetStackName(string) : "Change the target stack name"
+	input SetOperatorName(string) : "Change the target operator name"
+	input SetOpvarName(string) : "Change the target opvar name"	
+	input SetOpvarIndex(integer) : "Change the target opvar index"	
+	input SetSoundEventGUID(integer) : "Start the sound event using a snd_event_point and pass its guid output to this."
 ]
 
 @PointClass base(Targetname) = env_zoom : 
@@ -3663,7 +3686,7 @@
 		entity_tool_group = "Logic"
 	}
 = logic_case :
-	"Compares an input to up to 16 preset values. If the input value is the same as " +
+	"Compares an input to up to 32 preset values. If the input value is the same as " +
 	"any of the preset values, an output corresponding to that value is fired.<br><br>" +
 	"For example: if Case01 is set to 2 and Case02 is set to 5, and the input value is 5, " +
 	"the OnCase02 output will be fired.<br><br>" +
@@ -3687,6 +3710,22 @@
 	Case14(string) : "Case 14"
 	Case15(string) : "Case 15"
 	Case16(string) : "Case 16"
+	Case17(string) : "Case 17"
+	Case18(string) : "Case 18"
+	Case19(string) : "Case 19"
+	Case20(string) : "Case 20"
+	Case21(string) : "Case 21"
+	Case22(string) : "Case 22"
+	Case23(string) : "Case 23"
+	Case24(string) : "Case 24"
+	Case25(string) : "Case 25"
+	Case26(string) : "Case 26"
+	Case27(string) : "Case 27"
+	Case28(string) : "Case 28"
+	Case29(string) : "Case 29"
+	Case30(string) : "Case 30"
+	Case31(string) : "Case 31"
+	Case32(string) : "Case 32"
 
 	// Inputs
 	input InValue(string) : "Compares the Input value to the case values, and fires the appropriate output, if any."
@@ -3695,6 +3734,7 @@
 	input ResetShuffle(void) : "Starts the shuffle over so that the next PickRandomShuffle can select from all cases."
 	
 	// Outputs
+	output OnDefault(void) : "Fired when the input value does not equal any of the Case values."
 	output OnCase01(void) : "Fired when the input value equals the Case01 value."
 	output OnCase02(void) : "Fired when the input value equals the Case02 value."
 	output OnCase03(void) : "Fired when the input value equals the Case03 value."
@@ -3711,7 +3751,22 @@
 	output OnCase14(void) : "Fired when the input value equals the Case14 value."
 	output OnCase15(void) : "Fired when the input value equals the Case15 value."
 	output OnCase16(void) : "Fired when the input value equals the Case16 value."
-	output OnDefault(void) : "Fired when the input value does not equal any of the Case values."
+	output OnCase17(void) : "Fired when the input value equals the Case17 value."
+	output OnCase18(void) : "Fired when the input value equals the Case18 value."
+	output OnCase19(void) : "Fired when the input value equals the Case19 value."
+	output OnCase20(void) : "Fired when the input value equals the Case20 value."
+	output OnCase21(void) : "Fired when the input value equals the Case21 value."
+	output OnCase22(void) : "Fired when the input value equals the Case22 value."
+	output OnCase23(void) : "Fired when the input value equals the Case23 value."
+	output OnCase24(void) : "Fired when the input value equals the Case24 value."
+	output OnCase25(void) : "Fired when the input value equals the Case25 value."
+	output OnCase26(void) : "Fired when the input value equals the Case26 value."
+	output OnCase27(void) : "Fired when the input value equals the Case27 value."
+	output OnCase28(void) : "Fired when the input value equals the Case28 value."
+	output OnCase29(void) : "Fired when the input value equals the Case29 value."
+	output OnCase30(void) : "Fired when the input value equals the Case30 value."
+	output OnCase31(void) : "Fired when the input value equals the Case31 value."
+	output OnCase32(void) : "Fired when the input value equals the Case32 value."
 ]
 
 // NEEDHELP: Unused in HL2, not clear what it's useful for.
@@ -5337,14 +5392,7 @@
 	model(studio) : "World model"
 ]
 
-@BaseClass base(SystemLevelChoice) 
-	metadata
-	{
-	entity_tool_name = "Static Prop"
-	entity_tool_group = "Content"
-	entity_tool_tip = "Adds a static model"
-	}
-= prop_static_base
+@BaseClass base(SystemLevelChoice) = prop_static_base
 [
 	model(studio) [report] : "World Model"
 	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
@@ -5405,7 +5453,8 @@
 		1: "Yes"
 	]
 
-	DefaultAnim(sequence) : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation."
+	DefaultAnim(sequence) { enabled={ function="NotUsingAnimGraph" } } : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
+	use_animgraph(boolean) { enabled={ function="ModelHasAnimGraph" } } : "Use Animgraph" : 1 : "Allow the model to use its animgraph it has one. If the model has no animgraph this setting has no effect and is disabled"
 
 	RandomAnimation(boolean) : "Randomly Animate" : 0 : "If set, this prop will randomly choose and play animations, based upon the times specified in 'Min/Max Random Anim Time'. Inbetween the random animations, it will revert to playing the 'Default Animation'."
 	HoldAnimation(boolean) : "Hold Animation" : 0 : "If set, the prop will not loop its animation, but hold the last frame."
@@ -5449,7 +5498,6 @@
 	updatechildren(boolean) : "Update children" : 0 : "Update touches for any children that are attached to attachment points as this prop animates. "+
 		"This allows SetParentAttached triggers or func_brushes to touch properly."
 
-	use_animgraph(boolean) : "Allow Animgraph" : 1 : "Allow this entity to use its animgraph"
 
 	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "0" : "Create a navigation obstacle to assist NPC pathfinding"
 
@@ -5466,6 +5514,9 @@
 	metadata
 	{
 		model_archetypes = [ "static_prop_model" ]
+		entity_tool_name = "Static Prop"
+		entity_tool_group = "Content"
+		entity_tool_tip = "Adds a static model"
 	}
 = prop_static
 [
@@ -5499,9 +5550,8 @@
 		"and greater than 1 cause it to fade out at closer distances."
 	detailgeometry(boolean) : "Detail Geometry" : 0 : "If true this geometry is not important for precomputed lighting"	
 	visoccluder(boolean) : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility"	
-	baketoworld(boolean) : "Bake To World" : 0 : "If true this geometry will be baked into the world geometry of the map so that the model is not referenced at runtime."
-	terrainlighting(boolean) { enabled={ variable="baketoworld" value="1" } }: "Terrain Lighting" : 0 : "If true this geometry will bake the terrain lightmap data and normal for lighting."
-	disablemerging(boolean) : "Disable Mesh Merging" : 0 : "If true this will not be merged with other geometry during map compile (reduces rendering efficiency)."
+	baketoworld(boolean) [ group="Build Settings" ] : "Bake To World" : 0 : "If true this geometry will be baked into the world geometry of the map so that the model is not referenced at runtime."
+	disablemerging(boolean) [ group="Build Settings" ] : "Disable Mesh Merging" : 0 : "If true this will not be merged with other geometry during map compile (reduces rendering efficiency)."
 	renderamt(integer) [ group="Render Properties" ] : "Alpha" : 255 : "Alpha of the fade, where 0 = fully transparent and 255 = fully opaque." 
 	rendercolor(color255) : "Color (R G B)" : "255 255 255"
 	lightingorigin(target_destination) [ group="Render Properties" ]: "Lighting Origin" : "" : "Select a an entity to specify a location to sample lighting from, instead of using this entity's bounding box center."
@@ -6011,11 +6061,19 @@
 	"When it spawns it will automatically rotate to face the next path_track on the path."
 [
 
+	// Inputs
+	input MoveToPathNode(string) : "Start moving to a destination and stop when you get there. This must be in the same path."
+	input TeleportToPathNode(string) : "Teleport to a destination and stop there. This can be in a new path."
+	input LockOrientation(void) : "Lock the current orientation of the train."
+	input UnlockOrientation(void) : "Unlock the current orientation of the train."
+
+	input SetMaxSpeed(float) : "Set a new max speed for the train."
+
 	// Outputs
 	output OnStart(void) : "Fired when the train starts moving in either direction."
 	output OnNext(string) : "Fires when this train picks a new point to move towards (and just after OnStart)."
 	
-
+	output OnArrivedAtDestinationNode(void) : "Fired when this train arrives at a destination that was specified by the MoveToPathNode Input."	
 ]
 
 @SolidClass base(BaseTrain) = func_tanktrain :
@@ -7265,7 +7323,7 @@
 	]
 ]
 
-@PointClass tags( Info ) iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint
+@PointClass tags( Info, VisPreview ) iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint
 [
 	box_mins(vector) : "Box Mins" : "-64 -64 -64"
 	box_maxs(vector) : "Box Maxs" : "64 64 64"

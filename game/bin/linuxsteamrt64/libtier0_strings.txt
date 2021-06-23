@@ -58,7 +58,6 @@ $ORIGIN
 %4.2f %%
 %52.52s%12d%12.3f%12.3f%7.2f%12.3f%7.2f%12.3f%12.3f%12.3f%12.3f
 %70s
-%79s
 %8.4f / %9.2f:  %s
 %8.4f / %9.2f:  Writing profile data to '%s'
 %8.8x-%4.4x-%4.4x-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x
@@ -424,7 +423,7 @@ $ORIGIN
 0x%08X
 0x%p
 1
-1.4.9
+1.5.0
 10CJobThread
 10CTestSuite
 10ConCommand
@@ -843,6 +842,7 @@ CBufferString::GetReplacePtr(int, int, int, bool, int*)
 CBufferString::GrowByChunks(int, int)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
+CBufferString::MakeFixedAbsolutePath(char const*, char const*, char)
 CBufferString::MakeRelativePath(char const*, char const*)
 CBufferString::MoveFrom(CBufferString&)
 CBufferString::Purge(int)
@@ -1333,8 +1333,8 @@ CThreadSpinRWLock::UnlockRead(char const*, int)
 CThreadSpinRWLock::UnlockRead_LockForWrite(char const*, int)
 CThreadSpinRWLock::UnlockWrite(char const*, int)
 CThreadSpinRWLock::UnlockWrite_LockForRead(char const*, int)
-CThreadSwapContext::CThreadSwapContext(CThreadSwapTarget*)
-CThreadSwapContext::~CThreadSwapContext()
+CThreadSwapContext_Base::CThreadSwapContext_Base(CThreadSwapTarget*, void*, unsigned long)
+CThreadSwapContext_Base::~CThreadSwapContext_Base()
 CThreadSwapTarget::CThreadSwapTarget()
 CThreadSwapTarget::OwnerThreadRun()
 CThreadSwapTarget::ReleaseOwnerThread()
@@ -2003,6 +2003,7 @@ FioGetBaseFileInfo(char const*, FioBaseFileInfo_t*, unsigned int)
 FioGetFileCRC32(char const*, unsigned int*, int)
 FioGetFileCRC32Buffer(char const*, unsigned int*, unsigned char*, int)
 FioGetFileIdentity(int, unsigned long long*, unsigned long long*)
+FioGetFileType
 FioGetSectorSize(char const*, int*)
 FioGetSize(int, unsigned long long*)
 FioIsDotDir(char const*)
@@ -2057,6 +2058,7 @@ GameResourceServiceServerV001
 GameUIService_001
 General
 GenericGameData
+Generic_x86
 GenuineIntel
 GetAddressTranslationData
 GetCPUFrequencyResults
@@ -2270,7 +2272,6 @@ KeyValues::RecursiveSaveToFile(CUtlBuffer&, int, bool, bool)
 KeyValues::RecursiveSaveToLocalizationFile(IBaseFileSystem*, void*, int, bool)
 KeyValues::RemoveSubKey(KeyValues*, bool, bool)
 KeyValues::SaveToFile(IBaseFileSystem*, char const*, char const*, bool)
-KeyValues::SaveToFile: couldn't open file "%s" in path "%s".
 KeyValues::SetColor(char const*, Color)
 KeyValues::SetFloat(char const*, float)
 KeyValues::SetFromString(char const*, CKeyValues_Data::types_t, char const*)
@@ -2417,6 +2418,7 @@ MD5_Print
 MD5_ProcessSingleBuffer
 MD5_PseudoRandom
 MENUBAR_ITEM
+MOBILE
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 Mac OS
@@ -2555,6 +2557,7 @@ PARTICLE_VRHAND_CP
 PARTICLE_VRHAND_CP_OBJECT
 PARTICLE_VRHAND_LEFT
 PARTICLE_VRHAND_RIGHT
+PC
 PF_BIAS_TYPE_EXPONENTIAL
 PF_MAP_TYPE_MULT
 PF_MAP_TYPE_REMAP
@@ -2634,6 +2637,7 @@ Plat_DisableIOBuffering
 Plat_EnableCustomerMachineMode
 Plat_EnableHeadlessMode
 Plat_EndWatchdogTimer
+Plat_EnsureDirectory
 Plat_ExitProcess
 Plat_FastVerifyHardwareKey
 Plat_FileExists
@@ -3274,6 +3278,7 @@ ThreadMultiWait
 ThreadMultiWaitObjectSetCreate
 ThreadMultiWaitObjectSetCreate(pollfd const*, ThreadMultiWaitExtra_t const*, int)
 ThreadMultiWaitObjectSetDestroy
+ThreadMultiWaitObjectSetGetCount
 ThreadNanoSleep
 ThreadPoolTest:         %d threads -- %d (%d) jobs processed in %fms, %fms to suspend (%f/%f)
 ThreadPoolTest:         Testing with %d jobs! Sleep %d, interleave %d, prioritized %d
@@ -3492,6 +3497,7 @@ V_LZ4_resetStream_fast
 V_LogMultiline
 V_LogMultilineToArray
 V_MakeAbsolutePathBuffer
+V_MakeAbsolutePathBufferUnfixed
 V_MakeAbsoluteVPKPathName
 V_MakeAbsoluteVPKPathNameBuffer
 V_MakeRelativePathBuffer
@@ -3586,6 +3592,13 @@ V_UnicodeValidate(char const*)
 V_UnicodeValidate(unsigned short const*)
 V_UnicodeValidate(wchar_t const*)
 V_UnqualifiedFileName
+V_XXH64
+V_XXH64_copyState
+V_XXH64_createState
+V_XXH64_digest
+V_XXH64_freeState
+V_XXH64_reset
+V_XXH64_update
 V_ZSTD_compress
 V_ZSTD_compressBound
 V_ZSTD_compress_usingCDict
@@ -3601,13 +3614,13 @@ V_ZSTD_getDictID_fromDDict
 V_ZSTD_getDictID_fromFrame
 V_ZSTD_getFrameContentSize
 V_abort
-V_acos
+V_acosd
 V_acosf
-V_asin
+V_asind
 V_asinf
-V_atan
-V_atan2
+V_atan2d
 V_atan2f
+V_atand
 V_atanf
 V_atof
 V_atofloat32
@@ -3617,13 +3630,13 @@ V_atoi64
 V_atoui64
 V_clearerr
 V_containsWhitespace
-V_cos
+V_cosd
 V_cosf
-V_cosh
+V_coshd
 V_coshf
-V_exp
-V_exp2
+V_exp2d
 V_exp2f
+V_expd
 V_expf
 V_fclose
 V_fdopen
@@ -3633,17 +3646,17 @@ V_fflush
 V_fgetc
 V_fgets
 V_fileno
-V_fmod
+V_fmodd
 V_fmodf
 V_fopen
 V_fopenUTF8
-V_fpclassify
+V_fpclassifyd
 V_fprintf
 V_fputc
 V_fputs
 V_fread
 V_freopen
-V_frexp
+V_frexpd
 V_frexpf
 V_fscanf
 V_fseek
@@ -3651,14 +3664,14 @@ V_fseeki64
 V_ftell
 V_ftelli64
 V_fwrite
-V_hypot
+V_hypotd
 V_hypotf
 V_isalnum_str
 V_isalpha_str
 V_isbreakablewspace
 V_isbreakablewspace32
 V_isdigit_str
-V_isnan
+V_isnand
 V_isstrlower_fast
 V_isvalidhex
 V_iswalnum
@@ -3668,39 +3681,39 @@ V_iswdigit
 V_iswlower
 V_iswspace
 V_iswupper
-V_ldexp
+V_ldexpd
 V_ldexpf
 V_localeconv
-V_log
-V_log10
+V_log10d
 V_log10f
-V_log2
 V_log2_uint
+V_log2d
 V_log2f
+V_logd
 V_logf
 V_longjmp
 V_mkostemps
 V_mkstemps
-V_modf
+V_modfd
 V_modff
 V_normalizeFloatString
 V_normalizeFloatWString
-V_pow
+V_powd
 V_powf
 V_qsort
 V_qsort_s
-V_remainder
+V_remainderd
 V_remainderf
 V_rewind
-V_round
+V_roundd
 V_roundf
 V_setjmp
 V_setvbuf
-V_sin
-V_sincos
+V_sincosd
 V_sincosf
+V_sind
 V_sinf
-V_sinh
+V_sinhd
 V_sinhf
 V_snprintf
 V_snprintfNoSecurityDoNotUse
@@ -3725,16 +3738,16 @@ V_strtok
 V_strtoui64
 V_strupper_fast
 V_swscanf
-V_tan
+V_tand
 V_tanf
-V_tanh
+V_tanhd
 V_tanhf
-V_tier0_ceil
+V_tier0_ceild
 V_tier0_ceilf
 V_tier0_crc32
-V_tier0_fabs
+V_tier0_fabsd
 V_tier0_fabsf
-V_tier0_floor
+V_tier0_floord
 V_tier0_floorf
 V_tier0_isgraph
 V_tier0_ispunct
@@ -3742,18 +3755,22 @@ V_tier0_memcmp
 V_tier0_memcpy
 V_tier0_memmove
 V_tier0_memset
-V_tier0_sqrt
+V_tier0_sqrtd
 V_tier0_sqrtf
 V_tier0_strchr
 V_tier0_strcmp
 V_tier0_strcpy
+V_tier0_strcpy32
 V_tier0_strlen
+V_tier0_strlen16
+V_tier0_strlen32
 V_tier0_strrchr
 V_tier0_strstr
 V_tier0_strtok_ts
 V_tier0_wcschr
 V_tier0_wcscmp
 V_tier0_wcscpy
+V_tier0_wcslen
 V_towlower
 V_towlower32
 V_towupper
@@ -3932,6 +3949,7 @@ ZSTD_decompressDCtx
 ZSTD_decompressStream
 ZSTD_decompressStream_simpleArgs
 ZSTD_decompress_usingDict
+ZSTD_defaultCLevel
 ZSTD_endStream
 ZSTD_estimateCCtxSize
 ZSTD_estimateCCtxSize_usingCCtxParams
@@ -4124,6 +4142,7 @@ _root_keyname
 _test_conversion_counter
 `
 a
+acos
 ai_model_info
 alarm
 allowstatic
@@ -4144,7 +4163,10 @@ application
 archive
 asctime
 asctime_r
+asin
 at+
+atan
+atan2
 attach_point
 attachment
 attachment_offset
@@ -4161,6 +4183,7 @@ binary
 binary_auto
 binary_bc
 binary_lz4
+binary_zstd
 blendamount
 blockLOS
 body_type
@@ -4185,6 +4208,7 @@ c
 cable
 calloc
 cantdie
+ceil
 center
 cfg/configdefaults.linux.vcfg
 cfg/configschema.vcfg
@@ -4212,6 +4236,7 @@ consoleonly
 control_point
 core id
 corrupted entry
+cosh
 cpu.cpp
 create_particle
 cvar list--------------
@@ -4270,6 +4295,7 @@ execlp
 execute_per_tick
 execvpe
 exitprocess_%d
+exp2
 explosion_behavior
 explosion_buildup
 explosion_delay
@@ -4295,6 +4321,8 @@ flMaxDistance
 flMinDistance
 float( %f )
 float32
+floor
+fmod
 fopen64
 force
 forced dump
@@ -4305,6 +4333,7 @@ frame
 frame_end
 free
 freopen64
+frexp
 friction
 fseeko64
 ftello64
@@ -4373,6 +4402,7 @@ help:  no cvar or command named %s
 hibernate.cpp
 hurt_me
 hurt_them
+hypot
 i
 iOS
 ignored_assertions.txt
@@ -4383,7 +4413,6 @@ int( %d = 0x%X )
 int:transient:1
 invert_orientation
 is_debris
-isspace
 j
 jobthread.cpp
 k
@@ -4395,6 +4424,7 @@ l
 last_sniff
 launch
 ld-linux-x86-64.so.2
+ldexp
 length
 lib
 libc.so.6
@@ -4411,6 +4441,8 @@ list %u best segments
 localhost
 localtime_r
 lockRotationAlpha
+log10
+log2
 log_color
 log_dumpchannels
 log_flags
@@ -4793,6 +4825,7 @@ pose_control
 pose_control_type
 posix_fadvise64
 posix_memalign
+pow
 prctl
 pre
 pread64
@@ -4845,12 +4878,14 @@ realloc
 recenter_on_parent_bone
 relative_angles
 relative_origin
+remainder
 rename
 rep
 replicated
 resource
 resource_name
 rmdir
+round
 s
 s_dev_urandom_fd >= 0
 sample set too large : reduced to %u MB ...
@@ -4871,8 +4906,10 @@ sigaction
 sigaddset
 sigemptyset
 sigprocmask
+sincos
 singleplayer
 singletons.cpp
+sinh
 size
 sorting %u files of total size %u MB ...
 soundevent
@@ -4881,6 +4918,7 @@ sp
 spawn_motion_disabled
 speed
 sprintf
+sqrt
 srand
 ss_added
 stacktools.cpp
@@ -4927,6 +4965,7 @@ sysinfo
 system
 t
 tableLog requires too much memory : unsupported
+tanh
 test string
 test_angles_relative
 testscript_debug
@@ -5070,7 +5109,6 @@ warning : pathological dataset : literals are not compressible : samples are noi
 wb
 wb+
 wcscoll
-wcslen
 wcsncat
 wcsncpy
 wcstoll

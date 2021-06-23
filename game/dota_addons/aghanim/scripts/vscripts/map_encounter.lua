@@ -1494,7 +1494,7 @@ function CMapEncounter:AddAscensionAbilities( hEnemyCreature )
 			goto continue
 		end
 
-		print( "Ascension adding ability " .. self.AscensionAbilities[i] .. " to unit " .. hEnemyCreature:GetUnitName() )
+		--print( "Ascension adding ability " .. self.AscensionAbilities[i] .. " to unit " .. hEnemyCreature:GetUnitName() )
 		hAbility = hEnemyCreature:AddAbility( self.AscensionAbilities[i] )
 		hAbility:UpgradeAbility( true )
 

@@ -151,10 +151,10 @@
 	"AI Attached Item Manager - manages the items attached to one or more NPCs / ragdolls."
 [
 	target(target_name_or_class) : "Target(s)" : "" : "This is the entity who's items this manager should be managing. May be a targetname or a classname."
-	item_1( vdata_choice:scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 1" : "" : "Subclass of item or ability to attach in slot 1."
-	item_2( vdata_choice:scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 2" : "" : "Subclass of item or ability to attach in slot 2."
-	item_3( vdata_choice:scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 3" : "" : "Subclass of item or ability to attach in slot 3."
-	item_4( vdata_choice:scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 4" : "" : "Subclass of item or ability to attach in slot 4."
+	item_1( vdata_choice:scripts/grenades.vdata&scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 1" : "" : "Subclass of item or ability to attach in slot 1."
+	item_2( vdata_choice:scripts/grenades.vdata&scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 2" : "" : "Subclass of item or ability to attach in slot 2."
+	item_3( vdata_choice:scripts/grenades.vdata&scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 3" : "" : "Subclass of item or ability to attach in slot 3."
+	item_4( vdata_choice:scripts/grenades.vdata&scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 4" : "" : "Subclass of item or ability to attach in slot 4."
 	primary_linked_ability_1( vdata_choice:scripts/npc_abilities.vdata ) : "Primary Linked Ability 1" : "" : "(Optional) Subclass of primary ability to link to 1st ability to add."
 	primary_linked_ability_2( vdata_choice:scripts/npc_abilities.vdata ) : "Primary Linked Ability 2" : "" : "(Optional) Subclass of primary ability to link to 2nd ability to add."
 	primary_linked_ability_3( vdata_choice:scripts/npc_abilities.vdata ) : "Primary Linked Ability 3" : "" : "(Optional) Subclass of primary ability to link to 3rd ability to add."
@@ -289,6 +289,8 @@
 	m_iszPostIdle(sequence) : "Post Action Idle Animation" : "" : "The name of the sequence (such as 'idle01') or activity (such as 'ACT_IDLE') to play after the action animation."
 	m_iszCustomMove(sequence) : "Custom Move Animation" : "" : "Used in conjunction with the 'Custom movement' setting for the 'Move to Position' property, specifies the sequence (such as 'crouch_run01') or activity (such as 'ACT_RUN') to use while moving to the scripted position."
 	sync_group(string) : "Synchronization Group" : : "If set, identifier used to match other scripted sequences to synchronze with (alternative to name-based sync)"
+	m_iszModifierToAddOnPlay(string) : "Modifier to add on Play" : "" : "A modifier name to add when the scripted sequence starts."
+	m_bAllowCameraMovement(boolean) : "Allow Player Camera Movement?" : 1
 	m_bLoopActionSequence(boolean) : "Loop Action Animation?" : 0
 	m_bSynchPostIdles(boolean) : "Synch Post Idles?" : 0
 	m_bAllowCustomInterruptConditions(boolean) : "Allow custom interrupt conditions to be set." : 0
@@ -296,8 +298,8 @@
 	[
 		0 : "Enqueue"
 		1 : "Interrupt"
-	] 
-	m_nGroundIKPreference(choices) : "Ground IK Preference" : 0 : "If this NPC has ground IK; whether we disable it for the playthrough of the sequence or not." = 
+	]
+ 	m_nGroundIKPreference(choices) : "Ground IK Preference" : 0 : "If this NPC has ground IK; whether we disable it for the playthrough of the sequence or not." = 
 	[
 		0 : "No change"
 		1 : "Disable for this sequence"
@@ -305,6 +307,7 @@
 
 	m_flRadius(integer) : "Search Radius (0=everywhere)" : 0 : "Radius to search within for an NPC to use. 0 searches everywhere."
 	m_flRepeat(integer) : "Repeat Rate ms" : 0
+	m_flMoveInterpTime(float) : "Move-to interp time" : 0
 	m_fMoveTo(Choices) : "Move to Position" : 1 =
 	[
 		0 : "No"
@@ -450,7 +453,8 @@
 	input StopIdle(void) : "Stops all target NPCs that are performing this idle."
 
 	// Outputs
-	output OnFailedToPerform(string) : "Fired when any target NPC(s) fails to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
+	output OnSucceeded(void) : "Fired when any target NPC finishes idling at the destination."
+	output OnFailedToPerform(void) : "Fired when any target NPC(s) fails to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
 ]
 
 @PointClass base(Targetname) tags( Choreo ) color(255 0 255) iconsprite("editor/ai_scripted_moveto") = ai_scripted_moveto :
@@ -484,13 +488,20 @@
 		1 : "Only Taking Damage"
 		2 : "Nothing"
 	]
+
+	movementtype(choices) : "Movement Type" : 0 : "Set movement type" =
+	[
+		0 : "Walk"
+		1 : "Run"
+	]
 	
 	// Inputs
 	input StartMoveTo(void) : "Starts all target NPC(s) moving to the target destination."
 	input StopMoveTo(void) : "Stops all target NPCs that are performing this move to."
 
 	// Outputs
-	output OnFailedToPerform(string) : "Fired when we fail to command any target NPC(s) to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
+	output OnSucceeded(void) : "Fired when any target NPC finishes moving to the destination."
+	output OnFailedToPerform(void) : "Fired when we fail to command any target NPC(s) to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
 ]
 
 
@@ -539,5 +550,6 @@
 	input AbortAbilityPerformance(void) : "Tells all target NPC(s) to abort performing the ability, if they're in the process of doing it."
 
 	// Outputs
-	output OnFailedToPerform(string) : "Fired when we fail to command any target NPC(s) to perform the ability. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the ability."
+	output OnSucceeded(void) : "Fired when any target NPC finishes performing the ability."
+	output OnFailedToPerform(void) : "Fired when we fail to command any target NPC(s) to perform the ability. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the ability."
 ]

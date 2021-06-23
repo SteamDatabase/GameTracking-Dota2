@@ -347,6 +347,11 @@ function CAghanim:OnNPCSpawned_PlayerHero( event )
 			self.bHasInitializedSpectatorCameras = true
 		end
 
+		local hCaptureAbility = hPlayerHero:AddAbility( "ability_aghsfort_capture" )
+		if hCaptureAbility then
+			hCaptureAbility:UpgradeAbility( false )
+		end
+		
 		hPlayerHero:SetStashEnabled( false )
 		hPlayerHero:SetAbilityPoints( 0 )
 		hPlayerHero.nRespawnsRemaining = AGHANIM_STARTING_LIVES

@@ -818,6 +818,13 @@ _G.ENCOUNTER_DEFINITIONS =
 		nMinDepth = 6,
 		nMaxDepth = 6,
 	},
+	encounter_tusk_boss =
+	{
+		szMapNames = { "tusk_boss" },
+		nEncounterType = ROOM_TYPE_BOSS,
+		nMinDepth = 6,
+		nMaxDepth = 6,
+	},
 
 	encounter_storegga =
 	{

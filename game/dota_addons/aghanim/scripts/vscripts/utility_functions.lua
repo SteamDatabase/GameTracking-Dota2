@@ -6,14 +6,20 @@
 function bitand(a, b)
     local result = 0
     local bitval = 1
-    while a > 0 and b > 0 do
-      if a % 2 == 1 and b % 2 == 1 then -- test the rightmost bits
+
+    -- Hack to try to fix an error about comparing userdata to a number
+    local a_int = tonumber( tostring( a ) )
+    local b_int = tonumber( tostring( b ) )
+
+    while a_int > 0 and b_int > 0 do
+      if a_int % 2 == 1 and b_int % 2 == 1 then -- test the rightmost bits
           result = result + bitval      -- set the current bit
       end
       bitval = bitval * 2 -- shift left
-      a = math.floor(a/2) -- shift right
-      b = math.floor(b/2)
+      a_int = math.floor(a_int/2) -- shift right
+      b_int = math.floor(b_int/2)
     end
+
     return result
 end
 

@@ -135,7 +135,7 @@
 	{
 		"SunLightManagerCount" "0"
 		"TransformTextureRowCount" "256"
-		"CMTAtlasWidth" "512"
+		"CMTAtlasWidth" "1024"
 		"CMTAtlasHeight" "512"
 		"CMTAtlasChunkSize" "128"
 		"DrawParticleChildrenSeparateFromParents" "1"
@@ -237,6 +237,7 @@
 
 	RenderSystem
 	{
+		SwapChainSampleableDepth 1
 		"VulkanUseSecondaryCommandBuffers"	"1" // Use secondary command buffers for more efficiency on tiled based renderers. All platforms to limit configurations.
 		"VulkanSteamShaderCache"			"1"
 	}
