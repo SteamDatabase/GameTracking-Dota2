@@ -214,51 +214,17 @@ function OnThink()
 }
 $.Schedule( 0.0, OnThink )
 
-function FindDontShowAgainButton()
+function OnPlayDetailsDontShowAgain()
 {
-    var dontShowAgainPanel = null;
+    $.Msg( "OnPlayDetailsDontShowAgain()" )
+    g_bDontShowCheckBox = !g_bDontShowCheckBox;
+    Game.NemesticeSetShowGameInfo( !g_bDontShowCheckBox );
 
-    var hudRootPanel = $.GetContextPanel().FindAncestor( "Hud" );
-    if ( hudRootPanel != null )
-    {
-        //$.Msg( "^^^Found HUD Root" );
-        var howtoplayPopupPanel = hudRootPanel.FindChildTraverse( "NemesticeEventDetails" )
-        if ( howtoplayPopupPanel != null )
-        {
-            //$.Msg( "^^^Found Nemestice How To Play Popup Panel" );
-            dontShowAgainPanel = howtoplayPopupPanel.FindChildTraverse( "DontShowAgainButton");
-            if ( dontShowAgainPanel != null )
-            {
-                //$.Msg( "^^^Found Dont Show Again Button!" )
-            }
-        }
-    }   
-
-    return dontShowAgainPanel;
-}
-
-function SetupDontShowAgainOnActivateFunction()
-{
-    //$.Msg( "^^^SetupDontShowAgainOnActivateFunction()" )
-    var bReschedule = true;
-
-    var dontShowAgainPanel = FindDontShowAgainButton();
+    var dontShowAgainPanel = $.GetContextPanel().FindChildInLayoutFile( "DontShowAgainButton" );
     if ( dontShowAgainPanel != null )
     {
-        dontShowAgainPanel.SetPanelEvent( 'onactivate', function() {
-            //$.Msg( "^^^DontShowAgainButton activated!" )
-            g_bDontShowCheckBox = !g_bDontShowCheckBox;
-            Game.NemesticeSetShowGameInfo( !g_bDontShowCheckBox );
-
-            dontShowAgainPanel.SetHasClass( "CheckboxActive", g_bDontShowCheckBox );
-        });
-        bReschedule = false;
+        dontShowAgainPanel.SetHasClass( "CheckboxActive", g_bDontShowCheckBox );
     }    
-
-    if ( bReschedule )
-    {
-        $.Schedule( 0.1, SetupDontShowAgainOnActivateFunction )
-    } 
 }
 
 function SetupHowToPlay()
@@ -272,21 +238,14 @@ function SetupHowToPlay()
         return;
     }
 
-    $.DispatchEvent( 'UIShowCustomLayoutPopup', 'NemesticeEventDetails', 'file://{resources}/layout/events/nemestice_2021_play_details.xml' );
+    $( "#NemesticePlayDetails" ).SetHasClass( "Visible", true );
+    Game.EmitSound( "ui_find_match_slide_in" );
+}
 
-    $.Schedule( 0.1, SetupDontShowAgainOnActivateFunction )
-
-    /*var htpPanel = $.GetContextPanel().FindChildInLayoutFile( "HowToPlay" );
-    if ( htpPanel != null )
-    {
-        htpPanel.SetHasClass("Visible", true);
-    }
-
-    var gotItButton = $.GetContextPanel().FindChildInLayoutFile( "HowToPlay_GotIt" );
-    gotItButton.SetPanelEvent( 'onactivate', function() {
-        var htpPanel = $.GetContextPanel().FindChildInLayoutFile( "HowToPlay" );
-        htpPanel.SetHasClass("Visible", false);
-    });*/
+function OnGameInfoDismissed()
+{
+    $( "#NemesticePlayDetails" ).SetHasClass( "Visible", false );
+    Game.EmitSound( "ui_find_match_slide_out" );
 }
 
 function OnExecuteAbility( data )

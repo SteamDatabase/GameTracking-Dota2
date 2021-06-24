@@ -1194,6 +1194,33 @@ end
 
 --------------------------------------------------------------------------------
 function CNemestice:EndPrepTime()
+
+	-- set up stat tracking here, since it's safer
+	for nPlayerID = 0, DOTA_DEFAULT_MAX_TEAM_PLAYERS - 1 do
+		if PlayerResource:IsValidTeamPlayerID( nPlayerID ) then
+			local EventPlayer =
+			{
+				meteor_energy_absorbed = 0,
+				meteor_energy_channeled = 0,
+				meteor_energy_lost = 0,
+			}
+			table.insert( self.EventMetaData, nPlayerID, EventPlayer )
+
+			local SignOutPlayer = 
+			{
+				steam_id = PlayerResource:GetSteamID( nPlayerID ),
+				hero_id = PlayerResource:GetSelectedHeroID( nPlayerID ),
+				team_number = PlayerResource:GetPlayer( nPlayerID ):GetAssignedHero():GetTeamNumber(),
+				battle_points = 0,
+				shards_gathered = 0,
+				shard_kills = 0,
+				shards_channeled = 0,
+				tower_kills = 0,
+				shards_lost = 0,
+			}
+			table.insert( self.SignOutTable[ "player_list" ], nPlayerID, SignOutPlayer )
+		end
+	end
 	self.m_GameState = _G.NEMESTICE_GAMESTATE_IN_PROGRESS
 	local flDotaTime = GameRules:GetDOTATime( false, true )
 	self.m_flTimePhaseStarted = flDotaTime
