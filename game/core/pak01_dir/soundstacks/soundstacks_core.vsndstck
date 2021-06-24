@@ -2020,3 +2020,359 @@
 	}
 }
 
+// core_set_opvar_over_time
+"core_set_opvar_over_time"
+{
+	"public"
+	{
+		"operator"		"util_null"
+		"operator_variables"
+		{
+			"opvar_name"
+			{
+				"data_type"		"string"
+				"value"		"test_arr1"
+			}
+			"fade_in"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+			}
+			"fade_out"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+			}
+			"fade_over_time_x1"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+			}
+			"fade_over_time_y1"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"fade_over_time_x2"
+			{
+				"data_type"		"float"
+				"value"		"1.500000"
+			}
+			"fade_over_time_y2"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"fade_over_time_x3"
+			{
+				"data_type"		"float"
+				"value"		"3.500000"
+			}
+			"fade_over_time_y3"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"fade_over_time_x4"
+			{
+				"data_type"		"float"
+				"value"		"4.200000"
+			}
+			"fade_over_time_y4"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"enable_debug_radius"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+				"_system_properties"
+				{
+					"display_group"		"advanced"
+				}
+			}
+			"debug_string"
+			{
+				"data_type"		"string"
+				"value"		"debug"
+				"_system_properties"
+				{
+					"display_group"		"advanced"
+				}
+			}
+			"debug_x_offset"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+				"_system_properties"
+				{
+					"display_group"		"advanced"
+				}
+			}
+		}
+	}
+	"get_event_info"
+	{
+		"operator"		"soundevent_get_info"
+	}
+	"remap_envelope_over_time"
+	{
+		"operator"		"math_curve_2d_4knot"
+		"curve_type"		"linear"
+		"input"		"@get_event_info.output_elapsed_time"
+		"input_X1"		"@public.fade_over_time_x1"
+		"input_Y1"		"@public.fade_over_time_y1"
+		"input_X2"		"@public.fade_over_time_x2"
+		"input_Y2"		"@public.fade_over_time_y2"
+		"input_X3"		"@public.fade_over_time_x3"
+		"input_Y3"		"@public.fade_over_time_y3"
+		"input_X4"		"@public.fade_over_time_x4"
+		"input_Y4"		"@public.fade_over_time_y4"
+	}
+	"fade_out"
+	{
+		"operator"		"math_remap_float"
+		"input"		"@get_event_info.output_stop_elapsed_time"
+		"input_min"		"0.000000"
+		"input_max"		"@public.fade_out"
+		"input_map_min"		"1.000000"
+		"input_map_max"		"0.000000"
+		"default_to_max"		"true"
+	}
+	"fade_out_mult"
+	{
+		"operator"		"math_float"
+		"apply"		"mult"
+		"input2"		"@remap_envelope_over_time.output"
+		"input1"		"@fade_out.output"
+	}
+	"fade_out_inverse"
+	{
+		"operator"		"math_float"
+		"apply"		"sub"
+		"input2"		"1.000000"
+		"input1"		"@fade_out.output"
+	}
+	"set_if_stopped"
+	{
+		"operator"		"opvar_set_float"
+		"input_execute"		"@fade_out_inverse.output"
+		"input"		"0"
+		"input_index"		"0"
+		"input_stack_name"		"hlvr_global_opvars"
+		"input_operator_name"		"opvars"
+		"input_field_name"		"@public.opvar_name"
+		"input_use_namespace"		"false"
+	}
+	"set_if_unstopped"
+	{
+		"operator"		"opvar_set_float"
+		"input_execute"		"@fade_out.output"
+		"input"		"@fade_out_mult.output"
+		"input_index"		"0"
+		"input_stack_name"		"hlvr_global_opvars"
+		"input_operator_name"		"opvars"
+		"input_field_name"		"@public.opvar_name"
+		"input_use_namespace"		"false"
+	}
+	"amplify_fade_out_mult"
+	{
+		"operator"		"math_float"
+		"apply"		"mult"
+		"input2"		"@fade_out_mult.output"
+		"input1"		"60"
+	}
+	"create_debug_position"
+	{
+		"operator"		"util_pack_float3"
+		"execute_once"		"false"
+		"input_0"		"@public.debug_x_offset"
+		"input_1"		"0"
+		"input_2"		"@amplify_fade_out_mult.output"
+	}
+	"test_debug_radius"
+	{
+		"input_execute"		"@public.enable_debug_radius"
+		"operator"		"util_draw_radius"
+		"input_radius_min"		"1.000000"
+		"input_radius_max"		"1.000000"
+		"input_name"		"@public.debug_string"
+		"input_position"		"@create_debug_position.output"
+	}
+	"prevent_stop"
+	{
+		"operator"		"soundevent_control"
+		"input_execute"		"@fade_out_mult.output"
+		"input_add_dependent"		"1.000000"
+	}
+}
+
+// core_set_game_volume_timed
+"core_set_game_volume_timed"
+{
+	"public"
+	{
+		"operator"		"util_null"
+		"operator_variables"
+		{
+			"volume"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+			}
+			"hold_time"
+			{
+				"data_type"		"float"
+				"value"		"1.000000"
+			}
+			"fade_in"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+			}
+			"fade_out"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+			}
+			"enable_debug_radius"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+				"_system_properties"
+				{
+					"display_group"		"advanced"
+				}
+			}
+			"debug_string"
+			{
+				"data_type"		"string"
+				"value"		"debug"
+				"_system_properties"
+				{
+					"display_group"		"advanced"
+				}
+			}
+			"debug_x_offset"
+			{
+				"data_type"		"float"
+				"value"		"0.000000"
+				"_system_properties"
+				{
+					"display_group"		"advanced"
+				}
+			}
+		}
+	}
+	"get_event_info"
+	{
+		"operator"		"soundevent_get_info"
+	}
+	"total_hold_time"
+	{
+		"operator"		"math_float"
+		"execute_once"		"true"
+		"apply"		"add"
+		"input2"		"@public.hold_time"
+		"input1"		"@public.fade_in"
+	}
+	"stop_at_time"
+	{
+		"operator"		"soundevent_control"
+		"input_stop_at_time"		"@total_hold_time.output"
+	}
+	"get_game_volume"
+	{
+		"operator"		"convar_get"
+		"execute_once"		"true"
+		"convar"		"snd_gain"
+	}
+	"fade_in"
+	{
+		"operator"		"math_remap_float"
+		"input"		"@get_event_info.output_elapsed_time"
+		"input_min"		"0.000000"
+		"input_max"		"@public.fade_in"
+		"input_map_min"		"1.000000"
+		"input_map_max"		"@public.volume"
+		"default_to_max"		"false"
+	}
+	"fade_out"
+	{
+		"operator"		"math_remap_float"
+		"input"		"@get_event_info.output_stop_elapsed_time"
+		"input_min"		"0.000000"
+		"input_max"		"@public.fade_out"
+		"input_map_min"		"@public.volume"
+		"input_map_max"		"1.000000"
+		"default_to_max"		"false"
+	}
+	"fade_in_mult"
+	{
+		"operator"		"math_float"
+		"apply"		"mult"
+		"input2"		"@get_game_volume.output"
+		"input1"		"@fade_in.output"
+	}
+	"fade_out_mult"
+	{
+		"operator"		"math_float"
+		"apply"		"mult"
+		"input2"		"@get_game_volume.output"
+		"input1"		"@fade_out.output"
+	}
+	"set_if_stopped"
+	{
+		"operator"		"convar_set"
+		"input_execute"		"@get_event_info.output_stopped"
+		"convar"		"snd_gain"
+		"input"		"@fade_out_mult.output"
+	}
+	"set_if_unstopped"
+	{
+		"operator"		"convar_set"
+		"input_execute"		"@get_event_info.output_unstopped"
+		"convar"		"snd_gain"
+		"input"		"@fade_in_mult.output"
+	}
+	"amplify_fade_out_mult"
+	{
+		"operator"		"math_float"
+		"apply"		"mult"
+		"input2"		"@fade_out_mult.output"
+		"input1"		"60"
+	}
+	"create_debug_position"
+	{
+		"operator"		"util_pack_float3"
+		"execute_once"		"false"
+		"input_0"		"@public.debug_x_offset"
+		"input_1"		"0"
+		"input_2"		"@amplify_fade_out_mult.output"
+	}
+	"test_debug_radius"
+	{
+		"input_execute"		"@public.enable_debug_radius"
+		"operator"		"util_draw_radius"
+		"input_radius_min"		"1.000000"
+		"input_radius_max"		"1.000000"
+		"input_name"		"@public.debug_string"
+		"input_position"		"@create_debug_position.output"
+	}
+	"unfinished"
+	{
+		"operator"		"math_float"
+		"execute_once"		"false"
+		"apply"		"less_than"
+		"input1"		"@get_event_info.output_stop_elapsed_time"
+		"input2"		"@public.fade_out"
+	}
+	"prevent_stop"
+	{
+		"operator"		"soundevent_control"
+		"input_execute"		"@unfinished.output"
+		"input_add_dependent"		"1.000000"
+	}
+}
+

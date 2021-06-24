@@ -22,7 +22,7 @@ AnimateHeroRelicProgressAction.prototype.start = function ()
 	this.panel.BLoadLayoutSnippet( 'SingleRelicProgress' );
 	this.panel.SetDialogVariableInt( 'relic_type', this.data.relic_type );
 	this.panel.SetDialogVariableInt( 'current_progress', this.data.starting_value );
-	this.panel.SetDialogVariable( 'increment', this.data.ending_value - this.data.starting_value );
+	this.panel.SetDialogVariableInt( 'increment', this.data.ending_value - this.data.starting_value );
 	this.panel.SetDialogVariable( 'relic_level', nCurrentLevel > 0 ? nCurrentLevel.toString() : "-" );
 
 	switch ( this.data.primary_attribute )

@@ -15,8 +15,6 @@ function CreateProgressAnimationSequence( data )
 		GetScreenLinksContainer().enabled = false;
 	}));
 
-	
-
 	if ( data.mvp2 != null )
 	{
 		seq.actions.push( new AnimateMVP2ScreenAction( data ) );
@@ -50,6 +48,16 @@ function CreateProgressAnimationSequence( data )
 	{
 		seq.actions.push( new AnimateBattlePassScreenAction( data ) );
 	}
+
+	if ( data.spring_2021_progress != null )
+	{
+		seq.actions.push( new AnimateSpring2021ScreenAction( data ) );
+	}
+
+	if ( data.generic_arcana_progress != null )
+	{
+		seq.actions.push( new AnimateGenericArcanaScreenAction( data ) );
+    }
 
 	if ( data.rubick_arcana_progress != null )
 	{

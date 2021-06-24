@@ -244,12 +244,11 @@ AnimateMVP2TabAction.prototype.init = function( mvp2ScreenPanel )
 	if ( this.data.bProgressVersion )
 	{
 		this.seq.actions.push( new SkippableAction( new WaitAction(0.5)));
-
-		this.seq.actions.push( new StopSkippingAheadAction() );
 		this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
 		this.seq.actions.push( new SwitchClassAction( mvp2ScreenPanel, 'current_screen', '' ) );
 		this.seq.actions.push( new SkippableAction( new WaitAction( 7.0 ) ) );
 		this.seq.actions.push( new RunFunctionAction( function () { $.DispatchEvent( 'DOTASetDashboardBackgroundVisible', true ); } ) );
+		this.seq.actions.push( new StopSkippingAheadAction() );
 	}
 
 	this.seq.start();

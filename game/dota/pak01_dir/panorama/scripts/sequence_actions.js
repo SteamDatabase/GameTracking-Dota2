@@ -368,7 +368,8 @@ function AddClassAction( panel, panelClass )
 AddClassAction.prototype = new BaseAction();
 AddClassAction.prototype.update = function ()
 {
-	this.panel.AddClass( this.panelClass );
+	if ( this != null && this.panel != null )
+		this.panel.AddClass( this.panelClass );
 	return false;
 }
 
@@ -423,7 +424,7 @@ function WaitForClassAction( panel, panelClass )
 WaitForClassAction.prototype = new BaseAction();
 WaitForClassAction.prototype.update = function ()
 {
-	return !this.panel.BHasClass( this.panelClass );
+	return !this || !this.panel || !this.panel.BHasClass( this.panelClass );
 }
 
 
