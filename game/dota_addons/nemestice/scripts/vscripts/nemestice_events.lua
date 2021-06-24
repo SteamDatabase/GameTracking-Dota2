@@ -652,7 +652,7 @@ function CNemestice:OnEntityKilled_PlayerOrCreepHero( event )
 		if hAttacker ~= nil and hAttacker ~= hKilledHero and hAttacker:GetTeamNumber() ~= hKilledHero:GetTeamNumber() and ( hAttacker:IsRealHero() or ( hAttacker:IsOwnedByAnyPlayer() and hAttacker:IsCreepHero() ) ) then
 			local nAttackerPlayerID = hAttacker:GetPlayerOwnerID()
 			local nShards = self:GetHeroMeteorEnergy( hAttacker )
-			if nShards > 0 then
+			if nShards > 0 and self.SignOutTable[ "player_list" ][ nAttackerPlayerID ] ~= nil then
 				self.SignOutTable[ "player_list" ][ nAttackerPlayerID ][ "shard_kills" ] = self.SignOutTable[ "player_list" ][ nAttackerPlayerID ][ "shard_kills" ] + 1
 			end
 			printf( "Real hero %s died! Attacker was %s and had %d shards.", hKilledHero:GetUnitName(), hAttacker:GetUnitName(), nShards )
@@ -844,9 +844,11 @@ function CNemestice:OnGameFinished( event )
 			nMinPoints = nBPoints
 		end
 
-		self.EventMetaData[nPlayerID].battle_points = nBPoints
-		self.EventMetaData[nPlayerID].bp_remaining = v.bp_remaining
-		self.EventMetaData[nPlayerID].bp_total_cap = v.bp_total_cap
+		if self.EventMetaData[nPlayerID] ~= nil then
+			self.EventMetaData[nPlayerID].battle_points = nBPoints
+			self.EventMetaData[nPlayerID].bp_remaining = v.bp_remaining
+			self.EventMetaData[nPlayerID].bp_total_cap = v.bp_total_cap
+		end
 	end
 	local nPointAverage = 0
 	if nPlayers > 0 then

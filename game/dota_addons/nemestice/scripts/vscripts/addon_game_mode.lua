@@ -384,7 +384,9 @@ function CNemestice:TowerDestroyed( hOldTower, hAttacker, nNewTeam )
 	
 	if hAttacker:IsOwnedByAnyPlayer() then
 		local nAttackerPlayerID = hAttacker:GetPlayerOwnerID()
-		self.SignOutTable[ "player_list" ][ nAttackerPlayerID ][ "tower_kills" ] = self.SignOutTable[ "player_list" ][ nAttackerPlayerID ][ "tower_kills" ] + 1
+		if self.SignOutTable[ "player_list" ][ nAttackerPlayerID ] ~= nil then
+			self.SignOutTable[ "player_list" ][ nAttackerPlayerID ][ "tower_kills" ] = self.SignOutTable[ "player_list" ][ nAttackerPlayerID ][ "tower_kills" ] + 1
+		end
 	end
 
 	if self.bFirstTowerKilled == false then
@@ -1210,7 +1212,7 @@ function CNemestice:EndPrepTime()
 			{
 				steam_id = PlayerResource:GetSteamID( nPlayerID ),
 				hero_id = PlayerResource:GetSelectedHeroID( nPlayerID ),
-				team_number = PlayerResource:GetPlayer( nPlayerID ):GetAssignedHero():GetTeamNumber(),
+				team_number = PlayerResource:GetTeam( nPlayerID ),
 				battle_points = 0,
 				shards_gathered = 0,
 				shard_kills = 0,
@@ -1725,10 +1727,12 @@ function CNemestice:ChangeMeteorEnergy( nPlayerID, nChange, szReason, hNPC, flDu
 					--end
 
 					-- Fresh shards have no team number.
-					if nTeamNumber == nil then
-						self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_channeled" ] = self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_channeled" ] + nChange
-					else
-						self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_gathered" ] = self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_gathered" ] + nChange
+					if self.SignOutTable[ "player_list" ][ nPlayerID ] ~= nil then
+						if nTeamNumber == nil then
+							self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_channeled" ] = self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_channeled" ] + nChange
+						else
+							self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_gathered" ] = self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_gathered" ] + nChange
+						end
 					end
 
 					local flTrueDuration = flDuration
@@ -1746,7 +1750,9 @@ function CNemestice:ChangeMeteorEnergy( nPlayerID, nChange, szReason, hNPC, flDu
 						end
 					end
 					if szReason == "death" then
-						self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_lost" ] = self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_lost" ] - nChange
+						if self.SignOutTable[ "player_list" ][ nPlayerID ] ~= nil then
+							self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_lost" ] = self.SignOutTable[ "player_list" ][ nPlayerID ][ "shards_lost" ] - nChange
+						end
 					end
 				end
 			end
@@ -2517,7 +2523,7 @@ end
 --------------------------------------------------------------------------------
 
 function CNemestice:GrantPlayerBattlePoints( nPlayerID, nBattlePoints, szReason, bDisplay, nOtherPlayerID )
-	if nBattlePoints < 1 then
+	if nBattlePoints < 1 or self.SignOutTable[ "player_list" ][ nPlayerID ] == nil then
 		return
 	end
 	
