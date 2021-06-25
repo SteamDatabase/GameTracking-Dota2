@@ -159,9 +159,9 @@ function OnThink()
             var nSecondsRemaining = serverValues.TimePhaseEnds - Game.GetDOTATime( false, true );
             SetTimeValue( nSecondsRemaining );
 
-            if ( !Players.IsSpectator( Players.GetLocalPlayer() ) && !g_bMinimapIconsSet )
+            if ( !g_bMinimapIconsSet )
             {
-                var nLocalTeam = Players.GetTeam( Players.GetLocalPlayer() )
+                var nLocalTeam = Players.GetTeam( Players.GetLocalPlayer() ) === DOTATeam_t.DOTA_TEAM_BADGUYS ? DOTATeam_t.DOTA_TEAM_BADGUYS : DOTATeam_t.DOTA_TEAM_GOODGUYS; // Catches spectators and such
                 var buildingEntities = Entities.GetAllBuildingEntities();
                 for ( var i = 0; i < Object.keys( buildingEntities ).length; i++ )
                 {
