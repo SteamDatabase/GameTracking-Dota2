@@ -59,6 +59,8 @@ function CNemestice:InitGameMode()
 	self.EventMetaData["event_name"] = "nemestice"
 	self.SignOutTable = {}
 	self.SignOutTable[ "player_list" ] = {}
+	self.tGoldStats = {}
+	self.tMeteorStats = {}
 
 	self.m_hEventGameDetails = GetLobbyEventGameDetails()
 
@@ -1206,7 +1208,7 @@ function CNemestice:EndPrepTime()
 				meteor_energy_channeled = 0,
 				meteor_energy_lost = 0,
 			}
-			table.insert( self.EventMetaData, nPlayerID, EventPlayer )
+			self.EventMetaData[ nPlayerID ] = EventPlayer
 
 			local SignOutPlayer = 
 			{
@@ -1220,7 +1222,7 @@ function CNemestice:EndPrepTime()
 				tower_kills = 0,
 				shards_lost = 0,
 			}
-			table.insert( self.SignOutTable[ "player_list" ], nPlayerID, SignOutPlayer )
+			self.SignOutTable[ "player_list" ][ nPlayerID ] = SignOutPlayer
 		end
 	end
 	self.m_GameState = _G.NEMESTICE_GAMESTATE_IN_PROGRESS
