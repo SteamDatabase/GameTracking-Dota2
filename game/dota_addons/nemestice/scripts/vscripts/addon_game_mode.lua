@@ -1263,24 +1263,27 @@ end
 
 --------------------------------------------------------------------------------
 function CNemestice:CleanupDroppedItems()
-	for _, hItem in pairs( Entities:FindAllByClassname( "dota_item_drop" ) ) do
-		local szItemName = hItem:GetContainedItem():GetAbilityName()
-		if szItemName == "item_soulstuff" 
-				or szItemName == "item_soulstuff_dire" 
-				or szItemName == "item_mango" 
-				or szItemName == "item_enchanted_mango" 
-				or szItemName == "item_tombstone" 
-				or szItemName == "item_health_potion" 
-				or szItemName == "item_mana_potion"
-				or szItemName == "item_meteor_shard" then
-			if hItem:GetContainedItem().nViewer ~= nil and hItem:GetContainedItem().nTeamNumber ~= nil then
-				RemoveFOWViewer( hItem:GetContainedItem().nTeamNumber, hItem:GetContainedItem().nViewer )
+	for _, hItemPhysical in pairs( Entities:FindAllByClassname( "dota_item_drop" ) ) do
+		local hItem = hItemPhysical:GetContainedItem()
+		if hItem then
+			local szItemName = hItem:GetAbilityName()
+			if szItemName == "item_soulstuff" 
+					or szItemName == "item_soulstuff_dire" 
+					or szItemName == "item_mango" 
+					or szItemName == "item_enchanted_mango" 
+					or szItemName == "item_tombstone" 
+					or szItemName == "item_health_potion" 
+					or szItemName == "item_mana_potion"
+					or szItemName == "item_meteor_shard" then
+				if hItem.nViewer ~= nil and hItem.nTeamNumber ~= nil then
+					RemoveFOWViewer( hItem.nTeamNumber, hItem.nViewer )
+				end
+				UTIL_Remove( hItemPhysical )
 			end
-			UTIL_Remove( hItem )
 		end
 	end
-	for _, hItem in pairs( Entities:FindAllByClassname( "dota_item_rune" ) ) do
-		UTIL_Remove( hItem )
+	for _, hItemPhysical in pairs( Entities:FindAllByClassname( "dota_item_rune" ) ) do
+		UTIL_Remove( hItemPhysical )
 	end
 end
 
