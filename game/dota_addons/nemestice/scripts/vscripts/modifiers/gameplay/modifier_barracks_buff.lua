@@ -45,6 +45,7 @@ end
 function modifier_barracks_buff:OnRefresh( kv )
 	self.building_armor_bonus = kv.building_armor_bonus
 	self.building_hp_buff_pct = kv.building_hp_buff_pct
+	self.building_hp_bonus = kv.building_hp_bonus
 	self.building_dmg_buff_pct = kv.building_dmg_buff_pct
 	
 	if IsServer() == true then
@@ -95,7 +96,7 @@ end
 function modifier_barracks_buff:DeclareFunctions()
 	local funcs =
 	{
-		MODIFIER_PROPERTY_EXTRA_HEALTH_PERCENTAGE,
+		MODIFIER_PROPERTY_EXTRA_HEALTH_BONUS,
 		MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE,
 		MODIFIER_EVENT_ON_TAKEDAMAGE,
 		MODIFIER_PROPERTY_HEALTH_REGEN_PERCENTAGE,
@@ -136,9 +137,13 @@ end
 
 -----------------------------------------------------------------------------------------
 
-function modifier_barracks_buff:GetModifierExtraHealthPercentage( params )
+function modifier_barracks_buff:GetModifierExtraHealthBonus( params )
 	if self.building_hp_buff_pct == nil then return 0 end
-	return self.building_hp_buff_pct
+	if self.building_hp_bonus == nil then return 0 end
+
+	local fHealthBonus = ( self:GetParent():GetBaseMaxHealth() * ( self.building_hp_buff_pct / 100 ) ) + ( self.building_hp_bonus )
+
+	return fHealthBonus
 end
 
 --------------------------------------------------------------------------------

@@ -616,6 +616,9 @@ function CNemestice:OnEntityKilled( event )
 
 			-- Towers are not respawned once killed
 			self:TowerDestroyed( hKilledUnit, hAttacker, ( hAttacker ~= hKilledUnit and hAttacker:GetTeamNumber() ) or FlipTeamNumber( hKilledUnit:GetTeamNumber() ) )
+
+			-- update tower buffs after we're destroyed the tower
+			self:UpdateTowerBuffs()			
 		end
 	end
 end

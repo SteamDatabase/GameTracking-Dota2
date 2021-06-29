@@ -51,16 +51,24 @@ _G.NEMESTICE_SCOREBOARD_TOWER_ORDER =
 
 _G.NEMESTICE_BUILDING_HEALTH_BUFF_PCT =
 {
-	0, -- 0-3
-	38, -- 3-6
-	76, -- 6-9
-	114, -- 9-12
-	152, -- 12-15
-	190, -- 15-18
-	228, -- 18-21
-	266, -- 21-24
-	304, -- 24-27
-	342, -- 27+
+	0,   -- 0-3
+	22,  -- 3-6
+	43,  -- 6-9
+	65,  -- 9-12
+	87,  -- 12-15
+	108, -- 15-18
+	130, -- 18-21
+	152, -- 21-24
+	173, -- 24-27
+	195, -- 27+
+}
+
+_G.NEMESTICE_BUILDING_HEALTH_BONUS =
+{
+	1500,	-- 1 tower remaining
+	1000,	-- 2 towers remaining
+	500,	-- 3 towers remaining
+	0,		-- 4 towers remaining
 }
 
 _G.NEMESTICE_TOWER_DMG_BUFF_PCT = 

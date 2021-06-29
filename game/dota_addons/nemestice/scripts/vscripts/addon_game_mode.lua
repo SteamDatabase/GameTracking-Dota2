@@ -558,9 +558,19 @@ end
 --------------------------------------------------------------------------------
 function CNemestice:BuffTower( hBarracks )
 	local nRound = math.max( 1, self:GetRoundNumber() )
+
+	local nNumTowers = GameRules.Nemestice:GetTowersControlledBy( hBarracks:GetTeamNumber(), false )
+	local nHealthBonus = 0
+	if nNumTowers > 0 then
+		nHealthBonus = _G.NEMESTICE_BUILDING_HEALTH_BONUS[ nNumTowers ]
+	end
+
+	--print( '^^^ BUFF TOWER: Num Towers remainig = ' .. nNumTowers .. '. Health Bonus = ' .. nHealthBonus .. '. Health Pct = ' .. _G.NEMESTICE_BUILDING_HEALTH_BUFF_PCT[ nRound ] )
+
 	local kv = 
 	{
 		building_hp_buff_pct = _G.NEMESTICE_BUILDING_HEALTH_BUFF_PCT[ nRound ],
+		building_hp_bonus = nHealthBonus,
 		building_dmg_buff_pct = _G.NEMESTICE_TOWER_DMG_BUFF_PCT[ nRound ],
 		building_armor_bonus = _G.NEMESTICE_TOWER_ARMOR_BONUS[ nRound ],
 	}
