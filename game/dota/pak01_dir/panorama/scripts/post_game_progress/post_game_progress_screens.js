@@ -624,14 +624,15 @@ function AnimateSpring2021WeeklyProgressSubpanelAction( panel, ownerPanel, data,
 	panel.AddClass( 'Visible' );
 }
 
-function AnimateSpring2021WeeklyProgressIncreaseAction( panel, name, description, nProgressAmount, nStartAmount, nMaxAmount )
+function AnimateSpring2021WeeklyProgressIncreaseAction( panel, name, description, nStarsGranted, nProgressAmount, nStartAmount, nMaxAmount )
 {
-	this.panel = panel;
-	this.name = name;
-	this.description = description;
-	this.nProgressAmount = nProgressAmount;
-	this.nStartAmount = nStartAmount;
-	this.nMaxAmount = nMaxAmount;
+    this.panel = panel;
+    this.name = name;
+    this.description = description;
+    this.nStarsGranted = nStarsGranted;
+    this.nProgressAmount = nProgressAmount;
+    this.nStartAmount = nStartAmount;
+    this.nMaxAmount = nMaxAmount;
 }
 
 AnimateSpring2021WeeklyProgressIncreaseAction.prototype = new BaseAction();
@@ -640,26 +641,28 @@ AnimateSpring2021WeeklyProgressIncreaseAction.prototype.start = function ()
 {
 	this.seq = new RunParallelActions();
 
-	var duration = GetBPIncreaseAnimationDuration( this.nProgressAmount ) * 3.0;
-	var levelProgressBar = this.panel.FindChildInLayoutFile( 'ProgressBar' );
+    var duration = GetBPIncreaseAnimationDuration( this.nProgressAmount ) * 3.0;
+    var levelProgressBar = this.panel.FindChildInLayoutFile( 'ProgressBar' );
 
-	var minLevelBP = Math.min( this.nStartAmount, this.nMaxAmount);
-	var maxLevelBP = Math.min( this.nStartAmount + this.nProgressAmount, this.nMaxAmount );
+    var minProgressValue = Math.min( this.nStartAmount, this.nMaxAmount);
+    var maxProgressValue = Math.min( this.nStartAmount + this.nProgressAmount, this.nMaxAmount );
 
-	var self = this;
+    var self = this;
     this.seq.actions.push( new RunFunctionAction( function ()
     {
-        levelProgressBar.lowervalue = 0;
-        levelProgressBar.uppervalue = self.nMaxAmount;
+        levelProgressBar.lowervalue = self.panel.nInitialAmount;
+        levelProgressBar.uppervalue = maxProgressValue;
         levelProgressBar.max = self.nMaxAmount;
+        $.Msg("setting progress bar values "+self.nStartAmount+" "+self.nProgressAmount+" "+levelProgressBar.max);
         self.panel.SetDialogVariableInt( "progress_max_value", self.nMaxAmount );
         self.panel.SetDialogVariableLocString( "progress_name", self.name);
         self.panel.SetDialogVariable( "progress_description", self.description);
+
     } ) );
-	this.seq.actions.push( new AnimateDialogVariableIntAction( this.panel, 'progress_start_value', minLevelBP, maxLevelBP, duration ) );
-	this.seq.actions.push( new AnimateDialogVariableIntAction( this.panel, 'current_level_bp', minLevelBP, maxLevelBP, duration ) );
-	this.seq.actions.push( new AnimateProgressBarWithMiddleAction( levelProgressBar, minLevelBP, maxLevelBP, duration ) );
-	this.seq.actions.push( new PlaySoundForDurationAction( "XP.Count", duration ) );
+    this.seq.actions.push( new AnimateDialogVariableIntAction( this.panel, 'progress_start_value', minProgressValue, maxProgressValue, duration ) );
+    this.seq.actions.push( new AnimateDialogVariableIntAction( this.panel, 'current_level_bp', minProgressValue, maxProgressValue, duration ) );
+    this.seq.actions.push( new AnimateProgressBarWithMiddleAction( levelProgressBar, minProgressValue, maxProgressValue, duration ) );
+    this.seq.actions.push( new PlaySoundForDurationAction( "XP.Count", duration ) );
 
 	this.seq.start();
 }
@@ -669,7 +672,27 @@ AnimateSpring2021WeeklyProgressIncreaseAction.prototype.update = function ()
 }
 AnimateSpring2021WeeklyProgressIncreaseAction.prototype.finish = function ()
 {
-	this.seq.finish();
+    var maxProgressValue = Math.min( this.nStartAmount + this.nProgressAmount, this.nMaxAmount );
+
+    var nStarsGranted = this.nStarsGranted;
+    if( maxProgressValue == this.nMaxAmount )
+    {
+        ++nStarsGranted;
+    }
+
+    this.panel.SetHasClass( "StarsGranted1", nStarsGranted > 0 );
+    this.panel.SetHasClass( "StarsGranted2", nStarsGranted > 1 );
+    this.panel.SetHasClass( "StarsGranted3", nStarsGranted > 2 );
+
+    if(  nStarsGranted > this.panel.nStarsGranted )
+    { 
+        this.panel.AddClass( "StarsGrantedPulse"+nStarsGranted );
+        $.DispatchEvent('PlaySoundEffect', "WeeklyQuest.StarGranted");
+    }
+
+    this.panel.nStarsGranted = nStarsGranted;
+
+    this.seq.finish();
 }
 
 
@@ -718,12 +741,22 @@ function AnimateSpring2021WeeklyProgressLevels( panel, nStartValue, nProgress, l
 
             if ( nProgressToAnimateThisThreshold > 0 )
             {
+                var nStarsGranted = Math.max( 0, nNextThresholdIndex-1);
                 if ( bFirst )
                 {
-                    // initialize the name  the first time around or else it's {s:progress_name} until the animation plays
+                    // initialize values before the animation plays so we don't get blank dialog variables
+                    panel.SetDialogVariable( "progress_description", levelThreshold.description );
                     panel.SetDialogVariableLocString( "progress_name", levelThreshold.name );
-                }
 
+                    panel.nStarsGranted = nStarsGranted;
+                    panel.nInitialAmount = nStartValue;
+
+                    panel.SetHasClass( "StarsGranted1", nStarsGranted > 0 );
+                    panel.SetHasClass( "StarsGranted2", nStarsGranted > 1 );
+                    panel.SetHasClass( "StarsGranted3", nStarsGranted > 2 );
+                    bFirst = false;
+                }
+ 
                 // Build a set of sequences for levelling up to the threshold.
                 this.seq.actions.push(
                     new SkippableAction(
@@ -731,6 +764,7 @@ function AnimateSpring2021WeeklyProgressLevels( panel, nStartValue, nProgress, l
                             panel,
                             levelThreshold.name,
                             levelThreshold.description,
+                            nStarsGranted,
                             nProgressToAnimateThisThreshold,
                             nCurrentProgress,
                             nNextProgressThreshold
@@ -758,6 +792,7 @@ function AnimateSpring2021WeeklyProgressLevels( panel, nStartValue, nProgress, l
                             panel, 
 							levelThresholds[nNextThresholdIndex].name,
 							levelThresholds[nNextThresholdIndex].description,
+                            nNextThresholdIndex,
                             0, 
                             nCurrentProgress,
                             nNextProgressThreshold
@@ -789,7 +824,7 @@ AddNewWeeklyProgressPanel = function(seq, parentPanel, i, data)
     panel.SetDialogVariableInt( "progress_max_value", data.progress_start_value );
     panel.SetDialogVariable( "progress", data.progress);
 
-	seq.actions.push( new AnimateSpring2021WeeklyProgressLevels( panel,
+    seq.actions.push( new AnimateSpring2021WeeklyProgressLevels( panel,
 		data.progress_start_value,
 		data.progress,
         data.level_thresholds
@@ -1605,7 +1640,7 @@ AnimateSpring2021ScreenAction.prototype.start = function ()
 	this.seq.actions.push( new WaitAction( 0.2 ) );
 
 	this.seq.actions.push( new StopSkippingAheadAction() );
-	this.seq.actions.push( new SkippableAction( new WaitAction( 1.5 ) ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 2.5 ) ) );
 	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
 	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
 
@@ -2907,17 +2942,17 @@ function TestAnimateSpring2021()
 						level_thresholds : [
 							{
 								name: "#DOTA_Spring2021_Quest_Plays_Name",
-								description: 'Win <span class="ScoreTier1">1</span> / <span class="ScoreTier2">5</span> / <span class="ScoreTier3">18</span> Matches',
+								description: 'Win <span class="ScoreTierCurrent">3</span> Matches',
 								threshold: 3
                             },
 							{
 								name: "#DOTA_Spring2021_Quest_Plays_Name",
-								description: 'Win <span class="ScoreTier1">1</span> / <span class="ScoreTier2">5</span> / <span class="ScoreTier3">18</span> Matches',
+                                description: 'Win <span class="ScoreTierCurrent">10</span> Matches',
 								threshold: 10
                             },
 							{
 								name: "#DOTA_Spring2021_Quest_Plays_Name",
-								description: 'Win <span class="ScoreTier1">1</span> / <span class="ScoreTier2">5</span> / <span class="ScoreTier3">18</span> Matches',
+                                description: 'Win <span class="ScoreTierCurrent">30</span> Matches',
 								threshold: 30
                             },
 							]
@@ -2929,17 +2964,17 @@ function TestAnimateSpring2021()
 						level_thresholds : [
 							{
 								name: "#DOTA_Spring2021_Quest_Wins_Name",
-                                description:	'Win <span class="ScoreTier1">10</span> / <span class="ScoreTier2">50</span> / <span class="ScoreTier3">150</span> Matches',
+                                description: 'Win <span class="ScoreTierCurrent">10</span> Matches',
 								threshold: 10
                             },
 							{
 								name: "#DOTA_Spring2021_Quest_Wins_Name",
-                                description:	'Win <span class="ScoreTier1">10</span> / <span class="ScoreTier2">50</span> / <span class="ScoreTier3">150</span> Matches',
+                                description: 'Win <span class="ScoreTierCurrent">50</span> Matches',
 								threshold: 50
                             },
 							{
 								name: "#DOTA_Spring2021_Quest_Wins_Name",
-                                description:	'Win <span class="ScoreTier1">10</span> / <span class="ScoreTier2">50</span> / <span class="ScoreTier3">150</span> Matches',
+                                description: 'Win <span class="ScoreTierCurrent">150</span> Matches',
 								threshold: 150
                             },
 							]
@@ -2951,17 +2986,17 @@ function TestAnimateSpring2021()
 						level_thresholds : [
 							{
 								name: "#DOTA_Spring2021_Quest_Kills_Name",
-                                description:	'Win <span class="ScoreTier1">10</span> / <span class="ScoreTier2">50</span> / <span class="ScoreTier3">150</span> Matches',
+                                description: 'Win <span class="ScoreTierCurrent">10</span> Matches',
 								threshold: 10
                             },
 							{
 								name: "#DOTA_Spring2021_Quest_Kills_Name",
-                                description:	'Win <span class="ScoreTier1">10</span> / <span class="ScoreTier2">50</span> / <span class="ScoreTier3">150</span> Matches',
+                                description: 'Win <span class="ScoreTierCurrent">50</span> Matches',
 								threshold: 50
                             },
 							{
 								name: "#DOTA_Spring2021_Quest_Kills_Name",
-                                description:	'Win <span class="ScoreTier1">10</span> / <span class="ScoreTier2">50</span> / <span class="ScoreTier3">150</span> Matches',
+                                description: 'Win <span class="ScoreTierCurrent">150</span> Matches',
 								threshold: 150
                             },
 							]
