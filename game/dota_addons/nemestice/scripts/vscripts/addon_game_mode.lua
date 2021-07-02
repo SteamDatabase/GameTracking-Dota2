@@ -243,7 +243,15 @@ function CNemestice:GrantGoldAndXP( hHero, nGoldToGrant, nXPToGrant, szReason )
 		if hHero:IsAlive() == false then
 			nXPToGrant = math.ceil( nXPToGrant * NEMESTICE_REWARD_XP_MULT_DEAD )
 		end
-		hHero:AddExperience( nXPToGrant, DOTA_ModifyXP_CreepKill, false, true )	
+
+		local nXPReason = DOTA_ModifyXP_Outpost
+
+		if szReason == "lasthit" then
+			nXPReason = DOTA_ModifyXP_CreepKill
+		end
+
+		hHero:AddExperience( nXPToGrant, nXPReason, false, true )	
+
 		self.bLetXPThrough = nil
 	end
 	if nGoldToGrant > 0 then
