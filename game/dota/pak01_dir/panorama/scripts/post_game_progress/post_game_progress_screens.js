@@ -1861,6 +1861,8 @@ AnimateGenericArcanaScreenAction.prototype.start = function ()
 	var incrementScore = endScore - startScore;
 
 	panel.AddClass( heroName );
+
+    panel.SetDialogVariable('killeater_type_name', this.data.generic_arcana_progress.killeater_type_name );
 	
 	var heroModel = panel.FindChildTraverse( 'GenericArcanaModel' );
 	var unstyledHeroModel = panel.FindChildTraverse( 'GenericArcanaModelUnstyled' );
@@ -2006,7 +2008,7 @@ AnimateGenericArcanaScreenAction.prototype.start = function ()
 		panel.SetDialogVariable( "arcana_progress_bar", sProgressBar );		
 	} ) );
 
-	this.seq.actions.push( new SkippableAction( new WaitAction( 800 ) ) );
+	this.seq.actions.push( new SkippableAction( new WaitAction( 3 ) ) );
 	this.seq.actions.push( new StopSkippingAheadAction() );
 	this.seq.actions.push( new SwitchClassAction( panel, 'current_screen', '' ) );
 	this.seq.actions.push( new SkippableAction( new WaitAction( 0.5 ) ) );
