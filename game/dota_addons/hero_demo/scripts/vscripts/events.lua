@@ -217,7 +217,9 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 
 	local hPlayer = PlayerResource:GetPlayer( data.PlayerID )
 
-	DebugCreateUnit( hPlayer, self.m_sHeroToSpawn, self.m_nENEMIES_TEAM, false,
+	local sHeroToSpawn = Convars:GetStr( "dota_hero_demo_default_enemy" )
+
+	DebugCreateUnit( hPlayer, sHeroToSpawn, self.m_nENEMIES_TEAM, false,
 		function( hEnemy )
 			table.insert( self.m_tEnemiesList, hEnemy )
 			hEnemy:SetControllableByPlayer( self.m_nPlayerID, false )
@@ -237,8 +239,8 @@ end
 -- ButtonEvent: SelectHeroButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnSelectHeroButtonPressed( eventSourceIndex, data )
-	self.m_sHeroToSpawn	= DOTAGameManager:GetHeroUnitNameByID( tonumber( data.str ) );
-
+	local sHeroToSpawn = DOTAGameManager:GetHeroUnitNameByID( tonumber( data.str ) )
+	Convars:SetStr( "dota_hero_demo_default_enemy", sHeroToSpawn )
 	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
@@ -315,8 +317,73 @@ function CHeroDemo:OnRemoveSpawnedUnitsButtonPressed( eventSourceIndex )
 	--self:BroadcastMsg( "#RemoveSpawnedUnits_Msg" )
 end
 
+
 --------------------------------------------------------------------------------
--- GameEvent: OnChangeCosmeticsButtonPressed
+-- ButtonEvent: OnTowersEnabledButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnTowersEnabledButtonPressed( eventSourceIndex )
+
+	local nTowersEnabledEnabled = Convars:GetInt("dota_hero_demo_towers_enabled") 
+	
+	if nTowersEnabledEnabled == 0 then	
+		print("Enabling Towers")
+		Convars:SetInt("dota_hero_demo_towers_enabled", 1)
+		self:SetTowersEnabled( true )
+		self:BroadcastMsg( "#TowersEnabledOn_Msg" )
+	elseif nTowersEnabledEnabled == 1 then
+		print("Disabling Towers")
+		Convars:SetInt("dota_hero_demo_towers_enabled", 0)
+		self:SetTowersEnabled( false )
+		self:BroadcastMsg( "#TowersEnabledOff_Msg" )
+	end
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+function CHeroDemo:SetTowersEnabled( bEnabled )
+
+	print("SetTowersEnabled: " .. tostring(bEnabled) )
+	local nInclusiveTypeFlags = DOTA_UNIT_TARGET_FLAG_DEAD + DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE + DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD
+	local units = FindUnitsInRadius( DOTA_TEAM_GOODGUYS, Vector(0,0,0), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, nInclusiveTypeFlags, FIND_ANY_ORDER, false )
+	for _,hUnit in pairs( units ) do
+		if hUnit:IsTower() then
+			print(" enabling " .. hUnit:GetUnitName() .. " " .. tostring(bEnabled) )
+			if bEnabled then
+				hUnit:RemoveModifierByName( "modifier_generic_hidden" )
+			else
+				hUnit:AddNewModifier( hUnit, nil, "modifier_generic_hidden", {} )
+			end
+		end
+	end		
+
+end
+
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnCreepsButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnCreepsButtonPressed( eventSourceIndex )
+
+	local nSpawnCreepsEnabled = Convars:GetInt("dota_hero_demo_spawn_creeps_enabled") 
+	
+	if nSpawnCreepsEnabled == 0 then	
+		print("Enabling Creep Spawns")
+		SendToServerConsole( "dota_creeps_no_spawning 0" )
+		SendToServerConsole( "dota_spawn_creeps" )
+		Convars:SetInt("dota_hero_demo_spawn_creeps_enabled", 1)
+		self:BroadcastMsg( "#SpawnCreepsOn_Msg" )
+	elseif nSpawnCreepsEnabled == 1 then
+		print("Disabling Creep Spawns")
+		SendToServerConsole( "dota_creeps_no_spawning 1" )
+		Convars:SetInt("dota_hero_demo_spawn_creeps_enabled", 0)
+		self:BroadcastMsg( "#SpawnCreepsOff_Msg" )
+	end
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
+-- GameEvent: OnChangeCosmeticsButtonPresse
 --------------------------------------------------------------------------------
 function CHeroDemo:OnChangeCosmeticsButtonPressed( eventSourceIndex )
 	-- currently running the command directly in XML, should run it here if possible

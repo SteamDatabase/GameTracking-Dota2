@@ -88,13 +88,31 @@ function CHeroDemo:InitGameMode()
 	CustomGameEventManager:RegisterListener( "RemoveSpawnedUnitsButtonPressed", function(...) return self:OnRemoveSpawnedUnitsButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "ChangeHeroButtonPressed", function(...) return self:OnChangeHeroButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "ChangeCosmeticsButtonPressed", function(...) return self:OnChangeCosmeticsButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "SpawnCreepsButtonPressed", function(...) return self:OnSpawnCreepsButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "TowersEnabledButtonPressed", function(...) return self:OnTowersEnabledButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "PauseButtonPressed", function(...) return self:OnPauseButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "LeaveButtonPressed", function(...) return self:OnLeaveButtonPressed( ... ) end )
+
 
 	SendToServerConsole( "sv_cheats 1" )
 	SendToServerConsole( "dota_hero_god_mode 0" )
 	SendToServerConsole( "dota_ability_debug 0" )
-	SendToServerConsole( "dota_creeps_no_spawning 0" )
+	if Convars:GetInt("dota_hero_demo_spawn_creeps_enabled") == 1 then
+		print("Starting demo mode with creeps spawning")
+		SendToServerConsole( "dota_creeps_no_spawning 0" )
+	else 
+		print("Starting demo mode with no creeps spawning")
+		SendToServerConsole( "dota_creeps_no_spawning 1" )
+	end
+
+	if Convars:GetInt("dota_hero_demo_towers_enabled") == 1 then
+		print("Starting demo mode with towers")
+		self:SetTowersEnabled( true )
+	else 
+		print("Starting demo mode with no towers")
+		self:SetTowersEnabled( false )
+	end
+
 	SendToServerConsole( "dota_easybuy 1" )
 	--SendToServerConsole( "dota_bot_mode 1" )
 
@@ -115,8 +133,6 @@ function CHeroDemo:InitGameMode()
 
 	self.m_bFreeSpellsEnabled = false
 	self.m_bInvulnerabilityEnabled = false
-	self.m_bCreepsEnabled = true
-	self.m_sHeroToSpawn = "npc_dota_hero_axe" 
 
 	local hNeutralSpawn = Entities:FindByName( nil, "neutral_caster_spawn" )
 	if ( hNeutralSpawn == NIL ) then
@@ -124,7 +140,13 @@ function CHeroDemo:InitGameMode()
 	end
 
 	self._hNeutralCaster = CreateUnitByName( "npc_dota_neutral_caster", hNeutralSpawn:GetAbsOrigin(), false, nil, nil, NEUTRAL_TEAM )
-	
+
+	CustomNetTables:SetTableValue( "game_global", "ui_defaults", 
+		{ 
+			SpawnCreepsEnabled=Convars:GetInt("dota_hero_demo_spawn_creeps_enabled"),
+			TowersEnabled=Convars:GetInt("dota_hero_demo_towers_enabled") 
+		} 
+	)
 
 	PlayerResource:SetCustomTeamAssignment( self.m_nPlayerID, self.m_nALLIES_TEAM ) -- put PlayerID 0 on Radiant team (== team 2)
 end
@@ -134,6 +156,5 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:GameThink()
 	--print( "#self.m_tEnemiesList == " .. #self.m_tEnemiesList .. " | GameTime == " .. tostring( string.format( "%.0f", GameRules:GetGameTime() ) ) )
-
 	return 0.5
 end
