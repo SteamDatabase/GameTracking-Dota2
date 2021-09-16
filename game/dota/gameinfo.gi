@@ -240,5 +240,6 @@
 		SwapChainSampleableDepth 1
 		"VulkanUseSecondaryCommandBuffers"	"1" // Use secondary command buffers for more efficiency on tiled based renderers. All platforms to limit configurations.
 		"VulkanSteamShaderCache"			"1"
+		"OpenGLForceSM30"					"1"
 	}
 }

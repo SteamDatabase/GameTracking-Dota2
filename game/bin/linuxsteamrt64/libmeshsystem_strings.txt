@@ -45,6 +45,7 @@ $ORIGIN
 %s| Project: '%s' Binary: '%s'
 %s| SizeOf: %d
 %s| Virtual: %s; Abstract: %s; TrivialConstr: %s; TrivialDestr: %s
+'C
 ( def. "%s" )
 (None)
 *
@@ -120,7 +121,6 @@ $ORIGIN
 18CPlaceholderConVar
 18CRenderMeshManager
 19CBoneConstraintBase
-19CModelConfigElement
 19CSchemaRegistration
 2
 20CMutableRefCountBaseILb1E6CRefMTE
@@ -212,6 +212,8 @@ $ORIGIN
 25CKV3TransferDefaultHelperI34CModelConfigElement_SetRenderColorE
 25CKV3TransferDefaultHelperI36CModelConfigElement_SetMaterialGroupE
 25CKV3TransferDefaultHelperI40PermModelDataAnimatedMaterialAttribute_tE
+25CKV3TransferDefaultHelperI48CModelConfigElement_SetBodygroupOnAttachedModelsE
+25CKV3TransferDefaultHelperI52CModelConfigElement_SetMaterialGroupOnAttachedModelsE
 25CKV3TransferDefaultHelperI7CFlexOpE
 25CKV3TransferDefaultHelperI7CHitBoxE
 25CKV3TransferDefaultHelperI9CAnimFootE
@@ -240,10 +242,11 @@ $ORIGIN
 36CModelConfigElement_SetMaterialGroup
 37CTypesafeIntrospectedToKV3TypeManagerILy1818520950E15PermModelData_tE
 37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE
-3C
 4
 46CInputLayoutRegistration_g_hSkeletonMeshLayout
+48CModelConfigElement_SetBodygroupOnAttachedModels
 4C
+52CModelConfigElement_SetMaterialGroupOnAttachedModels
 6CModel
 6ConVar
 7IConVar
@@ -267,6 +270,7 @@ $ORIGIN
 >
 >nL>nL>nL>nLbodygroup_driven_morph_list
 ?
+@?
 @@
 @Aphysaggregatedata.cpp
 @B
@@ -309,6 +313,7 @@ Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&, char const*, .
 Assertion Failed in function %s():%s
 AssetBrowserSystem_001
 AssetPreviewSystem_001
+AssetRenameSystem_001
 AssetSystem001
 AssetSystemTest001
 AsyncProcessData: Cannot find data/vbib block in resource!
@@ -377,6 +382,7 @@ CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeRelativePath(char const*, char const*)
 CBufferString::MoveFrom(CBufferString&)
+CBufferString::Purge(int)
 CBufferString::RemoveAt(int, int)
 CBufferString::RemoveDotSlashes(char)
 CBufferString::RemoveFirstDir(CBufferString*)
@@ -384,7 +390,6 @@ CBufferString::Replace(char const*, char const*, bool)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
-CBufferString::SetUnusable()
 CBufferString::ShortenPath(bool)
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
@@ -429,7 +434,9 @@ CModelConfigElement_Command
 CModelConfigElement_RandomColor
 CModelConfigElement_RandomPick
 CModelConfigElement_SetBodygroup
+CModelConfigElement_SetBodygroupOnAttachedModels
 CModelConfigElement_SetMaterialGroup
+CModelConfigElement_SetMaterialGroupOnAttachedModels
 CModelConfigElement_SetRenderColor
 CModelConfigElement_UserPick
 CModelConfigList
@@ -620,7 +627,6 @@ FLAG_LEVEL_COLLISION
 FLAG_MASS
 FLAG_MESH
 FLAG_MODEL_DOC
-FLAG_MODEL_IS_RUNTIME_COMBINED
 FLAG_MODEL_PART_CHILD
 FLAG_NAV_GEN_HULL
 FLAG_NAV_GEN_NONE
@@ -719,6 +725,7 @@ FlattenedSerializersVersion001
 FlexOpCode_t
 Flexible;
 FontManager_001
+Force a reload of a vmdl resource
 FourCovMatrices3
 FourVectors2D
 GAME
@@ -745,7 +752,6 @@ HammerMapLoader001
 HangWatchdogInternal_BeginScope
 HangWatchdogInternal_EndScope
 Has Collision;
-HashString
 HelpSystem_001
 HookUpConfigValue
 HostStateMgr001
@@ -806,7 +812,7 @@ KeyValues::GetInt(char const*, int)
 KeyValues::GetName() const
 KeyValues::GetNextKey() const
 KeyValues::KeyValues(char const*)
-KeyValues::LoadFromFile(IBaseFileSystem*, char const*, char const*, bool (*)(char const*, void*), void*, char const*)
+KeyValues::LoadFromFile(IFileSystem*, char const*, char const*, bool (*)(char const*, void*), void*, char const*)
 KeyValues::operator=(KeyValues const&)
 KeyValues::~KeyValues()
 LOG_GENERAL
@@ -888,6 +894,8 @@ MaterialParam_t
 MaterialResourceData_t
 MaterialUtils_001
 MathLib_Init
+MemAlloc_AllocFunc
+MemAlloc_FreeFunc
 Mesh contains %d blend weights per vertex;  truncating to %d
 Mesh needs recompiling: '%s' (invalid version: %d)Browse to the corresponding model in asset browser, right click and select Full Recompile.
 MeshDrawPrimitiveFlags_t
@@ -913,10 +921,6 @@ MorphFlexControllerRemapType_t
 MorphLookupType_t
 MorphSetData_t
 MovementSettings
-MurmurHash2
-MurmurHash2LowerCase(char const*, int, unsigned int)
-MurmurHash2LowerCase(char const*, unsigned int)
-MurmurHash64
 N17CModelTypeManager23AsyncProcessDataResultsE
 N18CRenderMeshManager22AsyncProcessDataResultE
 N33CBaseIntrospectedToKV3TypeManager18AsyncProcessResultE
@@ -926,7 +930,6 @@ N37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE26IKV3Re
 N37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE28IKV3ResourceDeallocatorUtilsE
 NULL RenderMesh with valid handle
 NWay(
-Need valid position and texcoord when creating world space tangent lengths!
 Need valid position to calculate face centers!
 NetworkClientService_001
 NetworkMessagesVersion001
@@ -1009,6 +1012,7 @@ RenderSkeletonBone_t
 RenderSystemSurface001
 RenderUtils_001
 ReportClassError
+ResourceCompiler/MeshCompiler/UseMikkTSpace
 ResourceCompilerSystem001
 ResourceHandleUtils001
 ResourceManifestRegistry001
@@ -1035,6 +1039,7 @@ RnSoftbodySpring_t
 RnSphereDesc_t
 RnSphere_t
 RnTriangle_t
+RotationVector
 SSE and SSE2 are required.
 SaveKV3Text_NoHeader(KeyValues3 const*, CUtlString*, CUtlBuffer*)
 SaveKV3Text_NoHeader(KeyValues3 const*, CUtlString*, CUtlString*)
@@ -1106,7 +1111,6 @@ VApplication001
 VAsyncFileSystem2_001
 VAvi001
 VBAllocTracker001
-VBaseFileSystem011
 VBik001
 VConComm001
 VDebugService_001
@@ -1122,7 +1126,6 @@ VMDLLIB001
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
-VMeshError
 VModelError
 VP4003
 VPhysXAggregateData_t
@@ -1237,6 +1240,7 @@ __cxa_finalize
 __cxa_guard_acquire
 __cxa_guard_release
 __cxa_pure_virtual
+__finitef
 __gmon_start__
 __memcpy_chk
 __stack_chk_fail
@@ -1301,6 +1305,7 @@ embedded_meshes
 embedded_physics
 error in transition graph: %s to %s
 error opening required file %s
+error.vmesh
 exp( %s )
 eye_data
 eye_data_list
@@ -1356,6 +1361,7 @@ game
 generic
 health
 hidden
+highPitchOcclusion
 idle
 impactHardThreshold
 impacthard
@@ -1373,6 +1379,7 @@ libstdc++.so.6
 libtier0.so
 lightmap
 lightmapuv
+lowPitchOcclusion
 lowprecisionuv
 lowprecisionuv1
 m_AnimStrayRadii
@@ -1383,6 +1390,7 @@ m_AttachmentType
 m_AttributeName
 m_AxialEdges
 m_BodyGroupsHiddenInTools
+m_BodygroupOnOtherModels
 m_Bounds
 m_BoxRigids
 m_Capsule
@@ -1455,6 +1463,7 @@ m_LockToGoal
 m_LockToParent
 m_MassProperties
 m_MaterialGroupName
+m_MaterialGroupOnOtherModels
 m_Materials
 m_Mesh
 m_MorphLayers
@@ -1519,6 +1528,7 @@ m_audioSounds
 m_axes
 m_bAcceptParentMaterialDrivenDecals
 m_bAdditive
+m_bBoneMergeFlex
 m_bCanBatchWithDynamicShaderConstants
 m_bClamp
 m_bDrawLast
@@ -1642,6 +1652,7 @@ m_flFalloff
 m_flFingerScaleRatio
 m_flFingerWeight
 m_flFootLength
+m_flHighPitchOcclusion
 m_flInertiaScale
 m_flInternalPressure
 m_flK
@@ -1651,6 +1662,7 @@ m_flLinearDampingRatio
 m_flLinearFrequency
 m_flLocalForce
 m_flLocalRotation
+m_flLowPitchOcclusion
 m_flMass
 m_flMassInv
 m_flMax
@@ -1658,13 +1670,12 @@ m_flMaxAngle
 m_flMaxAngularRadius
 m_flMaxEyeDeflection
 m_flMaxForce
-m_flMaxMotionRadius
 m_flMaxPitch
 m_flMaxTorque
 m_flMaxYaw
+m_flMidPitchOcclusion
 m_flMin
 m_flMinAngle
-m_flMinMotionThickness
 m_flMinPitch
 m_flMinYaw
 m_flOffset
@@ -2060,12 +2071,12 @@ mesh_index
 meshinstance_imp.cpp
 meshsystem
 meshsystem.cpp
-meshsystem.cpp(153): GetErrorModel() called before error model exists!
+meshsystem.cpp(154): GetErrorModel() called before error model exists!
 meshutils.cpp
+midPitchOcclusion
 min
 min( %s, %s )
 min. %f
-model
 model.cpp
 model_default_preview_sequence_name
 model_dump_convert_info
@@ -2074,7 +2085,6 @@ modellib
 models/
 models/%s
 models/dev/error.vmdl
-models/dev/error.vmesh
 models\
 morph_block
 morph_name
@@ -2141,9 +2151,9 @@ pthread_mutexattr_settype
 qAdjust
 ragdoll
 raytrace.cpp
+reload_model
 remapping vertex %d[w%d] invalid: %d->%d >= %d
 remapping vertex %d[w%d] invalid: %d->? >= %d
-rendermeshmgr.cpp
 resource_name
 resourcesystem
 root

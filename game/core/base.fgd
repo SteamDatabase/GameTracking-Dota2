@@ -454,8 +454,6 @@
 		2: "Use Precise Gib Dir"
 	]
 
-	gibdir(angle) : "Precise Gib Direction" : "0 0 0" : "Specifies the direction to throw gibs when this breakable breaks. Be sure to select Use Precise Gib Dir in the Gibs Direction field!"
-
 	nodamageforces(boolean) : "Damaging it Doesn't Push It" : 0 : "Used to determine whether or not damage should cause the brush to move."
 
 	// Inputs
@@ -708,7 +706,6 @@
 	input FadeOut(integer) : "Fades the sound to silence over a specified number of seconds, with a range from 0 to 100 seconds."
 ]
 
-
 @PointClass base(Targetname, Parentname) tags( Sound ) iconsprite("editor/snd_event.vmat") = point_soundevent :
 	"Plays a sound event from a point. The point can be this entity or a specified entity's position."
 [
@@ -742,6 +739,22 @@
 [
 	box_mins(vector) : "Box Mins" : "-64 -64 -64"
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
+]
+
+@PointClass base(Targetname, Parentname) tags( Sound ) iconsprite("editor/snd_event.vmat") = snd_event_path_corner :
+	"Plays some number of soundevents (up to max) along segments of a path corner network"
+[
+	soundName(sound) [report]: "Sound Event Name" : "" : "Name of the sound event to play"
+	startOnSpawn(boolean) : "Start On Spawn" : "" : "Play the sound immediately upon spawning"
+
+	pathCornerEntity(target_destination) : "Path Corner Entity Name" : "" : "Name of the first path corner node in the chain"
+	soundeventCountMax(integer) : "Max Soundevents" : "5" : "The max number of soundevents the path corner chain will emit"
+	distanceMax(float) : "Max Distance" : "500" : "The distance beyond which a segment will not emit a soundevent"
+	dotProductMax(float) : "Max Dot Product" : "1.1" : "For excluding soundevents that are close to eachother"
+
+	//Inputs
+	input StartSound(void) : "Start the sound event. If an entity name is provided, the sound will originate from that entity"
+	input StopSound(void) : "Stop the sound event"
 ]
 
 @PointClass base(Targetname) tags( Sound ) iconsprite("editor/snd_event.vmat") = snd_stack_save :
@@ -849,17 +862,19 @@
 	output OnEnter(void) : "Fired when the player enters the outer distance."
 	output OnExit(void) : "Fired when the player exits the outer distance."
 ]
-
-@BaseClass = SndOpvarSetPointBaseAddition
+@BaseClass = SndOpvarSetPointBaseAddition1
 [ 
 	distanceMin(float) : "Minimum Distance" : "5.0" : "Minimum distance to map the OpVar value to"
 	distanceMax(float) : "Maximum Distance" : "25.0" : "Maximum distance to map the OpVar value to"
-	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity to check distance/occlusion from"
-	
+]
+
+@BaseClass = SndOpvarSetPointBaseAddition2
+[ 
+	sourceEntityName(target_destination) : "Source Entity Name" : "" : "Name of the entity to check distance/occlusion from"	
 	input SetSourceEntity(string) : "Set the name of the entity to check distance/occlusion from. This check will follow the entity as it moves."
 ]
 
-@PointClass base( Targetname, SndOpvarSetPointBaseAddition, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) = snd_opvar_set_point :
+@PointClass base( Targetname, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBaseAddition2, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) = snd_opvar_set_point :
 	"Sets an opvar value on a library stack"
 [
 	dynamicEntityName(target_destination) : "Dynamic Entity Name" : "" : "Name of the dynamic prop_door_rotating_physics entity to check for dynamic factor calculation."
@@ -888,7 +903,12 @@
 [
 ]
 
-@PointClass base( Targetname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb
+@PointClass base( Targetname, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") = snd_opvar_set_path_corner:
+[
+	pathCornerEntityName(target_destination) : "Path Corner Starting Entity" : "" : "The name of the entity that is at the start of the path"
+]
+
+@PointClass base( Targetname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb:
 [
 	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
 	operatorName(string) : "Operator Name" : "" : "The name of the operator the OpVar is in"
@@ -992,7 +1012,7 @@
 	"An entity to control & draw a sun effect in the sky."
 [
 	 effect_name(particlesystem) [report] : "Particle Sun flare" : "particles/environment/env_sun_clear.vpcf"
-	 effect_namess(particlesystem) [report] : "Sceenspace effect (addition)" : "" : "particles/environment/env_sun_screenspace_flare.vpcf"
+	 effect_namess(particlesystem) [report] : "Sceenspace effect (addition)" : "" : ""
 	 full_luminositycolorvalue(boolean) : "Remap to Max Luminosity" : 1 : "Regardless of color Value set to max luminocity. This is mainly for additive things like the sun"
 	 colortint(color255) : "Sun Color (R G B)" : "100 80 80"
 	 scale(float) : "Size" : "4.0" : "Increased control on scaling the sun in the particle system. This read into control point 17 which should drive the system."
@@ -2627,7 +2647,7 @@
 [
 ]
 
-@PointClass tags( Info ) base(Targetname, Parentname) editormodel("models/editor/info_target") iconsprite( "editor/icon_empty.vmat" ) = info_target : 
+@PointClass tags( Info ) base(Targetname, Parentname) editormodel("models/editor/info_target", nobounds ) = info_target : 
 	"An entity that does nothing. Very useful as a positioning entity for other entities to refer to (i.e. the endpoint of an env_beam)"
 [
 	spawnflags( Flags ) =
@@ -2906,11 +2926,10 @@
 	]
 ]
 
-@SolidClass base(Targetname, Parentname, RenderFields) drawangles( movedir, movedir_islocal ) = func_movelinear :
+@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local( movedir ) = func_movelinear :
 	"A brush entity that moves linearly along a given distance, in a given direction."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the brushes will move, when told to."
-	movedir_islocal(boolean) : "Move Direction is Expressed in Local Space" : "1" : "If checked, the movement direction angle is in local space and should be rotated by the entity's angles after spawning."
 	spawnflags(flags) =
 	[
 		8 : "Not Solid" : 0
@@ -3121,7 +3140,6 @@
 @BaseClass base(Targetname, Parentname, RenderFields,DamageFilter, Button) = BaseFuncButton
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "Specifies the direction of motion to move when the button is used."
-	movedir_islocal(boolean) : "Move Direction is Expressed in Local Space" : "1" : "If checked, the movement direction angle is in local space and should be rotated by the entity's angles after spawning."
 	speed(integer) : "Speed" : 5 : "The speed that the button moves, in inches per second."
 	glow(target_destination) : "Glow Entity" : : "The name of an entity that will get the +use glow for this button."
 	wait(integer) : "Delay Before Reset (-1 stay)" : 3 : "Amount of time, in seconds, after the button has been pressed before it returns to the starting position. Once it has returned, it can be used again. If the value is set to -1, the button never returns."
@@ -3131,7 +3149,7 @@
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 ]
 
-@SolidClass base(BaseFuncButton) drawangles( movedir, movedir_islocal ) = func_button : 
+@SolidClass base(BaseFuncButton) drawangles_local( movedir ) = func_button : 
 	"A brush entity that's designed to be used for a player-useable button. When used by the player, it moves to a pressed position."
 [
 	lip(integer) : "Lip" : 0 : "The amount, in inches, of the button to leave sticking out of the wall it recedes into when pressed. Negative values make the button recede even further into the wall."
@@ -3151,7 +3169,7 @@
 	]
 ]
 
-@SolidClass base(BaseFuncButton) drawangles( movedir, movedir_islocal ) = func_physical_button : 
+@SolidClass base(BaseFuncButton) drawangles_local( movedir ) = func_physical_button : 
 	"A brush entity that's designed to be used for a rotating player-useable button. When used by the player, it rotates to a pressed position."
 [
 	spawnflags(flags) =
@@ -3324,11 +3342,10 @@
 	input SetSpeed(float) : "Set the door speed."
 ]
 
-@SolidClass base(Door) drawangles( movedir, movedir_islocal ) = func_door : 
+@SolidClass base(Door) drawangles_local( movedir ) = func_door : 
 	"A brush entity for use as a player-useable door."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the door will move, when it opens."
-	movedir_islocal(boolean) : "Move Direction is Expressed in Local Space" : "1" : "If checked, the movement direction angle is in local space and should be rotated by the entity's angles after spawning."
 
 	filtername(filterclass) : "Block Filter Name" : : "Filter to use to determine entities that block the door. ( Half-Life: Source port only )"
 ]
@@ -4445,12 +4462,12 @@
 		16 : "ForceSpawn: Only if the player isn't looking" : 0
 	]
 
-	EntityTemplate(target_destination) : "Point_template To Spawn" : "" : "Name of the point_template to spawn here."
+	EntityTemplate(target_destination) : "Point_template To Spawn" : "" : "Name of the point_template to spawn here. If there is an offset between the point_template and its spawned entities in hammer, that offset will be maintained when spawning happens relative to the env_entity_maker."
 
 	PostSpawnSpeed(float) : "PostSpawn Movement Speed" : "0" : "If specified, all the entities created in the template will move this fast in the specified PostSpawn Movement Direction."
-	PostSpawnDirection(angle) : "PostSpawn Movement Direction" : "0 0 0" : "If a PostSpawn Movement Speed is specified, all the entities created in the template will move in this direction."
+	PostSpawnDirection(angle) : "PostSpawn Movement Direction" : "0 0 0" : "If a PostSpawn Movement Speed is specified, this angle will be added to the movement direction all the entities created by the template."
 	PostSpawnDirectionVariance(float) : "PostSpawn Direction Variance" : "0.15" : "This variance is applied to the PostSpawn Movement Direction for each spawned entity in the template. Use it to apply some randomness to the directions."
-	PostSpawnInheritAngles(boolean) : "PostSpawn Inherit Angles" : 0 : "If in hierarchy, is spawn direction in world space, or object local space of parent"
+	PostSpawnInheritAngles(boolean) : "PostSpawn Inherit Angles" : 0 : "If checked, uses the parent's forward vector as the spawn direction. Otherwise uses the entity maker's forward."
 
 	// Inputs
 	input ForceSpawn(void)				: "Spawn an instance of the template at this origin and angle."
@@ -5727,16 +5744,6 @@
 		1: "Explosive"
 	]
 
-	CollisionGroupOverride(choices) [ group="Misc" ] : "Collision Group Override" : -1 =
-	[
-		-1: "UNUSED"
-		0: "COLLISION_GROUP_ALWAYS"
-		1: "COLLISION_GROUP_NONPHYSICAL"
-		4: "COLLISION_GROUP_DEFAULT"
-		5: "COLLISION_GROUP_DEBRIS"
-		14: "COLLISION_GROUP_WEAPON"
-	]
-
 	SilentToZombies(boolean) : "Silent To Zombies" : 0 : "Should this prop generate sounds that blind zombies can hear."
 
 	// Inputs
@@ -6366,11 +6373,10 @@
 	output OnEndLook(void) : "Fired when the player was looking and unlooked while still touching."
 ]
 
-@SolidClass base(Trigger) drawangles( pushdir, pushdir_islocal )= trigger_push : 
+@SolidClass base(Trigger) drawangles( pushdir )= trigger_push : 
 	"A trigger volume that pushes entities that touch it."
 [
 	pushdir(angle) : "Push Direction (Pitch Yaw Roll)" : "0 0 0" : "Angles indicating the direction to push touched entities."
-	pushdir_islocal(boolean) : "Push direction is expressed in local space" : "0": "If checked, the push direction angle is in local space and will be rotated by the entity's angles before being applied."
 
 	spawnflags(flags) = 
 	[ 

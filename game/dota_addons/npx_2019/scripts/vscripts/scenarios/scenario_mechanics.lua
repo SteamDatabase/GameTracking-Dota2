@@ -87,6 +87,8 @@ function CDotaNPXScenario_Mechanics:SetupScenario()
 	Tutorial:SetTutorialConvar( "dota_disable_bot_lane", "1" )
 	Tutorial:EnableCreepAggroViz( true )
 
+	self:BlockPlayerLane( false )
+
 	self.hScenario.bLetXPThrough = false -- Disallow Experience Gain
 
 	self.nTaskListener = ListenToGameEvent( "trigger_start_touch", Dynamic_Wrap( CDotaNPXScenario_Mechanics, "OnTriggerStartTouch" ), self )
@@ -613,6 +615,20 @@ function CDotaNPXScenario_Mechanics:BlockPlayerMid( boolean )
 	local hMidBlockers = Entities:FindAllByClassname( "tutorial_npc_blocker" )
 	for _,hBlocker in pairs ( hMidBlockers ) do
 		if string.find( hBlocker:GetName(), "radiant_mid_blocker_start" ) or string.find( hBlocker:GetName(), "radiant_mid_blocker_end" ) then
+			hBlocker:SetEnabled( boolean )
+		end
+	end
+end
+
+----------------------------------------------------------------------------
+
+function CDotaNPXScenario_Mechanics:BlockPlayerLane( boolean )
+	local hStartBlockers = Entities:FindAllByClassname( "tutorial_npc_blocker" )
+	for _,hBlocker in pairs ( hStartBlockers ) do
+		if string.find( hBlocker:GetName(), "radiant_mid_t1_blocker_1_start" ) or string.find( hBlocker:GetName(), "radiant_mid_t1_blocker_1_end" ) or
+		string.find( hBlocker:GetName(), "radiant_mid_t1_blocker_2_start" ) or string.find( hBlocker:GetName(), "radiant_mid_t1_blocker_2_end" ) or
+		string.find( hBlocker:GetName(), "radiant_mid_t1_blocker_3_start" ) or string.find( hBlocker:GetName(), "radiant_mid_t1_blocker_3_end" ) or
+		string.find( hBlocker:GetName(), "radiant_mid_t1_blocker_4_start" ) or string.find( hBlocker:GetName(), "radiant_mid_t1_blocker_4_end" ) then
 			hBlocker:SetEnabled( boolean )
 		end
 	end

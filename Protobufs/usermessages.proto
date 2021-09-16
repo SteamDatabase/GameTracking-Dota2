@@ -45,6 +45,7 @@ enum EBaseUserMessages {
 	UM_AnimGraphUpdate = 149;
 	UM_HapticsManagerPulse = 150;
 	UM_HapticsManagerEffect = 151;
+	UM_CommandQueueState = 152;
 	UM_MAX_BASE = 200;
 }
 
@@ -89,6 +90,7 @@ enum PARTICLE_MESSAGE {
 	GAME_PARTICLE_MANAGER_EVENT_SET_TEXTURE_ATTRIBUTE = 20;
 	GAME_PARTICLE_MANAGER_EVENT_SET_SCENE_OBJECT_GENERIC_FLAG = 21;
 	GAME_PARTICLE_MANAGER_EVENT_SET_SCENE_OBJECT_TINT_AND_DESAT = 22;
+	GAME_PARTICLE_MANAGER_EVENT_DESTROY_NAMED = 23;
 }
 
 enum EHapticPulseType {
@@ -358,6 +360,7 @@ message CUserMsg_ParticleManager {
 		optional int32 entity_handle_for_modifiers = 4;
 		optional bool apply_voice_ban_rules = 5;
 		optional int32 team_behavior = 6;
+		optional string control_point_configuration = 7;
 	}
 
 	message DestroyParticle {
@@ -367,6 +370,13 @@ message CUserMsg_ParticleManager {
 	message DestroyParticleInvolving {
 		optional bool destroy_immediately = 1;
 		optional int32 entity_handle = 3;
+	}
+
+	message DestroyParticleNamed {
+		optional fixed64 particle_name_index = 1;
+		optional int32 entity_handle = 2;
+		optional bool destroy_immediately = 3;
+		optional bool play_endcap = 4;
 	}
 
 	message UpdateParticle {
@@ -488,6 +498,7 @@ message CUserMsg_ParticleManager {
 	optional .CUserMsg_ParticleManager.SetTextureAttribute set_texture_attribute = 23;
 	optional .CUserMsg_ParticleManager.SetSceneObjectGenericFlag set_scene_object_generic_flag = 24;
 	optional .CUserMsg_ParticleManager.SetSceneObjectTintAndDesat set_scene_object_tint_and_desat = 25;
+	optional .CUserMsg_ParticleManager.DestroyParticleNamed destroy_particle_named = 26;
 
 	extensions 100 to 201;
 }
@@ -517,4 +528,16 @@ message CUserMessageHapticsManagerEffect {
 message CUserMessageAnimStateGraphState {
 	optional int32 entity_index = 1;
 	optional bytes data = 2;
+}
+
+message CUserMessageCommandQueueState {
+	message command_queue_info_t {
+		optional uint32 commands_queued = 1;
+		optional uint32 command_queue_desired_size = 2;
+		optional uint32 starved_command_ticks = 3;
+		optional int32 time_dilation_percent = 4;
+	}
+
+	optional int32 player_entity_index = 1;
+	optional .CUserMessageCommandQueueState.command_queue_info_t command_queue_info = 2;
 }

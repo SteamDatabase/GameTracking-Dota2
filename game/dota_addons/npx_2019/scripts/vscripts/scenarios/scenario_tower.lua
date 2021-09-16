@@ -92,50 +92,9 @@ end
 
 --------------------------------------------------------------------
 
-function CDotaNPXScenario_Tower:SpawnCreepWaves()
-	print( "Spawning Demo Creep Waves" )
-	local hRadiantMeleeSpawner = Entities:FindByName( nil, "radiant_melee_spawner_good" )
-	local hRadiantRangeSpawner = Entities:FindByName( nil, "radiant_range_spawner_good" )
-	local hRadiantCreepPath = Entities:FindByName( nil, "radiant_creep_path1" )
-	local hDireMeleeSpawner = Entities:FindByName( nil, "dire_melee_spawner_good" )
-	local hDireRangeSpawner = Entities:FindByName( nil, "dire_range_spawner_good" )
-	local hDireCreepPath = Entities:FindByName( nil, "dire_creep_path1" )
-
-	for i = 1, 3 do
-	    local radiantMelee = CreateUnitByName( "npc_dota_creep_goodguys_melee", hRadiantMeleeSpawner:GetAbsOrigin() + RandomVector( RandomFloat( 0, 200 ) ), true, nil, nil, DOTA_TEAM_GOODGUYS )
-	    radiantMelee:SetInitialGoalEntity( hRadiantCreepPath )
-	end
-	local radiantRanged = CreateUnitByName( "npc_dota_creep_goodguys_ranged", hRadiantRangeSpawner:GetAbsOrigin(), true, nil, nil, DOTA_TEAM_GOODGUYS )
-	radiantRanged:SetInitialGoalEntity( hRadiantCreepPath )
-
-	for i = 1, 3 do
-	    local direMelee = CreateUnitByName( "npc_dota_creep_badguys_melee", hDireMeleeSpawner:GetAbsOrigin() + RandomVector( RandomFloat( 0, 200 ) ), true, nil, nil, DOTA_TEAM_BADGUYS )
-	    direMelee:SetInitialGoalEntity( hDireCreepPath )
-	end
-	local direRanged = CreateUnitByName( "npc_dota_creep_badguys_ranged", hDireRangeSpawner:GetAbsOrigin(), true, nil, nil, DOTA_TEAM_BADGUYS )
-	direRanged:SetInitialGoalEntity( hDireCreepPath )
-end
-
---------------------------------------------------------------------
-
-function CDotaNPXScenario_Tower:RemoveCreepWaves()
-	local demoUnits = FindUnitsInRadius( DOTA_TEAM_GOODGUYS, self:GetPlayerHero():GetOrigin(), self:GetPlayerHero(), FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS, FIND_ANY_ORDER, false )
-	if #demoUnits > 0 then
-		for _,unit in pairs( demoUnits ) do
-			if unit:GetUnitName() == "npc_dota_creep_goodguys_melee" or unit:GetUnitName() == "npc_dota_creep_goodguys_ranged" or 
-				unit:GetUnitName() == "npc_dota_creep_badguys_melee" or unit:GetUnitName() == "npc_dota_creep_badguys_ranged" then
-				UTIL_Remove( unit )
-			end
-		end
-	else
-		print("No Demo units found")
-	end
-end
-
---------------------------------------------------------------------
-
 function CDotaNPXScenario_Tower:ShowIntro()
 	self:BlockPlayerStart( true )
+	self:SpawnCreepUnits()
 	self:ShowWizardTip( "scenario_tower_wizard_tip_intro", 10.0 )
 	local vIntroPos = self.hTowerLoc:GetAbsOrigin()
 	SendToConsole( "dota_camera_lerp_position " .. vIntroPos.x .. " " .. vIntroPos.y .. " " .. 2 )
@@ -152,6 +111,7 @@ function CDotaNPXScenario_Tower:SetupStage1()
 	SendToConsole( "+dota_camera_center_on_hero" )
 	SendToConsole( "-dota_camera_center_on_hero" )
 	self:BlockPlayerStart( false )
+	self:RemoveCreepWaves()
 	self:SetupStage1Tasks()
 	self.nCheckpoint = 1
 end
@@ -353,6 +313,62 @@ function CDotaNPXScenario_Tower:OnEntityKilled( hEnt )
 		if self.bScenarioCompleted == false then
 			self:OnScenarioComplete( false, "task_fail_player_hero_death_fail" )
 		end
+	end
+end
+
+--------------------------------------------------------------------
+
+function CDotaNPXScenario_Tower:SpawnCreepUnits()
+	print( "Spawning Demo Creeps" )
+	local hRadiantMeleeSpawner = Entities:FindByName( nil, "radiant_melee_spawner_good" )
+	local hRadiantRangeSpawner = Entities:FindByName( nil, "radiant_range_spawner_good" )
+	local hRadiantCreepPath = Entities:FindByName( nil, "radiant_creep_path1" )
+
+	local radiantMelee = CreateUnitByName( "npc_dota_creep_goodguys_melee", hRadiantMeleeSpawner:GetAbsOrigin() + RandomVector( RandomFloat( 0, 200 ) ), true, nil, nil, DOTA_TEAM_GOODGUYS )
+	radiantMelee:SetInitialGoalEntity( hRadiantCreepPath )
+	local radiantRanged = CreateUnitByName( "npc_dota_creep_goodguys_ranged", hRadiantRangeSpawner:GetAbsOrigin(), true, nil, nil, DOTA_TEAM_GOODGUYS )
+	radiantRanged:SetInitialGoalEntity( hRadiantCreepPath )
+end
+
+--------------------------------------------------------------------
+
+function CDotaNPXScenario_Tower:SpawnCreepWaves()
+	print( "Spawning Creep Waves" )
+	local hRadiantMeleeSpawner = Entities:FindByName( nil, "radiant_melee_spawner_good" )
+	local hRadiantRangeSpawner = Entities:FindByName( nil, "radiant_range_spawner_good" )
+	local hRadiantCreepPath = Entities:FindByName( nil, "radiant_creep_path1" )
+	local hDireMeleeSpawner = Entities:FindByName( nil, "dire_melee_spawner_good" )
+	local hDireRangeSpawner = Entities:FindByName( nil, "dire_range_spawner_good" )
+	local hDireCreepPath = Entities:FindByName( nil, "dire_creep_path1" )
+
+	for i = 1, 3 do
+	    local radiantMelee = CreateUnitByName( "npc_dota_creep_goodguys_melee", hRadiantMeleeSpawner:GetAbsOrigin() + RandomVector( RandomFloat( 0, 200 ) ), true, nil, nil, DOTA_TEAM_GOODGUYS )
+	    radiantMelee:SetInitialGoalEntity( hRadiantCreepPath )
+	end
+	local radiantRanged = CreateUnitByName( "npc_dota_creep_goodguys_ranged", hRadiantRangeSpawner:GetAbsOrigin(), true, nil, nil, DOTA_TEAM_GOODGUYS )
+	radiantRanged:SetInitialGoalEntity( hRadiantCreepPath )
+
+	for i = 1, 3 do
+	    local direMelee = CreateUnitByName( "npc_dota_creep_badguys_melee", hDireMeleeSpawner:GetAbsOrigin() + RandomVector( RandomFloat( 0, 200 ) ), true, nil, nil, DOTA_TEAM_BADGUYS )
+	    direMelee:SetInitialGoalEntity( hDireCreepPath )
+	end
+	local direRanged = CreateUnitByName( "npc_dota_creep_badguys_ranged", hDireRangeSpawner:GetAbsOrigin(), true, nil, nil, DOTA_TEAM_BADGUYS )
+	direRanged:SetInitialGoalEntity( hDireCreepPath )
+end
+
+--------------------------------------------------------------------
+
+function CDotaNPXScenario_Tower:RemoveCreepWaves()
+	local demoUnits = FindUnitsInRadius( DOTA_TEAM_GOODGUYS, self:GetPlayerHero():GetOrigin(), self:GetPlayerHero(), FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS, FIND_ANY_ORDER, false )
+	if #demoUnits > 0 then
+		for _,unit in pairs( demoUnits ) do
+			if unit:GetUnitName() == "npc_dota_creep_goodguys_melee" or unit:GetUnitName() == "npc_dota_creep_goodguys_ranged" or 
+				unit:GetUnitName() == "npc_dota_creep_badguys_melee" or unit:GetUnitName() == "npc_dota_creep_badguys_ranged" then
+				UTIL_Remove( unit )
+			end
+		end
+	else
+		print("No Demo units found")
 	end
 end
 

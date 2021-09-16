@@ -1,7 +1,7 @@
 /* Called from C++ Code */
 function OnHeroPicked( teamIndex, playerIndex )
 {
-	$.Msg( "OnHeroPicked " + teamIndex.toString() + " " + playerIndex.toString() );
+	//$.Msg( "OnHeroPicked " + teamIndex.toString() + " " + playerIndex.toString() );
 
 	if ( teamIndex == 0 )
 	{	
@@ -28,7 +28,7 @@ function OnHeroPicked( teamIndex, playerIndex )
 /* Called from C++ Code */
 function OnHeroPickStart( teamIndex, playerIndex )
 {
-	$.Msg( "OnHeroPickStart " + teamIndex.toString() + " " + playerIndex.toString() );
+	//$.Msg( "OnHeroPickStart " + teamIndex.toString() + " " + playerIndex.toString() );
 		
 	if ( teamIndex == 0 )
 	{	
@@ -58,7 +58,7 @@ function OnHeroPickStart( teamIndex, playerIndex )
 /* Called from C++ Code */
 function OnHeroSpawned( teamIndex, playerIndex )
 {
-	$.Msg( "OnHeroSpawned " + teamIndex.toString() + " " + playerIndex.toString() );
+	//$.Msg( "OnHeroSpawned " + teamIndex.toString() + " " + playerIndex.toString() );
 
 	if ( teamIndex == 0 )
 	{
@@ -77,7 +77,7 @@ function OnHeroSpawned( teamIndex, playerIndex )
 /* Called from C++ Code */
 function OnHeroSpawnedUI( teamIndex, playerIndex )
 {
-	$.Msg( "OnHeroSpawnedUI " + teamIndex.toString() + " " + playerIndex.toString() );
+	//$.Msg( "OnHeroSpawnedUI " + teamIndex.toString() + " " + playerIndex.toString() );
 
 	if ( teamIndex == 0 )
 	{
@@ -92,7 +92,7 @@ function OnHeroSpawnedUI( teamIndex, playerIndex )
 /* Called from C++ Code */
 function OnHeroSpawnComplete(teamIndex, playerIndex)
 {
-	$.Msg("OnHeroSpawnComplete " + teamIndex.toString() + " " + playerIndex.toString());
+	//$.Msg("OnHeroSpawnComplete " + teamIndex.toString() + " " + playerIndex.toString());
 
 	if (teamIndex == 0)
 	{
@@ -112,12 +112,12 @@ function OnHeroSpawnComplete(teamIndex, playerIndex)
 
 function OnHeroBanStart( teamIndex, playerIndex )
 {
-	$.Msg( "OnHeroBanStart " + teamIndex.toString() + " " + playerIndex.toString() );
+	//$.Msg( "OnHeroBanStart " + teamIndex.toString() + " " + playerIndex.toString() );
 }
 
 function OnHeroBanned( teamIndex, playerIndex )
 {
-	$.Msg( "OnHeroBanned " + teamIndex.toString() + " " + playerIndex.toString() );
+	//$.Msg( "OnHeroBanned " + teamIndex.toString() + " " + playerIndex.toString() );
 }
 
 
@@ -125,5 +125,5 @@ function OnHeroBanned( teamIndex, playerIndex )
 /* Called from C++ Code */
 function OnDraftStateStarted( )
 {
-	$.Msg( "OnDraftStateStarted" );
+	//$.Msg( "OnDraftStateStarted" );
 }
