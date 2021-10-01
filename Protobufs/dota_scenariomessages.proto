@@ -1,25 +1,56 @@
 option optimize_for = SPEED;
 option cc_generic_services = false;
 
-message CScenario_SpiritBear {
+message CScenario_Position {
+	optional float x = 1;
+	optional float y = 2;
+}
+
+message CScenarioGame_RoshanSpawner {
+	optional int32 kill_count = 1;
+	optional int32 state = 2;
+	optional float cooldown = 3;
+}
+
+message CScenarioEnt_Courier {
+	optional int32 owner_id = 1;
+	optional float cooldown = 2 [default = -1];
+}
+
+message CScenarioEnt_NPC {
+	optional .CScenario_Position position = 1;
+	optional string unit_name = 2;
+	optional int32 team_number = 3;
+	optional float health_frac = 4 [default = 1];
+	optional string owning_camp = 10;
+	optional .CScenario_Position owning_camp_position = 11;
+	optional string invade_goal = 20;
+}
+
+message CScenarioEnt_SpiritBear {
+	optional int32 owner_id = 1;
+	optional int32 team_id = 2;
+}
+
+message CScenarioEnt_DroppedItem {
+	optional .CScenario_Position position = 1;
 }
 
 message CMsgDotaScenario {
-	message Position {
-		optional float x = 1;
-		optional float y = 2;
-	}
-
 	message EntityRef {
 		optional int32 player_id = 1 [default = -1];
 		optional int32 neutral_stash_id = 2 [default = -1];
 		optional int32 entity_idx = 3 [default = -1];
+		optional bool roshan = 4 [default = false];
+		optional string ability_name = 10;
 	}
 
 	message Game {
 		optional uint64 match_id = 1;
 		optional int32 game_mode = 2;
 		optional float clock_time = 3;
+		optional float internal_time = 4;
+		optional .CScenarioGame_RoshanSpawner roshan = 5;
 	}
 
 	message TeamNeutralItem {
@@ -30,6 +61,7 @@ message CMsgDotaScenario {
 	message Team {
 		optional int32 team_number = 1;
 		repeated .CMsgDotaScenario.TeamNeutralItem neutral_items = 2;
+		optional int32 roshan_kills = 3;
 	}
 
 	message HeroAbility {
@@ -49,6 +81,8 @@ message CMsgDotaScenario {
 		optional int32 last_hits = 9;
 		optional int32 denies = 10;
 		optional int32 kill_streak = 11;
+		optional int32 bkb_charges_used = 12;
+		optional int32 aeon_charges_used = 13;
 	}
 
 	message Stock {
@@ -65,11 +99,14 @@ message CMsgDotaScenario {
 		optional string entity_class = 2;
 		optional int32 team_id = 3;
 		optional bool is_destroyed = 4;
-		optional float health_frac = 5;
+		optional float health_frac = 5 [default = 1];
 	}
 
 	message Entity {
-		optional .CScenario_SpiritBear spirit_bear = 1;
+		optional .CScenarioEnt_Courier courier = 1;
+		optional .CScenarioEnt_NPC npc = 2;
+		optional .CScenarioEnt_SpiritBear spirit_bear = 3;
+		optional .CScenarioEnt_DroppedItem dropped_item = 4;
 	}
 
 	message Item {
@@ -84,6 +121,25 @@ message CMsgDotaScenario {
 		optional int32 stored_rune_type = 9 [default = -1];
 	}
 
+	message Modifier {
+		optional string name = 1;
+		optional .CMsgDotaScenario.EntityRef parent = 2;
+		optional .CMsgDotaScenario.EntityRef caster = 3;
+		optional .CMsgDotaScenario.EntityRef ability = 4;
+		optional float duration = 5 [default = -1];
+		optional float lifetime_remaining = 6 [default = 0];
+		optional int32 stack_count = 7;
+		optional bool create_even_if_existing = 8;
+		optional bool create_without_caster = 9;
+		optional bool create_without_ability = 10;
+		optional int32 moonshard_consumed_bonus = 100;
+		optional int32 moonshard_consumed_bonus_night_vision = 101;
+		optional int32 wardtruesight_range = 110;
+		optional int32 ultimate_scepter_consumed_alchemist_bonus_all_stats = 120;
+		optional int32 ultimate_scepter_consumed_alchemist_bonus_health = 121;
+		optional int32 ultimate_scepter_consumed_alchemist_bonus_mana = 122;
+	}
+
 	optional .CMsgDotaScenario.Game game = 1;
 	repeated .CMsgDotaScenario.Team teams = 2;
 	repeated .CMsgDotaScenario.Hero heroes = 3;
@@ -91,4 +147,5 @@ message CMsgDotaScenario {
 	repeated .CMsgDotaScenario.Building buildings = 5;
 	repeated .CMsgDotaScenario.Entity entities = 6;
 	repeated .CMsgDotaScenario.Item items = 7;
+	repeated .CMsgDotaScenario.Modifier modifiers = 8;
 }
