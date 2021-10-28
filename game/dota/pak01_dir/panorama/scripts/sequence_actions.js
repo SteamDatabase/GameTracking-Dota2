@@ -662,6 +662,69 @@ LerpAction.prototype.applyProgress = function ( progress )
 }
 
 // ----------------------------------------------------------------------------
+//   GuardedAction
+//
+//   Runs a contained action, except that it's immediately aborted if the
+//   passed-in guard function ever returns false -- not even finishing the
+//   contained action.
+//
+//   Alternatively you can keep a reference to the GuardedAction and just
+//   set guardFailed to true to trigger this abort.
+// ----------------------------------------------------------------------------
+function GuardedAction(action, guard = null)
+{
+	this.action = action;
+	this.guard = guard;
+	this.guardFailed = false;
+}
+GuardedAction.prototype = new BaseAction();
+GuardedAction.prototype.TriggerFailure = function()
+{
+	this.guardFailed = true;
+}
+GuardedAction.prototype.checkGuardFailure = function ()
+{
+	if ( this.guardFailed )
+	{
+		return true;
+	}
+
+	if ( this.guard && !this.guard() )
+	{
+		this.guardFailed = true;
+	}
+
+	return this.guardFailed;
+}
+GuardedAction.prototype.start = function ()
+{
+	if( this.checkGuardFailure() )
+	{
+		return;
+	}
+
+	this.action.start();
+}
+GuardedAction.prototype.update = function ()
+{
+    if( this.checkGuardFailure() )
+	{
+	    return false;
+	}
+
+	return this.action.update();
+}
+GuardedAction.prototype.finish = function ()
+{
+    if( this.checkGuardFailure() )
+	{
+	    return;
+	}
+
+	this.action.finish();
+}
+
+// ----------------------------------------------------------------------------
 
 // Helper function to asynchronously tick a single action until it's finished, then call finish on it.
 function UpdateSingleActionUntilFinished( action )
