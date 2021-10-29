@@ -6,8 +6,6 @@
 var animGuardAction;
 var debug_animation = false;
 var g_trackedSoundEvents = [];
-var g_bMarciDebutReadyToPlay = false;
-
 
 function PlayAndTrackSoundAction( soundName )
 {
@@ -58,16 +56,27 @@ var get_dof_value = function(
     }
 }
 
-
 /**
  * Main function linked to triggering the debut
  */
-var RunPageAnimation = function ()
-{
-    $.Msg("Marci RunPageAnimation Ready = " + g_bMarciDebutReadyToPlay )
 
-    if( !g_bMarciDebutReadyToPlay )
-        return;  
+var RunPageAnimation = function()
+{
+    $.Msg("Marci RunPageAnimation")
+
+    $('#MarciDebutMovie').RemoveClass("MovieFinished")    
+
+    var seq = new RunSequentialActions();
+    seq.actions.push( new WaitAction( 0.01 ) );
+    seq.actions.push( new RunFunctionAction( function() { $.DispatchEvent( 'DOTASetCurrentDashboardPageFullscreen', true ); } ) )
+    RunSingleAction( seq );
+
+    $('#MarciDebutMovie').Play();
+}
+
+var StartGameAnimation = function ()
+{
+    $.Msg("Marci StartGameAnimation")
 
     // Kill any existing animation/sound -- we're about to tear down the entire page and rebuild it
     StopAllTrackedSounds();
@@ -80,7 +89,7 @@ var RunPageAnimation = function ()
 
     var seq = new RunSequentialActions();
     seq.actions.push( new WaitAction( 0.01 ) );
-    seq.actions.push( new RunFunctionAction( function() { $.DispatchEvent( 'DOTASetCurrentDashboardPageFullscreen', true ); } ) )
+    //seq.actions.push( new RunFunctionAction( function() { $.DispatchEvent( 'DOTASetCurrentDashboardPageFullscreen', true ); } ) )
     seq.actions.push( new WaitForClassAction( $( '#ModelForeground' ), 'SceneLoaded' ) );
     seq.actions.push( new WaitForClassAction( $( '#ModelForeground_FG' ), 'SceneLoaded' ) );
 
@@ -188,10 +197,11 @@ var EndPageAnimation = function()
 
 var MovieFinished = function()
 {
-    $.Msg("Marci MovieFinished");
-    g_bMarciDebutReadyToPlay = true;
-    RunPageAnimation();
+    $.Msg("Marci MovieFinished")
+    $('#MarciDebutMovie').AddClass("MovieFinished")    
+    StartGameAnimation();
 }
 
-$.RegisterForUnhandledEvent( "DOTADebutMovieFinished", MovieFinished )
+$.RegisterForUnhandledEvent( "MoviePlayerPlaybackEnded", MovieFinished )
 
+//$.RegisterForUnhandledEvent( "VideoPlayerEnded", MovieFinished )
