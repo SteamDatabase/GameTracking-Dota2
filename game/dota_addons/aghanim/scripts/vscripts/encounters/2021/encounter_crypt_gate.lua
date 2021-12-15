@@ -293,7 +293,7 @@ function CMapEncounter_CryptGate:OnEncounterLoaded()
 
 	self.flTotalTimeThreshold = #self.GateTriggers * self.flTimeThreshold
 
-	self.nMaxSkeletons = 60
+	self.nMaxSkeletons = 45
 end
 
 --------------------------------------------------------------------------------
