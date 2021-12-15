@@ -262,11 +262,11 @@ function CBossPrimalBeast:OnHealthPercentThreshold( nPct )
 		self.bHeavyStepsEnabled = true
 		table.insert(self.AllowedPhases, self.PHASE_HEAVY_STEPS)
 
-		self.nPhaseIndex = 1
+		--self.nPhaseIndex = 1
 
 		--Reset counts for throws and onslaughts
-		--self.nCurrentThrowCount = 0
-		--self.nCurrentOnslaughtCount = 0
+		self.nCurrentThrowCount = self.MAX_THROWS
+		self.nCurrentOnslaughtCount = self.MAX_ONSLAUGHTS
 		--self:ChangePhase()
 	end
 
@@ -289,8 +289,8 @@ function CBossPrimalBeast:OnHealthPercentThreshold( nPct )
 
 		--self.nPhaseIndex = 1
 		--Reset counts for throws and onslaughts
-		--self.nCurrentThrowCount = 0
-		--self.nCurrentOnslaughtCount = 0
+		self.nCurrentThrowCount = self.MAX_THROWS
+		self.nCurrentOnslaughtCount = self.MAX_ONSLAUGHTS
 		--self:ChangePhase()
 	end
 --
@@ -306,7 +306,8 @@ function CBossPrimalBeast:OnHealthPercentThreshold( nPct )
 
 		table.insert(self.AllowedPhases, self.PHASE_TECTONIC_ATTACK)
 		--self.nPhaseIndex = 1
-
+		self.nCurrentThrowCount = self.MAX_THROWS
+		self.nCurrentOnslaughtCount = self.MAX_ONSLAUGHTS
 		--Reset counts for throws and onslaughts
 		--self.nCurrentThrowCount = 0
 		--self.nCurrentOnslaughtCount = 0
@@ -463,14 +464,13 @@ function CBossPrimalBeast:EvaluatePrimalRoarAbility()
 --	end
 	local hValidEnemies = {}
 	for _,enemy in pairs(hEnemies) do
-		local distanceToEnemy = (self.me:GetOrigin() - enemy:GetOrigin()):Length()
 		if enemy:IsAlive() and not enemy:IsIllusion() then
 			table.insert(hValidEnemies, enemy)
 		end 
 	end
 
 	if #hValidEnemies > 0 then
-		local hTargetEnemy = hValidEnemies[RandomInt( 1, #hEnemies )]
+		local hTargetEnemy = hValidEnemies[RandomInt( 1, #hValidEnemies  )]
 		self.hCurrentPummelTarget = hTargetEnemy
 		Order = 
 		{

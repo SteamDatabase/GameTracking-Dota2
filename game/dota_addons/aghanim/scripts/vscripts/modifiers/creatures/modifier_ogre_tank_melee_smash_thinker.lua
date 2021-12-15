@@ -9,11 +9,62 @@ function modifier_ogre_tank_melee_smash_thinker:OnCreated( kv )
 		self.stun_duration = self:GetAbility():GetSpecialValueFor( "stun_duration" )
 		self.damage = self:GetAbility():GetSpecialValueFor( "damage" )
 
+		self.bCancelled = false
+
 		self:StartIntervalThink( 0.01 )
 	end
 end
 
 -----------------------------------------------------------------------------
+
+function modifier_ogre_tank_melee_smash_thinker:DeclareFunctions()
+	local funcs = 
+	{
+		MODIFIER_EVENT_ON_ORDER,
+	}
+
+	return funcs
+end
+
+-----------------------------------------------------------------------
+
+function modifier_ogre_tank_melee_smash_thinker:OnOrder( params )
+	if IsServer() then
+		local hOrderedUnit = params.unit 
+		local nOrderType = params.order_type
+
+		if hOrderedUnit == nil or hOrderedUnit ~= self:GetCaster() then
+			return
+		end
+
+		if nOrderType ~= DOTA_UNIT_ORDER_MOVE_TO_TARGET and
+			nOrderType ~= DOTA_UNIT_ORDER_MOVE_TO_POSITION and
+			nOrderType ~= DOTA_UNIT_ORDER_MOVE_TO_DIRECTION and
+			nOrderType ~= DOTA_UNIT_ORDER_ATTACK_TARGET and
+			nOrderType ~= DOTA_UNIT_ORDER_ATTACK_MOVE and
+			nOrderType ~= DOTA_UNIT_ORDER_STOP and
+			nOrderType ~= DOTA_UNIT_ORDER_HOLD_POSITION and
+			nOrderType ~= DOTA_UNIT_ORDER_CAST_POSITION and
+			nOrderType ~= DOTA_UNIT_ORDER_CAST_NO_TARGET and
+			nOrderType ~= DOTA_UNIT_ORDER_CAST_POSITION then
+
+			return
+		end
+
+		if hOrderedUnit ~= nil and hOrderedUnit == self:GetCaster() then
+			printf( "caster isn't channeling, so set self.bCancelled to true" )
+			self.bCancelled = true
+			UTIL_Remove( self:GetParent() )
+
+			return
+		end
+	end
+
+	return 0
+end
+
+
+-----------------------------------------------------------------------
 
 function modifier_ogre_tank_melee_smash_thinker:OnIntervalThink()
 	if IsServer() then
@@ -29,7 +80,7 @@ end
 
 function modifier_ogre_tank_melee_smash_thinker:OnDestroy()
 	if IsServer() then
-		if self:GetCaster() ~= nil and self:GetCaster():IsAlive() then
+		if self:GetCaster() ~= nil and self:GetCaster():IsAlive() and self.bCancelled == false then
 			EmitSoundOnLocationWithCaster( self:GetParent():GetOrigin(), "OgreTank.GroundSmash", self:GetCaster() )
 			local nFXIndex = ParticleManager:CreateParticle( "particles/creatures/ogre/ogre_melee_smash.vpcf", PATTACH_WORLDORIGIN,  self:GetCaster()  )
 			ParticleManager:SetParticleControl( nFXIndex, 0, self:GetParent():GetOrigin() )
@@ -68,9 +119,9 @@ function modifier_ogre_tank_melee_smash_thinker:OnDestroy()
 					end
 				end
 			end
-		end
 
-		ScreenShake( self:GetParent():GetOrigin(), 10.0, 100.0, 0.5, 1300.0, 0, true )
+			ScreenShake( self:GetParent():GetOrigin(), 10.0, 100.0, 0.5, 1300.0, 0, true )
+		end
 
 		UTIL_Remove( self:GetParent() )
 	end
