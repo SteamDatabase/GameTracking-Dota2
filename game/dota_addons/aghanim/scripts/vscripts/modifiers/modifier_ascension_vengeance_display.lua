@@ -7,3 +7,9 @@ modifier_ascension_vengeance_display = class({})
 function modifier_ascension_vengeance_display:IsPurgable()
 	return false
 end
+
+-----------------------------------------------------------------------------------------
+
+function modifier_ascension_vengeance_display:GetTexture()
+	return "events/aghanim/interface/hazard_net"
+end

@@ -57,6 +57,29 @@ function BroadcastMessage( sMessage, fDuration )
 end
 
 ---------------------------------------------------------------------------
+-- Pretty-format a number value (to integer if integer, to places with
+--   trailing zeroes stripped if float)
+---------------------------------------------------------------------------
+function FormatValue( szValue, nPlaces, bStripZeroes )
+	if nPlaces == nil then
+		nPlaces = 2
+	end
+	if bStripZeroes == nil then
+		bStripZeroes = true
+	end
+	local flValue = tonumber( szValue )
+	local nValue = math.floor( flValue )
+	if nValue == flValue then
+		return string.format( "%d", nValue )
+	end
+	local szOutput = string.format( "%.2f", flValue )
+	while string.sub( szOutput, -1, -1) == '0' do
+		szOutput = string.sub(szOutput, 1, -2)
+	end
+	return szOutput
+end
+
+---------------------------------------------------------------------------
 -- GetRandomElement
 ---------------------------------------------------------------------------
 function GetRandomElement( table )
@@ -245,7 +268,7 @@ function TableContainsSubstring( t, substr )
 	return false
 end
 
----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 function ConvertToTime( value )
   	local value = tonumber( value )
@@ -314,6 +337,51 @@ function GetRandomPathablePositionWithin( vPos, nRadius, nMinRadius )
 
 		return vTryPos
 	end
+end
+
+--------------------------------------------------------------------------------
+
+function GetDOTAItemCost( szItemName ) 
+	local ItemKV = GetAbilityKeyValuesByName( szItemName )
+	if ItemKV == nil then
+		print ( "ItemKV kv is nil" )
+		return 0
+	end
+
+	return tonumber( ItemKV[ "ItemCost" ] )
+end
+
+--------------------------------------------------------------------------------
+
+function RandomizeAbilityCooldown( hAbility )
+	if hAbility then
+		local fCooldown = hAbility:GetCooldown( -1 )
+		hAbility:StartCooldown( RandomFloat( 0, fCooldown ) )
+	end
+end
+
+--------------------------------------------------------------------------------
+
+function Util_FindEnemiesAroundUnit( hUnit, fRadius, bIgnoreInvis )
+	local enemies = FindUnitsInRadius(
+		hUnit:GetTeamNumber(), hUnit:GetAbsOrigin(), nil, fRadius,
+		DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC,
+		( bIgnoreInvis and DOTA_UNIT_TARGET_FLAG_NO_INVIS ) or DOTA_UNIT_TARGET_FLAG_NONE, FIND_CLOSEST, false
+	)
+
+	return enemies
+end
+
+--------------------------------------------------------------------------------
+
+function Util_FindEnemiesAroundUnit_Farthest( hUnit, fRadius, bIgnoreInvis )
+	local enemies = FindUnitsInRadius(
+		hUnit:GetTeamNumber(), hUnit:GetAbsOrigin(), nil, fRadius,
+		DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC,
+		( bIgnoreInvis and DOTA_UNIT_TARGET_FLAG_NO_INVIS ) or DOTA_UNIT_TARGET_FLAG_NONE, FIND_FARTHEST, false
+	)
+
+	return enemies
 end
 
 --------------------------------------------------------------------------------

@@ -1,36 +1,76 @@
 local Slark =
 {
 	{
-		 description = "aghsfort_slark_dark_pact_cooldown",
-		 ability_name = "aghsfort_slark_dark_pact",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
+		description = "aghsfort_slark_dark_pact_mana_cost_cooldown",
+		ability_name = "aghsfort_slark_dark_pact",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
-	-- {
-	-- 	 description = "aghsfort_slark_essence_shift_cooldown",
-	-- 	 ability_name = "aghsfort_slark_essence_shift",
-	-- 	 special_value_name = "cooldown",
-	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	 value = 12,
-	-- },
+	{
+		description = "aghsfort_slark_pounce_mana_cost_cooldown",
+		ability_name = "aghsfort_slark_pounce",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
+	},
 
 	{
-		 description = "aghsfort_slark_pounce_cooldown",
-		 ability_name = "aghsfort_slark_pounce",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
-	},	
+		description = "aghsfort_slark_essence_shift_mana_cost_cooldown",
+		ability_name = "aghsfort_slark_essence_shift",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
+	},
 
 	{
-		 description = "aghsfort_slark_shadow_dance_cooldown",
-		 ability_name = "aghsfort_slark_shadow_dance",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
-	},	
+		description = "aghsfort_slark_shadow_dance_mana_cost_cooldown",
+		ability_name = "aghsfort_slark_shadow_dance",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
+	},
 
 	{
 		 description = "aghsfort_slark_dark_pact_total_damage",

@@ -50,7 +50,7 @@ function modifier_blessing_spell_life_steal:OnTakeDamage( params )
 
 		local flLifesteal = flDamage * self.spell_lifesteal_pct / 100
 		--print( 'modifier_blessing_spell_life_steal healing for ' .. flLifesteal )
-		Attacker:Heal( flLifesteal, self:GetAbility() )
+		Attacker:HealWithParams( flLifesteal, self:GetAbility(), false, true, nil, true )
 	end
 
 	return 0

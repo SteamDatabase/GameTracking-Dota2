@@ -75,7 +75,7 @@ function DoomThink()
 
 	thisEntity.flLastAggroSwitch = thisEntity.flLastAggroSwitch and thisEntity.flLastAggroSwitch or 0
 
-	local hTarget = AICore:ClosestEnemyHeroInRange( thisEntity, 9000 )
+	local hTarget = AICore:ClosestEnemyHeroInRange( thisEntity, 9000, false, true )
 
 	if (flNow - thisEntity.flLastAggroSwitch) > 2 then
 		AttackTargetOrder( thisEntity, hTarget )

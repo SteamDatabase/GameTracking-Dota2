@@ -44,7 +44,7 @@ function modifier_blessing_life_steal:OnAttacked( params )
 		if params.attacker ~= nil and params.attacker == self:GetParent() and params.target ~= nil then
 			local heal = ( params.damage * self.life_steal_pct / 100 )
 			--print( 'modifier_blessing_life_steal healing for ' .. heal )
-			self:GetParent():Heal( heal, nil )
+			self:GetParent():HealWithParams( heal, nil, true, true, nil, false )
 			ParticleManager:ReleaseParticleIndex( ParticleManager:CreateParticle( "particles/generic_gameplay/generic_lifesteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetParent() ) )
 		end
 	end
@@ -56,4 +56,9 @@ end
 
 function modifier_blessing_life_steal:OnTooltip( params )
 	return self.life_steal_pct
+end
+
+--------------------------------------------------------------------------------
+function modifier_blessing_life_steal:IsPermanent()
+	return true
 end

@@ -132,10 +132,12 @@ _G.ARCANE_FRAGMENT_DIFFICULTY_MODIFIERS =
 
 _G.ARCANE_FRAGMENT_RANDOM_DROP_CHANCES =
 {
-	{ low_chance =  0, high_chance =  60, num_fragments = 0 },
-	{ low_chance = 60, high_chance =  90, num_fragments = 1 },
-	{ low_chance = 90, high_chance = 100, num_fragments = 2 },
+	{ low_chance =  0, high_chance =  63, num_fragments = 0 },
+	{ low_chance = 63, high_chance =  90, num_fragments = 1 },
+	{ low_chance = 90, high_chance = 99, num_fragments = 2 },
+	{ low_chance = 99, high_chance = 100, num_fragments = 5 },
 }
+
 
 _G.REWARD_TIER_TABLE = 
 {

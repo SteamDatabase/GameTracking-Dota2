@@ -9,6 +9,12 @@ end
 
 ----------------------------------------
 
+function modifier_ascension_damage:GetTexture()
+	return "events/aghanim/interface/hazard_attack"
+end
+
+----------------------------------------
+
 function modifier_ascension_damage:OnCreated( kv )
 	self:OnRefresh( kv )
 end

@@ -11,7 +11,7 @@ end
 function item_life_rune:OnSpellStart()
 	if IsServer() then
 		if self:GetCaster() ~= nil and self:GetCaster():IsRealHero() then
-			if self:GetCaster().nRespawnsRemaining >= AGHANIM_MAX_LIVES then
+			if self:GetCaster().nRespawnsRemaining >= self:GetCaster().nRespawnsMax then
 				local newItem = CreateItem( "item_life_rune", nil, nil )
 				newItem:SetPurchaseTime( 0 )
 				local drop = CreateItemOnPositionSync( self:GetCaster():GetAbsOrigin(), newItem )
@@ -21,7 +21,7 @@ function item_life_rune:OnSpellStart()
 				return
 			end
 
-			self:GetCaster().nRespawnsRemaining = math.min( self:GetCaster().nRespawnsRemaining + 1, AGHANIM_MAX_LIVES )
+			self:GetCaster().nRespawnsRemaining = math.min( self:GetCaster().nRespawnsRemaining + 1, self:GetCaster().nRespawnsMax )
 			local hPlayer = self:GetCaster():GetPlayerOwner()
 			if hPlayer then
 				PlayerResource:SetCustomBuybackCooldown( hPlayer:GetPlayerID(), 0 )

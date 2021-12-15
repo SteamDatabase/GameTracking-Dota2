@@ -122,6 +122,12 @@ end
 
 --------------------------------------------------------------------------------
 
+function modifier_ascension:GetCritDamage()
+	return self.crit_multiplier / 100.0
+end
+
+--------------------------------------------------------------------------------
+
 function modifier_ascension:GetModifierPreAttack_CriticalStrike( params )
 	if IsServer() then
 		local hTarget = params.target

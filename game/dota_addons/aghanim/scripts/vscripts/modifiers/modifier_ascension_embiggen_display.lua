@@ -7,3 +7,9 @@ modifier_ascension_embiggen_display = class({})
 function modifier_ascension_embiggen_display:IsPurgable()
 	return false
 end
+
+-----------------------------------------------------------------------------------------
+
+function modifier_ascension_embiggen_display:GetTexture()
+	return "events/aghanim/interface/hazard_embiggen"
+end

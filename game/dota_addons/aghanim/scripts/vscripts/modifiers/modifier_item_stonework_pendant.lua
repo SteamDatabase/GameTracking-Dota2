@@ -20,7 +20,7 @@ function modifier_item_stonework_pendant:OnCreated( kv )
 	self.flBonusHP = self:GetParent():GetMaxMana()
 	self.flBonusHPRegen = self:GetParent():GetManaRegen()
 	if IsServer() then
-		self:GetParent():CalculateStatBonus()
+		self:GetParent():CalculateStatBonus( false )
 	end
 	self:StartIntervalThink( 0.5 )
 end
@@ -31,7 +31,7 @@ function modifier_item_stonework_pendant:OnIntervalThink()
 	self.flBonusHP = self.flBonusHP + self:GetParent():GetMaxMana()
 	self.flBonusHPRegen = self.flBonusHPRegen + self:GetParent():GetManaRegen()
 	if IsServer() then
-		self:GetParent():CalculateStatBonus()
+		self:GetParent():CalculateStatBonus( false )
 	end
 end
 
@@ -111,7 +111,7 @@ function modifier_item_stonework_pendant:OnTakeDamage( params )
 		ParticleManager:ReleaseParticleIndex( nFXIndex )
 
 		local flLifesteal = flDamage * self.spell_lifesteal / 100
-		Attacker:Heal( flLifesteal, self:GetAbility() )
+		Attacker:HealWithParams( flLifesteal, self:GetAbility(), false, true, self:GetCaster(), true )
 	end
 	return 0
 end

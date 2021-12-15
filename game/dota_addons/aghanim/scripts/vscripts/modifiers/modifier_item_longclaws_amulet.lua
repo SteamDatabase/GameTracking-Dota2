@@ -76,7 +76,7 @@ function modifier_item_longclaws_amulet:OnTakeDamage( params )
 		ParticleManager:ReleaseParticleIndex( nFXIndex )
 
 		local flLifesteal = flDamage * self.spell_lifesteal_pct / 100
-		Attacker:Heal( flLifesteal, self:GetAbility() )
+		Attacker:HealWithParams( flLifesteal, self:GetAbility(), false, true, self:GetCaster(), true )
 	end
 	return 0
 end

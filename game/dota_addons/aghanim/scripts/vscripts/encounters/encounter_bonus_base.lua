@@ -109,11 +109,23 @@ function CMapEncounter_BonusBase:OnItemPickedUp( event )
 		hCollector = EntIndexToHScript( event.UnitEntityIndex )
 	end
 
-	if hCollector and item and item:GetAbilityName() == "item_bag_of_gold" then
+	if hCollector and item and ( item:GetAbilityName() == "item_bag_of_gold" or item:GetAbilityName() == "item_bag_of_gold2" ) then
 		--printf( "hCollector name: %s", hCollector:GetUnitName() )
 		--printf( "hCollector player id: %d", hCollector:GetPlayerID() )
 		--printf( "self.PlayerGoldCollected table: " )
 		--PrintTable( self.PlayerGoldCollected, " -- " )
+
+		-- Don't count if Morty picks it up
+		if hCollector:GetUnitName() == "npc_aghsfort_morty" then
+			return
+		end
+
+		if hCollector:GetUnitName() == "npc_dota_creature_bonus_hoodwink" then
+			hCollector = PlayerResource:GetSelectedHeroEntity( hCollector:GetPlayerOwnerID() )
+			if hCollector == nil then
+				return
+			end
+		end
 
 		if not self.PlayerGoldCollected or #self.PlayerGoldCollected <= 0 then
 			printf( "WARNING - self.PlayerGoldCollected is nil or empty" )

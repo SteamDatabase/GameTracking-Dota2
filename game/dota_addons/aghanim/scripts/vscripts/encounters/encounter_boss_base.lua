@@ -134,11 +134,19 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter_BossBase:OnBossSpawned( hBoss )
-	hBoss.bIsBoss = true
 	hBoss:SetAbsAngles( 0, 270, 0 )
 	hBoss:AddNewModifier( hPlayerHero, nil, "modifier_boss_intro", {} )
+
+	self:AddBossToBossTable( hBoss )
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter_BossBase:AddBossToBossTable( hBoss )
+	hBoss.bIsBoss = true
 	hBoss:RemoveAbility( "ability_ascension" )
 	hBoss:RemoveModifierByName( "modifier_ascension" )
+	hBoss.hEncounter = self
 
 	table.insert( self.Bosses, hBoss )
 end
@@ -188,6 +196,12 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter_BossBase:GetBossIntroVoiceLine()
+	return nil
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter_BossBase:GetBossDeathVoiceLine()
 	return nil
 end
 
@@ -320,7 +334,7 @@ function CMapEncounter_BossBase:OnEntityKilled( event )
 			self:OnBossKilled( hVictim, hAttacker )
 		end
 
-		if hVictim:IsRealHero() and hAttacker.bIsBoss == true then
+		if hVictim:IsRealHero() and hAttacker ~= nil and hAttacker.bIsBoss == true then
 			self:BossSpeak( self:GetKillTauntLine() )
 		end
 	end
@@ -329,9 +343,16 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter_BossBase:OnBossKilled( hBoss, hAttacker )
+	print( 'ON BOSS KILLED! - ' .. hBoss:GetUnitName() )
+
 	for k,Boss in pairs ( self.Bosses ) do
 		if hBoss == Boss then
+			print( 'REMOVING BOSS FROM TABLE!' )			
 			table.remove( self.Bosses, k )
+			print( 'BOSSES REMAINING ' .. #self.Bosses )
+			for _,v in pairs( self.Bosses ) do
+				print( '	Boss remaining ' .. v:GetUnitName() )
+			end
 		end
 	end
 
@@ -340,16 +361,46 @@ function CMapEncounter_BossBase:OnBossKilled( hBoss, hAttacker )
 
 		CustomGameEventManager:Send_ServerToAllClients( "boss_fight_finished", netTable )	
 
+		if self:GetBossDeathVoiceLine() ~= nil then
+			self:BossSpeak( self:GetBossDeathVoiceLine() )
+		end
+
 		for i=1,NUM_LIVES_FROM_BOSSES do
 			self:DropLifeRuneFromUnit( hBoss, hAttacker, false )
 		end
 
 		self:DropNeutralItemFromUnit( hBoss, hAttacker, true )
 
+		if GetMapName() == "hub" then
+			
+			hBoss:EmitSoundParams( "Item.BattlePointsClaimed", 0, 0.5, 0 )
+
+			local gameEvent = {}
+			gameEvent["teamnumber"] = -1
+			gameEvent["message"] = "#Aghanim_QuestStarFound"
+			FireGameEvent( "dota_combat_event_message", gameEvent )
+
+			GameRules.Aghanim:GrantAllPlayersQuestStar()
+		end
+
 		for nPlayerID = 0,AGHANIM_PLAYERS-1 do
 			local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 			if hPlayerHero then
 				hPlayerHero:RemoveModifierByName( "modifier_provide_vision" )
+
+				for nItemSlot = 0, DOTA_ITEM_INVENTORY_SIZE - 1 do 
+					local hItem = hPlayerHero:GetItemInSlot( nItemSlot )
+					if hItem and hItem:GetAbilityName() == "item_cursed_item_slot" then 
+						hPlayerHero:RemoveItem( hItem )
+
+						local gameEvent = {}
+			 			gameEvent[ "player_id" ] = nPlayerID
+		 				gameEvent[ "teamnumber" ] = -1
+			 			gameEvent[ "message" ] = "#DOTA_HUD_Curse_Lifted"
+			 			FireGameEvent( "dota_combat_event_message", gameEvent )
+						break
+					end	
+				end
 			end
 
 			local hPlayer = PlayerResource:GetPlayer( nPlayerID )

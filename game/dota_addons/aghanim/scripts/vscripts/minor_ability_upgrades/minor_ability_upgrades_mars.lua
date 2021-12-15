@@ -1,19 +1,22 @@
 local Mars =
 {
-	-- {
-	-- 	 description = "aghsfort_mars_spear_percent_manacost",
-	-- 	 ability_name = "aghsfort_mars_spear",
-	-- 	 special_value_name = "mana_cost",
-	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	 value = 15,
-	-- },
 
 	{
-		 description = "aghsfort_mars_spear_percent_cooldown",
-		 ability_name = "aghsfort_mars_spear",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
+		description = "aghsfort_mars_spear_cooldown_manacost",
+		ability_name = "aghsfort_mars_spear",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
 	{
@@ -32,30 +35,38 @@ local Mars =
 		 value = 0.75,
 	},
 
-
-	-- {
-	-- 	 description = "aghsfort_mars_gods_rebuke_percent_manacost",
-	-- 	 ability_name = "aghsfort_mars_gods_rebuke",
-	-- 	 special_value_name = "mana_cost",
-	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	 value = 15,
-	-- },
-
 	{
-		 description = "aghsfort_mars_gods_rebuke_percent_cooldown",
-		 ability_name = "aghsfort_mars_gods_rebuke",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
+		description = "aghsfort_mars_gods_rebuke_cooldown_manacost",
+		ability_name = "aghsfort_mars_gods_rebuke",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
-
 
 	{
 		 description = "aghsfort_mars_gods_rebuke_flat_crit_mult",
 		 ability_name = "aghsfort_mars_gods_rebuke",
 		 special_value_name = "crit_mult",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 30,
+		 value = 40,
+	},
+
+	{
+		 description = "aghsfort_mars_gods_rebuke_radius",
+		 ability_name = "aghsfort_mars_gods_rebuke",
+		 special_value_name = "radius",
+		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		 value = 75,
 	},
 
 	{
@@ -67,33 +78,55 @@ local Mars =
 	},
 
 	{
-		description = "aghsfort_mars_bulwark_damage_reduction_front",
+		description = "aghsfort_mars_bulwark_cooldown_manacost",
 		ability_name = "aghsfort_mars_bulwark",
-		special_value_name = "physical_damage_reduction",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 10,
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
-	-- {
-	-- 	description = "aghsfort_mars_bulwark_damage_reduction_sides",
-	-- 	ability_name = "aghsfort_mars_bulwark",
-	-- 	special_value_name = "physical_damage_reduction_side",
-	-- 	operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-	-- 	value = 10,
-	-- },
 	{
-		 description = "aghsfort_mars_bulwark_percent_cooldown",
-		 ability_name = "aghsfort_mars_bulwark",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
-	},	
+		description = "aghsfort_mars_bulwark_damage_reduction",
+		ability_name = "aghsfort_mars_bulwark",
+		special_values =
+		{
+			{
+				special_value_name = "physical_damage_reduction",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 8,
+			},
+			{
+				special_value_name = "physical_damage_reduction_side",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 4,
+			},
+		},
+	},
+
+	{
+		description = "aghsfort_mars_bulwark_speed_penalty",
+		ability_name = "aghsfort_mars_bulwark",
+		special_value_name = "redirect_speed_penatly",
+		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		value = -10,
+	},
+
 	{
 		description = "aghsfort_mars_bulwark_active_bulwark_block_bonus",
 		ability_name = "aghsfort_mars_bulwark",
 		special_value_name = "active_bulwark_block_bonus",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 10,
+		value = 12,
 	},
 
 	{
@@ -104,27 +137,12 @@ local Mars =
 		value = 1.0,
 	},
 
-	-- {
-	-- 	 description = "aghsfort_mars_arena_of_blood_manacost",
-	-- 	 ability_name = "aghsfort_mars_arena_of_blood",
-	-- 	 special_value_name = "mana_cost",
-	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	 value = 15,
-	-- },
-
-	{
-		 description = "aghsfort_mars_arena_of_blood_cooldown",
-		 ability_name = "aghsfort_mars_arena_of_blood",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
-	},
 	{
 		description = "aghsfort_mars_arena_of_blood_duration",
 		ability_name = "aghsfort_mars_arena_of_blood",
 		special_value_name = "duration",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 1,
+		value = 2.0,
 	},
 
 	{
@@ -132,16 +150,26 @@ local Mars =
 		ability_name = "aghsfort_mars_arena_of_blood",
 		special_value_name = "spear_damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 65,
+		value = 90,
 	},
 
-	--{
-	--	description = "aghsfort_mars_arena_of_blood_spear_attack_interval",
-	--	ability_name = "aghsfort_mars_arena_of_blood",
-	--	special_value_name = "spear_attack_interval",
-	--	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	--	 value = -30,
-	--},
+	{
+		description = "aghsfort_mars_arena_of_blood_cooldown_manacost",
+		ability_name = "aghsfort_mars_arena_of_blood",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
+	},
 
 }
 

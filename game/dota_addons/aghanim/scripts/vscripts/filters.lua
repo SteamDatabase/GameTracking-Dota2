@@ -33,6 +33,10 @@ end
 ---------------------------------------------------------------------------
 
 function CAghanim:ItemAddedToInventoryFilter( filterTable )
+	if filterTable[ "item_entindex_const" ] == nil or filterTable[ "inventory_parent_entindex_const" ] == nil then 
+		return true
+	end
+	
 	return true
 end
 
@@ -62,10 +66,33 @@ function CAghanim:ModifierGainedFilter( filterTable )
 		"modifier_bashed",
 		"modifier_aghsfort_tusk_walrus_punch_air_time",
 		"modifier_aghsfort_mars_spear_stun",
+		"modifier_aghsfort_luna_moon_glaive_knockback",
+		"modifier_aghsfort_dawnbreaker_fire_wreath_smash_stun",
+		"modifier_aghsfort_void_spirit_aether_remnant_pull",
+		"modifier_tidehunter_ravage",
 	}
 
+
+
 	local hParent = EntIndexToHScript( filterTable[ "entindex_parent_const" ] )
-	if hParent ~= nil and hParent.bAbsoluteNoCC ~= nil and hParent.bAbsoluteNoCC == true then
+	if hParent == nil then 
+		return 
+	end
+
+	if hParent:IsRealHero() and filterTable[ "name_const" ] == "modifier_dark_willow_debuff_fear" then 
+		local flDuration = filterTable[ "duration" ]
+		if flDuration > 0 and filterTable[ "entindex_caster_const" ] and filterTable[ "entindex_ability_const" ] then
+			local hAbility = EntIndexToHScript( filterTable[ "entindex_ability_const" ] )
+			local hCaster = EntIndexToHScript( filterTable[ "entindex_caster_const" ] )
+			if hAbility and hCaster then 
+				hParent:AddNewModifier( hCaster, hAbility, "modifier_boss_dark_willow_fear_movement_speed", { duration = flDuration } )
+				hParent:AddNewModifier( hCaster, hAbility, "modifier_nevermore_requiem_fear", { duration = flDuration } )
+				return false
+			end
+		end
+	end
+
+	if hParent.bAbsoluteNoCC ~= nil and hParent.bAbsoluteNoCC == true then
 		if hParent.bNoNullifier ~= nil and hParent.bNoNullifier == true then
 			table.insert( BlackListModiifers, "modifier_item_nullifier_mute" ) 
 			table.insert( BlackListModiifers, "modifier_item_nullifier_slow" ) 
@@ -98,3 +125,36 @@ function CAghanim:ModifierGainedFilter( filterTable )
 
 	return true
 end
+
+--------------------------------------------------------------------------------
+
+function CAghanim:FilterModifyGold( filterTable )
+	--printf( "FilterModifyGold, reason: %d, gold %d", filterTable[ "reason_const" ], filterTable[ "gold" ] )
+
+	-- Spend-gold reasons
+	if filterTable[ "reason_const" ] == DOTA_ModifyGold_Death or
+		filterTable[ "reason_const" ] == DOTA_ModifyGold_Buyback or
+		filterTable[ "reason_const" ] == DOTA_ModifyGold_PurchaseConsumable or
+		filterTable[ "reason_const" ] == DOTA_ModifyGold_PurchaseItem or
+		filterTable[ "reason_const" ] == DOTA_ModifyGold_AbilityCost or
+		
+		-- incomes that should not be affected
+		filterTable[ "reason_const" ] == DOTA_ModifyGold_SellItem or
+		filterTable[ "reason_const" ] == DOTA_ModifyGold_CheatCommand then
+		return true
+	end
+
+	local Hero = PlayerResource:GetSelectedHeroEntity( filterTable[ "player_id_const" ] )
+	--printf( "  $$Hero: %s", Hero:GetUnitName() )
+	local hBuff = Hero:FindModifierByName( "modifier_event_slark_greed" )
+
+	if hBuff ~= nil then
+		--printf( "$$    %s has modifier modifier_event_slark_greed with multiplier %f thus gaining %d extra gold", Hero:GetUnitName(), hBuff.flGoldMultiplier, math.floor( filterTable[ "gold" ] * ( hBuff.flGoldMultiplier - 1.0 ) ) )
+		filterTable[ "gold" ] = math.floor( filterTable[ "gold" ] * hBuff.flGoldMultiplier + 0.5 )
+		--printf( "$$   value now %d", filterTable[ "gold" ] )
+	end
+
+	return true
+end
+
+--------------------------------------------------------------------------------

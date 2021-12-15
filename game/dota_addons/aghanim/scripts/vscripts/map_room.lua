@@ -9,7 +9,7 @@ end
 
 --------------------------------------------------------------------------------
 
-function CMapRoom:constructor( szRoomName, nRoomType, nDepth, vMins, vMaxs, vOrigin )
+function CMapRoom:constructor( szRoomName, nRoomType, nDepth, vMins, vMaxs, vOrigin, roomDef )
 	self.szRoomName = szRoomName
 	self.nRoomType = nRoomType
 	self.nDepth = nDepth
@@ -18,6 +18,9 @@ function CMapRoom:constructor( szRoomName, nRoomType, nDepth, vMins, vMaxs, vOri
 	self.vMaxs = vMaxs
 	self.vOrigin = vOrigin
 	self.nAct = tonumber( string.sub( szRoomName, 2, 2 ) )
+	if szRoomName == "hub" then
+		self.nAct = 1
+	end
 	self.bHidden = false;
 	self.PlayerUnitsInRoom = {}
 	self.szEncounterName = nil
@@ -28,18 +31,45 @@ function CMapRoom:constructor( szRoomName, nRoomType, nDepth, vMins, vMaxs, vOri
 	self.bSpawnGroupReady = false
 	self.szExitRoomSelected = nil
 	self.szMapName = "main"
+	if GetMapName() == "hub" then 
+		self.szMapName = "hub"
+	end
 	self.szRoomChoiceReward = nil
 	self.bHasCrystal = false
 	self.nPlayerChosenExitDirection = ROOM_EXIT_INVALID
 	self.nPlayerEntranceDirection = ROOM_EXIT_INVALID
 
+	--AghSlab2
+	self.nExitChoices = 0
+	self.nEncountersToSelect = 0
+	self.nNumEliteEncounters = 0
+	self.nHiddenExitOption = 0
+	self.bSpawnTrapRoom = false
+	self.vecPotentialEncounters = {}
+	self.bRoomGeometryReady = false 
+	self.hEventPrefabSpawnGroupHandle = nil
+	self.bEventPrefabReady = false 
+
+
 	self.hRandomStream = CreateUniformRandomStream( GameRules.Aghanim:GetRandomSeed() + MakeStringToken( szRoomName ) )
 	self.bDisplayHiddenAsElite = ( self:RoomRandomInt( 1, 4 ) == 1 )
+
+	if roomDef ~= nil then
+		self.flMinimapOriginX = roomDef.flMinimapOriginX
+		self.flMinimapOriginY = roomDef.flMinimapOriginY
+		self.flMinimapSize = roomDef.flMinimapSize
+		self.nMinimapScale = roomDef.nMinimapScale
+		self.szMinimapMapName = roomDef.szMinimapMapName
+	end
 end
 
 --------------------------------------------------------------------------------
 
 function CMapRoom:ShouldDisplayHiddenAsElite( )
+	if self.nRoomType == ROOM_TYPE_EVENT then 
+		return false 
+	end
+
 	return self.bDisplayHiddenAsElite
 end
 
@@ -163,7 +193,9 @@ end
 
 function CMapRoom:SetEliteDepthBonus( nEliteDepthBonus )
 	self.nEliteDepthBonus = nEliteDepthBonus
-	self:GetEncounter():OnEliteRankChanged( nEliteDepthBonus )
+	if self:GetEncounter() then
+		self:GetEncounter():OnEliteRankChanged( nEliteDepthBonus )
+	end
 	self:SendRoomToClient()
 end
 
@@ -176,7 +208,22 @@ end
 --------------------------------------------------------------------------------
 
 function CMapRoom:IsHidden( )
+	if GetMapName() == "hub" then 
+		return self.nHiddenExitOption > 0 
+	end
 	return self.bHidden
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:SetExitOptionHidden( nOption )
+	self.nHiddenExitOption = nOption 
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetExitOptionHidden()
+	return self.nHiddenExitOption
 end
 
 --------------------------------------------------------------------------------
@@ -197,7 +244,12 @@ function CMapRoom:AssignEncounter( szEncounterName )
 
 	--print( "AssignEncounter: " .. self:GetName() .." -> " .. szEncounterName )
 
-	local hEncounterClass = require( "encounters/" .. self.szEncounterName )
+	local hEncounterClass = nil
+	if GetMapName() == "main" then 
+		hEncounterClass = require( "encounters/" .. self.szEncounterName )
+	else
+		hEncounterClass = require( "encounters/2021/" .. self.szEncounterName )
+	end
 	if hEncounterClass == nil then
 		print( "ERROR: Encounter class " .. szEncounterName .. " not found.\n" )
 		return
@@ -208,7 +260,50 @@ function CMapRoom:AssignEncounter( szEncounterName )
 		print( "ERROR: Failed to create Encounter " .. szEncounterName .. "\n" )
 		return
 	end
+
+	self.vecPotentialEncounters = {}
 end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:AssignPendingEncounter( hEncounter )
+	if hEncounter == nil then 
+		print( "trying to assign nil pending encounter!" )
+	end
+	-- NOTE: For debugging, it's possible to re-assign a new encounter to an existing room.
+	-- In that case, clean up any temporary state
+	self.szMapName = nil
+	if self.hSpawnGroupHandle ~= nil then
+		UnloadSpawnGroupByHandle( self.hSpawnGroupHandle ) 
+		self.hSpawnGroupHandle = nil
+	end
+	self.bSpawnGroupReady = false
+
+	-- At this point, we're ready to assign the encounter
+	self.szEncounterName = hEncounter.szEncounterName
+
+	--print( "AssignEncounter: " .. self:GetName() .." -> " .. szEncounterName )
+
+	local hEncounterClass = nil
+	if GetMapName() == "main" then 
+		hEncounterClass = require( "encounters/" .. self.szEncounterName )
+	else
+		hEncounterClass = require( "encounters/2021/" .. self.szEncounterName )
+	end
+	if hEncounterClass == nil then
+		print( "ERROR: Encounter class " .. szEncounterName .. " not found.\n" )
+		return
+	end
+
+	self.Encounter = hEncounter
+	if self.Encounter == nil then
+		print( "ERROR: Failed to create Encounter " .. szEncounterName .. "\n" )
+		return
+	end
+
+	self.vecPotentialEncounters = {}
+end
+
 
 --------------------------------------------------------------------------------
 
@@ -217,10 +312,14 @@ function CMapRoom:FindAllEntitiesInRoomByName( szEntityName, bWarnIfNotFound )
 	local hEntityList = Entities:FindAllByName( szEntityName )
 
 	for i=#hEntityList, 1, -1 do
-		if hEntityList[i]:GetSpawnGroupHandle() ~= self:GetSpawnGroupHandle() then
+		if hEntityList[i]:GetSpawnGroupHandle() ~= self:GetSpawnGroupHandle() and ( hEntityList[i]:GetSpawnGroupHandle() ~= self.hEventPrefabSpawnGroupHandle ) then
 			table.remove( hEntityList, i )
 		end
 	end	
+
+	--print( self.szEncounterName )
+	--print( szEntityName )
+	--print( self:GetMapName() )
 
 	if #hEntityList == 0 and bWarnIfNotFound then
 		print( "Unable to find entity " .. szEntityName .. " for encounter " .. self.szEncounterName .. " map " .. self:GetMapName() )
@@ -328,6 +427,11 @@ function CMapRoom:OnRoomReadyToSpawn( hSpawnGroupHandle )
 	else
 		print( "Unexpected OnRoomReadyToSpawn " .. self:GetName() .. " " .. hSpawnGroupHandle .. "->" .. self.hSpawnGroupHandle .. "\n" )
 	end
+
+	if GetMapName() == "hub" then
+		print( "Finishing room spawn 2021" )
+		--ManuallyTriggerSpawnGroupCompletion( hSpawnGroupHandle )
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -385,6 +489,8 @@ end
 --------------------------------------------------------------------------------
 
 function CMapRoom:CreateVisBlockers( )
+	--print( "room " .. self:GetName() .. " origin: ( " .. self.vOrigin.x  .. ", " .. self.vOrigin.y .. ", " .. self.vOrigin.z .. ")" )
+	--print ( "creating vis blockers for room " .. self:GetName() .. " from ( " .. self.vMins.x + 1 .. ", " .. self.vMins.y + 1 .. ", " .. self.vMins.z .. ") to (" .. self.vMaxs.x - 1 .. ", " .. self.vMaxs.y - 1 .. ", " .. self.vMaxs.z .. ")" )
 
 	GameRules.Aghanim:AddFowOutlineBlocker( 
 		Vector( self.vMins.x + 1, self.vMins.y + 1, self.vMins.z ), 
@@ -420,10 +526,40 @@ end
 
 --------------------------------------------------------------------------------
 
+function CMapRoom:SpawnBridgeAtExit( szExitName )
+	-- NOTE: Do not break in the loop; necessary for double N exits in the main map
+	local hBridges = self:FindAllEntitiesInRoomByName( "spawn_bridge_" .. szExitName, true )
+	for i=1, #hBridges do
+
+		hBridges[i]:ForceSpawn( )
+
+		local hActualBridges = Entities:FindAllByClassnameWithin( "prop_dynamic", hBridges[i]:GetAbsOrigin(), 300.0 )
+		for j=1, #hActualBridges do
+			if string.find( hActualBridges[j]:GetName(), "room_gate" ) == nil then 
+				local vAngles = hBridges[i]:GetAnglesAsVector()
+				hActualBridges[j]:SetAbsAngles( vAngles.x, vAngles.y, vAngles.z )
+			end
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+
 function CMapRoom:OnSpawnRoomComplete( hSpawnGroupHandle )
+	print( "OnRoomSpawnComplete" )
+	if GetMapName() == "main" then
+		self:OnSpawnRoomComplete_2020( hSpawnGroupHandle )
+		return
+	else
+		self:OnSpawnRoomComplete_2021( hSpawnGroupHandle )
+		return
+	end
+end
 
+--------------------------------------------------------------------------------
+
+function CMapRoom:OnSpawnRoomComplete_2020( hSpawnGroupHandle )
 	if ( hSpawnGroupHandle == self.hSpawnGroupHandle ) then
-
 		--print( "OnSpawnRoomComplete " .. self:GetName() .. "\n" )
 		self:OnEncounterLoaded()
 
@@ -465,6 +601,77 @@ end
 
 --------------------------------------------------------------------------------
 
+function CMapRoom:OnEventExitPrefabSpawnComplete( hSpawnGroupHandle )
+	if ( hSpawnGroupHandle == self.hEventPrefabSpawnGroupHandle ) then
+		print( "prefab finished spawning" )
+		self.bEventPrefabReady = true 
+		if self.bRoomGeometryReady then 
+			self:OpenExit( "entrance", nil )
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:OnSpawnRoomComplete_2021( hSpawnGroupHandle )
+	print( "CMapRoom:OnSpawnRoomComplete_2021 - " .. self:GetName() )
+	if ( hSpawnGroupHandle == self.hSpawnGroupHandle ) then
+		self.bRoomGeometryReady = true
+		self.bSpawnGroupReady = true 
+		self:OnEncounterLoaded()
+		self:GetEncounter():Introduce()
+
+		-- Set up vis blockers on the new room
+		self:CreateVisBlockers()
+
+		local hCurrentRoom = GameRules.Aghanim:GetCurrentRoom()
+		if hCurrentRoom == nil then
+			print ( "OnSpawnRoomComplete_2021: Current room is nil! ")
+			return
+		end
+
+		if hCurrentRoom:GetName() == "hub" then 
+			local nAct = self.nAct 
+			if nAct == 1 then
+				hCurrentRoom:SpawnBridgeAtExit( "W" )	
+				hCurrentRoom:OpenExit( "W", nil )			
+			elseif nAct == 2 then
+				hCurrentRoom:SpawnBridgeAtExit( "N" )
+				hCurrentRoom:OpenExit( "N", nil )			
+			else
+				hCurrentRoom:SpawnBridgeAtExit( "E" )
+				hCurrentRoom:OpenExit( "E", nil )		
+			end	
+			self:OpenExit( "entrance", nil )			
+		else
+			if self.nRoomType == ROOM_TYPE_EVENT then 
+				hCurrentRoom:SpawnBridgeAtExit( "event_exit" )
+				hCurrentRoom:OpenExit( "event_exit", nil )
+
+				if self.bEventPrefabReady then 
+					self:OpenExit( "entrance", nil )
+					print( "WARNING!! The event door prefab was not ready when the exits were opened" )
+				end
+			else
+				hCurrentRoom:SpawnBridgeAtExit( "exit" )
+				hCurrentRoom:OpenExit( "exit", nil )
+
+				if hCurrentRoom.nRoomType == ROOM_TYPE_EVENT then 								
+					self:OpenExit( "event_entrance", nil )
+				else
+					self:OpenExit( "entrance", nil )
+				end
+			end 		
+		end
+	else 
+		print( "Unexpected OnSpawnRoomComplete " .. self:GetName() .. " " .. hSpawnGroupHandle .. "->" .. self.hSpawnGroupHandle .. "\n" )
+	end	
+end
+
+--------------------------------------------------------------------------------
+
 function CMapRoom:AreAllExitRoomsReady()
 	for nExitDirection=ROOM_EXIT_LEFT,ROOM_EXIT_RIGHT do
 		local szExitRoomName = self:GetExit( nExitDirection )
@@ -491,11 +698,21 @@ function CMapRoom:ComputeRoomStats( )
 		return nil
 	end
 
+	local bElite = false 
+	local bHidden = false 
+	if GetMapName() == "hub" then 
+		bElite = self.Encounter:IsEliteEncounter()
+		bHidden = self.Encounter:IsHiddenEncounter()
+	else
+		bElite = self:IsElite() 
+		bHidden = self:IsHidden()
+	end
+
 	local roomStats = 
 	{
 		szEncounterName = self.Encounter:GetName(),
-		bIsElite = self:IsElite(),
-		bIsHidden = self:IsHidden(),
+		bIsElite = bElite,
+		bIsHidden = bHidden,
 		nRoomType = self:GetType(),
 		szReward = self:GetRoomChoiceReward(),
 		ascensionAbilities = self.Encounter:GetAscensionAbilities(),
@@ -505,18 +722,61 @@ function CMapRoom:ComputeRoomStats( )
 
 end
 
+--------------------------------------------------------------------------------
+
+function CMapRoom:ComputeRoomStats_Unselected( hEncounter )
+
+	if hEncounter == nil then
+		return nil
+	end
+
+	local bElite = false 
+	local bHidden = false 
+	if GetMapName() == "hub" then 
+		bElite = hEncounter:IsEliteEncounter()
+		bHidden = hEncounter:IsHiddenEncounter()
+	else
+		bElite = self:IsElite() 
+		bHidden = self:IsHidden()
+	end
+
+	local roomStats = 
+	{
+		szEncounterName = hEncounter:GetName(),
+		bIsElite = bElite,
+		bIsHidden = bHidden,
+		nRoomType = hEncounter.nEncounterType,
+		szReward = self:GetPotentialEncounterRoomReward( hEncounter:GetName() ),
+		ascensionAbilities = hEncounter:GetAscensionAbilities(),
+	}
+
+	return roomStats
+
+end
+
 
 --------------------------------------------------------------------------------
 
-function CMapRoom:OnNextRoomSelected( szSelectedRoomName )
+function CMapRoom:OnNextRoomSelected( szSelectedRoomName, szSelectedEncounterName )
 
 	if self.szExitRoomSelected ~= nil then
 		return
 	end
 
-	self.szExitRoomSelected = szSelectedRoomName
 	printf( "OnNextRoomSelected %s\n", szSelectedRoomName )
+	if GetMapName() == "main" then 
+		self:OnNextRoomSelected_2020( szSelectedRoomName )
+	else
+		self:OnNextRoomSelected_2021( szSelectedRoomName, szSelectedEncounterName )
+	end
 
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:OnNextRoomSelected_2020( szSelectedRoomName )
+
+	self.szExitRoomSelected = szSelectedRoomName
 	-- Register the room selection
 	local roomSelectionStats = 
 	{
@@ -553,6 +813,150 @@ function CMapRoom:OnNextRoomSelected( szSelectedRoomName )
 end
 
 --------------------------------------------------------------------------------
+	
+function CMapRoom:OnNextRoomSelected_2021( szSelectedRoomName, szSelectedEncounterName )
+	print( "OnNextRoomSelected_2021: Room: " .. szSelectedRoomName  )
+	if szSelectedEncounterName == nil then
+		return
+	end
+
+	-- Record the event room length.
+	if self:GetEncounter():GetEncounterType() == ROOM_TYPE_EVENT then
+		GameRules.Aghanim:RegisterEncounterComplete( self:GetEncounter(), GameRules:GetGameTime() - self:GetEncounter():GetStartTime() )
+	end
+
+
+	print( "OnNextRoomSelected_2021: Encounter: " .. szSelectedEncounterName )
+	self.szExitRoomSelected = szSelectedRoomName
+
+	-- Register the room selection
+	local roomSelectionStats = 
+	{
+		depth = self:GetDepth() + 1
+	}
+
+	local ExitRoom = GameRules.Aghanim:GetRoom( self.szExitRoomSelected )
+	if ExitRoom == nil then
+		print( "exit room is nil" )
+		return
+	end
+
+	if szSelectedRoomName == "hub" then 
+		ExitRoom:GetEncounter():ResetHeroState()
+		ExitRoom:GetEncounter():UpdateAct()
+		print( "Exit Room is hub.. don't spawn things." ) 
+		for nPlayerID = 0,AGHANIM_PLAYERS-1 do
+			local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
+			if hPlayerHero then
+				hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_return_to_hub", { duration = 6.1 } )
+			end
+
+		end
+
+		return 
+	end
+
+	-- Must set the map name prior to getting the neighboring room height difference
+	local EncounterData = ENCOUNTER_DEFINITIONS[ szSelectedEncounterName ]
+	if EncounterData == nil then 
+		print( "ERROR: Encounter " .. szSelectedEncounterName .. " has no data in room_tables" )
+		return
+	end
+
+	local mapList = EncounterData.szMapNames
+	local szMapName = nil 
+	if mapList then
+	  	szMapName = mapList[ self:RoomRandomInt( 1, #mapList ) ]
+	else
+		print( "Warning: Encounter " .. szSelectedEncounterName .. " has no maps listed in data, falling back to template map" )
+		szMapName = MAP_ATLAS[ szSelectedRoomName ].szTemplateMap
+	end
+
+	if szMapName == nil then 
+		print( "Error! szMapName is nil for " .. szSelectedRoomName .. ": " .. szSelectedEncounterName )
+		return
+	end
+
+	if #ExitRoom.vecPotentialEncounters > 0 and ExitRoom:GetEncounter() == nil then 
+		local hPendingEncounter = nil 
+		for _,hEncounter in pairs ( ExitRoom.vecPotentialEncounters ) do 
+			if hEncounter then
+				if hEncounter.szEncounterName == szSelectedEncounterName then 
+					hPendingEncounter = hEncounter 
+				else
+					-- record unselected encounter stats, have to do this before encounter is assigned.
+					roomSelectionStats.unselectedRoom = ExitRoom:ComputeRoomStats_Unselected( hEncounter )
+				end
+			end
+		end
+
+		if hPendingEncounter then 
+			ExitRoom:AssignPendingEncounter( hPendingEncounter )
+		else 
+			ExitRoom:AssignEncounter( szSelectedEncounterName )
+		end
+	end
+
+	local hNextEncounter = ExitRoom:GetEncounter()
+	if hNextEncounter then 
+		if hNextEncounter:IsEliteEncounter() then 
+			ExitRoom:SetEliteDepthBonus( 1 )
+		end
+		ExitRoom.nRoomType = hNextEncounter:GetEncounterType()
+		ExitRoom:SendRoomToClient()
+	else
+		print( "ERROR! Exit Room " .. ExitRoom:GetName() .. " could not find its encounter!" )
+	end
+
+	-- Record stats
+	roomSelectionStats.selectedRoom = ExitRoom:ComputeRoomStats()
+
+	if ExitRoom:GetEncounter().nEncounterType ~= ROOM_TYPE_EVENT then
+		GameRules.Aghanim:RegisterEncounterStats( roomSelectionStats )
+	end
+
+
+	ExitRoom.szMapName = szMapName
+	local szDirName = "aghs2_encounters/"
+	local szNewMapNameShort = string.sub( szMapName, string.len( szDirName ) + 1, string.len( szMapName ) )
+	if self.szMapName == nil then 
+		self.szMapName = "none" 
+		print ( "WARNING! Room " .. self:GetName() .. " had no map name assigned?" )
+	end
+	local szCurMapNameShort = string.sub( self.szMapName, string.len( szDirName ) + 1, string.len( self.szMapName ) )
+	local flNewMapHeightOffset = MAP_ENTRANCE_HEIGHTS[ szNewMapNameShort ]
+	local flCurMapHeightOffset = MAP_EXIT_HEIGHTS[ szCurMapNameShort ]
+	if flNewMapHeightOffset == nil then 
+		flNewMapHeightOffset = 0
+	end
+
+	if flCurMapHeightOffset == nil then 
+		flCurMapHeightOffset = 0
+	end  
+
+	print( "ThisRoom z:" .. self.vOrigin.z )
+	print( "ExitRoom z:" .. ExitRoom.vOrigin.z )
+
+	local flOriginalZ = ExitRoom.vOrigin.z
+
+	ExitRoom.vOrigin.z = self.vOrigin.z + flNewMapHeightOffset - flCurMapHeightOffset
+
+	print( "flSpawnHeight " .. ExitRoom.vOrigin.z )
+	if ExitRoom.nRoomType == ROOM_TYPE_EVENT then 
+		--print( "attempting to spawn event door prefab" ) 
+		local vSpawnLoc = Vector( ExitRoom.vOrigin.x, ExitRoom.vOrigin.y, ExitRoom.vOrigin.z )
+		vSpawnLoc.z = ExitRoom.vOrigin.z - flNewMapHeightOffset + 128.0
+		local szPrefabName = "prefabs/event_exits/" .. ExitRoom:GetName() .. "_exit"
+		print( "Spawning room event prefab " .. szPrefabName .." at ( " .. vSpawnLoc.x .. ", " .. vSpawnLoc.y .. ", " .. vSpawnLoc.z .. " )" )
+		ExitRoom.hEventPrefabSpawnGroupHandle = DOTA_SpawnMapAtPosition( szPrefabName, vSpawnLoc, false, nil, Dynamic_Wrap( CMapRoom, "OnEventExitPrefabSpawnComplete" ), ExitRoom )
+	end
+
+	print( "Spawning room " .. szSelectedRoomName .. " with encounter " .. szSelectedEncounterName .. " on map " .. szMapName .. " at ( " .. ExitRoom.vOrigin.x .. ", " .. ExitRoom.vOrigin.y .. ", " .. ExitRoom.vOrigin.z .. " )" )
+	ExitRoom.hSpawnGroupHandle = DOTA_SpawnMapAtPosition( szMapName, ExitRoom.vOrigin, false, nil, Dynamic_Wrap( CMapRoom, "OnSpawnRoomComplete" ), ExitRoom )
+	
+end
+
+--------------------------------------------------------------------------------
 
 function CMapRoom:GetExitRoomSelected( )
 	return self.szExitRoomSelected
@@ -578,6 +982,12 @@ end
 function CMapRoom:OnEncounterCompleted()
 	StopListeningToGameEvent( self.nTriggerStartTouchListener )
 	StopListeningToGameEvent( self.nTriggerEndTouchListener )
+
+	if GetMapName() == "hub" then
+		if self.nRoomType == ROOM_TYPE_EVENT and self.OnEventRoomComplete ~= nil then 
+			self:OnEventRoomComplete()
+		end
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -660,14 +1070,83 @@ end
 
 --------------------------------------------------------------------------------
 
+function CMapRoom:SetRoomEncounterReward( szEncounterName, szReward )
+	if self.vecPotentialEncounters == nil or #self.vecPotentialEncounters == 0 or szEncounterName == "encounter_hub" then 
+		return
+	end
+
+	for _,hEncounter in pairs ( self.vecPotentialEncounters ) do
+		if hEncounter:GetName() == szEncounterName and hEncounter.szRoomChoiceReward == nil then 
+			hEncounter.szRoomChoiceReward = szReward 
+			print( "Room " .. self:GetName() .. " has been assigned " .. szReward .. " for encounter " .. szEncounterName )
+			break
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetPotentialEncounterRoomReward( szEncounterName )
+	if self.Encounter and self.Encounter:GetName() == szEncounterName then 
+		return self.Encounter.szRoomChoiceReward
+	end
+
+	if self.vecPotentialEncounters == nil or #self.vecPotentialEncounters == 0 or szEncounterName == "encounter_hub" then 
+		return "REWARD_TYPE_NONE"
+	end
+
+	for _,hEncounter in pairs ( self.vecPotentialEncounters ) do
+		if hEncounter:GetName() == szEncounterName then 
+			if hEncounter.szRoomChoiceReward == nil then 
+				return "REWARD_TYPE_NONE"
+			end
+			return hEncounter.szRoomChoiceReward
+		end
+	end
+
+	return "REWARD_TYPE_NONE"
+end
+
+--------------------------------------------------------------------------------
+
 function CMapRoom:GetRoomChoiceReward()
-	return self.szRoomChoiceReward
+	if GetMapName() == "main" then 
+		return self.szRoomChoiceReward
+	end
+
+	local szReward = "REWARD_TYPE_NONE"
+	if self.Encounter ~= nil then 
+		szReward = self:GetPotentialEncounterRoomReward( self.Encounter:GetName() )
+		if szReward == nil then 
+			print( "No Reward found for encounter " .. self.Encounter:GetName() )
+			szReward = "REWARD_TYPE_NONE"
+		end
+	end
+
+	--print ( "GetRoomChoiceReward() " .. self:GetName() .. " " .. szReward )
+	return szReward
 end
 
 --------------------------------------------------------------------------------
 
 function CMapRoom:SendRoomToClient()
+	if self:GetAct() == nil then 
+		print( "CMapRoom:GetAct() is nil!" )
+		return
+	end
+
+	if GameRules.Aghanim:GetCurrentRoom() == nil then 
+		print( "GameRules.Aghanim:GetCurrentRoom() is nil!" )
+		return 
+	end
+
+	 if GameRules.Aghanim:GetCurrentRoom():GetAct() == nil then
+		print( "GameRules.Aghanim:GetCurrentRoom():GetAct() is nil!" )
+		return 
+	end
+
 	local netTable = {}
+	netTable[ "room_name" ] = self:GetName()
 	if GameRules.Aghanim:GetCurrentRoom() and self:GetAct() <= GameRules.Aghanim:GetCurrentRoom():GetAct() then
 		netTable[ "reward" ] = self:GetRoomChoiceReward()				
 		netTable[ "map_name" ] = self:GetMapName()
@@ -677,7 +1156,7 @@ function CMapRoom:SendRoomToClient()
 		netTable[ "exit_direction" ] = self:GetPlayerChosenExitDirection()
 
 		netTable[ "completed" ] = 0
-		if self:GetEncounter():IsComplete() then
+		if self:GetEncounter() and self:GetEncounter():IsComplete() then
 			netTable[ "completed" ] = 1
 		end
 
@@ -818,6 +1297,42 @@ function CMapRoom:GetMapName()
 	return self.szMapName
 end
 
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetMinimapOriginX()
+	return self.flMinimapOriginX
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetMinimapOriginX()
+	return self.flMinimapOriginX
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetMinimapOriginY()
+	return self.flMinimapOriginY
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetMinimapSize()
+	return self.flMinimapSize
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetMinimapScale()
+	return self.nMinimapScale
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetMinimapMapName()
+	return self.szMinimapMapName
+end
+
 
 --------------------------------------------------------------------------------
 
@@ -835,6 +1350,12 @@ end
 
 function CMapRoom:HasCrystal()
 	return self.bHasCrystal
+end
+
+--------------------------------------------------------------------------------
+
+function CMapRoom:GetRoomRandomStream()
+	return self.hRandomStream 
 end
 
 --------------------------------------------------------------------------------

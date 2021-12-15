@@ -8,14 +8,15 @@ function Spawn( entityKeyValues )
 		return
 	end
 
-	thisEntity.hIcarusDiveAbility = thisEntity:FindAbilityByName( "aghsfort_phoenix_icarus_dive" )
-	thisEntity.hIcarusDiveStopAbility = thisEntity:FindAbilityByName( "aghsfort_phoenix_icarus_dive_stop" )
-	thisEntity.hActivateSpiritsAbility = thisEntity:FindAbilityByName( "aghsfort_phoenix_fire_spirits" )
-	thisEntity.hLaunchSpiritsAbility = thisEntity:FindAbilityByName( "aghsfort_phoenix_launch_fire_spirit" )
-	thisEntity.hSupernovaAbility = thisEntity:FindAbilityByName( "aghsfort_phoenix_supernova" )
+	thisEntity.hIcarusDiveAbility = thisEntity:FindAbilityByName( "aghsfort_creature_phoenix_icarus_dive" )
+	thisEntity.hIcarusDiveStopAbility = thisEntity:FindAbilityByName( "aghsfort_creature_phoenix_icarus_dive_stop" )
+	thisEntity.hActivateSpiritsAbility = thisEntity:FindAbilityByName( "aghsfort_creature_phoenix_fire_spirits" )
+	thisEntity.hLaunchSpiritsAbility = thisEntity:FindAbilityByName( "aghsfort_creature_phoenix_launch_fire_spirit" )
+	thisEntity.hSupernovaAbility = thisEntity:FindAbilityByName( "aghsfort_creature_phoenix_supernova" )
 
 	thisEntity.fDiveRange = 1400
 	thisEntity.fSupernovaRange = thisEntity.hSupernovaAbility:GetCastRange( thisEntity:GetOrigin(), nil )
+	thisEntity.bReapplyNoCCAfterAbility = false
 
 	thisEntity:SetContextThink( "PhoenixThink", PhoenixThink, 0.5 )
 end
@@ -33,6 +34,13 @@ function PhoenixThink()
 
 	if GameRules:IsGamePaused() == true then
 		return 0.1
+	end
+
+	-- Reapply the no CC after abilities used
+	if thisEntity.bReapplyNoCCAfterAbility == true then
+		print( 'ADDING NO CC BACK IN!' )
+		thisEntity.bReapplyNoCCAfterAbility = false
+		thisEntity:AddNewModifier( thisEntity, nil, 'modifier_absolute_no_cc', { duration = -1 } )
 	end
 
 	local hDiveRangeEnemies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, thisEntity.fDiveRange, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
@@ -77,6 +85,11 @@ end
 --------------------------------------------------------------------------------
 
 function CastIcarusDive( vTargetPos )
+	--print( "CastIcarusDive" )
+	thisEntity.bReapplyNoCCAfterAbility = true
+	thisEntity:RemoveAbility( 'ability_absolute_no_cc' )
+	thisEntity:RemoveModifierByName( 'modifier_absolute_no_cc' )
+
 	ExecuteOrderFromTable({
 		UnitIndex = thisEntity:entindex(),
 		OrderType = DOTA_UNIT_ORDER_CAST_POSITION,

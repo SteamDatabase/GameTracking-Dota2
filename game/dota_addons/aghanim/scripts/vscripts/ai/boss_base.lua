@@ -40,15 +40,28 @@ end
 
 --------------------------------------------------------------------------------
 
+function CBossBase:ShouldAutoAttack()
+	return true 
+end
+
+--------------------------------------------------------------------------------
+
 function CBossBase:OnBaseThink()
 	if self.me == nil or self.me:IsNull() or self.me:IsAlive() == false then
+		--print( '^^^CBossBase:OnBaseThink() - boss is dead shutting down!')
 		StopListeningToGameEvent( self.nAbilityListener )
 		return -1
 	end
 
 	Order = nil
 
-	if self.Encounter == nil or self.Encounter:HasStarted() == false then
+	if self.Encounter == nil then 
+		--print( '^^^CBossBase:OnBaseThink() - encounter is nil!')
+		return 0.01
+	end
+
+	if self.Encounter:HasStarted() == false then
+		--print( '^^^CBossBase:OnBaseThink() - encounter has not started!')
 		return 0.01
 	end
 
@@ -89,7 +102,7 @@ function CBossBase:OnBaseThink()
 		goto execute_order
 	else
 		for _,Ability in pairs ( AbilitiesReady ) do
-			if Ability.Evaluate ~= nil then
+			if Ability ~= nil and Ability.Evaluate ~= nil then
 				local TryOrder = Ability.Evaluate( self )
 				if TryOrder ~= nil then
 					Order = TryOrder
@@ -110,20 +123,25 @@ function CBossBase:OnBaseThink()
 		end
 	end
 
-	if Order == nil and #self.hPlayerHeroes > 0 then
-		--print( 'autoattack for ' .. self.flDefaultInterval  )
-		Order =
-		{
-			UnitIndex = self.me:entindex(),
-			OrderType = DOTA_UNIT_ORDER_ATTACK_MOVE,
-			Position = self.hPlayerHeroes[ 1 ]:GetAbsOrigin(), 
-		}
-		Order.flOrderInterval = self.flDefaultInterval
+	if Order == nil and #self.hPlayerHeroes > 0 and self.me:IsChanneling() == false and self:ShouldAutoAttack() then
+		if self.me:HasAttackCapability() then
+			--print( 'autoattack for ' .. self.flDefaultInterval  )
+			Order =
+			{
+				UnitIndex = self.me:entindex(),
+				OrderType = DOTA_UNIT_ORDER_ATTACK_MOVE,
+				Position = self.hPlayerHeroes[ 1 ]:GetAbsOrigin(), 
+			}
+			Order.flOrderInterval = self.flDefaultInterval
+		else
+			--print( 'no attack capability - facing towards the best hero' )
+			self.me:FaceTowards( self.hPlayerHeroes[ 1 ]:GetAbsOrigin() )
+		end
 	end
 
 	::execute_order::
 	if Order then
-		--print( 'Executing Order ' .. Order.OrderType .. ' and sleeping for ' .. Order.flOrderInterval )
+		print( 'Executing Order ' .. Order.OrderType .. ' and sleeping for ' .. Order.flOrderInterval )
 		ExecuteOrderFromTable( Order )
 		return Order.flOrderInterval
 	end

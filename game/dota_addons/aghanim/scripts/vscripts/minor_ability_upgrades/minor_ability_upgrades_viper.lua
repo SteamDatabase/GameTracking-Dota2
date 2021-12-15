@@ -25,14 +25,6 @@ local Viper =
 	},
 
 	{
-		 description = "aghsfort_viper_poison_attack_movement_speed",
-		 ability_name = "aghsfort_viper_poison_attack",
-		 special_value_name = "movement_speed",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 6,
-	},
-
-	{
 		 description = "aghsfort_viper_poison_attack_duration",
 		 ability_name = "aghsfort_viper_poison_attack",
 		 special_value_name = "duration",
@@ -48,21 +40,22 @@ local Viper =
 		 value = 1,
 	},
 
-	-- {
-	-- 	 description = "aghsfort_viper_nethertoxin_pct_mana_cost",
-	-- 	 ability_name = "aghsfort_viper_nethertoxin",
-	-- 	 special_value_name = "mana_cost",
-	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	 value = 15,
-	-- },
-
-
 	{
-		 description = "aghsfort_viper_nethertoxin_pct_cooldown",
-		 ability_name = "aghsfort_viper_nethertoxin",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
+		description = "aghsfort_viper_nethertoxin_mana_cost_cooldown",
+		ability_name = "aghsfort_viper_nethertoxin",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
 	{
@@ -122,20 +115,22 @@ local Viper =
 	},
 
 	{
-		 description = "aghsfort_viper_viper_strike_pct_cooldown",
-		 ability_name = "aghsfort_viper_viper_strike",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
+		description = "aghsfort_viper_viper_strike_mana_cost_cooldown",
+		ability_name = "aghsfort_viper_viper_strike",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
-
-	-- {
-	-- 	 description = "aghsfort_viper_viper_strike_pct_mana_cost",
-	-- 	 ability_name = "aghsfort_viper_viper_strike",
-	-- 	 special_value_name = "mana_cost",
-	-- 	 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	 value = 15,
-	-- },
 
 	{
 		 description = "aghsfort_viper_viper_strike_duration",

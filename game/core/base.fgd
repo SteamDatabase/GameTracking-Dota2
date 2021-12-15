@@ -930,6 +930,30 @@
 	input SetSoundEventGUID(integer) : "Start the sound event using a snd_event_point and pass its guid output to this."
 ]
 
+@BaseClass = SndSoundAreaBase
+[ 
+	soundAreaType(string) : "Sound Area Type" : "" : "Name of the type of Sound Area"
+	startDisabled(bool) : "Start Disabled" : 0
+	
+	//Inputs
+	input Enable(void) : "Enable the entity"
+	input Disable(void) : "Disable the entity"
+	
+]
+
+@PointClass base( Targetname, SndSoundAreaBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(areaRadius) = snd_sound_area_sphere :
+	"Creates a spherical Sound Area"
+[
+	areaRadius(float) : "Sound Area Radius" : "25.0" : "The radius of the Sound Area"
+]
+
+@PointClass base( Targetname, SndSoundAreaBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( areaMin, areaMax ) = snd_sound_area_obb :
+	"Creates a box Sound Area"
+[
+	areaMin(vector) : "Sound Area Min" : "-32 -32 -32"
+	areaMax(vector) : "Sound Area Max" : "32 32 32"	
+]
+
 @PointClass base(Targetname) = env_zoom : 
 	"An entity that can be used to control the player's FOV. Useful for scenes where the player's view is being controlled, or player-usable binoculars/telescopes, etc."
 [
@@ -985,6 +1009,27 @@
 	input	IncrementTextureIndex(void) : "Increments target brush's current texture frame by one."
 	input	SetTextureIndex(integer) : "Sets target brush's texture frame to the specified index."
 ]
+
+@PointClass base(Targetname) box_oriented( anim_bounds_min, anim_bounds_max) model() = texture_based_animatable
+[
+	model(studio) : "Model" : ""
+	fps(float) : "Frames Per Second" : "60"
+	loop(boolean) : "Loop" : "0"
+	texture_based_animation_preview_sequence(float) [ min="0.0", max="1.0" ] : "Preview Sequence"
+	texture_based_animation_position_keys(resource:texture) : "Position Keyframes"
+	texture_based_animation_rotation_keys(resource:texture) : "Rotation Keyframes"
+	anim_bounds_min(vector) : "Animation Bounds Min" : "0 0 0" : "Minimum extents of the model throughout the whole animation" 
+	anim_bounds_max(vector) : "Animation Bounds Max" : "0 0 0" : "Maximum extents of the model throughout the whole animation" 
+	lightingorigin(target_destination) : "Lighting Origin" : "" : "Select an info_lighting to specify a location to sample lighting from, instead of its own origins."
+
+
+	input Start(void) : "Starts the animation"
+	input Stop(void) : "Stops the animation"
+	StartDisabled(boolean) : "Start Disabled" : 0
+	input Enable(void) : "Enable the Object."
+	input Disable(void): "Disable the Object."
+]
+
 
 @PointClass base(Targetname) = env_splash : 
 	"An entity that creates a splash effect at its origin. If the 'find water surface' spawnflag is set, it will instead trace down below itself to find the water surface on which to create splashes."
@@ -1157,38 +1202,6 @@
 	// Outputs
 	output OnBeginFade(void) : "Fired when the fade has begun."
 ]
-
-@PointClass base(Targetname) tags( Trigger ) = env_player_surface_trigger : 
-	"An entity that monitors the material of the surface the player is standing on, and fires outputs whenever it changes to/from a specific material."
-[
-	gamematerial(choices) : "Game Material to Watch" : "0" : "The material to watch. When the player stands on/off this material, this entity's outputs will be fired." =
-	[
-		0 : "None (player's in the air)"
-		67 : "Concrete"
-		77 : "Metal"
-		68 : "Dirt"
-		86 : "Vent"
-		71 : "Grate"
-		84 : "Tile"
-		83 : "Slosh"
-		87 : "Wood"
-		80 : "Computer"
-		89 : "Glass"
-		70 : "Flesh"
-		73 : "Clip"
-		79 : "Foliage"
-		78 : "Sand"
-	]
-	
-	// Inputs
-	input Enable(void) : "Start watching the player's surface."
-	input Disable(void) : "Stop watching the player's surface."
-
-	// Outputs
-	output OnSurfaceChangedToTarget(void) : "Fired when the player moves onto the specified game material."
-	output OnSurfaceChangedFromTarget(void) : "Fired when the player moves off the specified game material."
-]
-
 
 @SolidClass base(Targetname) tags( Trigger ) = trigger_tonemap : "Changes tonemap controllers for players touching the trigger."
 [
@@ -1954,16 +1967,6 @@
 	output OnShowMessage(void) : "Fired when the message is activated."
 ]
 
-@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = env_hudhint : 
-	"An entity to control the display of HUD hints. HUD hints are used to show the player what key is bound to a particular command."
-[
-	message(string) : "Hint Text (localized)" : "" : "This should be set to match the desired HUD hint entry in the hl2\resource\valve_english.txt."
-
-	// Inputs
-	input ShowHudHint(void) : "Shows the hint message."
-	input HideHudHint(void) : "Hides the hint message."
-]
-
 @PointClass sphere() iconsprite("editor/env_shake.vmat") base(Targetname, Parentname) = env_shake : 
 	"An entity to control screen shake on players." 
 [
@@ -2335,13 +2338,6 @@
 
 	// Inputs
 	input SetAmmoModifier(float): "Adjust the ammo modifier."
-]
-
-@PointClass base(Targetname) iconsprite("editor/game_end.vmat") = game_end : 
-	"An entity that ends a multiplayer game." 
-[
-	master(string) : "Master (Obsolete)" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this entity will not activate."
-	input EndGame(void) : "End the multiplayer game."
 ]
 
 @PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = game_player_equip : 
@@ -2999,6 +2995,7 @@
 		256: "Medium Sound Radius" : 0
 		512: "Large Sound Radius" : 1
 		1024: "Client-side Animation" : 0
+		2048: "Unblockable by Player" : 0
 	]
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 	dmg(integer) : "Blocking Damage" : 0 : "Damage done to any entity that blocks the rotation, per frame."
@@ -3401,7 +3398,6 @@
 		3 : "Ajar (use Ajar Angle)"
 	]
 	
-	axis(axis) : "Hinge Axis"
 	distance(float) : "Rotation Distance (deg)" : 90 : "The amount, in degrees, that the door should rotate when opened."
 	speed(integer) : "Speed" : 100 : "The speed at which the door moves."
 	soundopenoverride(sound) : "Fully Open Sound" : : "Sound played when the door has finished opening."
@@ -4013,6 +4009,8 @@
 	input UpperRandomBound(float) : "Set a new Maximum Random Interval."
 	input AddToTimer(float) : "Add time to the timer if it is currently enabled.  Does not change the Refire Interval."
 	input SubtractFromTimer(float) : "Subtract time from the timer if it is currently enabled.  Does not change the Refire Interval."
+	input PauseTimer(void) : "Pauses the timer, maintaining its current remaining time."
+	input UnpauseTimer(void) : "Unpauses the timer, continuing from where it left off when frozen."
 
 
 	// Outputs
@@ -4275,7 +4273,7 @@
 	output OnEntitiesSpawned(void) : "Fired when the entities associated with the layer have been spawned."
 ]
 
-@PointClass base( Targetname ) tags( Logic ) 
+@PointClass base( Targetname, CanBeClientOnly ) tags( Logic ) 
 	selected_line( 255 255 255, targetname, Template01 )
 	selected_line( 255 255 255, targetname, Template02 )
 	selected_line( 255 255 255, targetname, Template03 )
@@ -4784,21 +4782,6 @@
 	input TurnOn(void) : "Enable this entity. It will start damaging entities everytime it fires, and refire based upon the specified Delay."
 	input TurnOff(void) : "Disable this entity. It will stop damaging entities."
 	input Toggle(void) : "Toggle this entity between On/Off state."
-]
-
-@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = point_playermoveconstraint : 
-	"An entity that constrains players to a radius around itself, slowing them down the closer they get to the edge of the radius."
-[
-	radius(float) : "Radius" : 256 : "Radius to constrain players to."
-	width(float) : "Constraint Width" : "75.0" : "Width of the constraint edge. This is the distance in which to start slowing players down as they approach the edge of the radius."
-	speedfactor(float) : "Speed Factor" : "0.15" : "Factor applied to the player's max speed as they approach the radius edge."
-
-	// Inputs
-	input TurnOn(void) : "Start constraining any players within the radius."
-	input TurnOff(void) : "Stop constraining any players previously constrained."
-
-	// Outputs
-	output OnConstraintBroken(void) : "Fired when a player breaks through the constraint."
 ]
 
 //-------------------------------------------------------------------------
@@ -5554,17 +5537,16 @@
 		3: "Only Baked Shadows"
 	]
 
-	screenspacefade(boolean) [ group="Render Properties" ] : "Screen Space Fade" : 0 : "The method by which the fading distance should be determined. If 'No', the fade distances is the distance from the player's view to the object, in inches. If 'Yes', the fade distance is the size of the object onscreen, in pixels."
-
 	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
 	lodlevel(lod_level)  [ group="Render Properties" ] : "LOD Level" : "-1" : "LOD level to be displayed in game. Set to Auto for standard automatic selection, or set to a specific level to always use that level."
 
-	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist/Pixels" : -1 : "Distance at which the prop starts to fade (<0 = use fademaxdist). If 'Screen Space Fade' is selected, this represents the number of pixels wide covered by the prop when it starts to fade."
-	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist/Pixels" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out). If 'Screen Space Fade' is selected, this represents the *minimum* number of pixels wide covered by the prop when it fades."
-	fadescale(float) [ group="Render Properties" ] : "Fade Scale" : 1 : "If you specify a fade in the worldspawn, or if the engine is running under dx7 [hl2/ep1/portal] or dx8 [ep2/tf], then the engine will forcibly fade out props even if fademindist/fademaxdist isn't specified." +
-		" This scale factor gives you some control over the fade. Using 0 here turns off the forcible fades." +
-		" Numbers smaller than 1 cause the prop to fade out at further distances," +
-		"and greater than 1 cause it to fade out at closer distances."
+	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist" : -1 : "Distance at which the prop starts to fade (-1 = use fademaxdist)."
+	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out)."
+	//fadescale(float) [ group="Render Properties" ] : "Fade Scale" : 1 : "If you specify a fade in the worldspawn, or if the engine is running under dx7 [hl2/ep1/portal] or dx8 [ep2/tf], then the engine will forcibly fade out props even if fademindist/fademaxdist isn't specified." +
+	//	" This scale factor gives you some control over the fade. Using 0 here turns off the forcible fades." +
+	//	" Numbers smaller than 1 cause the prop to fade out at further distances," +
+	//	"and greater than 1 cause it to fade out at closer distances."
+
 	detailgeometry(boolean) : "Detail Geometry" : 0 : "If true this geometry is not important for precomputed lighting"	
 	visoccluder(boolean) : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility"	
 	baketoworld(boolean) [ group="Build Settings" ] : "Bake To World" : 0 : "If true this geometry will be baked into the world geometry of the map so that the model is not referenced at runtime."
@@ -5715,6 +5697,7 @@
 	"or other constraints. It can also be configured to break when it takes enough damage. Health can be overridden on this version."
 [
 	health(integer) : "Health" : 0 : "Number of points of damage to take before breaking.  0 means don't break."
+	propdata_override(string) : "Prop Data Override" : "" : "Prop Data names defined in propdata.txt are typically defined in the VMDL used by this prop. For prototyping, this allows you to select a specific one and ignore the name in the VMDL."
 	
 	// Inputs
 	input Ignite(void) : "Ignite, burst into flames."
@@ -6373,7 +6356,7 @@
 	output OnEndLook(void) : "Fired when the player was looking and unlooked while still touching."
 ]
 
-@SolidClass base(Trigger) drawangles( pushdir )= trigger_push : 
+@SolidClass base(Trigger) drawangles_local( pushdir )= trigger_push : 
 	"A trigger volume that pushes entities that touch it."
 [
 	pushdir(angle) : "Push Direction (Pitch Yaw Roll)" : "0 0 0" : "Angles indicating the direction to push touched entities."

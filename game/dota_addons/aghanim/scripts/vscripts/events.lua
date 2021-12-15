@@ -23,7 +23,9 @@ end
 ---------------------------------------------------------
 
 function CAghanim:OnHeroSelected( event )
-	self:GetAnnouncer():OnHeroSelected( event.hero_unit )
+	if self:GetAnnouncer() then 
+		self:GetAnnouncer():OnHeroSelected( event.hero_unit )
+	end
 end
 
 ---------------------------------------------------------
@@ -92,7 +94,7 @@ function CAghanim:AddResultToSignOut()
 		if PlayerResource:IsValidPlayerID( nPlayerID ) then
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "steam_id" ] = PlayerResource:GetSteamID( nPlayerID )
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "hero_id" ] = PlayerResource:GetSelectedHeroID( nPlayerID )
-			self.SignOutTable[ "player_list" ][ nPlayerID ][ "current_ascension_level" ] = PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, "ti10_event_game_current_ascension_level" )
+			self.SignOutTable[ "player_list" ][ nPlayerID ][ "current_ascension_level" ] = PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, "labyrinth_current_ascension_level" )
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "bp_remaining" ] = self:GetPointsCapRemaining( nPlayerID, true, false )
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "bp_total_cap" ] = self:GetPointsCapRemaining( nPlayerID, true, true )
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "fragments_remaining" ] = self:GetPointsCapRemaining( nPlayerID, false, false )
@@ -216,96 +218,49 @@ function CAghanim:OnNPCSpawned( event )
 		return
 	end 
 
+	--[[
+	-- BRAD - disabling this feature - it was causing Undying Tombstone to be teleported underground sometimes
 	if spawnedUnit:IsSummoned() and spawnedUnit:GetTeamNumber() == DOTA_TEAM_GOODGUYS then
 		self:OnNPCSpawned_AlliedSummon( event )
 		return
 	end 
+	]]--
 end
 
 --------------------------------------------------------------------------------
 
 -- Evaluate the state of the game
 function CAghanim:InitBlessings( hHero )
-
 	if hHero == nil then 
 		return
 	end
 
-	print ( "Init Blessings -- " .. hHero:GetUnitName() )
-
+	print ( "Init blessings for " .. hHero:GetUnitName() )
+	
 	local nPlayerID = hHero:GetPlayerOwnerID()
-	for blessing_name,blessing_keys in pairs(BLESSING_MODIFIERS) do
-
-		local nClaimCount = 0
-		local nBlessingType = nil
-		local szActionName = nil
-
-		if blessing_keys.action_names ~= nil then
-			for i = #blessing_keys.action_names,1,-1 do
-				if PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, blessing_keys.action_names[i] ) > 0 then
-					szActionName = blessing_keys.action_names[i]
-					nClaimCount = i
-					break
-				end
-			end
-		else
-			szActionName = blessing_keys.action_name
-			nClaimCount = PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, szActionName )
-			nBlessingType = blessing_keys.blessing_type
-
-			-- Used to test blessings, even if they haven't claimed it
-			local nTestClaimCount = BLESSING_MODIFIERS_FORCE_LIST[blessing_name]
-			if nTestClaimCount ~= nil then
-				print( 'Forcing blessing ' .. blessing_name )
-				nClaimCount = nTestClaimCount
-			end
-		end
-
-		if nClaimCount > 0 then
-			local kv = 
-			{
-				blessing_level = nClaimCount
-			}
-
-			print( 'Player ' .. nPlayerID .. ' adding blessing ' .. blessing_name )
-
-			if nBlessingType == nil or nBlessingType == BLESSING_TYPE_MODIFIER then
-				--print( "Modifier Blessing added - " .. hHero:GetUnitName() .. " - " .. blessing_name )
-				local hModifier = hHero:AddNewModifier( hHero, nil, blessing_name, kv )
-				if hModifier.IsBlessing == nil then
-					print( "Blessing " .. blessing_name .. " doesn't inherit from modifier_blessing_base!!" )
-				end
-
-			elseif nBlessingType == BLESSING_TYPE_ITEM_GRANT then
-				--print( "Item Grant Blessing added - " .. hHero:GetUnitName() .. " - " .. blessing_name )
-
-				for k,v in pairs( blessing_keys.keys.items ) do
-					--print( 'Item Grant blessing - ' .. k )
-					GrantItemDropToHero( hHero, k )
-				end
-
-			elseif nBlessingType == BLESSING_TYPE_GOLD_GRANT then
-				--print( "Gold Grant Blessing added - " .. hHero:GetUnitName() .. " - " .. blessing_name )
-				--print( "Adding gold " .. blessing_keys.keys.gold_amount )
-
-				local nPlayerID = hHero:GetPlayerID()
-				PlayerResource:ModifyGold( nPlayerID, blessing_keys.keys.gold_amount, true, DOTA_ModifyGold_Unspecified )
-
-			elseif nBlessingType == BLESSING_TYPE_LIFE_GRANT then
-				--print( "Life Grant Blessing added - " .. hHero:GetUnitName() .. " - " .. blessing_name )
-				--print( "Adding lives " .. blessing_keys.keys.lives )
-
-				hHero.nRespawnsRemaining = hHero.nRespawnsRemaining + blessing_keys.keys.lives
-
-			else
-				print( "ERROR - bad BLESSING_TYPE detected for action " .. blessing_keys.action_name )
-				return
-			end
-
-			self:RegisterBlessingStat( nPlayerID, blessing_name, nClaimCount, szActionName, blessing_keys.scoreboard_order )
-		end
+	local tBlessings = PlayerResource:GetEventGameUpgrades( nPlayerID )
+	if tBlessings == nil then
+		return
 	end
 
+	for szBlessingType,nBlessingValue in pairs( tBlessings ) do
+		local tBlessingDefinition = BLESSING_DEFINITIONS[ szBlessingType ]
+		if tBlessingDefinition ~= nil then
+			if tBlessingDefinition.grant_blessing ~= nil then
+				print( "Granting blessing " .. szBlessingType .. ":" .. tostring( nBlessingValue ) )
+				tBlessingDefinition.grant_blessing( nPlayerID, hHero, nBlessingValue )
+			elseif tBlessingDefinition.modifier_name ~= nil then
+				print( "Granting blessing " .. szBlessingType .. ":" .. tostring( nBlessingValue ) .. " as modifier " .. tBlessingDefinition.modifier_name )
+				local hModifier = hHero:AddNewModifier( hHero, nil, tBlessingDefinition.modifier_name, {} )
+				hModifier:SetStackCount( nBlessingValue )
+			else
+				print ( "ERROR: Bad blessing type definition for " .. szBlessingType .. ":" .. tostring( nBlessingValue ) )
+			end
+			self:RegisterBlessingStat( nPlayerID, szBlessingType, nBlessingValue )
+		else
+			print ( "ERROR: Unknown blessing type " .. szBlessingType .. ":" .. tostring( nBlessingValue ) )
+		end
+	end
 end
 
 ---------------------------------------------------------
@@ -340,11 +295,20 @@ function CAghanim:OnNPCSpawned_PlayerHero( event )
 	end
 	]]
 
+	hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_hero_ambient_effects", { } )
+
 	if hPlayerHero.bFirstSpawnComplete == nil then
 
 		if self.bHasInitializedSpectatorCameras == false then
 			self:CenterAllSpectatorsOnHero( hPlayerHero )
 			self.bHasInitializedSpectatorCameras = true
+		end
+
+		if hPlayerHero.bDataSent == nil then
+			-- Send the special ability data for each hero
+			--print ("sending special ability upgrade data")
+			CustomNetTables:SetTableValue( "special_ability_upgrades", hPlayerHero:GetUnitName(), SPECIAL_ABILITY_UPGRADES[ hPlayerHero:GetUnitName() ] )
+			hPlayerHero.bDataSent = true
 		end
 
 		local hCaptureAbility = hPlayerHero:AddAbility( "ability_aghsfort_capture" )
@@ -354,7 +318,8 @@ function CAghanim:OnNPCSpawned_PlayerHero( event )
 		
 		hPlayerHero:SetStashEnabled( false )
 		hPlayerHero:SetAbilityPoints( 0 )
-		hPlayerHero.nRespawnsRemaining = AGHANIM_STARTING_LIVES
+		hPlayerHero.nRespawnsRemaining = self:GetStartingLives()
+		hPlayerHero.nRespawnsMax = self:GetMaxLives()
 		hPlayerHero:SetRespawnsDisabled( false )
 
 		local nPlayerID = hPlayerHero:GetPlayerOwnerID()
@@ -367,9 +332,6 @@ function CAghanim:OnNPCSpawned_PlayerHero( event )
 		if hTP then
 			UTIL_Remove( hTP )
 		end
-
-		-- Add blessing modifiers
-		self:InitBlessings( hPlayerHero )
 
 		if AGHANIM_ENABLE_BOTTLE == true then
 			local hBottle = GrantItemDropToHero( hPlayerHero, "item_bottle" )
@@ -388,16 +350,26 @@ function CAghanim:OnNPCSpawned_PlayerHero( event )
 			end
 		end	
 
+		-- free boots!
+		GrantItemDropToHero( hPlayerHero, "item_boots" )
+
+		for i = 1, self:GetStartingCursedItemSlots() do
+			GrantItemDropToHero( hPlayerHero, "item_cursed_item_slot" )
+		end
+
 		-- blessings may give additional lives so make sure these net tables get set afterwards
 		--printf("setting remaining respawns on %d to %d", hPlayerHero:entindex(), hPlayerHero.nRespawnsRemaining )
 		CustomNetTables:SetTableValue( "revive_state", string.format( "%d", hPlayerHero:entindex() ), { tombstone = false } )
 		CustomNetTables:SetTableValue( "respawns_remaining", string.format( "%d", hPlayerHero:entindex() ), { respawns = hPlayerHero.nRespawnsRemaining } )
+		CustomNetTables:SetTableValue( "respawns_max", string.format( "%d", hPlayerHero:entindex() ), { respawns = hPlayerHero.nRespawnsMax } )
 
 		-- Add the battle royale modifier to all heroes
-		hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_battle_royale", { } )
-
+		--if GetMapName() == "main" then
+			hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_battle_royale", { } )
+		--end
 		hPlayerHero.MinorAbilityUpgrades = {}
 		hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_minor_ability_upgrades", {} )
+		--self:AddMinorAbilityUpgrade( hPlayerHero, MINOR_ABILITY_UPGRADES[ hPlayerHero:GetUnitName() ][ 2 ] )
 
 		-- Add and level up the base stats upgrade ability
 		local hAbility = hPlayerHero:FindAbilityByName( "aghsfort_minor_stats_upgrade" )
@@ -409,14 +381,12 @@ function CAghanim:OnNPCSpawned_PlayerHero( event )
 	else
 		local fInvulnDuration = 3.0
 
-		local hBlessing = hPlayerHero:FindModifierByName( "modifier_blessing_respawn_invulnerability" )
-		if hBlessing ~= nil then
+		local hDurationBlessing = hPlayerHero:FindModifierByName( "modifier_blessing_respawn_invulnerability" )
+		if hDurationBlessing ~= nil then
 			--print( 'Player revived w/ respawn invulnerability blessing - adding ' .. hBlessing.respawn_invulnerability_time_bonus .. ' seconds to invuln time' )
-			fInvulnDuration = fInvulnDuration + hBlessing.respawn_invulnerability_time_bonus
+			fInvulnDuration = fInvulnDuration + hDurationBlessing:GetStackCount()
 
 			--print( 'OnNPCSpawned_PlayerHero - blessing values, min_move_speed = ' .. hBlessing.min_move_speed .. '. bonus_attack_speed = ' .. hBlessing.bonus_attack_speed )
-
-			hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_respawn_haste", { duration = fInvulnDuration, min_move_speed = hBlessing.min_move_speed, bonus_attack_speed = hBlessing.bonus_attack_speed } )
 		end
 
 		hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_invulnerable", { duration = fInvulnDuration } )
@@ -427,12 +397,7 @@ function CAghanim:OnNPCSpawned_PlayerHero( event )
 
 	hPlayerHero.bFirstSpawnComplete = true
 
-	if self.bDataSent == nil then
-		-- Send the special ability data for each hero
-		--print ("sending special ability upgrade data")
-		CustomNetTables:SetTableValue( "special_ability_upgrades", tostring( 0 ), SPECIAL_ABILITY_UPGRADES )
-		self.bDataSent = true
-	end
+	
 	
 	self.bPlayerHasSpawned = true
 
@@ -463,6 +428,8 @@ end
 
 ---------------------------------------------------------
 
+--[[
+-- BRAD - disabling this feature - it was causing Undying Tombstone to be teleported underground sometimes
 function CAghanim:OnNPCSpawned_AlliedSummon( event )
 	local hSummonedUnit = EntIndexToHScript( event.entindex )
 	if hSummonedUnit == nil then
@@ -475,6 +442,7 @@ function CAghanim:OnNPCSpawned_AlliedSummon( event )
 		hSummonedUnit:AddNewModifier( hPlayerHero, nil, "modifier_battle_royale", { } )
 	end
 end
+]]--
 
 ---------------------------------------------------------
 -- dota_on_hero_finish_spawn
@@ -582,7 +550,13 @@ function CAghanim:OnEntityKilled_PlayerHero( event )
 		killedHero.nRespawnFX = ParticleManager:CreateParticle( "particles/items_fx/aegis_timer.vpcf", PATTACH_ABSORIGIN_FOLLOW, killedHero )
 		ParticleManager:SetParticleControl( killedHero.nRespawnFX, 1, Vector( AGHANIM_TIMED_RESPAWN_TIME, 0, 0 ) )
 
-		AddFOWViewer( killedHero:GetTeamNumber(), killedHero:GetAbsOrigin(), 800.0, AGHANIM_TIMED_RESPAWN_TIME, false )
+		-- Ugly code alert
+		local nVisionRange = AGHANIM_RESPAWN_VISION_RANGE
+		local szEncounter = self:GetCurrentRoom():GetEncounterName()
+		if szEncounter == "encounter_twilight_maze" then
+			nVisionRange = TWILIGHT_MAZE_VISION_RANGE
+		end
+		AddFOWViewer( killedHero:GetTeamNumber(), killedHero:GetAbsOrigin(), nVisionRange, AGHANIM_TIMED_RESPAWN_TIME, false )
 	end
 
 	killedHero.nRespawnsRemaining = math.max( 0, killedHero.nRespawnsRemaining - LIFE_REVIVE_COST )
@@ -645,6 +619,7 @@ function CAghanim:OnPlayerRevived( event )
 		hRevivedHero:AddNewModifier( hRevivedHero, nil, "modifier_invulnerable", { duration = fInvulnDuration } )
 		hRevivedHero:AddNewModifier( hRevivedHero, nil, "modifier_omninight_guardian_angel", { duration = fInvulnDuration } )
 		hRevivedHero:AddNewModifier( hRevivedHero, nil, "modifier_phased", { duration = fInvulnDuration }  )
+		hRevivedHero:AddNewModifier( hRevivedHero, nil, "modifier_hero_ambient_effects", { } )
 		if hRevivedHero.nRespawnFX ~= nil then
 			ParticleManager:DestroyParticle( hRevivedHero.nRespawnFX, false )
 			hRevivedHero.nRespawnFX = nil
@@ -797,7 +772,7 @@ function CAghanim:OnHeroEnteredShop( event )
 				szLine = "bristleback_bristle_ally_09"
 			end
 		end
-
+		
 		EmitSoundOnLocationForPlayer( szLine, hShop:GetAbsOrigin(), hHero:GetPlayerOwnerID() )
 	end
 end
@@ -811,7 +786,7 @@ end
 --------------------------------------------------------------------------------
 
 function CAghanim:OnTriggerStartTouch( event )
-
+	--print( "OnTriggerStartTouch " .. event.trigger_name )
 	local hUnit = EntIndexToHScript( event.activator_entindex )
 	local hTriggerEntity = EntIndexToHScript( event.caller_entindex )
 	local hTriggerSpawnGroup = hTriggerEntity:GetSpawnGroupHandle()
@@ -842,11 +817,24 @@ end
 --------------------------------------------------------------------------------
 
 function CAghanim:OnTriggerEndTouch( event )
+	--print( "OnTriggerEndTouch " .. event.trigger_name )
 	local hUnit = EntIndexToHScript( event.activator_entindex )
 	local hTriggerEntity = EntIndexToHScript( event.caller_entindex )
 	if hUnit ~= nil then
 		-- empty
 	end
+end
+
+--------------------------------------------------------------------------------
+-- dota_watch_tower_captured
+-- > entindex - int
+-- > team_number - int
+-- > old_team_number- int
+
+--------------------------------------------------------------------------------
+
+function CAghanim:OnOutpostCaptured( event )
+	-- empty
 end
 
 --------------------------------------------------------------------------------
@@ -881,3 +869,62 @@ end
 ]]
 
 ---------------------------------------------------------
+
+--------------------------------------------------------------------------------
+-- player_chat
+-- > teamonly - bool
+-- > userid - int
+-- > playerid - int
+-- > text - string
+--------------------------------------------------------------------------------
+
+function CAghanim:OnPlayerChat( event )
+	local nPlayerID = event.playerid
+	if nPlayerID == -1 or GameRules:IsDev() == false then
+		return
+	end
+
+	local sChatMsg = event.text
+	if sChatMsg:find( '^-win_encounter$' ) then
+		self:Dev_WinEncounter()
+	elseif sChatMsg:find( '^-win_game$' ) then
+		self:Dev_WinGame()
+	elseif sChatMsg:find( '^-kill_beast$' ) then
+		self:Dev_KillBeast()
+	elseif sChatMsg:find( '^-extra_lives$' ) then
+		self:Dev_ExtraLives( nPlayerID )
+	elseif sChatMsg:find( '^-feed$' ) then
+		self:Dev_KillPlayer( nPlayerID )
+	elseif sChatMsg:find( '^-fast_test_encounter' ) then
+		local szStrings = {}
+		for s in string.gmatch( sChatMsg, "%S+" ) do
+			table.insert( szStrings, s )
+		end
+		local szEnc = szStrings[2]
+		local szElite = szStrings[3]
+		if szEnc ~= nil then
+			self.bFastTestEncounter = true
+			self:Dev_TestEncounter( "-fast_test_encounter", szEnc, szElite )
+		else
+			Say( nil, "Error: no encounter specified", false )
+		end
+	--[[elseif sChatMsg:find( '^-lua' ) then
+		local cmd = ''
+		_,_,cmd = sChatMsg:find( '^-lua (.*)$' )
+		print( 'Running a lua command: ' .. cmd )
+		local f = loadstring( cmd, 'chatCommand' )
+		if f == nil then
+			Say( nil, "Error loading command", false )
+		else
+			local ok, result = pcall( f )
+			if ok then
+				if result == nil then result = 'nil' end
+				Say( nil, "Result is " .. result, false )
+			else
+				Say( nil, "Error: " .. result, false )
+			end
+		end--]]
+	end
+end
+
+--------------------------------------------------------------------------------

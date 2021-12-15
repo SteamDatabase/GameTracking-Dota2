@@ -109,7 +109,7 @@ end
 function BehaviorNone:Begin()
 --	print( "BehaviorNone:Begin()" )
 	local orders = nil
-	local hTarget = AICore:ClosestEnemyHeroInRange( thisEntity, thisEntity:GetDayTimeVisionRange() )
+	local hTarget = AICore:ClosestEnemyHeroInRange( thisEntity, thisEntity:GetDayTimeVisionRange(), false, true )
 	
 	if hTarget ~= nil then
 		thisEntity.lastTargetPosition = hTarget:GetAbsOrigin()
@@ -171,7 +171,7 @@ function BehaviorAttack:Evaluate()
 	
 	if self.chainLightningAbility and self.chainLightningAbility:IsFullyCastable() then
 		
-		self.target = AICore:ClosestEnemyHeroInRange( thisEntity, thisEntity:GetDayTimeVisionRange() )
+		self.target = AICore:ClosestEnemyHeroInRange( thisEntity, thisEntity:GetDayTimeVisionRange(), false, false )
 		if self.target ~= nil and self.target:IsAlive() then
 			desire = 6
 		end
@@ -228,7 +228,7 @@ function BehaviorAvoid:Evaluate()
 		thisEntity.PreviousHealthPct = thisEntity:GetHealthPercent()		
 	end
 
-	self.avoidTarget = AICore:ClosestEnemyHeroInRange( thisEntity, 650 )
+	self.avoidTarget = AICore:ClosestEnemyHeroInRange( thisEntity, 650, false, true )
 	if self.avoidTarget ~= nil then
 		desire = 4
 	end

@@ -295,6 +295,10 @@ function aghanim_shard_attack:OnProjectileHitHandle( hTarget, vLocation, iProjec
 			return false
 		end
 
+		if hTarget and hTarget:IsZombie() then
+			return false
+		end
+
 		if self.nPattern == PATTERN_SPIRAL then
 			ParticleManager:DestroyParticle( info.nFXIndex, false )
 			UTIL_Remove( info.attachEnt )

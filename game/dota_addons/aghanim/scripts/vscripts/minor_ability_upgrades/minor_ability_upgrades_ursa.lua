@@ -5,48 +5,51 @@ local Ursa =
 		ability_name = "aghsfort_ursa_earthshock",
 		special_value_name = "impact_damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 100,
-	},
-
-	-- {
-	-- 	description = "aghsfort_ursa_earthshock_percent_mana_cost",
-	-- 	ability_name = "aghsfort_ursa_earthshock",
-	-- 	special_value_name = "mana_cost",
-	-- 	operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	value = 15,
-	-- },
-
-	{
-		description = "aghsfort_ursa_earthshock_flat_radius",
-		ability_name = "aghsfort_ursa_earthshock",
-		special_value_name = "shock_radius",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		value = 75,
 	},
 
-	--[[
 	{
-		description = "aghsfort_ursa_earthshock_percent_cooldown",
+		description = "aghsfort_ursa_earthshock_flat_radius_hop_distance",
 		ability_name = "aghsfort_ursa_earthshock",
-		special_value_name = "cooldown",
-		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		value = 12,
+		special_values =
+		{
+			{
+				special_value_name = "shock_radius",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 50,
+			},
+			{
+				special_value_name = "hop_distance",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 50,
+			},
+		},
 	},
-	]]
 
-	{
-		description = "aghsfort_ursa_earthshock_flat_hop_distance",
-		ability_name = "aghsfort_ursa_earthshock",
-		special_value_name = "hop_distance",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 100,
-	},
 	{
 		description = "aghsfort_ursa_earthshock_flat_movement_slow",
 		ability_name = "aghsfort_ursa_earthshock",
 		special_value_name = "movement_slow",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 20,
+		value = 12,
+	},
+
+	{
+		description = "aghsfort_ursa_earthshock_mana_cost_cooldown",
+		ability_name = "aghsfort_ursa_earthshock",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
 	{
@@ -66,11 +69,21 @@ local Ursa =
 	},
 
 	{
-		description = "aghsfort_ursa_overpower_percent_cooldown",
+		description = "aghsfort_ursa_overpower_mana_cost_cooldown",
 		ability_name = "aghsfort_ursa_overpower",
-		special_value_name = "cooldown",
-		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		value = 12,
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
 	{
@@ -78,7 +91,7 @@ local Ursa =
 		ability_name = "aghsfort_ursa_fury_swipes",
 		special_value_name = "damage_per_stack",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 5,
+		value = 7,
 	},
 
 	{
@@ -94,7 +107,7 @@ local Ursa =
 		ability_name = "aghsfort_ursa_enrage",
 		special_value_name = "damage_reduction",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 10,
+		value = 7,
 	},
 
 	{
@@ -102,7 +115,7 @@ local Ursa =
 		ability_name = "aghsfort_ursa_enrage",
 		special_value_name = "duration",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 1.0,
+		value = 0.75,
 	},
 
 	{
@@ -110,15 +123,25 @@ local Ursa =
 		ability_name = "aghsfort_ursa_enrage",
 		special_value_name = "status_resistance",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 10
+		value = 7
 	},
 
 	{
-		description = "aghsfort_ursa_enrage_percent_cooldown",
+		description = "aghsfort_ursa_enrage_mana_cost_cooldown",
 		ability_name = "aghsfort_ursa_enrage",
-		special_value_name = "cooldown",
-		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		value = 12,
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 }
 

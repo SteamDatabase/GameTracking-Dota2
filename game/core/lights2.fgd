@@ -38,7 +38,7 @@
 	]
 	color(color255) { enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255"
 	colortemperature(float) { min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
-	brightness(float) { min="-4.0" max="8.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Brightness (EV)"
+	brightness_lumens(float) { min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "224" : "Brightness in lumens"
 
 	directlight(choices) : "Direct Lighting" : "3" : "How direct lighting should be represented" =
 	[
@@ -49,14 +49,23 @@
 		"2" : "Dynamic"
 	]
 
-	// Units
-	brightness_units(choices) { group="Units" } : "Units" : "0" : "Brightness Units" =
+	luminaire_shape(choices) { group="Luminaire" }: "Area Light" : "0" : "Shape of the area light" =
 	[
-		"0" : "EV"
+		"0" : "Point"
+		"1" : "Disk"
+		"2" : "Rectangle"
+	]
+	luminaire_size(float) { group="Luminaire" min="0.0" max="90.0" } : "Area Light Size" : "4" : "Area light size, in degrees subtended by a point 100 units away from the near plane."
+	luminaire_anisotropy(float) { group="Luminaire" min="-1" max="1" } : "Area Light Anisotropy" : "0" : "Area light shape anisotropy"
+
+	// Units
+	brightness_units(choices) { group="Units" } : "Units" : "1" : "Brightness Units" =
+	[
 		"1" : "Lumens"
+		"0" : "EV"
 		"3" : "Legacy"
 	]
-	brightness_lumens(float) { group="Units" enabled={ variable="brightness_units" value="1" } } : "Lumens" : "224" : "Brightness in lumens"
+	brightness(float) { group="Units" min="-4.0" max="8.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Brightness (EV)"
 	brightness_legacy(float) { group="Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
 
 	// Style
@@ -72,7 +81,7 @@
 	skirt(float) { group="Shape" min="0.0" max="1.0" } : "Far Skirt" : "0.1"
 	skirt_near(float) { group="Shape" min="0.0" max="1.0" } : "Near Skirt" : "0.05"
 	size_params(vector) { group="Shape" } : "Size" : "16.0 16.0 0.0625"
-	range(float) { group="Shape" } : "Range" : "256.0"
+	range(float) { group="Shape" min="2.0" } : "Range" : "256.0"
 	shear(vector) { group="Shape" } : "Shear" : "0.0 0.0"
 
 	// Render
@@ -95,7 +104,26 @@
 		"1" : "Yes"
 		"2" : "Baked Only"
 	]
-
+	shadowmapsize(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Map Resolution" : "-1" =
+	[
+		"4096" : "4096"
+		"3584" : "3584"
+		"3072" : "3072"
+		"2560" : "2560"
+		"2048" : "2048"
+		"1536" : "1536"
+		"1024" : "1024"
+		"512" : "512"
+		"-1" : "Default"
+	]
+    shadowpriority(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Priority" : "-1" =
+    [
+        "100" : "Highest"
+        "10"  : "High"
+        "5"   : "Medium"
+        "-5"  : "Low"
+        "-1"  : "Default"
+    ]
 	pvs_modify_entity(boolean) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Transmit Shadow Casters to Client" : "0" : "When this light is visible to a player, add its shadow casters to the player's PVS."
 	shadowfade_size_start(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out Start Size" : ".10" : "Screen size where the shadows will begin fading out"
 	shadowfade_size_end(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out End Size" : ".05" : "Screen size where the shadows will be fully faded out"
@@ -147,7 +175,7 @@
 	]
 	color(color255) { enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255"
 	colortemperature(float) { min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
-	brightness(float) { min="-4.0" max="18.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Logarithmic Brightness"
+	brightness_lumens(float) { min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "250" : "Brightness in lumens"
 
 	shape(choices) : "Shape" : "0" : "Shape of the light" =
 	[
@@ -165,17 +193,17 @@
 	]
 
 	// Units
-	brightness_units(choices) { group="Units" } : "Units" : "0" : "Brightness Units" =
+	brightness_units(choices) { group="Units" } : "Units" : "1" : "Brightness Units" =
 	[
-		"0" : "EV"
 		"1" : "Lumens"
 		"4" : "Candelas"
 		"2" : "Nits"
+		"0" : "EV"
 		"3" : "Legacy"
 	]
-	brightness_lumens(float) { group="Units" enabled={ variable="brightness_units" value="1" } } : "Lumens" : "250" : "Brightness in lumens"
 	brightness_candelas(float) { group="Units" enabled={ variable="brightness_units" value="4" } } : "Candelas" : "80" : "Brightness in candelas"
 	brightness_nits(float) { group="Units" enabled={ variable="brightness_units" value="2" } } : "Nits" : "120" : "Brightness in nits"
+	brightness(float) { group="Units" min="-4.0" max="18.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Logarithmic Brightness"
 	brightness_legacy(float) { group="Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
 
 	// Style
@@ -184,7 +212,7 @@
 	// Shape
 	skirt(float) { group="Shape" min="0.0" max="1.0" } : "Skirt" : "0.1"
 	size_params(vector) { group="Shape" } : "Size" : "16.0 16.0 0.15"
-	range(float) { group="Shape" } : "Range" : "256.0"
+	range(float) { group="Shape" min="2.0" } : "Range" : "256.0"
 
 	// Render
 	showlight(boolean) { group="Render" } : "Render Light Geometry" : 0 : "Render the light geometry"
@@ -200,6 +228,26 @@
 		"1" : "Yes"
 		"2" : "Baked Only"
 	]
+	shadowmapsize(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Map Resolution" : "-1" =
+	[
+		"4096" : "4096"
+		"3584" : "3584"
+		"3072" : "3072"
+		"2560" : "2560"
+		"2048" : "2048"
+		"1536" : "1536"
+		"1024" : "1024"
+		"512" : "512"
+		"-1" : "Default"
+	]
+    shadowpriority(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Priority" : "-1" =
+    [
+        "100" : "Highest"
+        "10"  : "High"
+        "5"   : "Medium"
+        "-5"  : "Low"
+        "-1"  : "Default"
+    ]
 	pvs_modify_entity(boolean) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Transmit Shadow Casters to Client" : "0" : "When this light is visible to a player, add its shadow casters to the player's PVS."
 	shadowfade_size_start(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out Start Size" : ".10" : "Screen size where the shadows will begin fading out"
 	shadowfade_size_end(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out End Size" : ".05" : "Screen size where the shadows will be fully faded out"
@@ -240,6 +288,7 @@
 		entity_tool_name = "Omni Light"
 		entity_tool_tip = "Omni directional light source"
 		entity_tool_group = "Lighting"
+		default_pitch = 90.0
 	}
 	iconsprite
 	{
@@ -256,7 +305,7 @@
 	]
 	color(color255) { enabled={ variable="colormode" value="0" } } : "Color" : "255 255 255"
 	colortemperature(float) { min="1500" max="15000" enabled={ variable="colormode" value="1" } } : "Color Temperature (K)" : "6600"
-	brightness(float) { min="-4.0" max="18.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Logarithmic Brightness"
+	brightness_lumens(float) { min="0.0" max="4000" enabled={ variable="brightness_units" value="1" } } : "Brightness (Lumens)" : "1000" : "Brightness in lumens"
 
 	shape(choices) : "Shape" : "3" : "Shape of the light" =
 	[
@@ -276,17 +325,17 @@
 	]
 
 	// Units
-	brightness_units(choices) { group="Units" } : "Units" : "0" : "Brightness Units" =
+	brightness_units(choices) { group="Units" } : "Units" : "1" : "Brightness Units" =
 	[
-		"0" : "EV"
 		"1" : "Lumens"
 		"4" : "Candelas"
 		"2" : "Nits"
+		"0" : "EV"
 		"3" : "Legacy"
 	]
-	brightness_lumens(float) { group="Units" enabled={ variable="brightness_units" value="1" } } : "Lumens" : "1000" : "Brightness in lumens"
 	brightness_candelas(float) { group="Units" enabled={ variable="brightness_units" value="4" } } : "Candelas" : "80" : "Brightness in candelas"
 	brightness_nits(float) { group="Units" enabled={ variable="brightness_units" value="2" } } : "Nits" : "9816" : "Brightness in nits"
+	brightness(float) { group="Units" min="-4.0" max="18.0" enabled={ variable="brightness_units" value="0" } } : "Brightness (EV)" : "0" : "Logarithmic Brightness"
 	brightness_legacy(float) { group="Units" enabled={ variable="brightness_units" value="3" } } : "Legacy" : "1" : "Legacy brightness value"
 
 	// Style
@@ -295,9 +344,9 @@
 	// Shape
 	skirt(float) { group="Shape" min="0.0" max="1.0" } : "Skirt" : "0.1"
 	size_params(vector) { group="Shape" } : "Size" : "2.0 24.0 0.15"
-	range(float) { group="Shape" } : "Range" : "256.0"
-	outer_angle(float) { group="Shape" } : "Outer Angle" : "180.0"
-	inner_angle(float) { group="Shape" } : "Inner Angle" : "180.0"
+	range(float) { group="Shape" min="2.0" } : "Range" : "256.0"
+	outer_angle(float) { group="Shape" min="1.0" max="180.0" } : "Outer Angle" : "180.0"
+	inner_angle(float) { group="Shape" min="1.0" max="180.0" } : "Inner Angle" : "180.0"
 
 	// Render
 	showlight(boolean) { group="Render" } : "Render Light Geometry" : 0 : "Render the light geometry"
@@ -313,6 +362,26 @@
 		"1" : "Yes"
 		"2" : "Baked Only"
 	]
+	shadowmapsize(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Map Resolution" : "-1" =
+	[
+		"4096" : "4096"
+		"3584" : "3584"
+		"3072" : "3072"
+		"2560" : "2560"
+		"2048" : "2048"
+		"1536" : "1536"
+		"1024" : "1024"
+		"512" : "512"
+		"-1" : "Default"
+	]
+    shadowpriority(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Priority" : "-1" =
+    [
+        "100" : "Highest"
+        "10"  : "High"
+        "5"   : "Medium"
+        "-5"  : "Low"
+        "-1"  : "Default"
+    ]
 	pvs_modify_entity(boolean) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Transmit Shadow Casters to Client" : "0" : "When this light is visible to a player, add its shadow casters to the player's PVS."
 	shadowfade_size_start(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out Start Size" : ".10" : "Screen size where the shadows will begin fading out"
 	shadowfade_size_end(float) { group="Shadows" min="0.0" max="1.0" enabled={ variable="castshadows" value="1" } } : "Shadow Fade Out End Size" : ".05" : "Screen size where the shadows will be fully faded out"

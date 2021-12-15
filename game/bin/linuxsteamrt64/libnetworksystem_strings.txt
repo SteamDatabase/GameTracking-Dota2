@@ -144,6 +144,7 @@ $tI
 %d total.
 %d,'%s','%s',%d
 %d.%d.%d
+%d:  %s %s [ptr 0x%p] 0x%p (%s) (%s *) %s '%s'
 %d:  %s (%s) [ptr 0x%p] %s%s '%s'
 %g
 %g,
@@ -158,6 +159,7 @@ $tI
 %s %s %s
 %s %s = %s
 %s %s:  [%d] %s queue %s [type %s] %son 0x%p [alloc %u] [order %d] %s
+%s %s:  [%d] %s queue %s [type %s] 0x%p %s
 %s - Argument expected (message ID or name).
 %s - Invalid net message index: %d
 %s - Unrecognized net message name: '%s'
@@ -178,9 +180,8 @@ $tI
 %s%s %s::%s recursively
 %s%s found %s in path %s
 %s%s: failed to find match for offset %llu [path %s]
-%s%s::%s marked %s by group %s at %s
-%s%s::%s marked %s by name at %s
-%s%s::%s under consideration
+%s%s::%s marked %s by group %s%s
+%s%s::%s marked %s by name%s
 %s+--
 %s+-- Schema Class: %s
 %s,%s,'%s',%d,%d,%.3f,%d,%.3f,%d,%d,=E%d/K$1,%s,%s
@@ -231,6 +232,7 @@ $tI
 %s: field %s has MNetworkSendProxyRecipientsFilter but type '%s' is not declared DECLARE_EMBEDDED_NETWORKVAR_NOTFLATTENED()
 %s: invalid nBeforeIndex %d
 %s: rebasing delegate [ 0x%p -> 0x%p ]
+%s: recreation removing deallocation
 %s: shrinking removes delegate [0x%p]
 %s:%d
 %s:%d reliable sequence
@@ -244,7 +246,7 @@ $tI
 %sApplying %s
 %sCull fields for %s
 %sCulled %s::%s
-%sProcess includes/excludes %s
+%sProcess includes/excludes %s %s
 %sconsider %s at depth %d
 %sexcluding %s::%s due to MNetworkNoBase
 %sfound leafmost nobase at %s
@@ -266,6 +268,8 @@ $tI
 (
 ( def. "%s" )
 (%d) is > avg (%.2f) with stddev*scale (%.2f * %.2f) and threshold (%.2f)
+(%d,%d)
+(%s%s)
 (%s->%s)
 (%u %u %u %u)
 (Message Info)
@@ -317,7 +321,6 @@ $tI
 ->error
 -FLT_MAX
 -avx
--dti
 -inf
 -ip
 -net_no_parallel_build
@@ -344,13 +347,8 @@ $tI
 ...<truncated>...
 ../common/protobuf_helpers.cpp
 ../public/networksystem/serializedentity.h
-../public/ordered_constructor.h
 ../public/tier0/eventdispatcher.h
-../public/tier0/quantizedfloatencoder.h
 ../public/tier0/tslist.h
-../public/tier0/utlleanvector.h
-../public/tier0/utllinkedlist.h
-../public/tier0/utlrbtree.h
 ../public/tier0/utlsignalslot.h
 ../public/tier0/utlsortvector.h
 ../public/tier0/utlsymboltable.h
@@ -416,7 +414,6 @@ $tI
 13CNoRefFunctor
 13CSVCMsg_Print
 14CBaseAppSystemI14INetworkSystemE
-14CBaseAppSystemI19INetworkSystemUtilsE
 14CMsgIPCAddress
 14CMsgPlayerInfo
 14CMsgServerPeer
@@ -431,11 +428,8 @@ $tI
 15CMsg_CVars_CVar
 15CSVCMsg_SetView
 15CTier0AppSystemI14INetworkSystemLx0EE
-15CTier0AppSystemI19INetworkSystemUtilsLx0EE
 15CTier1AppSystemI14INetworkSystemLx0EE
-15CTier1AppSystemI19INetworkSystemUtilsLx0EE
 15CTier2AppSystemI14INetworkSystemLx0EE
-15CTier2AppSystemI19INetworkSystemUtilsLx0EE
 15INetChannelInfo
 15SignedPayload_t
 16CDefaultAccessor
@@ -467,12 +461,10 @@ $tI
 19CBidirMsg_RelayInfo
 19CCLCMsg_BaselineAck
 19CNETMsg_SignonState
-19CNetworkSystemUtils
 19CSVCMsg_SplitScreen
 19CSVCMsg_UserMessage
 19CSchemaRegistration
 19CSerializedEntities
-19INetworkSystemUtils
 19ISerializedEntities
 19NetMessagePacketEnd
 2.
@@ -518,7 +510,6 @@ $tI
 23NetMessagePacketStart_t
 24CCLCMsg_RespondCvarValue
 24CFlattenedSerializers_FS
-24CSVCMsgList_UserMessages
 25CCLCMsg_RconServerDetails
 25CConCommandMemberAccessorI16CNetworkMessagesE
 25CNETMsg_SpawnGroup_Unload
@@ -562,7 +553,6 @@ $tI
 33CNETMsg_SpawnGroup_ManifestUpdate
 33CSchemaRegistration_networksystem
 34CNETMsg_SpawnGroup_SetCreationTick
-34CSVCMsgList_UserMessages_usermsg_t
 34CSVCMsg_GameEventList_descriptor_t
 34NetMessageSplitscreenUserChanged_t
 4
@@ -645,7 +635,7 @@ AddUInt32
 AddUInt64
 Adding 0--%dms of additional latency to %g%% packets, for random reordering
 Adding additional packet lag of %dms (%dms each way), Bernoulli loss of %g%%.
-AllocInternal
+AlignedByteArray not properly aligned
 Allowing IP connections without auth
 Already saw decimal point or exponent; can't have another one.
 AnimGraphEditorUtils001
@@ -1413,7 +1403,6 @@ GetFloat
 GetInt32
 GetInt64
 GetMessage
-GetPathData
 GetPathData failed for read only CFieldPath
 GetRawRepeatedField
 GetRepeatedBool
@@ -1442,7 +1431,6 @@ HammerMapLoader001
 HasField
 HelpSystem_001
 Hex and octal numbers must be integers.
-HookUpConfigValue
 Host game server ip
 HostStateMgr001
 How long p2p connection requests should linger before we completely ignore them
@@ -1465,7 +1453,6 @@ Index must be -1 for non-repeated fields
 Index must be -1 for singular fields.
 Index must be in range of repeated field values.
 Index out-of-bounds (field is empty).
-Init
 InitFakeField:  Couldn't find schema lookup for '%s' of type '%s'
 InitFakeField:  Parser function returned false for '%s' of type '%s'
 InitFakeField: %-64s type: %-32s encoder: %-32s [%s]
@@ -1552,6 +1539,7 @@ MNetworkAlias
 MNetworkArraySerializer
 MNetworkBitCount
 MNetworkChangeCallback
+MNetworkChangePointerCallback
 MNetworkDisable
 MNetworkEnable
 MNetworkEncodeFlags
@@ -1575,6 +1563,8 @@ MNetworkUserGroupSendProxyRecipientsFilter
 MNetworkVarEmbeddedFieldOffsetDelta
 MNetworkVarEmbeddedNotFlattened
 MNetworkVarNames
+MNetworkVarTypeOverride
+MNetworkVarTypeOverride is referring to an unknown class name %s in class %s
 MNetworkVarsAtomic
 MNetworkVarsDisable
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
@@ -1619,8 +1609,8 @@ Maximum number of messages to process from a client in a single frame (0 == no l
 MaybeAllocateAligned cannot fail here.
 MemAlloc_AllocFunc
 MemAlloc_FreeFunc
+MemAlloc_StrDupFunc
 Merge
-MergeDeltas
 MeshSystem001
 MeshUtils001
 Message class "
@@ -1793,11 +1783,9 @@ NetworkServerService_001
 NetworkService_001
 NetworkSystem
 NetworkSystem/CreateListenSocketP2P
-NetworkSystemUtilsVersion001
 NetworkSystemVersion001
 Networking
 Networking Reliable
-NewNode
 No active net channels.
 No default value
 No field named "uninterpreted_option" in the Options proto.
@@ -1820,6 +1808,8 @@ Numbers starting with leading zero must be in octal.
 O
 OK
 OUT_OF_RANGE
+Off
+On
 Oneof must have at least one field.
 Opened Steam Net Connection on socket '%s' to %s, connection %s
 Option "
@@ -1843,24 +1833,22 @@ ParseFromString failed
 ParseMessages
 Parsing attempt:
 ParticleSystemMgr003
-Path_AddToTail
 Path_AddToTail failed for read only CFieldPath
 Path_AddToTail failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
-Path_PopLast
 Path_PopLast failed for read only CFieldPath
-Path_RemoveAll
 Path_RemoveAll failed for read only CFieldPath
-Path_SetCount
 Path_SetCount failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
 Peer To Peer
 PhysicsBuilderMgr001
 Plat_DebugPrint
 Plat_ExitProcess
+Plat_FatalErrorFunc
 Plat_FloatTime
 Plat_GetLocalTime
 Plat_IsInDebugSession
 Plat_IsInTestMode
 Plat_MSTime
+Plat_NonFatalErrorFunc
 Plat_RelativeTicks
 Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
@@ -1889,6 +1877,7 @@ Problem     : Field is not the right type for this message:    Expected  :
 ProcessMessages
 ProcessOverride encountered unknown directive NetworkOverrideType_t(%d)
 ProcessPacketSNP %s:%s packet %i at %i
+Processing
 PropertyEditorSystem_001
 Proto
 Proto file starts with 0xEF but not UTF-8 BOM. Only UTF-8 is accepted for proto file.
@@ -1907,7 +1896,6 @@ ProtoBufHelper::ParseJSON: Ignoring extra JSON key '%s', which is not found in p
 ProtoBufHelper::ParseJSON: Object Begin found on invalid field!
 ProtoBufHelper::ParseJSON: received callback with message field but no message!
 ProtoBufHelper::ParseJSON: received callback with no current message field!
-Protobuf: %s(%d): %s
 Protocol Buffer map usage error:
 Protocol Buffer reflection usage error:  Method      : google::protobuf::Reflection::
 Push
@@ -1949,8 +1937,6 @@ Reached impossible case in HasBit().
 ReadFields
 ReceiveDatagram
 Recursion limit at end of parse should be
-RegisterAllModuleData
-RegisterConfigValue: Unknown error constructing config value "%s"!
 RegisterFieldChangeCallbackPriority
 RegisterNetMessageHandlerAbstract: Attempted to register a message handler for a message which is not valid for this category of channel [message %s]!
 RegisterNetMessageHandlerAbstract: Must call StartRegisteringMessageHandlers before, and FinishRegisteringMessageHandlers after [message %s]!
@@ -1998,9 +1984,9 @@ STEAMINVENTORY_INTERFACE_V003
 STEAMMUSICREMOTE_INTERFACE_VERSION001
 STEAMMUSIC_INTERFACE_VERSION001
 STEAMPARENTALSETTINGS_INTERFACE_VERSION001
-STEAMREMOTESTORAGE_INTERFACE_VERSION014
+STEAMREMOTESTORAGE_INTERFACE_VERSION016
 STEAMSCREENSHOTS_INTERFACE_VERSION003
-STEAMUGC_INTERFACE_VERSION014
+STEAMUGC_INTERFACE_VERSION016
 STEAMUSERSTATS_INTERFACE_VERSION012
 STEAMVIDEO_INTERFACE_V002
 SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*)
@@ -2034,9 +2020,11 @@ SetRepeatedInt64
 SetRepeatedString
 SetRepeatedUInt32
 SetRepeatedUInt64
+SetSerializerProxyIndices_R
 SetString
 SetUInt32
 SetUInt64
+Setting FS %p field %p (%s) to %s
 Setting max routable payload size from %d to %d for %s
 Should dedicated server listen for new-style P2P?
 Should not reach here.
@@ -2088,7 +2076,7 @@ SteamAPI_UnregisterCallResult
 SteamAPI_UnregisterCallback
 SteamAudio001
 SteamClient020
-SteamController007
+SteamController008
 SteamDatagram Network Configuration
 SteamDatagramClient_Init failed.  %s
 SteamDatagramClient_Init_InternalV9
@@ -2100,12 +2088,11 @@ SteamDatagramServer_Init failed.  %s
 SteamDatagramServer_Init_InternalV2
 SteamDatagramServer_Kill
 SteamFriends017
-SteamGameServer013
+SteamGameServer014
 SteamGameServerNetworkingSockets_LibV12
 SteamGameServerStats001
 SteamGameServer_GetHSteamPipe
 SteamGameServer_GetHSteamUser
-SteamInput001
 SteamInternal_ContextInit
 SteamInternal_CreateInterface
 SteamInternal_FindOrCreateGameServerInterface
@@ -2392,6 +2379,7 @@ __pthread_key_create
 __snprintf_chk
 __sprintf_chk
 __stack_chk_fail
+__temp_unserialization_member__
 __tls_get_addr
 __vsnprintf_chk
 _edata
@@ -2410,6 +2398,7 @@ array count
 array of pointers
 array size changed
 assign_poll_group
+at '%s'
 at depth %d items %d
 available
 average metadata list is %f entries
@@ -2438,7 +2427,6 @@ builtin()
 bytes
 bytes).  To increase the limit (or to disable these warnings), see CodedInputStream::SetTotalBytesLimit() in third_party/protobuf/src/google/protobuf/io/coded_stream.h.
 bytes.
-calloc
 can't reach here.
 cannot be required.
 cb(%s[%d])
@@ -2475,6 +2463,7 @@ data_ == other.data_
 data_bits
 databytes
 deactivated
+deallocate
 decode
 decoding FAKE
 definition file imports the proto which defines the option.
@@ -2511,6 +2500,7 @@ field %s not present in %s
 field is fixed sized array size %d
 field is using array manipulator, current size returned %d
 field not in previous encoding
+field pointer
 field_full
 field_short
 fieldname
@@ -2524,7 +2514,6 @@ flattenedserializers.cpp
 float
 float32
 float64
-floor
 fltx4
 fp_trace
 free
@@ -2673,6 +2662,7 @@ int
 int google::protobuf::CalculateBase64EscapedLen(int, bool)
 internal error in map key sorting
 invalid
+invalid!
 invalid_address
 is unused.
 json_name = "
@@ -2837,7 +2827,6 @@ pending data
 per client out %.1f, in %.1f kB/s
 per client out %.1f/s, in %.1f/s
 please implement MergeFrom for your type.
-pointer
 pointer field
 pointer to struct
 possible match %d of %d:  %s %s.%s
@@ -2872,7 +2861,6 @@ resource_name
 rnd_down
 rnd_up
 s
-schemabindings.cpp
 schemaclassinfo.cpp
 schemasystem
 schematype.cpp
@@ -3014,6 +3002,7 @@ sv_maxroutable
 symbols
 syntax = "$0";
 t
+target struct
 text
 text format contains deprecated field "
 the Element type supplies a MergeFrom() operation to make copies.
@@ -3078,6 +3067,7 @@ x
 y
 yes
 z
+zD
 zero
 {
 { ... };

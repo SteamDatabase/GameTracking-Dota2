@@ -11,6 +11,7 @@ end
 
 function modifier_treasure_chest:OnCreated( kv )
 	if IsServer() then
+		self.vecPlayers = {}
 		self:StartIntervalThink( 0.5 )
 	end
 end
@@ -31,24 +32,28 @@ end
 
 function modifier_treasure_chest:OnOrder( params )
 	if IsServer() then
-		local hOrderedUnit = params.unit 
-		local hTargetUnit = params.target
-		local nOrderType = params.order_type
-		if nOrderType ~= DOTA_UNIT_ORDER_MOVE_TO_TARGET then
+		if self.bWasOpened then
 			return
 		end
 
-		if hTargetUnit == nil or hTargetUnit ~= self:GetParent() then
+		local hOrderedUnit = params.unit 
+		local hTargetUnit = params.target
+		local nOrderType = params.order_type
+
+		if hTargetUnit == nil or hTargetUnit ~= self:GetParent() or nOrderType ~= DOTA_UNIT_ORDER_MOVE_TO_TARGET then
+			if hOrderedUnit ~= nil and self.vecPlayers [ hOrderedUnit ] ~= nil then
+				self.vecPlayers [ hOrderedUnit ] = nil
+				--print( "--2--Hero " .. hOrderedUnit:GetUnitName() .. " has had a different order, stop thinking." )
+			end
 			return
 		end
 
 		if hOrderedUnit ~= nil and hOrderedUnit:IsRealHero() and hOrderedUnit:GetTeamNumber() == DOTA_TEAM_GOODGUYS then
-			self.hPlayerEnt = hOrderedUnit
+			--print( "++++Hero " .. hOrderedUnit:GetUnitName() .. " is going towards " .. self:GetParent():GetUnitName() )
+			self.vecPlayers[ hOrderedUnit ] = true
 			self:StartIntervalThink( 0.25 )
 			return
 		end
-
-		self:StartIntervalThink( -1 )
 	end
 
 	return 0
@@ -65,24 +70,35 @@ end
 function modifier_treasure_chest:OnIntervalThink()
 	if IsServer() then
 		if not self.bWasOpened then
-			if self.hPlayerEnt ~= nil then
-				local flOpenDistance = 150.0
-				if flOpenDistance >= ( self.hPlayerEnt:GetOrigin() - self:GetParent():GetOrigin() ):Length2D() then
-					if GameRules.Aghanim ~= nil then
-						self.hPlayerEnt:Interrupt()
-						self:GetParent():StartGesture( ACT_DOTA_PRESENT_ITEM )
-						GameRules.Aghanim:OnTreasureOpen( self.hPlayerEnt, self:GetParent() )
-						self.bWasOpened = true
-						self.hPlayerEnt = nil
+			local bFoundValid = false
+			for hPlayerEnt,v in pairs( self.vecPlayers ) do
+				if v then
+					local flOpenDistance = 150.0
+					if flOpenDistance >= ( hPlayerEnt:GetOrigin() - self:GetParent():GetOrigin() ):Length2D() then
+						if GameRules.Aghanim ~= nil then
+							hPlayerEnt:Interrupt()
+							self:GetParent():StartGesture( ACT_DOTA_PRESENT_ITEM )
+							GameRules.Aghanim:OnTreasureOpen( hPlayerEnt, self:GetParent() )
+							self.bWasOpened = true
 
-						self.fTimeChestOpened = GameRules:GetGameTime()
-						self:StartIntervalThink( 4 )
+							self.fTimeChestOpened = GameRules:GetGameTime()
+							self:StartIntervalThink( 4 )
 
-						return -1
+							return -1
+						end
+					else
+						bFoundValid = true
 					end
 				end
 			end
+
+			if bFoundValid ~= true then
+				--print( "---No more heroes heading to " .. self:GetParent():GetUnitName() )
+				self:StartIntervalThink( -1 )
+			end
 		else
+			self.vecPlayers = {}
+			self:StartIntervalThink( -1 )
 			self:GetParent():Destroy()
 		end
 	end

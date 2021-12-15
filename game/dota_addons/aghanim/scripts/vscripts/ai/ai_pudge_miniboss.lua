@@ -64,7 +64,7 @@ function PudgeMinibossThink()
 	else
 		hUnit.flLastAggroSwitch = hUnit.flLastAggroSwitch and hUnit.flLastAggroSwitch or 0
 	
-		local hTarget = AICore:ClosestEnemyHeroInRange( hUnit, 9000 )
+		local hTarget = AICore:ClosestEnemyHeroInRange( hUnit, 9000, false, true )
 
 		if (flNow - hUnit.flLastAggroSwitch) > 2 then
 			AttackTargetOrder( hUnit, hTarget )

@@ -78,10 +78,16 @@ end
 
 function modifier_item_bogduggs_cudgel:OnAttackLanded( params )
 	if IsServer() then
+		if self:GetAbility() == nil or self:GetAbility():IsCooldownReady() == false then 
+			return 0 
+		end
+
 		local Attacker = params.attacker
 		local Target = params.target
 		
 		if Attacker ~= nil and Attacker == self:GetParent() and Attacker:IsRangedAttacker() == false and Target ~= nil then
+			self:GetAbility():StartCooldown( 0.05 )
+
 			EmitSoundOn( "OgreTank.GroundSmash.Lesser", Target )
 			local nFXIndex = ParticleManager:CreateParticle( "particles/creatures/ogre/ogre_melee_smash.vpcf", PATTACH_WORLDORIGIN, Attacker )
 			ParticleManager:SetParticleControl( nFXIndex, 0, Target:GetOrigin() )

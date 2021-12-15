@@ -1,4 +1,7 @@
+
 require( "utility_functions" )
+
+--------------------------------------------------------------------------------
 
 function GrantItemDropToHero( hPlayerHero, szItemName )
 
@@ -17,31 +20,64 @@ function GrantItemDropToHero( hPlayerHero, szItemName )
 	return hItem
 end
 
-function GetPlayerAbilitiesAndItems( nPlayerID )
+--------------------------------------------------------------------------------
 
+function GetPlayerAbilitiesAndItems( nPlayerID )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
+
+	local vecAbilities = {}
+
+	if hPlayerHero == nil then
+		--printf("GetPlayerAbilitiesAndItems: no entity for Player ID %d, returning empty list.", nPlayerID)
+		return vecAbilities
+	end
+
+	-- @todo: fix this not catching neutral item slot (maybe not bottle either)
+	for i = 0, 15 do
+		local hItem = hPlayerHero:GetItemInSlot( i )
+		if hItem then
+			table.insert( vecAbilities, hItem )
+		end
+	end
+
+	for i = 0, ( hPlayerHero:GetAbilityCount() - 1 ) do
+		local hAbility = hPlayerHero:GetAbilityByIndex( i )
+		if hAbility then
+			table.insert( vecAbilities, hAbility )
+		end
+	end
+
+	return vecAbilities
+end
+
+--------------------------------------------------------------------------------
+
+function GetPlayerAbilityAndItemNames( nPlayerID )
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 
 	local vecAbilityNames = {}
 
 	if hPlayerHero == nil then
-		--printf("GetPlayerAbilitiesAndItems: no entity for Player ID %d, returning empty list.", nPlayerID)
+		--printf("GetPlayerAbilityAndItemNames: no entity for Player ID %d, returning empty list.", nPlayerID)
 		return vecAbilityNames
 	end
 
-	for ii=0,15 do
-		local hItem = hPlayerHero:GetItemInSlot(ii)
+	-- @todo: fix this not catching neutral item slot (maybe not bottle either)
+	for i = 0, 15 do
+		local hItem = hPlayerHero:GetItemInSlot( i )
 		if hItem and hItem:GetAbilityName() then
 			table.insert( vecAbilityNames, hItem:GetAbilityName() )
 		end
 	end
 
-	for ii=0,(hPlayerHero:GetAbilityCount()-1) do
-		local hAbility = hPlayerHero:GetAbilityByIndex(ii)
+	for i = 0, ( hPlayerHero:GetAbilityCount() - 1 ) do
+		local hAbility = hPlayerHero:GetAbilityByIndex( i )
 		if hAbility and hAbility:GetAbilityName() then
 			table.insert( vecAbilityNames, hAbility:GetAbilityName() )
 		end
 	end
 
 	return vecAbilityNames;
-
 end
+
+--------------------------------------------------------------------------------

@@ -4,7 +4,7 @@ modifier_ascension_vengeance_debuff = class({})
 --------------------------------------------------------------------------------
 
 function modifier_ascension_vengeance_debuff:GetTexture()
-	return "ascension_vengeance_debuff"
+	return "events/aghanim/interface/hazard_net"
 end
 
 --------------------------------------------------------------------------------
@@ -25,3 +25,5 @@ function modifier_ascension_vengeance_debuff:CheckState()
 end
 
 --------------------------------------------------------------------------------
+
+

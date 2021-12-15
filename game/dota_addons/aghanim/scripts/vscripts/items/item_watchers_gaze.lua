@@ -41,32 +41,3 @@ end
 function item_watchers_gaze:GetIntrinsicModifierName()
 	return "modifier_item_watchers_gaze"
 end
-
---------------------------------------------------------------------------------
-
-function item_watchers_gaze:Spawn()
-	self.required_level = self:GetSpecialValueFor( "required_level" )
-end
-
---------------------------------------------------------------------------------
-
-function item_watchers_gaze:OnHeroLevelUp()
-	if IsServer() then
-		if self:GetCaster():GetLevel() == self.required_level and self:IsInBackpack() == false then
-			self:OnUnequip()
-			self:OnEquip()
-		end
-	end
-end
-
---------------------------------------------------------------------------------
-
-function item_watchers_gaze:IsMuted()	
-	if self.required_level > self:GetCaster():GetLevel() then
-		return true
-	end
-	if not self:GetCaster():IsHero() then
-		return true
-	end
-	return self.BaseClass.IsMuted( self )
-end

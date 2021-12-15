@@ -1,10 +1,11 @@
 
 modifier_ascension_embiggen = class({})
 
------------------------------------------------------------------------------------------
+
+----------------------------------------
 
 function modifier_ascension_embiggen:GetTexture()
-	return "ascension_embiggen"
+	return "events/aghanim/interface/hazard_embiggen"
 end
 
 ----------------------------------------

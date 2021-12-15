@@ -187,6 +187,7 @@
 
 	ModelCompile
 	{
+		"AllowLegacyModelFormat"	"1" // modeldoc not required (yet)
 		"UseShadowFastPathHeuristic"	"1"
 	}
 	
@@ -240,4 +241,10 @@
 		"VulkanSteamShaderCache"			"1"
 		"OpenGLForceSM30"					"1"
 	}
+
+	vdata_editor
+	{
+		"fgd"				"vdata_dota.fgd"
+	}
 }
+

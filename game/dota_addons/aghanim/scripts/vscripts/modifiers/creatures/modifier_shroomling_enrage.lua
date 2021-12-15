@@ -72,7 +72,7 @@ function modifier_shroomling_enrage:OnAttacked( params )
 		if params.attacker ~= nil and params.attacker == self:GetParent() and params.target ~= nil then
 			local heal = ( params.damage * self.enrage_lifesteal_bonus_pct / 100 )
 			--print( 'modifier_shroomling_enrage healing for ' .. heal )
-			self:GetParent():Heal( heal, nil )
+			self:GetParent():HealWithParams( heal, nil, true, true, nil, false )
 			ParticleManager:ReleaseParticleIndex( ParticleManager:CreateParticle( "particles/generic_gameplay/generic_lifesteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetParent() ) )
 		end
 	end

@@ -31,7 +31,7 @@ end
 ----------------------------------------------------------------------------
 
 function CDotaSpawner:OnEncounterLoaded( EncounterInput )
-	--print( "CDotaSpawner:OnEncounterLoaded called for " .. self.szSpawnerName )
+	print( "CDotaSpawner:OnEncounterLoaded called for " .. self.szSpawnerName )
 	self.Encounter = EncounterInput
 	self.rgSpawners = self.Encounter:GetRoom():FindAllEntitiesInRoomByName( self.szLocatorName, false )
 	if #self.rgSpawners == 0 then
@@ -127,7 +127,7 @@ end
 ----------------------------------------------------------------------------
 
 function CDotaSpawner:SpawnUnitsFromRandomSpawners( nSpawners )
-	print( "spawning from " .. nSpawners .. " " .. self.szSpawnerName .. " spawers out of " .. #self.rgSpawners )
+	print( "spawning from " .. nSpawners .. " " .. self.szSpawnerName .. " spawners out of " .. #self.rgSpawners )
 	local hAllSpawnedUnits = {}
 	local Spawners = nil
 	for n=1,nSpawners do

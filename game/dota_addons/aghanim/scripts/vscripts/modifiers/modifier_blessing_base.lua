@@ -41,16 +41,16 @@ end
 
 function modifier_blessing_base:InvokeBlessingOnCreated( )
 
-	local kv = BLESSING_MODIFIERS[ self:GetName() ].keys
-
-	-- Allow you to specify different keys for each claim level
-	if #kv > 0 then
-		local nIndex = self.nBlessingLevel
-		if nIndex > #kv then
-			nIndex = #kv
-		end	
-		kv = kv[ nIndex ]
-	end
+--	local kv = BLESSING_MODIFIERS[ self:GetName() ].keys
+--
+--	-- Allow you to specify different keys for each claim level
+--	if #kv > 0 then
+--		local nIndex = self.nBlessingLevel
+--		if nIndex > #kv then
+--			nIndex = #kv
+--		end	
+--		kv = kv[ nIndex ]
+--	end
 
 	self:OnBlessingCreated( kv )
 

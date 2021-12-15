@@ -1,7 +1,11 @@
 require( "constants" )
 require( "gameplay_shared" )
 require( "map_room" )
-require( "reward_tables" )
+if GetMapName() == "main" then 
+	require( "reward_tables" )
+else
+	require( "reward_tables_2021" )
+end
 require( "utility_functions" )
 require( "ai/shared" )
 require( "aghanim_ability_upgrade_interface" )
@@ -9,12 +13,13 @@ require( "aghanim_ability_upgrade_interface" )
 
 function GetMinMaxGoldChoiceReward( nRoomDepth, bElite )
 	local nFixedGoldAwardOfDepth = ENCOUNTER_DEPTH_GOLD_REWARD[ nRoomDepth ]
+	local nAdjustedFixedAmountOfDepth = math.ceil( nFixedGoldAwardOfDepth * GameRules.Aghanim:GetGoldModifier() / 100 )
 	if bElite then
 		--print( "Elite Room, increasing expected value of item reward " .. nFixedGoldAwardOfDepth .. " to " .. nFixedGoldAwardOfDepth * ELITE_VALUE_MODIFIER )
-		nFixedGoldAwardOfDepth = nFixedGoldAwardOfDepth * ELITE_VALUE_MODIFIER
+		nAdjustedFixedAmountOfDepth = nAdjustedFixedAmountOfDepth * ELITE_VALUE_MODIFIER
 	end
-	local nMaxValue = math.ceil( nFixedGoldAwardOfDepth * GOLD_REWARD_CHOICE_MAX_PCT )
-	local nMinValue = math.floor( nFixedGoldAwardOfDepth * GOLD_REWARD_CHOICE_MIN_PCT ) 
+	local nMaxValue = math.ceil( nAdjustedFixedAmountOfDepth * GOLD_REWARD_CHOICE_MAX_PCT )
+	local nMinValue = math.floor( nAdjustedFixedAmountOfDepth * GOLD_REWARD_CHOICE_MIN_PCT ) 
 	return nMinValue, nMaxValue
 end
 
@@ -34,6 +39,12 @@ function GetPricedNeutralItems( nRoomDepth, bElite )
 		if nValue >= nMinValue and nValue <= nMaxValue then
 			table.insert( vecPossibleItems, szItemName )
 		end
+	end
+
+	if #vecPossibleItems == 0 then 
+		print( "WARNING: Depth " .. tostring( nRoomDepth ) .. " found no valid priced neutral items between " .. tostring( nMinValue ) .. " and " .. tostring( nMaxValue ) )
+	else
+		print( "Depth " .. tostring( nRoomDepth ) .. " has " .. #vecPossibleItems .. " items between " .. tostring( nMinValue ) .. " and " .. tostring( nMaxValue ) )
 	end
 
 	return vecPossibleItems
@@ -70,22 +81,24 @@ function GetRandomUnique( hRandomStream, Array, BlacklistValues )
 	Candidate = Whitelist[ nIndex ]
 
 	if bIgnoreBlacklist then
-		printf("WARNING: GetRandomUnique returning array[%d] = %s, ignoring blacklist.", nIndex, Candidate)
+		--printf("WARNING: GetRandomUnique returning array[%d] = %s, ignoring blacklist.", nIndex, Candidate)
 	end
 	
 	return Candidate
 end
 
-function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalExcludeList )
+function GetRoomRewards( nRoomDepth, bElite, nPlayerID, vecExternalExcludeList )
 
 	local vecRewardStruct = nil	
 
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 
 	if hPlayerHero == nil then
-		printf("GetRoomRewards; Aborting, no hero entity for Player %d", nPlayerID )
+		--printf("GetRoomRewards; Aborting, no hero entity for Player %d", nPlayerID )
 		return nil
 	end
+
+	local hBlessingEliteUpgrade = hPlayerHero:FindModifierByName( "modifier_blessing_elite_shard_upgrade" )
 
 	if( vecExternalExcludeList == nil ) then
 		vecExternalExcludeList = {}
@@ -94,17 +107,6 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 	local bLimitUltimateUpgrades = tonumber(nRoomDepth) == 1
 
 	local szHeroName = hPlayerHero:GetName()
-	local bHardRoom = bElite --or nRoomType == ROOM_TYPE_TRAPS
-
-	-- Rarity:
-	-- Common = 0 
-	-- Rare = 1
-	-- Epic = 2
-	local iRewardRarity = 0
-
-	if bHardRoom == true then
-		iRewardRarity = 1		
-	end
 
 	vecRewardStruct = ROOM_REWARDS[ "depth_" .. nRoomDepth].normal
 
@@ -135,7 +137,7 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 	ShuffleListInPlace( vecGeneratedRewardTiers, hHeroRandomStream )
 
 	-- exclude any item or ability they've learned, chosen, have in inventory or are externally marked for exclusion
-	local vecAbilitiesToExclude = GetPlayerAbilitiesAndItems( nPlayerID )
+	local vecAbilitiesToExclude = GetPlayerAbilityAndItemNames( nPlayerID )
 	for ii=1,nRoomDepth-1 do
 		local RewardChoices = CustomNetTables:GetTableValue( "reward_choices", tostring(ii) )
 		local RewardChoice = RewardChoices and RewardChoices[ tostring(nPlayerID) ] or nil
@@ -149,12 +151,22 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 	end
 
 	local MinorUpgrades = deepcopy( MINOR_ABILITY_UPGRADES[ szHeroName ] )
+	for nMinorUpgrade=#MinorUpgrades,1,-1 do
+		local Upgrade = MinorUpgrades[ nMinorUpgrade ]
+		local szUpgradeAbilityName = Upgrade[ "ability_name" ]
+		local hAbilityUpgrade = hPlayerHero:FindAbilityByName( szUpgradeAbilityName )
+		if ( hAbilityUpgrade == nil or ( hAbilityUpgrade:IsHidden() and not hAbilityUpgrade:IsAttributeBonus() ) ) then
+			-- print( "Removing upgrade " .. szUpgradeAbilityName .. " for hero " .. szHeroName )
+			table.remove( MinorUpgrades, nMinorUpgrade )
+		end
+	end
+
 	local MinorStatsUpgrades = deepcopy( MINOR_ABILITY_UPGRADES[ "base_stats_upgrades" ] )
 	for nStatUpgrade=#MinorStatsUpgrades,1,-1 do
 		local Upgrade = MinorStatsUpgrades[ nStatUpgrade ]
 		for k,v in pairs ( STAT_UPGRADE_EXCLUDES[ szHeroName ] ) do
 			if Upgrade[ "description" ] == v then
-				print( "blacklisting stat upgrade " .. v .. " for hero " .. szHeroName )
+				--print( "blacklisting stat upgrade " .. v .. " for hero " .. szHeroName )
 				table.remove( MinorStatsUpgrades, nStatUpgrade )
 				break
 			end
@@ -182,18 +194,37 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 
 				local szAbilityName = nil
 				local nQuantity = nil
+				
+				local nRarity = AGHANIM_REWARD_RARITY_COMMON
+				if bElite then
+					nRarity = AGHANIM_REWARD_RARITY_ELITE
+				end
+				if hBlessingEliteUpgrade ~= nil and bElite == false and eRewardType ~= "REWARD_TYPE_ABILITY_UPGRADE" and #vecGeneratedRewards == 0 then
+					if hBlessingEliteUpgrade:IsAppliedToDepth( nRoomDepth ) then
+						nRarity = AGHANIM_REWARD_RARITY_ELITE
+					elseif hBlessingEliteUpgrade:CanApplyToDepth( nRoomDepth ) then
+						hBlessingEliteUpgrade:ApplyToDepth( nRoomDepth )
+						nRarity = AGHANIM_REWARD_RARITY_ELITE
+					end
+				end
 
 				if eRewardType == "REWARD_TYPE_ABILITY_UPGRADE" then
 					szAbilityName = GetRandomUnique( hHeroRandomStream, SPECIAL_ABILITY_UPGRADES[szHeroName], vecAbilitiesToExclude )
-					iRewardRarity = 2
+					nRarity = AGHANIM_REWARD_RARITY_LEGENDARY
 				elseif eRewardType == "REWARD_TYPE_MINOR_ABILITY_UPGRADE" then
 					local k = hHeroRandomStream:RandomInt( 1, #MinorUpgrades )
 					local Upgrade = MinorUpgrades[ k ]
 					table.remove( MinorUpgrades, k )
 					MinorAbilityUpgrade = deepcopy( Upgrade )
-					if bHardRoom then
-						print( "Elite Room, increasing expected value of ability upgrade from " .. MinorAbilityUpgrade[ "value" ] .. " to " .. MinorAbilityUpgrade[ "value" ] * ELITE_VALUE_MODIFIER )
-						MinorAbilityUpgrade[ "value" ] = MinorAbilityUpgrade[ "value" ] * ELITE_VALUE_MODIFIER
+					if nRarity == AGHANIM_REWARD_RARITY_ELITE then
+						--print( "Elite Room, increasing expected value of ability upgrade from " .. MinorAbilityUpgrade[ "value" ] .. " to " .. MinorAbilityUpgrade[ "value" ] * ELITE_VALUE_MODIFIER )
+						if MinorAbilityUpgrade[ "special_values" ] == nil then 
+							MinorAbilityUpgrade[ "value" ] = MinorAbilityUpgrade[ "value" ] * ELITE_VALUE_MODIFIER
+						else
+							for _,SpecialValue in pairs ( MinorAbilityUpgrade[ "special_values" ] ) do
+								SpecialValue[ "value" ] = SpecialValue[ "value" ] * ELITE_VALUE_MODIFIER
+							end
+						end
 					end
 					--table.insert( vecMinorAbilityIDsToExclude, MinorAbilityUpgrade[ "id" ] ) 
 				elseif eRewardType == "REWARD_TYPE_MINOR_STATS_UPGRADE" then
@@ -201,8 +232,8 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 					local StatsUpgrade = MinorStatsUpgrades[ k ]
 					table.remove( MinorStatsUpgrades, k )
 					MinorStatsUpgrade = deepcopy( StatsUpgrade )
-					if bHardRoom then
-						print( "Elite Room, increasing expected value of stats upgrade from " .. MinorStatsUpgrade[ "value" ] .. " to " .. MinorStatsUpgrade[ "value" ] * ELITE_VALUE_MODIFIER )
+					if nRarity == AGHANIM_REWARD_RARITY_ELITE then
+						--print( "Elite Room, increasing expected value of stats upgrade from " .. MinorStatsUpgrade[ "value" ] .. " to " .. MinorStatsUpgrade[ "value" ] * ELITE_VALUE_MODIFIER )
 						MinorStatsUpgrade[ "value" ] = MinorStatsUpgrade[ "value" ] * ELITE_VALUE_MODIFIER
 					end
 				end
@@ -226,10 +257,10 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 					reward_tier  = eRewardTier,
 					ability_name = szAbilityName,
 					quantity = nQuantity,
-					rarity = iRewardRarity,
+					rarity = nRarity,
 				}
 
-				if bHardRoom then
+				if nRarity == 1 then
 					GeneratedReward[ "elite" ] = 1
 				else
 					GeneratedReward[ "elite" ] = 0
@@ -239,6 +270,15 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 					GeneratedReward[ "ability_name" ] = MinorAbilityUpgrade[ "ability_name" ]
 					GeneratedReward[ "description" ] = MinorAbilityUpgrade[ "description" ]
 					GeneratedReward[ "value" ] = MinorAbilityUpgrade[ "value" ]
+					GeneratedReward[ "special_values" ] = MinorAbilityUpgrade [ "special_values" ]
+					if GeneratedReward[ "special_values" ] then 
+						local nValue = 1
+						for _,SpecialValue in pairs ( GeneratedReward[ "special_values" ] ) do
+							GeneratedReward[ "value" .. tostring( nValue ) ] = tonumber( SpecialValue[ "value" ] )
+							nValue = nValue + 1
+						end
+					end
+					
 					GeneratedReward[ "id" ] = MinorAbilityUpgrade[ "id" ]
 				end
 
@@ -256,32 +296,27 @@ function GetRoomRewards( nRoomDepth, nRoomType, bElite, nPlayerID, vecExternalEx
 		
 		table.insert( vecGeneratedRewards, GeneratedReward )
 	end
-
+	--DeepPrintTable( vecGeneratedRewards )
 	return vecGeneratedRewards
 
 end
 
-function TestRoomRewardConsoleCommand( cmdName, szRoomDepth, szIsElite, szIsTrapRoom )
+function TestRoomRewardConsoleCommand( cmdName, szRoomDepth, szIsElite )
 
 	--CustomNetTables:SetTableValue( "reward_options", "current_depth", { szRoomDepth } );
 
 	local bIsElite = (szIsElite == "true")
-	local bIsTrapRoom = (szIsTrapRoom == "true")
 	local szRoomDepth = tostring( tonumber( szRoomDepth ) )
 	local nPlayerID = Entities:GetLocalPlayer():GetPlayerID()
-	local nRoomType = ROOM_TYPE_ENEMY
-	if bIsTrapRoom == true then
-		nRoomType = ROOM_TYPE_TRAPS
-	end
 
-	--printf( "Running %s %d %s %s %s...", cmdName, nPlayerID, szRoomDepth, szIsElite, szIsTrapRoom )
+	--printf( "Running %s %d %s %s...", cmdName, nPlayerID, szRoomDepth, szIsElite )
 
 	CustomNetTables:SetTableValue( "reward_options", "current_depth", { szRoomDepth } )
 
 	CustomNetTables:SetTableValue( "reward_choices", szRoomDepth, {} )
 
 	local RewardOptions = {}
-	local vecPlayerRewards = GetRoomRewards( tonumber(szRoomDepth), nRoomType, bIsElite, nPlayerID ) 
+	local vecPlayerRewards = GetRoomRewards( tonumber(szRoomDepth), bIsElite, nPlayerID ) 
 	RewardOptions[ tostring(nPlayerID) ] = vecPlayerRewards;
 
 	--DeepPrintTable( vecPlayerRewards )
@@ -319,7 +354,7 @@ function GrantRewards( nPlayerID, szRoomDepth, aReward )
 
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 	if hPlayerHero == nil then
-		printf("Aborting grant reward, no hero entity for Player %d", nPlayerID )
+		--printf("Aborting grant reward, no hero entity for Player %d", nPlayerID )
 		return
 	end
 
@@ -330,11 +365,11 @@ function GrantRewards( nPlayerID, szRoomDepth, aReward )
 
 	local aExistingReward = RewardChoices[ tostring(nPlayerID) ]
 	if aExistingReward ~= nil then
-		printf("GrantRewards: Player %d, Depth %s, aborting granting Reward %s to to existing Reward: %s", nPlayerID, szRoomDepth, DeepToString(aReward), DeepToString(aExistingReward) )
+		--printf("GrantRewards: Player %d, Depth %s, aborting granting Reward %s to to existing Reward: %s", nPlayerID, szRoomDepth, DeepToString(aReward), DeepToString(aExistingReward) )
 		return
 	end
 
-	printf("granting reward to %s: %s", hPlayerHero:GetName(), DeepToString(aReward) )
+	--printf("granting reward to %s: %s", hPlayerHero:GetName(), DeepToString(aReward) )
 
 	local eRewardType = aReward["reward_type"]
 	local nQuantity = aReward["quantity"]
@@ -353,8 +388,25 @@ function GrantRewards( nPlayerID, szRoomDepth, aReward )
 	elseif eRewardType == "REWARD_TYPE_MINOR_ABILITY_UPGRADE" then
 		local Upgrade = deepcopy( MINOR_ABILITY_UPGRADES[ hPlayerHero:GetUnitName() ][ aReward[ "id" ] ] )
 		if bEliteReward then
-			Upgrade[ "value" ] = Upgrade[ "value" ] * ELITE_VALUE_MODIFIER
+			if Upgrade[ "special_values" ] == nil then 
+				Upgrade[ "value" ] = Upgrade[ "value" ] * ELITE_VALUE_MODIFIER
+			else
+				for _,SpecialValue in pairs ( Upgrade[ "special_values" ] ) do
+					SpecialValue[ "value" ] = SpecialValue[ "value" ] * ELITE_VALUE_MODIFIER
+				end
+			end
 		end
+
+		if Upgrade == nil then 
+			if aReward == nil then
+				print( "ERROR!  Upgrade table is nil - failed to even find aReward!")
+			else
+				print( "ERROR!  Upgrade table is nil for " .. aReward[ "id" ] )
+			end
+			return
+		end 
+
+		Upgrade[ "elite" ] = bEliteReward
 		CAghanim:AddMinorAbilityUpgrade( hPlayerHero, Upgrade )
 		GameRules.Aghanim:GetAnnouncer():OnRewardSelected( hPlayerHero, tonumber( szRoomDepth ), eRewardType, Upgrade.description )
 	elseif eRewardType == "REWARD_TYPE_MINOR_STATS_UPGRADE" then
@@ -382,10 +434,21 @@ function GrantRewards( nPlayerID, szRoomDepth, aReward )
 		if eRewardType == "REWARD_TYPE_MINOR_ABILITY_UPGRADE" or eRewardType == "REWARD_TYPE_MINOR_STATS_UPGRADE" then
 			--PrintTable( aReward, " reward choice: " )
 			gameEvent["string_replace_token"] = aReward [ "description" ]
-			gameEvent["ability_name"] = aReward[ "ability_name" ]	
-			gameEvent["value"] = tonumber(aReward[ "value" ])
+			gameEvent["ability_name"] = aReward[ "ability_name" ]
+			if aReward[ "value" ] then 
+				gameEvent["value"] = tonumber(aReward[ "value" ])
+			else	
+				if aReward[ "special_values" ] then 
+					local nValue = 1
+					for _,SpecialValue in pairs ( aReward[ "special_values" ] ) do
+						local szValueName = "value" .. tostring( nValue )
+						gameEvent[ szValueName ] = tonumber( SpecialValue[ "value" ] )
+						nValue = nValue + 1
+					end
+				end
+			end
 		else
-			gameEvent["locstring_value"] ="#DOTA_Tooltip_Ability_" .. aReward["ability_name"]	
+			gameEvent["locstring_value"] ="#DOTA_Tooltip_Ability_" .. aReward["ability_name" ]	
 		end
 	end
 	gameEvent["player_id"] = nPlayerID
@@ -426,6 +489,13 @@ function GenerateRewardStatsForPlayer( hPlayerHero, reward )
 
 	if reward.value ~= nil then
 		rewardStats.value = reward.value
+	end
+	if reward.reward_type == "REWARD_TYPE_MINOR_ABILITY_UPGRADE" and MINOR_ABILITY_UPGRADES[ hPlayerHero:GetUnitName() ][ reward.id ].special_values ~= nil then
+		local nIndex = 1
+		for k,v in pairs( MINOR_ABILITY_UPGRADES[ hPlayerHero:GetUnitName() ][ reward.id ].special_values ) do
+			rewardStats[ "value" .. nIndex ] = v.value
+			nIndex = nIndex + 1
+		end
 	end
 
 	if szAbilityTexture ~= nil then
@@ -481,4 +551,37 @@ function OnRewardChoice( eventSourceIndex, data )
 	GrantRewards( nPlayerID, szRoomDepth, aReward )
 
 	GenerateRewardStats( nPlayerID, szRoomDepth, roomOptions, szRewardIndex )
+end
+
+--------------------------------------------------------------------------------
+
+function OnRewardReroll( eventSourceIndex, data )
+	local nPlayerID = data["player_id"]
+	local nRoomDepth = data["room_depth"]
+	local bElite = data["elite"] == "true"
+
+	local tRewardOptions = CustomNetTables:GetTableValue( "reward_options", tostring( nRoomDepth ) )
+	if tRewardOptions == nil or tRewardOptions["rarity"] == "epic" then
+		return
+	end
+
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
+	if hPlayerHero then
+		local hBuff = hPlayerHero:FindModifierByName( "modifier_blessing_upgrade_reroll" )
+		if ( hBuff and hBuff:GetStackCount() > 0 ) then
+			hBuff:SetStackCount( hBuff:GetStackCount() - 1 )
+			
+			local vecPlayerRewards = GetRoomRewards( nRoomDepth, bElite, nPlayerID, nil )
+			tRewardOptions[ tostring( nPlayerID ) ] = vecPlayerRewards
+
+			local gameEvent = {}
+			gameEvent["player_id"] = nPlayerID
+			gameEvent["teamnumber"] = -1
+			gameEvent["message"] = "#DOTA_AghsLab_UpgradeReroll_Toast"
+			FireGameEvent( "dota_combat_event_message", gameEvent )
+		end
+	end
+
+	-- This is potentially no change if there are no rerolls available
+	CustomNetTables:SetTableValue( "reward_options", tostring( nRoomDepth ), tRewardOptions )
 end

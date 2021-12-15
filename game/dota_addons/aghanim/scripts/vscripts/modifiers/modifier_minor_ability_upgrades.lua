@@ -78,7 +78,7 @@ function  modifier_minor_ability_upgrades:DeclareFunctions( )
 		MODIFIER_PROPERTY_OVERRIDE_ABILITY_SPECIAL,
 		MODIFIER_PROPERTY_OVERRIDE_ABILITY_SPECIAL_VALUE,
 		MODIFIER_PROPERTY_COOLDOWN_REDUCTION_CONSTANT,
-		MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE,
+		MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE_STACKING,
 		MODIFIER_PROPERTY_MANACOST_REDUCTION_CONSTANT,
 		MODIFIER_PROPERTY_MANACOST_PERCENTAGE_STACKING,
 	}
@@ -219,7 +219,7 @@ end
 
 -----------------------------------------------------------------------
 
-function modifier_minor_ability_upgrades:GetModifierPercentageCooldown( params )
+function modifier_minor_ability_upgrades:GetModifierPercentageCooldownStacking( params )
 	if self:GetParent() == nil or params.ability == nil then
 		return 0
 	end
@@ -236,7 +236,7 @@ function modifier_minor_ability_upgrades:GetModifierPercentageCooldown( params )
 	end
 
 	local flResult = 0.0
-	local CooldownUpgrades = hUpgrades[ szAbilityName ][ "cooldown" ]
+	local CooldownUpgrades = hUpgrades[ szAbilityName ][ "cooldown" ] or hUpgrades[ szAbilityName ][ "AbilityChargeRestoreTime" ]
 	if CooldownUpgrades ~= nil then
 		if self.bDirty == false and CooldownUpgrades[ "cached_result" ] ~= nil and CooldownUpgrades[ "cached_result" ][ MINOR_ABILITY_UPGRADE_OP_MUL ] ~= nil and CooldownUpgrades[ "cached_result" ][ MINOR_ABILITY_UPGRADE_OP_MUL ][ nSpecialLevel ] ~= nil then
 			return CooldownUpgrades[ "cached_result" ][ MINOR_ABILITY_UPGRADE_OP_MUL ][ nSpecialLevel ]

@@ -3,6 +3,13 @@ modifier_ascension_extra_fast = class({})
 
 -----------------------------------------------------------------------------------------
 
+function modifier_ascension_extra_fast:GetTexture()
+	return "events/aghanim/interface/hazard_speed"
+end
+
+-----------------------------------------------------------------------------------------
+
+
 function modifier_ascension_extra_fast:IsHidden()
 	return false
 end

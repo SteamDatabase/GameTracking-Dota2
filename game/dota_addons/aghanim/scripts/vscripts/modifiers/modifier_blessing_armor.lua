@@ -1,11 +1,9 @@
-require( "modifiers/modifier_blessing_base" )
+modifier_blessing_armor = class({})
 
-modifier_blessing_armor = class( modifier_blessing_base )
+--------------------------------------------------------------------------------
 
-----------------------------------------
-
-function modifier_blessing_armor:OnBlessingCreated( kv )
-	self.flArmor = kv.bonus_armor
+function modifier_blessing_armor:IsHidden()
+	return true
 end
 
 --------------------------------------------------------------------------------
@@ -21,5 +19,10 @@ end
 --------------------------------------------------------------------------------
 
 function modifier_blessing_armor:GetModifierPhysicalArmorBonus( params )
-	return self.flArmor
+	return self:GetStackCount()
+end
+
+--------------------------------------------------------------------------------
+function modifier_blessing_armor:IsPermanent()
+	return true
 end

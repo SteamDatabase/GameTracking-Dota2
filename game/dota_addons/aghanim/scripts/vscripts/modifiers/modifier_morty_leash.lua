@@ -51,7 +51,7 @@ function modifier_morty_leash:OnIntervalThink()
 	end
 
 	if vCurrentPos ~= vClamped then
-		--print( "Flying Teleporting to " .. tostring( vClamped ) )
+		print( "Morty Teleporting from " .. tostring( vCurrentPos ) .. " to " .. tostring( vClamped ) )
 		FindClearSpaceForUnit( self:GetParent(), vClamped, true )
 	end
 

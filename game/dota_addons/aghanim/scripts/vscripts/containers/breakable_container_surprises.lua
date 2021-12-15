@@ -1,5 +1,8 @@
-require( "rewards" )
-require( "reward_tables" )
+if GetMapName() == "main" then 
+	require( "reward_tables" )
+else
+	require( "reward_tables_2021" )
+end
 require( "map_encounter" )
 
 
@@ -7,7 +10,7 @@ function CAghanim:ChooseBreakableSurprise( hAttacker, hBreakableEnt )
 	hBreakableEnt.nRewardSpawnDist = 32
 
 	if hBreakableEnt.RoomReward ~= nil then
-		self:SpawnRoomReward( hBreakableEnt )
+		self:SpawnRoomReward( hBreakableEnt, hAttacker )
 		return
 	end
 	-- Note: hAttacker can be nil

@@ -13,6 +13,12 @@ function modifier_ascension_vampiric:IsPurgable()
 	return false
 end
 
+--------------------------------------------------------------------------------
+
+function modifier_ascension_vampiric:GetTexture()
+	return "events/aghanim/interface/hazard_vampiric"
+end
+
 -----------------------------------------------------------------------------------------
 
 function modifier_ascension_vampiric:GetEffectName()
@@ -91,7 +97,7 @@ function modifier_ascension_vampiric:OnTakeDamage( params )
 		end
 
 		local flLifesteal = flDamage * self.lifesteal_pct / 100
-		Attacker:Heal( flLifesteal, self:GetAbility() )
+		Attacker:HealWithParams( flLifesteal, self:GetAbility(), Ability == nil, true, nil, Ability ~= nil )
 	end
 
 	return 0.0

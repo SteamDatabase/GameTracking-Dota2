@@ -39,3 +39,5 @@ function temple_guardian_hammer_smash:OnSpellStart()
 end
 
 -----------------------------------------------------------------------------
+thunder_mountain_guardian_hammer_smash = temple_guardian_hammer_smash
+large_thunder_mountain_guardian_hammer_smash = temple_guardian_hammer_smash

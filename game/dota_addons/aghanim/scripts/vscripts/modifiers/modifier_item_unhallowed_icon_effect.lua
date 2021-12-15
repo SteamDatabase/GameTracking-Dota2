@@ -41,7 +41,7 @@ function modifier_item_unhallowed_icon_effect:OnAttackLanded( params )
 			for _,ally in pairs( allies ) do
 				if ally ~= nil and ally:FindModifierByName( "modifier_item_unhallowed_icon_effect" ) then
 					local heal = ( params.damage * self.lifesteal_pct / 100 ) / #allies
-					ally:Heal( heal, self:GetAbility() )
+					ally:HealWithParams( heal, self:GetAbility(), true, true, nil, false )
 					local nFXIndex = ParticleManager:CreateParticle( "particles/generic_gameplay/generic_lifesteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, ally )
 					ParticleManager:ReleaseParticleIndex( nFXIndex )
 				end

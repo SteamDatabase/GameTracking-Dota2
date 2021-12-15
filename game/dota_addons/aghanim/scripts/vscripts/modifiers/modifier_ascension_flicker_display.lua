@@ -7,3 +7,9 @@ modifier_ascension_flicker_display = class({})
 function modifier_ascension_flicker_display:IsPurgable()
 	return false
 end
+
+-----------------------------------------------------------------------------------------
+
+function modifier_ascension_flicker_display:GetTexture()
+	return "events/aghanim/interface/hazard_teleport"
+end

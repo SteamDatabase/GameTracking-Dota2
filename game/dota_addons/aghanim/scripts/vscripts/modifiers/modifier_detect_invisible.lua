@@ -15,7 +15,7 @@ end
 --------------------------------------------------------------------------------
 
 function modifier_detect_invisible:OnCreated( kv )
-	self.flRadius = 900
+	self.flRadius = 5000
 	if IsServer() then
 		EmitSoundOn(  "Item.DropGemWorld", self:GetParent() )		
 	end

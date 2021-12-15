@@ -39,7 +39,7 @@ function IsNoTargetSpellCastValid( hSpell )
 		nAbilityRadius = 250
 	end
 
-	local enemies = FindUnitsInRadius( hSpell:GetCaster():GetTeamNumber(), hSpell:GetCaster():GetOrigin(), hSpell:GetCaster(), nAbilityRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, 0, false )
+	local enemies = FindUnitsInRadius( hSpell:GetCaster():GetTeamNumber(), hSpell:GetCaster():GetOrigin(), hSpell:GetCaster(), nAbilityRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_NO_INVIS, 0, false )
 	if #enemies < nEnemiesRequired then
 		return false
 	end
@@ -106,7 +106,7 @@ function GetBestUnitTarget( hSpell )
 		print( "GetBestUnitTarget: " .. hSpell:GetAbilityName() )
 	end
 
-	local enemies = FindUnitsInRadius( hSpell:GetCaster():GetTeamNumber(), hSpell:GetCaster():GetOrigin(), hSpell:GetCaster(), GetTryToUseSpellRange( hSpell:GetCaster(), hSpell ), DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, 0, false )
+	local enemies = FindUnitsInRadius( hSpell:GetCaster():GetTeamNumber(), hSpell:GetCaster():GetOrigin(), hSpell:GetCaster(), GetTryToUseSpellRange( hSpell:GetCaster(), hSpell ), DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_NO_INVIS, 0, false )
 	if #enemies == 0 then
 		if bBasicSpellDebug then
 			print( "--Found 0 enemies")	

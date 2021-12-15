@@ -10,7 +10,7 @@
 
 	color(color255) : "Color" : "255 255 255"
 	brightness(float) : "Brightness" : "1.0"
-	range(float) : "Range" : "512" : "Distance range for light. 0=infinite"
+	range(float) { min="0" } : "Range" : "512" : "Distance range for light. 0=infinite"
 
 	castshadows(choices) [ group = "Shadows" ] : "Cast Shadows" : "1" : "Whether this light casts shadow" =
 	[
@@ -18,7 +18,15 @@
 		"1" : "Yes"
 		"2" : "Baked Only"
 	]
-	nearclipplane(float) [ group = "Shadows" ] : "Shadow Near Clip Plane" : 1 : "Distance for near clip plane for shadow map"
+	nearclipplane(float) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Near Clip Plane" : 1 : "Distance for near clip plane for shadow map"	
+	shadowpriority(choices) { group="Shadows" enabled={ variable="castshadows" value="1" } } : "Shadow Priority" : "-1" : "Priority for the lights shadowmap" =
+	[
+		"100" : "Highest"
+		"10"  : "High"
+		"5"   : "Medium"
+		"-5"  : "Low"
+		"-1"  : "Default"
+	]
 
 	input SetParent(string) : "Changes the entity's parent in the movement hierarchy."
 	input SetParentAttachment(string) : "Change this entity to attach to a specific attachment point on its parent. Entities must be parented before being sent this input. The parameter passed in should be the name of the attachment."
@@ -109,7 +117,7 @@
 [
 	attenuation1(float) : "Linear Attenuation" : "0.0"
 	attenuation2(float) : "Quadratic Attenuation" : "1.0"
-	lightsourceradius(float) : "Light Source Radius" : "2.0" : "The radius of the light source in game units"
+	lightsourceradius(float) { min="0" } : "Light Source Radius" : "2.0" : "The radius of the light source in game units"
 ]
 
 
@@ -128,7 +136,7 @@
 		tintKey = "skycolor"
 	}	
 	global( sun )
-	bakeskylight( skycolor, skyintensity, skytexture, skytexturescale, skyambientbounce, sunlightminbrightness )
+	bakeskylight()
 	bakeambientocclusion( ambient_occlusion, max_occlusion_distance, fully_occluded_fraction, occlusion_exponent )
 	= light_environment : 
 	"Sets the color and angle of the light from the sun and sky.<br><br>" +
@@ -139,7 +147,7 @@
 	"4. Adjust angle and brightness of the sunlight as you see fit"
 
 [
-	angulardiameter(float) : "SunSpreadAngle" : "1.0" : "The angular extent of the sun for casting soft shadows. Higher numbers are more diffuse. 1 is a good starting value."
+	angulardiameter(float) { min="0.1" } : "Sun Spread Angle" : "1.0" : "The angular extent of the sun for casting soft shadows. Higher numbers are more diffuse. 1 is a good starting value."
 
 	numcascades(integer) [ group = "Shadows" ] : "Cascade Count" : 3 : "Number of shadow cascades to use."
 	shadowcascadedistance0(float) { group = "Shadows" enabled={ variable="numcascades" values=["1", "2", "3", "4"] } }: "Cascade Distance 0" : "0.0"
@@ -151,7 +159,7 @@
 	shadowcascaderesolution2(integer) { group = "Shadows" enabled={ variable="numcascades" values=[          "3", "4"] } } : "Cascade Resolution 2" : 0
 	shadowcascaderesolution3(integer) { group = "Shadows" enabled={ variable="numcascades" values=[               "4"] } } : "Cascade Resolution 3" : 0
 
-	cascadecrossfade(float) { group="Shadows" enabled={ variable="numcascades" values=[ "2", "3", "4" ] } } : "Cascade Cross Fade Size" : ".1" : "Size of the region at the edge of the cascade that will be crossfaded to the next (to hide resolution changes)"
+	cascadecrossfade(float) { min="0" max=".3" group="Shadows" enabled={ variable="numcascades" values=[ "2", "3", "4" ] } } : "Cascade Cross Fade Size" : ".1" : "Size of the region at the edge of the cascade that will be crossfaded to the next (to hide resolution changes)"
 	cascadedistancefade(float) { group="Shadows" } : "Cascade Distance Fade Out Size" : ".05" : "Size of the region where shadows are faded out at the end of the cascades"
 
 	cascaderenderstaticobj(int) { group="Shadows" enabled={ variable="baked_light_indexing" value="1" } } : "Render Static Objects To Cascades" : "-1" : "Renders static objects to cascades <= this cascade when using mixed shadows (Stationary / Indexed lights)"
@@ -160,8 +168,14 @@
 	skyintensity(float) [ group = "Sky" ] : "Sky Intensity" : "1.0"
 	skytexture(target_destination) [ group = "Sky" ] : "Sky IBL Source" : "" : "env_sky entity, lat-long/h-cross/v-cross skybox image, or sky material to use for sky IBL"
 	skytexturescale(float) [ group = "Sky" ] : "Sky IBL Scale" : "1.0" : "Scale value for IBL intensity fine-tuning"
-	skyambientbounce(color255alpha) [ group = "Sky" ] : "Sky Ambient Bounce" : "147 147 147"
+	skyambientbounce(color255alpha) [ group = "Sky" ] : "Sky Ground Albedo" : "0 0 0" : "This is the color of the virtual ground plane used for skybox IBL / color ambient lighting"
 	sunlightminbrightness(float) [ group = "Sky" ] : "Sun Light Minimum Brightness Threshold" : "32" : "Brightness beyond which pixels in the Sky IBL Source are considered to be coming from the sun"
+	skydirectlight(choices) [ group = "Sky" ] : "Sky Direct Light" : "1" =
+	[
+		"0" : "None"
+		"1" : "Baked"
+	]
+	skybouncescale(float) [ group = "Sky" ] : "Sky Bounce Light Multiplier" : "1.0"
 
 	ambient_occlusion(boolean) [ group = "Ambient Occlusion" ] : "Ambient Occlusion" : "0"
 	max_occlusion_distance(float) [ group = "Ambient Occlusion" ] : "Ambient Occlusion Max Distance" : "16.0"

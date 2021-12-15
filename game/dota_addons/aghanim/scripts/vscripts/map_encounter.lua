@@ -5,6 +5,8 @@ require( "utility_functions" )
 require( "spawner" )
 require( "portalspawner" )
 require( "portalspawnerv2" )
+require( "encounter_ability_modifier_functions" )
+require( "event_npcs/event_npc_life_vendor" )
 
 
 LinkLuaModifier( "modifier_monster_leash", "modifiers/modifier_monster_leash", LUA_MODIFIER_MOTION_NONE )
@@ -33,6 +35,7 @@ function CMapEncounter:constructor( hRoom, szEncounterName )
 	self.PortalSpawners = {}
 	self.RetreatPoints = {}
 	self.PortalSpawnersV2 = {}
+	self.AscensionAbilities = {}
 
 	self.flStartTime = -1
 	self.EventListeners = {}
@@ -61,10 +64,12 @@ function CMapEncounter:constructor( hRoom, szEncounterName )
 	self.hTreasureRandomStream = nil
 	self.hTreasureList = {}
 
-	local nTotalGoldReward = self:GetTotalGoldRewardPerPlayer()
-	self.nGoldReward = nTotalGoldReward
-	self.nTotalGoldFromEnemies = nTotalGoldReward - self.nGoldReward
+	self.nGoldReward = self:GetTotalGoldRewardPerPlayer()
+
+	-- Unused
+	self.nTotalGoldFromEnemies = 0
 	self.nRemainingGoldFromEnemies = self.nTotalGoldFromEnemies
+	
 
 	local nTotalXPReward = self:GetTotalXPRewardPerPlayer()
 	self.nXPReward = nTotalXPReward / 2
@@ -74,36 +79,85 @@ function CMapEncounter:constructor( hRoom, szEncounterName )
 	self.nNumItemsToDrop = 0
 	self.nNumBPToDrop = 0
 	self.nNumFragmentsToDrop = 0
+	self.nNumConsumablesToDrop = 0
 
+	self.ClientData = {}
+	self.ClientData[ "encounter_name" ] = szEncounterName
+	self.ClientData[ "encounter_depth" ] = self.hRoom:GetDepth()
+	self.ClientData[ "objectives" ] = {}
+	self.nObjectiveNumber = 1
+
+	self:AssignEncounterType( ENCOUNTER_DEFINITIONS[ szEncounterName ].nEncounterType )
+
+	--Aghs 2
+	self.bEliteEncounter = false
+	self.bHiddenEncounter = false
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:AssignEncounterType( nType )
+	self.nEncounterType = nType
 	self.nChestsToSpawn = 0
-	if self.hRoom:GetType() == ROOM_TYPE_TRAPS then
+	if self.nEncounterType == ROOM_TYPE_TRAPS then
 		self.nChestsToSpawn = self:RoomRandomInt( DEFAULT_MIN_CHESTS, DEFAULT_MAX_CHESTS )
-	--elseif self.hRoom:GetType() == ROOM_TYPE_STARTING then
-		--self.nChestsToSpawn = 8 -- dev test
 	end
 
 	self.nCratesToSpawn = 0
-	if self.hRoom:GetType() == ROOM_TYPE_ENEMY then
+	if self.nEncounterType == ROOM_TYPE_ENEMY then
 		self.nCratesToSpawn = self:RoomRandomInt( DEFAULT_MIN_CRATES_ENEMY_ENC, DEFAULT_MAX_CRATES_ENEMY_ENC )
-	elseif self.hRoom:GetType() == ROOM_TYPE_BOSS then
+	elseif self.nEncounterType == ROOM_TYPE_BOSS then
 		self.nCratesToSpawn = self:RoomRandomInt( DEFAULT_MIN_CRATES_BOSS_ENC, DEFAULT_MAX_CRATES_BOSS_ENC )
 	end
 
 	self.nExplosiveBarrelsToSpawn = 0
 	local bSpawnExplosiveBarrels = self:RoomRollPercentage( ENCOUNTER_SPAWN_BARRELS_CHANCE )
 	if bSpawnExplosiveBarrels then
-		if self.hRoom:GetType() == ROOM_TYPE_ENEMY then
+		if self.nEncounterType == ROOM_TYPE_ENEMY then
 			self.nExplosiveBarrelsToSpawn = self:RoomRandomInt( DEFAULT_MIN_BARRELS_ENEMY_ENC, DEFAULT_MAX_BARRELS_ENEMY_ENC )
 		end
 	end
 
 	self.nObjectiveNumber = 1
 
-	self.ClientData = {}
-	self.ClientData[ "encounter_name" ] = szEncounterName
-	self.ClientData[ "encounter_depth" ] = self.hRoom:GetDepth()
-	self.ClientData[ "room_type" ] = GetStringForRoomType( self.hRoom:GetType() )
-	self.ClientData[ "objectives" ] = {}
+	self.bSpawnGoldShopAtExit = false
+	if GetMapName() == "hub" then  
+		if self.nEncounterType == ROOM_TYPE_TRANSITIONAL or self.nEncounterType == ROOM_TYPE_TRAPS or self.nEncounterType == ROOM_TYPE_ENEMY or ( ( self.nEncounterType == ROOM_TYPE_EVENT ) and FREE_EVENT_ROOMS ) then 
+			if self:GetRoom():GetName() == "a3_3" or self:GetRoom():GetName() == "a3_3_event" then 
+				self.bSpawnGoldShopAtExit = false 
+			else
+				self.bSpawnGoldShopAtExit = true 
+			end
+		end
+	end
+
+	self.ClientData[ "room_type" ] = GetStringForRoomType( self.nEncounterType )
+
+	--print( "AssignEncounterType: encounter " .. self.szEncounterName .. " has been assigned type " .. GetStringForRoomType( self.nEncounterType ) )
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:IsEliteEncounter()
+	return self.bEliteEncounter
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:IsHiddenEncounter()
+	return self.bHiddenEncounter
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:SetEncounterHidden( bHidden )
+ 	self.bHiddenEncounter = bHidden
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:GetEncounterType()
+	return self.nEncounterType 
 end
 
 --------------------------------------------------------------------------------
@@ -123,6 +177,21 @@ end
 function CMapEncounter:RoomRollPercentage( nChance )
 	local bOutcome = self:RoomRandomInt( 1, 100 ) <= nChance
 	return bOutcome
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:SpawnGoldShopAtExit()
+	if self.hRoom and self.hRoom.hEventRoom then 
+		return false 
+	end
+	return self.bSpawnGoldShopAtExit
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:ResetHeroStateOnEncounterComplete()
+	return true
 end
 
 ---------------------------------------------------------------------------
@@ -155,6 +224,12 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter:SelectAscensionAbilities( )
+	if self:GetEncounterType() == ROOM_TYPE_TRAPS or self:GetEncounterType() == ROOM_TYPE_EVENT then 
+		return 
+	end
+
+	--print( 'ADDING ASCENSION ABILITIES' )
+
 	self.AscensionAbilities = {}
 	self.hDummyAscensionCaster = nil
 	self.ClientData[ "ascension_abilities" ] = {}
@@ -162,26 +237,40 @@ function CMapEncounter:SelectAscensionAbilities( )
 
 	if self:GetRoom():GetType() ~= ROOM_TYPE_ENEMY then
 		if self:GetRoom():GetType() == ROOM_TYPE_BOSS then
+			--print( 'CHECKING BOSS ROOM' )
 			if GameRules.Aghanim.bIsInTournamentMode and #TRIALS_BOSS_ASCENSION_ABILITIES > 0 then
+				--print( 'BOSS ROOM - TOURNAMENT MODE' )
 				for i=1,#TRIALS_BOSS_ASCENSION_ABILITIES do
 					print( "Encounter " .. self.szEncounterName .. " added trial ascension ability " .. TRIALS_BOSS_ASCENSION_ABILITIES[i] )
 					table.insert( self.AscensionAbilities, TRIALS_BOSS_ASCENSION_ABILITIES[i] )
 					self.ClientData[ "ascension_abilities" ][ tostring(i) ] = TRIALS_BOSS_ASCENSION_ABILITIES[i]
 				end
 			else
+				--print( 'BOSS ROOM - NON-TOURNAMENT MODE' )
 
 				if GameRules.Aghanim:GetAscensionLevel() == AGHANIM_ASCENSION_APEX_MAGE then
 					local nIndex = self:RoomRandomInt( 1, #APEX_BOSS_ASCENSION_ABILITIES )
 					print( "Encounter " .. self.szEncounterName .. " added boss ascension ability " .. APEX_BOSS_ASCENSION_ABILITIES[ nIndex ] )
 					table.insert( self.AscensionAbilities, APEX_BOSS_ASCENSION_ABILITIES[ nIndex ] )
 					self.ClientData[ "ascension_abilities" ][ 1 ] = APEX_BOSS_ASCENSION_ABILITIES[ nIndex ]
+				else
+					--print( 'BOSS ROOM - non-Apex Mage - no abilities added')
 				end
 			end
 		end
 		return
 	end
 
-	local nEliteLevel = self:GetRoom():GetEliteRank()
+	local nEliteLevel = 0 
+	if GetMapName() == "main" then 
+		nEliteLevel = self:GetRoom():GetEliteRank()
+	else
+		if self.bEliteEncounter then 
+			nEliteLevel = 1
+		else
+			nEliteLevel = 0
+		end
+	end
 	local nAscensionLevel = nEliteLevel + GameRules.Aghanim:GetAscensionLevel()
 	self.ClientData[ "total_difficulty" ] = nAscensionLevel
 
@@ -245,7 +334,8 @@ function CMapEncounter:SelectAscensionAbilities( )
 		end
 	end
 
-	
+	ShuffleListInPlace( vecEliteAbilityOptions, self:GetRoom():GetRoomRandomStream() )
+	ShuffleListInPlace( vecAbilityOptions, self:GetRoom():GetRoomRandomStream() )
 
 	-- Force specific abilities
 	local nStart = 1
@@ -323,12 +413,41 @@ function CMapEncounter:Precache( context )
 	end	
 
 	-- Precache preview units for exit directions
-	for nExitDirection=ROOM_EXIT_LEFT,ROOM_EXIT_RIGHT do
-		local szExitRoomName = self:GetRoom():GetExit( nExitDirection )
+	if GetMapName() == "hub" then 
+
+		if self:GetRoom().hEventRoom and self:GetRoom().hEventRoom:GetEncounter() then 
+			print( "Precaching preview unit " .. self:GetRoom().hEventRoom:GetEncounter():GetPreviewUnit() .. " for event room " )
+			PrecacheUnitByNameSync( self:GetRoom().hEventRoom:GetEncounter():GetPreviewUnit(), context, -1 )
+		end
+
+		local szExitRoomName = self:GetRoom().szSingleExitRoomName
 		if szExitRoomName ~= nil then
 			local hExitRoom = GameRules.Aghanim:GetRoom( szExitRoomName )
-			if hExitRoom ~= nil and hExitRoom:GetEncounter():GetPreviewUnit() ~= nil then
-				PrecacheUnitByNameSync( hExitRoom:GetEncounter():GetPreviewUnit(), context, -1 )
+			if hExitRoom then 
+				if hExitRoom:GetEncounter() then
+					if hExitRoom:GetEncounter():GetPreviewUnit() ~= nil then
+						print( "Precaching preview unit " .. hExitRoom:GetEncounter():GetPreviewUnit() .. " for room " )
+						PrecacheUnitByNameSync( hExitRoom:GetEncounter():GetPreviewUnit(), context, -1 )
+					end
+				else
+					for _,hEncounter in pairs( hExitRoom.vecPotentialEncounters ) do
+						if hEncounter and hEncounter:GetPreviewUnit() ~= nil then 
+							print( "Precaching preview unit " .. hEncounter:GetPreviewUnit() .. " for room " )
+							PrecacheUnitByNameSync( hEncounter:GetPreviewUnit(), context, -1 )
+						end
+					end
+				end
+			end
+		end
+	else
+
+		for nExitDirection=ROOM_EXIT_LEFT,ROOM_EXIT_RIGHT do
+			local szExitRoomName = self:GetRoom():GetExit( nExitDirection )
+			if szExitRoomName ~= nil then
+				local hExitRoom = GameRules.Aghanim:GetRoom( szExitRoomName )
+				if hExitRoom ~= nil and hExitRoom:GetEncounter():GetPreviewUnit() ~= nil then
+					PrecacheUnitByNameSync( hExitRoom:GetEncounter():GetPreviewUnit(), context, -1 )
+				end
 			end
 		end
 	end
@@ -390,14 +509,19 @@ end
 
 function CMapEncounter:InitializeObjectives()
 	if self.hRoom:GetType() == ROOM_TYPE_ENEMY then
-		self:AddEncounterObjective( "defeat_all_enemies", 0, 0 ) 
+		self:AddEncounterObjective( "defeat_all_enemies", 0, self.nMaxSpawnedUnitCount ) 
 	end
 end
 
 --------------------------------------------------------------------------------
 
 function CMapEncounter:Introduce()
-	GameRules.Aghanim:GetAnnouncer():OnEncounterSelected( self )
+	if GameRules.Aghanim:GetAnnouncer() ~= nil then 
+		GameRules.Aghanim:GetAnnouncer():OnEncounterSelected( self )
+	else
+		print( "announcer is nil in encounter " .. self.szEncounterName )
+	end
+	--PrintTable( self.ClientData, "  " )
 	CustomGameEventManager:Send_ServerToAllClients( "introduce_encounter", self.ClientData )
 	self:UpdateClient()
 end
@@ -568,7 +692,7 @@ end
 
 function CMapEncounter:Start()
 	print( string.format( "Encounter %s starting..\n", self.szEncounterName ) )
-	for nPlayerID=0,AGHANIM_PLAYERS-1 do
+	for nPlayerID = 0, AGHANIM_PLAYERS - 1 do
 		PlayerResource:SetCustomIntParam( nPlayerID, self.hRoom:GetDepth() - 1 )
 	end
 
@@ -590,6 +714,8 @@ function CMapEncounter:Start()
 		end
 	end
 
+	self:RunEncounterAbilityFunctions( "ENCOUNTER_START" )
+
 	local nEntityKilledGameEvent = ListenToGameEvent( "entity_killed", Dynamic_Wrap( getclass( self ), "OnEntityKilled" ), self )
 	table.insert( self.EventListeners, nEntityKilledGameEvent )
 
@@ -598,6 +724,9 @@ function CMapEncounter:Start()
 
 	local nTriggerEndTouchEvent = ListenToGameEvent( "trigger_end_touch", Dynamic_Wrap( getclass( self ), "OnTriggerEndTouch" ), self )
 	table.insert( self.EventListeners, nTriggerEndTouchEvent )
+
+	local nOutpostsCaptured = ListenToGameEvent( "dota_watch_tower_captured", Dynamic_Wrap( getclass( self ), "OnOutpostCaptured" ), self )
+	table.insert( self.EventListeners, nOutpostsCaptured )
 	
 	GameRules.Aghanim:GetAnnouncer():OnEncounterStarted( self )
 	
@@ -608,6 +737,11 @@ function CMapEncounter:Start()
 		self.nUnitsRemainingForRewardDrops = self.nMaxSpawnedUnitCount
 		if self.nMaxSpawnedUnitCount == 0 then
 			print( "*** WARNING : Encounter " .. self.szEncounterName .. " indicates 0 units to be spawned.. Check your GetMaxSpawnedUnitCount()" )
+		else
+			local nCurrentValue = self:GetEncounterObjectiveProgress( "defeat_all_enemies" )
+			if nCurrentValue ~= -1 then 
+				self:UpdateEncounterObjective( "defeat_all_enemies", 0, self.nMaxSpawnedUnitCount )
+			end
 		end
 	end
 
@@ -638,6 +772,11 @@ function CMapEncounter:Start()
 	if self.hRoom:GetType() == ROOM_TYPE_ENEMY then
 		self.nNumItemsToDrop = GameRules.Aghanim:RollRandomNeutralItemDrops( self )
 		self.nNumBPToDrop = self:RoomRandomInt( 0, 2 )
+		local nConsumableRoll = self:RoomRandomInt( 0, 100 )
+
+		if nConsumableRoll >= PCT_CONSUMABLE_ENEMY_ROOM_CHANCE then 
+			self.nNumConsumablesToDrop = 1 
+		end
 	end
 
 	if self.hRoom:GetType() == ROOM_TYPE_ENEMY or self.hRoom:GetType() == ROOM_TYPE_TRAPS then
@@ -647,6 +786,67 @@ function CMapEncounter:Start()
 	self.ClientData[ "start_time" ] = self:GetStartTime() - GameRules.Aghanim:GetExpeditionStartTime()
 	CustomNetTables:SetTableValue( "encounter_state", "depth_started", { tostring( self.hRoom:GetDepth() ) } )
 	self:UpdateClient()
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:RunEncounterAbilityFunctions( szFunctionType )
+	local FunctionTable = _G.ENCOUNTER_ABILITY_FUNCTIONS[ szFunctionType ]
+	if FunctionTable == nil then 
+		print( "CMapEncounter:RunEncounterAbilityFunctions: Error, trying to run invalid function type " .. szFunctionType )
+	end
+
+	for nPlayerID = 0, AGHANIM_PLAYERS - 1 do
+		local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID ) 
+		if hPlayerHero then 
+			for nAbilityIndex = 0, DOTA_MAX_ABILITIES - 1 do
+				local hAbility = hPlayerHero:GetAbilityByIndex( nAbilityIndex )
+				if hAbility then 
+					local hAbilityFunction = FunctionTable[ hAbility:GetAbilityName() ] 
+					if hAbilityFunction then 
+						hAbilityFunction( hAbility, self )
+					end
+				end
+			
+			end
+
+			for nItemSlot = 0,DOTA_ITEM_INVENTORY_SIZE - 1 do 
+				local hItem = hPlayerHero:GetItemInSlot( nItemSlot )
+				if hItem then 
+					local hItemFunction = FunctionTable[ hItem:GetAbilityName() ] 
+					if hItemFunction then 
+						hItemFunction( hItem, self )
+					end
+				end	
+			end
+
+			local hBottle = hPlayerHero:GetItemInSlot( DOTA_ITEM_TP_SCROLL )
+			if hBottle then
+				local hBottleFunction = FunctionTable[ hBottle:GetAbilityName() ] 
+				if hBottleFunction then 
+					hBottleFunction( hBottle, self )
+				end
+			end
+
+			local hNeutralItem = hPlayerHero:GetItemInSlot( DOTA_ITEM_NEUTRAL_SLOT )
+			if hNeutralItem then
+				local hNeutralFunction = FunctionTable[ hNeutralItem:GetAbilityName() ] 
+				if hNeutralFunction then 
+					hNeutralFunction( hNeutralItem, self )
+				end
+			end
+
+			local vecModifiers = hPlayerHero:FindAllModifiers()
+			for _,hBuff in pairs ( vecModifiers ) do 
+				if hBuff then 
+					local hBuffFunction = FunctionTable[ hBuff:GetName() ] 
+					if hBuffFunction then 
+						hBuffFunction( hBuff, self )
+					end
+				end
+			end
+		end
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -755,6 +955,8 @@ function CMapEncounter:SpawnBreakableContainers()
 		if ( breakableData.szSpawnerName ~= nil ) then
 			--print( "breakableData.szSpawnerName == " .. breakableData.szSpawnerName )
 			local hSpawners = self:GetRoom():FindAllEntitiesInRoomByName( breakableData.szSpawnerName, false )
+			ShuffleListInPlace( hSpawners )
+			
 			for i, hSpawner in pairs( hSpawners ) do
 				if nCratesSpawned < self.nCratesToSpawn then
 					local vSpawnLoc = hSpawner:GetOrigin() + RandomVector( RandomFloat( 0, breakableData.nMaxSpawnDistance ) )
@@ -900,12 +1102,16 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter:OnThink()
+	if GameRules:IsGamePaused() == true then
+		return 0.1
+	end
 
 	--print( 'CMapEncounter:OnThink()' )
 	if self.flStartTime ~= -1 and not self.bCompleted then
 		self:TrySpawningUnits()
 		self:TrySpawningPortalUnits()
 		self:TrySpawningPortalUnitsV2()
+		self:TrySpawningMasterWaveUnits()
 		self:TryCompletingMapEncounter()
 	end
 
@@ -991,6 +1197,159 @@ end
 
 --------------------------------------------------------------------------------
 
+function CMapEncounter:TrySpawningMasterWaveUnits()
+	if self.masterWaveSchedule == nil then
+		return
+	end
+
+	if self.flMasterWaveScheduleStartTime == nil then
+		return
+	end
+
+	--print( 'CMapEncounter:TrySpawningMasterWaveUnits()' )
+
+	for WaveKey,Wave in pairs ( self.masterWaveSchedule ) do
+		--print( 'Attempting to spawn Wave ' .. WaveKey )
+
+		if Wave.SpawnStatus ~= nil then
+			goto continue
+		end
+
+		if Wave.TriggerData == nil then
+			print( "CMapEncounter:TrySpawningMasterWaveUnits(): Error - Wave " .. WaveKey .. " has nil trigger data!" )
+		else
+			for TriggerKey,Trigger in pairs( Wave.TriggerData ) do
+				if Trigger.TriggerType == nil then
+					printf( "ERROR: Trigger \"%s\" used by wave \"%s\" does not have a valid TriggerType specified!", TriggerKey, tostring( WaveKey ) )
+				else
+					--print( 'Wave ' .. WaveKey .. ' - Processing trigger ' .. TriggerKey )
+					if Trigger.TriggerType == PORTAL_TRIGGER_TYPE_TIME_ABSOLUTE then
+
+						--print( WaveKey .. 'Processing an *absolute* TIME trigger with time = ' .. Trigger.Time )
+						local flRelativeTime = GameRules:GetGameTime() - self.flMasterWaveScheduleStartTime
+						if Trigger.Time < flRelativeTime then
+							--print( 'TIME IS UP! spawning ' .. WaveKey )
+							self:SpawnMasterWave( Wave, WaveKey )
+							goto continue	-- make sure we don't double trigger this wave
+						end
+
+					elseif Trigger.TriggerType == PORTAL_TRIGGER_TYPE_TIME_RELATIVE then
+						if Trigger.TriggerAfterWave == nil then
+							print( 'ERROR: Time Relative trigger has not specified TriggerAfterWave' )
+						else
+							--print( WaveKey .. ' - Processing a *relative* TIME trigger with time = ' .. Trigger.Time .. ' set to go after ' .. Trigger.TriggerAfterWave )
+							local TriggerWave = self.masterWaveSchedule[ Trigger.TriggerAfterWave ]
+							if TriggerWave == nil then
+								print( 'ERROR: Cannot find Trigger Wave named - ' .. Trigger.TriggerAfterWave )
+							else
+								-- wait until our trigger wave has completely spawned before checking the relative time
+								if TriggerWave.SpawnStatus ~= nil and TriggerWave.SpawnStatus == 'complete' then
+									local flRelativeTime = GameRules:GetGameTime() - TriggerWave.flCompletionTime
+									--print( Trigger.TriggerAfterWave .. ' has completed - checking for relative time spawn after ' .. Trigger.Time .. ' seconds. Current relative time is ' .. flRelativeTime )
+									if Trigger.Time < flRelativeTime then
+										--print( 'TIME IS UP! spawning ' .. WaveKey )
+										self:SpawnMasterWave( Wave, WaveKey )
+										goto continue	-- make sure we don't double trigger this wave
+									end
+								end
+							end
+						end
+
+					elseif Trigger.TriggerType == PORTAL_TRIGGER_TYPE_KILL_PERCENT then
+						if Trigger.TriggerAfterWave == nil then
+							print( 'ERROR: Kill Percent Wave named ' .. k .. ' needs to have TriggerAfterWave specified!' )
+						else
+							--print( WaveKey .. 'Processing a KILL PERCENT trigger - destroy ' .. Trigger.KillPercent .. '% of ' .. Trigger.TriggerAfterWave )
+							local TriggerWave = self.masterWaveSchedule[ Trigger.TriggerAfterWave ]
+							if TriggerWave == nil then
+								print( 'ERROR: Cannot find Trigger Wave named - ' .. Trigger.TriggerAfterWave )
+							else
+								if TriggerWave.SpawnStatus ~= nil and TriggerWave.SpawnStatus == 'complete' then
+									local nPercentDestroyed = 100 - ( ( #TriggerWave.hSpawnedUnits / TriggerWave.nTotalSpawnedUnits ) * 100.0 )
+									--print( 'Trigger Wave ' .. Trigger.TriggerAfterWave .. ' has completed its spawning. It has ' .. #TriggerWave.hSpawnedUnits .. ' remaining from a total of ' .. TriggerWave.nTotalSpawnedUnits .. '. ' .. nPercentDestroyed .. '% completed!' )
+									if Trigger.KillPercent == nil then
+										print( 'ERROR: missing var ***KillPercent*** for Trigger named ' .. WaveKey )
+									elseif nPercentDestroyed >= Trigger.KillPercent then
+										--print( WaveKey .. ' kill percent met! Spawning now!' )
+										self:SpawnMasterWave( Wave, WaveKey )
+										goto continue	-- make sure we don't double trigger this wave
+									end
+								end
+							end
+						end
+
+					elseif Trigger.TriggerType == PORTAL_TRIGGER_TYPE_HEALTH_PERCENT then
+						if Trigger.TriggerAfterWave == nil then
+							print( 'ERROR: Health Percent Wave named ' .. k .. ' needs to have TriggerAfterWave specified!' )
+						else
+							--print( WaveKey .. 'Processing a HEALTH PERCENT trigger - fire at ' .. Trigger.HealthPercent .. '% of ' .. Trigger.TriggerAfterWave .. ' health.' )
+							local TriggerWave = self.masterWaveSchedule[ Trigger.TriggerAfterWave ]
+							if TriggerWave == nil then
+								print( 'ERROR: Cannot find Trigger Wave named - ' .. Trigger.TriggerAfterWave )
+							else
+								if TriggerWave.SpawnStatus ~= nil and TriggerWave.SpawnStatus == 'complete' then
+									local nWaveHealth = 0
+									for _,hSpawnedUnit in pairs( TriggerWave.hSpawnedUnits ) do
+										if hSpawnedUnit ~= nil and hSpawnedUnit:IsNull() == false and hSpawnedUnit:IsAlive() == true then
+											nWaveHealth = nWaveHealth + hSpawnedUnit:GetHealth()
+										end
+									end
+									
+									local nPercentHealth = ( nWaveHealth / TriggerWave.nTotalUnitHealth ) * 100.0
+									--print( 'Trigger Wave ' .. Trigger.TriggerAfterWave .. ' has completed its spawning. It has ' .. nWaveHealth .. ' health remaining from a total of ' .. TriggerWave.nTotalUnitHealth .. '. ' .. nPercentHealth .. '% remaining!' )
+									if nPercentHealth <= Trigger.HealthPercent then
+										--print( WaveKey .. ' health percent met! Spawning now!' )
+										self:SpawnMasterWave( Wave, WaveKey )
+										goto continue	-- make sure we don't double trigger this wave
+									end
+								end
+							end
+						end
+
+					else
+						print( 'ERROR: TriggerType for Trigger ' .. TriggerKey .. ' inside of ' .. WaveKey .. ' is invalid - ' .. Trigger.TriggerType )
+
+					end
+				end
+			end
+		end
+
+		::continue::
+	end
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:SpawnMasterWave( Wave, WaveKey )
+	if Wave == nil then
+		print( 'ERROR - trying to call SpawnMasterWave( Wave ) w/ a nil WAVE!' )
+	else
+		Wave.SpawnStatus = 'portal_summoning'
+		Wave.nTotalSpawnedUnits = 0
+		Wave.nTotalUnitHealth = 0
+
+		-- default to always use portals if it's not specified
+		local bUsePortals = true
+		if Wave.UsePortals ~= nil then
+			bUsePortals = Wave.UsePortals
+		end
+
+		-- default to always aggro heroes if it's not specified
+		local bAggroHeroes = true
+		if Wave.AggroHeroes ~= nil then
+			bAggroHeroes = Wave.AggroHeroes
+		end
+
+		if self.PortalSpawnersV2[ Wave.SpawnerName ] ~= nil then
+			self.PortalSpawnersV2[ Wave.SpawnerName ]:SpawnUnitsFromRandomSpawners( Wave.Count, WaveKey, bUsePortals, bAggroHeroes )
+		else
+			print( 'ERROR - cannot find a V2 Portal Spawner with name ' .. Wave.SpawnerName )
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+
 function CMapEncounter:IsScheduledSpawnComplete( hSpawner )
 	if hSpawner.schedule == nil then
 		return true
@@ -1016,6 +1375,16 @@ function CMapEncounter:AreScheduledSpawnsComplete()
 			return false
 		end
 	end
+
+	if self.masterWaveSchedule ~= nil then
+		for k,Wave in pairs ( self.masterWaveSchedule ) do
+			if Wave.SpawnStatus == nil or Wave.SpawnStatus == 'portal_summoning' then
+				--print( 'Wave ' .. k .. ' is still not complete!' )
+				return false
+			end
+		end
+	end
+
 	return true
 end
 
@@ -1027,6 +1396,9 @@ function CMapEncounter:TryCompletingMapEncounter()
 	if bCompleted and self:GetRoom():AreAllExitRoomsReady() then
 		self.bCompleted = bCompleted
 		self.flCompletionTime = GameRules:GetGameTime()
+		if self:GetEncounterType() ~= ROOM_TYPE_EVENT then
+			GameRules.Aghanim:RegisterEncounterComplete( self, self.flCompletionTime - self.flStartTime )
+		end
 
 		for i=1,#self.EventListeners do
 			StopListeningToGameEvent( self.EventListeners[i] )
@@ -1034,6 +1406,7 @@ function CMapEncounter:TryCompletingMapEncounter()
 		end
 
 		self:DestroyRemainingSpawnedUnits()
+		self:DestroyRemainingGoodUnits()
 		self:ResetHeroState()
 		self:SpawnEndLevelEntities()
 		self:OnComplete()
@@ -1054,6 +1427,8 @@ end
 
 function CMapEncounter:OnComplete()
 	GameRules.Aghanim:GetAnnouncer():OnEncounterComplete( self )
+
+	self:RunEncounterAbilityFunctions( "ENCOUNTER_COMPLETE" )
 	
 	-- Delete any unclaimed treasures
 	for i=1,#self.hTreasureList do
@@ -1219,6 +1594,20 @@ end
 
 --------------------------------------------------------------------------------
 
+function CMapEncounter:SetMasterSpawnSchedule( waveSchedule )
+	--print( '^^^CMapEncounter:SetMasterSpawnSchedule( waveSchedule )' )
+	--PrintTable( waveSchedule )
+	self.masterWaveSchedule = deepcopy( waveSchedule )
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:StartMasterWaveSchedule( flDelay )
+	self.flMasterWaveScheduleStartTime = GameRules:GetGameTime() + flDelay
+end
+
+--------------------------------------------------------------------------------
+
 function CMapEncounter:StartAllSpawnerSchedules( flDelay )
 
 	-- Start everything up
@@ -1238,6 +1627,7 @@ function CMapEncounter:StartAllSpawnerSchedules( flDelay )
 		end
 	end	
 
+	self:StartMasterWaveSchedule( flDelay )
 end
 
 --------------------------------------------------------------------------------
@@ -1421,6 +1811,26 @@ function CMapEncounter:GetMaxSpawnedUnitCount()
 		end
 	end
 
+	if self.masterWaveSchedule then
+		for _,Wave in pairs ( self.masterWaveSchedule ) do
+			local nWaveCount = Wave.Count
+
+			--print( 'This Portal has ' .. nWaveCount .. ' COUNT.' )
+			for _,PortalSpawner in pairs( self.PortalSpawnersV2 ) do
+				if Wave.SpawnerName == PortalSpawner:GetSpawnerName() then
+					local nPortalCount = PortalSpawner:GetSpawnCountPerSpawnPosition()
+					if nWaveCount == SPAWN_ALL_POSITIONS then 
+						nWaveCount = PortalSpawner:GetSpawnPositionCount()
+					end
+					--print( 'Found the v2 portal! This one contains ' .. nPortalCount .. ' units.' )
+					nCount = nCount + ( nPortalCount * nWaveCount )
+				end
+			end
+		end
+	end
+
+	--print( 'GetMaxSpawnedUnitCount() - COUNT IS AT ' .. nCount )
+
 	return nCount
 end
 
@@ -1540,6 +1950,7 @@ end
 function CMapEncounter:OnEnemyCreatureSpawned( hEnemyCreature )
 
 	if hEnemyCreature.Encounter ~= nil then
+		--print( 'CMapEncounter:OnEnemyCreatureSpawned( hEnemyCreature ) - ENEMY CREATURE ALREADY HAS AN ENCOUNTER SET!' )
 		return
 	end
 
@@ -1566,8 +1977,10 @@ function CMapEncounter:OnEnemyCreatureSpawned( hEnemyCreature )
 
 	local bIsGlobal = IsGlobalAscensionCaster( hEnemyCreature )
 	if not bIsGlobal and self:MustKillForEncounterCompletion( hEnemyCreature ) == true then
+		--print( 'CMapEncounter:OnEnemyCreatureSpawned( hEnemyCreature ) - inserting creature into SPAWNED enemy list: ' .. hEnemyCreature:GetUnitName() )
 		table.insert( self.SpawnedEnemies, hEnemyCreature )
 	else
+		--print( 'CMapEncounter:OnEnemyCreatureSpawned( hEnemyCreature ) - inserting creature into SECONDARY enemy list' .. hEnemyCreature:GetUnitName() )
 		table.insert( self.SpawnedSecondaryEnemies, hEnemyCreature )
 		self:SuppressRewardsOnDeath( hEnemyCreature )
 	end
@@ -1591,13 +2004,64 @@ function CMapEncounter:OnSpawnerFinished( hSpawner, hSpawnedUnits )
 
 	for _,hSpawnedUnit in pairs ( hSpawnedUnits ) do
 		if hSpawnedUnit ~= nil then
-			hSpawnedUnit:SetRequiresReachingEndPath( true )	-- this ensures that our spawned dudes won't shut down while getting to their goal ent
-
+			if hSpawnedUnit.SetRequiresReachingEndPath ~= nil then 
+				hSpawnedUnit:SetRequiresReachingEndPath( true )	-- this ensures that our spawned dudes won't shut down while getting to their goal ent
+			end
 			if bIsPortalTriggerUnit == true then
 				table.insert( self.SpawnedPortalTriggerUnits, hSpawnedUnit )
-			end			
+			end
 		end
 	end
+end
+
+---------------------------------------------------------
+
+function CMapEncounter:AssignSpawnedUnitsToMasterWaveSchedule( hSpawnedUnits, szMasterWaveName )
+
+	for _,hSpawnedUnit in pairs ( hSpawnedUnits ) do
+		if hSpawnedUnit ~= nil then
+			-- add units into the master wave schedule for tracking
+			if szMasterWaveName == nil then
+				print( 'ERROR - Master Wave Name is nil - AssignSpawnedUnitsToMasterWaveSchedule( hSpawnedUnits, szMasterWaveName )!' )
+			end
+			if self.masterWaveSchedule ~= nil and szMasterWaveName ~= nil then
+				local Wave = self.masterWaveSchedule[ szMasterWaveName ]
+				if Wave == nil then
+					print( 'ERROR - spawned units are trying to map into Master Wave Schedule using a bad Wave Name = ' .. szMasterWaveName )
+				else
+					if Wave.hSpawnedUnits == nil then
+						Wave.hSpawnedUnits = {}
+					end
+					table.insert( Wave.hSpawnedUnits, hSpawnedUnit )
+					Wave.nTotalSpawnedUnits = Wave.nTotalSpawnedUnits + 1
+					Wave.nTotalUnitHealth = Wave.nTotalUnitHealth + hSpawnedUnit:GetMaxHealth()
+					Wave.SpawnStatus = 'complete'
+					Wave.flCompletionTime = GameRules:GetGameTime()
+					--print( 'Inserting ' .. hSpawnedUnit:GetUnitName() .. ' into ' .. szMasterWaveName )
+				end
+			end
+		end
+	end
+end
+
+---------------------------------------------------------
+
+function CMapEncounter:AggroSpawnedUnitsToHeroes( hSpawnedUnits )
+	local heroes = FindRealLivingEnemyHeroesInRadius( DOTA_TEAM_BADGUYS, self.hRoom:GetOrigin(), FIND_UNITS_EVERYWHERE )
+	--print( heroes )
+
+	for _, hSpawnedUnit in pairs ( hSpawnedUnits ) do
+		local hero = heroes[RandomInt(1, #heroes)]
+		if hero ~= nil then
+			--printf( "Set initial goal entity for unit \"%s\" to \"%s\"", hSpawnedUnit:GetUnitName(), hero:GetUnitName() )
+			hSpawnedUnit:SetInitialGoalEntity( hero )
+		-- TODO - now that this is generalized we should support this somehow? also it should handle the case where everyone is dead and the table of heroes is empty!
+		--elseif #self.hObjectiveEnts > 0 then
+		--	print( "Can't find a hero to attack - setting a goal position to Objective Entity" )
+		--	hSpawnedUnit:SetInitialGoalPosition( self.hObjectiveEnts[1]:GetOrigin() )
+		end
+	end
+
 end
 
 ---------------------------------------------------------
@@ -1613,7 +2077,7 @@ function CMapEncounter:SetInitialGoalEntityToNearestHero( hSpawnedUnit )
 			if hPlayerHero ~= nil and hPlayerHero:IsAlive() then
 				local flDist = ( hPlayerHero:GetAbsOrigin() - hSpawnedUnit:GetAbsOrigin() ):Length2D()
 				if flDist < flNearestDistance then
-					flDist = flNearestDistance
+					flNearestDistance = flDist
 					hNearestHero = hPlayerHero
 				end
 			end			
@@ -1709,37 +2173,58 @@ function CMapEncounter:GrantRewardsForKill( hVictim, hAttacker, nUnitCount )
 				self.nNumFragmentsToDrop = self.nNumFragmentsToDrop - 1
 			end
 		end
+
+		if self.nNumConsumablesToDrop > 0 then 
+			local nPct = math.max( 100 / nEstimatedUnitCount, 1 )
+			if RollPercentage( nPct ) then
+				print( "Dropping consumable item!" )
+				local nTier = 1
+				if self.hRoom:GetEliteRank() > 0 then
+					nTier = 2 
+				end
+
+				local vecItems = TREASURE_REWARDS[ nTier ]
+				local szConsumableItemName = vecItems[ self:RoomRandomInt( 1, #vecItems ) ]
+
+				self:DropConsumableItemFromUnit( hVictim, hAttacker, szConsumableItemName, true )
+				self.nNumConsumablesToDrop = self.nNumConsumablesToDrop - 1
+			end
+		end
 	end
 
 	-- Always drop potions, even if other rewards are suppressed
-	local nHealthPct = HEALTH_POTION_DROP_PCT
-	local nManaPct = MANA_POTION_DROP_PCT
-	if hVictim.bBossMinion ~= nil and hVictim.bBossMinion == true then
-		nHealthPct = nHealthPct * 2
-		nManaPct = nManaPct * 2
-	end
-	if RollPercentage( nHealthPct ) then
-		local newItem = CreateItem( "item_health_potion", nil, nil )
-		newItem:SetPurchaseTime( 0 )
-		if newItem:IsPermanent() and newItem:GetShareability() == ITEM_FULLY_SHAREABLE then
-			item:SetStacksWithOtherOwners( true )
-		end
-		local drop = CreateItemOnPositionSync( hVictim:GetAbsOrigin(), newItem )
-		local dropTarget = hVictim:GetAbsOrigin() + RandomVector( RandomFloat( 50, 350 ) )
-		newItem:LaunchLoot( true, 300, 0.75, dropTarget )
-	end
+	-- Unless we have the creature_suppress_potion_drops that is sometimes used in bonus rooms
+	local hSuppressPotionDropAbility = hVictim:FindAbilityByName("creature_suppress_potion_drops")
+	if hSuppressPotionDropAbility == nil then 
 
-	if RollPercentage( nManaPct ) then
-		local newItem = CreateItem( "item_mana_potion", nil, nil )
-		newItem:SetPurchaseTime( 0 )
-		if newItem:IsPermanent() and newItem:GetShareability() == ITEM_FULLY_SHAREABLE then
-			item:SetStacksWithOtherOwners( true )
+		local nHealthPct = HEALTH_POTION_DROP_PCT
+		local nManaPct = MANA_POTION_DROP_PCT
+		if hVictim.bBossMinion ~= nil and hVictim.bBossMinion == true then
+			nHealthPct = nHealthPct * 2
+			nManaPct = nManaPct * 2
 		end
-		local drop = CreateItemOnPositionSync( hVictim:GetAbsOrigin(), newItem )
-		local dropTarget = hVictim:GetAbsOrigin() + RandomVector( RandomFloat( 50, 350 ) )
-		newItem:LaunchLoot( true, 300, 0.75, dropTarget )
-	end
+		if RollPercentage( nHealthPct ) then
+			local newItem = CreateItem( "item_health_potion", nil, nil )
+			newItem:SetPurchaseTime( 0 )
+			if newItem:IsPermanent() and newItem:GetShareability() == ITEM_FULLY_SHAREABLE then
+				item:SetStacksWithOtherOwners( true )
+			end
+			local drop = CreateItemOnPositionSync( hVictim:GetAbsOrigin(), newItem )
+			local dropTarget = hVictim:GetAbsOrigin() + RandomVector( RandomFloat( 50, 350 ) )
+			newItem:LaunchLoot( true, 300, 0.75, dropTarget )
+		end
 
+		if RollPercentage( nManaPct ) then
+			local newItem = CreateItem( "item_mana_potion", nil, nil )
+			newItem:SetPurchaseTime( 0 )
+			if newItem:IsPermanent() and newItem:GetShareability() == ITEM_FULLY_SHAREABLE then
+				item:SetStacksWithOtherOwners( true )
+			end
+			local drop = CreateItemOnPositionSync( hVictim:GetAbsOrigin(), newItem )
+			local dropTarget = hVictim:GetAbsOrigin() + RandomVector( RandomFloat( 50, 350 ) )
+			newItem:LaunchLoot( true, 300, 0.75, dropTarget )
+		end
+	end
 end
 
 
@@ -1762,10 +2247,12 @@ function CMapEncounter:OnEntityKilled( event )
 	end
 
 	if hVictim == nil then
+		--print( 'CMapEncounter:OnEntityKilled( event ) - VICTIM is nil - bailing' )
 		return
 	end
 
 	if hVictim:IsReincarnating() then
+		--print( 'CMapEncounter:OnEntityKilled( event ) - VICTIM is REINCARNATING - bailing' )
 		return
 	end
 
@@ -1778,9 +2265,10 @@ function CMapEncounter:OnEntityKilled( event )
 			GameRules.Aghanim:RegisterPlayerKillStat( hAttacker:GetPlayerOwnerID(), self.hRoom:GetDepth() )			
 		end
 
-		if hVictim:IsConsideredHero() or hVictim:IsBoss() then
+		-- Now we call this whenever any creature is killed, even if it's not a captain/boss.
+		--if hVictim:IsConsideredHero() or hVictim:IsBoss() then
 			GameRules.Aghanim:GetAnnouncer():OnCreatureKilled( self, hVictim )
-		end
+		--end
 
 		-- Distribute using fixed rewards
 		self:GrantRewardsForKill( hVictim, hAttacker, 1 )
@@ -1798,22 +2286,40 @@ function CMapEncounter:OnEntityKilled( event )
 		end
 	end
 
+	-- remove units from the master wave schedule
+	if self.masterWaveSchedule ~= nil then
+		--print( '^^^Searching Master Wave Schedule to remove dead unit ' .. hVictim:GetUnitName() )
+		for WaveKey,Wave in pairs ( self.masterWaveSchedule ) do
+			if Wave.hSpawnedUnits ~= nil then
+				for k,SpawnedUnit in pairs ( Wave.hSpawnedUnits ) do
+					if SpawnedUnit == hVictim then
+						--print( '^^^Removing dead unit from Master Wave Schedule! ' .. WaveKey .. ' - ' .. hVictim:GetUnitName() )
+						table.remove( Wave.hSpawnedUnits, k )
+						self:OnMasterWaveUnitKilled( SpawnedUnit, WaveKey, #Wave.hSpawnedUnits )
+					end
+				end
+			end
+		end
+	end
+
 	if hVictim.bSuppressRewardsOnDeath == nil or hVictim.bSuppressRewardsOnDeath == false then
+		--print( 'OnEntityKilled - searching SPAWNED ENEMIES list' )
 		for k,hSpawnedEnemy in pairs ( self.SpawnedEnemies ) do
 			if hSpawnedEnemy == hVictim then
 				self.nKilledEnemies = self.nKilledEnemies + 1
 				table.remove( self.SpawnedEnemies, k )
 				self:OnRequiredEnemyKilled( hAttacker, hVictim )
-				--print( "Remaining enemies: " .. #self.SpawnedEnemies )
+				--print( "Remaining SPAWNED enemies: " .. #self.SpawnedEnemies )
 			end
 		end
 	else
+		--print( 'OnEntityKilled - searching SECONDARY ENEMIES list' )
 		for k,hSpawnedSecondaryEnemy in pairs ( self.SpawnedSecondaryEnemies ) do
 			if hSpawnedSecondaryEnemy == hVictim then
 				self.nKilledSecondaryEnemies = self.nKilledSecondaryEnemies + 1
 				self:OnSecondaryEnemyKilled( hAttacker, hVictim )
 				table.remove( self.SpawnedSecondaryEnemies, k )
-				--print( "Remaining enemies: " .. #self.SpawnedEnemies )
+				--print( "Remaining SECONDARY enemies: " .. #self.SpawnedSecondaryEnemies )
 			end
 		end
 	end
@@ -1862,7 +2368,18 @@ end
 
 ---------------------------------------------------------
 
+function CMapEncounter:OnMasterWaveUnitKilled( hVictim, szWaveName, nWaveUnitsRemaining )
+	--print( 'CMapEncounter:OnMasterWaveUnitKilled! victim = ' .. hVictim:GetUnitName() .. ', Wave Name = ' .. szWaveName .. ', Units Remaining = ' .. nWaveUnitsRemaining )
+end
+
+---------------------------------------------------------
+
 function CMapEncounter:OnRequiredEnemyKilled( hAttacker, hVictim )
+	local nCurrentValue = self:GetEncounterObjectiveProgress( "defeat_all_enemies" )
+	if nCurrentValue ~= -1 then 
+		local nMaxSpawnedUnits = self:GetMaxSpawnedUnitCount()
+		self:UpdateEncounterObjective( "defeat_all_enemies", math.min( nCurrentValue + 1, nMaxSpawnedUnits ), nMaxSpawnedUnits )
+	end
 end
 
 ---------------------------------------------------------
@@ -1919,6 +2436,17 @@ end
 -- > caller_entindex- short
 
 function CMapEncounter:OnTriggerEndTouch( event )
+	-- currently empty
+end
+
+--------------------------------------------------------------------------------
+
+-- dota_watch_tower_captured
+-- > entindex - int
+-- > team_number - int
+-- > old_team_number- int
+
+function CMapEncounter:OnOutpostCaptured( event )
 	-- currently empty
 end
 
@@ -2062,10 +2590,10 @@ end
 
 --------------------------------------------------------------------------------
 
-function CMapEncounter:DropItemFromRoomRewardContainer( hContainer, szItemName, bAnnounce )
+function CMapEncounter:DropItemFromRoomRewardContainer( hContainer, szItemName, bAnnounce, hPlayerHero )
 	for szNeutralItem,v in pairs ( PRICED_ITEM_REWARD_LIST ) do
 		if szNeutralItem == szItemName then
-			DropNeutralItemAtPositionForHero( szItemName, hContainer:GetAbsOrigin() + RandomVector( RandomFloat( 50, 150 ) ), PlayerResource:GetSelectedHeroEntity( 0 ), -1, true )
+			DropNeutralItemAtPositionForHero( szItemName, hContainer:GetAbsOrigin() + RandomVector( RandomFloat( 50, 150 ) ), ( hPlayerHero ~= nil and hPlayerHero ) or PlayerResource:GetSelectedHeroEntity( 0 ), -1, true )
 			return
 		end
 	end
@@ -2086,6 +2614,35 @@ function CMapEncounter:DropItemFromRoomRewardContainer( hContainer, szItemName, 
 		gameEvent["player_id"] = 0 --fixme
 		gameEvent["teamnumber"] = DOTA_TEAM_GOODGUYS
 		gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_" .. szItemDrop
+		gameEvent["message"] = "#Aghanim_FoundConsumableItem"
+		FireGameEvent( "dota_combat_event_message", gameEvent )
+	end
+end
+
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:DropConsumableItemFromUnit( hUnit, hAttacker, szItemName, bAnnounce )
+	local newItem = CreateItem( szItemName, nil, nil )
+	newItem:SetPurchaseTime( 0 )
+	
+	local drop = CreateItemOnPositionSync( hUnit:GetAbsOrigin(), newItem )
+	local dropTarget = hUnit:GetAbsOrigin() + RandomVector( RandomFloat( 50, 150 ) )
+	newItem:LaunchLoot( false, 150, 0.75, dropTarget )
+
+	if bAnnounce and hAttacker then
+		AddFOWViewer( DOTA_TEAM_GOODGUYS, dropTarget, 300.0, 10.0, false )
+		MinimapEvent( DOTA_TEAM_GOODGUYS, hAttacker, dropTarget.x, dropTarget.y, DOTA_MINIMAP_EVENT_HINT_LOCATION, 10.0 )
+		EmitSoundOn( "NeutralLootDrop.TierComplete", hAttacker )
+
+		local gameEvent = {}
+		local nPlayerID = 0
+		if hAttacker:IsRealHero() then 
+			nPlayerID = hAttacker:GetPlayerOwnerID()
+		end
+		gameEvent["player_id"] = nPlayerID --fixme
+		gameEvent["teamnumber"] = DOTA_TEAM_GOODGUYS
+		gameEvent["locstring_value"] = "#DOTA_Tooltip_Ability_" .. szItemName
 		gameEvent["message"] = "#Aghanim_FoundConsumableItem"
 		FireGameEvent( "dota_combat_event_message", gameEvent )
 	end
@@ -2128,6 +2685,23 @@ end
 
 --------------------------------------------------------------------------------
 
+function CMapEncounter:DestroyRemainingGoodUnits()
+
+	local units = FindUnitsInRadius( DOTA_TEAM_GOODGUYS, self.hRoom:GetOrigin(), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_ANY_ORDER, true )
+	for _,unitName in pairs( UNITS_TO_DESTROY_AT_ROOM_CLEAR ) do
+		--print( '^^^Searching for units to destroy named - ' .. unitName )
+		for _,unit in pairs( units ) do
+			--print( '^^^Checking unit named - ' .. unit:GetUnitName() )
+			if unit:GetUnitName() == unitName then
+				--print( '^^^Matched! destroying!' )
+				unit:ForceKill( false )
+			end
+		end
+	end		
+end
+
+--------------------------------------------------------------------------------
+
 function CMapEncounter:FindEncounterEndLocator()
 
 	local hExitLocatorList = self:GetRoom():FindAllEntitiesInRoomByName( "encounter_end_locator", false )
@@ -2140,8 +2714,19 @@ end
 
 --------------------------------------------------------------------------------
 
-function CMapEncounter:SpawnEndLevelEntities()
+function CMapEncounter:FindRoshanLocator()
+	local hRoshanLocatorList = self:GetRoom():FindAllEntitiesInRoomByName( "encounter_end_roshan_locator", false )
+	if #hRoshanLocatorList == 0 then
+		return nil
+	end
 
+	return hRoshanLocatorList[1]
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:SpawnEndLevelEntities()
+	print( "CMapEncounter:SpawnEndLevelEntities()" )
 	self.bHasSpawnedEndLevelEntities = true
 
 	local vExitTemplate = Entities:FindByName( nil, "encounter_end_template" )
@@ -2152,6 +2737,7 @@ function CMapEncounter:SpawnEndLevelEntities()
 
 	local hExitLocator = self:FindEncounterEndLocator()
 	if hExitLocator == nil then
+		print ( "Unable to find Encounter Exit Locator" )
 		return
 	end
 
@@ -2159,7 +2745,9 @@ function CMapEncounter:SpawnEndLevelEntities()
 	local vSpawnLocation = Vector( vExitLocation.x, vExitLocation.y, GetGroundHeight( vExitLocation, nil ) )
 	vExitTemplate:SetAbsOrigin( vSpawnLocation )
 	vExitTemplate:ForceSpawn()
+	print( "spawning exit template at (" .. vSpawnLocation.x .. ", " .. vSpawnLocation.y .. ", " .. vSpawnLocation.z .. ")" )
 
+	local hShop = nil
 	--meh
 	local nDepth = self.hRoom:GetDepth() 
 	
@@ -2167,12 +2755,56 @@ function CMapEncounter:SpawnEndLevelEntities()
 		if hTemplateEnt:GetName() == "room_reward_spawn" then
 			self.vRoomRewardCratePos = hTemplateEnt:GetAbsOrigin()
 		end
-		if nDepth == 6 or nDepth == 11 or nDepth == 13 or nDepth == 17 then  
-			if hTemplateEnt:GetName() == "shop" or hTemplateEnt:GetName() == "shop_trigger" or hTemplateEnt:GetName() == "shop_obstruction" or hTemplateEnt:GetName() == "shop_particles"  or hTemplateEnt:GetName() == "neutral_stash" then
-				UTIL_Remove( hTemplateEnt )
+
+		if GetMapName() == "main" then
+			if nDepth == 6 or nDepth == 11 or nDepth == 13 or nDepth == 17 then  
+				if hTemplateEnt:GetName() == "shop" or hTemplateEnt:GetName() == "shop_trigger" or hTemplateEnt:GetName() == "shop_obstruction" or hTemplateEnt:GetName() == "shop_particles"  or hTemplateEnt:GetName() == "neutral_stash" then
+					UTIL_Remove( hTemplateEnt )
+				end
+			end
+		end
+
+		if GetMapName() == "hub" then 
+			if self:SpawnGoldShopAtExit() == false then  
+				if hTemplateEnt:GetName() == "shop" or hTemplateEnt:GetName() == "shop_trigger" or hTemplateEnt:GetName() == "shop_obstruction" or hTemplateEnt:GetName() == "shop_particles"  or hTemplateEnt:GetName() == "neutral_stash" then
+					UTIL_Remove( hTemplateEnt )
+				end
+			end
+
+
+			if hTemplateEnt ~= nil and hTemplateEnt:IsNull() == false then 
+				if FREE_EVENT_ROOMS and self.hRoom.hEventRoom and hTemplateEnt:GetClassname() == "npc_dota_aghsfort_watch_tower" then 
+					local hBuff = hTemplateEnt:FindModifierByName( "modifier_aghsfort_watch_tower" )
+					if hBuff then 
+						GameRules.Aghanim.hAutoChannelEventOutpostBuff = hBuff
+					end 
+				end
+
+
+				if hTemplateEnt:GetName() == "shop" then 
+					hShop = hTemplateEnt
+				end
+
+				if string.find( hTemplateEnt:GetName(), "room_gate" ) ~= nil then
+					hTemplateEnt:SetSequence( "gate_aghanim_02_portcullis_blend" )
+					hTemplateEnt:SetPoseParameter( "capture_progress_0_to_1", 0.0 )
+				end
 			end
 		end
 	end
+
+
+	local hRoshanLocator = self:FindRoshanLocator()
+	if hRoshanLocator and self.hRoom.hEventRoom == nil then 
+		vRoshanSpawnLocation = hRoshanLocator:GetAbsOrigin()
+	
+		self.hRoshanEventNPC = CEvent_NPC_LifeVendor( vRoshanSpawnLocation ) 
+		if self.hRoshanEventNPC and self.hRoshanEventNPC:GetEntity() then			
+			local vAngles = hRoshanLocator:GetAnglesAsVector()
+			self.hRoshanEventNPC:GetEntity():SetAbsAngles( vAngles.x, vAngles.y, vAngles.z )
+		end
+	end
+
 
 	if self.hRoom:HasCrystal() then
 		local hCrystal = CreateUnitByName( "npc_dota_story_crystal", self.vRoomRewardCratePos + Vector( 0, 350, 0 ), true, nil, nil, DOTA_TEAM_GOODGUYS )
@@ -2185,6 +2817,10 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter:ResetHeroState()
+	if self:ResetHeroStateOnEncounterComplete() == false then 
+		return 
+	end
+
 	for nPlayerID = 0,AGHANIM_PLAYERS-1 do
 		local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 		if hPlayerHero then
@@ -2208,9 +2844,17 @@ function CMapEncounter:ResetHeroState()
 				-- make the players invulnerable for a few seconds after winning - just generally protecting them from stuff that might be lingering in the room
 				hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_invulnerable", { duration = 5 } )
 
+				-- Give them their light back
+				hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_hero_ambient_effects", { } )
+
 				--				   PositiveBuffs, NegativeBuffs, FrameOnly, RemoveStuns, RemoveExceptions
 				hPlayerHero:Purge( false,		  true,			 false,		true,		 false )
-		
+
+				for _,buffName in pairs( POSITIVE_BUFFS_TO_PURGE_AT_ROOM_CLEAR ) do
+					--print( '^^^Removing buff named ' .. buffName )
+					hPlayerHero:RemoveAllModifiersOfName( buffName )
+				end
+
 				hPlayerHero:SetHealth( hPlayerHero:GetMaxHealth() )
 				hPlayerHero:SetMana( hPlayerHero:GetMaxMana() )
 			end
@@ -2224,20 +2868,21 @@ function CMapEncounter:ResetHeroState()
 				end
 			end
 
-			--for j = 0,DOTA_ITEM_INVENTORY_SIZE-1 do
-			local j = DOTA_ITEM_TP_SCROLL
+			for j = 0,DOTA_ITEM_INVENTORY_SIZE-1 do 
 				local hItem = hPlayerHero:GetItemInSlot( j )
-				if hItem then
-					if hItem:GetAbilityName() == "item_bottle" then
-						local nMaxCharges = hItem:GetSpecialValueFor( "max_charges" )
-						--print( "filling bottle: current charges = " .. hItem:GetCurrentCharges() .. ". Max Charges = " .. nMaxCharges .. ". Restoring up to " .. AGHANIM_ENCOUNTER_BOTTLE_CHARGES )
-						hItem:SetCurrentCharges( math.min( hItem:GetCurrentCharges() + AGHANIM_ENCOUNTER_BOTTLE_CHARGES, nMaxCharges ) )
-					elseif hItem:IsRefreshable()  then
-						hItem:SetFrozenCooldown( false )
-						hItem:EndCooldown()
-					end
+				if hItem and ( hItem:IsRefreshable() or hItem:GetAbilityName() == "item_refresher" ) then
+					hItem:SetFrozenCooldown( false )
+					hItem:EndCooldown()
 				end
-			--end
+			end
+
+			local hBottle = hPlayerHero:GetItemInSlot(  DOTA_ITEM_TP_SCROLL)
+			if hBottle and  hBottle:GetAbilityName() == "item_bottle" then
+				if self.nEncounterType ~= ROOM_TYPE_EVENT then 
+					local nMaxCharges = hBottle:GetSpecialValueFor( "max_charges" )
+					hBottle:SetCurrentCharges( math.min( hBottle:GetCurrentCharges() + AGHANIM_ENCOUNTER_BOTTLE_CHARGES, nMaxCharges ) )
+				end
+			end
 
 			local hNeutralItem = hPlayerHero:GetItemInSlot( DOTA_ITEM_NEUTRAL_SLOT )
 			if hNeutralItem and hNeutralItem:IsRefreshable() then
@@ -2271,10 +2916,17 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter:AddRewardItemsToCrate( hRewardCrate, bDebug )
+	--print( "Adding items to reward crate" )
+	if hRewardCrate == nil then 
+		--print( "reward crate is nil?" )
+		return
+	end
+
 
 	local bHardRoom = ( self.hRoom:GetEliteRank() > 0 )
 	if self.hRoom:GetRoomChoiceReward() == "REWARD_TYPE_EXTRA_LIVES" then
 		if bDebug == true then
+			print( "Debug Crate: Skipping lives" )
 			return
 		end
 
@@ -2283,6 +2935,7 @@ function CMapEncounter:AddRewardItemsToCrate( hRewardCrate, bDebug )
 			nNumLives = 4
 		end
 		for i=1,nNumLives do
+		--	print( "inserting life rune" )
 			table.insert( hRewardCrate.RoomReward, "item_life_rune" )
 		end
 	end
@@ -2290,48 +2943,84 @@ function CMapEncounter:AddRewardItemsToCrate( hRewardCrate, bDebug )
 	if self.hRoom:GetRoomChoiceReward() == "REWARD_TYPE_GOLD" then
 		if bDebug == true then
 			-- Can't do this here since it'll drop at the final depth value
+			--print( "returning because debug" )
 			return
 		end
 		for i=1,AGHANIM_PLAYERS do 
+			--print( "inserting gold bags" )
 			table.insert( hRewardCrate.RoomReward, "item_bag_of_gold" )
 		end
 	end
 
 	if self.hRoom:GetRoomChoiceReward() == "REWARD_TYPE_TREASURE" then
-		local nTier = 1
+		local nNumNeutralItems = NUM_NEUTRAL_ITEMS_ROOM_REWARD
 		if bHardRoom then
-			nTier = 2
+			nNumNeutralItems = NUM_NEUTRAL_ITEMS_ROOM_REWARD_ELITE
 		end
 
+		--print( "inserting item item_tome_of_greater_knowledge" )
 		table.insert( hRewardCrate.RoomReward, "item_tome_of_greater_knowledge" )
 
-		for nItem=1,nTier do
+		for nItem=1,nNumNeutralItems do
 			local szItemName = GameRules.Aghanim:PrepareNeutralItemDrop( self.hRoom, bHardRoom )
 			if szItemName ~= nil then 
+				if bDebug then 
+				 	print( "Debug Crate: inserting item " .. szItemName )
+				 end
 				table.insert( hRewardCrate.RoomReward, szItemName )
 			end
 		end
 
-		local vecItems = TREASURE_REWARDS[ nTier ]
-		for i = 1, NUM_CONSUMABLES_FROM_ROOM_REWARD do
-			table.insert( hRewardCrate.RoomReward, vecItems[ self:RoomRandomInt( 1, #vecItems ) ] )
+		if not CONSUMABLES_IN_ANY_ROOM_REWARD then 
+			local vecItems = TREASURE_REWARDS[ nTier ]
+			for i = 1, NUM_CONSUMABLES_FROM_ROOM_REWARD do
+				local szConsumableItemName = vecItems[ self:RoomRandomInt( 1, #vecItems ) ]
+				if bDebug then 
+					print( "Debug Crate: inserting consumable " .. szConsumableItemName)
+				end
+				
+				table.insert( hRewardCrate.RoomReward, szConsumableItemName )
+			end
 		end
+		
 	end
 
+	local nTier = 1 
+	if bHardRoom then 
+		nTier = 2 
+	end
+
+	if CONSUMABLES_IN_ANY_ROOM_REWARD then 
+		local vecItems = TREASURE_REWARDS[ nTier ]
+		for i = 1, NUM_CONSUMABLES_FROM_ROOM_REWARD do
+			local szConsumableItemName = vecItems[ self:RoomRandomInt( 1, #vecItems ) ]
+			if bDebug then 
+				print( "Debug Crate: inserting consumable " .. szConsumableItemName)
+			end
+			
+			table.insert( hRewardCrate.RoomReward, szConsumableItemName )
+		end
+	end
 end
 
 --------------------------------------------------------------------------------
 
 function CMapEncounter:CreateRewardCrate()
-
-	if self.hRoom:GetRoomChoiceReward() == nil or self.nGoldReward == 0 then
+	
+	if self.hRoom:GetRoomChoiceReward() == nil or self.nGoldReward == 0 or self.hRoom.nRoomType == ROOM_TYPE_EVENT then
 		return
 	end
 
 	local hDebugRoom = GameRules.Aghanim:GetTestEncounterDebugRoom()
 	if hDebugRoom ~= nil then
+		print( "Debug Room: Adding room " .. self.hRoom:GetName() .. " rewards into debug crate" )		
 		self:AddRewardItemsToCrate( GameRules.Aghanim.debugItemsToStuffInCrate, true )
 	end		
+
+	local hRoomRewardCrateOverride = self:GetRoom():FindAllEntitiesInRoomByName( "room_reward_spawn_override", false )
+	if #hRoomRewardCrateOverride > 0 then 
+		self.vRoomRewardCratePos = hRoomRewardCrateOverride[1]:GetAbsOrigin()
+	end
 
 	local hRewardCrate = CreateUnitByName( "npc_treasure_chest", self.vRoomRewardCratePos, true, nil, nil, DOTA_TEAM_GOODGUYS )
 	if hRewardCrate == nil then
@@ -2359,16 +3048,23 @@ function CMapEncounter:CreateRewardCrate()
 	if self.hRoom:GetType() == ROOM_TYPE_ENEMY then
 		local nNumItemsToDrop = self.nNumItemsToDrop
 		if ( nNumItemsToDrop == 0 ) and hDebugRoom ~= nil then
-			-- Must do this here because when debugging, we don't actually start encounters we skip
-			nNumItemsToDrop = GameRules.Aghanim:RollRandomNeutralItemDrops()
+			-- Must do this here because when debugging, we don't actually start encounters we skip		
+			nNumItemsToDrop = GameRules.Aghanim:RollRandomNeutralItemDrops( self )
+			print( "Debug Crate: Rolling for neutral item drops result: " .. nNumItemsToDrop )
 		end
 
 		if nNumItemsToDrop > 0 then
 			for i=1,nNumItemsToDrop do
 				local szItemName = GameRules.Aghanim:PrepareNeutralItemDrop( self.hRoom, false )
 				if szItemName ~= nil then
-					print( "adding " .. szItemName .. " to reward crate" )  
-					table.insert( hRewardCrate.RoomReward, szItemName )
+					
+					if hDebugRoom ~= nil then
+						print( "adding " .. szItemName .. " to debug crate" )  
+						table.insert( GameRules.Aghanim.debugItemsToStuffInCrate.RoomReward, szItemName )
+					else
+						print( "adding " .. szItemName .. " to reward crate" )  
+						table.insert( hRewardCrate.RoomReward, szItemName )
+					end
 				end
 			end
 		end
@@ -2398,8 +3094,12 @@ function CMapEncounter:CreateRewardCrate()
 
 	-- Stuff items we would have dropped during winning encounters into this crate
 	if GameRules.Aghanim:GetTestEncounterDebugRoom() == nil and GameRules.Aghanim.debugItemsToStuffInCrate ~= nil then
+		print( "Items in room reward create before debug test: " )
+		for _,szItemName in pairs ( hRewardCrate.RoomReward ) do
+			print( szItemName )
+		end
 		for i = 1,#GameRules.Aghanim.debugItemsToStuffInCrate.RoomReward do
-			print( GameRules.Aghanim.debugItemsToStuffInCrate.RoomReward[i] )
+			print( "inserting item into room reward crate from debug list: " .. GameRules.Aghanim.debugItemsToStuffInCrate.RoomReward[i] )
 			table.insert( hRewardCrate.RoomReward, GameRules.Aghanim.debugItemsToStuffInCrate.RoomReward[i] )
 		end
 		GameRules.Aghanim.debugItemsToStuffInCrate = nil
@@ -2439,19 +3139,32 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter:GenerateRewards()
+	if self.hRoom:GetType() == ROOM_TYPE_EVENT or self.nEncounterType == ROOM_TYPE_EVENT then 
+		self.bHasGeneratedRewards = true 
+		return 
+	end
 	
 	if self.bHasGeneratedRewards == true then
+		--print( "@@ Room has generated rewards" )
 		return
 	end
 
 	local bHardRoom = ( self.hRoom:GetEliteRank() > 0 ) or ( self.hRoom:GetType() == ROOM_TYPE_TRAPS )
 
 	local nBPReward = ENCOUNTER_DEPTH_BATTLE_POINTS[ self.hRoom:GetDepth() ]
+	if nBPReward == nil then 
+		nBPReward = 0  
+	end
 	nBPReward = nBPReward * BATTLE_POINT_DIFFICULTY_MODIFIERS[ GameRules.Aghanim:GetAscensionLevel() + 1 ]
 
-	local nArcaneFragmentsReward = ENCOUNTER_DEPTH_ARCANE_FRAGMENTS[ self.hRoom:GetDepth() ]
+	--print( 'Generating Arcane Fragment reward for DEPTH: ' .. self.hRoom:GetDepth() )
 
-	--print( 'CMapEncounter:GenerateRewards() - base Arcane Fragment reward: ' .. nArcaneFragmentsReward )
+	local nArcaneFragmentsReward = ENCOUNTER_DEPTH_ARCANE_FRAGMENTS[ self.hRoom:GetDepth() ]
+	if nArcaneFragmentsReward == nil then 
+		nArcaneFragmentsReward = 0  
+	end
+
+	--print( '@@ CMapEncounter:GenerateRewards() - base Arcane Fragment reward: ' .. nArcaneFragmentsReward )
 
 	-- only reward a percentage of the points since the rest is given as drops
 	if self.hRoom:GetType() == ROOM_TYPE_ENEMY or self.hRoom:GetType() == ROOM_TYPE_TRAPS then
@@ -2486,44 +3199,52 @@ function CMapEncounter:GenerateRewards()
 
 	local nXPReward = self.nXPReward + self.nRemainingXPFromEnemies
 	local nGoldReward = self.nGoldReward + self.nRemainingGoldFromEnemies
-
+	local nAdjustedGoldReward = math.ceil( nGoldReward * GameRules.Aghanim:GetGoldModifier() / 100 )
+	local vecPlayerGoldRewards = {}
 	for nPlayerID = 0,AGHANIM_PLAYERS-1 do
 		local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 		if hPlayerHero then	
 			hPlayerHero:AddExperience( nXPReward, DOTA_ModifyXP_Unspecified, false, true )
-			PlayerResource:ModifyGold( nPlayerID, nGoldReward, true, DOTA_ModifyGold_Unspecified )
+			vecPlayerGoldRewards[ nPlayerID ] = hPlayerHero:ModifyGoldFiltered( nAdjustedGoldReward, true, DOTA_ModifyGold_Unspecified )
+		
+			if self.hRoom:GetType() == ROOM_TYPE_BOSS then
+				local hBossTomeBuff = hPlayerHero:FindModifierByName("modifier_blessing_boss_tome")
+				if hBossTomeBuff ~= nil then
+					hBossTomeBuff:GrantReward()
+				end
+			end
 		end
 
-		for _,szAbilityName in pairs( GetPlayerAbilitiesAndItems( nPlayerID ) ) do
+		for _,szAbilityName in pairs( GetPlayerAbilityAndItemNames( nPlayerID ) ) do
 			if string.match( szAbilityName, "aghsfort_aura" ) or string.match( szAbilityName, "aghsfort_tempbuff" ) then
 				table.insert( vecAbilityNamesToExclude, szAbilityName )
 			end
 		end
 	end
 	
-	for nPlayerID = 0,AGHANIM_PLAYERS-1 do
-		local vecPlayerRewards = GetRoomRewards( self.hRoom:GetDepth(), self.hRoom:GetType(), bHardRoom, nPlayerID, vecAbilityNamesToExclude )
-		RewardOptions[ tostring(nPlayerID) ] = vecPlayerRewards;
-		--print( "CMapEncounter:GenerateRewards - Sending rewards to player id " .. nPlayerID .. " for encounter " .. self.szEncounterName )
-		--DeepPrintTable( vecPlayerRewards )
+	if self.nEncounterType ~= ROOM_TYPE_STARTING then
+		for nPlayerID = 0,AGHANIM_PLAYERS-1 do
+			local vecPlayerRewards = GetRoomRewards( self.hRoom:GetDepth(), bHardRoom, nPlayerID, vecAbilityNamesToExclude )
+			RewardOptions[ tostring(nPlayerID) ] = vecPlayerRewards
+			--print( "CMapEncounter:GenerateRewards - Sending rewards to player id " .. nPlayerID .. " for encounter " .. self.szEncounterName )
+			--DeepPrintTable( vecPlayerRewards )
+		end
 	end
 
 
 	-- figure out the overall rarity of the rewards for the main block of the reward panel
-	local szRarity = "common"
-	if bHardRoom then
-		szRarity = "elite"
-	end
-	if self.hRoom:GetType() == ROOM_TYPE_BOSS or self.hRoom:GetDepth() == 1 then
-		szRarity = "epic"
-	end
+	local szRarity = self:GetEncounterRewardRarity()
 
-	if TableLength(RewardOptions) > 0  then	
+	if TableLength(RewardOptions) > 0 or self.nEncounterType == ROOM_TYPE_STARTING then	
 		RewardOptions[ "battle_points" ] = vecBPRewards
 		RewardOptions[ "arcane_fragments" ] = vecArcaneFragmentRewards
 		RewardOptions[ "xp" ] = nXPReward
-		RewardOptions[ "gold" ] = nGoldReward
+		RewardOptions[ "gold" ] = nAdjustedGoldReward
+		for nPlayerID = 0,AGHANIM_PLAYERS-1 do
+			RewardOptions[ "gold" .. nPlayerID ] = vecPlayerGoldRewards[ nPlayerID ] or 0
+		end
 		RewardOptions[ "rarity" ] = szRarity
+		RewardOptions[ "elite" ] = bHardRoom
 
 		--printf("sending reward options")
 		--DeepPrintTable( RewardOptions )		
@@ -2531,6 +3252,23 @@ function CMapEncounter:GenerateRewards()
 	end
 	
 	self.bHasGeneratedRewards = true
+end
+
+
+
+--------------------------------------------------------------------------------
+function CMapEncounter:GetEncounterRewardRarity()
+	local bHardRoom = ( self.hRoom:GetEliteRank() > 0 ) or ( self.hRoom:GetType() == ROOM_TYPE_TRAPS )
+
+	local szRarity  ="common"
+	if bHardRoom then
+		szRarity = "elite"
+	end
+	if self.hRoom:GetType() == ROOM_TYPE_BOSS or self.hRoom:GetDepth() == 1 then
+		szRarity = "epic"
+	end
+
+	return szRarity
 end
 
 --------------------------------------------------------------------------------
@@ -2586,6 +3324,15 @@ function CMapEncounter:GetRemainingPortalCount()
 		end
 	end
 
+	if self.masterWaveSchedule ~= nil then
+		for WaveKey,Wave in pairs ( self.masterWaveSchedule ) do
+			if Wave.SpawnStatus == nil or Wave.SpawnStatus == 'portal_summoning' then
+				--print( '^^^Master Wave Schedule still has remaining portals from - ' .. WaveKey )
+				nPortals = nPortals + Wave.Count
+			end
+		end
+	end
+
 	return nPortals
 end
 
@@ -2622,13 +3369,23 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter:GetTotalGoldRewardPerPlayer()
-	return ENCOUNTER_DEPTH_GOLD_REWARD[self:GetDepth()]
+	local nTotalGoldRewardPerPlayer = ENCOUNTER_DEPTH_GOLD_REWARD[self:GetDepth()]
+	if nTotalGoldRewardPerPlayer == nil then 
+		print( "nil value for ENCOUNTER_DEPTH_GOLD_REWARD encountered for encounter " .. self.szEncounterName .. " at depth " .. self:GetDepth() )
+		return 0 
+	end
+	return nTotalGoldRewardPerPlayer
 end
 
 --------------------------------------------------------------------------------
 
 function CMapEncounter:GetTotalXPRewardPerPlayer()
-	return ENCOUNTER_DEPTH_XP_REWARD[self:GetDepth()]
+	local nTotalXPRewardPerPlayer = ENCOUNTER_DEPTH_XP_REWARD[self:GetDepth()]
+	if nTotalXPRewardPerPlayer == nil then
+		print( "nil value for ENCOUNTER_DEPTH_XP_REWARD encountered for encounter " .. self.szEncounterName .. " at depth " .. self:GetDepth() ) 
+		return 0 
+	end
+	return nTotalXPRewardPerPlayer
 end
 
 --------------------------------------------------------------------------------
@@ -2662,6 +3419,7 @@ end
 ----------------------------------------------------------------------
 
 function CMapEncounter:HasRemainingEnemies()
+	--print( '^^^Remaining enemies = ' .. #self.SpawnedEnemies )
 	return #self.SpawnedEnemies > 0
 end
 
@@ -2698,6 +3456,12 @@ end
 
 function CMapEncounter:Dev_ForceCompleteEncounter()
 	self.bDevForceCompleted = true
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter:Dev_ResetEncounter()
+	-- empty - must be implemented by the individual encounter
 end
 
 --------------------------------------------------------------------------------

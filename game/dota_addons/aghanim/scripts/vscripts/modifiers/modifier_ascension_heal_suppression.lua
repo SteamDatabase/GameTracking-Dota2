@@ -9,6 +9,12 @@ end
 
 --------------------------------------------------------------------------------
 
+function modifier_ascension_heal_suppression:GetTexture()
+	return "events/aghanim/interface/hazard_healsupress"
+end
+
+--------------------------------------------------------------------------------
+
 function modifier_ascension_heal_suppression:GetEffectName()
 	return "particles/items4_fx/spirit_vessel_damage.vpcf"
 end

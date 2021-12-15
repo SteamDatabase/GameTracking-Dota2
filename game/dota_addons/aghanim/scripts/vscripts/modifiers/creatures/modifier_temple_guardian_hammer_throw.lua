@@ -89,13 +89,13 @@ function modifier_temple_guardian_hammer_throw:OnIntervalThink()
 					damage_type = DAMAGE_TYPE_MAGICAL,
 					ability = self:GetAbility(),
 				}
-				ApplyDamage( damageInfo )
 				enemy:AddNewModifier( self:GetCaster(), self:GetAbility(), "modifier_stunned", { duration = self.stun_duration } )
 				EmitSoundOn( "TempleGuardian.HammerThrow.Damage", enemy )
 
 				local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_beastmaster/beastmaster_wildaxes_hit.vpcf", PATTACH_CUSTOMORIGIN, nil )
 				ParticleManager:SetParticleControlEnt( nFXIndex, 0, enemy, PATTACH_POINT_FOLLOW, "attach_hitloc", enemy:GetOrigin(), true )
 				ParticleManager:ReleaseParticleIndex( nFXIndex )
+				ApplyDamage( damageInfo )
 			end
 		end	
 

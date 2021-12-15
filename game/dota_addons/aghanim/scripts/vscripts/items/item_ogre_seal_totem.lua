@@ -25,36 +25,6 @@ end
 
 --------------------------------------------------------------------------------
 
-function item_ogre_seal_totem:Spawn()
-	self.required_level = self:GetSpecialValueFor( "required_level" )
-end
-
---------------------------------------------------------------------------------
-
-function item_ogre_seal_totem:OnHeroLevelUp()
-	if IsServer() then
-		if self:GetCaster():GetLevel() == self.required_level and self:IsInBackpack() == false then
-			self:OnUnequip()
-			self:OnEquip()
-		end
-	end
-end
-
---------------------------------------------------------------------------------
-
-function item_ogre_seal_totem:IsMuted()
-	if self.required_level > self:GetCaster():GetLevel() then
-		return true
-	end
-	if not self:GetCaster():IsHero() then
-		return true
-	end
-	
-	return self.BaseClass.IsMuted( self )
-end
-
---------------------------------------------------------------------------------
-
 
 function item_ogre_seal_totem:OnAbilityPhaseStart()
 	if IsServer() then
@@ -109,7 +79,7 @@ function item_ogre_seal_totem:TryToDamage()
 		local radius = self:GetSpecialValueFor( "radius" )
 		local damage = self:GetSpecialValueFor( "damage" )
 		local silence_duration = self:GetSpecialValueFor( "silence_duration" )
-		local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetOrigin(), self:GetCaster(), radius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS, 0, false )
+		local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), self:GetCaster():GetOrigin(), self:GetCaster(), radius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NONE, 0, false )
 		if #enemies > 0 then
 			for _,enemy in pairs(enemies) do
 				if enemy ~= nil and ( not enemy:IsMagicImmune() ) and ( not enemy:IsInvulnerable() ) then

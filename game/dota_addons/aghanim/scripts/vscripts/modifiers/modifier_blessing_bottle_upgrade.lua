@@ -10,12 +10,6 @@ end
 
 --------------------------------------------------------------------------------
 
-function modifier_blessing_bottle_upgrade:OnBlessingCreated( kv )
-	self.max_charges = kv.max_charges
-end
-
---------------------------------------------------------------------------------
-
 function modifier_blessing_bottle_upgrade:DeclareFunctions()
 	local funcs = 
 	{
@@ -32,15 +26,7 @@ function modifier_blessing_bottle_upgrade:GetModifierOverrideAbilitySpecial( par
 		return 0
 	end
 
-	local szAbilityName = params.ability:GetAbilityName()
-	local szSpecialValueName = params.ability_special_value
-
-	if szAbilityName ~= "item_bottle" then
-		return 0
-	end
-
-	if szSpecialValueName == "max_charges" then
-		--print( 'modifier_blessing_bottle_upgrade:GetModifierOverrideAbilitySpecial - looking for max_charges!' )
+	if params.ability:GetAbilityName() == "item_bottle" and params.ability_special_value == "max_charges" then
 		return 1
 	end
 
@@ -50,18 +36,9 @@ end
 -----------------------------------------------------------------------
 
 function modifier_blessing_bottle_upgrade:GetModifierOverrideAbilitySpecialValue( params )
-	local szAbilityName = params.ability:GetAbilityName() 
-	if szAbilityName ~= "item_bottle" then
-		return 0
-	end
-
-	local szSpecialValueName = params.ability_special_value
-	if szSpecialValueName == "max_charges" then
+	if params.ability:GetAbilityName() == "item_bottle" and params.ability_special_value == "max_charges" then
 		local nSpecialLevel = params.ability_special_level
-		local flBaseValue = params.ability:GetLevelSpecialValueNoOverride( szSpecialValueName, nSpecialLevel )
-		--print( 'modifier_blessing_bottle_upgrade:GetModifierOverrideAbilitySpecialValue - max_charges is ' .. flBaseValue .. '. Adding on an additional ' .. self.max_charges )
-
-		return flBaseValue + self.max_charges
+		return params.ability:GetLevelSpecialValueNoOverride( "max_charges", nSpecialLevel ) + self:GetStackCount()
 	end
 
 	return 0

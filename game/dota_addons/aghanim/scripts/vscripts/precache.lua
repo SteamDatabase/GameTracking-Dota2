@@ -9,6 +9,8 @@ g_ItemPrecache =
 	"item_arcane_fragments",
 	"item_javelin",
 	"item_monkey_king_bar",
+	"item_cursed_item_slot",
+	"item_cursed_key",
 }
 
 g_UnitPrecache =
@@ -28,7 +30,8 @@ g_UnitPrecache =
 	"aghsfort_ascension_level_picker_4",
 	"npc_dota_announcer_aghanim",
 	"npc_dota_story_crystal",
-
+	"npc_dota_creature_event_life_roshan",
+	"npc_dota_creature_shard_shop_oracle",
 	-- Assets in Dota path
 }
 
@@ -54,6 +57,7 @@ g_ModelPrecache =
 	"models/heroes/bristleback/bristleback_head.vmdl", 
 	"models/heroes/bristleback/bristleback_necklace.vmdl", 
 	"models/heroes/bristleback/bristleback_weapon.vmdl", 
+	"models/heroes/aghanim/aghanim_model.vmdl", 
 }
 
 g_ParticlePrecache =
@@ -102,6 +106,11 @@ g_ParticlePrecache =
 	"particles/creature_true_sight.vpcf", -- modifier_detect_invisible
 	"particles/msg_fx/msg_bp.vpcf",
 	"particles/generic_gameplay/battle_point_splash.vpcf",
+	"particles/gameplay/hero_ground_light.vpcf",
+	"particles/generic_gameplay/dust_impact.vpcf",
+	"particles/units/heroes/hero_oracle/oracle_idle_throw.vpcf",
+	"particles/generic_gameplay/dust_impact_large.vpcf",
+	"particles/units/heroes/hero_oracle/oracle_ambient_head.vpcf",
 }
 
 g_SoundPrecache =

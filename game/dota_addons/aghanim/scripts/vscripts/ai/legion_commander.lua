@@ -31,7 +31,7 @@ end
 function BehaviorNone:Begin()
 
 	local orders = nil
-	local hTarget = AICore:ClosestEnemyHeroInRange( thisEntity, 1000 )
+	local hTarget = AICore:ClosestEnemyHeroInRange( thisEntity, 1000, false, true )
 	if hTarget ~= nil then
 		thisEntity.lastTargetPosition = hTarget:GetAbsOrigin()
 		hTarget:MakeVisibleDueToAttack( DOTA_TEAM_BADGUYS, 100 )
@@ -123,7 +123,7 @@ function BehaviorBlademail:Evaluate()
 	local desire = 0
 	for i = 0, DOTA_ITEM_MAX - 1 do
 		local item = thisEntity:GetItemInSlot( i )
-		if item and item:GetAbilityName() == "item_blade_mail" then
+		if item and item:GetAbilityName() == "item_aghsfort_creature_blade_mail" then
 			self.blademailAbility = item
 		end
 	end

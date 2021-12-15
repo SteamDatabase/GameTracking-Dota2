@@ -271,14 +271,22 @@ function CDrowRangerMiniboss:GetNonAbilityOrder()
 	if self:IsInvisible() and self.bTriggerEscape == true then
 		print( 'INVIS! Setting new escape location' )
 		self.bTriggerEscape = false
-		local vEscapeLoc = FindPathablePositionNearby( thisEntity:GetAbsOrigin(), 1000, 2000 )
+		local vEscapeLoc
+		local flOrderInterval
+		if GetMapName() == "hub" then
+			vEscapeLoc = FindPathablePositionNearby( thisEntity:GetAbsOrigin(), 1500, 3000 )	-- larger run away distance for the new hub map since the map is larger
+			flOrderInterval = 13
+		else
+			vEscapeLoc = FindPathablePositionNearby( thisEntity:GetAbsOrigin(), 1000, 2000 )
+			flOrderInterval = 10
+		end
 		Order =
 		{
 			UnitIndex = self.me:entindex(),
 			OrderType = DOTA_UNIT_ORDER_MOVE_TO_POSITION,
 			Position = vEscapeLoc,
 		}
-		Order.flOrderInterval = 10.0
+		Order.flOrderInterval = flOrderInterval
 
 		if self.Encounter ~= nil then
 			self.Encounter:OnDrowShadowBladed()

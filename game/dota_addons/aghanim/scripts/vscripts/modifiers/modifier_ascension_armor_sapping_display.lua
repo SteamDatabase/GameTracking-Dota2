@@ -7,3 +7,9 @@ modifier_ascension_armor_sapping_display = class({})
 function modifier_ascension_armor_sapping_display:IsPurgable()
 	return false
 end
+
+
+
+function modifier_ascension_armor_sapping_display:GetTexture()
+	return "events/aghanim/interface/hazard_armorshred"
+end

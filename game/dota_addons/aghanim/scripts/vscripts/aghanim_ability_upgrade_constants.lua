@@ -3,6 +3,8 @@ LinkLuaModifier( "modifier_minor_ability_upgrades", "modifiers/modifier_minor_ab
 _G.MINOR_ABILITY_UPGRADE_OP_ADD = 1
 _G.MINOR_ABILITY_UPGRADE_OP_MUL = 2
 
+_G.MINOR_ABILITY_COOLDOWN_MANACOST_PCT = 7
+
 _G.MINOR_ABILITY_UPGRADES =
 {
    npc_dota_hero_magnataur = require( "minor_ability_upgrades/minor_ability_upgrades_magnataur" ),
@@ -21,6 +23,20 @@ _G.MINOR_ABILITY_UPGRADES =
    npc_dota_hero_templar_assassin = require( "minor_ability_upgrades/minor_ability_upgrades_templar_assassin" ),
    npc_dota_hero_slark = require( "minor_ability_upgrades/minor_ability_upgrades_slark" ),
    npc_dota_hero_queenofpain = require( "minor_ability_upgrades/minor_ability_upgrades_queenofpain" ),
+   npc_dota_hero_undying = require( "minor_ability_upgrades/minor_ability_upgrades_undying" ),
+   npc_dota_hero_juggernaut = require( "minor_ability_upgrades/minor_ability_upgrades_juggernaut" ),
+   npc_dota_hero_drow_ranger = require( "minor_ability_upgrades/minor_ability_upgrades_drow_ranger" ),
+   npc_dota_hero_luna = require( "minor_ability_upgrades/minor_ability_upgrades_luna" ),
+   npc_dota_hero_void_spirit = require( "minor_ability_upgrades/minor_ability_upgrades_void_spirit" ),
+   npc_dota_hero_lich = require( "minor_ability_upgrades/minor_ability_upgrades_lich" ),
+   npc_dota_hero_lina = require( "minor_ability_upgrades/minor_ability_upgrades_lina" ),
+   npc_dota_hero_gyrocopter = require( "minor_ability_upgrades/minor_ability_upgrades_gyrocopter" ),
+   npc_dota_hero_dawnbreaker = require( "minor_ability_upgrades/minor_ability_upgrades_dawnbreaker" ),
+   npc_dota_hero_bane = require( "minor_ability_upgrades/minor_ability_upgrades_bane" ),
+   npc_dota_hero_phoenix = require( "minor_ability_upgrades/minor_ability_upgrades_phoenix" ),
+   npc_dota_hero_kunkka = require( "minor_ability_upgrades/minor_ability_upgrades_kunkka" ),
+   npc_dota_hero_sand_king = require( "minor_ability_upgrades/minor_ability_upgrades_sand_king" ),
+   npc_dota_hero_clinkz = require( "minor_ability_upgrades/minor_ability_upgrades_clinkz" ),
    --non hero specific upgrades (bonus HP/mana/damage/etc.)
    base_stats_upgrades = require( "minor_ability_upgrades/base_minor_stats_upgrades" ),
 }
@@ -99,6 +115,60 @@ _G.STAT_UPGRADE_EXCLUDES =
    npc_dota_hero_slark = 
    {
    },
+
+   npc_dota_hero_lich =
+   {
+      "aghsfort_minor_stat_upgrade_bonus_evasion",
+   },
+
+   npc_dota_hero_luna =
+   {
+   },
+
+   npc_dota_hero_kunkka = 
+   {
+   },
+
+   npc_dota_hero_undying = 
+   {
+   },
+
+   npc_dota_hero_juggernaut =
+   {
+   },
+
+   npc_dota_hero_drow_ranger =
+   {
+   },
+
+   npc_dota_hero_void_spirit = 
+   {
+   },
+   npc_dota_hero_lina = 
+   {
+   },   
+   npc_dota_hero_gyrocopter = 
+   {
+   }, 
+   npc_dota_hero_dawnbreaker = 
+   {
+   }, 
+
+   npc_dota_hero_bane = 
+   {
+   },      
+
+   npc_dota_hero_phoenix = 
+   {
+   },
+
+   npc_dota_hero_sand_king = 
+   {
+   },
+
+   npc_dota_hero_clinkz = 
+   {
+   },
 }
 
 -- NOTE: These are substrings to search for in SPECIAL_ABILITY_UPGRADES
@@ -120,6 +190,20 @@ _G.ULTIMATE_ABILITY_NAMES =
    npc_dota_hero_queenofpain = "queenofpain_sonic_wave",
    npc_dota_hero_templar_assassin = "templar_assassin_psionic_trap",
    npc_dota_hero_slark = "slark_shadow_dance",
+   npc_dota_hero_lina = "lina_laguna_blade",
+   npc_dota_hero_juggernaut = "juggernaut_omni_slash",
+   npc_dota_hero_drow_ranger = "drow_ranger_marksmanship",
+   npc_dota_hero_luna = "luna_eclipse",
+   npc_dota_hero_lich = "lich_chain_frost",
+   npc_dota_hero_kunkka = "kunkka_ghostship",
+   npc_dota_hero_undying = "undying_flesh_golem",
+   npc_dota_hero_void_spirit = "void_spirit_astral_step",
+   npc_dota_hero_gyrocopter = "gyrocopter_call_down",
+   npc_dota_hero_dawnbreaker = "dawnbreaker_solar_guardian",
+   npc_dota_hero_bane = "bane_fiends_grip",
+   npc_dota_hero_phoenix = "phoenix_supernova",
+   npc_dota_hero_sand_king = "sand_king_epicenter",
+   npc_dota_hero_clinkz = "clinkz_burning_army",
 }
 
 -- Lists for ability upgrades go here
@@ -155,14 +239,16 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_magnataur"] =
 	"aghsfort_special_magnataur_shockwave_damage_reduction",
    "aghsfort_special_magnataur_shockwave_boomerang",
 
-	"aghsfort_special_magnataur_empower_all_allies",
+--	"aghsfort_special_magnataur_empower_all_allies",
+   "aghsfort_special_magnataur_empower_charges",
    "aghsfort_special_magnataur_empower_lifesteal",
    "aghsfort_special_magnataur_empower_shockwave_on_attack",
 
    --"aghsfort_special_magnataur_skewer_original_scepter",
    --"aghsfort_special_magnataur_friendly_skewer",
    "aghsfort_special_magnataur_skewer_bonus_strength",
-   "aghsfort_special_magnataur_skewer_heal",
+   --"aghsfort_special_magnataur_skewer_heal",
+   "aghsfort_magnataur_horn_toss",
    "aghsfort_special_magnataur_skewer_shockwave",
 
    --"aghsfort_special_magnataur_reverse_polarity_radius",
@@ -188,13 +274,6 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_phantom_assassin"] =
 	"aghsfort_special_phantom_assassin_phantom_strike_buff_allies",
 	"aghsfort_special_phantom_assassin_phantom_strike_mastery",
 	"aghsfort_special_phantom_assassin_phantom_strike_damage_reduction",
-}
-
-SPECIAL_ABILITY_UPGRADES["npc_dota_hero_luna"] =
-{
-	"omniknight_guardian_angel",
-	"aghsfort_special_omniknight_purification_cast_radius",
-	"omniknight_purification",
 }
 
 
@@ -267,7 +346,8 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_tusk"] =
    --"aghsfort_special_tusk_ice_shards_circle",
    "aghsfort_special_tusk_ice_shards_secondary",
    "aghsfort_special_tusk_ice_shards_explode",
-   "aghsfort_special_tusk_ice_shards_stun",
+  -- "aghsfort_special_tusk_ice_shards_stun",
+   "aghsfort_special_tusk_ice_shards_snowball",
 
    "aghsfort_special_tusk_snowball_heal",
    "aghsfort_special_tusk_snowball_end_damage",
@@ -275,7 +355,8 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_tusk"] =
 
    "aghsfort_special_tusk_tag_team_lifesteal",
    "aghsfort_special_tusk_tag_team_toggle",
-   "aghsfort_special_tusk_tag_team_global",
+   "aghsfort_special_tusk_tag_team_death_cooldown",
+   --"aghsfort_special_tusk_tag_team_global",
 
    "aghsfort_special_tusk_walrus_punch_reset",
    "aghsfort_special_tusk_walrus_punch_land_damage",
@@ -284,48 +365,56 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_tusk"] =
 
 SPECIAL_ABILITY_UPGRADES["npc_dota_hero_ursa"] =
 {
-   "aghsfort_special_ursa_earthshock_invis",
    "aghsfort_special_ursa_earthshock_knockback",
    "aghsfort_special_ursa_earthshock_apply_fury_swipes", 
    "aghsfort_special_ursa_earthshock_overpower_stack",
-   --"aghsfort_special_ursa_earthshock_miss_chance",
-
+   
    "aghsfort_special_ursa_overpower_crit",
    "aghsfort_special_ursa_overpower_evasion",
    "aghsfort_special_ursa_overpower_cleave",
-  -- "aghsfort_special_ursa_overpower_taunt",
 
    "aghsfort_special_ursa_fury_swipes_armor_reduction",
    "aghsfort_special_ursa_fury_swipes_lifesteal",
    "aghsfort_special_ursa_fury_swipes_ursa_minor",
 
-   --"aghsfort_special_ursa_enrage_magic_immunity",
-   "aghsfort_special_ursa_enrage_allies",
-   "aghsfort_special_ursa_enrage_fear",
-   --"aghsfort_special_ursa_enrage_armor",
    "aghsfort_special_ursa_enrage_earthshock",
    "aghsfort_special_ursa_enrage_attack_speed",
+   "aghsfort_special_ursa_enrage_allies",
+
+    -- "aghsfort_special_ursa_earthshock_invis",
+   --"aghsfort_special_ursa_earthshock_miss_chance",
+   -- "aghsfort_special_ursa_overpower_taunt",
+   --"aghsfort_special_ursa_enrage_magic_immunity",
+   --"aghsfort_special_ursa_enrage_fear",
+   --"aghsfort_special_ursa_enrage_armor",
+ 
 }
 
 SPECIAL_ABILITY_UPGRADES["npc_dota_hero_sniper"] =
 {
    "aghsfort_special_sniper_shrapnel_bombs",
    "aghsfort_special_sniper_shrapnel_attack_speed",
-   "aghsfort_special_sniper_shrapnel_miss_chance",
    "aghsfort_special_sniper_shrapnel_move_speed",
-
-   "aghsfort_special_sniper_headshot_crits",
-   "aghsfort_special_sniper_headshot_stuns",
+ 
+   "aghsfort_special_sniper_headshot_armor_reduction",
+   "aghsfort_special_sniper_headshot_shotgun",
+   "aghsfort_special_sniper_headshot_assassinate",
 
    "aghsfort_special_sniper_take_aim_self_purge",
-   --"aghsfort_special_sniper_take_aim_aoe", -- bugged
-   "aghsfort_special_sniper_take_aim_hop_backwards",
-   "aghsfort_special_sniper_take_aim_armor_reduction",
    "aghsfort_special_sniper_take_aim_rapid_fire",
-
+   "aghsfort_special_sniper_take_aim_shrapnel",
+  
    "aghsfort_special_sniper_assassinate_buckshot",
    "aghsfort_special_sniper_assassinate_original_scepter",
-   "aghsfort_special_sniper_assassinate_killshot",
+   "aghsfort_special_sniper_assassinate_concussive_dummy",
+
+    -- "aghsfort_special_sniper_headshot_stuns",
+   --"aghsfort_special_sniper_headshot_crits",
+   --"aghsfort_special_sniper_shrapnel_miss_chance",
+   --"aghsfort_special_sniper_take_aim_hop_backwards",
+   --"aghsfort_special_sniper_take_aim_armor_reduction",
+   --"aghsfort_special_sniper_take_aim_rapid_fire",
+   --"aghsfort_special_sniper_assassinate_killshot",
 }
 
 SPECIAL_ABILITY_UPGRADES["npc_dota_hero_mars"] = 
@@ -385,7 +474,7 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_weaver"] =
 
   -- "aghsfort_special_weaver_shukuchi_pull",
   "aghsfort_special_weaver_shukuchi_trail",
-  "aghsfort_special_weaver_shukuchi_heal",
+  --"aghsfort_special_weaver_shukuchi_heal",
   "aghsfort_special_weaver_shukuchi_attack_on_completion",
   "aghsfort_special_weaver_shukuchi_swarm",
   --"aghsfort_special_weaver_shukuchi_greater_invisibility",
@@ -483,6 +572,320 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_slark"] =
    "aghsfort_special_slark_shadow_dance_dark_pact_pulses",
    "aghsfort_special_slark_shadow_dance_leash",
 
+}
+
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_lina"] =
+{
+   "aghsfort_special_lina_dragon_slave_lsa_trail",
+   "aghsfort_special_lina_dragon_slave_triwave",
+   "aghsfort_special_lina_dragon_slave_ignite",
+   "aghsfort_special_lina_dragon_slave_booster",
+
+   "aghsfort_special_lina_light_strike_array_pulsate",
+   "aghsfort_special_lina_light_strike_array_attacks",
+   "aghsfort_special_lina_light_strike_array_vacuum",
+
+   "aghsfort_special_lina_fiery_soul_multishot",
+--   "aghsfort_special_lina_fiery_soul_dragon_slave_on_cast",
+--   "aghsfort_special_lina_fiery_soul_dragon_slave_mini_lagunas",
+--   "aghsfort_special_lina_fiery_soul_lsa_attacks",
+   "aghsfort_special_lina_fiery_soul_ally_cast",
+
+   "aghsfort_special_lina_laguna_blade_bounce",
+--   "aghsfort_special_lina_laguna_blade_lsa",
+   "aghsfort_special_lina_laguna_blade_channel",
+   "aghsfort_special_lina_laguna_blade_line",
+}
+
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_undying"] =
+{
+   "aghsfort_special_undying_decay_spawn_zombies",
+   "aghsfort_special_undying_decay_on_attack",
+   "aghsfort_special_undying_decay_reverberation",
+
+   "aghsfort_special_undying_soul_rip_ward",
+   --"aghsfort_special_undying_soul_rip_charges",  -- moving to talent
+   "aghsfort_special_undying_soul_rip_spawn_zombies",
+   "aghsfort_special_undying_soul_rip_share_strength",
+
+   "aghsfort_special_undying_consume_zombies_dummy",
+   "aghsfort_special_undying_tombstone_exploding_zombies",
+   "aghsfort_special_undying_tombstone_bunker",
+
+   "aghsfort_special_undying_flesh_golem_spawn_zombies",
+   "aghsfort_special_undying_flesh_golem_heal_on_enemy_death",
+   "aghsfort_special_undying_flesh_golem_smash",
+}
+
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_juggernaut"] =
+{
+   "aghsfort_special_juggernaut_blade_fury_sparks",
+   "aghsfort_special_juggernaut_blade_fury_force",
+   "aghsfort_special_juggernaut_blade_dance_launches_blade_fury",   
+
+   "aghsfort_special_juggernaut_healing_ward_blade_fury",
+   "aghsfort_special_juggernaut_healing_ward_detonate",
+   "aghsfort_special_juggernaut_zen_ward",
+
+   "aghsfort_special_juggernaut_blade_dance_cooldown",
+   "aghsfort_special_juggernaut_blade_dance_teleport",
+   "aghsfort_special_juggernaut_blade_dance_buff",
+
+   "aghsfort_special_juggernaut_omni_slash_shared",
+   "aghsfort_special_juggernaut_omni_slash_spin",
+   "aghsfort_special_juggernaut_omni_slash_ignite",
+   
+   --"aghsfort_special_juggernaut_blade_fury_lifesteal_hit",
+   -- "aghsfort_special_juggernaut_blade_fury_shared",
+   -- "aghsfort_special_juggernaut_healing_ward_crit",
+   -- "aghsfort_special_juggernaut_blade_dance_shared",
+   -- "aghsfort_special_juggernaut_omni_slash_range",
+   -- "aghsfort_special_juggernaut_omni_slash_illusion",
+   -- "aghsfort_special_juggernaut_omni_slash_crit_extend",
+}
+
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_drow_ranger"] =
+{
+   "aghsfort2_special_drow_ranger_frost_arrows_split",
+   "aghsfort2_special_drow_ranger_frost_arrows_move_damage",
+   "aghsfort2_special_drow_ranger_frost_arrows_wave",
+
+   "aghsfort2_special_drow_ranger_wave_of_silence_echo",
+   "aghsfort2_special_drow_ranger_wave_of_silence_movement",
+   "aghsfort2_special_drow_ranger_wave_of_silence_cooldown",
+   "aghsfort2_special_drow_ranger_wave_of_silence_frost",
+
+   "aghsfort2_special_drow_ranger_multi_shot_move",
+   "aghsfort2_special_drow_ranger_multi_shot_side_line",
+   "aghsfort2_special_drow_ranger_multi_shot_buff",
+
+   "aghsfort2_special_drow_ranger_marksmanship_waveofsilence",
+   "aghsfort2_special_drow_ranger_marksmanship_aoe",
+   
+   --"aghsfort2_special_drow_ranger_multi_shot_refire",
+}
+
+
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_luna"] =
+{
+	-- Lucent Beam
+   "aghsfort_special_luna_lucent_beam_diffusion",
+   "aghsfort_special_luna_lucent_beam_moonglow",
+   "aghsfort_special_luna_lucent_beam_glaives",
+	
+	-- Glaives
+   "aghsfort_special_luna_moon_glaive_knockback",
+   "aghsfort_special_luna_moon_glaive_glaive_shield",
+   "aghsfort_special_luna_glaives_moon_well",
+	
+	-- Lunar Blessing
+   "aghsfort_special_luna_lunar_blessing_lunar_remnant",
+   "aghsfort_special_luna_lunar_blessing_leap",
+   "aghsfort_special_luna_lunar_blessing_moon_mark",
+  
+	-- Eclipse
+   "aghsfort_special_luna_eclipse_lunar_cycle",
+   "aghsfort_special_luna_eclipse_lunar_focus",
+   "aghsfort_special_luna_eclipse_hide",
+
+
+   --"aghsfort_special_luna_lucent_beam_bloodmoon",
+   --"aghsfort_special_luna_moon_glaive_ally_bounce",
+   --"aghsfort_special_luna_moon_glaive_double_moon",
+    --"aghsfort_special_luna_lunar_blessing_lunar_power",
+
+   --"aghsfort_special_luna_lunar_blessing_moon_shield",
+   --"aghsfort_special_luna_lunar_blessing_moonfright",
+
+	--"aghsfort_special_luna_eclipse_moonstruck",
+	--"aghsfort_special_luna_eclipse_lunar_favor",
+}
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_lich"] =
+{
+   "aghsfort_special_lich_frost_nova_root_disarm",
+   -- "aghsfort_special_lich_frost_nova_applies_frost_shield",
+   "aghsfort_special_lich_frost_nova_execute_refund",
+   "aghsfort_special_lich_frost_nova_aoe_attacks",
+
+   "aghsfort_special_lich_frost_shield_magic_resist_debuff_and_stun",
+   -- "aghsfort_special_lich_frost_shield_heal",
+   "aghsfort_special_lich_frost_shield_frost_giant",
+   "aghsfort_special_lich_frost_shield_dispels",
+
+   "aghsfort_special_lich_sinister_gaze_spawns_ice_spire",
+   "aghsfort_special_lich_sinister_gaze_drains_life",
+   "aghsfort_special_lich_sinister_gaze_raises_skeletons",
+
+   "aghsfort_special_lich_chain_frost_split",
+   "aghsfort_special_lich_chain_frost_applies_frost_shield",
+   "aghsfort_special_lich_chain_frost_applies_frost_nova",
+
+}
+
+SPECIAL_ABILITY_UPGRADES["npc_dota_hero_kunkka"] =
+{
+	-- Ghost ship upgrades
+   "aghsfort_special_kunkka_ghost_ship_fire_cannons", -- "Man o' War"
+   "aghsfort_special_kunkka_rumboldened",
+   "aghsfort_special_kunkka_skull_and_bones",
+   "aghsfort_special_kunkka_davy_jones_locker",
+	-- X-marks upgrades
+   "aghsfort_special_kunkka_grog_blossom",
+   -- "aghsfort_special_kunkka_angry_recall",				-- "Shore Leave's Over" -- Turning off for now.  Sergei had a good point that sealegs is a superset of this; so it could use redesign.
+   "aghsfort_special_kunkka_sealegs",
+   "aghsfort_special_kunkka_dread_pirate",
+	-- Tidebringer upgrades
+   "aghsfort_special_kunkka_tsunami",
+   "aghsfort_special_kunkka_no_quarter",
+	-- Torrent upgrades
+   "aghsfort_special_kunkka_squall",
+   "aghsfort_special_kunkka_marked",
+}
+
+SPECIAL_ABILITY_UPGRADES[ "npc_dota_hero_void_spirit" ] =
+{
+   "aghsfort_special_void_spirit_aether_remnant_phantom_attack",
+   "aghsfort_special_void_spirit_aether_remnant_bowling",
+
+   "aghsfort_special_void_spirit_dissimilate_translocate",
+   "aghsfort_special_void_spirit_dissimilate_expanse",
+   "aghsfort_special_void_spirit_dissimilate_remnants",
+   "aghsfort_special_void_spirit_dissimilate_lure",
+
+   "aghsfort_special_void_spirit_resonant_pulse_knockback",
+   "aghsfort_special_void_spirit_resonant_pulse_cadence",
+   "aghsfort_special_void_spirit_resonant_pulse_suppression",
+
+   "aghsfort_special_void_spirit_astral_step_attacks",
+   "aghsfort_special_void_spirit_astral_step_trail",
+   "aghsfort_special_void_spirit_astral_step_breach",
+   --"aghsfort_special_void_spirit_astral_step_vacuum", -- REMOVED
+}
+
+
+SPECIAL_ABILITY_UPGRADES[ "npc_dota_hero_gyrocopter" ] =
+{
+   "aghsfort_special_gyrocopter_rocket_barrage_on_attack",
+   --"aghsfort_special_gyrocopter_rocket_barrage_double_target",
+  -- "aghsfort_special_gyrocopter_rocket_barrage_flare",
+   "aghsfort_special_gyrocopter_rocket_barrage_ground",
+
+   "aghsfort_special_gyrocopter_homing_missile_barrage",
+   "aghsfort_special_gyrocopter_homing_missile_ride",
+   "aghsfort_special_gyrocopter_homing_missile_minimissile",
+   "aghsfort_special_gyrocopter_homing_missile_call_down",
+
+   "aghsfort_special_gyrocopter_flak_cannon_first_strike",
+   --"aghsfort_special_gyrocopter_flak_cannon_side_gunner",
+   "aghsfort_special_gyrocopter_flak_cannon_missiles",
+   "aghsfort_special_gyrocopter_flak_cannon_fire_trail",
+
+
+   --"aghsfort_special_gyrocopter_call_down_attack_buff",
+   "aghsfort_special_gyrocopter_call_down_minefield",
+   "aghsfort_special_gyrocopter_call_down_strafe",
+   "aghsfort_special_gyrocopter_call_down_precision_strike",
+}
+
+SPECIAL_ABILITY_UPGRADES[ "npc_dota_hero_dawnbreaker" ] =
+{
+   "aghsfort_special_dawnbreaker_starbreaker_celestial_fire",
+   "aghsfort_special_dawnbreaker_starbreaker_counter_orbital",
+   "aghsfort_special_dawnbreaker_starbreaker_suncrusher",
+
+   "aghsfort_special_dawnbreaker_celestial_hammer_hammer_time",
+   "aghsfort_special_dawnbreaker_celestial_hammer_sunforge",
+   "aghsfort_special_dawnbreaker_celestial_hammer_haven",
+
+   "aghsfort_special_dawnbreaker_luminosity_solar_battery",
+   "aghsfort_special_dawnbreaker_luminosity_bright_foundry",
+   "aghsfort_special_dawnbreaker_luminosity_light_bringer",
+
+   "aghsfort_special_dawnbreaker_solar_guardian_sun_sentinel",
+   "aghsfort_special_dawnbreaker_solar_guardian_death_of_a_star",
+   "aghsfort_special_dawnbreaker_solar_guardian_solar_flare",
+}
+
+SPECIAL_ABILITY_UPGRADES[ "npc_dota_hero_bane" ] =
+{
+   "aghsfort_special_bane_enfeeble_spill",
+   "aghsfort_special_bane_enfeeble_end_fiends_grip",
+   "aghsfort_special_bane_enfeeble_allies",
+
+   "aghsfort_special_bane_brain_sap_knockback_slow",
+   "aghsfort_special_bane_brain_sap_nightmare_mirror",
+   "aghsfort_special_bane_brain_sap_invis",
+
+   "aghsfort_special_bane_nightmare_nightmare_burst",
+   "aghsfort_special_bane_nightmare_sweet_dreams",
+   "aghsfort_special_bane_nightmare_confusion",
+
+   "aghsfort_special_bane_fiends_grip_spread",
+   "aghsfort_special_bane_fiends_grip_boost_ally",
+   "aghsfort_special_bane_fiends_grip_auto_nightmare",
+}
+
+SPECIAL_ABILITY_UPGRADES[ "npc_dota_hero_phoenix" ] =
+{
+   "aghsfort_special_phoenix_icarus_dive_savior",
+   "aghsfort_special_phoenix_icarus_dive_blast_wave",
+   "aghsfort_special_phoenix_icarus_dive_second_sun",
+
+   "aghsfort_special_phoenix_fire_spirits_vitality",
+   "aghsfort_special_phoenix_fire_spirits_artillery",
+   "aghsfort_special_phoenix_fire_spirits_flame_revenant",
+
+   "aghsfort_special_phoenix_sun_ray_luminance",
+   "aghsfort_special_phoenix_sun_ray_focus_point",
+   "aghsfort_special_phoenix_sun_ray_gamma_ray",
+
+   "aghsfort_special_phoenix_supernova_capture",
+   "aghsfort_special_phoenix_supernova_horizon",
+   "aghsfort_special_phoenix_supernova_expel_core",
+}
+
+SPECIAL_ABILITY_UPGRADES[ "npc_dota_hero_sand_king" ] =
+{
+   "aghsfort_special_sand_king_burrowstrike_channel",
+   "aghsfort_special_sand_king_burrowstrike_transport",
+   "aghsfort_special_sand_king_burrowstrike_reverse",
+
+   "aghsfort_special_sand_king_sandstorm_independant",
+   "aghsfort_special_sand_king_sandstorm_burrowstrike_field",
+   "aghsfort_special_sand_king_sandstorm_vacuum",
+
+   "aghsfort_special_sand_king_caustic_finale_sandstorm",
+   "aghsfort_special_sand_king_caustic_finale_active",
+   "aghsfort_special_sand_king_caustic_finale_strength_buff",
+
+   "aghsfort_special_sand_king_epicenter_movement",
+   "aghsfort_special_sand_king_epicenter_allies",
+   "aghsfort_special_sand_king_epicenter_damage_resist",
+}
+
+SPECIAL_ABILITY_UPGRADES[ "npc_dota_hero_clinkz" ] =
+{
+   "aghsfort_special_clinkz_burning_barrage_tri_split",
+   "aghsfort_special_clinkz_burning_barrage_skeleton_shot",
+   "aghsfort_special_clinkz_burning_barrage_singe",
+
+   "aghsfort_special_clinkz_searing_arrows_ignite",
+   "aghsfort_special_clinkz_searing_arrows_skeletal_colossus",
+   "aghsfort_special_clinkz_searing_arrows_melter",
+
+   "aghsfort_special_clinkz_skeleton_walk_beckon_undead",
+   "aghsfort_special_clinkz_skeleton_walk_wraith_touch",
+   "aghsfort_special_clinkz_skeleton_walk_strafe",
+
+   "aghsfort_special_clinkz_burning_army_entrenchment",
+   "aghsfort_special_clinkz_burning_army_big_skeletons",
+   "aghsfort_special_clinkz_burning_army_stunning_skeletons",
 }
 
 require( "items/item_small_scepter_fragment" )
@@ -819,3 +1222,32 @@ PURCHASABLE_SHARDS[ "npc_dota_hero_witch_doctor" ] =
    "item_aghsfort_witch_doctor_death_ward_flat_damage",
    "item_aghsfort_witch_doctor_death_ward_flat_channel_duration",
 }
+
+-- Void Spirit
+item_aghsfort_void_spirit_aether_remnant_mana_cost_cooldown = item_small_scepter_fragment
+item_aghsfort_void_spirit_aether_remnant_damage = item_small_scepter_fragment
+item_aghsfort_void_spirit_dissimilate_mana_cost_cooldown = item_small_scepter_fragment
+item_aghsfort_void_spirit_dissimilate_damage = item_small_scepter_fragment
+item_aghsfort_void_spirit_resonant_pulse_mana_cost_cooldown = item_small_scepter_fragment
+item_aghsfort_void_spirit_resonant_pulse_damage = item_small_scepter_fragment
+item_aghsfort_void_spirit_resonant_pulse_base_absorb = item_small_scepter_fragment
+item_aghsfort_void_spirit_resonant_pulse_absorb_per_unit = item_small_scepter_fragment
+item_aghsfort_void_spirit_astral_step_pop_damage = item_small_scepter_fragment
+item_aghsfort_void_spirit_astral_step_max_travel_distance = item_small_scepter_fragment
+item_aghsfort_void_spirit_astral_step_charge_restore_time = item_small_scepter_fragment
+
+PURCHASABLE_SHARDS[ "npc_dota_hero_void_spirit" ] =
+{
+   "item_aghsfort_void_spirit_aether_remnant_mana_cost_cooldown",
+   "item_aghsfort_void_spirit_aether_remnant_damage",
+   "item_aghsfort_void_spirit_dissimilate_mana_cost_cooldown",
+   "item_aghsfort_void_spirit_dissimilate_damage",
+   "item_aghsfort_void_spirit_resonant_pulse_mana_cost_cooldown",
+   "item_aghsfort_void_spirit_resonant_pulse_damage",
+   "item_aghsfort_void_spirit_resonant_pulse_base_absorb",
+   "item_aghsfort_void_spirit_resonant_pulse_absorb_per_unit",
+   "item_aghsfort_void_spirit_astral_step_pop_damage",
+   "item_aghsfort_void_spirit_astral_step_max_travel_distance",
+   "item_aghsfort_void_spirit_astral_step_charge_restore_time",
+}
+

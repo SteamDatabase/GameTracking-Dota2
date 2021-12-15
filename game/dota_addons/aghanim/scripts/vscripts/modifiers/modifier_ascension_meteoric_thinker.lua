@@ -13,11 +13,11 @@ function modifier_ascension_meteoric_thinker:OnCreated( kv )
 	if IsServer() then
 		self.duration = self:GetAbility():GetSpecialValueFor( "duration" )
 		self.land_time = self:GetAbility():GetSpecialValueFor( "land_time" )
-		self.impact_radius = self:GetAbility():GetSpecialValueFor( "land_time" )
+		self.impact_radius = self:GetAbility():GetSpecialValueFor( "impact_radius" )
 
 		EmitSoundOn( "DOTA_Item.MeteorHammer.Channel", self:GetParent() )
 
-		self.nFXIndexA = ParticleManager:CreateParticle( "particles/items4_fx/meteor_hammer_aoe.vpcf", PATTACH_WORLDORIGIN, nil )
+		self.nFXIndexA = ParticleManager:CreateParticle( "particles/ascension/meteoric_target.vpcf", PATTACH_WORLDORIGIN, nil )
 		ParticleManager:SetParticleControl( self.nFXIndexA, 0, self:GetParent():GetAbsOrigin() )
 		ParticleManager:SetParticleControl( self.nFXIndexA, 1, Vector( self.impact_radius, self.impact_radius, self.impact_radius ) )
 

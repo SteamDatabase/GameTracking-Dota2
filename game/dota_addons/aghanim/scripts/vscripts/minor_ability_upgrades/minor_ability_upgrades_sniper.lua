@@ -1,11 +1,22 @@
 local Sniper =
 {
+
 	{
-		description = "aghsfort_sniper_shrapnel_percent_cooldown",
+		description = "aghsfort_sniper_shrapnel_percent_mana_cost_cooldown",
 		ability_name = "aghsfort_sniper_shrapnel",
-		special_value_name = "cooldown",
-		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		value = 12,
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 	
 	{
@@ -13,7 +24,7 @@ local Sniper =
 		ability_name = "aghsfort_sniper_shrapnel",
 		special_value_name = "shrapnel_damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 20,
+		value = 15,
 	},
 
 	{
@@ -21,7 +32,7 @@ local Sniper =
 		ability_name = "aghsfort_sniper_shrapnel",
 		special_value_name = "radius",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 75,
+		value = 50,
 	},
 
 	{
@@ -31,14 +42,6 @@ local Sniper =
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		value = -12,
 	},
-
-	-- {
-	-- 	description = "aghsfort_sniper_shrapnel_percent_mana_cost",
-	-- 	ability_name = "aghsfort_sniper_shrapnel",
-	-- 	special_value_name = "mana_cost",
-	-- 	operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	value = 12,
-	-- },
 
 	{
 		description = "aghsfort_sniper_shrapnel_duration",
@@ -52,7 +55,7 @@ local Sniper =
 		ability_name = "aghsfort_sniper_headshot",
 		special_value_name = "damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 30,
+		value = 20,
 	},
 
 	{
@@ -68,7 +71,7 @@ local Sniper =
 		ability_name = "aghsfort_sniper_headshot",
 		special_value_name = "proc_chance",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 7,
+		value = 4,
 	},
 
 	{
@@ -79,20 +82,46 @@ local Sniper =
 		value = 0.5,
 	},
 
-	-- {
-	-- 	description = "aghsfort_sniper_take_aim_percent_cooldown",
-	-- 	ability_name = "aghsfort_sniper_take_aim",
-	-- 	special_value_name = "cooldown",
-	-- 	operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-	-- 	value = 12,
-	-- },
+	{
+		description = "aghsfort_sniper_take_aim_percent_mana_cost_cooldown",
+		ability_name = "aghsfort_sniper_take_aim",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
+	},
 
 	{
 		description = "aghsfort_sniper_take_aim_flat_bonus_attack_range",
 		ability_name = "aghsfort_sniper_take_aim",
 		special_value_name = "bonus_attack_range",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 50,
+		value = 25,
+	},
+
+	{
+		description = "aghsfort_sniper_take_aim_self_slow",
+		ability_name = "aghsfort_sniper_take_aim",
+		special_value_name = "slow",
+		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		value = -10,
+	},
+
+	{
+		description = "aghsfort_sniper_take_aim_duration",
+		ability_name = "aghsfort_sniper_take_aim",
+		special_value_name = "duration",
+		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		value = 0.5,
 	},
 
 	{
@@ -104,19 +133,21 @@ local Sniper =
 	},
 
 	{
-		description = "aghsfort_sniper_assassinate_percent_mana_cost",
+		description = "aghsfort_sniper_assassinate_percent_mana_cost_cooldown",
 		ability_name = "aghsfort_sniper_assassinate",
-		special_value_name = "mana_cost",
-		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		value = 15,
-	},
-
-	{
-		description = "aghsfort_sniper_assassinate_percent_cooldown",
-		ability_name = "aghsfort_sniper_assassinate",
-		special_value_name = "cooldown",
-		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		value = 12,
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
 	{

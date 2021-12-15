@@ -32,8 +32,31 @@ LinkLuaModifier( "modifier_blessing_book_strength", "modifiers/modifier_blessing
 LinkLuaModifier( "modifier_blessing_book_agility", "modifiers/modifier_blessing_book_agility", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_blessing_book_intelligence", "modifiers/modifier_blessing_book_intelligence", LUA_MODIFIER_MOTION_NONE )
 LinkLuaModifier( "modifier_blessing_refresher_shard", "modifiers/modifier_blessing_refresher_shard", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_bottle_regen_duration", "modifiers/modifier_blessing_bottle_regen_duration", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_bottle_regen_movement_speed", "modifiers/modifier_blessing_bottle_regen_movement_speed", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_roshan_shop_discount", "modifiers/modifier_blessing_roshan_shop_discount", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_oracle_shop_discount", "modifiers/modifier_blessing_oracle_shop_discount", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_respawn_haste", "modifiers/modifier_blessing_respawn_haste", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_respawn_attack_speed", "modifiers/modifier_blessing_respawn_attack_speed", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_upgrade_reroll", "modifiers/modifier_blessing_upgrade_reroll", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_elite_shard_upgrade", "modifiers/modifier_blessing_elite_shard_upgrade", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_boss_tome", "modifiers/modifier_blessing_boss_tome", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_blessing_extra_life", "modifiers/modifier_blessing_extra_life", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier( "modifier_blessing_attack_range", "modifiers/modifier_blessing_attack_range", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier( "modifier_blessing_projectile_speed", "modifiers/modifier_blessing_projectile_speed", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier( "modifier_blessing_cast_range", "modifiers/modifier_blessing_cast_range", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier( "modifier_blessing_damage_on_stunned", "modifiers/modifier_blessing_damage_on_stunned", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier( "modifier_low_hp_outgoing_damage", "modifiers/modifier_low_hp_outgoing_damage", LUA_MODIFIER_MOTION_NONE)
+
+
+
+
+
+
+
 
 -- Uncomment + change blessing modifier names for debugging
+-- DEPRECATED 2020
 _G.BLESSING_MODIFIERS_FORCE_LIST =
 {
 --	modifier_blessing_bottle_upgrade = 1,	-- 1 is the claim count
@@ -71,6 +94,7 @@ _G.BLESSING_MODIFIERS_FORCE_LIST =
 --	modifier_blessing_refresher_shard = 1,
 }
 
+-- DEPRECATED 2020
 _G.BLESSING_MODIFIERS =
 {
 --	example_blessing_modifier_name =
@@ -509,4 +533,219 @@ _G.BLESSING_MODIFIERS =
 			bonus_magic_damage = 6
 		},
 	},
+}
+
+_G.BLESSING_DEFINITIONS =
+{
+	bottle_charges =
+	{
+		grant_blessing = function( nPlayerID, hHero, nBlessingValue )
+			local hModifier = hHero:AddNewModifier( hHero, nil, "modifier_blessing_bottle_upgrade", {} )
+			hModifier:SetStackCount( nBlessingValue )
+
+			local hBottle = hHero:GetItemInSlot( DOTA_ITEM_TP_SCROLL)
+			if hBottle and hBottle:GetAbilityName() == "item_bottle" then
+				hBottle:SetCurrentCharges( hBottle:GetSpecialValueFor( "max_charges" ) )
+			end
+		end,
+	},
+	stat_agi =
+	{
+		modifier_name = "modifier_blessing_agility",
+	},
+	stat_int =
+	{
+		modifier_name = "modifier_blessing_intelligence",
+	},
+	stat_str =
+	{
+		modifier_name = "modifier_blessing_strength",
+	},
+	stat_damage =
+	{
+		modifier_name = "modifier_blessing_damage_bonus",
+	},
+	stat_spell_amp =
+	{
+		modifier_name = "modifier_blessing_magic_damage_bonus",
+	},
+	stat_health =
+	{
+		modifier_name = "modifier_blessing_health_boost",
+	},
+	stat_mana =
+	{
+		modifier_name = "modifier_blessing_mana_boost",
+	},
+	stat_armor =
+	{
+		modifier_name = "modifier_blessing_armor",
+	},
+	stat_magic_resist =
+	{
+		modifier_name = "modifier_blessing_magic_resist",
+	},
+	starting_gold =
+	{
+		grant_blessing = function( nPlayerID, hHero, nBlessingValue )
+			if nBlessingValue > 0 then
+				PlayerResource:ModifyGold( nPlayerID, nBlessingValue, true, DOTA_ModifyGold_Unspecified )
+			end
+		end,
+	},
+	purification_potion =
+	{
+		grant_blessing = function( nPlayerID, hHero, nBlessingValue )
+			if nBlessingValue > 0 then
+				local vPotionList = {}
+				--doubling up less potent potions
+				table.insert(vPotionList, "item_purification_potion")
+				table.insert(vPotionList, "item_ravage_potion")
+				table.insert(vPotionList, "item_arcanist_potion")
+				table.insert(vPotionList, "item_echo_slam_potion")
+				table.insert(vPotionList, "item_purification_potion")
+				table.insert(vPotionList, "item_ravage_potion")
+				table.insert(vPotionList, "item_arcanist_potion")
+				table.insert(vPotionList, "item_echo_slam_potion")
+
+				table.insert(vPotionList, "item_dragon_potion")
+
+				local iPotionToGrant = RandomInt(1,#vPotionList)
+				for i = 1, nBlessingValue do
+					GrantItemDropToHero( hHero, vPotionList[iPotionToGrant] )
+				end
+			end
+		end,
+	},
+	death_detonation =
+	{
+		modifier_name = "modifier_blessing_death_detonation",
+	},
+	potion_health =
+	{
+		modifier_name = "modifier_blessing_potion_health",
+	},
+	potion_mana =
+	{
+		modifier_name = "modifier_blessing_potion_mana",
+	},
+	respawn_time_reduction =
+	{
+		modifier_name = "modifier_blessing_respawn_time_reduction",
+	},
+	bottle_regen_duration =
+	{
+		modifier_name = "modifier_blessing_bottle_regen_duration",
+	},
+	bottle_regen_movement_speed =
+	{
+		modifier_name = "modifier_blessing_bottle_regen_movement_speed",
+	},
+	roshan_shop_discount =
+	{
+		modifier_name = "modifier_blessing_roshan_shop_discount",
+	},
+	oracle_shop_discount =
+	{
+		modifier_name = "modifier_blessing_oracle_shop_discount",
+	},
+	respawn_invulnerability =
+	{
+		modifier_name = "modifier_blessing_respawn_invulnerability",
+	},
+	respawn_haste =
+	{
+		modifier_name = "modifier_blessing_respawn_haste",
+	},
+	respawn_attack_speed =
+	{
+		modifier_name = "modifier_blessing_respawn_attack_speed",
+	},	
+	stat_evasion =
+	{
+		modifier_name = "modifier_blessing_evasion",
+	},	
+	upgrade_reroll =
+	{
+		modifier_name = "modifier_blessing_upgrade_reroll",
+	},	
+	elite_upgrade =
+	{
+		modifier_name = "modifier_blessing_elite_shard_upgrade",
+	},
+	start_tome =
+	{
+		grant_blessing = function( nPlayerID, hHero, nBlessingValue )
+			local nAttribute = hHero:GetPrimaryAttribute()
+			for i = 1, math.floor( nBlessingValue / 3 ) do
+				if nAttribute == 0 then
+					GrantItemDropToHero( hHero, "item_book_of_blessed_strength" )
+				elseif nAttribute == 1 then
+					GrantItemDropToHero( hHero, "item_book_of_blessed_agility" )
+				else
+					GrantItemDropToHero( hHero, "item_book_of_blessed_intelligence" )
+				end
+			end
+		end,
+	},
+	boss_tome =
+	{
+		modifier_name = "modifier_blessing_boss_tome",
+	},
+	extra_life =
+	{
+		modifier_name = "modifier_blessing_extra_life",
+	},
+	melee_cleave = 
+	{
+		grant_blessing = function( nPlayerID, hHero, nBlessingValue )
+			local hAbility = hHero:AddAbility("blessings_melee_cleave")
+			if hAbility ~= nil then
+				hAbility:UpgradeAbility(true)
+				local hAbilityModifier = hHero:FindModifierByName(hAbility:GetIntrinsicModifierName())
+				if hAbilityModifier ~= nil then
+					hAbilityModifier:SetStackCount(nBlessingValue)
+				end
+			end
+		end
+	},
+	attack_range = 
+	{
+		modifier_name = "modifier_blessing_attack_range"
+	},
+	projectile_speed = 
+	{
+		modifier_name = "modifier_blessing_projectile_speed"
+	},
+	cast_range = 
+	{
+		modifier_name = "modifier_blessing_cast_range"
+	},
+	damage_on_stunned = 
+	{
+		modifier_name = "modifier_blessing_damage_on_stunned"
+	},
+	regen_around_allies = 
+	{
+		grant_blessing = function( nPlayerID, hHero, nBlessingValue )
+			local hAbility = hHero:AddAbility("blessings_regen_around_allies")
+			if hAbility ~= nil then
+				hAbility:UpgradeAbility(true)
+				local hAbilityModifier = hHero:FindModifierByName(hAbility:GetIntrinsicModifierName())
+				if hAbilityModifier ~= nil then
+					hAbilityModifier:SetStackCount(nBlessingValue)
+				end
+			end
+		end
+	},	
+	debuff_duration_increase = 
+	{
+		modifier = "modifier_blessings_debuff_duration_increase"
+	},
+	low_hp_outgoing_damage = 
+	{
+		modifier = "modifier_low_hp_outgoing_damage"
+	}
+
+
 }

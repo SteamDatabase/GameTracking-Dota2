@@ -424,7 +424,7 @@ function WaitForClassAction( panel, panelClass )
 WaitForClassAction.prototype = new BaseAction();
 WaitForClassAction.prototype.update = function ()
 {
-	return !this || !this.panel || !this.panel.BHasClass( this.panelClass );
+	return !this || !this.panel || !this.panel.IsValid() || !this.panel.BHasClass( this.panelClass );
 }
 
 
@@ -626,6 +626,26 @@ PlaySoundForDurationAction.prototype.finish = function ()
 }
 
 // ----------------------------------------------------------------------------
+//   PlaySoundUntilFinishedAction
+// ----------------------------------------------------------------------------
+
+function PlaySoundUntilFinishedAction( soundName )
+{
+	this.soundName = soundName;
+}
+PlaySoundUntilFinishedAction.prototype = new BaseAction();
+
+PlaySoundUntilFinishedAction.prototype.start = function ()
+{
+	this.soundEventGuid = PlayUISoundScript( this.soundName );
+}
+PlaySoundUntilFinishedAction.prototype.update = function ()
+{
+	return IsUISoundScriptPlaying( this.soundEventGuid );
+}
+
+
+// ----------------------------------------------------------------------------
 //   LerpAction
 //
 //   Base class that you can override an applyProgress for to do a simple Lerp
@@ -722,6 +742,27 @@ GuardedAction.prototype.finish = function ()
 	}
 
 	this.action.finish();
+}
+
+// ----------------------------------------------------------------------------
+
+function PlayMovieAction( moviePanel )
+{
+	this.moviePanel = moviePanel;
+
+	this.isMovieFinished = false;
+	var thisAction = this;
+	$.RegisterEventHandler( 'MoviePlayerPlaybackEnded', this.moviePanel, function () { thisAction.isMovieFinished = true; } );
+}
+PlayMovieAction.prototype = new BaseAction();
+
+PlayMovieAction.prototype.start = function ()
+{
+	this.moviePanel.Play();
+}
+PlayMovieAction.prototype.update = function ()
+{
+	return !this.isMovieFinished;
 }
 
 // ----------------------------------------------------------------------------

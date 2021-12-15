@@ -1,4 +1,8 @@
 
+LinkLuaModifier( "modifier_ascension_firefly_display", "modifiers/modifier_ascension_firefly_display", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_ascension_last_stand_display", "modifiers/modifier_ascension_last_stand_display", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_ascension_silence_display", "modifiers/modifier_ascension_silence_display", LUA_MODIFIER_MOTION_NONE )
+
 _G.EXTRA_ABILITIES_PER_ASCENSION_LEVEL =
 {
 	0, 1, 2, 3, 4, 5,
@@ -76,6 +80,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_enraged_wildwings",
+			"encounter_bamboo_garden",
 		}
 	},
 
@@ -88,24 +93,30 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_drow_ranger_miniboss",
+			"encounter_sacred_grounds",
 			"encounter_alchemist",
+			"encounter_toxic_terrace",
 			"encounter_fire_roshan",
 			"encounter_big_ogres",
+			"encounter_hidden_colosseum",
+			"encounter_dark_forest",
+			"encounter_smashy_and_bashy",
 		}
 	},
 
-	ascension_bomb =
-	{
-		nType = ASCENSION_ABILITY_GLOBAL,
-		nTargetType = ASCENSION_TARGET_CLUMPED_PLAYER,
-		bEliteOnly = true,
-		nRange = 700,
-		vecBlacklistedEncounters = 
-		{
-			"encounter_bombers",
-			"encounter_bomb_squad",
-		}		
-	},
+	-- ascension_bomb =
+	-- {
+	-- 	nType = ASCENSION_ABILITY_GLOBAL,
+	-- 	nTargetType = ASCENSION_TARGET_CLUMPED_PLAYER,
+	-- 	bEliteOnly = true,
+	-- 	nRange = 700,
+	-- 	vecBlacklistedEncounters = 
+	-- 	{
+	-- 		"encounter_bombers",
+	-- 		"encounter_bomb_squad",
+	--		"encounter_icy_pools",
+	-- 	}		
+	-- },
 
 	ascension_flicker =
 	{
@@ -115,6 +126,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_dire_siege",
+			"encounter_temple_siege",
 		},
 	},
 
@@ -124,6 +136,12 @@ _G.ASCENSION_ABILITIES =
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
 		nCastBehavior = ASCENSION_CAST_ON_NEARBY_ENEMY,
 		nRange = 500,
+		vecBlacklistedEncounters = 
+		{
+			"encounter_polarity_swap",
+			"encounter_collapsed_mines",
+			"encounter_frozen_ravine",
+		},
 	},
 
 	ascension_bulwark =
@@ -142,9 +160,12 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_mushroom_mines",
+			"encounter_mushroom_mines2021",
 			"encounter_brewmaster",
 			"encounter_drow_ranger_miniboss",
+			"encounter_sacred_grounds",
 			"encounter_gauntlet",
+			"encounter_catacombs",
 		}		
 	},
 
@@ -174,7 +195,7 @@ _G.ASCENSION_ABILITIES =
 		nType = ASCENSION_ABILITY_ALL_UNITS,
 		vecBlacklistedEncounters = 
 		{
-			"encounter_mushroom_mines",
+			"encounter_mushroom_mines2021",
 		}
 	},
 
@@ -186,7 +207,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_big_ogres",
-			"encounter_mushroom_mines",
+			"encounter_mushroom_mines2021",
 		}
 	},
 
@@ -205,6 +226,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_alchemist",
+			"encounter_toxic_terrace",
 			"encounter_fire_roshan",
 		}
 	},
@@ -225,6 +247,10 @@ _G.ASCENSION_ABILITIES =
 	aghsfort_ascension_magnetic_field =
 	{
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
+		vecBlacklistedEncounters =
+		{
+			"encounter_boss_arc_warden",
+		}
 	},
 
 	ascension_embiggen =
@@ -236,6 +262,7 @@ _G.ASCENSION_ABILITIES =
 		{
 			"encounter_bombers",
 			"encounter_alchemist",
+			"encounter_toxic_terrace",
 			"encounter_fire_roshan",
 		}
 	},
@@ -248,6 +275,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters =
 		{
 			"encounter_alchemist",
+			"encounter_toxic_terrace",
 			"encounter_fire_roshan",
 		}
 	},
@@ -257,6 +285,11 @@ _G.ASCENSION_ABILITIES =
 		nType = ASCENSION_ABILITY_CAPTAINS_ONLY,
 		nCastBehavior = ASCENSION_CAST_ON_NEARBY_ENEMY,
 		nRange = 800,
+		vecBlacklistedEncounters =
+		{
+			"encounter_leshrac",
+			"encounter_tropical_keep",
+		},
 	},
 
 	--[[
@@ -282,6 +315,17 @@ _G.ASCENSION_ABILITIES =
 		--nCastBehavior = ASCENSION_CAST_WHEN_COOLDOWN_READY,
 		nTargetType = ASCENSION_TARGET_CLUMPED_PLAYER,
 		bEliteOnly = true,
+		vecBlacklistedEncounters =
+		{
+			"encounter_dark_forest",
+			"encounter_drow_ranger_miniboss",
+			"encounter_sacred_grounds",
+			"encounter_stonehall_citadel",
+		}
 	},
 
 }
+
+_G.ASCENSION_MAGICIAN_LESS_STARTING_LIVES = 1
+_G.ASCENSION_SORCERER_LESS_GOLD_EARNED_PCT = 10
+_G.ASCENSION_GRAND_MAGUS_CURSED_ITEMS = 3

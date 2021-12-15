@@ -13,19 +13,21 @@ end
 
 function item_purification_potion:OnSpellStart()
 	if IsServer() then
-		self.heal = self:GetSpecialValueFor( "heal" )
-		self.radius = self:GetSpecialValueFor( "radius" )
+		local hTarget = self:GetCursorTarget() 
+		if hTarget then
+			self.heal = math.min(self:GetSpecialValueFor( "heal"), (hTarget:GetMaxHealth()  - hTarget:GetHealth()))
+			self.radius = self:GetSpecialValueFor( "radius" )
+			--print( 'item_purification_potion:OnSpellStart() - radius is ' .. self.radius )
+			local kv =
+			{
+				duration = 0.1,
+			}
 
-		--print( 'item_purification_potion:OnSpellStart() - radius is ' .. self.radius )
+			self:HealAlly( hTarget )
 
-		local kv =
-		{
-			duration = 0.1,
-		}
-
-		self:HealAlly( self:GetCursorTarget() )
-
-		self:SpendCharge()
+			self:SpendCharge()
+		end
+		
 	end
 end
 

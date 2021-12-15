@@ -7,38 +7,3 @@ LinkLuaModifier( "modifier_item_bogduggs_lucky_femur", "modifiers/modifier_item_
 function item_bogduggs_lucky_femur:Precache( context )
 	PrecacheResource( "particle", "particles/units/heroes/hero_ogre_magi/ogre_magi_multicast.vpcf", context )
 end
-
---------------------------------------------------------------------------------
-
-function item_bogduggs_lucky_femur:GetIntrinsicModifierName()
-	return "modifier_item_bogduggs_lucky_femur"
-end
-
---------------------------------------------------------------------------------
-
-function item_bogduggs_lucky_femur:Spawn()
-	self.required_level = self:GetSpecialValueFor( "required_level" )
-end
-
---------------------------------------------------------------------------------
-
-function item_bogduggs_lucky_femur:OnHeroLevelUp()
-	if IsServer() then
-		if self:GetCaster():GetLevel() == self.required_level and self:IsInBackpack() == false then
-			self:OnUnequip()
-			self:OnEquip()
-		end
-	end
-end
-
---------------------------------------------------------------------------------
-
-function item_bogduggs_lucky_femur:IsMuted()	
-	if self.required_level > self:GetCaster():GetLevel() then
-		return true
-	end
-	if not self:GetCaster():IsHero() then
-		return true
-	end
-	return self.BaseClass.IsMuted( self )
-end

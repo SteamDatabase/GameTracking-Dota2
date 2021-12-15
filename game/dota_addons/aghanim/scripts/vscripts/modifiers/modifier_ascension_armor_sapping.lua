@@ -4,7 +4,7 @@ modifier_ascension_armor_sapping = class({})
 -----------------------------------------------------------------------------------------
 
 function modifier_ascension_armor_sapping:GetTexture()
-	return "ascension_armor_sapping"
+	return "events/aghanim/interface/hazard_armorshred"
 end
 
 ----------------------------------------

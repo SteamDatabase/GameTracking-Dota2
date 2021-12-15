@@ -21,6 +21,37 @@ function CAghanim:OnAbilityUpgradeButtonClicked( eventSourceIndex, data )
 						-- Grants and upgrades the ability
 						hNewAbility:UpgradeAbility( false )
 						--print ("Adding new ability", szAbilityName)
+						if hPlayerHero.MajorAbilityUpgrades == nil then 
+							hPlayerHero.MajorAbilityUpgrades = {}
+						end
+
+						local newUpgrade = {}
+						newUpgrade[ "ability_upgrade_name" ] = szAbilityName
+
+						local AbilityKV = hNewAbility:GetAbilityKeyValues()
+						if AbilityKV then 
+							local szMatchName = AbilityKV[ "AbilityParentName" ] 
+							if szMatchName == nil then 
+								szMatchName = AbilityKV[ "AbilityTextureName" ]
+							end
+							--print( "searching for " .. szMatchName )
+							for i = 0, hPlayerHero:GetAbilityCount() do 
+								local hAbility = hPlayerHero:GetAbilityByIndex( i )
+								if hAbility and hAbility:GetMaxLevel() > 1 then 
+
+									if string.find( hAbility:GetAbilityName(), szMatchName )  then 
+										newUpgrade[ "ability_parent_name" ] = hAbility:GetAbilityName()
+										--print( "found parent ability " .. hAbility:GetAbilityName() )
+										break
+									end
+								end
+							end						
+						end					
+
+						table.insert( hPlayerHero.MajorAbilityUpgrades, newUpgrade )
+
+						CustomNetTables:SetTableValue( "major_ability_upgrades", tostring( hPlayerHero:GetPlayerOwnerID() ), hPlayerHero.MajorAbilityUpgrades )
+
 					end
 				end
 			end

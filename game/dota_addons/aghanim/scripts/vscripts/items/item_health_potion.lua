@@ -19,7 +19,7 @@ function item_health_potion:OnSpellStart()
 		local Heroes = HeroList:GetAllHeroes()
 
 		for _,Hero in pairs ( Heroes ) do
-			if Hero ~= nil and Hero:IsRealHero() and Hero:IsAlive() and Hero:GetTeamNumber() == nTeamNumber then
+			if Hero ~= nil and Hero:IsRealHero() and Hero:IsAlive() and Hero:GetTeamNumber() == nTeamNumber and Hero:HasModifier( "modifier_event_slark_greed" ) == false then
 				local hBlessing = Hero:FindModifierByName( "modifier_blessing_potion_health" )
 				if hBlessing ~= nil then
 					local nBonusHealPct = hBlessing:GetHealthRestorePercentBonus()

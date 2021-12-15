@@ -77,8 +77,10 @@ function CMapEncounter_MushroomMines:OnThink()
 
 	if self.fShamanSpawnTimer > 0 and self.fShamanSpawnTimer < GameRules:GetGameTime() then
 		print( 'Shaman ready to spawn!' )
-		local hShamanPortal = self:GetPortalSpawnerV2( "shaman_portal" )
-		hShamanPortal:SpawnUnitsFromRandomSpawners( 1 )
+		if self.bShroomGiantsKilled == false then
+			local hShamanPortal = self:GetPortalSpawnerV2( "shaman_portal" )
+			hShamanPortal:SpawnUnitsFromRandomSpawners( 1 )
+		end
 		self.fShamanSpawnTimer = -1.0	-- this will be reset when the shaman is killed
 	end
 end

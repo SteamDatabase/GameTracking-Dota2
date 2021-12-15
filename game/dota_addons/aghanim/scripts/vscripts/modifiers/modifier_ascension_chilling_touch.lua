@@ -9,6 +9,12 @@ end
 
 -----------------------------------------------------------------------------------------
 
+function modifier_ascension_chilling_touch:GetTexture()
+	return "events/aghanim/interface/hazard_chillingtouch"
+end
+
+-----------------------------------------------------------------------------------------
+
 function modifier_ascension_chilling_touch:IsPurgable()
 	return false
 end

@@ -77,17 +77,20 @@ function ogreseal_flop:TryToDamage()
 						damage_type = self:GetAbilityDamageType(),
 					}
 					ApplyDamage( DamageInfo )
-					if enemy:IsAlive() == false then
-						local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_phantom_assassin/phantom_assassin_crit_impact.vpcf", PATTACH_CUSTOMORIGIN, nil )
-						ParticleManager:SetParticleControlEnt( nFXIndex, 0, enemy, PATTACH_POINT_FOLLOW, "attach_hitloc", enemy:GetOrigin(), true )
-						ParticleManager:SetParticleControl( nFXIndex, 1, enemy:GetOrigin() )
-						ParticleManager:SetParticleControlForward( nFXIndex, 1, -self:GetCaster():GetForwardVector() )
-						ParticleManager:SetParticleControlEnt( nFXIndex, 10, enemy, PATTACH_ABSORIGIN_FOLLOW, nil, enemy:GetOrigin(), true )
-						ParticleManager:ReleaseParticleIndex( nFXIndex )
+					-- For some reason we have to recheck here, I guess because the enemy entity might be cleaned up super fast on death?
+					if enemy ~= nil and enemy:IsNull() == false then
+						if enemy:IsAlive() == false then
+							local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_phantom_assassin/phantom_assassin_crit_impact.vpcf", PATTACH_CUSTOMORIGIN, nil )
+							ParticleManager:SetParticleControlEnt( nFXIndex, 0, enemy, PATTACH_POINT_FOLLOW, "attach_hitloc", enemy:GetOrigin(), true )
+							ParticleManager:SetParticleControl( nFXIndex, 1, enemy:GetOrigin() )
+							ParticleManager:SetParticleControlForward( nFXIndex, 1, -self:GetCaster():GetForwardVector() )
+							ParticleManager:SetParticleControlEnt( nFXIndex, 10, enemy, PATTACH_ABSORIGIN_FOLLOW, nil, enemy:GetOrigin(), true )
+							ParticleManager:ReleaseParticleIndex( nFXIndex )
 
-						EmitSoundOn( "Dungeon.BloodSplatterImpact", enemy )
-					else
-						enemy:AddNewModifier( self:GetCaster(), self, "modifier_stunned", { duration = self.stun_duration } )
+							EmitSoundOn( "Dungeon.BloodSplatterImpact", enemy )
+						else
+							enemy:AddNewModifier( self:GetCaster(), self, "modifier_stunned", { duration = self.stun_duration } )
+						end
 					end
 				end
 			end

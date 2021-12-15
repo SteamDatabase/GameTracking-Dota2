@@ -25,6 +25,8 @@ function modifier_boss_intro:CheckState()
 	{
 		[MODIFIER_STATE_STUNNED] = true,
 		[MODIFIER_STATE_INVULNERABLE] = true,
+		[MODIFIER_STATE_NO_UNIT_COLLISION] = true,
+		[MODIFIER_STATE_NOT_ON_MINIMAP] = true,
 	}
 	
 	return state

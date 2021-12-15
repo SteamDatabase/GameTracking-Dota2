@@ -30,6 +30,7 @@ function modifier_aghanim_passive:CheckState()
 		[MODIFIER_STATE_STUNNED] = false,
 		[MODIFIER_STATE_FROZEN] = false,
 		[MODIFIER_STATE_FEARED] = false,
+		[MODIFIER_STATE_TAUNTED] = false,
 		[MODIFIER_STATE_CANNOT_BE_MOTION_CONTROLLED] = true,
 		[MODIFIER_STATE_NO_HEALTH_BAR] = true,
 	}

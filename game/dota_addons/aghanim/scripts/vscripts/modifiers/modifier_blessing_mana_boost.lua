@@ -1,11 +1,9 @@
-require( "modifiers/modifier_blessing_base" )
+modifier_blessing_mana_boost = class({})
 
-modifier_blessing_mana_boost = class( modifier_blessing_base )
+--------------------------------------------------------------------------------
 
-----------------------------------------
-
-function modifier_blessing_mana_boost:OnBlessingCreated( kv )
-	self.bonus_mana = kv.bonus_mana
+function modifier_blessing_mana_boost:IsHidden()
+	return true
 end
 
 --------------------------------------------------------------------------------
@@ -13,13 +11,20 @@ end
 function modifier_blessing_mana_boost:DeclareFunctions()
 	local funcs = 
 	{
-		MODIFIER_PROPERTY_EXTRA_MANA_PERCENTAGE,
+		MODIFIER_PROPERTY_EXTRA_MANA_BONUS,
+
 	}
-	return funcs
+	return funcs	
 end
 
 --------------------------------------------------------------------------------
 
-function modifier_blessing_mana_boost:GetModifierExtraManaPercentage( params )
-	return self.bonus_mana
+function modifier_blessing_mana_boost:GetModifierExtraManaBonus( params )
+	return self:GetParent():GetLevel() * self:GetStackCount()
+end
+
+
+--------------------------------------------------------------------------------
+function modifier_blessing_mana_boost:IsPermanent()
+	return true
 end

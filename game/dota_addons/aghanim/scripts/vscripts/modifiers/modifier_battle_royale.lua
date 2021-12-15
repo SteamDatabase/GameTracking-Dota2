@@ -62,20 +62,36 @@ function modifier_battle_royale:OnIntervalThink()
 	local nDepth = 0
 	local vCurrentPos = self:GetParent():GetAbsOrigin()
 	local vClampedValidFlyingPos = self.vLastValidPos 
+
+	local hCurrentRoom = GameRules.Aghanim:GetCurrentRoom()
+	if hCurrentRoom then
+		
+		if not hCurrentRoom:IsInRoomBounds( vCurrentPos ) then
+			--print( "POINT IS NOT IN ROOM BOUNDS!!" )
+			--print( "CurrentRoom: " .. hCurrentRoom:GetName() )
+			--print( "Room Origin: ( ".. hCurrentRoom:GetOrigin().x .. ", " .. hCurrentRoom:GetOrigin().y .. ", " .. hCurrentRoom:GetOrigin().z .. ")" )
+			--print( "vCurrentPos: ( ".. vCurrentPos.x .. ", " .. vCurrentPos.y .. ", " .. vCurrentPos.z .. ")" )
+			--print( "Room Mins: ( ".. hCurrentRoom.vMins.x .. ", " .. hCurrentRoom.vMins.y .. ", " .. hCurrentRoom.vMins.z .. ")" )
+			--print( "Room Maxs: ( ".. hCurrentRoom.vMaxs.x .. ", " .. hCurrentRoom.vMaxs.y .. ", " .. hCurrentRoom.vMaxs.z .. ")" )
+		end
+	end 
+
 	local hRoom = GameRules.Aghanim:FindRoomForPoint( vCurrentPos )
 	if hRoom ~= nil then
-
+		--print( "found room" )
 		nDepth = hRoom:GetDepth()
-
+		--print( "room depth: " .. nDepth )
 		-- Update the deepest we've ever been in the dungeon
 		-- But don't allow people to skip ahead to unselected rooms
-		local hCurrentRoom = GameRules.Aghanim:GetCurrentRoom()
+
 		if nDepth > self.nDeepestDepth then
 			if ( hCurrentRoom == hRoom ) or
-				( hCurrentRoom:GetExitRoomSelected() == hRoom:GetName() )  or
+				( hCurrentRoom:GetExitRoomSelected() == hRoom:GetName() ) or 
+				( hCurrentRoom.hEventRoom and hCurrentRoom.hEventRoom:GetName() == hRoom:GetName() ) or
 				( GameRules.Aghanim:GetTestEncounterDebugRoom() == hRoom ) then
 				self.nDeepestDepth = nDepth
 				self.hDeepestRoom = hRoom
+				--print( "setting deepest depth and deepest room" )
 
 				-- Ok, they advanced rooms. We can stop punishment.
 				if self:GetParent():FindModifierByName( "modifier_battle_royale_damage" ) ~= nil then
@@ -96,11 +112,16 @@ function modifier_battle_royale:OnIntervalThink()
 			if bValidPosition == true then
 				flBoundary = 4.0
 			end
-			vClampedValidFlyingPos = self.hDeepestRoom:ClampPointToRoomBounds( vCurrentPos, flBoundary )
+
+			local hClampRoom = self.hDeepestRoom
+			if hCurrentRoom ~= nil and hCurrentRoom == self.hDeepestRoom.hEventRoom then
+				hClampRoom = hCurrentRoom
+			end
+			vClampedValidFlyingPos = hClampRoom:ClampPointToRoomBounds( vCurrentPos, flBoundary )
 		end
 	end
 
-	if ( GameRules:GetGameTime() - self.flLastTimeInCurrentRoom ) > 8.0 and self:GetParent():IsSummoned() == false then
+	if ( GameRules:GetGameTime() - self.flLastTimeInCurrentRoom ) > 12.0 and self:GetParent():IsSummoned() == false and GameRules.Aghanim:GetAnnouncer() ~= nil then
 		GameRules.Aghanim:GetAnnouncer():OnLaggingHero( self:GetParent():GetUnitName(), GameRules.Aghanim:GetCurrentRoom():GetDepth() )
 	end
 
@@ -111,12 +132,19 @@ function modifier_battle_royale:OnIntervalThink()
 	local bIsMotionControlled = self:GetParent():IsCurrentlyHorizontalMotionControlled() == true or self:GetParent():IsCurrentlyVerticalMotionControlled() == true
 	if self:GetParent():HasFlyMovementCapability() == false and bIsMotionControlled == false then
 		if bValidRoom == false or bValidPosition == false then
-			--print( "Teleporting to " .. tostring( self.vLastValidPos ) )
+			if bValidRoom == false then 
+			--	print( "Room is not valid!" )
+			end
+
+			if bValidPosition == false then
+			--	print( "Position is not valid!" )
+			end
+			--print( "BR Modifier Teleporting to " .. tostring( self.vLastValidPos ) )
 			FindClearSpaceForUnit( self:GetParent(), self.vLastValidPos, true )
 		end
 	else
 		if bValidRoom == false or vCurrentPos ~= vClampedValidFlyingPos then
-			--print( "Flying Teleporting to " .. tostring( vClampedValidFlyingPos ) )
+			--print( "BR Flying Teleporting to " .. tostring( vClampedValidFlyingPos ) )
 			FindClearSpaceForUnit( self:GetParent(), vClampedValidFlyingPos, true )
 		end
 	end

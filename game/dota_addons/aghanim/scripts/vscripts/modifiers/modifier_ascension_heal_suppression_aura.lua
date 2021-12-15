@@ -11,6 +11,12 @@ end
 
 --------------------------------------------------------------------------------
 
+function modifier_ascension_heal_suppression_aura:GetTexture()
+	return "events/aghanim/interface/hazard_healsupress"
+end
+
+--------------------------------------------------------------------------------
+
 function modifier_ascension_heal_suppression_aura:GetEffectName() 
 	return "particles/units/heroes/hero_necrolyte/necrolyte_spirit.vpcf"
 end

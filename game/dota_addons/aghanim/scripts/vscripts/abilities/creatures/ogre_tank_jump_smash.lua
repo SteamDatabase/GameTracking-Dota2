@@ -33,3 +33,5 @@ function ogre_tank_jump_smash:OnSpellStart()
 end
 
 -----------------------------------------------------------------------------
+
+ogre_tank_farmer_jump_smash = ogre_tank_jump_smash

@@ -1,10 +1,12 @@
+_G.SPAWN_ALL_POSITIONS = -1
+
 if CPortalSpawnerV2 == nil then
 	CPortalSpawnerV2 = class({})
 end
 
 ----------------------------------------------------------------------------
 
-function CPortalSpawnerV2:constructor( szSpawnerNameInput, szLocatorNameInput, nPortalHealthInput, flSummonTimeInput, flScaleInput, rgUnitsInfoInput, bInvulnerableInput )
+function CPortalSpawnerV2:constructor( szSpawnerNameInput, szLocatorNameInput, nPortalHealthInput, flSummonTimeInput, flScaleInput, rgUnitsInfoInput, bInvulnerableInput, vColorInput )
 	self.szSpawnerName = szSpawnerNameInput
 	self.szLocatorName = szLocatorNameInput
 	self.rgUnitsInfo = rgUnitsInfoInput
@@ -15,6 +17,12 @@ function CPortalSpawnerV2:constructor( szSpawnerNameInput, szLocatorNameInput, n
 		self.bInvulnerable = false
 	else
 		self.bInvulnerable = bInvulnerableInput
+	end
+
+	if vColorInput == nil then
+		self.vColor = Vector( 29, 76, 245 )		-- default to blue portals
+	else
+		self.vColor = vColorInput
 	end
 	
 	self.flScale = flScaleInput
@@ -154,24 +162,28 @@ function CPortalSpawnerV2:TrySpawningPortalUnits()
 
 			if hPortal.flSpawnTime <= GameRules:GetGameTime() then
 
-				local nSpawned = 0
 				local vLocation = hPortal:GetAbsOrigin()
-				for _,rgUnitInfo in pairs ( self.rgUnitsInfo ) do
-					local hSingleSpawnedUnits = self:SpawnSingleUnitType( rgUnitInfo, vLocation )
-					for _,hUnit in pairs ( hSingleSpawnedUnits ) do
-						table.insert( hSpawnedUnits, hUnit )
-					end
-				end
+
+				hSpawnedUnits = self:SpawnUnitsInternal( vLocation )
 
 				table.insert( hActivatedPortals, hPortal )
-				--printf( "%s spawning %d units", self.szSpawnerName, nSpawned )
+
+				if #hSpawnedUnits > 0 then
+					self.Encounter:OnSpawnerFinished( self, hSpawnedUnits )
+					if hPortal.szMasterWaveName ~= nil then
+						--print( '^^^Portal Master Wave Name = ' .. hPortal.szMasterWaveName )
+						self.Encounter:AssignSpawnedUnitsToMasterWaveSchedule( hSpawnedUnits, hPortal.szMasterWaveName )
+					end
+					if hPortal.bAggroSpawnedUnitsToHeroes and hPortal.bAggroSpawnedUnitsToHeroes == true then
+						self.Encounter:AggroSpawnedUnitsToHeroes( hSpawnedUnits )
+					end
+				end
+				hSpawnedUnits = {}
+
 			end
 		end
 	end
 
-	if #hSpawnedUnits > 0 then
-		self.Encounter:OnSpawnerFinished( self, hSpawnedUnits )
-	end
 
 	-- Once a portal has been spawned, it can die
 	for i=#hActivatedPortals,1,-1 do
@@ -185,8 +197,19 @@ function CPortalSpawnerV2:TrySpawningPortalUnits()
 		UTIL_Remove( hPortal )
 	end
 
-	return hSpawnedUnits
+end
 
+----------------------------------------------------------------------------
+
+function CPortalSpawnerV2:SpawnUnitsInternal( vLocation )
+	local hSpawnedUnits={}
+	for _,rgUnitInfo in pairs ( self.rgUnitsInfo ) do
+		local hSingleSpawnedUnits = self:SpawnSingleUnitType( rgUnitInfo, vLocation )
+		for _,hUnit in pairs ( hSingleSpawnedUnits ) do
+			table.insert( hSpawnedUnits, hUnit )
+		end
+	end
+	return hSpawnedUnits
 end
 
 ----------------------------------------------------------------------------
@@ -217,7 +240,8 @@ function CPortalSpawnerV2:SpawnPortal( hPortalEnt )
 		hPortalEnt:AddEffects( EF_NODRAW )
 
 		hPortalEnt.nWarningFX = ParticleManager:CreateParticle( "particles/portals/portal_ground_spawn_endpoint.vpcf", PATTACH_WORLDORIGIN, nil )
-		ParticleManager:SetParticleControl( hPortalEnt.nWarningFX, 0, hPortalEnt:GetAbsOrigin() )		
+		ParticleManager:SetParticleControl( hPortalEnt.nWarningFX, 0, hPortalEnt:GetAbsOrigin() )
+		ParticleManager:SetParticleControl( hPortalEnt.nWarningFX, 1, self.vColor )
 
 	else
 		-- vulnerable portals need to remove the invulnerable modifier that's built in to the building
@@ -298,13 +322,24 @@ end
 
 ----------------------------------------------------------------------------
 
-function CPortalSpawnerV2:SpawnUnitsFromRandomSpawners( nSpawners )
+function CPortalSpawnerV2:SpawnUnitsFromRandomSpawners( nSpawners, szMasterWaveName, bUsePortals, bAggroSpawnedUnitsToHeroes )
 
-	--print( "spawning from " .. nSpawners .. " " .. self.szSpawnerName .. " spawers out of " .. #self.rgSpawners )
+	
+	if szMasterWaveName then
+		--print( '^^^Master Wave Name = ' .. szMasterWaveName )
+	end
+
+	local nSpawnerCount = nSpawners 
+	if nSpawnerCount == SPAWN_ALL_POSITIONS then 
+		nSpawnerCount = #self.rgSpawners
+		print( "spawning all " .. #self.rgSpawners .. " positions" ) 
+	end
+
+	print( "spawning from " .. nSpawnerCount .. " " .. self.szSpawnerName .. " spawners out of " .. #self.rgSpawners )
 	local hAllSpawnedUnits = {}
 	local Spawners = nil
 	local flTotalSpawnerWeight = self:ComputeSpawnerWeights( )
-	for n=1,nSpawners do
+	for n=1,nSpawnerCount do
 		if Spawners == nil or #Spawners == 0 then
 			Spawners = deepcopy( self.rgSpawners )
 		end
@@ -321,19 +356,48 @@ function CPortalSpawnerV2:SpawnUnitsFromRandomSpawners( nSpawners )
 				
 			local vLocation = Spawner:GetAbsOrigin()
 
-			local portalTable = 
-			{ 	
-				MapUnitName = "npc_aghsfort_dark_portal_v2", 
-				origin = tostring( vLocation.x ) .. " " .. tostring( vLocation.y ) .. " " .. tostring( vLocation.z ),
-				StatusHealth = self.nPortalHealth,
-				teamnumber = DOTA_TEAM_BADGUYS,
-				modelscale = self.flScale,
-			}
+			if bUsePortals == nil or bUsePortals == true then
+				-- use the standard portal system - the actual units will be delayed by the specific summon time
+				local portalTable = 
+				{ 	
+					MapUnitName = "npc_aghsfort_dark_portal_v2", 
+					origin = tostring( vLocation.x ) .. " " .. tostring( vLocation.y ) .. " " .. tostring( vLocation.z ),
+					StatusHealth = self.nPortalHealth,
+					teamnumber = DOTA_TEAM_BADGUYS,
+					modelscale = self.flScale,
+				}
 
-			local hPortal = CreateUnitFromTable( portalTable, vLocation )
-			self:SpawnPortal( hPortal )
-			table.insert( hAllSpawnedUnits, hPortal )
-			table.insert( self.rgSpawnedPortals, hPortal )
+				local hPortal = CreateUnitFromTable( portalTable, vLocation )
+				if szMasterWaveName ~= nil then
+					--print( 'Adding Master Wave Name to Portal ' .. szMasterWaveName )
+					hPortal.szMasterWaveName = szMasterWaveName
+				end
+				if bAggroSpawnedUnitsToHeroes ~= nil then
+					--print( 'Aggroing these units to heroes' )
+					hPortal.bAggroSpawnedUnitsToHeroes = bAggroSpawnedUnitsToHeroes
+				end
+				self:SpawnPortal( hPortal )
+				table.insert( hAllSpawnedUnits, hPortal )
+				table.insert( self.rgSpawnedPortals, hPortal )
+			
+			else
+
+				-- ignore portals and spawn immediately
+				local hSpawnedUnits = {}
+				hSpawnedUnits = self:SpawnUnitsInternal( vLocation )
+
+				if #hSpawnedUnits > 0 then
+					self.Encounter:OnSpawnerFinished( self, hSpawnedUnits )
+					if szMasterWaveName ~= nil then
+						--print( '^^^Master Wave Name = ' .. szMasterWaveName )
+						self.Encounter:AssignSpawnedUnitsToMasterWaveSchedule( hSpawnedUnits, szMasterWaveName )
+					end
+					if bAggroSpawnedUnitsToHeroes and bAggroSpawnedUnitsToHeroes == true then
+						self.Encounter:AggroSpawnedUnitsToHeroes( hSpawnedUnits )
+					end
+				end
+			end
+
 		end 
 		table.remove( Spawners, nIndex )
 	end

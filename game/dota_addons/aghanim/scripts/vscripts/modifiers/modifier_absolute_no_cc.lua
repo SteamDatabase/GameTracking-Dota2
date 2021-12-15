@@ -1,13 +1,13 @@
 
 modifier_absolute_no_cc = class({})
 
------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 function modifier_absolute_no_cc:IsHidden()
 	return true
 end
 
------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 function modifier_absolute_no_cc:IsPurgable()
 	return false
@@ -27,7 +27,7 @@ function modifier_absolute_no_cc:OnCreated( kv )
 	end
 end
 
------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 function modifier_absolute_no_cc:CheckState()
 	local state =
@@ -38,7 +38,29 @@ function modifier_absolute_no_cc:CheckState()
 		[MODIFIER_STATE_STUNNED] = false,
 		[MODIFIER_STATE_FROZEN] = false,
 		[MODIFIER_STATE_FEARED] = false,
+		[MODIFIER_STATE_TAUNTED] = false,
+		[MODIFIER_STATE_DISARMED] = false,
 		[MODIFIER_STATE_CANNOT_BE_MOTION_CONTROLLED] = true,
 	}
+
 	return state
 end
+
+--------------------------------------------------------------------------------
+
+function modifier_absolute_no_cc:DeclareFunctions()
+	local funcs =
+	{
+		MODIFIER_PROPERTY_MOVESPEED_REDUCTION_PERCENTAGE,
+	}
+
+	return funcs
+end
+
+-----------------------------------------------------------------------------------------
+
+function modifier_absolute_no_cc:GetModifierMoveSpeedReductionPercentage( params )
+	return 0
+end
+
+--------------------------------------------------------------------------------

@@ -1,6 +1,8 @@
 
 temple_guardian_purification = class({})
 
+
+
 ----------------------------------------------------------------------------------------
 
 function temple_guardian_purification:Precache( context )
@@ -88,4 +90,6 @@ function temple_guardian_purification:OnSpellStart()
 	end
 end
 
---------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+large_thunder_mountain_guardian_purification = temple_guardian_purification

@@ -23,3 +23,10 @@ end
 function modifier_blessing_movement_speed:GetModifierMoveSpeedBonus_Percentage( params )
 	return self.bonus_movement_speed
 end
+
+
+
+--------------------------------------------------------------------------------
+function modifier_blessing_movement_speed:IsPermanent()
+	return true
+end

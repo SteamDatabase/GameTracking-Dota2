@@ -54,9 +54,21 @@ function CreateProgressAnimationSequence( data )
 		seq.actions.push( new AnimateSpring2021ScreenAction( data ) );
 	}
 
-	if ( data.generic_arcana_progress != null )
+	if ( data.fall_2021_progress != null )
 	{
-		seq.actions.push( new AnimateGenericArcanaScreenAction( data ) );
+		seq.actions.push( new AnimateFall2021ScreenAction( data ) );
+	}
+
+	if ( data.arcana_progress != null )
+	{
+		if( data.arcana_progress.hero_id == 6 )
+		{
+			seq.actions.push( new AnimateDrowRangerArcanaScreenAction( data ) );
+		}
+		else
+		{
+			seq.actions.push( new AnimateGenericArcanaScreenAction( data ) );
+		}	
     }
 
 	if ( data.rubick_arcana_progress != null )

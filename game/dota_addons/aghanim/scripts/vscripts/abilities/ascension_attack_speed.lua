@@ -1,6 +1,7 @@
 ascension_attack_speed = class( {} )
 
 LinkLuaModifier( "modifier_ascension_attack_speed", "modifiers/modifier_ascension_attack_speed", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_ascension_last_stand_display", "modifiers/modifier_ascension_last_stand_display", LUA_MODIFIER_MOTION_NONE )
 
 -----------------------------------------------------------------------------------------
 

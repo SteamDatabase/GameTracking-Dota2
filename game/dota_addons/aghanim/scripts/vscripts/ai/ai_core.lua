@@ -36,8 +36,15 @@ AICore = {}
 
 behaviorSystem = {} -- create the global so we can assign to it
 
-function AICore:RandomEnemyHeroInRange( entity, range )
-	local enemies = FindUnitsInRadius( DOTA_TEAM_BADGUYS, entity:GetOrigin(), entity, range, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, 0, 0, false )
+function AICore:RandomEnemyHeroInRange( entity, range, bAllowInvis, bAllowMagicImmune )
+	local nFlags = 0
+	if bAllowInvis ~= true then
+		nFlags = DOTA_UNIT_TARGET_FLAG_NO_INVIS
+	end
+	if bAllowMagicImmune == true then
+		nFlags = nFlags + DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES
+	end
+	local enemies = FindUnitsInRadius( DOTA_TEAM_BADGUYS, entity:GetOrigin(), entity, range, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, nFlags, 0, false )
 	if #enemies > 0 then
 		local index = RandomInt( 1, #enemies )
 		return enemies[index]
@@ -46,8 +53,15 @@ function AICore:RandomEnemyHeroInRange( entity, range )
 	end
 end
 
-function AICore:ClosestEnemyHeroInRange( entity, range )
-	local enemies = FindUnitsInRadius( DOTA_TEAM_BADGUYS, entity:GetOrigin(), entity, range, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_NO_INVIS + DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
+function AICore:ClosestEnemyHeroInRange( entity, range, bAllowInvis, bAllowMagicImmune )
+	local nFlags = 0
+	if bAllowInvis ~= true then
+		nFlags = DOTA_UNIT_TARGET_FLAG_NO_INVIS
+	end
+	if bAllowMagicImmune == true then
+		nFlags = nFlags + DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES
+	end
+	local enemies = FindUnitsInRadius( DOTA_TEAM_BADGUYS, entity:GetOrigin(), entity, range, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, nFlags, FIND_CLOSEST, false )
 	if #enemies > 0 then
 		return enemies[1]
 	else
@@ -55,8 +69,15 @@ function AICore:ClosestEnemyHeroInRange( entity, range )
 	end
 end
 
-function AICore:WeakestEnemyHeroInRange( entity, range )
-	local enemies = FindUnitsInRadius( DOTA_TEAM_BADGUYS, entity:GetOrigin(), entity, range, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, 0, 0, false )
+function AICore:WeakestEnemyHeroInRange( entity, range, bAllowInvis, bAllowMagicImmune )
+	local nFlags = 0
+	if bAllowInvis ~= true then
+		nFlags = DOTA_UNIT_TARGET_FLAG_NO_INVIS
+	end
+	if bAllowMagicImmune == true then
+		nFlags = nFlags + DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES
+	end
+	local enemies = FindUnitsInRadius( DOTA_TEAM_BADGUYS, entity:GetOrigin(), entity, range, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, nFlags, 0, false )
 
 	local minHP = nil
 	local target = nil

@@ -14,8 +14,8 @@ function Spawn( entityKeyValues )
 
 	thisEntity:AddNewModifier( nil, nil, "modifier_phased", { duration = -1 } )
 
-	thisEntity.hSunRayAbility = thisEntity:FindAbilityByName( "assault_captain_sun_ray" )
-	thisEntity.hChainsAbility = thisEntity:FindAbilityByName( "assault_captain_searing_chains" )
+	thisEntity.hSunRayAbility = thisEntity:FindAbilityByName( "aghsfort_assault_captain_sun_ray" )
+	thisEntity.hChainsAbility = thisEntity:FindAbilityByName( "aghsfort_assault_captain_searing_chains" )
 
 	thisEntity:SetContextThink( "AssaultCaptainThink", AssaultCaptainThink, 0.5 )
 end
@@ -61,13 +61,20 @@ function AssaultCaptainThink()
 	end
 	]]
 
-	if thisEntity:HasModifier( "modifier_phoenix_sun_ray" ) then
+	if thisEntity:HasModifier( "modifier_aghsfort_assault_captain_sun_ray" ) then
+		--print( 'SUN RAY!' )
+		-- continuously face our sunray target if it's still alive
+		if thisEntity.hSunRayTarget ~= nil and thisEntity.hSunRayTarget:IsAlive() then
+			--print( 'VALID SUN RAY TARGET!' )
+			thisEntity:FaceTowards( thisEntity.hSunRayTarget:GetOrigin() )
+		end
 		return 0.25
 	else
+		thisEntity.hSunRayTarget = nil
 		thisEntity:SetModelScale( thisEntity.fOrigModelScale )
 	end
 
-	local hEnemies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, 1200, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE, FIND_FARTHEST, false )
+	local hEnemies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, 1200, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE + DOTA_UNIT_TARGET_FLAG_NO_INVIS, FIND_FARTHEST, false )
 	if #hEnemies == 0 then
 		return 0.5
 	end
@@ -90,6 +97,7 @@ function AssaultCaptainThink()
 
 	if hSunRayTarget ~= nil and thisEntity.hSunRayAbility ~= nil and thisEntity.hSunRayAbility:IsFullyCastable() then
 		if ( thisEntity:GetHealthPercent() < 95 ) then
+			thisEntity.hSunRayTarget = hSunRayTarget
 			return CastSunRay( hSunRayTarget )
 		end
 	end
@@ -118,7 +126,7 @@ function SearchForItems()
 	for i = 0, 5 do
 		local item = thisEntity:GetItemInSlot( i )
 		if item then
-			if item:GetAbilityName() == "item_blade_mail" then
+			if item:GetAbilityName() == "item_aghsfort_creature_blade_mail" then
 				thisEntity.hBlademailAbility = item
 			end
 			if item:GetAbilityName() == "item_rod_of_atos" then

@@ -24,6 +24,8 @@ function modifier_monster_leash:OnCreated( kv )
 		self.bProvideVision = false
 		self.fProvideVisionTime = TIME_BEFORE_PROVIDE_VISION
 
+		self.bHubDevWarnAboutMonsterLeash = false
+
 		self:StartIntervalThink( 0.01 )
 	end
 end
@@ -59,8 +61,17 @@ function modifier_monster_leash:OnIntervalThink()
 
 	local vOrigin = self:GetParent():GetAbsOrigin()
 	local vClampedPos = hEncounter:GetRoom():ClampPointToRoomBounds( vOrigin, 128.0 )
-	if vOrigin ~= vClampedPos then
+	if vOrigin ~= vClampedPos and self.bHubDevWarnAboutMonsterLeash == false then
+		
 		FindClearSpaceForUnit( self:GetParent(), vClampedPos, true )
+
+		if GetMapName() == "hub" then
+			print( "teleporting unit via monster leash: " .. self:GetParent():GetUnitName() )
+			print( "from " .. tostring( vOrigin ) .. " to " .. tostring( vClampedPos ) )
+			print( "room maxes: " .. tostring( hEncounter:GetRoom():GetMaxs() ) )
+			print( "room mins: " .. tostring( hEncounter:GetRoom():GetMins() ) )
+			self.bHubDevWarnAboutMonsterLeash = true
+		end
 	end
 
 	if vOrigin.z > -1000 then
@@ -75,9 +86,12 @@ function modifier_monster_leash:OnIntervalThink()
 	--print ("killcountdown = ", self.killcountdown )
 	-- only kill the unit if they are in a bad position for 3 seconds, 
 	-- to make sure it's not a weird flying unit thing that is actually behaving legally.
-	if ( GameRules:GetGameTime() - self.flKillStartTime ) >= 3 then
+	if ( GameRules:GetGameTime() - self.flKillStartTime ) >= 3 and self:GetParent():GetUnitName() ~= "npc_dota_creature_aghsfort_primal_beast_boss" then
 		SendToServerConsole( "say *** KILLING ROGUE UNIT " .. self:GetParent():GetUnitName() .. " at " .. tostring( vOrigin ) )
-		self:GetParent():ForceKill( false )	
+		self:GetParent():ForceKill( false )
+
+		self:Destroy()
+		return
 	end
 
 end

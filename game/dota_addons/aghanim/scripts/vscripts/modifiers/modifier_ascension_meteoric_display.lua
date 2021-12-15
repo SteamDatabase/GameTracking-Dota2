@@ -7,3 +7,9 @@ modifier_ascension_meteoric_display = class({})
 function modifier_ascension_meteoric_display:IsPurgable()
 	return false
 end
+
+--------------------------------------------------------------------------------
+
+function modifier_ascension_meteoric_display:GetTexture()
+	return "events/aghanim/interface/hazard_meteor"
+end

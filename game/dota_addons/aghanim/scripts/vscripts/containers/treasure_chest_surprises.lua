@@ -1,13 +1,17 @@
 
 require( "rewards" )
-require( "reward_tables" )
+if GetMapName() == "main" then 
+	require( "reward_tables" )
+else
+	require( "reward_tables_2021" )
+end
 require( "map_encounter" )
 
 function CAghanim:ChooseTreasureSurprise( hPlayerHero, hTreasureEnt )
 	hTreasureEnt.nRewardSpawnDist = 64
 
 	if hTreasureEnt.RoomReward ~= nil then
-		self:SpawnRoomReward( hTreasureEnt )
+		self:SpawnRoomReward( hTreasureEnt, hPlayerHero )
 		return
 	end
 
@@ -260,7 +264,7 @@ end
 ---------------------------------------------------------------------------
 
 
-function CAghanim:SpawnRoomReward( hTreasureEnt )
+function CAghanim:SpawnRoomReward( hTreasureEnt, hPlayerHero )
 	if hTreasureEnt.Encounter == nil then
 		return
 	end
@@ -279,7 +283,7 @@ function CAghanim:SpawnRoomReward( hTreasureEnt )
 			local vPos = self:GetBreakableRewardSpawnPos( hTreasureEnt )
 			newItem:LaunchLoot( true, 300, 0.5, vPos )
 		else
-			hTreasureEnt.Encounter:DropItemFromRoomRewardContainer( hTreasureEnt, szReward, false )
+			hTreasureEnt.Encounter:DropItemFromRoomRewardContainer( hTreasureEnt, szReward, false, hPlayerHero )
 		end
 
 		EmitSoundOn( "Dungeon.TreasureItemDrop", hTreasureEnt )

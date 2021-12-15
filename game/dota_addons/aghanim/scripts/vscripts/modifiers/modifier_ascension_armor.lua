@@ -1,6 +1,13 @@
 
 modifier_ascension_armor = class({})
 
+--------------------------------------------------------------------------------
+
+function modifier_ascension_armor:GetTexture()
+	return "file://{images}/events/aghanim/interface/hazard_armor.png"
+end
+
+
 -----------------------------------------------------------------------------------------
 
 function modifier_ascension_armor:constructor()

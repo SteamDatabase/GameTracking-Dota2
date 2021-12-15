@@ -23,7 +23,7 @@ end
 function BehaviorNone:Begin()
 
 	local orders = nil
-	local hTarget = AICore:ClosestEnemyHeroInRange( thisEntity, 1000 )
+	local hTarget = AICore:ClosestEnemyHeroInRange( thisEntity, 1000, false, true )
 	if hTarget ~= nil then
 		thisEntity.lastTargetPosition = hTarget:GetAbsOrigin()
 		hTarget:MakeVisibleDueToAttack( DOTA_TEAM_BADGUYS, 100 )

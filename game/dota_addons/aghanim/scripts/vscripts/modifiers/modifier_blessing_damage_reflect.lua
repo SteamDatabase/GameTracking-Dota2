@@ -19,7 +19,10 @@ function modifier_blessing_damage_reflect:DeclareFunctions()
 	}
 	return funcs
 end
-
+--------------------------------------------------------------------------------
+function modifier_blessing_damage_reflect:IsPermanent()
+	return true
+end
 --------------------------------------------------------------------------------
 
 function modifier_blessing_damage_reflect:OnTakeDamage( params )

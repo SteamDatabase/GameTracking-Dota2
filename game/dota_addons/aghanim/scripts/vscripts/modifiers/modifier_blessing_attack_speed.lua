@@ -9,6 +9,11 @@ function modifier_blessing_attack_speed:OnBlessingCreated( kv )
 end
 
 --------------------------------------------------------------------------------
+function modifier_blessing_attack_speed:IsPermanent()
+	return true
+end
+
+--------------------------------------------------------------------------------
 
 function modifier_blessing_attack_speed:DeclareFunctions()
 	local funcs = 

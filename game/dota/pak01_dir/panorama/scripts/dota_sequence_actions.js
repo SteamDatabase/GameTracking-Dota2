@@ -117,3 +117,29 @@ AnimateEntityInputAction.prototype.finish = function ()
 {
 	this.scenePanel.FireEntityInput( this.entityName, this.entityInput, this.endValue );
 }
+
+
+// ----------------------------------------------------------------------------
+//  StartDuckingUIMusicAction / StopDuckingUIMusicAction
+// 
+//  Starts/stops ducking all UI music. Quack
+// ----------------------------------------------------------------------------
+function StartDuckingUIMusicAction( panel )
+{
+	this.panel = panel;
+}
+StartDuckingUIMusicAction.prototype = new BaseAction();
+StartDuckingUIMusicAction.prototype.start = function()
+{
+	SetDuckingUIMusic( this.panel, true );
+}
+
+function StopDuckingUIMusicAction( panel )
+{
+	this.panel = panel;
+}
+StopDuckingUIMusicAction.prototype = new BaseAction();
+StopDuckingUIMusicAction.prototype.start = function()
+{
+	SetDuckingUIMusic( this.panel, false );
+}

@@ -25,7 +25,8 @@ end
 -----------------------------------------------------------------------------
 
 function baby_ogre_tank_melee_smash:GetPlaybackRateOverride()
-	return math.min( 2.0, math.max( self:GetCaster():GetHasteFactor(), 0.75 ) )
+	local flPlaybackRate = math.min( 2.0, math.max( self:GetCaster():GetHasteFactor(), 0.5 ) )
+	return flPlaybackRate
 end
 
 -----------------------------------------------------------------------------
@@ -33,7 +34,7 @@ end
 function baby_ogre_tank_melee_smash:OnSpellStart()
 	if IsServer() then
 		EmitSoundOn( "OgreTank.Grunt", self:GetCaster() )
-		local flSpeed = self:GetSpecialValueFor( "base_swing_speed" ) / self:GetPlaybackRateOverride()
+		local flSpeed = ( self:GetSpecialValueFor( "base_swing_speed" ) / self:GetPlaybackRateOverride() ) - ( self:GetSpecialValueFor( "base_swing_speed" ) * ( 1 - self:GetCastPointModifier() ) )
 		local vToTarget = self:GetCursorPosition() - self:GetCaster():GetOrigin()
 		vToTarget = vToTarget:Normalized()
 		local vTarget = self:GetCaster():GetOrigin() + vToTarget * self:GetCastRange( self:GetCaster():GetOrigin(), nil )

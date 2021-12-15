@@ -107,7 +107,7 @@ function modifier_storegga_avalanche_thinker:OnIntervalThink()
 			ParticleManager:SetParticleControl( ava.nFX, 0, vNewPos )
 
 
-			local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), vNewPos, nil, self.radius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
+			local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), vNewPos, nil, self.radius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
 			for _,enemy in pairs( enemies ) do
 				if enemy ~= nil and enemy:IsInvulnerable() == false and enemy:IsMagicImmune() == false then
 					local damageInfo =

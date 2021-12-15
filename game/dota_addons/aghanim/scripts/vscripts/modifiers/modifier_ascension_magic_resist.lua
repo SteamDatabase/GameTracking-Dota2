@@ -7,6 +7,12 @@ function modifier_ascension_magic_resist:IsPurgable()
 	return false
 end
 
+--------------------------------------------------------------------------------
+
+function modifier_ascension_magic_resist:GetTexture()
+	return "events/aghanim/interface/hazard_magicresist"
+end
+
 ----------------------------------------
 
 function modifier_ascension_magic_resist:OnCreated( kv )

@@ -45,15 +45,16 @@ $ORIGIN
 %-8i
 %.0f pct of time accounted for
 %.18g
-%.2f
 %0*llx bytes at %0*llx is the largest open user-space VA region%s
 %0*llx bytes of %s at %0*llx%s
 %0*llx: address after highest user-space virtual region
+%02d: %u:0x%llx
 %08x %s size %08x
 %12.3f %12.2f
 %14.3f %12.2f
 %14s %10s
-%2d.%03d
+%2u - proc %2u (grp %u:%-2u / phy %u / cor %u / smt %u): max freq %llu
+%3d - grp %u:%u / phy %d / cor %d / smt %d, max freq %llu
 %3u:%3u bytes at pos %8u, savings %7u bytes |
 %4.2f %%
 %52.52s%12d%12.3f%12.3f%7.2f%12.3f%7.2f%12.3f%12.3f%12.3f%12.3f
@@ -69,8 +70,6 @@ $ORIGIN
 %d total counted strings.
 %d.
 %d.%d.%d.%d:%d
-%d:%02d.%03d
-%d:%02d:%02d.%03d
 %f %f %f %f
 %g
 %hd
@@ -88,6 +87,7 @@ $ORIGIN
 %p::%p:%d
 %s %c%s
 %s %d
+%s %d: proc %d (group %u:%u)
 %s %i %s
 %s %s
 %s %s %s %s
@@ -106,6 +106,7 @@ $ORIGIN
 %s not expected here.  Missing ':'?
 %s not expected here; expected string for key name or '}'
 %s not expected here; missing value?
+%s slot %d combined mask %u:0x%llx
 %s specified, allocating %d MB%s
 %s test: multithread interleaved push/pop, %s
 %s test: multithread push, multithread pop, %s
@@ -120,13 +121,13 @@ $ORIGIN
 %s#%d
 %s%d
 %s%s
-%s(%d%%) %s
 %s():%s
 %s,
 %s/
 %s/%d
 %s/source_engine_%u.lock
 %s: %s
+%s: Invalid lock state %d
 %s: Unable to get executable filename (%d byte buffer).
 %s: Unable to load SDL
 %s: Unable to progress %d jobs to finished state (%llums elapsed)
@@ -279,11 +280,15 @@ $ORIGIN
 'true'
 (
 ( def. "%s" )
+(%d)
+(%d,%d)
+(%s%s)
 (*%s*),
 (DISABLED)
 (Missing)
 (None)
 (Unaccounted)
+(forced)
 (including user space up to 63 bits)
 (main)
 (no name set)
@@ -327,13 +332,13 @@ $ORIGIN
 -assertbreak
 -attachtodebugger
 -breakimmediately
--clearassertstate
 -debug_exitprocess
 -debugbreak
 -dedicated
 -disable_affinity_preferences
 -emaildumps
 -etwprofile
+-fake_mixed_cpu_mode
 -force_battery_level
 -force_battery_level_battery
 -force_dpi
@@ -362,6 +367,7 @@ $ORIGIN
 -phased_window_create
 -profile
 -retail
+-spew_detailed_cpu_info
 -start_resource_profiling
 -t
 -testmode
@@ -374,17 +380,10 @@ $ORIGIN
 .%c
 ............|
 ../
-../public/ordered_constructor.h
 ../public/tier0/globallist.h
 ../public/tier0/memstack.h
-../public/tier0/quantizedfloatencoder.h
-../public/tier0/threadtools.h
+../public/tier0/threadtoolstypes.h
 ../public/tier0/tslist.h
-../public/tier0/utlblockmemory.h
-../public/tier0/utlfixedmemory.h
-../public/tier0/utlleanvector.h
-../public/tier0/utllinkedlist.h
-../public/tier0/utlrbtree.h
 ../public/tier0/utltshash.h
 .\
 /
@@ -671,8 +670,21 @@ AbsolutePoseControl
 Access of unconnected ConVarRef
 Access of unconnected SplitScreenConVarRef
 AddCompletionCallback
-AddRef
-AllocInternal
+Affinity preferences: %d logical processors, limiting to %d
+Affinity preferences: %d speeds, preference split at sort index %d
+Affinity preferences: '%s' thread assigned to all-procs mask %u:0x%llx
+Affinity preferences: '%s' thread assigned to proc mask %u:0x%llx (index %d)%s, next proc mask %u:0x%llx (index %d)
+Affinity preferences: all-procs gather crossed group boundary
+Affinity preferences: disabled (%u physical procs, %u logical)
+Affinity preferences: explicitly disabled
+Affinity preferences: no logical processor speed variation
+Affinity preferences: no logical processor split fit
+Affinity preferences: no per-logical-processor information
+Affinity preferences: no preferences, skipping assignment
+Affinity preferences: no-pref all-procs does not set affinity
+Affinity preferences: only one logical processor
+Affinity preferences: turned off for internal reason
+AlignedByteArray not properly aligned
 AllocUnlocked
 AllocateEvent
 Allocation error : not enough memory
@@ -794,13 +806,16 @@ C->D
 C->E
 CAddAnimNode
 CAimMatrixAnimNode
+CAnimComponentManager
 CAnimGraphGeneralSettings
 CAnimGraphSettingsManager
 CAnimMotorList
 CAnimMovementManager
+CAnimMovementUpdater
 CAnimNodeConnection
 CAnimNodeManager
 CAnimState
+CAnimUpdateSharedData
 CAnimationGraph
 CAuthPhysBody
 CAuthPhysJoint
@@ -810,6 +825,7 @@ CBlendAnimNode
 CBlockCompress::FastCompress(unsigned char const*, unsigned int, unsigned char*, unsigned int)
 CBlockCompress::FastDecompress(unsigned char const*, unsigned int, unsigned char*, unsigned int)
 CBoneMaskAnimNode
+CBufferString::%s: unsafe self pointer provided as a modification input
 CBufferString::AppendConcat(char const*, char const*, ...)
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
 CBufferString::AppendConcatV(char const*, char const*, __va_list_tag*, bool)
@@ -975,6 +991,7 @@ CDirWatcher::GetChangedFile(CUtlString*, bool)
 CDirWatcher::SetDirToWatch(char const*, unsigned int, bool)
 CDirWatcher::Stop()
 CDirectPlaybackAnimNode
+CEmitTagAction
 CEventDispatcher_Base::CEventDispatcher_Base()
 CEventDispatcher_Base::FindInsertionPoint(CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int> > const&, int)
 CEventDispatcher_Base::GetListenerNames_Base(CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int> > const&, CUtlVector<CUtlString, CUtlMemory<CUtlString, int> >*)
@@ -1021,8 +1038,6 @@ CFollowAttachmentAnimNode
 CFollowPathAnimNode
 CFootLockAnimNode
 CFootStepTriggerAnimNode
-CFormatNumber_DontUseDirectly_UseFormatNumberMacro::FormatNumberInternal(unsigned long long)
-CFormatNumber_DontUseDirectly_UseFormatNumberMacro::FormatNumberInternal64(long long)
 CFunctorCallback0
 CGaussianRandomStream::AttachToStream(IUniformRandomStream*)
 CGaussianRandomStream::CGaussianRandomStream(IUniformRandomStream*)
@@ -1103,6 +1118,8 @@ CLZSS::SafeUncompress(unsigned char*, unsigned char*, unsigned int)
 CLZSS::Uncompress(unsigned char*, unsigned char*)
 CLoggingSystem::AllocTag overflowed!
 CLookAtAnimNode
+CLookComponent
+CLookComponentUpdater
 CMemAllocSystemInitialize
 CMemoryStack %s
 CMemoryStack %s ran out of reserved memory (%u/%ukb committed) when attempting to commit %ukb additional
@@ -1135,6 +1152,8 @@ CMiniDumpComment::~CMiniDumpComment()
 CMiniDumpCommentBuilderBase::CMiniDumpCommentBuilderBase()
 CMiniDumpCommentBuilderBase::GetNextCommentBuilder()
 CMiniDumpCommentBuilderBase::~CMiniDumpCommentBuilderBase()
+CMovementComponent
+CMovementComponentUpdater
 CMoverAnimNode
 COLLISION_MODE_INITIAL_TRACE_DOWN
 COLLISION_MODE_PER_FRAME_PLANESET
@@ -1143,6 +1162,7 @@ COLLISION_MODE_USE_NEAREST_TRACE
 COLORCORRECTION_VERSION_1
 COM_TimestampedLog
 COneTimeEvent::Allocate()
+CPU information: physical %u, logical %u (fake mode %u)
 CPU_MHZ
 CParticleSystemDefinition
 CPathHelperAnimNode
@@ -1174,6 +1194,8 @@ CSingleAppInstance::CheckForOtherRunningInstances(bool, bool)
 CSingleAppInstance::CheckForRunningInstance(char const*)
 CSingleAppInstance::ShutdownInstance()
 CSingleAppInstance::~CSingleAppInstance()
+CSlopeComponent
+CSlopeComponentUpdater
 CSlopeSettings
 CSlowDownOnSlopesAnimNode
 CSolveIKChainAnimNode
@@ -1195,6 +1217,7 @@ CStackTop_ReferenceParentStack::CStackTop_ReferenceParentStack(void const* const
 CStackTop_ReferenceParentStack::ChangeReferencedStack(void const* const*, int)
 CStackTop_ReferenceParentStack::ReleaseParentStackReferences()
 CStackTop_ReferenceParentStack::~CStackTop_ReferenceParentStack()
+CStateAction
 CStopAtGoalAnimNode
 CStrAutoEncode::Clear()
 CStrAutoEncode::Copy(CStrAutoEncode const&)
@@ -1377,6 +1400,7 @@ CUtlBuffer::AccessGet(int)
 CUtlBuffer::AccessPut(int)
 CUtlBuffer::ActivateByteSwapping(bool)
 CUtlBuffer::AddNullTermination()
+CUtlBuffer::AlignBuffer(int)
 CUtlBuffer::AssumeMemory(void*, int, int, int)
 CUtlBuffer::CUtlBuffer(int, int, int)
 CUtlBuffer::CUtlBuffer(void const*, int, int)
@@ -1419,9 +1443,11 @@ CUtlBuffer::Printf(char const*, ...)
 CUtlBuffer::Put(void const*, int)
 CUtlBuffer::PutDelimitedChar(CUtlCharConversion*, char)
 CUtlBuffer::PutDelimitedString(CUtlCharConversion*, char const*)
+CUtlBuffer::PutFileContent(char const*)
 CUtlBuffer::PutJSONString(char const*)
 CUtlBuffer::PutOverflow(int)
 CUtlBuffer::PutString(char const*)
+CUtlBuffer::PutZeros(int)
 CUtlBuffer::Scanf(char const*, ...)
 CUtlBuffer::SeekGet(CUtlBuffer::SeekType_t, int)
 CUtlBuffer::SeekPut(CUtlBuffer::SeekType_t, int)
@@ -1434,6 +1460,8 @@ CUtlBuffer::Swap(CUtlMemory<unsigned char, int>&)
 CUtlBuffer::VaPrintf(char const*, __va_list_tag*)
 CUtlBuffer::VaPrintf: String overflowed buffer [%llu]
 CUtlBuffer::VaScanf(char const*, __va_list_tag*)
+CUtlBuffer::WriteToFile(char const*, bool)
+CUtlBuffer::WriteToFileIfDifferent(char const*)
 CUtlCharConversion::CUtlCharConversion(char, char const*, int, CUtlCharConversion::ConversionArray_t const*)
 CUtlCharConversion::FindConversion(char const*, int*)
 CUtlFilenameSymbolTable::FindFileName(char const*) const
@@ -1765,9 +1793,9 @@ CatchAndWriteMiniDumpEx
 CatchAndWriteMiniDumpExForVoidPtrFn
 CatchAndWriteMiniDumpExReturnsInt
 CatchAndWriteMiniDumpForVoidPtrFn
-ChangeSize
 Channel Name
 CharacterSetBuild
+CheckForUnsafeInputString
 Client Game
 Client Input/Output
 Client Physics
@@ -1859,6 +1887,7 @@ DeveloperVerbose
 Dictionary is corrupted
 Dictionary mismatch
 Diff
+DoAssertDialog: invalid Assert response returned from dialog/vxconsole - breaking to debugger
 DotaCardGameClient_001
 Double-register of KV3 conversion (from '%s' to '%s')
 Dumps information about all logging channels.
@@ -2082,7 +2111,6 @@ GetSymbolNameFromAddress
 GetThreadedLoadLibraryFunc
 GetWin32ConsoleCursorColumnIndex
 GlobPool
-Grow
 GrowByChunks
 H
 H@
@@ -2109,7 +2137,6 @@ Help Text
 HelpSystem_001
 Hit end of input before closing quote (%c)
 Hit end of line before closing quote (%c)
-HookUpConfigValue
 HostStateMgr001
 I
 IAssertionFailureListener::AssertionFailure()
@@ -2333,6 +2360,7 @@ LoadKV3FromKV3OrKV1(KeyValues3*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char 
 LoadKV3FromOldSchemaText(KeyValues3*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 LoadKV3Text_NoHeader(KeyValues3*, CUtlString*, char const*, KV3ID_t const&, char const*)
 Localize_001
+LockForWrite
 LockGlobalObjectRegistry
 Log Function Help:     log_verbosity <channel specifiers> <verbosity>    log_color <channel specifiers> <hex color>    log_flags <channel specifiers> <+/-flag>All functions are case insensitive.A channel specifier is either:1) tag specifiers: +/-tag1 +/-tag2 ...      // Narrows down to channels with & without given tags.2) channel names: name1 name2 ...           // Lists channels by name.verbosity: off, essential, default,         // Sets how verbose a channel is allowed to be.           detailed, max                     // 'off' turns all spew off                                            // 'essential' turns on vital logs                                            // 'default' turns on most messages                                            // 'detailed' allows for walls of text that are usually useful                                            // 'max' allows everythinghex color: RRGGBBAA                         // A hexadecimal color value in the order RGBA.flag: <+/->DoNotEcho                        // Enable/disable a flag to turn off echoing to the console.      <+/->ConsoleOnly                      // Enable/disable a flag to send text only to the console.e.g.    log_verbosity +console -developer verbose   // Sets minimum spew level of channels with the tag                                            // 'console' but without the tag 'developer' to 'verbose'.    log_color renderdebug bsp FFC08040      // Sets the 'renderdebug' and 'bsp' channels to the RGBA color (64, 128, 192, 255).    log_flags +developer +donotecho         // Turns on the LCF_DO_NOT_ECHO flag for all channels with the 'developer' tag.
 LoggingSystem_AddTagToChannel
@@ -2427,14 +2455,20 @@ MapListService_001
 MaterialUtils_001
 Max committed memory: %u KB out of %d KB
 MemAllocScratch
+MemAlloc_AllocAlignedFunc
 MemAlloc_AllocFunc
 MemAlloc_CallocFunc
+MemAlloc_FreeAlignedFunc
 MemAlloc_FreeFunc
 MemAlloc_GetAllocAttributesFunc
+MemAlloc_GetSizeAlignedFunc
 MemAlloc_GetSizeFunc
+MemAlloc_ReallocAlignedFunc
 MemAlloc_ReallocFunc
 MemAlloc_SetAllocAttributesFunc
+MemAlloc_StrDupFunc
 MemAlloc_StrDupWrapperFunc
+MemAlloc_WcStrDupFunc
 MemFreeScratch
 MemZeroMemory
 MeshSystem001
@@ -2474,10 +2508,8 @@ NetworkMessagesVersion001
 NetworkP2PService_001
 NetworkServerService_001
 NetworkService_001
-NetworkSystemUtilsVersion001
 NetworkSystemVersion001
 Networking
-NewNode
 Newline in string literal
 NextBot
 No Buffer
@@ -2621,6 +2653,7 @@ Plat_EndWatchdogTimer
 Plat_EnsureDirectory
 Plat_ExitProcess
 Plat_FastVerifyHardwareKey
+Plat_FatalErrorFunc
 Plat_FileExists
 Plat_FileIsReadOnly
 Plat_FileSize
@@ -2656,6 +2689,7 @@ Plat_GetMasterMobileEventHandler
 Plat_GetMemPageSize
 Plat_GetMiniDumpErrorString
 Plat_GetModuleFilename
+Plat_GetModuleFilenameNoSymlink
 Plat_GetModuleInterfaceFactory
 Plat_GetModuleProcAddress
 Plat_GetMonitorBounds
@@ -2667,7 +2701,6 @@ Plat_GetMonitorResolution
 Plat_GetOSDescriptionString
 Plat_GetOSType
 Plat_GetPageSize
-Plat_GetPagedPoolInfo
 Plat_GetPeakRSS
 Plat_GetPlatformError
 Plat_GetPowerInfo
@@ -2735,6 +2768,7 @@ Plat_MilliSecTickDiff
 Plat_MilliSecTickDiffF
 Plat_MinimizeWindow
 Plat_NeedsLowFragmentation
+Plat_NonFatalErrorFunc
 Plat_OsSpecificHandleToPlatWindow
 Plat_Printf
 Plat_QueueSteamLoginWithAccessCode
@@ -2859,7 +2893,6 @@ RecursiveLoadFromBuffer:  recursion overflow
 RegisterAssertionFailureListener
 RegisterConfigValue: Cannot register two different completion callbacks for config value "%s"!
 RegisterConfigValue: Error registering config value "%s", the hash of its name collides with another config value %s, rename it!
-RegisterConfigValue: Unknown error constructing config value "%s"!
 RegisterConfigValueInternal
 RegisterFormatConversion
 RegisterLoggingChannel
@@ -2881,6 +2914,9 @@ RenderService_001
 RenderSystemSurface001
 RenderUtils_001
 ReplaceAt
+ReportInvalidStringConversion(char const*)
+ReportInvalidStringConversion(unsigned short const*)
+ReportInvalidStringConversion(wchar_t const*)
 ReportOutOfMemory
 ReportProgress
 Resident virtual bytes: %s
@@ -2974,6 +3010,7 @@ SDL_JoystickGetAxis
 SDL_JoystickGetBall
 SDL_JoystickGetButton
 SDL_JoystickGetHat
+SDL_JoystickInstanceID
 SDL_JoystickName
 SDL_JoystickNameForIndex
 SDL_JoystickNumAxes
@@ -3083,6 +3120,10 @@ SPRITECARD_TEXTURE_CHANNEL_MIX_RGB
 SPRITECARD_TEXTURE_CHANNEL_MIX_RGBA
 SPRITECARD_TEXTURE_NORMALMAP
 SS_ADDED
+STATETAGBEHAVIOR_ACTIVE_WHILE_CURRENT
+STATETAGBEHAVIOR_FIRE_ON_ENTER
+STATETAGBEHAVIOR_FIRE_ON_ENTER_AND_EXIT
+STATETAGBEHAVIOR_FIRE_ON_EXIT
 STEAM_RUNTIME=0 LD_LIBRARY_PATH="$SYSTEM_LD_LIBRARY_PATH" PATH="$SYSTEM_PATH" /usr/bin/xdg-open
 SaveBitString
 SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*)
@@ -3207,6 +3248,7 @@ TSList cannot hold more that %d nodes
 TSPointerList Nodes
 Tags
 Test bucket %d has an invalid value %d
+TestAffinityPreferenceSlotInfo
 TestFormatA
 TestFormatB
 TestFormatC
@@ -3246,6 +3288,7 @@ Testing on %u samples of total size %u
 Tests done, purging test memory...
 TextLayout_001
 Thread failed to initialize
+Thread pool %s requested %d threads, using %u
 Thread(%p/0x%llx)
 ThreadCloseProcess
 ThreadGetCurrentHandle
@@ -3361,6 +3404,7 @@ Unknown
 Unknown (invalid)
 Unknown frame descriptor
 UnknownOS
+Unlock
 UnlockGlobalObjectRegistry
 Unrecognized flag name '%s'
 Unrecognized flag: %s.
@@ -3387,7 +3431,7 @@ UtlMemory_AllocAligned
 UtlMemory_CalcNewAllocationCount
 UtlStringFastCompareLess
 V
-VALVE_DISABLE_CLOCK_SPEED_CALCULATION
+VALVE_CLOCK_SPEED_CALCULATION
 VALVE_TESTMODE
 VAsyncFileSystem2_001
 VAvi001
@@ -3447,11 +3491,13 @@ V_FixupPathSpaceToUnderscore
 V_GetErrno
 V_GetFileExtension
 V_GetFileExtensionSafe
+V_GetPathForm
 V_GetPathOriginLength
 V_GetProcessUtils
 V_GetUTF8BytesNeeded(char const*, int)
 V_GetUTF8BytesNeeded(unsigned short const*, int)
 V_GetUTF8BytesNeeded(wchar_t const*, int)
+V_GetVPKPathForm
 V_Get_stderr
 V_Get_stdin
 V_Get_stdout
@@ -3656,6 +3702,8 @@ V_isalpha_str_fast
 V_isbreakablewspace
 V_isbreakablewspace32
 V_isdigit_str
+V_isfinited
+V_isinfd
 V_isnand
 V_isstrlower_fast
 V_isvalidhex
@@ -4100,6 +4148,9 @@ _V_wcsncpy_bytes
 _Warning_AlwaysSpewCallStack_Enable
 _Warning_AlwaysSpewCallStack_Length
 __bss_start
+__ctype_b_loc
+__ctype_tolower_loc
+__ctype_toupper_loc
 __cxa_atexit
 __cxa_finalize
 __cxa_guard_acquire
@@ -4107,15 +4158,18 @@ __cxa_guard_release
 __cxa_pure_virtual
 __environ
 __errno_location
+__finite
 __fpclassify
 __fprintf_chk
 __fxstat64
 __gmon_start__
+__isinf
 __isnan
 __lxstat64
 __oldschema_object_name
 __pthread_key_create
 __stack_chk_fail
+__temp_unserialization_member__
 __tls_get_addr
 __xstat64
 _edata
@@ -4142,6 +4196,8 @@ animgraph2
 animgraph3
 animgraph4
 animgraph5
+animgraph6
+animgraph7
 app
 appears in lower database
 application
@@ -4187,7 +4243,6 @@ breakable_count
 breakable_model
 breakable_skin
 broadcast
-buffer_string.cpp
 burst_randomize
 burst_scale
 bytes
@@ -4195,7 +4250,6 @@ c
 cable
 calloc
 cantdie
-ceil
 center
 cfg/configdefaults.linux.vcfg
 cfg/configschema.vcfg
@@ -4308,7 +4362,6 @@ flMaxDistance
 flMinDistance
 float( %f )
 float32
-floor
 fmod
 fopen64
 force
@@ -4387,6 +4440,7 @@ help
 help text
 help:  no cvar or command named %s
 hibernate.cpp
+higher
 hurt_me
 hurt_them
 hypot
@@ -4442,6 +4496,7 @@ loop_break_on_flashlight
 loop_in_action
 loopback
 looping
+lower
 lseek64
 m
 m_Bone
@@ -4481,6 +4536,7 @@ m_SolverType
 m_TargetSettingSource
 m_TargetSource
 m_TextureControls
+m_actions
 m_additiveChildID
 m_additiveInput
 m_bAdditive
@@ -4520,6 +4576,9 @@ m_child2ID
 m_childID
 m_childNodeID
 m_children
+m_componentManager
+m_components
+m_eBehavior
 m_fForceAmount
 m_fForceAmountMin
 m_fLifespanScaleExp
@@ -4597,7 +4656,9 @@ m_inputConnection
 m_inputConnection1
 m_inputConnection2
 m_items
+m_managers
 m_modelName
+m_motors
 m_nAnimationType
 m_nAttributeToWrite
 m_nBehaviorVersion
@@ -4645,16 +4706,22 @@ m_nodeID
 m_nodeManager
 m_nodes
 m_outputID
+m_pAction
 m_pBody
 m_pJointConstraintData
 m_pMovementManager
 m_pParent
+m_pSettingsManager
 m_previewModels
 m_pszSnapshotName
+m_settings
 m_settingsGroups
 m_snapshotName
 m_subtractChildID
 m_subtractInputConnection
+m_tag
+m_tagBehaviors
+m_tags
 m_useCurl
 m_vCPValueScale
 m_vEndTrailTintFactor
@@ -4911,7 +4978,6 @@ spawn_motion_disabled
 speed
 sprintf
 sqrt
-srand
 ss_added
 stacktools.cpp
 statistics ...
@@ -4991,6 +5057,7 @@ typeinfo name for CThreadSyncObject
 typeinfo name for CUniformRandomStream
 typeinfo name for CUtlCharConversion
 typeinfo name for IKeyValuesDumpContextAsText
+tzset
 u
 u64( %lld = 0x%llX )
 ugc:
@@ -5007,7 +5074,6 @@ use_additional_offset
 usleep
 utlmemoryarena.cpp
 utlobjectregistry.cpp
-utlstring.cpp
 utlstringtokensystem.cpp
 uuid_generate
 v

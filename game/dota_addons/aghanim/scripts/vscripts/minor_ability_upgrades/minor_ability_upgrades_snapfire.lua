@@ -1,20 +1,23 @@
 local Snapfire =
 {
 	{
-		 description = "aghsfort_snapfire_scatterblast_pct_mana_cost",
-		 ability_name = "aghsfort_snapfire_scatterblast",
-		 special_value_name = "mana_cost",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 15,
+		description = "aghsfort_snapfire_scatterblast_mana_cost_cooldown",
+		ability_name = "aghsfort_snapfire_scatterblast",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
-	{
-		 description = "aghsfort_snapfire_scatterblast_pct_cooldown",
-		 ability_name = "aghsfort_snapfire_scatterblast",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
-	},
 
 	{
 		 description = "aghsfort_snapfire_scatterblast_flat_damage",
@@ -41,19 +44,39 @@ local Snapfire =
 	},
 
 	{
-		 description = "aghsfort_snapfire_firesnap_cookie_pct_cooldown",
-		 ability_name = "aghsfort_snapfire_firesnap_cookie",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
+		description = "aghsfort_snapfire_firesnap_cookie_mana_cost_cooldown",
+		ability_name = "aghsfort_snapfire_firesnap_cookie",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
 	{
-		 description = "aghsfort_snapfire_firesnap_cookie_flat_jump_horizontal_distance",
-		 ability_name = "aghsfort_snapfire_firesnap_cookie",
-		 special_value_name = "jump_horizontal_distance",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 150,
+		description = "aghsfort_snapfire_firesnap_cookie_distance_radius",
+		ability_name = "aghsfort_snapfire_firesnap_cookie",
+		special_values =
+		{
+			{
+				special_value_name = "jump_horizontal_distance",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 150,
+			},
+			{
+				special_value_name = "impact_radius",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 85,
+			},
+		},
 	},
 
 	{
@@ -73,20 +96,23 @@ local Snapfire =
 	},
 
 	{
-		 description = "aghsfort_snapfire_firesnap_cookie_flat_impact_radius",
-		 ability_name = "aghsfort_snapfire_firesnap_cookie",
-		 special_value_name = "impact_radius",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 85,
+		description = "aghsfort_snapfire_lil_shredder_mana_cost_cooldown",
+		ability_name = "aghsfort_snapfire_lil_shredder",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
 
-	{
-		 description = "aghsfort_snapfire_lil_shredder_pct_cooldown",
-		 ability_name = "aghsfort_snapfire_lil_shredder",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
-	},
 
 	{
 		 description = "aghsfort_snapfire_lil_shredder_flat_damage",
@@ -105,28 +131,42 @@ local Snapfire =
 	},
 
 	{
-		 description = "aghsfort_snapfire_lil_shredder_flat_attack_range_bonus",
-		 ability_name = "aghsfort_snapfire_lil_shredder",
-		 special_value_name = "attack_range_bonus",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 100,
+		description = "aghsfort_snapfire_lil_shredder_attack_range_speed",
+		ability_name = "aghsfort_snapfire_lil_shredder",
+		special_values =
+		{
+			{
+				special_value_name = "attack_range_bonus",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 75,
+			},
+			{
+				special_value_name = "attack_speed_bonus",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 75,
+			},
+		},
 	},
 
-	{
-		 description = "aghsfort_snapfire_lil_shredder_flat_attack_speed_bonus",
-		 ability_name = "aghsfort_snapfire_lil_shredder",
-		 special_value_name = "attack_speed_bonus",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 150,
-	},
 
 	{
-		 description = "aghsfort_snapfire_mortimer_kisses_pct_cooldown",
-		 ability_name = "aghsfort_snapfire_mortimer_kisses",
-		 special_value_name = "cooldown",
-		 operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-		 value = 12,
+		description = "aghsfort_snapfire_mortimer_kisses_mana_cost_cooldown",
+		ability_name = "aghsfort_snapfire_mortimer_kisses",
+		special_values =
+		{
+			{
+				special_value_name = "mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "cooldown",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+		},
 	},
+	
 
 	{
 		 description = "aghsfort_snapfire_mortimer_kisses_flat_projectile_count",
