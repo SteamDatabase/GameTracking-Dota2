@@ -185,16 +185,11 @@ end
 --------------------------------------------------------------------------------
  
 function CBossPrimalBeast:OnBossBeastThink()
-	if self.bDefeated then
-		return -1
-	end
-
 	if thisEntity.bStarted ~= true then
 		return 0.25
 	end
 
 	if self.bInVictorySequence then
-		self.Encounter.bInVictorySequence = true 
 		return -1
 	end
 

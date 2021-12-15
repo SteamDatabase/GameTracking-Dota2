@@ -285,7 +285,7 @@ _G.MAP_ATLAS =
 		encounters =
 		{
 			"encounter_boss_dark_willow",
-			"encounter_boss_winter_wyvern",
+			--"encounter_boss_winter_wyvern",
 			"encounter_boss_earthshaker",
 			"encounter_boss_rizzrick",
 		},

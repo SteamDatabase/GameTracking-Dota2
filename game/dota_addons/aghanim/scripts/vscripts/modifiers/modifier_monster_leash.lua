@@ -16,6 +16,12 @@ end
 
 --------------------------------------------------------------------------------
 
+function modifier_monster_leash:IsPurgable()
+	return false
+end
+
+--------------------------------------------------------------------------------
+
 function modifier_monster_leash:OnCreated( kv )
 	if IsServer() then
 		self.flKillStartTime = -1
@@ -24,7 +30,7 @@ function modifier_monster_leash:OnCreated( kv )
 		self.bProvideVision = false
 		self.fProvideVisionTime = TIME_BEFORE_PROVIDE_VISION
 
-		self.bHubDevWarnAboutMonsterLeash = false
+		self.nLeashCounter = 0
 
 		self:StartIntervalThink( 0.01 )
 	end
@@ -61,33 +67,47 @@ function modifier_monster_leash:OnIntervalThink()
 
 	local vOrigin = self:GetParent():GetAbsOrigin()
 	local vClampedPos = hEncounter:GetRoom():ClampPointToRoomBounds( vOrigin, 128.0 )
-	if vOrigin ~= vClampedPos and self.bHubDevWarnAboutMonsterLeash == false then
+	if ( vOrigin - vClampedPos ):Length2D() > 1.0 then
+		-- in a bad position.
 		
-		FindClearSpaceForUnit( self:GetParent(), vClampedPos, true )
+		if self.nLeashCounter < 2 then
+			self.flKillStartTime = -1
 
-		if GetMapName() == "hub" then
+			local flBorder = 128.0		
+			if self.nLeashCounter == 1 then
+				flBorder = 1024.0
+			end
+			vClampedPos = hEncounter:GetRoom():ClampPointToRoomBounds( vOrigin, flBorder )
+
+			FindClearSpaceForUnit( self:GetParent(), vClampedPos, true )
+			
+			self.nLeashCounter = self.nLeashCounter + 1
+
 			print( "teleporting unit via monster leash: " .. self:GetParent():GetUnitName() )
+			print( "Leash counter: " .. self.nLeashCounter )
 			print( "from " .. tostring( vOrigin ) .. " to " .. tostring( vClampedPos ) )
 			print( "room maxes: " .. tostring( hEncounter:GetRoom():GetMaxs() ) )
 			print( "room mins: " .. tostring( hEncounter:GetRoom():GetMins() ) )
-			self.bHubDevWarnAboutMonsterLeash = true
-		end
-	end
 
-	if vOrigin.z > -1000 then
-		self.flKillStartTime = -1
+			return
+		else
+			if self.flKillStartTime < 0 then
+				self.flKillStartTime = GameRules:GetGameTime()
+			end
+		end
+	else
+		self.nLeashCounter = 0
 		return
 	end
 
-	if self.flKillStartTime < 0 then
-		self.flKillStartTime = GameRules:GetGameTime()
-	end
+	
 
 	--print ("killcountdown = ", self.killcountdown )
 	-- only kill the unit if they are in a bad position for 3 seconds, 
 	-- to make sure it's not a weird flying unit thing that is actually behaving legally.
 	if ( GameRules:GetGameTime() - self.flKillStartTime ) >= 3 and self:GetParent():GetUnitName() ~= "npc_dota_creature_aghsfort_primal_beast_boss" then
-		SendToServerConsole( "say *** KILLING ROGUE UNIT " .. self:GetParent():GetUnitName() .. " at " .. tostring( vOrigin ) )
+		--SendToServerConsole( "say *** KILLING ROGUE UNIT " .. self:GetParent():GetUnitName() .. " at " .. tostring( vOrigin ) )
+		print( "*** KILLING ROGUE UNIT " .. self:GetParent():GetUnitName() .. " at " .. tostring( vOrigin ) )
 		self:GetParent():ForceKill( false )
 
 		self:Destroy()

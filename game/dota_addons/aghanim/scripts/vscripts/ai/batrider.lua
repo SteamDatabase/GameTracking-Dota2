@@ -198,7 +198,16 @@ end
 
 function Patrol()
 	if thisEntity:GetInitialGoalEntity() == nil then
-		local hWaypoint = Entities:FindByClassnameNearest( "path_track", thisEntity:GetOrigin(), 2000.0 )
+		--local hWaypoint = Entities:FindByClassnameNearest( "path_track", thisEntity:GetOrigin(), 2000.0 )
+		local EntityNames = 
+			{
+				"batrider_patrol_a_1",
+				"batrider_patrol_b_1",
+				"batrider_patrol_c_1",
+			}	
+		local nRandom = RandomInt(1,3)
+		local szEntityName = EntityNames[nRandom]
+		local hWaypoint = Entities:FindByName( nil, szEntityName )
 		if hWaypoint ~= nil then
 			--print( "Patrolling to " .. hWaypoint:GetName() )
 			thisEntity:SetInitialGoalEntity( hWaypoint )

@@ -70,6 +70,7 @@ function modifier_primal_beast_cinematic_controller:OnDeathPrevented( params )
 			self:GetParent():Interrupt()
 			--GameRules.Aghanim:GetAnnouncer():SetServerAuthoritative( true )
 			self:GetParent().AI.bInVictorySequence = true 
+			self:GetParent().AI.Encounter.bInVictorySequence = true -- don't depend on the AI to set this.
 		end
 	end
 end
