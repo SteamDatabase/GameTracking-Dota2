@@ -1,6 +1,7 @@
 boss_winter_wyvern_cold_embrace = class({})
-LinkLuaModifier( "modifier_boss_winter_wyvern_cold_embrace_debuff", "modifiers/creatures/modifier_boss_winter_wyvern_cold_embrace_debuff", LUA_MODIFIER_MOTION_NONE )
-LinkLuaModifier( "modifier_boss_winter_wyvern_cold_embrace_thinker", "modifiers/creatures/modifier_boss_winter_wyvern_cold_embrace_thinker", LUA_MODIFIER_MOTION_NONE )
+-- Modifiers done in C++ now
+--[[LinkLuaModifier( "modifier_boss_winter_wyvern_cold_embrace_debuff", "modifiers/creatures/modifier_boss_winter_wyvern_cold_embrace_debuff", LUA_MODIFIER_MOTION_NONE )
+LinkLuaModifier( "modifier_boss_winter_wyvern_cold_embrace_thinker", "modifiers/creatures/modifier_boss_winter_wyvern_cold_embrace_thinker", LUA_MODIFIER_MOTION_NONE )--]]
 
 -------------------------------------------------------------------------------
 

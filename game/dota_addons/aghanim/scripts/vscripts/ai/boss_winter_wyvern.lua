@@ -160,7 +160,7 @@ function CBossWinterWyvern:SetupAbilitiesAndItems()
 
 	self.hShatterBlast = self.me:FindAbilityByName( "ice_boss_shatter_projectile" )
 	if self.hShatterBlast ~= nil then
-		self.hShatterBlast.Evaluate = self.EvaluteShatterBlast
+		self.hShatterBlast.Evaluate = self.EvaluateShatterBlast
 		self.AbilityPriority[ self.hShatterBlast:GetAbilityName() ] = 6
 	end
 end
@@ -323,7 +323,7 @@ end
 
 --------------------------------------------------------------------------------
 
-function CBossWinterWyvern:EvaluteShatterBlast()
+function CBossWinterWyvern:EvaluateShatterBlast()
 	if self:GetPhase() ~= BOSS_WYVERN_PHASE_ON_GROUND then 
 		return nil 
 	end

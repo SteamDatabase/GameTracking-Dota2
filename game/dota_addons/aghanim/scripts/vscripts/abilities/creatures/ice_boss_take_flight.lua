@@ -21,6 +21,8 @@ end
 
 function ice_boss_take_flight:OnSpellStart()
 	if IsServer() then
+		self:GetCaster():Purge( false, true, false, true, false )
+
 		EmitSoundOn( "Hero_Winter_Wyvern.ArcticBurn.Cast", self:GetCaster() )
 
 		local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_winter_wyvern/wyvern_arctic_burn_start.vpcf", PATTACH_CUSTOMORIGIN, self:GetCaster() )

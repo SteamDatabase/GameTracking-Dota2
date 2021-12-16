@@ -285,7 +285,7 @@ _G.MAP_ATLAS =
 		encounters =
 		{
 			"encounter_boss_dark_willow",
-			--"encounter_boss_winter_wyvern",
+			"encounter_boss_winter_wyvern",
 			"encounter_boss_earthshaker",
 			"encounter_boss_rizzrick",
 		},
@@ -573,7 +573,7 @@ _G.MAP_ATLAS =
 		encounters =
 		{
 			"encounter_hidden_colosseum",
-			--"encounter_frozen_ravine",
+			"encounter_frozen_ravine",
 
 			--Traps
 			"encounter_palace_traps",

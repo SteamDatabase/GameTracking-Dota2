@@ -304,7 +304,6 @@ var OnAghanimDeviceActivate = function()
 
 	var ModelHelp = $( '#ModelHelp' );
 	
-
 	deviceModel.SetAnimgraphParameterOnEntityInt( 'conundrum', 'mouseover', 2 );
 	deviceModel.FireEntityInput( 'device_active_fx', 'stop', 0 );
 	deviceModel.FireEntityInput( 'device_active_fx', 'start', 0 );
@@ -312,10 +311,6 @@ var OnAghanimDeviceActivate = function()
 	aghanimModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
 
 	ModelContainer.RemoveClass( "HelpMe" );
-	$.Schedule( 0.1, function () { ModelContainer.AddClass( "HelpMe" ); } );
-	
-	//var guess = "red";
-	//var Speech = null;
 	
 	var SpeechChoice = [ 
 		"DOTA_Aghanim_FrontPageSpeech1",
@@ -340,9 +335,8 @@ var OnAghanimDeviceActivate = function()
 	Roshanaghanim: ...
 	Aghanim the Wisest: What a pack of donkeys...*/
 
-	//var index = Math.floor(Math.random() * SpeechChoice.length);
-
-	ModelHelp.text = SpeechChoice[g_nCurrentModelIndex];
+	nCurrentModelIndex = g_nCurrentModelIndex;
+	$.Schedule(0.1, function () { ModelContainer.AddClass( "HelpMe" ); ModelHelp.text = SpeechChoice[ nCurrentModelIndex ]; });
 
 	SetToNextModel();
 }

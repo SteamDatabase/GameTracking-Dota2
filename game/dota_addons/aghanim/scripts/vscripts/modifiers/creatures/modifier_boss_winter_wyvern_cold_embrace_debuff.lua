@@ -1,3 +1,4 @@
+
 modifier_boss_winter_wyvern_cold_embrace_debuff = class({})
 
 -------------------------------------------------------------------------------
@@ -15,6 +16,7 @@ function modifier_boss_winter_wyvern_cold_embrace_debuff:OnCreated( kv )
 	if IsServer() then 
 		self:OnIntervalThink()
 		self:StartIntervalThink( 1.0 )
+
 		local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_winter_wyvern/wyvern_splinter_blast_slow.vpcf", PATTACH_CUSTOMORIGIN, self:GetParent() )
 		ParticleManager:SetParticleControlEnt( nFXIndex, 0, self:GetParent(), PATTACH_ABSORIGIN_FOLLOW, nil, self:GetParent():GetAbsOrigin(), true )
 		ParticleManager:SetParticleControlEnt( nFXIndex, 1, self:GetParent(), PATTACH_POINT_FOLLOW, "attach_hitloc", self:GetParent():GetAbsOrigin(), true )
@@ -30,6 +32,7 @@ function modifier_boss_winter_wyvern_cold_embrace_debuff:DeclareFunctions()
 	{
 		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
 	}
+
 	return funcs
 end
 
@@ -45,6 +48,7 @@ function modifier_boss_winter_wyvern_cold_embrace_debuff:OnIntervalThink()
 	if IsServer() == false then 
 		return 
 	end
+
 	local damageInfo = 
 	{
 		victim = self:GetParent(),

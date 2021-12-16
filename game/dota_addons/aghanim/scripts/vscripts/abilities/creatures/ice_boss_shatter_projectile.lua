@@ -42,7 +42,8 @@ function ice_boss_shatter_projectile:OnSpellStart()
 		ParticleManager:DestroyParticle( self.nPreviewFX, false )
 		EmitSoundOn( "Hero_Winter_Wyvern.SplinterBlast.Cast", self:GetCaster() )
 		self.initial_projectile_speed = self:GetSpecialValueFor( "initial_projectile_speed" )
-		self.initial_projectile_radius = self:GetSpecialValueFor( "initial_projectile_radius" )
+		self.projectile_start_radius = self:GetSpecialValueFor( "projectile_start_radius" )
+		self.projectile_end_radius = self:GetSpecialValueFor( "projectile_end_radius" )
 		self.burst_distance = self:GetSpecialValueFor( "burst_distance" )
 		self.shatter_damage = self:GetSpecialValueFor( "shatter_damage" )
 		self.shatter_num_projectiles = self:GetSpecialValueFor( "shatter_num_projectiles" )
@@ -61,14 +62,14 @@ function ice_boss_shatter_projectile:OnSpellStart()
 		vDirection.z = 0.0
 		vDirection = vDirection:Normalized()
 
-		local nAttachmentID = self:GetCaster():ScriptLookupAttachment( "attach_attack1" )
+		local nAttachmentID = self:GetCaster():ScriptLookupAttachment( "attach_hitloc" )
 
 		local info = {
 			EffectName = "particles/units/heroes/hero_puck/puck_illusory_orb.vpcf", 
 			Ability = self,
 			vSpawnOrigin = self:GetCaster():GetAttachmentOrigin( nAttachmentID ), 
-			fStartRadius = self.initial_projectile_radius,
-			fEndRadius = self.initial_projectile_radius,
+			fStartRadius = self.projectile_start_radius,
+			fEndRadius = self.projectile_end_radius,
 			vVelocity = vDirection * self.initial_projectile_speed,
 			fDistance = self.burst_distance,
 			Source = self:GetCaster(),
@@ -112,16 +113,24 @@ function ice_boss_shatter_projectile:OnProjectileHitHandle( hTarget, vLocation, 
 			EmitSoundOnLocationWithCaster( vLocation, "Hero_Winter_Wyvern.SplinterBlast.Target", self:GetCaster() )
 		else
 			if hTarget ~= nil and hTarget:IsMagicImmune() == false and hTarget:IsInvulnerable() == false then
+				printf( "ice_boss_shatter_projectile:OnProjectileHitHandle - hitting target \"%s\"", hTarget:GetUnitName() )
+
+				local fDamage = self:GetSpecialValueFor( "shatter_damage" )
+
+				--printf( "fDamage: %.1f", fDamage )
+
 				local damageInfo =
 				{
 					victim = hTarget,
 					attacker = self:GetCaster(),
-					damage = self:GetSpecialValueFor( "shatter_damage" ),
+					damage = fDamage,
 					damage_type = DAMAGE_TYPE_MAGICAL,
 					ability = self,
 				}
 				ApplyDamage( damageInfo )
+
 				hTarget:AddNewModifier( self:GetCaster(), self, "modifier_winter_wyvern_splinter_blast_slow", { duration = self.slow_duration })
+
 				EmitSoundOn( "Hero_Winter_Wyvern.SplinterBlast.Splinter", hTarget )
 			end
 		end

@@ -103,6 +103,7 @@ function modifier_ice_boss_take_flight:CheckState()
 		[MODIFIER_STATE_NO_UNIT_COLLISION] = true,
 		[MODIFIER_STATE_DISARMED] = true,
 		[MODIFIER_STATE_UNSELECTABLE] = true,
+		[MODIFIER_STATE_INVULNERABLE] = true,
 	}
 
 	return state

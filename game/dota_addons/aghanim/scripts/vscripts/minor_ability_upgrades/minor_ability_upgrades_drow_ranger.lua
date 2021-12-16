@@ -12,7 +12,7 @@ local DrowRanger =
 		 ability_name = "aghsfort2_drow_ranger_frost_arrows",
 		 special_value_name = "damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 15,
+		 value = 10,
 	},
 	{
 		 description = "aghsfort2_drow_ranger_frost_arrows_frost_arrows_movement_speed",
@@ -73,7 +73,7 @@ local DrowRanger =
 	   ability_name = "aghsfort2_drow_ranger_multishot",
 	   special_value_name = "arrow_damage_pct",
 	   operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-	   value = 20,
+	   value = 15,
 	},
 	{
 		description = "aghsfort2_drow_ranger_multishot_mana_cost_cooldown",
@@ -98,7 +98,7 @@ local DrowRanger =
 		ability_name = "aghsfort2_drow_ranger_marksmanship",
 		special_value_name = "bonus_damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 50,
+		value = 30,
 	},
 	{
 		description = "aghsfort2_drow_ranger_marksmanship_bonus_range",
@@ -136,7 +136,7 @@ local DrowRanger =
 		ability_name = "aghsfort2_drow_ranger_marksmanship",
 		special_value_name = "aura_agility_multiplier",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 5,
+		value = 3,
 	},
 	{
 		description = "aghsfort2_drow_ranger_marksmanship_aura_range",
