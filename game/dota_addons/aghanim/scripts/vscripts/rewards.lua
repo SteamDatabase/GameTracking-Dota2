@@ -151,15 +151,16 @@ function GetRoomRewards( nRoomDepth, bElite, nPlayerID, vecExternalExcludeList )
 	end
 
 	local MinorUpgrades = deepcopy( MINOR_ABILITY_UPGRADES[ szHeroName ] )
-	for nMinorUpgrade=#MinorUpgrades,1,-1 do
-		local Upgrade = MinorUpgrades[ nMinorUpgrade ]
-		local szUpgradeAbilityName = Upgrade[ "ability_name" ]
-		local hAbilityUpgrade = hPlayerHero:FindAbilityByName( szUpgradeAbilityName )
-		if ( hAbilityUpgrade == nil or ( hAbilityUpgrade:IsHidden() and not hAbilityUpgrade:IsAttributeBonus() ) ) then
-			-- print( "Removing upgrade " .. szUpgradeAbilityName .. " for hero " .. szHeroName )
-			table.remove( MinorUpgrades, nMinorUpgrade )
-		end
-	end
+	-- DISABLING this check. Causes a bug in trap rooms where the hero doesn't have their abilities. This was needed for minor upgrades of legendary shards, but we aren't using that.
+	-- for nMinorUpgrade=#MinorUpgrades,1,-1 do 
+	-- 	local Upgrade = MinorUpgrades[ nMinorUpgrade ]
+	-- 	local szUpgradeAbilityName = Upgrade[ "ability_name" ]
+	-- 	local hAbilityUpgrade = hPlayerHero:FindAbilityByName( szUpgradeAbilityName )
+	-- 	if ( hAbilityUpgrade == nil or ( hAbilityUpgrade:IsHidden() and not hAbilityUpgrade:IsAttributeBonus() ) ) then
+	-- 		-- print( "Removing upgrade " .. szUpgradeAbilityName .. " for hero " .. szHeroName )
+	-- 		table.remove( MinorUpgrades, nMinorUpgrade )
+	-- 	end
+	-- end
 
 	local MinorStatsUpgrades = deepcopy( MINOR_ABILITY_UPGRADES[ "base_stats_upgrades" ] )
 	for nStatUpgrade=#MinorStatsUpgrades,1,-1 do
@@ -260,7 +261,7 @@ function GetRoomRewards( nRoomDepth, bElite, nPlayerID, vecExternalExcludeList )
 					rarity = nRarity,
 				}
 
-				if nRarity == 1 then
+				if nRarity == AGHANIM_REWARD_RARITY_ELITE then
 					GeneratedReward[ "elite" ] = 1
 				else
 					GeneratedReward[ "elite" ] = 0
@@ -558,7 +559,6 @@ end
 function OnRewardReroll( eventSourceIndex, data )
 	local nPlayerID = data["player_id"]
 	local nRoomDepth = data["room_depth"]
-	local bElite = data["elite"] == "true"
 
 	local tRewardOptions = CustomNetTables:GetTableValue( "reward_options", tostring( nRoomDepth ) )
 	if tRewardOptions == nil or tRewardOptions["rarity"] == "epic" then
@@ -571,7 +571,7 @@ function OnRewardReroll( eventSourceIndex, data )
 		if ( hBuff and hBuff:GetStackCount() > 0 ) then
 			hBuff:SetStackCount( hBuff:GetStackCount() - 1 )
 			
-			local vecPlayerRewards = GetRoomRewards( nRoomDepth, bElite, nPlayerID, nil )
+			local vecPlayerRewards = GetRoomRewards( nRoomDepth, tRewardOptions["elite"] == 1, nPlayerID, nil )
 			tRewardOptions[ tostring( nPlayerID ) ] = vecPlayerRewards
 
 			local gameEvent = {}
