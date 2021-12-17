@@ -244,6 +244,7 @@ function CAghanim:InitGameMode()
 	GameRules:GetGameModeEntity():SetGiveFreeTPOnDeath( false )
 	GameRules:SetAllowOutpostBonuses( false )
 	GameRules:GetGameModeEntity():SetPlayerHeroAvailabilityFiltered( true )
+	GameRules:GetGameModeEntity():SetForcedHUDSkin( "aghanims_labyrinth_2021" )
 
  	--Temp for tesitng new lives rules
  	if AGHANIM_TIMED_RESPAWN_MODE == true then

@@ -63,7 +63,7 @@ function modifier_boss_arc_warden_shard_counter:OnIntervalThink()
 	end
 
 	self.fAccumulatedTime = self.fAccumulatedTime + self.fInterval
-	local nStacks = math.floor( self.fAccumulatedTime / self.time_per_stack )
+	local nStacks = ( math.floor( self.fAccumulatedTime / self.time_per_stack ) ) + 1
 	if nStacks <= self.max_stacks then
 		self:SetStackCount( nStacks )
 	end

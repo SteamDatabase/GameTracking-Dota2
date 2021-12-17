@@ -17,7 +17,8 @@ function aghslab_phantom_lancer_spirit_lance:OnSpellStart()
 		self.lance_distance = self:GetSpecialValueFor( "lance_distance" )
 		self.lance_damage = self:GetSpecialValueFor( "lance_damage" ) 
 		self.duration = self:GetSpecialValueFor( "duration" )
-		
+		self.num_illusions = self:GetSpecialValueFor( "num_illusions" )
+
 		local vPos = nil
 		if self:GetCursorTarget() then
 			vPos = self:GetCursorTarget():GetOrigin()
@@ -68,13 +69,17 @@ function aghslab_phantom_lancer_spirit_lance:OnProjectileHit( hTarget, vLocation
 
 			local vPos = hTarget:GetAbsOrigin()
 			local illusion_name = "npc_dota_creature_phantom_lancer_illusion"
-			local illusion_origin = vPos
-			local illusion = CreateUnitByName(illusion_name, illusion_origin, true, self:GetCaster(), nil, DOTA_TEAM_BADGUYS)
-		 	illusion:SetInitialGoalEntity( hTarget )
+			
+			for i = 1, self.num_illusions do
+				local illusion_origin = vPos + RandomVector( RandomFloat( 50, 150 ) )
+				local illusion = CreateUnitByName(illusion_name, illusion_origin, true, self:GetCaster(), nil, DOTA_TEAM_BADGUYS)
+				illusion:SetInitialGoalEntity( hTarget )
 
-		 	local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_phantom_lancer/phantomlancer_spiritlance_flash_target.vpcf", PATTACH_WORLDORIGIN, nil )
-			ParticleManager:SetParticleControl( nFXIndex, 0, illusion:GetOrigin() )
-			ParticleManager:ReleaseParticleIndex( nFXIndex )
+				local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_phantom_lancer/phantomlancer_spiritlance_flash_target.vpcf", PATTACH_WORLDORIGIN, nil )
+				ParticleManager:SetParticleControl( nFXIndex, 0, illusion:GetOrigin() )
+				ParticleManager:ReleaseParticleIndex( nFXIndex )
+			end
+	 	
 		end
 
 		return true

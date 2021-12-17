@@ -52,7 +52,6 @@ function modifier_ogre_tank_melee_smash_thinker:OnOrder( params )
 		end
 
 		if hOrderedUnit ~= nil and hOrderedUnit == self:GetCaster() then
-			printf( "caster isn't channeling, so set self.bCancelled to true" )
 			self.bCancelled = true
 			UTIL_Remove( self:GetParent() )
 

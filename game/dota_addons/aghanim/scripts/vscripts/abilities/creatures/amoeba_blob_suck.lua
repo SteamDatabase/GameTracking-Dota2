@@ -117,7 +117,7 @@ function amoeba_blob_suck:OnChannelThink( flInterval )
 		if self.fLastDamageTime == nil or ( GameRules:GetGameTime() - self.fLastDamageTime > self.burn_interval ) then
 			local hCaster = self:GetCaster()
 			if hCaster ~= nil and hCaster:IsNull() == false and hCaster:IsAlive() == true then
-				local enemies = FindUnitsInRadius( hCaster:GetTeamNumber(), hCaster:GetOrigin(), nil, self.nRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
+				local enemies = FindUnitsInRadius( hCaster:GetTeamNumber(), hCaster:GetOrigin(), nil, self.nRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NONE, FIND_CLOSEST, false )
 				for _,enemy in pairs( enemies ) do
 					if enemy ~= nil and enemy:IsInvulnerable() == false then
 						local damage = {

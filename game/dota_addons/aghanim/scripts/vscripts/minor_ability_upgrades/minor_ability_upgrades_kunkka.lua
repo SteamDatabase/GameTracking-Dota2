@@ -71,7 +71,7 @@ local minor_upgrades = {
         ability_name = "aghsfort_kunkka_torrent",
         special_value_name = "delay",
         operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-        value = -20
+        value = -25
     },
     {
         description = "aghsfort_kunkka_torrent_damage",

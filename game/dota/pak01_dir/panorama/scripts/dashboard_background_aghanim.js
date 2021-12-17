@@ -304,6 +304,7 @@ var OnAghanimDeviceActivate = function()
 
 	var ModelHelp = $( '#ModelHelp' );
 	
+
 	deviceModel.SetAnimgraphParameterOnEntityInt( 'conundrum', 'mouseover', 2 );
 	deviceModel.FireEntityInput( 'device_active_fx', 'stop', 0 );
 	deviceModel.FireEntityInput( 'device_active_fx', 'start', 0 );
@@ -311,18 +312,24 @@ var OnAghanimDeviceActivate = function()
 	aghanimModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
 
 	ModelContainer.RemoveClass( "HelpMe" );
+	$.Schedule( 0.1, function () { ModelContainer.AddClass( "HelpMe" ); } );
+	
+	//var guess = "red";
+	//var Speech = null;
 	
 	var SpeechChoice = [ 
-		"DOTA_Aghanim_FrontPageSpeech1",
-		"DOTA_Aghanim_FrontPageSpeech2",
-		"DOTA_Aghanim_FrontPageSpeech3",
-		"DOTA_Aghanim_FrontPageSpeech4",
-		"DOTA_Aghanim_FrontPageSpeech5",
-		"DOTA_Aghanim_FrontPageSpeech6",
-		"DOTA_Aghanim_FrontPageSpeech7",
-		"DOTA_Aghanim_FrontPageSpeech8",
-		"DOTA_Aghanim_FrontPageSpeech9",
-		"DOTA_Aghanim_FrontPageSpeech10" ];
+		"#DOTA_Aghanim_FrontPageSpeech1",
+		"#DOTA_Aghanim_FrontPageSpeech2",
+		"#DOTA_Aghanim_FrontPageSpeech3",
+		"#DOTA_Aghanim_FrontPageSpeech4",
+		"#DOTA_Aghanim_FrontPageSpeech5",
+		"#DOTA_Aghanim_FrontPageSpeech6",
+		"#DOTA_Aghanim_FrontPageSpeech7",
+		"#DOTA_Aghanim_FrontPageSpeech8",
+		"#DOTA_Aghanim_FrontPageSpeech9",
+		"#DOTA_Aghanim_FrontPageSpeech10",
+		"#DOTA_Aghanim_FrontPageSpeech11"
+	];
 
 	/*Barb: Save us!
 	Bath: Bring a towel!
@@ -335,8 +342,9 @@ var OnAghanimDeviceActivate = function()
 	Roshanaghanim: ...
 	Aghanim the Wisest: What a pack of donkeys...*/
 
-	nCurrentModelIndex = g_nCurrentModelIndex;
-	$.Schedule(0.1, function () { ModelContainer.AddClass( "HelpMe" ); ModelHelp.text = SpeechChoice[ nCurrentModelIndex ]; });
+	//var index = Math.floor(Math.random() * SpeechChoice.length);
+
+	ModelHelp.SetLocString( SpeechChoice[ g_nCurrentModelIndex ] );
 
 	SetToNextModel();
 }

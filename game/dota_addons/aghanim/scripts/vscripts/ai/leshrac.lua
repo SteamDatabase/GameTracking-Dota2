@@ -12,6 +12,7 @@ function Spawn( entityKeyValues )
 	end
 
 	thisEntity.hSplitEarthAbility = thisEntity:FindAbilityByName( "aghslab_leshrac_split_earth" )
+	thisEntity.hEdictAbility = thisEntity:FindAbilityByName( "leshrac_diabolic_edict" )
 
 	thisEntity.flRetreatRange = 500
 	thisEntity.flAttackRange = 600
@@ -41,6 +42,10 @@ function LeshracThink()
 		local hTowers = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, 4000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_BUILDING, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_CLOSEST, false )
 		if #hTowers > 0 then
 			local hTower = hTowers[1]
+			local fDist = ( hTower:GetOrigin() - thisEntity:GetOrigin() ):Length2D()
+			if fDist < 500 then
+				return CastEdict()
+			end
 			return TargetEnemy( hTower )
 		end
 		return HoldPosition()
@@ -138,6 +143,23 @@ function CastSplitEarth( hEnemy )
 	})
 
 	thisEntity.PreviousOrder = "split_earth"
+
+	return 1
+end
+
+--------------------------------------------------------------------------------
+
+function CastEdict()
+	--print( "Leshrac - CastEdict" )
+
+	ExecuteOrderFromTable({
+		UnitIndex = thisEntity:entindex(),
+		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
+		AbilityIndex = thisEntity.hEdictAbility:entindex(),
+		Queue = false,
+	})
+
+	thisEntity.PreviousOrder = "edict"
 
 	return 1
 end

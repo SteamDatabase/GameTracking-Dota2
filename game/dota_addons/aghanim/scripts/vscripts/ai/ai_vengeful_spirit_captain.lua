@@ -80,7 +80,8 @@ function VengefulSpiritThink()
 					local hEnemies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetAbsOrigin(), nil, nSwapRange, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE + DOTA_UNIT_TARGET_FLAG_NO_INVIS, FIND_FARTHEST, false )
 					local hSwapTarget = nil
 					-- grab the *farthest* enemy from our list
-					for _, hEnemy in pairs( hEnemies ) do
+					for i = 1, #hEnemies do
+						local hEnemy = hEnemies[i]
 						if hEnemy ~= nil and hEnemy:IsAlive() then
 							return CastSwap( hEnemy )
 						end

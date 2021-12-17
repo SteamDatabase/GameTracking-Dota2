@@ -17,7 +17,8 @@ function Spawn( entityKeyValues )
 
 	thisEntity.fLastPortalTime = GameRules:GetGameTime() - 30
 	thisEntity.bHasCreatedDarkPortal = false
-
+	thisEntity.nMaxAllowedPortalWalks = 3
+	thisEntity.nCurrentPortalWalks = 0
 
 end
 
@@ -68,20 +69,21 @@ function UnderlordThink()
 
 	local hPortals = Entities:FindAllByClassnameWithin("npc_dota_unit_aziyog_underlord_portal", thisEntity:GetOrigin(), 800) 
 	if hPortals ~= nil and #hPortals > 0 then
-	for _, hPortal in pairs (hPortals) do
-		if hPortal ~= nil and hPortal:GetOwner() ~= thisEntity and GameRules:GetGameTime() > thisEntity.fLastPortalTime + 20 and thisEntity:GetHealthPercent() < 45 then 
-				printf("moving to portal")
-			ExecuteOrderFromTable( {
-			UnitIndex = thisEntity:entindex(),
-			OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
-			AbilityIndex = hWarpAbility:entindex(),
-			TargetIndex = hPortal:entindex(),
-			Queue = false,
-			} )
-			thisEntity.fLastPortalTime = GameRules:GetGameTime()
-			return 5
+		for _, hPortal in pairs (hPortals) do
+			if hPortal ~= nil and hPortal:GetOwner() ~= thisEntity and GameRules:GetGameTime() > thisEntity.fLastPortalTime + 20 and thisEntity:GetHealthPercent() < 45 and thisEntity.nCurrentPortalWalks <= thisEntity.nMaxAllowedPortalWalks then 
+				ExecuteOrderFromTable( {
+				UnitIndex = thisEntity:entindex(),
+				OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
+				AbilityIndex = hWarpAbility:entindex(),
+				TargetIndex = hPortal:entindex(),
+				Queue = false,
+				} )
+				thisEntity.fLastPortalTime = GameRules:GetGameTime()
+				thisEntity.nCurrentPortalWalks = thisEntity.nCurrentPortalWalks + 1
+
+				return 5
+			end
 		end
-	end
 	end
 	if hFirestormAbility ~= nil and hFirestormAbility:IsFullyCastable() then
 		return CastFirestorm()

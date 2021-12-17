@@ -82,13 +82,13 @@ function CBossArcWarden:Initialize()
 
 	self.nMaxClonesInitial = 2
 	self.nMaxClones = self.nMaxClonesInitial
-	self.nMaxClonesProgressive = 0.75
+	self.nMaxClonesProgressive = 0.5
 	self.nMaxClonesAbsoluteMax = 4
 
-	self.fTimePerShardInitial = 5.5
+	self.fTimePerShardInitial = 6
 	self.fTimePerShard = self.fTimePerShardInitial
-	self.fTimePerShardProgressive = 0.65
-	self.fTimePerShardMin = 3.5
+	self.fTimePerShardProgressive = 0.5
+	self.fTimePerShardMin = 4
 
 	self.nDamageThresholdPct = 10
 
@@ -212,6 +212,14 @@ function CBossArcWarden:RefillCombatQueue()
 			BOSS_ARC_WARDEN_COMBAT_PHASE_BLINK,
 		}
 
+		local vRotation3alt =
+		{
+			BOSS_ARC_WARDEN_COMBAT_PHASE_MAGNETIC_FIELD,
+			BOSS_ARC_WARDEN_COMBAT_PHASE_RANGED_ATTACK_SLOW,
+			BOSS_ARC_WARDEN_COMBAT_PHASE_SPARK_WRAITH_MISSILE,
+			BOSS_ARC_WARDEN_COMBAT_PHASE_BLINK,
+		}
+
 		-- full rotation
 		local vRotation4 = 
 		{
@@ -259,10 +267,12 @@ function CBossArcWarden:RefillCombatQueue()
 			table.insert( vRotations, vRotation1 )
 			table.insert( vRotations, vRotation2 )
 			table.insert( vRotations, vRotation3 )
+			table.insert( vRotations, vRotation3alt )
 			table.insert( vRotations, vRotation4 )
 		else
 			table.insert( vRotations, vRotation2 )
 			table.insert( vRotations, vRotation3 )
+			table.insert( vRotations, vRotation3alt )
 			print( 'LOW HEALTH - USING THE GLEIPNIR ROTATIONS!' )
 			table.insert( vRotations, vRotation5 )
 			table.insert( vRotations, vRotation6 )

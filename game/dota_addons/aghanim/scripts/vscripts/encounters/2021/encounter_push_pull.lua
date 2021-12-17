@@ -139,7 +139,7 @@ function CMapEncounter_PushPull:constructor( hRoom, szEncounterName )
 			{
 				EntityName = "npc_dota_creature_eidolon",
 				Team = DOTA_TEAM_BADGUYS,
-				Count = 3,
+				Count = 4,
 				PositionNoise = 200.0,
 			},
 			{
@@ -165,7 +165,7 @@ function CMapEncounter_PushPull:constructor( hRoom, szEncounterName )
 			{
 				EntityName = "npc_dota_creature_eidolon",
 				Team = DOTA_TEAM_BADGUYS,
-				Count = 3,
+				Count = 4,
 				PositionNoise = 200.0,
 			},
 			{

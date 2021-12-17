@@ -111,6 +111,13 @@ local Disruptor =
 	},
 
 	{
+		description = "aghsfort_disruptor_kinetic_field_intellect_bonus",
+		ability_name = "aghsfort_disruptor_kinetic_field",
+		special_value_name = "intellect_bonus",
+		operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+		value = 4,
+	},
+	{
 		description = "aghsfort_disruptor_static_storm_mana_cost_cooldown",
 		ability_name = "aghsfort_disruptor_static_storm",
 		special_values =

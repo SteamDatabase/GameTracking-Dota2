@@ -15,26 +15,26 @@ end
 
 function aghsfort_pugna_grandmaster_netherblast:OnSpellStart()
 	if IsServer() then
-		self.vTargetLoc = self:GetCursorPosition()
-		self.preview_duration = self:GetSpecialValueFor( "preview_duration" )
-		self.max_rings = self:GetSpecialValueFor( "max_rings" )
-		self.preview_duration = self:GetSpecialValueFor( "preview_duration" )
-		self.ring_step = self:GetSpecialValueFor( "ring_step" )
-		self.ring_width = self:GetSpecialValueFor( "ring_width" )
-		self.damage = self:GetSpecialValueFor( "damage" )
+		if self:GetCaster() ~= nil then
+			self.vTargetLoc = self:GetCursorPosition()
+			self.preview_duration = self:GetSpecialValueFor( "preview_duration" )
+			self.max_rings = self:GetSpecialValueFor( "max_rings" )
+			self.preview_duration = self:GetSpecialValueFor( "preview_duration" )
+			self.ring_step = self:GetSpecialValueFor( "ring_step" )
+			self.ring_width = self:GetSpecialValueFor( "ring_width" )
+			self.damage = self:GetSpecialValueFor( "damage" )
 
 
-		local kv = {}
-		kv[ "duration" ] = self.preview_duration
-		kv[ "ring_count" ] = 1
-		kv[ "preview_duration" ] = self.preview_duration
-		kv[ "max_rings" ] = self.max_rings
-		kv[ "ring_step" ] = self.ring_step
-		kv[ "ring_width" ] = self.ring_width
-		kv[ "damage" ] = self.damage
+			local kv = {}
+			kv[ "duration" ] = self.preview_duration
+			kv[ "ring_count" ] = 1
+			kv[ "preview_duration" ] = self.preview_duration
+			kv[ "max_rings" ] = self.max_rings
+			kv[ "ring_step" ] = self.ring_step
+			kv[ "ring_width" ] = self.ring_width
+			kv[ "damage" ] = self.damage
 
-		PrintTable( kv, "KV:" )
-		self.hThinker = CreateModifierThinker( self:GetCaster(), self, "modifier_aghsfort_pugna_grandmaster_netherblast_thinker", kv, self.vTargetLoc, self:GetCaster():GetTeamNumber(), false )
-
+			self.hThinker = CreateModifierThinker( self:GetCaster(), self, "modifier_aghsfort_pugna_grandmaster_netherblast_thinker", kv, self.vTargetLoc, self:GetCaster():GetTeamNumber(), false )
+		end
 	end
 end

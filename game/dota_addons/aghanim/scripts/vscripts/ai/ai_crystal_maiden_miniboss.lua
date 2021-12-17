@@ -202,7 +202,9 @@ function CCrystalMaidenMiniboss:EvaluateFreezingField()
 	end
 
 	local Enemies = shallowcopy( self.hPlayerHeroes )
-	local nSearchRadius = self.hFreezingField:GetSpecialValueFor( 'radius' )
+	-- use the nova cast range instead - it's larger and we want to freezing field even without targets so that we can get the venges to swap in
+	--local nSearchRadius = self.hFreezingField:GetSpecialValueFor( 'radius' )
+	local nSearchRadius = self.hCrystalNova:GetCastRange()
 	printf( 'EvaluateFreezingField - nSearchRadius == %d', nSearchRadius )
 	Enemies = GetEnemyHeroesInRange( thisEntity, nSearchRadius )
 
@@ -265,25 +267,26 @@ function CCrystalMaidenMiniboss:EvaluateFrostBite()
 		return nil
 	end
 
-	local Enemies = shallowcopy( self.hPlayerHeroes )
 	local nSearchRadius = self.hFrostbite:GetCastRange()
 	printf( 'EvaluateFrostBite - nSearchRadius == %d', nSearchRadius )
-	Enemies = GetEnemyHeroesInRange( thisEntity, nSearchRadius )
+	Enemies = FindUnitsInRadius( self.me:GetTeamNumber(), self.me:GetAbsOrigin(), nil, nSearchRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_NONE, FIND_FARTHEST, false )
 
 	local Order = nil
-	if #Enemies >= 1 then
-		local hRandomEnemy = Enemies[ RandomInt( 1, #Enemies ) ]
-		if hRandomEnemy ~= nil then
+	for i = 1, #Enemies do
+		local enemy = Enemies[i]
+		if enemy ~= nil and enemy:IsNull() == false and enemy:IsAlive() == true then
+			print( 'FROST BITE ' .. enemy:GetUnitName() .. ' - at index = ' .. i )
 			Order =
 			{
 				UnitIndex = self.me:entindex(),
 				OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
-				TargetIndex = hRandomEnemy:entindex(),
+				TargetIndex = enemy:entindex(),
 				AbilityIndex = self.hFrostbite:entindex(),
 				Queue = false,
 			}
 			Order.flOrderInterval = GetSpellCastTime( self.hFrostbite )
-			print( 'ORDER INTERVAL for Frostbite is ' .. Order.flOrderInterval )
+			--print( 'ORDER INTERVAL for Frostbite is ' .. Order.flOrderInterval )
+			return Order
 		end
 	end
 
@@ -312,7 +315,7 @@ function CCrystalMaidenMiniboss:EvaluateColdEmbrace()
 		Queue = false,
 	}
 	Order.flOrderInterval = GetSpellCastTime( self.hColdEmbrace )
-	print( 'ORDER INTERVAL for ColdEmbrace is ' .. Order.flOrderInterval )
+	--print( 'ORDER INTERVAL for ColdEmbrace is ' .. Order.flOrderInterval )
 
 	return Order
 end
@@ -430,7 +433,7 @@ end
 --------------------------------------------------------------------------------
 
 function CCrystalMaidenMiniboss:OnPlayerTouchedPinnacleTrigger()
-	print( 'CCrystalMaidenMiniboss:OnPlayerTouchedPinnacleTrigger()!' )
+	--print( 'CCrystalMaidenMiniboss:OnPlayerTouchedPinnacleTrigger()!' )
 	self:WakeUp()
 end
 

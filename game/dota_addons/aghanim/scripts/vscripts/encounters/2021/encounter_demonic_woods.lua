@@ -60,9 +60,24 @@ function CMapEncounter_DemonicWoods:constructor( hRoom, szEncounterName )
 			},
 		},
 
-		Wave1 =
+		Wave1Peons =
 		{
-			SpawnerName = "wave_1",
+			SpawnerName = "wave_1_peons",
+			Count = 2,
+			TriggerData =
+			{
+				TriggerKillPercent = 
+				{
+					TriggerType = PORTAL_TRIGGER_TYPE_KILL_PERCENT,
+					TriggerAfterWave = "PrePlacedCaptain",
+					KillPercent = 100,
+				},
+			},
+		},
+
+		Wave1Captains =
+		{
+			SpawnerName = "wave_1_captains",
 			Count = 2,
 			TriggerData =
 			{
@@ -83,9 +98,9 @@ function CMapEncounter_DemonicWoods:constructor( hRoom, szEncounterName )
 			{
 				TriggerKillPercent = 
 				{
-					TriggerType = PORTAL_TRIGGER_TYPE_HEALTH_PERCENT,
-					TriggerAfterWave = "Wave1",
-					HealthPercent = 50,
+					TriggerType = PORTAL_TRIGGER_TYPE_KILL_PERCENT,
+					TriggerAfterWave = "PrePlacedCaptain",
+					KillPercent = 100,
 				},
 			},
 		},
@@ -98,9 +113,9 @@ function CMapEncounter_DemonicWoods:constructor( hRoom, szEncounterName )
 			{
 				TriggerKillPercent = 
 				{
-					TriggerType = PORTAL_TRIGGER_TYPE_HEALTH_PERCENT,
-					TriggerAfterWave = "Wave2",
-					HealthPercent = 50,
+					TriggerType = PORTAL_TRIGGER_TYPE_KILL_PERCENT,
+					TriggerAfterWave = "Wave1Captains",
+					KillPercent = 100,
 				},
 			},
 		},
@@ -130,7 +145,7 @@ function CMapEncounter_DemonicWoods:constructor( hRoom, szEncounterName )
 		}, bInvulnerable ) )	
 
 	-- portal enemies
-	self:AddPortalSpawnerV2( CPortalSpawnerV2( "wave_1", "spawner_wave_1", 8, 5, 1.0,
+	self:AddPortalSpawnerV2( CPortalSpawnerV2( "wave_1_peons", "spawner_wave_1", 8, 5, 1.0,
 		{
 			{
 				EntityName = "npc_dota_creature_nightstalker_minion",
@@ -138,6 +153,10 @@ function CMapEncounter_DemonicWoods:constructor( hRoom, szEncounterName )
 				Count = 5,
 				PositionNoise = 200.0,
 			},
+		}, bInvulnerable ) )
+	
+	self:AddPortalSpawnerV2( CPortalSpawnerV2( "wave_1_captains", "spawner_wave_1", 8, 5, 1.0,
+		{
 			{
 				EntityName = "npc_dota_creature_bane",
 				Team = DOTA_TEAM_BADGUYS,

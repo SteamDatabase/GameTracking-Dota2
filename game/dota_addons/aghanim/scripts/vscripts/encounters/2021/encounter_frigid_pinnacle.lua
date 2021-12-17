@@ -59,11 +59,11 @@ function CMapEncounter_FrigidPinnacle:constructor( hRoom, szEncounterName )
 			AggroHeroes = false,
 			TriggerData =
 			{
-				TriggerKillPercent = 
+				TriggerHealthPercent = 
 				{
-					TriggerType = PORTAL_TRIGGER_TYPE_KILL_PERCENT,
+					TriggerType = PORTAL_TRIGGER_TYPE_HEALTH_PERCENT,
 					TriggerAfterWave = "PrePlacedCaptain1",
-					KillPercent = 100.0,
+					HealthPercent = 75.0,
 				},
 			},
 		},
@@ -86,7 +86,7 @@ function CMapEncounter_FrigidPinnacle:constructor( hRoom, szEncounterName )
 		Wave1Captains =
 		{
 			SpawnerName = "portal_captain_1",
-			Count = 1,
+			Count = 2,
 			TriggerData =
 			{
 				TriggerHealthPercent = 

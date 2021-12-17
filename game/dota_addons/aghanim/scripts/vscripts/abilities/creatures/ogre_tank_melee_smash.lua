@@ -41,5 +41,5 @@ end
 
 -----------------------------------------------------------------------------
 
-
 ogre_tank_farmer_melee_smash = ogre_tank_melee_smash
+bonus_ogre_tank_melee_smash = ogre_tank_melee_smash
