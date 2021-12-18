@@ -126,6 +126,10 @@ function CPortalSpawner:SpawnSingleUnitType( rgUnitInfo )
 				rgUnitInfo.PostSpawn( hUnit )
 			end
 
+			if hUnit.SetAggroOnOwnerOnDamage ~= nil then
+				hUnit:SetAggroOnOwnerOnDamage( true )
+			end
+
 			local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_visage/visage_summon_familiars.vpcf", PATTACH_CUSTOMORIGIN, hUnit );
 			ParticleManager:SetParticleControl( nFXIndex, 0, hUnit:GetAbsOrigin() );
 			ParticleManager:SetParticleControlEnt( nFXIndex, 1, hUnit, PATTACH_POINT_FOLLOW, "attach_hitloc", hUnit:GetAbsOrigin(), true )

@@ -61,10 +61,10 @@ local minor_upgrades = {
     }, 
     {
         description = "aghsfort_kunkka_torrent_stun_duration",
-        ability_name = "aghsfort_kunkka_stun_duration",
+        ability_name = "aghsfort_kunkka_torrent",
         special_value_name = "stun_duration",
         operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-        value = 0.5 -- Bradm feedback: set to 0.5 from 2
+        value = 0.75 
     },
     {
         description = "aghsfort_kunkka_torrent_delay",
@@ -137,7 +137,7 @@ local minor_upgrades = {
         ability_name = "aghsfort_kunkka_x_marks_the_spot",
         special_value_name = "armour_increase",
         operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-        value = 2 -- Bradm feedback: Making armour higher might be better; 1 seemed too low.
+        value = 3
     },
 }
 return minor_upgrades

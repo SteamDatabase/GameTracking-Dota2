@@ -1428,6 +1428,7 @@ _G.ENCOUNTER_PREVIEW_SCALES =
 	npc_dota_creature_dark_willow_boss = 1,
 	npc_dota_creature_bonus_hoodwink = 1.5,
 	npc_dota_boss_timbersaw = .525,
+	npc_dota_creature_bonus_ogre_tank = 1.2,
 }
 
 -- if you want to adjust an effigy's position 
@@ -1515,6 +1516,7 @@ _G.ENCOUNTER_EFFIGY_OFFSETS =
 	npc_dota_creature_bandit_captain = Vector ( 0, 0, 42),
 	npc_dota_creature_dark_willow_boss = Vector ( 0, 0, 20),
 	npc_dota_boss_timbersaw = Vector ( 0, 0, 42),
+	npc_dota_creature_bonus_ogre_tank = Vector (0, 0, 42),
 }
 
 -- For debugging at the moment, a fixed layout of rooms

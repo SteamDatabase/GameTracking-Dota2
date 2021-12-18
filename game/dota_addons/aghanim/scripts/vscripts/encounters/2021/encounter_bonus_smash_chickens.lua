@@ -89,6 +89,7 @@ function CMapEncounter_BonusSmashChickens:Start()
 
 	local nPlayerID = 0
 	for _, hOgre in pairs ( hUnits ) do
+
 		local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 		if hPlayerHero then
 			hPlayerHero:AddNewModifier( hPlayerHero, nil, "modifier_bonus_room_start", {} )
@@ -97,8 +98,8 @@ function CMapEncounter_BonusSmashChickens:Start()
 		hOgre.Encounter = self
 		hOgre:SetControllableByPlayer( nPlayerID, true )
 		hOgre:SetOwner( hPlayerHero )
-		hOgre.nPlayerOwner = nPlayerID 
-
+		hOgre.nPlayerOwner = nPlayerID
+		hOgre:SetSkin( nPlayerID )
 
 		local hBuff = hOgre:AddNewModifier( hOgre, nil, "modifier_bonus_ogre_start_passive", {} )
 		if hBuff then
