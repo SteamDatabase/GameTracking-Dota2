@@ -138,9 +138,6 @@ function CPortalSpawnerV2:SpawnSingleUnitType( rgUnitInfo, vLocation )
 			if rgUnitInfo.PostSpawn ~= nil then
 				rgUnitInfo.PostSpawn( hUnit )
 			end
-			if hUnit.SetAggroOnOwnerOnDamage ~= nil then
-				hUnit:SetAggroOnOwnerOnDamage( true )
-			end
 			table.insert( hSpawnedUnits, hUnit )
 		end
 	end

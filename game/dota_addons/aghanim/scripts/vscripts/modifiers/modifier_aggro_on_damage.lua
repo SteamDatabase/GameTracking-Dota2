@@ -66,7 +66,7 @@ function modifier_aggro_on_damage:OnTakeDamage( params )
 		end
 
 		--print( 'modifier_aggro_on_damage:OnTakeDamage() - setting SetInitialGoalEntity() to ' .. hAttacker:GetUnitName() )
-		self:GetParent():MoveToPositionAggressive( hAttacker:GetAbsOrigin() )
+		self:GetParent():SetInitialGoalEntity( hAttacker )
 
 		return 0
 	end
