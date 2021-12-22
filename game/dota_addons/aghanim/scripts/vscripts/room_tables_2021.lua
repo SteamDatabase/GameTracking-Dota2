@@ -1348,7 +1348,7 @@ _G.ENCOUNTER_PREVIEW_SCALES =
 {
 	npc_dota_creature_bonus_chicken = 2.5,
 	npc_dota_creature_shroom_giant = 1.5,
-	npc_dota_creature_year_beast = 0.55,
+	npc_dota_creature_year_beast = 0.4,
 	npc_dota_creature_bonus_pig = 1.75,
 	npc_dota_creature_huge_axe = .95,
 	npc_dota_creature_drow_ranger_miniboss = 1.35,
@@ -1373,7 +1373,7 @@ _G.ENCOUNTER_PREVIEW_SCALES =
 	npc_dota_creature_phantom_lancer = 1.25,
 	npc_dota_creature_life_stealer = 1.15,
 	npc_dota_creature_phoenix = 0.85,
-	npc_dota_creature_ice_boss = .85,
+	npc_dota_creature_ice_boss = .4,
 	npc_dota_boss_visage = .8,
 	npc_dota_boss_earthshaker = .9,
 	npc_dota_boss_clockwerk = 1.35,
@@ -1431,6 +1431,9 @@ _G.ENCOUNTER_PREVIEW_SCALES =
 	npc_dota_creature_bonus_hoodwink = 1.5,
 	npc_dota_boss_timbersaw = .525,
 	npc_dota_creature_bonus_ogre_tank = 1.2,
+	npc_dota_creature_event_ogre_magi = 1.2,
+	npc_dota_creature_dragon_knight_egg_smasher = 1.2,
+	npc_dota_creature_event_leshrac = 1.0,
 }
 
 -- if you want to adjust an effigy's position 
@@ -1439,7 +1442,7 @@ _G.ENCOUNTER_EFFIGY_OFFSETS =
 {
 	npc_dota_creature_bonus_chicken = Vector( 0, 0, 42 ),
 	npc_dota_creature_shroom_giant = Vector( -10, 0, 42 ),
-	npc_dota_creature_year_beast = Vector( -30, 0, 42 ),
+	npc_dota_creature_year_beast = Vector( 0, 0, 42 ),
 	npc_dota_creature_bonus_pig = Vector( 0, 0, 42 ),
 	npc_dota_creature_huge_axe = Vector( 0, 0, 42 ),
 	npc_dota_creature_drow_ranger_miniboss = Vector( -16, 0, 42 ),
@@ -1469,7 +1472,7 @@ _G.ENCOUNTER_EFFIGY_OFFSETS =
 	npc_dota_boss_earthshaker = Vector( 0, 0, 42 ),
 	npc_dota_boss_clockwerk = Vector( 0, 0, 42 ),
 	npc_dota_aghsfort_arc_warden_boss = Vector( 0, 0, 42 ),
-	npc_aghsfort_morty_mango_orchard = Vector( 42, 0, 42 ),
+	npc_aghsfort_morty_mango_orchard = Vector( -28, 0, 42 ),
 	npc_dota_creature_bonus_pudge = Vector( 0, 0, 42 ),
 	npc_dota_creature_acid_blob = Vector( 0, 0, 42 ),
 	npc_dota_creature_acid_blob_effigy = Vector( 0, 0, 42 ),
@@ -1511,7 +1514,7 @@ _G.ENCOUNTER_EFFIGY_OFFSETS =
 	npc_dota_creature_snapfire = Vector( -40, 0, 42 ),
 	npc_dota_creature_slardar_smashy = Vector( 0, 0, 42 ),
 	npc_dota_creature_dire_hound_boss = Vector( 0, 0, 42 ),
-	npc_dota_creature_diregull = Vector ( -20, 0, 42),
+	npc_dota_creature_diregull = Vector ( -200, 0, 42),
 	npc_dota_creature_aziyog_underlord = Vector ( -18, 0, 42),
 	npc_dota_creature_stonehall_general = Vector ( 0, 0, 42),
 	npc_dota_sled_penguin = Vector ( 0, 0, 42),
@@ -1519,6 +1522,9 @@ _G.ENCOUNTER_EFFIGY_OFFSETS =
 	npc_dota_creature_dark_willow_boss = Vector ( 0, 0, 20),
 	npc_dota_boss_timbersaw = Vector ( 0, 0, 42),
 	npc_dota_creature_bonus_ogre_tank = Vector (0, 0, 42),
+	npc_dota_creature_event_ogre_magi = Vector (0, 0, 42),
+	npc_dota_creature_dragon_knight_egg_smasher = Vector (0, 0, 42),
+	npc_dota_creature_event_leshrac = Vector (0, 0, 42),
 }
 
 -- For debugging at the moment, a fixed layout of rooms
