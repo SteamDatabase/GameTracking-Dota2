@@ -114,8 +114,12 @@ function modifier_battle_royale:OnIntervalThink()
 			end
 
 			local hClampRoom = self.hDeepestRoom
-			if hCurrentRoom ~= nil and hCurrentRoom == self.hDeepestRoom.hEventRoom then
-				hClampRoom = hCurrentRoom
+			if hCurrentRoom ~= nil then
+				local bIsHub = hCurrentRoom:GetName() == "hub" and hCurrentRoom:GetAct() > self.hDeepestRoom:GetAct()
+				local bIsEventRoom = hCurrentRoom == self.hDeepestRoom.hEventRoom
+				if bIsHub or bIsEventRoom then
+					hClampRoom = hCurrentRoom
+				end
 			end
 			vClampedValidFlyingPos = hClampRoom:ClampPointToRoomBounds( vCurrentPos, flBoundary )
 		end

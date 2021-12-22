@@ -14,10 +14,13 @@ function modifier_fat_golem_burst_thinker:OnCreated( kv )
 	self.thinker_spawn_duration = self:GetAbility():GetSpecialValueFor( "thinker_spawn_duration" )
 	self.spawns_per_interval = self:GetAbility():GetSpecialValueFor( "spawns_per_interval" )
 	self.max_spawn_distance = self:GetAbility():GetSpecialValueFor( "max_spawn_distance" )
+	self.max_spawns = self:GetAbility():GetSpecialValueFor( "max_spawns" )
 
 	self.nTeamNumber = self:GetCaster():GetTeamNumber()
 
 	if IsServer() then
+		self.nSkeleteeniesSpawned = 0
+
 		self:StartIntervalThink( self.thinker_interval )
 	end
 end
@@ -64,11 +67,21 @@ function modifier_fat_golem_burst_thinker:OnIntervalThink()
 			local nFXIndex = ParticleManager:CreateParticle( "particles/units/heroes/hero_visage/visage_summon_familiars.vpcf", PATTACH_CUSTOMORIGIN, hSkeleteeny )
 			ParticleManager:SetParticleControl( nFXIndex, 0, vSpawnPos )
 			ParticleManager:ReleaseParticleIndex( nFXIndex )
+
+			self.nSkeleteeniesSpawned = self.nSkeleteeniesSpawned + 1
+
+			if self.nSkeleteeniesSpawned >= self.max_spawns then
+				self:StartIntervalThink( -1 )
+				self:Destroy()
+				return
+			end
 		end
 	end
 
 	if self:GetElapsedTime() >= self.thinker_spawn_duration then
 		self:StartIntervalThink( -1 )
+		self:Destroy()
+		return
 	end
 end
 

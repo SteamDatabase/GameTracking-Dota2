@@ -42,24 +42,6 @@ function CMapEncounter_BossClockwerkAndTinker:constructor( hRoom, szEncounterNam
 			},
 		}
 	) )
-
-	--[[
-	local self.szClockLocator
-	self:AddSpawner( CDotaSpawner( self.szClockLocator, self.szClockLocator,
-		{
-			{
-				EntityName = "npc_dota_boss_clockwerk",
-				Team = DOTA_TEAM_BADGUYS,
-				Count = 1,
-				PositionNoise = 200.0,
-			},
-		}
-	) )
-	]]
-
-	self.bClockwerkDead = false
-
-	self.bTinkerDead = false
 end
 
 --------------------------------------------------------------------------------
@@ -80,11 +62,6 @@ function CMapEncounter_BossClockwerkAndTinker:Precache( context )
 
 	PrecacheUnitByNameSync( "npc_dota_creature_keen_minion", context, -1 )
 	PrecacheUnitByNameSync( "npc_dota_boss_tinker_structure", context, -1 )
-
-	--PrecacheUnitByNameSync( "npc_dota_boss_clockwerk", context, -1 )
-	--PrecacheResource( "particle_folder", "particles/units/heroes/hero_rattletrap", context )
-	--PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_rattletrap.vsndevts", context )
-	--PrecacheResource( "soundfile", "soundevents/voscripts/game_sounds_vo_rattletrap.vsndevts", context )
 end
 
 --------------------------------------------------------------------------------
@@ -193,46 +170,15 @@ end
 
 --------------------------------------------------------------------------------
 
---[[
-function CMapEncounter_BossClockwerkAndTinker:OnSpawnerFinished( hSpawner, hSpawnedUnits )
-	CMapEncounter.OnSpawnerFinished( self, hSpawner, hSpawnedUnits )
+function CMapEncounter_BossClockwerkAndTinker:OnComplete()
+	CMapEncounter.OnComplete( self )
 
-	if hSpawner:GetSpawnerName() == self.szBossLocator then
-		for _,hUnit in pairs ( hSpawnedUnits ) do
-			if hUnit and hUnit:GetUnitName() == "npc_dota_boss_clockwerk" then
-				self.bClonkerSpawned = true
-			elseif hUnit and hUnit:GetUnitName() == "npc_dota_boss_tinker" then
-				self.bTinkwerkSpawned = true
-			end
+	local units = FindUnitsInRadius( DOTA_TEAM_BADGUYS, self.hRoom:GetOrigin(), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_ANY_ORDER, true )
+	for _, unit in pairs( units ) do
+		if unit:GetUnitName() == "npc_dota_creature_keen_minion" then
+			unit:ForceKill( false )
 		end
 	end
-end
-]]
-
----------------------------------------------------------------------------
-
-function CMapEncounter_BossClockwerkAndTinker:IsMyBuddyDead( me )
-	if me:GetUnitName() == "npc_dota_boss_tinker" then
-		if self.bClockwerkDead then
-			return true
-		end
-	elseif me:GetUnitName() == "npc_dota_boss_clockwerk" then
-		if self.bTinkerDead then
-			return true
-		end
-	end
-end
-
---------------------------------------------------------------------------------
-
-function CMapEncounter_BossClockwerkAndTinker:SetClockwerkDead()
-	self.bClockwerkDead = true
-end
-
---------------------------------------------------------------------------------
-
-function CMapEncounter_BossClockwerkAndTinker:SetTinkerDead()
-	self.bTinkerDead = true
 end
 
 --------------------------------------------------------------------------------

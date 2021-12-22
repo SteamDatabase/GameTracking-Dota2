@@ -86,10 +86,6 @@ end
 function magma_golem_projectile:OnProjectileHit( hTarget, vLocation )
 	if IsServer() then
 		if hTarget ~= nil and ( not hTarget:IsMagicImmune() ) and ( not hTarget:IsInvulnerable() ) then
-			--EmitSoundOn( "Lycan.RuptureBall.Impact", hTarget );
-
-			hTarget:AddNewModifier( self:GetCaster(), self, "modifier_flamebreak_damage", { duration = self:GetSpecialValueFor( "duration" ) } )
-
 			local damage = {
 				victim = hTarget,
 				attacker = self:GetCaster(),

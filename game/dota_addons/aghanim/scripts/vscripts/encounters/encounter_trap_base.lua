@@ -63,6 +63,21 @@ end
 
 --------------------------------------------------------------------------------
 
+function CMapEncounter_TrapBase:GetBlacklistedTrapModifiers()
+	local vecBlacklistedModiifers =
+	{
+		"modifier_aghsfort_winter_wyvern_arctic_burn_flight",
+		"modifier_aghsfort_phoenix_sun_ray",
+		"modifier_aghsfort_templar_assassin_refraction_absorb",
+		"modifier_aghsfort_viper_corrosive_skin_flying",
+		"modifier_aghsfort_phoenix_icarus_dive",
+	}
+
+	return vecBlacklistedModiifers
+end
+
+--------------------------------------------------------------------------------
+
 function CMapEncounter_TrapBase:Start()
 	CMapEncounter.Start( self )
 
@@ -73,6 +88,11 @@ function CMapEncounter_TrapBase:Start()
 	for nPlayerID = 0, AGHANIM_PLAYERS - 1 do
 		local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID ) 
 		if hPlayerHero then 
+			local vecBlacklistedModiifers = self:GetBlacklistedTrapModifiers()
+			for _,szModifierName in pairs ( vecBlacklistedModiifers ) do 
+				hPlayerHero:RemoveModifierByName( szModifierName )
+			end
+
 			local kv = {}
 			kv[ "duration" ] = -1
 

@@ -20,10 +20,7 @@ end
 -----------------------------------------------------------------------------
 
 function smashy_slithereen_crush:GetPlaybackRateOverride()
-	if self:GetAbilityName() == "bashy_slithereen_crush" then 
-		return 0.40
-	end
-	return 0.38
+	return 0.40
 end
 
 

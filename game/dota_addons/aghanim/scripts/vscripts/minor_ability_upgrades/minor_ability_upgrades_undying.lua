@@ -53,7 +53,7 @@ local Undying =
 		 ability_name = "aghsfort_undying_soul_rip",
 		 special_value_name = "max_units",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 2,
+		 value = 3,
 	},
 	{
 		 description = "aghsfort_undying_soul_rip_percent_mana_cost_cooldown",
@@ -80,7 +80,7 @@ local Undying =
 		 ability_name = "aghsfort_undying_tombstone",
 		 special_value_name = "zombie_base_damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 4,
+		 value = 5,
 	},
 	{
 		 description = "aghsfort_undying_tombstone_duration",
@@ -114,14 +114,14 @@ local Undying =
 		 ability_name = "aghsfort_undying_flesh_golem",
 		 special_value_name = "str_percentage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 5,
+		 value = 4,
 	},
 	{
 		 description = "aghsfort_undying_flesh_golem_duration",
 		 ability_name = "aghsfort_undying_flesh_golem",
 		 special_value_name = "duration",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 8,
+		 value = 5,
 	},
 	{
 		 description = "aghsfort_undying_flesh_golem_damage_amp",

@@ -13,8 +13,6 @@ end
 --------------------------------------------------------------------------------
 
 function boss_earthshaker_smash:OnAbilityPhaseStart()
-	self.playback_rate = self:GetSpecialValueFor( "playback_rate" )
-
 	if IsServer() then
 		EmitSoundOn( "TempleGuardian.PreAttack", self:GetCaster() )
 	end
@@ -23,12 +21,6 @@ function boss_earthshaker_smash:OnAbilityPhaseStart()
 end
 
 --------------------------------------------------------------------------------
-
-function boss_earthshaker_smash:GetPlaybackRateOverride()
-	return self.playback_rate
-end
-
------------------------------------------------------------------------------
 
 function boss_earthshaker_smash:OnSpellStart()
 	if IsServer() then

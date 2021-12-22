@@ -110,11 +110,13 @@ _G.MAP_ATLAS =
 		bForceEvent = false,
 		encounters =
 		{
+			"encounter_event_brewmaster_bar",
 			"encounter_event_slark",
 			"encounter_event_tinker_range_retrofit",
 			"encounter_event_zeus",
 			"encounter_event_naga_bottle_rune",
 			"encounter_event_leshrac",
+			"encounter_event_warlock_library",
 		},
 	},
 

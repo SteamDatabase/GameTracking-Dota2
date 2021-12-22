@@ -99,13 +99,16 @@ end
 
 function CMapEncounter_Twilight_Maze:CreateEnemies()
 	self.nEnemyCount = 0
-	for _,Spawner in pairs ( self:GetSpawners() ) do
+
+	for _, Spawner in pairs ( self:GetSpawners() ) do
 		local hUnits = Spawner:SpawnUnits()
 		if #hUnits > 0 then 
 			self.nEnemyCount = self.nEnemyCount + #hUnits
+
 			for _,hUnit in pairs ( hUnits ) do 
 				if hUnit:GetUnitName() == "npc_dota_creature_big_skeleton" then 
-					self.nEnemyCount = self.nEnemyCount + 20 -- skeleteeny
+					local nSkeleteeniesPerBigSkeleton = 20
+					self.nEnemyCount = self.nEnemyCount + nSkeleteeniesPerBigSkeleton
 
 					table.insert( self.BigSkeletons, hUnit )
 				end
@@ -176,9 +179,14 @@ end
 --------------------------------------------------------------------------------
 
 function CMapEncounter_Twilight_Maze:OnComplete()
-	-- should we remove the twilight vision dummy?
-
 	CMapEncounter.OnComplete( self )
+
+	local units = FindUnitsInRadius( DOTA_TEAM_BADGUYS, self.hRoom:GetOrigin(), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_ANY_ORDER, true )
+	for _, unit in pairs( units ) do
+		if unit:GetUnitName() == "npc_dota_creature_skeleteeny" then
+			unit:ForceKill( false )
+		end
+	end
 end
 
 --------------------------------------------------------------------------------

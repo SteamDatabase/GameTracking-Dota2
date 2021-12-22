@@ -99,7 +99,7 @@ local Slark =
 		 ability_name = "aghsfort_slark_pounce",
 		 special_value_name = "leash_duration",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 0.5,
+		 value = 1,
 	},	
 	{
 		 description = "aghsfort_slark_pounce_damage",

@@ -24,6 +24,7 @@ end
 
 --------------------------------------------------------------------------------
 
+--[[
 function modifier_boss_clockwerk_passive:DeclareFunctions()
 	local funcs =
 	{
@@ -59,5 +60,6 @@ function modifier_boss_clockwerk_passive:OnDeath( params )
 
 	return 0
 end
+]]
 
 --------------------------------------------------------------------------------

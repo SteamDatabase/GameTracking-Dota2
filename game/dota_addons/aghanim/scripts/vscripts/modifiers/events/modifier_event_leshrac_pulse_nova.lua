@@ -92,8 +92,7 @@ function modifier_event_leshrac_pulse_nova:OnIntervalThink()
 		return
 	end
 
-
-	if GameRules:GetGameTime() >= self.fNextPulseTime then
+	if not self:GetParent():IsSilenced() and not self:GetParent():IsMuted() and GameRules:GetGameTime() >= self.fNextPulseTime then
 		local enemies = Util_FindEnemiesAroundUnit( self:GetParent(), self.radius, true )
 
 		if #enemies > 0 then
@@ -130,6 +129,12 @@ end
 
 function modifier_event_leshrac_pulse_nova:OnDestroy()
 	if not IsServer() then
+		return
+	end
+
+	if self:GetParent():IsCreature() then
+		-- It's not a real ability on Leshrac npc, he just has it so we can read its values in
+		-- the event npc interaction dialog. Just return early before we error on GetIntellect.
 		return
 	end
 

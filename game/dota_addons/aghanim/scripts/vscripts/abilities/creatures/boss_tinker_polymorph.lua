@@ -151,9 +151,13 @@ end
 
 function boss_tinker_polymorph:OnProjectileHit( hTarget, vLocation )
 	if IsServer() then
+		if not self:GetCaster() or self:GetCaster():IsNull() or self:GetCaster():IsAlive() == false then
+			return true
+		end
+
 		if hTarget ~= nil then
-			for i=1,#self.Thinkers do
-				local hThinker = self.Thinkers[i]
+			for i = 1, #self.Thinkers do
+				local hThinker = self.Thinkers[ i ]
 				if hThinker ~= nil and hThinker == hTarget then
 					table.remove( self.Thinkers, i )
 					UTIL_Remove( hThinker )

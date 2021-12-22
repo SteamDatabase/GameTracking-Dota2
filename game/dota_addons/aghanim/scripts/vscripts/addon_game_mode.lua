@@ -2215,8 +2215,9 @@ function CAghanim:GetExitOptionData_2021( nOptionNumber )
 
 		if ENCOUNTER_EFFIGY_OFFSETS[ strPreviewUnit ] then 
 			local vOffset = ENCOUNTER_EFFIGY_OFFSETS[ strPreviewUnit ]
-			exitData.vOverrideLocation.x = exitData.vOverrideLocation.x + vOffset.x 
-			exitData.vOverrideLocation.y = exitData.vOverrideLocation.y + vOffset.y
+			local flYawRadians = exitData.flOverrideYaw * 2 * math.pi / 360
+			exitData.vOverrideLocation.x = exitData.vOverrideLocation.x + math.cos( flYawRadians ) * vOffset.x - math.sin( flYawRadians ) * vOffset.y
+			exitData.vOverrideLocation.y = exitData.vOverrideLocation.y + math.sin( flYawRadians ) * vOffset.x + math.cos( flYawRadians ) * vOffset.y
 			exitData.flZOffset = exitData.flZOffset + vOffset.z 
 	 	end
 

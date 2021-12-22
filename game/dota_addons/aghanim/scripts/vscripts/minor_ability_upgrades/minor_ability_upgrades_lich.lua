@@ -22,7 +22,7 @@ local Lich =
 		 ability_name = "aghsfort_lich_frost_nova",
 		 special_value_name = "aoe_damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 70,
+		 value = 80,
 	},
 	{
 		 description = "aghsfort_lich_frost_nova_radius_upgrade",
@@ -60,7 +60,7 @@ local Lich =
 		 ability_name = "aghsfort_lich_frost_shield",
 		 special_value_name = "damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 15,
+		 value = 20,
 	},
 	{
 		description = "aghsfort_lich_frost_shield_damage_reduction_upgrade",
@@ -98,7 +98,7 @@ local Lich =
 		 ability_name = "aghsfort_lich_sinister_gaze",
 		 special_value_name = "mana_drain",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 5,
+		 value = 7,
 	},
 	{
 		description = "aghsfort_lich_chain_frost_mana_cost_cooldown",
@@ -130,6 +130,14 @@ local Lich =
 		 special_value_name = "damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		 value = 150,
+	},	
+
+	{
+		 description = "aghsfort_lich_chain_frost_jumps_upgrade",
+		 ability_name = "aghsfort_lich_chain_frost",
+		 special_value_name = "jumps",
+		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		 value = 2,
 	},	
 }
 return Lich

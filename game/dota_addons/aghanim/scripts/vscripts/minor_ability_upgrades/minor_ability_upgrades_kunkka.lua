@@ -34,7 +34,7 @@ local minor_upgrades = {
         ability_name = "aghsfort_kunkka_ghostship",
         special_value_name = "stun_duration",
         operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-        value = 1 -- 0.5 was too low, 2 was too much.  1 = goldilocks?
+        value = 1 
     }, 
     {
         description = "aghsfort_kunkka_ghost_ship_absorb",

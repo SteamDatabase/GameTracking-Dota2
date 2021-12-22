@@ -25,29 +25,40 @@ function CMapEncounter_SmashyAndBashy:constructor( hRoom, szEncounterName )
 	self.hSmashy = nil 
 	self.hBashy = nil
 
-	self:AddSpawner( CDotaSpawner( "spawner_smashy", "spawner_smashy",
-		{
-			{
-				EntityName = "npc_dota_creature_slardar_smashy",
-				Team = DOTA_TEAM_BADGUYS,
-				Count = 1,
-				PositionNoise = 0.0,
-			},
-		} ) )
-
-	self:AddSpawner( CDotaSpawner( "spawner_bashy", "spawner_bashy",
-		{
-			{
-				EntityName = "npc_dota_creature_slardar_bashy",
-				Team = DOTA_TEAM_BADGUYS,
-				Count = 1,
-				PositionNoise = 0.0,
-			},
-		} ) )
-
-
 	self.vReinforcementSchedule =
 	{
+		Bashy =
+		{
+			SpawnerName = "spawner_bashy",
+			UsePortals = false,
+			AggroHeroes = false,
+			TriggerData =
+			{
+				TimeAbsolute = 
+				{
+					TriggerType = PORTAL_TRIGGER_TYPE_TIME_ABSOLUTE,
+					Time = 0.0,
+				},
+			},
+			Count = 1,
+		},
+
+		Smashy =
+		{
+			SpawnerName = "spawner_smashy",
+			UsePortals = false,
+			AggroHeroes = false,
+			TriggerData =
+			{
+				TimeAbsolute = 
+				{
+					TriggerType = PORTAL_TRIGGER_TYPE_TIME_ABSOLUTE,
+					Time = 0.0,
+				},
+			},
+			Count = 1,
+		},
+
 		Peons1 =
 		{
 			SpawnerName = "spawner_peon",
@@ -64,25 +75,27 @@ function CMapEncounter_SmashyAndBashy:constructor( hRoom, szEncounterName )
 		Peons2 =
 		{
 			SpawnerName = "spawner_peon",
-			TriggerData =
+			TriggerData = 
 			{
-				TimeAbsolute = 
+				TriggerKillPercent = 
 				{
-					TriggerType = PORTAL_TRIGGER_TYPE_TIME_ABSOLUTE,
-					Time = 30.0,
+					TriggerType = PORTAL_TRIGGER_TYPE_HEALTH_PERCENT,
+					TriggerAfterWave = "Smashy",
+					HealthPercent = 50,
 				},
 			},
-			Count = 2,
+			Count = 3,
 		},
 		Peons3 =
 		{
 			SpawnerName = "spawner_peon",
-			TriggerData =
+			TriggerData = 
 			{
-				TimeAbsolute = 
+				TriggerKillPercent = 
 				{
-					TriggerType = PORTAL_TRIGGER_TYPE_TIME_ABSOLUTE,
-					Time = 50.0,
+					TriggerType = PORTAL_TRIGGER_TYPE_HEALTH_PERCENT,
+					TriggerAfterWave = "Bashy",
+					HealthPercent = 50,
 				},
 			},
 			Count = 3,
@@ -90,17 +103,53 @@ function CMapEncounter_SmashyAndBashy:constructor( hRoom, szEncounterName )
 		Peons4 =
 		{
 			SpawnerName = "spawner_peon",
-			TriggerData =
+			TriggerData = 
 			{
-				TimeAbsolute = 
+				TriggerKillPercent = 
 				{
-					TriggerType = PORTAL_TRIGGER_TYPE_TIME_ABSOLUTE,
-					Time = 70.0,
+					TriggerType = PORTAL_TRIGGER_TYPE_HEALTH_PERCENT,
+					TriggerAfterWave = "Smashy",
+					HealthPercent = 5,
+				},
+			},
+			Count = 4,
+		},
+		Peons5 =
+		{
+			SpawnerName = "spawner_peon",
+			TriggerData = 
+			{
+				TriggerKillPercent = 
+				{
+					TriggerType = PORTAL_TRIGGER_TYPE_HEALTH_PERCENT,
+					TriggerAfterWave = "Bashy",
+					HealthPercent = 5,
 				},
 			},
 			Count = 4,
 		},
 	}
+
+	self:AddPortalSpawnerV2( CPortalSpawnerV2( "spawner_smashy", "spawner_smashy", 8, 5, 1.0,
+		{
+			{
+				EntityName = "npc_dota_creature_slardar_smashy",
+				Team = DOTA_TEAM_BADGUYS,
+				Count = 1,
+				PositionNoise = 0.0,
+			},
+		}, true ) )
+
+	self:AddPortalSpawnerV2( CPortalSpawnerV2( "spawner_bashy", "spawner_bashy", 8, 5, 1.0,
+		{
+			{
+				EntityName = "npc_dota_creature_slardar_bashy",
+				Team = DOTA_TEAM_BADGUYS,
+				Count = 1,
+				PositionNoise = 0.0,
+			},
+		}, true ) )
+
 
 	self:AddPortalSpawnerV2( CPortalSpawnerV2( "spawner_peon", "spawner_peon", 8, 5, 1.0,
 		{
@@ -132,23 +181,26 @@ end
 
 function CMapEncounter_SmashyAndBashy:Start()
 	CMapEncounter.Start( self )
-	
-	for _,Spawner in pairs ( self:GetSpawners() ) do
-		local hUnits = Spawner:SpawnUnits()
-		if hUnits and #hUnits == 1 then 
-			if hUnits[ 1 ] then 
-				if hUnits[ 1 ]:GetUnitName() == "npc_dota_creature_slardar_smashy" then 
-					self.hSmashy = hUnits[ 1 ]
-				end 
 
-				if hUnits[ 1 ]:GetUnitName() == "npc_dota_creature_slardar_bashy" then 
-					self.hBashy = hUnits[ 1 ]
-				end
+	self:StartAllSpawnerSchedules( 0 )
+end
+
+--------------------------------------------------------------------------------
+
+function CMapEncounter_SmashyAndBashy:OnSpawnerFinished( hSpawner, hSpawnedUnits )
+	if #hSpawnedUnits > 0 then 
+		for _,hUnit in pairs ( hSpawnedUnits ) do
+			if hUnit and hUnit:GetUnitName() == "npc_dota_creature_slardar_smashy" then 
+				self.hSmashy = hUnit 
+				break 
+			end
+
+			if hUnit and hUnit:GetUnitName() == "npc_dota_creature_slardar_bashy" then 
+				self.hBashy = hUnit 
+				break 
 			end
 		end
 	end
-
-	self:StartAllSpawnerSchedules( 0 )
 end
 
 --------------------------------------------------------------------------------

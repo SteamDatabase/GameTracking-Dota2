@@ -37,6 +37,10 @@ end
 
 function boss_tinker_march:OnProjectileHit( hTarget, vLocation )
 	if IsServer() then
+		if not self:GetCaster() or self:GetCaster():IsNull() or self:GetCaster():IsAlive() == false then
+			return true
+		end
+
 		local enemies = FindUnitsInRadius( self:GetCaster():GetTeamNumber(), vLocation, nil,
 			self.splash_radius, self:GetAbilityTargetTeam(), self:GetAbilityTargetType(),
 			DOTA_UNIT_TARGET_FLAG_NONE, FIND_CLOSEST, false

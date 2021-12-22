@@ -85,17 +85,19 @@ local Dawnbreaker =
 	{
 		description = "aghsfort_dawnbreaker_celestial_hammer_hammer_damage",
 		ability_name = "aghsfort_dawnbreaker_celestial_hammer",
-		special_value_name = "hammer_damage",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 45,
-	},
-
-	{
-		description = "aghsfort_dawnbreaker_celestial_hammer_burn_damage",
-		ability_name = "aghsfort_dawnbreaker_celestial_hammer",
-		special_value_name = "burn_damage",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 12,
+		special_values =
+		{
+			{
+				special_value_name = "hammer_damage",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 45,
+			},
+			{
+				special_value_name = "burn_damage",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 12,
+			},
+		},
 	},
 
 	{
@@ -103,7 +105,7 @@ local Dawnbreaker =
 		ability_name = "aghsfort_dawnbreaker_celestial_hammer",
 		special_value_name = "range",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 200,
+		value = 250,
 	},
 
 	{
@@ -111,7 +113,7 @@ local Dawnbreaker =
 		ability_name = "aghsfort_dawnbreaker_celestial_hammer",
 		special_value_name = "flare_debuff_duration",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 0.8,
+		value = 1.0,
 	},
 
 	{

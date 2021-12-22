@@ -41,7 +41,7 @@ function modifier_boss_earthshaker_quake:OnIntervalThink()
 			self.nPreviewFX = ParticleManager:CreateParticle( "particles/act_2/wyvern_generic_blast_pre.vpcf", PATTACH_CUSTOMORIGIN, nil )
 			ParticleManager:SetParticleControl( self.nPreviewFX, 0, GetGroundPosition( self:GetParent():GetAbsOrigin(), self:GetParent() ) )
 			ParticleManager:SetParticleControl( self.nPreviewFX, 1, Vector( self.area_of_effect, 2, 1 ) )
-			ParticleManager:SetParticleControl( self.nPreviewFX, 15, Vector( 200, 30, 0 ) )
+			ParticleManager:SetParticleControl( self.nPreviewFX, 15, Vector( 255, 120, 20 ) )
 			ParticleManager:SetParticleControl( self.nPreviewFX, 16, Vector( 1, 0, 0 ) )
 
 			self.bStarted = true
