@@ -33,6 +33,12 @@ end
 
 --------------------------------------------------------------------------------
 
+function modifier_primal_beast_outro_aura:GetAuraSearchFlags()
+	return DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE
+end
+
+--------------------------------------------------------------------------------
+
 function modifier_primal_beast_outro_aura:GetAuraSearchType()
 	return DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_CREEP
 end
