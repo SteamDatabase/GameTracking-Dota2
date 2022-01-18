@@ -12,7 +12,7 @@ function Spawn( entityKeyValues )
 	if thisEntity.hFishAttack == nil then
 		print( "Ability not found!" )
 	end
-
+	thisEntity.bPatrolled = false
 	thisEntity:AddNewModifier( thisEntity, nil, "modifier_phased", { duration = -1 } )
 
 	thisEntity:SetContextThink( "DiregullThink", DiregullThink, 1 )
@@ -38,7 +38,10 @@ function DiregullThink()
 	)
 
 	if #hEnemies == 0 then
-		return Patrol()
+		if thisEntity.bPatrolled == false then
+			thisEntity.bPatrolled = true
+			return Patrol()
+		end
 	end
 
 	-- Fish Attack

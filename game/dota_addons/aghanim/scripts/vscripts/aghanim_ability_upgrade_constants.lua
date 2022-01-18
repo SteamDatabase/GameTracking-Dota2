@@ -495,13 +495,13 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_witch_doctor"] =
    --"aghsfort_special_witch_doctor_maledict_ground_curse",
    "aghsfort_special_witch_doctor_maledict_aoe_procs",
    "aghsfort_special_witch_doctor_maledict_death_restoration",
-   "aghsfort_special_witch_doctor_maledict_affects_allies",
+  -- "aghsfort_special_witch_doctor_maledict_affects_allies",
    "aghsfort_special_witch_doctor_maledict_infectious",
    
    "aghsfort_special_witch_doctor_voodoo_restoration_enemy_damage",
    "aghsfort_special_witch_doctor_voodoo_restoration_lifesteal",
    "aghsfort_special_witch_doctor_voodoo_restoration_damage_amp",
-   "aghsfort_special_witch_doctor_voodoo_restoration_mana_restore",
+   --"aghsfort_special_witch_doctor_voodoo_restoration_mana_restore",
    
    "aghsfort_special_witch_doctor_death_ward_no_channel",
    "aghsfort_special_witch_doctor_death_ward_splitshot",
@@ -531,7 +531,7 @@ SPECIAL_ABILITY_UPGRADES["npc_dota_hero_queenofpain"] =
 SPECIAL_ABILITY_UPGRADES["npc_dota_hero_templar_assassin"] = 
 {
 
-   "aghsfort_special_templar_assassin_refraction_allies",
+   --"aghsfort_special_templar_assassin_refraction_allies",
    "aghsfort_special_templar_assassin_refraction_kill_refresh",
   -- "aghsfort_special_templar_assassin_refraction_counter_attack",
    "aghsfort_special_templar_assassin_refraction_detonate_trap",

@@ -162,6 +162,7 @@ _G.ASCENSION_ABILITIES =
 			"encounter_mushroom_mines",
 			"encounter_mushroom_mines2021",
 			"encounter_brewmaster",
+			"encounter_splitsville",
 			"encounter_drow_ranger_miniboss",
 			"encounter_sacred_grounds",
 			"encounter_gauntlet",
@@ -182,6 +183,7 @@ _G.ASCENSION_ABILITIES =
 		vecBlacklistedEncounters = 
 		{
 			"encounter_brewmaster",
+			"encounter_splitsville",
 		}
 	},
 
@@ -300,6 +302,7 @@ _G.ASCENSION_ABILITIES =
 		{
 			"encounter_hellbears_portal_v3",
 			"encounter_morphlings_b",
+			"encounter_aqua_manor",
 			"encounter_warlocks",
 			"encounter_mirana",
 			"encounter_legion_commander",

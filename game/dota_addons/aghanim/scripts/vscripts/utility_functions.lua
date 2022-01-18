@@ -213,6 +213,15 @@ function table.ToStringShallow(t)
 	return s
 end
 
+function TableFindFirst( rgArray, fnCondition )
+	for _,v in ipairs( rgArray ) do
+		if fnCondition( v ) then
+			return v
+		end
+	end
+	return nil
+end
+
 function TableFindKey( table, val )
 	if table == nil then
 		print( "nil" )

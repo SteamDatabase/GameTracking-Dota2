@@ -153,7 +153,7 @@ local Omniknight =
 		 ability_name = "aghsfort_omniknight_guardian_angel",
 		 special_value_name = "hp_regen",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 8,
+		 value = 12,
 	},
 
 }

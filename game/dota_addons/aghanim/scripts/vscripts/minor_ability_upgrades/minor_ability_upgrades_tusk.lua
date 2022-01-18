@@ -31,7 +31,7 @@ local Tusk =
 		 ability_name = "aghsfort_tusk_ice_shards",
 		 special_value_name = "shard_duration",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 0.5,
+		 value = 0.75,
 	},
 
 	{

@@ -2997,6 +2997,17 @@ function CAghanim:GrantAllPlayersAghanimClone( szActionName )
 
 		print( "Awarding player action " .. szActionName .. " for encountering an aghanim clone!" )
 		PlayerResource:RecordEventActionGrantForPrimaryEvent( nPlayerID, szActionName, eEventAudit_PlayedMatch, nQuantity, nDefaultToMatchIDAtSignout )
+		local bHaveAll = true
+		for k,v in pairs( _G.AGHANIM_CLONE_EVENT_ACTIONS ) do
+			if v ~= szActionName and PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, v ) < 1 then
+				bHaveAll = false
+			end
+		end
+		if bHaveAll then
+			local szCourier = "labyrinth_all_aghs"
+			print( "Awarding player action " .. szCourier .. " for freeing all clones." )
+			PlayerResource:RecordEventActionGrantForPrimaryEvent( nPlayerID, szCourier, eEventAudit_PlayedMatch, nQuantity, nDefaultToMatchIDAtSignout )
+		end
 	end
 end
  

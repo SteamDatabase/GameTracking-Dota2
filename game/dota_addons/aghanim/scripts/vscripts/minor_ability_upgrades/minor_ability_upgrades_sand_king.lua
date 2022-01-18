@@ -60,8 +60,17 @@ local Sand_King =
 		ability_name = "aghsfort_sand_king_burrowstrike",
 		special_value_name = "damage",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 60,
+		value = 75,
 	},
+
+	{
+		description = "aghsfort_sand_king_burrowstrike_burrow_duration",
+		ability_name = "aghsfort_sand_king_burrowstrike",
+		special_value_name = "burrow_duration",
+		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		value = 0.75,
+	},
+	
 	{
 		description = "aghsfort_sand_king_burrowstrike_cast_range",
 		ability_name = "aghsfort_sand_king_burrowstrike",
@@ -89,18 +98,12 @@ local Sand_King =
 		special_value_name = "sandstorm_duration",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		value = 2,
-	},	
+	},
+
 	{
-		description = "aghsfort_sand_king_sandstorm_blind",
+		description = "aghsfort_sand_king_sandstorm_blind_slow",
 		ability_name = "aghsfort_sand_king_sand_storm",
-		special_value_name = "blind",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 5,
-	},	
-	{
-		description = "aghsfort_sand_king_sandstorm_slow",
-		ability_name = "aghsfort_sand_king_sand_storm",
-		special_value_name = "slow",
+		special_value_name = "blind_slow_pct",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		value = 5,
 	},			
@@ -117,14 +120,14 @@ local Sand_King =
 		ability_name = "aghsfort_sand_king_caustic_finale",
 		special_value_name = "caustic_finale_damage_death",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 40,
+		value = 50,
 	},	
 	{
 		description = "aghsfort_sand_king_caustic_finale_damage_dot",
 		ability_name = "aghsfort_sand_king_caustic_finale",
 		special_value_name = "caustic_finale_damage_dot",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 7,
+		value = 8,
 	},		
 	{
 		description = "aghsfort_sand_king_caustic_finale_duration",
@@ -133,13 +136,7 @@ local Sand_King =
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		value = 2,
 	},
-	{
-		description = "aghsfort_sand_king_caustic_finale_slow",
-		ability_name = "aghsfort_sand_king_caustic_finale",
-		special_value_name = "caustic_finale_slow",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = -5,
-	},			
+				
 	{	
 		description = "aghsfort_sand_king_epicenter_radius",
 		ability_name = "aghsfort_sand_king_epicenter",
@@ -161,14 +158,6 @@ local Sand_King =
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		value = 30,
 	},		
-	{	
-		description = "aghsfort_sand_king_epicenter_epicenter_slow_as",
-		ability_name = "aghsfort_sand_king_epicenter",
-		special_value_name = "epicenter_slow_as",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = -10,
-	},					
-
 	    
 }
 

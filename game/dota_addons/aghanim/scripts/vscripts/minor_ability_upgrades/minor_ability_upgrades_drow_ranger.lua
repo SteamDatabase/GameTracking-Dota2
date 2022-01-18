@@ -41,7 +41,7 @@ local DrowRanger =
 		ability_name = "aghsfort2_drow_ranger_wave_of_silence",
 		special_value_name = "blind_percent",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 5,
+		value = 7,
 	},
 	{
 		description = "aghsfort2_drow_ranger_wave_of_silence_mana_cost_cooldown",

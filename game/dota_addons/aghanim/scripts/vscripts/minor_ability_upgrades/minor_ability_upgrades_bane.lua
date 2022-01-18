@@ -32,7 +32,7 @@ local Bane =
 		ability_name = "aghsfort_bane_enfeeble",
 		special_value_name = "cast_reduction",
 		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 3,
+		value = 4,
 	},
 
 	{
@@ -139,19 +139,21 @@ local Bane =
 	},
 
 	{
-		description = "aghsfort_bane_fiends_grip_fiend_grip_damage",
+		description = "aghsfort_bane_fiends_grip_fiend_grip_damage_mana_drain",
 		ability_name = "aghsfort_bane_fiends_grip",
-		special_value_name = "fiend_grip_damage",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 50,
-	},
-
-	{
-		description = "aghsfort_bane_fiends_grip_fiend_grip_mana_drain",
-		ability_name = "aghsfort_bane_fiends_grip",
-		special_value_name = "fiend_grip_mana_drain",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 3,
+		special_values =
+		{
+			{
+				special_value_name = "fiend_grip_damage",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 40,
+			},
+			{
+				special_value_name = "fiend_grip_mana_drain",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 3,
+			},
+		},
 	},
 
 	{

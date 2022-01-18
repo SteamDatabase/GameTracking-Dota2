@@ -26,13 +26,13 @@ local Ursa =
 		},
 	},
 
-	{
-		description = "aghsfort_ursa_earthshock_flat_movement_slow",
-		ability_name = "aghsfort_ursa_earthshock",
-		special_value_name = "movement_slow",
-		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		value = 16,
-	},
+	-- {
+	-- 	description = "aghsfort_ursa_earthshock_flat_movement_slow",
+	-- 	ability_name = "aghsfort_ursa_earthshock",
+	-- 	special_value_name = "movement_slow",
+	-- 	operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+	-- 	value = 16,
+	-- },
 
 	{
 		description = "aghsfort_ursa_earthshock_mana_cost_cooldown",

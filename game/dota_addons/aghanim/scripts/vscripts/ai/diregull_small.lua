@@ -7,7 +7,7 @@ function Spawn( entityKeyValues )
 	if thisEntity == nil then
 		return
 	end
-
+	thisEntity.bPatrolled = false
 	thisEntity:SetContextThink( "DiregullSmallThink", DiregullSmallThink, 1 )
 end
 
@@ -31,7 +31,10 @@ function DiregullSmallThink()
 	)
 
 	if #hEnemies == 0 then
-		return Patrol()
+		if thisEntity.bPatrolled == false then
+			thisEntity.bPatrolled = true
+			return Patrol()
+		end
 	end
 
 	return 0.5

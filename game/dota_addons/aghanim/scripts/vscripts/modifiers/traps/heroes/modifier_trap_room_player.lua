@@ -61,7 +61,7 @@ function modifier_trap_room_player:DisableAbilitiesAndItems()
 			end
 		end
 
-		for i = 0, 15 do
+		for i = 0, DOTA_ITEM_NEUTRAL_SLOT do
 			local hItem = self:GetParent():GetItemInSlot( i )
 			if hItem then
 				hItem:OnUnequip()
@@ -111,7 +111,10 @@ function modifier_trap_room_player:RestoreAbilitiesAndItems()
 				hAbilityOrItem:SetHidden( false )
 
 				if hAbilityOrItem:IsItem() then
-					hAbilityOrItem:OnEquip()
+					local nSlot = hAbilityOrItem:GetItemSlot()
+					if nSlot <= DOTA_ITEM_SLOT_6 or nSlot == DOTA_ITEM_TP_SCROLL or nSlot == DOTA_ITEM_NEUTRAL_SLOT then
+						hAbilityOrItem:OnEquip()
+					end
 				end
 
 				if hAbilityOrItem.nOriginalIndex ~= 0 then

@@ -183,6 +183,16 @@ function CMapEncounter_BonusGallery:OnThink()
 	end
 
 	if not self.bGameStarted then
+		-- Force Swallow on Not Connected Players
+		for nPlayerID = 0, AGHANIM_PLAYERS - 1 do
+			if PlayerResource:GetTeam( nPlayerID ) == DOTA_TEAM_GOODGUYS and PlayerResource:IsValidPlayerID( nPlayerID ) and PlayerResource:GetConnectionState( nPlayerID ) ~= DOTA_CONNECTION_STATE_CONNECTED then
+				local hHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
+				local hHoodwink = TableFindFirst( self.Hoodwinks, function( hEntity ) return hEntity:GetOwnerEntity() == hHero end )
+				if hHoodwink ~= nil and hHero:HasModifier( "modifier_bonus_room_start" ) then
+					self:OnHeroSwallowed( hHero, hHoodwink )
+				end
+			end
+		end
 		return
 	end
 
@@ -271,17 +281,16 @@ function CMapEncounter_BonusGallery:OnEntityKilled( event )
 end
 --------------------------------------------------------------------------------
 
-function CMapEncounter_BonusGallery:OnPlayerHoodwinkSwallowed( nPlayerID, hHoodwink )
-	print("OnPlayerHoodwinkSwallowed")
+function CMapEncounter_BonusGallery:OnHeroSwallowed( hHero, hHoodwink )
+	hHero:AddNewModifier( hHoodwink, nil, "modifier_bonus_hoodwink_swallow", {} )
+	hHero:RemoveModifierByName( "modifier_bonus_room_start" )
+	
+	local nPlayerID = hHero:GetPlayerOwnerID()
 	ParticleManager:DestroyParticle( hHoodwink.nFXIndex, true )
 	CustomGameEventManager:Send_ServerToPlayer( PlayerResource:GetPlayer( nPlayerID ), "stop_world_text_hint", {} )
-
-	--PlayerResource:SetCameraTarget( nPlayerID, hHoodwink )
 	PlayerResource:SetOverrideSelectionEntity( nPlayerID, hHoodwink )
 
-	local nCurrentValue = self:GetEncounterObjectiveProgress( "objective_saddle_up_on_hoodwink" )
-	local nSaddledPlayers = nCurrentValue + 1
-	self:UpdateEncounterObjective( "objective_saddle_up_on_hoodwink", nSaddledPlayers, nil )
+	local nSaddledPlayers = self:IncrementEncounterObjective( "objective_saddle_up_on_hoodwink" )
 
 	local nPlayerCount = 0
 	for nPlayerID = 0, AGHANIM_PLAYERS - 1 do

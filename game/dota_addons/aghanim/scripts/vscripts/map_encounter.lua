@@ -557,6 +557,18 @@ end
 
 --------------------------------------------------------------------------------
 
+function CMapEncounter:IncrementEncounterObjective( szKey, nValue )
+	if nValue == nil then
+		nValue = 1
+	end
+
+	local nNewValue = self:GetEncounterObjectiveProgress( szKey ) + nValue
+	self:UpdateEncounterObjective( szKey, nNewValue )
+	return nNewValue
+end
+
+--------------------------------------------------------------------------------
+
 function CMapEncounter:GetEncounterObjectiveProgress( szKey )
 	if self.ClientData[ "objectives" ][ szKey ] == nil then
 		return -1

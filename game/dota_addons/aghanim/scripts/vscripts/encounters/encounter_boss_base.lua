@@ -36,7 +36,7 @@ function CMapEncounter_BossBase:OnThink()
 			local hPlayerHero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 			if hPlayerHero then
 				for _,hBoss in pairs( self.Bosses ) do
-					if hPlayerHero:CanEntityBeSeenByMyTeam( hBoss ) then
+					if hPlayerHero:CanEntityBeSeenByMyTeam( hBoss ) and hBoss:CanEntityBeSeenByMyTeam( hPlayerHero ) then
 						self:IntroduceBoss( hBoss )
 						return
 					end
@@ -135,7 +135,7 @@ end
 
 function CMapEncounter_BossBase:OnBossSpawned( hBoss )
 	hBoss:SetAbsAngles( 0, 270, 0 )
-	hBoss:AddNewModifier( hPlayerHero, nil, "modifier_boss_intro", {} )
+	hBoss:AddNewModifier( nil, nil, "modifier_boss_intro", {} )
 
 	self:AddBossToBossTable( hBoss )
 end

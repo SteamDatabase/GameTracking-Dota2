@@ -105,6 +105,7 @@ $.Schedule( 0.0, function()
 	{
 		var unlockIcon = $.CreatePanel( 'Panel', unlockIcons, 'UnlockIcon' + i );
 		unlockIcon.BLoadLayoutSnippet( 'UnlockIcon' );
+		unlockIcon.SetPanelEvent( 'onactivate', function ( nIndex ) { return function () { ActivateModel( nIndex ) } }( i ) );
 	}  
 
 	UpdateUnlockIcons();
@@ -199,9 +200,56 @@ var SetCurrentModel = function( nModelIndex, bPlaySound )
 	}
 }
 
-var SetToNextModel = function()
+var ActivateModel = function ( nIndex )
 {
-	SetCurrentModel( ( g_nCurrentModelIndex + 1 ) % k_modelInfos.length, true );
+	var aghanimModel = $( '#AghanimModel' );
+	var deviceModel = $( '#DeviceModel' );
+	var ModelContainer = $( '#BackgroundModelsRef' );
+
+	var ModelHelp = $( '#ModelHelp' );
+
+	deviceModel.SetAnimgraphParameterOnEntityInt( 'conundrum', 'mouseover', 2 );
+	deviceModel.FireEntityInput( 'device_active_fx', 'stop', 0 );
+	deviceModel.FireEntityInput( 'device_active_fx', 'start', 0 );
+	deviceModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
+	aghanimModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
+
+	ModelContainer.RemoveClass( "HelpMe" );
+	$.Schedule( 0.1, function () { ModelContainer.AddClass( "HelpMe" ); } );
+	
+	//var guess = "red";
+	//var Speech = null;
+	
+	var SpeechChoice = [ 
+		"#DOTA_Aghanim_FrontPageSpeech1",
+		"#DOTA_Aghanim_FrontPageSpeech2",
+		"#DOTA_Aghanim_FrontPageSpeech3",
+		"#DOTA_Aghanim_FrontPageSpeech4",
+		"#DOTA_Aghanim_FrontPageSpeech5",
+		"#DOTA_Aghanim_FrontPageSpeech6",
+		"#DOTA_Aghanim_FrontPageSpeech7",
+		"#DOTA_Aghanim_FrontPageSpeech8",
+		"#DOTA_Aghanim_FrontPageSpeech9",
+		"#DOTA_Aghanim_FrontPageSpeech10",
+		"#DOTA_Aghanim_FrontPageSpeech11"
+	];
+
+	/*Barb: Save us!
+	Bath: Bring a towel!
+	Tinker: Useless idiots.
+	Bucket: What are you?!
+	Dude: Far out!
+	Goat: Baaah!
+	Mad Maghs: This is your fault!
+	Cyber Aghs: Recalibrating...
+	Roshanaghanim: ...
+	Aghanim the Wisest: What a pack of donkeys...*/
+
+	//var index = Math.floor(Math.random() * SpeechChoice.length);
+
+	ModelHelp.SetLocString( SpeechChoice[ nIndex ] );
+
+	SetCurrentModel( nIndex, true );
 }
 
 var MaybeUpdateInitalModel = function()
@@ -297,56 +345,7 @@ var OnAghanimDeviceMouseOut = function()
 var OnAghanimDeviceActivate = function()
 {
 	//$.Msg("Aghanim Device Activate " );
-
-	var aghanimModel = $( '#AghanimModel' );
-	var deviceModel = $( '#DeviceModel' );
-	var ModelContainer = $( '#BackgroundModelsRef' );
-
-	var ModelHelp = $( '#ModelHelp' );
-	
-
-	deviceModel.SetAnimgraphParameterOnEntityInt( 'conundrum', 'mouseover', 2 );
-	deviceModel.FireEntityInput( 'device_active_fx', 'stop', 0 );
-	deviceModel.FireEntityInput( 'device_active_fx', 'start', 0 );
-	deviceModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
-	aghanimModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
-
-	ModelContainer.RemoveClass( "HelpMe" );
-	$.Schedule( 0.1, function () { ModelContainer.AddClass( "HelpMe" ); } );
-	
-	//var guess = "red";
-	//var Speech = null;
-	
-	var SpeechChoice = [ 
-		"#DOTA_Aghanim_FrontPageSpeech1",
-		"#DOTA_Aghanim_FrontPageSpeech2",
-		"#DOTA_Aghanim_FrontPageSpeech3",
-		"#DOTA_Aghanim_FrontPageSpeech4",
-		"#DOTA_Aghanim_FrontPageSpeech5",
-		"#DOTA_Aghanim_FrontPageSpeech6",
-		"#DOTA_Aghanim_FrontPageSpeech7",
-		"#DOTA_Aghanim_FrontPageSpeech8",
-		"#DOTA_Aghanim_FrontPageSpeech9",
-		"#DOTA_Aghanim_FrontPageSpeech10",
-		"#DOTA_Aghanim_FrontPageSpeech11"
-	];
-
-	/*Barb: Save us!
-	Bath: Bring a towel!
-	Tinker: Useless idiots.
-	Bucket: What are you?!
-	Dude: Far out!
-	Goat: Baaah!
-	Mad Maghs: This is your fault!
-	Cyber Aghs: Recalibrating...
-	Roshanaghanim: ...
-	Aghanim the Wisest: What a pack of donkeys...*/
-
-	//var index = Math.floor(Math.random() * SpeechChoice.length);
-
-	ModelHelp.SetLocString( SpeechChoice[ g_nCurrentModelIndex ] );
-
-	SetToNextModel();
+	ActivateModel( ( g_nCurrentModelIndex + 1 ) % k_modelInfos.length );
 }
 
 var SetDetailsVisible = function( bVisible )

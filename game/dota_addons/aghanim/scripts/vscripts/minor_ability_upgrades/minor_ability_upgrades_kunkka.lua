@@ -36,13 +36,22 @@ local minor_upgrades = {
         operator = MINOR_ABILITY_UPGRADE_OP_ADD,
         value = 1 
     }, 
+
     {
-        description = "aghsfort_kunkka_ghost_ship_absorb",
+        description = "aghsfort_kunkka_ghost_ship_damage",
         ability_name = "aghsfort_kunkka_ghostship",
-        special_value_name = "ghostship_absorb",
-        operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-        value = 15
+        special_value_name = "ghostship_damage",
+        operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+        value = 150 
     }, 
+    
+    -- {
+    --     description = "aghsfort_kunkka_ghost_ship_absorb",
+    --     ability_name = "aghsfort_kunkka_ghostship",
+    --     special_value_name = "ghostship_absorb",
+    --     operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+    --     value = 15
+    -- }, 
 	-- Torrent
     {
         description = "aghsfort_kunkka_torrent_mana_and_cooldown",
@@ -78,7 +87,7 @@ local minor_upgrades = {
         ability_name = "aghsfort_kunkka_torrent",
         special_value_name = "torrent_damage",
         operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-        value = 50  -- Bradm feedback: Move to 50 from 75
+        value = 75  
     },
 	-- Tidebringer upgrades
     {
@@ -86,14 +95,14 @@ local minor_upgrades = {
         ability_name = "aghsfort_kunkka_tidebringer",
         special_value_name = "cleave_distance",
         operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-        value = 100 -- Playtest feedback that 50 seemed very low, trying 100.
+        value = 100
     }, 
     {
         description = "aghsfort_kunkka_tidebringer_damage",
         ability_name = "aghsfort_kunkka_tidebringer",
         special_value_name = "damage_bonus",
         operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-        value = 15
+        value = 20
     }, 
 	{
         description = "aghsfort_kunkka_tidebringer_cooldown",

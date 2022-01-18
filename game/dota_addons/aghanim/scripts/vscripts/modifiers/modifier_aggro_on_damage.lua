@@ -22,6 +22,14 @@ end
 
 --------------------------------------------------------------------------------
 
+function modifier_aggro_on_damage:OnCreated( kv )
+	if IsServer() then
+		self.bAggroed = false 
+	end
+end
+
+--------------------------------------------------------------------------------
+
 function modifier_aggro_on_damage:DeclareFunctions()
 	local funcs = 
 	{
@@ -38,6 +46,10 @@ function modifier_aggro_on_damage:OnTakeDamage( params )
 		local hUnit = params.unit
 		if hUnit ~= self:GetParent() then
 			return 0
+		end
+
+		if self.bAggroed == true then 
+			return 0 
 		end
 
 		--print( '^^^modifier_aggro_on_damage:OnTakeDamage' )
@@ -65,8 +77,17 @@ function modifier_aggro_on_damage:OnTakeDamage( params )
 			end
 		end
 
+		local bWasGoalNotEnemy = self:GetParent():GetInitialGoalEntity() == nil or self:GetParent():GetInitialGoalEntity():IsNull() or self:GetParent():GetInitialGoalEntity():IsDOTANPC() ~= true
+
 		--print( 'modifier_aggro_on_damage:OnTakeDamage() - setting SetInitialGoalEntity() to ' .. hAttacker:GetUnitName() )
 		self:GetParent():SetInitialGoalEntity( hAttacker )
+
+		-- Kick us out of our current behavior so we actually aggro properly
+		if bWasGoalNotEnemy then
+			self:GetParent():Interrupt()
+		end
+
+		self.bAggroed = true
 
 		return 0
 	end

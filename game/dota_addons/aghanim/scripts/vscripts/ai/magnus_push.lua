@@ -15,7 +15,7 @@ function Spawn( entityKeyValues )
 
 	thisEntity.hSkewerAbility = thisEntity:FindAbilityByName( "creature_magnus_push_skewer" )
 	thisEntity.hHornTossAbility = thisEntity:FindAbilityByName( "magnus_push_horn_toss" )
-	
+	thisEntity.bPatrolled = false
 	thisEntity.flHornTossDelayTime = GameRules:GetGameTime() + RandomFloat( 1, 3 )	-- need to live for this long before we can think about casting impale
 	
 	thisEntity:SetInitialGoalEntity( nil )
@@ -46,7 +46,11 @@ function MagnusThink()
 	local nEnemiesRemoved = 0
 	local enemies = FindUnitsInRadius( thisEntity:GetTeamNumber(), thisEntity:GetOrigin(), nil, 1000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE + DOTA_UNIT_TARGET_FLAG_NO_INVIS, FIND_CLOSEST, false )
 	if #enemies == 0 then
-		return Patrol()
+		if thisEntity.bPatrolled == false then
+			thisEntity.bPatrolled = true
+			return Patrol()
+		end
+		return 0.5
 	end
 
 	local hEnemy = enemies[#enemies]

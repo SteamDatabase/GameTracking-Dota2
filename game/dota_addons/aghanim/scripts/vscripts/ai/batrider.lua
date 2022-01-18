@@ -14,6 +14,8 @@ function Spawn( entityKeyValues )
 	thisEntity.hFirefly = thisEntity:FindAbilityByName( "batrider_firefly" )
 	thisEntity.hLassoAbility = thisEntity:FindAbilityByName( "batrider_flaming_lasso" )
 
+
+	thisEntity.bPatrolled = false
 	thisEntity.flLassoDelayTime = GameRules:GetGameTime() + RandomFloat( 4, 8 )	-- need to live for this long before we can think about casting lasso
 
 	thisEntity:AddNewModifier( thisEntity, nil, "modifier_phased", { duration = -1 } )
@@ -72,7 +74,11 @@ function BatriderThink()
 	)
 
 	if #hEnemies == 0 then
-		return Patrol()
+		if thisEntity.bPatrolled == false then
+			thisEntity.bPatrolled = true
+			return Patrol()
+		end
+		return 0.5
 	end
 
 	-- Flame Break

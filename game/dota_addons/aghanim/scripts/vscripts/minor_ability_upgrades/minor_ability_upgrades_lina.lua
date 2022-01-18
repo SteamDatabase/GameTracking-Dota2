@@ -69,58 +69,38 @@ local Lina =
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
 		 value = 0.4,
 	},
+	
 	{
-		description = "aghsfort_lina_fiery_soul_mana_cost_cooldown",
+ 		description = "aghsfort_lina_fiery_soul_attack_move_speed",
 		ability_name = "aghsfort_lina_fiery_soul",
 		special_values =
 		{
 			{
-				special_value_name = "mana_cost",
-				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+				special_value_name = "fiery_soul_attack_speed_bonus",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 20,
 			},
 			{
-				special_value_name = "cooldown",
-				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+				special_value_name = "fiery_soul_move_speed_bonus",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 2,
 			},
 		},
-	},
-	{
- 		description = "aghsfort_lina_fiery_soul_attack_speed",
-		 ability_name = "aghsfort_lina_fiery_soul",
-		 special_value_name = "fiery_soul_attack_speed_bonus",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 20,
+		 
 	},
 	{
  		description = "aghsfort_lina_fiery_soul_max_stacks",
-		 ability_name = "aghsfort_lina_fiery_soul",
-		 special_value_name = "fiery_soul_max_stacks",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 1,
+		ability_name = "aghsfort_lina_fiery_soul",
+		special_value_name = "fiery_soul_max_stacks",
+		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		value = 1,
 	},
 	{
  		description = "aghsfort_lina_fiery_soul_active_duration",
-		 ability_name = "aghsfort_lina_fiery_soul",
-		 special_value_name = "active_duration",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 2,
-	},
-	{
- 		description = "aghsfort_lina_fiery_soul_fiery_soul_stack_duration",
-		 ability_name = "aghsfort_lina_fiery_soul",
-		 special_value_name = "fiery_soul_stack_duration",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 3,
-	},
-
-	{
- 		description = "aghsfort_lina_fiery_soul_move_speed",
-		 ability_name = "aghsfort_lina_fiery_soul",
-		 special_value_name = "fiery_soul_move_speed_bonus",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 2,
+		ability_name = "aghsfort_lina_fiery_soul",
+		special_value_name = "active_duration",
+		operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+		value = 2,
 	},
 	{
 		description = "aghsfort_lina_laguna_blade_mana_cost_cooldown",

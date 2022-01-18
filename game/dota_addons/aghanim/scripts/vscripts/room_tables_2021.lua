@@ -91,6 +91,7 @@ _G.MAP_ATLAS =
 			
 			--Legacy
 			"encounter_pine_grove",
+			"encounter_splitsville",
 		},
 	},
 
@@ -142,6 +143,7 @@ _G.MAP_ATLAS =
 			
 			--Legacy
 			"encounter_sacred_grounds",
+			"encounter_jungle_trek",
 		},
 	},
 
@@ -192,6 +194,7 @@ _G.MAP_ATLAS =
 
 			--Legacy
 			"encounter_desert_oasis",
+			"encounter_aqua_manor",
 		},
 	},
 
@@ -759,11 +762,25 @@ _G.ENCOUNTER_DEFINITIONS =
 		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
 	},
 
+	encounter_splitsville =
+	{
+		szMapNames = { "aghs2_encounters/a1_1_splitsville", },
+		nEncounterType = ROOM_TYPE_ENEMY,
+		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
+	},
+
 	-- Depth 2 --
 
 	encounter_sacred_grounds =
 	{
 		szMapNames = { "aghs2_encounters/a1_2_sacred_grounds", },
+		nEncounterType = ROOM_TYPE_ENEMY,
+		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
+	},
+
+	encounter_jungle_trek =
+	{
+		szMapNames = { "aghs2_encounters/a1_2_jungle_trek", },
 		nEncounterType = ROOM_TYPE_ENEMY,
 		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
 	},
@@ -803,6 +820,13 @@ _G.ENCOUNTER_DEFINITIONS =
 	encounter_desert_oasis =
 	{
 		szMapNames = { "aghs2_encounters/a1_3_desert_oasis", },
+		nEncounterType = ROOM_TYPE_ENEMY,
+		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
+	},
+
+	encounter_aqua_manor =
+	{
+		szMapNames = { "aghs2_encounters/a1_3_aqua_manor", },
 		nEncounterType = ROOM_TYPE_ENEMY,
 		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
 	},
@@ -1434,6 +1458,10 @@ _G.ENCOUNTER_PREVIEW_SCALES =
 	npc_dota_creature_event_ogre_magi = 1.2,
 	npc_dota_creature_dragon_knight_egg_smasher = 1.2,
 	npc_dota_creature_event_leshrac = 1.0,
+	npc_dota_creature_brewmaster_boss = 1.0,
+	npc_dota_creature_huskar = 1.0,
+	npc_dota_creature_morphling_big = 1.4,
+	npc_dota_creature_large_ogre_seal = .65,
 }
 
 -- if you want to adjust an effigy's position 
@@ -1525,6 +1553,10 @@ _G.ENCOUNTER_EFFIGY_OFFSETS =
 	npc_dota_creature_event_ogre_magi = Vector (0, 0, 42),
 	npc_dota_creature_dragon_knight_egg_smasher = Vector (0, 0, 42),
 	npc_dota_creature_event_leshrac = Vector (0, 0, 42),
+	npc_dota_creature_brewmaster_boss = Vector (0, 0, 42),
+	npc_dota_creature_huskar = Vector (0, 0, 42),
+	npc_dota_creature_morphling_big= Vector (0, 0, 42),
+	npc_dota_creature_large_ogre_seal = Vector (0, 0, 42),
 }
 
 -- For debugging at the moment, a fixed layout of rooms

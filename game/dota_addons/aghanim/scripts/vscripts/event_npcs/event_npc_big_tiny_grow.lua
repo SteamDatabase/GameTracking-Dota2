@@ -20,7 +20,7 @@ end
 EVENT_NPC_BIG_TINY_ACCEPT_DECLINE = 0
 EVENT_NPC_BIG_TINY_ACCEPT_GROW = 1
 
-EVENT_NPC_BIG_TINY_CAPPED_MOVEMENT_SPEED = 350
+EVENT_NPC_BIG_TINY_MOVEMENT_SPEED_REDUCTION = 75
 EVENT_NPC_BIG_TINY_MORE_MODEL_SCALE = 75
 EVENT_NPC_BIG_TINY_MORE_HP = 40
 
@@ -61,7 +61,7 @@ function CEvent_NPC_BigTiny_Grow:GetEventOptionData( hPlayerHero, nOptionRespons
 
 	if nOptionResponse == EVENT_NPC_BIG_TINY_ACCEPT_GROW then 
 		EventOption[ "ability_name" ] = "tiny_toss"
-		EventOption[ "dialog_vars" ][ "capped_movement_speed" ] = EVENT_NPC_BIG_TINY_CAPPED_MOVEMENT_SPEED
+		EventOption[ "dialog_vars" ][ "movement_speed_reduction" ] = EVENT_NPC_BIG_TINY_MOVEMENT_SPEED_REDUCTION
 		EventOption[ "dialog_vars" ][ "bonus_hp" ] = self.vecPlayerHPValues[ hPlayerHero:GetPlayerOwnerID() ]
 	end
 
@@ -110,7 +110,7 @@ function CEvent_NPC_BigTiny_Grow:OnInteractWithNPCResponse( hPlayerHero, nOption
 		local kv = 
 		{
 			duration = -1,
-			capped_movement_speed = EVENT_NPC_BIG_TINY_CAPPED_MOVEMENT_SPEED,
+			movement_speed_reduction = EVENT_NPC_BIG_TINY_MOVEMENT_SPEED_REDUCTION,
 			model_scale = EVENT_NPC_BIG_TINY_MORE_MODEL_SCALE,
 			bonus_hp = self.vecPlayerHPValues[ hPlayerHero:GetPlayerOwnerID() ],
 		}

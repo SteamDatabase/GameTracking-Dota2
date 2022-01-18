@@ -19,7 +19,7 @@ local Juggernaut =
 		 ability_name = "aghsfort_juggernaut_blade_fury",
 		 special_value_name = "duration",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 1,
+		 value = 0.75,
 	},
 	{
 		 description = "aghsfort_juggernaut_blade_fury_mana_cost_cooldown",

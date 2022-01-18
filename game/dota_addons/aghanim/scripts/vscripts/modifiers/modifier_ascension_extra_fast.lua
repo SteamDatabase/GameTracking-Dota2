@@ -51,7 +51,7 @@ end
 function modifier_ascension_extra_fast:CheckState()
 	local state =
 	{
-		[MODIFIER_STATE_UNSLOWABLE] = true,
+		[MODIFIER_STATE_UNSLOWABLE] = false,
 	}
 	return state
 end

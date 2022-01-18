@@ -74,7 +74,7 @@ local Mars =
 		 ability_name = "aghsfort_mars_gods_rebuke",
 		 special_value_name = "knockback_slow_duration",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 3.0,
+		 value = 2.0,
 	},
 
 	{

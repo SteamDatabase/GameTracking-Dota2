@@ -204,6 +204,10 @@ function CMapEncounter_TropicalKeep:OnEncounterLoaded()
 	else
 		local hAllyEnt = self.hAllyEnts[1]
 		self.hAlly = CreateUnitByName( "npc_dota_creature_friendly_radiant_guard", hAllyEnt:GetOrigin(), false, nil, nil, DOTA_TEAM_GOODGUYS )
+		if self.hAlly then 
+			local nLevel = self:GetRoom():GetEliteRank() + GameRules.Aghanim:GetAscensionLevel()
+			self.hAlly:CreatureLevelUp( nLevel )
+		end
 	end
 end
 

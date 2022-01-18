@@ -88,12 +88,23 @@ local Slark =
 	},
 
 	{
-		 description = "aghsfort_slark_pounce_distance",
+		 description = "aghsfort_slark_pounce_distance_speed",
 		 ability_name = "aghsfort_slark_pounce",
-		 special_value_name = "pounce_distance",
-		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 150,
+		 special_values =
+		 {
+			{
+				special_value_name = "pounce_distance",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 150,
+			},
+			{
+				special_value_name = "pounce_speed",
+				operator = MINOR_ABILITY_UPGRADE_OP_ADD,
+				value = 150,
+			},
+		},
 	},
+
 	{
 		 description = "aghsfort_slark_pounce_leash_duration",
 		 ability_name = "aghsfort_slark_pounce",
@@ -106,8 +117,8 @@ local Slark =
 		 ability_name = "aghsfort_slark_pounce",
 		 special_value_name = "pounce_damage",
 		 operator = MINOR_ABILITY_UPGRADE_OP_ADD,
-		 value = 50,
-	},		
+		 value = 75,
+	},	
 	{
 		 description = "aghsfort_slark_essence_shift_agi_gain",
 		 ability_name = "aghsfort_slark_essence_shift",

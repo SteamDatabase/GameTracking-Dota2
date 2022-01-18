@@ -4,7 +4,7 @@ modifier_item_torrent_effect_potion = class({})
 ------------------------------------------------------------------------------
 
 function modifier_item_torrent_effect_potion:GetTexture()
-	return "tome_of_torrents"
+	return "item_tome_of_torrents"
 end
 
 --------------------------------------------------------------------------------
