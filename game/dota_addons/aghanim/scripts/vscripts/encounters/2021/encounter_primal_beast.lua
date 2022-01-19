@@ -143,7 +143,7 @@ function CMapEncounter_PrimalBeast:Start()
 		local szCloneName = nil
 		local vecCloneNames = 
 		{
-			--[["npc_dota_aghanim_clone_dude",
+			"npc_dota_aghanim_clone_dude",
 			"npc_dota_aghanim_clone_donkey",
 			"npc_dota_aghanim_clone_roshan",
 			"npc_dota_aghanim_clone_mecha",
@@ -151,7 +151,7 @@ function CMapEncounter_PrimalBeast:Start()
 			"npc_dota_aghanim_clone_goat",
 			"npc_dota_aghanim_clone_bucket",
 			"npc_dota_aghanim_clone_blacksmith",
-			"npc_dota_aghanim_clone_barbarian",--]]
+			"npc_dota_aghanim_clone_barbarian",
 			"npc_dota_aghanim_clone_bathtime",
 		}
 
