@@ -8,48 +8,58 @@ const k_modelInfos =
 	},
 	{	// Beastmaster Aghs
 		entityName : "aghanim_02",
-		unlockAction : "aghs_model_unlocked_beastmaster"
+		unlockAction : "aghs_model_unlocked_beastmaster",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech1"
 	},
 	{	// Bubble Bath Aghs
 		entityName : "aghanim_03",
-		unlockAction : "aghs_model_unlocked_bubble_bath"
+		unlockAction : "aghs_model_unlocked_bubble_bath",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech2"
 	},
 	{	// Mechanic Aghs
 		entityName : "aghanim_04",
 		customSounds : [ "Aghanim.LotsOfHobbies" ],
-		unlockAction : "aghs_model_unlocked_mechanic"
+		unlockAction : "aghs_model_unlocked_mechanic",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech3"
 	},
 	{	// Bucket Aghs
 		entityName : "aghanim_05",
 		customSounds : [ "Aghanim.BucketEntrance" ],
-		unlockAction : "aghs_model_unlocked_bucket"
+		unlockAction : "aghs_model_unlocked_bucket",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech4"
 	},
 	{	// Bro Aghs
 		entityName : "aghanim_06",
 		customSounds : [ "Aghanim.BroEntrance" ],
-		unlockAction : "aghs_model_unlocked_bro"
+		unlockAction : "aghs_model_unlocked_bro",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech5"
 	},
 	{	// Goat Aghs
 		entityName : "aghanim_07",
 		customSounds : [ "Aghanim.GoatEntrance" ],
-		unlockAction : "aghs_model_unlocked_goat"
+		unlockAction : "aghs_model_unlocked_goat",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech6"
 	},
 	{	// Mad Max Aghs
 		entityName : "aghanim_08",
-		unlockAction : "aghs_model_unlocked_mad_max"
+		unlockAction : "aghs_model_unlocked_mad_max",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech7"
 	},
 	{	// Future Aghs
 		entityName : "aghanim_09",
 		customSounds : [ "Aghanim.MechEntrance" ],
-		unlockAction : "aghs_model_unlocked_future"
+		unlockAction : "aghs_model_unlocked_future",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech8"
 	},
 	{	// Roshan Aghs
 		entityName : "aghanim_10",
-		unlockAction : "aghs_model_unlocked_roshan"
+		unlockAction : "aghs_model_unlocked_roshan",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech9"
 	},
 	{	// Courier Aghs
 		entityName : "aghanim_11",
-		unlockAction : "aghs_model_unlocked_courier"
+		unlockAction : "aghs_model_unlocked_courier",
+		speechChoice : "#DOTA_Aghanim_FrontPageSpeech10"
 	},
 ];
 
@@ -214,40 +224,13 @@ var ActivateModel = function ( nIndex )
 	deviceModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
 	aghanimModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
 
-	ModelContainer.RemoveClass( "HelpMe" );
-	$.Schedule( 0.1, function () { ModelContainer.AddClass( "HelpMe" ); } );
-	
-	//var guess = "red";
-	//var Speech = null;
-	
-	var SpeechChoice = [ 
-		"#DOTA_Aghanim_FrontPageSpeech1",
-		"#DOTA_Aghanim_FrontPageSpeech2",
-		"#DOTA_Aghanim_FrontPageSpeech3",
-		"#DOTA_Aghanim_FrontPageSpeech4",
-		"#DOTA_Aghanim_FrontPageSpeech5",
-		"#DOTA_Aghanim_FrontPageSpeech6",
-		"#DOTA_Aghanim_FrontPageSpeech7",
-		"#DOTA_Aghanim_FrontPageSpeech8",
-		"#DOTA_Aghanim_FrontPageSpeech9",
-		"#DOTA_Aghanim_FrontPageSpeech10",
-		"#DOTA_Aghanim_FrontPageSpeech11"
-	];
-
-	/*Barb: Save us!
-	Bath: Bring a towel!
-	Tinker: Useless idiots.
-	Bucket: What are you?!
-	Dude: Far out!
-	Goat: Baaah!
-	Mad Maghs: This is your fault!
-	Cyber Aghs: Recalibrating...
-	Roshanaghanim: ...
-	Aghanim the Wisest: What a pack of donkeys...*/
-
-	//var index = Math.floor(Math.random() * SpeechChoice.length);
-
-	ModelHelp.SetLocString( SpeechChoice[ nIndex ] );
+	var speechChoice = k_modelInfos[ nIndex ].speechChoice;
+	if ( speechChoice )
+	{
+		ModelContainer.RemoveClass( "HelpMe" );
+		$.Schedule( 0.1, function () { ModelContainer.AddClass( "HelpMe" ); } );
+		ModelHelp.SetLocString( k_modelInfos[ nIndex ].speechChoice );
+	}
 
 	SetCurrentModel( nIndex, true );
 }
