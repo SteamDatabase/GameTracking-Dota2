@@ -66,14 +66,14 @@ local Witch_Doctor =
 				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
 			},
 			{
-				special_value_name = "cooldown",
-				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
-			},
-			{
 				special_value_name = "mana_per_second",
 				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
-				value = MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+				value = -MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
+			},
+			{
+				special_value_name = "activation_base_mana_cost",
+				operator = MINOR_ABILITY_UPGRADE_OP_MUL,
+				value = -MINOR_ABILITY_COOLDOWN_MANACOST_PCT,
 			},
 		},
 	},
