@@ -97,6 +97,8 @@ function CHeroDemo:InitGameMode()
 	SendToServerConsole( "sv_cheats 1" )
 	SendToServerConsole( "dota_hero_god_mode 0" )
 	SendToServerConsole( "dota_ability_debug 0" )
+	SendToServerConsole( "dota_taunt_base_cooldown 0" )
+	SendToServerConsole( "dota_taunt_second_cooldown 0" )
 	if Convars:GetInt("dota_hero_demo_spawn_creeps_enabled") == 1 then
 		print("Starting demo mode with creeps spawning")
 		SendToServerConsole( "dota_creeps_no_spawning 0" )

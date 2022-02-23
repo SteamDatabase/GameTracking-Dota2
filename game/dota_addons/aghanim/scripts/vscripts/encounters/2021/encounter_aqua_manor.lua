@@ -259,7 +259,6 @@ end
 function CMapEncounter_AquaManor:InitializeObjectives()
 	--CMapEncounter.InitializeObjectives( self )
 
-	self:AddEncounterObjective( "survive_waves", 0, 4 )
 	self:AddEncounterObjective( "defeat_all_enemies", 0, self:GetMaxSpawnedUnitCount() )
 end
 
@@ -282,15 +281,6 @@ end
 
 --------------------------------------------------------------------------------
 
-function CMapEncounter_AquaManor:OnRequiredEnemyKilled( hAttacker, hVictim )
-	CMapEncounter.OnRequiredEnemyKilled( self, hAttacker, hVictim )
-
-	local nCurrentValue = self:GetEncounterObjectiveProgress( "defeat_all_enemies" )
-	self:UpdateEncounterObjective( "defeat_all_enemies", nCurrentValue + 1, nil )
-end
-
---------------------------------------------------------------------------------
-
 function CMapEncounter_AquaManor:GetPreviewUnit()
 	return "npc_dota_creature_morphling_big"
 end
@@ -301,7 +291,6 @@ function CMapEncounter_AquaManor:Start()
 	CMapEncounter.Start( self )
 
 	self:CreateUnits()
-
 	self:StartAllSpawnerSchedules( 0 )	
 end
 
@@ -311,20 +300,6 @@ function CMapEncounter_AquaManor:CreateUnits()
 	for _,Spawner in pairs ( self:GetSpawners() ) do
 		Spawner:SpawnUnits()
 	end
-end
-
---------------------------------------------------------------------------------
-
-function CMapEncounter_AquaManor:OnSpawnerFinished( hSpawner, hSpawnedUnits )
-	CMapEncounter.OnSpawnerFinished( self, hSpawner, hSpawnedUnits )
-
-	if hSpawner.szSpawnerName == "portal_v2_captain" then
-		if hSpawner.schedule then
-			local nCurrentValue = self:GetEncounterObjectiveProgress( "survive_waves" )
-			self:UpdateEncounterObjective( "survive_waves", nCurrentValue + 1, nil )
-		end
-	end
-
 end
 
 --------------------------------------------------------------------------------

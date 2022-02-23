@@ -152,13 +152,6 @@ end
 
 --------------------------------------------------------------------------------
 
-function CMapEncounter_Splitsville:InitializeObjectives()
-	CMapEncounter.InitializeObjectives( self )
-	self:AddEncounterObjective( "survive_waves", 0, 3 )
-end
-
---------------------------------------------------------------------------------
-
 function CMapEncounter_Splitsville:ShouldAutoStartGlobalAscensionAbilities()
 	return false
 end
@@ -175,18 +168,6 @@ end
 
 function CMapEncounter_Splitsville:Start()
 	CMapEncounter.Start( self )
-end
-
---------------------------------------------------------------------------------
-
-function CMapEncounter_Splitsville:OnSpawnerFinished( hSpawner, hSpawnedUnits )
-	CMapEncounter.OnSpawnerFinished( self, hSpawner, hSpawnedUnits )
-	if hSpawner.szSpawnerName == "dynamic_portal" then
-		if hSpawner.schedule then
-			local nCurrentValue = self:GetEncounterObjectiveProgress( "survive_waves" )
-			self:UpdateEncounterObjective( "survive_waves", nCurrentValue + 1, nil )
-		end
-	end
 end
 
 --------------------------------------------------------------------------------

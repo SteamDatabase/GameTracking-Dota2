@@ -65,91 +65,64 @@
 		"cvarvalue"	"string"	// new cvar value
 	}
 
-	"server_addban"
-	{
-		"name"		"string"	// player name
-		"userid"	"short"		// user ID on server
-		"networkid"	"string"	// player network (i.e steam) id
-		"ip"		"string"	// IP address
-		"duration"	"string"	// length of the ban
-		"by"		"string"	// banned by...
-		"kicked"	"bool"		// whether the player was also kicked
-	}
-
-	"server_removeban"
-	{
-		"networkid"	"string"	// player network (i.e steam) id
-		"ip"		"string"	// IP address
-		"by"		"string"	// removed by...
-	}
-
 	"player_activate"
 	{
-		"userid"	"short"		// user ID on server
+		"userid"	"player_controller"		// user ID on server
 	}
 
 	"player_connect_full"			// player has sent final message in the connection sequence
 	{
-		"userid"	"short"		// user ID on server
-		"index"		"byte"		// player slot (entity index-1)
+		"userid"	"player_controller"		// user ID on server (unique on server)
 		"PlayerID"	"short"
-	}
-
-	"player_say"
-	{
-		"userid"	"short"		// user ID on server
-		"text"		"string"	// the say text
 	}
 
 	"player_full_update"
 	{
-		"userid"	"short"		// user ID on server
+		"userid"	"player_controller"		// user ID on server
 		"count"		"short"		// Number of this full update
 	}
 
 	"player_connect"			// a new client connected
 	{
 		"name"		"string"	// player name		
-		"index"		"byte"		// player slot (entity index-1)
-		"userid"	"short"		// user ID on server (unique on server)
-		"networkid" "string" // player network (i.e steam) id
+		"userid"	"player_controller"		// user ID on server (unique on server)
+		"networkid" "string"	// player network (i.e steam) id
+		"xuid"		"uint64"	// steam id
 		"address"	"string"	// ip:port
 		"bot"		 "bool"
 	}
 
 	"player_disconnect"			// a client was disconnected
 	{
-		"userid"	"short"		// user ID on server
-		"reason"	"short"	// see networkdisconnect enum protobuf
+		"userid"	"player_controller"		// user ID on server
+		"reason"	"short"		// see networkdisconnect enum protobuf
 		"name"		"string"	// player name
 		"networkid"	"string"	// player network (i.e steam) id
+		"xuid"		"uint64"	// steam id
 		"PlayerID"	"short"
 	}
 
 	"player_info"				// a player changed his name
 	{
 		"name"			"string"	// player name		
-		"index"			"byte"		// player slot (entity index-1)
-		"userid"		"short"		// user ID on server (unique on server)
-		"networkid"		"string"	// player network (i.e steam) id
+		"userid"		"player_controller"		// user ID on server (unique on server)
+		"steamid"		"uint64"	// player network (i.e steam) id
 		"bot"			"bool"		// true if player is a AI bot
 	}
 
 	"player_spawn"				// player spawned in game
 	{
-		"userid"	"short"		// user ID on server
+		"userid"	"player_controller_and_pawn"
 	}
 
 	// player change his team
 	// you can receive this on the client before the local player has updated the team field locally
 	"player_team"				
 	{
-		"userid"	"short"		// user ID on server
+		"userid"	"player_controller_and_pawn"
 		"team"		"byte"		// team id
 		"oldteam" "byte"		// old team id
 		"disconnect" "bool"	// team change because player disconnects
-		"autoteam" "bool"		// true if the player was auto assigned to the team
-		"silent" "bool"			// if true wont print the team join messages
 		"name"	"string"
 		"isbot"	"bool"
 	}
@@ -161,43 +134,22 @@
 
 	"player_changename"
 	{
-		"userid"	"short"		// user ID on server
+		"userid"	"player_controller"		// user ID on server
 		"oldname"	"string"	// players old (current) name
 		"newname"	"string"	// players new name
 	}
 
-	"player_class"				// a player changed his class
-	{
-		"userid"	"short"		// user ID on server
-		"class"		"string"	// new player class / model
-	}
-
-	"player_score"				// players scores changed
-	{
-		"userid"	"short"		// user ID on server
-		"kills"		"short"		// # of kills
-		"deaths"	"short"		// # of deaths
-		"score"		"short"		// total game score
-	}
-	
 	"player_hurt"
 	{
-		"userid"	"short"   	// player index who was hurt				
-		"attacker"	"short"	 	// player index who attacked
+		"userid"	"player_controller_and_pawn"  	// player who was hurt
+		"attacker"	"player_controller_and_pawn" 	// player who attacked
 		"health"	"byte"		// remaining health points
-	}
-
-	"player_shoot"				// player shoot his weapon
-	{
-		"userid"	"short"		// user ID on server
-		"weapon"	"byte"		// weapon ID
-		"mode"		"byte"		// weapon mode
 	}
 
 	"player_chat"				// a public player chat
 	{
 		"teamonly"	"bool"		// true if team only chat
-		"userid" 	"short"		// chatting player 
+		"userid" 	"player_controller"		// chatting player 
 		"playerid"	"short"		// chatting player ID 
 		"text" 	 	"string"	// chat text
 	}
@@ -245,13 +197,13 @@
 
 	"hltv_cameraman"			// a spectator/player is a cameraman
 	{
-		"index"		"short"			// camera man entity index
+		"userid"		"player_controller"			// camera man entity index
 	}
 
 	"hltv_chase"					// shot of a single entity
 	{
-		"target1"		"short"		// primary traget index 
-		"target2"		"short"		// secondary traget index or 0
+		"target1"		"player_controller"		// primary traget index 
+		"target2"		"player_controller"		// secondary traget index or 0
 		"distance"	"short"		// camera distance
 		"theta"			"short"		// view angle horizontal 
 		"phi"				"short"		// view angle vertical
@@ -263,14 +215,14 @@
 	{
 		"index"		"byte"			// fixed camera index
 		"rank"		"float"			// ranking, how interesting is this camera view
-		"target"	"short"			// best/closest target entity
+		"target"	"player_controller"	// best/closest target entity
 	}
 
 	"hltv_rank_entity"			// an entity ranking
 	{
-		"index"		"short"			// entity index
+		"userid"	"player_controller"	// player slot
 		"rank"		"float"			// ranking, how interesting is this entity to view
-		"target"	"short"			// best/closest target entity
+		"target"	"player_controller"	// best/closest target entity
 	}
 
 	"hltv_fixed"				// show from fixed view
@@ -282,7 +234,7 @@
 		"phi"			"short"		
 		"offset"	"short"
 		"fov"			"float"
-		"target"	"short"		// follow this entity or 0
+		"target"	"player_controller"		// follow this player
 	}
 
 	"hltv_message"	// a HLTV message send by moderators
@@ -401,13 +353,13 @@
 
 	"player_death"				// a game event, name may be 32 charaters long
 	{
-		"userid"	"short"   	// user ID who died				
-		"attacker"	"short"	 	// user ID who killed
+		"userid"		"player_controller_and_pawn"   	// user ID who died				
+		"attacker"		"player_controller_and_pawn"	 	// user ID who killed
 	}
 
 	"player_footstep"
 	{
-		"userid"	"short"
+		"userid"	"player_pawn"
 	}
 
 	"player_hintmessage"
@@ -418,14 +370,14 @@
 	"break_breakable"
 	{
 		"entindex"	"long"
-		"userid"		"short"
+		"userid"	"player_pawn"
 		"material"	"byte"	// BREAK_GLASS, BREAK_WOOD, etc
 	}
 
 	"break_prop"
 	{
 		"entindex"			"long"
-		"userid"			"short"
+		"userid"		"player_pawn"
 		"player_held"		"bool"
 		"player_thrown"		"bool"
 		"player_dropped"	"bool"
@@ -439,23 +391,10 @@
 		"damagebits"		"long"
 	}
 	
-	"door_open"
-	{
-		"userid"		"short"	// Who opened the door
-		"checkpoint"		"bool"	// Is the door a checkpoint door
-		"closed"		"bool"	// Was the door closed when it started opening?
-	}
-
 	"door_close"
 	{
-		"userid"		"short"	// Who closed the door
+		"userid"		"player_pawn"	// Who closed the door
 		"checkpoint"		"bool"	// Is the door a checkpoint door
-	}
-
-	"door_unlocked"
-	{
-		"userid"		"short"	// Who opened the door
-		"checkpoint"	"bool"	// Is the door a checkpoint door
 	}
 
 // Client side VoteController talking to HUD
@@ -511,7 +450,7 @@
 
 	"achievement_earned"
 	{
-		"player"	"byte"		// entindex of the player
+		"player"	"player_controller"		// entindex of the player
 		"achievement"	"short"		// achievement ID
 	}
 
@@ -530,11 +469,13 @@
 
 	"spec_target_updated"
 	{
+		"userid"	"player_controller_and_pawn"	// spectating player
+		"target"	"ehandle"		// ehandle of the target
 	}
 
 	"entity_visible"
 	{
-		"userid"	"short"		// The player who sees the entity
+		"userid"	"player_controller"		// The player who sees the entity
 		"subject"	"long"		// Entindex of the entity they see
 		"classname"	"string"	// Classname of the entity they see
 		"entityname" "string"	// name of the entity they see
@@ -542,7 +483,7 @@
 
 	"player_use_miss"			// the player pressed use but a use entity wasn't found.
 	{
-		"userid"	"short"		// userid of user
+		"userid"	"player_controller"		// playerslot of user
 	}
 
 	"gameinstructor_draw"
@@ -600,7 +541,7 @@
 //////////////////////////////////////////////////////////////////////
 	"instructor_start_lesson"
 	{
-		"userid"					"short"		// The player who this lesson is intended for
+		"userid"						"player_controller"		// The player who this lesson is intended for
 		"hint_name"					"string"	// Name of the lesson to start.  Must match instructor_lesson.txt
 		"hint_target"				"long"		// entity id that the hint should display at. Leave empty if controller target
 
@@ -611,19 +552,19 @@
 
 	"instructor_close_lesson"
 	{
-		"userid"					"short"		// The player who this lesson is intended for	
+		"userid"						"player_controller"		// The player who this lesson is intended for	
 		"hint_name"					"string"	// Name of the lesson to start.  Must match instructor_lesson.txt
 	}
 
 	"instructor_server_hint_create" //create a hint using data supplied entirely by the server/map. Intended for hints to smooth playtests before content is ready to make the hint unneccessary. NOT INTENDED AS A SHIPPABLE CRUTCH
 	{
-		"userid"					"short"		// user ID of the player that triggered the hint
+		"userid"					"player_controller"		// user ID of the player that triggered the hint
 		"hint_entindex"				"long"		// entity id of the env_instructor_hint that fired the event
 
 		"hint_name"					"string"	// what to name the hint. For referencing it again later (e.g. a kill command for the hint instead of a timeout)
 		"hint_replace_key"			"string"	// type name so that messages of the same type will replace each other
 		"hint_target"				"long"		// entity id that the hint should display at
-		"hint_activator_userid"		"short"		// userid id of the activator
+		"hint_activator_userid"		"player_controller"		// playerslot of the activator
 		"hint_timeout"				"short"	 	// how long in seconds until the hint automatically times out, 0 = never
 		"hint_icon_onscreen"		"string"	// the hint icon to use when the hint is onscreen. e.g. "icon_alert_red"
 		"hint_icon_offscreen"		"string"	// the hint icon to use when the hint is offscreen. e.g. "icon_alert"

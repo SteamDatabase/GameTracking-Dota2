@@ -70,6 +70,7 @@ function CAghanim:ModifierGainedFilter( filterTable )
 		"modifier_aghsfort_dawnbreaker_fire_wreath_smash_stun",
 		"modifier_aghsfort_void_spirit_aether_remnant_pull",
 		"modifier_tidehunter_ravage",
+		"modifier_aghsfort_ravage_potion",
 	}
 
 

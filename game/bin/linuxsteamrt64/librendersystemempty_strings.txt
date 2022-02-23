@@ -45,7 +45,7 @@ $ORIGIN
 (%s): Setting %s to %s
 )
 *
-*ZN19CTextureManagerBase26MN_CacheRequestedResourcesER10CUtlVectorINS_15ToCacheHandle_tE10CUtlMemoryIS1_iEEEUlP25IAsyncResourceDataRequestSt10unique_ptrI25IAsyncProcessedDataResultSt14default_deleteIS9_EEE_
+*ZN19CTextureManagerBase26MN_CacheRequestedResourcesER10CUtlVectorINS_15ToCacheHandle_tEi10CUtlMemoryIS1_iEEEUlP25IAsyncResourceDataRequestSt10unique_ptrI25IAsyncProcessedDataResultSt14default_deleteIS9_EEE_
 +
 ,
 , channels =
@@ -72,6 +72,7 @@ $ORIGIN
 -noinitfallbacktextures
 -preloadtextures
 -r_max_device_threads
+-renderdoc
 -rendersystem_thread_mode
 -shaderstats
 -shadowTargetSize
@@ -79,7 +80,6 @@ $ORIGIN
 -sse2
 -sse3
 -sse4
--tools
 -vulkan
 .
 ../public/tier0/memstack.h
@@ -112,6 +112,7 @@ $ORIGIN
 12CThreadEvent
 12CThreadedJob
 12IRenderUtils
+13CRenderDocAPI
 13CTextureEmpty
 13IRenderDevice
 14CBaseAppSystemI12IRenderUtilsE
@@ -139,7 +140,6 @@ $ORIGIN
 18CEmptyShaderBuffer
 18CPlaceholderConVar
 18CRenderDeviceEmpty
-19CRenderContextEmpty
 19CSchemaRegistration
 19CTextureManagerBase
 19IReadBufferCallback
@@ -307,7 +307,6 @@ CMemoryStack::FreeAll(bool)
 CMemoryStack::Init(char const*, unsigned int, unsigned int, unsigned int, unsigned int)
 CMemoryStack::~CMemoryStack()
 CMotionTransform
-COLORCORRECTION_VERSION_1
 CONTENT
 CONTENTROOT
 CPlayerSlot
@@ -429,6 +428,7 @@ D32
 D32FS8
 DCT coefficient out of range
 DCT scaled block size %dx%d not supported
+DEFAULT_WRITE_PATH
 DX11
 DXT1
 DXT1_ONEBITALPHA
@@ -436,7 +436,6 @@ DXT3
 DXT5
 DXT5_NM
 Data size too short
-DebugTextureInfo001
 Decompressed %i texture mips in %.2f ms (%.1fmb/s)
 Define Arithmetic Table 0x%02x: 0x%02x
 Define Huffman Table 0x%02x
@@ -445,12 +444,12 @@ Define Restart Interval %u
 DegreeEuler
 Deleting texture with outstanding streaming request (%s)
 DemoUpconverterVersion001
+Detected RenderDoc %i.%i.%i
 DevWarning(char const*, ...)
 Didn't expect more than one scan
 Direct3D 11
 Discarding abandoned streaming texture load for %s
 Display GPU memory usage.
-DotaCardGameClient_001
 ERROR! LoadFromPNG( %s ) failed!
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: Specified full path %s does not lie under the mod search path!)
@@ -471,7 +470,6 @@ Empty input file
 EncodeBC7Blocks
 End Of Image
 EngineServiceMgr001
-EventSystem001
 Evict all resident texture.
 FATAL ERROR: unable to register all schema data: %s
 FCVAR_NEVER_AS_STRING
@@ -684,6 +682,7 @@ Loading multipart or DeepImage is not supported  in LoadEXR() API
 Localize_001
 LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
+LoggingSystem_Log(int, LoggingSeverity_t, Color, char const*, ...)
 LoggingSystem_Log(int, LoggingSeverity_t, LeafCodeInfo_t const&, char const*, ...)
 LoggingSystem_RegisterLoggingChannel
 M
@@ -774,7 +773,7 @@ Plat_GetDesktopResolution
 Plat_GetEnv
 Plat_GetModuleFilename
 Plat_GetMonitorResolution
-Plat_GetThreadIndex
+Plat_GetProcAddress
 Plat_GetWindowMonitorIndex
 Plat_GlobalMemoryStatus
 Plat_IsInDebugSession
@@ -783,7 +782,6 @@ Plat_NeedsLowFragmentation
 Plat_NonFatalErrorFunc
 Plat_OsSpecificHandleToPlatWindow
 Plat_ReconfigureWindow
-Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_WindowToOsSpecificHandle
 PooledDynamicConstantBuffer
@@ -801,13 +799,14 @@ Quantizing to %d colors
 QuarterSizeAttrWithBoxFilter
 Quaternion
 QuaternionAligned
-QueuedLoaderVersion001
 R channel not found
 R channel not found!
 R11_EAC
 R16
 R16F
 R16F_EXPAND
+R16G16_UINT
+R16_UINT
 R32F
 R32G32_UINT
 R32_UINT
@@ -815,6 +814,7 @@ R8G8B8A8_ETC2_EAC
 R8G8B8_ETC2
 R8G8_UINT
 R8_UINT
+RENDERDOC_GetAPI
 RENDER_BUFFER_APPEND_CONSUME_BUFFER
 RENDER_BUFFER_BYTEADDRESS_BUFFER
 RENDER_BUFFER_STRUCTURED_BUFFER
@@ -905,7 +905,6 @@ RGBX8888
 RST%d
 RadianEuler
 RandomFloat
-RandomSeed
 Read failed on temporary file
 Read from EMS failed
 Read from XMS failed
@@ -960,7 +959,6 @@ Seek failed on temporary file
 Selected %d colors for quantization
 SerializedEntitiesVersion001
 SeriousWarning
-ServerUploadGameStats001
 Setting max texture resolution to: %dx%d
 Smoothing not supported with nonstandard sampling ratios
 SoundGuid_t
@@ -979,7 +977,6 @@ Source2GameClients001
 Source2GameEntities001
 Source2Host001
 Source2Server001
-Source2ServerSerializers002
 Ss=%d, Se=%d, Ah=%d, Al=%d
 Start Of Frame 0x%02x: width=%u, height=%u, components=%d
 Start Of Scan: %d components
@@ -1017,11 +1014,12 @@ ThreadGetCurrentId
 ThreadSleep
 ThreadYield
 Too many color components: %d, max %d
-Too many threads (%d) accessing the render device, need to increase -r_max_device_threads (%d)
+Too many threads (%d), increase m_nMaxDeviceAccessThreads (%d) in CRenderDeviceBase when a new thread is added.
 ToolFramework2_002
 ToolSceneNodeFactory_001
 ToolService_001
 Total size of the texture pool in MB
+Triggers a RenderDoc capture
 Trying to create a render target with invalid image format %s
 Trying to set dxlevel (%d) which is higher than the card can support (%d)!
 Trying to set dxlevel (%d) which is lower than the card can support (%d)!
@@ -1059,10 +1057,8 @@ VApplication001
 VAsyncFileSystem2_001
 VAvi001
 VB: %d buffers, %.2f MB
-VBAllocTracker001
 VBik001
 VConComm001
-VDebugService_001
 VEngineCvar007
 VFileSystem017
 VGUI_Input005
@@ -1072,7 +1068,6 @@ VGUI_Surface032
 VGUI_System010
 VGUI_ivgui008
 VGy#
-VMDLLIB001
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
@@ -1219,6 +1214,7 @@ archive
 arithmetic overflow
 basic_string::_S_construct null not valid
 before solve err=%f
+binary
 binary_auto
 binary_bc
 binary_lz4
@@ -1441,6 +1437,8 @@ queued
 r_fullscreen_gamma
 r_gpu_mem_stats
 r_max_texture_pool_size
+r_renderdoc_capture_frame
+r_renderdoc_open_captures
 r_texture_hookup_uses_threadpool
 r_texture_nonstreaming_load
 r_texture_pool_size
@@ -1455,9 +1453,9 @@ rb
 reached chunk/cache limits
 reached end-of-image state
 realloc
-rendercontextbase.cpp
 renderdevicebase.cpp
 renderdevicemgrbase.cpp
+renderdoc_captures
 renderstatehelper.h
 rendersystem (%s) tracked resources:
 rendersystemempty
@@ -1582,15 +1580,15 @@ sub%dx%d.tga
 submrg%dx%d.tga
 success
 texturebase.cpp
-texturebase.cpp(2269):Error loading texture: %s
-texturebase.cpp(3281):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3304):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3315):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3326):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3341):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3362):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3373):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3384):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2249):Error loading texture: %s
+texturebase.cpp(3261):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3284):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3295):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3306):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3321):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3342):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3353):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3364):ResourceHandleToData( %s ) failed! Falling back to error texture!
 tier0
 tiles
 too many length or distance symbols

@@ -113,8 +113,10 @@ $tI
 %-10s %d %s: %s at offset %d, 0x%p array %s struct %s: index %d array size %d in %s
 %-120s
 %-120s - %s
+%-3d %s
 %-4d classes
 %-5d %-20s : [%-5d -> %-5d] %-5s bits:  %-32s %-80s : '%s'
+%-75s %-75s offset %10.10s %9.9s %s
 %.*g
 %.*s
 %.18g
@@ -123,7 +125,6 @@ $tI
 %12.12s %21.21s[%d]
 %12.12s:  @ %.3f [%s]
 %20.20s
-%50.50s %75.75s offset %10.10s %9.9s %s
 %50.50s: %2.2d bits == '%s'
 %60.60s %6.6s %15.15s %5.5s %10.10s
 %60.60s %6.6s %15.15s %5d %10d
@@ -146,9 +147,11 @@ $tI
 %d.%d.%d
 %d:  %s %s [ptr 0x%p] 0x%p (%s) (%s *) %s '%s'
 %d:  %s (%s) [ptr 0x%p] %s%s '%s'
+%d: %d,
 %g
 %g,
 %i %i %i %i
+%i:  culled %s:  %s -> %s
 %ld
 %lld
 %llu
@@ -171,6 +174,7 @@ $tI
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
 %s allocation count overflow( add %llu + current %llu > max %llu )
+%s ambiguous, field exists in serializer '%s' field %d
 %s depth %d
 %s encoding as %d bits '
 %s had %d different permutations
@@ -180,8 +184,8 @@ $tI
 %s%s %s::%s recursively
 %s%s found %s in path %s
 %s%s: failed to find match for offset %llu [path %s]
-%s%s::%s marked %s by group %s%s
-%s%s::%s marked %s by name%s
+%s%s::%s marked %s by group %s at '%s'
+%s%s::%s marked %s by name at '%s'
 %s+--
 %s+-- Schema Class: %s
 %s,%s,'%s',%d,%d,%.3f,%d,%.3f,%d,%d,=E%d/K$1,%s,%s
@@ -220,6 +224,7 @@ $tI
 %s:  reliable send overflow, pending %d bytes (bits size %d) of outgoing reliable until acknowledge
 %s:  resending reliable seq %d
 %s:  sent reliable data blocks %d through %d, bytes %d (bit size %d)
+%s:  specified different usergroup proxy functions for '%s'
 %s:  unexpected reliable start sequence %d, wanted %d
 %s:  value %u: count %d
 %s: !CanPacket() - SNPQueueTime=%.1fms.
@@ -230,7 +235,6 @@ $tI
 %s: SendMessage unreliable failed with k_EResultLimitExceeded, crashing connection.
 %s: field %s has MNetworkSendProxyRecipientsFilter but is not declared using CNetworkVarEmbeddedNotFlattened
 %s: field %s has MNetworkSendProxyRecipientsFilter but type '%s' is not declared DECLARE_EMBEDDED_NETWORKVAR_NOTFLATTENED()
-%s: invalid nBeforeIndex %d
 %s: rebasing delegate [ 0x%p -> 0x%p ]
 %s: recreation removing deallocation
 %s: shrinking removes delegate [0x%p]
@@ -264,19 +268,20 @@ $tI
 %s| SizeOf: %d
 %s| Virtual: %s; Abstract: %s; TrivialConstr: %s; TrivialDestr: %s
 %u serializers with %u fields (approx memory %llu / %llu in fields ) bytes (field size %d, serializer size %d)
+%u:%u:%u
 %x (int:%d, float:%f)
 (
 ( def. "%s" )
 (%d) is > avg (%.2f) with stddev*scale (%.2f * %.2f) and threshold (%.2f)
 (%d,%d)
 (%s%s)
+(%s)
 (%s->%s)
 (%u %u %u %u)
 (Message Info)
 (NULL)
 (cannot determine missing fields for lite message)
 (merge
-(no node).%s
 (root)
 (stream: %s local: %s) %s
 )", which is not defined. The innermost scope is searched first in name resolution. Consider using a leading '.'(i.e., "(.
@@ -314,7 +319,6 @@ $tI
 - remote IP: %s
 - total: in %.1f, out %.1f MB
 ---
---- %s
 --- %s:
 --- %s[%d]:
 ->
@@ -324,6 +328,7 @@ $tI
 -inf
 -ip
 -net_no_parallel_build
+-networkprofile_fsbuild
 -networkspew
 -networkspewcreate
 -networkspewentity
@@ -391,7 +396,6 @@ $tI
 10CMsg_CVars
 10ConCommand
 10IAppSystem
-11CEncodeInfo
 11CNETMsg_NOP
 11CRefCountedI20CRefCountServiceBaseILb1E6CRefMTEE
 11INetChannel
@@ -479,11 +483,10 @@ $tI
 20CSVCMsg_CmdKeyValues
 20CSVCMsg_GetCvarValue
 20CSVCMsg_TempEntities
-20CSendSerializerStack
 21CBidirMsg_RelayPacket
 21CCLCMsg_ClientMessage
-21CClientDatatableStack
 21CDeltaFieldPathTracer
+21CFlattenedSerializers
 21CNetworkEncodingStats
 21CSVCMsg_GameEventList
 21CSVCMsg_ServerSteamID
@@ -493,6 +496,8 @@ $tI
 21IVConCommDataReceived
 21NetMessagePacketEnd_t
 21NetMessagePacketStart
+22CDecodeSerializerStack
+22CEncodeSerializerStack
 22CMsgServerNetworkStats
 22CSVCMsgList_GameEvents
 22CSVCMsg_CrosshairAngle
@@ -509,7 +514,6 @@ $tI
 23INetworkMessageInternal
 23NetMessagePacketStart_t
 24CCLCMsg_RespondCvarValue
-24CFlattenedSerializers_FS
 25CCLCMsg_RconServerDetails
 25CConCommandMemberAccessorI16CNetworkMessagesE
 25CNETMsg_SpawnGroup_Unload
@@ -598,11 +602,10 @@ $tI
 =%s
 >
 ?
-???
 ?color
 @
 @?
-@@default
+@@CUtlVector
 @B
 A file with this name is already in the pool.
 A protobuf object %s with a repeated field %s was used in a container, this will crash
@@ -674,7 +677,8 @@ Boolean default must be true or false.
 Buffer overflow in net channel %s
 BuildDelta
 BuildDeltaProperties fieldDataBuf
-BuildHierarchy
+BuildHierarchy_IterateFields
+BuildHierarchy_R
 BuildMergedSerializedEntity:  delta header with corrupt array count [ ent %d ]:  entry %d/%d == %u!
 BuildMergedSerializedEntity:  ignoring %s, was in previous state only, now outside of valid range for root field %s [array count %d, base index %d]
 BuildMergedSerializedEntity:  problem writing %s:  %d bits [%d to %d] is < 1 bit!
@@ -687,11 +691,13 @@ CAnimVariant
 CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::AppendRepeat(char, int, bool)
+CBufferString::EndsWith(char const*) const
 CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::Purge(int)
 CBufferString::RemoveAt(int, int)
 CBufferString::Replace(char const*, char const*, bool)
+CBufferString::SetLength(int, bool, int*)
 CBufferString::ToLowerFast(int)
 CBufferString::Trim(char const*)
 CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
@@ -700,12 +706,13 @@ CDeltaCalculator::FieldCalcDelta fromBits
 CDeltaCalculator::FieldCalcDelta toBits
 CEntityIndex
 CEntitySystem::BuildEntityNetworking (%s build of %s) took %.3f msecs for %d out of %d classes
+CEntitySystem::BuildEntityNetworking:  starting %s build %d / %d (%.2f%%)
 CEventDispatcher_Base::CEventDispatcher_Base()
 CEventDispatcher_Base::IterateListener(CEventDispatcher_Base::DelegateIterator_Base_t&)
 CEventDispatcher_Base::IterateListeners_End(CEventDispatcher_Base::DelegateIterator_Base_t&)
 CEventDispatcher_Base::IterateListeners_Start(CEventDispatcher_Base::DelegateIterator_Base_t&, bool)
-CEventDispatcher_Base::RegisterEventListener_Base(CUtlAbstractDelegate const&, unsigned int, bool, CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int> >&, int, char const*)
-CEventDispatcher_Base::UnregisterEventListener_Base(CUtlAbstractDelegate const&, CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int> >&)
+CEventDispatcher_Base::RegisterEventListener_Base(CUtlAbstractDelegate const&, unsigned int, bool, CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int> >&, int, char const*)
+CEventDispatcher_Base::UnregisterEventListener_Base(CUtlAbstractDelegate const&, CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int> >&)
 CFieldPath tracing ended
 CFieldPath tracing started
 CFlattenedSerializer::ApplyOverrides_R
@@ -714,8 +721,11 @@ CFlattenedSerializer::BuildOverrideField:  Problem initializing replacement fiel
 CFlattenedSerializer::Decode
 CFlattenedSerializer::Decode array index %d out of range %d for field %s::%s [%d]
 CFlattenedSerializer::DumpSerializedEntityToConsole
-CFlattenedSerializer::Encode failure for entity %d because buffer of %d bytes overflowed
+CFlattenedSerializer::Encode failure for entity %d
+CFlattenedSerializer::Encode overflow failure for entity %d max size is %d bytes
 CFlattenedSerializer::Encode writeBuf
+CFlattenedSerializer::EncodeField overflowed %s %s %s
+CFlattenedSerializer::EncodeField overflowed %s %s[%d/%d] %s
 CFlattenedSerializer::MaybeWriteFlattenedSerializers_R, skipping already wrote stable %s : %d
 CFlattenedSerializer::MergeDeltas fieldDataBuf
 CFlattenedSerializer::MergeDeltas: invalid parameters passed.
@@ -727,8 +737,8 @@ CFlattenedSerializer::ValidateSerializedEntity
 CFlattenedSerializer::WriteFieldList
 CFlattenedSerializer::WriteFieldList fieldDataBuf
 CFlattenedSerializer::[ent %d] Decode path %s array index %d out of range %d for field %s::%s [%d]
-CFlattenedSerializers_FS::BuildMergedSerializedEntity fieldDataBuf
-CFlattenedSerializers_FS::SpewSerializer: called with NULL serializer!!!
+CFlattenedSerializers::BuildMergedSerializedEntity fieldDataBuf
+CFlattenedSerializers::SpewSerializer: called with NULL serializer!!!
 CHECK failed: !InRealOneof(field):
 CHECK failed: !IsDefault(default_value):
 CHECK failed: !TableEntryIsTree(b) && !TableEntryIsTree(b ^ 1):
@@ -975,7 +985,6 @@ CHECK failed: type > 0 && type <= WireFormatLite::MAX_FIELD_TYPE:
 CHECK failed: uninterpreted_options_field != nullptr:
 CHECK failed: value != nullptr:
 CHECK failed: z.first != NULL:
-CHandle<
 CMemAllocSystemInitialize
 CMergedEntityOffsetBuilder::Expecting at least one bit in offset
 CMotionTransform
@@ -1006,6 +1015,7 @@ CNetworkSerializer: Unable to find network encoder named %s!
 CNetworkSerializer::Init:  Couldn't find field %s in iterator for %s
 CNetworkSystem::BufferToBufferDecompress with improperly sized dest buffer (%u in, %llu needed)
 CNetworkSystem::BufferToBufferDecompress with improperly sized dest buffer (%u in, %u needed)
+CNetworkSystem::CleanupDebugOutputFunction()
 CNetworkSystem::CloseAllSockets()
 CNetworkSystem::FlushPeerToPeerChannels
 CNetworkSystem::Init() m_SteamAPIContextClient.Init ( ) failed (no Steam?)
@@ -1016,7 +1026,6 @@ CNetworkSystem::Shutdown()
 CNetworkSystem::ShutdownGameServer
 CNetworkUtlVectorBase
 CNetworkedQuantizedFloat
-COLORCORRECTION_VERSION_1
 CPPTYPE_BOOL
 CPPTYPE_DOUBLE
 CPPTYPE_ENUM
@@ -1035,7 +1044,6 @@ CSerializedEntities::CompareSerializedEntities to field %s not present in from
 CSerializedEntities::CompareSerializedEntities:  to pointer is %s and from pointer is %s
 CSplitScreenSlot
 CSplitString::Construct(char const*, char const**, int)
-CStackPair
 CStrongHandle
 CTSQueue corruption
 CThreadEvent::CThreadEvent(bool)
@@ -1066,7 +1074,6 @@ CUtlBinaryBlock::SetLength(int)
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
 CUtlBuffer::CUtlBuffer(void const*, int, int)
-CUtlBuffer::CheckGet(int)
 CUtlBuffer::CheckPut(int)
 CUtlBuffer::ParseToken(characterset_t const*, char*, int, bool)
 CUtlBuffer::Printf(char const*, ...)
@@ -1077,6 +1084,7 @@ CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
 CUtlMemoryBlockAllocator::AllocCopy(char const*, unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int)
+CUtlMemoryBlockAllocator::Purge()
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
 CUtlMemoryPoolBase::Alloc()
 CUtlMemoryPoolBase::CUtlMemoryPoolBase(int, int, int, MemoryPoolGrowType_t, char const*, MemAllocAttribute_t)
@@ -1096,6 +1104,7 @@ CUtlString::IsEqual_CaseSensitive(char const*) const
 CUtlString::Purge()
 CUtlString::Set(char const*)
 CUtlString::SetDirect(char const*, int)
+CUtlString::SetLength(int)
 CUtlString::Trim(char const*)
 CUtlString::TrimRight(char const*)
 CUtlString::TrimRight(char)
@@ -1105,7 +1114,6 @@ CUtlString::operator+=(CUtlString const&)
 CUtlString::operator+=(char const*)
 CUtlString::operator==(CUtlString const&) const
 CUtlString::operator[](int) const
-CUtlStringToken
 CUtlSymbol
 CUtlSymbolLarge
 CUtlSymbolTable::AddString(char const*)
@@ -1114,8 +1122,9 @@ CUtlSymbolTable::Find(char const*) const
 CUtlSymbolTable::RemoveAll()
 CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
-CUtlVector
 CUtlVectorEmbeddedNetworkVar
+CVariableBitStringBase::FreeInts()
+CVariableBitStringBase::Resize(int)
 CXXABI_1.3
 CXXABI_1.3.5
 CXXABI_1.3.8
@@ -1150,7 +1159,7 @@ Cannot get here
 Cannot reconnect loopback after initializing steam networking!
 Cannot register change callback priorities at this stage! Must do it earlier!
 Cannot show available settings until SteamNetworkingUtils initialized
-Cannot show values of SteamNetworkongSockets configuration values until initialized
+Cannot show values of SteamNetworkingSockets configuration values until initialized
 Cannot skip field value, unexpected token:
 Cannot use priority equal to NETWORK_FIELD_CHANGE_DEFAULT_PRIORITY!
 ChangeAccessorFieldPathIndex_t
@@ -1198,7 +1207,6 @@ DTI %s
 DTI reset
 DTI: wrote client stats into %s. Session duration = %0.2f seconds.
 DebugCallback
-DebugTextureInfo001
 Declared Class
 Declared Enum
 Decode
@@ -1215,7 +1223,6 @@ Division or mod by zero: dividend.hi=
 Don't bother compressing packets below this size.
 Don't lookup extension types if they aren't present (1).
 Don't lookup extension types if they aren't present (2).
-DotaCardGameClient_001
 Double-save to Member '%s'
 Dump UDP packets summary to console
 Dump non-loopback udp only
@@ -1258,7 +1265,6 @@ Error: Components count + networkable data type must be the same for all instanc
 Error: Duplicate network array field serializer registered (%s)!
 Error: Duplicate network field change callback registered (%s)!
 Error: Duplicate network field serializer registered (%s)!
-EventSystem001
 Exceeded max number proxies in CFlattenedSerializer::BuildHierarchy()
 Executing queued command: '%s'
 Expanded map entry type
@@ -1376,7 +1382,6 @@ For servers behind NAT/DHCP meant to be exposed to the public internet, this is 
 Forces larger payloads.
 Found invalid proto option data for:
 GCC: (SteamRT 5.4.0-7.really.6+steamrt1.2+srt2) 5.4.1 20160803
-GCC: (SteamRT/Linaro 4.6.3-1ubuntu5+steamrt1.2+srt2) 4.6.3
 GLIBCXX_3.4
 GLIBCXX_3.4.11
 GLIBCXX_3.4.18
@@ -1456,7 +1461,7 @@ Index must be in range of repeated field values.
 Index out-of-bounds (field is empty).
 InitFakeField:  Couldn't find schema lookup for '%s' of type '%s'
 InitFakeField:  Parser function returned false for '%s' of type '%s'
-InitFakeField: %-64s type: %-32s encoder: %-32s [%s]
+InitFakeField: %-80s type: %-50s encoder: %-32s [%s]
 InitField
 InitGameServer
 InitSteamNetworking
@@ -1465,7 +1470,6 @@ InputService_001
 InputStackSystemVersion001
 InputSystemVersion001
 Insert
-InsertBeforeGetPtr
 InsertIfNotFound
 InstallChangeCallback called with NULL callback, ignoring!!!
 InstallChangeCallback ignoring duplicate change callback!!!
@@ -1560,7 +1564,7 @@ MNetworkSerializeAs
 MNetworkSerializer
 MNetworkTypeAlias
 MNetworkUserGroup
-MNetworkUserGroupSendProxyRecipientsFilter
+MNetworkUserGroupProxy
 MNetworkVarEmbeddedFieldOffsetDelta
 MNetworkVarEmbeddedNotFlattened
 MNetworkVarNames
@@ -1608,10 +1612,9 @@ Maximum amount of foreign packets (no established connection) allowed per frame 
 Maximum number of messages to allow waiting in queue after processing; exceeding this disconnects the client. 0 == no limit
 Maximum number of messages to process from a client in a single frame (0 == no limit).
 MaybeAllocateAligned cannot fail here.
-MemAlloc_AllocFunc
-MemAlloc_FreeFunc
 MemAlloc_StrDupFunc
 Merge
+MergeDeltas
 MeshSystem001
 MeshUtils001
 Message class "
@@ -1849,7 +1852,6 @@ Plat_IsInTestMode
 Plat_MSTime
 Plat_NonFatalErrorFunc
 Plat_RelativeTicks
-Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_TickDiffMilliSecF
 Plat_USTime
@@ -1868,12 +1870,10 @@ PopNPlusOne
 PopOnePlusN
 PopOnePlusOne
 PostProcessingSystem_001
-PrecipitationType_t
 Print detailed network statistics for each network connection
 Problem     :
 Problem     : Enum value did not match field type:    Expected  :
 Problem     : Field is not the right type for this message:    Expected  :
-ProcessMessages
 ProcessOverride encountered unknown directive NetworkOverrideType_t(%d)
 ProcessPacketSNP %s:%s packet %i at %i
 Processing
@@ -1895,6 +1895,7 @@ ProtoBufHelper::ParseJSON: Ignoring extra JSON key '%s', which is not found in p
 ProtoBufHelper::ParseJSON: Object Begin found on invalid field!
 ProtoBufHelper::ParseJSON: received callback with message field but no message!
 ProtoBufHelper::ParseJSON: received callback with no current message field!
+Protobuf: %s(%d): %s
 Protocol Buffer map usage error:
 Protocol Buffer reflection usage error:  Method      : google::protobuf::Reflection::
 Push
@@ -1924,7 +1925,6 @@ QAngle
 Quaternion
 QuaternionAligned
 QueueChange
-QueuedLoaderVersion001
 R
 RESOURCE_EXHAUSTED
 RadianEuler
@@ -2000,7 +2000,6 @@ Sending %d byte message to %s on socket %s
 SerializedEntitiesVersion001
 Serializer,Field,Field Path,Decode Count,Total Bits,Avg Bits,Total Index Bits,Avg Index Bits,Priority,Best Priority,=SUM(E:E),Full Name,Notes
 Server upper bound on net_maxroutable that a client can use.
-ServerUploadGameStats001
 SetAllocatedMessage
 SetBool
 SetDouble
@@ -2018,11 +2017,10 @@ SetRepeatedInt64
 SetRepeatedString
 SetRepeatedUInt32
 SetRepeatedUInt64
-SetSerializerProxyIndices_R
 SetString
 SetUInt32
 SetUInt64
-Setting FS %p field %p (%s) to %s
+Setting FS %s field %s to %s
 Setting max routable payload size from %d to %d for %s
 Should dedicated server listen for new-style P2P?
 Should not reach here.
@@ -2054,8 +2052,6 @@ Source2GameClients001
 Source2GameEntities001
 Source2Host001
 Source2Server001
-Source2ServerSerializers002
-Specified different usergroup proxies for %s
 Spew CSerializedEntity memory
 Spew CSerializedEntity metadata information
 Spew QoS interval data as we gather it
@@ -2102,11 +2098,11 @@ SteamNetSockets
 SteamNetworking006
 SteamNetworkingMessages002
 SteamNetworkingMessages_LibV2
+SteamNetworkingSockets not yet initialized.  Queuing command '%s'
 SteamNetworkingSockets012
 SteamNetworkingSockets_LibV12
 SteamNetworkingUtils004
 SteamNetworkingUtils_LibV4
-SteamNetworkongSockets not yet initialized.  Queuing command '%s'
 SteamUser021
 SteamUtils010
 String field
@@ -2183,10 +2179,8 @@ V
 VApplication001
 VAsyncFileSystem2_001
 VAvi001
-VBAllocTracker001
 VBik001
 VConComm001
-VDebugService_001
 VERBOSE_BITCOUNT
 VERBOSE_ENDBIT
 VERBOSE_FIELDNAME_WITH_ARRAY_INDEX
@@ -2206,7 +2200,6 @@ VGUI_Scheme010
 VGUI_Surface032
 VGUI_System010
 VGUI_ivgui008
-VMDLLIB001
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
@@ -2221,8 +2214,10 @@ VScript
 VScriptDbg
 VScriptManager010
 VStringTokenSystem001
-V_SplitString(char const*, char const*, CUtlVector<char*, CUtlMemory<char*, int> >&)
-V_SplitStringOnSeparators(char const*, char const*, CUtlVector<char*, CUtlMemory<char*, int> >&)
+V_InitJSONConfig
+V_ParseJSONBuffer
+V_SplitString(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int> >&)
+V_SplitStringOnSeparators(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int> >&)
 V_acosd
 V_acosf
 V_asinf
@@ -2240,11 +2235,9 @@ V_expf
 V_fmodf
 V_fpclassifyd
 V_isnand
-V_localeconv
 V_logf
 V_powd
 V_powf
-V_qsort
 V_qsort_s
 V_sincosf
 V_sind
@@ -2254,7 +2247,6 @@ V_sscanf
 V_stricmp_fast
 V_stristr_fast(char const*, char const*)
 V_strnlen
-V_strtod
 V_strtok
 V_tanf
 V_uuid_t
@@ -2298,6 +2290,7 @@ Z
 ZN26CParallelProcessorAbstractI18CParallelProcessorI30BuildFlattenedSerializerInfo_t27CMemberFuncJobItemProcessorIS1_37CBuildNetworkSerializerHierarchyOrderS3_ELi1EEE3RunEvE13CStackFunctor
 ZN26CParallelProcessorAbstractI18CParallelProcessorIN37CBuildNetworkSerializerHierarchyOrder12BuildEntry_tE27CMemberFuncJobItemProcessorIS2_S1_S1_ELi1EEE3RunEvE13CStackFunctor
 [
+[ %d ]
 [ Net Message Info: %s ]
 [$0]
 [%.3f server clamped to %.3f]
@@ -2398,11 +2391,11 @@ array count
 array of pointers
 array size changed
 assign_poll_group
-at '%s'
 at depth %d items %d
 available
 average metadata list is %f entries
 average non-zero list would be %f entries
+avg %g:  %s
 avg_latency_local
 avg_latency_net
 avg_latency_peer
@@ -2423,6 +2416,7 @@ bool
 bool google::protobuf::internal::RepeatedFieldRefIterator<T>::operator!=(const google::protobuf::internal::RepeatedFieldRefIterator<T>&) const [with T = google::protobuf::Message]
 both states
 buffer. Use the 'bytes' type if you intend to send raw
+buildhierarchystruct.cpp
 builtin()
 bytes
 bytes).  To increase the limit (or to disable these warnings), see CodedInputStream::SetTotalBytesLimit() in third_party/protobuf/src/google/protobuf/io/coded_stream.h.
@@ -2455,9 +2449,7 @@ contains invalid
 context(0x%p)
 coord
 coord_integral
-count(%d)
 create_poll_group
-cull rule %d:  %s -> %s
 d
 data_ == other.data_
 data_bits
@@ -2466,6 +2458,7 @@ deactivated
 deallocate
 decode
 decoding FAKE
+default
 definition file imports the proto which defines the option.
 deleted
 delta
@@ -2493,9 +2486,9 @@ extend .$0 {
 f
 failed to construct fake field from metadata %s::%s in %s
 false
+fc=%d, m=%d, sum=%d, bits=%u
 fflush
 field %s had different encoding for %d bits
-field %s had different spans [%d -> %d (%d)] vs. [%d -> %d (%d)]
 field %s not present in %s
 field is fixed sized array size %d
 field is using array manipulator, current size returned %d
@@ -2531,7 +2524,6 @@ g_pSteamNetworkingSockets
 g_pSteamNetworkingUtils
 g_pThreadPool
 game
-gender_t
 generic
 gethostname
 google.protobuf.
@@ -2784,7 +2776,6 @@ networksystem_protomessages.proto
 next state only
 no
 no CSerializedEntity memory being used
-no cull rules
 no fastpath
 no metadata!
 non-parallel
@@ -2876,7 +2867,6 @@ server
 server_can_execute
 server_framerate_stddev
 service $0 {
-service thread gave up on lock
 sfixed32
 sfixed64
 shutdown
@@ -2990,6 +2980,7 @@ strlen
 strpbrk
 strrchr
 strstr
+strtod
 strtof
 strtol
 strtoll
@@ -3035,12 +3026,12 @@ usage:  net_spewserializer <name>
 user
 utlvector count
 v
-valveextensions.proto
 vector::_M_default_append
 vector::_M_emplace_back_aux
 vector::_M_insert_aux
 vector::_M_range_insert
 vector::reserve
+verbosespewbuilder.cpp
 voice_xsend_debug
 void
 void google::protobuf::FieldDescriptorProto::_internal_set_label(google::protobuf::FieldDescriptorProto_Label)

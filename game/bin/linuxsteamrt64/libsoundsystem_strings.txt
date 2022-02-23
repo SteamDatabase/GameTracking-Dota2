@@ -179,6 +179,7 @@ $toolgraphs
 12CThreadedJob
 12ISoundSystem
 130
+13CAddonWatcher
 13COversampler2
 13COversampler4
 13COversampler8
@@ -323,6 +324,8 @@ $toolgraphs
 22CSosOperatorSteamAudio
 22CTier2ShutdownCallback
 22CUtilityAudioProcessor
+22CVocoderAudioProcessor
+22IAddonListChangeNotify
 23CDynamicsAudioProcessor
 23CEnvelopeAudioProcessor
 23CKV3ResourceBlockHelper
@@ -360,13 +363,13 @@ $toolgraphs
 25CAutoFilterAudioProcessor
 25CKV3TransferDefaultHelperI13VMixEQ8Desc_tE
 25CKV3TransferDefaultHelperI15VMixDelayDesc_tE
-25CKV3TransferDefaultHelperI16VMixFilterDesc_tE
 25CKV3TransferDefaultHelperI16VMixShaperDesc_tE
 25CKV3TransferDefaultHelperI17VMixUtilityDesc_tE
 25CKV3TransferDefaultHelperI17VMixVocoderDesc_tE
 25CKV3TransferDefaultHelperI18VMixDynamicsBand_tE
 25CKV3TransferDefaultHelperI18VMixDynamicsDesc_tE
 25CKV3TransferDefaultHelperI18VMixEnvelopeDesc_tE
+25CKV3TransferDefaultHelperI19CSoundEventMetaDataE
 25CKV3TransferDefaultHelperI20VMixAutoFilterDesc_tE
 25CKV3TransferDefaultHelperI20VMixPitchShiftDesc_tE
 25CKV3TransferDefaultHelperI21CSosGroupActionSchemaE
@@ -504,7 +507,6 @@ $toolgraphs
 =
 >
 ?
-?22CVocoderAudioProcessor
 @
 @%s.output
 @?
@@ -602,7 +604,7 @@ CBufferString::Replace(char const*, char const*, bool)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::ShortenPath(bool)
-CBufferString::StartsWith_FastCaseInsensitive(char const*)
+CBufferString::StartsWith_FastCaseInsensitive(char const*) const
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
 CCircularBuffer::Advance(int)
@@ -621,7 +623,6 @@ CKeyValues_Data::Internal_SetString(char const*)
 CLOSECAPTION
 CMemAllocSystemInitialize
 CMotionTransform
-COLORCORRECTION_VERSION_1
 COM_TimestampedLog
 CONTENTROOT
 CPlayerSlot
@@ -818,7 +819,6 @@ ConMsg(char const*, ...)
 ConVar(%s) defined with infinite float value (%s)
 ConVarRef %s doesn't point to an existing ConVar
 ConfigurationSystem_001
-Connect
 ConnectInterfaceSingletons
 Connection Offset: %i
 Continue: elapsed time: %f, next sync time: %f, local elapsed: %f, local sync: %f
@@ -863,7 +863,6 @@ Data Count: %i
 Data Size: %i
 Debug dump the list of available vmix graphs
 DebugPrintKV3(KeyValues3 const*)
-DebugTextureInfo001
 Decay target amplitude
 Decay time (ms)
 Decreased audio mix latency to %d buffers
@@ -890,7 +889,6 @@ Displaying %d probes around (%.1f, %.1f, %.1f) within %.2f radius for %.2f secon
 Distortion Mix (1.0 = wet)
 Distortion Threshold
 Distortion feedback
-DotaCardGameClient_001
 Double-save to Member '%s'
 Downward Ratio
 Drive (dB)
@@ -950,7 +948,6 @@ Error: unable to access stack topology report
 Event Data: %i
 Event Name
 Event VSNDS:
-EventSystem001
 Exponential
 Exponential Ramp
 Exports scene currently used by Steam Audio as a phononscene file.
@@ -1318,6 +1315,7 @@ Plat_NeedsLowFragmentation
 Plat_NonFatalErrorFunc
 Plat_RelativeTicks
 Plat_RequireSDL
+Plat_RestoreDenormalsAreZero
 Plat_SetDenormalsAreZero
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_TickDiffSecF
@@ -1363,7 +1361,6 @@ QAngle
 Quaternion
 QuaternionAligned
 Queued: elapsed time: %f, next sync time: %f, length: %f
-QueuedLoaderVersion001
 R
 R@
 RESOURCE_TYPE_SOUND
@@ -1376,7 +1373,6 @@ Random
 Random Modulation
 RandomFloat
 RandomInt
-RandomSeed
 Reference dB at snd_refdist
 Reference distance for snd_refdb
 RegisterConfigValue: Unknown error constructing config value "%s"!
@@ -1492,7 +1488,6 @@ SendVoiceInverseSends
 SendVoiceInverseTotalSend
 SendVoiceWithNamedSend
 SerializedEntitiesVersion001
-ServerUploadGameStats001
 Set an input mix value
 Set named Mixgroup of current mixer to mix vol, mute, solo.
 Set named Mixgroup of named mix layer to mix vol, mute, solo.
@@ -1571,7 +1566,6 @@ Source2GameEntities001
 Source2Host001
 Source2SDLDefaultDevice
 Source2Server001
-Source2ServerSerializers002
 Specifies the exponent for the pan xfade from phone to phone if the "exp" pan law is being used.
 Specifies the exponent for the pan xfade from speaker to speaker if the "exp" pan law is being used.
 Specifies the position  (in degrees) of the virtual rear left/right headphones.
@@ -1667,6 +1661,7 @@ Total USED Stacks: %i
 Total soundevents %iTotal param bytes: %iTotal field bytes: %iTotal combined bytes: %i
 Total: %.2f MB
 Triangle
+Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference flag.
 TriggersSoundEvents
 Type Name: %s
@@ -1711,10 +1706,8 @@ VALUES
 VApplication001
 VAsyncFileSystem2_001
 VAvi001
-VBAllocTracker001
 VBik001
 VConComm001
-VDebugService_001
 VERSION
 VERSION 1.0
 VERTICAL SHAFT Detected
@@ -1726,7 +1719,6 @@ VGUI_Scheme010
 VGUI_Surface032
 VGUI_System010
 VGUI_ivgui008
-VMDLLIB001
 VMIX: Unknown filter type %s for DSP:%s
 VMIX: Unknown processor type %s (name %s)
 VMIX_CHAN_LEFT
@@ -2307,6 +2299,7 @@ input_interval
 input_invalidate_global_stack
 input_inverse_distance_scalar
 input_invert_match
+input_is_orphan
 input_is_player
 input_level
 input_limit_max_events
@@ -2643,7 +2636,6 @@ m_nFilterSlope
 m_nFilterType
 m_nGrainSampleCount
 m_nGraphOutputChannels
-m_nGuid
 m_nIncomingTangent
 m_nLFOShape
 m_nLayer
@@ -2680,6 +2672,7 @@ m_vDomainMaxs
 m_vDomainMins
 m_vHandLeft
 m_vHandRight
+m_vOrigin
 m_valueArrays
 m_values
 m_vsndInputs

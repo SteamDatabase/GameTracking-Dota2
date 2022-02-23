@@ -245,6 +245,7 @@ _G.MAP_ATLAS =
 
 			-- Legacy
 			"encounter_catacombs",
+			"encounter_bitter_tundra",
 		},
 	},
 
@@ -870,6 +871,13 @@ _G.ENCOUNTER_DEFINITIONS =
 		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
 	},
 
+	encounter_bitter_tundra =
+	{
+		szMapNames = { "aghs2_encounters/a1_4_bitter_tundra", },
+		nEncounterType = ROOM_TYPE_ENEMY,
+		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
+	},
+
 	encounter_swamp_of_sadness =
 	{
 		szMapNames = { "aghs2_encounters/a1_4_swamp_of_sadness", },
@@ -1225,7 +1233,7 @@ _G.ENCOUNTER_DEFINITIONS =
 	{
 		szMapNames = { "aghs2_encounters/a3_3_burning_mesa", },
 		nEncounterType = ROOM_TYPE_ENEMY,
-		--HACK DO NOT SHIP ME nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
+		nRequiredAscension = AGHANIM_ASCENSION_MAGICIAN,
 	},
 
 	encounter_smashy_and_bashy =

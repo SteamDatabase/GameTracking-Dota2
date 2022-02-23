@@ -81,7 +81,6 @@
 		"HasModAppSystems" "1"
 		"Capable64Bit" "1"
 		"UsesVGui" "0"
-		"UsesPanorama" "1"
 		"PanoramaUIClientFromClient" "1" // IPanoramaUIClient is implemented by client.dll
 		"HasGameUI" "1" // dota uses gameui
 		"GameUIFromClient" "1"  // AND that gameui comes from client.dll
@@ -141,7 +140,7 @@
 		"MaxAutoPartitions" "8"
 		"LayerBatchThreshold" "512" [ $OSX && $CPU_EMULATED ] // Apple M1 - increase sc_layer_batch_threshold from 128 -> 512. Reduces TBDR memory bandwidth.
 	}
-	
+
 	SoundSystem
 	{
 		"SteamAudioEnabled" "0"

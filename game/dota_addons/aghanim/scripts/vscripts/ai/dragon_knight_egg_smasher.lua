@@ -8,6 +8,7 @@ function Spawn( entityKeyValues )
 		return
 	end
 
+	-- thisEntity.hGroundBlastAbility = thisEntity:FindAbilityByName( "dragon_knight_egg_smasher_ground_blast" )
 	thisEntity:SetContextThink( "DragonKnightEggSmasherThink", DragonKnightEggSmasherThink, 0.25 )
 end
 
@@ -34,6 +35,24 @@ function DragonKnightEggSmasherThink()
 		return FindStuffToSmash()
 	end
 
+	-- if thisEntity.hGroundBlastAbility:IsFullyCastable() then
+	-- 	local flRange = thisEntity.hGroundBlastAbility:GetCastRange( thisEntity:GetOrigin(), nil )
+	-- 	local flFurthestDistance = 0
+	-- 	local hFurthestEnemy = nil
+	-- 	for _, hEnemy in pairs( vecEnemies ) do
+	-- 		local flDistance = (thisEntity:GetOrigin() - hEnemy:GetOrigin()):Length2D()
+	-- 		if flDistance <= flRange and flDistance > flFurthestDistance then
+	-- 			hFurthestEnemy = hEnemy
+	-- 			flFurthestDistance = flDistance
+	-- 			printf( "Found enemy" )
+	-- 		end
+	-- 	end
+
+	-- 	if hFurthestEnemy ~= nil then
+	-- 		return CastGroundBlast( hFurthestEnemy )
+	-- 	end
+	-- end
+	
 	return Attack( vecEnemies[1] )
 end
 
@@ -65,6 +84,21 @@ function FindStuffToSmash()
 	end
 
 	return 1.0
+end
+
+--------------------------------------------------------------------------------
+
+function CastGroundBlast( hEnemy )
+	ExecuteOrderFromTable({
+		UnitIndex = thisEntity:entindex(),
+		OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
+		AbilityIndex = thisEntity.hGroundBlastAbility:entindex(),
+		TargetIndex = hEnemy:entindex(),
+		Queue = false,
+	})
+
+	local fReturnTime = thisEntity.hGroundBlastAbility:GetCastPoint() + 1
+	return fReturnTime
 end
 
 --------------------------------------------------------------------------------
