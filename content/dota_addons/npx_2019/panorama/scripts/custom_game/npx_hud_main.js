@@ -15,7 +15,7 @@ function OnScenarioInfoUpdated()
 		hudPanel.SwitchClass( "scenario_name", strScenarioName );
 	}
 
-	$( '#ObjectiveContainer' ).SetDialogVariable( "main_objective", $.Localize( strScenarioName + "_main_objective" ) );
+	$( '#ObjectiveContainer' ).SetDialogVariable( "main_objective", $.Localize( "#" + strScenarioName + "_main_objective" ) );
 }
 
 function OnRestartButtonClicked()
@@ -93,9 +93,9 @@ function OnTaskStart( event )
 	}
 
 	var rgScenarioInfo = CustomNetTables.GetTableValue( "base_scenario", "scenario_info" );
-	var szLocalizedName = $.Localize( rgScenarioInfo[ "scenario_name" ] + "_task_" + event[ "task_name" ], taskPanel );
+	var szLocalizedName = $.Localize( "#" + rgScenarioInfo[ "scenario_name" ] + "_task_" + event[ "task_name" ], taskPanel );
 	taskPanel.SetDialogVariable( "task_name", szLocalizedName );
-	var szLocalizedDesc = $.Localize( rgScenarioInfo[ "scenario_name" ] + "_task_" + event[ "task_name" ] + "_Description", taskPanel );
+	var szLocalizedDesc = $.Localize( "#" + rgScenarioInfo[ "scenario_name" ] + "_task_" + event[ "task_name" ] + "_Description", taskPanel );
 	taskPanel.SetDialogVariable( "task_description", szLocalizedDesc );
 
 	if ( event["task_hidden"] == false )
@@ -127,7 +127,7 @@ function UnserializeDialogVariables( panel, key, value )
 		}
 		else
 		{
-			szDialogVariableValue = $.Localize( "DOTA_Tooltip_ability_" + value.toString(), panel );
+			szDialogVariableValue = $.Localize( "#DOTA_Tooltip_ability_" + value.toString(), panel );
 		}
 	}
 	panel.SetDialogVariable( key.toString(), szDialogVariableValue );
@@ -188,7 +188,7 @@ function OnDisplayHint( event )
 	hintPanel.SetHasClass( "HintVisible", true );
 	
 	var rgScenarioInfo = CustomNetTables.GetTableValue( "base_scenario", "scenario_info" );
-	var szLocalizedName = $.Localize( rgScenarioInfo[ "scenario_name" ] + "_hint_" + event[ "hint_text" ], hintPanel );
+	var szLocalizedName = $.Localize( "#" + rgScenarioInfo[ "scenario_name" ] + "_hint_" + event[ "hint_text" ], hintPanel );
 	hintPanel.SetDialogVariable( "hint_text", szLocalizedName );
 
 	var flDuration = 10
@@ -242,7 +242,7 @@ function StartWorldTextHint( event )
 		$( '#WorldHintPanel' ).SetDialogVariable( "alternate_keybind_raw", GetAlternateKeybindForCommand( event["command"] ) );
 	}
 
-	var szLocalizedName = $.Localize( rgScenarioInfo[ "scenario_name" ] + "_hint_" + event[ "hint_text" ], $( '#WorldHintPanel' ) );
+	var szLocalizedName = $.Localize( "#" + rgScenarioInfo[ "scenario_name" ] + "_hint_" + event[ "hint_text" ], $( '#WorldHintPanel' ) );
 	$( '#WorldHintPanel' ).SetDialogVariable( "world_hint_text", szLocalizedName );
 	$( '#WorldHintPanel' ).style.x = ( nX / $( "#WorldHintPanel" ).actualuiscale_x ) - (  $( '#WorldHintPanel' ).actuallayoutwidth / 2 ) + "px"; 
 	$( '#WorldHintPanel' ).style.y = ( nY / $( "#WorldHintPanel" ).actualuiscale_y  ) + 75 + "px";
@@ -317,7 +317,7 @@ function StartDialog( event )
 	$.Msg( "StartDialog" );
 
 	var rgScenarioInfo = CustomNetTables.GetTableValue( "base_scenario", "scenario_info" );
-	var szLocalizedText = $.Localize( rgScenarioInfo[ "scenario_name" ] + "_dialog_" + event[ "dialog_text" ], $( '#DialogPanel' ) );
+	var szLocalizedText = $.Localize( "#" + rgScenarioInfo[ "scenario_name" ] + "_dialog_" + event[ "dialog_text" ], $( '#DialogPanel' ) );
 	
 	g_szPendingDialog = szLocalizedText;
 	g_bDialogActive = true;
@@ -336,7 +336,7 @@ function StartDialog( event )
 
 	if ( g_nDialogEnt !== -1 )
 	{
-		var szSpeakingEntityName = $.Localize( Entities.GetUnitName( g_nDialogEnt ) );
+		var szSpeakingEntityName = $.Localize( "#" + Entities.GetUnitName( g_nDialogEnt ) );
 		DialogPanel.SetDialogVariable( "dialog_npc_name", szSpeakingEntityName );
 	}
 }
@@ -441,7 +441,7 @@ function OnScenarioFailed( event )
 	if ( szFailureReason != null )
 	{
 		$.Msg( "FAILURE = " + szFailureReason )
-		$( '#ScenarioFailedPanel' ).SetDialogVariable( "failure_reason", $.Localize( szFailureReason ) );
+		$( '#ScenarioFailedPanel' ).SetDialogVariable( "failure_reason", $.Localize( "#" + szFailureReason ) );
 	}
 	else
 	{
@@ -459,7 +459,7 @@ GameEvents.Subscribe( "timer_set", OnTimerSet );
 function OnTimerSet( event )
 {
 	$( '#TimerPanel' ).AddClass( "ShowTimerPanel" );
-	$( '#TimerPanel' ).SetDialogVariable( "header", $.Localize( event["timer_header"] ) );
+	$( '#TimerPanel' ).SetDialogVariable( "header", $.Localize( "#" + event["timer_header"] ) );
 	g_bTimerActive = true;
 
 	var nTimerValue = event.timer_value || 0;
@@ -587,7 +587,7 @@ function ShowUIHint( event )
 
 		if ( event[ "ui_tip_text" ] )
 		{
-			$( '#TutorialUIHintText' ).SetDialogVariable( "ui_hint_text", $.Localize( event[ "ui_tip_text" ] ) );
+			$( '#TutorialUIHintText' ).SetDialogVariable( "ui_hint_text", $.Localize( "#" + event[ "ui_tip_text" ] ) );
 
 			if ( event[ "nudge_time" ] )
 			{
