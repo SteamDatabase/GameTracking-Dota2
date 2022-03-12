@@ -168,12 +168,12 @@
 #%s/%s/+MultiGpu-TransferRenderTarget( To: %dx%d @ x: %d y: %d, From: %dx%d @ x: %d y: %d )
 #%s/%s/+SteamVrCompositor-TransferLeftEye( %dx%d @ (x: %d y: %d) )
 #%s/%s/+SteamVrCompositor-TransferRightEye( %dx%d @ x: %d y: %d) )
+#%s/%s/LayerClear
 #%s/%s/Resolves
 #%s/%s/UpdatePerViewConstantBuffer%d
 #%s/AsyncComputeSemaphoreWait
 #%s/PrimaryContext frame( %d )
 #%s/RenderAView/LightSetup
-#%s/SetupLightingForView/SetupLightingForView
 #%s/UpdatePerViewConstantBuffers
 #%s/UpdatePerViewConstantBuffers%d
 #@
@@ -490,7 +490,6 @@ $ORIGIN
 12ISceneSystem
 13CImGuiWrapper
 13CLightBinner2
-13CNoRefFunctor
 13IBaseSequence
 14CBaseAppSystemI10IAppSystemE
 14CBaseAppSystemI11ISceneUtilsE
@@ -505,8 +504,6 @@ $ORIGIN
 15CLightBinnerCPU
 15CLightBinnerGPU
 15CMemberFunctor1IP12CSceneSystemMS0_FvP10CSceneViewES3_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
-15CMemberFunctor1IP26CParallelProcessorAbstractI18CParallelProcessorIP12CSceneObject21CFuncJobItemProcessorIS3_ELi1EEEMS7_FviEi12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
-15CMemberFunctor1IP26CParallelProcessorAbstractI22CParallelLoopProcessorI13CViewDrawList31CLoopMemberFuncJobItemProcessorIS2_12CSceneSystemS4_EEEMS7_FviEi12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor5IP12CSceneSystemMS0_FvSt10shared_ptrI13CViewDrawListEP11CSceneLayerP16CRenderBatchList18EBatchStartFlags_tRK10CUtlVectorIP14CSceneDrawListi10CUtlMemoryISC_iEEES4_S6_S8_S9_SF_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor6IP13CSOAContainerMS0_FviiiiiDv4_fEiiiiiS2_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor7IP12CSceneSystemMS0_FvSt10shared_ptrI13CViewDrawListEP11CSceneLayerP16CRenderBatchList18EBatchStartFlags_tS2_I10CUtlVectorI20CMeshDrawPrimitive_ti10CUtlMemoryISB_iEEEiiES4_S6_S8_S9_SF_ii12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
@@ -540,6 +537,7 @@ $ORIGIN
 18CRenderingPipeline
 18CSceneSkyBoxObject
 18IModelRenderHelper
+18IMultipleWorkerJob
 18IRenderingPipeline
 19
 19CDebugLayerRenderer
@@ -642,6 +640,8 @@ $ORIGIN
 25IRenderingPipelineFactory
 26
 26CAnimatableSceneObjectDesc
+26CParallelProcessorAbstractI18CParallelProcessorIP12CSceneObject21CFuncJobItemProcessorIS2_ELi1EEE
+26CParallelProcessorAbstractI22CParallelLoopProcessorI13CViewDrawList31CLoopMemberFuncJobItemProcessorIS1_12CSceneSystemS3_EEE
 26ICommandCompletionCallback
 27
 27CDirectionalLightObjectDesc
@@ -669,6 +669,7 @@ $ORIGIN
 30ISceneLightProbeVolumeListener
 31
 31CBlitTextureToRenderTargetLayer
+31CParallelProcessorAbstract_Base
 31CResolveProceduralLayerRenderer
 31CSchemaRegistration_scenesystem
 32.0
@@ -682,7 +683,6 @@ $ORIGIN
 36
 37
 37CAmbientOcclusionProxySceneObjectDesc
-38
 38IMaxSwapChainDimensionsChangedListener
 39
 3D Skybox
@@ -1358,7 +1358,6 @@ CThreadSemaphore::~CThreadSemaphore()
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
-CThreadedJob::Abort(bool)
 CTiltTwistConstraint
 CTonemapRenderer needs to use a layer which has had a render attribute called "ColorBuffer" set!
 CTonemapRendererLegacy needs to use a layer which has had a render attribute called "ColorBuffer" set!
@@ -2524,7 +2523,6 @@ Layout & Scrolling
 Leaked drawlists : %d!!!!!
 Left
 Left-click drag on axis labels to pan an individual axis.
-Left-click drag within the plot area to pan X and Y axes.
 Left-click while box selecting to cancel the selection.
 Legacy Columns API
 LegendBg
@@ -3001,8 +2999,6 @@ P2
 P3
 P8
 P@
-PARALLEL_PROCESS tinyexr_impl.cpp:161
-PARALLEL_PROCESS utlsoacontainer.cpp:2517
 PARENT
 PF%d %d-1.000000
 PFvP12CSceneObjectE
@@ -3811,6 +3807,7 @@ This window has a changing title.
 Those are old settings provided for convenience.However, the _correct_ way of scaling your UI is currently to reload your font at the designed size, rebuild the font atlas, and call style.ScaleAllSizes() on a reference ImGuiStyle structure.Using those settings here will give you poor quality results.
 Those flags are set by the backends (imgui_impl_xxx files) to specify their capabilities.Here we expose then as read-only fields to avoid breaking interactions with your backend.
 ThreadGetCurrentId
+ThreadInMainThread
 ThreadMultiWaitObjectSetDestroy
 ThreadSleep
 Thread_ProcessProceduralLayer
@@ -4231,8 +4228,6 @@ Your current configuration is:
 Z
 ZFP compression is not supported in this build
 ZFP compression is not supported.
-ZN26CParallelProcessorAbstractI18CParallelProcessorIP12CSceneObject21CFuncJobItemProcessorIS2_ELi1EEE3RunEvE13CStackFunctor
-ZN26CParallelProcessorAbstractI22CParallelLoopProcessorI13CViewDrawList31CLoopMemberFuncJobItemProcessorIS1_12CSceneSystemS3_EEE3RunEvE13CStackFunctor
 [
 [ ]
 [%.3f server clamped to %.3f]
@@ -5434,7 +5429,6 @@ scenesysDodecahedron
 scenesysPyramid
 scenesystem
 scenesystem.cpp
-scenesystem.cpp(3394):
 scenesystem.cpp(5809): Expecting 1 renderable pass for material "%s" but found %d!
 scenesystem.cpp(7029): Waited 500 ms for jobs to complete. Attempt to drain windows message queue.
 scenesystem.h
@@ -5652,6 +5646,7 @@ this cell %d
 this is a 300-wide button
 this is a tree node
 timegm
+tinyexr_impl.cpp:161
 tonemap.cpp: g_pRenderDevice->CreateQueryObject( RENDER_QUERY_OCCLUSION ) failed!
 tools.light_volume_boundary
 tools.reference_notrace
@@ -5690,6 +5685,8 @@ utils/sceneutils.cpp
 utils/sceneutils.h(67): Material %s cannot render in mode %s but is being asked to
 utils/tonemapsystem.cpp
 utils/volumetricfog.cpp
+utlgrid.cpp:238
+utlsoacontainer.cpp:2517
 uvtangent
 v %g %g %g
 v %g %g %g%s

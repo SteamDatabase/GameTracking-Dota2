@@ -106,11 +106,11 @@ AnimateDrowRangerArcanaScreenAction.prototype.start = function ()
 		panel.SetDialogVariable('arcana_progress_current_score', Math.floor(startScore * 10)/10.0 );
 	}
 
-	var sHeaderLoc = "DOTA_ArcanaProgress_Header_"+heroName;
-	var sTitleLoc = "DOTA_ArcanaProgress_Title_"+heroName;
-	var sDescriptionLoc = "DOTA_ArcanaProgress_Description_"+heroName;
-	var sProgressBarLoc = "DOTA_ArcanaProgress_ProgressBar_"+heroName;
-	var sIncrementLoc = "DOTA_ArcanaProgress_Increment_"+heroName;
+	var sHeaderLoc = "#DOTA_ArcanaProgress_Header_"+heroName;
+	var sTitleLoc = "#DOTA_ArcanaProgress_Title_"+heroName;
+	var sDescriptionLoc = "#DOTA_ArcanaProgress_Description_"+heroName;
+	var sProgressBarLoc = "#DOTA_ArcanaProgress_ProgressBar_"+heroName;
+	var sIncrementLoc = "#DOTA_ArcanaProgress_Increment_"+heroName;
 
 	var sHeader = $.Localize( sHeaderLoc, panel );
 	var sTitle = $.Localize( sTitleLoc, panel );
@@ -118,11 +118,11 @@ AnimateDrowRangerArcanaScreenAction.prototype.start = function ()
 	var sProgressBar = $.Localize( sProgressBarLoc, panel );
 	var sIncrement = $.Localize( sIncrementLoc, panel );
 
-	if( sHeader == sHeaderLoc ) { sHeader = $.Localize( "DOTA_ArcanaProgress_Header_generic", panel ); }
-	if( sTitle == sTitleLoc ) { sTitle = $.Localize( "DOTA_ArcanaProgress_Title_generic", panel ); }
-	if( sDescription == sDescriptionLoc ) { sDescription = $.Localize( "DOTA_ArcanaProgress_Description_generic", panel ); }
-	if( sProgressBar == sProgressBarLoc ) { sProgressBar = $.Localize( "DOTA_ArcanaProgress_ProgressBar_generic", panel ); }
-	if( sIncrement == sIncrementLoc ) { sIncrement = $.Localize( "DOTA_ArcanaProgress_Increment_generic", panel ); }
+	if( sHeader == sHeaderLoc ) { sHeader = $.Localize( "#DOTA_ArcanaProgress_Header_generic", panel ); }
+	if( sTitle == sTitleLoc ) { sTitle = $.Localize( "#DOTA_ArcanaProgress_Title_generic", panel ); }
+	if( sDescription == sDescriptionLoc ) { sDescription = $.Localize( "#DOTA_ArcanaProgress_Description_generic", panel ); }
+	if( sProgressBar == sProgressBarLoc ) { sProgressBar = $.Localize( "#DOTA_ArcanaProgress_ProgressBar_generic", panel ); }
+	if( sIncrement == sIncrementLoc ) { sIncrement = $.Localize( "#DOTA_ArcanaProgress_Increment_generic", panel ); }
 
 	panel.SetDialogVariable( "arcana_progress_header", sHeader );
 	panel.SetDialogVariable( "arcana_progress_title", sTitle );
@@ -138,7 +138,7 @@ AnimateDrowRangerArcanaScreenAction.prototype.start = function ()
 	// Setup the sequence of actions to animate the screen
 	this.seq = new RunSequentialActions();
 
-	var sndStinger = $.Localize( "DOTA_ArcanaProgress_Stinger_"+heroName, panel );
+	var sndStinger = $.Localize( "#DOTA_ArcanaProgress_Stinger_"+heroName, panel );
 	if( sndStinger )
 	{
     	this.seq.actions.push( new RunFunctionAction(function () { $.DispatchEvent('PlaySoundEffect', sndStinger); }) )
@@ -188,7 +188,7 @@ AnimateDrowRangerArcanaScreenAction.prototype.start = function ()
 		}
 
 		sProgressBar = $.Localize( sProgressBarLoc, panel );
-		if( sProgressBar == sProgressBarLoc ) { sProgressBar = $.Localize( "DOTA_ArcanaProgress_ProgressBar_generic", panel ); }
+		if( sProgressBar == sProgressBarLoc ) { sProgressBar = $.Localize( "#DOTA_ArcanaProgress_ProgressBar_generic", panel ); }
 		panel.SetDialogVariable( "arcana_progress_bar", sProgressBar );		
 	} ) );
 
@@ -466,11 +466,11 @@ AnimateGenericArcanaScreenAction.prototype.start = function ()
 		panel.SetDialogVariable('arcana_progress_current_score', Math.floor(startScore * 10)/10.0 );
 	}
 
-	var sHeaderLoc = "DOTA_ArcanaProgress_Header_"+heroName;
-	var sTitleLoc = "DOTA_ArcanaProgress_Title_"+heroName;
-	var sDescriptionLoc = "DOTA_ArcanaProgress_Description_"+heroName;
-	var sProgressBarLoc = "DOTA_ArcanaProgress_ProgressBar_"+heroName;
-	var sIncrementLoc = "DOTA_ArcanaProgress_Increment_"+heroName;
+	var sHeaderLoc = "#DOTA_ArcanaProgress_Header_"+heroName;
+	var sTitleLoc = "#DOTA_ArcanaProgress_Title_"+heroName;
+	var sDescriptionLoc = "#DOTA_ArcanaProgress_Description_"+heroName;
+	var sProgressBarLoc = "#DOTA_ArcanaProgress_ProgressBar_"+heroName;
+	var sIncrementLoc = "#DOTA_ArcanaProgress_Increment_"+heroName;
 
 	var sHeader = $.Localize( sHeaderLoc, panel );
 	var sTitle = $.Localize( sTitleLoc, panel );
@@ -478,11 +478,11 @@ AnimateGenericArcanaScreenAction.prototype.start = function ()
 	var sProgressBar = $.Localize( sProgressBarLoc, panel );
 	var sIncrement = $.Localize( sIncrementLoc, panel );
 
-	if( sHeader == sHeaderLoc ) { sHeader = $.Localize( "DOTA_ArcanaProgress_Header_generic", panel ); }
-	if( sTitle == sTitleLoc ) { sTitle = $.Localize( "DOTA_ArcanaProgress_Title_generic", panel ); }
-	if( sDescription == sDescriptionLoc ) { sDescription = $.Localize( "DOTA_ArcanaProgress_Description_generic", panel ); }
-	if( sProgressBar == sProgressBarLoc ) { sProgressBar = $.Localize( "DOTA_ArcanaProgress_ProgressBar_generic", panel ); }
-	if( sIncrement == sIncrementLoc ) { sIncrement = $.Localize( "DOTA_ArcanaProgress_Increment_generic", panel ); }
+	if( sHeader == sHeaderLoc ) { sHeader = $.Localize( "#DOTA_ArcanaProgress_Header_generic", panel ); }
+	if( sTitle == sTitleLoc ) { sTitle = $.Localize( "#DOTA_ArcanaProgress_Title_generic", panel ); }
+	if( sDescription == sDescriptionLoc ) { sDescription = $.Localize( "#DOTA_ArcanaProgress_Description_generic", panel ); }
+	if( sProgressBar == sProgressBarLoc ) { sProgressBar = $.Localize( "#DOTA_ArcanaProgress_ProgressBar_generic", panel ); }
+	if( sIncrement == sIncrementLoc ) { sIncrement = $.Localize( "#DOTA_ArcanaProgress_Increment_generic", panel ); }
 
 	panel.SetDialogVariable( "arcana_progress_header", sHeader );
 	panel.SetDialogVariable( "arcana_progress_title", sTitle );
@@ -498,7 +498,7 @@ AnimateGenericArcanaScreenAction.prototype.start = function ()
 	// Setup the sequence of actions to animate the screen
 	this.seq = new RunSequentialActions();
 
-	var sndStinger = $.Localize( "DOTA_ArcanaProgress_Stinger_"+heroName, panel );
+	var sndStinger = $.Localize( "#DOTA_ArcanaProgress_Stinger_"+heroName, panel );
 	if( sndStinger )
 	{
     	this.seq.actions.push( new RunFunctionAction(function () { $.DispatchEvent('PlaySoundEffect', sndStinger); }) )
@@ -548,7 +548,7 @@ AnimateGenericArcanaScreenAction.prototype.start = function ()
 		}
 
 		sProgressBar = $.Localize( sProgressBarLoc, panel );
-		if( sProgressBar == sProgressBarLoc ) { sProgressBar = $.Localize( "DOTA_ArcanaProgress_ProgressBar_generic", panel ); }
+		if( sProgressBar == sProgressBarLoc ) { sProgressBar = $.Localize( "#DOTA_ArcanaProgress_ProgressBar_generic", panel ); }
 		panel.SetDialogVariable( "arcana_progress_bar", sProgressBar );		
 	} ) );
 
