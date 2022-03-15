@@ -15,6 +15,7 @@ do
 	
 	echo "> VPK $baseFile"
 	
+	# https://github.com/Penguinwizzard/VPKTool
 	../.support/vpktool "$file" > "$baseFile"
 done <   <(find "game/dota/maps/" -type f -name "*.vpk" -print0)
 
