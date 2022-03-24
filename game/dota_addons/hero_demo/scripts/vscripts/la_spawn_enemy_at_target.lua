@@ -16,11 +16,9 @@ function la_spawn_enemy_at_target:OnSpellStart()
 
 	if fRandom <= 0.8 then
 		hEnemy = CreateUnitByName( "npc_dota_hero_axe", vTargetPos, true, nil, nil, GameRules.herodemo.m_nENEMIES_TEAM )
-		table.insert( GameRules.herodemo.m_tEnemiesList, hEnemy )
 	else
 		hEnemy = CreateUnitByName( "npc_dota_hero_antimage", vTargetPos, true, nil, nil, GameRules.herodemo.m_nENEMIES_TEAM )
 		hEnemy:SetModelScale( 0.5 )
-		table.insert( GameRules.herodemo.m_tEnemiesList, hEnemy )
 	end
 
 	hEnemy:SetControllableByPlayer( GameRules.herodemo.m_nPlayerID, false )

@@ -53,7 +53,9 @@ function CLastHitTrainer:OnNPCSpawned( event )
 	if not self.m_hPlayerHero then
 		if spawnedUnit:IsRealHero() and spawnedUnit:GetTeamNumber() == DOTA_TEAM_GOODGUYS then
 			self.m_hPlayerHero = spawnedUnit
-		end
+			gGameInfo.m_bHeroSpawned = true
+			CustomNetTables:SetTableValue( "last_hit_trainer_gameinfo", "gameinfo", gGameInfo )
+		end	
 	end
 
 	spawnedUnit:SetDeathXP( 0 )

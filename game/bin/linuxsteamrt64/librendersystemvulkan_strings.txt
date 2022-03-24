@@ -590,6 +590,7 @@ $accept
 -sse2
 -sse3
 -sse4
+-threads
 -tx-struct
 -vulkan
 -vulkan_aggressive_command_pool_rebalancing
@@ -606,6 +607,7 @@ $accept
 -vulkan_disable_device_coherent_allocations
 -vulkan_disable_ext_memory_budget
 -vulkan_disable_ext_memory_priority
+-vulkan_disable_ext_pageable_device_local_memory
 -vulkan_disable_ext_pipeline_creation_cache_control
 -vulkan_disable_ext_separate_stencil_usage
 -vulkan_disable_ext_validation_cache
@@ -809,7 +811,6 @@ $accept
 20IResourceTypeManager
 21CConstantBufferVulkan
 21CFramebufferMgrVulkan
-21CRayTraceShaderVulkan
 21CRenderHardwareConfig
 21CTextureInfoChunkBase
 21CTextureManagerVulkan
@@ -1531,6 +1532,7 @@ CSplitString::Construct(char const*, char const**, int)
 CStringPool::CStringPool(StringPoolCase_t)
 CStringPool::~CStringPool()
 CSwapChainBase::QueuePresentAndWait() looped for %d iterations without a present event.
+CSwapChainVulkan::SwapBuffers vkAcquireNextImageKHR - completed result = %s
 CSwapChainVulkan::SwapBuffers(): the main thread is more than %d frames ahead which means no swap queue images are available.  Waiting for outstanding frames...
 CSwapChainVulkan::SwapBuffers(): waited for %0.2f seconds
 CTSQueue corruption
@@ -2366,7 +2368,7 @@ Empty JPEG image (DNL not supported)
 Empty input file
 Enabling GPU validation.
 Enabling aggressive command pool rebalancing.
-Enabling async background compilation of VK_KHR_graphics_pipeline_library shaders.
+Enabling async background compilation of VK_EXT_graphics_pipeline_library shaders.
 Enabling instance extension: %s.
 Enabling validation layer: %s.
 EncodeBC7Blocks
@@ -2381,6 +2383,8 @@ End of line in string
 EndInvocationInterlockEXT
 EndPrimitive
 EndStreamPrimitive
+Ending RenderDoc capture...
+Ending RenderDoc frame capture...
 EngineServiceMgr001
 EnqueueKernel
 EnqueueMarker
@@ -4062,7 +4066,6 @@ MainDs
 MainGs
 MainHs
 MainPs
-MainRtx
 MainVs
 MakeAvailableKHR
 MakePointerAvailable
@@ -5416,7 +5419,7 @@ Sext
 Shader '%s' has more than the maximum number of samplers per stage (has: %d MAX: %d)
 Shader '%s' has more than the maximum number of textures per stage (has: %d MAX: %d)
 Shader '%s' has more than the maximum number of uniform blocks per stage (has: %d MAX: %d)
-Shader file version mismatch.  Expected (%d), Got (%d).
+Shader file version (%d), unsupported. Must be (%d) or higher.
 Shader module
 Shader version:
 ShaderBindingTable
@@ -5550,6 +5553,8 @@ StallEnableINTEL
 Start Of Frame 0x%02x: width=%u, height=%u, components=%d
 Start Of Scan: %d components
 Start of Image
+Starting RenderDoc capture...
+Starting RenderDoc frame capture...
 Starting parse
 Static Member Declaration
 Static combos:
@@ -6285,8 +6290,11 @@ VK_EXT_debug_utils
 VK_EXT_extended_dynamic_state
 VK_EXT_extended_dynamic_state2
 VK_EXT_extended_dynamic_state_2 does not support extendedDynamicState2PatchControlPoints, disabling.
+VK_EXT_graphics_pipeline_library
+VK_EXT_graphics_pipeline_library and dependent extensions enabled.
 VK_EXT_memory_budget
 VK_EXT_memory_priority
+VK_EXT_pageable_device_local_memory
 VK_EXT_pipeline_creation_cache_control
 VK_EXT_separate_stencil_usage
 VK_EXT_validation_cache
@@ -6299,12 +6307,11 @@ VK_KHR_device_group_creation
 VK_KHR_draw_indirect_count
 VK_KHR_dynamic_rendering
 VK_KHR_get_physical_device_properties2
-VK_KHR_graphics_pipeline_library
-VK_KHR_graphics_pipeline_library and dependent extensions enabled.
 VK_KHR_image_format_list
 VK_KHR_maintenance1
 VK_KHR_maintenance2
 VK_KHR_pipeline_executable_properties
+VK_KHR_pipeline_library
 VK_KHR_ray_tracing_pipeline
 VK_KHR_swapchain_mutable_format
 VK_LAYER_GOOGLE_threading
@@ -6394,6 +6401,7 @@ VR_001
 VRenderDeviceMgrBackdoor001
 VRenderDeviceSetupV001
 VS
+VS_RTX
 VScript
 VScriptDbg
 VScriptManager010
@@ -6740,6 +6748,7 @@ WriteOnly
 WritePackedPrimitiveIndices4x8NV
 WritePipeBlockingINTEL
 Wrong JPEG library version: library is %d, caller expects %d
+Wrote RenderDoc capture to %s
 X
 X must be a 32-bit unsigned integer OpConstant
 X-LEGEND
@@ -10556,12 +10565,14 @@ renderPasses
 renderPasses2
 rendercontextbase.cpp
 renderdevicebase.cpp
-renderdevicebase.cpp(1579):
-renderdevicebase.cpp(1743):
-renderdevicebase.cpp(1979):
-renderdevicebase.cpp(1983):
-renderdevicebase.cpp(3289):
-renderdevicebase.cpp(914):
+renderdevicebase.cpp(1581):
+renderdevicebase.cpp(1745):
+renderdevicebase.cpp(1981):
+renderdevicebase.cpp(1985):
+renderdevicebase.cpp(3297):
+renderdevicebase.cpp(3497):
+renderdevicebase.cpp(3510):
+renderdevicebase.cpp(916):
 renderdevicemgrbase.cpp
 renderdoc_captures
 renderstatehelper.h
@@ -11417,14 +11428,14 @@ textureSize
 textureSize(
 texturebase.cpp
 texturebase.cpp(2249):Error loading texture: %s
-texturebase.cpp(3261):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3284):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3295):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3306):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3321):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3342):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3353):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3364):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3262):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3285):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3296):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3307):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3326):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3347):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3358):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3369):ResourceHandleToData( %s ) failed! Falling back to error texture!
 tgamma
 that allocate pointers must be in Function or Private
 that is not a scalar or vector
@@ -12220,7 +12231,6 @@ vkCreateSemaphore( m_pDeviceVulkan, &acquireNextImageSemaphoreCreateInfo, NULL, 
 vkCreateSemaphore( m_pDeviceVulkan, &semaphoreCreateInfo, nullptr, &pVulkanSemaphore->m_pSemaphore )
 vkCreateShaderModule
 vkCreateShaderModule( VulkanDevice(), pShaderModuleCreateInfo, nullptr, &pShaderModule )
-vkCreateShaderModule( m_pDevice, &ci, nullptr, &m_vkShaderModule )
 vkCreateSharedSwapchainsKHR
 vkCreateSwapchainKHR
 vkCreateValidationCacheEXT
@@ -12604,7 +12614,7 @@ vulkan/pipelinemgrvulkan.cpp
 vulkan/rendercontextvulkan.cpp
 vulkan/rendercontextvulkan.cpp(456):
 vulkan/renderdevicemgrvulkan.cpp
-vulkan/renderdevicevulkan.cpp(2626):
+vulkan/renderdevicevulkan.cpp(2645):
 vulkan/renderpassvulkan.cpp
 vulkan/renderpipelinestatsvulkan.cpp
 vulkan/renderthreadvulkan.cpp
@@ -12623,7 +12633,6 @@ vulkan_memgr_print
 vulkan_memgr_telemetry_stats
 vulkan_peer2peer_mgpu.vtex
 vulkan_pipeline_compile_spew
-vulkan_pipeline_compile_spew_threshold
 vulkan_pipeline_compile_throttle_ms
 vulkan_pipelinemgr_print
 vulkan_readpixels_resolve.vtex

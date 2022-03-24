@@ -193,7 +193,6 @@
 	ModelDoc
 	{
 		"models_gamedata"			"models_gamedata.fgd"
-		"export_modeldoc"			"0"
 		"features"					"econitems;editorconfig"
 	}
 

@@ -10,6 +10,10 @@ function lm_take_no_damage:DeclareFunctions()
 	return funcs
 end
 
+function lm_take_no_damage:GetTexture()
+	return "modifier_invulnerable"
+end
+
 function lm_take_no_damage:GetAbsoluteNoDamageMagical( params )
 	return 1
 end

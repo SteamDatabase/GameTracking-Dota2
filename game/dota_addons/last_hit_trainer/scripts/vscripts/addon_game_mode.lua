@@ -55,7 +55,8 @@ _G.gGameInfo = {
 	m_nBronzeScoreReq = 600,
 	m_nSilverScoreReq = 1600,
 	m_nGoldScoreReq = 2600,
-	m_nDiamondScoreReq = 3600
+	m_nDiamondScoreReq = 3600,
+	m_bHeroSpawned = false
 	--[[
 	-- Dev Values
 	m_nBronzeScoreReq = 100,

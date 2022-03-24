@@ -24,17 +24,51 @@ end
 -- GameEvent: OnNPCSpawned
 --------------------------------------------------------------------------------
 function CHeroDemo:OnNPCSpawned( event )
+	print( "^^^CHeroDemo:OnNPCSpawned" )
+
 	spawnedUnit = EntIndexToHScript( event.entindex )
 
-	if spawnedUnit:GetPlayerOwnerID() == 0 and spawnedUnit:IsRealHero() and not spawnedUnit:IsClone() then
-		--print( "spawnedUnit is player's hero" )
-		local hPlayerHero = spawnedUnit
-		hPlayerHero:SetContextThink( "self:Think_InitializePlayerHero", function() return self:Think_InitializePlayerHero( hPlayerHero ) end, 0 )
+	if spawnedUnit == nil then
+		return
 	end
+
+	--DeepPrintTable( event )
 
 	if spawnedUnit:GetUnitName() == "npc_dota_neutral_caster" then
 		--print( "Neutral Caster spawned" )
 		spawnedUnit:SetContextThink( "self:Think_InitializeNeutralCaster", function() return self:Think_InitializeNeutralCaster( spawnedUnit ) end, 0 )
+	end
+
+	if spawnedUnit:GetPlayerOwnerID() == 0 and spawnedUnit:IsRealHero() and not spawnedUnit:IsClone() and not spawnedUnit:IsTempestDouble() then
+		print( "spawnedUnit is player's hero" )
+
+		-- clean up ui element for previous player hero if we have a different ent index
+		if self.m_nPlayerEntIndex ~= -1 and self.m_nPlayerEntIndex ~= event.entindex then
+			local event_data =
+			{
+				entindex = self.m_nPlayerEntIndex
+			}
+			CustomGameEventManager:Send_ServerToAllClients( "remove_hero_entry", event_data )
+		end
+
+		self.m_nPlayerEntIndex = event.entindex
+
+		local event_data =
+		{
+			hero_id = spawnedUnit:GetHeroID()
+		}
+		CustomGameEventManager:Send_ServerToAllClients( "set_player_hero_id", event_data )
+
+		local hPlayerHero = spawnedUnit
+		hPlayerHero:SetContextThink( "self:Think_InitializePlayerHero", function() return self:Think_InitializePlayerHero( hPlayerHero ) end, 0 )
+	end
+
+	if event.is_respawn == 0 and spawnedUnit:IsRealHero() and not spawnedUnit:IsClone() and not spawnedUnit:IsTempestDouble() then
+		local event_data =
+		{
+			entindex = event.entindex
+		}
+		CustomGameEventManager:Send_ServerToAllClients( "add_new_hero_entry", event_data )
 	end
 end
 
@@ -56,6 +90,7 @@ function CHeroDemo:Think_InitializePlayerHero( hPlayerHero )
 		end
 	end
 
+	-- TODO - support this!
 	if self.m_bInvulnerabilityEnabled then
 		local hAllPlayerUnits = {}
 		hAllPlayerUnits = hPlayerHero:GetAdditionalOwnedUnits()
@@ -130,23 +165,25 @@ function CHeroDemo:OnLevelUpButtonPressed( eventSourceIndex )
 end
 
 --------------------------------------------------------------------------------
--- ButtonEvent: OnMaxLevelButtonPressed
+-- ButtonEvent: OnUltraMaxLevelButtonPressed
 --------------------------------------------------------------------------------
-function CHeroDemo:OnMaxLevelButtonPressed( eventSourceIndex, data )
+function CHeroDemo:OnUltraMaxLevelButtonPressed( eventSourceIndex, data )
+	
+	print( 'ULTRA MAX!' )
+
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
 	if hPlayerHero == nil then
 		return
 	end
 
-	hPlayerHero:AddExperience( 59900, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
+	HeroMaxLevel( hPlayerHero )
 
-	for i = 0, DOTA_MAX_ABILITIES - 1 do
-		local hAbility = hPlayerHero:GetAbilityByIndex( i )
-		if hAbility and not hAbility:IsAttributeBonus() then
-			while hAbility:GetLevel() < hAbility:GetMaxLevel() and hAbility:CanAbilityBeUpgraded () == ABILITY_CAN_BE_UPGRADED and not hAbility:IsHidden()  do
-				hPlayerHero:UpgradeAbility( hAbility )
-			end
-		end
+	if not hPlayerHero:FindModifierByName( "modifier_item_aghanims_shard" ) then
+		hPlayerHero:AddItemByName( "item_aghanims_shard" )
+	end
+
+	if not hPlayerHero:FindModifierByName( "modifier_item_ultimate_scepter_consumed" ) then
+		hPlayerHero:AddItemByName( "item_ultimate_scepter_2" )
 	end
 
 	EmitGlobalSound( "UI.Button.Pressed" )
@@ -172,44 +209,50 @@ function CHeroDemo:OnFreeSpellsButtonPressed( eventSourceIndex )
 end
 
 --------------------------------------------------------------------------------
--- ButtonEvent: OnInvulnerabilityButtonPressed
+-- ButtonEvent: CombatLogButtonPressed
 --------------------------------------------------------------------------------
-function CHeroDemo:OnInvulnerabilityButtonPressed( eventSourceIndex, data )
-	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-	if hPlayerHero == nil then
-		return
-	end
-
-	local hAllPlayerUnits = {}
-	hAllPlayerUnits = hPlayerHero:GetAdditionalOwnedUnits()
-	hAllPlayerUnits[ #hAllPlayerUnits + 1 ] = hPlayerHero
-
-	if self.m_bInvulnerabilityEnabled == false then
-		for _, hUnit in pairs( hAllPlayerUnits ) do
-			hUnit:AddNewModifier( hPlayerHero, nil, "lm_take_no_damage", nil )
-		end
-		self.m_bInvulnerabilityEnabled = true
-		self:BroadcastMsg( "#InvulnerabilityOn_Msg" )
-	elseif self.m_bInvulnerabilityEnabled == true then
-		for _, hUnit in pairs( hAllPlayerUnits ) do
-			hUnit:RemoveModifierByName( "lm_take_no_damage" )
-		end
-		self.m_bInvulnerabilityEnabled = false
-		self:BroadcastMsg( "#InvulnerabilityOff_Msg" )
-	end
-
+function CHeroDemo:CombatLogButtonPressed( eventSourceIndex )
+	SendToServerConsole( "dota_toggle_combatlog" )
 	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSetInvulnerabilityHero
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSetInvulnerabilityHero( bInvuln, eventSourceIndex, data )
+	local nHeroEntIndex = tonumber( data.str )
+	local hHero = EntIndexToHScript( nHeroEntIndex )
+	if ( hHero ~= nil and hHero:IsNull() == false ) then
+		print( 'OnSetInvulnerabilityHero! - found hero with ent index = ' .. nHeroEntIndex )
+
+		local hAllUnits = {}
+		if hHero:IsRealHero() then
+			hAllUnits = hHero:GetAdditionalOwnedUnits()
+		end
+		table.insert( hAllUnits, hHero )
+
+		if bInvuln == nil then
+			bInvuln = hHero:FindModifierByName( "lm_take_no_damage" ) == nil
+		end
+
+		if bInvuln then
+			for _, hUnit in pairs( hAllUnits ) do
+				print( 'Adding INVULN modifier to entindex ' .. hUnit:GetEntityIndex() .. ' - ' .. hUnit:GetUnitName() )
+				hUnit:AddNewModifier( hHero, nil, "lm_take_no_damage", nil )
+			end
+		else
+			for _, hUnit in pairs( hAllUnits ) do
+				print( 'Removing INVULN modifier to ' .. hUnit:GetUnitName() )
+				hUnit:RemoveModifierByName( "lm_take_no_damage" )
+			end
+		end
+	end
 end
 
 --------------------------------------------------------------------------------
 -- ButtonEvent: SpawnEnemyButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
-	if #self.m_tEnemiesList >= 100 then
-		self:BroadcastMsg( "#MaxEnemies_Msg" )
-		return
-	end
-
 	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
 	if hPlayerHero == nil then
 		return
@@ -221,7 +264,6 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 
 	DebugCreateUnit( hPlayer, sHeroToSpawn, self.m_nENEMIES_TEAM, false,
 		function( hEnemy )
-			table.insert( self.m_tEnemiesList, hEnemy )
 			hEnemy:SetControllableByPlayer( self.m_nPlayerID, false )
 			hEnemy:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
 			FindClearSpaceForUnit( hEnemy, hPlayerHero:GetAbsOrigin(), false )
@@ -234,45 +276,187 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
+--------------------------------------------------------------------------------
+-- RequestInitialSpawnHeroID
+--------------------------------------------------------------------------------
+function CHeroDemo:OnRequestInitialSpawnHeroID( eventSourceIndex, data )
+	local sHeroToSpawn = Convars:GetStr( "dota_hero_demo_default_enemy" )
+	local nHeroID = DOTAGameManager:GetHeroIDByName( sHeroToSpawn )
+	local event_data =
+	{
+		hero_id = nHeroID,
+		hero_name = sHeroToSpawn
+	}
+	CustomGameEventManager:Send_ServerToAllClients( "set_spawn_hero_id", event_data )
+end
 
 --------------------------------------------------------------------------------
--- ButtonEvent: SelectHeroButtonPressed
+-- ButtonEvent: SelectMainHeroButtonPressed
 --------------------------------------------------------------------------------
-function CHeroDemo:OnSelectHeroButtonPressed( eventSourceIndex, data )
+function CHeroDemo:OnSelectMainHeroButtonPressed( eventSourceIndex, data )
+	local sHero = DOTAGameManager:GetHeroUnitNameByID( tonumber( data.str ) )
+	--EmitGlobalSound( "UI.Button.Pressed" )
+
+	print( 'MAIN HERO PICK!' )
+
+	local event_data =
+	{
+		hero_id = tonumber( data.str ),
+		hero_name = sHero
+	}
+	CustomGameEventManager:Send_ServerToAllClients( "set_main_hero_id", event_data )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: SelectSpawnHeroButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSelectSpawnHeroButtonPressed( eventSourceIndex, data )
 	local sHeroToSpawn = DOTAGameManager:GetHeroUnitNameByID( tonumber( data.str ) )
 	Convars:SetStr( "dota_hero_demo_default_enemy", sHeroToSpawn )
-	EmitGlobalSound( "UI.Button.Pressed" )
-end
+	--EmitGlobalSound( "UI.Button.Pressed" )
 
+	print( 'SPAWN HERO PICK!' )
 
---------------------------------------------------------------------------------
--- ButtonEvent: OnLevelUpEnemyButtonPressed
---------------------------------------------------------------------------------
-function CHeroDemo:OnLevelUpEnemyButtonPressed( eventSourceIndex )
-	for k, v in pairs( self.m_tEnemiesList ) do
-		if self.m_tEnemiesList[ k ]:IsRealHero() then
-			self.m_tEnemiesList[ k ]:HeroLevelUp( false )
-		end
-	end
-
-	EmitGlobalSound( "UI.Button.Pressed" )
-
-	--self:BroadcastMsg( "#LevelUpEnemy_Msg" )
+	local event_data =
+	{
+		hero_id = tonumber( data.str ),
+		hero_name = sHeroToSpawn
+	}
+	CustomGameEventManager:Send_ServerToAllClients( "set_spawn_hero_id", event_data )
 end
 
 --------------------------------------------------------------------------------
--- ButtonEvent: OnMaxLevelEnemyButtonPressed
+-- ButtonEvent: RemoveHeroButtonPressed
 --------------------------------------------------------------------------------
-function CHeroDemo:OnMaxLevelEnemyButtonPressed( eventSourceIndex )
-	for k, v in pairs( self.m_tEnemiesList ) do
-		if self.m_tEnemiesList[ k ]:IsRealHero() then
-			self.m_tEnemiesList[ k ]:AddExperience( 56045, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
+function CHeroDemo:OnRemoveHeroButtonPressed( eventSourceIndex, data )
+	local nHeroEntIndex = tonumber( data.str )
+	local hHero = EntIndexToHScript( nHeroEntIndex )
+	
+	if ( hHero ~= nil and hHero:IsNull() == false and hHero ~= PlayerResource:GetSelectedHeroEntity( 0 ) ) then
+		print( 'OnRemoveHeroButtonPressed! - found hero with ent index = ' .. nHeroEntIndex )
+		if hHero:IsHero() and hHero:GetPlayerOwner() ~= nil and hHero:GetPlayerOwnerID() ~= 0 then
+			local nPlayerID = hHero:GetPlayerID()
+			-- TODO - kill all clones that are attached
+			DisconnectClient( nPlayerID, true )
+		else
+			hHero:Destroy()
+		end
+
+		local event_data =
+		{
+			entindex = nHeroEntIndex
+		}
+		CustomGameEventManager:Send_ServerToAllClients( "remove_hero_entry", event_data )
+	end
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: LevelUpHero
+--------------------------------------------------------------------------------
+function CHeroDemo:OnLevelUpHero( eventSourceIndex, data )
+	local nHeroEntIndex = tonumber( data.str )
+	local hHero = EntIndexToHScript( nHeroEntIndex )
+	if ( hHero ~= nil and hHero:IsNull() == false ) then
+		print( 'OnLevelUpHero! - found hero with ent index = ' .. nHeroEntIndex )
+		if hHero.HeroLevelUp then
+			hHero:HeroLevelUp( true )
 		end
 	end
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: MaxLevelUpHero
+--------------------------------------------------------------------------------
+function CHeroDemo:OnMaxLevelUpHero( eventSourceIndex, data )
+	local nHeroEntIndex = tonumber( data.str )
+	local hHero = EntIndexToHScript( nHeroEntIndex )
+	if ( hHero ~= nil and hHero:IsNull() == false ) then
+		print( 'OnMaxLevelUpHero! - found hero with ent index = ' .. nHeroEntIndex )
+
+		if hHero.AddExperience then
+			hHero:AddExperience( 59900, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
+
+			for i = 0, DOTA_MAX_ABILITIES - 1 do
+				local hAbility = hHero:GetAbilityByIndex( i )
+				if hAbility and not hAbility:IsAttributeBonus() then
+					while hAbility:GetLevel() < hAbility:GetMaxLevel() and hAbility:CanAbilityBeUpgraded () == ABILITY_CAN_BE_UPGRADED and not hAbility:IsHidden()  do
+						hHero:UpgradeAbility( hAbility )
+					end
+				end
+			end
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: ScepterHero
+--------------------------------------------------------------------------------
+function CHeroDemo:OnScepterHero( eventSourceIndex, data )
+	local nHeroEntIndex = tonumber( data.str )
+	local hHero = EntIndexToHScript( nHeroEntIndex )
+	if ( hHero ~= nil and hHero:IsNull() == false ) then
+		print( 'OnScepterHero! - found hero with ent index = ' .. nHeroEntIndex )
+		
+		if not hHero:FindModifierByName( "modifier_item_ultimate_scepter_consumed" ) then
+			hHero:AddItemByName( "item_ultimate_scepter_2" )
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: ShardHero
+--------------------------------------------------------------------------------
+function CHeroDemo:OnShardHero( eventSourceIndex, data )
+	local nHeroEntIndex = tonumber( data.str )
+	local hHero = EntIndexToHScript( nHeroEntIndex )
+	if ( hHero ~= nil and hHero:IsNull() == false ) then
+		print( 'OnShardHero! - found hero with ent index = ' .. nHeroEntIndex )
+		
+		if not hHero:FindModifierByName( "modifier_item_aghanims_shard" ) then
+			hHero:AddItemByName( "item_aghanims_shard" )
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: ResetHero
+--------------------------------------------------------------------------------
+function CHeroDemo:OnResetHero( eventSourceIndex, data )
+	local nHeroEntIndex = tonumber( data.str )
+	local hHero = EntIndexToHScript( nHeroEntIndex )
+	if ( hHero ~= nil and hHero:IsNull() == false ) then
+		print( 'OnResetHero! - found hero with ent index = ' .. nHeroEntIndex )
+		GameRules:SetSpeechUseSpawnInsteadOfRespawnConcept( true )
+		PlayerResource:ReplaceHeroWithNoTransfer( hHero:GetPlayerOwnerID(), hHero:GetUnitName(), -1, 0 )
+		GameRules:SetSpeechUseSpawnInsteadOfRespawnConcept( false )
+	end
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: SpawnAllyButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnAllyButtonPressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+
+	local hPlayer = PlayerResource:GetPlayer( data.PlayerID )
+
+	local sHeroToSpawn = Convars:GetStr( "dota_hero_demo_default_enemy" )
+
+	DebugCreateUnit( hPlayer, sHeroToSpawn, self.m_nALLIES_TEAM, false,
+		function( hAlly )
+			hAlly:SetControllableByPlayer( self.m_nPlayerID, false )
+			hAlly:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
+			FindClearSpaceForUnit( hAlly, hPlayerHero:GetAbsOrigin(), false )
+			hAlly:Hold()
+			hAlly:SetIdleAcquire( false )
+			hAlly:SetAcquisitionRange( 0 )
+			self:BroadcastMsg( "#SpawnAlly_Msg" )
+		end )
 
 	EmitGlobalSound( "UI.Button.Pressed" )
-
-	--self:BroadcastMsg( "#MaxLevelEnemy_Msg" )
 end
 
 --------------------------------------------------------------------------------
@@ -284,8 +468,7 @@ function CHeroDemo:OnDummyTargetButtonPressed( eventSourceIndex, data )
 		return
 	end
 	
-	table.insert( self.m_tEnemiesList, CreateUnitByName( "npc_dota_hero_target_dummy", hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nENEMIES_TEAM ) )
-	local hDummy = self.m_tEnemiesList[ #self.m_tEnemiesList ]
+	local hDummy = CreateUnitByName( "npc_dota_hero_target_dummy", hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nENEMIES_TEAM )
 	hDummy:SetAbilityPoints( 0 )
 	hDummy:SetControllableByPlayer( self.m_nPlayerID, false )
 	hDummy:Hold()
@@ -296,27 +479,6 @@ function CHeroDemo:OnDummyTargetButtonPressed( eventSourceIndex, data )
 
 	--self:BroadcastMsg( "#SpawnDummyTarget_Msg" )
 end
-
---------------------------------------------------------------------------------
--- ButtonEvent: OnRemoveSpawnedUnitsButtonPressed
---------------------------------------------------------------------------------
-function CHeroDemo:OnRemoveSpawnedUnitsButtonPressed( eventSourceIndex )
-	for k, v in pairs( self.m_tAlliesList ) do
-		self.m_tAlliesList[ k ]:Destroy()
-		self.m_tAlliesList[ k ] = nil
-	end
-	for k, v in pairs( self.m_tEnemiesList ) do
-		self.m_tEnemiesList[ k ]:Destroy()
-		self.m_tEnemiesList[ k ] = nil
-	end
-
-	self.m_nEnemiesCount = 0
-
-	EmitGlobalSound( "UI.Button.Pressed" )
-
-	--self:BroadcastMsg( "#RemoveSpawnedUnits_Msg" )
-end
-
 
 --------------------------------------------------------------------------------
 -- ButtonEvent: OnTowersEnabledButtonPressed
@@ -343,19 +505,48 @@ end
 function CHeroDemo:SetTowersEnabled( bEnabled )
 
 	print("SetTowersEnabled: " .. tostring(bEnabled) )
+	for _,tTower in pairs( self.m_rgTowers ) do
+		local hTower = tTower.hUnit
+
+		if hTower ~= nil and not hTower:IsNull() then
+			if not hTower:IsAlive() and hTower:UnitCanRespawn() then
+				print(" respawning " .. tTower.sName )
+				hTower:SetOriginalModel( tTower.sOriginalModel )
+				hTower:RespawnUnit()
+				hTower:RemoveModifierByName( "modifier_invulnerable" )
+			end
+
+			print(" enabling " .. tTower.sName .. " " .. tostring(bEnabled) )
+			if bEnabled then
+				hTower:RemoveModifierByName( "modifier_generic_hidden" )
+			else
+				hTower:AddNewModifier( hTower, nil, "modifier_generic_hidden", {} )
+			end
+		end
+	end		
+end
+
+function CHeroDemo:FindTowers()
+	print( "FindTowers" )
+	self.m_rgTowers = {}
 	local nInclusiveTypeFlags = DOTA_UNIT_TARGET_FLAG_DEAD + DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE + DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD
 	local units = FindUnitsInRadius( DOTA_TEAM_GOODGUYS, Vector(0,0,0), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, nInclusiveTypeFlags, FIND_ANY_ORDER, false )
 	for _,hUnit in pairs( units ) do
 		if hUnit:IsTower() then
-			print(" enabling " .. hUnit:GetUnitName() .. " " .. tostring(bEnabled) )
-			if bEnabled then
-				hUnit:RemoveModifierByName( "modifier_generic_hidden" )
-			else
-				hUnit:AddNewModifier( hUnit, nil, "modifier_generic_hidden", {} )
+			local tTower = {
+				hUnit = hUnit,
+				sName = hUnit:GetUnitName(),
+				sOriginalModel = hUnit:GetModelName()
+			}
+			if hUnit:GetUnitName() == "npc_dota_goodguys_tower1_mid" then
+				hUnit:SetUnitCanRespawn( true )
+				self.m_rgTowers[1] = tTower
+			elseif hUnit:GetUnitName() == "npc_dota_badguys_tower1_mid" then
+				hUnit:SetUnitCanRespawn( true )
+				self.m_rgTowers[2] = tTower
 			end
 		end
-	end		
-
+	end
 end
 
 
@@ -374,6 +565,7 @@ function CHeroDemo:OnSpawnCreepsButtonPressed( eventSourceIndex )
 		self:BroadcastMsg( "#SpawnCreepsOn_Msg" )
 	elseif nSpawnCreepsEnabled == 1 then
 		print("Disabling Creep Spawns")
+		self:RemoveCreeps()
 		SendToServerConsole( "dota_creeps_no_spawning 1" )
 		Convars:SetInt("dota_hero_demo_spawn_creeps_enabled", 0)
 		self:BroadcastMsg( "#SpawnCreepsOff_Msg" )
@@ -382,6 +574,160 @@ function CHeroDemo:OnSpawnCreepsButtonPressed( eventSourceIndex )
 	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnSingleCreepWaveButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnSingleCreepWaveButtonPressed( eventSourceIndex )
+	SendToServerConsole( "dota_spawn_creeps" )
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
+
+function CHeroDemo:RemoveCreeps()
+
+	print( "Removing Creeps" )
+	local nInclusiveTypeFlags = DOTA_UNIT_TARGET_FLAG_DEAD + DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_INVULNERABLE + DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD
+	local units = FindUnitsInRadius( DOTA_TEAM_GOODGUYS, Vector(0,0,0), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, nInclusiveTypeFlags, FIND_ANY_ORDER, false )
+	for _,hUnit in pairs( units ) do
+		if hUnit:IsCreep() and not hUnit:IsControllableByAnyPlayer() then
+			hUnit:Destroy()
+		end
+	end		
+
+end
+
+--------------------------------------------------------------------------------
+-- SpawnRuneInFrontOfUnit - Helper method for rune spawning
+--------------------------------------------------------------------------------
+function CHeroDemo:SpawnRuneInFrontOfUnit( hUnit, runeType )
+	if hUnit == nil then
+		return
+	end
+
+	local fDistance = 200.0
+	local fMinSeparation = 50.0
+	local fRingOffset = fMinSeparation + 20.0
+	local vDir = hUnit:GetForwardVector()
+	local vInitialTarget = hUnit:GetAbsOrigin() + vDir * fDistance
+	vInitialTarget.z = GetGroundHeight( vInitialTarget, nil )
+	local vTarget = vInitialTarget
+	local nRemainingAttempts = 100
+	local fAngle = 2 * math.pi
+	local fOffset = 0.0
+	local bDone = false
+
+	local vecRunes = Entities:FindAllByClassname( "dota_item_rune" )
+	while ( not bDone and nRemainingAttempts > 0 ) do
+		bDone = true
+		-- Too close to other runes?
+		for i=1, #vecRunes do
+			if ( vecRunes[i]:GetAbsOrigin() - vTarget ):Length() < fMinSeparation then
+				bDone = false
+				break
+			end
+		end
+		if not GridNav:CanFindPath( hUnit:GetAbsOrigin(), vTarget ) then
+			bDone = false
+		end 
+		if not bDone then
+			fAngle = fAngle + 2 * math.pi / 8
+			if fAngle >= 2 * math.pi then
+				fOffset = fOffset + fRingOffset
+				fAngle = 0
+			end
+			vTarget = vInitialTarget + fOffset * Vector( math.cos( fAngle ), math.sin( fAngle), 0.0 )
+			vTarget.z = GetGroundHeight( vTarget, nil )
+		end
+		nRemainingAttempts = nRemainingAttempts - 1
+	end
+
+	CreateRune( vTarget, runeType )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnRuneDoubleDamagePressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnRuneDoubleDamagePressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+	
+	self:SpawnRuneInFrontOfUnit( hPlayerHero, DOTA_RUNE_DOUBLEDAMAGE )
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnRuneHastePressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnRuneHastePressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+	
+	self:SpawnRuneInFrontOfUnit( hPlayerHero, DOTA_RUNE_HASTE )
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnRuneIllusionPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnRuneIllusionPressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+	
+	self:SpawnRuneInFrontOfUnit( hPlayerHero, DOTA_RUNE_ILLUSION )
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnRuneInvisibilityPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnRuneInvisibilityPressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+	
+	self:SpawnRuneInFrontOfUnit( hPlayerHero, DOTA_RUNE_INVISIBILITY )
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
+
+function CHeroDemo:GetRuneSpawnLocation()
+
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnRuneRegenerationPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnRuneRegenerationPressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+	
+	self:SpawnRuneInFrontOfUnit( hPlayerHero, DOTA_RUNE_REGENERATION )
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnRuneArcanePressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnRuneArcanePressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+	
+	self:SpawnRuneInFrontOfUnit( hPlayerHero, DOTA_RUNE_ARCANE )
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
 --------------------------------------------------------------------------------
 -- GameEvent: OnChangeCosmeticsButtonPresse
 --------------------------------------------------------------------------------

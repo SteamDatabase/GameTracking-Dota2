@@ -2624,27 +2624,30 @@ function TestMVP2Screen() {
 					slot: 3,
 					accountid: 174054,
 					guildid: 4,
-					heroname: 'npc_dota_hero_skeleton_king', // just for display
+					heroname: 'npc_dota_hero_naga_siren', // just for display
 					// Find hero id in game\dota\scripts\npc\npc_heroes.txt
-					overrideheroid: 42,
+					overrideheroid: 89,
 					// Find econ id in game\dota\scripts\items\items_game.txt
-					overrideeconid: 13456,
+					overrideeconid: 21136,
 					was_dire: false,
 					accolades: [
-						{ type: accolades[0], detail_value: 113 },
-						{ type: accolades[1], detail_value: 4 },
-						{ type: accolades[2], detail_value: 13 }
+						//{ type: accolades[0], detail_value: 113 },
+						//{ type: accolades[1], detail_value: 4 },
+						//{ type: accolades[2], detail_value: 13 }
+						{ type: 11, detail_value: 1000 },
+						{ type: 2, detail_value: 0 },
+						{ type: 264, detail_value: 23 }
 					]
 				},
 				{
 					slot: 1,
 					accountid: 85501829,
 					guildid: 18,
-					heroname: 'npc_dota_hero_sven',
-					overrideheroid: 18,
+					heroname: 'npc_dota_hero_windrunner',
+					overrideheroid: 21,
 					was_dire: false,
 					accolades: [
-						{ type: 3, detail_value: 32 }
+						{ type: 3, detail_value: 11 }
 						]
 				},
 				{
@@ -2652,10 +2655,10 @@ function TestMVP2Screen() {
                     accountid: 85501006,
 					guildid: 4,
 					was_dire: true,
-					heroname: 'npc_dota_hero_emberspirit',
-					overrideheroid: 106,
+					heroname: 'npc_dota_hero_axe',
+					overrideheroid: 2,
 					accolades: [
-						{ type: 127, detail_value: 17 }
+						{ type: 18, detail_value: 1 }
 						]
 				}
             ]

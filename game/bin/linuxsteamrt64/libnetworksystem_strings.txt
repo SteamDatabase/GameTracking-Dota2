@@ -106,7 +106,6 @@ $tI
 %%%d.%ds
 %%s
 %-10s % 5d % 5d % 5d: %-20s: 0x%p encoding field %s %s%s: %s
-%-10s % 5d %-20s:  %-32s:  received non-zero array count for FAKE deleted field in demo file, can't continue since don't know how to parse the members
 %-10s % 5d no fastpath because field %s %s changed the array size from %d to %d
 %-10s % 5d no fastpath because field %s base depth is too large (pointer metadata change?)
 %-10s % 5d no fastpath because field %s not resolvable
@@ -115,7 +114,7 @@ $tI
 %-120s - %s
 %-3d %s
 %-4d classes
-%-5d %-20s : [%-5d -> %-5d] %-5s bits:  %-32s %-80s : '%s'
+%-5d %-20s : [%-5d -> %-5d] %-5s bits:  %-32s %-80s : '%s' %s
 %-75s %-75s offset %10.10s %9.9s %s
 %.*g
 %.*s
@@ -160,7 +159,9 @@ $tI
 %s != %s
 %s %d %s
 %s %s %s
+%s %s %s offset %u, temporarily adding to ignore list
 %s %s = %s
+%s %s preserve field %i %s at offset %u, removing from ignore list
 %s %s:  [%d] %s queue %s [type %s] %son 0x%p [alloc %u] [order %d] %s
 %s %s:  [%d] %s queue %s [type %s] 0x%p %s
 %s - Argument expected (message ID or name).
@@ -168,6 +169,7 @@ $tI
 %s - Unrecognized net message name: '%s'
 %s -> %s::%s is marked for networking but is not a CNetworkVar!
 %s : %s = '%s'
+%s Gathering field offsets in %s
 %s Schema Type: %s
 %s SendMessage reliable failed with EResult: %d, bytes written %d
 %s SendMessage unreliable failed with EResult: %d, bytes written %d
@@ -179,6 +181,8 @@ $tI
 %s encoding as %d bits '
 %s had %d different permutations
 %s has MNetworkBitCount (or other float field tags) but is type cat '%s' (type %s)
+%s rebuild %s::%s at %u
+%s!fake
 %s%d
 %s%s
 %s%s %s::%s recursively
@@ -192,11 +196,7 @@ $tI
 %s.%s
 %s/%d:  AddFieldPathAndOffset (%s) added too large of a bit offset (%u : prev=%u) at element %d
 %s/%d:  AddFieldPathAndOffset (%s) added unexpected offset (%u : prev=%u) at element %d
-%s0x%p %s Ignoring %s offset %u, storing in 0x%p
 %s0x%p %s Initializing
-%s0x%p %s removing field %i %s at offset %u, removing from 0x%p
-%s0x%p Gathering field offsets in %s, storing in 0x%p
-%s0x%p rebuild %s::%s at %u
 %s:  %d : %s bits %d to %d [%d bits] : %s
 %s:  %s
 %s:  %s packet type '%s' %d/%d (%.1f%%)
@@ -208,7 +208,7 @@ $tI
 %s:  NetChan Setting Timeout to %4.2f seconds
 %s:  compressing reliable (%u -> %u bytes)
 %s:  corrupted packet %i at %i
-%s:  couldn't find serializer %s
+%s:  couldn't find serializer %s in %s
 %s:  encodeded data mismatched %d bits
 %s:  encoding mismatched %d vs. %d bits
 %s:  fake client reliable ack now %d
@@ -230,7 +230,6 @@ $tI
 %s: !CanPacket() - SNPQueueTime=%.1fms.
 %s: !CanPacket() - m_bSuppressingTransmit.
 %s: %s
-%s: %s exists only in %s
 %s: SendMessage reliable failed with k_EResultLimitExceeded, crashing connection.
 %s: SendMessage unreliable failed with k_EResultLimitExceeded, crashing connection.
 %s: field %s has MNetworkSendProxyRecipientsFilter but is not declared using CNetworkVarEmbeddedNotFlattened
@@ -243,14 +242,15 @@ $tI
 %s:%s needs base %s:%s to be registered
 %s:%s packet %i at %i
 %s::
-%s::%s
 %s::%s was in the original serializer at offset %u but that offset isn't in the ignore list!!!
 %s::%s:%u (%s ) already encountered at %s::%s:%u (%s)
 %s:Dropped %i packets at %i
 %sApplying %s
 %sCull fields for %s
 %sCulled %s::%s
-%sProcess includes/excludes %s %s
+%sProcess includes/excludes %s %s [%d fields]
+%s[%d]
+%s_%s_%s
 %sconsider %s at depth %d
 %sexcluding %s::%s due to MNetworkNoBase
 %sfound leafmost nobase at %s
@@ -278,6 +278,7 @@ $tI
 (%s)
 (%s->%s)
 (%u %u %u %u)
+(.*)\[(\d+)\]$
 (Message Info)
 (NULL)
 (cannot determine missing fields for lite message)
@@ -322,8 +323,6 @@ $tI
 --- %s:
 --- %s[%d]:
 ->
-->error
--FLT_MAX
 -avx
 -inf
 -ip
@@ -345,6 +344,7 @@ $tI
 -sse3
 -sse4
 -steamnetworkingsockets_use_steamclient
+-use_valve_ice
 .
 .  Please update your library.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
 . Difference of
@@ -376,6 +376,8 @@ $tI
 ./google/protobuf/stubs/stringpiece.h
 ./google/protobuf/unknown_field_set.h
 .PLACEHOLDER_VALUE
+.[\()*+?{|^$
+.[\*^$
 .dummy
 .foo = value".
 .placeholder.proto
@@ -603,13 +605,14 @@ $tI
 ?color
 @
 @?
-@@CUtlVector
+@@-FLT_MAX
 @B
 A file with this name is already in the pool.
 A protobuf object %s with a repeated field %s was used in a container, this will crash
 A protocol message was rejected because it was too big (more than
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 ABORTED
+ACK
 ALREADY_EXISTS
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 Accepting Steam Net connection %s
@@ -684,6 +687,7 @@ BuildOutputString:  change %s to %d
 Builtin
 Byte size calculation and serialization were inconsistent.  This may indicate a bug in protocol buffers or it may be caused by concurrent modification of
 C
+CAN
 CANCELLED
 CAnimVariant
 CBufferString::AppendFormat(char const*, ...)
@@ -737,6 +741,10 @@ CFlattenedSerializer::WriteFieldList fieldDataBuf
 CFlattenedSerializer::[ent %d] Decode path %s array index %d out of range %d for field %s::%s [%d]
 CFlattenedSerializers::BuildMergedSerializedEntity fieldDataBuf
 CFlattenedSerializers::SpewSerializer: called with NULL serializer!!!
+CGridStringPrinter::GetLines(CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int> >&) const
+CGridStringPrinter::NumRows() const
+CGridStringPrinter::SetColumnHeader(int, char const*)
+CGridStringPrinter::SetString(int, int, char const*)
 CHECK failed: !InRealOneof(field):
 CHECK failed: !IsDefault(default_value):
 CHECK failed: !TableEntryIsTree(b) && !TableEntryIsTree(b ^ 1):
@@ -1093,12 +1101,14 @@ CUtlRBTree overflow with %u elements!
 CUtlScratchMemoryPool::AllocAligned(int, int)
 CUtlString
 CUtlString::Append(char const*)
+CUtlString::DottedAppend(char const*) const
 CUtlString::Format(char const*, ...)
 CUtlString::FormatV(char const*, __va_list_tag*)
 CUtlString::FreeMemoryBlock()
 CUtlString::GetForModify()
 CUtlString::IsEqual_CaseSensitive(char const*) const
 CUtlString::Purge()
+CUtlString::Right(int) const
 CUtlString::Set(char const*)
 CUtlString::SetDirect(char const*, int)
 CUtlString::SetLength(int)
@@ -1110,7 +1120,6 @@ CUtlString::operator+(char const*) const
 CUtlString::operator+=(CUtlString const&)
 CUtlString::operator+=(char const*)
 CUtlString::operator==(CUtlString const&) const
-CUtlString::operator[](int) const
 CUtlSymbol
 CUtlSymbolLarge
 CUtlSymbolTable::AddString(char const*)
@@ -1198,7 +1207,13 @@ CreateSerializedEntityBlob:  removing %s from field path list, culled by another
 Created poll group for socket '%s'
 D
 DATA_LOSS
+DC1
+DC2
+DC3
+DC4
 DEADLINE_EXCEEDED
+DEL
+DLE
 DO NOT PARSE: fields may be stripped and missing.
 DTI %s
 DTI reset
@@ -1223,14 +1238,18 @@ Don't lookup extension types if they aren't present (2).
 Double-save to Member '%s'
 Dump UDP packets summary to console
 Dump non-loopback udp only
-Duplicate local entry %s %s already exists in field dict (field possibly defined as CNetworkVar in a base class?)!
-Duplicate remote entry %s %s already exists in field dict (field possibly defined as CNetworkVar in a base class?)!
 E
+EM
+ENQ
+EOT
 ERROR
 ERROR! SendData %s data too big (%i)
 ERROR: Field %s::%s unable to deduce unserializer for type (%s)!
 ERROR: Schema registration error - class '%s' is not marked as MModuleLocalTypeScope but contains member '%s' with locally-scoped type '%s'
 ERROR: Schema registration error - class '%s' is not marked as MModuleLocalTypeScope but derives from locally-scoped class '%s'
+ESC
+ETB
+ETX
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
 EconItemToolModel_001
@@ -1298,6 +1317,8 @@ Extra connection [%s]:
 ExtractSubrange() when arena is non-NULL is only supported when
 F
 FAILED_PRECONDITION
+FAKE array size
+FAKE pointer
 FALSE
 FATAL
 FATAL ERROR: unable to register all schema data: %s
@@ -1381,8 +1402,11 @@ Found invalid proto option data for:
 GCC: (SteamRT 5.4.0-7.really.6+steamrt1.2+srt2) 5.4.1 20160803
 GLIBCXX_3.4
 GLIBCXX_3.4.11
+GLIBCXX_3.4.14
+GLIBCXX_3.4.15
 GLIBCXX_3.4.18
 GLIBCXX_3.4.5
+GLIBCXX_3.4.9
 GLIBC_2.14
 GLIBC_2.2.5
 GLIBC_2.3
@@ -1446,6 +1470,10 @@ INetChannel::SetCategories: Network category wasn't registered!
 INetworkSystem::RegisterNetworkCategory: Attempted to register category %u twice (debug name: %s and %s)
 INetworkSystem::RegisterNetworkCategory: all categories must have ids between 0-31!
 IQuickTime001
+IS1
+IS2
+IS3
+IS4
 If set, only net_showmsg spew for data inbound on this socket name e.g. client, server, etc.
 If unable to bind to initial port, how many more to try binding.
 Ignoring extension "
@@ -1456,9 +1484,9 @@ Index must be -1 for non-repeated fields
 Index must be -1 for singular fields.
 Index must be in range of repeated field values.
 Index out-of-bounds (field is empty).
+InitFakeField
 InitFakeField:  Couldn't find schema lookup for '%s' of type '%s'
 InitFakeField:  Parser function returned false for '%s' of type '%s'
-InitFakeField: %-80s type: %-50s encoder: %-32s [%s]
 InitField
 InitGameServer
 InitSteamNetworking
@@ -1556,6 +1584,7 @@ MNetworkOverride
 MNetworkOverride_Invalid
 MNetworkPriority
 MNetworkRemoveAll
+MNetworkReplayCompatField
 MNetworkSendProxyRecipientsFilter
 MNetworkSerializeAs
 MNetworkSerializer
@@ -1626,7 +1655,6 @@ MessageSet is not supported in proto3.
 MessageSets cannot have fields, only extensions.
 Messages can't have default values!
 Messages can't have default values.
-Mismatch between client %s and server %s
 Missing field: FileDescriptorProto.name.
 Missing name.
 ModelDocUtils001
@@ -1751,9 +1779,11 @@ N6snappy15ByteArraySourceE
 N6snappy22UncheckedByteArraySinkE
 N6snappy4SinkE
 N6snappy6SourceE
+NAK
 NETWORK_FIELD_CHANGED_ARRAY_WITH_VALUE
 NETWORK_FIELD_CHANGED_NO_VALUE
 NETWORK_FIELD_CHANGED_NO_VALUE_NO_CONTEXT
+NETWORK_FIELD_CHANGED_REPLAY_COMPAT
 NETWORK_FIELD_CHANGED_TYPE_NONE
 NETWORK_FIELD_CHANGED_WITH_VALUE
 NETWORK_FIELD_CHANGES_OFTEN_PRIORITY
@@ -1763,6 +1793,23 @@ NETWORK_FIELD_DEFAULT_PRIORITY
 NETWORK_FIELD_HIGHEST_PRIORITY
 NETWORK_FIELD_LOWEST_PRIORITY
 NOT_FOUND
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb0ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb0ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb1ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb1ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb0ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb0ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb1ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb1ELb1EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb0ELb0EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb0ELb1EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb1ELb0EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb1ELb1EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb0ELb0EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb0ELb1EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb1ELb0EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb1ELb1EEE
+NUL
 Need space between identifier and decimal point.
 Need space between number and identifier.
 Net graph %s
@@ -1970,6 +2017,9 @@ ResourceSystem013
 RotationVector
 S
 SDR connect
+SI
+SO
+SOH
 SSE and SSE2 are required.
 STEAMAPPLIST_INTERFACE_VERSION001
 STEAMAPPS_INTERFACE_VERSION008
@@ -1982,8 +2032,10 @@ STEAMPARENTALSETTINGS_INTERFACE_VERSION001
 STEAMREMOTESTORAGE_INTERFACE_VERSION016
 STEAMSCREENSHOTS_INTERFACE_VERSION003
 STEAMUGC_INTERFACE_VERSION016
-STEAMUSERSTATS_INTERFACE_VERSION012
 STEAMVIDEO_INTERFACE_V002
+STX
+SUB
+SYN
 SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*)
 SceneSystem_002
 SceneUtils_001
@@ -2055,6 +2107,10 @@ Spew QoS interval data as we gather it
 Spew a warning if packet loss percentage is above this threshold
 Spew serializer counts
 Spew serializer info
+St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+St16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+St19_Sp_make_shared_tag
+St23_Sp_counted_ptr_inplaceINSt8__detail4_NFAISt12regex_traitsIcEEESaIS4_ELN9__gnu_cxx12_Lock_policyE2EE
 Stack depth limit hit (%d)
 StatsService_001
 Steam Net connection %s %s, reason %d: %s
@@ -2069,15 +2125,18 @@ SteamAudio001
 SteamClient020
 SteamController008
 SteamDatagram Network Configuration
+SteamDatagramClient_Init
 SteamDatagramClient_Init failed.  %s
-SteamDatagramClient_Init_InternalV9
-SteamDatagramClient_Internal_SteamAPIKludge
+SteamDatagramClient_InitSteam failed.  %s
+SteamDatagramClient_InitSteam_InternalV1
 SteamDatagramClient_Kill
-SteamDatagramClient_SetAppID
-SteamDatagramClient_SetUniverse
+SteamDatagramServer_Init
 SteamDatagramServer_Init failed.  %s
-SteamDatagramServer_Init_InternalV2
+SteamDatagramServer_InitSteam_InternalV1
 SteamDatagramServer_Kill
+SteamDatagram_Internal_SteamAPIKludge
+SteamDatagram_SetAppID
+SteamDatagram_SetUniverse
 SteamFriends017
 SteamGameServer014
 SteamGameServerNetworkingSockets_LibV12
@@ -2136,7 +2195,6 @@ Toggle field path tracing to file
 Tokenizer::ParseFloat() passed text that could not have been tokenized as a float:
 Tokenizer::ParseStringAppend() passed text that could not have been tokenized as a string:
 Too many incoming messages on channel (%s) %d remain queued, limit per-frame is %d.
-Too many proxies for serializer %s.
 Too many queued messages on channel (%s) %d queued, limit is %d.
 ToolFramework2_002
 ToolSceneNodeFactory_001
@@ -2159,6 +2217,7 @@ UNIMPLEMENTED
 UNKNOWN
 UNKNOWN_ENUM_VALUE_%s_%d
 UTF-8 data when
+Unable to unambiguously match %s::%s in %s, %d possible matches found
 Unexpected end of string.
 Unexpected failure while serializing option submessage
 Unimplemented type:
@@ -2171,6 +2230,7 @@ Usage: sdr <setting> [<value>]
 Use lz compression on game packets.
 Use network sockets layer even for listen server local player's packets (multiplayer only).
 UserInfoChangeService_001
+Using Valve ICE implementation
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
 V
@@ -2212,6 +2272,7 @@ VScript
 VScriptDbg
 VScriptManager010
 VStringTokenSystem001
+VTT for std::basic_istringstream<char, std::char_traits<char>, std::allocator<char> >
 V_InitJSONConfig
 V_ParseJSONBuffer
 V_SplitString(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int> >&)
@@ -2333,6 +2394,7 @@ Z
 \u00
 \x%02x
 ^
+^$\.*+?()[]{}|
 _
 _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
@@ -2346,6 +2408,7 @@ __assert_fail
 __bss_start
 __cxa_allocate_exception
 __cxa_atexit
+__cxa_bad_cast
 __cxa_begin_catch
 __cxa_end_catch
 __cxa_finalize
@@ -2357,9 +2420,11 @@ __cxa_pure_virtual
 __cxa_rethrow
 __cxa_throw
 __cxa_throw_bad_array_new_length
+__dynamic_cast
 __errno_location
 __fprintf_chk
 __gmon_start__
+__gnu_cxx::__enable_if<std::__is_char<char>::__value, bool>::__type std::operator==<char>(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 __gxx_personality_v0
 __memcpy_chk
 __once_proxy
@@ -2379,6 +2444,12 @@ a
 a protocol
 aE
 accessor_ == other.accessor_
+aggegated
+alert
+alnum
+alpha
+ampersand
+apostrophe
 archive
 args were given.  Full format string was: "
 arguments.
@@ -2387,6 +2458,7 @@ array count
 array of pointers
 array size changed
 assign_poll_group
+asterisk
 at depth %d items %d
 available
 average metadata list is %f entries
@@ -2399,7 +2471,10 @@ avg_packet_in
 avg_packet_loss
 avg_packet_out
 backing paths
+backslash
+backspace
 badpacket%03i.dat
+basic_string::_S_construct null not valid
 best_priority
 binary
 binary_auto
@@ -2408,21 +2483,32 @@ binary_lz4
 binary_zstd
 bit %d - %d (%d bits/%d bytes):
 bitcount=%d,
+blank
 bool
 bool google::protobuf::internal::RepeatedFieldRefIterator<T>::operator!=(const google::protobuf::internal::RepeatedFieldRefIterator<T>&) const [with T = google::protobuf::Message]
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>&)
+bool std::__detail::__regex_algo_impl<char const*, std::allocator<std::sub_match<char const*> >, char, std::regex_traits<char>, (std::__detail::_RegexExecutorPolicy)0, true>(char const*, char const*, std::match_results<char const*, std::allocator<std::sub_match<char const*> > >&, std::basic_regex<char, std::regex_traits<char> > const&, std::regex_constants::match_flag_type)
 both states
 buffer. Use the 'bytes' type if you intend to send raw
 buildhierarchystruct.cpp
+building fake field for %s %s
 builtin()
 bytes
 bytes).  To increase the limit (or to disable these warnings), see CodedInputStream::SetTotalBytesLimit() in third_party/protobuf/src/google/protobuf/io/coded_stream.h.
 bytes.
 can't reach here.
 cannot be required.
+carriage-return
 cb(%s[%d])
+change
 char
 char google::protobuf::StringPiece::operator[](google::protobuf::stringpiece_ssize_type) const
+char* std::string::_S_construct<char const*>(char const*, char const*, std::allocator<char> const&, std::forward_iterator_tag)
 cheat
+circumflex
 client
 client_interpolation_amount
 clientcmd_can_execute
@@ -2430,7 +2516,10 @@ close
 close() failed:
 closed by peer
 cmd_info
+cntrl
+comma
 command
+commercial-at
 compressed
 conflicts with an existing enum type.
 conflicts with an existing field.
@@ -2462,6 +2551,7 @@ delta >= 1u
 details:
 disabled
 dl_iterate_phdr
+dollar-sign
 double
 dropped
 dt_instrumentation.cpp
@@ -2470,12 +2560,16 @@ dti_enabled
 dti_report_stddev_threshold
 duplicate
 e
+eight
 embedded field
 enable
+encoder
 encoder(%s)
 encoding_stats
 enum
+equals-sign
 exceeded maximum protobuf size of 2GB:
+exclamation-mark
 exclude
 excluding
 extend .$0 {
@@ -2497,6 +2591,7 @@ fieldpath_%02d%02d%02d-%02d%02d%02d.csv
 fieldpathpacker.cpp
 filesystem
 filesystem_stdio
+five
 flags=%d,
 flattenedserializer.cpp
 flattenedserializers.cpp
@@ -2505,6 +2600,8 @@ float32
 float64
 floor
 fltx4
+form-feed
+four
 fp_trace
 free
 from
@@ -2624,12 +2721,19 @@ google::protobuf::uint64 google::protobuf::UnknownField::fixed64() const
 google::protobuf::uint64 google::protobuf::UnknownField::varint() const
 google::protobuf::uint8* google::protobuf::internal::ExtensionSet::_InternalSerialize(int, int, google::protobuf::uint8*, google::protobuf::io::EpsCopyOutputStream*) const
 graph
+grave-accent
+greater-than-sign
 groupindex
 groupnames
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>::operator()(char) const::__nul
 h
 has the same name as
 has_network_encoding_data
 hostip
+hyphen
 i < length_
 if you ignore case and strip out the enum name prefix (if any). This is error-prone and can lead to undefined behavior. Please avoid doing this. If you are using allow_alias, please assign the same numeric value to both enums.
 import "$0";
@@ -2645,22 +2749,26 @@ index[%d]
 index_bits
 infinity
 inpacket.message
-int
 int google::protobuf::CalculateBase64EscapedLen(int, bool)
 internal error in map key sorting
 invalid
 invalid!
 invalid_address
 is unused.
+j
 json_name = "
 jstype is only allowed on int64, uint64, sint64, fixed64 or sfixed64 fields.
 key
 l
 latency_seconds
 ld-linux-x86-64.so.2
+left-curly-bracket
+left-parenthesis
+left-square-bracket
 len >= 0
 len >= input_len
 length_ >= n
+less-than-sign
 libc.so.6
 libm.so.6
 libnetworksystem.so
@@ -2673,6 +2781,7 @@ listen
 loop
 loopback:%d
 loopback_t CUtlMemoryPool
+lower
 lseek
 m
 m_bCanStillRegisterCallbackPriorities
@@ -2769,7 +2878,9 @@ networkserializer.cpp
 networksystem
 networksystem.cpp
 networksystem_protomessages.proto
+newline
 next state only
+nine
 no
 no CSerializedEntity memory being used
 no fastpath
@@ -2784,6 +2895,7 @@ nothing
 notify
 null
 nullptr output boolean given.
+number-sign
 o
 of the Protocol Buffer runtime library, but the installed version is
 of the Protocol Buffer runtime library, which is not compatible with the installed version (
@@ -2813,13 +2925,17 @@ parsing
 pending data
 per client out %.1f, in %.1f kB/s
 per client out %.1f/s, in %.1f/s
+percent-sign
+period
 please implement MergeFrom for your type.
+plus-sign
 pointer field
 pointer to struct
-possible match %d of %d:  %s %s.%s
+possible match: %s.%s
 prediction_errors
 previous only
 pri(%u)
+print
 problem detected locally
 proto2
 proto3
@@ -2830,21 +2946,28 @@ pthread_mutex_unlock
 pthread_mutexattr_init
 pthread_mutexattr_settype
 pthread_once
+punct
 q
 qangle
 qangle_pitch_yaw
+question-mark
 queued
+quotation-mark
 rb
 read
 reason
 records
 recursion_budget_ < recursion_limit_
+regex
 render_interpolation_fraction
 repeated
 replicated
 required
 resource
 resource_name
+right-curly-bracket
+right-parenthesis
+right-square-bracket
 rnd_down
 rnd_up
 s
@@ -2854,6 +2977,8 @@ schematype.cpp
 sdr
 sdr %s = %s
 sdr config option not found
+semicolon
+sendnode
 sent
 sentinel
 serialize
@@ -2863,6 +2988,7 @@ server
 server_can_execute
 server_framerate_stddev
 service $0 {
+seven
 sfixed32
 sfixed64
 shutdown
@@ -2871,9 +2997,11 @@ singleplayer
 singletons.cpp
 sint32
 sint64
+six
 size too big:
 size_t to int conversion
 skip
+skipping MatchToSerializerByMeta for %s
 soundevent
 splitpacket
 splits [%d]
@@ -2881,22 +3009,124 @@ sqrt
 sqrtf
 ss_added
 stack frames not accounted for stack unwind.
+std::_Deque_base<long, std::allocator<long> >::_M_initialize_map(unsigned long)
+std::_Deque_base<long, std::allocator<long> >::~_Deque_base()
+std::_Deque_base<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::_M_initialize_map(unsigned long)
+std::_Deque_base<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::~_Deque_base()
+std::_Function_base::_Base_manager<std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_BracketMatcher<std::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_BracketMatcher<std::regex_traits<char>, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_BracketMatcher<std::regex_traits<char>, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_BracketMatcher<std::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_CharMatcher<std::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_CharMatcher<std::regex_traits<char>, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_CharMatcher<std::regex_traits<char>, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_base::_Base_manager<std::__detail::_CharMatcher<std::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, true> >::_M_invoke(std::_Any_data const&, char&&)
 std::_Hash_bytes(void const*, unsigned long, unsigned long)
+std::_Rb_tree<long, std::pair<long const, long>, std::_Select1st<std::pair<long const, long> >, std::less<long>, std::allocator<std::pair<long const, long> > >::_M_erase(std::_Rb_tree_node<std::pair<long const, long> >*)
+std::_Rb_tree<long, std::pair<long const, long>, std::_Select1st<std::pair<long const, long> >, std::less<long>, std::allocator<std::pair<long const, long> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<long const, long> >, long const&)
+std::_Rb_tree<long, std::pair<long const, long>, std::_Select1st<std::pair<long const, long> >, std::less<long>, std::allocator<std::pair<long const, long> > >::_M_get_insert_unique_pos(long const&)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base const*)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base*)
 std::_Rb_tree_increment(std::_Rb_tree_node_base const*)
 std::_Rb_tree_increment(std::_Rb_tree_node_base*)
 std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)
+std::_Rb_tree_iterator<std::pair<long const, long> > std::_Rb_tree<long, std::pair<long const, long>, std::_Select1st<std::pair<long const, long> >, std::less<long>, std::allocator<std::pair<long const, long> > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<long const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<long const, long> >, std::piecewise_construct_t const&, std::tuple<long const&>&&, std::tuple<>&&)
 std::_Rb_tree_rebalance_for_erase(std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)
+std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_destroy()
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&)
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::~_Sp_counted_ptr_inplace()
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>::operator()(char) const::__nul
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>::_M_add_character_class(std::string const&, bool)
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>::_M_apply(char, std::integral_constant<bool, false>) const
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::_M_add_character_class(std::string const&, bool)
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::_M_apply(char, std::integral_constant<bool, false>) const
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::~_BracketMatcher()
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>::_M_add_character_class(std::string const&, bool)
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>::_M_apply(char, std::integral_constant<bool, false>) const
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::_M_add_character_class(std::string const&, bool)
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::_M_apply(char, std::integral_constant<bool, false>) const
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::~_BracketMatcher()
+std::__detail::_Compiler<std::regex_traits<char> >::_Compiler(char const*, char const*, std::locale const&, std::regex_constants::syntax_option_type)
+std::__detail::_Compiler<std::regex_traits<char> >::_M_alternative()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_assertion()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_atom()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_bracket_expression()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_cur_int_value(int)
+std::__detail::_Compiler<std::regex_traits<char> >::_M_disjunction()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_pop()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_quantifier()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_quantifier()::{lambda()#1}::operator()() const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_try_char()
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_dfs(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_is_word(char) const::__s
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_lookahead(std::__detail::_State<std::regex_traits<char> >)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_rep_once_more(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_word_boundary() const
+std::__detail::_NFA<std::regex_traits<char> >::_M_eliminate_dummy()
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_backref(unsigned long)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_dummy()
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_matcher(std::function<bool (char)>)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_repeat(long, long, bool)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_state(std::__detail::_State<std::regex_traits<char> >)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_subexpr_begin()
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_subexpr_end()
 std::__detail::_Prime_rehash_policy::_M_need_rehash(unsigned long, unsigned long, unsigned long) const
 std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const
+std::__detail::_RegexTranslator<std::regex_traits<char>, false, true>::_M_transform_impl(char, std::integral_constant<bool, true>) const
+std::__detail::_RegexTranslator<std::regex_traits<char>, true, false>::_M_translate(char) const
+std::__detail::_RegexTranslator<std::regex_traits<char>, true, true>::_M_transform_impl(char, std::integral_constant<bool, true>) const
+std::__detail::_RegexTranslator<std::regex_traits<char>, true, true>::_M_translate(char) const
+std::__detail::_Scanner<char>::_M_advance()
+std::__detail::_Scanner<char>::_M_eat_class(char)
+std::__detail::_Scanner<char>::_M_eat_escape_awk()
+std::__detail::_Scanner<char>::_M_eat_escape_ecma()
+std::__detail::_Scanner<char>::_M_eat_escape_posix()
+std::__detail::_Scanner<char>::_M_scan_in_brace()
+std::__detail::_Scanner<char>::_M_scan_in_bracket()
+std::__detail::_Scanner<char>::_M_scan_normal()
+std::__detail::_Scanner<char>::_Scanner(char const*, char const*, std::regex_constants::syntax_option_type, std::locale)
+std::__detail::_State<std::regex_traits<char> >::_State(std::__detail::_State<std::regex_traits<char> >&&)
+std::__detail::_StateSeq<std::regex_traits<char> >::_M_clone()
 std::__once_call
 std::__once_callable
 std::__throw_bad_alloc()
+std::__throw_bad_cast()
+std::__throw_bad_function_call()
 std::__throw_length_error(char const*)
 std::__throw_logic_error(char const*)
+std::__throw_regex_error(std::regex_constants::error_type)
 std::__throw_system_error(int)
 std::basic_ios<char, std::char_traits<char> >::fill() const
+std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)
 std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::_Setfill<char>)
 std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::_Setw)
 std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
@@ -2907,19 +3137,45 @@ std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_st
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(unsigned long, char, std::allocator<char> const&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string()
+std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::_M_sync(char*, unsigned long, unsigned long)
 std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::str() const
+std::collate<char> const& std::use_facet<std::collate<char> >(std::locale const&)
+std::ctype<char> const& std::use_facet<std::ctype<char> >(std::locale const&)
+std::ctype<char>::_M_widen_init() const
+std::ctype<char>::do_narrow(char, char) const
+std::ctype<char>::do_widen(char) const
+std::ctype<char>::id
+std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::push_back(std::__detail::_StateSeq<std::regex_traits<char> > const&)
 std::exception::~exception()
 std::ios_base::Init::Init()
 std::ios_base::Init::~Init()
+std::ios_base::ios_base()
+std::ios_base::~ios_base()
+std::istream& std::istream::_M_extract<long>(long&)
 std::istream::read(char*, long)
+std::locale::id::_M_id() const
+std::locale::locale()
+std::locale::locale(std::locale const&)
+std::locale::operator=(std::locale const&)
+std::locale::~locale()
+std::map<long, long, std::less<long>, std::allocator<std::pair<long const, long> > >::operator[](long const&)
 std::nothrow
 std::ostream::operator<<(std::ios_base& (*)(std::ios_base&))
 std::ostream::operator<<(unsigned long)
 std::ostream::write(char const*, long)
+std::regex_traits<char>::_RegexMask std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const
+std::regex_traits<char>::isctype(char, std::regex_traits<char>::_RegexMask) const
+std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const::__classnames
+std::regex_traits<char>::lookup_collatename<char const*>(char const*, char const*) const::__collatenames
+std::regex_traits<char>::value(char, int) const
+std::string std::regex_traits<char>::lookup_collatename<char const*>(char const*, char const*) const
+std::string std::regex_traits<char>::transform<char*>(char*, char*) const
+std::string std::regex_traits<char>::transform_primary<char const*>(char const*, char const*) const
 std::string::_M_iend() const
 std::string::_M_leak()
 std::string::_M_leak_hard()
 std::string::_M_mutate(unsigned long, unsigned long, unsigned long)
+std::string::_M_replace_aux(unsigned long, unsigned long, unsigned long, char)
 std::string::_Rep::_M_destroy(std::allocator<char> const&)
 std::string::_Rep::_M_set_length_and_sharable(unsigned long)
 std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&)
@@ -2964,6 +3220,9 @@ std::string::resize(unsigned long, char)
 std::string::rfind(char, unsigned long) const
 std::string::substr(unsigned long, unsigned long) const
 std::string::swap(std::string&)
+std::vector<char, std::allocator<char> >::_M_erase(__gnu_cxx::__normal_iterator<char*, std::vector<char, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::vector<char, std::allocator<char> > >)
+std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > >::_M_default_append(unsigned long)
+std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > >::operator=(std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > const&)
 stderr
 steamappid
 strchr
@@ -2995,8 +3254,11 @@ text format contains deprecated field "
 the Element type supplies a MergeFrom() operation to make copies.
 the actual field type (for enums T should be the generated enum
 the global scope
+three
+tilde
 to missing
 true
+two
 type does not match
 type or int32).
 type() == TYPE_FIXED32
@@ -3007,17 +3269,61 @@ type() == TYPE_VARINT
 type.googleapis.com/
 type.googleprod.com/
 typeinfo for CThreadSyncObject
+typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_make_shared_tag
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, false, false>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, false, true>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, true, false>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, true, true>
+typeinfo for std::ctype<char>
 typeinfo for std::exception
+typeinfo for std::locale::facet
+typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_make_shared_tag
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, false, false>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, false, true>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, true, false>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, true, true>
 uint16
 uint32
 uint64
 uint8
 unable to match %s::%s (type %s) in %s, no likely matches found
+underscore
 unfiltered_server_framerate
 uninterpreted_option
 unknown
 unreliable
 unreliable_bits
+upper
 usage:  net_spewserializer <name>
 user
 utlvector count
@@ -3028,16 +3334,46 @@ vector::_M_insert_aux
 vector::_M_range_insert
 vector::reserve
 verbosespewbuilder.cpp
+vertical-line
+vertical-tab
 voice_xsend_debug
 void
 void google::protobuf::FieldDescriptorProto::_internal_set_label(google::protobuf::FieldDescriptorProto_Label)
 void google::protobuf::FieldDescriptorProto::_internal_set_type(google::protobuf::FieldDescriptorProto_Type)
 void google::protobuf::io::CodedInputStream::UnsafeDecrementRecursionDepth()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<false, false>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<false, true>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<true, false>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<true, true>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_char_matcher<false, true>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_char_matcher<true, false>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_char_matcher<true, true>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<false, false>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<false, true>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<true, false>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<true, true>()
+void std::deque<long, std::allocator<long> >::_M_push_back_aux<long const&>(long const&)
+void std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::_M_push_back_aux<std::__detail::_StateSeq<std::regex_traits<char> > >(std::__detail::_StateSeq<std::regex_traits<char> >&&)
+void std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::emplace_back<std::__detail::_StateSeq<std::regex_traits<char> > >(std::__detail::_StateSeq<std::regex_traits<char> >&&)
+void std::vector<char, std::allocator<char> >::emplace_back<char>(char&&)
 void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&)
+void std::vector<std::__detail::_State<std::regex_traits<char> >, std::allocator<std::__detail::_State<std::regex_traits<char> > > >::_M_emplace_back_aux<std::__detail::_State<std::regex_traits<char> > >(std::__detail::_State<std::regex_traits<char> >&&)
+void std::vector<std::pair<char, char>, std::allocator<std::pair<char, char> > >::_M_emplace_back_aux<std::pair<char, char> >(std::pair<char, char>&&)
+void std::vector<std::pair<char, char>, std::allocator<std::pair<char, char> > >::emplace_back<std::pair<char, char> >(std::pair<char, char>&&)
+void std::vector<std::pair<std::string, std::string>, std::allocator<std::pair<std::string, std::string> > >::_M_emplace_back_aux<std::pair<std::string, std::string> >(std::pair<std::string, std::string>&&)
+void std::vector<std::pair<std::string, std::string>, std::allocator<std::pair<std::string, std::string> > >::emplace_back<std::pair<std::string, std::string> >(std::pair<std::string, std::string>&&)
+void std::vector<std::regex_traits<char>::_RegexMask, std::allocator<std::regex_traits<char>::_RegexMask> >::_M_emplace_back_aux<std::regex_traits<char>::_RegexMask const&>(std::regex_traits<char>::_RegexMask const&)
+void std::vector<std::string, std::allocator<std::string> >::_M_emplace_back_aux<std::string const&>(std::string const&)
+void std::vector<unsigned long, std::allocator<unsigned long> >::_M_emplace_back_aux<unsigned long const&>(unsigned long const&)
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__si_class_type_info
 vtable for __cxxabiv1::__vmi_class_type_info
-warning
+vtable for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
+vtable for std::basic_ios<char, std::char_traits<char> >
+vtable for std::basic_istringstream<char, std::char_traits<char>, std::allocator<char> >
+vtable for std::basic_streambuf<char, std::char_traits<char> >
+vtable for std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >
+w
 was modified concurrently during serialization.
 wb
 with a type that does not implement MergeFrom. This is unsafe;
@@ -3047,6 +3383,7 @@ writing (in %s)
 wrong submessage type
 wt
 x
+xdigit
 y
 yes
 z
