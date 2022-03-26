@@ -5,6 +5,7 @@ cd "${0%/*}"
 
 echo "Processing Dota 2..."
 
+ProcessDepot ".dll"
 ProcessDepot ".so"
 ProcessVPK
 ProcessToolAssetInfo
