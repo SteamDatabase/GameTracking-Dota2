@@ -36,7 +36,7 @@ AnimateDrowRangerArcanaScreenAction.prototype.start = function ()
 	panel.AddClass( heroName );
 	panel.SetHasClass( "FlawlessVictory", bFlawlessVictory );
 
-    panel.SetDialogVariable('killeater_type_name', this.data.arcana_progress.killeater_type_name );
+	panel.SetDialogVariableLocString('killeater_type_name', this.data.arcana_progress.killeater_type_name );
 	
 	var heroModel = panel.FindChildTraverse( 'GenericArcanaModel' );
 	var unstyledHeroModel = panel.FindChildTraverse( 'GenericArcanaModelUnstyled' );
@@ -405,7 +405,7 @@ AnimateGenericArcanaScreenAction.prototype.start = function ()
 
 	panel.AddClass( heroName );
 
-    panel.SetDialogVariable('killeater_type_name', this.data.arcana_progress.killeater_type_name );
+    panel.SetDialogVariableLocString('killeater_type_name', this.data.arcana_progress.killeater_type_name );
 	
 	var heroModel = panel.FindChildTraverse( 'GenericArcanaModel' );
 	var unstyledHeroModel = panel.FindChildTraverse( 'GenericArcanaModelUnstyled' );
@@ -566,4 +566,40 @@ AnimateGenericArcanaScreenAction.prototype.update = function ()
 AnimateGenericArcanaScreenAction.prototype.finish = function ()
 {
 	this.seq.finish();
+}
+
+
+
+var TestAnimateEarthshakerArcanaProgress = function ()
+{
+	var data =
+	{
+		hero_id: 7,
+
+		arcana_progress:
+		{
+			hero_id: 7,
+			kills: 6,
+			deaths: 7,
+			assists: 8,
+
+			arcana_hero_name: "Earthshaker",
+
+			arcana_owner_item_def_index: 12692,
+			arcana_gem_item_def_index: 3023,
+			arcana_bundle_def_index: 0,
+
+			killeater_type_name: "KillEaterEventType_Earthshaker_Arcana_EchoSlamDamageLeadingToKills",
+
+			arcana_start_score: 23,
+			arcana_end_score: 88,
+			arcana_max_score: 150,
+			style_index: 1,
+			arcana_bundle_items: [],
+			arcana_bundle_slots: []
+
+		}
+	};
+
+	TestProgressAnimation(data);
 }
