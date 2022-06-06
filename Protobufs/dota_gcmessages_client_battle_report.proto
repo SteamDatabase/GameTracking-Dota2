@@ -12,6 +12,7 @@ option optimize_for = SPEED;
 option cc_generic_services = false;
 
 enum CMsgBattleReport_HighlightType {
+	k_eHighlightTypeInvalid = -1 [(schema_suppress_enumerator) = true];
 	k_eGameWinrate = 0 [(schema_friendly_name) = "Game Winrate"];
 	k_eLaneWinrate = 1 [(schema_friendly_name) = "Lane Winrate"];
 	k_eMMRDelta = 2 [(schema_friendly_name) = "Ranked MMR Delta"];
@@ -134,14 +135,15 @@ message CMsgBattleReport {
 
 	message Highlight {
 		required uint32 highlight_id = 1;
-		optional .CMsgBattleReport_HighlightTier tier = 2 [default = k_eHighlightTierLow];
-		optional .CMsgBattleReport_HighlightRarity rarity = 3 [default = k_eHighlightCommon];
-		optional float score = 4;
-		optional float confidence = 5;
-		optional uint32 hero_id = 6;
-		optional .CMsgBattleReport_Role role = 7 [default = k_eUnknownRole];
-		optional float comparison_delta_value = 8;
-		optional .CMsgBattleReport_CompareContext context = 9 [default = k_eCompareContextInvalid];
+		required .CMsgBattleReport_HighlightCategory category = 2 [default = k_eHighlightGeneral];
+		optional .CMsgBattleReport_HighlightTier tier = 3 [default = k_eHighlightTierLow];
+		optional .CMsgBattleReport_HighlightRarity rarity = 4 [default = k_eHighlightCommon];
+		optional float score = 5;
+		optional float confidence = 6;
+		optional uint32 hero_id = 7;
+		optional .CMsgBattleReport_Role role = 8 [default = k_eUnknownRole];
+		optional float comparison_delta_value = 9;
+		optional .CMsgBattleReport_CompareContext context = 10 [default = k_eCompareContextInvalid];
 	}
 
 	message Game {
@@ -183,6 +185,7 @@ message CMsgBattleReport {
 		optional uint32 stun_duration = 37;
 		optional uint32 duration = 38;
 		optional uint32 friendly_roshan_kills = 39;
+		optional int32 previous_rank = 40;
 	}
 
 	enum EOutcome {
@@ -198,7 +201,6 @@ message CMsgBattleReport {
 	}
 
 	repeated .CMsgBattleReport.Game games = 1;
-	optional .CMsgBattleReportAggregateStats aggregate_stats = 2;
 	optional .CMsgBattleReportHighlights highlights = 3;
 }
 
@@ -206,6 +208,10 @@ message CMsgBattleReportInfo {
 	optional uint32 timestamp = 1;
 	optional uint32 duration = 2;
 	optional bool acknowledged = 3;
+	optional uint32 featured_hero_id = 4;
+	optional uint32 featured_position = 5;
+	optional uint32 games_played = 6;
+	repeated uint32 medal_counts = 7;
 }
 
 message CMsgBattleReportInfoList {
@@ -269,10 +275,18 @@ message CMsgClientToGCGetBattleReportResponse {
 		k_eTooBusy = 2;
 		k_eDisabled = 3;
 		k_ePermissionDenied = 4;
+		k_eNotSubscribedToDotaPlus = 5;
+		k_eInvalidParameters = 6;
+		k_eUnableToGetPlusSubInfo = 7;
+		k_eUnableToLoadBattleReport = 8;
+		k_eUnableToSaveBattleReport = 9;
+		k_eUnableToGetAggregates = 10;
 	}
 
 	optional .CMsgBattleReport report = 1;
 	optional .CMsgClientToGCGetBattleReportResponse.EResponse response = 2 [default = k_eInternalError];
+	optional .CMsgBattleReportAggregateStats aggregate_stats = 3;
+	optional .CMsgBattleReportInfo info = 4;
 }
 
 message CMsgClientToGCGetBattleReportAggregateStats {
@@ -316,4 +330,23 @@ message CMsgClientToGCGetBattleReportInfoResponse {
 
 	optional .CMsgBattleReportInfoList battle_report_info_list = 1;
 	optional .CMsgClientToGCGetBattleReportInfoResponse.EResponse response = 2 [default = k_eInternalError];
+}
+
+message CMsgClientToGCAcknowledgeBattleReport {
+	optional uint32 account_id = 1;
+	optional uint32 timestamp = 2;
+	optional uint32 duration = 3;
+}
+
+message CMsgClientToGCAcknowledgeBattleReportResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_ePermissionDenied = 5;
+	}
+
+	optional .CMsgClientToGCAcknowledgeBattleReportResponse.EResponse response = 1 [default = k_eInternalError];
 }
