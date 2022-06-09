@@ -9,7 +9,7 @@
  * @property {number} nShardsPerLoss
  * @property {string} sLocName
  * @property {string} sLocDescription
- * @property {number} nEndTime
+ * @property {string} sLocalizedEndsIn
  */
 
 /**
@@ -147,7 +147,7 @@ function UpdateUnrankedValues()
         }
 
     if ( gFeaturedGamemodeDef )
-        pContext.SetDialogVariableTime( "ends_in_time", gFeaturedGamemodeDef.nEndTime -  Game.Time() );
+        pContext.SetDialogVariable( "ends_in_time", gFeaturedGamemodeDef.sLocalizedEndsIn );
 
     const pShowAllCount = pContext.FindChildInLayoutFile( "GameMode_ShowAll_Count" );
     if ( pShowAllCount )
