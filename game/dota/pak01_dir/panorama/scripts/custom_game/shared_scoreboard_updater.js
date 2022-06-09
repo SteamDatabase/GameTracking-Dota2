@@ -19,6 +19,11 @@ function _ScoreboardUpdater_SetTextSafe( panel, childName, textValue )
 //=============================================================================
 function _ScoreboardUpdater_UpdatePlayerPanel( scoreboardConfig, playersContainer, playerId, localPlayerTeamId )
 {
+	//$.Msg( '^^^_ScoreboardUpdater_UpdatePlayerPanel' );
+	var bAltPressed = IsDotaAltPressed();
+	$.GetContextPanel().SetHasClass( "AltPressed", bAltPressed == true );
+	//$.Msg( 'ALT PRESSED = ' + bAltPressed );
+
 	var playerPanelName = "_dynamic_player_" + playerId;
 	var playerPanel = playersContainer.FindChild( playerPanelName );
 	if ( playerPanel === null )
@@ -29,9 +34,16 @@ function _ScoreboardUpdater_UpdatePlayerPanel( scoreboardConfig, playersContaine
 	}
 
 	playerPanel.SetHasClass( "is_local_player", ( playerId == Game.GetLocalPlayerID() ) );
+
+	var bTipsAvailable = GameUI.AreTipsAvailable();
+	playerPanel.SetHasClass( "TipsAvailable", bTipsAvailable );
+
+	var bIsPlayerTippable = GameUI.IsPlayerTippable( playerId );
+	playerPanel.SetHasClass( "PlayerTippable", bIsPlayerTippable );
 	
 	var ultStateOrTime = PlayerUltimateStateOrTime_t.PLAYER_ULTIMATE_STATE_HIDDEN; // values > 0 mean on cooldown for that many seconds
 	var goldValue = -1;
+	var networthValue = -1;
 	var isTeammate = false;
 
 	var playerInfo = Game.GetPlayerInfo( playerId );
@@ -43,6 +55,7 @@ function _ScoreboardUpdater_UpdatePlayerPanel( scoreboardConfig, playersContaine
 			ultStateOrTime = Game.GetPlayerUltimateStateOrTime( playerId );
 		}
 		goldValue = playerInfo.player_gold;
+		networthValue = playerInfo.player_networth;
 		
 		playerPanel.SetHasClass( "player_dead", ( playerInfo.player_respawn_seconds >= 0 ) );
 		playerPanel.SetHasClass( "local_player_teammate", isTeammate && ( playerId != Game.GetLocalPlayerID() ) );
@@ -125,9 +138,16 @@ function _ScoreboardUpdater_UpdatePlayerPanel( scoreboardConfig, playersContaine
 		var playerItems = Game.GetPlayerItems( playerId );
 		if ( playerItems )
 		{
-	//		$.Msg( "playerItems = ", playerItems );
-			for ( var i = playerItems.inventory_slot_min; i < playerItems.inventory_slot_max; ++i )
+			//$.Msg( "playerItems = ", playerItems );
+			var i;
+			for ( i = playerItems.inventory_slot_min; i < playerItems.inventory_slot_max; ++i )
 			{
+				// skip over backpack items
+				if ( i >= ( playerItems.inventory_slot_max - playerItems.backpack_size ) )
+				{
+					continue;
+				}
+
 				var itemPanelName = "_dynamic_item_" + i;
 				var itemPanel = playerItemsContainer.FindChild( itemPanelName );
 				if ( itemPanel === null )
@@ -151,6 +171,27 @@ function _ScoreboardUpdater_UpdatePlayerPanel( scoreboardConfig, playersContaine
 					itemPanel.SetImage( "" );
 				}
 			}
+
+			// neutral item
+			var itemPanelName = "_dynamic_item_" + i;
+			var itemPanel = playerItemsContainer.FindChild( itemPanelName );
+			if ( itemPanel === null )
+			{
+				itemPanel = $.CreatePanel( "Image", playerItemsContainer, itemPanelName );
+				itemPanel.AddClass( "PlayerItem" );
+			}
+
+			var itemInfo = playerItems.neutral_item;
+			if ( itemInfo )
+			{
+				var item_image_name = "file://{images}/items/" + itemInfo.item_name.replace( "item_", "" ) + ".png"
+				itemPanel.SetImage( item_image_name );
+			}
+			else
+			{
+				itemPanel.SetImage( "" );
+			}
+
 		}
 	}
 
@@ -160,6 +201,7 @@ function _ScoreboardUpdater_UpdatePlayerPanel( scoreboardConfig, playersContaine
 	}
 
 	_ScoreboardUpdater_SetTextSafe( playerPanel, "PlayerGoldAmount", goldValue );
+	_ScoreboardUpdater_SetTextSafe( playerPanel, "PlayerNetworth", networthValue );
 
 	playerPanel.SetHasClass( "player_ultimate_ready", ( ultStateOrTime == PlayerUltimateStateOrTime_t.PLAYER_ULTIMATE_STATE_READY ) );
 	playerPanel.SetHasClass( "player_ultimate_no_mana", ( ultStateOrTime == PlayerUltimateStateOrTime_t.PLAYER_ULTIMATE_STATE_NO_MANA) );

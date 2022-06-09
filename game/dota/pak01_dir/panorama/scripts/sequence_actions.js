@@ -249,6 +249,22 @@ RunFunctionAction.prototype.update = function ()
 	return false;
 }
 
+// Action that calls $.DispatchEvent. You may include extra arguments and they will be passed to event
+function DispatchEventAction( eventName )
+{
+	this.argsArray = [];
+	for ( var i = 0; i < arguments.length; ++i )
+	{
+		this.argsArray.push( arguments[i] );
+	}
+}
+DispatchEventAction.prototype = new BaseAction();
+DispatchEventAction.prototype.update = function ()
+{
+	$.DispatchEvent.apply( null, this.argsArray );
+	return false;
+}
+
 
 function WaitForConditionAction( f )
 {

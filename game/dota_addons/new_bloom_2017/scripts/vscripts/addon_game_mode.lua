@@ -81,7 +81,9 @@ function Precache( context )
 	PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_warlock.vsndevts", context )
 
 	-- Round 7
+	PrecacheResource( "particle_folder", "particles/units/heroes/hero_undying", context )
 	PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_life_stealer.vsndevts", context )
+	PrecacheResource( "model", "models/heroes/undying/undying_minion_torso.vmdl", context )
 
 	-- Round 8
 	PrecacheResource( "particle_folder", "particles/units/heroes/hero_tidehunter", context )
@@ -116,6 +118,7 @@ function Precache( context )
 
 	-- Round 14
 	PrecacheResource( "particle_folder", "particles/units/heroes/hero_techies", context )
+	PrecacheResource( "model", "models/heroes/techies/fx_techiesfx_mine.vmdl", context )
 	PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_techies.vsndevts", context )
 
 	-- Round 15
@@ -153,6 +156,8 @@ function CHoldoutGameMode:InitGameMode()
 	self._bBossHasSpawned = false
 	self._bBossHasDied = false
 	self._hInvoker = nil
+
+	self._bFillWithBots = GlobalSys:CommandLineCheck( "-addon_bots" )
 
 	--[[
 	self._roundResources = {
@@ -336,6 +341,10 @@ function CHoldoutGameMode:OnGameRulesStateChange()
 	if nNewState == DOTA_GAMERULES_STATE_STRATEGY_TIME then
 		--Add Instruction Panel call here
 		self:ForceAssignHeroes() -- @fixme: this doesn't work
+	elseif nNewState == DOTA_GAMERULES_STATE_HERO_SELECTION then
+		if self._bFillWithBots == true then
+			GameRules:BotPopulate()
+		end
 	elseif nNewState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		self._flPrepTimeEnd = GameRules:GetGameTime() + self._flPrepTimeBetweenRounds
 	end
@@ -425,7 +434,7 @@ function CHoldoutGameMode:_RefreshPlayers()
 				local hero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
 				if not hero:IsAlive() then
 					local vLocation = hero:GetOrigin()
-					hero:RespawnHero( false, false, false )
+					hero:RespawnHero( false, false )
 					FindClearSpaceForUnit( hero, vLocation, true )
 				end
 				hero:SetHealth( hero:GetMaxHealth() )

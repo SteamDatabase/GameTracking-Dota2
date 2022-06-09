@@ -10,11 +10,13 @@ $ORIGIN
 %d Schema references (Most likely a resource referring to another resource)
 %d Strong handle references (Still holding onto a CStrongHandle somewhere)
 %g
+%hu
 %i %i %i %i
 %lld
 %lld,
 %llu
 %s Schema Type: %s
+%s$%u
 %s$Fence%d
 %s%d
 %s%s%s%sFinal operation count %llu
@@ -93,7 +95,6 @@ $ORIGIN
 21IVConCommDataReceived
 22CSchemaInstallCallback
 22CStreamingResourceData
-22CTier2ShutdownCallback
 23CKV3ResourceBlockHelper
 23CKV3ResourceTypeManagerILy418564367478EE
 23CKV3ResourceTypeManagerILy500152235126EE
@@ -102,12 +103,6 @@ $ORIGIN
 23IResourceSystemProfiler
 25CAsyncResourceDataRequest
 25CConCommandMemberAccessorI23CResourceSystemProfilerE
-25CKV3TransferDefaultHelperI14TestResource_tE
-25CKV3TransferDefaultHelperI22ManifestTestResource_tE
-25CKV3TransferDefaultHelperI31CExampleSchemaVData_MonomorphicE
-25CKV3TransferDefaultHelperI35CExampleSchemaVData_PolymorphicBaseE
-25CKV3TransferDefaultHelperI39CExampleSchemaVData_PolymorphicDerivedAE
-25CKV3TransferDefaultHelperI39CExampleSchemaVData_PolymorphicDerivedBE
 25CResourceDeallocatorUtils
 25IAsyncProcessedDataResult
 25IAsyncResourceDataRequest
@@ -142,11 +137,11 @@ $ORIGIN
 <%s, cat %d>
 <INVALID>
 <No schemasystem>
+<deferred>
 <invalid>
 <no deferred ref found>
 <no failure reason set>
 <null>
-<unconnected>
 <unknown: %d>
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 Access of unconnected ConVarRef
@@ -202,7 +197,6 @@ CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
 CCallStackCapture::CCallStackCapture(int (*)(void**, int, int), unsigned int, unsigned int)
 CColorGradient
-CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CEntityIndex
 CExampleSchemaVData_Monomorphic
@@ -213,6 +207,7 @@ CMemAllocSystemInitialize
 CMotionTransform
 CONTENT
 CONTENTROOT
+CPanoramaImageName
 CPiecewiseCurve
 CPlayerSlot
 CRC32_ProcessBuffer
@@ -236,7 +231,6 @@ CStackTop_Base::~CStackTop_Base()
 CStrongHandle
 CStrongHandleCopyable
 CStrongHandleVoid
-CStrongHandleVolatile
 CTSQueue corruption
 CThread::CThread()
 CThread::Init()
@@ -297,7 +291,7 @@ CUtlString::operator+(char const*) const
 CUtlString::operator=(CBufferString const&)
 CUtlSymbol
 CUtlSymbolLarge
-CUtlSymbolTable::AddString(char const*)
+CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
 CUtlSymbolTable::Find(char const*) const
 CUtlSymbolTable::String(CUtlSymbol) const
@@ -325,6 +319,7 @@ ConVar(%s) defined with infinite float value (%s)
 ConVarRef %s doesn't point to an existing ConVar
 ConfigurationSystem_001
 ConnectInterfaceSingletons
+Construct
 Couldn't load KV3 for resource: %s
 CreateInterface
 DISABLED
@@ -407,9 +402,11 @@ FIELD_QUATERNION_WORLDSPACE
 FIELD_RESOURCE
 FIELD_ROTATION_VECTOR
 FIELD_ROTATION_VECTOR_WORLDSPACE
+FIELD_SCALE32
 FIELD_SHIM
 FIELD_SOUNDNAME
 FIELD_STRING
+FIELD_STRING_AND_TOKEN
 FIELD_TICK
 FIELD_TIME
 FIELD_TYPECOUNT
@@ -486,7 +483,6 @@ InfoForResourceTypeCPanoramaStyle
 InfoForResourceTypeCPhysAggregateData
 InfoForResourceTypeCPostProcessingResource
 InfoForResourceTypeCRenderMesh
-InfoForResourceTypeCResourceManifestInternal
 InfoForResourceTypeCSequenceGroupData
 InfoForResourceTypeCTextureBase
 InfoForResourceTypeCVDataResource
@@ -501,7 +497,6 @@ InfoForResourceTypeIMaterial2
 InfoForResourceTypeIParticleSnapshot
 InfoForResourceTypeIParticleSystemDefinition
 InfoForResourceTypeIVectorGraphic
-InfoForResourceTypeManifestTestResource_t
 InfoForResourceTypeProceduralTestResource_t
 InfoForResourceTypeTestResource_t
 InfoForResourceTypeVSound_t
@@ -518,7 +513,6 @@ InstallTypeManager
 Intentionally vague touch behavior for %p
 Invalid access of deferred ConVarRef for '%s'
 IsResourceManifestGroupKnown: Manifest group name is empty or null
-KV3 save transfer failed: %s
 KeyValueCache001
 KeyValues::GetInt(char const*, int)
 LOG_GENERAL
@@ -593,7 +587,7 @@ PropertyEditorSystem_001
 Push
 QAngle
 Quaternion
-QuaternionAligned
+QuaternionStorage
 RESOURCE_MANIFEST_HANDLE_INVALID
 RESOURCE_TYPE_NONE
 RESOURCE_TYPE_RESOURCE_MANIFEST
@@ -658,6 +652,9 @@ Source2GameClients001
 Source2GameEntities001
 Source2Host001
 Source2Server001
+St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+St16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+St19_Sp_make_shared_tag
 Stack depth limit hit (%d)
 StatsService_001
 SteamAudio001
@@ -809,6 +806,9 @@ cheat
 client
 clientcmd_can_execute
 command
+concommandbase.cpp
+convar.cpp
+convarref.cpp
 curve
 default
 disable_group_clearing
@@ -836,10 +836,10 @@ libresourcesystem.so
 libstdc++.so.6
 libtier0.so
 loadingresource.cpp
+m_Value
 m_child
 m_hResource->m_nLoadingResource != LOADING_RESOURCE_INDEX_INVALID
 m_hResource->m_nStreamingResource != STREAMING_RESOURCE_DATA_INDEX_INVALID
-m_nBoxedTypeSafeInt
 m_nDerivedA
 m_nDerivedB
 m_nExample1
@@ -869,6 +869,8 @@ operator new(unsigned long, std::nothrow_t const&)
 operator new[](unsigned long)
 operator new[](unsigned long, std::nothrow_t const&)
 panorama
+panorama_image
+profilehelpers.cpp
 pthread_mutex_destroy
 pthread_mutex_init
 pthread_mutex_lock
@@ -893,7 +895,6 @@ resource_reset_allocate_timing
 resourcefile
 resourcesystem
 resourcesystem.cpp
-rs_dump_stats
 rs_dump_stats - Dump resourcesystem stats.
 schemaclassinfo.cpp
 schemasystem
@@ -902,6 +903,7 @@ server_can_execute
 set_profile_mode
 singleplayer
 singletons.cpp
+size <= INT_MAX - 12
 soundevent
 ss_added
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()
@@ -915,6 +917,12 @@ text
 true
 typeinfo for CThread
 typeinfo for CThreadSyncObject
+typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_make_shared_tag
+typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_make_shared_tag
 ugc:
 uint16
 uint32

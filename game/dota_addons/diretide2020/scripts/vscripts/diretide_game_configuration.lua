@@ -8,7 +8,7 @@ require( "diretide_game_spawner" )
 
 function CDiretide:SetupGameConfiguration()
 	self.m_bFillWithBots = false
-	self.m_bFillWithBots = GlobalSys:CommandLineCheck( "-diretide_bots" )
+	self.m_bFillWithBots = GlobalSys:CommandLineCheck( "-addon_bots" )
 	self.m_bShortStrategyTime = false
 	self.m_bShortStrategyTime = GlobalSys:CommandLineCheck( "-diretide_short_strategy_time" )
 	self.m_bFastPlay = false

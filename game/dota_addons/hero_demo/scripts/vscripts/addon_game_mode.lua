@@ -58,14 +58,17 @@ function CHeroDemo:InitGameMode()
 	GameMode:SetCustomGameForceHero( sHeroSelection ) -- sHeroSelection string gets piped in by dashboard's demo button
 	GameMode:SetTowerBackdoorProtectionEnabled( true )
 	GameMode:SetFixedRespawnTime( 4 )
+	GameMode:SetDaynightCycleDisabled( true )
 	--GameMode:SetBotThinkingEnabled( true ) -- the ConVar is currently disabled in C++
 	-- Set bot mode difficulty: can try GameMode:SetCustomGameDifficulty( 1 )
 
 	GameRules:SetUseUniversalShopMode( true )
 	GameRules:SetPreGameTime( 0 )
 	GameRules:SetCustomGameSetupTimeout( 0 ) -- skip the custom team UI with 0, or do indefinite duration with -1
-	GameRules:SetTimeOfDay( 0.251 )
-
+	GameRules:SetTimeOfDay( 0.251 )	
+	GameRules:SetSuggestAbilitiesEnabled( true )
+	GameRules:SetSuggestItemsEnabled( true )
+	
 	GameMode:SetContextThink( "HeroDemo:GameThink", function() return self:GameThink() end, 0 )
 
 	-- Events
@@ -75,6 +78,8 @@ function CHeroDemo:InitGameMode()
 	ListenToGameEvent( "npc_replaced", Dynamic_Wrap( CHeroDemo, "OnNPCReplaced" ), self )
 
 	CustomGameEventManager:RegisterListener( "RequestInitialSpawnHeroID", function(...) return self:OnRequestInitialSpawnHeroID( ... ) end )
+
+	CustomGameEventManager:RegisterListener( "ToggleDayNight", function(...) return self:OnToggleDayNight( ... ) end )
 
 	CustomGameEventManager:RegisterListener( "WelcomePanelDismissed", function(...) return self:OnWelcomePanelDismissed( ... ) end )
 	CustomGameEventManager:RegisterListener( "RefreshButtonPressed", function(...) return self:OnRefreshButtonPressed( ... ) end )
@@ -97,6 +102,10 @@ function CHeroDemo:InitGameMode()
 	CustomGameEventManager:RegisterListener( "ToggleInvulnerabilityHero", function(...) return self:OnSetInvulnerabilityHero( nil, ... ) end )
 	CustomGameEventManager:RegisterListener( "InvulnOnHero", function(...) return self:OnSetInvulnerabilityHero( true, ... ) end )
 	CustomGameEventManager:RegisterListener( "InvulnOffHero", function(...) return self:OnSetInvulnerabilityHero( false, ... ) end )
+
+	CustomGameEventManager:RegisterListener( "ClearGameState", function(...) return self:OnClearGameState( ... ) end )
+	CustomGameEventManager:RegisterListener( "SaveState", function(...) return self:OnSaveState( ... ) end )
+	CustomGameEventManager:RegisterListener( "RestoreState", function(...) return self:OnRestoreState( ... ) end )
 	
 	CustomGameEventManager:RegisterListener( "DummyTargetButtonPressed", function(...) return self:OnDummyTargetButtonPressed( ... ) end )
 
@@ -116,6 +125,8 @@ function CHeroDemo:InitGameMode()
 	CustomGameEventManager:RegisterListener( "SpawnRuneInvisibilityPressed", function(...) return self:OnSpawnRuneInvisibilityPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnRuneRegenerationPressed", function(...) return self:OnSpawnRuneRegenerationPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnRuneArcanePressed", function(...) return self:OnSpawnRuneArcanePressed( ... ) end )
+
+	CustomGameEventManager:RegisterListener( "ChangeSpeedStep", function(...) return self:OnChangeSpeedStep( ... ) end )
 	
 	SendToServerConsole( "sv_cheats 1" )
 	SendToServerConsole( "dota_hero_god_mode 0" )
@@ -123,19 +134,19 @@ function CHeroDemo:InitGameMode()
 	SendToServerConsole( "dota_taunt_base_cooldown 0" )
 	SendToServerConsole( "dota_taunt_second_cooldown 0" )
 	if Convars:GetInt("dota_hero_demo_spawn_creeps_enabled") == 1 then
-		print("Starting demo mode with creeps spawning")
+		--print("Starting demo mode with creeps spawning")
 		SendToServerConsole( "dota_creeps_no_spawning 0" )
 	else 
-		print("Starting demo mode with no creeps spawning")
+		--print("Starting demo mode with no creeps spawning")
 		SendToServerConsole( "dota_creeps_no_spawning 1" )
 	end
 
 	self:FindTowers()
 	if Convars:GetInt("dota_hero_demo_towers_enabled") == 1 then
-		print("Starting demo mode with towers")
+		--print("Starting demo mode with towers")
 		self:SetTowersEnabled( true )
 	else 
-		print("Starting demo mode with no towers")
+		--print("Starting demo mode with no towers")
 		self:SetTowersEnabled( false )
 	end
 

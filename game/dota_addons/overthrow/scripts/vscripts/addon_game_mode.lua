@@ -30,17 +30,11 @@ function Precache( context )
 		PrecacheResource( "particle", "particles/items2_fx/veil_of_discord.vpcf", context )	
 
 		PrecacheItemByNameSync( "item_treasure_chest", context )
-		PrecacheModel( "item_treasure_chest", context )
 
 	--Cache the creature models
 		PrecacheUnitByNameSync( "npc_dota_creature_basic_zombie", context )
-        PrecacheModel( "npc_dota_creature_basic_zombie", context )
-
         PrecacheUnitByNameSync( "npc_dota_creature_berserk_zombie", context )
-        PrecacheModel( "npc_dota_creature_berserk_zombie", context )
-
         PrecacheUnitByNameSync( "npc_dota_treasure_courier", context )
-        PrecacheModel( "npc_dota_treasure_courier", context )
 
     --Cache new particles
        	PrecacheResource( "particle", "particles/econ/events/nexon_hero_compendium_2014/teleport_end_nexon_hero_cp_2014.vpcf", context )
@@ -63,6 +57,9 @@ function Precache( context )
 	--Cache sounds for traps
 		PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_dragon_knight.vsndevts", context )
 		PrecacheResource( "soundfile", "soundevents/soundevents_conquest.vsndevts", context )
+
+	-- Cache overthrow-specific sounds
+		PrecacheResource( "soundfile", "soundevents/game_sounds_overthrow.vsndevts", context )
 end
 
 function Activate()
@@ -86,6 +83,9 @@ function COverthrowGameMode:InitGameMode()
 	
 --	CustomNetTables:SetTableValue( "test", "value 1", {} );
 --	CustomNetTables:SetTableValue( "test", "value 2", { a = 1, b = 2 } );
+
+	self.m_bFillWithBots = GlobalSys:CommandLineCheck( "-addon_bots" )
+	self.m_bFastPlay = GlobalSys:CommandLineCheck( "-addon_fastplay" )
 
 	self.m_TeamColors = {}
 	self.m_TeamColors[DOTA_TEAM_GOODGUYS] = { 61, 210, 150 }	--		Teal
@@ -121,8 +121,10 @@ function COverthrowGameMode:InitGameMode()
 	self.m_GatheredShuffledTeams = {}
 	self.numSpawnCamps = 5
 	self.specialItem = ""
-	self.spawnTime = 120
+	self.spawnTime = 60
+	self.warnTime = 7
 	self.nNextSpawnItemNumber = 1
+	self.nMaxItemSpawns = 30
 	self.hasWarnedSpawn = false
 	self.allSpawned = false
 	self.leadingTeam = -1
@@ -137,8 +139,15 @@ function COverthrowGameMode:InitGameMode()
 	self.tier2ItemBucket = {}
 	self.tier3ItemBucket = {}
 	self.tier4ItemBucket = {}
+	self.tier5ItemBucket = {}
 
-	self.TEAM_KILLS_TO_WIN = 25
+	self.KILLS_TO_WIN_SINGLES = 25
+	self.KILLS_TO_WIN_DUOS = 30
+	self.KILLS_TO_WIN_TRIOS = 35
+	self.KILLS_TO_WIN_QUADS = 50
+	self.KILLS_TO_WIN_QUINTS = 50
+
+	self.TEAM_KILLS_TO_WIN = self.KILLS_TO_WIN_SINGLES
 	self.CLOSE_TO_VICTORY_THRESHOLD = 5
 
 	---------------------------------------------------------------------------
@@ -172,14 +181,22 @@ function COverthrowGameMode:InitGameMode()
 	-- Show the ending scoreboard immediately
 	GameRules:SetCustomGameEndDelay( 0 )
 	GameRules:SetCustomVictoryMessageDuration( 10 )
-	GameRules:SetPreGameTime( 10 )
-	GameRules:SetStrategyTime( 0.0 )
+	GameRules:SetCustomGameSetupTimeout( 0.0 )
+	GameRules:SetPreGameTime( 10.0 )
+	GameRules:SetStrategyTime( 10.0 )
+	if self.m_bFastPlay then
+		GameRules:SetStrategyTime( 1.0 )
+	end
+	GameRules:SetHeroSelectPenaltyTime( 0.0 )
 	GameRules:SetShowcaseTime( 0.0 )
+	GameRules:SetIgnoreLobbyTeamsInCustomGame( false )
 	--GameRules:SetHideKillMessageHeaders( true )
 	GameRules:GetGameModeEntity():SetTopBarTeamValuesOverride( true )
 	GameRules:GetGameModeEntity():SetTopBarTeamValuesVisible( false )
 	GameRules:SetHideKillMessageHeaders( true )
 	GameRules:SetUseUniversalShopMode( true )
+	GameRules:SetSuggestAbilitiesEnabled( true )
+	GameRules:SetSuggestItemsEnabled( true )
 	GameRules:GetGameModeEntity():SetRuneEnabled( DOTA_RUNE_DOUBLEDAMAGE , true ) --Double Damage
 	GameRules:GetGameModeEntity():SetRuneEnabled( DOTA_RUNE_HASTE, true ) --Haste
 	GameRules:GetGameModeEntity():SetRuneEnabled( DOTA_RUNE_ILLUSION, true ) --Illusion
@@ -191,12 +208,27 @@ function COverthrowGameMode:InitGameMode()
 	GameRules:GetGameModeEntity():SetFountainPercentageHealthRegen( 0 )
 	GameRules:GetGameModeEntity():SetFountainPercentageManaRegen( 0 )
 	GameRules:GetGameModeEntity():SetFountainConstantManaRegen( 0 )
+	GameRules:GetGameModeEntity():SetGiveFreeTPOnDeath( false )
+	GameRules:GetGameModeEntity():SetDefaultStickyItem( "item_boots" )
 	GameRules:GetGameModeEntity():SetBountyRunePickupFilter( Dynamic_Wrap( COverthrowGameMode, "BountyRunePickupFilter" ), self )
 	GameRules:GetGameModeEntity():SetExecuteOrderFilter( Dynamic_Wrap( COverthrowGameMode, "ExecuteOrderFilter" ), self )
 
+	GameRules:GetGameModeEntity():SetFreeCourierModeEnabled( true )
+	GameRules:GetGameModeEntity():SetUseTurboCouriers( true )
+	GameRules:GetGameModeEntity():SetCanSellAnywhere( true )
+
+	local nTeamSize = GameRules:GetCustomGameTeamMaxPlayers( DOTA_TEAM_GOODGUYS )
+	--print( '^^^Setting BANS PER TEAM to Team Size = ' .. nTeamSize )
+	GameRules:SetCustomGameBansPerTeam( nTeamSize )
+	GameRules:GetGameModeEntity():SetDraftingBanningTimeOverride( 8.0 )
+	if self.m_bFastPlay then
+		GameRules:GetGameModeEntity():SetDraftingBanningTimeOverride( 1.0 )
+	end
+	GameRules:GetGameModeEntity():SetDraftingHeroPickSelectTimeOverride( 30.0 )
 
 	ListenToGameEvent( "game_rules_state_change", Dynamic_Wrap( COverthrowGameMode, 'OnGameRulesStateChange' ), self )
 	ListenToGameEvent( "npc_spawned", Dynamic_Wrap( COverthrowGameMode, "OnNPCSpawned" ), self )
+	ListenToGameEvent( "dota_on_hero_finish_spawn", Dynamic_Wrap( COverthrowGameMode, "OnHeroFinishSpawn" ), self )
 	ListenToGameEvent( "dota_team_kill_credit", Dynamic_Wrap( COverthrowGameMode, 'OnTeamKillCredit' ), self )
 	ListenToGameEvent( "entity_killed", Dynamic_Wrap( COverthrowGameMode, 'OnEntityKilled' ), self )
 	ListenToGameEvent( "dota_item_picked_up", Dynamic_Wrap( COverthrowGameMode, "OnItemPickUp"), self )
@@ -221,6 +253,18 @@ function COverthrowGameMode:InitGameMode()
 			WaypointName = "camp"..i.."_path_wp1"
 		}
 	end
+
+	GameRules:SetPostGameLayout( DOTA_POST_GAME_LAYOUT_SINGLE_COLUMN )
+	GameRules:SetPostGameColumns( {
+		DOTA_POST_GAME_COLUMN_LEVEL,
+		DOTA_POST_GAME_COLUMN_ITEMS,
+		DOTA_POST_GAME_COLUMN_KILLS,
+		DOTA_POST_GAME_COLUMN_DEATHS,
+		DOTA_POST_GAME_COLUMN_ASSISTS,
+		DOTA_POST_GAME_COLUMN_NET_WORTH,
+		DOTA_POST_GAME_COLUMN_DAMAGE,
+		DOTA_POST_GAME_COLUMN_HEALING,
+	} )
 end
 
 ---------------------------------------------------------------------------
@@ -262,7 +306,6 @@ function COverthrowGameMode:EndGame( victoryTeam )
 
 	GameRules:SetGameWinner( victoryTeam )
 end
-
 
 ---------------------------------------------------------------------------
 -- Put a label over a player's hero so people know who is on what team
@@ -485,6 +528,7 @@ function COverthrowGameMode:ExecuteOrderFilter( filterTable )
 			return true
 		end
 		local pickedItem = item:GetContainedItem()
+
 		--print(pickedItem:GetAbilityName())
 		if pickedItem == nil then
 			return true
@@ -492,7 +536,29 @@ function COverthrowGameMode:ExecuteOrderFilter( filterTable )
 		if pickedItem:GetAbilityName() == "item_treasure_chest" then
 			local player = PlayerResource:GetPlayer(filterTable["issuer_player_id_const"])
 			local hero = player:GetAssignedHero()
-			if hero:GetNumItemsInInventory() < 6 then
+
+			-- determine if we can scoop the neutral or not
+			-- we need either a free backpack slot or a free neutral item slot
+			local bAllowPickup = false
+			local hNeutralItem = hero:GetItemInSlot( DOTA_ITEM_NEUTRAL_SLOT )
+			if hNeutralItem == nil then
+				bAllowPickup = true
+				--print( '^^^Empty neutral slot!' )
+			else
+				local numBackpackItems = 0
+				for nItemSlot = 0,DOTA_ITEM_INVENTORY_SIZE - 1 do 
+					local hItem = hero:GetItemInSlot( nItemSlot )
+					if hItem and hItem:IsInBackpack() then
+						numBackpackItems = numBackpackItems + 1
+					end
+				end
+				--print( '^^^Backpack slots = ' .. numBackpackItems )
+				if numBackpackItems < 3 then
+					bAllowPickup = true
+				end
+			end		
+
+			if bAllowPickup then
 				--print("inventory has space")
 				return true
 			else
@@ -507,4 +573,65 @@ function COverthrowGameMode:ExecuteOrderFilter( filterTable )
 		end
 	end
 	return true
+end
+
+--------------------------------------------------------------------------------
+function COverthrowGameMode:AssignTeams()
+	--print( "Assigning teams" )
+	local vecTeamValid = {}
+	local vecTeamNeededPlayers = {}
+	for nTeam = 0, (DOTA_TEAM_COUNT-1) do
+		local nMax = GameRules:GetCustomGameTeamMaxPlayers( nTeam )
+		if nMax > 0 then
+			--print( "Found team " .. nTeam .. " with max players " .. nMax )
+			vecTeamNeededPlayers[ nTeam ] = nMax
+			vecTeamValid[ nTeam ] = true
+		else
+			vecTeamValid[ nTeam ] = false
+		end
+	end
+
+	-- loop 1: count up players on each team
+	local hPlayers = {}
+	for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
+		if PlayerResource:IsValidPlayerID( nPlayerID ) then
+			local nTeam = PlayerResource:GetTeam( nPlayerID )
+			if vecTeamValid[ nTeam ] == false then
+				nTeam = PlayerResource:GetCustomTeamAssignment( nPlayerID )
+			end
+			--print( "Found player " .. nPlayerID .. " on team " .. nTeam )
+			if vecTeamValid[ nTeam ] then
+				vecTeamNeededPlayers[ nTeam ] = vecTeamNeededPlayers[ nTeam ] - 1
+			else
+				table.insert( hPlayers, nPlayerID )
+			end
+		end
+	end
+
+	-- loop 2: assign players. For each player who is on an invalid team,
+	-- find the team that has the highest number of needed players
+	-- and assign the player to that team
+	for _,nPlayerID in pairs( hPlayers ) do
+		--print( "Finding team for player " .. nPlayerID )
+		local nTeamNumber = -1
+		local nHighest = 0
+		for nTeam = 0, (DOTA_TEAM_COUNT-1) do
+			if vecTeamValid[ nTeam ] then
+				local nVal = vecTeamNeededPlayers[ nTeam ]
+				if nVal > nHighest then
+					--print( "found team " .. nTeam .. " with needed " .. nVal .. " but highest was only " .. nHighest )
+					nHighest = nVal
+					nTeamNumber = nTeam
+				end
+			end
+		end
+		if nTeamNumber > 0 then
+			PlayerResource:SetCustomTeamAssignment( nPlayerID, nTeamNumber )
+			vecTeamNeededPlayers[ nTeamNumber ] = vecTeamNeededPlayers[ nTeamNumber ] - 1
+		end
+	end
+		
+	if self.m_bFillWithBots == true then
+		GameRules:BotPopulate()
+	end
 end

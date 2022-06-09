@@ -141,6 +141,75 @@ AnimateShardRewardAction.prototype.finish = function ()
 	this.skip.finish();
 }
 
+
+// Action to display progress into shards
+function AnimateShardProgressAction( panel, label, progressValue, progressGoal, shardAmount, totalStart, currentShards )
+{
+	this.panel = panel;
+	this.label = label;
+	this.progressValue = progressValue;
+	this.progressGoal = progressGoal;
+	this.shardAmount = shardAmount;
+	this.totalStart = totalStart;
+	this.currentShardsStart = currentShards;
+}
+AnimateShardProgressAction.prototype = new BaseAction();
+
+AnimateShardProgressAction.prototype.start = function ()
+{
+	var shardsSection = this.panel.FindChildInLayoutFile( "ShardsMatchRewardsSection" );
+	var rowsContainer = shardsSection.FindChildInLayoutFile( "MatchRewardsShardsTable" );
+	var totalsRow = shardsSection.FindChildInLayoutFile( "MatchRewardsTableTotalsRow" );
+
+	var row = $.CreatePanel( 'Panel', rowsContainer, '' );
+	row.BLoadLayoutSnippet( 'MatchRewardsShardProgress' );
+	row.SetDialogVariable( 'reward_type', $.Localize( this.label ) );
+	
+	var seq = new RunSequentialActions();
+	seq.actions.push( new AddClassAction( row, 'ShowRow' ) );
+	seq.actions.push( new AddClassAction( row, 'CollapseValue' ) );
+	
+	var progressContainer = row.FindChildInLayoutFile( 'MatchRewardsTableRowProgress' );
+	for ( var i = 0; i < this.progressGoal; i++ )
+	{
+		var dot = $.CreatePanel( 'Panel', progressContainer, '' );
+		dot.AddClass( 'MatchRewardsShardProgressDot' );
+		if ( i < this.progressValue )
+		{
+			seq.actions.push( new SkippableAction( new WaitAction( 0.2 ) ) );
+			seq.actions.push( new AddClassAction( dot, 'FilledDot' ) );
+			seq.actions.push( new PlaySoundAction( 'WeeklyQuest.StarGranted' ) );
+		}
+	}
+
+	if ( this.shardAmount > 0 )
+	{
+		seq.actions.push( new SkippableAction( new WaitAction( 0.2 ) ) );
+		seq.actions.push( new RemoveClassAction( row, 'CollapseValue' ) );
+		seq.actions.push( new AddClassAction( row, 'ShowValue' ) );
+	
+		var duration = GetXPIncreaseAnimationDuration( this.shardAmount );
+		var par = new RunParallelActions();
+		par.actions.push( new AnimateDialogVariableIntAction( row, 'shard_value', 0, this.shardAmount, duration ) );
+		par.actions.push( new AnimateDialogVariableIntAction( totalsRow, 'shard_value', this.totalStart, this.totalStart + this.shardAmount, duration ) );
+		par.actions.push( new AnimateDialogVariableIntAction( this.panel, 'current_shards', this.currentShardsStart, this.currentShardsStart + this.shardAmount, duration ) );
+		par.actions.push( new PlaySoundForDurationAction( "XP.Count", duration ) );
+		seq.actions.push( par );
+	}
+
+	this.skip = new SkippableAction( seq );
+	this.skip.start();
+}
+AnimateShardProgressAction.prototype.update = function ()
+{
+	return this.skip.update();
+}
+AnimateShardProgressAction.prototype.finish = function ()
+{
+	this.skip.finish();
+}
+
+
 // Action to display earning guild points
 function AnimateGuildPointsRewardAction( panel, label, totalStartPoints, increaseAmount )
 {
@@ -473,6 +542,18 @@ AnimateMatchRewardsScreenAction.prototype.start = function ()
 			nCurrentShards += dotaPlusProgress.max_level_hero_challenge_shard_reward;
 		}
 
+		if ( dotaPlusProgress.featured_gamemode_progress != null )
+		{
+			var nGainedShards = dotaPlusProgress.featured_gamemode_progress.end_value - dotaPlusProgress.featured_gamemode_progress.start_value;
+			if ( nGainedShards > 0 )
+			{
+				this.seq.actions.push( new AnimateShardRewardAction( panel, '#DOTA_PlusPostGame_FeaturedGameMode', nGainedShards, nTotalEarned, nCurrentShards ) );
+				// this.seq.actions.push( new AnimateShardProgressAction( panel, '#DOTA_PlusPostGame_FeaturedGameMode', dotaPlusProgress.featured_gamemode_wins, dotaPlusProgress.featured_gamemode_wins_goal, dotaPlusProgress.featured_gamemode_shard_reward, nTotalEarned, nCurrentShards ) );
+				nTotalEarned += nGainedShards;
+				nCurrentShards += nGainedShards;
+			}
+		}
+
 		this.seq.actions.push( new StopSkippingAheadAction() );
 	}
 
@@ -701,6 +782,13 @@ function TestAnimateMatchRewards()
 			guild_contracts_shard_reward: 250,
 			role_call_shard_reward: 50,
 			max_level_hero_challenge_shard_reward: 250,
+
+			featured_gamemode_progress:
+			{
+				start_value: 0,
+				end_value: 100,
+				max_value: 300,
+			}
 		},
 
 		guild_progress:

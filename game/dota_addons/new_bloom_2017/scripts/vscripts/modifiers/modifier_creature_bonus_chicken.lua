@@ -109,23 +109,19 @@ end
 function modifier_creature_bonus_chicken:TeleportOut()
 	local tower = Entities:FindByNameNearest( "dota_badguys_tower1_bot", self:GetParent():GetOrigin(), 99999 )
 	if tower ~= nil then
-		for i = 0, DOTA_ITEM_MAX - 1 do
-			local item = self:GetParent():GetItemInSlot( i )
-			if item then
-				if item:GetAbilityName() == "item_travel_boots" then
-					ExecuteOrderFromTable({
-						UnitIndex = self:GetParent():entindex(),
-						OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
-						AbilityIndex = item:entindex(),
-						TargetIndex = tower:entindex()
-					})
-					self.bTeleporting = true
-					return
-				end
-			else
-				FindClearSpaceForUnit( self:GetParent(), tower:GetOrigin(), true )
-				self:GetParent():ForceKill( false )
-			end
+		local item = self:GetParent():GetItemInSlot( DOTA_ITEM_TP_SCROLL )
+		if item then
+			ExecuteOrderFromTable({
+				UnitIndex = self:GetParent():entindex(),
+				OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
+				AbilityIndex = item:entindex(),
+				TargetIndex = tower:entindex()
+			})
+			self.bTeleporting = true
+			return
+		else
+			FindClearSpaceForUnit( self:GetParent(), tower:GetOrigin(), true )
+			self:GetParent():ForceKill( false )
 		end
 	end
 end

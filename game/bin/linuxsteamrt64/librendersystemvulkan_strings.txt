@@ -237,6 +237,7 @@ $accept
 %s     subgroupXor(%s);
 %s %s (
 %s (%d)
+%s - encountered shader with requiredSubgroupSize (%d), but VK_EXT_subgroup_size_control not enabled.  Will be ignored, might cause rendering artifacts.
 %s / %s MB
 %s / %s MB (non-evictable: %s MB)
 %s 0..0
@@ -246,6 +247,7 @@ $accept
 %s called on an immutable constant buffer
 %s is not a valid flag.  Flag passes should have the form '--pass_name[=pass_args]'. Special flag names also accepted: -O and -Os.
 %s profile; removed in version %d
+%s$%u
 %s%d
 %s%s%s
 %s() isn't a known function.
@@ -382,6 +384,7 @@ $accept
 'spirv_literal' can only be used on functions defined with 'spirv_instruction' for argument
 (
 ( ( uint32 ) pImmutableSamplersBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_nNumImmutableSamplers * sizeof( PipelineLayoutImmutableSampler_t ) )
+( ( uint32 ) pLayoutBindingFlagsBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_pNumLayoutBindingsPerSet[ nDescriptorSet ] * sizeof( VkDescriptorBindingFlags ) )
 ( ( uint32 ) pLayoutBindingsBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_pNumLayoutBindingsPerSet[ nDescriptorSet ] * sizeof( VkDescriptorSetLayoutBinding ) )
 ( ( uint32 ) pPushConstantRangesBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_nNumPushConstantRanges * sizeof( VkPushConstantRange ) )
 ( def. "%s" )
@@ -461,6 +464,7 @@ $accept
 *ZN11ImageLoaderL15ConvertFromBC6hI10RGBA8888_tLb1EEEbPKhPT_iiEUlRiE_
 *ZN11ImageLoaderL15ConvertFromBC6hI15RGBA16161616F_tLb0EEEbPKhPT_iiEUlRiE_
 *ZN11ImageLoaderL15ConvertFromBC6hI15RGBA32323232F_tLb0EEEbPKhPT_iiEUlRiE_
+*ZN18CRenderContextBase16GetBarrierHelperEvE19CBarrierHelperEmpty
 *ZN19CTextureManagerBase26MN_CacheRequestedResourcesER10CUtlVectorINS_15ToCacheHandle_tEi10CUtlMemoryIS1_iEEEUlP25IAsyncResourceDataRequestSt10unique_ptrI25IAsyncProcessedDataResultSt14default_deleteIS9_EEE_
 *ZN23CTextureStreamingHelper23IssueTextureLoadRequestEP12CTextureBaseRK22TextureSpecification_tEUlP25IAsyncResourceDataRequestSt10unique_ptrI25IAsyncProcessedDataResultSt14default_deleteIS8_EEE_
 *ZN3Etc13EncodeMipmapsEPfjjNS_5Image6FormatENS_11ErrorMetricEfjjjjPNS_8RawImageEPibEUlPhE_
@@ -549,6 +553,7 @@ $accept
 -autoconfig
 -autoconfig_level
 -avx
+-bindlesstexturedescriptorsettest
 -bit float literals
 -bit integer for the addressing model used in the module)
 -bit integer literals
@@ -613,6 +618,7 @@ $accept
 -vulkan_disable_ext_validation_cache
 -vulkan_disable_external_subpass_dependency
 -vulkan_disable_fossilize_whitelist
+-vulkan_disable_graphics_pipeline_library
 -vulkan_disable_khr_descriptor_update_template
 -vulkan_disable_khr_image_format_list
 -vulkan_disable_khr_maintenance1
@@ -643,10 +649,8 @@ $accept
 -vulkan_force_sm30
 -vulkan_force_sm60
 -vulkan_fossilize_log_verbose
--vulkan_graphics_pipeline_library
 -vulkan_metal_validation
 -vulkan_minimal_validation
--vulkan_no_image_transitions
 -vulkan_preload_fossilize
 -vulkan_trim_all_command_pools
 -vulkan_trim_all_command_pools_2gb
@@ -740,9 +744,11 @@ $accept
 14CTextureVulkan
 14CVfxShaderFile
 14ConCommandBase
+14IBarrierHelper
 14IRenderContext
 15CMemberFunctor1IP25CAsyncCompileHelperVulkanMS0_FvP17CShaderVulkanBaseES3_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor2IP27CPipelineCacheManagerVulkanMS0_FvPN9Fossilize17DatabaseInterfaceERK13CBufferStringES4_S5_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
+15CMemberFunctor3IP22CPipelineManagerVulkanMS0_FvP22PipelineObjectVulkan_t15CUtlVectorFixedIP12VkPipeline_TLm4EiE26PipelineLayoutCreateInfo_tES3_S7_S8_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor6IP13CSOAContainerMS0_FviiiiiDv4_fEiiiiiS2_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CMemberFunctor6IP19CTextureManagerBaseMS0_FvP12CTextureBase11CWeakHandleI31InfoForResourceTypeCTextureBaseE12ResourceId_tRKNS0_24AsyncTextureHookupData_tERK22TextureSpecification_t10CUtlStringES3_S6_S7_S8_SB_SE_12CRefCounted1I8CFunctor20CRefCountServiceBaseILb1E6CRefMTEE18CFuncMemPolicyNoneE
 15CNVReflexVulkan
@@ -781,6 +787,7 @@ $accept
 16IRenderDeviceMgr
 17CMemoryRefTracker
 17CRenderDeviceBase
+17CRenderPassVulkan
 17CRenderThreadBase
 17CShaderVulkanBase
 17CVertexBufferBase
@@ -800,6 +807,7 @@ $accept
 2
 2 Entry points cannot share the same name and ExecutionMode.
 2.5
+20CBarrierHelperVulkan
 20CDescriptorSetVulkan
 20CMemoryManagerVulkan
 20CPostConnectCallback
@@ -807,12 +815,12 @@ $accept
 20CRenderContextVulkan
 20CRenderDeviceMgrBase
 20CVfxShaderFileVulkan
+20CVulkanSamplerObject
 20IMobileEventListener
 20IResourceTypeManager
 21CConstantBufferVulkan
 21CFramebufferMgrVulkan
 21CRenderHardwareConfig
-21CTextureInfoChunkBase
 21CTextureManagerVulkan
 21IRenderHardwareConfig
 21IRenderShaderByteCode
@@ -841,6 +849,7 @@ $accept
 26ICommandCompletionCallback
 27CPipelineCacheManagerVulkan
 27IRaytraceShaderBindingTable
+28CBufferedDescriptorSetVulkan
 29CMemoryReferenceManagerVulkan
 2b
 3
@@ -1018,6 +1027,7 @@ $accept
 <<=
 <??>
 <bad token>
+<deferred>
 <float
 <instruction>
 <int
@@ -1028,7 +1038,6 @@ $accept
 <none>
 <null>
 <uint
-<unconnected>
 <unknown multisample type
 <unknown op>
 <unknown: %d>
@@ -1163,7 +1172,7 @@ All OpSampledImage instructions must be in the same block in which their Result 
 All OpVariable instructions in a function must be the first instructions in the first block.
 AllMemoryBarrier
 AllMemoryBarrierWithGroupSync
-AllocTextureSlot
+AllocTextureId
 AllocateAndUploadSequenceData
 Allocating a variable containing a 16-bit element in
 Allocating a variable containing a 8-bit element in
@@ -1178,6 +1187,7 @@ AllowRecip
 Android SM 4.0 (VULKAN)
 Android SM 4.1 (VULKAN)
 Android SM 5.0 (VULKAN)
+AngularSpan
 AnimGraphEditorUtils001
 AnimationSystemUtils_001
 AnimationSystem_001
@@ -1256,14 +1266,15 @@ Asking for 2d Texture Array with Cube map as input and no compatible view found 
 AsmCallINTEL
 AsmINTEL
 AsmTargetINTEL
+Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&)
 Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&, char const*, ...)
-Assertion Failed in function %s():%s
 AssetBrowserSystem_001
 AssetPreviewSystem_001
 AssetRenameSystem_001
 AssetSystem001
 AssetSystemTest001
 AssumeTrueKHR
+Async Link Time Optimize PSO
 Async Pipeline Compile
 Async Texture hookup uses its own threadpool instead of the global pool.
 Async shader compile
@@ -1325,6 +1336,7 @@ Attempting to create UAV for compressed image.  This is not supported without VK
 Attempting to create a Vulkan compute pipeline without a compute shader bound, aborting pipeline creation.
 Attempting to create a Vulkan pipeline with too many descriptors, aborting pipeline creation.
 Attempting to create a Vulkan pipeline without a vertex shader bound, aborting pipeline creation.
+Attempting to create a descriptor set with VK_EXT_descriptor_indexing, but it's not enabled.
 Attempting to load Steam Shader Pre-Cache database from basePath: %s read-only: %s
 Attempting to purge m_fencedResourceList.Count() = %d, m_pendingFencedResourceQueue.Count() = %d, nCurrentCmdBuffersAvailable = %d, nAllocatedCommandBuffers = %d
 Attempting to release an invalid semaphore handle.
@@ -1363,6 +1375,7 @@ Bailing out of OnBlockForQuery after %.3f seconds
 BakedLODBuilderMgr001
 BankBitsINTEL
 BankwidthINTEL
+Barrier Builder didn't submit barriers
 BaryCoordKHR
 BaryCoordNoPersp
 BaryCoordNoPerspCentroid
@@ -1471,7 +1484,6 @@ CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
 CCIR601 sampling not implemented yet
 CCallQueue::ParallelCallQueued(char const*, IThreadPool*)
-CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CCommandBufferChunk CUtlMemoryPoolMT
 CDescriptorSetVulkan::Rebake - could not allocate descriptor in new pool.
@@ -1520,7 +1532,7 @@ CRenderDeviceVulkan::InitDevice: failed to get queue properties
 CRenderDeviceVulkan::InitDevice: no graphics queue found
 CRenderDeviceVulkan::InitDevice: vkEnumerateDeviceExtensionProperties( ... ) failed.
 CRenderDeviceVulkan::OnLowMemoryNotification - evicting all textures to reduce memory pressure.
-CRenderDeviceVulkan::RebakeStaticDescriptorSetsReferencingTexture - could not allocate descriptor in new pool.
+CRenderDeviceVulkan::RebakeDescriptorSetsReferencing - could not allocate descriptor in new pool.
 CRenderDeviceVulkan::SetHardwareGammaRamp failed to get swap chain.
 CRenderDeviceVulkan::UpdateDescriptorSet: Failed to update descriptor set.
 CRenderDeviceVulkan::m_hDefaultConstantBuffer
@@ -1626,7 +1638,7 @@ CUtlString::operator=(CBufferString const&)
 CUtlString::operator[](int) const
 CUtlSymbol
 CUtlSymbolLarge
-CUtlSymbolTable::AddString(char const*)
+CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
 CUtlSymbolTable::Find(char const*) const
 CUtlSymbolTable::String(CUtlSymbol) const
@@ -1737,6 +1749,7 @@ CodeSectionINTEL
 Codeplay
 Coherent
 ColMajor
+ColorCorrection
 Column
 Column Major operand <id> '
 Column type is not defined.
@@ -2267,6 +2280,7 @@ Derivative instructions require Fragment or GLCompute execution model:
 DerivativeControl
 DerivativeGroupLinearNV
 Description
+Descriptor pool allocation failed on available pool, reducing descriptors to attempt allocating in pool to %d
 Descriptor pool allocation failed, reducing descriptors to attempt allocating in pool to %d
 Descriptor set layout
 DescriptorSet
@@ -2296,7 +2310,9 @@ Dim SubpassData requires format Unknown
 Dim must be a 32-bit unsigned integer OpConstant
 Direct3D 11
 Direct3D 9 sampler declaration
+Disabling VK_EXT_graphics_pipeline_library dependent extensions.
 Disabling graphics pipeline libraries for shader '%s' because it has unsupported descriptor types [ %s ].  Move them to a static descriptor set.
+Disabling subgroup wave ops, need maxSubGroupSize of at least 32 (maxSubgroupSize = %d)
 Disabling validation feature: %s
 Disassembly failed before pass
 Discarding abandoned streaming texture load for %s
@@ -2322,6 +2338,7 @@ DrawIndexedInstancedIndirect failed - invalid drawarg buffer.
 DrawInstancedIndirect failed - invalid drawarg buffer.
 DrawParameters
 Dref sampling operation is invalid for multisample image
+Dumps state of texture streaming at the next frame boundary.
 Duplicate non-aggregate type declarations are not allowed. Opcode:
 Dynamic )
 Dynamic combos:
@@ -2368,7 +2385,6 @@ Empty JPEG image (DNL not supported)
 Empty input file
 Enabling GPU validation.
 Enabling aggressive command pool rebalancing.
-Enabling async background compilation of VK_EXT_graphics_pipeline_library shaders.
 Enabling instance extension: %s.
 Enabling validation layer: %s.
 EncodeBC7Blocks
@@ -2398,6 +2414,7 @@ Error creating compute pipeline containing shader: %s
 Error creating fragment output interface pipeline library
 Error creating graphics pipeline containing shader: %s
 Error creating graphics pipeline library
+Error creating link-time optimized graphics pipeline library
 Error creating renderpass from Vulkan Steam Shader Source pre-cache.
 Error creating the clearing pixel shader!
 Error creating the clearing vertex shader!
@@ -3453,6 +3470,7 @@ Hash: %llu
 Having
 Header block
 Header size does not contain enough data in pipeline cache file %s.  Deleting.
+HeightBlend
 HelpSystem_001
 HitAttributeKHR
 HitAttributeNV
@@ -4524,6 +4542,7 @@ PRECISE
 PS
 PSIZE
 PS_RENDER_STATE
+PS_RTX
 PSt12_Bind_simpleIFSt7_Mem_fnIMN3Etc5ImageEFjjjjEEPS2_jijEE
 PSt12_Bind_simpleIFSt7_Mem_fnIMN3Etc5ImageEFvjjEEPS2_ijEE
 PackDouble2x32
@@ -4587,11 +4606,11 @@ Pixel Shader Render State
 PixelCenterInteger
 PixelInterlockOrderedEXT
 PixelInterlockUnorderedEXT
+Plat_CPUTickFrequency
 Plat_DebugPrint
 Plat_ExitProcess
 Plat_FatalErrorFunc
 Plat_FloatTime
-Plat_GetCPUFrequency
 Plat_GetClockStart
 Plat_GetCrtEnv
 Plat_GetDefaultMonitorIndex
@@ -4712,7 +4731,7 @@ Quantizing to %d = %d*%d*%d colors
 Quantizing to %d colors
 QuarterSizeAttrWithBoxFilter
 Quaternion
-QuaternionAligned
+QuaternionStorage
 QueueFamily
 QueueFamilyKHR
 R
@@ -4961,6 +4980,7 @@ RenderSystem
 RenderSystem/AllowPartialMipChainImmediateTexLoads
 RenderSystem/AllowSampleableDepthInVr
 RenderSystem/AlwaysPreloadTexturesInGame
+RenderSystem/GraphicsPipelineLibrary
 RenderSystem/MaxPreloadTextureResolution
 RenderSystem/MinStreamingPoolSizeMB
 RenderSystem/SwapChainSampleableDepth
@@ -4969,6 +4989,7 @@ RenderSystem/VulkanLazilyAllocateRenderTargets
 RenderSystem/VulkanMutableSwapchain
 RenderSystem/VulkanOnly
 RenderSystem/VulkanPoolSize%s
+RenderSystem/VulkanRequireDescriptorIndexing
 RenderSystem/VulkanRequireSubgroupWaveOpSupport
 RenderSystem/VulkanStagingPMBSizeLimitMB
 RenderSystem/VulkanSteamAppShaderCache
@@ -5292,6 +5313,7 @@ STAR
 STDGL
 STEAM_FOSSILIZE_DUMP_PATH
 STEAM_FOSSILIZE_DUMP_PATH_READ_ONLY
+STORAGE_BUFFER
 STORAGE_IMAGE
 STORAGE_TEXEL_BUFFER
 STRING_LITERAL
@@ -5842,7 +5864,7 @@ TestFormatE
 TestScriptMgr001
 TextLayout_001
 Texture Streaming:
-Texture manager doesn't know about texture "%s" - returning error texture in  CTextureManagerVK::GetImageView
+Texture manager doesn't know about texture "%s" - returning error texture in CTextureManagerVK::GetImageView
 Texture manager doesn't know about texture "%s" - returning error texture in CTextureManagerVulkan::GetResourceView
 Texture manager out of space! Can't allocate new texture!
 Texture memory discrepancy! %llu != %llu
@@ -5924,11 +5946,11 @@ TornadoVM SPIRV Beehive Toolkit
 Total Combined ( %llu MB )
 Total Dynamic ( %llu MB )
 Total PMB ( %llu MB )
+Total PSOs: %d (Per-Stage Libraries: %d) This frame [Pre-Warmed: %d, Draw-Time: %d, Per-Stage: %d, Linked Libraries: %d] (Total time this frame: %0.2f ms Driver time this frame: %0.2f ms)
 Total Shader Modules Requested: %.2fMB
 Total Shader Modules Stored: %.2fMB
 Total Shader Requested: %.2fMB
 Total Static ( %llu MB )
-Total pipeline count: %d This frame pre-warmed: %d Draw-time compiled: %d (Total time this frame: %0.2f ms Driver time this frame: %0.2f ms)
 Total size of the texture pool in MB
 TraceMotionNV
 TraceNV
@@ -6287,6 +6309,9 @@ VK_EVENT_SET
 VK_EXT_debug_marker
 VK_EXT_debug_report
 VK_EXT_debug_utils
+VK_EXT_descriptor_indexing
+VK_EXT_descriptor_indexing does not support required features, disabling.
+VK_EXT_descriptor_indexing support required because VulkanRequireDescriptorIndxing is set in gameinfo.gi, but are not supported.  Vulkan device creation failed.
 VK_EXT_extended_dynamic_state
 VK_EXT_extended_dynamic_state2
 VK_EXT_extended_dynamic_state_2 does not support extendedDynamicState2PatchControlPoints, disabling.
@@ -6297,10 +6322,13 @@ VK_EXT_memory_priority
 VK_EXT_pageable_device_local_memory
 VK_EXT_pipeline_creation_cache_control
 VK_EXT_separate_stencil_usage
+VK_EXT_subgroup_size_control
 VK_EXT_validation_cache
 VK_GOOGLE_display_timing
 VK_INCOMPLETE
 VK_KHR_bind_memory2
+VK_KHR_create_renderpass2
+VK_KHR_depth_stencil_resolve
 VK_KHR_descriptor_update_template
 VK_KHR_device_group
 VK_KHR_device_group_creation
@@ -6356,7 +6384,7 @@ VK_OBJECT_TYPE_PHYSICAL_DEVICE
 VK_OBJECT_TYPE_PIPELINE
 VK_OBJECT_TYPE_PIPELINE_CACHE
 VK_OBJECT_TYPE_PIPELINE_LAYOUT
-VK_OBJECT_TYPE_PRIVATE_DATA_SLOT_EXT
+VK_OBJECT_TYPE_PRIVATE_DATA_SLOT
 VK_OBJECT_TYPE_QUERY_POOL
 VK_OBJECT_TYPE_QUEUE
 VK_OBJECT_TYPE_RENDER_PASS
@@ -7868,6 +7896,7 @@ compute shader derivatives
 compute shaders
 computePipelines
 concatenated_input_layout
+concommandbase.cpp
 condition must be a scalar integer expression
 conditional expression
 conditional_expression
@@ -8025,6 +8054,8 @@ context-insensitive value
 continue statement only allowed in loops
 continue target
 controlBarrier
+convar.cpp
+convarref.cpp
 convert-local-access-chains
 convert-relaxed-to-half
 convert-to-half-pass
@@ -8584,6 +8615,11 @@ face-forward
 faceforward
 failOp
 failed to insert the global constant buffer
+fallback2d.vtex
+fallback2darray.vtex
+fallback3d.vtex
+fallbackcube.vtex
+fallbackcubearray.vtex
 false
 false case
 fast_distance
@@ -8704,13 +8740,13 @@ float64_t vector
 floatBitsToInt
 floatBitsToUint
 floatbitmap.cpp
-floatbitmap.cpp(128): Unknown gamma type "%s"!
-floatbitmap.cpp(2603): Error loading %s
-floatbitmap.cpp(2627): Error! Unknown file type for %s
-floatbitmap.cpp(2646): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
-floatbitmap.cpp(306): Conversion not supported yet!
-floatbitmap.cpp(392): Conversion not supported yet!
-floatbitmap.cpp(948): Unsupported color format "%s", skipping!
+floatbitmap.cpp(129): Unknown gamma type "%s"!
+floatbitmap.cpp(2702): Error loading %s
+floatbitmap.cpp(2726): Error! Unknown file type for %s
+floatbitmap.cpp(2745): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
+floatbitmap.cpp(307): Conversion not supported yet!
+floatbitmap.cpp(393): Conversion not supported yet!
+floatbitmap.cpp(949): Unsupported color format "%s", skipping!
 floating-point fast math mode
 floating-point rounding mode
 floor
@@ -9647,6 +9683,7 @@ layout rules: member
 layout(
 layout(binding=X) is required
 layout, semantic, packoffset, or register
+layoutBindingFlags
 layoutBindings
 layoutSecondaryViewportRelativeOffset=
 layoutViewportRelative
@@ -10565,14 +10602,14 @@ renderPasses
 renderPasses2
 rendercontextbase.cpp
 renderdevicebase.cpp
-renderdevicebase.cpp(1581):
-renderdevicebase.cpp(1745):
-renderdevicebase.cpp(1981):
-renderdevicebase.cpp(1985):
-renderdevicebase.cpp(3297):
-renderdevicebase.cpp(3497):
+renderdevicebase.cpp(1594):
+renderdevicebase.cpp(1758):
+renderdevicebase.cpp(1994):
+renderdevicebase.cpp(1998):
+renderdevicebase.cpp(3310):
 renderdevicebase.cpp(3510):
-renderdevicebase.cpp(916):
+renderdevicebase.cpp(3523):
+renderdevicebase.cpp(929):
 renderdevicemgrbase.cpp
 renderdoc_captures
 renderstatehelper.h
@@ -10703,6 +10740,7 @@ samplerExternalOES
 samplerShadow
 sampler_state
 samplers and atomic_uints cannot be output parameters
+samplerstateindex
 samples
 saturate
 says it has
@@ -10824,6 +10862,7 @@ single_declaration
 single_type_qualifier
 singleplayer
 singletons.cpp
+size <= INT_MAX - 12
 sizeQueryTemp
 sizeof
 smooth
@@ -11374,11 +11413,14 @@ texture2DProjLodEXT
 texture2DRectGradARB
 texture2DRectProj
 texture2DRectProjGradARB
+texture2darrayindex
+texture2dindex
 texture3DGradARB
 texture3DLod
 texture3DProj
 texture3DProjGradARB
 texture3DProjLod
+texture3dindex
 textureClamp
 textureClampARB
 textureCubeGradARB
@@ -11427,15 +11469,17 @@ textureSamples(
 textureSize
 textureSize(
 texturebase.cpp
-texturebase.cpp(2249):Error loading texture: %s
-texturebase.cpp(3262):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3285):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3296):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3307):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3326):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3347):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3358):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3369):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2322):Error loading texture: %s
+texturebase.cpp(3332):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3355):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3366):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3377):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3396):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3417):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3428):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3439):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturecubearrayindex
+texturecubeindex
 tgamma
 that allocate pointers must be in Function or Private
 that is not a scalar or vector
@@ -12174,6 +12218,7 @@ vkCreateFramebuffer( m_pDeviceVulkan, &framebufferCreateInfo, NULL, &pFramebuffe
 vkCreateFramebuffer( m_pDeviceVulkan, &framebufferCreateInfo, NULL, &pSwapChainFramebuffer )
 vkCreateGraphicsPipelines
 vkCreateGraphicsPipelines( m_pDeviceVulkan, VK_NULL_HANDLE, 1, &pipelineCreateInfo, NULL, &pPipelineOut->m_pPipeline )
+vkCreateGraphicsPipelines( m_pDeviceVulkan, pPipelineCache, 1, &executablePipelineCreateInfo, NULL, &pLinkTimeOptimizedPipeline )
 vkCreateGraphicsPipelines( m_pDeviceVulkan, pPipelineCache, 1, &executablePipelineCreateInfo, NULL, &pPipelineOut->m_pPipeline )
 vkCreateGraphicsPipelines( m_pDeviceVulkan, pPipelineCacheToUse, 1, &pipelineCreateInfo, NULL, &pPipelineOut->m_pPipeline )
 vkCreateHeadlessSurfaceEXT
@@ -12612,15 +12657,14 @@ vulkan/memorymgrvulkan.cpp
 vulkan/pipelinecachemgrvulkan.cpp
 vulkan/pipelinemgrvulkan.cpp
 vulkan/rendercontextvulkan.cpp
-vulkan/rendercontextvulkan.cpp(456):
+vulkan/rendercontextvulkan.cpp(449):
 vulkan/renderdevicemgrvulkan.cpp
-vulkan/renderdevicevulkan.cpp(2645):
-vulkan/renderpassvulkan.cpp
+vulkan/renderdevicevulkan.cpp
 vulkan/renderpipelinestatsvulkan.cpp
 vulkan/renderthreadvulkan.cpp
 vulkan/renderthreadvulkan.cpp(208): Error! NULL texture pointer sent to OnReadPixels()!
 vulkan/shadertablevulkan.cpp
-vulkan/texturevulkan.cpp(1387):
+vulkan/texturevulkan.cpp(1399):
 vulkan1.1spv1.4
 vulkan_additional_semaphores
 vulkan_amd_timestamp_workaround
@@ -12628,6 +12672,7 @@ vulkan_batch_size
 vulkan_batch_submits
 vulkan_dedicated_allocation_threshold
 vulkan_framebuffermgr_print
+vulkan_link_time_optimize_libraries
 vulkan_memgr_fragmentation_print
 vulkan_memgr_print
 vulkan_memgr_telemetry_stats

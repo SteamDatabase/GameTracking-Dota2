@@ -71,86 +71,97 @@ function COverthrowGameMode:SpecialItemAdd( event )
 	local lastPlace = sortedTeams[n].teamID
 
 	local tableindex = 0
+
 	local tier1 = 
 	{
-		"item_urn_of_shadows",
-		"item_ring_of_basilius",
-		"item_ring_of_aquila",
-		"item_arcane_boots",
-		"item_tranquil_boots",
-		"item_phase_boots",
-		"item_power_treads",
-		"item_medallion_of_courage",
-		"item_soul_ring",
-		"item_gem",
-		"item_orb_of_venom"
+		"item_keen_optic",				--
+		--"item_ocean_heart",			-- !no water!
+		"item_broom_handle",			--
+		"item_trusty_shovel",			--
+		"item_arcane_ring",				--
+		"item_chipped_vest",			--
+		"item_possessed_mask",			--
+		"item_mysterious_hat",			-- fairy's trinket
+		"item_unstable_wand",			-- pig pole
+		"item_pogo_stick",				-- tumbler's toy
 	}
-	local tier2 = 
+
+	local tier2 =
 	{
-		"item_blink",
-		"item_force_staff",
-		"item_cyclone",
-		"item_ghost",
-		"item_vanguard",
-		"item_mask_of_madness",
-		"item_blade_mail",
-		"item_helm_of_the_dominator",
-		"item_vladmir",
-		"item_yasha",
-		"item_mekansm",
-		"item_hood_of_defiance",
-		"item_veil_of_discord",
-		"item_glimmer_cape"
+		"item_ring_of_aquila",			--
+		"item_nether_shawl",			--
+		"item_dragon_scale",			--
+		"item_pupils_gift",				--
+		"item_vambrace",				--
+		"item_misericorde",				-- brigand's blade
+		"item_grove_bow",				--
+		--"item_philosophers_stone",	-- !game is not long enough for bonus gold to matter!
+		"item_essence_ring",			--
+		"item_paintball",				-- fae grenade
+		"item_bullwhip",				--
+		"item_quicksilver_amulet",		--
 	}
-	local tier3 = 
+
+	local tier3 =
 	{
-		"item_shivas_guard",
-		"item_sphere",
-		"item_diffusal_blade",
-		"item_maelstrom",
-		"item_basher",
-		"item_invis_sword",
-		"item_desolator",
-		"item_ultimate_scepter",
-		"item_bfury",
-		"item_pipe",
-		"item_heavens_halberd",
-		"item_crimson_guard",
-		"item_black_king_bar",
-		"item_bloodstone",
-		"item_lotus_orb",
-		"item_guardian_greaves",
-		"item_moon_shard"
+		"item_quickening_charm",		--
+		"item_black_powder_bag",		-- blast rig
+		"item_spider_legs",				--
+		"item_paladin_sword",			--
+		"item_titan_sliver",			--
+		"item_mind_breaker",			--
+		"item_enchanted_quiver",		--
+		"item_elven_tunic",				--
+		"item_cloak_of_flames",			--
+		"item_ceremonial_robe",			--
+		"item_psychic_headband",		--
 	}
-	local tier4 = 
+
+	local tier4 =
 	{
-		"item_skadi",
-		"item_sange_and_yasha",
-		"item_greater_crit",
-		"item_sheepstick",
-		"item_orchid",
-		"item_heart",
-		"item_mjollnir",
-		"item_ethereal_blade",
-		"item_radiance",
-		"item_abyssal_blade",
-		"item_butterfly",
-		"item_monkey_king_bar",
-		"item_satanic",
-		"item_octarine_core",
-		"item_silver_edge",
-		"item_rapier"
+		"item_timeless_relic",			--
+		"item_spell_prism",				--
+		"item_ascetic_cap",				--
+		"item_heavy_blade",				-- witchbane
+		"item_flicker",					--
+		"item_ninja_gear",				--
+		"item_the_leveller",			--
+		"item_spy_gadget",				-- telescope
+		"item_trickster_cloak",			--
+		"item_stormcrafter",			--
+		"item_penta_edged_sword",		--
+	}
+
+	local tier5 =
+	{
+		"item_force_boots",				--
+		"item_desolator_2",				--
+		"item_seer_stone",				--
+		"item_mirror_shield",			--
+		"item_apex",					--
+		"item_demonicon",				--
+		"item_fallen_sky",				--
+		"item_force_field",				-- arcanist's armor
+		"item_pirate_hat",				--
+		"item_ex_machina",				--
+		"item_giants_ring",				--
+		"item_book_of_shadows",			--
 	}
 
 	local t1 = PickRandomShuffle( tier1, self.tier1ItemBucket )
 	local t2 = PickRandomShuffle( tier2, self.tier2ItemBucket )
 	local t3 = PickRandomShuffle( tier3, self.tier3ItemBucket )
 	local t4 = PickRandomShuffle( tier4, self.tier4ItemBucket )
+	local t5 = PickRandomShuffle( tier5, self.tier5ItemBucket )
 
 	local spawnedItem = ""
 
 	-- pick the item we're giving them
-	if GetTeamHeroKills( leader ) > 5 and GetTeamHeroKills( leader ) <= 10 then
+	local nLeaderKills = GetTeamHeroKills( leader )
+
+	if nLeaderKills <= 5 then
+		spawnedItem = t1
+	elseif nLeaderKills > 5 and nLeaderKills <= 13 then
 		if ownerTeam == leader and ( self.leadingTeamScore - self.runnerupTeamScore > 3 ) then
 			spawnedItem = t1
 		elseif ownerTeam == lastPlace then
@@ -158,7 +169,7 @@ function COverthrowGameMode:SpecialItemAdd( event )
 		else
 			spawnedItem = t2
 		end
-	elseif GetTeamHeroKills( leader ) > 10 and GetTeamHeroKills( leader ) <= 15 then
+	elseif nLeaderKills > 13 and nLeaderKills <= 21 then
 		if ownerTeam == leader and ( self.leadingTeamScore - self.runnerupTeamScore > 3 ) then
 			spawnedItem = t2
 		elseif ownerTeam == lastPlace then
@@ -166,13 +177,19 @@ function COverthrowGameMode:SpecialItemAdd( event )
 		else
 			spawnedItem = t3
 		end
-	else
-		spawnedItem = t2
+	elseif nLeaderKills > 21 then
+		if ownerTeam == leader and ( self.leadingTeamScore - self.runnerupTeamScore > 3 ) then
+			spawnedItem = t3
+		elseif ownerTeam == lastPlace then
+			spawnedItem = t5
+		else
+			spawnedItem = t4
+		end
 	end
 
 	-- add the item to the inventory and broadcast
 	owner:AddItemByName( spawnedItem )
-	EmitGlobalSound("powerup_04")
+	EmitGlobalSound("Overthrow.Item.Claimed")
 	local overthrow_item_drop =
 	{
 		hero_id = hero,
@@ -182,8 +199,8 @@ function COverthrowGameMode:SpecialItemAdd( event )
 end
 
 function COverthrowGameMode:ThinkSpecialItemDrop()
-	-- Stop spawning items after 15
-	if self.nNextSpawnItemNumber >= 15 then
+	-- Stop spawning items after the maximum amount
+	if self.nNextSpawnItemNumber >= self.nMaxItemSpawns then
 		return
 	end
 	-- Don't spawn if the game is about to end
@@ -192,7 +209,7 @@ function COverthrowGameMode:ThinkSpecialItemDrop()
 	end
 	local t = GameRules:GetDOTATime( false, false )
 	local tSpawn = ( self.spawnTime * self.nNextSpawnItemNumber )
-	local tWarn = tSpawn - 15
+	local tWarn = tSpawn - self.warnTime
 	
 	if not self.hasWarnedSpawn and t >= tWarn then
 		-- warn the item is about to spawn
@@ -242,7 +259,7 @@ function COverthrowGameMode:WarnItem()
 
 	-- notify everyone
 	CustomGameEventManager:Send_ServerToAllClients( "item_will_spawn", { spawn_location = spawnLocation } )
-	EmitGlobalSound( "powerup_03" )
+	EmitGlobalSound( "Overthrow.Item.Warning" )
 	
 	-- fire the destination particles
 	DoEntFire( "item_spawn_particle_" .. self.itemSpawnIndex, "Start", "0", 0, self, self )
@@ -258,7 +275,7 @@ end
 function COverthrowGameMode:SpawnItem()
 	-- notify everyone
 	CustomGameEventManager:Send_ServerToAllClients( "item_has_spawned", {} )
-	EmitGlobalSound( "powerup_05" )
+	EmitGlobalSound( "Overthrow.Item.Spawn" )
 
 	-- spawn the item
 	local startLocation = Vector( 0, 0, 700 )
@@ -268,9 +285,9 @@ function COverthrowGameMode:SpawnItem()
     --print ("Spawning Treasure")
     targetSpawnLocation = self.itemSpawnLocation
     treasureCourier:SetInitialGoalEntity(targetSpawnLocation)
-    local particleTreasure = ParticleManager:CreateParticle( "particles/items_fx/black_king_bar_avatar.vpcf", PATTACH_ABSORIGIN, treasureCourier )
-	ParticleManager:SetParticleControlEnt( particleTreasure, PATTACH_ABSORIGIN, treasureCourier, PATTACH_ABSORIGIN, "attach_origin", treasureCourier:GetAbsOrigin(), true )
-	treasureCourier:Attribute_SetIntValue( "particleID", particleTreasure )
+    --local particleTreasure = ParticleManager:CreateParticle( "particles/items_fx/black_king_bar_avatar.vpcf", PATTACH_ABSORIGIN, treasureCourier )
+	--ParticleManager:SetParticleControlEnt( particleTreasure, PATTACH_ABSORIGIN, treasureCourier, PATTACH_ABSORIGIN, "attach_origin", treasureCourier:GetAbsOrigin(), true )
+	--treasureCourier:Attribute_SetIntValue( "particleID", particleTreasure )
 end
 
 function COverthrowGameMode:ForceSpawnItem()
@@ -322,7 +339,7 @@ function COverthrowGameMode:TreasureDrop( treasureCourier )
 	DoEntFire( "item_spawn_particle_" .. self.itemSpawnIndex, "stopplayendcap", "0", 0, self, self )
 
 	--Knock people back from the treasure
-	self:KnockBackFromTreasure( spawnPoint, 375, 0.25, 400, 100 )
+	self:KnockBackFromTreasure( spawnPoint, 375, 0.25, 400.1, 100 )
 		
 	--Destroy the courier
 	UTIL_Remove( treasureCourier )

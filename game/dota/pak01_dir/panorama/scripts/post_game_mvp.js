@@ -49,7 +49,6 @@ AnimateMVP2TabAction.prototype.init = function( mvp2ScreenPanel )
 
 		var gradient_colour = wasDire ? "red" : "green";
 		accolade_panel.FindChildInLayoutFile('gradient').AddClass('mvp_gradient_' + gradient_colour);
-		accolade_panel.FindChildInLayoutFile('icon').AddClass('mvp_icon_' + accolade.icon);
 		accolade_panel.FindChildInLayoutFile('icon').style.backgroundImage = 'url("' + accolade.icon + '")';
 		accolade_panel.FindChildInLayoutFile('icon').style.backgroundRepeat = 'no-repeat';
 		accolade_panel.FindChildInLayoutFile('icon').style.backgroundPosition = 'center';

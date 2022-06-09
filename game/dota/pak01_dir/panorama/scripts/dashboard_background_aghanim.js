@@ -1,6 +1,24 @@
+//@ts-check
+
+/**
+ * @typedef {object} CDOTA_DB_Background_BP_Fall2021_ObjectTemplate
+ * @property {(sAction?: string) => number} RequestActionScoreByName
+ * @property {() => boolean} HasEventData
+ */
+
+/**
+ * @returns {Panel & CDOTA_DB_Background_BP_Fall2021_ObjectTemplate}
+ */
+ function GetFall2021Panel()
+ {
+	 //@ts-ignore
+	 return $.GetContextPanel();
+ }
+
 const EVENT_ID_FALL_2021 = 33;
 var g_bDetailsVisible = false;
 
+/** @type {Array<{ entityName: string; customSounds?: string[]; unlockAction?: string; speechChoice?: string }>} */
 const k_modelInfos = 
 [
 	{	// Default Aghs
@@ -84,6 +102,10 @@ const k_genericSounds =
 	"Aghanim.SmallBusinessOwner",
 ];
 
+/**
+ * @param {number} nIndex 
+ * @returns {boolean}
+ */
 var IsModelUnlocked = function( nIndex )
 {
 	if ( nIndex < 0 || nIndex >= k_modelInfos.length )
@@ -92,22 +114,27 @@ var IsModelUnlocked = function( nIndex )
 	if ( k_modelInfos[ nIndex ].unlockAction == undefined )
 		return true;
 
-	return $.GetContextPanel().RequestActionScoreByName( k_modelInfos[ nIndex ].unlockAction ) > 0;
+	return GetFall2021Panel().RequestActionScoreByName( k_modelInfos[ nIndex ].unlockAction ) > 0;
 }
 
 var UpdateUnlockIcons = function()
 {
+	/** @type {Panel} */
 	var unlockIcons = $( '#UnlockIcons' );
 	for ( var i = 0; i < unlockIcons.GetChildCount() && i < k_modelInfos.length; ++i )
 	{
 		var unlockIcon = unlockIcons.GetChild( i );
-		unlockIcon.SetHasClass( 'ModelUnlocked', IsModelUnlocked( i ) );
-		unlockIcon.checked = ( i == g_nCurrentModelIndex );
+		if ( unlockIcon )
+		{
+			unlockIcon.SetHasClass( 'ModelUnlocked', IsModelUnlocked( i ) );
+			unlockIcon.checked = ( i == g_nCurrentModelIndex );
+		}
 	}
 }
 
 $.Schedule( 0.0, function()
 {
+	/** @type {Panel} */
 	var unlockIcons = $( '#UnlockIcons' );
 	unlockIcons.RemoveAndDeleteChildren();
 
@@ -123,12 +150,17 @@ $.Schedule( 0.0, function()
 
 var UpdateSelectedModelUnlocked = function()
 {
-	$.GetContextPanel().SetHasClass( 'SelectedModelUnlocked', IsModelUnlocked( g_nCurrentModelIndex ) );
+	GetFall2021Panel().SetHasClass( 'SelectedModelUnlocked', IsModelUnlocked( g_nCurrentModelIndex ) );
 }
 
 var g_nCurrentModelIndex = -1;
 var g_nSoundCookie = 0;
 var g_bPlayingVoiceoverSound = false;
+
+/**
+ * @param {number} nModelIndex
+ * @param {boolean} bPlaySound
+ */
 var SetCurrentModel = function( nModelIndex, bPlaySound )
 {
 	// $.Msg( 'SetCurrentModel ' + nModelIndex + " " + bPlaySound );
@@ -137,6 +169,7 @@ var SetCurrentModel = function( nModelIndex, bPlaySound )
 
 	g_nCurrentModelIndex = nModelIndex;
 
+	/** @type {DOTAScenePanel} */
 	var aghanimModel = $( '#AghanimModel' );
 
 	for ( var i = 0; i < k_modelInfos.length; ++i )
@@ -189,9 +222,10 @@ var SetCurrentModel = function( nModelIndex, bPlaySound )
 
 					// Choose from the generic sounds or if this model has something specific.
 					var soundOptions = k_genericSounds;
-					if ( k_modelInfos[ g_nCurrentModelIndex ].customSounds )
+					var modelInfo = k_modelInfos[ g_nCurrentModelIndex ];
+					if ( modelInfo.customSounds )
 					{
-						soundOptions = soundOptions.concat( k_modelInfos[ g_nCurrentModelIndex ].customSounds );
+						soundOptions = soundOptions.concat( modelInfo.customSounds );
 					}
 			
 					var nIndex = Math.floor( Math.random() * soundOptions.length );
@@ -210,12 +244,18 @@ var SetCurrentModel = function( nModelIndex, bPlaySound )
 	}
 }
 
+/**
+ * @param {number} nIndex 
+ */
 var ActivateModel = function ( nIndex )
 {
+	/** @type {DOTAScenePanel} */
 	var aghanimModel = $( '#AghanimModel' );
+	/** @type {DOTAParticleScenePanel} */
 	var deviceModel = $( '#DeviceModel' );
+	/** @type {Panel} */
 	var ModelContainer = $( '#BackgroundModelsRef' );
-
+	/** @type {Label} */
 	var ModelHelp = $( '#ModelHelp' );
 
 	deviceModel.SetAnimgraphParameterOnEntityInt( 'conundrum', 'mouseover', 2 );
@@ -229,7 +269,7 @@ var ActivateModel = function ( nIndex )
 	{
 		ModelContainer.RemoveClass( "HelpMe" );
 		$.Schedule( 0.1, function () { ModelContainer.AddClass( "HelpMe" ); } );
-		ModelHelp.SetLocString( k_modelInfos[ nIndex ].speechChoice );
+		ModelHelp.SetLocString( speechChoice );
 	}
 
 	SetCurrentModel( nIndex, true );
@@ -240,9 +280,10 @@ var MaybeUpdateInitalModel = function()
 	if ( g_nCurrentModelIndex != -1 )
 		return;
 
-	if ( !$.GetContextPanel().HasEventData() )
+	if ( !GetFall2021Panel().HasEventData() )
 		return;
 
+	/** @type {DOTAScenePanel} */
 	var aghanimModel = $( '#AghanimModel' );
 	if ( !aghanimModel.BHasClass( 'SceneLoaded' ) )
 		return;
@@ -265,13 +306,16 @@ var MaybeUpdateInitalModel = function()
 	var nSelectedIndex = Math.floor( Math.random() * possibleModelIndices.length );
 	SetCurrentModel( possibleModelIndices[ nSelectedIndex ], false );
 
-	$( '#AghanimModel' ).AddClass( 'Initialized' );
+	aghanimModel.AddClass( 'Initialized' );
 }
 
 $.RegisterEventHandler( 'DOTAScenePanelSceneUnloaded', $( '#AghanimModel' ), function()
 {
 	g_nCurrentModelIndex = -1;
-	$( '#AghanimModel' ).RemoveClass( 'Initialized' );
+
+	/** @type {DOTAScenePanel} */
+	var aghanimModel = $( '#AghanimModel' );
+	aghanimModel.RemoveClass( 'Initialized' );
 } );
 
 $.RegisterEventHandler( 'DOTAScenePanelSceneLoaded', $( '#AghanimModel' ), function()
@@ -301,28 +345,33 @@ var OnAghanimDeviceMouseOver = function()
 {
 	//$.Msg("Aghanim Device MouseOver");
 
+	/** @type {DOTAParticleScenePanel} */
 	 var deviceModel = $( '#DeviceModel' );
+	/** @type {DOTAScenePanel} */
 	 var aghanimModel = $( '#AghanimModel' );
+
 	 deviceModel.SetAnimgraphParameterOnEntityInt( 'conundrum', 'mouseover', 1 );
 	 deviceModel.FireEntityInput( 'device_spin_fx', 'start', 0 );
 	 aghanimModel.FireEntityInput( 'device_spin_fx', 'start', 0 );
 
-	$.GetContextPanel().AddClass( 'DeviceMouseOver' );
+	GetFall2021Panel().AddClass( 'DeviceMouseOver' );
 }
 
 var OnAghanimDeviceMouseOut = function()
 {
 	//$.Msg("Aghanim Device MouseOut");
 
+	/** @type {DOTAScenePanel} */
 	var aghanimModel = $( '#AghanimModel' );
-	 var deviceModel = $( '#DeviceModel' );
-	 
-	 deviceModel.SetAnimgraphParameterOnEntityInt( 'conundrum', 'mouseover', 0 );
-	 deviceModel.FireEntityInput( 'device_active_fx', 'stop', 0 );
-	 deviceModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
-	 aghanimModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
+	/** @type {DOTAParticleScenePanel} */
+	var deviceModel = $( '#DeviceModel' );
+	
+	deviceModel.SetAnimgraphParameterOnEntityInt( 'conundrum', 'mouseover', 0 );
+	deviceModel.FireEntityInput( 'device_active_fx', 'stop', 0 );
+	deviceModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
+	aghanimModel.FireEntityInput( 'device_spin_fx', 'stop', 0 );
 
-	$.GetContextPanel().RemoveClass( 'DeviceMouseOver' );
+	GetFall2021Panel().RemoveClass( 'DeviceMouseOver' );
 }
 
 var OnAghanimDeviceActivate = function()
@@ -331,16 +380,19 @@ var OnAghanimDeviceActivate = function()
 	ActivateModel( ( g_nCurrentModelIndex + 1 ) % k_modelInfos.length );
 }
 
+/**
+ * @param {boolean} bVisible 
+ */
 var SetDetailsVisible = function( bVisible )
 {
-	$.GetContextPanel().SetHasClass( 'DetailsVisible', bVisible );
+	GetFall2021Panel().SetHasClass( 'DetailsVisible', bVisible );
 }
 
 var ToggleDetailsVisible = function()
 {
 	//$.Msg("Details Clicked" );
 
-	$.GetContextPanel().ToggleClass( 'DetailsVisible' );
+	GetFall2021Panel().ToggleClass( 'DetailsVisible' );
 
 	var aghanimModel = $( '#AghanimModel' );
 	var deviceModel = $( '#DeviceModel' );

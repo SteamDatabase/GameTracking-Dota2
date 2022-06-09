@@ -688,7 +688,6 @@
 	]
 ]
 
-
 @PointClass base(Targetname, Parentname) tags( Sound ) iconsprite("editor/ambient_generic.vmat") sphere() = ambient_generic : "Universal ambient sound. Use it to play and control a single sound."
 [
 	message(sound) [report] : "Sound Name" : "" : "Name of the GameSound entry for the sound to play. Also supports direct .wav filenames."
@@ -2494,46 +2493,6 @@
 	input Save(void) : "Saves bonus map data."
 ]
 
-@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = game_ui : 
-	"An entity used to override player input when the player is looking at it."
-[
-	spawnflags(flags) =
-	[
-		32 : "Freeze Player" : 1
-		64 : "Hide Weapon" : 1
-		128 : "+Use Deactivates" : 1
-		256 : "Jump Deactivates" : 1
-	]
-	
-	FieldOfView(float) : "FieldOfView" : "-1.0" : "The amount of tolerance in the view checking when determining whether the player's input is still under control. 1.0 = straight ahead, 0.0 = +/- 90 degrees, -1.0 = all directions. If the player isn't within the tolerance, the player regains control."
-
-	// Inputs
-	input Deactivate(void) : "Return Player Control."
-	input Activate(string) : "Take Player Control."
-
-	// Outputs
-	output PlayerOn(void) : "Fired whenever this entity starts controlling the player's input."
-	output PlayerOff(void) : "Fired whenever this entity stops controlling the player's input."
-	output PressedMoveLeft(void) : "Fired whenever the player presses the moveleft key."
-	output PressedMoveRight(void) : "Fired whenever the player presses the moveright key."
-	output PressedForward(void) : "Fired whenever the player presses the forward key."
-	output PressedBack(void) : "Fired whenever the player presses the backward key."
-	output PressedAttack(void) : "Fired whenever the player presses the attack key."
-	output PressedAttack2(void) : "Fired whenever the player presses the secondary attack key."
-
-	output UnpressedMoveLeft(void) : "Fired whenever the player releases the moveleft key."
-	output UnpressedMoveRight(void) : "Fired whenever the player releases the moveright key."
-	output UnpressedForward(void) : "Fired whenever the player releases the forward key."
-	output UnpressedBack(void) : "Fired whenever the player releases the backward key."
-	output UnpressedAttack(void) : "Fired whenever the player releases the attack key."
-	output UnpressedAttack2(void) : "Fired whenever the player releases the secondary attack key."
-
-	output XAxis(string) : "An output that fires whenever the X axis of the player's input changes. i.e. -1 when the player has moveleft key down, 1 when the player has moveright key down, and 0 if neither."
-	output YAxis(string) : "An output that fires whenever the Y axis of the player's input changes. i.e. -1 when the player has backward key down, 1 when the player has forward key down, and 0 if neither."
-	output AttackAxis(string) : "An output that fires whenever the state of the player's attack key changes. i.e. 1 when the player has the attack key down, 0 otherwise."
-	output Attack2Axis(string) : "An output that fires whenever the state of the player's secondary attack key changes. i.e. 1 when the player has the secondary attack key down, 0 otherwise."
-]
-
 @PointClass base(Targetname) = point_entity_finder :
 	"An entity that will find an entity and pass it along as the !Caller with the OutEntity output.  Requires using !Caller as the parameter on the input."
 [
@@ -3171,15 +3130,19 @@
     displaytext(string) : "Display Text" : : "Place localization text here and it will be displayed in tooltips, etc."
 ]
 
-@BaseClass base(Targetname, Parentname, RenderFields,DamageFilter, Button) = BaseFuncButton
+@BaseClass = ButtonSounds
+[
+	use_sound(sound) : "Use sound" : ""  : "Sound event played when the button is successfully used."
+	locked_sound(sound) : "Locked Sound" : "" : "Sound played when the player tries to use the button, and fails because it's locked."
+	unlocked_sound(sound) : "Unlocked Sound" : "" : "Sound played when the button is unlocked."
+]
+
+@BaseClass base(Targetname, Parentname, RenderFields,DamageFilter, Button, ButtonSounds) = BaseFuncButton
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "Specifies the direction of motion to move when the button is used."
 	speed(integer) : "Speed" : 5 : "The speed that the button moves, in inches per second."
 	glow(target_destination) : "Glow Entity" : : "The name of an entity that will get the +use glow for this button."
 	wait(integer) : "Delay Before Reset (-1 stay)" : 3 : "Amount of time, in seconds, after the button has been pressed before it returns to the starting position. Once it has returned, it can be used again. If the value is set to -1, the button never returns."
-	use_sound(sound) : "Use sound" : ""  : "Sound event played when the button is successfully used."
-	locked_sound(sound) : "Locked Sound" : "" : "Sound played when the player tries to use the button, and fails because it's locked."
-	unlocked_sound(sound) : "Unlocked Sound" : "" : "Sound played when the button is unlocked."
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 ]
 
@@ -3215,21 +3178,12 @@
 	]
 ]
 
-@SolidClass base(Targetname, Parentname, Global, Button, EnableDisable) = func_rot_button : 
+@SolidClass base(Targetname, Parentname, Global, Button, ButtonSounds, EnableDisable) = func_rot_button : 
 	"A brush entity that's designed to be used for a rotating player-useable button. When used by the player, it rotates to a pressed position."
 [
 	master(string) : "Master (Obsolete)" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this button cannot be used."
 	speed(integer) : "Speed" : 50 : "The speed that the button rotates, in degrees per second."
 	health(integer) : "Health (Obsolete)" : 0 : "Legacy method of specifying whether or not the button can be shot to activate it. Use the 'Damage Activates' spawnflag instead."
-	sounds(choices) : "Sounds" : 21 = 
-	[
-		0: "None (Silent)"
-		21: "Squeaky"
-		22: "Squeaky Pneumatic"
-		23: "Ratchet Groan"
-		24: "Clean Ratchet"
-		25: "Gas Clunk"
-	]
 	wait(integer) : "Delay Before Reset (-1 stay)" : 3 : "Amount of time, in seconds, after the button has been pressed before it returns to the starting position. Once it has returned, it can be used again. If the value is set to -1, the button never returns."
 	distance(integer) : "Distance (deg)" : 90 : "The amount, in degrees, that the button should rotate when it's pressed."
 	// TODO: move spawnflags into Button base class?
@@ -5811,6 +5765,192 @@
 	input Detach(string) : "Detach from the Target Entity and become invisible. The ornament can be re-attached with the SetAttached input."
 ]
 
+
+//-------------------------------------------------------------------------
+// Vehicles.
+//-------------------------------------------------------------------------
+@BaseClass base(Targetname, Global) = BaseVehicle
+[
+	subclass_name( subclass_choice:scripts/vehicles.vdata ) : "Vehicle Subclass" : "" : "Subclass of the Vehicle."
+
+	vehicle_locked(boolean) : "Start locked" : 0
+
+	// Outputs
+	output PassengerEntered(integer) : "Passenger entered the vehicle (argument is passenger index)"
+	output PassengerExited(integer) : "Passenger exited the vehicle (argument is passenger index)"
+
+	input Lock(void) : "Prevent passengers from entering or exiting the vehicle."
+	input Unlock(void) : "Re-allow passengers to enter or exit the vehicle."
+]
+
+//==================================================================================================
+@PointClass base(BaseVehicle) 
+	vdata_model{my_key = "subclass_name" vdata_key = "m_sModelName" use_class_when_blank = true}
+= vehicle_entityio :
+	"Vehicle which does nothing but fire outputs based on IN_BUTTONS, typically used for prototyping."
+[
+	button1(choices) : "Button 1" : "" : "The button which fires the Button1-related outputs." =
+	[
+		1 : "IN_ATTACK"
+		2 : "IN_JUMP"
+		4 : "IN_DUCK"
+		8 : "IN_FORWARD"
+		16 : "IN_BACK"
+	//	32 : "IN_CANCEL"
+	//	64 : "IN_TURNLEFT"
+	//	128 : "IN_TURNRIGHT"
+		256 : "IN_MOVELEFT"
+		512 : "IN_MOVERIGHT"
+		1024 : "IN_ATTACK2"
+	//	2048 : "IN_RUN"
+		4096 : "IN_RELOAD"
+	]
+
+	button2(choices) : "Button 2" : "" : "The button which fires the Button2-related outputs." =
+	[
+		1 : "IN_ATTACK"
+		2 : "IN_JUMP"
+		4 : "IN_DUCK"
+		8 : "IN_FORWARD"
+		16 : "IN_BACK"
+	//	32 : "IN_CANCEL"
+	//	64 : "IN_TURNLEFT"
+	//	128 : "IN_TURNRIGHT"
+		256 : "IN_MOVELEFT"
+		512 : "IN_MOVERIGHT"
+		1024 : "IN_ATTACK2"
+	//	2048 : "IN_RUN"
+		4096 : "IN_RELOAD"
+	]
+
+	button3(choices) : "Button 3" : "" : "The button which fires the Button3-related outputs." =
+	[
+		1 : "IN_ATTACK"
+		2 : "IN_JUMP"
+		4 : "IN_DUCK"
+		8 : "IN_FORWARD"
+		16 : "IN_BACK"
+	//	32 : "IN_CANCEL"
+	//	64 : "IN_TURNLEFT"
+	//	128 : "IN_TURNRIGHT"
+		256 : "IN_MOVELEFT"
+		512 : "IN_MOVERIGHT"
+		1024 : "IN_ATTACK2"
+	//	2048 : "IN_RUN"
+		4096 : "IN_RELOAD"
+	]
+
+	button4(choices) : "Button 4" : "" : "The button which fires the Button4-related outputs." =
+	[
+		1 : "IN_ATTACK"
+		2 : "IN_JUMP"
+		4 : "IN_DUCK"
+		8 : "IN_FORWARD"
+		16 : "IN_BACK"
+	//	32 : "IN_CANCEL"
+	//	64 : "IN_TURNLEFT"
+	//	128 : "IN_TURNRIGHT"
+		256 : "IN_MOVELEFT"
+		512 : "IN_MOVERIGHT"
+		1024 : "IN_ATTACK2"
+	//	2048 : "IN_RUN"
+		4096 : "IN_RELOAD"
+	]
+
+	button5(choices) : "Button 5" : "" : "The button which fires the Button5-related outputs." =
+	[
+		1 : "IN_ATTACK"
+		2 : "IN_JUMP"
+		4 : "IN_DUCK"
+		8 : "IN_FORWARD"
+		16 : "IN_BACK"
+	//	32 : "IN_CANCEL"
+	//	64 : "IN_TURNLEFT"
+	//	128 : "IN_TURNRIGHT"
+		256 : "IN_MOVELEFT"
+		512 : "IN_MOVERIGHT"
+		1024 : "IN_ATTACK2"
+	//	2048 : "IN_RUN"
+		4096 : "IN_RELOAD"
+	]
+
+	button6(choices) : "Button 6" : "" : "The button which fires the Button6-related outputs." =
+	[
+		1 : "IN_ATTACK"
+		2 : "IN_JUMP"
+		4 : "IN_DUCK"
+		8 : "IN_FORWARD"
+		16 : "IN_BACK"
+	//	32 : "IN_CANCEL"
+	//	64 : "IN_TURNLEFT"
+	//	128 : "IN_TURNRIGHT"
+		256 : "IN_MOVELEFT"
+		512 : "IN_MOVERIGHT"
+		1024 : "IN_ATTACK2"
+	//	2048 : "IN_RUN"
+		4096 : "IN_RELOAD"
+	]
+
+	button7(choices) : "Button 7" : "" : "The button which fires the Button7-related outputs." =
+	[
+		1 : "IN_ATTACK"
+		2 : "IN_JUMP"
+		4 : "IN_DUCK"
+		8 : "IN_FORWARD"
+		16 : "IN_BACK"
+	//	32 : "IN_CANCEL"
+	//	64 : "IN_TURNLEFT"
+	//	128 : "IN_TURNRIGHT"
+		256 : "IN_MOVELEFT"
+		512 : "IN_MOVERIGHT"
+		1024 : "IN_ATTACK2"
+	//	2048 : "IN_RUN"
+		4096 : "IN_RELOAD"
+	]
+
+	button8(choices) : "Button 8" : "" : "The button which fires the Button8-related outputs." =
+	[
+		1 : "IN_ATTACK"
+		2 : "IN_JUMP"
+		4 : "IN_DUCK"
+		8 : "IN_FORWARD"
+		16 : "IN_BACK"
+	//	32 : "IN_CANCEL"
+	//	64 : "IN_TURNLEFT"
+	//	128 : "IN_TURNRIGHT"
+		256 : "IN_MOVELEFT"
+		512 : "IN_MOVERIGHT"
+		1024 : "IN_ATTACK2"
+	//	2048 : "IN_RUN"
+		4096 : "IN_RELOAD"
+	]
+
+	// Outputs
+	output OnButtonStart1(integer) : "Passenger started hitting button 1 (argument is passenger index)"
+	output OnButtonEnd1(integer) : "Passenger stopped hitting button 1 (argument is passenger index)"
+
+	output OnButtonStart2(integer) : "Passenger started hitting button 1 (argument is passenger index)"
+	output OnButtonEnd2(integer) : "Passenger stopped hitting button 2 (argument is passenger index)"
+
+	output OnButtonStart3(integer) : "Passenger started hitting button 3 (argument is passenger index)"
+	output OnButtonEnd3(integer) : "Passenger stopped hitting button 3 (argument is passenger index)"
+
+	output OnButtonStart4(integer) : "Passenger started hitting button 4 (argument is passenger index)"
+	output OnButtonEnd4(integer) : "Passenger stopped hitting button 4 (argument is passenger index)"
+
+	output OnButtonStart5(integer) : "Passenger started hitting button 5 (argument is passenger index)"
+	output OnButtonEnd5(integer) : "Passenger stopped hitting button 5 (argument is passenger index)"
+
+	output OnButtonStart6(integer) : "Passenger started hitting button 6 (argument is passenger index)"
+	output OnButtonEnd6(integer) : "Passenger stopped hitting button 6 (argument is passenger index)"
+
+	output OnButtonStart7(integer) : "Passenger started hitting button 7 (argument is passenger index)"
+	output OnButtonEnd7(integer) : "Passenger stopped hitting button 7 (argument is passenger index)"
+
+	output OnButtonStart8(integer) : "Passenger started hitting button 8 (argument is passenger index)"
+	output OnButtonEnd8(integer) : "Passenger stopped hitting button 8 (argument is passenger index)"
+]
+
 //-------------------------------------------------------------------------
 //
 // Solid Entities
@@ -6223,21 +6363,6 @@
 [
 	gravity(integer) : "Gravity (0-1)" : 1
 ]
-
-@SolidClass base(Trigger) = trigger_playermovement : 
-	"An entity that can be used to disable player's automatic ducking/unducking when jumping."
-[
-	spawnflags(flags) = 
-	[
-	// Remove this after maps fixed up:
-		16: "(OBSOLETE, Uncheck me)" : 0
-		128: "Disable auto player movement" : 1
-		2048: "Auto-duck while in trigger" : 0
-		4096: "Auto-walk while in trigger" : 0
-		8192: "Disable jump while in trigger" : 0
-	]
-]
-
 
 // NEEDHELP
 @SolidClass base(Trigger) = trigger_soundscape : 
@@ -7239,6 +7364,7 @@
 [
 	skyname(resource:material) { report=true initial_filter_string="materials/skybox/" } : "Sky Material" : "materials/dev/default_sky.vmat"
 	tint_color(color255) : "Skybox Tint Color" : "255 255 255" : "Tint the skybox"
+	brightnessscale(float) : "Brightness Scale" : "1.0" : "Scale brightness by this amount"
 
 	fog_type(choices) : "Fog Type" : 1 =
 	[
@@ -7356,6 +7482,8 @@
 		3: "Use Low Resolution (64 unit grid)"
 		8: "Use Lower Resolution (64 unit grid, fewer intial clusters)"
 		9: "Use Lowest Resolution (256 unit grid, fewest initial clusters)"
+		4: "X-axis split"
+		5: "Y-axis split"
 		6: "Z-axis split"
 	]
 ]
@@ -7568,3 +7696,20 @@
 	SetFluidDensity(float) : "Fluid density, kg/liter" : "1.0"
 	input SetFluidDensity(float) : "Fluid density, kg/liter"
 ]
+
+@NavLinkClass
+	editormodel("models/props/navlink/nav_link_hammer_model.vmdl")
+	metadata
+	{
+	}
+ = ai_nav_link_area : "An entity that links navmesh sections togther with animation transitions between them"
+[
+	nav_link_movement( vdata_choice:scripts/navlinks.vdata ) : "NavLink Movement" : "" : "The Type of movement needed to traverse this navlink."
+	nav_link_movement_reverse( vdata_choice:scripts/navlinks.vdata ) : "NavLink Movement (Reverse)" : "" : "The Type of movement needed to traverse this navlink in reverse."
+	use_link_entity_orientation(boolean) : "Use entity orientation" : "0" : "Get link orientation from this entity transform; otherwise orient toward target"
+
+	output OnNavLinkStart(void) : "An NPC started using this nav link"
+	output OnNavLinkFinish(void) : "An NPC finished using this nav link"
+]
+
+

@@ -8,10 +8,9 @@ function COverthrowGameMode:OnGameRulesStateChange()
 	--print( "OnGameRulesStateChange: " .. nNewState )
 
 	if nNewState == DOTA_GAMERULES_STATE_HERO_SELECTION then
+		self:AssignTeams()
 
-	end
-
-	if nNewState == DOTA_GAMERULES_STATE_PRE_GAME then
+	elseif nNewState == DOTA_GAMERULES_STATE_PRE_GAME then
 		local numberOfPlayers = PlayerResource:GetPlayerCount()
 		if numberOfPlayers > 7 then
 			--self.TEAM_KILLS_TO_WIN = 25
@@ -23,29 +22,40 @@ function COverthrowGameMode:OnGameRulesStateChange()
 			--self.TEAM_KILLS_TO_WIN = 15
 			nCOUNTDOWNTIMER = 601
 		end
+		
 		if GetMapName() == "forest_solo" then
-			self.TEAM_KILLS_TO_WIN = 25
+			self.TEAM_KILLS_TO_WIN = self.KILLS_TO_WIN_SINGLES
 		elseif GetMapName() == "desert_duo" then
-			self.TEAM_KILLS_TO_WIN = 30
-		elseif GetMapName() == "desert_quintet" then
-			self.TEAM_KILLS_TO_WIN = 50
+			self.TEAM_KILLS_TO_WIN = self.KILLS_TO_WIN_DUOS
 		elseif GetMapName() == "temple_quartet" then
-			self.TEAM_KILLS_TO_WIN = 50
+			self.TEAM_KILLS_TO_WIN = self.KILLS_TO_WIN_QUADS
+		elseif GetMapName() == "desert_quintet" then
+			self.TEAM_KILLS_TO_WIN = self.KILLS_TO_WIN_QUINTS
 		else
-			self.TEAM_KILLS_TO_WIN = 30
+			self.TEAM_KILLS_TO_WIN = self.KILLS_TO_WIN_TRIOS
 		end
 		--print( "Kills to win = " .. tostring(self.TEAM_KILLS_TO_WIN) )
 
 		CustomNetTables:SetTableValue( "game_state", "victory_condition", { kills_to_win = self.TEAM_KILLS_TO_WIN } );
 
 		self._fPreGameStartTime = GameRules:GetGameTime()
-	end
 
-	if nNewState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
+	elseif nNewState == DOTA_GAMERULES_STATE_STRATEGY_TIME then
+		-- random for all players that haven't chosen yet
+		for nPlayerID = 0, ( DOTA_MAX_TEAM_PLAYERS - 1 ) do
+			local hPlayer = PlayerResource:GetPlayer( nPlayerID )
+			if hPlayer and not PlayerResource:HasSelectedHero( nPlayerID ) then
+				hPlayer:MakeRandomHeroSelection()
+			end	
+		end
+
+	elseif nNewState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		--print( "OnGameRulesStateChange: Game In Progress" )
 		self.countdownEnabled = true
 		CustomGameEventManager:Send_ServerToAllClients( "show_timer", {} )
 		DoEntFire( "center_experience_ring_particles", "Start", "0", 0, self, self  )
+
+		GameRules:GetGameModeEntity():SetAnnouncerDisabled( true ) -- Disable the normal announcer at game start
 	end
 end
 
@@ -69,6 +79,22 @@ function COverthrowGameMode:OnNPCSpawned( event )
 				local particleSpawn = ParticleManager:CreateParticleForTeam( "particles/addons_gameplay/player_deferred_light.vpcf", PATTACH_ABSORIGIN, spawnedUnit, unitTeam )
 				ParticleManager:SetParticleControlEnt( particleSpawn, PATTACH_ABSORIGIN, spawnedUnit, PATTACH_ABSORIGIN, "attach_origin", spawnedUnit:GetAbsOrigin(), true )
 			end
+		end
+	end
+end
+
+---------------------------------------------------------
+-- dota_on_hero_finish_spawn
+-- * heroindex
+-- * hero  		(string)
+---------------------------------------------------------
+
+function COverthrowGameMode:OnHeroFinishSpawn( event )
+	local hPlayerHero = EntIndexToHScript( event.heroindex )
+	if hPlayerHero ~= nil and hPlayerHero:IsRealHero() then
+		local hTP = hPlayerHero:FindItemInInventory( "item_tpscroll" )
+		if hTP ~= nil then
+			UTIL_Remove( hTP )
 		end
 	end
 end

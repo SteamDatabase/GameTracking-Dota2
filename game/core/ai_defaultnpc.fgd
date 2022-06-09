@@ -462,16 +462,22 @@
 	output OnFailedToPerform(void) : "Fired when any target NPC(s) fails to move to the destination. This occurs if no target NPCs could be found, or if they were found but were in a state that couldn't be broken out of to perform the movement."
 ]
 
-@PointClass base(Targetname) tags( Choreo ) selected_line( 255 255 255, targetname, m_iszTarget ) color(255 0 255)  iconsprite("editor/ai_scripted_moveto") = ai_scripted_moveto :
+@PointClass base(Targetname) tags( Choreo ) selected_line( 255 255 255, targetname, m_iszTarget ) selected_line( 255 255 255, targetname, m_iszNPC ) color(255 0 255)  iconsprite("editor/ai_scripted_moveto") = ai_scripted_moveto :
 	"Forces an NPC to move to a specified destination entity."
 [
 	m_iszNPC(target_destination) : "Target NPC(s)" : : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to move to the Target Destination."
 	m_iszTarget(target_destination) : "Target Destination" : "" : "The entity that marks the destination of this move-to."
 
-	resilient(choices) : "Reacquire after break" : 1 : "If set , once the NPC returns to idling, it'll resume the move-to until reaching the destination, even if it previously broke out of the schedule due to the Interruptability choices." =
+	resilient(choices) : "Reacquire after break" : 1 : "If set, if the NPC doesn't complete the movement, it'll retry, even if it previously broke out of the schedule due to the Interruptability choices. Note that by default, the Reacquisition Priority is Low, which means they'll only retry when they're idling. Set that to High if you want them to retry in combat." =
 	[
 		0 : "No"
 		1 : "Yes"
+	]
+
+	resumepriority(choices) : "Reacquisition Priority" : 0 : "Used to decide when to retry the moveto after it failed. Low means only retry when the NPC is about to idle. High means it should retry any time the NPC selects a schedule, unless the NPC needs to perform a critical schedule (like being required to flinch in response to heavy damage)." =
+	[
+		0 : "Low"
+		1 : "High"
 	]
 
 	shouldsetenemy(choices) : "Set Enemy To Target" : 0 : "If the target destination is an NPC or player, setting this to 'Yes' will also give commanded NPCs memory of the target, and cause them to set their enemy to it. Note that if there's another NPC that's a better enemy, commanded NPCs will flip to the better enemy on their next think." =
@@ -486,7 +492,7 @@
 		1 : "Yes"
 	]
 
-	interruptability(choices) : "Interruptability" : 0 : "Sets what kind of events can interrupt an NPC that's performing this move to. Note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
+	interruptability(choices) : "Interruptability" : 0 : "Sets what kind of events can interrupt an NPC that's performing this move to. Note that this only describes events that interrupt the moveto while it's working properly, not whether or not movement itself can fail. So even if this is set to 'Nothing', a moveto can still fail due to core movement failure (path failing / route blocked). Also, note that when set to 'Everything', NPCs can be easily interrupted by small things like physics impact sounds, or distant combat sounds." =
 	[
 		0 : "Everything that usually interrupts AI"
 		3 : "Direct Combat (Seeing enemies, taking damage, etc)"
@@ -498,7 +504,7 @@
 	[
 		0 : "Walk"
 		1 : "Run"
-	]
+	]	
 	
 	// Inputs
 	input StartMoveTo(void) : "Starts all target NPC(s) moving to the target destination."

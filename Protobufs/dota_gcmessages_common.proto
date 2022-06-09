@@ -187,6 +187,16 @@ message CMsgLobbyGauntletProgress {
 	repeated .CMsgLobbyGauntletProgress.AccountProgress accounts = 1;
 }
 
+message CMsgLobbyFeaturedGamemodeProgress {
+	message AccountProgress {
+		optional uint32 account_id = 1;
+		optional uint32 current_value = 2;
+		optional uint32 max_value = 3;
+	}
+
+	repeated .CMsgLobbyFeaturedGamemodeProgress.AccountProgress accounts = 1;
+}
+
 message CMsgBattleCupVictory {
 	optional uint32 account_id = 1;
 	optional uint32 win_date = 2;
@@ -290,6 +300,33 @@ message CMatchHeroSelectEvent {
 	optional bool is_pick = 1;
 	optional uint32 team = 2;
 	optional uint32 hero_id = 3;
+}
+
+message CMatchClip {
+	message ClipDetails {
+		optional .CMatchClip.CameraType camera_type = 1 [default = INVALID];
+		optional bytes camera_data = 2;
+		repeated string video_host_links = 3;
+		repeated string social_media_links = 4;
+	}
+
+	enum CameraType {
+		INVALID = 0;
+		PLAYER_PERSPECTIVE = 1;
+		HERO_CHASE = 2;
+		BROADCASTER = 3;
+		USER_CAMERA = 4;
+	}
+
+	optional uint64 match_id = 1;
+	optional uint32 account_id = 2;
+	optional uint32 game_time_seconds = 3;
+	optional uint32 duration_seconds = 4;
+	optional uint32 player_id = 5;
+	optional uint32 hero_id = 6;
+	optional uint32 ability_id = 7;
+	optional string comment = 8;
+	optional .CMatchClip.ClipDetails clip_details = 9;
 }
 
 message CPartySearchClientParty {
@@ -582,6 +619,8 @@ message CMsgDOTARealtimeGameStats {
 		optional uint32 league_node_id = 18;
 		optional bool single_team = 16;
 		optional uint32 cheers_peak = 17;
+		optional uint32 lobby_type = 20;
+		optional uint32 start_timestamp = 21;
 	}
 
 	message GraphData {
@@ -685,6 +724,8 @@ message CMsgDOTARealtimeGameStatsTerse {
 		optional uint32 game_state = 10;
 		repeated .CMsgDOTARealtimeGameStatsTerse.PickBanDetails picks = 11;
 		repeated .CMsgDOTARealtimeGameStatsTerse.PickBanDetails bans = 12;
+		optional uint32 lobby_type = 13;
+		optional uint32 start_timestamp = 14;
 	}
 
 	message GraphData {
@@ -907,7 +948,7 @@ message CMsgDOTAMatch {
 		optional uint32 last_hits = 19;
 		optional uint32 denies = 20;
 		optional uint32 gold_per_min = 21;
-		optional uint32 XP_per_min = 22;
+		optional uint32 xp_per_min = 22;
 		optional uint32 gold_spent = 23;
 		optional uint32 hero_damage = 24;
 		optional uint32 tower_damage = 25;
@@ -952,6 +993,8 @@ message CMsgDOTAMatch {
 		optional uint32 lane_selection_flags = 75;
 		optional uint32 bounty_runes = 77;
 		optional uint32 outposts_captured = 78;
+		optional .DOTA_GC_TEAM team_number = 80 [default = DOTA_GC_TEAM_GOOD_GUYS];
+		optional uint32 team_slot = 81;
 	}
 
 	message BroadcasterInfo {
@@ -987,7 +1030,7 @@ message CMsgDOTAMatch {
 	}
 
 	optional uint32 duration = 3;
-	optional fixed32 startTime = 4;
+	optional fixed32 starttime = 4;
 	repeated .CMsgDOTAMatch.Player players = 5;
 	optional uint64 match_id = 6;
 	repeated uint32 tower_status = 8;
@@ -1081,7 +1124,7 @@ message CMsgDOTABotDebugInfo {
 		message Mode {
 			optional uint32 mode_id = 1;
 			optional float desire = 2;
-			optional uint32 target_entity = 3;
+			optional int32 target_entity = 3;
 			optional uint32 target_x = 4;
 			optional uint32 target_y = 5;
 			optional uint32 target_z = 6;
@@ -1137,6 +1180,7 @@ message CMsgRecentMatchInfo {
 	optional uint32 player_slot = 7;
 	optional .EMatchOutcome match_outcome = 8 [default = k_EMatchOutcome_Unknown];
 	optional uint32 timestamp = 9;
+	optional uint32 lobby_type = 10;
 }
 
 message CMsgMatchTips {
@@ -1161,6 +1205,7 @@ message CMsgDOTAMatchMinimal {
 		optional uint32 player_slot = 7;
 		optional string pro_name = 8;
 		optional uint32 level = 9;
+		optional .DOTA_GC_TEAM team_number = 10 [default = DOTA_GC_TEAM_GOOD_GUYS];
 	}
 
 	message Tourney {
@@ -1190,6 +1235,7 @@ message CMsgDOTAMatchMinimal {
 	optional .EMatchOutcome match_outcome = 8 [default = k_EMatchOutcome_Unknown];
 	optional uint32 radiant_score = 9;
 	optional uint32 dire_score = 10;
+	optional uint32 lobby_type = 11;
 }
 
 message CMsgConsumableUsage {

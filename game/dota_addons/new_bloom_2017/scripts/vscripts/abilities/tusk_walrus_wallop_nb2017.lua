@@ -11,7 +11,8 @@ end
 --------------------------------------------------------------------------------
 
 function tusk_walrus_wallop_nb2017:GetCastRange( vLocation, hTarget )
-	return self:GetCaster():GetAttackRange()
+	
+	return self:GetCaster():Script_GetAttackRange()
 end
 
 --------------------------------------------------------------------------------

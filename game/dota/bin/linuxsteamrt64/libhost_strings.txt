@@ -130,6 +130,7 @@ $ORIGIN
 %s - %s
 %s / %s
 %s Schema Type: %s
+%s$%u
 %s%d
 %s.%u
 %s:  IGameSystem::LoopActivateAllSystems {
@@ -398,14 +399,13 @@ $ORIGIN
 <INVALID EXPRESSION>
 <INVALID_RBF_TYPE>
 <NO EXPRESSION>
+<deferred>
 <empty>
 <invalid>
 <no deferred ref found>
 <no failure reason set>
 <null>
-<unconnected>
 <unknown: %d>
-<unknown>
 =
 = { <proto text format> }". To set fields within it, use syntax like "
 >
@@ -422,6 +422,7 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 ABORTED
 ACT_IDLE
 ACT_NEUTRAL_REF_POSE
+ADDONROOT
 AIM
 ALREADY_EXISTS
 APPSYSTEM: In ConnectGameInterfaces(), s_nRegistrationCount is %d!
@@ -477,6 +478,7 @@ Base Spring;
 BenchmarkService001
 BinaryProperties_GetValue
 BoneChannel
+BoneConstraintList
 Boolean default must be true or false.
 Byte size calculation and serialization were inconsistent.  This may indicate a bug in protocol buffers or it may be caused by concurrent modification of
 C
@@ -485,9 +487,6 @@ CAimConstraint
 CAnimBone
 CAnimDataChannelDesc
 CAnimKeyData
-CAnimRetargetChainData
-CAnimRetargetData
-CAnimRetargetElementData
 CAnimUser
 CAnimVariant
 CAnimationGroup
@@ -527,7 +526,6 @@ CBufferString::StartsWith(char const*) const
 CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
-CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CConstraintSlave
 CConstraintTarget
@@ -881,7 +879,7 @@ CUtlString::operator=(CBufferString const&)
 CUtlString::operator==(CUtlString const&) const
 CUtlSymbol
 CUtlSymbolLarge
-CUtlSymbolTable::AddString(char const*)
+CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
 CUtlSymbolTable::Find(char const*) const
 CUtlSymbolTable::RemoveAll()
@@ -926,6 +924,7 @@ ConfigurationSystem_001
 ConnectGameInterfaces
 ConnectInterfaceSingletons
 ConsoleStartup
+Construct
 Could not create an instance of
 Could not find type "
 Couldn't parse default value "
@@ -1082,6 +1081,9 @@ GameModelInfo001
 GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameStartup
+GameStartup_RayTracing
+GameStartup_SM40
+GameStartup_SM50
 GameUIService_001
 Gaussian
 GenerateResourceNameFromFileName: Invalid extension specified in file name "%s"!
@@ -1190,7 +1192,6 @@ J
 JIGGLE_BONE
 K
 KV3 load transfer failed: %s
-KV3 save transfer failed: %s
 Key in map fields cannot be enum types.
 Key in map fields cannot be float/double, bytes or message types.
 KeyValueCache001
@@ -1577,7 +1578,7 @@ Protocol Buffer map usage error:
 Protocol Buffer reflection usage error:  Method      : google::protobuf::Reflection::
 QAngle
 Quaternion
-QuaternionAligned
+QuaternionStorage
 Quintic
 RESOURCE_EXHAUSTED
 ROTATION
@@ -1617,7 +1618,6 @@ ResourceHandleUtils001
 ResourceManifestRegistry001
 ResourceSystem013
 ResponseRulesCache001
-RetargetSrc.%s.%s
 Rigid;
 RotationVector
 S
@@ -1803,12 +1803,16 @@ V_GetFileExtension
 V_GetFileExtensionSafe
 V_Get_stdout
 V_InitJSONConfig
+V_Int32ToString_Unchecked
+V_Int64ToString_Unchecked
 V_IsAbsolutePath
 V_ParseJSONBuffer
 V_PathContainsPath
 V_PrettifyMem
 V_RemoveDotSlashes
 V_SplitString(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int> >&)
+V_UInt32ToString_Unchecked
+V_UInt64ToString_Unchecked
 V_UnqualifiedFileName
 V_acosd
 V_acosf
@@ -2005,6 +2009,7 @@ clientcmd_can_execute
 close() failed:
 cloth_enable
 color
+concommandbase.cpp
 conflicts with an existing enum type.
 conflicts with an existing field.
 conflicts with an existing nested message type.
@@ -2016,6 +2021,8 @@ const google::protobuf::internal::ExtensionSet::KeyValue* google::protobuf::inte
 const google::protobuf::internal::ExtensionSet::KeyValue* google::protobuf::internal::ExtensionSet::flat_end() const
 const string& google::protobuf::UnknownField::length_delimited() const
 contains invalid
+convar.cpp
+convarref.cpp
 conversion failed
 core
 cos( %s )
@@ -2215,7 +2222,6 @@ m_attachments
 m_bCanBatchWithDynamicShaderConstants
 m_bClamp
 m_bDrawLast
-m_bEnableRetarget
 m_bHasBakedLightingFromLightMap
 m_bHasBakedLightingFromVertexStream
 m_bHasCullingData
@@ -2235,7 +2241,6 @@ m_boneName
 m_boneParents
 m_bones
 m_cRenderColor
-m_chain
 m_constraints
 m_dataChannelArray
 m_decodeKey
@@ -2247,17 +2252,14 @@ m_dynamicParams
 m_dynamicTextureParams
 m_eHand
 m_eRbfType
-m_element
 m_elems
 m_fingers
 m_flAlpha
 m_flBindPoseDirectionMS
-m_flDistance
 m_flFalloff
 m_flFingerScaleRatio
 m_flFingerWeight
 m_flFootLength
-m_flMass
 m_flMax
 m_flMaxAngle
 m_flMin
@@ -2288,7 +2290,6 @@ m_inputValue
 m_intAttributes
 m_intParams
 m_invBindPose
-m_invTransform
 m_localHAnimArray
 m_localHAnimArray_Handle
 m_material
@@ -2299,22 +2300,15 @@ m_morphSet
 m_nBaseVertex
 m_nBindOffsetBytes
 m_nBoneHash
-m_nBoneIndex
 m_nBoneNameHash
 m_nBoneWeightCount
-m_nChainIndex
-m_nChainInvIndex
-m_nChainType
 m_nChannelElements
 m_nD3DSemanticIndex
-m_nElement
 m_nElementIndexArray
 m_nElementMaskArray
-m_nElementType
 m_nFingerIndex
 m_nFlags
 m_nGroupId
-m_nGroupType
 m_nHitBoxIndex
 m_nIndexCount
 m_nInfluences
@@ -2324,7 +2318,6 @@ m_nMeshID
 m_nNameHash
 m_nOffset
 m_nPrimitiveType
-m_nRetargetStyle
 m_nSemanticIndex
 m_nShapeType
 m_nSlaveAxis
@@ -2359,14 +2352,12 @@ m_qOffset
 m_qParentBindRotation
 m_quat
 m_renderAttributesUsed
-m_replicated
-m_retarget
 m_sAttachmentName
 m_sBoneName
-m_sChainName
 m_sName
 m_sSurfaceProperty
 m_sTargetMorph
+m_scale
 m_sceneObjects
 m_shaderName
 m_skeleton
@@ -2383,7 +2374,6 @@ m_textureAttributes
 m_textureParams
 m_tipParentBoneName
 m_toeBoneName
-m_transform
 m_userArray
 m_vBallOffset
 m_vBasePosition
@@ -2406,8 +2396,6 @@ m_vUpLS
 m_vUpVector
 m_value
 m_vecCenter
-m_vecMax
-m_vecMin
 m_vecSize
 m_vectorAttributes
 m_vectorParams
@@ -2512,6 +2500,7 @@ regex
 remapping vertex %d[w%d] invalid: %d->%d >= %d
 remapping vertex %d[w%d] invalid: %d->? >= %d
 repeated
+replicated
 required
 resource
 resource_name
@@ -2520,7 +2509,6 @@ rnd_up
 runleft
 runright
 runspeed
-s
 s offg cMeshusemtl initialShadingGroup
 schematype.cpp
 scripts/surfaceproperties_footsteps.txt
@@ -2538,6 +2526,7 @@ singleplayer
 singletons.cpp
 sint32
 sint64
+size <= INT_MAX - 12
 size too big:
 size_t to int conversion
 soundevent
@@ -2659,11 +2648,12 @@ table
 tangent
 tangentu_signv
 texcoord
-text
 text format contains deprecated field "
 the Element type supplies a MergeFrom() operation to make copies.
 the actual field type (for enums T should be the generated enum
 the global scope
+tier0
+tools_preview
 trivial
 true
 type does not match
@@ -2678,6 +2668,7 @@ type.googleprod.com/
 typeinfo for CThreadSyncObject
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_make_shared_tag
 typeinfo for std::exception
 typeinfo for std::thread::_Impl_base
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>

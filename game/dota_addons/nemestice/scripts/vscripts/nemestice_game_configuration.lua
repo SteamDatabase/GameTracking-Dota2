@@ -8,7 +8,7 @@ require( "nemestice_constants" )
 
 function CNemestice:SetupGameConfiguration()
 	
-	self.m_bFillWithBots = GlobalSys:CommandLineCheck( "-nemestice_bots" ) or GameRules:GetGameSessionConfigValue("nemestice_bots", "false") == "true"
+	self.m_bFillWithBots = GlobalSys:CommandLineCheck( "-addon_bots" ) or GameRules:GetGameSessionConfigValue("nemestice_bots", "false") == "true"
 	self.m_bShortStrategyTime = GlobalSys:CommandLineCheck( "-nemestice_short_strategy_time" ) or GameRules:GetGameSessionConfigValue("nemestice_short_strategy_time", "false") == "true"
 	self.m_bFastPlay = ( self.m_bShortStrategyTime == false ) and ( GlobalSys:CommandLineCheck( "-nemestice_fastplay" ) or GameRules:GetGameSessionConfigValue("nemestice_fastplay", "false") == "true" )
 

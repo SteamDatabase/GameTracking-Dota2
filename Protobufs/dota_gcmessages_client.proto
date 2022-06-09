@@ -7,6 +7,7 @@ import "dota_gcmessages_common_lobby.proto";
 import "dota_gcmessages_common_match_management.proto";
 import "base_gcmessages.proto";
 import "econ_gcmessages.proto";
+import "valveextensions.proto";
 
 option optimize_for = SPEED;
 option cc_generic_services = false;
@@ -256,6 +257,7 @@ message CMsgDOTASubmitPlayerReportResponse {
 message CMsgDOTASubmitPlayerAvoidRequest {
 	optional uint32 target_account_id = 1;
 	optional uint64 lobby_id = 4;
+	optional string user_note = 5;
 }
 
 message CMsgDOTASubmitPlayerAvoidRequestResponse {
@@ -2416,6 +2418,7 @@ message CMsgGCToClientGetFilteredPlayersResponse {
 		optional fixed32 account_id = 1;
 		optional fixed32 time_added = 2;
 		optional fixed32 time_expires = 3;
+		optional string note = 4;
 	}
 
 	enum Result {
@@ -2425,6 +2428,9 @@ message CMsgGCToClientGetFilteredPlayersResponse {
 
 	optional .CMsgGCToClientGetFilteredPlayersResponse.Result result = 1 [default = SUCCESS];
 	repeated .CMsgGCToClientGetFilteredPlayersResponse.CFilterEntry filtered_players = 2;
+	optional int32 base_slots = 3;
+	optional int32 additional_slots = 4;
+	optional int32 next_slot_cost = 5;
 }
 
 message CMsgClientToGCRemoveFilteredPlayer {
@@ -2438,6 +2444,38 @@ message CMsgGCToClientRemoveFilteredPlayerResponse {
 	}
 
 	optional .CMsgGCToClientRemoveFilteredPlayerResponse.Result result = 1 [default = SUCCESS];
+}
+
+message CMsgClientToGCPurchaseFilteredPlayerSlot {
+	optional int32 additional_slots_current = 1;
+}
+
+message CMsgGCToClientPurchaseFilteredPlayerSlotResponse {
+	enum Result {
+		SUCCESS = 0;
+		FAILURE = 1;
+		CURRENT_SLOTCOUNT_DOESNT_MATCH = 2;
+		CANT_AFFORD = 3;
+	}
+
+	optional .CMsgGCToClientPurchaseFilteredPlayerSlotResponse.Result result = 1 [default = SUCCESS];
+	optional int32 additional_slots = 2;
+	optional int32 next_slot_cost = 3;
+}
+
+message CMsgClientToGCUpdateFilteredPlayerNote {
+	optional fixed32 target_account_id = 1;
+	optional string new_note = 2;
+}
+
+message CMsgGCToClientUpdateFilteredPlayerNoteResponse {
+	enum Result {
+		SUCCESS = 0;
+		FAILURE = 1;
+		NOT_FOUND = 2;
+	}
+
+	optional .CMsgGCToClientUpdateFilteredPlayerNoteResponse.Result result = 1 [default = SUCCESS];
 }
 
 message CMsgPartySearchPlayer {
