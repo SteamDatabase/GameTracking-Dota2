@@ -104,14 +104,16 @@ function CStatusEffectsDrowBot:BotThink()
 	end
 
 	if self.nBotState == DROW_BOT_STATE_TP then
-		ExecuteOrderFromTable( {
-			UnitIndex = self.me:entindex(),
-			OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
-			AbilityIndex = self.hTownPortalItem:entindex(),
-			Position = self.hTpLocation:GetAbsOrigin(),
-		} )
+		if self.hTownPortalItem ~= nil and self.hTownPortalItem:IsNull() == false then
+			ExecuteOrderFromTable( {
+				UnitIndex = self.me:entindex(),
+				OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+				AbilityIndex = self.hTownPortalItem:entindex(),
+				Position = self.hTpLocation:GetAbsOrigin(),
+			} )
+		end
 		
-		if self.hTownPortalItem and not self.hTownPortalItem:IsFullyCastable() and not self.hTownPortalItem:IsChanneling() then
+		if self.hTownPortalItem and self.hTownPortalItem:IsNull() == false and not self.hTownPortalItem:IsFullyCastable() and not self.hTownPortalItem:IsChanneling() then
 			self.nBotState = DROW_BOT_STATE_INACTIVE	
 			return -1
 		end

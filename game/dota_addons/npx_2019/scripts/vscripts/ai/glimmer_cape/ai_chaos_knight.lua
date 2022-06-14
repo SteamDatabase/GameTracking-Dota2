@@ -167,7 +167,7 @@ function CGlimmerCapeChaosKnightBot:BotThink()
 		self:ChangeBotState( CHAOS_KNIGHT_BOT_STATE_ATTACK )
 
 	elseif self.nBotState == CHAOS_KNIGHT_BOT_STATE_TP_OUT then
-		if self.hTpScroll then
+		if self.hTpScroll and self.hTpScroll:IsNull() == false then
 			ExecuteOrderFromTable( {
 				UnitIndex = self.me:entindex(),
 				OrderType = DOTA_UNIT_ORDER_CAST_POSITION,

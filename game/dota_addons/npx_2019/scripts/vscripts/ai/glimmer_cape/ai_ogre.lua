@@ -74,7 +74,7 @@ function CGlimmerCapeOgreBot:BotThink()
 		end
 
 	elseif self.nBotState == OGRE_BOT_STATE_TP_OUT then
-		if self.hTpScroll then
+		if self.hTpScroll and self.hTpScroll:IsNull() == false then
 			ExecuteOrderFromTable( {
 				UnitIndex = self.me:entindex(),
 				OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
@@ -82,7 +82,7 @@ function CGlimmerCapeOgreBot:BotThink()
 				Position = self.hTpPosition:GetAbsOrigin(),
 			} )
 			
-			if self.hTpScroll and not self.hTpScroll:IsFullyCastable() and not self.hTpScroll:IsChanneling() then
+			if not self.hTpScroll:IsFullyCastable() and not self.hTpScroll:IsChanneling() then
 				self.me:ForceKill( false )
 				--self:ChangeBotState( CHAOS_KNIGHT_BOT_STATE_IDLE )
 			end

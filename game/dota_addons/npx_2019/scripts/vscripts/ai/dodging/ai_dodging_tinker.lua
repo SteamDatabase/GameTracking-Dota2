@@ -127,16 +127,18 @@ function CDodgingTinkerBot:BotThink()
 
 		return 3
 	elseif self.nBotState == TINKER_BOT_STATE_TP then
-		ExecuteOrderFromTable( {
-			UnitIndex = self.me:entindex(),
-			OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
-			AbilityIndex = self.hTownPortalItem:entindex(),
-			Position = self.hTpLocation:GetAbsOrigin(),
-		} )
+		if self.hTownPortalItem and self.hTownPortalItem:IsNull() == false then
+			ExecuteOrderFromTable( {
+				UnitIndex = self.me:entindex(),
+				OrderType = DOTA_UNIT_ORDER_CAST_POSITION,
+				AbilityIndex = self.hTownPortalItem:entindex(),
+				Position = self.hTpLocation:GetAbsOrigin(),
+			} )
 		
-		if self.hTownPortalItem and not self.hTownPortalItem:IsFullyCastable() and not self.hTownPortalItem:IsChanneling() then
-			self.nBotState = TINKER_BOT_STATE_INACTIVE
-			return -1
+			if not self.hTownPortalItem:IsFullyCastable() and not self.hTownPortalItem:IsChanneling() then
+				self.nBotState = TINKER_BOT_STATE_INACTIVE
+				return -1
+			end
 		end
 	end
 	return 3

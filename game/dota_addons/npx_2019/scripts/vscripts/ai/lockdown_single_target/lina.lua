@@ -100,7 +100,7 @@ function CLockdownScenarioLinaBot:BotThink()
 		end
 
 		-- Waiting for enemy's stun on me before entering teleport-out state
-		if self.me:IsStunned() and self.hTpScroll and self.hTpScroll:IsFullyCastable() then
+		if self.me:IsStunned() and self.hTpScroll and self.hTpScroll:IsNull() == false and self.hTpScroll:IsFullyCastable() then
 			printf( "  LINA_BOT_STATE_TELEPORT_OUT: Lina is not stunned and has a tp scroll ability ready to cast" )
 
 			self:ChangeBotState( LINA_BOT_STATE_TELEPORT_OUT )
@@ -124,7 +124,7 @@ function CLockdownScenarioLinaBot:BotThink()
 			return 0.02
 		end
 
-		if self.hTpScroll == nil or self.hTpScroll:IsFullyCastable() == false then
+		if self.hTpScroll == nil or self.hTpScroll:IsNull() == true or self.hTpScroll:IsFullyCastable() == false then
 			--printf( "  Lina's tp scroll is nil or isn't ready, return early" )
 			return 0.02
 		end

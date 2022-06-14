@@ -147,7 +147,7 @@ function CRoshanSnapfireBot:BotThink()
 
 
 	elseif self.nBotState == SNAPFIRE_BOT_STATE_TP_OUT then
-		if self.hTpScroll then
+		if self.hTpScroll and self.hTpScroll:IsNull() == false then
 			ExecuteOrderFromTable( {
 				UnitIndex = self.me:entindex(),
 				OrderType = DOTA_UNIT_ORDER_CAST_POSITION,

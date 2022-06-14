@@ -288,7 +288,7 @@ end
 function CDotaNPXScenario_Roshan:OnNPCSpawned( hEnt )
 	CDotaNPXScenario:OnEntityKilled( hEnt )	
 
-	if hEnt == nil or hEnt:IsNull() == true then
+	if hEnt == nil or hEnt:IsNull() == true or hEnt:IsIllusion() == true then
 		return
 	end
 

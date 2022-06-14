@@ -623,7 +623,7 @@ end
 function CDotaNPXScenario_Status_Effects:OnNPCSpawned( hEnt )
 	CDotaNPXScenario:OnEntityKilled( hEnt )	
 
-	if hEnt ~= nil and hEnt:IsNull() == false then
+	if hEnt ~= nil and hEnt:IsNull() == false and hEnt:IsIllusion() == false then
 		if hEnt:GetUnitName() == "npc_dota_hero_troll_warlord" then
 			local Task = self:GetTask( "disarm_enemy_hero" )
 			if Task then

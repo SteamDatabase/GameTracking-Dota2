@@ -148,7 +148,7 @@ function CDotaNPXScenario:OnTakeDamage( hVictim, hKiller, hInflictor )
 		sKillerName = hKiller:GetUnitName()
 	end
 
-	if hInflictor ~= nil then
+	if hInflictor ~= nil and hInflictor.GetAbilityName ~= nil then
 		sInflictorName = hInflictor:GetAbilityName()
 	end
 	
