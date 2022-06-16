@@ -132,6 +132,12 @@ function COverthrowGameMode:OnTeamKillCredit( event )
 	}
 
 	if nKillsRemaining <= 0 then
+		local tTeamScores = {}
+		for team = DOTA_TEAM_FIRST, (DOTA_TEAM_COUNT-1) do
+			tTeamScores[team] = GetTeamHeroKills(team)
+		end
+		GameRules:SetPostGameTeamScores( tTeamScores )
+
 		GameRules:SetCustomVictoryMessage( self.m_VictoryMessages[nTeamID] )
 		GameRules:SetGameWinner( nTeamID )
 		broadcast_kill_event.victory = 1
@@ -241,8 +247,29 @@ function COverthrowGameMode:OnItemPickUp( event )
 		SendOverheadEventMessage( owner, OVERHEAD_ALERT_GOLD, owner, r, nil )
 		UTIL_Remove( item ) -- otherwise it pollutes the player inventory
 	elseif event.itemname == "item_treasure_chest" then
-		--print("Special Item Picked Up")
-		DoEntFire( "item_spawn_particle_" .. self.itemSpawnIndex, "Stop", "0", 0, self, self )
+		print( "Special Item Picked Up" )
+
+		if item.GetAbilityName ~= nil then
+			--print( "Item is named: - " .. item:GetAbilityName() )
+		end
+
+		local hContainer = item:GetContainer()
+
+		for k,v in pairs ( self.itemSpawnLocationsInUse ) do
+			if v.hDrop == hContainer then
+				--print( '^^^DROP CONTAINER!' )
+				if v.hItemDestinationRevealer then
+					v.hItemDestinationRevealer:RemoveSelf()
+					ParticleManager:DestroyParticle( v.nItemDestinationParticles, false )
+					DoEntFire( v.world_effects_name, "Stop", "0", 0, self, self )
+				end
+				
+				table.insert( self.itemSpawnLocations, v )
+				table.remove( self.itemSpawnLocationsInUse, k )
+				break
+			end
+		end
+		
 		COverthrowGameMode:SpecialItemAdd( event )
 		UTIL_Remove( item ) -- otherwise it pollutes the player inventory
 	end

@@ -11,6 +11,28 @@ function BroadcastMessage( sMessage, fDuration )
     FireGameEvent( "show_center_message", centerMessage )
 end
 
+function PrintTable( t, indent )
+    --print( "PrintTable( t, indent ): " )
+
+    if type(t) ~= "table" then return end
+    
+    if indent == nil then
+        indent = "   "
+    end
+
+    for k,v in pairs( t ) do
+        if type( v ) == "table" then
+            if ( v ~= t ) then
+                print( indent .. tostring( k ) .. ":\n" .. indent .. "{" )
+                PrintTable( v, indent .. "  " )
+                print( indent .. "}" )
+            end
+        else
+        print( indent .. tostring( k ) .. ":" .. tostring(v) )
+        end
+    end
+end
+
 function PickRandomShuffle( reference_list, bucket )
     if ( #reference_list == 0 ) then
         return nil

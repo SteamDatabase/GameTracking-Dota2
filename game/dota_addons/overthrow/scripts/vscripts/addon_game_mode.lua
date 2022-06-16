@@ -141,6 +141,7 @@ function COverthrowGameMode:InitGameMode()
 	self.tier4ItemBucket = {}
 	self.tier5ItemBucket = {}
 
+	self.itemSpawnLocations = nil
 	self.KILLS_TO_WIN_SINGLES = 25
 	self.KILLS_TO_WIN_DUOS = 30
 	self.KILLS_TO_WIN_TRIOS = 35
@@ -303,6 +304,12 @@ function COverthrowGameMode:EndGame( victoryTeam )
 			overBoss:CastAbilityNoTarget( celebrate, -1 )
 		end
 	end
+	
+	local tTeamScores = {}
+	for team = DOTA_TEAM_FIRST, (DOTA_TEAM_COUNT-1) do
+		tTeamScores[team] = GetTeamHeroKills(team)
+	end
+	GameRules:SetPostGameTeamScores( tTeamScores )
 
 	GameRules:SetGameWinner( victoryTeam )
 end

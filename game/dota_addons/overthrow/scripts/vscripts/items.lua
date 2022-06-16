@@ -213,7 +213,11 @@ function COverthrowGameMode:ThinkSpecialItemDrop()
 	
 	if not self.hasWarnedSpawn and t >= tWarn then
 		-- warn the item is about to spawn
-		self:WarnItem()
+		-- we might fail to reserve a spot in which case we'll just skip and move on to the next spawn
+		if self:WarnItem() == false then
+			self.nNextSpawnItemNumber = self.nNextSpawnItemNumber + 1
+			return
+		end
 		self.hasWarnedSpawn = true
 	elseif t >= tSpawn then
 		-- spawn the item
@@ -224,52 +228,72 @@ function COverthrowGameMode:ThinkSpecialItemDrop()
 end
 
 function COverthrowGameMode:PlanNextSpawn()
-	local missingSpawnPoint =
-	{
-		origin = "0 0 384",
-		targetname = "item_spawn_missing"
-	}
+	if self.itemSpawnLocations == nil then
+		self.itemSpawnLocations = {}
+		self.itemSpawnLocationsInUse = {}
+		local nMaxSpawns = 8
+		if GetMapName() == "desert_quintet" then
+			print("map is desert_quintet")
+			nMaxSpawns = 6
+		elseif GetMapName() == "temple_quartet" then
+			print("map is temple_quartet")
+			nMaxSpawns = 4
+		end
 
-	local r = RandomInt( 1, 8 )
-	if GetMapName() == "desert_quintet" then
-		print("map is desert_quintet")
-		r = RandomInt( 1, 6 )
-	elseif GetMapName() == "temple_quartet" then
-		print("map is temple_quartet")
-		r = RandomInt( 1, 4 )
+		for i=1,nMaxSpawns do
+			local spawnName = "item_spawn_" .. i
+			--print( '^^^SEARCHING FOR SPAWN POINT NAMED = ' .. spawnName )
+			local hSpawnLocation = Entities:FindByName( nil, spawnName )
+			if hSpawnLocation == nil then
+				print( '^^^MISSING SPAWN LOCATION = ' .. spawnName )
+			else
+				local newSpawnLocation =
+				{
+					hSpawnLocation = hSpawnLocation,
+					path_track_name = "item_spawn_" .. i,
+					world_effects_name = "item_spawn_particle_" .. i,
+				}
+				self.itemSpawnLocations[i] = newSpawnLocation
+			end
+		end
 	end
-	local path_track = "item_spawn_" .. r
-	local spawnPoint = Vector( 0, 0, 700 )
-	local spawnLocation = Entities:FindByName( nil, path_track )
 
-	if spawnLocation == nil then
-		spawnLocation = SpawnEntityFromTableSynchronous( "path_track", missingSpawnPoint )
-		spawnLocation:SetAbsOrigin(spawnPoint)
+	if #self.itemSpawnLocations <= 0 then
+		--print( 'RAN OUT OF SPAWN LOCATIONS!' )
+		return false
 	end
-	
-	self.itemSpawnLocation = spawnLocation
-	self.itemSpawnIndex = r
+
+	local r = RandomInt( 1, #self.itemSpawnLocations )
+	local spawnPoint = self.itemSpawnLocations[r]
+	table.remove( self.itemSpawnLocations, r )
+	table.insert( self.itemSpawnLocationsInUse, spawnPoint )
+
+	self.hCurrentItemSpawnLocation = spawnPoint
+
+	return true
 end
 
 function COverthrowGameMode:WarnItem()
 	-- find the spawn point
-	self:PlanNextSpawn()
+	if self:PlanNextSpawn() == false then
+		return false
+	end
 
-	local spawnLocation = self.itemSpawnLocation:GetAbsOrigin();
+	local spawnLocation = self.hCurrentItemSpawnLocation.hSpawnLocation:GetAbsOrigin();
 
 	-- notify everyone
 	CustomGameEventManager:Send_ServerToAllClients( "item_will_spawn", { spawn_location = spawnLocation } )
 	EmitGlobalSound( "Overthrow.Item.Warning" )
 	
 	-- fire the destination particles
-	DoEntFire( "item_spawn_particle_" .. self.itemSpawnIndex, "Start", "0", 0, self, self )
+	DoEntFire( self.hCurrentItemSpawnLocation.world_effects_name, "Start", "0", 0, self, self )
 
 	-- Give vision to the spawn area (unit is on goodguys, but shared vision)
-	local visionRevealer = CreateUnitByName( "npc_vision_revealer", spawnLocation, false, nil, nil, DOTA_TEAM_GOODGUYS )
-	visionRevealer:SetContextThink( "KillVisionRevealer", function() return visionRevealer:RemoveSelf() end, 35 )
-	local trueSight = ParticleManager:CreateParticle( "particles/econ/wards/f2p/f2p_ward/f2p_ward_true_sight_ambient.vpcf", PATTACH_ABSORIGIN, visionRevealer )
-	ParticleManager:SetParticleControlEnt( trueSight, PATTACH_ABSORIGIN, visionRevealer, PATTACH_ABSORIGIN, "attach_origin", visionRevealer:GetAbsOrigin(), true )
-	visionRevealer:SetContextThink( "KillVisionParticle", function() return trueSight:RemoveSelf() end, 35 )
+	self.hItemDestinationRevealer = CreateUnitByName( "npc_vision_revealer", spawnLocation, false, nil, nil, DOTA_TEAM_GOODGUYS )
+	self.nItemDestinationParticles = ParticleManager:CreateParticle( "particles/econ/wards/f2p/f2p_ward/f2p_ward_true_sight_ambient.vpcf", PATTACH_ABSORIGIN, self.hItemDestinationRevealer )
+	ParticleManager:SetParticleControlEnt( self.nItemDestinationParticles, PATTACH_ABSORIGIN, self.hItemDestinationRevealer, PATTACH_ABSORIGIN, "attach_origin", self.hItemDestinationRevealer:GetAbsOrigin(), true )
+
+	return true
 end
 
 function COverthrowGameMode:SpawnItem()
@@ -283,16 +307,16 @@ function COverthrowGameMode:SpawnItem()
 	local treasureAbility = treasureCourier:FindAbilityByName( "dota_ability_treasure_courier" )
 	treasureAbility:SetLevel( 1 )
     --print ("Spawning Treasure")
-    targetSpawnLocation = self.itemSpawnLocation
-    treasureCourier:SetInitialGoalEntity(targetSpawnLocation)
+    treasureCourier:SetInitialGoalEntity( self.hCurrentItemSpawnLocation.hSpawnLocation )
     --local particleTreasure = ParticleManager:CreateParticle( "particles/items_fx/black_king_bar_avatar.vpcf", PATTACH_ABSORIGIN, treasureCourier )
 	--ParticleManager:SetParticleControlEnt( particleTreasure, PATTACH_ABSORIGIN, treasureCourier, PATTACH_ABSORIGIN, "attach_origin", treasureCourier:GetAbsOrigin(), true )
 	--treasureCourier:Attribute_SetIntValue( "particleID", particleTreasure )
 end
 
 function COverthrowGameMode:ForceSpawnItem()
-	self:WarnItem()
-	self:SpawnItem()
+	if self:WarnItem() then
+		self:SpawnItem()
+	end
 end
 
 function COverthrowGameMode:KnockBackFromTreasure( center, radius, knockback_duration, knockback_distance, knockback_height )
@@ -318,6 +342,11 @@ end
 
 
 function COverthrowGameMode:TreasureDrop( treasureCourier )
+
+	-- Destroy vision revealer
+	self.hItemDestinationRevealer:RemoveSelf()
+	ParticleManager:DestroyParticle( self.nItemDestinationParticles, false )
+
 	--Create the death effect for the courier
 	local spawnPoint = treasureCourier:GetInitialGoalEntity():GetAbsOrigin()
 	spawnPoint.z = 400
@@ -335,6 +364,13 @@ function COverthrowGameMode:TreasureDrop( treasureCourier )
 	drop:SetForwardVector( treasureCourier:GetRightVector() ) -- oriented differently
 	newItem:LaunchLootInitialHeight( false, 0, 50, 0.25, spawnPoint )
 
+	self.hCurrentItemSpawnLocation.hDrop = drop
+
+	--print( '^^^ITEM SPAWN LOCATIONS' )
+	--PrintTable( self.itemSpawnLocations )
+	--print( '^^^ITEM SPAWN LOCATIONS IN USE' )
+	--PrintTable( self.itemSpawnLocationsInUse )
+
 	--Stop the particle effect
 	DoEntFire( "item_spawn_particle_" .. self.itemSpawnIndex, "stopplayendcap", "0", 0, self, self )
 
@@ -343,6 +379,13 @@ function COverthrowGameMode:TreasureDrop( treasureCourier )
 		
 	--Destroy the courier
 	UTIL_Remove( treasureCourier )
+
+	-- create the minimap/revealer for the treasure now that it's on the ground
+	-- this one is attached to the table of data for the spawn location so we can clean it up when the treasure is picked up
+	self.hCurrentItemSpawnLocation.hItemDestinationRevealer = CreateUnitByName( "npc_vision_revealer", self.hCurrentItemSpawnLocation.hSpawnLocation:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_GOODGUYS )
+	--self.hCurrentItemSpawnLocation.hItemDestinationRevealer:SetContextThink( "KillVisionRevealer", function() return self.hCurrentItemSpawnLocation.hItemDestinationRevealer:RemoveSelf() end, 35 )
+	self.hCurrentItemSpawnLocation.nItemDestinationParticles = ParticleManager:CreateParticle( "particles/econ/wards/f2p/f2p_ward/f2p_ward_true_sight_ambient.vpcf", PATTACH_ABSORIGIN, self.hCurrentItemSpawnLocation.hItemDestinationRevealer )
+	ParticleManager:SetParticleControlEnt( self.hCurrentItemSpawnLocation.nItemDestinationParticles, PATTACH_ABSORIGIN, self.hCurrentItemSpawnLocation.hItemDestinationRevealer, PATTACH_ABSORIGIN, "attach_origin", self.hCurrentItemSpawnLocation.hItemDestinationRevealer:GetAbsOrigin(), true )
 end
 
 function COverthrowGameMode:ForceSpawnGold()
