@@ -382,8 +382,7 @@ function COverthrowGameMode:TreasureDrop( treasureCourier )
 
 	-- create the minimap/revealer for the treasure now that it's on the ground
 	-- this one is attached to the table of data for the spawn location so we can clean it up when the treasure is picked up
-	self.hCurrentItemSpawnLocation.hItemDestinationRevealer = CreateUnitByName( "npc_vision_revealer", self.hCurrentItemSpawnLocation.hSpawnLocation:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_GOODGUYS )
-	--self.hCurrentItemSpawnLocation.hItemDestinationRevealer:SetContextThink( "KillVisionRevealer", function() return self.hCurrentItemSpawnLocation.hItemDestinationRevealer:RemoveSelf() end, 35 )
+	self.hCurrentItemSpawnLocation.hItemDestinationRevealer = CreateUnitByName( "npc_treasure_revealer", self.hCurrentItemSpawnLocation.hSpawnLocation:GetAbsOrigin(), false, nil, nil, DOTA_TEAM_GOODGUYS )
 	self.hCurrentItemSpawnLocation.nItemDestinationParticles = ParticleManager:CreateParticle( "particles/econ/wards/f2p/f2p_ward/f2p_ward_true_sight_ambient.vpcf", PATTACH_ABSORIGIN, self.hCurrentItemSpawnLocation.hItemDestinationRevealer )
 	ParticleManager:SetParticleControlEnt( self.hCurrentItemSpawnLocation.nItemDestinationParticles, PATTACH_ABSORIGIN, self.hCurrentItemSpawnLocation.hItemDestinationRevealer, PATTACH_ABSORIGIN, "attach_origin", self.hCurrentItemSpawnLocation.hItemDestinationRevealer:GetAbsOrigin(), true )
 end
