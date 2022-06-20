@@ -1760,7 +1760,7 @@ g_MVP_Accolade_TypeMap = {
 	259:
 	{	// kKillEaterEventType_Mirana_KillsFromMoonlightShadow
 		title_loc_token: "#DOTA_mvp2_accolade_title_kKillEaterEventType_Mirana_KillsFromMoonlightShadow",
-		ability_name: "courier_dequeue_pickup_from_stash",
+		ability_name: "mirana_invis",
 		gradient: "red",
 		detail_loc_token: "#DOTA_mvp2_accolade_detail_kKillEaterEventType_Mirana_KillsFromMoonlightShadow",
 	},
