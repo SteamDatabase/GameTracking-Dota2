@@ -354,6 +354,9 @@ function CConquestGameMode:OnPlayerChat( event )
 		local mult = ''
 		_,_,mult = sChatMsg:find('^-pointmultiplier (.*)$')
 		self:TestPointMultiplier('pointmultiplier', mult)
+	elseif sChatMsg:find( '^-digsite') then
+		dig_site_radiant:RemoveModifierByName( "modifier_dig_site_cooldown" )
+		dig_site_dire:RemoveModifierByName( "modifier_dig_site_cooldown" )
 	-- other
 	elseif sChatMsg:find( '^-lua' ) then
 		local cmd = ''
