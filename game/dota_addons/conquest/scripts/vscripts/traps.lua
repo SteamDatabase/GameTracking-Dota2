@@ -524,6 +524,7 @@ function CConquestGameMode:EnableBoulder( index, team )
 		
 		npc.KillerToCredit = tablefirstkey( m_boulder_info[index].touchers[team] )
 		npc:SetContextThink( "SetIsFalling", function() return CConquestGameMode:SetBoulderIsFalling(index, true) end, 2.6)
+		npc:SetContextThink( "UpdateFOWViewers", function() return CConquestGameMode:BoulderUpdateFOWViewers(index, Entities:FindByName( nil, boulderName.."_model") ) end, 2.7 )
 		npc:SetContextThink( "StartEffects", function() return CConquestGameMode:BoulderEffects( boulderName, npc ) end, 3 )
 		npc:SetContextThink( "PlaySoundEffects1", function() return CConquestGameMode:PlayBoulderSounds( boulderName ) end, 7.25 )
 		npc:SetContextThink( "PlaySoundEffects2", function() return CConquestGameMode:PlayBoulderSounds( boulderName ) end, 8.35 )
@@ -536,6 +537,16 @@ function CConquestGameMode:EnableBoulder( index, team )
 		end
 	end
 	return -1
+end
+
+function CConquestGameMode:BoulderUpdateFOWViewers( index, ent )
+	if m_boulder_info[index].isBoulderFalling == true and ent ~= nil and ent:IsNull() == false then
+		local boulderLoc = ent:GetAttachmentOrigin( ent:ScriptLookupAttachment( "attach_boulder" ) )
+		AddFOWViewer(DOTA_TEAM_GOODGUYS, boulderLoc, 350, 0.25, false)
+		AddFOWViewer(DOTA_TEAM_BADGUYS, boulderLoc, 350, 0.25, false)
+		return 0.25
+	end
+	return 0
 end
 
 function CConquestGameMode:BoulderEffects( boulderName, npc )
