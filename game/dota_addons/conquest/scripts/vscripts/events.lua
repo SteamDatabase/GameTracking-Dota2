@@ -232,18 +232,47 @@ end
 -- Event: Point Captured
 ---------------------------------------------------------------------------
 function CConquestGameMode:OnPointCaptured( point, newTeam, oldTeam )
-	if newTeam == 2 then
-		local number_of_points = m_points_owned[DOTA_TEAM_GOODGUYS]
-		CConquestGameMode:BroadcastControlPointsOwned( newTeam, number_of_points )
-	elseif newTeam == 3 then
-		local number_of_points = m_points_owned[DOTA_TEAM_BADGUYS]
-		CConquestGameMode:BroadcastControlPointsOwned( newTeam, number_of_points )
+	local szMessage = nil 
+	local nNumberOfPoints = 0
+
+	if newTeam == DOTA_TEAM_GOODGUYS then
+		nNumberOfPoints = m_points_owned[DOTA_TEAM_GOODGUYS]
+		CConquestGameMode:BroadcastControlPointsOwned( newTeam, nNumberOfPoints )
+		szMessage = "#DOTA_HUD_Radiant_CaptureZone"
+		if nNumberOfPoints == 3 then 
+			szMessage = "#DOTA_HUD_Radiant_CaptureZone_NowScoring"
+		end
+	elseif newTeam == DOTA_TEAM_BADGUYS then
+		nNumberOfPoints = m_points_owned[DOTA_TEAM_BADGUYS]
+		CConquestGameMode:BroadcastControlPointsOwned( newTeam, nNumberOfPoints )
+		szMessage = "#DOTA_HUD_Dire_CaptureZone"
+		if nNumberOfPoints == 3 then 
+			szMessage = "#DOTA_HUD_Dire_CaptureZone_NowScoring"
+		end
 	end
 
-	if oldTeam == 2 then
+	if szMessage ~= nil then 
+		local gameEvent = {}
+		gameEvent["teamnumber"] = -1
+		gameEvent["int_value"] = point
+		gameEvent["message"] = szMessage
+		FireGameEvent( "dota_combat_event_message", gameEvent )
+
+		local cp_particle_name = "cp"..point.."_particle_neutral"
+		local cpParticleEnt = Entities:FindByName( nil, cp_particle_name )
+		if cpParticleEnt ~= nil then 
+			--print( "found" )
+			local hGoodGuysHero = PlayerResource:GetSelectedHeroEntity( 0 )
+			local hBadGuysHero = PlayerResource:GetSelectedHeroEntity( 5 )
+			MinimapEvent( DOTA_TEAM_GOODGUYS, hGoodGuysHero, cpParticleEnt:GetAbsOrigin().x, cpParticleEnt:GetAbsOrigin().y, DOTA_MINIMAP_EVENT_HINT_LOCATION, 3.0 )
+			MinimapEvent( DOTA_TEAM_BADGUYS, hBadGuysHero, cpParticleEnt:GetAbsOrigin().x, cpParticleEnt:GetAbsOrigin().y, DOTA_MINIMAP_EVENT_HINT_LOCATION, 3.0 )
+		end
+	end
+
+	if oldTeam == DOTA_TEAM_GOODGUYS then
 		local number_of_points = m_points_owned[DOTA_TEAM_GOODGUYS]
 		CConquestGameMode:BroadcastControlPointsOwned( oldTeam, number_of_points )
-	elseif oldTeam == 3 then
+	elseif oldTeam == DOTA_TEAM_GOODGUYS then
 		local number_of_points = m_points_owned[DOTA_TEAM_BADGUYS]
 		CConquestGameMode:BroadcastControlPointsOwned( oldTeam, number_of_points )
 	end
