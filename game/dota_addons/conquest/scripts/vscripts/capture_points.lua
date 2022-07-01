@@ -402,7 +402,8 @@ function CConquestGameMode:CalculateCaptureRate( index, cappingTeam, cappingPlay
 	end
 
 	local playerBonus = 0
-	if cappingPlayerCount > 0 then playerBonus = PLAYER_CAPTURE_BONUS[cappingPlayerCount] end
+	if cappingPlayerCount > 5 then cappingPlayerCount = 5 end
+	if cappingPlayerCount ~= nil and cappingPlayerCount > 0 and PLAYER_CAPTURE_BONUS ~= nil and PLAYER_CAPTURE_BONUS[ cappingPlayerCount ] ~= nil then playerBonus = PLAYER_CAPTURE_BONUS[cappingPlayerCount] end
 
 	local milestoneBonus = 0
 	if cappingTeam == DOTA_TEAM_GOODGUYS then

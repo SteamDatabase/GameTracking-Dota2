@@ -160,8 +160,17 @@ end
 -- Event: Item picked up
 ---------------------------------------------------------------------------
 function CConquestGameMode:OnItemPickUp( event )
+	if event.ItemEntityIndex == nil or event.HeroEntityIndex == nil then
+		return
+	end
+
 	local item = EntIndexToHScript( event.ItemEntityIndex )
 	local owner = EntIndexToHScript( event.HeroEntityIndex )
+
+	if item == nil or item:IsNull() or owner == nil or owner:IsNull() then
+		return
+	end
+
 	local playerID = owner:GetPlayerID()
 	item:SetPurchaser( owner )
 	--print("Item has been picked up")

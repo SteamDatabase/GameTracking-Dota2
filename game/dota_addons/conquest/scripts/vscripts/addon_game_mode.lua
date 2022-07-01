@@ -18,10 +18,10 @@ _G.points_fortified = false
 _G.cp_game_timer = 1201
 _G.cp_update_period = 0.25 -- update 4 times per second
 
-_G.gold_per_tick = 8
+_G.gold_per_tick = 4
 _G.xp_per_tick = 4
 
-_G.m_gold_multiplier = 4
+_G.m_gold_multiplier = 1.8
 _G.m_hero_kill_gold_portion_self = 0.9
 _G.m_hero_kill_gold_portion_others = 0.025
 _G.m_xp_multiplier = 1.0

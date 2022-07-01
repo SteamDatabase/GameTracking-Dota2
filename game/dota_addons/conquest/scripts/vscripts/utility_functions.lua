@@ -449,9 +449,6 @@ function CConquestGameMode:GrantGlobalGoldAndXP()
 		return
 	end
 
-	local bGiveTickGold = _G.giveTickGold == true
-	_G.giveTickGold = bGiveTickGold == false
-
 	local members = HeroList:GetAllHeroes()
 	local playersHit = {}
 	for _,hero in ipairs(members) do
@@ -459,9 +456,7 @@ function CConquestGameMode:GrantGlobalGoldAndXP()
 		if playersHit[memberID] == nil then
 			playersHit[memberID] = true
 			hero:AddExperience( xp_per_tick, 0, false, false )
-			if bGiveTickGold then
-				PlayerResource:ModifyGold( memberID, gold_per_tick, false, 0 ) -- unreliable
-			end
+			PlayerResource:ModifyGold( memberID, gold_per_tick, false, 0 ) -- unreliable
 		end
 	end
 end
