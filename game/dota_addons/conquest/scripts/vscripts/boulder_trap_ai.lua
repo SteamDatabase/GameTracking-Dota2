@@ -33,29 +33,29 @@ function Fire(trigger)
 	local heroHandle = EntIndexToHScript(heroIndex)
 
 	if m_boulder_info[index].isBoulderFalling == false then
-		print("Boulder "..index.." hit something but wasn't falling. Hit hero "..trigger.activator:GetName().." triggered by "..thisEntity.KillerToCredit:GetName().." at "..GameRules:GetDOTATime(false, false))
+		print("Boulder "..index.." hit something but wasn't falling. Hit "..trigger.activator:GetName().." triggered by "..thisEntity.KillerToCredit:GetName().." at "..GameRules:GetDOTATime(false, false))
 		return
 	end
-
-	--print(" Boulder hit hero "..trigger.activator:GetName().." triggered by "..thisEntity.KillerToCredit:GetName().." at "..GameRules:GetDOTATime(false, false))
-
+	
 	if heroHandle == nil or heroHandle:IsNull() then
 		return
 	end
-
+	
 	local nResult = UnitFilter( heroHandle, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_CREEP + DOTA_UNIT_TARGET_OTHER, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, DOTA_TEAM_GOODGUYS )
 	--print( "$$$$Result: " .. nResult )
 	if nResult ~= UF_SUCCESS then
 		return
 	end
-
+	
 	if heroHandle:IsPhantom() or trigger.activator:GetName() == thisEntity:GetName() or heroHandle.isDigSite == true then
 		--print(trigger.activator:GetName().." cannot be hit by boulder")
 		return
 	end
 
+	print(" Boulder hit "..trigger.activator:GetName().." triggered by "..thisEntity.KillerToCredit:GetName().." at "..GameRules:GetDOTATime(false, false))
+
 	--print("Boulder should kill a hero")
-	local boulderTrap = thisEntity:FindAbilityByName("boulder_trap")
+	--local boulderTrap = thisEntity:FindAbilityByName("boulder_trap")
 	--thisEntity:CastAbilityOnTarget(heroHandle, boulderTrap, -1 )
 	-- Using Kill() instead of ability
 	local killEffects = ParticleManager:CreateParticle( "particles/units/heroes/hero_life_stealer/life_stealer_infest_emerge_blood01.vpcf", PATTACH_POINT, heroHandle )
