@@ -242,6 +242,11 @@ function CHoldoutGameMode:InitGameMode()
 	for _, shrine in pairs( Entities:FindAllByClassname( "npc_dota_healer" ) ) do
 		print( "Setting respawn flag on shrine" )
 		shrine:SetUnitCanRespawn( true )
+		local hAbilitySanctuary = shrine:FindAbilityByName( "filler_ability" )
+		if hAbilitySanctuary then
+			print( "Found" )
+			hAbilitySanctuary:EndCooldown()
+		end
 	end
 
 	-- Hook into game events allowing reload of functions at run time
@@ -483,7 +488,10 @@ function CHoldoutGameMode:_RespawnBuildings()
 				building:RespawnUnit()
 			end
 			building:SetOrigin( vOrigin )
-
+			local hShrineAbility = building:FindAbilityByName( "filler_ability" )
+			if hShrineAbility then
+				hShrineAbility:EnCooldown() 
+			end
 			building:RemoveModifierByName( "modifier_invulnerable" )
 		end
 	end

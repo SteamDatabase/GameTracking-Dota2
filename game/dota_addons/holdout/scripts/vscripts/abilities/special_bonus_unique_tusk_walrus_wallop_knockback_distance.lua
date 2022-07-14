@@ -1,0 +1,5 @@
+special_bonus_unique_tusk_walrus_wallop_knockback_distance = class({})
+
+function special_bonus_unique_tusk_walrus_wallop_knockback_distance:IsAttributeBonus()
+	return true
+end

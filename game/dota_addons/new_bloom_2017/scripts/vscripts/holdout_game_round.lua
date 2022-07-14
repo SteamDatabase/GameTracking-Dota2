@@ -6,6 +6,30 @@ if CHoldoutGameRound == nil then
 	CHoldoutGameRound = class({})
 end
 
+_G.NEUTRAL_ITEMS_PER_ROUND = 2
+
+function CHoldoutGameRound:GetNeutralItemTier()
+	if self._nRoundNumber < 3 then 
+		return 1
+	end
+
+	if self._nRoundNumber >= 3 or self._nRoundNumber < 6 then 
+		return 2 
+	end
+
+	if self._nRoundNumber >= 6 or self._nRoundNumber < 9 then 
+		return 3 
+	end
+
+	if self._nRoundNumber >= 9 or self._nRoundNumber < 11 then 
+		return 4 
+	end
+
+	if self._nRoundNumber >= 11 then 
+		return 5 
+	end
+end
+
 
 function CHoldoutGameRound:ReadConfiguration( kv, gameMode, roundNumber )
 	self._gameMode = gameMode
@@ -19,6 +43,7 @@ function CHoldoutGameRound:ReadConfiguration( kv, gameMode, roundNumber )
 	self._nFixedXP = tonumber( kv.FixedXP or 0 )
 	self._nGoldFromBagsCollected = 0
 	self._nStarRanking = 0
+	self._nNeutralItemsLeft = NEUTRAL_ITEMS_PER_ROUND
 
 	self._bVisionApplied = false
 	self._bPrecached = false
@@ -122,6 +147,14 @@ function CHoldoutGameRound:Begin()
 	if self._nRoundNumber == 5 or self._nRoundNumber == 10 then
 		print( "play bonus round sound" )
 		EmitGlobalSound( "chicken_round_begin" )
+	end
+
+	for _, shrine in pairs( Entities:FindAllByClassname( "npc_dota_healer" ) ) do
+		local hAbilitySanctuary = shrine:FindAbilityByName( "filler_ability" )
+		if hAbilitySanctuary then
+			print( "Found" )
+			hAbilitySanctuary:EndCooldown()
+		end
 	end
 end
 
@@ -305,6 +338,21 @@ function CHoldoutGameRound:OnEntityKilled( event )
 			local hero = heroes[i]
 			if hero ~= nil and hero:IsRealHero() and hero:GetTeamNumber() == DOTA_TEAM_GOODGUYS then
 				hero:AddExperience( math.ceil( self:GetXPPerCoreUnit() / 5 ), DOTA_ModifyXP_CreepKill, false, true )
+			end
+		end
+
+		if self._nNeutralItemsLeft > 0 and self._nCoreUnitsTotal > 0 then 
+			local nPctChance = math.ceil( ( self._nCoreUnitsKilled / self._nCoreUnitsTotal ) * 100 ) 
+			if RollPercentage( nPctChance ) then 
+				local szNeutralItemName = GetPotentialNeutralItemDrop( self:GetNeutralItemTier(), DOTA_TEAM_GOODGUYS )
+				if szNeutralItemName ~= nil then 
+					local hHeroToDrop = EntIndexToHScript( event.entindex_attacker or -1 )
+					if hHeroToDrop == nil then 
+						hHeroToDrop = heroes[ i ]
+					end
+					DropNeutralItemAtPositionForHero( szNeutralItemName, killedUnit:GetAbsOrigin(), hHeroToDrop, self:GetNeutralItemTier(), true )
+					self._nNeutralItemsLeft = self._nNeutralItemsLeft - 1
+				end
 			end
 		end
 	end
