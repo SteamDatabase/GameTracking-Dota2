@@ -201,7 +201,7 @@ function CHoldoutGameRound:End( bRoundSummary )
 	end
 
 	if self._bUnlockShardAtEnd then
-		self:UnlockShard()
+		GameRules.holdOut:UnlockShard()
 	end
 
 	if bRoundSummary == true then
