@@ -875,6 +875,12 @@ function CHoldoutGameMode:_TestRoundConsoleCommand( cmdName, roundNumber, delay 
 		self._hAncient:SetHealth( self._hAncient:GetMaxHealth() )
 	end
 
+	for i=self._nRoundNumber,nRoundToTest - 1 do
+		if self._vRounds[ self._nRoundNumber ]._bUnlockShardAtEnd then
+			self:UnlockShard()
+		end
+	end
+
 	self._flPrepTimeEnd = GameRules:GetGameTime() + self._flPrepTimeBetweenRounds
 	self._nRoundNumber = nRoundToTest
 	if delay ~= nil then
@@ -1226,4 +1232,12 @@ function CHoldoutGameMode:OnPlayerChat( event )
 	elseif sChatMsg:find( '^-status$' ) then
 		self:_StatusReportConsoleCommand( nPlayerID )
 	end
+end
+
+function CHoldoutGameMode:UnlockShard()
+	GameRules:SetItemStockCount( 99, DOTA_TEAM_GOODGUYS, "item_aghanims_shard", -1 )
+	local gameEvent = {}
+	gameEvent["teamnumber"] = -1
+	gameEvent["message"] = "#DOTA_HUD_ShardAvailable"
+	FireGameEvent( "dota_combat_event_message", gameEvent )
 end

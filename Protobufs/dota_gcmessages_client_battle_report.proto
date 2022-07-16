@@ -119,10 +119,70 @@ enum CMsgBattleReport_HighlightRarity {
 	k_eHighlightRare = 2 [(schema_friendly_name) = "Rare"];
 }
 
+enum CMsgBattleReport_EOutcome {
+	k_eWin = 0;
+	k_eLoss = 1;
+}
+
+enum CMsgBattleReport_ELaneOutcome {
+	k_eUnknownLaneOutcome = -1;
+	k_eWonLane = 0;
+	k_eLostLane = 1;
+	k_eEvenLane = 2;
+}
+
 message CMsgClientToGCGetBattleReport {
 	optional uint32 account_id = 1;
 	optional uint32 timestamp = 2;
 	optional uint32 duration = 3;
+}
+
+message CMsgBattleReport_Game {
+	optional uint32 hero_id = 1;
+	optional uint32 kills = 2;
+	optional uint32 deaths = 3;
+	optional uint32 assists = 4;
+	optional int32 rank_change = 5;
+	optional uint32 last_hits = 6;
+	optional uint32 denies = 21;
+	optional uint32 gpm = 7;
+	optional uint32 xpm = 8;
+	optional .CMsgBattleReport_Role role = 9 [default = k_eUnknownRole];
+	optional .CMsgBattleReport_EOutcome outcome = 10 [default = k_eWin];
+	optional .CMsgBattleReport_ELaneOutcome lane_outcome = 11 [default = k_eUnknownLaneOutcome];
+	optional bool ranked = 12;
+	optional uint64 match_id = 13;
+	optional uint32 lane_selection_flags = 14;
+	optional uint32 predicted_position = 15;
+	optional uint32 seconds_dead = 16;
+	optional uint32 winning_team = 17;
+	optional uint32 player_slot = 28;
+	optional bool party_game = 19;
+	optional uint32 start_time = 20;
+	optional uint32 bounty_runes = 22;
+	optional uint32 water_runes = 23;
+	optional uint32 power_runes = 24;
+	optional uint32 time_enemy_t1_tower_destroyed = 25;
+	optional uint32 time_friendly_t1_tower_destroyed = 26;
+	optional uint32 enemy_roshan_kills = 27;
+	optional uint32 teleports_used = 29;
+	optional uint32 dewards = 30;
+	optional uint32 camps_stacked = 31;
+	optional uint32 support_gold = 32;
+	optional uint32 hero_damage = 33;
+	optional uint32 hero_healing = 34;
+	optional uint32 tower_damage = 35;
+	optional uint32 successful_smokes = 36;
+	optional uint32 stun_duration = 37;
+	optional uint32 duration = 38;
+	optional uint32 friendly_roshan_kills = 39;
+	optional int32 previous_rank = 40;
+	optional uint32 game_mode = 41;
+	optional uint32 lobby_type = 42;
+}
+
+message CMsgBattleReport_GameList {
+	repeated .CMsgBattleReport_Game game = 1;
 }
 
 message CMsgBattleReport {
@@ -146,63 +206,7 @@ message CMsgBattleReport {
 		optional .CMsgBattleReport_CompareContext context = 10 [default = k_eCompareContextInvalid];
 	}
 
-	message Game {
-		optional uint32 hero_id = 1;
-		optional uint32 kills = 2;
-		optional uint32 deaths = 3;
-		optional uint32 assists = 4;
-		optional int32 rank_change = 5;
-		optional uint32 last_hits = 6;
-		optional uint32 denies = 21;
-		optional uint32 gpm = 7;
-		optional uint32 xpm = 8;
-		optional .CMsgBattleReport_Role role = 9 [default = k_eUnknownRole];
-		optional .CMsgBattleReport.EOutcome outcome = 10 [default = k_eWin];
-		optional .CMsgBattleReport.ELaneOutcome lane_outcome = 11 [default = k_eUnknownLaneOutcome];
-		optional bool ranked = 12;
-		optional uint64 match_id = 13;
-		optional uint32 lane_selection_flags = 14;
-		optional uint32 predicted_position = 15;
-		optional uint32 seconds_dead = 16;
-		optional uint32 winning_team = 17;
-		optional uint32 player_slot = 28;
-		optional bool party_game = 19;
-		optional uint32 start_time = 20;
-		optional uint32 bounty_runes = 22;
-		optional uint32 water_runes = 23;
-		optional uint32 power_runes = 24;
-		optional uint32 time_enemy_t1_tower_destroyed = 25;
-		optional uint32 time_friendly_t1_tower_destroyed = 26;
-		optional uint32 enemy_roshan_kills = 27;
-		optional uint32 teleports_used = 29;
-		optional uint32 dewards = 30;
-		optional uint32 camps_stacked = 31;
-		optional uint32 support_gold = 32;
-		optional uint32 hero_damage = 33;
-		optional uint32 hero_healing = 34;
-		optional uint32 tower_damage = 35;
-		optional uint32 successful_smokes = 36;
-		optional uint32 stun_duration = 37;
-		optional uint32 duration = 38;
-		optional uint32 friendly_roshan_kills = 39;
-		optional int32 previous_rank = 40;
-		optional uint32 game_mode = 41;
-		optional uint32 lobby_type = 42;
-	}
-
-	enum EOutcome {
-		k_eWin = 0;
-		k_eLoss = 1;
-	}
-
-	enum ELaneOutcome {
-		k_eUnknownLaneOutcome = -1;
-		k_eWonLane = 0;
-		k_eLostLane = 1;
-		k_eEvenLane = 2;
-	}
-
-	repeated .CMsgBattleReport.Game games = 1;
+	repeated .CMsgBattleReport_Game games = 1;
 	optional .CMsgBattleReportHighlights highlights = 3;
 }
 
@@ -360,4 +364,25 @@ message CMsgClientToGCAcknowledgeBattleReportResponse {
 
 	optional .CMsgClientToGCAcknowledgeBattleReportResponse.EResponse response = 1 [default = k_eInternalError];
 	optional uint32 shards_awarded = 2;
+}
+
+message CMsgClientToGCGetBattleReportMatchHistory {
+	optional uint32 account_id = 1;
+	optional uint32 timestamp = 2;
+	optional uint32 duration = 3;
+}
+
+message CMsgClientToGCGetBattleReportMatchHistoryResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_ePermissionDenied = 5;
+		k_eNotSubscribedToDotaPlus = 6;
+	}
+
+	optional .CMsgClientToGCGetBattleReportMatchHistoryResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgBattleReport_GameList games = 2;
 }

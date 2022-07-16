@@ -107,7 +107,7 @@ function modifier_tusk_walrus_wallop_enemy_nb2017:UpdateHorizontalMotion( me, dt
 		if #enemies > 0 then
 			for _,enemy in pairs(enemies) do
 				if enemy ~= nil and ( not enemy:IsMagicImmune() ) and ( not enemy:IsInvulnerable() ) then
-					if hBuff:HasHitTarget( enemy ) == false then
+					if hBuff:HasHitTarget( enemy ) == false and not hBuff:HasHitMaxTargets() then
 						hBuff:AddHitTarget( enemy )
 						
 						bHitAnEnemy = true

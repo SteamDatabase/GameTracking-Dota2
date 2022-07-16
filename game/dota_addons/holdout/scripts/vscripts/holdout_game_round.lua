@@ -201,11 +201,7 @@ function CHoldoutGameRound:End( bRoundSummary )
 	end
 
 	if self._bUnlockShardAtEnd then
-		GameRules:SetItemStockCount( 99, DOTA_TEAM_GOODGUYS, "item_aghanims_shard", -1 )
-		local gameEvent = {}
-		gameEvent["teamnumber"] = -1
-		gameEvent["message"] = "#DOTA_HUD_ShardAvailable"
-		FireGameEvent( "dota_combat_event_message", gameEvent )
+		self:UnlockShard()
 	end
 
 	if bRoundSummary == true then

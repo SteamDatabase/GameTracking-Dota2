@@ -20,6 +20,7 @@ function modifier_tusk_walrus_wallop_nb2017:OnCreated( kv )
 	self.knockback_height = self:GetAbility():GetSpecialValueFor( "knockback_height" )
 	self.knockback_distance = self:GetAbility():GetSpecialValueFor( "knockback_distance" ) 
 	self.knockback_duration = self:GetAbility():GetSpecialValueFor( "knockback_duration" )
+	self.max_targets = 100
 
 	if IsServer() then
 		self.hHitTargets = {}
@@ -247,3 +248,8 @@ function modifier_tusk_walrus_wallop_nb2017:AddHitTarget( hTarget )
 	table.insert( self.hHitTargets, hTarget )
 end
 
+--------------------------------------------------------------------------------
+
+function modifier_tusk_walrus_wallop_nb2017:HasHitMaxTargets()
+	return #self.hHitTargets >= self.max_targets
+end
