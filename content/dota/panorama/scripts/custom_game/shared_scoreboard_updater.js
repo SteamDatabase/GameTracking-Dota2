@@ -264,6 +264,7 @@ function _ScoreboardUpdater_UpdateTeamPanel( scoreboardConfig, containerPanel, t
 	
 	teamPanel.SetHasClass( "no_players", (teamPlayers.length == 0) )
 	teamPanel.SetHasClass( "one_player", (teamPlayers.length == 1) )
+	teamPanel.SetHasClass( "ten_players", (teamPlayers.length == 10) )
 	
 	if ( teamsInfo.max_team_players < teamPlayers.length )
 	{
@@ -417,13 +418,15 @@ function _ScoreboardUpdater_UpdateAllTeamsAndPlayers( scoreboardConfig, teamsCon
 //		$.Msg( "POST: ", teamsAndPanels );
 
 		// reorder the panels based on the sort
-		var prevPanel = panelsByTeam[ teamsList[0].team_id ];
-		for ( var i = 0; i < teamsList.length; ++i )
+		if ( scoreboardConfig.shouldReorder ) 
 		{
-			var teamId = teamsList[i].team_id;
-			var teamPanel = panelsByTeam[ teamId ];
-			_ScoreboardUpdater_ReorderTeam( scoreboardConfig, teamsContainer, teamPanel, teamId, i, prevPanel );
-			prevPanel = teamPanel;
+			var prevPanel = panelsByTeam[teamsList[0].team_id];
+			for (var i = 0; i < teamsList.length; ++i) {
+				var teamId = teamsList[i].team_id;
+				var teamPanel = panelsByTeam[teamId];
+				_ScoreboardUpdater_ReorderTeam(scoreboardConfig, teamsContainer, teamPanel, teamId, i, prevPanel);
+				prevPanel = teamPanel;
+			}
 		}
 //		$.Msg( GameUI.CustomUIConfig().teamsPrevPlace );
 	}
@@ -441,6 +444,10 @@ function ScoreboardUpdater_InitializeScoreboard( scoreboardConfig, scoreboardPan
 	{
 		// default to true
 		scoreboardConfig.shouldSort = true;
+	}
+	if (typeof (scoreboardConfig.shouldReorder) === 'undefined') {
+		// default to true
+		scoreboardConfig.shouldReorder = true;
 	}
 	_ScoreboardUpdater_UpdateAllTeamsAndPlayers( scoreboardConfig, scoreboardPanel );
 	return { "scoreboardConfig": scoreboardConfig, "scoreboardPanel":scoreboardPanel }
