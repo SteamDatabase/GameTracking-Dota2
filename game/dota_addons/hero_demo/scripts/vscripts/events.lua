@@ -17,7 +17,7 @@ function CHeroDemo:OnGameRulesStateChange()
 	elseif nNewState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		--print( "OnGameRulesStateChange: Game In Progress" )
 		local sLoadScenario = Convars:GetStr( "dota_sv_load_demo_mode_scenario" )
-		if #sLoadScenario then
+		if sLoadScenario ~= nil and #sLoadScenario then
 			--print( "loading demo mode scenario: " .. sLoadScenario )
 			SendToServerConsole( "dota_load_demo_mode_scenario " .. sLoadScenario )
 		end
@@ -390,7 +390,7 @@ function CHeroDemo:OnMaxLevelUpHero( eventSourceIndex, data )
 		--print( 'OnMaxLevelUpHero! - found hero with ent index = ' .. nHeroEntIndex )
 
 		if hHero.AddExperience then
-			hHero:AddExperience( 59900, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
+			hHero:AddExperience( 64400, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
 
 			for i = 0, DOTA_MAX_ABILITIES - 1 do
 				local hAbility = hHero:GetAbilityByIndex( i )
