@@ -5,28 +5,6 @@
 //   the page is closing it automatically stops them.
 // ----------------------------------------------------------------------------
 var seq;
-var g_trackedSoundEvents = [];
-
-function PlayAndTrackSoundAction( soundName )
-{
-	this.soundName = soundName;
-}
-PlayAndTrackSoundAction.prototype = new BaseAction();
-
-PlayAndTrackSoundAction.prototype.update = function ()
-{
-	g_trackedSoundEvents.push( PlayUISoundScript( this.soundName ) );
-	return false;
-}
-var StopAllTrackedSounds = function()
-{
-	for ( var i = 0; i < g_trackedSoundEvents.length; ++i )
-	{
-		StopUISoundScript( g_trackedSoundEvents[ i ] );
-	}
-
-	g_trackedSoundEvents = [];
-}
 
 //
 //
@@ -226,7 +204,8 @@ var RunPageAnimation = function ()
 var EndPageAnimation = function()
 {
     seq.finish();
-	StopAllTrackedSounds();
+	
+    PlayAndTrackSoundAction.StopAllTrackedSounds();
 
     //$( '#ItemName' ).RemoveClass( 'Initialize' );
 	//$( '#InformationBodyBackground' ).RemoveClass( 'Initialize' );

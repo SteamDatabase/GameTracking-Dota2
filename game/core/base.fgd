@@ -2172,6 +2172,8 @@
 [
 	radius(integer) : "Radius" : 128 : "If set to -1, then the player can hear the soundscape as long as he can see it (regardless of distance to it)."
 	soundscape(string) : "Soundscape" : "Nothing" : "The name of the soundscape to use. Corresponds to an entry in the soundscapes*.txt file in the scripts directory."
+	enablesoundevent(boolean) : "Override soundscape with a specific sound event start." : 0
+	soundevent(sound) : "Sound Event" : "" : "The name of the sound event to start from the soundscape entity."
 
 	position0(target_destination) : "Sound Position 0" : "" : "A sound position that will be referenced inside the soundscape text file. Usually used to position a set of sounds within the world."
 	position1(target_destination) : "Sound Position 1" : "" : "A sound position that will be referenced inside the soundscape text file. Usually used to position a set of sounds within the world."
@@ -2665,6 +2667,12 @@
 	snapshot_file(resource:vsnap) { enabled={ variable="snapshot_mesh" value="0" } } : "Particle Snapshot File" : "" : "Name of .VSNAP (Particle Snapshot File) to be loaded and used by this particle system (e.g. 'smoke_snapshot1')"
 	snapshot_mesh(node_id) : "Particle Snapshot Node" : "" : "Id of a node in the map to be used to generate a particle snapshot, if specified Particle Snapshot File is ignored."
 
+	data_cp(integer) : "Data Control Point (-1 unused)" : -1 : "What controlpoint to set data on.  -1 means this is not used."
+	data_cp_value(vector) : "Data Control Point Value" : "0 0 0" : "Data Control Point Value to set."
+
+	tint_cp(integer) : "Tint Control Point (-1 unused)" : -1 : "What controlpoint to set color on.  -1 means this is not used."
+	tint_cp_color(color255) : "Tint CP Color" : "255 255 255" : "Color for the specified Control Point"
+
 	cpoint0(target_destination) [ group="Control Points" ] : "Control Point 0" : : "If set, control point 0 of the effect will be at this entity's location. (Otherwise it is at the info_particle_system origin)"
 	cpoint1(target_destination) [ group="Control Points" ]  : "Control Point 1" : : "If set, control point 1 of the effect will be at this entity's location."
 	cpoint2(target_destination) [ group="Control Points" ]  : "Control Point 2" : : "If set, control point 2 of the effect will be at this entity's location. If control point 1 is not set, this will be ignored."
@@ -2928,13 +2936,18 @@
 	]
 
 	startposition(float) : "Start Position" : 0 : "Position of brush when spawned. The range is a value between 0.0 and 1.0, where 0 is the starting position and 1 is the starting position + (move direction * move distance)."	
+	authoredposition(choices) : "Authored position" : 0 : "The entity may be authored in one of three positions for convenience." =
+	[
+		0 : "Start position (position = 'Start Position' key)"
+		1 : "Open position (position = 1)"
+		2 : "Closed position (position = 0)"
+	]
 	speed(integer) : "Speed" : 100 : "The speed that the brush moves, in inches per second."
 	movedistance(float) : "Move Distance" : 100 : "The distance from the starting point that the brush should move, in inches."
 	blockdamage(float) : "Block Damage" : 0 : "The amount of damage to do to any entity that blocks the brushes, per frame."
 	startsound(sound) : "Sound played when the brush starts moving."
 	stopsound(sound) : "Sound played when the brush stops moving."
 	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "0" : "Create a navigation obstacle to assist NPC pathfinding"
-
 	// Inputs
 	input Open(void) : "Move the brush to the end position (starting position + (move direction * move distance))."
 	input Close(void) : "Move the brush to the starting position."
@@ -3142,7 +3155,7 @@
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "Specifies the direction of motion to move when the button is used."
 	speed(integer) : "Speed" : 5 : "The speed that the button moves, in inches per second."
 	glow(target_destination) : "Glow Entity" : : "The name of an entity that will get the +use glow for this button."
-	wait(integer) : "Delay Before Reset (-1 stay)" : 3 : "Amount of time, in seconds, after the button has been pressed before it returns to the starting position. Once it has returned, it can be used again. If the value is set to -1, the button never returns."
+	wait(float) : "Delay Before Reset (-1 stay)" : 3 : "Amount of time, in seconds, after the button has been pressed before it returns to the starting position. Once it has returned, it can be used again. If the value is set to -1, the button never returns."
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 ]
 
@@ -3334,6 +3347,8 @@
 	"A brush entity for use as a player-useable door."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the door will move, when it opens."
+
+	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "1" : "Create a navigation obstacle to assist NPC pathfinding"
 
 	filtername(filterclass) : "Block Filter Name" : : "Filter to use to determine entities that block the door. ( Half-Life: Source port only )"
 ]
@@ -5057,14 +5072,21 @@
 ]
 
 
-@PointClass base(TwoObjectPhysics) iconsprite("editor/phys_ballsocket.vmat") tags( Physics ) = phys_ballsocket : 
-	"A constraint that keeps the position of two objects fixed, relative to the constraint's origin. It does not affect rotation."
+@PointClass editormodel("models/editor/axis_helper") base(TwoObjectPhysics) iconsprite("editor/phys_ballsocket.vmat") tags( Physics ) = phys_ballsocket : 
+	"A constraint that keeps the position of two objects fixed, relative to the constraint's origin. You can optionally specify limits for the relative twist and swing rotation."
 [
 	spawnflags(flags) =
 	[
 	]
 
 	friction(float) : "Friction" : "0" : "Resistance/friction in the constraint"
+
+	enable_swing_limit(boolean) : "Enable Swing Limit" : 0 : "Limit relative rotation away from the constraint's Z axis"
+	swing_limit(float) : "Swing Limit" : "0" : "Maximum swing angle in degrees, if the swing limit is enabled"
+
+	enable_twist_limit(boolean) : "Enable Twist Limit" : 0 : "Limit relative rotation about the Z axis"
+	min_twist_angle(float) : "Min Twist Angle" : "0" : "Minimum relative twist angle in degrees, if the twist limit is enabled"
+	max_twist_angle(float) : "Max Twist Angle" : "0" : "Maximum relative twist angle in degrees, if the twist limit is enabled"
 ]
 
 
@@ -5483,7 +5505,6 @@
 	updatechildren(boolean) : "Update children" : 0 : "Update touches for any children that are attached to attachment points as this prop animates. "+
 		"This allows SetParentAttached triggers or func_brushes to touch properly."
 
-
 	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "0" : "Create a navigation obstacle to assist NPC pathfinding"
 
 	forcenpcexclude(boolean) : "Force NPC Exclude" : "0" : "If set, NPC movement will ignore this prop"
@@ -5539,6 +5560,7 @@
 	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"	
 	precomputelightprobes(boolean) [ group="Render Properties" ] : "Precompute Light Probes" : 1 : "Pre-compute environment map and light probe volume used on this object."
 	bakelightdoublesided(boolean) [ group = "Render Properties" ] : "Bake Lighting As If Double-Sided" : 0 : "Bake lighting as if this were double-sided geometry. Useful on geometry with pre-culled backfaces whose neighbors have lighting errors caused by saw-too-many-backfaces sample invalidation."
+	emissive(boolean) [ group = "Render Properties" ] : "Emissive Lighting" : 1 : "Allow this prop to emit lighting for raytraced lighting"
 	materialoverride(material) [ group="Render Properties" ] : "Override Material" : ""
 	disableinlowquality(boolean) [ group="Render Properties" ] : "Disable in low quality mode" : 0 : "Do not render this prop when using the lowest quality video settings, it is an non-essential detail."
 	lightmapscalebias(choices) [ group="Render Properties" ] : "Lightmap Scale Bias" : 0 : "Use to scale the resolution of the lightmap for this object." =
@@ -5596,7 +5618,6 @@
 		4 : "Debris - Don't collide with the player or other debris" : 0
 		8 : "Motion Disabled" : 0
 		64 : "Enable motion on Physcannon grab (This also applies to the HLVR hand interaction)" : 0
-		128 : "Not affected by rotor wash" : 0
 		256 : "Generate output on +USE " : 1
 		512 : "Prevent pickup" : 0
 		1024: "Prevent motion enable on player bump" : 0
@@ -6435,7 +6456,7 @@
 @SolidClass base(Trigger) = trigger_multiple :
 	"A trigger volume that can be triggered multiple times."
 [
-	wait(integer) : "Delay Before Reset" : 1 : "Amount of time, in seconds, after the trigger_multiple has triggered before it can be triggered again. If set to -1, it will never trigger again (in which case you should just use a trigger_once)."
+	wait(float) : "Delay Before Reset" : 1 : "Amount of time, in seconds, after the trigger_multiple has triggered before it can be triggered again. If set to -1, it will never trigger again (in which case you should just use a trigger_once)."
 	 
 	// Inputs
 	input TouchTest(void) : "Tests if the trigger is being touched and fires an output based on whether the value is true or false." 
@@ -6798,6 +6819,22 @@
 	input SpotlightTexture(string)		: "Set the spotlight texture"
 	input EnableShadows(bool)		: "Set the if shadows are enabled"
 	input LightColor(color255)		: "Change the light color/brightness"
+]
+
+
+@PointClass base(Targetname, Parentname) overlay() editormodel("models/editor/axis_helper_thick.vmdl") = env_decal :
+	"Simple projected decal entity"
+[
+	material(material) : "Decal Material" : ""
+
+	width(float) : "Decal Width" : "256.0"
+	height(float) : "Decal Height" : "256.0"
+	depth(float) : "Decal Depth" : "256.0"
+
+	RenderOrder(integer)		: "Render Order" : "0"
+	projectonworld(boolean)		: "Project on World" : "1"
+	projectoncharacters(boolean)	: "Project on Characters" : "1"
+	projectonwater(boolean)		: "Project on Water" : "1"
 ]
 
 
@@ -7698,16 +7735,14 @@
 ]
 
 @NavLinkClass
+	base(Targetname, EnableDisable)
+	tags( NavMarkup )
 	editormodel("models/props/navlink/nav_link_hammer_model.vmdl")
 	metadata
 	{
 	}
  = ai_nav_link_area : "An entity that links navmesh sections togther with animation transitions between them"
 [
-	nav_link_movement( vdata_choice:scripts/navlinks.vdata ) : "NavLink Movement" : "" : "The Type of movement needed to traverse this navlink."
-	nav_link_movement_reverse( vdata_choice:scripts/navlinks.vdata ) : "NavLink Movement (Reverse)" : "" : "The Type of movement needed to traverse this navlink in reverse."
-	use_link_entity_orientation(boolean) : "Use entity orientation" : "0" : "Get link orientation from this entity transform; otherwise orient toward target"
-
 	output OnNavLinkStart(void) : "An NPC started using this nav link"
 	output OnNavLinkFinish(void) : "An NPC finished using this nav link"
 ]

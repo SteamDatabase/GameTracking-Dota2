@@ -47,7 +47,7 @@ function modifier_boss_arc_warden_shard_counter:OnCreated( kv )
 	self.nCurrentStacks = 0
 
 	self.nParticleFX = -1
-	self.fInterval = 0.01
+	self.fInterval = 0.033
 	self.flNextFXTime = GameRules:GetGameTime()
 	self:StartIntervalThink( self.fInterval )
 

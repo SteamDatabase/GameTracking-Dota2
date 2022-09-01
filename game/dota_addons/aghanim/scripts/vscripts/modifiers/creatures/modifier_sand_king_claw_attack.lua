@@ -29,7 +29,7 @@ end
 
 function modifier_sand_king_claw_attack:OnIntervalThink()
 	if IsServer() then
-		self:StartIntervalThink( 0.01 )
+		self:StartIntervalThink( 0.033 )
 		local vForward = self:GetParent():GetForwardVector()
 		self:GetParent():SetOrigin( self:GetParent():GetOrigin() + vForward * self.forward_movement ) 
 

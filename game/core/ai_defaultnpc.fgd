@@ -44,7 +44,7 @@
 	input DisableChoreoPhysProxy(void) : "Disable the phys proxy."
 	input DisableRandomLookAts( boolean ) : "Disables the AI's random lookAts."
 	input EnableRandomLookAts( boolean ) : "Enables the AI's random lookAts."
-	input ForceLookAtTarget( void ): "Set named actor to be the look at target"
+	input ForceLookAtTarget( string ): "Set named actor to be the look at target"
 	input ClearForcedLookAtTarget( void ): "Clear the look at target set by ForceLookAtTarget"
 	input LookAtIgnoreHands( void ) : "NPC does not look at the player hands"
 	input LookAtUseHands( void ) : "NPC will look at the player hands"
@@ -52,6 +52,8 @@
 	input EnableAbility( string ) : "Enables an ability on the NPC"
 	input DisableAbility( string ) : "Disables an ability on the NPC"
 	input RemoveAbility( string ) : "Removes an ability to the NPC"
+	input SetForceWalkRun(integer) : "Force this NPC to walk or run. Parameter: 0 - Return to AI, 1 - Force Walk, 2 - Force Run."
+	input SetForceAim(integer) : "Force this NPC to aim or not aim. Parameter: 0 - Return to AI, 1 - Force Aiming, 2 - Force Not Aiming. Note that an NPC forced to Not Aim may be non-functional in combat."
 ]
 
 @BaseClass base(DefaultNPC) = TalkNPC
@@ -304,11 +306,6 @@
 		0 : "Enqueue"
 		1 : "Interrupt"
 	]
- 	m_nGroundIKPreference(choices) : "Ground IK Preference" : 0 : "If this NPC has ground IK; whether we disable it for the playthrough of the sequence or not." = 
-	[
-		0 : "No change"
-		1 : "Disable for this sequence"
-	] 
 
 	m_flRadius(integer) : "Search Radius (0=everywhere)" : 0 : "Radius to search within for an NPC to use. 0 searches everywhere."
 	m_flRepeat(integer) : "Repeat Rate ms" : 0
@@ -500,12 +497,6 @@
 		2 : "Nothing"
 	]
 
-	movementtype(choices) : "Movement Type" : 0 : "Set movement type" =
-	[
-		0 : "Walk"
-		1 : "Run"
-	]	
-	
 	// Inputs
 	input StartMoveTo(void) : "Starts all target NPC(s) moving to the target destination."
 	input StopMoveTo(void) : "Stops all target NPCs that are performing this move to."
@@ -520,8 +511,10 @@
 	"Forces an NPC to perform an ability at a specified target."
 [
 	m_iszNPC(target_destination) : "Target NPC(s)" : "" : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to perform the ability at the Ability Target."
-	m_iszAbilityName( vdata_choice:scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Ability Subclass to Perform" : "" : "Subclass of the ability that target NPC(s) should perform against the Ability Target."
+	m_iszAbilityName(npc_ability_name) : "Ability Subclass to Perform" : "" : "Subclass of the ability that target NPC(s) should perform against the Ability Target."
 	m_iszTarget(target_destination) : "Ability Target" : "" : "The entity that marks the target of the ability."
+	m_bAddIfMissing(boolean) : "Add Ability if Missing?" : "No" : "If yes, we'll add the ability to the NPC when trying to execute it. "
+
 	m_nAbilityTargetBodyLoc(choices) : "Target Body Location" : 3 : "The body location on the Ability Target entity that the ability should target." =
 	[
 		0 : "Eyes"
@@ -555,6 +548,8 @@
 		0 : "No"
 		1 : "Yes"
 	]
+
+	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
 
 	// Inputs
 	input PerformAbility(void) : "Tells all target NPC(s) to perform the ability."

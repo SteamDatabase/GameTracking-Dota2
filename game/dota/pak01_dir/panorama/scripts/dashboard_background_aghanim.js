@@ -1,4 +1,6 @@
 //@ts-check
+/// <reference path="../../../core/panorama/scripts/panorama.d.ts" />
+/// <reference path="dota.d.ts" />
 
 /**
  * @typedef {object} CDOTA_DB_Background_BP_Fall2021_ObjectTemplate

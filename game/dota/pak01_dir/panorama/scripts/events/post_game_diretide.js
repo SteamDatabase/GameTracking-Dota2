@@ -18,12 +18,12 @@ function UpdateStackClasses( heroPanel, nStackSize )
 	}
 	else if ( nStackSize > 0 )
 	{
-		stackPanel.SwitchClass( 'CandyStack','CandyStack02' );
+		stackPanel.SwitchClass( 'CandyStack', 'CandyStack02' );
 	}
 	else
 	{
 		stackPanel.SwitchClass( 'CandyStack', 'CandyStack01' );
-	}			
+	}
 }
 
 function UpdateBucketClasses( heroPanel, nAmount )
@@ -35,19 +35,19 @@ function UpdateBucketClasses( heroPanel, nAmount )
 	}
 	else if ( nAmount > 2000 )
 	{
-		bucketPanel.AddClass( 'HeroBucket04' );				
+		bucketPanel.AddClass( 'HeroBucket04' );
 	}
 	else if ( nAmount > 1000 )
 	{
-		bucketPanel.AddClass( 'HeroBucket03' );				
+		bucketPanel.AddClass( 'HeroBucket03' );
 	}
 	else if ( nAmount > 500 )
 	{
-		bucketPanel.AddClass( 'HeroBucket02' );				
+		bucketPanel.AddClass( 'HeroBucket02' );
 	}
 	else
 	{
-		bucketPanel.AddClass( 'HeroBucket01' );				
+		bucketPanel.AddClass( 'HeroBucket01' );
 	}
 }
 
@@ -58,11 +58,12 @@ function CreatePopuplateHeroScenesAction( data )
 
 	var vParallelContainer = new RunParallelActions();
 	data.diretide_rewards_progress.match_players.forEach(
-		function( playerData, idx ) {
+		function( playerData, idx )
+		{
 
 			var heroGroup = rootPanel.FindChildInLayoutFile( 'DiretideHeroGroup' );
 			var teamName = idx < 5 ? 'Radiant' : 'Dire';
-			var heroPanel = $.CreatePanel( 'Panel', heroGroup, 'DiretideHero_slot' + idx );		
+			var heroPanel = $.CreatePanel( 'Panel', heroGroup, 'DiretideHero_slot' + idx );
 			heroPanel.BLoadLayoutSnippet( 'DiretideHeroEntry' );
 			heroPanel.AddClass( teamName );
 			rootPanel.heroPanels.push( heroPanel );
@@ -73,14 +74,14 @@ function CreatePopuplateHeroScenesAction( data )
 			heroPanel.nEventPoints = ( playerData.event_points % 100 ) | 0;
 			heroPanel.nTotalEventPoints = playerData.event_points;
 			heroPanel.SetDialogVariableInt( 'event_points', heroPanel.nEventPoints );
-			
+
 			if ( data.player_slot === playerData.player_slot )
 			{
 				heroPanel.AddClass( 'LocalPlayer' );
 			}
 
 
-			var nStackSize = ( playerData.event_points % 100 ) | 0;			
+			var nStackSize = ( playerData.event_points % 100 ) | 0;
 			UpdateStackClasses( heroPanel, nStackSize );
 			UpdateBucketClasses( heroPanel, heroPanel.nTotalEventPoints );
 
@@ -89,18 +90,20 @@ function CreatePopuplateHeroScenesAction( data )
 
 			var vSequence = new RunSequentialActions();
 			vParallelContainer.actions.push( vSequence );
-			vSequence.actions.push( new WaitForConditionAction( function() {
+			vSequence.actions.push( new WaitForConditionAction( function()
+			{
 				if ( scenePanel.BAscendantHasClass( 'HasMetaData' ) && scenePanel.BAscendantHasClass( 'MatchDataLoaded' ) )
 				{
 					return true;
 				}
 				return false;
-			}));
+			} ) );
 			vSequence.actions.push( new WaitForClassAction( scenePanel, 'SceneLoaded' ) );
 
 			var playerSlot = playerData.player_slot;
 			var matchID = data.diretide_rewards_progress.match_id;
-			vSequence.actions.push( new RunFunctionAction( function () {
+			vSequence.actions.push( new RunFunctionAction( function()
+			{
 				scenePanel.SpawnHeroInScenePanelByPlayerSlotWithFullBodyView( matchID, playerSlot );
 			} ) );
 		}
@@ -109,41 +112,46 @@ function CreatePopuplateHeroScenesAction( data )
 }
 
 // Action to animate an integer dialog variable over some duration of seconds
-function AnimateCandyCountAction( panel, dialogVariable, start, end, seconds )
+class AnimateCandyCountAction extends BaseAction
 {
-	this.panel = panel;
-	this.dialogVariable = dialogVariable;
-	this.startValue = start;
-	this.endValue = end;
-	this.seconds = seconds;
-}
+	constructor( panel, dialogVariable, start, end, seconds )
+	{
+		super();
+		this.panel = panel;
+		this.dialogVariable = dialogVariable;
+		this.startValue = start;
+		this.endValue = end;
+		this.seconds = seconds;
+	}
 
-AnimateCandyCountAction.prototype = new BaseAction();
-AnimateCandyCountAction.prototype.start = function ()
-{
-	this.startTimestamp = Game.Time();
-	this.endTimestamp = this.startTimestamp + this.seconds;
-}
-AnimateCandyCountAction.prototype.update = function ()
-{
-	var now = Game.Time();
-	if ( now >= this.endTimestamp )
-		return false;
+	start()
+	{
+		this.startTimestamp = Game.Time();
+		this.endTimestamp = this.startTimestamp + this.seconds;
+	}
 
-	var ratio = ( now - this.startTimestamp ) / ( this.endTimestamp - this.startTimestamp );
-	var amount = Math.floor(this.startValue + ( this.endValue - this.startValue ) * ratio );
+	update()
+	{
+		var now = Game.Time();
+		if ( now >= this.endTimestamp )
+			return false;
 
-	this.panel.SetDialogVariableInt( this.dialogVariable, amount );
-	UpdateStackClasses( this.panel, amount );
-	UpdateBucketClasses( this.panel, this.panel.nTotalEventPoints + amount )
+		var ratio = ( now - this.startTimestamp ) / ( this.endTimestamp - this.startTimestamp );
+		var amount = Math.floor( this.startValue + ( this.endValue - this.startValue ) * ratio );
 
-	return true;
-}
-AnimateCandyCountAction.prototype.finish = function ()
-{
-	this.panel.SetDialogVariableInt( this.dialogVariable, this.endValue );
-	this.panel.SetHasClass( 'MaxPointsHit', this.endValue >= 100 );
-	this.panel.nTotalEventPoints = this.panel.nTotalEventPoints + ( this.endValue - this.startValue )
+		this.panel.SetDialogVariableInt( this.dialogVariable, amount );
+		UpdateStackClasses( this.panel, amount );
+		UpdateBucketClasses( this.panel, this.panel.nTotalEventPoints + amount );
+
+		return true;
+	};
+
+	finish()
+	{
+		this.panel.SetDialogVariableInt( this.dialogVariable, this.endValue );
+		this.panel.SetHasClass( 'MaxPointsHit', this.endValue >= 100 );
+		this.panel.nTotalEventPoints = this.panel.nTotalEventPoints + ( this.endValue - this.startValue );
+	};
 }
 
 
@@ -158,33 +166,33 @@ function CreateAwardAction( awardData, rootPanel )
 		if ( nIndex === -1 )
 			return;
 
-		vSequence.actions.push(new AddClassAction( heroPanel, 'HasKicker'));
+		vSequence.actions.push( new AddClassAction( heroPanel, 'HasKicker' ) );
 
 		var fxPanel = heroPanel.FindChildInLayoutFile( 'BurstFX' );
-		vSequence.actions.push(new AddClassAction( fxPanel, 'ShowExplosion'));
-    	vSequence.actions.push(new RunFunctionAction(function ()
-    	{
-			fxPanel.FireEntityInput('burst_fx', 'stop', 0);
-			fxPanel.FireEntityInput('burst_fx', 'start', 0);
-			fxPanel.FireEntityInput('base_fx', 'stop', 0);
-			fxPanel.FireEntityInput('base_fx', 'start', 0);
-		}));		
+		vSequence.actions.push( new AddClassAction( fxPanel, 'ShowExplosion' ) );
+		vSequence.actions.push( new RunFunctionAction( function()
+		{
+			fxPanel.FireEntityInput( 'burst_fx', 'stop', 0 );
+			fxPanel.FireEntityInput( 'burst_fx', 'start', 0 );
+			fxPanel.FireEntityInput( 'base_fx', 'stop', 0 );
+			fxPanel.FireEntityInput( 'base_fx', 'start', 0 );
+		} ) );
 
 		var newPanel = $.CreatePanel( 'Panel', heroPanel, '' );
 		newPanel.BLoadLayoutSnippet( 'DiretideAwardKicker' );
 		newPanel.SetDialogVariableLocString( 'award_name', awardData.award_name );
-		newPanel.SetDialogVariableInt( 'award_amount', awardData.award_amounts[ nIndex ] );
+		newPanel.SetDialogVariableInt( 'award_amount', awardData.award_amounts[nIndex] );
 		newPanel.SwitchClass( 'step', 'Start' );
 		newPanel.nStartPointsValue = heroPanel.nEventPoints;
-		newPanel.nEndPointsValue = heroPanel.nEventPoints + awardData.award_amounts[ nIndex ] ;
+		newPanel.nEndPointsValue = heroPanel.nEventPoints + awardData.award_amounts[nIndex];
 		heroPanel.nEventPoints = newPanel.nEndPointsValue;
 		vKickerPanels.push( newPanel );
-	});
+	} );
 
 	vKickerPanels.forEach( function( kicker )
 	{
 		vSequence.actions.push( new SwitchClassAction( kicker, 'step', 'Step1' ) );
-	});
+	} );
 
 	vSequence.actions.push( new PlaySoundAction( "Diretide.Postgame.Award" ) );
 
@@ -193,7 +201,7 @@ function CreateAwardAction( awardData, rootPanel )
 	{
 		vSequence.actions.push( new SwitchClassAction( kicker, 'step', 'Step2' ) );
 		vParallelAction.actions.push( new AnimateCandyCountAction( kicker.GetParent(), 'event_points', kicker.nStartPointsValue, kicker.nEndPointsValue, 0.4 ) );
-	});
+	} );
 
 	vParallelAction.actions.push( new WaitAction( 0.45 ) );
 	vSequence.actions.push( vParallelAction );
@@ -202,16 +210,16 @@ function CreateAwardAction( awardData, rootPanel )
 	{
 		var nIndex = awardData.award_player_slots.indexOf( heroPanel.playerSlot );
 		if ( nIndex === -1 )
-			return;	
-	});
-	
+			return;
+	} );
+
 	vSequence.actions.push( new WaitAction( 0.75 ) );
 
 	vKickerPanels.forEach( function( kicker )
 	{
-		vSequence.actions.push( new RemoveClassAction( kicker.GetParent(), 'HasKicker') );
+		vSequence.actions.push( new RemoveClassAction( kicker.GetParent(), 'HasKicker' ) );
 		vSequence.actions.push( new SwitchClassAction( kicker, 'step', 'End' ) );
-	});
+	} );
 
 	vSequence.actions.push( new WaitAction( 1.0 ) );
 
@@ -220,7 +228,7 @@ function CreateAwardAction( awardData, rootPanel )
 
 function GetItemCategory( itemData )
 {
-	switch( itemData.item_id )
+	switch ( itemData.item_id )
 	{
 		case 13562: //crate
 		case 17626: //calabaxa
@@ -238,16 +246,16 @@ function GetItemCategory( itemData )
 		case 13812:	//Treasure	
 			return "Tier2Reward";
 		default:
-		return "Tier1Reward";
+			return "Tier1Reward";
 	}
-	
+
 	return "";
 }
 
 
 function GetItemTierNumber( itemData )
 {
-	switch( itemData.item_id )
+	switch ( itemData.item_id )
 	{
 		case 13562: //crate
 		case 17626: //calabaxa
@@ -265,9 +273,9 @@ function GetItemTierNumber( itemData )
 		case 13812:	//Treasure	
 			return "2";
 		default:
-		return "1";
+			return "1";
 	}
-	
+
 	return "";
 }
 
@@ -284,17 +292,17 @@ function CreateItemRewardAction( itemData, rootPanel )
 		if ( itemData.item_player_slot !== heroPanel.playerSlot )
 			return;
 
-		vSequence.actions.push(new AddClassAction( heroPanel, 'HasItemKicker'));
+		vSequence.actions.push( new AddClassAction( heroPanel, 'HasItemKicker' ) );
 
 		var fxPanel = heroPanel.FindChildInLayoutFile( 'BurstFX' );
-		vSequence.actions.push(new AddClassAction( fxPanel, 'ShowExplosion'));
-    	vSequence.actions.push(new RunFunctionAction(function ()
-    	{
+		vSequence.actions.push( new AddClassAction( fxPanel, 'ShowExplosion' ) );
+		vSequence.actions.push( new RunFunctionAction( function()
+		{
 
-			fxPanel.FireEntityInput('item_base_tier' + strItemTierNumber, 'stop', 0);
-			fxPanel.FireEntityInput('item_base_tier' + strItemTierNumber, 'start', 0);
+			fxPanel.FireEntityInput( 'item_base_tier' + strItemTierNumber, 'stop', 0 );
+			fxPanel.FireEntityInput( 'item_base_tier' + strItemTierNumber, 'start', 0 );
 			/*$.DispatchEvent('PlaySoundEffect', 'ui_explosion');*/
-		}));
+		} ) );
 
 
 		var newPanel = $.CreatePanel( 'Panel', heroPanel, '' );
@@ -311,11 +319,11 @@ function CreateItemRewardAction( itemData, rootPanel )
 		newPanel.SwitchClass( 'step', 'Start' );
 		heroPanel.SwitchClass( 'ItemCategory', strItemCategory );
 		vKickerPanels.push( newPanel );
-	});
+	} );
 	vKickerPanels.forEach( function( kicker )
 	{
 		vSequence.actions.push( new SwitchClassAction( kicker, 'step', 'Step1' ) );
-	});
+	} );
 
 	//vSequence.actions.push( new PlaySoundAction( "Diretide.Postgame.Award" ) );
 	vSequence.actions.push( new PlaySoundAction( "Diretide.Postgame.Award." + strItemCategory ) );
@@ -328,29 +336,29 @@ function CreateItemRewardAction( itemData, rootPanel )
 		var newPoints = heroPanel.nEventPoints; // Save off for closure in the RunFunctionAction...
 		vSequence.actions.push( new RunFunctionAction( UpdateStackClasses, heroPanel, newPoints ) );
 		vSequence.actions.push( new SetDialogVariableIntAction( heroPanel, 'event_points', heroPanel.nEventPoints ) );
-	});
+	} );
 	vSequence.actions.push( new WaitAction( 0.45 ) );
 	rootPanel.heroPanels.forEach( function( heroPanel )
 	{
 		if ( itemData.item_player_slot !== heroPanel.playerSlot )
 			return;
 		var fxPanel = heroPanel.FindChildInLayoutFile( 'BurstFX' );
-		vSequence.actions.push(new RunFunctionAction(function ()
+		vSequence.actions.push( new RunFunctionAction( function()
 		{
-			fxPanel.FireEntityInput( 'item_fx' + strItemTierNumber, 'stop', 0);
-			fxPanel.FireEntityInput( 'item_fx' + strItemTierNumber, 'start', 0);
-		}));
+			fxPanel.FireEntityInput( 'item_fx' + strItemTierNumber, 'stop', 0 );
+			fxPanel.FireEntityInput( 'item_fx' + strItemTierNumber, 'start', 0 );
+		} ) );
 
-	});
-	
+	} );
+
 	vSequence.actions.push( new WaitAction( 1.0 ) );
 
 	vKickerPanels.forEach( function( kicker )
 	{
-		vSequence.actions.push( new RemoveClassAction( kicker.GetParent(), 'HasItemKicker'));
+		vSequence.actions.push( new RemoveClassAction( kicker.GetParent(), 'HasItemKicker' ) );
 		vSequence.actions.push( new SwitchClassAction( kicker, 'step', 'End' ) );
-	});
-	
+	} );
+
 	vSequence.actions.push( new WaitAction( 1.0 ) );
 
 	return vSequence;
@@ -360,7 +368,7 @@ $.GetContextPanel().CreatePostgameAction = function( data )
 {
 	var rootPanel = $.GetContextPanel();
 	var rootAction = new RunSequentialActions();
-	
+
 	rootAction.actions.push( new PlaySoundAction( "Diretide.Postgame.Underscore" ) );
 	rootAction.actions.push( CreatePopuplateHeroScenesAction( data ) );
 	rootAction.actions.push( new AddClassAction( rootPanel, 'FadeIn' ) );
@@ -432,9 +440,9 @@ $.GetContextPanel().CreatePostgameAction = function( data )
 	);
 	rootAction.actions.push( new RemoveClassAction( rootPanel, 'ItemGrantInProgress' ) );
 	rootAction.actions.push( new AddClassAction( rootPanel, 'ItemGrantComplete' ) );
-	
+
 	rootAction.actions.push( new WaitAction( 1.0 ) );
 
 	return rootAction;
-}
+};
 

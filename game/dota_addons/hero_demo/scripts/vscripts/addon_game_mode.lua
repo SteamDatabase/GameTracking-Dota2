@@ -11,6 +11,10 @@ LinkLuaModifier( "lm_take_no_damage", LUA_MODIFIER_MOTION_NONE )
 
 -- "demo_hero_name" is a magic term, "default_value" means no string was passed, so we'd probably want to put them in hero selection
 sHeroSelection = GameRules:GetGameSessionConfigValue( "demo_hero_name", "default_value" )
+-- If it hasn't been set there, check the command line
+if sHeroSelection == "default_value" then
+	sHeroSelection = GlobalSys:CommandLineStr( "-demo_hero_name", "default_value" )
+end
 print( "sHeroSelection: " .. sHeroSelection )
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -31,7 +35,9 @@ require( "utility_functions" )
 -- Precache files and folders
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 function Precache( context )
-	PrecacheUnitByNameSync( sHeroSelection, context )
+	if sHeroSelection ~= "default_value" then
+		PrecacheUnitByNameSync( sHeroSelection, context )
+	end
 	PrecacheUnitByNameSync( "npc_dota_hero_target_dummy", context )
 
 	PrecacheResource( "soundfile", "soundevents/game_sounds_hero_demo.vsndevts", context )

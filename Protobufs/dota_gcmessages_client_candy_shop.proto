@@ -1,0 +1,155 @@
+import "steammessages.proto";
+import "dota_shared_enums.proto";
+import "dota_gcmessages_common.proto";
+import "dota_gcmessages_webapi.proto";
+import "gcsdk_gcmessages.proto";
+import "base_gcmessages.proto";
+import "econ_gcmessages.proto";
+import "dota_gcmessages_client.proto";
+import "valveextensions.proto";
+
+option optimize_for = SPEED;
+option cc_generic_services = false;
+
+enum ECandyShopRewardType {
+	k_eCandyShopRewardType_None = 0;
+	k_eCandyShopRewardType_Item = 1;
+	k_eCandyShopRewardType_EventAction = 2;
+}
+
+message CMsgCandyShopCandyCount {
+	optional uint32 candy_type = 1;
+	optional uint32 candy_count = 2;
+}
+
+message CMsgCandyShopCandyQuantity {
+	repeated .CMsgCandyShopCandyCount candy_counts = 1;
+}
+
+message CMsgCandyShopExchangeRecipe {
+	optional uint64 recipe_id = 1;
+	optional .CMsgCandyShopCandyQuantity input = 2;
+	optional .CMsgCandyShopCandyQuantity output = 3;
+}
+
+message CMsgCandyShopRewardData_Item {
+	optional uint32 item_def = 1;
+}
+
+message CMsgCandyShopRewardData_EventAction {
+	optional .EEvent event_id = 1 [default = EVENT_ID_NONE];
+	optional uint32 action_id = 2;
+	optional uint32 quantity = 3;
+}
+
+message CMsgCandyShopRewardItem {
+	optional .ECandyShopRewardType reward_type = 1 [default = k_eCandyShopRewardType_None];
+	optional .CMsgCandyShopRewardData_Item item_data = 2;
+	optional .CMsgCandyShopRewardData_EventAction event_action_data = 3;
+}
+
+message CMsgCandyShopReward {
+	optional uint64 reward_id = 1;
+	optional .CMsgCandyShopCandyQuantity price = 2;
+	optional .CMsgCandyShopRewardItem reward = 3;
+}
+
+message CMsgCandyShopUserData {
+	optional uint32 inventory_size = 1;
+	optional .CMsgCandyShopCandyQuantity inventory = 2;
+	optional fixed32 exchange_reset_timestamp = 3;
+	repeated .CMsgCandyShopExchangeRecipe exchange_recipes = 4;
+	repeated .CMsgCandyShopReward active_rewards = 5;
+}
+
+message CMsgClientToGCCandyShopGetUserData {
+	optional uint32 candy_shop_id = 1;
+}
+
+message CMsgClientToGCCandyShopGetUserDataResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+	}
+
+	optional .CMsgClientToGCCandyShopGetUserDataResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgCandyShopUserData user_data = 2;
+}
+
+message CMsgGCToClientCandyShopUserDataUpdated {
+	optional uint32 candy_shop_id = 1;
+	optional .CMsgCandyShopUserData user_data = 2;
+}
+
+message CMsgClientToGCCandyShopPurchaseReward {
+	optional uint32 candy_shop_id = 1;
+	optional uint64 reward_id = 2;
+}
+
+message CMsgClientToGCCandyShopPurchaseRewardResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+	}
+
+	optional .CMsgClientToGCCandyShopPurchaseRewardResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCCandyShopDoExchange {
+	optional uint32 candy_shop_id = 1;
+	optional uint64 recipe_id = 2;
+}
+
+message CMsgClientToGCCandyShopDoExchangeResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+	}
+
+	optional .CMsgClientToGCCandyShopDoExchangeResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCCandyShopDoVariableExchange {
+	optional uint32 candy_shop_id = 1;
+	optional .CMsgCandyShopCandyQuantity input = 2;
+	optional .CMsgCandyShopCandyQuantity output = 3;
+}
+
+message CMsgClientToGCCandyShopDoVariableExchangeResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+	}
+
+	optional .CMsgClientToGCCandyShopDoVariableExchangeResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCCandyShopRerollReward {
+	optional uint32 candy_shop_id = 1;
+	optional uint64 reward_id = 2;
+	optional .CMsgCandyShopCandyQuantity price = 3;
+}
+
+message CMsgClientToGCCandyShopRerollRewardResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+	}
+
+	optional .CMsgClientToGCCandyShopRerollRewardResponse.EResponse response = 1 [default = k_eInternalError];
+}

@@ -242,5 +242,12 @@
 	{
 		"fgd"				"vdata_dota.fgd"
 	}
+
+	ConVars
+	{
+		"r_size_cull_threshold"		"0.4"
+		"cl_interp"					"0.016"
+		"cl_predict"				"0"
+	}
 }
 

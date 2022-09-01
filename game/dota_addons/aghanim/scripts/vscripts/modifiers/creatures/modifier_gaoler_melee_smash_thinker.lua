@@ -9,7 +9,7 @@ function modifier_gaoler_melee_smash_thinker:OnCreated( kv )
 		self.stun_duration = self:GetAbility():GetSpecialValueFor( "stun_duration" )
 		self.damage = self:GetAbility():GetSpecialValueFor( "damage" )
 
-		self:StartIntervalThink( 0.01 )
+		self:StartIntervalThink( 0.033 )
 	end
 end
 

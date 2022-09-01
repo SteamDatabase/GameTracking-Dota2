@@ -7,7 +7,12 @@
 	%.*s
 	%s at offset %d, 
 	You must construct it with ORDERED_CONSTRUCT macro in the dependency resolution function.
+	_V_strncpy
+	_V_strnicmp_fast
 	fD9t
+	g_VProfCurrentProfile
+	g_bUpdateStringTokenDatabase
+	g_pMemAlloc
 	kE>fvw
 	}4Hc
      
@@ -69,11 +74,13 @@
  A^A]A\_[
  A^^]
  A^_[
+ A^_]
  A^_^
  A_A^A\
  A_A^A\_^
  A_A^A]
  A_A^A]A\]
+ A_A^A]A\^
  A_A^A]A\_
  A_A^A]A\_^]
  A_A^A]A\_^]H
@@ -102,6 +109,7 @@
  Hc9H
  HcA H
  HcA L
+ HcZHM
  HciHE3
  HciHH
  Hci`H
@@ -118,10 +126,13 @@
  new[]
  tDE3
  vfxcompile <source files> [options]
+!	g_pThreadPool
 !>6'Y
 !hn7!
 "%s" is not a vfx file!
-"V!p%
+#AppFramework_InvalidLocalFiles
+#AppFramework_OutOfMemory
+#General_UnableToStartGame
 #include
 #line
 $+C$Hc
@@ -136,8 +147,6 @@ $+C$Hc
 %i succeeded, 
 %i up-to-date 
 %s %s --as-json --release-next-task %s
-%s IFileSystem::Connect failed.
-%s IFileSystem::Init failed.
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
 %s allocation count overflow( add %llu + current %llu > max %llu )
@@ -161,9 +170,12 @@ $+C$Hc
 %s/*.*
 %s/game/bin/win64/vfxcompile.exe %s%s -kubedir %s
 %s: %i shaders (~%s dyn. combos, %d units)
+%s: Invalid capacity %u
+%s: Invalid grow amount %d
 %s: VFXCompile completed %s with %d failed shaders.
 %s: Warning: No compile targets specified! Shader will not be compiled!
 %s: Wrote out to %s
+%s: nLoadError: %d, RequestModule: %s, RequestInterface: %s, Module: %s, Interface: %s
 %s=%d 
 %s=%s
 %s[line %d:%d] 
@@ -177,6 +189,7 @@ $+C$Hc
 %s_tempcontent
 &YA1A
 &YA1H
+&YA1M
 ', type<
 ',=?k
 'exists'
@@ -184,6 +197,7 @@ $+C$Hc
 'y%Ii
 (%s remaining) 
 (64-bit)
+(;=)s
 (A]A\_[
 (A^A\
 (A^A]A\]
@@ -192,7 +206,11 @@ $+C$Hc
 (A_A]_]
 (A_A^
 (A_^[]
+(Addresses differ: existing '%s' @ '%p' != requested '%s' @ '%p')
 (D8(t
+(HcA 3
+(Module names differ: existing '%s' != requested '%s')
+(Modules differ: existing '%p' != requested '%p')
 (On the line reading %s):
 (_^][
 (a/ #
@@ -214,14 +232,14 @@ $+C$Hc
 *** A dynamic combo in %s doesn't start with "D_"! Aborting shader compile!
 *** A feature in %s doesn't start with "F_"! Aborting shader compile!
 *** A static combo in %s doesn't start with "S_"! Aborting shader compile!
-*** CVfx::ParseCombosAndRulesFromFileHelper(6166): Error opening file "%s"!
-*** CVfx::ParseDescriptionFromFile(6062): Error opening file "%s"!
-*** CVfx::ParseDevBoolFromFile(5989): Error opening file "%s"!
-*** CVfx::ParseFeaturesFromFile(5760): Error opening file "%s"!
-*** CVfx::ParseIncludeFiles(5721): Error opening include file in features list"%s"!
-*** CVfx::ParseModesFromFile(5572): Error opening file "%s"!
-*** CVfx::ParseVersionFromFile(6023): Error opening file "%s"!
-*** CVfx::StartupSanityCheck(6675): Programmer Error! The order of VfxVariableSourceType_t does not match s_shaderVariableSource!
+*** CVfx::ParseCombosAndRulesFromFileHelper(6260): Error opening file "%s"!
+*** CVfx::ParseDescriptionFromFile(6156): Error opening file "%s"!
+*** CVfx::ParseDevBoolFromFile(6083): Error opening file "%s"!
+*** CVfx::ParseFeaturesFromFile(5854): Error opening file "%s"!
+*** CVfx::ParseIncludeFiles(5815): Error opening include file in features list"%s"!
+*** CVfx::ParseModesFromFile(5665): Error opening file "%s"!
+*** CVfx::ParseVersionFromFile(6117): Error opening file "%s"!
+*** CVfx::StartupSanityCheck(6770): Programmer Error! The order of VfxVariableSourceType_t does not match s_shaderVariableSource!
 *** Combo "%s" in %s doesn't match a known combo source!
 *** Combo "%s" in %s either does not follow the 0..N format, is not a valid dynamic combo name, or doesn't match an existing feature or mode argument!
 *** Combo "%s" in %s has arg %s that doesn't match an existing feature!
@@ -260,6 +278,7 @@ $+C$Hc
 *** Error! Could not find static or dynamic combo with name "%s" in %s!
 *** Error! Multiple dynamic combos are putting the same constant (%s) in different descriptor sets. This won't work correctly.
 *** Error! Multiple dynamic combos are putting the same constant (%s) in different locations. This shouldn't happen.
+*** Error! Multiple dynamic combos are putting the same sampler state (%s) in different bindless sampler indices. This won't work correctly.
 *** Error! Multiple dynamic combos are putting the same texure (%s) in different descriptor set slots. This won't work correctly.
 *** Error! Rule error string must be quoted in %s!
 *** Error! Too many args found in rule in %s!
@@ -279,12 +298,13 @@ $+C$Hc
 *** Unable to parse Version in HEADER section of %s!
 *** Unknown rule "%s" in %s!
 *** Unknown text found in FEATURES section in %s: "%s"
-*** VfxGetCompileTargetsFromVfxFile(1401): Error opening file "%s"!
-*** VfxGetUsedShaderProgramsFromVfxFile(1478): Error opening file "%s"!
-*** VfxInit(253): Don't call VfxInit() more than once!
-*** VfxInit(261): g_pFullFileSystem must be set up before calling VfxInit!
-*** VfxReadAndPrepForCrc(1206): Error opening file "%s"!
-*** VfxReadAndPrepForCrc(1216): Error masking unused parts for "%s"!
+*** VfxGetCompileTargetsFromVfxFile(1480): Error opening file "%s"!
+*** VfxGetUsedShaderProgramsFromVfxFile(1557): Error opening file "%s"!
+*** VfxInit(269): Don't call VfxInit() more than once!
+*** VfxInit(277): g_pFullFileSystem must be set up before calling VfxInit!
+*** VfxReadAndPrepForCrc(1283): Error opening file "%s"!
+*** VfxReadAndPrepForCrc(1293): Error masking unused parts for "%s"!
+***************** ERROR: Cannot call CAppSystemDict::AddSystems without initializing first!
 *9Z9N
 *StO9>T
 *YA1H
@@ -324,12 +344,16 @@ $+C$Hc
 --dev
 -NoVConfig
 -Stop: 
+-allow_exe_in_build_dir
 -allowdebug
 -buildmachine
 -debug-kubejobs
 -dev-kubejobs
+-devcontent
 -end of input-(
+-fpexcept
 -game
+-gameinfo_define
 -help
 -kube_max_tasks_per_job
 -kube_min_total_jobs
@@ -343,53 +367,71 @@ $+C$Hc
 -no-local-kubejob-work
 -nokube
 -profile
+-showasserts
 -sse2
 -sse3
 -sse4
+-steam
 -tempcontent
 -threads
+-unbufferedio
 -unknown source-
 -unknown source-(
 -verbose-kubejobs
 -vproject
+.+Q4]
 ..%c%s
 ../../bin/vfxcompile_copy_to_worker.sh
 ../../sdktools/bin/linuxsteamrt64/smtpmail
 .00cfg
 .9B(u(
-.?AV?$CFunctor2@P6AXPEBVCFileInfo@@PEAVCCompileTargetFileInfo@@@ZPEBV1@PEAV2@V?$CRefCounted1@VCFunctor@@V?$CRefCountServiceBase@$00VCRefMT@@@@@@@@
-.?AV?$CFunctor3@P6AXAEAVCVFXCompileKubeJobsProcess@@AEAVCUtlString@@_N@ZV1@V2@_NV?$CRefCounted1@VCFunctor@@V?$CRefCountServiceBase@$00VCRefMT@@@@@@@@
-.?AV?$CFunctor3@P6AXPEBVCFileInfo@@PEAVCCompileTargetFileInfo@@PEAV?$CUtlVector@W4VfxProgram_t@@HV?$CUtlMemory@W4VfxProgram_t@@H@@@@@ZPEBV1@PEAV2@PEAV3@V?$CRefCounted1@VCFunctor@@V?$CRefCountServiceBase@$00VCRefMT@@@@@@@@
-.?AV?$CFunctor3@P6AXPEBVCFileInfo@@PEBVCCompileTargetFileInfo@@PEAVCProgramInfo@@@ZPEBV1@PEBV2@PEAV3@V?$CRefCounted1@VCFunctor@@V?$CRefCountServiceBase@$00VCRefMT@@@@@@@@
+.?AV<lambda_0f8bbaa511a6598bbc20ac5e0e708998>@@
+.?AV<lambda_3664f56941b630c48279676d76152d58>@@
+.?AV<lambda_e24fba73234f25398be1a4073bc5bd84>@@
+.?AV<lambda_f90ed8ff454420391e879e10b1ed34b9>@@
+.?AV<lambda_fa3c903e9cf27e286fb8756914f61f8b>@@
+.?AV?$CBaseAppSystem@VIApplication@@@@
 .?AV?$CParallelLambdaJob@V<lambda_0b506be7fb4176c4668b29840fbd3520>@@@CParallelProcessLauncher@@
-.?AV?$CParallelLambdaJob@V<lambda_c0a3f00cd4b73715fb12f5ce50e87b40>@@@CParallelProcessLauncher@@
+.?AV?$CParallelLambdaJob@V<lambda_2dfc332b5d244c4b3ecd3e490aeba363>@@@CParallelProcessLauncher@@
 .?AV?$CParallelProcessorAbstract@V?$CParallelProcessor@USerializeStaticCombosWorkUnit_t@@V?$CFuncJobItemProcessor@USerializeStaticCombosWorkUnit_t@@@@$00@@@@
 .?AV?$CParallelProcessorAbstract@V?$CParallelProcessor@_KV?$CFuncJobItemProcessor@_K@@$00@@@@
-.?AV?$CRefCountServiceBase@$00VCRefMT@@@@
-.?AV?$CRefCounted1@VCFunctor@@V?$CRefCountServiceBase@$00VCRefMT@@@@@@
+.?AV?$CTier0AppSystem@VIApplication@@$0A@@@
+.?AV?$CTier1AppSystem@VIApplication@@$0A@@@
 .?AV?$IOpCodeHandler@H@@
 .?AV?$IOpEvaluator@H@@
+.?AV?$_Func_base@X$$V@std@@
 .?AV?$_Func_base@_NAEBUClientProcessProgressData_t@KubeJobs@@@std@@
 .?AV?$_Func_impl_no_alloc@P6A_NAEBUClientProcessProgressData_t@KubeJobs@@@Z_NAEBU12@@std@@
+.?AV?$_Func_impl_no_alloc@V<lambda_0f8bbaa511a6598bbc20ac5e0e708998>@@X$$V@std@@
+.?AV?$_Func_impl_no_alloc@V<lambda_3664f56941b630c48279676d76152d58>@@X$$V@std@@
+.?AV?$_Func_impl_no_alloc@V<lambda_e24fba73234f25398be1a4073bc5bd84>@@X$$V@std@@
+.?AV?$_Func_impl_no_alloc@V<lambda_f90ed8ff454420391e879e10b1ed34b9>@@X$$V@std@@
+.?AV?$_Func_impl_no_alloc@V<lambda_fa3c903e9cf27e286fb8756914f61f8b>@@X$$V@std@@
 .?AV?$_Ref_count_obj2@UDecompressedComboData_t@CVfxStaticComboData@@@std@@
+.?AVCAppSystemDict@@
 .?AVCClientProcess@KubeJobs@@
+.?AVCColorizedLoggingListener@@
 .?AVCCompileTargetExprOpCodeHandler@@
 .?AVCCompileTargetExprStackMachineBuilder@@
-.?AVCFunctor@@
 .?AVCIntOpEvaluator@@
 .?AVCParallelProcessorAbstract_Base@@
 .?AVCShaderCreateCallbacks@@
 .?AVCShaderStats@@
+.?AVCSimpleLoggingListener@@
+.?AVCSimpleWindowsLoggingListener@@
+.?AVCTier1AppSystemDict@@
+.?AVCTier1Application@@
 .?AVCUtlStackMachineBuilder@@
 .?AVCVFXCompileDLL@@
 .?AVCVFXCompileKubeJobsProcess@@
 .?AVCVfxLoggingListener@@
 .?AVCVfxShaderBuffer@@
+.?AVIAppSystem@@
+.?AVIApplication@@
 .?AVICompiletimeShaderCreateCallbacks@@
 .?AVILaunchableDLL@@
 .?AVILoggingListener@@
 .?AVIMultipleWorkerJob@@
-.?AVIRefCounted@@
 .?AVIRenderShaderByteCode@@
 .?AV_Ref_count_base@std@@
 .?AVtype_info@@
@@ -450,12 +492,11 @@ $+C$Hc
 /game/
 /help
 /tmp/Valve/
-/uU8H
+/uT8H
 0123456789)"
 0;_(|
 0A\_[
 0A\_]
-0A^A\]
 0A^A]A\
 0A^_^
 0A_A\_
@@ -482,7 +523,8 @@ $+C$Hc
 211007000000Z
 220323000000Z
 220329000000Z
-220608193134Z0/
+220801000000Z
+220901153059Z0/
 241009235959Z0a1
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA
 2DigiCert Trusted G4 RSA4096 SHA256 TimeStamping CA0
@@ -490,6 +532,7 @@ $+C$Hc
 2http://crl3.digicert.com/DigiCertTrustedRootG4.crl0 
 2xJK7*L
 3. Add -game <path> on the command line where <path> is the directory that %s is in.
+311109235959Z0b1
 330314235959Z0L1
 33333333H+
 370322235959Z0c1
@@ -508,16 +551,21 @@ $+C$Hc
 4_1_gl
 4_1_ios_vulkan
 4_1_vulkan
+4http://crl3.digicert.com/DigiCertAssuredIDRootCA.crl0
+5FjiT
 5_0_android_vulkan
 5_0_gl
 5_0_ios_vulkan
 5_0_vulkan
 5http://cacerts.digicert.com/DigiCertTrustedRootG4.crt0C
+5r@Xm
 6Lcg8
 6OB,n_
 6_0_vulkan
 70503
+7http://cacerts.digicert.com/DigiCertAssuredIDRootCA.crt0E
 8A^A]
+8A_A\_]
 8A_A]
 8A_A^A]A\_^][
 8A__^[
@@ -526,11 +574,12 @@ $+C$Hc
 8DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1
 8DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA10
 8YA1H
-9"t~A
 9"u3H
+9>~@H
 9B(u7
 9\$pt
 9_ ~"Hc
+9kP~(H
 9o(~-H
 9t$0u
 : compile only for platforms specified.
@@ -544,7 +593,6 @@ $+C$Hc
 : use vmpi instead of kubernetes
 : visualize mpi work
 :%02ds 
-:>0eB6c
 :u A8N
 ;D$P|
 ;G(uRH
@@ -555,10 +603,12 @@ $+C$Hc
 <	t*A
 < t=<	t9
 < w	I
+</uL8A
 </uM8A
+</uN8A
 </uS8A
 <0:08
-<:t`</t
+<:tf</t
 <DOWN>
 <EOF>
 <EOR>
@@ -566,6 +616,7 @@ $+C$Hc
 <invalid>
 <missing 
 <no text for the token>
+<unknown>
 =	 ();,
 ==========
 ========== 
@@ -573,6 +624,7 @@ $+C$Hc
 =SBMSuYH
 =imb;D
 =rIQU
+>0<0:
 >jtm}S
 ?7zQ6$
 ?:kP<
@@ -580,7 +632,7 @@ $+C$Hc
 ??0CThreadMutex@@QEAA@PEBD@Z
 ??0CUtlBuffer@@QEAA@HHH@Z
 ??0CUtlBuffer@@QEAA@PEBXHH@Z
-??0CUtlMemoryBlockAllocator@@QEAA@HI@Z
+??0CUtlMemoryBlockAllocator@@QEAA@HIW4RawAllocatorType_t@@@Z
 ??0CUtlString@@QEAA@AEBVCBufferString@@@Z
 ??0CUtlSymbolTable@@QEAA@HH_N@Z
 ??0KeyValues@@QEAA@PEBD@Z
@@ -600,7 +652,8 @@ $+C$Hc
 ??YCUtlString@@QEAAAEAV0@PEBD@Z
 ?AddNullTermination@CUtlBuffer@@IEAAXXZ
 ?AddString@CUtlSymbolTable@@QEAA?AVCUtlSymbol@@PEBDPEA_N@Z
-?AllocCopy@CUtlMemoryBlockAllocator@@QEAAIPEBDI@Z
+?Alloc@CRawAllocator@@SAPEAXW4RawAllocatorType_t@@_KPEA_K@Z
+?AllocAndCopy@CUtlMemoryBlockAllocator@@QEAAIPEBDI@Z
 ?Append@CUtlString@@QEAAXPEBD@Z
 ?Append@CUtlString@@QEAAXPEBDH@Z
 ?AppendFormatV@CBufferString@@QEAAHPEBDPEAD@Z
@@ -608,20 +661,26 @@ $+C$Hc
 ?CheckGet@CUtlBuffer@@IEAA_NH@Z
 ?CheckPut@CUtlBuffer@@IEAA_NH@Z
 ?ComposeFileName@CBufferString@@QEAAPEBDPEBD0D@Z
+?DefaultExtension@CBufferString@@QEAAPEBDPEBD@Z
 ?EnsureCapacity@CUtlBuffer@@QEAAXH@Z
 ?EnterScope@CVProfile@@QEAAXPEBDH0_NH@Z
 ?ExitScope@CVProfile@@QEAAXXZ
 ?ExtendPath@CBufferString@@QEAAPEBDPEBDD@Z
 ?ExtractFileBase@CBufferString@@QEAAPEBDPEBD@Z
+?ExtractFilePath@CBufferString@@QEAAPEBDPEBD_N@Z
 ?ExtractFirstDir@CBufferString@@QEAAPEBDPEBD@Z
 ?Find@CUtlSymbolTable@@QEBA?AVCUtlSymbol@@PEBD@Z
+?FindAndDeleteSubKey@KeyValues@@QEAA_NPEBD@Z
 ?FindKey@KeyValues@@QEAAPEAV1@PEBD_N@Z
 ?FioClose@@YAHPEAX@Z
+?FioReadFileToBuffer@@YAHPEBDPEAVCUtlBuffer@@H@Z
 ?FixSlashes@CBufferString@@QEAAPEBDD@Z
 ?FixSlashes@CUtlString@@QEAAXD@Z
+?FixupPathName@CBufferString@@QEAAPEBDD@Z
 ?Format@CBufferString@@QEAAHPEBDZZ
 ?Format@CUtlString@@QEAAHPEBDZZ
 ?FormatV@CUtlString@@QEAAHPEBDPEAD@Z
+?Free@CRawAllocator@@SAXW4RawAllocatorType_t@@PEAX_K@Z
 ?FreeMemoryBlock@CUtlString@@AEAAXXZ
 ?Get@CUtlBuffer@@QEAA_NPEAXH@Z
 ?GetFirstValue@KeyValues@@QEBAPEAV1@XZ
@@ -638,6 +697,7 @@ $+C$Hc
 ?Insert@CBufferString@@QEAAPEBDHPEBDH_N@Z
 ?IsBigEndian@CUtlBuffer@@QEAA_NXZ
 ?LoadFromBuffer@KeyValues@@QEAA_NPEBD0PEAVIFileSystem@@0P6A_N0PEAX@ZPEAVIKeyValuesErrorSpew@@20@Z
+?LoadFromBuffer@KeyValues@@QEAA_NPEBDAEAVCUtlBuffer@@PEAVIFileSystem@@0P6A_N0PEAX@ZPEAVIKeyValuesErrorSpew@@30@Z
 ?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEAVCUtlBuffer@@AEBUKV3ID_t@@PEBD@Z
 ?LoadKV3FromJSON@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBD2@Z
 ?Lock@CThreadMutex@@QEAAXPEBDH@Z
@@ -647,6 +707,7 @@ $+C$Hc
 ?LoggingSystem_Log@@YA?AW4LoggingResponse_t@@HW4LoggingSeverity_t@@VColor@@PEBDZZ
 ?MakeAbsolutePath@CBufferString@@QEAAPEBDPEBD0@Z
 ?MarkFrame@CVProfile@@QEAAXXZ
+?MergeFrom@KeyValues@@QEAAXPEBV1@W4MergeKeyValuesOp_t@1@@Z
 ?NextFile@CDirIterator@@QEAA_NXZ
 ?OutputReport@CVProfile@@QEAAXAEBUVProfReportSettings_t@@PEBDH@Z
 ?PeekGet@CUtlBuffer@@QEAAPEBXHH@Z
@@ -656,6 +717,9 @@ $+C$Hc
 ?Put@CUtlBuffer@@QEAAXPEBXH@Z
 ?PutString@CUtlBuffer@@QEAAXPEBD@Z
 ?QY^&
+?RemoveAll@CUtlSymbolTable@@QEAAXXZ
+?RemoveDotSlashes@CBufferString@@QEAAPEBDD@Z
+?Replace@CBufferString@@QEAAHPEBD0_N@Z
 ?Replace@CUtlString@@QEBA?AV1@PEBD0_N@Z
 ?Reset@CVProfile@@QEAAXXZ
 ?ResetPeaks@CVProfile@@QEAAXXZ
@@ -667,6 +731,7 @@ $+C$Hc
 ?SetBigEndian@CUtlBuffer@@QEAAX_N@Z
 ?SetBufferType@CUtlBuffer@@QEAAX_N0@Z
 ?SetDirect@CUtlString@@QEAAXPEBDH@Z
+?SetInt@KeyValues@@QEAAXPEBDH@Z
 ?SetLength@CUtlString@@QEAAXH@Z
 ?SetOverflowFuncs@CUtlBuffer@@IEAAXP81@EAA_NH@Z0@Z
 ?ShortenPath@CBufferString@@QEAAPEBD_N@Z
@@ -682,15 +747,18 @@ $+C$Hc
 ?Unlock@CThreadMutex@@QEAAXPEBDH@Z
 ?V_stristr_fast@@YAPEBDPEBD0@Z
 ?f`Y4
-?u_HcJ
-?udIcD
+?udHcJ
+?ujIcL
 @.data
 @.reloc
-@8*t{H
 @8,7u
+@8- f
+@8-%e
+@8-Da
+@83u1I
 @84)u
 @8<.u
-@8>u0I
+@8=bx
 @8l$Ht
 @8s0tG@8s@t
 @8|$Ht
@@ -736,10 +804,12 @@ $+C$Hc
 @USATAVH
 @USVAWH
 @USVWATAUAVAWH
+@USVWAVAWH
 @USWH
 @UVAVH
 @UVAWH
 @UVWH
+@UWATAWH
 @UWAUAWH
 @VAVAWH
 @VAVH
@@ -749,17 +819,18 @@ $+C$Hc
 @WAVH
 @_RDATA
 @echo off
+A game file appears to be missing or corrupted.  In the Steam client go to the game's properties.  In the 'Local Files' tab select 'Verify Integrity of Game Cache' to have Steam double-check the game's installation.
 A0D;B0u%A
 A84.u
 A8H+B8u
 A9/~FI
 A97~{L
+A9D> u-M
 A:8ucI
 A;4$r
 A;>|,I
 A;>|eI
 A;@0A
-A;C`}
 A;] |
 A>pP&
 A@H+B@H
@@ -772,6 +843,7 @@ ANDROID_VULKAN_5_0
 ANTLR
 ANTLR3_EXCEPTION number %d (%08X).
 ANTLR3_EXCEPTION: %s
+APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 ATAUAVH
 ATAUH
 ATAVAWH
@@ -785,9 +857,10 @@ A]A\_][
 A]_[]
 A^A\[]
 A^A]A\
-A^A]A\_[]
+A^A]A\^[]
 A^A]A\_^][
 A^A]_]
+A^^[]
 A^_^[]
 A_A\^
 A_A\_^]
@@ -802,7 +875,9 @@ A_A^A]A\_
 A_A^A]A\_^[]
 A_A^A]A\_^]
 A_A^]
+A_A^^][
 A_A^_
+A_A^_^[]
 A_A^_^]
 About to compile %d shader%s:
 AcquireSRWLockExclusive
@@ -816,10 +891,25 @@ Allow%d
 Android SM 4.0 (VULKAN)
 Android SM 4.1 (VULKAN)
 Android SM 5.0 (VULKAN)
+AnimGraphEditorUtils001
+AnimationSystemUtils_001
+AnimationSystem_001
 AppPolicyGetProcessTerminationMethod
+AppSystemDict: Attempted to add two different systems with the same interface name %s!
+AppSystemDict: Error in Connect() of interface '%s'!
+AppSystemDict: Error in Init() of interface '%s'!
+AppSystemDict: Interface '%s' (tier %d) depends on interface '%s' (tier %d) but is in a lower tier!
+Application "
+Application unable to load gameinfo.gi file from directory "%s"!
+ApplicationInfo
 Approximately %llu total dynamic combos
 April
 AreFileApisANSI
+AssetBrowserSystem_001
+AssetPreviewSystem_001
+AssetRenameSystem_001
+AssetSystem001
+AssetSystemTest001
 August
 AutoLoginUser
 B(A94
@@ -830,6 +920,7 @@ BF>^G
 BLENDINDICES
 BLENDWEIGHT
 BOOLLITERAL
+BakedLODBuilderMgr001
 Base recognizer function 'alreadyParsedRule' called by unknown parser type - provide override for this function
 Base recognizer function 'consumeUntil' called by unknown parser type - provide override for this function
 Base recognizer function 'consumeUntilSet' called by unknown parser type - provide override for this function
@@ -844,12 +935,12 @@ Base recognizer function recover called by unknown parser type - provide overrid
 Base recognizer function recoverFromMismatchedSet called by unknown parser type - provide override for this function
 Base recognizer function recoverFromMismatchedToken called by unknown parser type - provide override for this function
 Bellevue1
+BenchmarkService001
 BinaryProperties_GetValue
 Building %i shaders on kubejobs (%s total approx dynamic combos, %d work units) 
 Building %i shaders... (%llu total approx dynamic combos, %llu work units) 
 Building compile list...
 Building compile list: %c
-Bxrwn
 C 9(t
 C 90t
 C(A94
@@ -858,7 +949,10 @@ C847u
 C89(t
 C8<(u
 C:\buildworker\source2_dota_rel_2019_win64\build\_build_\utils\vfxcompile\_vpc_vfxcompile\default\win64\_msvc_\Retail\vfxcompile.pdb
+C:\buildworker\source2_dota_rel_2019_win64\build\src\appframework\appsystemdict.cpp
 C:\buildworker\source2_dota_rel_2019_win64\build\src\mathlib\mathlib.cpp
+C:\buildworker\source2_dota_rel_2019_win64\build\src\public\appframework\tier1app.h
+C:\buildworker\source2_dota_rel_2019_win64\build\src\tier0_perproject\singletons.cpp
 C:\buildworker\source2_dota_rel_2019_win64\build\src\utils\vfxcompile\filesystem_init.cpp
 C:\buildworker\source2_dota_rel_2019_win64\build\src\utils\vfxcompile\vfxc_cmdline.cpp
 C:\buildworker\source2_dota_rel_2019_win64\build\src\utils\vfxcompile\vfxc_fileinfo.cpp
@@ -869,39 +963,57 @@ C:\buildworker\source2_dota_rel_2019_win64\build\src\utils\vfxcompile\vfxcompile
 C:\buildworker\source2_dota_rel_2019_win64\build\src\vfx\compiletargetexpr.g
 C:\buildworker\source2_dota_rel_2019_win64\build\src\vfx\vfx_common.cpp
 C:\buildworker\source2_dota_rel_2019_win64\build\src\vfx\vfxexpr.g
+CAppSystemDict::AddSystem
+CAppSystemDict::AddSystems
+CAppSystemDict::Connect( %-32s ) %8.3f msec
+CAppSystemDict::DictSortLessFunc
+CAppSystemDict::Init
+CAppSystemDict::Init   ( %-32s ) %8.3f msec
+CAppSystemDict::LoadModuleInPath( %-23s ) %8.3f msec
+CAppSystemDict::LoadSystemAndDependencies
+CAppSystemDict:Unable to create interface %s from %s (Dependency of %s)
+CAppSystemDict:Unable to load interface factory %s from %s (Dependency of %s), error %d
+CAppSystemDict:Unable to load module %s (Dependency of %s), error %d
+CHH9,
 CHL9,
 CLA;@
 CMemAllocSystemInitialize
 COLOR
 COMMENT
 COMMON
+COM_TimestampedLog
 CONTENT
 CONTENTROOT
 CP9(t
 CP90t
+CPU_EMULATED
+CTier1AppSystemDict::SetModGameSubdir
 CUtlBlockMemory overflow!
 CUtlLeanVectorBase<class CUtlString,short>::EnsureCapacity
 CUtlLeanVectorFixedGrowableBase<struct VfxVariableIndexData_t,2,int>::EnsureCapacity
 CUtlLeanVectorFixedGrowableBase<unsigned char,12,short>::EnsureCapacity
 CUtlLeanVectorImpl<class CUtlLeanVectorFixedGrowableBase<struct VfxVariableIndexData_t,2,int>,struct VfxVariableIndexData_t,int>::AddMultipleToTail
 CUtlLinkedList overflow! (exhausted memory allocator)
+CUtlMemory_RawAllocator<class CUtlHashtableEntry<unsigned int,struct empty_t> >::EnsureCapacity
+CUtlMemory_RawAllocator<unsigned int>::EnsureCapacity
+CUtlMemory_RawAllocator<unsigned int>::Grow
 CUtlRBTree overflow with %u elements!
 CUtlStreamBuffer does not support TEXT_BUFFER's use CUtlBuffer
 CUtlSymbolTableLargeBase
-CVfx::CreateFromVcs(7374): Error opening file %s
-CVfx::CreateFromVcs(7447): VCS %s Unserialize failed
-CVfx::CreateFromVcs(7461): VCS %s Unserialize hit EOF
-CVfx::ValidateMD5FromVcs(7595): Error opening file %s
-CVfx::ValidateMD5FromVcs(7602): Error calling SkipAndValidateVCSHeader() for %s
+CVfx::CreateFromVcs(7469): Error opening file %s
+CVfx::CreateFromVcs(7542): VCS %s Unserialize failed
+CVfx::CreateFromVcs(7556): VCS %s Unserialize hit EOF
+CVfx::ValidateMD5FromVcs(7690): Error opening file %s
+CVfx::ValidateMD5FromVcs(7697): Error calling SkipAndValidateVCSHeader() for %s
 CVfxDllMgr::Load
 CVfxProgramData::FindOrAddVsInputSignatureToArray
-CVfxProgramData::FindOrLoadStaticComboData(4031): Error! Ref count !=0 for static combo data cache entry!
+CVfxProgramData::FindOrLoadStaticComboData(4124): Error! Ref count !=0 for static combo data cache entry!
 CVfxStaticComboData::Decompress
 Can't find %s relative to executable path: %s.
 Can't find steam app user info.
-Can't load %s.
 Can't load p4lib.dll
 Cannot find shader %s in the current mod folder %s!
+Cannot run executable from '_build_' intermediate dir: %s
 Check your -game parameter or VCONFIG setting.
 ChildOf
 CloseHandle
@@ -920,6 +1032,8 @@ CompileTargets
 Compiling %d shader%s:
 Compressing input files for kubejobs...
 Compute Shader
+ConVars
+ConnectInterfaceSingletons
 CorExitProcess
 Could not write to file '%s'
 CreateEventExW
@@ -939,6 +1053,7 @@ C|Lc{(A
 D!l$xA
 D!xJ9
 D$ E3
+D$$fA;
 D$(H;
 D$(L;
 D$0;z
@@ -952,13 +1067,13 @@ D$0jH
 D$0tY
 D$8A;
 D$8H;
+D$8I;
 D$8Lc
 D$8ff
 D$8p9
 D$@+C
 D$@E3
 D$@H+
-D$@I;
 D$@L;
 D$@Mc
 D$@\A
@@ -966,42 +1081,43 @@ D$D+D$T
 D$DMc
 D$H@2
 D$HE3
+D$HH;
 D$HJ;
 D$HL;
 D$Hek
 D$PA;E
 D$PE3
 D$PH+
-D$PH;
 D$PI;
 D$PL;
+D$PfA;
 D$X9X
 D$X@2
 D$XD9x
+D$XfA;
 D$`+D$t
 D$`+D$tLc
 D$`A;
+D$`E3
 D$`H;
 D$`I+
 D$`L;
-D$`b+
 D$`ff
 D$`u"H
 D$d+D$t
 D$d+D$tHc
 D$dH;
 D$hA;
+D$hE3
 D$hH+
 D$hIcE8
+D$hfA;
 D$lLc
-D$pA;
 D$pE3
 D$pL;
-D$xH;
 D$xek
 D/&eH
 D8$1u
-D8%H'	
 D84(u
 D8\0>t
 D8l$Tt)E
@@ -1010,19 +1126,22 @@ D8l$htGH
 D8|$x
 D8}?t	H
 D9/uE
+D9/~iM
 D9?~GL
 D9H$t
 D9I$t
 D9P$t
 D9Q$t
 D9d$0~.I
-D9d$0~5I
+D9d$0~1I
 D9t$P
 D9xH9
 D9|$xH
+D;c@u8
 D;|$`
 DD$`H
 DEFAULT_WRITE_PATH
+DEV_BUILD
 DIGIT
 DNHf9
 DONE in %dm:%02ds
@@ -1032,10 +1151,12 @@ Dd$pL
 December
 DefaultConditionalSymbolProc
 DeleteCriticalSection
+DemoUpconverterVersion001
 Description
 Determining number of dynamic combos...
 Dev Shader
 DevShader
+DigiCert Assured ID Root CA0
 DigiCert Inc1
 DigiCert Timestamp 2022 - 20
 DigiCert Trusted Root G40
@@ -1051,6 +1172,7 @@ Done: task %i with %u wu: %1.1fs
 DynamicCombo
 DynamicComboFromFeature
 DynamicComboRule
+E(8\0$u
 E(Hc,
 E97~MH
 E;4$|
@@ -1061,14 +1183,21 @@ ERROR loading %s! g_pVfx is not valid!
 ERROR: %s, %s: Building feature data failed!
 ERROR: %s, %s: Validation failed! %s
 ERROR: Cannot find shader %s in the current mod folder %s!
+ERROR: Detected mismatched logging state. Expected matching LoggingSystem_PushLoggingState/LoggingSystem_PopLoggingState.
+ERROR: Executable Location: %s
 ERROR: Failed to kick off vcs write!
 ERROR: Failed to write vcs file '%s'!
 ERROR: Unable to load %s with compile target %s!  Skipping...
 ESC_SEQ
 EXECUTABLE_PATH
 EXPONENT
+EXPORTSYSTEM_INTERFACE_VERSION_001
 Early exit
+EconItemToolModel_001
+Encountered a circular dependency with library %s!
+EngineServiceMgr001
 EnterCriticalSection
+Error
 Error calling vfxcompile up-to-date-check-only!
 Error decompressing static combo data
 Error decompressing static combo data (%i)
@@ -1083,12 +1212,17 @@ Error! Could not create temp filename
 Error! Could not delete file "%s"
 Error! Could not rename file "%s" to file "%s"
 Error! Could not write contents of "%s" to temp file "%s"
+ExD9g
+ExD;w
+Executable Location
 ExitProcess
 Expecting %s
 Expression Parser - 
 ExternalDescSet
 Extraneous token
 E|$ D
+F(9T8 u
+F(L9t
 F0H!k
 F8$8u
 FEATURES
@@ -1113,6 +1247,7 @@ File does not exist! "%s"
 File has not been opened!
 File ready notification %s
 FileSystem
+FileSystem/SearchPaths
 FileSystem_AddLoadedSearchPath
 FileSystem_AddLoadedSearchPath - Can't resolve pathname for '%s'
 FileSystem_GetBaseDir failed.
@@ -1123,34 +1258,40 @@ FindClose
 FindFirstFileExW
 FindNextFileW
 Finished in %dm:%02ds
+FlattenedSerializersVersion001
 FlsAlloc
 FlsFree
 FlsGetValue
 FlsSetValue
 FlushFileBuffers
 FlushProcessWriteBuffers
+FontManager_001
 FreeEnvironmentStringsW
 FreeLibrary
 FreeLibraryWhenCallbackReturns
 Friday
 G(HcZ
-G5xf	
+G@L9,
 GAMEBIN
 GAMEROOT
 GD$(A
+GD$83
 GD$8A
 GD$8D
 GD$8H
 GD$XA
 GD$hH
 GD$xA
+GL$8A
 GL$8D
 GL$8H
 GL$XH
 GLSL.std.450
 GPt	H
 GT$8A
+GT$8D
 GT$8H
+GT$HH
 GT$XA
 GT$XI
 GT$hI
@@ -1160,6 +1301,9 @@ G\$8H
 G\$XH
 G\$xD
 G\$xH
+GameResourceServiceClientV001
+GameResourceServiceServerV001
+GameUIService_001
 GenuD
 Geometry Shader
 GetACP
@@ -1200,18 +1344,21 @@ GetStringTypeW
 GetSystemTimeAsFileTime
 GetSystemTimePreciseAsFileTime
 GetTickCount64
+GetWin32ConsoleCursorColumnIndex
 G|$8H
 G|$XH
 H!D$ H
 H!T$0D
 H+M(I
 H33M3
-H95,|
+H9(t8
+H95=3
 H97u+A
 H9A(u
-H9\$0t
-H9\$@t
-H9\$Ht
+H9\$8t
+H9\$Pt
+H9\$Xt
+H9kxH
 H9l$ t
 HA^^][
 HA_A\[]
@@ -1221,19 +1368,22 @@ HEADER
 HEXINTEGERLITERAL
 HEX_DIGIT
 HH:mm:ss
+HammerMapLoader001
 HcApD;
 HcC8H
 HcCH;
 HcCxH;
+HcD$XH
 HcD$p
 HcD$pL
 HcD20
-HcEHH
 HcEHL
+HcEXH
 HcF H)Cp
 HcK ;
 HcL$dL
-HcS@H
+HcL$pL
+HcSxH
 HcT$ D
 Hc\$dL
 Hc]XH
@@ -1241,6 +1391,9 @@ Hc]`M
 Hci8+
 Hck`D
 Hct$DH
+Hc}8H
+HelpSystem_001
+HostStateMgr001
 Hull Shader
 I could not work out what I was expecting, like so many of us these days!
 I,;J,u/E
@@ -1250,6 +1403,7 @@ IOS_VULKAN
 IOS_VULKAN_4_0
 IOS_VULKAN_4_1
 IOS_VULKAN_5_0
+IQuickTime001
 IS_DIRECTX
 IS_GL
 IS_MOBILE
@@ -1263,6 +1417,7 @@ Ihttp://crl3.digicert.com/DigiCertTrustedG4RSA4096SHA256TimeStampingCA.crl0
 Incorrect vpk path delimiter for shader %s
 InitKubeJobsSearchPath
 InitOnceExecuteOnce
+InitWin32ConsoleColorContext
 Initialize
 InitializeConditionVariable
 InitializeCriticalSectionAndSpinCount
@@ -1271,6 +1426,9 @@ InitializeFilesystem
 InitializeKubeConfig
 InitializeSListHead
 InitializeSRWLock
+InputService_001
+InputStackSystemVersion001
+InputSystemVersion001
 Intentionally vague touch behavior for %p
 InterlockedFlushSList
 InvTextureDim
@@ -1280,10 +1438,9 @@ IsDebuggerPresent
 IsProcessorFeaturePresent
 IsValidCodePage
 January
-Jk/W4
-Jun  8 2022
 K L9S
 K&>.yC
+KDLcC@
 KERNEL32.dll
 KUBEJOBS_PATH
 KUBEJOBS_TASK_DATA_PREFIX
@@ -1298,6 +1455,7 @@ KUBEWORKER: invalid compile target index in '%s'. nCompileTargetIdx = %d.
 KUBEWORKER: invalid compile target index in '%s'. nProgramIdx = %d.
 KUBEWORKER: invalid file index in '%s'. nFileIdx = %d.
 KUBEWORKER: invalid work unit count in '%s'. nWorkUnit = %d.
+KeyValueCache001
 KeyValuesSystem
 KubeJobs
 KubeJobs command: %s
@@ -1355,6 +1513,7 @@ L$PB8
 L$PE3
 L$PHi
 L$PI+
+L$PLk
 L$PfI
 L$PtZL
 L$Pt]L
@@ -1366,15 +1525,15 @@ L$Pu1
 L$XA9
 L$XA;
 L$XE3
-L$XH;L$x
+L$XH;M
 L$XHi
 L$`E3
 L$`H;
+L$dH;
 L$lH;
 L$pE3
 L$pH;
 L$qE3
-L$tH;
 L$tM;
 L$xH;
 L20Hc
@@ -1382,10 +1541,12 @@ L90tzA
 L93t	H
 L9d$@t
 L9d$`t
+L9l$0t
 L9l$@t
-L9l$Ht
-L9t$Pt
+L9t$@t
+L9t$`t
 L9}@t
+L;d$H
 L;d$P
 L;l$@
 LCMapStringEx
@@ -1393,7 +1554,10 @@ LCMapStringW
 LNHf9
 LOCAL
 LOG_ASSERT
+LOG_DEVELOPER
+LOG_DEVELOPER_CONSOLE
 LOG_GENERAL
+LayeredOnMod
 Lc#E+
 Lc7A+
 LcA<E3
@@ -1409,17 +1573,17 @@ LcK@H
 LcKXH
 LcL$0H
 LcL$@H
-LcL$HH
+LcL$xH
 LcM0H
 LcM4H
 LcM<H
-LcM`H
 LcO8H
 LcOHH
 LcOPH
 LcOXH
 LcOpH
 LcQ H
+Lcc0D
 Lcs0A
 LcsHA
 Lcw8A
@@ -1436,16 +1600,20 @@ LoadLibraryExW
 Local kubejobs process exited with %i
 Local_ProcessWorkUnitFn
 LocaleNameToLCID
+Localize_001
+LoggingSystem_CurrentStateIndex
 LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
 LoggingSystem_PopLoggingState
 LoggingSystem_PushLoggingState
 LoggingSystem_RegisterLoggingChannel
 LoggingSystem_RegisterLoggingListener
+LoggingSystem_ResetCurrentLoggingState
 LoggingSystem_SetChannelVerbosity
 M D;8
 M H1E
 M+4$I
+MATCHFRAMEWORK_001
 MB(iVR
 MD5 check failed for %s
 MD5 check failed.  Will compile %s
@@ -1460,16 +1628,24 @@ MM/dd/yy
 MOBILE_GLES
 MOBILE_GLES_3_0
 MOBILE_GLES_3_1
+MODEL_PROCESSING_SCRIPT_INTERFACE_001
+MODEL_PROCESSING_SERVICES_INTERFACE_001
 MODES
 M_Lc?D
 Manifest "%s" not found!
+MapListService_001
 March
+MaterialID
+MaterialUtils_001
 MathLib_Init
+Mc/E;o
 Mc4$D
-Mc>Lc+E
+McNHI
 McNXI
-McOHI
 Mce`I
+McnPM
+Mco E3
+Mcw83
 MemAlloc_AllocFunc
 MemAlloc_CallocFunc
 MemAlloc_FreeFunc
@@ -1477,6 +1653,8 @@ MemAlloc_ReallocFunc
 MemAlloc_StrDupFunc
 MemAlloc_StrDupWrapperFunc
 MergeFeatureProgramDataJob() -> WriteFeatureProgramDataJob()
+MeshSystem001
+MeshUtils001
 Message Buffer %d not found %s
 Mhttp://crl3.digicert.com/DigiCertTrustedG4CodeSigningRSA4096SHA3842021CA1.crl0S
 Mhttp://crl4.digicert.com/DigiCertTrustedG4CodeSigningRSA4096SHA3842021CA1.crl0>
@@ -1487,14 +1665,24 @@ Missing SteamAppId in %s\%s.
 Missing token
 Mobile SM 3.0 (GLES 3.0)
 Mobile SM 3.0 (GLES 3.1)
+ModelDocUtils001
 Modes
 Monday
 MultiByteToWideChar
 Multiply defined variable "%s"
 NORMAL
+NavSystem001
 NeedsLightProbe
+NetworkClientService_001
+NetworkMessagesVersion001
+NetworkP2PService_001
+NetworkServerService_001
+NetworkService_001
+NetworkSystemVersion001
 NewFiles
+No know mod!
 No valid vcs file found for shader %s
+NoDefaultModPath
 NoZPrepass
 Non-Zero Combos: 
 November
@@ -1503,6 +1691,7 @@ October
 Ordered constructor wrapped type has no default constructor.
 Out-of-date:
 Overall Progress: 
+P HcN 
 P L9P
 PA]A\_
 PA^_]
@@ -1536,17 +1725,25 @@ PLAT_
 POSITION
 PS_RENDER_STATE
 PS_RTX
+PanoramaTextServices001
+PanoramaUIClient001
+PanoramaUIEngine001
 ParseCommandLine
 Parser encountered %i errors parsing compile targets expression "%s"
+ParticleSystemMgr003
 PerViewConstantBufferVR_t
 PerViewConstantBuffer_t
 PercentComplete0To1
 Phttp://cacerts.digicert.com/DigiCertTrustedG4CodeSigningRSA4096SHA3842021CA1.crt0
+PhysicsBuilderMgr001
 Pixel Shader
 Pixel Shader Render State
 Plat_CPUTickFrequency
+Plat_CheckSDL
 Plat_CreateOpenTempFile
 Plat_DebugPrint
+Plat_DebugString
+Plat_DisableIOBuffering
 Plat_ExitProcess
 Plat_FatalErrorFunc
 Plat_FileExists
@@ -1554,33 +1751,50 @@ Plat_FloatTime
 Plat_GetCurrentDirectory
 Plat_GetEnv
 Plat_GetExecutablePathUTF8
+Plat_GetGameDirectory
+Plat_GetModuleFilename
 Plat_GetModuleInterfaceFactory
+Plat_IgnoreContentAsserts
+Plat_InitializeCOM
+Plat_IsCPUEmulated
 Plat_IsInDebugSession
+Plat_IsInTestMode
+Plat_IsRunningOnCustomerMachine
 Plat_LoadInterface
 Plat_LoadModule
+Plat_LoadModuleRaw
+Plat_LoadSDL
 Plat_MSTime
+Plat_MessageBox
 Plat_NonFatalErrorFunc
+Plat_RelativeTicks
 Plat_RemoveFile
+Plat_SetGameDirectories
 Plat_ShouldCollectMiniDumpsForFatalErrors
+Plat_ShutdownCOM
+Plat_TickDiffMilliSecF
 Plat_UnloadModule
+Plat_UnloadSDL
 Please override CKubeJobsProcess::FormatLocalTask!
 Please override KubeJobs::CClientProcess::FormatRemoteTask!
+PostProcessingSystem_001
 PreloadDirectoryEntries
 PrepareWorkerDirectories failed.
 Preparing work units...
 ProcessKubeWorker
-ProcessKubeWorker(), C:\buildworker\source2_dota_rel_2019_win64\build\src\utils\vfxcompile\vfxcompile_dll.cpp:1140
-ProcessKubeWorker::<lambda_c0a3f00cd4b73715fb12f5ce50e87b40>::operator ()
+ProcessKubeWorker(), C:\buildworker\source2_dota_rel_2019_win64\build\src\utils\vfxcompile\vfxcompile_dll.cpp:1177
+ProcessKubeWorker::<lambda_2dfc332b5d244c4b3ecd3e490aeba363>::operator ()
 Program MD5 is out of date with features! %s
 Program MD5 is out of date with features! If you recompiled shaders in the background, reload shaders now! %s
 Progress [vcs writes]: 
+PropertyEditorSystem_001
+QGhva
 QueryPerformanceCounter
 QueueMergeAndWriteFeatureProgramData() -> MergeFeatureProgramDataJob()
 QueueMergeProgramData() -> MergeProgramDataJob()
 QueueWriteProgramData() -> WriteProgramDataJob()
 RD11<
 RDEFH
-RSDSb(M
 RaiseException
 RandomInt
 Raytracing Shader
@@ -1590,13 +1804,26 @@ Recognition Exception
 RegCloseKey
 RegOpenKeyExA
 RegQueryValueExA
+RegisterConCommand: Unknown error registering con command "%s"!
+RegisterConVar: Unknown error registering convar "%s"!
 RegisterStringToken
 Release
 ReleaseSRWLockExclusive
+RenderDevice003
+RenderDeviceMgr001
+RenderHardwareConfig002
+RenderService_001
+RenderSystemSurface001
+RenderUtils_001
 RepresentativeTexture
 Requires
 Requires%d
 ResetEvent
+ResourceCompilerSystem001
+ResourceHandleUtils001
+ResourceManifestRegistry001
+ResourceSystem013
+RestoreWin32ConsoleColor
 RfD9|
 RtlCaptureContext
 RtlLookupFunctionEntry
@@ -1607,6 +1834,8 @@ RunKubeJobs
 RunKubeJobsProcess
 S0Q0O
 SBMSH
+SDL_VIDEO_ALLOW_SCREENSAVER
+SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN
 SHADER_SOURCE
 SHADER_SOURCE_MOD
 SHADER_SOURCE_ROOT
@@ -1636,9 +1865,18 @@ S_SUPPORTS_CLIP_DISTANCE
 S_TOOLS_ENABLED
 S_TRANSFORM_CONSTANT_BUFFER
 Saturday
+SceneSystem_002
+SceneUtils_001
+SchemaSystem_001
+SchemaTestExternal_One_001
+SchemaTestExternal_Two_001
 SearchPaths
+Sep  1 2022
 September
 SerializeStaticComboWorker
+SerializedEntitiesVersion001
+Set the VMOD environment variable or run with -game to set the mod name.
+SetAssertionPrompt
 SetEnvironmentVariableW
 SetEvent
 SetFileInformationByHandle
@@ -1651,6 +1889,7 @@ SetSteamInstallPath: FileSystem_GetExecutableDir failed.
 SetThreadpoolTimer
 SetThreadpoolWait
 SetUnhandledExceptionFilter
+SetWin32ConsoleColor
 Setup file '%s' doesn't exist in subdirectory '%s'.
 SetupFileSystemError
 Shader %s doesn't support compile target %s
@@ -1666,14 +1905,32 @@ ShadingComplexity
 SleepConditionVariableCS
 SleepConditionVariableSRW
 Software\Valve\Source\Settings
+SoundOpSystem001
+SoundOpSystemEdit001
+SoundService_001
+SoundSystem001
+Source2Client002
+Source2ClientPrediction001
+Source2ClientUI001
+Source2EngineToClient001
+Source2EngineToClientStringTable001
+Source2EngineToServer001
+Source2EngineToServerStringTable001
+Source2GameClients001
+Source2GameEntities001
+Source2Host001
+Source2Server001
+Source2V8System001
 Staging gameinfos...
 Staging shaders...
 Staging vfxcompile and its dependencies...
 StaticCombo
 StaticComboRule
+StatsService_001
 Stdout: %s
 SteamAppId
 SteamAppUser
+SteamAudio001
 SteamUserPassphrase
 SubmitThreadpoolWork
 Succeeded
@@ -1692,7 +1949,7 @@ T$!ff
 T$$I;
 T$(E3
 T$0;-
-T$0A9<$
+T$0E3
 T$0Hi
 T$0Lc
 T$2fff
@@ -1702,6 +1959,7 @@ T$8+G$H
 T$@+C$A
 T$@+G$A
 T$@E3
+T$@Lc
 T$BE3
 T$FE3
 T$H+C$A
@@ -1711,8 +1969,9 @@ T$P+G$A
 T$PE3
 T$PHi
 T$X+C$A
+T$XE3
+T$\E3
 T$`E3
-T$`Lc
 T$`M+
 T$h;T$PH
 T$hHc
@@ -1722,26 +1981,32 @@ TANGENT
 TEXCOORD
 TUUUU
 TerminateProcess
+TestScriptMgr001
+TextLayout_001
 TextureDim
 TextureDimLog2
 TextureSheetData
+The system ran out of memory while loading the game.
 ThreadGetCurrentProcessId
 ThreadInMainThread
 ThreadSleep
 Thursday
 Tier0GenericMiniDumpHandler_SetOptions
+TimestampedEvent
+TimestampedEventMsgV
 TlsAlloc
 TlsFree
 TlsGetValue
 TlsSetValue
+ToolFramework2_002
+ToolSceneNodeFactory_001
+ToolService_001
 Total time: %s
 TryAcquireSRWLockExclusive
 Tuesday
 U +G$A
 U(+G$A
-U)(![
 U0+G$A
-U8+G$A
 UATAUAVAWH
 UATAUH
 UAVAWH
@@ -1751,10 +2016,11 @@ UP+D$tA
 USATAWH
 USATH
 USAUH
+USVATAUAVH
 USVAUAWH
+USVAVH
 USVWATAUAVAWH
 USVWAVH
-USWATAUAVH
 USWAUH
 UUUUUU
 UUUUUUUUH
@@ -1771,6 +2037,7 @@ UX+D$tA
 U`+D$tA
 Uh+D$tA
 Unable to SaveKV3 to buffer: %s
+Unable to Start Game
 Unable to create KV3 task data file %s
 Unable to create KV3 task data.  Error: %s
 Unable to create directory %s to hold work unit files.
@@ -1782,6 +2049,7 @@ Unable to find kv3 element 'tasks' in %s.
 Unable to find kv3 element 'work_units' in %s.
 Unable to get MOD search path.
 Unable to kubejobsw!
+Unable to load required DLLs
 Unable to parse kube config file file %s.  Error: %s
 Unable to parse vpk paths from shader %s
 Unable to parse worker data file %s.  Error: %s
@@ -1807,23 +2075,45 @@ Ux+D$tA
 V6E>`"(5
 VAUAVH
 VAVAWH
+VApplication001
+VAsyncFileSystem2_001
+VAvi001
+VBik001
 VCRT_isdigit
 VCRT_isprint
 VCRT_toupper
 VCS file format is "%c%c%c%c" instead of "%c%c%c%c" for %s
 VCS file version is %d instead of %d for %s
+VConComm001
 VContent
+VEngineCvar007
 VFX Compile
 VFX value %s out of range %d-%d: %d
 VFXCompile_Main
 VFX_DLL_001
 VFX_PROGRAM_MAX
 VFileSystem017
+VGUI_Input005
+VGUI_Panel010
+VGUI_Scheme010
+VGUI_Surface032
+VGUI_System010
+VGUI_ivgui008
 VGame
 VMPI_GAMEINFO
+VMaterialSystem2_001
+VMediaFoundation001
 VP4003
+VPhysics2_Handle_Interface_001
+VPhysics2_Interface_001
+VProcessUtils002
+VProfService_001
 VProject
+VR_001
+VRenderDeviceSetupV001
 VS_RTX
+VScriptManager010
+VStringTokenSystem001
 VULKAN
 VUUUH
 VWATAVAW
@@ -1833,6 +2123,8 @@ V_FixSlashes
 V_GetFileExtension
 V_GetProcessUtils
 V_Get_stderr
+V_Get_stdout
+V_IsAbsolutePath
 V_LZ4_compressBound
 V_LZ4_compress_HC
 V_LZ4_compress_fast
@@ -1862,12 +2154,14 @@ V_atoi
 V_atoi64
 V_atoui64
 V_fclose
+V_fflush
 V_fopenUTF8
 V_fprintf
 V_fread
 V_fseek
 V_ftell
 V_fwrite
+V_qsort_s
 V_snprintf
 V_sscanf
 V_stricmp_fast
@@ -1892,10 +2186,14 @@ VfxParseCompileTargetExpr(108): : Failed to create lexer from "%s"
 VfxParseCompileTargetExpr(116): : Failed to create token stream from "%s"
 VfxParseCompileTargetExpr(124): : Failed to create parser from "%s"
 Viewport
+VisBuilder_001
+Vy6E1
 WARNING: Received additional notification of %s associated with %s.
 WATAUAVAWH
 WATAUH
 WAVAWH
+WIN32
+WINDOWS
 WaitForSingleObject
 WaitForSingleObjectEx
 WaitForThreadpoolTimerCallbacks
@@ -1911,7 +2209,8 @@ Wednesday
 WideCharToMultiByte
 WorkerCommunicationData
 Worker_ProcessProgramWorkUnit
-Worker_ProcessProgramWorkUnit(), C:\buildworker\source2_dota_rel_2019_win64\build\src\utils\vfxcompile\vfxc_mpi.cpp:493
+Worker_ProcessProgramWorkUnit(), C:\buildworker\source2_dota_rel_2019_win64\build\src\utils\vfxcompile\vfxc_mpi.cpp:494
+WorldRendererMgr001
 WriteConsoleW
 WriteFile
 WriteProgramDataJob
@@ -1935,11 +2234,11 @@ ZIP_PreloadHeader
 \$ UH
 \$ UVWATAUAVAWH
 \$ UWATH
-\$ VAWE
+\$ UWAVH
+\$ VATAUAVAWH
 \$ VWATAUAVH
 \$ WATAVH
 \$ WH
-\$0A_^
 \$0H;
 \$0eH
 \$8Hc
@@ -1947,20 +2246,20 @@ ZIP_PreloadHeader
 \$@E3
 \$@H;
 \$@Hc
+\$@Mc>L
 \$HA_A^A]A\_^]
 \$HHc
-\$HMc>L
 \$PHc
 \$PI+
 \$`M+
-\$hH3
+\$hI3
 \$h~:L
 \$pu3H
 \$xu3M
 \bin\
 \game\
 \src\shaders\
-]U\YX
+]J<0"0i3
 _HHcG@
 _RDATA
 _V_AppendSlash
@@ -1972,8 +2271,6 @@ _V_StripLastDir
 _V_strcspn
 _V_strncat
 _V_strncmp
-_V_strncpy
-_V_strnicmp_fast
 __Attribute__
 __Expression__
 __FROM_ATTRIBUTE_OR_FEATURE__
@@ -2002,6 +2299,7 @@ __swift_2
 __thiscall
 __unaligned
 __vectorcall
+_build_
 _feature
 _gUT^
 _kubejobs
@@ -2023,7 +2321,6 @@ _psrs
 `eh vector destructor iterator'
 `eh vector vbase constructor iterator'
 `eh vector vbase copy constructor iterator'
-`lAjL,
 `local static guard'
 `local static thread guard'
 `local vftable constructor closure'
@@ -2093,15 +2390,17 @@ antlr3VectorNew
 antlr3dfapredict
 antlr3dfaspecialStateTransition
 antlr3dfaspecialTransition
+application
 bOnlyUseDirectoryName=1 and pDirectoryName=NULL.
 bin\win64
 binary_auto
 bool4
 bp(=>?g
+branch gameinfo
 build-note: |
 c [1>H'
 c(>\,
-cd %ssrc/shaders/%s && WINEDEBUG=-all JE_MALLOC_CONF=retain:true /app/wine/bin/wine64 %sgame/bin/win64/vfxcompile.exe %s%s%s -kubedir "z:\tmp\Valve" -threads %.0f && rsync --remove-source-files --inplace -rt /tmp/Valve/out $KUBEJOBS_OUTPUT_DIR
+cd %ssrc/shaders/%s && WINEDEBUG=-all JE_MALLOC_CONF=retain:true /app/wine/bin/wine64 %sgame/bin/win64/vfxcompile.exe %s%s%s -kubedir "z:\tmp\Valve" -threads %.0f && $KUBEJOBS_KJUTIL --verbose mv /tmp/Valve/out $KUBEJOBS_OUTPUT_DIR
 centralDirectorySize
 commandLine
 commentLength
@@ -2138,7 +2437,7 @@ dddd, MMMM dd, yyyy
 diskNumberStart
 docker-image: %s
 docker.valve.org/kubejobs/worker-base:1
-docker.valve.org/kubejobs/worker-vfxcompile:1
+docker.valve.org/kubejobs/worker-vfxcompile:2
 ds_5_0
 ds_6_0
 dxcompiler.dll
@@ -2165,10 +2464,11 @@ fA94@u
 fA94nu
 fB94ht	H
 fC94wu
-fD9(u2
+fD9(u
 fD90t
 fD94Fu
 fD96u
+fD98u2
 fD9l$2H
 fD9t$b
 false
@@ -2191,13 +2491,11 @@ float3
 float4
 float4x4
 force
-g_VProfCurrentProfile
 g_bFogTypeEnabled
 g_bOtherFxEnabled
 g_bRoughnessParams
 g_bStereoEnabled
 g_bTexCoordScaleByModel
-g_bUpdateStringTokenDatabase
 g_bUseSecondaryUvForDetailTexture
 g_bWrinkleOverride
 g_flDetailNormalStrength
@@ -2241,8 +2539,6 @@ g_matWorldToView
 g_matvCubeFogSkyWsToOs
 g_nScaleTexCoordUByModelScaleAxis
 g_nScaleTexCoordVByModelScaleAxis
-g_pMemAlloc
-g_pThreadPool
 g_sTransformTexture
 g_tTransformTexture
 g_vAoProxyDownres
@@ -2310,7 +2606,9 @@ game_language
 game_lowviolence
 game_nontools
 gamebin
+gameinfo
 gameinfo.gi
+gameinfo_branchspecific.gi
 gameroot
 generic
 gfffffff
@@ -2323,6 +2621,7 @@ hr =
 hs_5_0
 hs_6_0
 http://ocsp.digicert.com0A
+http://ocsp.digicert.com0C
 http://ocsp.digicert.com0X
 http://ocsp.digicert.com0\
 http://www.digicert.com/CPS0
@@ -2333,6 +2632,8 @@ input-paths :
 internalFileAttribs
 invalid_parameter
 is also the end of the line, so you must check your lexer rules
+is running without a known mod!
+isgame
 job_name
 k HcKX;
 k VATAWH
@@ -2344,12 +2645,12 @@ l$ AVH
 l$ E3
 l$ VH
 l$ VWATAVAWH
-l$ VWAVH
 l$ WH
 l$ fD
 l$"fD
 l$(E3
 l$0E3
+l$0Hc
 l$2u$H
 l$8E3
 l$8Hi
@@ -2362,6 +2663,7 @@ l$XD9cH
 l$`Hc
 l$hE3
 l$lE9.
+l$xHc
 lastModifiedDate
 lastModifiedTime
 launchable_dll_1
@@ -2372,6 +2674,7 @@ limits
 local-output-dir : results
 log10
 looks like this:
+m0k0$
 mL+7H
 m_dynamicComboArray
 m_dynamicComboRuleArray
@@ -2399,6 +2702,7 @@ near '%c' :
 near char(%#02X) :
 nocompress
 ntelA
+nullptr
 numberOfTheDiskWithStartOfCentralDirectory
 numberOfThisDisk
 o 	E3
@@ -2411,6 +2715,8 @@ orangebox
 ot$ H
 p AWH
 p4lib
+p4lib.dll
+p;>}	H
 pA^A]^
 pA_A^A]A\_^]
 per_shader_settings
@@ -2423,6 +2729,8 @@ ps_4_1
 ps_5_0
 ps_6_0
 purecall
+qDWHe%
+q`HcAXH
 r	Vr.>T
 r>@8o
 relativeOffsetOfLocalHeader
@@ -2467,6 +2775,7 @@ t D8`
 t$ AVH
 t$ E3
 t$ L+
+t$ Lcu M
 t$ Li
 t$ UAVAWH
 t$ UH
@@ -2479,22 +2788,23 @@ t$ WH
 t$ uAH
 t$(A;
 t$(E3
+t$09t$@|LH
 t$0@8
 t$0E3
 t$0Hc
 t$0Hi
+t$0ff
+t$0x0Hc
 t$4A;
 t$8;Upr4I
 t$8E3
 t$8H+
-t$8H3
 t$8Hc
 t$8Hi
 t$8Hk
 t$8Lc
 t$;B4u
 t$@Hc
-t$@HcD$8L
 t$@Ic
 t$@IcD$8
 t$@Icp
@@ -2508,12 +2818,13 @@ t$P9E
 t$PH;
 t$PH;F
 t$PHc
-t$X@8{
 t$XD9u
 t$XE3
 t$XHc
 t$XLc
+t$`@8{
 t$`D9c0
+t$`Hc
 t$htjL
 t$ptu
 t%fE9
@@ -2525,7 +2836,6 @@ t?H95
 t?HcD$4H
 tCD8u
 tDfff
-tRD8+t@H
 tW@88tR
 tXfff
 tY9oP~J
@@ -2537,12 +2847,13 @@ tasks
 tasks :
 tc9D$Xt]
 thE9o
+tier0
 tier0.dll
 tsLcG$E
 u HcA<H
 u"8Z(t
 u$D:B
-u(D8-
+u(@8={x
 u-HcT$@L
 u-fD;
 u0H9Z
@@ -2558,12 +2869,13 @@ ufD:B
 uncompressedSize
 up-to-date-check-only
 uzKs@>
+v=Y]Bv
 vB8_(t
 vC8_(t
 valve\vfxkube_%i
 vconfig.exe
 vcruntime140_1.dll
-vcs2Vfx
+vcs2%hd
 verbose
 versionMadeBy
 versionNeededToExtract
@@ -2586,6 +2898,7 @@ vs_4_1
 vs_5_0
 vs_6_0
 w(@8s`tJ@8spt
+w6=!o
 warning
 work_unit
 work_unit_count
@@ -2595,24 +2908,24 @@ worker_task_file_full_path
 worker_task_file_relative_path
 worker_tasks_%d.kv3
 www.digicert.com1!0
+www.digicert.com1$0"
 x ATAVAWH
 x AVH
 x LcU
 x Lcm
 x UAVAWH
+x&;F`}!H
 x(fff
 x)fff
 x-;C`}(H
 x9HcS
 xA_A^A]A\_^[]
-xP^	C
 xWI96tRI
 xXI96tSI
 x]~\6
 xjHcC
 xoHcC
 y\PD>!
-y`HcAXH
 zHcE8L
 {(9s |AH
 {(H9{
@@ -2633,17 +2946,22 @@ zHcE8L
 |$ L;
 |$ Lk
 |$ UATAUAVAWH
+|$ UAVAWH
 |$ UH
 |$":uq
 |$(M;
 |$0A_A^
 |$0D;sX
 |$0E3
+|$0H3
 |$0Hc
-|$89|$H|LH
+|$0Lc
+|$0u0I
 |$8;3
 |$8A+FH
 |$8E3
+|$8Hc
+|$8HcD$0L
 |$@A+
 |$@E3
 |$@Hc
@@ -2656,10 +2974,10 @@ zHcE8L
 |$PE3
 |$Pu H
 |$XLk
-|$`E3
+|$pLc
 |$zE3
-|2\<p
 |>Lu-
+|Lu?c
 |all_source_engine_paths|
 |b=})>
 }	fE;
@@ -2674,4 +2992,5 @@ zHcE8L
 }};{$
 ~(IcF Li
 ~-fff
+~qj#k"
 ~t&LN

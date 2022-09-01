@@ -41,6 +41,8 @@ enum EBaseUserMessages {
 	UM_HapticsManagerEffect = 151;
 	UM_CommandQueueState = 152;
 	UM_UpdateCssClasses = 153;
+	UM_ServerFrameTime = 154;
+	UM_LagCompensationError = 155;
 	UM_MAX_BASE = 200;
 }
 
@@ -87,6 +89,8 @@ enum PARTICLE_MESSAGE {
 	GAME_PARTICLE_MANAGER_EVENT_SET_SCENE_OBJECT_TINT_AND_DESAT = 22;
 	GAME_PARTICLE_MANAGER_EVENT_DESTROY_NAMED = 23;
 	GAME_PARTICLE_MANAGER_EVENT_SKIP_TO_TIME = 24;
+	GAME_PARTICLE_MANAGER_EVENT_CAN_FREEZE = 25;
+	GAME_PARTICLE_MANAGER_EVENT_SET_NAMED_VALUE_CONTEXT = 26;
 }
 
 enum EHapticPulseType {
@@ -443,6 +447,27 @@ message CUserMsg_ParticleManager {
 		optional float skip_to_time = 1;
 	}
 
+	message ParticleCanFreeze {
+		optional bool can_freeze = 1;
+	}
+
+	message SetParticleNamedValueContext {
+		message FloatContextValue {
+			optional string value_name = 1;
+			optional float value = 2;
+		}
+
+		message VectorContextValue {
+			optional string value_name = 1;
+			optional .CMsgVector value = 2;
+			optional uint32 ent_index = 3;
+			optional string attachment_name = 4;
+		}
+
+		repeated .CUserMsg_ParticleManager.SetParticleNamedValueContext.FloatContextValue float_values = 1;
+		repeated .CUserMsg_ParticleManager.SetParticleNamedValueContext.VectorContextValue vector_values = 2;
+	}
+
 	required .PARTICLE_MESSAGE type = 1 [default = GAME_PARTICLE_MANAGER_EVENT_CREATE];
 	required uint32 index = 2;
 	optional .CUserMsg_ParticleManager.ReleaseParticleIndex release_particle_index = 3;
@@ -469,6 +494,8 @@ message CUserMsg_ParticleManager {
 	optional .CUserMsg_ParticleManager.SetSceneObjectTintAndDesat set_scene_object_tint_and_desat = 25;
 	optional .CUserMsg_ParticleManager.DestroyParticleNamed destroy_particle_named = 26;
 	optional .CUserMsg_ParticleManager.ParticleSkipToTime particle_skip_to_time = 27;
+	optional .CUserMsg_ParticleManager.ParticleCanFreeze particle_can_freeze = 28;
+	optional .CUserMsg_ParticleManager.SetParticleNamedValueContext set_named_value_context = 29;
 
 	extensions 100 to 201;
 }
@@ -516,4 +543,12 @@ message CUserMessageUpdateCssClasses {
 	optional int32 target_world_panel = 1;
 	optional string css_classes = 2;
 	optional bool is_add = 3;
+}
+
+message CUserMessageServerFrameTime {
+	optional float frame_time = 1;
+}
+
+message CUserMessageLagCompensationError {
+	optional float distance = 1;
 }

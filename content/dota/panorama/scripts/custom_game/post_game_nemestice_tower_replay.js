@@ -24,118 +24,84 @@ var testData = {
 
 // -------------------------------------------------------
 
-function PlaySoundIfVisibleAction( soundName )
+class PlaySoundIfVisibleAction extends RunFunctionAction
 {
-	this.soundName = soundName;
-}
-
-PlaySoundIfVisibleAction.prototype = new BaseAction();
-
-PlaySoundIfVisibleAction.prototype.update = function ()
-{
-	var findDetailsOverviewPanel = $.GetContextPanel();
-	for ( var i = 0; i < 10; i++ )
+	constructor( soundName )
 	{
-		if ( findDetailsOverviewPanel.id == "DetailsOverview" )
-			break;
-		findDetailsOverviewPanel = findDetailsOverviewPanel.GetParent();
+		super( () =>
+		{
+			var findDetailsOverviewPanel = $.GetContextPanel();
+			for ( var i = 0; i < 10; i++ )
+			{
+				if ( findDetailsOverviewPanel.id == "DetailsOverview" )
+					break;
+				findDetailsOverviewPanel = findDetailsOverviewPanel.GetParent();
+			}
+			if ( findDetailsOverviewPanel.BHasClass( "TabSelected" ) )
+				PlayUISoundScript( soundName );
+		} );
 	}
-	if ( findDetailsOverviewPanel.BHasClass( "TabSelected" ) )
-		PlayUISoundScript( this.soundName );
-	return false;
 }
 
 // -------------------------------------------------------
 
-function AnimateTowerSurvival( panelName )
+class AnimateTowerSurvival extends RunSequentialActions
 {
-	this.panelName = panelName;
-}
-
-AnimateTowerSurvival.prototype = new BaseAction();
-
-AnimateTowerSurvival.prototype.init = function ( towerPanel )
-{
-	var fxPanel = towerPanel.FindChildInLayoutFile( "SurvivingTowerFX" );
-
-	this.seq = new RunSequentialActions();
-
-	this.seq.actions.push( new WaitForClassAction( fxPanel, "SceneLoaded" ) );
-	this.seq.actions.push( new RunFunctionAction( function ()
+	constructor( panelName )
 	{
-		fxPanel.SetControlPoint( 15, 0x30, 0x5F, 0x7F );
-		fxPanel.StartParticles();
-	} ) );
+		super();
+		this.panelName = panelName;
+	}
 
-	this.seq.start();
-}
+	start()
+	{
+		var towerPanel = $.GetContextPanel().FindPanelInLayoutFile( this.panelName );
 
-AnimateTowerSurvival.prototype.start = function ()
-{
-	var towerSurvivalPanel = $.GetContextPanel().FindPanelInLayoutFile( this.panelName );
+		this.seq.actions.push( new WaitForClassAction( fxPanel, "SceneLoaded" ) );
+		this.seq.actions.push( new RunFunctionAction( function()
+		{
+			fxPanel.SetControlPoint( 15, 0x30, 0x5F, 0x7F );
+			fxPanel.StartParticles();
+		} ) );
 
-	this.init( towerSurvivalPanel );
-}
-
-AnimateTowerSurvival.prototype.update = function ()
-{
-	return this.seq.update();
-}
-
-AnimateTowerSurvival.prototype.finish = function ()
-{
-	this.seq.finish();
+		super.start();
+	}
 }
 
 
 // -------------------------------------------------------
 
-function AnimateTowerDestroyed( panelName )
+class AnimateTowerDestroyed extends RunSequentialActions
 {
-	this.panelName = panelName;
-}
+	constructor( panelName )
+	{
+		super();
+		this.panelName = panelName;
+	}
 
-AnimateTowerDestroyed.prototype = new BaseAction();
+	start()
+	{
+		var towerPanel = $.GetContextPanel().FindPanelInLayoutFile( this.panelName );
 
-AnimateTowerDestroyed.prototype.init = function( towerPanel )
-{
-	var fxPanel = towerPanel.FindChildInLayoutFile( "DestroyTowerFX" );
+		var fxPanel = towerPanel.FindChildInLayoutFile( "DestroyTowerFX" );
 
-	this.seq = new RunSequentialActions();
+		var destroySound = "Building_Generic.PartialDestruction";
 
-	var destroySound = "Building_Generic.PartialDestruction";
+		if ( fxPanel )
+			this.seq.actions.push( new WaitForClassAction( fxPanel, "SceneLoaded" ) );
+		this.seq.actions.push( new PlaySoundIfVisibleAction( destroySound ) );
+		this.seq.actions.push( new WaitAction( 0.05 ) );
+		if ( fxPanel )
+			this.seq.actions.push( new RunFunctionAction( function()
+			{
+				fxPanel.SetControlPoint( 15, 0xFF, 0xFF, 0xA0 );
+				fxPanel.StartParticles();
+			} ) );
+		this.seq.actions.push( new WaitAction( 0.1 ) );  // let the particle system play briefly before showing the number
+		this.seq.actions.push( new AddClassAction( towerPanel, "FXCompleted" ) );
 
-	if ( fxPanel )
-		this.seq.actions.push( new WaitForClassAction( fxPanel, "SceneLoaded" ) );
-	this.seq.actions.push( new PlaySoundIfVisibleAction( destroySound ) );
-	this.seq.actions.push( new WaitAction( 0.05 ) );
-	if ( fxPanel )
-		this.seq.actions.push( new RunFunctionAction( function () { 
-			fxPanel.SetControlPoint( 15, 0xFF, 0xFF, 0xA0 );
-			fxPanel.StartParticles(); 
-		} ) );
-	this.seq.actions.push( new WaitAction( 0.1 ) );  // let the particle system play briefly before showing the number
-	this.seq.actions.push( new AddClassAction( towerPanel, "FXCompleted" ) );
-
-	this.seq.start();
-
-}
-
-AnimateTowerDestroyed.prototype.start = function ()
-{
-	var towerDestroyedPanel = $.GetContextPanel().FindPanelInLayoutFile( this.panelName );
-
-	this.init( towerDestroyedPanel );
-}
-
-AnimateTowerDestroyed.prototype.update = function ()
-{
-	return this.seq.update();
-}
-
-AnimateTowerDestroyed.prototype.finish = function ()
-{
-	this.seq.finish();
+		super.start();
+	}
 }
 
 // -------------------------------------------------------
@@ -153,8 +119,8 @@ function InitNemesticeTowerReplay( towersData )
 		seq.actions.push( new WaitAction( 0.5 ) ); // extra delay before first tower
 
 		// create all the towers, some which will be destroyed
-		vTowerPanels = []
-		vTowersArray.forEach( function ( towerData, index )
+		vTowerPanels = [];
+		vTowersArray.forEach( function( towerData, index )
 		{
 			var towerDestructionPanel = null;
 
@@ -195,7 +161,7 @@ function InitNemesticeTowerReplay( towersData )
 						else heroContainer.AddClass( "Hidden" );
 					}
 				}
-				var bIsFinalDestruction = ( index + 1 < vTowersArray.length && vTowersArray[ index + 1 ].time_destroyed < 0 )
+				var bIsFinalDestruction = ( index + 1 < vTowersArray.length && vTowersArray[index + 1].time_destroyed < 0 );
 
 				seq.actions.push( new WaitAction( 0.35 ) ); // delay between towers
 				seq.actions.push( new AnimateTowerDestroyed( towerPanelName ) );

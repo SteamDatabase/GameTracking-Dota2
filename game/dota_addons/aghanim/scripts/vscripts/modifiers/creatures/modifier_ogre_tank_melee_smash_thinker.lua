@@ -11,7 +11,7 @@ function modifier_ogre_tank_melee_smash_thinker:OnCreated( kv )
 
 		self.bCancelled = false
 
-		self:StartIntervalThink( 0.01 )
+		self:StartIntervalThink( 0.033 )
 	end
 end
 

@@ -5,30 +5,6 @@
  */
 var seq;
 var debug_animation = false;
-var g_trackedSoundEvents = [];
-
-
-function PlayAndTrackSoundAction( soundName )
-{
-	this.soundName = soundName;
-}
-PlayAndTrackSoundAction.prototype = new BaseAction();
-
-
-PlayAndTrackSoundAction.prototype.update = function ()
-{
-	g_trackedSoundEvents.push( PlayUISoundScript( this.soundName ) );
-	return false;
-}
-var StopAllTrackedSounds = function()
-{
-	for ( var i = 0; i < g_trackedSoundEvents.length; ++i )
-	{
-		StopUISoundScript( g_trackedSoundEvents[ i ] );
-	}
-
-	g_trackedSoundEvents = [];
-}
 
 
 /**
@@ -104,7 +80,8 @@ var EndPageAnimation = function()
     if( seq != undefined ){
         seq.finish();
     }
-    StopAllTrackedSounds();
+    
+    PlayAndTrackSoundAction.StopAllTrackedSounds();
 
     $('#MainContainer').RemoveClass('Initialize');
     $('#ModelBackground').RemoveClass('Initialize');
