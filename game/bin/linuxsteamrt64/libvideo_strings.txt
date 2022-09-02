@@ -1,11 +1,82 @@
 
 !
 !!!
+!"Don't poll on UDP sockets dude"
+!"Not implemented"
+!"couldn't read cpu information from /proc/cpuinfo"
+!( m_nFlags & FCVAR_NEVER_AS_STRING )
+!( m_pHTTPResponseHandler && m_pHTTPStreamingResponseHandler )
+!(nStringCaseFlags & STRINGCASE_FLAG_TURKISH)
 != and not NULL
+!BUseIOCP()
+!IsExternallyAllocated()
+!IsPlaybackTimerRunning()
+!IsVideoPlayerManagerInitialized()
+!V_isempty( svHostname )
 !XX
+!bAsDatagram
+!bBlockedOnNetwork
+!bRet || m_listVideoPackets.Count() == 0
 !g*
+!g_VProfile
+!g_pCrashMemoryReserve
+!g_unPrivateIPThisBox.HasIP() || unIP == g_unPrivateIPThisBox
+!g_unPublicIPThisBox.HasIP() || unIP == g_unPublicIPThisBox
 !is_large()
 !lQ
+!m_bAborted
+!m_bConnectionIsInit
+!m_bConnectionReleased
+!m_bDisconnecting
+!m_bEndOfInput
+!m_bFindingBestServer
+!m_bHasStartMsg
+!m_bInThreadPool
+!m_bInitialRequest
+!m_bIsShutdown
+!m_bJustCount
+!m_bLoaded
+!m_bRcvdCloseFrame
+!m_bRunJobFromMsgEntryPoint
+!m_cubPkt || ( m_cubPkt >= ( m_cubMsgHdr + m_cubStruct ) )
+!m_data.HasError()
+!m_pContext
+!m_pHTTP2Session
+!m_pInitalizeFileStream->IsRequestingData()
+!m_pInt
+!m_pManifest
+!m_pNextPacket
+!m_pProtoBufBody
+!m_pReceivedPktFirst || m_pReceivedPktFirst->GetSeq() > m_nTheirSeqReceived
+!m_pReceivedPktFirst || pNextPkt->GetSeq() != m_pReceivedPktFirst->GetSeq()
+!m_pRedirectRequestHandle
+!m_pSSLConnection
+!m_pWebSocketConnectionCallback
+!m_pszCipher
+!m_pubRecvBuffer
+!m_pubRecvMsg
+!m_sFrameCur.m_pubPayload
+!m_strTargetPath.IsEmpty()
+!m_strURL.IsEmpty() || m_bufFromMemory.TellPut() > 0
+!m_vecAllPlayers.HasElement( pPlayer )
+!m_vecLocks.HasElement( pLock )
+!m_vecMainThreadDel.HasElement( del )
+!pArray || (Base() >= (pArray + size)) || (pArray >= (Base() + Count()) )
+!pKeyCallback
+!pLock->BIsLocked()
+!pParent->m_bInDeleteQueue
+!pPlayer->BInThreadPool()
+!pToCopy || (pToCopy + num <= Base()) || (pToCopy >= (Base() + Count()) )
+!pTracker->IsClaimed( pKey )
+!pWorkItem->BIsRunning()
+!pszString || pszString[nChars] == '\0'
+!pvCallbackCur
+!s_bInittedJobTypeMessageInfo
+!sm_bShutDown
+!sm_bShuttingDown
+!sm_pLogInstance
+!sm_pMemPoolPendingMsg
+!sm_pMemPoolReceivedPkt
 "
 " because it is missing required fields:
 " conflicts with field "
@@ -275,6 +346,7 @@ $tI
 %d MB free space
 %d MB total space
 %d frames sampled for %.2f seconds
+%d jobs reached caller deadline without aborting since last report
 %d total TCP connections exist.
 %d validator nodes, %d nodes larger than %s
 %d%d%d
@@ -308,11 +380,14 @@ $tI
 %s %2d %02d:%02d:%02d%.*s %d%s
 %s %d %s
 %s %i %s
+%s %s
 %s %s HTTP/1.0
 %s %s%lu (%s0x%lx)
+%s %s(%llu) / %s
 %s (%d) :
 %s (%s)
 %s (%u)
+%s (emsg=%d)
 %s - %llu total requests made%s %lld completed
 %s - %s
 %s - locked by 0x%p
@@ -322,7 +397,9 @@ $tI
 %s Salt Length: 0x
 %s [%s]%-*s
 %s algorithm "%s" unsupported
+%s begin_ctx=%lld
 %s called
+%s end_ctx=%lld
 %s not implemented
 %s overflow!
 %s%02X
@@ -341,6 +418,7 @@ $tI
 %s------%s--%s%s
 %s.%%u.txt
 %s.%10u.txt
+%s.%u.tmp
 %s.*.txt
 %s.async%u.tmp
 %s.current.txt
@@ -353,7 +431,12 @@ $tI
 %s/.steam/%s
 %s/.steam/steam
 %s/steamXXXXXX
+%s: %d
+%s: %d, %d
+%s: %d, %d, %d
+%s: %s
 %s: %s returned %s %d (%s), disconnecting TCP connection. %d sends, %lld bytes outstanding %s
+%s: '%s', '%s'
 %s: (%d bit)
 %s: no such process %d
 %s:%d
@@ -497,6 +580,13 @@ $tI
 'F9
 'g*
 (
+( Assoc.nFlags & ( k_nAssocProcessing | k_nAssocFinalizing ) ) == 0 && Assoc.pPending == NULL
+( id & k_nMessageTypeID_Mask ) == k_nMessageTypeID_EMsg
+( m_AssocHandles[nAssocIdx].nFlags & k_nAssocClosed ) == 0
+( m_cubRecvMsg + pHdr->m_cbPkt ) <= k_cubMaxMsgNetworkSize
+( m_iHead & nNewCapacityMask ) == nNewCapacity - nPreSplit
+(!((uintptr_t)(src_height) & ((2)-1)))
+(!((uintptr_t)(src_width) & ((2)-1)))
 (%ld unused bits)
 (%llu proxied)
 (%p) Aborting HTTP connection and all requests on it due to lack of SSL certificate verification
@@ -522,8 +612,10 @@ $tI
 (%u)
 (%zu) Descend: %s, (%s), %s
 (%zu) readdir failed to find '%s' in '%s'
+(&src < m_Memory.Base()) || (&src >= (m_Memory.Base() + m_Size) )
 (((
 ((LPBUFFEREDISTREAM)parser->reader)->pos<((LPBUFFEREDISTREAM)parser->reader)->bytesavail
+((size_t)(m_nLogicalBytesAllocated) % 8) == 0
 (*
 (.
 (BGP MDT)
@@ -542,7 +634,15 @@ $tI
 (Unknown SAFI %u)
 (VPLS)
 (cannot determine missing fields for lite message)
+(cubToRead % (m_nAudioChannels * av_get_bytes_per_sample( k_eAVSampleFormatOut ))) == 0
+(dst_width % 2 == 0) && (dst_width >= 0)
+(dst_width % 3 == 0) && (dst_width > 0)
+(dy & 0x1ffff) == 0
+(dy & 0x3ffff) == 0
 (g*
+(int) m_treePostParamNameHashes.Count() == (int) m_vecPostParams.Count()
+(iub & (m_nSizeWithStack-1)) == 0
+(m_pAudioCallback->GetAudioBufferSize() % (m_nAudioChannels * av_get_bytes_per_sample( k_eAVSampleFormatOut ))) == 0
 (m`
 (main)
 (merge
@@ -551,7 +651,11 @@ $tI
 (null)
 (repeat period: %lldms)
 (root)
+(size_t) pNetPacket->CubData() >= sizeof( ProtoBufMsgHeader_t )
+(uint)~0 != hConnection
+(uint32)m_pHTTPRequestCache->m_listCacheFileLRU.Count() == (uint32)m_pHTTPRequestCache->m_mapCacheFiles.Count()
 (unknown)
+(unspecified)
 )
 )", which is not defined. The innermost scope is searched first in name resolution. Consider using a leading '.'(i.e., "(.
 )))
@@ -575,12 +679,24 @@ $tI
 *N6google8protobuf12_GLOBAL__N_123StringBaseTextGeneratorE
 *N6google8protobuf12_GLOBAL__N_124FieldValuePrinterWrapperE
 *N6google8protobuf12_GLOBAL__N_133FastFieldValuePrinterUtf8EscapingE
-*ZN15IMetricsFactory11NullMetricsEvEUlR8CMetricsE2_
 *g*
-*m_pLentReference
+*pBaseFrameFunction->GetName()
+*pOldMsgInfo->pchMsgName
+*pPtr == pExpectEnd
+*pPtr == pExpectEnd - rsalen
+*pchHost == '.'
+*pchMsg && *pchMsg == '%'
+*pchQueryString == '?'
+*pchSubDomain == '.'
+*pcubDecodedData
+*pcubEncryptedData
+*pcubMsgSizeMax >= 0 && *pcubMsgSizeMax < k_cubMaxMsgDataSize * 2
+*pcubPlaintextData
+*pcubSignature > 0
 *ppTCPConnection
 *ppUDPConnection
 *ppWebSocketConnection
+*ppWebSocketConnetion
 *pvRecord
 +
 +++
@@ -651,9 +767,9 @@ $tI
 -nocrashdialog
 -stack=
 -steamconsole
+-steamdeck
 -steamos
 -steamos3
--steampal
 -
 .
 .  Please update your library.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
@@ -702,14 +818,12 @@ $tI
 .pac
 .placeholder.proto
 .steam_exec_test.sh
-.tmp.swap
 /
 /%d
 //
 ///
 />
 /?
-/data/src/common/RateLimiter.h
 /data/src/common/completionportmanager.cpp
 /data/src/common/completionportmanager_posix.cpp
 /data/src/common/cookiecontainer.cpp
@@ -731,10 +845,8 @@ $tI
 /data/src/common/logger.cpp
 /data/src/common/metrics/metrics.cpp
 /data/src/common/msg.cpp
-/data/src/common/msg.h
 /data/src/common/msgbase.h
 /data/src/common/msgprotobuf.cpp
-/data/src/common/msgprotobuf.h
 /data/src/common/net.cpp
 /data/src/common/net_misc.cpp
 /data/src/common/netconnection.cpp
@@ -742,6 +854,7 @@ $tI
 /data/src/common/netfilter.cpp
 /data/src/common/netfilter.h
 /data/src/common/netpacket.cpp
+/data/src/common/netpacket_legacy_struct.h
 /data/src/common/opensslconnection.cpp
 /data/src/common/opensslwrapper.cpp
 /data/src/common/platform_sockets_posix.cpp
@@ -772,7 +885,6 @@ $tI
 /data/src/public/rtime.cpp
 /data/src/public/stat.cpp
 /data/src/public/tier0/memblockhdr.h
-/data/src/public/tier0/threadtools.h
 /data/src/public/tier0/tslist.h
 /data/src/public/tier0/vprof.h
 /data/src/public/tier1/bitstring.h
@@ -780,7 +892,6 @@ $tI
 /data/src/public/tier1/refcount.h
 /data/src/public/tier1/smartptr.h
 /data/src/public/tier1/thash.h
-/data/src/public/tier1/tsmempool.h
 /data/src/public/tier1/utlbuffer.h
 /data/src/public/tier1/utldict.h
 /data/src/public/tier1/utlhashmap.h
@@ -808,7 +919,6 @@ $tI
 /data/src/tier1/fileio.cpp
 /data/src/tier1/mempool.cpp
 /data/src/tier1/netadr.cpp
-/data/src/tier1/tsmempool.cpp
 /data/src/tier1/utlbuffer.cpp
 /data/src/tier1/utlmemory.cpp
 /data/src/tier1/utlqueue.cpp
@@ -830,6 +940,10 @@ $tI
 /etc/ssl/ca-bundle.pem
 /etc/ssl/certs/ca-certificates.crt
 /g*
+/home/saml/dev/steam/thirdpartycode/nonredist/libyuv/libyuv/source/planar_functions.cc
+/home/saml/dev/steam/thirdpartycode/nonredist/libyuv/libyuv/source/row_common.cc
+/home/saml/dev/steam/thirdpartycode/nonredist/libyuv/libyuv/source/scale.cc
+/home/saml/dev/steam/thirdpartycode/nonredist/libyuv/libyuv/source/scale_common.cc
 /proc
 /proc/%d/status
 /proc/%u/stat
@@ -840,6 +954,8 @@ $tI
 /proc/self/exe
 /proc/self/fd
 /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq
+/sys/kernel/debug/tracing/trace_marker
+/sys/kernel/tracing/trace_marker
 /tmp
 /tmp/.steam-sem-names
 /tmp/disk-free.XXXXXX
@@ -851,7 +967,28 @@ $tI
 /usr/local/ssl/private
 /wpad.dat
 0
+0 != ( g_vecIPv4ThisBox.Count() + g_vecIPv6ThisBox.Count() )
+0 != cMicrosecondsToSleep
+0 != g_vecIPv4ThisBox.Count()
+0 != g_vecIPv6ThisBox.Count()
+0 != hConnection
+0 != hSocketOwner
+0 != m_rgchPrefixFileName[0]
+0 != pTCPConnection->GetHConnection()
+0 != pWebSocketConnection->GetHConnection()
+0 != sm_hSocketOwnerSharedClient
+0 != sm_hSocketOwnerSharedClientIOCP
 0 <= i
+0 == (int)m_cThreadsRunning
+0 == cRef
+0 == iRet
+0 == iRet || (IsOSX() && errno == EINVAL)
+0 == m_ThreadLocalSpewReentrancyGuardInstance.Get()
+0 == m_WorkThreads.Count()
+0 == m_cubMsgIncomingAlloc
+0 == m_cubMsgIncomingRecv
+0 == sm_ThreadSafeQueueLogEvents.Count()
+0 == sm_ThreadSafeQueueLogMsgSpew.Count()
 0,
 0.8.3
 00
@@ -865,14 +1002,17 @@ $tI
 0123456789.:abcdefABCDEF
 0123456789ABCDEF
 0123456789abcdef
+03:07:22
 0@
 0g*
 0x
 1
+1 == ret
 1.0
 10
 10.0.0.0/8
 10.4.252.0/24
+100
 100 127.0.0.1 stale
 1000
 10000
@@ -910,7 +1050,6 @@ $tI
 10CUtlVectorIN14CUDPConnection20ConnectPingResults_tE10CUtlMemoryIS1_EE
 10CUtlVectorIN16CCookieContainer11CCookieInfoE10CUtlMemoryIS1_EE
 10CUtlVectorIN16CVideoFileStream20AvailableByteRange_tE10CUtlMemoryIS1_EE
-10CUtlVectorIN21CThreadSafeMemoryPool10BlockSet_tE10CUtlMemoryIS1_EE
 10CUtlVectorIN22VideoSegmentTemplate_t17TimelineSegment_tE10CUtlMemoryIS1_EE
 10CUtlVectorIN24MainThreadPlaybackInfo_t21VideoRepresentation_tE10CUtlMemoryIS1_EE
 10CUtlVectorIN6ConVar22ConVarChangeCallback_tE10CUtlMemoryIS1_EE
@@ -946,9 +1085,11 @@ $tI
 11IRTMPStream
 127.0.0.1
 12CAutoReleaseI14CMetricsStringE
+12CAutoReleaseI15CMetricsPayloadE
 12CAutoReleaseI16CCookieContainerE
 12CAutoReleaseI20IHTTPRedirectHandlerE
 12CAutoReleaseI21COpenSSLCachedSessionE
+12CAutoReleaseI8CMetricsE
 12CHTTPRequest
 12CIPRangeList
 12CRefCounted1I29IHTTPStreamingResponseHandler20CRefCountServiceBaseILb1E6CRefMTEE
@@ -956,14 +1097,11 @@ $tI
 12CStdMemAlloc
 12CVideoPlayer
 13CHTTPResponse
-13CMetricsTimer
 13CMsgAppRights
 13CMsgIPAddress
 13CPlainAutoPtrI7CUtlMapI10CUtlStringbi8CDefLessEE
 13CPlainAutoPtrI7CUtlMapIybi8CDefLessEE
-13CPlainAutoPtrI8CMetricsE
 13IMsgNetPacket
-13IStreamParser
 14 (default)
 14CClanEventData
 14CFrameFunctionI11CHTTPClientE
@@ -972,7 +1110,6 @@ $tI
 14CMetricsString
 14CMsgAuthTicket
 14CNetConnection
-14CPoolReferenceI8CMetricsE
 14CTCPConnection
 14CUDPConnection
 14CUtlHashMapLRUI10CIPAndPort9CSmartPtrI21COpenSSLCachedSessionE10CDefEqualsIS0_E11HashFunctorIS0_EE
@@ -984,7 +1121,6 @@ $tI
 14CUtlLinkedListIN17CHTTPRequestCache19CachedFileLRUData_tEiE
 14CUtlLinkedListIN18COpenSSLConnection13JobWakeData_tEiE
 14CUtlLinkedListIN4CNet21NetConnectionWakeUp_tEiE
-14CUtlLinkedListIN7CJobMgr12JobTimeout_tEiE
 14CUtlLinkedListIN7CJobMgr13JobYielding_tEiE
 14CUtlLinkedListIP10CNetPacketiE
 14CUtlLinkedListIP18CHTTPRequestHandleiE
@@ -1003,19 +1139,22 @@ $tI
 14VideoSegment_t
 1536
 15CAudioResampler
+15CMetricsPayload
+15CMsgKeyValueSet
 15COpenSSLContext
 15CVideoMPDParser
 15CWorkThreadPool
 15IAudioResampler
-15IMetricsFactory
 15ISSLCertificate
 16
 166
 16CBilling_Address
 16CCumulativeTimerIdLy1EE
 16CKeyValuesSystem
+16CMsgKeyValuePair
 16CStructNetPacket
 16CVideoFileStream
+16IKeyValuesSystem
 17CAudioFileDecoder
 17CDebugStatsSystem
 17CDummyCnxCallback
@@ -1044,6 +1183,7 @@ $tI
 18CScheduledFunctionI20CWebSocketConnectionE
 18CScheduledFunctionI21CHTTPClientConnectionE
 18CScheduledFunctionI25CHTTPClientNetworkRequestE
+18CUtlCharConversion
 18CVideoDecodedFrame
 18CVideoDecoderLibav
 18IUDPSocketCallback
@@ -1061,6 +1201,7 @@ $tI
 19IConnectionCallback
 1g*
 2
+2 + encoded_len_bytes + encoded_len <= buflen
 2.
 2000
 2048
@@ -1077,11 +1218,9 @@ $tI
 20IHTTPRedirectHandler
 20IUniformRandomStream
 20VideoAdaptationSet_t
-21:08:28
 21CHTTPClientConnection
 21CHTTPClientWorkThread
 21COpenSSLCachedSession
-21CThreadSafeMemoryPool
 21CUtlCStringConversion
 21VideoRepresentation_t
 222
@@ -1093,6 +1232,7 @@ $tI
 22ISSLConnectionCallback
 22VideoSegmentTemplate_t
 23CClanEventUserNewsTuple
+23CDummyWebSocketCallback
 250
 258EAFA5-E914-47DA-95CA-C5AB0DC85B11
 25CFastTimerCumulativeTimer
@@ -1246,6 +1386,7 @@ $tI
 <family %u, %u bytes>
 <from memory buffer>
 <g*
+<html><body>Fake captive portal</body></html>
 <html><head><title>%d %s</title></head><body><h1>%s</h1></body></html>
 <invalid>
 <li>
@@ -1277,6 +1418,7 @@ $tI
 ?||
 @
 @@@
+@C
 @EnableUDPHistory
 @L
 @MaxOutstandingSendThreadItem
@@ -1285,10 +1427,13 @@ $tI
 @bEnableFrameFuncOverageWarnings
 @bEnableHTTP2OnAllCHTTPClients
 @bEnableLogTearOff
+@bEnableNetworkJobsOwnStartList
 @bEnableSpewThrottle
 @bHttpClientRecordHostnameDimension
+@bLogMessageToProtobufClass
 @bMetricsEnabled
 @bMsgErrorDump
+@cMinimumJobTimeoutsToCheckPerFrame
 @cNetEncryptionHandshakeWorkMax_HighPri
 @cNetEncryptionHandshakeWorkMax_LowPri
 @cNetEncryptionHandshakeWorkMax_MedPri
@@ -1299,6 +1444,7 @@ $tI
 @metricsEnabledCatalogs
 @metricsEnabledOperations
 @metricsLegacyJobMetrics
+@nCallerDeadlineHopLatencyMS
 @nClientCMUDPPingTimeGoodEnoughThresholdMS
 @nClientCMUDPPingTimeoutUseGoodEnoughMS
 @nIOCPThreadCount
@@ -1321,12 +1467,38 @@ AA Compromise
 AAA
 AACompromise
 AAO
+AB64ToARGB
+AB64ToARGBRow_AVX2
+AB64ToARGBRow_Any_AVX2
+AB64ToARGBRow_Any_SSSE3
+AB64ToARGBRow_C
+AB64ToARGBRow_SSSE3
 ABADF
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+ABGRToAR30
+ABGRToAR30Row_AVX2
+ABGRToAR30Row_Any_AVX2
+ABGRToAR30Row_Any_SSSE3
+ABGRToAR30Row_C
+ABGRToAR30Row_SSSE3
+ABGRToARGB
+ABGRToNV12
+ABGRToNV21
+ABGRToUVRow_AVX2
+ABGRToUVRow_Any_AVX2
+ABGRToUVRow_Any_SSSE3
+ABGRToUVRow_C
+ABGRToUVRow_SSSE3
+ABGRToYRow_AVX2
+ABGRToYRow_Any_AVX2
+ABGRToYRow_Any_SSSE3
+ABGRToYRow_C
+ABGRToYRow_SSSE3
 ABORTED
 ABSENT
 ACCESS_DESCRIPTION
 ACHIEVEMENTS
+AC_
 AD
 AD Time Stamping
 ADH
@@ -1418,6 +1590,222 @@ ANDROID64
 ANSI X9.62
 ANY
 ANY PRIVATE KEY
+AR30ToAB30
+AR30ToAB30Row_C
+AR30ToABGR
+AR30ToABGRRow_C
+AR30ToARGB
+AR30ToARGBRow_C
+AR64Shuffle
+AR64ShuffleRow_C
+AR64ToAB64
+AR64ToARGB
+AR64ToARGBRow_AVX2
+AR64ToARGBRow_Any_AVX2
+AR64ToARGBRow_Any_SSSE3
+AR64ToARGBRow_C
+AR64ToARGBRow_SSSE3
+ARGB1555ToARGB
+ARGB1555ToARGBRow_Any_SSE2
+ARGB1555ToARGBRow_C
+ARGB1555ToARGBRow_SSE2
+ARGB1555ToUVRow_C
+ARGB1555ToYRow_C
+ARGB4444ToARGB
+ARGB4444ToARGBRow_Any_SSE2
+ARGB4444ToARGBRow_C
+ARGB4444ToARGBRow_SSE2
+ARGB4444ToUVRow_C
+ARGB4444ToYRow_C
+ARGBAdd
+ARGBAddRow_AVX2
+ARGBAddRow_Any_AVX2
+ARGBAddRow_Any_SSE2
+ARGBAddRow_C
+ARGBAddRow_SSE2
+ARGBAffineRow_C
+ARGBAffineRow_SSE2
+ARGBAttenuate
+ARGBAttenuateRow_AVX2
+ARGBAttenuateRow_Any_AVX2
+ARGBAttenuateRow_Any_SSSE3
+ARGBAttenuateRow_C
+ARGBAttenuateRow_SSSE3
+ARGBBlend
+ARGBBlendRow_C
+ARGBBlendRow_SSSE3
+ARGBBlur
+ARGBColorMatrix
+ARGBColorMatrixRow_C
+ARGBColorMatrixRow_SSSE3
+ARGBColorTable
+ARGBColorTableRow_C
+ARGBColorTableRow_X86
+ARGBComputeCumulativeSum
+ARGBCopy
+ARGBCopyAlpha
+ARGBCopyAlphaRow_AVX2
+ARGBCopyAlphaRow_Any_AVX2
+ARGBCopyAlphaRow_Any_SSE2
+ARGBCopyAlphaRow_C
+ARGBCopyAlphaRow_SSE2
+ARGBCopyYToAlpha
+ARGBCopyYToAlphaRow_AVX2
+ARGBCopyYToAlphaRow_Any_AVX2
+ARGBCopyYToAlphaRow_Any_SSE2
+ARGBCopyYToAlphaRow_C
+ARGBCopyYToAlphaRow_SSE2
+ARGBExtractAlpha
+ARGBExtractAlphaRow_AVX2
+ARGBExtractAlphaRow_Any_AVX2
+ARGBExtractAlphaRow_Any_SSE2
+ARGBExtractAlphaRow_C
+ARGBExtractAlphaRow_SSE2
+ARGBGray
+ARGBGrayRow_C
+ARGBGrayRow_SSSE3
+ARGBGrayTo
+ARGBInterpolate
+ARGBLumaColorTable
+ARGBLumaColorTableRow_C
+ARGBLumaColorTableRow_SSSE3
+ARGBMirror
+ARGBMirrorRow_AVX2
+ARGBMirrorRow_Any_AVX2
+ARGBMirrorRow_Any_SSE2
+ARGBMirrorRow_C
+ARGBMirrorRow_SSE2
+ARGBMultiply
+ARGBMultiplyRow_AVX2
+ARGBMultiplyRow_Any_AVX2
+ARGBMultiplyRow_Any_SSE2
+ARGBMultiplyRow_C
+ARGBMultiplyRow_SSE2
+ARGBPolynomial
+ARGBPolynomialRow_AVX2
+ARGBPolynomialRow_C
+ARGBPolynomialRow_SSE2
+ARGBQuantize
+ARGBQuantizeRow_C
+ARGBQuantizeRow_SSE2
+ARGBRect
+ARGBSepia
+ARGBSepiaRow_C
+ARGBSepiaRow_SSSE3
+ARGBSetRow_C
+ARGBSetRow_X86
+ARGBShade
+ARGBShadeRow_C
+ARGBShadeRow_SSE2
+ARGBShuffle
+ARGBShuffleRow_AVX2
+ARGBShuffleRow_Any_AVX2
+ARGBShuffleRow_Any_SSSE3
+ARGBShuffleRow_C
+ARGBShuffleRow_SSSE3
+ARGBSobel
+ARGBSobelToPlane
+ARGBSobelXY
+ARGBSubtract
+ARGBSubtractRow_AVX2
+ARGBSubtractRow_Any_AVX2
+ARGBSubtractRow_Any_SSE2
+ARGBSubtractRow_C
+ARGBSubtractRow_SSE2
+ARGBToAB64
+ARGBToAB64Row_AVX2
+ARGBToAB64Row_Any_AVX2
+ARGBToAB64Row_Any_SSSE3
+ARGBToAB64Row_C
+ARGBToAB64Row_SSSE3
+ARGBToABGR
+ARGBToAR30
+ARGBToAR30Row_AVX2
+ARGBToAR30Row_Any_AVX2
+ARGBToAR30Row_Any_SSSE3
+ARGBToAR30Row_C
+ARGBToAR30Row_SSSE3
+ARGBToAR64
+ARGBToAR64Row_AVX2
+ARGBToAR64Row_Any_AVX2
+ARGBToAR64Row_Any_SSSE3
+ARGBToAR64Row_C
+ARGBToAR64Row_SSSE3
+ARGBToARGB1555
+ARGBToARGB1555Row_Any_SSE2
+ARGBToARGB1555Row_C
+ARGBToARGB1555Row_SSE2
+ARGBToARGB4444
+ARGBToARGB4444Row_Any_SSE2
+ARGBToARGB4444Row_C
+ARGBToARGB4444Row_SSE2
+ARGBToBGRA
+ARGBToI400
+ARGBToI422
+ARGBToI444
+ARGBToJ400
+ARGBToJ420
+ARGBToJ422
+ARGBToNV12
+ARGBToNV12Matrix
+ARGBToNV21
+ARGBToNV21Matrix
+ARGBToRAW
+ARGBToRAWRow_AVX2
+ARGBToRAWRow_Any_AVX2
+ARGBToRAWRow_Any_SSSE3
+ARGBToRAWRow_C
+ARGBToRAWRow_SSSE3
+ARGBToRGB24
+ARGBToRGB24Row_AVX2
+ARGBToRGB24Row_Any_AVX2
+ARGBToRGB24Row_Any_SSSE3
+ARGBToRGB24Row_C
+ARGBToRGB24Row_SSSE3
+ARGBToRGB565
+ARGBToRGB565Dither
+ARGBToRGB565DitherRow_AVX2
+ARGBToRGB565DitherRow_Any_AVX2
+ARGBToRGB565DitherRow_Any_SSE2
+ARGBToRGB565DitherRow_C
+ARGBToRGB565DitherRow_SSE2
+ARGBToRGB565Row_Any_SSE2
+ARGBToRGB565Row_C
+ARGBToRGB565Row_SSE2
+ARGBToRGBA
+ARGBToUV444Row_Any_SSSE3
+ARGBToUV444Row_C
+ARGBToUV444Row_SSSE3
+ARGBToUVJRow_AVX2
+ARGBToUVJRow_Any_AVX2
+ARGBToUVJRow_Any_SSSE3
+ARGBToUVJRow_C
+ARGBToUVJRow_SSSE3
+ARGBToUVRowMatrix_C
+ARGBToUVRow_AVX2
+ARGBToUVRow_Any_AVX2
+ARGBToUVRow_Any_SSSE3
+ARGBToUVRow_C
+ARGBToUVRow_SSSE3
+ARGBToUYVY
+ARGBToYJRow_AVX2
+ARGBToYJRow_Any_AVX2
+ARGBToYJRow_Any_SSSE3
+ARGBToYJRow_C
+ARGBToYJRow_SSSE3
+ARGBToYRowMatrix_C
+ARGBToYRow_AVX2
+ARGBToYRow_Any_AVX2
+ARGBToYRow_Any_SSSE3
+ARGBToYRow_C
+ARGBToYRow_SSSE3
+ARGBToYUY2
+ARGBUnattenuate
+ARGBUnattenuateRow_AVX2
+ARGBUnattenuateRow_Any_AVX2
+ARGBUnattenuateRow_Any_SSE2
+ARGBUnattenuateRow_C
+ARGBUnattenuateRow_SSE2
 ARIA
 ARIA-128-CBC
 ARIA-128-CCM
@@ -1457,6 +1845,7 @@ ARIAGCM(256)
 ARS
 AS
 ASCII
+ASEs implemented
 ASIdOrRange
 ASIdentifierChoice
 ASIdentifierChoice_canonize
@@ -1537,6 +1926,9 @@ AUTHORITY_INFO_ACCESS
 AUTHORITY_KEYID
 AVGRATE
 AVS Failure
+AYUVToUVRow_C
+AYUVToVURow_C
+AYUVToYRow_C
 AbortConnection - (%p) Aborting client HTTP connection
 Aborting HTTP request because !bSent
 Aborting HTTP request because body content is larger than range request
@@ -1603,7 +1995,6 @@ AddUInt32
 AddUInt64
 AddedGameToWishlist
 Adding connection back to pool, but not found in in use list or waiting list
-AddingFiles
 Address is invalid or contains invalid characters
 Address too small!
 Admin
@@ -1615,6 +2006,7 @@ Ag*
 Age
 Akbank
 Akk
+Alfa-Click
 AliPay
 All
 All Friends
@@ -1633,6 +2025,9 @@ American Express
 Amex (BoaCompra)
 Analytics
 Android
+Android420ToABGR
+Android420ToARGB
+Android420ToARGBMatrix
 Announcement
 Anonymous Game Server
 Anonymous User
@@ -1646,736 +2041,17 @@ AppendedSHA
 Application running
 Approved Friends
 Apr
+ArmCpuCaps
 Art
 Artwork
 ArtworkPublished
 Ascending
 Assert( %s ):%s:%d
-Assertion Failed: !"Don't poll on UDP sockets dude"
-Assertion Failed: !"couldn't read cpu information from /proc/cpuinfo"
-Assertion Failed: !( m_nFlags & FCVAR_NEVER_AS_STRING )
-Assertion Failed: !( m_pHTTPResponseHandler && m_pHTTPStreamingResponseHandler )
-Assertion Failed: !(nStringCaseFlags & STRINGCASE_FLAG_TURKISH)
-Assertion Failed: !BUseIOCP()
-Assertion Failed: !InternalGetWebSocketConnection( hConnectionPreAllocWebSocket )
-Assertion Failed: !IsExternallyAllocated()
-Assertion Failed: !IsPlaybackTimerRunning()
-Assertion Failed: !IsVideoPlayerManagerInitialized()
-Assertion Failed: !V_isempty( svHostname )
-Assertion Failed: !bAsDatagram
-Assertion Failed: !bBlockedOnNetwork
-Assertion Failed: !bRet || m_listVideoPackets.Count() == 0
-Assertion Failed: !g_VProfile
-Assertion Failed: !g_unPrivateIPThisBox.HasIP() || unIP == g_unPrivateIPThisBox
-Assertion Failed: !g_unPublicIPThisBox.HasIP() || unIP == g_unPublicIPThisBox
-Assertion Failed: !m_bAborted
-Assertion Failed: !m_bConnectionIsInit
-Assertion Failed: !m_bConnectionReleased
-Assertion Failed: !m_bDisconnecting
-Assertion Failed: !m_bEndOfInput
-Assertion Failed: !m_bFindingBestServer
-Assertion Failed: !m_bInThreadPool
-Assertion Failed: !m_bInitialRequest
-Assertion Failed: !m_bIsShutdown
-Assertion Failed: !m_bJustCount
-Assertion Failed: !m_bLoaded
-Assertion Failed: !m_bRcvdCloseFrame
-Assertion Failed: !m_cubPkt || ( m_cubPkt >= ( m_cubMsgHdr + m_cubStruct ) )
-Assertion Failed: !m_data.HasError()
-Assertion Failed: !m_pContext
-Assertion Failed: !m_pHTTP2Session
-Assertion Failed: !m_pInitalizeFileStream->IsRequestingData()
-Assertion Failed: !m_pInt
-Assertion Failed: !m_pManifest
-Assertion Failed: !m_pNextPacket
-Assertion Failed: !m_pProtoBufBody
-Assertion Failed: !m_pReceivedPktFirst || m_pReceivedPktFirst->GetSeq() > m_nTheirSeqReceived
-Assertion Failed: !m_pReceivedPktFirst || pNextPkt->GetSeq() != m_pReceivedPktFirst->GetSeq()
-Assertion Failed: !m_pRedirectRequestHandle
-Assertion Failed: !m_pSSLConnection
-Assertion Failed: !m_pWebSocketConnectionCallback
-Assertion Failed: !m_pszCipher
-Assertion Failed: !m_pubRecvBuffer
-Assertion Failed: !m_pubRecvMsg
-Assertion Failed: !m_sFrameCur.m_pubPayload
-Assertion Failed: !m_strTargetPath.IsEmpty()
-Assertion Failed: !m_strURL.IsEmpty() || m_bufFromMemory.TellPut() > 0
-Assertion Failed: !m_vecAllPlayers.HasElement( pPlayer )
-Assertion Failed: !m_vecLocks.HasElement( pLock )
-Assertion Failed: !m_vecMainThreadDel.HasElement( del )
-Assertion Failed: !pArray || (Base() >= (pArray + size)) || (pArray >= (Base() + Count()) )
-Assertion Failed: !pKeyCallback
-Assertion Failed: !pLock->BIsLocked()
-Assertion Failed: !pMessageInfo->BHasDynamicMessageName()
-Assertion Failed: !pParent->m_bInDeleteQueue
-Assertion Failed: !pPlayer->BInThreadPool()
-Assertion Failed: !pToCopy || (pToCopy + num <= Base()) || (pToCopy >= (Base() + Count()) )
-Assertion Failed: !pTracker->IsClaimed( pKey )
-Assertion Failed: !pszString || pszString[nChars] == '\0'
-Assertion Failed: !pvCallbackCur
-Assertion Failed: !s_bInittedJobTypeMessageInfo
-Assertion Failed: !sm_bShutDown
-Assertion Failed: !sm_bShuttingDown
-Assertion Failed: !sm_pMemPoolPendingMsg
-Assertion Failed: !sm_pMemPoolReceivedPkt
-Assertion Failed: %s
-Assertion Failed: ( Assoc.nFlags & ( k_nAssocProcessing | k_nAssocFinalizing ) ) == 0 && Assoc.pPending == NULL
-Assertion Failed: ( blockSize % TSLIST_NODE_ALIGNMENT ) == 0
-Assertion Failed: ( id & k_nMessageTypeID_Mask ) == k_nMessageTypeID_EMsg
-Assertion Failed: ( m_AssocHandles[nAssocIdx].nFlags & k_nAssocClosed ) == 0
-Assertion Failed: ( m_cubRecvMsg + pHdr->m_cbPkt ) <= k_cubMaxMsgNetworkSize
-Assertion Failed: ( m_iHead & nNewCapacityMask ) == nNewCapacity - nPreSplit
-Assertion Failed: (&src < m_Memory.Base()) || (&src >= (m_Memory.Base() + m_Size) )
-Assertion Failed: ((size_t)(m_nLogicalBytesAllocated) % 8) == 0
-Assertion Failed: (cubToRead % (m_nAudioChannels * av_get_bytes_per_sample( k_eAVSampleFormatOut ))) == 0
-Assertion Failed: (int) m_treePostParamNameHashes.Count() == (int) m_vecPostParams.Count()
-Assertion Failed: (int)amount <= m_cubBlockSize
-Assertion Failed: (iub & (m_nSizeWithStack-1)) == 0
-Assertion Failed: (m_pAudioCallback->GetAudioBufferSize() % (m_nAudioChannels * av_get_bytes_per_sample( k_eAVSampleFormatOut ))) == 0
-Assertion Failed: (size_t) pNetPacket->CubData() >= sizeof( ProtoBufMsgHeader_t )
-Assertion Failed: (uint)~0 != hConnection
-Assertion Failed: (uint32)m_pHTTPRequestCache->m_listCacheFileLRU.Count() == (uint32)m_pHTTPRequestCache->m_mapCacheFiles.Count()
-Assertion Failed: *m_pNRefs > 0
-Assertion Failed: *pBaseFrameFunction->GetName()
-Assertion Failed: *pPtr == pExpectEnd
-Assertion Failed: *pPtr == pExpectEnd - rsalen
-Assertion Failed: *pchHost == '.'
-Assertion Failed: *pchMsg && *pchMsg == '%'
-Assertion Failed: *pchQueryString == '?'
-Assertion Failed: *pchSubDomain == '.'
-Assertion Failed: *pcubDecodedData
-Assertion Failed: *pcubEncryptedData
-Assertion Failed: *pcubMsgSizeMax >= 0 && *pcubMsgSizeMax < k_cubMaxMsgDataSize * 2
-Assertion Failed: *pcubPlaintextData
-Assertion Failed: *pcubSignature > 0
-Assertion Failed: *ppTCPConnection
-Assertion Failed: *ppUDPConnection
-Assertion Failed: *ppWebSocketConnetion
-Assertion Failed: 0
-Assertion Failed: 0 != ( g_vecIPv4ThisBox.Count() + g_vecIPv6ThisBox.Count() )
-Assertion Failed: 0 != cMicrosecondsToSleep
-Assertion Failed: 0 != g_vecIPv4ThisBox.Count()
-Assertion Failed: 0 != g_vecIPv6ThisBox.Count()
-Assertion Failed: 0 != hConnection
-Assertion Failed: 0 != hSocketOwner
-Assertion Failed: 0 != m_rgchPrefixFileName[0]
-Assertion Failed: 0 != pTCPConnection->GetHConnection()
-Assertion Failed: 0 != pWebSocketConnection->GetHConnection()
-Assertion Failed: 0 != sm_hSocketOwnerSharedClient
-Assertion Failed: 0 != sm_hSocketOwnerSharedClientIOCP
-Assertion Failed: 0 == (int)m_cThreadsRunning
-Assertion Failed: 0 == cRef
-Assertion Failed: 0 == iRet
-Assertion Failed: 0 == iRet || (IsOSX() && errno == EINVAL)
-Assertion Failed: 0 == m_ThreadLocalSpewReentrancyGuardInstance.Get()
-Assertion Failed: 0 == m_WorkThreads.Count()
-Assertion Failed: 0 == m_cubMsgIncomingAlloc
-Assertion Failed: 0 == m_cubMsgIncomingRecv
-Assertion Failed: 0 == sm_ThreadSafeQueueLogEvents.Count()
-Assertion Failed: 0 == sm_ThreadSafeQueueLogMsgSpew.Count()
-Assertion Failed: 1 == ret
-Assertion Failed: 2 + encoded_len_bytes + encoded_len <= buflen
-Assertion Failed: Assoc.nFd == hQueue
-Assertion Failed: Assoc.nFd == handle
-Assertion Failed: BStarted()
-Assertion Failed: BUseIOCP()
-Assertion Failed: CHTTPUtil::BStatusCodeIsRedirect( eRedirectStatusCode )
-Assertion Failed: CNet::s_FrameFuncHandleCompletedWorkItems == NULL
-Assertion Failed: CNet::s_FrameFuncPollConnections == NULL
-Assertion Failed: CNet::s_FrameFuncRunHosts == NULL
-Assertion Failed: CNet::s_FrameFuncWakeUpConnections == NULL
-Assertion Failed: ConstHdr().ip_v6().length() == 16
-Assertion Failed: Coroutine_IsActive()
-Assertion Failed: GCoroutineMgr().IsAnyCoroutineActive()
-Assertion Failed: GCoroutineMgr().IsValidCoroutine(hCoroutine)
-Assertion Failed: GetConnectionType( hConnection ) == eConnectionType
-Assertion Failed: GetConnectionType() == k_ESSLConnectionType_Client || GetConnectionType() == k_EDTLSConnectionType_Client
-Assertion Failed: GetInts()
-Assertion Failed: GetLastNetError() != 0
-Assertion Failed: INVALID_SOCKET != hSocket
-Assertion Failed: INVALID_SOCKET != m_hSocket
-Assertion Failed: INVALID_SOCKET == m_hSocket
-Assertion Failed: IOTYPE_ACCEPT == pCompletionData->type
-Assertion Failed: IsInList(after)
-Assertion Failed: IsInList(before)
-Assertion Failed: IsPowerOfTwo( nNewCapacity )
-Assertion Failed: IsRunning()
-Assertion Failed: IsText()
-Assertion Failed: IsValidIndex( elem )
-Assertion Failed: IsValidIndex( idx )
-Assertion Failed: IsValidIndex(elem)
-Assertion Failed: IsVideoPlayerManagerInitialized()
-Assertion Failed: NULL != m_pConnectionCallbackOrig
-Assertion Failed: NULL != m_pValObjectCur
-Assertion Failed: NULL != pPendingMsg
-Assertion Failed: NULL != pchFileName
-Assertion Failed: NULL != pchPrefixPassed
-Assertion Failed: NULL != pubPkt
-Assertion Failed: NULL == m_pConnectionCallbackOrig
-Assertion Failed: NULL == m_pFile
-Assertion Failed: NULL == m_pJobToNotifyOnLockRelease
-Assertion Failed: NULL == m_pJobWaitingQueueTail->m_pNextJobInLineForLock
-Assertion Failed: NULL == m_pNextJobInLineForLock
-Assertion Failed: NULL == m_pvStartParam
-Assertion Failed: NULL == pLock->m_pJobWaitingQueueTail || this == pLock->m_pJobWaitingQueueTail
-Assertion Failed: NULL == pValObjectPrev->m_pValObjectNext
-Assertion Failed: PrepareBuffer( nNewLength ) == pstrNew
-Assertion Failed: PvRecordFind( unKey ) == NULL
-Assertion Failed: Size() == operand.Size()
-Assertion Failed: ThreadInMainThread()
-Assertion Failed: V_IsAbsolutePath( pPath )
-Assertion Failed: V_strlen( pchName ) < V_ARRAYSIZE( m_rgchName )
-Assertion Failed: _IsValidIndex( elem, unNodeSize, pMemBase )
-Assertion Failed: _IsValidIndex( y, unNodeSize, pMemBase )
-Assertion Failed: addrListening.HasIP()
-Assertion Failed: argLen < 0x10000000u
-Assertion Failed: avPacket.pts != AV_NOPTS_VALUE
-Assertion Failed: bForceRequeue || m_unThreadBytesToRead == 0 || m_eResultRunSSL != k_EResultOK
-Assertion Failed: bSuccess || pWorkItem->HasTimedOut()
-Assertion Failed: baseIP.GetType() == k_EIPTypeV4
-Assertion Failed: baseIP.GetType() == k_EIPTypeV6
-Assertion Failed: bitNum >= 0 && bitNum < this->Size()
-Assertion Failed: blobSize <= nMaxBlobSize
-Assertion Failed: blockSize > sizeof(FreeListItem_t)
-Assertion Failed: buf.GetFlags() & CUtlBuffer::TEXT_BUFFER
-Assertion Failed: bufDataChunk.TellPut() > 0
-Assertion Failed: buf[0] == expect_tag
-Assertion Failed: bufferLen == 0 || pDest != NULL
-Assertion Failed: bufferLen > 0 && bufferLen <= INT_MAX
-Assertion Failed: bufferToSwap.TellPut() < FIO_MAX_IO_BYTES
-Assertion Failed: buflen >= 2
-Assertion Failed: buflen >= 2 + encoded_len_bytes
-Assertion Failed: bytesTransferred >= 0
-Assertion Failed: cActualReplacements == cReplacements
-Assertion Failed: cBytes > 0
-Assertion Failed: cDaysKeepPersistentLogFiles > 0
-Assertion Failed: cIntervalsSinceLastGrant >= 1
-Assertion Failed: cMaxSamples > 2
-Assertion Failed: cMicrosecondsToSleep < k_cMicroSecJobPausedTimeout
-Assertion Failed: cRecordInit > 0
-Assertion Failed: cRefCount >= 0
-Assertion Failed: cRemaining > 0
-Assertion Failed: cSeqsAcked > 0
-Assertion Failed: cbActual < (uint32)nBufSizeWithTerminator
-Assertion Failed: ccMax >= 1
-Assertion Failed: cchEncodedData > 0
-Assertion Failed: cchEncodedData >= ( cubData * 2 ) + 1
-Assertion Failed: checkLen >= 0
-Assertion Failed: components.Count() == 0
-Assertion Failed: context.m_vecStack.Count() <= 1
-Assertion Failed: cookie.m_strDomain != ""
-Assertion Failed: coroutines.Base() == NULL
-Assertion Failed: count == 0 || s1 != NULL
-Assertion Failed: count == 0 || s2 != NULL
-Assertion Failed: count >= 0
-Assertion Failed: cubBuffer >= cbWritten + ( m_pNetPacket->CubData() - cubSkip )
-Assertion Failed: cubBuffer >= cbWritten + m_ReplacementBody.Count()
-Assertion Failed: cubBytesToRead < INT32_MAX
-Assertion Failed: cubConvertedBuffer == cubConverted
-Assertion Failed: cubData
-Assertion Failed: cubData < FIO_MAX_IO_BYTES
-Assertion Failed: cubData < INT32_MAX
-Assertion Failed: cubData <= k_cubMaxExpectedMsgDataSize
-Assertion Failed: cubData <= k_cubMaxMsgNetworkSize
-Assertion Failed: cubData <= k_nMaxDatagramSize
-Assertion Failed: cubData > 0
-Assertion Failed: cubData >= 0
-Assertion Failed: cubData >= 8
-Assertion Failed: cubDecryptedData + 16 <= (uint) m_pNetPacket->CubData()
-Assertion Failed: cubEncryptedData
-Assertion Failed: cubEncryptedData > 0
-Assertion Failed: cubEncryptedData >= cubTotalOutput
-Assertion Failed: cubIV
-Assertion Failed: cubIV >= k_nSymmetricBlockSize
-Assertion Failed: cubIncoming >= 0
-Assertion Failed: cubInput > 0
-Assertion Failed: cubKey > 0
-Assertion Failed: cubModulus <= 0xFFFFFFFFu
-Assertion Failed: cubMsgRemaining > 0
-Assertion Failed: cubMsgSizeMax >= 0
-Assertion Failed: cubPkt >= sizeof ( UDPPktHdr_t )
-Assertion Failed: cubPlaintextData
-Assertion Failed: cubPlaintextData > 0
-Assertion Failed: cubRemaining >= 0
-Assertion Failed: cubSent == cubPkt
-Assertion Failed: cubWritten == bufAudio.TellPut()
-Assertion Failed: dest != NULL
-Assertion Failed: destCapacity != 0
-Assertion Failed: destSize >= 1
-Assertion Failed: dirName
-Assertion Failed: eFrameType < k_EFrameTypeMax
-Assertion Failed: eGroup < VPROF_BUDGETGROUP_MAX
-Assertion Failed: eGroup >= static_cast< ESpewGroup >( 0 ) && eGroup < k_ESpew_ArraySize
-Assertion Failed: eMsg != k_EMsgInvalid
-Assertion Failed: encoded_len_bytes >= 1 && encoded_len_bytes <= sizeof(size_t)
-Assertion Failed: existingLen < k_cchMaxString && cubInput * 2 < k_cchMaxString - existingLen
-Assertion Failed: extension
-Assertion Failed: extension[0] == '.'
-Assertion Failed: false
-Assertion Failed: filesystem
-Assertion Failed: g_CompletionPortManager.BStarted()
-Assertion Failed: g_pFioAsyncEnqueue == NULL
-Assertion Failed: g_pFioAsyncFinalize == NULL
-Assertion Failed: g_pJobCur
-Assertion Failed: g_pJobCur != NULL
-Assertion Failed: g_pMemAllocSteam
-Assertion Failed: g_vecIPv4ThisBox.Count() > 0
-Assertion Failed: hQueue != -1
-Assertion Failed: iIP < g_vecIPv4ThisBox.Count()
-Assertion Failed: iIP < g_vecIPv6ThisBox.Count()
-Assertion Failed: iNode == iIndex
-Assertion Failed: iSegment >= 0
-Assertion Failed: iSetNonBlockResult == 0
-Assertion Failed: idx < m_map.m_nMaxElement
-Assertion Failed: in
-Assertion Failed: in != out
-Assertion Failed: info.m_pReplacementString == 0
-Assertion Failed: info.m_pTreeInUseConnections->Element(iIndexConnection) == pConnection
-Assertion Failed: info.m_pTreeWaitingConnections->Element(iIndexConnection) == pConnection
-Assertion Failed: job.m_ePauseReason == k_EJobPauseReasonWaitingForLock
-Assertion Failed: job.m_pWaitingOnWorkItem == NULL
-Assertion Failed: jobID != k_GIDNil
-Assertion Failed: jobMsgInfo.m_EMsg != 0
-Assertion Failed: k_EConnectionModeClient == m_pNetConnection->m_EConnectionMode
-Assertion Failed: k_EConnectionStateConnecting == m_EConnectionState
-Assertion Failed: k_EConnectionStateUnconnected == m_EConnectionState
-Assertion Failed: k_EConnectionTypeTCP == GetConnectionType( hConnection )
-Assertion Failed: k_EConnectionTypeUDP == GetConnectionType( hConnection )
-Assertion Failed: k_EConnectionTypeWebSocket == GetConnectionType( hConnection )
-Assertion Failed: k_EHandshakeStateComplete == m_EHandshakeState
-Assertion Failed: k_EHandshakeStateInProgress == m_EHandshakeState
-Assertion Failed: k_EIPTypeV4 == addr.GetType()
-Assertion Failed: k_nMemPoolMagic_Free == *(( (int *) returnBlock) - 1)
-Assertion Failed: k_nMemPoolMagic_InUse == *(( (int *) pMem) - 1)
-Assertion Failed: k_nSymmetricKeyLen256 == cubKey || k_nSymmetricKeyLen128 == cubKey
-Assertion Failed: lNext >= 0
-Assertion Failed: lOffset >= 0
-Assertion Failed: lSet >= 0
-Assertion Failed: lVideoSleep >= 0 && lAudioSleep >= 0
-Assertion Failed: len < maxlen
-Assertion Failed: len > 0 || HasError()
-Assertion Failed: len >= 0
-Assertion Failed: lengthToEncodePriv > 0 && lengthToEncodePriv < 1024*1024
-Assertion Failed: lengthToEncodePub > 0 && lengthToEncodePub < 1024*1024
-Assertion Failed: m_AssocHandles.IsValidIndex( nAssocIdx )
-Assertion Failed: m_BaseIP.GetType() == k_EIPTypeV4
-Assertion Failed: m_Count == 0
-Assertion Failed: m_EConnectionState == k_EConnectionStateConnecting
-Assertion Failed: m_EConnectionState == k_EConnectionStateDisconnecting
-Assertion Failed: m_Func
-Assertion Failed: m_MapJob.Find( job.GetJobID() ) == m_MapJob.InvalidIndex()
-Assertion Failed: m_MapJob.InvalidIndex() != iJob || !bShouldExist
-Assertion Failed: m_MapJob[iJob]->GetPauseReason() == k_EJobPauseReasonYield
-Assertion Failed: m_Put >= 0
-Assertion Failed: m_QueueScheduledItems.Count() >= m_ListScheduledFunctions.Count()
-Assertion Failed: m_STimeSwitched.LTime() == CSTime::LServerTimeCur()
-Assertion Failed: m_TotalElements != InvalidIndex()
-Assertion Failed: m_VecCoroutineStack.Count() > 1
-Assertion Failed: m_WorkThreads.Count() == 0 && m_cThreadsRunning == (uint32) 0
-Assertion Failed: m_bAllowUnstableRemoval
-Assertion Failed: m_bConnectionIsInit
-Assertion Failed: m_bEndOfInput || ( m_Packet.data && m_Packet.size )
-Assertion Failed: m_bHTTPSTunnelCompleted == false
-Assertion Failed: m_bPauseForValidation
-Assertion Failed: m_bRunning
-Assertion Failed: m_bSemOwner
-Assertion Failed: m_bufBody.TellPut() == 0
-Assertion Failed: m_bufFromMemory.TellPut() <= 0 || m_strURL.IsEmpty()
-Assertion Failed: m_cBlocksInUse.GetRaw() > 0
-Assertion Failed: m_cCurrentDepth < m_cMaxDepth
-Assertion Failed: m_cCurrentDepth > 0
-Assertion Failed: m_cNextThreads == 0
-Assertion Failed: m_cNextThreads == 1
-Assertion Failed: m_cPkts <= k_nMaxPktsPerMsg
-Assertion Failed: m_cReentrancyCount >= 0
-Assertion Failed: m_cRef == 0
-Assertion Failed: m_cRefCountPolling > 0
-Assertion Failed: m_cRunningThreads == 0
-Assertion Failed: m_cSamples == 0 && m_pulSamples[0] == 0
-Assertion Failed: m_cStartCount > 0
-Assertion Failed: m_cubAlreadySentFromHeadBuffer < head.len
-Assertion Failed: m_cubMsgIncomingRecv <= m_cubMsgIncomingAlloc
-Assertion Failed: m_cubSavedStack < k_cubMaxCoroutineStackSize
-Assertion Failed: m_eConnectionState == k_EHTTPClientConnectionState_CONNECTING
-Assertion Failed: m_eConnectionState == k_EHTTPClientConnectionState_HANDSHAKING
-Assertion Failed: m_eConnectionState == k_EHTTPClientConnectionState_KEEPALIVE || m_eConnectionState == k_EHTTPClientConnectionState_HTTP2SESSIONACTIVE
-Assertion Failed: m_eConnectionState == k_EHTTPClientConnectionState_SENDINGREQUEST || m_eConnectionState == k_EHTTPClientConnectionState_HTTP2SESSIONACTIVE
-Assertion Failed: m_eConnectionState == k_EHTTPClientConnectionState_SENDINGREQUEST_BODY
-Assertion Failed: m_eRequestMethod == k_EHTTPMethodGET
-Assertion Failed: m_errorIndex>=0
-Assertion Failed: m_fnCompletionCallback
-Assertion Failed: m_hConnection != 0xdddddddd
-Assertion Failed: m_hSocket == INVALID_SOCKET
-Assertion Failed: m_heap.IsValidIndex(index)
-Assertion Failed: m_iAudioTrack >= 0
-Assertion Failed: m_iHistory < V_ARRAYSIZE( m_rgunMicroSecRunHistory )
-Assertion Failed: m_iRefs > 0 && m_iRefs < 0x1000000
-Assertion Failed: m_iRefs >= 0 && m_iRefs < 0x0ffffff
-Assertion Failed: m_iSampleBucketCurrent < m_cSampleBuckets
-Assertion Failed: m_iSampleBucketLast < m_cSampleBuckets
-Assertion Failed: m_iThreadMutexValidationLock < (int) ( sizeof(m_threadMutexValidationLock)/sizeof(m_threadMutexValidationLock[0]) )
-Assertion Failed: m_iThreadMutexValidationLock == 0
-Assertion Failed: m_iVideoTrack >= 0
-Assertion Failed: m_lStartPlaybackPosition != AV_NOPTS_VALUE
-Assertion Failed: m_listCacheFileLRU.IsValidIndex( mapData.m_iLRUListIndex )
-Assertion Failed: m_listThreadBufDataToWrite.Count() == 0 || ( m_listThreadPacketsToRead.Count() == 0 && SSL_want_read( m_pSSL ) )
-Assertion Failed: m_mapJobSharedStatesOutstanding.IsValidIndex( ndxCount )
-Assertion Failed: m_mapPendingSharedStates.IsValidIndex( ndx )
-Assertion Failed: m_mapRequestsAwaitingCompletion.Count() == 0
-Assertion Failed: m_mapRequestsAwaitingCompletion.Count() == 1
-Assertion Failed: m_mapRequestsAwaitingCompletion.Count() == 1 && !m_pHTTP2Session
-Assertion Failed: m_nAllocationCount >= 0
-Assertion Failed: m_nPollFd >= 0
-Assertion Failed: m_nPostFd >= 0
-Assertion Failed: m_nRecursions > 0
-Assertion Failed: m_nTheirSeqNacked < m_nTheirSeqReceived
-Assertion Failed: m_nWritesPendingInEncryptedBuffer == 0 && m_bufEncryptedSendBuffer.TellPut() == 0
-Assertion Failed: m_p == NULL
-Assertion Failed: m_pAVFormatContext->pb
-Assertion Failed: m_pBucket == NULL
-Assertion Failed: m_pBudgetGroups
-Assertion Failed: m_pBudgetGroups == NULL
-Assertion Failed: m_pClientRequest->m_pWebSocketConnectionCallback
-Assertion Failed: m_pConnectionCallback
-Assertion Failed: m_pConnectionCallback == NULL
-Assertion Failed: m_pContext
-Assertion Failed: m_pDecodedAudio
-Assertion Failed: m_pDecodedAudio->GetWriteAvailable() >= bufAudio.TellPut()
-Assertion Failed: m_pHeader->ip_v6().length() == 16
-Assertion Failed: m_pInitializationThread
-Assertion Failed: m_pJobFuncsData->m_listActiveJobs.Count()
-Assertion Failed: m_pManifest
-Assertion Failed: m_pMemory
-Assertion Failed: m_pNRefs
-Assertion Failed: m_pNetConnection
-Assertion Failed: m_pNetConnection->m_pConnectionCallback != this
-Assertion Failed: m_pNetConnection->m_pConnectionCallback == this
-Assertion Failed: m_pNetFilter
-Assertion Failed: m_pNetPacket
-Assertion Failed: m_pNetPacket && m_pNetPacket->CubData() >= sizeof( ProtoBufMsgHeader_t )
-Assertion Failed: m_pNetPacket->CubData() >= cubSkip
-Assertion Failed: m_pObj
-Assertion Failed: m_pObj == NULL
-Assertion Failed: m_pParent
-Assertion Failed: m_pParent == this
-Assertion Failed: m_pProtoBufBody == NULL
-Assertion Failed: m_pReceivedPktFirst->GetSeq() != m_pReceivedPktFirst->PReceivedPktNext()->GetSeq()
-Assertion Failed: m_pRecvState == NULL
-Assertion Failed: m_pSSLConnection == NULL
-Assertion Failed: m_pSSLConnectionData
-Assertion Failed: m_pSSLConnectionData != NULL
-Assertion Failed: m_pSSLConnectionData && m_pSSLConnectionData->m_pSSLCallback
-Assertion Failed: m_pSavedStack
-Assertion Failed: m_pStackHigh
-Assertion Failed: m_pTicketKeyMgr == NULL
-Assertion Failed: m_pValObjects != NULL
-Assertion Failed: m_pWaitingOnLock == NULL
-Assertion Failed: m_pWaitingOnWorkItem == NULL
-Assertion Failed: m_pkvLastKeyAdded != NULL
-Assertion Failed: m_pszName
-Assertion Failed: m_pubMsgIncoming == NULL
-Assertion Failed: m_pubRecvBuffer
-Assertion Failed: m_queueItemsPending.Count() == 0
-Assertion Failed: m_rtLiveContentStarted != k_RTime32Nil
-Assertion Failed: m_sFrameCur.m_pubPayload
-Assertion Failed: m_stackDoNotYieldGuards.Count() == 0
-Assertion Failed: m_unSizeOfElements == mem.m_unSizeOfElements
-Assertion Failed: m_usType == k_EIPTypeV6
-Assertion Failed: m_usType == k_EIPTypeV6 && netadr.m_usType == k_EIPTypeV6
-Assertion Failed: m_vecAllFileStreams.Count() == 0
-Assertion Failed: m_vecAllPlayers.Count() == 0
-Assertion Failed: m_vecAllPlayers.HasElement( pPlayer )
-Assertion Failed: m_vecCallbacks.Count() == 0
-Assertion Failed: m_vecCallbacks.Count() == 0 || !callback
-Assertion Failed: m_vecLocks.HasElement( pLock )
-Assertion Failed: m_vecPostParams.Count() < 65535
-Assertion Failed: m_vecPostParams.IsValidIndex( iNode )
-Assertion Failed: m_vecRegisteredWriters.Count() == 0
-Assertion Failed: m_vecRegisteredWriters.HasElement( pFile )
-Assertion Failed: m_vecRequestsToSend.Count()
-Assertion Failed: m_vecRequestsToSend.Count() == 1
-Assertion Failed: m_vecThreads.Count() == 0
-Assertion Failed: m_vecpHTTPClients.FindAndFastRemove( pHTTPClient )
-Assertion Failed: maxLen <= INT_MAX
-Assertion Failed: maxLen == 0 || pDest != NULL
-Assertion Failed: maxLen > 0
-Assertion Failed: maxLen > 0 && maxLen <= INT_MAX
-Assertion Failed: maxLenInBytes == 0 || pDest != NULL
-Assertion Failed: maxLenInBytes >= 0
-Assertion Failed: maxlen >= 1
-Assertion Failed: n == 0 || s1 != NULL
-Assertion Failed: n == 0 || s2 != NULL
-Assertion Failed: n >= 0
-Assertion Failed: nBarrierNumber < m_vecBarriers.Count()
-Assertion Failed: nBarrierNumber >= 0
-Assertion Failed: nBytes
-Assertion Failed: nBytes2 == m_data.NumAllocated()
-Assertion Failed: nChildren > 2
-Assertion Failed: nContentLength != 0
-Assertion Failed: nContentLength == 0 || CHTTPUtil::BMethodAllowsRequestBody( m_eRequestMethod )
-Assertion Failed: nDay < 32
-Assertion Failed: nDay > 0
-Assertion Failed: nDecrypted == cubEncryptedData - k_nSymmetricBlockSize
-Assertion Failed: nDestSize == 0 || pDest != NULL
-Assertion Failed: nFieldDescriptorType == WireFormatLite::TYPE_INT32 || nFieldDescriptorType == WireFormatLite::TYPE_INT64 || nFieldDescriptorType == WireFormatLite::TYPE_SINT32 || nFieldDescriptorType == WireFormatLite::TYPE_SINT64 || nFieldDescriptorType == WireFormatLite::TYPE_UINT32 || nFieldDescriptorType == WireFormatLite::TYPE_UINT64 || nFieldDescriptorType == WireFormatLite::TYPE_FIXED32 || nFieldDescriptorType == WireFormatLite::TYPE_FIXED64 || nFieldDescriptorType == WireFormatLite::TYPE_SFIXED32 || nFieldDescriptorType == WireFormatLite::TYPE_SFIXED64 || nFieldDescriptorType == WireFormatLite::TYPE_ENUM
-Assertion Failed: nFieldDescriptorTypeIfKnown != ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE
-Assertion Failed: nFieldDescriptorTypeIfKnown != ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT
-Assertion Failed: nGrowSize >= 0
-Assertion Failed: nHTTPConnectionFindCount == 1
-Assertion Failed: nHeight % 2 == 0
-Assertion Failed: nMicroSecLimit > 0
-Assertion Failed: nMicroSeconds >= 0
-Assertion Failed: nMinCapacity <= k_nMaxStringSize
-Assertion Failed: nMinCapacity > Capacity()
-Assertion Failed: nMinCapacity >= nChars
-Assertion Failed: nPreSplit > 0 && nPreSplit + nPostSplit == nCount
-Assertion Failed: nPut + nPutDelta <= outBuf.TellMaxPut()
-Assertion Failed: nRead == nPeeked
-Assertion Failed: nSamplesToCopy > 0
-Assertion Failed: nSeq >= GetSeqStart() && nSeq <= GetSeqEnd()
-Assertion Failed: nSeq >= m_nSeqFirstUnacked && nSeq < ( m_nSeqFirstUnacked + k_nMaxUnackedPkts )
-Assertion Failed: nSeqStart <= nSeqEnd
-Assertion Failed: nSeqStart > nSeqPrev
-Assertion Failed: nSize >= 0
-Assertion Failed: nSizeOfType > 0
-Assertion Failed: nValue >= 0 && nValue <= 15
-Assertion Failed: nWidth % 2 == 0
-Assertion Failed: num > 0
-Assertion Failed: num >= 0
-Assertion Failed: numElements <= m_nAllocationCount
-Assertion Failed: numElements >= 0
-Assertion Failed: offset != INT_MIN && offset <= m_nMaxPut && -offset <= INT_MAX-m_nMaxPut
-Assertion Failed: offset >= -m_Put && offset <= INT_MAX-m_Put
-Assertion Failed: offset >= 0
-Assertion Failed: out
-Assertion Failed: outsize >= ( inputbytes * 2 ) + 1
-Assertion Failed: outsize >= 1
-Assertion Failed: pAdaptation->m_pSegmentTemplate
-Assertion Failed: pAllocTracker->m_uSentinel == 0xaa110ced
-Assertion Failed: pAudioResampler
-Assertion Failed: pBarrier->m_ulCurrentSequenceNum == pItem->GetPipelineSequenceNumber()
-Assertion Failed: pBaseFrameFunction
-Assertion Failed: pBaseScheduledFunction->GetDeadlineTime().LTime() >= m_lTimeNextDeadline
-Assertion Failed: pBaseScheduledFunction->m_iScheduledItem == scheduledItem.m_iScheduledFunction
-Assertion Failed: pBodyBuffer->TellPut() == (int)pRequest->GetReqBodyBytesTotal()
-Assertion Failed: pBuf->BIsUnbufferedSend()
-Assertion Failed: pBuffer
-Assertion Failed: pCallback == m_pConnectionCallback || m_pConnectionCallback == NULL
-Assertion Failed: pClientRequest->GetRefCount() > 0 && pClientRequest->GetRefCount() < 10000
-Assertion Failed: pCompletion->type == IOTYPE_ACCEPT && pCompletion->pubBuffer == pBuffer
-Assertion Failed: pCompletion->type == IOTYPE_ACCEPT && pCompletion->ulResult == 0 && pCompletion->SocketAcceptEx.hNewSocket != INVALID_SOCKET
-Assertion Failed: pCompletion->type == IOTYPE_CONNECT
-Assertion Failed: pCompletion->type == IOTYPE_RECV
-Assertion Failed: pCompletion->type == IOTYPE_SEND || pCompletion->type == IOTYPE_UNBUFFEREDSEND
-Assertion Failed: pCompletionData->pNext == NULL && pCompletionData->nPollFlags != 0
-Assertion Failed: pCompletionData->pubBuffer == pRecvState->m_bufMsg.PeekPut()
-Assertion Failed: pCompletionData->pvUserData
-Assertion Failed: pCompletionData->type == IOTYPE_SEND
-Assertion Failed: pConnection->BIsConnected()
-Assertion Failed: pConnectionCallback
-Assertion Failed: pContext
-Assertion Failed: pContext->GetConnectionType() == k_ESSLConnectionType_Client
-Assertion Failed: pConv && pConv->GetDelimiterLength() > 0
-Assertion Failed: pData
-Assertion Failed: pDecodedData
-Assertion Failed: pDefaultValue
-Assertion Failed: pDest
-Assertion Failed: pDest != NULL
-Assertion Failed: pDest >= pBuffer && pDest <= pBuffer + destBufferSize
-Assertion Failed: pEnd <= pubMsgBytes + cubBuffer
-Assertion Failed: pEnd == m_ReplacementBody.Base() + m_ReplacementBody.Count()
-Assertion Failed: pEndingDelim && pEndingDelim[0]
-Assertion Failed: pFile->m_hFileDest != INVALID_OSFILEHANDLE
-Assertion Failed: pFmt
-Assertion Failed: pFormat != NULL
-Assertion Failed: pFrameFunctionMgr
-Assertion Failed: pGroupName
-Assertion Failed: pHandle
-Assertion Failed: pHandle == pRequestHandle
-Assertion Failed: pHdr->m_nDstConnectionID == m_nOurConnectionID
-Assertion Failed: pHdr->m_nMsgStartSeq == pHdr->m_nSeqThis
-Assertion Failed: pHdr->m_nPktsInMsg <= k_nMaxPktsPerMsg
-Assertion Failed: pHdr->m_nSeqThis <= pHdr->m_nMsgStartSeq + pHdr->m_nPktsInMsg - 1
-Assertion Failed: pHost && *pHost
-Assertion Failed: pIV
-Assertion Failed: pItem->CurrentBarrierID() < m_vecBarriers.Count()
-Assertion Failed: pItem->CurrentBarrierID() == -1
-Assertion Failed: pItem->CurrentBarrierID() >= 0
-Assertion Failed: pItem->GetJobID() == GetJobID()
-Assertion Failed: pJob->m_vecNetPackets.Count()
-Assertion Failed: pJobType->m_pCreationMessageInfo == nullptr
-Assertion Failed: pJobType->m_pchName && *pJobType->m_pchName
-Assertion Failed: pKeyCallback
-Assertion Failed: pKeyValuesTextParser
-Assertion Failed: pLeft->m_iStackPC <= V_ARRAYSIZE(pLeft->m_StackPC)
-Assertion Failed: pLock
-Assertion Failed: pLock->BIsLocked()
-Assertion Failed: pLock->GetJobLocking() == this
-Assertion Failed: pLock->m_pJob == this
-Assertion Failed: pLock->m_unWaitingCount > 0
-Assertion Failed: pLogEvent
-Assertion Failed: pLogInstance == sm_pLogInstance
-Assertion Failed: pName
-Assertion Failed: pNetConnection
-Assertion Failed: pNetFilter
-Assertion Failed: pNetPacket
-Assertion Failed: pNetPacket->CubData() > 0
-Assertion Failed: pNetPacket->GetEMsg() == jobMsgInfo.m_EMsg || ( pNetPacket->GetEMsg() == k_EMsgClientServiceMethodLegacy && jobMsgInfo.m_EMsg == k_EMsgServiceMethodCallFromClient )
-Assertion Failed: pNetPacket->GetEMsgFormatType() == k_EMsgFormatTypeProtocolBuffer
-Assertion Failed: pNewJob->GetPauseReason() == k_EJobPauseReasonWaitingForLock
-Assertion Failed: pNewJob->m_pWaitingOnLock == pLock
-Assertion Failed: pNode && pNode->Next == QueueEnd()
-Assertion Failed: pNodeCombineTarget->m_nCombined == 1
-Assertion Failed: pOldCallback
-Assertion Failed: pOldCallback != pConnectionCallback
-Assertion Failed: pOtherDecoder->GetInitFileStream() == pInitSegment
-Assertion Failed: pOutDigest
-Assertion Failed: pOutputDigest
-Assertion Failed: pOwner->m_unThreadBytesToRead == 0
-Assertion Failed: pOwner->m_unThreadBytesToRead > (uint)pBIOData->m_Num
-Assertion Failed: pOwner->m_unThreadBytesToRead >= pPacket->CubData()
-Assertion Failed: pParent->m_bInDeleteQueue
-Assertion Failed: pPeeked == &m_chData[ m_nWrite ] && nBytesToCommit >= 0 && m_nWrite + nBytesToCommit <= m_nSize
-Assertion Failed: pPeeked >= &m_chData[0] && pPeeked < &m_chData[m_nSize]
-Assertion Failed: pPendingMsg->GetPUDPConnection() == this
-Assertion Failed: pPendingMsg->GetSeqEnd() >= m_nOurSeqCur
-Assertion Failed: pPendingMsgAcked
-Assertion Failed: pPlayer->GetNextRunFrameUS() >= 0
-Assertion Failed: pPool->m_SpaceUsed < 0xFFFF
-Assertion Failed: pProtocol && *pProtocol
-Assertion Failed: pPtr == mem.Base() + lengthToEncodePriv
-Assertion Failed: pPtr == mem.Base() + lengthToEncodePub
-Assertion Failed: pRSAKey
-Assertion Failed: pRange->m_ulEnd >= cOffset
-Assertion Failed: pRecvFileProgress->pIAsync
-Assertion Failed: pReq->AccessBodyDataBuffer().TellPut() == 0
-Assertion Failed: pReqHandle->AccessResponse()->GetBodyBuffer()->TellPut() == 0
-Assertion Failed: pRequest->GetReqBodyBytesSent() == pRequest->GetReqBodyBytesTotal()
-Assertion Failed: pRequestHandle
-Assertion Failed: pRequestHandle->AccessClientRequest()->GetPOSTParamCount() == 0 && pRequestHandle->AccessClientRequest()->GetBodyBuffer()->TellPut() == 0
-Assertion Failed: pRequestHandle->AccessResponse()->GetBodyBuffer()->TellPut() == 0
-Assertion Failed: pRequestHandle->GetRefCount() > 0 && pRequestHandle->GetRefCount() < 10000
-Assertion Failed: pReuseSession == NULL
-Assertion Failed: pSalt
-Assertion Failed: pScanHandlePendingList != pCompletionData
-Assertion Failed: pSearch != NULL
-Assertion Failed: pSegment->m_lDuration > 0
-Assertion Failed: pSrc != NULL
-Assertion Failed: pStr != NULL
-Assertion Failed: pStr1 != NULL
-Assertion Failed: pStr2 != NULL
-Assertion Failed: pStream
-Assertion Failed: pTCPConnection->m_cOutstandingSends > 0
-Assertion Failed: pThread
-Assertion Failed: pToken
-Assertion Failed: pTracker->Find( pKey ) != NULL
-Assertion Failed: pWatcher != NULL
-Assertion Failed: pWebSocketConnection
-Assertion Failed: pWebSocketConnection->m_EConnectionMode == k_EConnectionModeHost
-Assertion Failed: pWebSocketConnection->m_EConnectionState == k_EConnectionStateConnecting
-Assertion Failed: pWorkItem
-Assertion Failed: pWorkThread != NULL
-Assertion Failed: parms.Count() == 0
-Assertion Failed: path
-Assertion Failed: pathStringLength >= 1
-Assertion Failed: pchBaseFileName
-Assertion Failed: pchData
-Assertion Failed: pchEncodedData
-Assertion Failed: pchFileName
-Assertion Failed: pchHaystack != NULL
-Assertion Failed: pchInput
-Assertion Failed: pchMsg
-Assertion Failed: pchName
-Assertion Failed: pchNeedle != NULL
-Assertion Failed: pchOut
-Assertion Failed: pchSteam2ID
-Assertion Failed: pchTLSServerName == NULL
-Assertion Failed: pchTemplate[0] == '\0'
-Assertion Failed: pch[cub - 1] != '\0' && pch[cub] == '\0'
-Assertion Failed: pcubDecodedData
-Assertion Failed: pcubEncryptedData
-Assertion Failed: pcubPlaintextData
-Assertion Failed: pcubSignature
-Assertion Failed: ppDecoder == &m_pAudioDecoder || ppDecoder == &m_pVideoDecoder
-Assertion Failed: ppFrames[iFrame] != NULL
-Assertion Failed: ppath
-Assertion Failed: prefix != NULL
-Assertion Failed: pstrDest[nNewLength] == '\0'
-Assertion Failed: pstrNew + nNewLength == pstrDestination + 1
-Assertion Failed: pstrNew == pstrDestination
-Assertion Failed: pstrNew == pszString
-Assertion Failed: pszName
-Assertion Failed: pszName == NULL || *pszName == '/' || (isalpha((unsigned char) *pszName) && pszName[1] == ':' && pszName[2] == '/')
-Assertion Failed: pszThreadName != NULL
-Assertion Failed: pubData
-Assertion Failed: pubEncryptedData
-Assertion Failed: pubIV == NULL || cubIV == k_nSymmetricBlockSize
-Assertion Failed: pubInput
-Assertion Failed: pubKey
-Assertion Failed: pubMsgStart
-Assertion Failed: pubMsgStart <= pubCurrent + cubMsgSizeMax
-Assertion Failed: pubMsgStart >= pubCurrent
-Assertion Failed: pubPktSend
-Assertion Failed: pubPlaintextData
-Assertion Failed: pubSignature
-Assertion Failed: pulContext
-Assertion Failed: pvCallback != NULL
-Assertion Failed: pvCallbackUDPCur || pvCallbackTCPCur
-Assertion Failed: pvRemove
-Assertion Failed: pvecAddressesOut != nullptr || pSingleOutput != nullptr
-Assertion Failed: res == pBuf->TellPut()
-Assertion Failed: resizeNumBits >= 0
-Assertion Failed: result
-Assertion Failed: ret != 0
-Assertion Failed: rounds != 0
-Assertion Failed: rsaKey.IsValid()
-Assertion Failed: rsalen > 0 && rsalen < 10 * 1024 * 1024
-Assertion Failed: rv > 0 && rv <= nSendLen
-Assertion Failed: s1 != NULL
-Assertion Failed: s2 != NULL
-Assertion Failed: scheduledItem.m_ulTime
-Assertion Failed: size < INT_MAX
-Assertion Failed: sm_ListHConnectionToPoll.Element( iIndex ) == hConnection
-Assertion Failed: sm_ListHConnectionToWakeUp.IsValidIndex( hWakeup )
-Assertion Failed: sm_ListRecvThrottleGroup.IsValidIndex( iGroup )
-Assertion Failed: sm_bShuttingDown
-Assertion Failed: sm_bShuttingDown && sm_pLogInstance
-Assertion Failed: sm_cOutstandingSendBytesAllConnections >= 0
-Assertion Failed: sm_cOutstandingSendsAllConnections > 0
-Assertion Failed: sm_cRef == 0
-Assertion Failed: sm_cRef > 0
-Assertion Failed: sm_pLogInstance
-Assertion Failed: src != NULL
-Assertion Failed: sslType == k_EDTLSConnectionType_Client || sslType == k_EDTLSConnectionType_Server
 Assertion Failed: stack%2d: %s
 Assertion Failed: stack%2d: 0x%llX
-Assertion Failed: stackLevel >= 0 && stackLevel < m_errorIndex
-Assertion Failed: str
-Assertion Failed: str != NULL
-Assertion Failed: strlen( pGroupName ) < MAX_GROUP_NAME_LENGTH
-Assertion Failed: szDomainName != nullptr
-Assertion Failed: this != g_pJobCur
-Assertion Failed: this != pLock->m_pJob
-Assertion Failed: this != pLock->m_pJobWaitingQueueTail
-Assertion Failed: this == g_pJobCur
-Assertion Failed: toRead > 0
-Assertion Failed: uNetFlags & k_uNetFlagNoIOCP
-Assertion Failed: ulResult != 0
-Assertion Failed: unBytes == 0
-Assertion Failed: unDataLen < INT_MAX
-Assertion Failed: unDataLen <= (uint32)INT_MAX
-Assertion Failed: unNetworkBitsIPv4 <= 32
-Assertion Failed: unNetworkBitsIPv4 >= 8
-Assertion Failed: unNetworkBitsIPv6 <= 64
-Assertion Failed: unNetworkBitsIPv6 >= 32
-Assertion Failed: unNewPacketSize == cubExtHdrSize + unOldBodySize + sizeof( ProtoBufMsgHeader_t )
-Assertion Failed: unOldBodySize >= 0
-Assertion Failed: unReadAheadChunkSize < INT32_MAX/2
-Assertion Failed: unSeekMS != k_unNoSeekRequest && 0 == ( unSeekMS & k_unSeekPreciseBit )
-Assertion Failed: vecSharedState.Count() > 0
-Assertion Failed: watchingLog.m_pLogInstance
-Assertion Failed: written == count
 Assertion failed: length > k_cchMaxString
+Assoc.nFd == hQueue
+Assoc.nFd == handle
 Async I/O on closed handle %d
 AsyncRead
 AsyncSocketAcceptExComplete
@@ -2435,6 +2111,7 @@ BBB
 BBVA Continental
 BC
 BC (default)
+BCallerDeadlineTriggered()
 BConvertYUVtoRGB
 BEGIN
 BF
@@ -2443,6 +2120,14 @@ BF-CFB
 BF-ECB
 BF-OFB
 BGN
+BGRAToARGB
+BGRAToUVRow_Any_SSSE3
+BGRAToUVRow_C
+BGRAToUVRow_SSSE3
+BGRAToYRow_Any_SSSE3
+BGRAToYRow_C
+BGRAToYRow_SSSE3
+BGetFreeDiskSpace: usable_space:%llu disk_size:%llu expandable_space:%llu
 BH
 BIGNUM
 BIO lib
@@ -2489,6 +2174,7 @@ BITLIST
 BITSTR
 BITSTRING
 BITWRAP
+BIsOpen()
 BK.
 BLAKE2b512
 BLAKE2s256
@@ -2548,12 +2234,16 @@ BR
 BRL
 BResolveHostString - unexpected DNS lookup flag '%d'
 BRouteWorkItemCompleted called for a job that could not be found!
+BSaveBufferToFileWithTemporary() failed to find unused file temp name
+BSaveBufferToFileWithTemporary() without k_EFileIOFlushImmediately will result in data loss
 BScaleImageNV12
 BScaleImageYUV
+BStarted()
 BUF lib
 BUF_MEM_grow
 BUF_MEM_grow_clean
 BUF_MEM_new
+BUseIOCP()
 BYN
 BYield()
 BackUp() can only be called after Next().
@@ -2567,7 +2257,6 @@ Bad flag in RTime32DateAdd
 Bad packet received: EMsg would be %u
 Bad packet received: EMsg would be %u, next 12 bytes: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X
 Bad response
-Bad thread local
 Bad time value
 Balota
 Banco Credito de Peru
@@ -2592,6 +2281,12 @@ Billing name is invalid because it looks like it contains credit card data
 Biometric Info
 BitCash
 Bitcoin
+BlendPlane
+BlendPlaneRow_AVX2
+BlendPlaneRow_Any_AVX2
+BlendPlaneRow_Any_SSSE3
+BlendPlaneRow_C
+BlendPlaneRow_SSSE3
 Blocked
 Blocked because user is not a commercial partner
 Blocked by U.S. government regulations
@@ -2612,6 +2307,8 @@ Business account not allowed to purchase
 Busy
 Busy, please retry.
 Byte size calculation and serialization were inconsistent.  This may indicate a bug in protocol buffers or it may be caused by concurrent modification of
+ByteToFloat
+ByteToFloatRow_C
 C
 C-runtime internal
 C1x
@@ -2687,6 +2384,7 @@ CCrypto::Base64Encode: insufficient output buffer (up to n*4/3+5 bytes required,
 CCrypto::Base64Encode: insufficient output buffer for encoding, needed %d got %d
 CCrypto::GenerateHMAC
 CCrypto::GenerateHMAC256
+CCrypto::GenerateHMAC512
 CCrypto::GenerateHMACMD5
 CCrypto::GenerateMD5Digest
 CCrypto::GenerateSHA1Digest
@@ -3010,6 +2708,7 @@ CHTTPRequestCache::DeleteCachedResponsesMatchingURL
 CHTTPRequestHandle::DispatchRequest()
 CHTTPResponse
 CHTTPUtil::BFindNextHeader called with invalid parameters
+CHTTPUtil::BStatusCodeIsRedirect( eRedirectStatusCode )
 CIPAndPort::GetIPv4 called on IPv6 address
 CInfluxClient::SendCurrentBatchAsync
 CInfluxClient::SendCurrentBatchAsync,UpdateAppJobReport,perf,ExternalStorageTransferReport,ChatRoom.RelaySendChatMessage#1,DownloadRates,DownloadRatesPerServer,AppBranchUpdateStats,Trust.FullAccountUpdate#1,Trust.OnAccountChanged#1,Trust.OnAccountLabeled#1,Trust.OnAccountLicenseAdded#1,PlayerStatsVOD,PlayerStatsBroadcast,CurrentPlayers,matchmaking,AppTransfers,DownloadRatesISP,DownloadRatesISPPerServer,ExternalTransferStats,BroadcastFetchStats,Transaction,DataTransfer,ContentServerStats,SteamPipeCDNWeights,RegionDirectives,BroadcastCDNWeights,China.ListPersonaNames#1,China.RestrictVisibility#1,GetInteractiveRecommendations,PlayerStallReportBroadcast,PlayerStallReportVOD,AddAnnouncementImage,GetIRAppRankForAccounts,email_monitor
@@ -3021,25 +2720,33 @@ CJob::BYieldingWaitForServiceMethodResponse - Received message of type %s with s
 CJob::BYieldingWaitForServiceMethodResponse - Received mismatched message type (%d instead of %d) for service method %s
 CJob::BYieldingWaitForServiceMethodResponse expected service method %s but received an empty service method
 CJob::BYieldingWaitForServiceMethodResponse expected service method %s but received service method %s
+CJob::Heartbeat
+CJob::OnCallerDeadlineReached
 CJob::StartJob() called twice on job %s
 CJob::WaitForThreadFuncWorkItemBlocking job %s has unexpected work item state
 CJob::WaitForThreadFuncWorkItemBlocking job %s will leak generic heap object
 CJobFuncs::YieldingWaitForFuncs()
 CJobFuncsDispatchJob
 CJobMgr -- Dispatch completed work items
+CJobMgr -- Process Wait Detail Updates
 CJobMgr class statics
+CJobMgr::BCheckForJobTimeouts
+CJobMgr::BFrameFuncDispatchCompletedWorkItems
 CJobMgr::BFrameFuncRun
+CJobMgr::BFrameFuncRunNewJobsFromNetMessages
 CJobMgr::BFrameFuncRunSleepingJobs
 CJobMgr::BFrameFuncRunUntilCompleted
+CJobMgr::BResumeSleepingJobs
 CJobMgr::BResumeYieldingJobs
 CJobMgr::BRouteGenericDataToJob() - continue job
 CJobMgr::BRouteGenericDataToJob() - data access
 CJobMgr::BRouteGenericToJob() job %s received unexpected generic event
 CJobMgr::BRouteMsgToJob() - continue job
 CJobMgr::BRouteMsgToJob() - job
-CJobMgr::CheckForJobTimeouts
+CJobMgr::BRunNewJobsFromNetMessages
 CJobMgr::DumpJobCategoryData - job type %s is waiting on a lock with no owning job
-CJobMgr::PassMsgToJob() job %s received unexpected message %s when paused for %s - %s
+CJobMgr::PassMsgToJob() job %s received unexpected message %s when paused for %s
+CJobMgr::TimeoutJob
 CJobMgr::m_WorkThreadPool
 CKeyValuesSystem
 CKeyValuesSystem::AddStringToPool: key name too long (%u chars)
@@ -3188,6 +2895,10 @@ CNet::BFrameFuncRunHosts
 CNet::BFrameFuncWakeUpConnections
 CNet::BFrameHandleCompletedWorkItems
 CNet::BIsSendBlocked
+CNet::s_FrameFuncHandleCompletedWorkItems == NULL
+CNet::s_FrameFuncPollConnections == NULL
+CNet::s_FrameFuncRunHosts == NULL
+CNet::s_FrameFuncWakeUpConnections == NULL
 CNetConnection::BAsyncSend: data size of %d bytes exceeds max of %d, failing send to ip %s
 CNetConnection::BAsyncSend: suspiciously large traffic of %d bytes - passing traffic anyway
 CNetConnection::BVerifyCertificate called with no SSL callback, but we still have base Net callback!
@@ -3266,8 +2977,10 @@ CPS
 CPU_MHZ
 CPathString
 CPendingMsg::SendPkt
+CProtoBufMsg::BAsyncSend
 CProtoBufMsg::BAsyncSendInternal
 CProtoBufMsg::InitFromPacket( IMsgNetPacket )
+CProtoBufMsg::InitHeaderFromPacket( IMsgNetPacket )
 CProtoBufMsgBase::SerializeWriteBytes
 CProtoBufNetPacket::RebuildPacketIfNeeded (needed)
 CR
@@ -3479,8 +3192,14 @@ CZK
 C`
 Cabal
 Cache Proxy results by hostname: %s
+Cache miss for %s - '%s' corrupt
+Cache miss for %s - cached data is for head, this is a get
+Cache miss for %s - file '%s' corrupt
+Cache miss for %s - file '%s' has wrong version
+Cache miss for %s - file '%s' not found
 Cache stats: %llu served with validation, %llu served without validation, %llu validations failed.  Currently %u in cache, %llu total written.
 Cache-Control
+Cached credential is invalid
 Cached data for %s exceeds request max-age cache-control, forcing validation
 Cached data for %s exceeds request min-fresh cache-control, forcing validation
 Cached data for %s has exceeded freshness lifetime of %lld, forcing validation
@@ -3493,6 +3212,7 @@ Cached response for %s includes must-revalidate or no-cache cache control so mus
 Cafe Funded
 Call Mismatch
 Call set methods to initialize MapKey.
+Caller deadline reached
 Caller should provide us with *buffer_ when buffer is non-empty
 Calling Tell on an async file writer is unsafe, will race with thread and may corrupt file pointer.
 Camellia(128)
@@ -3506,6 +3226,7 @@ Camellia_cbc_encrypt
 Can't
 Can't BackUp() after failed Next().
 Can't back up over more bytes than were returned by the last call to Next().
+Can't change job type once it has been set
 Can't convert timestamp to unknown track
 Can't convert unknown track timestamp
 Can't get here.
@@ -3538,10 +3259,17 @@ Cannot skip field value, unexpected token:
 Cannot use encryption with raw stream connection
 Cannot use netfilter based encryption with SSL, setup SSL based encryption in your INetSSLConnectionCallback
 Cant remove item
+Captive portal simulation: Generating hijacked/fake response body for '%s'
+Captive portal simulation: Generating redirect '%s' -> '%s'
+Captive portal simulation: blocking '%s'
+CaptivePortal
+CaptivePortal_InPlace
+CaptivePortal_Redirected
 Carnet
 Carte Bleue
 Cash Card (Nodwin)
 Cash on Delivery
+Cash-In CIS
 CashU
 CatchAndWriteContext_t::Invoke with bogus argc/argv
 CatchAndWriteContext_t::Invoke with bogus void *ptr
@@ -3562,13 +3290,16 @@ ChainCAFile
 ChainCAPath
 Char=
 Chargedback
+Charger required
 Chat
 Cheat
 Cheating
 CipherString
 Ciphersuites
+ClampFloatToZero_SSE2
 Clan
 ClearField
+Clearing HTTP cache, deleting all files under %s
 Click&Buy
 Client no longer supported
 ClientCAFile
@@ -3596,14 +3327,16 @@ Comment started here.
 Comments by user
 Committing
 Community
-Compact is no longer supported
 Compat tool failed
 CompatibleLobby
 Complete-the-set bundles cannot be gifted
 Complimentary
 Component In Use
 Compression
+ComputeCumulativeSumRow_C
+ComputeCumulativeSumRow_SSE2
 Computed freshness lifetime for %s is %lld
+Computer
 ConCommand '%s' not currently supported in config file
 ConVar
 ConVar::InternalSetValue: called with NULL
@@ -3612,6 +3345,7 @@ Concepts
 Config
 Conflict
 Connect
+Connected
 Connection
 Connection Failed
 Connection closed
@@ -3621,6 +3355,7 @@ Connection timeout
 Connection: Upgrade
 Console
 Console User
+ConstHdr().ip_v6().length() == 16
 Contact Support
 Content Server
 Content Version
@@ -3648,23 +3383,49 @@ Controller Binding
 ControllerBindings
 Convars
 Convenient Store Voucher
+Convert16To8Plane
+Convert16To8Row_AVX2
+Convert16To8Row_Any_AVX2
+Convert16To8Row_Any_SSSE3
+Convert16To8Row_C
+Convert16To8Row_SSSE3
+Convert8To16Plane
+Convert8To16Row_AVX2
+Convert8To16Row_Any_AVX2
+Convert8To16Row_Any_SSE2
+Convert8To16Row_C
+Convert8To16Row_SSE2
+ConvertToLSBPlane_16
+ConvertToMSBPlane_16
 Cookie
+CopyPlane
+CopyPlane_16
+CopyRow_16_C
+CopyRow_AVX
+CopyRow_Any_AVX
+CopyRow_Any_SSE2
+CopyRow_C
+CopyRow_ERMS
+CopyRow_SSE2
 Copyright Violation
+Coroutine_IsActive()
 Corrupt depot cache
 Corrupt disk
 Corrupt download
+Corrupt file signature
 Corrupt game files
 Corrupt pending msg list
 Corrupt update files
 Corrupted or unrecoverable data error
 Coudln't find queued segment
 Could not create an instance of
-Could not find job for received EMsg %s.  Will attempt to spawn a new job.
+Could not find job for received '%s' (%d).  Will attempt to spawn a new job.
 Could not find type "
 Couldn't parse default value "
 Couldn't queue video segment
 Couldn't write %s: %s
 Coupon has expired
+CpuId
 Create process failed
 CreateAudioFileDecoder
 CreateAudioResampler
@@ -3676,6 +3437,8 @@ CreateInterface
 CreateRTMPStream
 CreateVideoPlayer
 Created
+Created %lldms ago
+Created %lldms ago, current wait %lldms for %s
 CreatedByFollowedUsersRankedByPublicationDate
 CreatedByFriendsRankedByPublicationDate
 Credit Card
@@ -3686,9 +3449,12 @@ Credit card number provided does not match the credit card type
 Credit would exceed max allowed wallet balance
 Critical
 CrlID
+Crypto
 Ctrl/Provision WAP Termination
 Ctrl/provision WAP Access
 Culture Voucher
+CumulativeSumToAverageRow_C
+CumulativeSumToAverageRow_SSE2
 CuratorRecommendedGame
 Currency Conversion
 Currency of purchase does not match currency of wallet
@@ -3877,6 +3643,7 @@ DTLSv1.2
 DTLSv1_listen
 DVCS
 DWCHV
+Dana
 Dankort
 Data Encipherment
 Data Exploit
@@ -3934,6 +3701,9 @@ Disk write failure
 DispatchCompletedItem
 DispatchCompletedItem - error
 Distance
+DivideRow_16_AVX2
+DivideRow_16_Any_AVX2
+DivideRow_16_C
 Division or mod by zero: dividend.hi=
 Do Not Revive
 Does not own required app
@@ -3975,6 +3745,8 @@ EAppType
 EAppUpdateError
 EAppUpdateState
 EAsyncGameSessionUserState
+EAuthTokenPermission
+EBluetoothDeviceType
 EBroadcastPermission
 EBroadcastUploadResult
 EC
@@ -4122,6 +3894,8 @@ ECommunityProfileState
 ECompare
 EConnectionMode
 EConnectionState
+EConnectionType
+EConnectivityTestResult
 EContentCorruptionType
 EContentDownloadSourceType
 EControllerConfigFeature
@@ -4148,6 +3922,7 @@ EForeignKeyAction
 EFriendRelationship
 EGCAction
 EGCStatus
+EGamingDeviceType
 EHTTPMethod
 EHTTPStatusCode
 EHostIPFamilies
@@ -4172,6 +3947,7 @@ ELogonState
 EMPTY
 EMicroTxnAuthResponse
 EMsg %d registered multiple times.
+EMsg_IsValid( pOldMsgInfo->eMsg )
 ENCRYPTED
 ENCRYPTED PRIVATE KEY
 END
@@ -4179,6 +3955,7 @@ ENGINE lib
 ENOPROTOOPT
 ENUM
 ENUMERATED
+ENetFakeLocalSystemState
 EOC
 EOSType
 EPS
@@ -4206,6 +3983,8 @@ ESteamIPv6ConnectivityProtocol
 ESteamIPv6ConnectivityState
 ESteamRealm
 ESteamUserStatType
+EStorageBlockContentType
+EStorageBlockFileSystemType
 EStoreCategory
 ESupportCompanyDomain
 ETIMEDOUT
@@ -4423,10 +4202,10 @@ FORMAT
 FR19CNullMetricsFactoryvE
 Facebook query returned an error
 Failed
-Failed MemAlloc_AllocAligned in CThreadSafeMemoryPool::Alloc, out of memory?
 Failed loading trust store: %s
 Failed parsing ProtoBuf body %s out of message: %s(%d)
-Failed system(%s) in execute test: %s
+Failed system(%s) in execute test: %d
+Failed system(%s) in execute test: %d %s
 Failed to close logfile with prefix %s during BTearOffLogFile call!
 Failed to create first worker thread in AddWorkItem()
 Failed to create thread (error 0x%x)
@@ -4450,29 +4229,7 @@ Failure
 Failure reading & decoding
 False
 FastHexToBuffer() wants non-negative integers, not
-Fatal Assertion Failed: !pWorkItem->BIsRunning()
-Fatal Assertion Failed: !sm_pLogInstance
-Fatal Assertion Failed: %s
-Fatal Assertion Failed: *oldMsgInfo.pchMsgName
-Fatal Assertion Failed: EMsg_IsValid( oldMsgInfo.eMsg )
-Fatal Assertion Failed: NULL != pPendingMsg
-Fatal Assertion Failed: NULL != pReceivedPkt
-Fatal Assertion Failed: SHA1_Init( &c )
-Fatal Assertion Failed: SHA256_Init( &c )
-Fatal Assertion Failed: bUseIOCP
-Fatal Assertion Failed: cubMsgByteSize <= INT_MAX
-Fatal Assertion Failed: cubPkt < V_ARRAYSIZE( m_rgPacketData )
-Fatal Assertion Failed: false
-Fatal Assertion Failed: m_cBucket > 0
-Fatal Assertion Failed: pBlob
-Fatal Assertion Failed: pNetConnection
-Fatal Assertion Failed: pPendingMsg == m_pPendingMsgFirst
-Fatal Assertion Failed: pReceivedPkt
-Fatal Assertion Failed: pReceivedPkt == m_pReceivedPktFirst
-Fatal Assertion Failed: s_dev_urandom_fd >= 0
-Fatal Assertion Failed: sm_pMemPoolPendingMsg
-Fatal Assertion Failed: sm_pMemPoolReceivedPkt
-Fatal Assertion Failed: urandom_result > 0 || ( urandom_result < 0 && errno == EINTR )
+Fatal Assertion Failed:
 Fatal assert
 Fatal assert; application exiting
 Fatal error (code: %d)
@@ -4523,6 +4280,7 @@ File recursively imports itself:
 FileOptions
 FilePublished_Screenshot_Tagged
 FileRead
+FileSystem
 FileWrite
 Files Corrupt
 Files Missing
@@ -4533,6 +4291,10 @@ Finansbank
 First argument to Swap() (of type "
 First argument to SwapFields() (of type "
 FiveHours
+FixedDiv1_C
+FixedDiv1_X86
+FixedDiv_C
+FixedDiv_X86
 Fj]
 Forbidden
 Force Bounce
@@ -4573,11 +4335,16 @@ Fully Installed
 Function not implemented
 G
 G:
+GAMESCOPE_WAYLAND_DISPLAY
+GAME_
 GB
 GBP
 GCC: (SteamRT 4.8.4-1ubuntu15~12.04+steamrt1.2+srt2) 4.8.4
 GCC: (SteamRT/Linaro 4.6.3-1ubuntu5+steamrt1.2+srt2) 4.6.3
 GCC: (crosstool-NG 1.17.0) 4.6.3
+GCash
+GCoroutineMgr().IsAnyCoroutineActive()
+GCoroutineMgr().IsValidCoroutine(hCoroutine)
 GENERALIZEDTIME
 GENERALSTRING
 GENERAL_NAME
@@ -4592,6 +4359,7 @@ GLIBCXX_3.4.11
 GLIBCXX_3.4.14
 GLIBCXX_3.4.18
 GLIBCXX_3.4.5
+GLIBC_2.10
 GLIBC_2.12
 GLIBC_2.14
 GLIBC_2.15
@@ -4660,21 +4428,31 @@ Game Voucher
 GameManagedItems
 GameServer
 GameStop
+Gamepad
 Games
 Gameserver login token denied
 Gameserver login token expired
 Gameserver login token owner denied
 Garanti
 Gateway Time-out
+GaussCol_C
+GaussCol_F32_C
+GaussPlane_F32
+GaussRow_C
+GaussRow_F32_C
 Gbps
 GeneralNames
 GeneralString
 Generator (compressed):
 Generator (hybrid):
 Generator (uncompressed):
+GetARGBBlend
 GetAllWorkThreadPools()
 GetAttlistDecl
 GetBool
+GetConnectionType( hConnection ) == eConnectionType
+GetConnectionType() != k_EConnectionTypeUDP
+GetConnectionType() == k_ESSLConnectionType_Client || GetConnectionType() == k_EDTLSConnectionType_Client
 GetDouble
 GetEntityDecl
 GetEnumValue
@@ -4684,8 +4462,11 @@ GetInt32
 GetInt64
 GetInt64FromString() did not get correct peCS parameter
 GetIntFromString() did not get correct peCS parameter
+GetInts()
+GetLastNetError() != 0
 GetMessage
 GetMessageFlags
+GetMicrosecsUntilCallerDeadline() >= k_nMillion*3600*24*30
 GetRawRepeatedField
 GetRepeatedBool
 GetRepeatedDouble
@@ -4704,6 +4485,7 @@ GetStringReference
 GetUInt32
 GetUInt64
 GetUint64FromString() did not get correct peCS parameter
+GetXCR0
 Gg*
 GiB
 Gift
@@ -4721,6 +4503,25 @@ Groups are not supported in proto3 syntax.
 Guest Pass
 Guides
 H
+H010ToAB30
+H010ToABGR
+H010ToAR30
+H010ToARGB
+H210ToAB30
+H210ToABGR
+H210ToAR30
+H210ToARGB
+H420ToAB30
+H420ToABGR
+H420ToAR30
+H420ToARGB
+H420ToRAW
+H420ToRGB24
+H420ToRGB565
+H422ToABGR
+H422ToARGB
+H444ToABGR
+H444ToARGB
 HD
 HEAD
 HEX
@@ -4751,6 +4552,7 @@ HTTP Connection (%p) Dispatching pending request (%p) as failed due to AsyncAbor
 HTTP Connection (%p) Dispatching pending request (%p) as failed due to failure sending
 HTTP Connection (%p) handle (%X) Dispatching pending request (%p) as failed due to AsyncAbort() called before RecvHTTPResponseData
 HTTP Version not supported
+HTTP cache fileio still busy after waiting %dms.  Giving up!
 HTTP client (%p) connect completed (handle %X handle in %X) (request handle %p)
 HTTP client must be set on video manager before it can be used by players
 HTTP/1.0
@@ -4764,7 +4566,18 @@ HTTPS_PROXY
 HTTP_PROXY
 HUF
 HWID Set
+HalfFloatPlane
+HalfFloatRow_AVX2
+HalfFloatRow_Any_AVX2
+HalfFloatRow_Any_SSE2
+HalfFloatRow_C
+HalfFloatRow_SSE2
+HalfMergeUVPlane
+HalfMergeUVRow_AVX2
+HalfMergeUVRow_C
+HalfMergeUVRow_SSSE3
 Halkbank
+Handheld
 Handshake Failed
 Happymoney Voucher
 Harassment
@@ -4773,6 +4586,8 @@ Hardware not capable of IPT
 Has not logged in on PS3 with required app
 HasField
 Hash Algorithm:
+Headphones
+Headset
 Hex and octal numbers must be integers.
 Hey, you just set %s's number values to be 0.  Is that what you wanted?If you do `%s = 123`, you will set the convar to `= 123` which becomes `0` for numeric uses.Did you mean to do `%s %s` instead?
 Hg*
@@ -4796,6 +4611,183 @@ I
 I##
 I/O Operation Failed
 I/O error
+I010AlphaToARGBMatrix
+I010ToAB30
+I010ToABGR
+I010ToAR30
+I010ToAR30Matrix
+I010ToARGB
+I010ToARGBMatrix
+I012ToAR30Matrix
+I012ToARGBMatrix
+I210AlphaToARGBMatrix
+I210AlphaToARGBRow_AVX2
+I210AlphaToARGBRow_Any_AVX2
+I210AlphaToARGBRow_Any_SSSE3
+I210AlphaToARGBRow_C
+I210AlphaToARGBRow_SSSE3
+I210ToAB30
+I210ToABGR
+I210ToAR30
+I210ToAR30Matrix
+I210ToAR30Row_AVX2
+I210ToAR30Row_Any_AVX2
+I210ToAR30Row_Any_SSSE3
+I210ToAR30Row_C
+I210ToAR30Row_SSSE3
+I210ToARGB
+I210ToARGBMatrix
+I210ToARGBRow_AVX2
+I210ToARGBRow_Any_AVX2
+I210ToARGBRow_Any_SSSE3
+I210ToARGBRow_C
+I210ToARGBRow_SSSE3
+I212ToAR30Row_AVX2
+I212ToAR30Row_Any_AVX2
+I212ToAR30Row_Any_SSSE3
+I212ToAR30Row_C
+I212ToAR30Row_SSSE3
+I212ToARGBRow_AVX2
+I212ToARGBRow_Any_AVX2
+I212ToARGBRow_Any_SSSE3
+I212ToARGBRow_C
+I212ToARGBRow_SSSE3
+I400Mirror
+I400ToARGB
+I400ToARGBMatrix
+I400ToARGBRow_AVX2
+I400ToARGBRow_Any_AVX2
+I400ToARGBRow_Any_SSE2
+I400ToARGBRow_C
+I400ToARGBRow_SSE2
+I400ToI400
+I410AlphaToARGBMatrix
+I410AlphaToARGBRow_AVX2
+I410AlphaToARGBRow_Any_AVX2
+I410AlphaToARGBRow_Any_SSSE3
+I410AlphaToARGBRow_C
+I410AlphaToARGBRow_SSSE3
+I410ToAR30Matrix
+I410ToAR30Row_AVX2
+I410ToAR30Row_Any_AVX2
+I410ToAR30Row_Any_SSSE3
+I410ToAR30Row_C
+I410ToAR30Row_SSSE3
+I410ToARGBMatrix
+I410ToARGBRow_AVX2
+I410ToARGBRow_Any_AVX2
+I410ToARGBRow_Any_SSSE3
+I410ToARGBRow_C
+I410ToARGBRow_SSSE3
+I420AlphaToABGR
+I420AlphaToARGB
+I420AlphaToARGBMatrix
+I420Blend
+I420Interpolate
+I420Mirror
+I420Rect
+I420Scale
+I420Scale_12
+I420Scale_16
+I420ToAB30
+I420ToABGR
+I420ToAR30
+I420ToAR30Matrix
+I420ToARGB
+I420ToARGB1555
+I420ToARGB4444
+I420ToARGBMatrix
+I420ToBGRA
+I420ToI400
+I420ToRAW
+I420ToRGB24
+I420ToRGB24Matrix
+I420ToRGB565
+I420ToRGB565Dither
+I420ToRGB565Matrix
+I420ToRGBA
+I420ToRGBAMatrix
+I422AlphaToABGR
+I422AlphaToARGB
+I422AlphaToARGBMatrix
+I422AlphaToARGBRow_AVX2
+I422AlphaToARGBRow_Any_AVX2
+I422AlphaToARGBRow_Any_SSSE3
+I422AlphaToARGBRow_C
+I422AlphaToARGBRow_SSSE3
+I422Copy
+I422ToABGR
+I422ToAR30Row_AVX2
+I422ToAR30Row_Any_AVX2
+I422ToAR30Row_Any_SSSE3
+I422ToAR30Row_C
+I422ToAR30Row_SSSE3
+I422ToARGB
+I422ToARGB1555Row_AVX2
+I422ToARGB1555Row_Any_AVX2
+I422ToARGB1555Row_Any_SSSE3
+I422ToARGB1555Row_C
+I422ToARGB1555Row_SSSE3
+I422ToARGB4444Row_AVX2
+I422ToARGB4444Row_Any_AVX2
+I422ToARGB4444Row_Any_SSSE3
+I422ToARGB4444Row_C
+I422ToARGB4444Row_SSSE3
+I422ToARGBMatrix
+I422ToARGBRow_AVX2
+I422ToARGBRow_Any_AVX2
+I422ToARGBRow_Any_SSSE3
+I422ToARGBRow_C
+I422ToARGBRow_SSSE3
+I422ToBGRA
+I422ToRGB24Row_AVX2
+I422ToRGB24Row_Any_AVX2
+I422ToRGB24Row_Any_SSSE3
+I422ToRGB24Row_C
+I422ToRGB24Row_SSSE3
+I422ToRGB565
+I422ToRGB565Row_AVX2
+I422ToRGB565Row_Any_AVX2
+I422ToRGB565Row_Any_SSSE3
+I422ToRGB565Row_C
+I422ToRGB565Row_SSSE3
+I422ToRGBA
+I422ToRGBAMatrix
+I422ToRGBARow_AVX2
+I422ToRGBARow_Any_AVX2
+I422ToRGBARow_Any_SSSE3
+I422ToRGBARow_C
+I422ToRGBARow_SSSE3
+I422ToUYVYRow_AVX2
+I422ToUYVYRow_Any_AVX2
+I422ToUYVYRow_Any_SSE2
+I422ToUYVYRow_C
+I422ToUYVYRow_SSE2
+I422ToYUY2Row_AVX2
+I422ToYUY2Row_Any_AVX2
+I422ToYUY2Row_Any_SSE2
+I422ToYUY2Row_C
+I422ToYUY2Row_SSE2
+I444AlphaToABGR
+I444AlphaToARGB
+I444AlphaToARGBMatrix
+I444AlphaToARGBRow_AVX2
+I444AlphaToARGBRow_Any_AVX2
+I444AlphaToARGBRow_Any_SSSE3
+I444AlphaToARGBRow_C
+I444AlphaToARGBRow_SSSE3
+I444Copy
+I444Scale
+I444Scale_12
+I444Scale_16
+I444ToABGR
+I444ToARGB
+I444ToARGBMatrix
+I444ToARGBRow_AVX2
+I444ToARGBRow_Any_AVX2
+I444ToARGBRow_Any_SSSE3
+I444ToARGBRow_C
+I444ToARGBRow_SSSE3
 IA5
 IA5STRING
 IANA
@@ -4828,8 +4820,12 @@ INTERNAL
 INVALID
 INVALID_ARGUMENT
 INVALID_CPPTYPE
+INVALID_SOCKET != hSocket
+INVALID_SOCKET != m_hSocket
+INVALID_SOCKET == m_hSocket
 IOCP Thread
 IOCP Thread %u
+IOTYPE_ACCEPT == pCompletionData->type
 IOTYPE_RECV should never be posted back to main thread
 IOTYPE_SEND/UNBUFERREDSEND
 IOTYPE_SOCKETFAIL
@@ -4852,6 +4848,7 @@ IPSec End System
 IPSec Tunnel
 IPSec User
 IPT init error
+IProtoBufMsg::ExpectingReply
 IPv4
 IPv4-SAFI
 IPv6
@@ -4881,6 +4878,9 @@ Iface
 Ig*
 Ignored
 IgnoredFriend
+Ignoring attempt to clear the caller deadline, since the deadline has already been reached.
+Ignoring attempt to set suspicious caller deadline %lldms from now
+Ignoring attempt to set suspicious caller deadline %lldusec from now
 Ignoring extension "
 Ignoring resume of count %d
 Illegal character
@@ -4907,6 +4907,7 @@ Inherit all
 Inhibit Policy Mapping
 Init
 Init Failed
+InitCpuFlags
 Initial packet in multi-packet UDP message is too large and would exceed initially allocated buffer
 Initialization
 Initialized SSL context with certificate %s
@@ -4914,6 +4915,7 @@ Input size too large:
 Install path removed
 Insufficient Funds
 Insufficient Privilege
+Insufficient battery charge
 Insufficient funds
 Insufficient signature buffer passed to RSASign, got %u needed %d
 Integer out of range (
@@ -4925,6 +4927,13 @@ Internal Error
 Internal Server Error
 Internal error
 International Organizations
+InterpolatePlane
+InterpolateRow_16_C
+InterpolateRow_AVX2
+InterpolateRow_Any_AVX2
+InterpolateRow_Any_SSSE3
+InterpolateRow_C
+InterpolateRow_SSSE3
 Interpreting non ascii codepoint %d.
 Invalid
 Invalid %s declaration
@@ -4953,6 +4962,7 @@ Invalid application configuration
 Invalid async I/O handle %d
 Invalid at the top level of the document
 Invalid certificate verification context
+Invalid connection type %d hConn=%x
 Invalid content configuration
 Invalid control characters encountered in text.
 Invalid coupon
@@ -5005,7 +5015,15 @@ Invisible
 InviteOnly
 Invited
 Is Bank
+IsInList(after)
+IsPowerOfTwo( nNewCapacity )
+IsRunning()
 IsSpewActive
+IsText()
+IsValidIndex( elem )
+IsValidIndex( idx )
+IsValidIndex(elem)
+IsVideoPlayerManagerInitialized()
 Issuer certificate lookup error
 Issuer:%c
 Itau Online
@@ -5014,6 +5032,19 @@ Items
 Items_Mtx
 Items_ReadyToUse
 J
+J400ToARGB
+J400ToARGBRow_Any_SSE2
+J400ToARGBRow_C
+J400ToARGBRow_SSE2
+J420ToABGR
+J420ToARGB
+J420ToRAW
+J420ToRGB24
+J420ToRGB565
+J422ToABGR
+J422ToARGB
+J444ToABGR
+J444ToARGB
 JCB
 JJ
 JJJ
@@ -5021,6 +5052,9 @@ JOINT-ISO-ITU-T
 JPY
 Jan
 Jg*
+Job %llu (%s) aborting.  %s
+Job %llu (%s) caller deadline reached, but not aborting because '%s'
+Job %s being started by message %s, but prototype is not the same as the previously-registered one %s?
 Job %s trying to release lock it's not holding
 Job %s trying to release lock though the lock is held by %s
 Job (%s) is trying to take the same lock more than once
@@ -5029,6 +5063,7 @@ Job (%s) would deadlock if it waited on desired lock
 Job Avg
 Job Avg Wait ms  :  Average wait time (ms) of the jobs of this type that have been waiting on this cause chain
 Job Lock
+Job count bookkeeping error for job %s
 Job factory did not create CJob for message %d
 Job factory did not create CJob for message %s
 Job failed trying to release a CNetPacket it doesn't own
@@ -5041,9 +5076,10 @@ JobMgr ThreadPoolStats:
 JobMgr busy threads (%d):
 Jobs
 JoinedGroup
+Joystick
 Jul
 Jun
-Jun 22 2021
+Jun 17 2022
 K
 K-163
 K-233
@@ -5057,6 +5093,7 @@ KKK
 KRW
 KWD
 KZT
+KakaoPay
 Kbps
 KeepBest
 Key Agreement
@@ -5076,6 +5113,7 @@ KeyValues::WriteAsBinary() called with a text buffer
 KeyValues::WriteAsBinary() called with an invalid buffer
 KeyValues::WriteAsBinary() overflowed buffer (%d bytes)
 KeyValuesSystem()
+Keyboard
 Kg*
 KiB
 Kicked
@@ -5104,18 +5142,10 @@ LIBAVFORMAT_58
 LIBAVRESAMPLE_4
 LIBAVUTIL_56
 LIBSWSCALE_5
-LIBYUV_DISABLE_ASM
-LIBYUV_DISABLE_AVX
-LIBYUV_DISABLE_AVX2
-LIBYUV_DISABLE_ERMS
-LIBYUV_DISABLE_SSE2
-LIBYUV_DISABLE_SSE41
-LIBYUV_DISABLE_SSE42
-LIBYUV_DISABLE_SSSE3
-LIBYUV_DISABLE_X86
 LINUX
 LINUX32
 LINUX64
+LINUXARM64
 LLL
 LOCK_EX
 LOCK_SH
@@ -5141,6 +5171,7 @@ Limited User (forced)
 Limited use, delayed activation
 Limited user account
 LimitedLocal
+LinePay
 Linux
 Live Broadcast
 Load certs from files in a directory
@@ -5165,6 +5196,8 @@ Logon Extra Security
 Logon Extra Security Disabled
 Looking to Play
 Looking to Trade
+Loongson-2K
+Loongson-3
 Low FPS
 Low Violence
 Lowered '%s' -> '%s'
@@ -5234,6 +5267,7 @@ MapValueRef::SetUInt32Value
 MapValueRef::SetUInt64Value
 Mar
 Mask Algorithm:
+MaskCpuFlags
 Master App Editor
 Master Subscription
 MasterCard
@@ -5250,8 +5284,54 @@ MemTotal:
 Member
 Members
 Memory leak: mempool blocks left in memory: %d
+MerPay
 MercadoPago
 Merch
+MergeAR64Plane
+MergeAR64Row_AVX2
+MergeAR64Row_Any_AVX2
+MergeAR64Row_C
+MergeARGB16To8Plane
+MergeARGB16To8Row_AVX2
+MergeARGB16To8Row_Any_AVX2
+MergeARGB16To8Row_C
+MergeARGBPlane
+MergeARGBPlaneAlpha
+MergeARGBPlaneOpaque
+MergeARGBRow_AVX2
+MergeARGBRow_Any_AVX2
+MergeARGBRow_Any_SSE2
+MergeARGBRow_C
+MergeARGBRow_SSE2
+MergeRGBPlane
+MergeRGBRow_Any_SSSE3
+MergeRGBRow_C
+MergeRGBRow_SSSE3
+MergeUVPlane
+MergeUVPlane_16
+MergeUVRow_16_AVX2
+MergeUVRow_16_Any_AVX2
+MergeUVRow_16_C
+MergeUVRow_AVX2
+MergeUVRow_Any_AVX2
+MergeUVRow_Any_SSE2
+MergeUVRow_C
+MergeUVRow_SSE2
+MergeXR30Plane
+MergeXR30Row_AVX2
+MergeXR30Row_Any_AVX2
+MergeXR30Row_C
+MergeXR64Row_AVX2
+MergeXR64Row_Any_AVX2
+MergeXR64Row_C
+MergeXRGB16To8Row_AVX2
+MergeXRGB16To8Row_Any_AVX2
+MergeXRGB16To8Row_C
+MergeXRGBRow_AVX2
+MergeXRGBRow_Any_AVX2
+MergeXRGBRow_Any_SSE2
+MergeXRGBRow_C
+MergeXRGBRow_SSE2
 Message %s constructed to be sent but was received instead. Use the default constructor instead.
 Message class "
 Message does not support reflection (type
@@ -5265,6 +5345,7 @@ MessageLite at 0x
 MessageOptions
 MessageSet is not supported in proto3.
 MessageSets cannot have fields, only extensions.
+MessageToProtobufClass: Message '%s' uses protobuf msgclass '%s'
 Messages can't have default values!
 Messages can't have default values.
 Method Not Allowed
@@ -5293,7 +5374,22 @@ MilliSeconds
 MinProtocol
 Minidumps written:
 Minimum
+MipsCpuCaps
 Mirror
+MirrorPlane
+MirrorRow_AVX2
+MirrorRow_Any_AVX2
+MirrorRow_Any_SSSE3
+MirrorRow_C
+MirrorRow_SSSE3
+MirrorSplitUVRow_C
+MirrorSplitUVRow_SSSE3
+MirrorUVPlane
+MirrorUVRow_AVX2
+MirrorUVRow_Any_AVX2
+MirrorUVRow_Any_SSSE3
+MirrorUVRow_C
+MirrorUVRow_SSSE3
 MirroredNotStriped
 Missing Audio
 Missing Key Frames
@@ -5316,6 +5412,7 @@ Modulus:
 MoneyBookers
 More than one message named '%s'
 More than one message with ID 0x%x
+Mouse
 Moved Permanently
 Moving Folder
 MrCash
@@ -5325,6 +5422,9 @@ Multicaja
 Multiplayer
 Multiple Choices
 Multiple extension registrations for type "
+MultiplyRow_16_AVX2
+MultiplyRow_16_Any_AVX2
+MultiplyRow_16_C
 Multiseat
 Music And Arts
 Must agree to SSA
@@ -5342,7 +5442,8 @@ N14CTCPConnection11RecvState_tE
 N14CUtlHashMapLRUI10CIPAndPortN11CHTTPClient17ProxyCacheEntry_tE10CDefEqualsIS0_E11HashFunctorIS0_EE15ElementBucket_tE
 N16CCookieContainer11CCookieInfoE
 N16SteamThreadTools7CThreadE
-N17CFileWriterThread16FileWriterItem_tE
+N17CFileWriterThread14CFileWriteItemE
+N17CFileWriterThread19CFileWriterWorkItemE
 N17CHTTPRequestCache19CachedFileLRUData_tE
 N17CHTTPRequestCache30RequestWaitingValidationData_tE
 N6google8protobuf10TextFormat17FieldValuePrinterE
@@ -5487,6 +5588,21 @@ NO_PROXY
 NR
 NTT
 NULL
+NULL != m_pConnectionCallbackOrig
+NULL != m_pValObjectCur
+NULL != pPendingMsg
+NULL != pReceivedPkt
+NULL != pchFileName
+NULL != pchPrefixPassed
+NULL != pubPkt
+NULL == m_pConnectionCallbackOrig
+NULL == m_pFile
+NULL == m_pJobToNotifyOnLockRelease
+NULL == m_pJobWaitingQueueTail->m_pNextJobInLineForLock
+NULL == m_pNextJobInLineForLock
+NULL == m_pvStartParam
+NULL == pLock->m_pJobWaitingQueueTail || this == pLock->m_pJobWaitingQueueTail
+NULL == pValObjectPrev->m_pValObjectNext
 NULL buffer passed to V_atof()
 NULL buffer passed to V_atoi()
 NULL output buffer with non-zero size passed to Base64Decode
@@ -5497,6 +5613,52 @@ NULL-SHA
 NULL-SHA256
 NUMERIC
 NUMERICSTRING
+NV12Copy
+NV12Mirror
+NV12Scale
+NV12ToABGR
+NV12ToARGB
+NV12ToARGBMatrix
+NV12ToARGBRow_AVX2
+NV12ToARGBRow_Any_AVX2
+NV12ToARGBRow_Any_SSSE3
+NV12ToARGBRow_C
+NV12ToARGBRow_SSSE3
+NV12ToRAW
+NV12ToRGB24
+NV12ToRGB24Matrix
+NV12ToRGB24Row_AVX2
+NV12ToRGB24Row_Any_AVX2
+NV12ToRGB24Row_Any_SSSE3
+NV12ToRGB24Row_C
+NV12ToRGB24Row_SSSE3
+NV12ToRGB565
+NV12ToRGB565Matrix
+NV12ToRGB565Row_AVX2
+NV12ToRGB565Row_Any_AVX2
+NV12ToRGB565Row_Any_SSSE3
+NV12ToRGB565Row_C
+NV12ToRGB565Row_SSSE3
+NV21Copy
+NV21ToABGR
+NV21ToARGB
+NV21ToARGBMatrix
+NV21ToARGBRow_AVX2
+NV21ToARGBRow_Any_AVX2
+NV21ToARGBRow_Any_SSSE3
+NV21ToARGBRow_C
+NV21ToARGBRow_SSSE3
+NV21ToNV12
+NV21ToRAW
+NV21ToRGB24
+NV21ToRGB24Matrix
+NV21ToRGB24Row_AVX2
+NV21ToRGB24Row_Any_AVX2
+NV21ToRGB24Row_Any_SSSE3
+NV21ToRGB24Row_C
+NV21ToRGB24Row_SSSE3
+NV21ToYUV24
+NV21ToYUV24Row_C
 NZD
 Name
 Nanaco
@@ -5556,9 +5718,13 @@ No samples during profile period.
 No site licenses found
 No subscription
 No tracked allocs currently in use. Total %d
+No verified phone number
 No waiting requests for %s
+NoInternet
+NoLAN
 NoRenegotiation
 NoResumptionOnRenegotiation
+NoSteam
 Nobody
 Non Critical
 Non Repudiation
@@ -5569,6 +5735,7 @@ Non-repeated field "
 NonMembers
 Nonce
 None
+Normal
 Not Acceptable
 Not After :
 Not After:
@@ -5583,16 +5750,22 @@ Not activated
 Not allowed to play
 Not continuing coroutine due to g_bPreventCoroutineContinue, %s
 Not created
+Not currently held by a job?
 Not enough disk quota
 Not enough disk space
 Not enough free disk space
+Not enough time to send '%s' and get reply
+Not enough time to send msg %d and get reply
 Not implemented field number
 Not installed
+Not paused
 Not released
 Not supported.
+Not yet started
 NotYetRated
 Note that enum values use C++ scoping rules, meaning that enum values are siblings of their type, not children of it.  Therefore, "
 Nov
+NullMetrics()
 Num
 Num Jobs         :  Number of jobs of this specific type waiting on this same cause chain
 NumTickets
@@ -5741,6 +5914,8 @@ OneCard
 Oneof must have at least one field.
 OneofOptions
 Online
+Only %dms remaining until caller deadline.  Sending message '%s' anyway (%s)
+Only %dms remaining until caller deadline.  Sending msg %d anyway (%s)
 Only Some Reasons
 Only one top level element is allowed
 Only support SegmentBase in representation
@@ -5786,6 +5961,7 @@ Origin
 Other
 Other abortable transaction in progress
 Other session playing
+OtherAudio
 Others In Progress
 Out of Resources
 Out of memory
@@ -5795,6 +5971,7 @@ Out-of-sequence continuation frame
 Outdent() without matching Indent().
 Outgoing request to http://%s%s has Content-Length header set to %u but actually has %u bytes in the body.
 Over consumption limit
+OverlayFrameMark
 Overlong timeout %llu usec in CJob::BYieldingWaitForMsg - max of 10 seconds due to heartbeats
 Owner
 P
@@ -5804,6 +5981,30 @@ P-256
 P-384
 P-521
 P-521:P-384:P-256
+P010ToAR30Matrix
+P010ToARGBMatrix
+P210ToAR30Matrix
+P210ToAR30Row_AVX2
+P210ToAR30Row_Any_AVX2
+P210ToAR30Row_Any_SSSE3
+P210ToAR30Row_C
+P210ToAR30Row_SSSE3
+P210ToARGBMatrix
+P210ToARGBRow_AVX2
+P210ToARGBRow_Any_AVX2
+P210ToARGBRow_Any_SSSE3
+P210ToARGBRow_C
+P210ToARGBRow_SSSE3
+P410ToAR30Row_AVX2
+P410ToAR30Row_Any_AVX2
+P410ToAR30Row_Any_SSSE3
+P410ToAR30Row_C
+P410ToAR30Row_SSSE3
+P410ToARGBRow_AVX2
+P410ToARGBRow_Any_AVX2
+P410ToARGBRow_Any_SSSE3
+P410ToARGBRow_C
+P410ToARGBRow_SSSE3
 P:
 PARAMETERS
 PATCH
@@ -5856,7 +6057,6 @@ PEM_write_bio_PrivateKey_traditional
 PEN
 PERMISSION_DENIED
 PFR19CNullMetricsFactoryvE
-PFv14CPoolReferenceI8CMetricsEE
 PHP
 PINIT
 PIX
@@ -6039,6 +6239,7 @@ Parsing attempt:
 Partial Content
 Partial refund
 Partner Member
+Partner needs VAT ID set to purchase commercial licenses
 Party
 Password Set
 Password is not set
@@ -6046,9 +6247,11 @@ Password reentry required
 Password required to kick session
 Path Loop
 Paused
+Paused for %s (%d)
 Pay Easy (Degica)
 PayPal
 PayPal internal error
+PayPay
 PaySafeCard
 PayU
 Payco
@@ -6081,6 +6284,8 @@ Persistent logfile %s is past the keep until date - cleaning up
 Persona Name
 Persona Set
 Pg*
+Phone
+Phone number is Voice Over IP
 Physical product limit exceeded
 Pichincha
 Pichincha Cash
@@ -6092,17 +6297,19 @@ Policy Qualifier CPS
 Policy Qualifier User Notice
 Poly1305
 Polynomial:
+Post DNS resolve
 PostRecv
 PostedAnnouncement
 Pragma
 Preallocating
 Precondition Failed
 Prefetching Info
+PrepareBuffer( nNewLength ) == pstrNew
 Prime:
 PrioritizeChaCha
+Priority Auto Update
 Priority Down
 Priority First
-Priority Last
 Priority Manual
 Priority None
 Priority Paused
@@ -6146,6 +6353,7 @@ Public-Key: (%d bit)
 Purchase
 Purchase not yet settled
 Purchase pending
+PvRecordFind( unKey ) == NULL
 Q
 Q:
 QAR
@@ -6154,6 +6362,7 @@ QKK
 QQQ
 QQ
 Qg*
+Queued deletion of %d files in HTTP cache
 Queueing request for http%s://%s%s, %d already in queue
 R
 RAND_DRBG_generate
@@ -6167,6 +6376,28 @@ RAND_bytes
 RAND_load_file
 RAND_pseudo_bytes
 RAND_write_file
+RAWToARGB
+RAWToARGBRow_Any_SSSE3
+RAWToARGBRow_C
+RAWToARGBRow_SSSE3
+RAWToRGB24
+RAWToRGB24Row_Any_SSSE3
+RAWToRGB24Row_C
+RAWToRGB24Row_SSSE3
+RAWToRGBA
+RAWToRGBARow_Any_SSSE3
+RAWToRGBARow_C
+RAWToRGBARow_SSSE3
+RAWToUVJRow_C
+RAWToUVRowMatrix_C
+RAWToUVRow_C
+RAWToYJRow_AVX2
+RAWToYJRow_Any_AVX2
+RAWToYJRow_Any_SSSE3
+RAWToYJRow_C
+RAWToYJRow_SSSE3
+RAWToYRowMatrix_C
+RAWToYRow_C
 RB
 RC2
 RC2(128)
@@ -6199,7 +6430,51 @@ RFC 5639 curve over a 256 bit prime field
 RFC 5639 curve over a 320 bit prime field
 RFC 5639 curve over a 384 bit prime field
 RFC 5639 curve over a 512 bit prime field
+RGB24Mirror
+RGB24MirrorRow_Any_SSSE3
+RGB24MirrorRow_C
+RGB24MirrorRow_SSSE3
+RGB24ToARGB
+RGB24ToARGBRow_Any_SSSE3
+RGB24ToARGBRow_C
+RGB24ToARGBRow_SSSE3
+RGB24ToUVJRow_C
+RGB24ToUVRowMatrix_C
+RGB24ToUVRow_C
+RGB24ToYJRow_AVX2
+RGB24ToYJRow_Any_AVX2
+RGB24ToYJRow_Any_SSSE3
+RGB24ToYJRow_C
+RGB24ToYJRow_SSSE3
+RGB24ToYRowMatrix_C
+RGB24ToYRow_C
+RGB565ToARGB
+RGB565ToARGBRow_Any_SSE2
+RGB565ToARGBRow_C
+RGB565ToARGBRow_SSE2
+RGB565ToUVRow_C
+RGB565ToYRow_C
 RGBA: %.2X %.2X %.2X %.2X
+RGBAToARGB
+RGBAToJ400
+RGBAToUVJRow_C
+RGBAToUVRowMatrix_C
+RGBAToUVRow_Any_SSSE3
+RGBAToUVRow_C
+RGBAToUVRow_SSSE3
+RGBAToYJRow_AVX2
+RGBAToYJRow_Any_AVX2
+RGBAToYJRow_Any_SSSE3
+RGBAToYJRow_C
+RGBAToYJRow_SSSE3
+RGBAToYRowMatrix_C
+RGBAToYRow_Any_SSSE3
+RGBAToYRow_C
+RGBAToYRow_SSSE3
+RGBColorMatrix
+RGBColorTable
+RGBColorTableRow_C
+RGBColorTableRow_X86
 RH
 RID
 RIPEMD160
@@ -6289,10 +6564,13 @@ RSA_verify_ASN1_OCTET_STRING
 RSA_verify_PKCS1_PSS_mgf1
 RUB
 RackSystem
+Raid
 Range
 Range request upper bound is less than lower bound
 RankedByAveragePlaytimeTrend
+RankedByBanContentCheck
 RankedByInappropriateContentRating
+RankedByLastUpdatedDate
 RankedByLifetimeAveragePlaytime
 RankedByLifetimePlaytimeSessions
 RankedByNumTimesReported
@@ -6318,6 +6596,7 @@ ReadToken overflow
 Ready to run
 Reasons
 Rebuild
+Received a message with timeout=0.  Caller should not have sent it
 Received large message over websocket, payload size %llu
 ReceivedNewGame
 ReceivesGroupComment
@@ -6369,6 +6648,7 @@ RemoveLast
 Removing idle connection for %s, %d left open, %d requests waiting, %d requests still in-flight
 Removing in-use connection for %s, %d left open, %d requests waiting, %d requests still in-flight
 Removing now closed connection (%p) for %s
+RenderFrameMark
 Renew failed
 Renew next period
 Rental
@@ -6412,11 +6692,11 @@ Reserved numbers must be positive integers.
 Reserved range $0 to $1 overlaps with already-defined range $2 to $3.
 Reserved range end number must be greater than start number.
 Reset Content
+Resolving %s
 Response Not Received
 Response for %s can be cached? No.
 Response for %s can be cached? Yes.
 ResponseHeaders
-Restoring saved stack over RestoreStackFrame (%p, %p, %p, %p)
 Restricted country
 Restricted device
 Retail
@@ -6430,7 +6710,8 @@ Routing Domain Identifiers
 RunOnce
 RunUntilCompleted
 RunUntilCompletedLowPri
-Running
+Running Script
+Running Update
 S
 S/MIME
 S/MIME CA
@@ -6488,8 +6769,10 @@ SETWRAP
 SGD
 SHA
 SHA1
+SHA1_Init( &c )
 SHA224
 SHA256
+SHA256_Init( &c )
 SHA3-224
 SHA3-256
 SHA3-384
@@ -6702,6 +6985,203 @@ SafeMode
 SafetyPay
 Same as previous value
 Santander Rio
+Sberbank
+Scale
+ScaleARGBCols64_C
+ScaleARGBColsUp2_C
+ScaleARGBColsUp2_SSE2
+ScaleARGBCols_C
+ScaleARGBCols_SSE2
+ScaleARGBFilterCols64_C
+ScaleARGBFilterCols_C
+ScaleARGBFilterCols_SSSE3
+ScaleARGBRowDown2Box_Any_SSE2
+ScaleARGBRowDown2Box_C
+ScaleARGBRowDown2Box_SSE2
+ScaleARGBRowDown2Linear_Any_SSE2
+ScaleARGBRowDown2Linear_C
+ScaleARGBRowDown2Linear_SSE2
+ScaleARGBRowDown2_Any_SSE2
+ScaleARGBRowDown2_C
+ScaleARGBRowDown2_SSE2
+ScaleARGBRowDownEvenBox_Any_SSE2
+ScaleARGBRowDownEvenBox_C
+ScaleARGBRowDownEvenBox_SSE2
+ScaleARGBRowDownEven_Any_SSE2
+ScaleARGBRowDownEven_C
+ScaleARGBRowDownEven_SSE2
+ScaleAddRow_16_C
+ScaleAddRow_AVX2
+ScaleAddRow_Any_AVX2
+ScaleAddRow_Any_SSE2
+ScaleAddRow_C
+ScaleAddRow_SSE2
+ScaleColsUp2_16_C
+ScaleColsUp2_C
+ScaleColsUp2_SSE2
+ScaleCols_16_C
+ScaleCols_C
+ScaleFilterCols64_16_C
+ScaleFilterCols64_C
+ScaleFilterCols_16_C
+ScaleFilterCols_C
+ScaleFilterCols_SSSE3
+ScaleFilterReduce
+ScaleMaxSamples_C
+ScalePlane
+ScalePlaneBilinearDown
+ScalePlaneBilinearDown_16
+ScalePlaneBilinearUp
+ScalePlaneBilinearUp_16
+ScalePlaneUp2_12_Bilinear
+ScalePlaneUp2_12_Linear
+ScalePlaneUp2_16_Bilinear
+ScalePlaneUp2_16_Linear
+ScalePlaneUp2_Bilinear
+ScalePlaneUp2_Linear
+ScalePlaneVertical
+ScalePlaneVertical_16
+ScalePlane_12
+ScalePlane_16
+ScaleRowDown2Box_16_C
+ScaleRowDown2Box_AVX2
+ScaleRowDown2Box_Any_AVX2
+ScaleRowDown2Box_Any_SSSE3
+ScaleRowDown2Box_C
+ScaleRowDown2Box_Odd_AVX2
+ScaleRowDown2Box_Odd_C
+ScaleRowDown2Box_Odd_SSSE3
+ScaleRowDown2Box_SSSE3
+ScaleRowDown2Linear_16_C
+ScaleRowDown2Linear_AVX2
+ScaleRowDown2Linear_Any_AVX2
+ScaleRowDown2Linear_Any_SSSE3
+ScaleRowDown2Linear_C
+ScaleRowDown2Linear_SSSE3
+ScaleRowDown2_16_C
+ScaleRowDown2_AVX2
+ScaleRowDown2_Any_AVX2
+ScaleRowDown2_Any_SSSE3
+ScaleRowDown2_C
+ScaleRowDown2_SSSE3
+ScaleRowDown34_0_Box_16_C
+ScaleRowDown34_0_Box_Any_SSSE3
+ScaleRowDown34_0_Box_C
+ScaleRowDown34_0_Box_SSSE3
+ScaleRowDown34_16_C
+ScaleRowDown34_1_Box_16_C
+ScaleRowDown34_1_Box_Any_SSSE3
+ScaleRowDown34_1_Box_C
+ScaleRowDown34_1_Box_SSSE3
+ScaleRowDown34_Any_SSSE3
+ScaleRowDown34_C
+ScaleRowDown34_SSSE3
+ScaleRowDown38_16_C
+ScaleRowDown38_2_Box_16_C
+ScaleRowDown38_2_Box_Any_SSSE3
+ScaleRowDown38_2_Box_C
+ScaleRowDown38_2_Box_SSSE3
+ScaleRowDown38_3_Box_16_C
+ScaleRowDown38_3_Box_Any_SSSE3
+ScaleRowDown38_3_Box_C
+ScaleRowDown38_3_Box_SSSE3
+ScaleRowDown38_Any_SSSE3
+ScaleRowDown38_C
+ScaleRowDown38_SSSE3
+ScaleRowDown4Box_16_C
+ScaleRowDown4Box_AVX2
+ScaleRowDown4Box_Any_AVX2
+ScaleRowDown4Box_Any_SSSE3
+ScaleRowDown4Box_C
+ScaleRowDown4Box_SSSE3
+ScaleRowDown4_16_C
+ScaleRowDown4_AVX2
+ScaleRowDown4_Any_AVX2
+ScaleRowDown4_Any_SSSE3
+ScaleRowDown4_C
+ScaleRowDown4_SSSE3
+ScaleRowUp2_16_C
+ScaleRowUp2_Bilinear_12_AVX2
+ScaleRowUp2_Bilinear_12_Any_AVX2
+ScaleRowUp2_Bilinear_12_Any_SSSE3
+ScaleRowUp2_Bilinear_12_SSSE3
+ScaleRowUp2_Bilinear_16_AVX2
+ScaleRowUp2_Bilinear_16_Any_AVX2
+ScaleRowUp2_Bilinear_16_Any_C
+ScaleRowUp2_Bilinear_16_Any_SSSE3
+ScaleRowUp2_Bilinear_16_C
+ScaleRowUp2_Bilinear_16_SSE2
+ScaleRowUp2_Bilinear_AVX2
+ScaleRowUp2_Bilinear_Any_AVX2
+ScaleRowUp2_Bilinear_Any_C
+ScaleRowUp2_Bilinear_Any_SSE2
+ScaleRowUp2_Bilinear_Any_SSSE3
+ScaleRowUp2_Bilinear_C
+ScaleRowUp2_Bilinear_SSE2
+ScaleRowUp2_Bilinear_SSSE3
+ScaleRowUp2_Linear_12_AVX2
+ScaleRowUp2_Linear_12_Any_AVX2
+ScaleRowUp2_Linear_12_Any_SSSE3
+ScaleRowUp2_Linear_12_SSSE3
+ScaleRowUp2_Linear_16_AVX2
+ScaleRowUp2_Linear_16_Any_AVX2
+ScaleRowUp2_Linear_16_Any_C
+ScaleRowUp2_Linear_16_Any_SSE2
+ScaleRowUp2_Linear_16_C
+ScaleRowUp2_Linear_16_SSE2
+ScaleRowUp2_Linear_AVX2
+ScaleRowUp2_Linear_Any_AVX2
+ScaleRowUp2_Linear_Any_C
+ScaleRowUp2_Linear_Any_SSE2
+ScaleRowUp2_Linear_Any_SSSE3
+ScaleRowUp2_Linear_C
+ScaleRowUp2_Linear_SSE2
+ScaleRowUp2_Linear_SSSE3
+ScaleSamples_C
+ScaleSlope
+ScaleSumSamples_C
+ScaleUVBilinearUp2
+ScaleUVBilinearUp2_16
+ScaleUVCols64_C
+ScaleUVColsUp2_C
+ScaleUVCols_C
+ScaleUVFilterCols64_C
+ScaleUVFilterCols_C
+ScaleUVLinearUp2
+ScaleUVLinearUp2_16
+ScaleUVRowDown2Box_AVX2
+ScaleUVRowDown2Box_Any_AVX2
+ScaleUVRowDown2Box_Any_SSSE3
+ScaleUVRowDown2Box_C
+ScaleUVRowDown2Box_SSSE3
+ScaleUVRowDown2Linear_C
+ScaleUVRowDown2_C
+ScaleUVRowDownEvenBox_C
+ScaleUVRowDownEven_C
+ScaleUVRowUp2_Bilinear_16_AVX2
+ScaleUVRowUp2_Bilinear_16_Any_AVX2
+ScaleUVRowUp2_Bilinear_16_Any_C
+ScaleUVRowUp2_Bilinear_16_Any_SSE2
+ScaleUVRowUp2_Bilinear_16_C
+ScaleUVRowUp2_Bilinear_16_SSE2
+ScaleUVRowUp2_Bilinear_AVX2
+ScaleUVRowUp2_Bilinear_Any_AVX2
+ScaleUVRowUp2_Bilinear_Any_C
+ScaleUVRowUp2_Bilinear_Any_SSSE3
+ScaleUVRowUp2_Bilinear_C
+ScaleUVRowUp2_Bilinear_SSSE3
+ScaleUVRowUp2_Linear_16_AVX2
+ScaleUVRowUp2_Linear_16_Any_AVX2
+ScaleUVRowUp2_Linear_16_Any_C
+ScaleUVRowUp2_Linear_16_Any_SSE2
+ScaleUVRowUp2_Linear_16_C
+ScaleUVRowUp2_Linear_16_SSE2
+ScaleUVRowUp2_Linear_AVX2
+ScaleUVRowUp2_Linear_Any_AVX2
+ScaleUVRowUp2_Linear_Any_C
+ScaleUVRowUp2_Linear_Any_SSSE3
+ScaleUVRowUp2_Linear_C
+ScaleUVRowUp2_Linear_SSSE3
 ScheduledEvent
 Scope                                                      Calls  Time+Child    Pct        Time    Pct   Avg+Child         Avg        Peak
 Screenshot
@@ -6733,6 +7213,7 @@ Send Proxied Owner
 Send Proxied Router
 Send Router
 Sending first queued request for %s
+Sending msg of type '%s' with timeout=0.  Receiver won't have any time to service it!
 Sending of an email failed
 Sent message: %s - %u bytes
 Sep
@@ -6750,12 +7231,14 @@ SessionTicket
 Set-Cookie
 SetAllocatedMessage
 SetBool
+SetCallerDeadlineMS - caller deadline already set?
 SetDouble
 SetEnum
 SetEnumValue
 SetFloat
 SetInt32
 SetInt64
+SetPlane
 SetRepeatedBool
 SetRepeatedDouble
 SetRepeatedEnum
@@ -6765,6 +7248,10 @@ SetRepeatedInt64
 SetRepeatedString
 SetRepeatedUInt32
 SetRepeatedUInt64
+SetRow_Any_X86
+SetRow_C
+SetRow_ERMS
+SetRow_X86
 SetString
 SetUInt32
 SetUInt64
@@ -6774,7 +7261,6 @@ Setup Error
 Shared Only
 Shared library locked
 Shopping Cart Not Found
-Should not be tallying messages under the k_EMsgServiceMethod eMsg -- should use the specific service method!
 Should not reach here.
 Should only be called when we have an audio track in the video
 Signature Algorithm:
@@ -6791,9 +7277,25 @@ Site License
 Site License locked
 SiteLicense
 Size
+Size() == operand.Size()
+Sleep for time
 Sleeping for time
 SlotsAvailable
 Snooze
+SobelRow_Any_SSE2
+SobelRow_C
+SobelRow_SSE2
+SobelToPlaneRow_Any_SSE2
+SobelToPlaneRow_C
+SobelToPlaneRow_SSE2
+SobelXRow_C
+SobelXRow_SSE2
+SobelXYRow_Any_SSE2
+SobelXYRow_C
+SobelXYRow_SSE2
+SobelYRow_C
+SobelYRow_SSE2
+SocketAlreadyClosed
 SocketFail
 Sofort
 Software
@@ -6803,30 +7305,72 @@ Someone called ClearWritingMinidump without holding the minidump lock.
 Someone called SetWritingMinidump without holding the minidump lock.
 Something else
 Spamming
+Speakers
 Special Cause
 Spending limit exceeded
 Spew Globals
 Spew globals
 Split
+SplitARGBPlane
+SplitARGBPlaneAlpha
+SplitARGBPlaneOpaque
+SplitARGBRow_AVX2
+SplitARGBRow_Any_AVX2
+SplitARGBRow_Any_SSE2
+SplitARGBRow_Any_SSSE3
+SplitARGBRow_C
+SplitARGBRow_SSE2
+SplitARGBRow_SSSE3
+SplitRGBPlane
+SplitRGBRow_Any_SSSE3
+SplitRGBRow_C
+SplitRGBRow_SSSE3
+SplitUVPlane
+SplitUVPlane_16
+SplitUVRow_16_AVX2
+SplitUVRow_16_Any_AVX2
+SplitUVRow_16_C
+SplitUVRow_AVX2
+SplitUVRow_Any_AVX2
+SplitUVRow_Any_SSE2
+SplitUVRow_C
+SplitUVRow_SSE2
+SplitXRGBRow_AVX2
+SplitXRGBRow_Any_AVX2
+SplitXRGBRow_Any_SSE2
+SplitXRGBRow_Any_SSSE3
+SplitXRGBRow_C
+SplitXRGBRow_SSE2
+SplitXRGBRow_SSSE3
 Spoofing
 Sports
 Stack%2d: %s
 Stack%2d: 0x%llX
 Staging
+StandardPC
+Starting packet has timeout of 0?  Caller should not have sent it!
 Startup
 StaticFileWriterThread()
 Steam
 Steam - DirWatcher
 Steam Video
-Steam client files corrupt
 Steam client out of date
 Steam/Press Master
 Steam2 Migration Complete
 Steam2010 CD-Key
+SteamBox
 SteamCache
+SteamCallbacks
+SteamDeck
 SteamRealPath
 Steamworks Access Invite
 SteamworksAccessInvites
+Steamworks_DispatchCallback
+Steamworks_DispatchCallback: %u,%u -> %d, %u
+Steamworks_IPCRecv
+Steamworks_IPCRecv: %s::%s
+Steamworks_IPCSend
+Steamworks_IPCSend: %s::%s
 Still busy
 Stop using I64/I32 - use lld or d, respectively
 Stopping
@@ -6835,6 +7379,7 @@ Store
 Store / Billing country code mismatch
 Store / Business country code mismatch
 Store Promotion
+StreamingSendPacket: %s %u %u %u %u %u %d
 String
 String field
 String literals cannot cross line boundaries.
@@ -6866,6 +7411,12 @@ Suspect
 Suspected Hijacker
 Suspended
 Swap
+SwapUVPlane
+SwapUVRow_AVX2
+SwapUVRow_Any_AVX2
+SwapUVRow_Any_SSSE3
+SwapUVRow_C
+SwapUVRow_SSSE3
 Switch
 Switch from encoding '%s' to '%s' is not supported
 Switching Protocols
@@ -6877,6 +7428,7 @@ S}<
 T
 T61
 T61STRING
+TCP
 TCP disconnect
 TED
 TELETEXSTRING
@@ -7160,6 +7712,7 @@ Target buffer too short
 Target buffer too short to terminate
 Temporary Redirect
 Tenpay
+Terminating
 Test
 Test CD-Key
 The JSON camel-case name of field "
@@ -7190,6 +7743,7 @@ Thread failed to initialize
 Thread pool rejected HTTP work item, bad news.
 Thread synchronization object is unuseable
 Thread(0x%p/0x%p/0x%x)
+ThreadInMainThread()
 ThreadedPerformInitialHandshake SSL_do_handshake
 ThreeHours
 Ti=
@@ -7198,9 +7752,11 @@ Time Stamp signing
 Time Stamping
 Time is out of sync
 Timed Trial
+TimedOut
 Timeout
 Times Recv     Pct     Bytes Recv     Pct    AvgSize MessageName
 Times Sent     Pct     Bytes Sent     Pct    AvgSize MessageName
+Tinkoff
 Todito Cash
 Tokenizer::ParseFloat() passed text that could not have been tokenized as a float:
 Tokenizer::ParseStringAppend() passed text that could not have been tokenized as a string:
@@ -7218,6 +7774,7 @@ Total bytes allocated (os heap reported): %s
 Total bytes allocated counted: %s
 Total number of strings %u, longest string size %u, avg size %u
 Total of %u buckets with %u hash collisions
+Touch'n Go
 TracerPid:
 Tracked allocs currently in use. %d Total %d
 Trade
@@ -7236,19 +7793,36 @@ Tried to merge messages of different types
 Tried to register a non-generated type with the generated type registry.
 Trip
 True
+TrueMoney
 Trust Root
 Trustly
 Trustpay
 Try another CM
+Trying to clear job caller deadline, but we have already aborted!
 Two-factor activation code mismatch
 Two-factor code mismatch
 Type appears to be in generated pool but wasn't
 Type is already registered:
 Type=
 U
+U010ToAB30
+U010ToABGR
+U010ToAR30
+U010ToARGB
+U210ToAB30
+U210ToABGR
+U210ToAR30
+U210ToARGB
+U420ToABGR
+U420ToARGB
+U422ToABGR
+U422ToARGB
+U444ToABGR
+U444ToARGB
 UAH
 UC
 UCS-4
+UDP
 UDP Socket %i too full (%d bytes, warning limit %d)
 UDPSocket: ThreadedFunc_RecvUDP got error %d (%s) from socket %d, (invalid) hSocketOwner %d, we're not receiving on this socket now!
 UDPSocket: WSARecvFrom returned benign error %d, retrying
@@ -7310,7 +7884,32 @@ UTF8STRING
 UTF8String
 UU!
 UUU
+UVScale
+UVScale_16
 UYU
+UYVYToARGB
+UYVYToARGBRow_AVX2
+UYVYToARGBRow_Any_AVX2
+UYVYToARGBRow_Any_SSSE3
+UYVYToARGBRow_C
+UYVYToARGBRow_SSSE3
+UYVYToI422
+UYVYToNV12
+UYVYToUV422Row_AVX2
+UYVYToUV422Row_Any_AVX2
+UYVYToUV422Row_Any_SSE2
+UYVYToUV422Row_C
+UYVYToUV422Row_SSE2
+UYVYToUVRow_AVX2
+UYVYToUVRow_Any_AVX2
+UYVYToUVRow_Any_SSE2
+UYVYToUVRow_C
+UYVYToUVRow_SSE2
+UYVYToYRow_AVX2
+UYVYToYRow_Any_AVX2
+UYVYToYRow_Any_SSE2
+UYVYToYRow_C
+UYVYToYRow_SSE2
 Unable to decrement IOCP eventfd, error %d
 Unable to determine CPU Frequency. Try defining CPU_MHZ.
 Unable to increment IOCP eventfd, error %d
@@ -7368,7 +7967,6 @@ Unsupported format qualifier l%c
 Unsupported format qualifier z%c
 Unsupported: type mismatch
 Unused
-Update Hidden
 Update Optional
 Update Paused
 Update Queued
@@ -7378,6 +7976,7 @@ Update Started
 Update required
 Upgrade
 Upgrade: websocket
+Upgrading websocket client connection, should have been pre-allocated!
 Upload Disconnected
 Upload Timeout
 UsableInGame
@@ -7415,9 +8014,12 @@ VTC Pay Wallet
 VV>
 VVV
 V_AppendSlash: ran out of space on %s.
+V_IsAbsolutePath( pPath )
 V_MakeAbsolutePath: _getcwd failed.
 V_RemoveDotSlashes failed for "%s".
 V_URLDecode needs a dest buffer at least as large as the source
+V_strlen( pchName ) < V_ARRAYSIZE( m_rgchName )
+V_strlen( pchTime ) == 25
 Vakiflar Bank
 Valid
 Validate Failed: Leaked connection %u
@@ -7486,7 +8088,6 @@ WIN32
 WIN64
 WIN7
 WINDOWS
-WOL: 0x%p
 WON CD-Key
 WPACKET_start_sub_packet_len__
 WSARecv
@@ -7502,23 +8103,28 @@ Wait for msg
 Wait ms
 Waited %u iterations in CFileWriter::Flush - m_cubOutstanding = %d
 Waiting for disk
+Waiting on HTTP
 Waiting on SQL
 Waiting on http
+Waiting on job
+Waiting on lock
 Waiting on lock (job owning lock not known)
+Waiting on lock: 0x%p
 Waiting on memcached
+Waiting on msg %s
 Waiting on network message
 Waiting on workitem
+Waiting on workitem %s
 Wallet
 Wallet (Nodwin)
 Warning
 Warning parsing text-format
-Warning: failed to init SDL thread priority manager: SDL not found
-Warning: failed to init SDL thread priority manager: symbol %s missing
 Warning: failed to set thread priority: foreign thread unsupported
 Warning: failed to set thread priority: set failed for %d: %d: %s
 Warning: failed to set thread priority: set failed for priority %d
 Warning: support for elevated priorities is most likely unavailable, suppressing future warnings
 Warning: thread priority outside allowed range %d
+We we first discover the protobuf class used for a particular EMsg, log it
 WeChat
 Web API key registration ban
 Web Guide
@@ -7530,16 +8136,19 @@ WebMoney
 WebMoney (Degica)
 WebMoney Steam Card (Japan)
 WebMoney Steam Card Top Up (Japan)
+WebSocket
 What city were you born in?
 What is the name of your pet?
 What is the name of your school?
 What is your favorite team?
 What is your mother's maiden name?
+When we send a message expecting a reply from a job with a deadline, set the timeout on the message to [current time remaining in this job] - N ms.  A negative value prevents propagating caller deadlines down the chain
 While parsing SegmentBase, didn't find init and index range
 Whitelist
 Whitespace not allowed here
 Whitespace required
 Who was your childhood hero?
+WifiDisabled
 Windows
 Work Item (%s) for Work Pool %s completed but job no longer existed to notify
 Work thread '%s' is marked exited, but we could not immediately join prior to deleting -- proceeding without join
@@ -7702,19 +8311,44 @@ XXXXXX
 Y
 Y@
 YQ
+YUY2ToARGB
+YUY2ToARGBRow_AVX2
+YUY2ToARGBRow_Any_AVX2
+YUY2ToARGBRow_Any_SSSE3
+YUY2ToARGBRow_C
+YUY2ToARGBRow_SSSE3
+YUY2ToI422
+YUY2ToNV12
+YUY2ToUV422Row_AVX2
+YUY2ToUV422Row_Any_AVX2
+YUY2ToUV422Row_Any_SSE2
+YUY2ToUV422Row_C
+YUY2ToUV422Row_SSE2
+YUY2ToUVRow_AVX2
+YUY2ToUVRow_Any_AVX2
+YUY2ToUVRow_Any_SSE2
+YUY2ToUVRow_C
+YUY2ToUVRow_SSE2
+YUY2ToY
+YUY2ToYRow_AVX2
+YUY2ToYRow_Any_AVX2
+YUY2ToYRow_Any_SSE2
+YUY2ToYRow_C
+YUY2ToYRow_SSE2
 YY
 YY'
 YYY
 YYYY
 Yandex
 Yapi Kredi
+Yielding (ready to run)
 YieldingResolveHostNameOrIPWithPort
+YooMoney
 You are about to call a thread func on an object on the current stack - it will move while we yield!
 You can't set a body manually AND set POST params
 You must refund this transaction to wallet
 You must type in
 You should clear the KeyValues instance before calling this function or call MergeFromFile instead.
-You should follow through with the finalize that was already set
 Z
 Z0000
 ZAR
@@ -7736,6 +8370,7 @@ ZxF
 [ func+child   func ]  [ func+child   func ]  [ func+child   func ]  Count   Peak
 [$0]
 [%d]
+[%s]
 [%s] %s=%s
 [%s]%-*s
 [0x%p] %ums:
@@ -7804,6 +8439,8 @@ _
 _ExitOnFatalAssert
 _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
+_IsValidIndex( elem, unNodeSize, pMemBase )
+_IsValidIndex( y, unNodeSize, pMemBase )
 _Jv_RegisterClasses
 ___
 __`
@@ -7859,6 +8496,7 @@ __wrap___lxstat64
 __wrap___xstat
 __wrap___xstat64
 __wrap_access
+__wrap_chdir
 __wrap_chmod
 __wrap_chown
 __wrap_dlmopen
@@ -7959,6 +8597,7 @@ add_key_share
 adding object
 additional input too long
 additional verification
+addrListening.HasIP()
 addr_strings
 addr_validate_path_internal
 addressFamily
@@ -8084,6 +8723,7 @@ anyPolicy
 api
 app data in handshake
 append_exp
+appid=%u
 appl [ %d ]
 application
 application data after close notify
@@ -8097,6 +8737,7 @@ application/x-pkcs7-signature
 application/x-www-form-urlencoded
 archiveCutoff
 arg2 lt arg3
+argLen < 0x10000000u
 args were given.  Full format string was: "
 argument out of range
 arguments.
@@ -8136,6 +8777,7 @@ aria_gcm_ctrl
 aria_gcm_init_key
 aria_init_key
 asctime_r
+asimd
 asn1
 asn1 encoding routines
 asn1 error
@@ -8253,6 +8895,7 @@ authsafes
 auto
 automatic
 aux error
+avPacket.pts != AV_NOPTS_VALUE
 av_dict_set
 av_find_best_stream
 av_frame_alloc
@@ -8318,6 +8961,9 @@ b2i_dss
 b2i_rsa
 b64_new
 b64_read_asn1
+bForceRequeue || m_unThreadBytesToRead == 0 || m_eResultRunSSL != k_EResultOK
+bSuccess || pWorkItem->HasTimedOut()
+bUseIOCP
 baY
 backlog
 backtrace
@@ -8390,6 +9036,8 @@ banned from chat
 base
 base64 decode error
 base64 encoding
+baseIP.GetType() == k_EIPTypeV4
+baseIP.GetType() == k_EIPTypeV6
 basicConstraints
 basicOCSPResponse
 basic_string::_S_construct null not valid
@@ -8416,10 +9064,12 @@ bio_make_pair
 bio_read_intern
 bio_write_intern
 biometricInfo
+bitNum >= 0 && bitNum < this->Size()
 bits too small
 bitstr_cb
 blake2b512
 blake2s256
+blobSize <= nMaxBlobSize
 block cipher pad is wrong
 block type is not 01
 block type is not 02
@@ -8454,6 +9104,7 @@ boolean is wrong length
 bootstrap
 boundary
 bpcs.com
+bpp >= 1 && bpp <= 4
 bps
 br
 brainpoolP160r1
@@ -8478,10 +9129,18 @@ broadcastorigin
 broken pipe
 browser
 buf error
+buf.GetFlags() & CUtlBuffer::TEXT_BUFFER
+bufDataChunk.TellPut() > 0
+buf[0] == expect_tag
 buffer
 buffer too small
 buffer. Use the 'bytes' type if you intend to send raw
+bufferLen == 0 || pDest != NULL
+bufferLen > 0 && bufferLen <= INT_MAX
+bufferToSwap.TellPut() < FIO_MAX_IO_BYTES
 buffer_ctrl
+buflen >= 2
+buflen >= 2 + encoded_len_bytes
 bugs
 build_chain
 buildingName
@@ -8492,6 +9151,7 @@ bytes).  To increase the limit (or to disable these warnings), see CodedInputStr
 bytes.
 bytes=
 bytes=%llu-%llu
+bytesTransferred >= 0
 bytes_to_cipher_list
 c
 c ap traffic
@@ -8524,9 +9184,18 @@ c2tnb359v1
 c2tnb431r1
 c3
 cACertificate
+cActualReplacements == cReplacements
+cBytes > 0
+cDaysKeepPersistentLogFiles > 0
 cE,
+cMaxSamples > 2
+cMicrosecondsToSleep < k_cMicroSecJobPausedTimeout
 cNAMERecord
 cRLSign
+cRecordInit > 0
+cRefCount >= 0
+cRemaining > 0
+cSeqsAcked > 0
 c_)
 ca
 ca dn length mismatch
@@ -8670,8 +9339,12 @@ category_6
 category_7
 category_8
 category_9
+cbActual < (uint32)nBufSizeWithTerminator
+ccMax >= 1
 ccU
 ccc
+cchEncodedData > 0
+cchEncodedData >= ( cubData * 2 ) + 1
 ccs received early
 cdkeyrestrictions
 cdn
@@ -8732,6 +9405,7 @@ check pubkey invalid
 check pubkey too large
 check pubkey too small
 check q not prime
+checkLen >= 0
 check_bitlen_dsa
 check_bitlen_rsa
 check_content
@@ -8848,6 +9522,7 @@ community
 comp
 comp_id
 compatible
+components.Count() == 0
 compressed length too long
 compressed-data
 compression disabled
@@ -8912,6 +9587,7 @@ contentsOfAdmissions
 contentserver
 context not dane enabled
 context not initialised
+context.m_vecStack.Count() <= 1
 control command failed
 controller
 controller_android
@@ -8922,6 +9598,7 @@ controller_keyboard_generic
 controller_mobile_touch
 controller_mouse_generic
 controller_native
+controller_neptune
 controller_none
 controller_ps3
 controller_ps4
@@ -8942,12 +9619,14 @@ controller_xboxelite
 controller_xboxone
 cookie gen callback failure
 cookie mismatch
+cookie.m_strDomain != ""
 coordinates out of range
 copy
 copy error
 copy_email
 copy_issuer
 core id
+coroutines.Base() == NULL
 costParameter
 could not bind to the requested symbol name
 could not load the shared library
@@ -8955,6 +9634,9 @@ could not set engine
 could not set time
 could not unload the shared library
 count  job:
+count == 0 || s1 != NULL
+count == 0 || s2 != NULL
+count >= 0
 counter
 counter:
 countersignature
@@ -8963,6 +9645,8 @@ countryCode3n
 countryName
 countrycodes
 covalensolutions.com
+cpu model
+cpu_info_
 crashhandler.so
 crashhandler002
 crashhandler003
@@ -9284,6 +9968,39 @@ ctrl error
 ctrl failure
 ctrl not implemented
 ctrl operation not implemented
+cubBuffer >= cbWritten + ( m_pNetPacket->CubData() - cubSkip )
+cubBuffer >= cbWritten + m_ReplacementBody.Count()
+cubBytesToRead < INT32_MAX
+cubConvertedBuffer == cubConverted
+cubData
+cubData < FIO_MAX_IO_BYTES
+cubData < INT32_MAX
+cubData <= k_cubMaxExpectedMsgDataSize
+cubData <= k_cubMaxMsgNetworkSize
+cubData <= k_nMaxDatagramSize
+cubData > 0
+cubData >= 0
+cubData >= 8
+cubDecryptedData + 16 <= (uint) m_pNetPacket->CubData()
+cubEncryptedData
+cubEncryptedData > 0
+cubEncryptedData >= cubTotalOutput
+cubIV
+cubIV >= k_nSymmetricBlockSize
+cubIncoming >= 0
+cubInput > 0
+cubKey > 0
+cubModulus <= 0xFFFFFFFFu
+cubMsgByteSize <= INT_MAX
+cubMsgRemaining > 0
+cubMsgSizeMax >= 0
+cubPkt < V_ARRAYSIZE( m_rgPacketData )
+cubPkt >= sizeof ( UDPPktHdr_t )
+cubPlaintextData
+cubPlaintextData > 0
+cubRemaining >= 0
+cubSent == cubPkt
+cubWritten == bufAudio.TellPut()
 currencies
 curve
 curve does not support ecdh
@@ -9415,7 +10132,12 @@ depotdeltapatch
 depotonly
 depots
 deprecated client msg %s, SteamID %s
+depth <= 16
+depth >= 1
+depth >= 10
+depth >= 8
 depth exceeded
+derive
 derive_secret_key_and_iv
 derived
 des
@@ -9443,13 +10165,16 @@ des3
 des3-wrap
 des_ede3_wrap_cipher
 description
+dest != NULL
+destCapacity != 0
+destSize >= 1
 destinationIndicator
 desx
 desx-cbc
 detached content
 details:
-details: %s (%d) (%dms)
 details: %s [locked by %s - %s / %s (%ldms)] (%d) (%ldms)
+details: %s%s (%d) (%dms)
 dfxp
 dgram_sctp_new
 dgram_sctp_read
@@ -9512,6 +10237,7 @@ directory
 directory services (X.500)
 directory services - algorithms
 dirname error
+disabled
 disabled group
 disconnected
 discriminant is zero
@@ -9545,6 +10271,7 @@ dmp1 not congruent to d
 dmq1
 dmq1 not congruent to d
 dnQualifier
+dns
 dnsName
 dns_failed
 do_EC_KEY_print
@@ -9617,6 +10344,9 @@ dsa_with_SHA3-512
 dsa_with_SHA384
 dsa_with_SHA512
 dso already loaded
+dst_height > 0
+dst_width % 3 == 0
+dst_width > 0
 dstu28147
 dstu28147-cfb
 dstu28147-ofb
@@ -9647,12 +10377,21 @@ duplicate compression id
 duplicate zone id
 duration
 dvcs
+dx != __null
+dx == 65536 * 2
+dx == 65536 * 4
+dy != __null
 dynamic
 e
 e exp master
 e;;
+eConnectionMode == k_EConnectionModeClient
 eContent
 eContentType
+eFrameType < k_EFrameTypeMax
+eGroup < VPROF_BUDGETGROUP_MAX
+eGroup >= static_cast< ESpewGroup >( 0 ) && eGroup < k_ESpew_ArraySize
+eMsg != k_EMsgInvalid
 eNULL
 early_data_count_ok
 ec group new by name failure
@@ -9788,6 +10527,7 @@ emailProtection
 embedded_unknown
 empty file structure
 empty srtp protection profile list
+emsg=%d
 en
 enabled_logs
 enc_data
@@ -9798,6 +10538,7 @@ encapContentInfo
 encipherOnly
 encode error
 encode_pkcs1
+encoded_len_bytes >= 1 && encoded_len_bytes <= sizeof(size_t)
 encoding error
 encrypt error
 encrypted length too long
@@ -9886,6 +10627,7 @@ excessive message size
 excluded
 excluded subtree violation
 excludedSubtrees
+existingLen < k_cchMaxString && cubInput * 2 < k_cchMaxString - existingLen
 exp master
 expand on static bignum data
 expected a section name
@@ -9914,6 +10656,7 @@ exporter
 exptext
 ext binder
 ext length mismatch
+ext4
 extReq
 extend .$0 {
 extended
@@ -9921,12 +10664,14 @@ extended master secret
 extendedCertificateAttributes
 extendedKeyUsage
 extendedStatus
+extension
 extension exists
 extension name error
 extension not found
 extension not received
 extension setting not supported
 extension value error
+extension[0] == '.'
 extensions
 external
 externaltests.so
@@ -9945,6 +10690,7 @@ failed to init async
 failed to set pool
 failed to swap context
 failure
+fallocate64
 false
 fastly
 fatal
@@ -9999,6 +10745,7 @@ filename="%s"%s
 filename="smime.p7s"%s%s
 fileno
 fileop
+filesystem
 filesystem_stdio.so
 filesystem_steam.so
 filetx
@@ -10018,12 +10765,12 @@ first num too large
 first octet invalid
 fixed32
 fixed64
+fixed_invtbl8
 flags
 float
 flock
 flock %s %s failed. errno = %d
 flock LOCK_EX %s failed, errno = %d
-flock LOCK_EX request but file is not opened for writing, ignoring: %s
 flock LOCK_SH requested but file is not opened for reading, ignoring: %s
 floorf
 flushing
@@ -10072,6 +10819,7 @@ fwrite
 g
 g*
 g_CompletionPortManager
+g_CompletionPortManager.BStarted()
 g_LocalSubnetsThisBox
 g_VecPCoroutineMgr
 g_VecPCoroutineMgr[i]
@@ -10081,9 +10829,15 @@ g_mapMetricsDisabledOperations
 g_mapMetricsEnabledCatalogs
 g_mapMetricsEnabledOperations
 g_nullMetricsFactory
-g_pNullMetrics
+g_pFioAsyncEnqueue == NULL
+g_pFioAsyncFinalize == NULL
+g_pJobCur
+g_pJobCur != NULL
+g_pJobCur == nullptr || g_pJobCur == this
+g_pMemAllocSteam
 g_queuePacketsToDelete
 g_vecIPv4ThisBox
+g_vecIPv4ThisBox.Count() > 0
 g_vecIPv6ThisBox
 gai_strerror
 game
@@ -10297,6 +11051,8 @@ guide
 gzip
 gzip,identity,*;q=0
 h
+hConnection == m_hConnection
+hQueue != -1
 handshake failure
 hardware
 has the same name as
@@ -10306,6 +11062,8 @@ hashFunc
 header too long
 heartbeat request already pending
 height
+height > 0
+held by
 hex:
 hexinfo
 hexkey
@@ -10345,10 +11103,12 @@ hour
 houseIdentifier
 http
 http request
+http:
 http:%s
 http://
 http://%s%s
 http://%s%s%s
+http://fakecaptiveportal.org/
 http://www.w3.org/2000/xmlns/
 http://www.w3.org/XML/1998/namespace
 http_client
@@ -10393,9 +11153,15 @@ i2s_ASN1_INTEGER
 i2v_AUTHORITY_INFO_ACCESS
 iA5StringSyntax
 iDEAL
+iIP < g_vecIPv4ThisBox.Count()
+iIP < g_vecIPv6ThisBox.Count()
+iNode == iIndex
 iPhoneOS
+iSegment >= 0
+iSetNonBlockResult == 0
 ia5org
 iana
+iboxwidth > 0
 id
 id-DHBasedMac
 id-Gost28147-89-CryptoPro-A-ParamSet
@@ -10707,6 +11473,7 @@ identity
 identity,*;q=0
 idp mismatch
 ids
+idx < m_map.m_nMaxElement
 ieee
 ieee-siswg
 if you ignore case and strip out the enum name prefix (if any). This is error-prone and can lead to undefined behavior. Please avoid doing this. If you are using allow_alias, please assign the same numeric value to both enums.
@@ -10741,6 +11508,7 @@ import "$0";
 import public "$0";
 import weak "$0";
 in
+in != out
 in error state
 in use
 in_channel_layout
@@ -10764,11 +11532,15 @@ inf
 infinite
 infinity
 info
+info.m_pReplacementString == 0
+info.m_pTreeInUseConnections->Element(iIndexConnection) == pConnection
+info.m_pTreeWaitingConnections->Element(iIndexConnection) == pConnection
 inherit
 inhibitAnyPolicy
 inhibitPolicyMapping
 init fail
 init failed
+initial wait
 initialization
 initialization error
 initials
@@ -10919,6 +11691,7 @@ ioctlsocket
 ios
 ios32
 ios64
+ip=%s
 ipAddressChoice
 ipsec Internet Key Exchange
 ipsec3
@@ -10973,6 +11746,10 @@ jj
 jjj
 jjjjjjjjjjjjjjjj
 job
+job.m_ePauseReason == k_EJobPauseReasonWaitingForLock
+job.m_pWaitingOnWorkItem == NULL
+jobID != k_GIDNil
+jobMsgInfo.m_EMsg != 0
 job_metrics
 joined the group
 joint-iso-itu-t
@@ -10990,6 +11767,10 @@ k#u
 k1
 k2
 k3
+kBgrF709Constants
+kBgrH709Constants
+kBgrI601Constants
+kBgrJPEGConstants
 kDHE
 kDHEPSK
 kECDHE
@@ -11000,8 +11781,33 @@ kGOST
 kPSK
 kRSA
 kRSAPSK
+kRgbF709Constants
+kRgbH709Constants
+kRgbI601Constants
+kRgbJPEGConstants
 kSRP
 kUU
+kYuv2020Constants
+kYuvF709Constants
+kYuvH709Constants
+kYuvI601Constants
+kYuvJPEGConstants
+kYuvV2020Constants
+kYvu2020Constants
+kYvuF709Constants
+kYvuH709Constants
+kYvuI601Constants
+kYvuJPEGConstants
+kYvuV2020Constants
+k_EConnectionModeClient == m_pNetConnection->m_EConnectionMode
+k_EConnectionStateConnecting == m_EConnectionState
+k_EConnectionStateUnconnected == m_EConnectionState
+k_EConnectionTypeTCP == GetConnectionType( hConnection )
+k_EConnectionTypeUDP == GetConnectionType( hConnection )
+k_EConnectionTypeWebSocket == GetConnectionType( hConnection )
+k_EHandshakeStateComplete == m_EHandshakeState
+k_EHandshakeStateInProgress == m_EHandshakeState
+k_EIPTypeV4 == addr.GetType()
 k_EMSgNonStdMsgSyslog
 k_EMsgAMClientAddFriendToGroup
 k_EMsgAMClientAddFriendToGroupResponse
@@ -11084,7 +11890,6 @@ k_EMsgClientCommentNotifications
 k_EMsgClientConnectionStats
 k_EMsgClientContentServerLogOn_Deprecated
 k_EMsgClientCreateAccountResponse
-k_EMsgClientCreateAcctResponse
 k_EMsgClientCreateChat
 k_EMsgClientCreateChatResponse
 k_EMsgClientCurrentUIMode
@@ -11175,6 +11980,7 @@ k_EMsgClientGetPurchaseReceipts
 k_EMsgClientGetUserStats
 k_EMsgClientGetUserStatsResponse
 k_EMsgClientHeartBeat
+k_EMsgClientHello
 k_EMsgClientHideFriend
 k_EMsgClientInformOfResetForgottenPassword
 k_EMsgClientInformOfResetForgottenPasswordResponse
@@ -11470,8 +12276,12 @@ k_EMsgRemoteClientStartStream
 k_EMsgRemoteClientStartStreamResponse
 k_EMsgServiceMethod
 k_EMsgServiceMethodCallFromClient
+k_EMsgServiceMethodCallFromClientNonAuthed
 k_EMsgServiceMethodResponse
 k_EMsgServiceMethodSendToClient
+k_nMemPoolMagic_Free == *(( (int *) returnBlock) - 1)
+k_nMemPoolMagic_InUse == *(( (int *) pMem) - 1)
+k_nSymmetricKeyLen256 == cubKey || k_nSymmetricKeyLen128 == cubKey
 kdf parameter error
 keep-alive
 kek_unwrap_key
@@ -11531,6 +12341,10 @@ kx-rsa-psk
 kx-srp
 kxBlob
 l
+lNext >= 0
+lOffset >= 0
+lSet >= 0
+lVideoSleep >= 0 && lAudioSleep >= 0
 ladder post failure
 ladder pre failure
 ladder step failure
@@ -11545,6 +12359,8 @@ ld-linux-x86-64.so.2
 left the group
 legacy_renegotiation
 legacy_server_connect
+len < maxlen
+len > 0 || HasError()
 len >= 0
 len >= input_len
 length
@@ -11552,6 +12368,8 @@ length is greater than %ld
 length mismatch
 length too long
 length too short
+lengthToEncodePriv > 0 && lengthToEncodePriv < 1024*1024
+lengthToEncodePub > 0 && lengthToEncodePub < 1024*1024
 length_ >= n
 level3
 level_add_node
@@ -11594,6 +12412,7 @@ linux419
 linux44
 linux49
 linux4x
+linux510
 linux54
 linux5x
 linux64
@@ -11632,6 +12451,8 @@ long_c2i
 longjmp
 lookup returned nothing
 lookup_certs_sk
+loongson-ext
+loongson-mmi
 loopback
 lseek
 lseek64
@@ -11640,17 +12461,23 @@ ly
 m
 mXRecord
 m_AssocHandles
+m_AssocHandles.IsValidIndex( nAssocIdx )
+m_BaseIP.GetType() == k_EIPTypeV4
 m_BodyDataBuffer
+m_Count == 0
+m_EConnectionState == k_EConnectionStateConnecting
+m_EConnectionState == k_EConnectionStateDisconnecting
 m_Elements
 m_FileIOThreadPool
 m_Filenames
+m_Func
 m_HashItemMemPool
 m_L2Cache
 m_LeakTrack
 m_List
 m_ListCoroutines
 m_ListCoroutines[iRoutine]
-m_ListJobTimeouts
+m_ListJobsNewFromNetMsg
 m_ListJobsYieldingRegPri
 m_ListScheduledFunctions
 m_ListScheduledItem
@@ -11663,58 +12490,113 @@ m_MapCookiesByHost[iMap]->Element(i)
 m_MapHostsToPersistentConnections
 m_MapHostsToPersistentConnections has NULL entry!
 m_MapJob
+m_MapJob.Find( job.GetJobID() ) == m_MapJob.InvalidIndex()
+m_MapJob.InvalidIndex() != iJob || !bShouldExist
 m_MapJobTimeoutsIndexByJobID
+m_MapJob[iJob]->GetPauseReason() == k_EJobPauseReasonYield
 m_MapMaxConnectionsInFlightPerHostOverrides
 m_MapSSLContexts
 m_Memory
-m_OverlappedMemPool
+m_Put >= 0
 m_Q
 m_QueueJobSleeping
+m_QueueJobTimeouts
 m_QueueScheduledItems
+m_QueueScheduledItems.Count() >= m_ListScheduledFunctions.Count()
 m_ReceiveBuffer
 m_Reporters
+m_STimeSwitched.LTime() == CSTime::LServerTimeCur()
 m_SpewThrottle
 m_StatExecutionTime
 m_StatWaitTime
 m_StringPools
 m_ThreadPool
+m_TotalElements != InvalidIndex()
 m_Tree
 m_VecCoroutineStack
+m_VecCoroutineStack.Count() > 1
 m_VecPFrameFunction[iFrameType]
 m_WorkThreadPool
 m_WorkThreads
+m_WorkThreads.Count() == 0 && m_cThreadsRunning == (uint32) 0
 m_WorkThreads[ iWorkThread ]
+m_bAllowUnstableRemoval
+m_bConnectionIsInit
+m_bEndOfInput || ( m_Packet.data && m_Packet.size )
+m_bHTTPSTunnelCompleted == false
 m_bHavePartialMsg is true, but no receive buffer is allocated!
+m_bPauseForValidation
 m_bQueueProxyDiscoveryCheckOnDispatch is expected to be windows only!
+m_bRunning
+m_bSemOwner
 m_bitsMigratedBuckets
 m_bufBody
+m_bufBody.TellPut() == 0
 m_bufDecryptedRecvBuffer
 m_bufEncryptedSendBuffer
 m_bufFromMemory
+m_bufFromMemory.TellPut() <= 0 || m_strURL.IsEmpty()
 m_bufMultiFragment
 m_bufSRTPRecvKey
 m_bufSRTPSendKey
 m_bufSSLRecv
 m_buffer
 m_bufferVarArgs
+m_cBucket > 0
+m_cCurrentDepth < m_cMaxDepth
+m_cCurrentDepth > 0
+m_cNextThreads == 0
+m_cNextThreads == 1
+m_cPkts <= k_nMaxPktsPerMsg
+m_cRef == 0
+m_cRefCountPolling > 0
+m_cRunningThreads == 0
+m_cSamples == 0 && m_pulSamples[0] == 0
+m_cStartCount > 0
 m_cacheProxyHosts
 m_cachedRequest.GetPtr()
 m_cachedResponse.GetPtr()
 m_configOverride
+m_cubAlreadySentFromHeadBuffer < head.len
+m_cubMsgIncomingRecv <= m_cubMsgIncomingAlloc
+m_cubSavedStack < k_cubMaxCoroutineStackSize
 m_data
 m_decoratedFactory
 m_doubleMeasurements
+m_eConnectionState == k_EHTTPClientConnectionState_CONNECTING
+m_eConnectionState == k_EHTTPClientConnectionState_HANDSHAKING
+m_eConnectionState == k_EHTTPClientConnectionState_KEEPALIVE || m_eConnectionState == k_EHTTPClientConnectionState_HTTP2SESSIONACTIVE
+m_eConnectionState == k_EHTTPClientConnectionState_SENDINGREQUEST || m_eConnectionState == k_EHTTPClientConnectionState_HTTP2SESSIONACTIVE
+m_eConnectionState == k_EHTTPClientConnectionState_SENDINGREQUEST_BODY
+m_eRequestMethod == k_EHTTPMethodGET
+m_errorIndex>=0
+m_fnCompletionCallback
+m_hConnection != 0xdddddddd
+m_hSocket == INVALID_SOCKET
 m_hashMap
 m_heap
+m_heap.IsValidIndex(index)
+m_iAudioTrack >= 0
+m_iHistory < V_ARRAYSIZE( m_rgunMicroSecRunHistory )
+m_iRefs > 0 && m_iRefs < 0x1000000
+m_iRefs >= 0 && m_iRefs < 0x0ffffff
+m_iSampleBucketCurrent < m_cSampleBuckets
+m_iSampleBucketLast < m_cSampleBuckets
+m_iThreadMutexValidationLock < (int) ( sizeof(m_threadMutexValidationLock)/sizeof(m_threadMutexValidationLock[0]) )
+m_iThreadMutexValidationLock == 0
+m_iVideoTrack >= 0
 m_intDimensions
 m_intMeasurements
+m_lStartPlaybackPosition != AV_NOPTS_VALUE
 m_listCacheFileLRU
+m_listCacheFileLRU.IsValidIndex( mapData.m_iLRUListIndex )
 m_listChangedFiles
 m_listHandlesDelayedForCache
 m_listJobsToWakeOnSendsComplete
 m_listLRU
 m_listLogWatchParams
 m_listThreadBufDataToWrite
+m_listThreadBufDataToWrite.Count() == 0 || ( m_listThreadPacketsToRead.Count() == 0 && SSL_want_read( m_pSSL ) )
 m_listThreadPacketsToRead
 m_listVideoPackets
 m_llQueuedAudioSegments
@@ -11727,79 +12609,139 @@ m_mapFileWatchData.Key( i )
 m_mapIndexSegments
 m_mapInitSegments
 m_mapJobSharedStatesOutstanding
+m_mapJobSharedStatesOutstanding.IsValidIndex( ndxCount )
 m_mapJobsDependentOnUs
 m_mapMessageIDToMsgInfo
 m_mapMessageNameToMsgInfo
 m_mapOrphanMessages
 m_mapOutstandingConditionalRequests
 m_mapPendingSharedStates
+m_mapPendingSharedStates.IsValidIndex( ndx )
 m_mapRequestsAwaitingCompletion
+m_mapRequestsAwaitingCompletion.Count() == 0
+m_mapRequestsAwaitingCompletion.Count() == 1
+m_mapRequestsAwaitingCompletion.Count() == 1 && !m_pHTTP2Session
+m_mapServiceMethodRequestJobNameDeprecated
+m_mapServiceMethodRequestJobNameDeprecated.Key(i)
 m_mapServiceMethodRequestJobNameToMsgInfo
 m_mapServiceMethodResponseJobNameToMsgInfo
 m_mapStatsBucket
 m_mapStatsBucket[iBucket]
 m_memNodes
 m_memPSK
-m_nullMetrics
+m_nAllocationCount >= 0
+m_nPollFd >= 0
+m_nPostFd >= 0
+m_nRecursions > 0
+m_nTheirSeqNacked < m_nTheirSeqReceived
+m_nWritesPendingInEncryptedBuffer == 0 && m_bufEncryptedSendBuffer.TellPut() == 0
 m_p
+m_p == NULL
+m_pAVFormatContext->pb
 m_pAudioDecoder
+m_pBucket == NULL
+m_pBudgetGroups
+m_pBudgetGroups == NULL
 m_pBuffer
 m_pCachedResponseData
 m_pChild
+m_pClientRequest->m_pWebSocketConnectionCallback
 m_pClientRequest.Get()
 m_pClientSession
 m_pConnection
+m_pConnectionCallback
+m_pConnectionCallback == NULL
+m_pContext
 m_pCookieContainer
 m_pCustomReadContext
+m_pDecodedAudio
+m_pDecodedAudio->GetWriteAvailable() >= bufAudio.TellPut()
 m_pFileReader
 m_pHTTPClient
 m_pHTTPClientMgr
 m_pHTTPRedirectHandler
+m_pHTTPRequest
+m_pHeader->ip_v6().length() == 16
 m_pInitSegment
 m_pInitalizeFileStream
+m_pInitializationThread
+m_pJobFuncsData->m_listActiveJobs.Count()
 m_pListQueuedSSLRecvsPostHandshake
 m_pListWaitingRequestsForAddress
 m_pLogInstance
 m_pMainThreadPlaybackInfo->m_vecVideoRepresentations
 m_pManifest
+m_pMemory
 m_pMemoryPoolRecord
 m_pMetrics
+m_pMetricsPayload
+m_pNetConnection
+m_pNetConnection->m_pConnectionCallback != this
+m_pNetConnection->m_pConnectionCallback == this
+m_pNetFilter
+m_pNetPacket
+m_pNetPacket && m_pNetPacket->CubData() >= sizeof( ProtoBufMsgHeader_t )
+m_pNetPacket->CubData() >= cubSkip
 m_pNextVideoFrame
 m_pObj
+m_pObj == NULL
 m_pOriginatingRequestHandle
+m_pParent
+m_pParent == this
+m_pProtoBufBody == NULL
+m_pReceivedPktFirst->GetSeq() != m_pReceivedPktFirst->PReceivedPktNext()->GetSeq()
+m_pRecvState == NULL
 m_pRecvState->m_bufMsg
 m_pRedirectRequestHandle.Get()
 m_pRequestCache
 m_pRequestHandle
 m_pResponse.Get()
 m_pSSLConnection
+m_pSSLConnection == NULL
 m_pSSLConnectionData
+m_pSSLConnectionData != NULL
+m_pSSLConnectionData && m_pSSLConnectionData->m_pSSLCallback
 m_pSSLContext
+m_pSavedStack
 m_pSegmentTemplate
 m_pSibling
+m_pStackHigh
 m_pTicketKeyMgr
+m_pTicketKeyMgr == NULL
 m_pTreeInUseConnections
 m_pTreeWaitingConnections
+m_pValObjects != NULL
 m_pVecStringValue
 m_pVecUlValue
 m_pVideoDecoder
+m_pWaitingOnLock == NULL
+m_pWaitingOnWorkItem == NULL
+m_pWebSocketConnectionCallback
+m_pkvLastKeyAdded != NULL
 m_pkvRequestHeaders
 m_pkvResponseHeaders
 m_pmapAdrToClientSessionLRU
 m_pmapAdrToClientSessionLRU->Peek(i).Get()
-m_pool
-m_poolSends
 m_prescientDimensions
+m_pszName
 m_pthreadWatcher
+m_pubMsgIncoming == NULL
+m_pubRecvBuffer
+m_queueItemsPending.Count() == 0
 m_queueRunningPlayers
 m_queueSendBuffers
 m_reporterChain
 m_rgvecKeys
+m_rtLiveContentStarted != k_RTime32Nil
 m_sCurrentFilename
 m_sFailureInfo
+m_sFrameCur.m_pubPayload
 m_sPreviousFilename
+m_sWaitDetails
 m_sYieldInfo
 m_stackDoNotYieldGuards
+m_stackDoNotYieldGuards.Count() == 0
+m_stimeFakeTimeout.LTime() < INT64_MAX
 m_strActualHostName
 m_strActualUrl
 m_strAppProtocol
@@ -11811,6 +12753,7 @@ m_strContentType
 m_strDirectory
 m_strDomain
 m_strFileName
+m_strFileNamePrevious
 m_strFilename
 m_strFilenameToUnlink
 m_strFilenameToUpdateLRUFor
@@ -11818,6 +12761,7 @@ m_strHostname
 m_strID
 m_strInit
 m_strLastUserProxyHostString
+m_strLogLine
 m_strMedia
 m_strMimeType
 m_strName
@@ -11826,8 +12770,11 @@ m_strPathCertPEMFile
 m_strPathPrivKeyPEMFile
 m_strPrivKeyPEMFile
 m_strProxyHostString
+m_strProxyOverride
 m_strRawQueryString
+m_strRequestHostName
 m_strSRTPPRofileSelected
+m_strTargetHostName
 m_strTargetPath
 m_strTempFile
 m_strURL
@@ -11838,18 +12785,26 @@ m_symbolDimensions
 m_totalTime
 m_treeDisconnectingConnections
 m_treePostParamNameHashes
+m_unInCounter == m_unOutCounter
+m_unSizeOfElements == mem.m_unSizeOfElements
+m_usType == k_EIPTypeV6
+m_usType == k_EIPTypeV6 && netadr.m_usType == k_EIPTypeV6
 m_vecAdaptationSets
 m_vecAdaptationSets[i]
 m_vecAllFileStreams
+m_vecAllFileStreams.Count() == 0
 m_vecAllFileStreams[i]
 m_vecAllPlayers
+m_vecAllPlayers.Count() == 0
+m_vecAllPlayers.HasElement( pPlayer )
 m_vecAllPlayers[i]
 m_vecAutoDetectedProxyExcludedHosts
 m_vecAvailableByteRanges
 m_vecBarriers
-m_vecBlockSets
 m_vecBusyWork
 m_vecCallbacks
+m_vecCallbacks.Count() == 0
+m_vecCallbacks.Count() == 0 || !callback
 m_vecCompletedAndWaiting
 m_vecConnectPingResults
 m_vecEncryptedSendBufferIndividualLengths
@@ -11861,24 +12816,34 @@ m_vecIPFilterRangesV6
 m_vecLocks
 m_vecLocks.Count(): %d, m_vecLocks[0]: (0x%p), pLock: 0x%p, this: 0x%p
 m_vecLocks.Count(): %d, this: 0x%p, pLock = 0x%p
+m_vecLocks.HasElement( pLock )
 m_vecMainThreadDel
 m_vecNetPackets
+m_vecNetPackets.Count() == 0
 m_vecPostParams
+m_vecPostParams.Count() < 65535
+m_vecPostParams.IsValidIndex( iNode )
 m_vecPostParams[i]
 m_vecProxyOverrideExcludedHosts
 m_vecQuickRemovePlayer
 m_vecRegisteredWriters
+m_vecRegisteredWriters.Count() == 0
+m_vecRegisteredWriters.HasElement( pFile )
 m_vecRepresentations
 m_vecRepresentations[i]
 m_vecRequestsToSend
+m_vecRequestsToSend.Count()
+m_vecRequestsToSend.Count() == 1
 m_vecResourceAccessRecord
 m_vecSSLHostnames
 m_vecSegments
 m_vecSegments[i]
 m_vecThreads
+m_vecThreads.Count() == 0
 m_vecTimelineSegments
 m_vecUserProxyExcludedHosts
 m_vecpHTTPClients
+m_vecpHTTPClients.FindAndFastRemove( pHTTPClient )
 mac
 mac absent
 mac generation error
@@ -11894,6 +12859,7 @@ macos1013
 macos1014
 macos1015
 macos1016
+macos1017
 macos104
 macos105
 macos1058
@@ -11910,6 +12876,8 @@ macos108
 macos109
 macos11
 macos11.1
+macos12
+macos13
 made clan invite only and private
 made group private
 made group public
@@ -11939,9 +12907,16 @@ master_key
 max
 max-age
 max-stale
+maxLen <= INT_MAX
+maxLen == 0 || pDest != NULL
+maxLen > 0
+maxLen > 0 && maxLen <= INT_MAX
+maxLenInBytes == 0 || pDest != NULL
+maxLenInBytes >= 0
 max_early_data
 max_protocol
 maximum
+maxlen >= 1
 maxmem_bytes
 maxsize=
 md
@@ -12082,7 +13057,9 @@ msEFS
 msExtReq
 msSGC
 msSmartcardLogin
+msTimeout >= 0
 msUPN
+msa
 msg %s, job source %llu, job target %llu
 msgsigdigest error
 msgsigdigest verification failure
@@ -12098,15 +13075,53 @@ must-revalidate
 mustownapp
 m
 n
+n == 0 || s1 != NULL
+n == 0 || s2 != NULL
+n >= 0
 n does not equal p q
 n does not equal product of primes
 n$$
 n3
+nBarrierNumber < m_vecBarriers.Count()
+nBarrierNumber >= 0
 nBufferCount > %d not supported in %s
+nBytes
+nBytes2 == m_data.NumAllocated()
 nBytesItem is %zu in UtlMemory_CalcNewAllocationCount
+nChildren > 2
+nContentLength != 0
+nContentLength == 0 || CHTTPUtil::BMethodAllowsRequestBody( m_eRequestMethod )
 nDataLen not supported in %s
+nDay < 32
+nDay > 0
+nDecrypted == cubEncryptedData - k_nSymmetricBlockSize
+nDestSize == 0 || pDest != NULL
+nFieldDescriptorType == WireFormatLite::TYPE_INT32 || nFieldDescriptorType == WireFormatLite::TYPE_INT64 || nFieldDescriptorType == WireFormatLite::TYPE_SINT32 || nFieldDescriptorType == WireFormatLite::TYPE_SINT64 || nFieldDescriptorType == WireFormatLite::TYPE_UINT32 || nFieldDescriptorType == WireFormatLite::TYPE_UINT64 || nFieldDescriptorType == WireFormatLite::TYPE_FIXED32 || nFieldDescriptorType == WireFormatLite::TYPE_FIXED64 || nFieldDescriptorType == WireFormatLite::TYPE_SFIXED32 || nFieldDescriptorType == WireFormatLite::TYPE_SFIXED64 || nFieldDescriptorType == WireFormatLite::TYPE_ENUM
+nFieldDescriptorTypeIfKnown != ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE
+nFieldDescriptorTypeIfKnown != ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT
+nGrowSize >= 0
+nHTTPConnectionFindCount == 1
+nHeight % 2 == 0
+nMicroSecLimit > 0
+nMicroSeconds >= 0
+nMinCapacity <= k_nMaxStringSize
+nMinCapacity > Capacity()
+nMinCapacity >= nChars
+nPreSplit > 0 && nPreSplit + nPostSplit == nCount
+nPut + nPutDelta <= outBuf.TellMaxPut()
+nRead == nPeeked
 nSRecord
+nSamplesToCopy > 0
+nSeq >= GetSeqStart() && nSeq <= GetSeqEnd()
+nSeq >= m_nSeqFirstUnacked && nSeq < ( m_nSeqFirstUnacked + k_nMaxUnackedPkts )
+nSeqStart <= nSeqEnd
+nSeqStart > nSeqPrev
+nSize >= 0
+nSizeOfType > 0
 nTotal number of strings %u, longest string size %u, avg size %u
+nValue >= 0 && nValue <= 15
+nWidth % 2 == 0
+nYear > 1712
 name
 name =
 name constraints minimum and maximum not supported
@@ -12139,9 +13154,11 @@ neon
 nested asn1 error
 nested asn1 string
 nested too deep
+netfilter
 netmsg
 network
 networkmgr
+never
 new
 new_dir
 newer crl not newer
@@ -12334,7 +13351,11 @@ null ssl ctx
 null ssl method passed
 nullptr output boolean given.
 num
+num > 0
+num >= 0
 num threads
+numElements <= m_nAllocationCount
+numElements >= 0
 num_tickets
 number too large
 o
@@ -12362,6 +13383,9 @@ odd number of digits
 oeap
 of the Protocol Buffer runtime library, but the installed version is
 of the Protocol Buffer runtime library, which is not compatible with the installed version (
+offset != INT_MIN && offset <= m_nMaxPut && -offset <= INT_MAX-m_nMaxPut
+offset >= -m_Put && offset <= INT_MAX-m_Put
+offset >= 0
 ogg
 oid exists
 oid_module_init
@@ -12394,6 +13418,7 @@ openssl.cnf
 openssl_conf
 openssl_fopen
 openvroverlay
+openxr
 operation
 operation fail
 operation not defined
@@ -12410,6 +13435,7 @@ operator new[](unsigned long)
 option json_name is not allowed on extension fields.
 optional
 optionalSignature
+oracle
 order
 org
 organization
@@ -12457,12 +13483,15 @@ othername
 othername error
 othername:<unsupported>
 othervr
+out
 out of memory
 out_channel_layout
 out_sample_fmt
 out_sample_rate
 outgoing
 output specified is nullptr
+outsize >= ( inputbytes * 2 ) + 1
+outsize >= 1
 overflow error
 owner
 p
@@ -12478,12 +13507,148 @@ p2p
 p2pcore.so
 p2prelayserver.so
 p2pstunserver.so
+pAdaptation->m_pSegmentTemplate
+pAllocTracker->m_uSentinel == 0xaa110ced
+pAudioResampler
+pBarrier->m_ulCurrentSequenceNum == pItem->GetPipelineSequenceNumber()
+pBaseFrameFunction
+pBaseScheduledFunction->GetDeadlineTime().LTime() >= m_lTimeNextDeadline
 pBaseScheduledFunction->Run()
+pBaseScheduledFunction->m_iScheduledItem == scheduledItem.m_iScheduledFunction
+pBlob
+pBodyBuffer->TellPut() == (int)pRequest->GetReqBodyBytesTotal()
+pBuf->BIsUnbufferedSend()
+pBuffer
+pCallback == m_pConnectionCallback || m_pConnectionCallback == NULL
 pChild
+pClientRequest->GetRefCount() > 0 && pClientRequest->GetRefCount() < 10000
+pCompletion->type == IOTYPE_ACCEPT && pCompletion->pubBuffer == pBuffer
+pCompletion->type == IOTYPE_ACCEPT && pCompletion->ulResult == 0 && pCompletion->SocketAcceptEx.hNewSocket != INVALID_SOCKET
+pCompletion->type == IOTYPE_CONNECT
+pCompletion->type == IOTYPE_RECV
+pCompletion->type == IOTYPE_SEND || pCompletion->type == IOTYPE_UNBUFFEREDSEND
+pCompletionData->pNext == NULL && pCompletionData->nPollFlags != 0
+pCompletionData->pubBuffer == pRecvState->m_bufMsg.PeekPut()
+pCompletionData->pvUserData
+pCompletionData->type == IOTYPE_SEND
+pConnection->BIsConnected()
+pConnectionCallback
+pConnectionCallback == pWebSocketConnection
+pContext
+pContext->GetConnectionType() == k_ESSLConnectionType_Client
+pConv && pConv->GetDelimiterLength() > 0
+pData
+pDecodedData
+pDefaultValue
+pDest
+pDest != NULL
+pDest >= pBuffer && pDest <= pBuffer + destBufferSize
+pEnd <= pubMsgBytes + cubBuffer
+pEnd == m_ReplacementBody.Base() + m_ReplacementBody.Count()
+pEndingDelim && pEndingDelim[0]
+pFile->m_hFileDest != INVALID_OSFILEHANDLE
+pFmt
+pFormat != NULL
+pFrameFunctionMgr
+pGroupName
+pHandle
+pHandle == pRequestHandle
+pHdr->m_nDstConnectionID == m_nOurConnectionID
+pHdr->m_nMsgStartSeq == pHdr->m_nSeqThis
+pHdr->m_nPktsInMsg <= k_nMaxPktsPerMsg
+pHdr->m_nSeqThis <= pHdr->m_nMsgStartSeq + pHdr->m_nPktsInMsg - 1
+pHost && *pHost
+pIV
+pItem->CurrentBarrierID() < m_vecBarriers.Count()
+pItem->CurrentBarrierID() == -1
+pItem->CurrentBarrierID() >= 0
+pItem->GetJobID() == GetJobID()
+pJ&
 pJob
+pJob->GetPauseReason() == k_EJobPauseReasonWaitingForLock
+pJob->m_pWaitingOnLock == pLock
+pJob->m_vecNetPackets.Count()
+pJobType->m_pCreationMessageInfo == nullptr
+pJobType->m_pNumCurrentJobs == nullptr
+pJobType->m_pchName && *pJobType->m_pchName
+pKeyCallback
+pKeyValuesTextParser
+pLeft->m_iStackPC <= V_ARRAYSIZE(pLeft->m_StackPC)
+pLock
+pLock->BIsLocked()
+pLock->GetJobLocking() == this
+pLock->m_pJob == this
+pLock->m_unWaitingCount > 0
+pLogEvent
+pLogInstance == sm_pLogInstance
 pManager
+pName
+pNetConnection
+pNetFilter
+pNetPacket
+pNetPacket->CubData() > 0
+pNetPacket->GetEMsg() == jobMsgInfo.m_EMsg || ( pNetPacket->GetEMsg() == k_EMsgClientServiceMethodLegacy && jobMsgInfo.m_EMsg == k_EMsgServiceMethodCallFromClient )
+pNetPacket->GetEMsgFormatType() == k_EMsgFormatTypeProtocolBuffer
+pNewJob->GetPauseReason() == k_EJobPauseReasonWaitingForLock
+pNewJob->m_pWaitingOnLock == pLock
+pNode && pNode->Next == QueueEnd()
+pNodeCombineTarget->m_nCombined == 1
+pOldCallback
+pOldCallback != pConnectionCallback
+pOtherDecoder->GetInitFileStream() == pInitSegment
+pOutDigest
+pOutputDigest
+pOwner->m_unThreadBytesToRead == 0
+pOwner->m_unThreadBytesToRead > (uint)pBIOData->m_Num
+pOwner->m_unThreadBytesToRead >= pPacket->CubData()
+pParent->m_bInDeleteQueue
+pPeeked == &m_chData[ m_nWrite ] && nBytesToCommit >= 0 && m_nWrite + nBytesToCommit <= m_nSize
+pPeeked >= &m_chData[0] && pPeeked < &m_chData[m_nSize]
+pPendingMsg == m_pPendingMsgFirst
+pPendingMsg->GetPUDPConnection() == this
+pPendingMsg->GetSeqEnd() >= m_nOurSeqCur
+pPendingMsgAcked
+pPlayer->GetNextRunFrameUS() >= 0
+pPool->m_SpaceUsed < 0xFFFF
+pProtocol && *pProtocol
+pPtr == mem.Base() + lengthToEncodePriv
+pPtr == mem.Base() + lengthToEncodePub
+pRSAKey
+pRange->m_ulEnd >= cOffset
+pReceivedPkt
+pReceivedPkt == m_pReceivedPktFirst
+pRecvFileProgress->pIAsync
+pReq->AccessBodyDataBuffer().TellPut() == 0
+pReqHandle->AccessResponse()->GetBodyBuffer()->TellPut() == 0
+pRequest->GetReqBodyBytesSent() == pRequest->GetReqBodyBytesTotal()
+pRequestHandle
+pRequestHandle->AccessClientRequest()->GetPOSTParamCount() == 0 && pRequestHandle->AccessClientRequest()->GetBodyBuffer()->TellPut() == 0
+pRequestHandle->AccessResponse()->GetBodyBuffer()->TellPut() == 0
+pRequestHandle->GetRefCount() > 0 && pRequestHandle->GetRefCount() < 10000
+pReuseSession == NULL
+pSalt
+pScanHandlePendingList != pCompletionData
+pSearch != NULL
+pSegment->m_lDuration > 0
 pSourceFunc
 pSpecified
+pSrc != NULL
+pStr != NULL
+pStr1 != NULL
+pStr2 != NULL
+pStream
+pTCPConnection->m_cOutstandingSends > 0
+pThread
+pToken
+pTracker->Find( pKey ) != NULL
+pUDPConnection
+pWatcher != NULL
+pWebSocketConnection
+pWebSocketConnection->m_EConnectionMode == k_EConnectionModeHost
+pWebSocketConnection->m_EConnectionState == k_EConnectionStateConnecting
+pWebSocketConnection->m_pHTTPRequest
+pWorkItem
+pWorkThread != NULL
 pWorkThread->m_bFinished is false but thread is not running
 pYUVFrame
 package $0;
@@ -12500,6 +13665,7 @@ params
 parent locking not enabled
 parent strength too weak
 parental
+parms.Count() == 0
 parse
 parse error
 parse tlsext
@@ -12522,6 +13688,7 @@ path
 path length constraint exceeded
 path must be absolute
 path too long
+pathStringLength >= 1
 pathlen
 payment gateway capabilities
 pbeWithMD2AndDES-CBC
@@ -12539,12 +13706,32 @@ pbeWithSHA1AndDES-CBC
 pbeWithSHA1AndRC2-CBC
 pbkdf2 error
 pcPathLengthConstraint
+pchBaseFileName
+pchData
+pchEncodedData
+pchFileName
+pchHaystack != NULL
+pchInput
+pchMsg
+pchName
+pchNeedle != NULL
+pchOut
+pchSteam2ID
+pchTLSServerName == NULL
+pchTemplate[0] == '\0'
+pch[cub - 1] != '\0' && pch[cub] == '\0'
+pclose
+pcubDecodedData
+pcubEncryptedData
+pcubPlaintextData
+pcubSignature
 peer
 peer did not return a certificate
 peer does not accept heartbeats
 peer key error
 pem name bad prefix
 pem name too short
+pending
 perfectworld
 permissions changed
 permitted
@@ -12553,6 +13740,7 @@ permittedSubtrees
 personalSignature
 personalTitle
 personalisation string too long
+pf
 photo
 physical id
 physicalDeliveryOfficeName
@@ -12668,6 +13856,7 @@ policy_section
 policyid
 poll
 poly1305
+popen
 port
 posix_fadvise
 posix_memalign
@@ -12677,13 +13866,17 @@ postalAddress
 postalCode
 pow
 ppBasis
+ppDecoder == &m_pAudioDecoder || ppDecoder == &m_pVideoDecoder
+ppFrames[iFrame] != NULL
 ppH
+ppath
 ppp
 pqualid
 pqueue_new
 pread64
 prediction resistance not supported
 preferredDeliveryMethod
+prefix != NULL
 preloadonly
 prerelease
 presentationAddress
@@ -12758,6 +13951,13 @@ psk_identity
 psk_identity_hint
 pss
 pss saltlen too small
+pstrDest[nNewLength] == '\0'
+pstrNew + nNewLength == pstrDestination + 1
+pstrNew == pstrDestination
+pstrNew == pszString
+pszName
+pszName == NULL || *pszName == '/' || (isalpha((unsigned char) *pszName) && pszName[1] == ':' && pszName[2] == '/')
+pszThreadName != NULL
 pt
 pt-br
 pthread_attr_init
@@ -12798,6 +13998,17 @@ pthread_setname_np
 pthread_setschedparam
 pthread_setspecific
 pub:
+pubData
+pubEncryptedData
+pubIV == NULL || cubIV == k_nSymmetricBlockSize
+pubInput
+pubKey
+pubMsgStart
+pubMsgStart <= pubCurrent + cubMsgSizeMax
+pubMsgStart >= pubCurrent
+pubPktSend
+pubPlaintextData
+pubSignature
 pub_key
 pubkey
 public
@@ -12809,6 +14020,12 @@ publicExponent:
 publicKey
 public_key
 publish
+pulContext
+purchase
+pvCallback != NULL
+pvCallbackUDPCur || pvCallbackTCPCur
+pvRemove
+pvecAddressesOut != nullptr || pSingleOutput != nullptr
 pvk data too short
 pvk too short
 pw_csgo
@@ -12923,6 +14140,7 @@ rename
 renegotiate ext too long
 renegotiation encoding err
 renegotiation mismatch
+renew
 repeated
 reqCert
 req_info
@@ -12940,9 +14158,11 @@ requireExplicitPolicy
 required
 required cipher missing
 required compression algorithm missing
+res == pBuf->TellPut()
 res master
 reseed error
 reserved
+resizeNumBits >= 0
 responderId
 response
 response contains no revocation data
@@ -12954,8 +14174,10 @@ responseType
 response_duration
 response_firstbyte_latency
 responses
+result
 result too large
 result too small
+ret != 0
 retn
 reused
 revocationDate
@@ -12977,12 +14199,14 @@ room
 roomNumber
 root
 root ca not trusted
+rounds != 0
 rr
 rrr
 rsa
 rsa operations not supported
 rsa routines
 rsaEncryption
+rsaKey.IsValid()
 rsaOAEPEncryptionSET
 rsaSignature
 rsa_algor_to_md
@@ -13026,6 +14250,7 @@ rsa_pss_to_ctx
 rsa_pub_decode
 rsadsi
 rsaesOaep
+rsalen > 0 && rsalen < 10 * 1024 * 1024
 rsassaPss
 rsaz_1024_gather5_avx2
 rsaz_1024_mul_avx2
@@ -13042,10 +14267,13 @@ rsaz_512_scatter4
 rsaz_512_sqr
 rsaz_avx2_eligible
 ru
+rv > 0 && rv <= nSendLen
 s
 s ap traffic
 s hs traffic
 s-maxage
+s1 != NULL
+s2 != NULL
 s2i_ASN1_IA5STRING
 s2i_ASN1_INTEGER
 s2i_ASN1_OCTET_STRING
@@ -13054,6 +14282,7 @@ s390x_aes_gcm_ctrl
 s:
 sOARecord
 s_VecModuleAddressRanges
+s_dev_urandom_fd >= 0
 s_hashMapIPWatches
 s_hashMapServerTypeWatches
 s_hashMapSteamIDWatches
@@ -13076,11 +14305,14 @@ saltLength
 sbgp-autonomousSysNum
 sbgp-ipAddrBlock
 sbgp-routerIdentifier
+scale <= 32768
+scale >= 256
 scandir
 scandir64
 sched_get_priority_max
 sched_get_priority_min
 sched_yield
+scheduledItem.m_ulTime
 scheme=
 script
 scrypt
@@ -13166,6 +14398,8 @@ sendProxiedRouter
 sendRouter
 send_duration
 sendfile64
+sending
+sending request
 sendmsg
 sendto
 sequence length mismatch
@@ -13418,6 +14652,7 @@ singleapp
 sint32
 sint64
 siphash
+size < INT_MAX
 size is
 size too big:
 size_t to int conversion
@@ -13438,7 +14673,11 @@ sm4-ctr
 sm4-ecb
 sm4-ofb
 sm_ListHConnectionToPoll
+sm_ListHConnectionToPoll.Element( iIndex ) == hConnection
 sm_ListHConnectionToWakeUp
+sm_ListHConnectionToWakeUp.IsEmpty() || sm_ListHConnectionToWakeUp[ sm_ListHConnectionToWakeUp.Tail() ].m_wakeUpTime <= wakeupTime
+sm_ListHConnectionToWakeUp.IsValidIndex( hWakeup )
+sm_ListRecvThrottleGroup.IsValidIndex( iGroup )
 sm_ListWatchingLogs
 sm_MemPoolNetPacket
 sm_SchedulerACK
@@ -13452,6 +14691,12 @@ sm_THashUDPSocketOwnerCallback
 sm_ThreadSafeQueueLogEvents
 sm_ThreadSafeQueueLogEvents.GetQueue()[ iLogEvent ]
 sm_ThreadSafeQueueLogMsgSpew
+sm_bShuttingDown
+sm_bShuttingDown && sm_pLogInstance
+sm_cOutstandingSendBytesAllConnections >= 0
+sm_cOutstandingSendsAllConnections > 0
+sm_cRef == 0
+sm_cRef > 0
 sm_msgSpewThrottle
 sm_pLogInstance
 sm_pMemPoolPendingMsg
@@ -13477,6 +14722,12 @@ spkac
 sprintf
 sql
 sqrtf
+src != NULL
+src_height != 0
+src_height == ((dst_height + 1) / 2)
+src_width != 0
+src_width == ((dst_width + 1) / 2)
+src_width > 0
 srp_generate_client_master_secret
 srp_generate_server_master_secret
 srp_username
@@ -13566,6 +14817,7 @@ ssl3_setup_write_buffer
 ssl3_write_bytes
 ssl3_write_pending
 sslCA
+sslType == k_EDTLSConnectionType_Client || sslType == k_EDTLSConnectionType_Server
 ssl_add_cert_chain
 ssl_add_cert_to_wpacket
 ssl_bad_method
@@ -13629,6 +14881,7 @@ sslv3 rollback attack
 sss
 stable_get
 stack frames not accounted for stack unwind.
+stackLevel >= 0 && stackLevel < m_errorIndex
 stackpath
 stalledlink
 startNumber
@@ -13692,6 +14945,10 @@ std::nothrow
 std::ostream::operator<<(std::ios_base& (*)(std::ios_base&))
 std::ostream::operator<<(unsigned long)
 std::ostream::write(char const*, long)
+std::overflow_error::overflow_error(std::string const&)
+std::overflow_error::~overflow_error()
+std::runtime_error::runtime_error(std::string const&)
+std::runtime_error::~runtime_error()
 std::string::_M_iend() const
 std::string::_M_leak()
 std::string::_M_leak_hard()
@@ -13743,6 +15000,8 @@ stderr
 stdin
 stdout
 steam
+steam://close
+steam://close/
 steam://openurl/
 steam://openurl_external/
 steamchina
@@ -13752,15 +15011,19 @@ steamcmd
 steamglobal
 steamhdl
 steamid
+steamid=%s (%llu)
 steammessages_base.proto
 steampipe
 steampipepeering
 steamservice.so
 steamui.so
+steamworks_drm
 still in init
 stop using I64/I32, use lld or d respectively
 store
 store init error
+str
+str != NULL
 str_copy
 strcasecmp
 strcasestr
@@ -13788,6 +15051,7 @@ string too short
 string=
 strings::Substitute format string invalid: asked for "$
 strlen
+strlen( pGroupName ) < MAX_GROUP_NAME_LENGTH
 strncasecmp
 strncat
 strncmp
@@ -13847,6 +15111,7 @@ system
 system lib
 system library
 system_default
+szDomainName != nullptr
 t
 t22
 t]d
@@ -13868,6 +15133,7 @@ tenfoot.so
 test
 test string
 text format contains deprecated field "
+text/html
 text/html,*/*;q=0.9
 text/plain
 text:
@@ -13884,6 +15150,10 @@ the meth_data stack is corrupt
 the same event name (%s) was created as both manual and auto reset, something's fubar'd
 there must be one signer
 thirdparty
+this != g_pJobCur
+this != pLock->m_pJob
+this != pLock->m_pJobWaitingQueueTail
+this == g_pJobCur
 thisUpdate
 threads
 ticket_appdata
@@ -14099,6 +15369,7 @@ tlsv1 unsupported extension
 tlsv13 alert certificate required
 tlsv13 alert missing extension
 to
+toRead > 0
 token not present
 token present
 tolower
@@ -14171,6 +15442,8 @@ type:
 type_id
 typeinfo for int
 typeinfo for std::exception
+typeinfo for std::overflow_error
+typeinfo for std::runtime_error
 u
 u.addressPrefix
 u.addressRange
@@ -14179,6 +15452,7 @@ u.asIdsOrRanges
 u.id
 u.inherit
 u.range
+uNetFlags & k_uNetFlagNoIOCP
 ua-pki
 uacurve0
 uacurve1
@@ -14198,13 +15472,27 @@ uid
 uint32
 uint32_c2i
 uint32_new
+uint32_t libyuv::SumPixels(int, const uint16_t*)
+uint32_t libyuv::SumPixels_16(int, const uint32_t*)
 uint64
 uint64_c2i
 uint64_new
 uk
 ukm
+ulResult != 0
 un-banned from chat
+unBytes == 0
+unDataLen < INT_MAX
+unDataLen <= (uint32)INT_MAX
+unNetworkBitsIPv4 <= 32
+unNetworkBitsIPv4 >= 8
+unNetworkBitsIPv6 <= 64
+unNetworkBitsIPv6 >= 32
+unNewPacketSize == cubExtHdrSize + unOldBodySize + sizeof( ProtoBufMsgHeader_t )
+unOldBodySize >= 0
+unReadAheadChunkSize < INT32_MAX/2
 unReadAheadChunkSize should be zero when using bUnbuffered = true
+unSeekMS != k_unNoSeekRequest && 0 == ( unSeekMS & k_unSeekPreciseBit )
 unable to bind socket
 unable to check generator
 unable to create new section
@@ -14320,7 +15608,6 @@ unprotectedAttrs
 unrecognized name
 unrecognized signature nid
 unregistered scheme
-unreleased
 unsafe legacy renegotiation disabled
 unsignedAttrs
 unsolicited extension
@@ -14385,6 +15672,7 @@ unwrap error
 unwrap failure
 update
 upgrade
+urandom_result > 0 || ( urandom_result < 0 && errno == EINTR )
 uri authority unsupported
 use srtp not negotiated
 use_certificate_chain_file
@@ -14453,6 +15741,7 @@ valvesoftware.com
 var bad value
 variable expansion too long
 variable has no value
+vecSharedState.Count() > 0
 vector::_M_default_append
 vector::_M_emplace_back_aux
 vector::_M_insert_aux
@@ -14468,6 +15757,7 @@ version
 version error
 version too high
 version too low
+vfat
 vgui2_s.so
 vi
 video
@@ -14491,6 +15781,60 @@ void google::protobuf::internal::byteswap<1>(void*)
 void google::protobuf::internal::byteswap<4>(void*)
 void google::protobuf::internal::byteswap<8>(void*)
 void google::protobuf::io::CodedInputStream::UnsafeDecrementRecursionDepth()
+void libyuv::Convert16To8Row_C(const uint16_t*, uint8_t*, int, int)
+void libyuv::MergeAR64Row_C(const uint16_t*, const uint16_t*, const uint16_t*, const uint16_t*, uint16_t*, int, int)
+void libyuv::MergeARGB16To8Row_C(const uint16_t*, const uint16_t*, const uint16_t*, const uint16_t*, uint8_t*, int, int)
+void libyuv::MergeARGBPlaneAlpha(const uint8_t*, int, const uint8_t*, int, const uint8_t*, int, const uint8_t*, int, uint8_t*, int, int, int)
+void libyuv::MergeARGBPlaneOpaque(const uint8_t*, int, const uint8_t*, int, const uint8_t*, int, uint8_t*, int, int, int)
+void libyuv::MergeUVPlane_16(const uint16_t*, int, const uint16_t*, int, uint16_t*, int, int, int, int)
+void libyuv::MergeUVRow_16_C(const uint16_t*, const uint16_t*, uint16_t*, int, int)
+void libyuv::MergeXR64Row_C(const uint16_t*, const uint16_t*, const uint16_t*, uint16_t*, int, int)
+void libyuv::MergeXRGB16To8Row_C(const uint16_t*, const uint16_t*, const uint16_t*, uint8_t*, int, int)
+void libyuv::ScaleAddRow_16_C(const uint16_t*, uint32_t*, int)
+void libyuv::ScaleAddRow_C(const uint8_t*, uint16_t*, int)
+void libyuv::ScalePlaneDown34(int, int, int, int, int, int, const uint8_t*, uint8_t*, libyuv::FilterMode)
+void libyuv::ScalePlaneDown34_16(int, int, int, int, int, int, const uint16_t*, uint16_t*, libyuv::FilterMode)
+void libyuv::ScalePlaneDown38(int, int, int, int, int, int, const uint8_t*, uint8_t*, libyuv::FilterMode)
+void libyuv::ScalePlaneDown38_16(int, int, int, int, int, int, const uint16_t*, uint16_t*, libyuv::FilterMode)
+void libyuv::ScalePlaneUp2_12_Bilinear(int, int, int, int, int, int, const uint16_t*, uint16_t*)
+void libyuv::ScalePlaneUp2_12_Linear(int, int, int, int, int, int, const uint16_t*, uint16_t*)
+void libyuv::ScalePlaneUp2_16_Bilinear(int, int, int, int, int, int, const uint16_t*, uint16_t*)
+void libyuv::ScalePlaneUp2_16_Linear(int, int, int, int, int, int, const uint16_t*, uint16_t*)
+void libyuv::ScalePlaneUp2_Bilinear(int, int, int, int, int, int, const uint8_t*, uint8_t*)
+void libyuv::ScalePlaneUp2_Linear(int, int, int, int, int, int, const uint8_t*, uint8_t*)
+void libyuv::ScalePlaneVertical(int, int, int, int, int, const uint8_t*, uint8_t*, int, int, int, int, libyuv::FilterMode)
+void libyuv::ScalePlaneVertical_16(int, int, int, int, int, const uint16_t*, uint16_t*, int, int, int, int, libyuv::FilterMode)
+void libyuv::ScaleRowDown34_0_Box_16_C(const uint16_t*, ptrdiff_t, uint16_t*, int)
+void libyuv::ScaleRowDown34_0_Box_C(const uint8_t*, ptrdiff_t, uint8_t*, int)
+void libyuv::ScaleRowDown34_16_C(const uint16_t*, ptrdiff_t, uint16_t*, int)
+void libyuv::ScaleRowDown34_1_Box_16_C(const uint16_t*, ptrdiff_t, uint16_t*, int)
+void libyuv::ScaleRowDown34_1_Box_C(const uint8_t*, ptrdiff_t, uint8_t*, int)
+void libyuv::ScaleRowDown34_C(const uint8_t*, ptrdiff_t, uint8_t*, int)
+void libyuv::ScaleRowDown38_16_C(const uint16_t*, ptrdiff_t, uint16_t*, int)
+void libyuv::ScaleRowDown38_2_Box_16_C(const uint16_t*, ptrdiff_t, uint16_t*, int)
+void libyuv::ScaleRowDown38_2_Box_C(const uint8_t*, ptrdiff_t, uint8_t*, int)
+void libyuv::ScaleRowDown38_3_Box_16_C(const uint16_t*, ptrdiff_t, uint16_t*, int)
+void libyuv::ScaleRowDown38_3_Box_C(const uint8_t*, ptrdiff_t, uint8_t*, int)
+void libyuv::ScaleRowDown38_C(const uint8_t*, ptrdiff_t, uint8_t*, int)
+void libyuv::ScaleRowUp2_Bilinear_16_C(const uint16_t*, ptrdiff_t, uint16_t*, ptrdiff_t, int)
+void libyuv::ScaleRowUp2_Bilinear_C(const uint8_t*, ptrdiff_t, uint8_t*, ptrdiff_t, int)
+void libyuv::ScaleRowUp2_Linear_16_C(const uint16_t*, uint16_t*, int)
+void libyuv::ScaleRowUp2_Linear_C(const uint8_t*, uint8_t*, int)
+void libyuv::ScaleSlope(int, int, int, int, libyuv::FilterMode, int*, int*, int*, int*)
+void libyuv::ScaleUVBilinearUp2(int, int, int, int, int, int, const uint8_t*, uint8_t*)
+void libyuv::ScaleUVBilinearUp2_16(int, int, int, int, int, int, const uint16_t*, uint16_t*)
+void libyuv::ScaleUVDown2(int, int, int, int, int, int, const uint8_t*, uint8_t*, int, int, int, int, libyuv::FilterMode)
+void libyuv::ScaleUVDown4Box(int, int, int, int, int, int, const uint8_t*, uint8_t*, int, int, int, int)
+void libyuv::ScaleUVDownEven(int, int, int, int, int, int, const uint8_t*, uint8_t*, int, int, int, int, libyuv::FilterMode)
+void libyuv::ScaleUVLinearUp2(int, int, int, int, int, int, const uint8_t*, uint8_t*)
+void libyuv::ScaleUVLinearUp2_16(int, int, int, int, int, int, const uint16_t*, uint16_t*)
+void libyuv::ScaleUVRowUp2_Bilinear_16_C(const uint16_t*, ptrdiff_t, uint16_t*, ptrdiff_t, int)
+void libyuv::ScaleUVRowUp2_Bilinear_C(const uint8_t*, ptrdiff_t, uint8_t*, ptrdiff_t, int)
+void libyuv::ScaleUVRowUp2_Linear_16_C(const uint16_t*, uint16_t*, int)
+void libyuv::ScaleUVRowUp2_Linear_C(const uint8_t*, uint8_t*, int)
+void libyuv::SplitARGBPlaneAlpha(const uint8_t*, int, uint8_t*, int, uint8_t*, int, uint8_t*, int, uint8_t*, int, int, int)
+void libyuv::SplitARGBPlaneOpaque(const uint8_t*, int, uint8_t*, int, uint8_t*, int, uint8_t*, int, int, int)
+void libyuv::SplitUVRow_16_C(const uint16_t*, uint16_t*, uint16_t*, int, int)
 vorbis
 vp8
 vpaes_cbc_encrypt
@@ -14515,6 +15859,8 @@ w
 w+
 w..
 wa+
+wait details: [%s] - %s
+waitid
 waiting
 waiting for lock
 waiting on %d %s%s  (%ldms)
@@ -14535,6 +15881,7 @@ wap-wsg-idm-ecid-wtls9
 warning
 was modified concurrently during serialization.
 wasd.vdf
+watchingLog.m_pLogInstance
 wcscasecmp
 wcscmp
 wcslen
@@ -14549,11 +15896,13 @@ web links changed
 webm
 webm-segmented
 websocket
+websockets
 week
 while
 whirlpool
 width
 win10
+win11
 win200
 win2003
 win2008
@@ -14561,6 +15910,7 @@ win2012
 win2012R2
 win2016
 win2019
+win2022
 win311
 win32
 win32_bind_func
@@ -14588,6 +15938,7 @@ with type
 work item
 workitem
 wpacket_intern_init_len
+wpp >= 1 && wpp <= 2
 wrap error
 wrap mode not allowed
 write
@@ -14595,6 +15946,7 @@ write %s failed, errno = %d
 write to read only BIO
 write_state_machine
 writing strings
+written == count
 wrong certificate type
 wrong cipher returned
 wrong content type
@@ -14617,6 +15969,7 @@ wrong version number
 wss://
 www
 x
+x != __null
 x-gzip
 x121Address
 x25519_fe51_mul
@@ -14653,6 +16006,7 @@ xor128_encrypt_n_pad
 xts duplicated keys
 xxx
 y
+y != __null
 year
 yes
 yielding
@@ -14684,5 +16038,6 @@ zzz
 ~4
 ~~~
 
+T+
 i5
 
