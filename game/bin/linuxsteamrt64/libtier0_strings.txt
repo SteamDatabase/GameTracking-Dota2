@@ -7,7 +7,6 @@
 !  note : calculated dictionary significantly larger than requested (%u > %u)
 !  note : larger dictionaries are not necessarily better, test its efficiency on samples
 !  warning : selected content significantly smaller than requested (%u < %u)
-!"Coroutine assert requested"
 "
 """
 "%f"
@@ -30,8 +29,10 @@
 #include is NULL
 #int#
 $
+$%d
+$%s
 $@
-$@ <<
+$@Grow
 $ORIGIN
 %
 %%%d.%ds
@@ -46,6 +47,7 @@ $ORIGIN
 %-4s    %-32s    %-10s    %-10s    %-32s    %-32s
 %-80s : %-16s : %-32s : %s
 %.0f pct of time accounted for
+%.15lf
 %0*llx bytes at %0*llx is the largest open user-space VA region%s
 %0*llx bytes of %s at %0*llx%s
 %0*llx: address after highest user-space virtual region
@@ -116,8 +118,8 @@ $ORIGIN
 %s test: single thread push/pop, interleaved...
 %s total bytes in user-space regions (%s bytes in kernel-space regions)
 %s unable to allocate %u bytes
-%s#%d
 %s%s
+%s%s#%d
 %s():%s
 %s,
 %s.exe
@@ -281,6 +283,7 @@ $ORIGIN
 'null'
 'true'
 (
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 ( def. "%s" )
 (%d)
 (%d,%d)
@@ -388,6 +391,7 @@ $ORIGIN
 ../public/tier0/memstack.h
 ../public/tier0/threadtoolstypes.h
 ../public/tier0/tslist.h
+../public/tier0/utlmemory.h
 ../public/tier0/utltshash.h
 .\
 /
@@ -397,10 +401,10 @@ $ORIGIN
 /e%s%s
 /game/
 /proc/%u/maps
+/proc/%u/status
 /proc/cpuinfo
 /proc/self/cmdline
 /proc/self/exe
-/proc/self/maps
 /proc/self/statm
 /proc/version
 /sys/devices/system/clocksource/clocksource0/current_clocksource
@@ -579,6 +583,7 @@ $ORIGIN
 </script>
 </u>
 </ul>
+<<
 << NULL >>
 <NULL>
 <b>
@@ -719,6 +724,8 @@ Assert_ConditionFailed(char const*, unsigned int, char const*, char const*, Asse
 Assertion Failed
 Assertion Failed in function %s():%s
 AssertionFailureListenerMiniDumpContext_t
+AssertsGetCount
+AssertsMarkFrame
 AssetBrowserSystem_001
 AssetPreviewSystem_001
 AssetRenameSystem_001
@@ -949,7 +956,7 @@ CDirIterator::SplitPathAndPattern(char const*, CUtlString*, CUtlString*)
 CDirIterator::Stop()
 CDirIterator::~CDirIterator()
 CDirTreeWatchManager::AddWatch called on '%s' which is contained in existing watch of '%s'
-CDirTreeWatchManager::AddWatch(char const*, CDirTreeWatchManager::Visitor*)
+CDirTreeWatchManager::AddWatch(char const*, CDirTreeWatchManager::Visitor*, unsigned long)
 CDirTreeWatchManager::CDirTreeWatchManager(unsigned int)
 CDirTreeWatchManager::CheckForPendingChanges()
 CDirTreeWatchManager::GetChangedFile(CBufferString*, FioBaseFileInfo_t*)
@@ -961,7 +968,7 @@ CDirWatcher::AddFileToChangeList(char const*)
 CDirWatcher::CDirWatcher()
 CDirWatcher::GetChangedFile(CBufferString*)
 CDirWatcher::GetChangedFiles(CUtlBuffer*, CUtlVector<char*, int, CUtlMemory<char*, int> >*)
-CDirWatcher::SetDirToWatch(char const*, unsigned int, bool, void*)
+CDirWatcher::SetDirToWatch(char const*, unsigned int, bool, void*, unsigned long)
 CDirWatcher::Stop()
 CDirectPlaybackAnimNode
 CEmitTagAction
@@ -1046,6 +1053,7 @@ CKeyValuesDumpContextToBufferString::KvWriteText(char const*)
 CKeyValuesDumpContextToLoggingChannel::KvWriteText(char const*)
 CKeyValuesSystem::hash_item_t CUtlMemoryPool
 CKeyValuesSystem::m_Strings
+CKeyValuesSystem::m_pMemPool
 CKeyValues_Data::Internal_ClearAll()
 CKeyValues_Data::Internal_ClearData()
 CKeyValues_Data::Internal_CopyData(CKeyValues_Data const&)
@@ -1132,16 +1140,17 @@ CMiniDumpCommentBuilderBase::GetNextCommentBuilder()
 CMiniDumpCommentBuilderBase::~CMiniDumpCommentBuilderBase()
 CModuleListSnapshot::CModuleListSnapshot(unsigned char*, unsigned long)
 CModuleListSnapshot::Capture(unsigned int)
+CModuleListSnapshot::Capture(void*)
 CModuleListSnapshot::FindElfBuildId(void const*, unsigned long, unsigned char**, unsigned int*)
-CModuleListSnapshot::FindElfVirtualSize(unsigned int, unsigned long long, unsigned long long, unsigned long)
 CModuleListSnapshot::FindElfVirtualSize(void const*, unsigned long, unsigned long)
+CModuleListSnapshot::FindElfVirtualSize(void*, unsigned long long, unsigned long long, unsigned long)
 CModuleListSnapshot::FindMachoUuid(void const*, unsigned long, unsigned char**, unsigned int*)
 CModuleListSnapshot::FindMachoVirtualSize(void const*, unsigned long, unsigned long)
-CModuleListSnapshot::FindModuleVirtualSize(unsigned int, unsigned long long, unsigned long long)
 CModuleListSnapshot::FindModuleVirtualSize(void const*, unsigned long)
+CModuleListSnapshot::FindModuleVirtualSize(void*, unsigned long long, unsigned long long)
 CModuleListSnapshot::GetNextModule(void const**, char const**, void**, unsigned long*) const
-CModuleListSnapshot::IsElfHeader(unsigned int, unsigned long long, unsigned long long)
 CModuleListSnapshot::IsElfHeader(void const*, unsigned long)
+CModuleListSnapshot::IsElfHeader(void*, unsigned long long, unsigned long long)
 CModuleListSnapshot::IsExeModule(void const*, unsigned long)
 CModuleListSnapshot::IsMachoHeader(void const*, unsigned long)
 CModuleListSnapshot::IsNotPlatModule(char const*, void const*, unsigned long)
@@ -1164,6 +1173,7 @@ COLLISION_MODE_PER_FRAME_PLANESET
 COLLISION_MODE_PER_PARTICLE_TRACE
 COLLISION_MODE_USE_NEAREST_TRACE
 COM_TimestampedLog
+CONTENT
 COneTimeEvent::Allocate()
 CPU information: physical %u, logical %u (fake mode %u)
 CPUInformation::GetIAFamilyModelStepping(unsigned int*, unsigned int*, unsigned int*)
@@ -1335,7 +1345,6 @@ CThreadEvent::Reset()
 CThreadEvent::Set()
 CThreadEvent::WaitForMultiple(int, CThreadEvent**, bool, unsigned int)
 CThreadEvent::WaitForMultiple(int, CThreadEvent*, bool, unsigned int)
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadFiber::CThreadFiber(unsigned long)
 CThreadFullMutex::CThreadFullMutex(bool, char const*, bool, bool)
 CThreadFullMutex::IsCreator() const
@@ -1385,6 +1394,7 @@ CThreadSemaphore::CThreadSemaphore(int, int, char const*, bool)
 CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::WaitImpl(unsigned int)
 CThreadSemaphore::~CThreadSemaphore()
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
 CThreadSpinRWLock::UnlockRead(char const*, int)
@@ -1504,7 +1514,6 @@ CUtlBuffer::SetOverflowFuncs(bool (CUtlBuffer::*)(int), bool (CUtlBuffer::*)(int
 CUtlBuffer::Swap(CUtlBuffer&)
 CUtlBuffer::Swap(CUtlMemory<unsigned char, int>&)
 CUtlBuffer::VaPrintf(char const*, __va_list_tag*)
-CUtlBuffer::VaPrintf: String overflowed buffer [%llu]
 CUtlBuffer::VaScanf(char const*, __va_list_tag*)
 CUtlBuffer::WriteToFile(char const*, bool)
 CUtlBuffer::WriteToFileIfDifferent(char const*)
@@ -1646,9 +1655,6 @@ CUtlSymbolTable::SaveToBuffer(CUtlBuffer&) const
 CUtlSymbolTable::SetPageSize(unsigned int)
 CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
-CUtlTSRowAllocator::AllocateData(int, int*, int*, int)
-CUtlTSRowAllocator::AllocateDataIgnoreHoles(int, int*, int*, int)
-CUtlTSRowAllocator::Reset(int, int)
 CVAR_
 CVProfNode::EnterScope()
 CVProfNode::ExitScope()
@@ -1700,11 +1706,12 @@ CVariableBitStringBase::Resize(int)
 CVariableBitStringBase::ValidateOperand(CVariableBitStringBase const&) const
 CVectorAnimParameter
 CVertexKDTree::BuildMidpoint(float const*, int, int)
+CVertexKDTree::BuildMidpointFromVertexSubSet(float const*, int, int const*, int)
 CVertexKDTree::BuildNode(int, int)
 CVertexKDTree::FindVertsInBox(CUtlVectorFixed<float const*, 64ul, int>&, Vector const&, Vector const&, int) const
 CVertexKDTree::FindVertsInBox(CUtlVectorFixedGrowable<float const*, 64ul, int>&, Vector const&, Vector const&, int) const
-CVertexKDTree::ForEachInBox(Vector const&, Vector const&, std::function<void (float const*)> const&, int)
-CVertexKDTree::ForEachInSphere(Vector const&, float, std::function<void (float const*)> const&, int)
+CVertexKDTree::ForEachInBox(Vector const&, Vector const&, std::function<void (float const*)> const&, int) const
+CVertexKDTree::ForEachInSphere(Vector const&, float, std::function<void (float const*)> const&, int) const
 CVirtualMachineCallStackTranslationEncoder::CVirtualMachineCallStackTranslationEncoder(char const*)
 CVirtualMachineCallStackTranslationEncoder::DecodeFromNativePointer(void const*, CBufferString*, CBufferString*, unsigned int*)
 CVirtualMachineCallStackTranslationEncoder::EncodeAsNativePointer(char const*, char const*, unsigned int)
@@ -1721,7 +1728,8 @@ CVirtualMachineCallStackTranslationEncoder::GetName()
 CVirtualMachineCallStackTranslationEncoder::GetVMID()
 CVirtualMachineCallStackTranslationEncoder::~CVirtualMachineCallStackTranslationEncoder()
 CVirtualMemorySnapshot::CVirtualMemorySnapshot()
-CVirtualMemorySnapshot::Capture()
+CVirtualMemorySnapshot::Capture(unsigned int)
+CVirtualMemorySnapshot::Capture(void*)
 CVirtualMemorySnapshot::Diff(CVirtualMemorySnapshot const*, CVirtualMemorySnapshot const*)
 CVirtualMemorySnapshot::GetAddressAfterLastRegion(unsigned long long) const
 CVirtualMemorySnapshot::GetLargestUnmappedRegion(unsigned long long*, unsigned long long*, unsigned long long) const
@@ -1894,18 +1902,11 @@ CopyPending
 CopyUniqueId
 Corefile
 Coroutine[%s] performance problem: excessive stack size (%d bytes)
-Coroutine_Cancel
 Coroutine_Continue
 Coroutine_Create
-Coroutine_DebugBreak
 Coroutine_Finish
 Coroutine_GetCurrentlyActive
-Coroutine_GetStackDepth
-Coroutine_IsActive
 Coroutine_IsActive()
-Coroutine_IsAddressInOurStack
-Coroutine_ReleaseThreadMemory
-Coroutine_Test
 Coroutine_YieldToMain
 Corrupted block detected
 Could not execute the command:   %sOS error message:   "%s"
@@ -2213,7 +2214,6 @@ IMobileEventListener::OnLowMemoryNotification()
 INF
 INHERITABLE_BOOL_INHERIT
 INHERITABLE_BOOL_TRUE
-IQuickTime001
 ITALIAN
 Ignore All Asserts
 Ignore For 24 Hours
@@ -2253,6 +2253,7 @@ InvalidateUniqueId
 IsKV3Data(CUtlBuffer const*, KV3ID_t*)
 IsKV3Data(void const*, int, KV3ID_t*)
 IsModelDocFormat
+IsParticleSystemBehaviorVersionDeprecated(KeyValues3*, int*)
 IsRunningFromAlternateLocation
 IsUniqueIdEqual
 IsUniqueIdValid
@@ -2291,29 +2292,30 @@ KeyValues::Element(int) const
 KeyValues::ElideSubKey(KeyValues*)
 KeyValues::FindAndDeleteSubKey(char const*)
 KeyValues::FindKey(HKeySymbol) const
+KeyValues::FindKey(char const*) const
 KeyValues::FindKey(char const*, bool)
 KeyValues::FindKeyAndParent(char const*, KeyValues**, bool)
 KeyValues::FindLastSubKey() const
 KeyValues::FromString(char const*, char const*, char const**)
-KeyValues::GetColor(char const*, Color const&)
+KeyValues::GetColor(char const*, Color const&) const
 KeyValues::GetDataType(char const*) const
 KeyValues::GetFirstSubKey() const
 KeyValues::GetFirstTrueSubKey() const
 KeyValues::GetFirstValue() const
-KeyValues::GetFloat(char const*, float)
-KeyValues::GetInt(char const*, int)
+KeyValues::GetFloat(char const*, float) const
+KeyValues::GetInt(char const*, int) const
 KeyValues::GetName() const
 KeyValues::GetNameSymbol() const
 KeyValues::GetNameSymbolCaseSensitive() const
 KeyValues::GetNextKey() const
 KeyValues::GetNextTrueSubKey() const
 KeyValues::GetNextValue() const
-KeyValues::GetPtr(char const*, void*)
+KeyValues::GetPtr(char const*, void*) const
 KeyValues::GetString(char const*, char const*, char*, unsigned long)
-KeyValues::GetUint64(char const*, unsigned long long)
+KeyValues::GetUint64(char const*, unsigned long long) const
 KeyValues::GetWString(char const*, wchar_t const*, wchar_t*, unsigned long)
 KeyValues::InsertSubKey(int, KeyValues*)
-KeyValues::IsEmpty(char const*)
+KeyValues::IsEmpty(char const*) const
 KeyValues::IsEqual(KeyValues*)
 KeyValues::KeyValues(KeyValues const*, bool)
 KeyValues::KeyValues(char const*)
@@ -2596,7 +2598,6 @@ No error detected
 No samples
 No valid format conversion from '%s' to '%s'
 NoPoseControl
-Not continuing coroutine due to g_bPreventCoroutineContinue, %s
 Not enough memory
 NoteAlloc
 Number contains invalid character 0x%02x
@@ -2750,7 +2751,6 @@ Plat_EnsureDirectory
 Plat_EnumerateModuleImportLibraries
 Plat_ExitProcess
 Plat_ExpandEnvVars
-Plat_FastVerifyHardwareKey
 Plat_FatalErrorFunc
 Plat_FileExists
 Plat_FileIsReadOnly
@@ -2795,6 +2795,7 @@ Plat_GetModuleInterfaceFactory
 Plat_GetModuleProcAddress
 Plat_GetMonitorBounds
 Plat_GetMonitorContentsScale
+Plat_GetMonitorCount
 Plat_GetMonitorIndexFromName
 Plat_GetMonitorName
 Plat_GetMonitorPPI
@@ -2953,19 +2954,18 @@ Plat_UUIDFromString
 Plat_UUIDToString
 Plat_UnloadModule
 Plat_UnloadSDL
-Plat_VerifyHardwareKey
-Plat_VerifyHardwareKeyDriver
-Plat_VerifyHardwareKeyPrompt
 Plat_VirtualAccessFlags
 Plat_VirtualAlloc
 Plat_VirtualFree
 Plat_VirtualProtect
 Plat_WindowToOsSpecificHandle
 Plat_WindowToScreenCoords
-Plat_ctime
-Plat_gmtime
-Plat_localtime
-Plat_timegm
+Plat_asctime
+Plat_ctime64
+Plat_gmtime64
+Plat_localtime64
+Plat_mktime64
+Plat_timegm64
 PopCoroutineStack
 PopMiniProfilerTS
 PostProcessingSystem_001
@@ -3016,7 +3016,6 @@ RenderDeviceMgr001
 RenderHardwareConfig002
 RenderMeshFile
 RenderService_001
-RenderSystemSurface001
 RenderUtils_001
 ReplaceAt
 ReportInvalidStringConversion(char const*)
@@ -3148,6 +3147,7 @@ SDL_Quit
 SDL_QuitSubSystem
 SDL_RWFromFile
 SDL_RaiseWindow
+SDL_ResetKeyboard
 SDL_RestoreWindow
 SDL_SetClipboardText
 SDL_SetClipboardText failed: %s
@@ -3316,6 +3316,7 @@ Source2GameEntities001
 Source2Host001
 Source2Server001
 Source2V8System001
+SpecialCommand_Test_Run
 SpecialCommand_Test_SetEvent
 SpecialCommand_Test_SetEvent <event name> : requires an event name.
 SpecialCommand_Test_Wait
@@ -3387,6 +3388,7 @@ Test_LoopLoopForNumSeconds: requires a loop name and number of seconds to loop.
 Test_RandomChance
 Test_RandomChance <percent chance, 0-100> <token1> <token2...> - Roll the dice and maybe run the command following the percentage chance.
 Test_RandomChance: requires percentage chance parameter (0-100) followed by command to execute.
+Test_Run
 Test_RunFrame
 Test_SetEvent
 Test_StartLoop
@@ -3414,6 +3416,7 @@ ThreadGetCurrentProcessId
 ThreadGetDebugNameForThreadHandle
 ThreadGetDebugNameForThreadId
 ThreadGetProcessExitCode
+ThreadGetProcessIdFromHandle
 ThreadGetProcessPriority
 ThreadInMainThread
 ThreadInitOnceCall_Finish
@@ -3427,6 +3430,7 @@ ThreadMultiWaitObjectSetCreate(pollfd const*, ThreadMultiWaitExtra_t const*, int
 ThreadMultiWaitObjectSetDestroy
 ThreadMultiWaitObjectSetGetCount
 ThreadNanoSleep
+ThreadOpenProcess
 ThreadPoolTest:         %d threads -- %d (%d) jobs processed in %fms, %fms to suspend (%f/%f)
 ThreadPoolTest:         Testing with %d jobs! Sleep %d, interleave %d, prioritized %d
 ThreadPoolTest:     Distribute
@@ -3449,6 +3453,7 @@ ThreadSleep
 ThreadSpin
 ThreadTerminateProcessCode
 ThreadWaitForProcessExit
+ThreadWrapProcessId
 ThreadYield
 Tier0GenericMiniDumpHandler
 Tier0GenericMiniDumpHandlerEx
@@ -3490,6 +3495,7 @@ TranslateStackInfo
 TrimRight
 TruncateAt
 Truncated data
+TryCullParticleSystemDisabledBlocks(KeyValues3*)
 Trying %u different sets of parameters
 Tst
 Two Bone
@@ -3565,12 +3571,6 @@ VConComm001
 VEngineCvar007
 VFileSystem017
 VGAME
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
 VMaterialSystem2_001
 VMediaFoundation001
 VP4003
@@ -3832,6 +3832,7 @@ V_ftelli64
 V_fwrite
 V_hypotd
 V_hypotf
+V_isEntirelyWhitespace
 V_isalnum_str_fast
 V_isalpha_str_fast
 V_isbreakablewspace
@@ -4334,7 +4335,6 @@ animgraph9
 appears in lower database
 archive
 argument not found
-asctime
 asctime_r
 asin
 at+
@@ -4346,7 +4346,6 @@ attachment_offset
 attachment_type
 auto_unragdoll_duration
 b
-bAnyCoroutineActive
 bUpdate
 backtrace
 base64_decode
@@ -5039,6 +5038,7 @@ missing '}' in format string
 missing precision specifier
 mkdir
 mkostemps64
+mktime
 mmap64
 model_name
 modeldoc0
@@ -5118,6 +5118,7 @@ no affinity...
 no guard
 no results
 nolog
+none
 nopref-all
 norecord
 not enough space to write RepOffsets
@@ -5146,6 +5147,7 @@ out of order
 p
 p4 add -t binary "%s"
 p4 edit -t binary "%s"
+pFrameBottom > m_pStackHigh || pFrameTop < m_pStackLow
 panorama
 particles/
 pass
@@ -5234,6 +5236,8 @@ replicated
 resource
 resource_name
 rmdir
+rnd_down
+rnd_up
 round
 s
 s_dev_urandom_fd >= 0
@@ -5324,7 +5328,6 @@ system
 t
 tableLog requires too much memory : unsupported
 tanh
-test string
 test_angles_relative
 testscript_debug
 testscriptmgr.cpp
@@ -5332,6 +5335,7 @@ texturescale
 threadtools.cpp
 tier0
 tier0_strtools.cpp
+timegm
 timestamped.log
 tools_stall_monitor.cpp
 true
@@ -5379,6 +5383,7 @@ urandom_result > 0 || ( urandom_result < 0 && errno == EINTR )
 use_additional_offset
 userinfo
 usleep
+utlbuffer.cpp
 utlmemoryarena.cpp
 utlobjectregistry.cpp
 utlstringtokensystem.cpp
@@ -5469,6 +5474,7 @@ vtable for IKeyValuesDumpContextAsText
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__si_class_type_info
 vtable for __cxxabiv1::__vmi_class_type_info
+vtest
 vtune
 w
 wait
@@ -5496,6 +5502,7 @@ yaw_end
 yaw_start
 z
 zD
+zero
 {
 {}
 {}[]:,

@@ -11,10 +11,23 @@ import "valveextensions.proto";
 option optimize_for = SPEED;
 option cc_generic_services = false;
 
+enum ECandyShopAuditAction {
+	k_eInvalid = 0;
+	k_eSupportModify = 1;
+	k_ePurchaseReward = 2;
+	k_eOpenBags = 3;
+	k_eRerollRewards = 4;
+	k_eDoVariableExchange = 5;
+	k_eDoExchange = 6;
+	k_eEventActionGrantInventorySizeIncrease = 7;
+	k_eEventActionGrantRerollChargesIncrease = 8;
+}
+
 enum ECandyShopRewardType {
 	k_eCandyShopRewardType_None = 0;
 	k_eCandyShopRewardType_Item = 1;
 	k_eCandyShopRewardType_EventAction = 2;
+	k_eCandyShopRewardType_EventPoints = 3;
 }
 
 message CMsgCandyShopCandyCount {
@@ -27,7 +40,7 @@ message CMsgCandyShopCandyQuantity {
 }
 
 message CMsgCandyShopExchangeRecipe {
-	optional uint64 recipe_id = 1;
+	optional uint32 recipe_id = 1;
 	optional .CMsgCandyShopCandyQuantity input = 2;
 	optional .CMsgCandyShopCandyQuantity output = 3;
 }
@@ -42,16 +55,19 @@ message CMsgCandyShopRewardData_EventAction {
 	optional uint32 quantity = 3;
 }
 
-message CMsgCandyShopRewardItem {
-	optional .ECandyShopRewardType reward_type = 1 [default = k_eCandyShopRewardType_None];
-	optional .CMsgCandyShopRewardData_Item item_data = 2;
-	optional .CMsgCandyShopRewardData_EventAction event_action_data = 3;
+message CMsgCandyShopRewardData_EventPoints {
+	optional .EEvent event_id = 1 [default = EVENT_ID_NONE];
+	optional uint32 points = 2;
 }
 
 message CMsgCandyShopReward {
-	optional uint64 reward_id = 1;
-	optional .CMsgCandyShopCandyQuantity price = 2;
-	optional .CMsgCandyShopRewardItem reward = 3;
+	optional uint32 reward_id = 1;
+	optional uint32 reward_option_id = 2;
+	optional .CMsgCandyShopCandyQuantity price = 3;
+	optional .ECandyShopRewardType reward_type = 4 [default = k_eCandyShopRewardType_None];
+	optional .CMsgCandyShopRewardData_Item item_data = 5;
+	optional .CMsgCandyShopRewardData_EventAction event_action_data = 6;
+	optional .CMsgCandyShopRewardData_EventPoints event_points_data = 7;
 }
 
 message CMsgCandyShopUserData {
@@ -60,6 +76,7 @@ message CMsgCandyShopUserData {
 	optional fixed32 exchange_reset_timestamp = 3;
 	repeated .CMsgCandyShopExchangeRecipe exchange_recipes = 4;
 	repeated .CMsgCandyShopReward active_rewards = 5;
+	optional uint32 reroll_charges = 6;
 }
 
 message CMsgClientToGCCandyShopGetUserData {
@@ -73,6 +90,7 @@ message CMsgClientToGCCandyShopGetUserDataResponse {
 		k_eTooBusy = 2;
 		k_eDisabled = 3;
 		k_eTimeout = 4;
+		k_eInvalidShop = 5;
 	}
 
 	optional .CMsgClientToGCCandyShopGetUserDataResponse.EResponse response = 1 [default = k_eInternalError];
@@ -96,14 +114,38 @@ message CMsgClientToGCCandyShopPurchaseRewardResponse {
 		k_eTooBusy = 2;
 		k_eDisabled = 3;
 		k_eTimeout = 4;
+		k_eInvalidShop = 5;
+		k_eInvalidReward = 6;
+		k_eNotEnoughCandy = 7;
 	}
 
 	optional .CMsgClientToGCCandyShopPurchaseRewardResponse.EResponse response = 1 [default = k_eInternalError];
 }
 
+message CMsgClientToGCCandyShopOpenBags {
+	optional uint32 candy_shop_id = 1;
+	optional uint32 bag_count = 2;
+}
+
+message CMsgClientToGCCandyShopOpenBagsResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalidShop = 5;
+		k_eInvalidItem = 6;
+		k_eNotEnoughBags = 7;
+		k_eNotEnoughSpace = 8;
+	}
+
+	optional .CMsgClientToGCCandyShopOpenBagsResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
 message CMsgClientToGCCandyShopDoExchange {
 	optional uint32 candy_shop_id = 1;
-	optional uint64 recipe_id = 2;
+	optional uint32 recipe_id = 2;
 }
 
 message CMsgClientToGCCandyShopDoExchangeResponse {
@@ -113,6 +155,10 @@ message CMsgClientToGCCandyShopDoExchangeResponse {
 		k_eTooBusy = 2;
 		k_eDisabled = 3;
 		k_eTimeout = 4;
+		k_eInvalidShop = 5;
+		k_eNotEnoughCandy = 6;
+		k_eInvalidRecipe = 7;
+		k_eNotEnoughSpace = 8;
 	}
 
 	optional .CMsgClientToGCCandyShopDoExchangeResponse.EResponse response = 1 [default = k_eInternalError];
@@ -131,25 +177,123 @@ message CMsgClientToGCCandyShopDoVariableExchangeResponse {
 		k_eTooBusy = 2;
 		k_eDisabled = 3;
 		k_eTimeout = 4;
+		k_eInvalidShop = 5;
+		k_eNotEnoughCandy = 6;
+		k_eInvalidRecipe = 7;
+		k_eNotEnoughSpace = 8;
 	}
 
 	optional .CMsgClientToGCCandyShopDoVariableExchangeResponse.EResponse response = 1 [default = k_eInternalError];
 }
 
-message CMsgClientToGCCandyShopRerollReward {
+message CMsgClientToGCCandyShopRerollRewards {
 	optional uint32 candy_shop_id = 1;
-	optional uint64 reward_id = 2;
-	optional .CMsgCandyShopCandyQuantity price = 3;
 }
 
-message CMsgClientToGCCandyShopRerollRewardResponse {
+message CMsgClientToGCCandyShopRerollRewardsResponse {
 	enum EResponse {
 		k_eInternalError = 0;
 		k_eSuccess = 1;
 		k_eTooBusy = 2;
 		k_eDisabled = 3;
 		k_eTimeout = 4;
+		k_eInvalidShop = 5;
+		k_eNoRerollCharges = 6;
 	}
 
-	optional .CMsgClientToGCCandyShopRerollRewardResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgClientToGCCandyShopRerollRewardsResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCCandyShopDevGrantCandy {
+	optional uint32 candy_shop_id = 1;
+	optional .CMsgCandyShopCandyQuantity candy_quantity = 2;
+}
+
+message CMsgClientToGCCandyShopDevGrantCandyResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eNotAllowed = 5;
+		k_eInvalidShop = 6;
+		k_eNotEnoughSpace = 7;
+	}
+
+	optional .CMsgClientToGCCandyShopDevGrantCandyResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCCandyShopDevClearInventory {
+	optional uint32 candy_shop_id = 1;
+}
+
+message CMsgClientToGCCandyShopDevClearInventoryResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eNotAllowed = 5;
+		k_eInvalidShop = 6;
+	}
+
+	optional .CMsgClientToGCCandyShopDevClearInventoryResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCCandyShopDevGrantCandyBags {
+	optional uint32 candy_shop_id = 1;
+	optional uint32 quantity = 2;
+}
+
+message CMsgClientToGCCandyShopDevGrantCandyBagsResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eNotAllowed = 5;
+		k_eInvalidShop = 6;
+	}
+
+	optional .CMsgClientToGCCandyShopDevGrantCandyBagsResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCCandyShopDevShuffleExchange {
+	optional uint32 candy_shop_id = 1;
+}
+
+message CMsgClientToGCCandyShopDevShuffleExchangeResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eNotAllowed = 5;
+		k_eInvalidShop = 6;
+	}
+
+	optional .CMsgClientToGCCandyShopDevShuffleExchangeResponse.EResponse response = 1 [default = k_eInternalError];
+}
+
+message CMsgClientToGCCandyShopDevGrantRerollCharges {
+	optional uint32 candy_shop_id = 1;
+	optional uint32 reroll_charges = 2;
+}
+
+message CMsgClientToGCCandyShopDevGrantRerollChargesResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eNotAllowed = 5;
+		k_eInvalidShop = 6;
+	}
+
+	optional .CMsgClientToGCCandyShopDevGrantRerollChargesResponse.EResponse response = 1 [default = k_eInternalError];
 }

@@ -80,6 +80,7 @@
 "MapSize"
 "MutableRawRepeatedField"
 "e" must be followed by exponent.
+"is running without a known mod!Set the VMOD environment variable or run with -game to set the mod name.
 #
 #AppFramework_OutOfMemory
 #General_UnableToStartGame
@@ -109,6 +110,7 @@ $ORIGIN
 %.*g
 %.*s
 %.1f
+%50.50s: %2.2d bits == '%s'
 %8.3f
 %c
 %d "No animation data"
@@ -116,6 +118,7 @@ $ORIGIN
 %d.%d.%d
 %f %f %f %f
 %g
+%hu
 %ld
 %lf
 %lld
@@ -127,6 +130,8 @@ $ORIGIN
 %s - %s
 %s / %s
 %s Schema Type: %s
+%s allocation count overflow
+%s allocation count overflow( %llu > %llu )
 %s.%u
 %s:  IGameSystem::LoopActivateAllSystems {
 %s:  IGameSystem::LoopDeactivateAllSystems {
@@ -140,6 +145,8 @@ $ORIGIN
 %s: Invalid grow amount %d
 %s_tempcontent
 (
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
+(%d)
 (%d,%d)
 (%s%s)
 (None)
@@ -173,6 +180,7 @@ $ORIGIN
 -----
 -1
 ->
+-> %s
 -addon
 -addon_path
 -allow_exe_in_build_dir
@@ -208,6 +216,10 @@ $ORIGIN
 ... }
 ...<truncated>...
 ../../common/protobuf_helpers.cpp
+../../public/appframework/tier1app.h
+../../public/appframework/tier2app.h
+../../public/tier0/utlmemory.h
+../public/tier0/utlmemory.h
 ../shared/igamesystem.cpp
 ../src/shaders
 ..\content
@@ -449,6 +461,7 @@ Animated
 AnimationSystemUtils_001
 AnimationSystem_001
 Application "
+Application unable to load gameinfo.gi file from directory "%s"!
 ApplicationInfo
 Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&)
 Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&, char const*, ...)
@@ -807,11 +820,12 @@ CSplitString::Construct(char const*, char const**, int, bool)
 CStrongHandle
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadMutex::TryLock(char const*, int)
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
+CTier2AppSystemDict::LoadStartupManifestGroup
 CTiltTwistConstraint
 CTransform
 CTwistConstraint
@@ -819,6 +833,7 @@ CUtlBinaryBlock
 CUtlBinaryBlock::Set(void const*, int)
 CUtlBinaryBlock::SetLength(int)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
+CUtlBinaryBlock::operator=(CUtlBinaryBlock&&)
 CUtlBlockMemory overflow!
 CUtlBuffer::AccessGet(int)
 CUtlBuffer::AccessPut(int)
@@ -879,6 +894,7 @@ CUtlSymbolTable::~CUtlSymbolTable()
 CUtlVector
 CUtlVectorFixedGrowable
 CVertexKDTree::BuildMidpoint(float const*, int, int)
+CVertexKDTree::BuildMidpointFromVertexSubSet(float const*, int, int const*, int)
 CVertexKDTree::FindVertsInBox(CUtlVectorFixedGrowable<float const*, 64ul, int>&, Vector const&, Vector const&, int) const
 CVrSkeletalInputSettings
 CWristBone
@@ -938,6 +954,8 @@ ERROR
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: Specified full path %s does not lie under the mod search path!)
 ERROR: Specified path %s could not be made content-relative
+ERROR: You are trying to mount addon '%s' but SetAllowAddonChanges is false which probably means you shouldn't be calling this directly.
+ERROR: You are trying to unmount addon '%s', but SetAllowAddonChanges is false which probably means you should be using calling this directly.
 EXECUTABLE_PATH
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
@@ -999,6 +1017,7 @@ Failed to compute mesh tangents for mesh using material %s -- normals are all id
 Failed to compute mesh tangents for mesh using material %s -- positions are all identical
 Failed to compute mesh tangents for mesh using material %s -- uvs are all identical
 Failed to convert introspected block: %s
+Failed to determine base game directory from %s
 Failed to open file
 Failed to open file: %s
 False
@@ -1027,6 +1046,7 @@ FieldDescriptorProto.extendee not set for extension field.
 FieldDescriptorProto.extendee set for non-extension field.
 FieldDescriptorProto.oneof_index $0 is out of range for type "$1".
 FieldDescriptorProto.oneof_index should not be set for extensions.
+FieldPathEncodeFinish
 FieldSize
 Fields in the same oneof must be defined consecutively. "$0" cannot be defined before the completion of the "$1" oneof definition.
 Fields of oneofs must themselves have label LABEL_OPTIONAL.
@@ -1074,6 +1094,9 @@ GameStartup_SM50
 GameUIService_001
 Gaussian
 GenerateResourceNameFromFileName: Invalid extension specified in file name "%s"!
+GetAddonsContentDirectory: Failed to find CONTENTADDONS search path.
+GetAddonsDirectory: Failed to find ADDONS search path.
+GetAvailableAddonMaps failed to find any maps in the '%s' addon - trying fallback maps:
 GetBool
 GetCPUInformation
 GetDouble
@@ -1081,6 +1104,7 @@ GetFloat
 GetInt32
 GetInt64
 GetMessage
+GetPathData failed for read only CFieldPath
 GetRawRepeatedField
 GetRepeatedBool
 GetRepeatedDouble
@@ -1100,6 +1124,7 @@ GetStringReference
 GetUInt32
 GetUInt64
 Groups are not supported in proto3 syntax.
+Grow
 H
 HBm_influenceFlags
 HELPER_BONE
@@ -1121,7 +1146,6 @@ INTERNAL
 INVALID
 INVALID_ARGUMENT
 INVALID_CPPTYPE
-IQuickTime001
 Ignoring extension "
 Illegal jstype for int64, uint64, sint64, fixed64 or sfixed64 field:
 Import
@@ -1161,6 +1185,7 @@ Invalid remapping table starts for mesh %d on model %s, %d expected %d
 Invalid request for mesh %d in model %s with %d entry remapping start table
 Invalid request for mesh %d in model %s with no remapping table
 Invalid request for mesh %d in model %s with no remapping table starts
+Invalid search path specified for '%s'. Search path '%s' does not contain '%s'
 Invalid strings::Substitute() format string: "
 Invalid symbol name:
 Invalid value for boolean field "
@@ -1174,6 +1199,7 @@ Inverse Multi Quadratic
 Invert Axes;
 J
 JIGGLE_BONE
+JustInTimeManifest
 K
 KV3 load transfer failed: %s
 Key in map fields cannot be enum types.
@@ -1185,14 +1211,14 @@ KeyValues::FindKey(char const*, bool)
 KeyValues::GetDataType(char const*) const
 KeyValues::GetFirstSubKey() const
 KeyValues::GetFirstValue() const
-KeyValues::GetFloat(char const*, float)
-KeyValues::GetInt(char const*, int)
+KeyValues::GetFloat(char const*, float) const
+KeyValues::GetInt(char const*, int) const
 KeyValues::GetName() const
 KeyValues::GetNextKey() const
 KeyValues::GetNextValue() const
-KeyValues::GetPtr(char const*, void*)
+KeyValues::GetPtr(char const*, void*) const
 KeyValues::GetString(char const*, char const*, char*, unsigned long)
-KeyValues::GetUint64(char const*, unsigned long long)
+KeyValues::GetUint64(char const*, unsigned long long) const
 KeyValues::KeyValues(char const*)
 KeyValues::LoadFromBuffer(char const*, CUtlBuffer&, IFileSystem*, char const*, bool (*)(char const*, void*), IKeyValuesErrorSpew*, void*, char const*)
 KeyValues::LoadFromFile(IFileSystem*, char const*, char const*, bool (*)(char const*, void*), void*, char const*)
@@ -1318,10 +1344,13 @@ MessageSet is not supported in proto3.
 MessageSets cannot have fields, only extensions.
 Messages can't have default values!
 Messages can't have default values.
+Mismatched CTier2AppSystemDict::SetAllowAddonChanges!!!
 Missing field: FileDescriptorProto.name.
 Missing name.
 Model %s missing bone and flex counts (%d < %d), init %d
 ModelDocUtils001
+MountAddon: Failed to find ADDONS search path.
+MountAddonSearchPaths: Failed to find CONTENTADDONS search path.
 MovementSettings
 Msg
 Multiple extension registrations for type "
@@ -1463,6 +1492,9 @@ Nodes
 Non-primitive types can't be packed.
 Non-repeated Any specified multiple times.
 Non-repeated field "
+NonTopoComplex
+NonTopoComplexPack4Bits
+NonTopoPenultimatePluseOne
 Not implemented field number
 Not supported.
 Note that enum values use C++ scoping rules, meaning that enum values are siblings of their type, not children of it.  Therefore, "
@@ -1495,6 +1527,10 @@ Parameter to BackUp() can't be negative.
 ParseFromString failed
 Parsing attempt:
 ParticleSystemMgr003
+Path_AddToTail failed for read only CFieldPath
+Path_AddToTail failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
+Path_PopLast failed for read only CFieldPath
+Path_RemoveAll failed for read only CFieldPath
 PerVertexLighting
 Physics
 PhysicsBuilderMgr001
@@ -1537,6 +1573,18 @@ Plat_TickDiffMilliSecF
 Plat_UUIDToString
 Plat_UnloadModule
 Plat_UnloadSDL
+PlusFour
+PlusThree
+PlusTwo
+PopAllButOnePlusN
+PopAllButOnePlusNPack3Bits
+PopAllButOnePlusNPack6Bits
+PopAllButOnePlusOne
+PopNAndNonTopographical
+PopNPlusN
+PopNPlusOne
+PopOnePlusN
+PopOnePlusOne
 PostProcessingSystem_001
 PredictionDiffManager001
 Problem     :
@@ -1560,9 +1608,30 @@ ProtoBufHelper::ParseJSON: Ignoring extra JSON key '%s', which is not found in p
 ProtoBufHelper::ParseJSON: Object Begin found on invalid field!
 ProtoBufHelper::ParseJSON: received callback with message field but no message!
 ProtoBufHelper::ParseJSON: received callback with no current message field!
-Protobuf: %s(%d): %s
 Protocol Buffer map usage error:
 Protocol Buffer reflection usage error:  Method      : google::protobuf::Reflection::
+PushN
+PushNAndNonTopographical
+PushOneLeftDeltaNRightNonZero
+PushOneLeftDeltaNRightNonZeroPack6Bits
+PushOneLeftDeltaNRightNonZeroPack8Bits
+PushOneLeftDeltaNRightZero
+PushOneLeftDeltaOneRightNonZero
+PushOneLeftDeltaOneRightZero
+PushOneLeftDeltaZeroRightNonZero
+PushOneLeftDeltaZeroRightZero
+PushThreeLeftDeltaN
+PushThreeLeftDeltaOne
+PushThreeLeftDeltaZero
+PushThreePack5LeftDeltaN
+PushThreePack5LeftDeltaOne
+PushThreePack5LeftDeltaZero
+PushTwoLeftDeltaN
+PushTwoLeftDeltaOne
+PushTwoLeftDeltaZero
+PushTwoPack5LeftDeltaN
+PushTwoPack5LeftDeltaOne
+PushTwoPack5LeftDeltaZero
 QAngle
 Quaternion
 QuaternionStorage
@@ -1592,7 +1661,6 @@ RenderPrimitiveType_t
 RenderService_001
 RenderSkeletonBone_t
 RenderSlotType_t
-RenderSystemSurface001
 RenderUtils_001
 Repeated fields can't have default values.
 Requested size is too large to fit into size_t.
@@ -1746,6 +1814,7 @@ Unexpected failure while serializing option submessage
 Unimplemented type:
 Uninterpreted option is missing name or value.
 Unknown enumeration value of "
+UnmountAddon: Failed to find %s search path.
 Unrecognized resource version (%d): %s
 Unrecognized syntax:
 Unsupported
@@ -1762,12 +1831,6 @@ VBik001
 VConComm001
 VEngineCvar007
 VFileSystem017
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
 VMOD
 VMaterialSystem2_001
 VMatrix
@@ -1874,6 +1937,7 @@ W
 WARNING
 WARNING: Trying to create a CRenderContextPtr without a valid context.
 WARNING: Unrecognized bone "%s"
+WARNING: You are trying to mount an addon (%s) in tools mode that is different from the addon tools mode was launched with (%s).
 Warning
 Warning parsing text-format
 WorldRendererMgr001
@@ -1912,6 +1976,7 @@ _V_strncat
 _V_strncmp
 _V_strncpy
 _V_strnicmp_fast
+__UNKNOWN__
 __assert_fail
 __bss_start
 __cxa_allocate_exception
@@ -2666,6 +2731,7 @@ v %g %g %g
 v %g %g %g%s
 valve_demo_1
 valve_demo_2
+valveextensions.proto
 vb phys
 vector2
 vector3

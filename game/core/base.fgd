@@ -269,6 +269,7 @@
 	glowrange(integer) [ group="Glow Properties" ] : "Glow Range" : 0 : "Range at which the glow becomes visible. (0 = always visible)"
 	glowrangemin(integer) [ group="Glow Properties" ] : "Glow Range Min" : 0 : "Range at which the glow stops being visible. (0 = always visible)"
 	glowcolor(color255) [ group="Glow Properties" ] : "Glow Color Override (R G B)" : "0 0 0" : "Change the render color of the glow."
+	glowteam(integer) [ group="Glow Properties" ] : "Glow Team" : "-1" : "Change the team we glow for."
 
 	input StartGlowing(void) : "Turn on a permanent glow effect for this prop."
 	input StopGlowing(void) : "Turn off this prop's glow effect."
@@ -511,6 +512,7 @@
 
 	spawnobject(choices) : "Spawn On Break" : 0 : "When broken, an entity of the selected type will be created." =
 	[
+		0:	""
 		1:	"item_battery"				
 		2:	"item_healthkit"			
 		3:	"item_ammo_pistol"			
@@ -566,11 +568,6 @@
 
 	// Outputs
 	output OnTakeDamage(void) : "Fired each time this breakable takes any damage."
-	output OnPhysCannonDetach(void) : "Fired when the physcannon has ripped this breakable off of the wall. Only fired if ACT_PHYSCANNON_DETACH is defined in the model this breakable is using."
-	output OnPhysCannonAnimatePreStarted(void) : "Fired when this prop starts playing the Pre physcannon-pull activity, caused by the player trying to grab this prop with the physcannon. Only fired if the ACT_PHYSCANNON_ANIMATE_PRE activity is defined in the model this breakable is using."
-	output OnPhysCannonAnimatePullStarted(void) : "Fired when this prop starts playing the physcannon-pull activity, caused by the player trying to grab this prop with the physcannon. Only fired if the ACT_PHYSCANNON_ANIMATE activity is defined in the model this breakable is using. If the prop has Pre pull anim, this will be fired after the Pre anim has finished playing."
-	output OnPhysCannonPullAnimFinished(void) : "Fired when this prop has finished playing the physcannon-pull activity, caused by the player trying to grab this prop with the physcannon. Only fired if the ACT_PHYSCANNON_ANIMATE activity is defined in the model this breakable is using. If the prop has Pre & Post pull anims, this will be fired after the Post anim has finished playing."
-	output OnPhysCannonAnimatePostStarted(void) : "Fired when this prop starts playing the Post physcannon-pull activity. Only fired if the ACT_PHYSCANNON_ANIMATE_POST activity is defined in the model this breakable is using."
 ]
 
 @BaseClass color(0 255 0) = PlayerClass []
@@ -2172,7 +2169,7 @@
 [
 	radius(integer) : "Radius" : 128 : "If set to -1, then the player can hear the soundscape as long as he can see it (regardless of distance to it)."
 	soundscape(string) : "Soundscape" : "Nothing" : "The name of the soundscape to use. Corresponds to an entry in the soundscapes*.txt file in the scripts directory."
-	enablesoundevent(boolean) : "Override soundscape with a specific sound event start." : 0
+	enablesoundevent(boolean) : "Override soundscape with sound event" : 0
 	soundevent(sound) : "Sound Event" : "" : "The name of the sound event to start from the soundscape entity."
 
 	position0(target_destination) : "Sound Position 0" : "" : "A sound position that will be referenced inside the soundscape text file. Usually used to position a set of sounds within the world."
@@ -2663,6 +2660,7 @@
 [
 	effect_name(particlesystem) [report] : "Particle System Name"
 	start_active(boolean) : "Start Active?" : 1
+	no_save(boolean) : "Don't Save" : 0
 
 	snapshot_file(resource:vsnap) { enabled={ variable="snapshot_mesh" value="0" } } : "Particle Snapshot File" : "" : "Name of .VSNAP (Particle Snapshot File) to be loaded and used by this particle system (e.g. 'smoke_snapshot1')"
 	snapshot_mesh(node_id) : "Particle Snapshot Node" : "" : "Id of a node in the map to be used to generate a particle snapshot, if specified Particle Snapshot File is ignored."
@@ -4602,6 +4600,14 @@
 	]
 ]
 
+@FilterClass base(BaseFilter) iconsprite("editor/filter_class.vmat") = filter_activator_attribute_int :
+	"A filter that filters by the mass of the activator."
+[
+	filterattribute(string) : "Attribute Name" : : "The attribute to filter by. If the filter mode is Allow, only entities who "+
+		"have the attribute with a value > 0 will pass the filter. If the filter mode is Disallow, "+
+		"all entities EXCEPT those who have the attribute with a value > 0 will pass the filter."
+]
+
 @FilterClass base(BaseFilter) iconsprite("editor/filter_class.vmat") sphere(filter_radius) sphere(filter_outer_radius) = filter_enemy :
 	"A filter that filters a potential enemy entity by a set of criteria."
 [
@@ -4817,13 +4823,8 @@
 		16384 : "Debris - Don't collide with the player or other debris" : 0
 		32768 : "Motion Disabled" : 0
 		65536 : "Use Preferred Carry Angles" : 0
-		131072: "Enable motion on Physcannon grab" : 0
-		262144: "Ignore +USE for Pickup" : 0
-		524288: "Generate output on +USE " : 1
 		1048576 : "Start Asleep" : 0
-		2097152 : "Physgun is NOT allowed to pick this up." : 0 
-		4194304 : "Physgun is NOT allowed to punt this object." : 0
-		8388608: "Prevent motion enable on player bump" : 0
+		8388608 : "Prevent motion enable on player bump" : 0
 		16777216: "Force nav-ignore" : 0
 	]
 	
@@ -4837,6 +4838,11 @@
 	massScale(float) : "Mass Scale" : "0" : "A scale multiplier for the object's mass."
 	damagetoenablemotion(integer) : "Health Level to Override Motion" : 0 : "If specified, this object will start motion disabled. Once its health has dropped below this specified amount, it will enable motion."
 	forcetoenablemotion(float) : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
+	enableuseoutput(boolean) : "Enable +Use Output" : 0 : "Enables OnPlayerUse output being fired when this object is used"
+	cannotgravitygrab(boolean) : "Cannot Gravity Grab" : 0
+	cannotgravitypunt(boolean) : "Cannot Gravity Punt" : 0
+	enablemotionongravitygrab(boolean) : "Enable Motion On Grab" : 0
+	gravitygrabignoremassandsize(boolean) : "Grab Ignores Mass" : 0 : "Gravity Grab is possible regardless of whether the object is too heavy or large."
 	health(integer) : "Strength" : 0 : "Number of points of damage to take before breaking.  0 means don't break."
 	preferredcarryangles(vector) : "Preferred Player-carry Angles" : "0 0 0" : "If the 'Use Preferred Carry Angles' spawnflag is set, this angle is the angle which the object should orient to when the player picks it up, with the physgun or +USE."
 	notsolid(choices) : "Not solid to world" : 0 =
@@ -5270,25 +5276,6 @@
 	]
 ]
 
-@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) color(0 0 255) tags( Physics ) = phys_convert : 
-	"Turns an arbitrary entity into a physically simulated entity. i.e. brush entities will behave like func_physbox, model entities behave like prop_physics."
-[
-	spawnflags(flags) =
-	[
-		1: "Convert Asleep" : 0
-		2: "Convert As Debris" : 0
-	]
-	target(target_destination) : "Entity to convert" : : "Name of the entity that will be converted to a physics object when the ConvertTarget input is fired."
-	swapmodel(string) : "Model Swap Entity"
-	massoverride(float) : "Mass Override" : "0" : "Sets the mass when the object(s) are converted (0 means auto-calculate)"
-
-	// Outputs
-	output OnConvert(void) : "Fires after the conversion has taken place."
-
-	// Inputs
-	input ConvertTarget(void) : "Converts this entity's target to a physically simulated object." 
-]
-
 @BaseClass base(Targetname, BasePhysicsNoSettleAttached) = ForceController
 [
 	spawnflags(flags) =
@@ -5396,11 +5383,6 @@
 // Props
 //
 //-------------------------------------------------------------------------
-
-@BaseClass = prop_detail_base
-[
-	model(studio) : "World model"
-]
 
 @BaseClass base(SystemLevelChoice) = prop_static_base
 [
@@ -5510,12 +5492,6 @@
 	forcenpcexclude(boolean) : "Force NPC Exclude" : "0" : "If set, NPC movement will ignore this prop"
 ]
 
-@PointClass base(prop_detail_base) model() = prop_detail : 
-	"Detail Prop"
-[
-	model(studio) : "World model"
-]
-
 @PointClass base(PosableSkeleton) tags( PropStatic ) color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static) 
 	metadata
 	{
@@ -5523,6 +5499,7 @@
 		entity_tool_name = "Static Prop"
 		entity_tool_group = "Content"
 		entity_tool_tip = "Adds a static model"
+		static_prop = true
 	}
 = prop_static
 [
@@ -5983,6 +5960,13 @@
 [
 	minhealthdmg(integer) : "Min Damage to Hurt" : 0 : "The prop will ignore any damage events if the damage is less than this amount."
 	gamemass(integer) : "Game Mass Override" : 0 : "Set the game mass by hand instead of using the code defaults."
+
+	overrideBlockLOS(choices) : "Block LOS override" : 0 : "Should this entity block or not-block LOS" =
+	[
+		0 : "use default"
+		1 : "Force no block LOS"
+		2 : "Force block LOS"
+	]
 
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 	physdamagescale(float) [ group="Physics Properties" ] : "Physics Impact Damage Scale" : "1.0" : "Scales damage energy when this object is hit by a physics object. NOTE: 0 means this feature is disabled for backwards compatibility.<br>Set to 1.0 for materials as strong as flesh, smaller numbers indicate stronger materials."
@@ -6731,7 +6715,9 @@
 //	  at the position of every devshot camera in the level.
 //-------------------------------------------------------------------------
 
-@PointClass editormodel("models/editor/camera") = point_devshot_camera : 
+@PointClass
+	editormodel("models/editor/camera")
+	frustum(FOV) = point_devshot_camera : 
 	"An entity used by the -makedevshots system, which automatically takes screenshots at the position of every devshot camera in the level."
 [
 	cameraname(string) : "Camera Name" : "" : "Used as the name of the directory to store screenshots from this camera. Must be unique within the level."
@@ -7734,17 +7720,5 @@
 	input SetFluidDensity(float) : "Fluid density, kg/liter"
 ]
 
-@NavLinkClass
-	base(Targetname, EnableDisable)
-	tags( NavMarkup )
-	editormodel("models/props/navlink/nav_link_hammer_model.vmdl")
-	metadata
-	{
-	}
- = ai_nav_link_area : "An entity that links navmesh sections togther with animation transitions between them"
-[
-	output OnNavLinkStart(void) : "An NPC started using this nav link"
-	output OnNavLinkFinish(void) : "An NPC finished using this nav link"
-]
 
 

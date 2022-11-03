@@ -80,7 +80,6 @@
 	{
 		"HasModAppSystems" "1"
 		"Capable64Bit" "1"
-		"UsesVGui" "0"
 		"PanoramaUIClientFromClient" "1" // IPanoramaUIClient is implemented by client.dll
 		"HasGameUI" "1" // dota uses gameui
 		"GameUIFromClient" "1"  // AND that gameui comes from client.dll
@@ -206,6 +205,8 @@
 			"gridnav"	"1"	// Dota generates its grid navigation data by default
 		}
 		"DotaTileGrid"	"1"
+
+		"DeprecatedBehaviorVersionsAllowed"	"1"
 	}
 
 	RenderPipelineAliases
@@ -236,6 +237,7 @@
 		"VulkanUseSecondaryCommandBuffers"	"1" // Use secondary command buffers for more efficiency on tiled based renderers. All platforms to limit configurations.
 		"VulkanSteamShaderCache"			"1"
 		"OpenGLForceSM30"					"1"
+		"LowLatency"						"1"
 	}
 
 	vdata_editor

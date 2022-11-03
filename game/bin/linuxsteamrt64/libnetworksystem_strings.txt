@@ -182,6 +182,7 @@ $tI
 %s had %d different permutations
 %s has MNetworkBitCount (or other float field tags) but is type cat '%s' (type %s)
 %s rebuild %s::%s at %u
+%s samples(%s complex), %s paths(%s complex)
 %s!fake
 %s%s
 %s%s %s::%s recursively
@@ -269,6 +270,7 @@ $tI
 %u:%u:%u
 %x (int:%d, float:%f)
 (
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%d,%d)
 (%s%s)
 (%s->%s)
@@ -354,6 +356,7 @@ $tI
 ../public/networksystem/serializedentity.h
 ../public/tier0/eventdispatcher.h
 ../public/tier0/tslist.h
+../public/tier0/utlmemory.h
 ../public/tier0/utlsignalslot.h
 ../public/tier0/utlsortvector.h
 ../public/tier0/utlsymboltable.h
@@ -629,10 +632,11 @@ AddToTail
 AddUInt32
 AddUInt64
 Adding 0--%dms of additional latency to %g%% packets, for random reordering
-Adding additional packet lag of %dms (%dms each way), Bernoulli loss of %g%%.
+Adding additional packet lag of %dms (when received), Bernoulli loss of %g%%.
 AlignedByteArray not properly aligned
 Allowing IP connections without auth
 Already saw decimal point or exponent; can't have another one.
+An old command that has been renamed to 'net_option'
 AnimGraphEditorUtils001
 AnimationSystemUtils_001
 AnimationSystem_001
@@ -1040,7 +1044,6 @@ CStrongHandle
 CTSQueue corruption
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadRWLock::LockForWrite(char const*, int)
 CThreadRWLock::UnlockWrite(char const*, int)
 CThreadRWLock::WaitForRead()
@@ -1050,6 +1053,7 @@ CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
 CThreadRWLock_FastRead::UnlockRead_LockForWrite(char const*, int, CThreadRWLock_FastRead::WriteLockTransition_t)
 CThreadRWLock_FastRead::UnlockWrite(char const*, int)
 CThreadSemaphore::~CThreadSemaphore()
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
 CThreadSpinRWLock::UnlockRead(char const*, int)
@@ -1153,12 +1157,14 @@ Cannot deallocate abstract class
 Cannot deduce for class
 Cannot destruct abstract class
 Cannot get here
+Cannot open file %s
 Cannot reconnect loopback after initializing steam networking!
 Cannot register change callback priorities at this stage! Must do it earlier!
 Cannot show available settings until SteamNetworkingUtils initialized
 Cannot show values of SteamNetworkingSockets configuration values until initialized
 Cannot skip field value, unexpected token:
 Cannot use priority equal to NETWORK_FIELD_CHANGE_DEFAULT_PRIORITY!
+Captures low-level data to replay path culling algorithm behavior in controlled unit test environment
 ChangeAccessorFieldPathIndex_t
 ChangeCallbackOnChange
 ChangeCallbackOnChangeOrCreate
@@ -1239,6 +1245,7 @@ ETX
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
 EconItemToolModel_001
+Enable optimization of slow path that makes HLTV CPU consumption high in AnimGraph-using mods. Will switch to this on by default soon.
 Encode
 Encountered 2 fields "%s" and "%s" in struct "%s" using the same change callback with different change callback types!
 Encountered message on net channel %s with an invalid network category! [net message %s]
@@ -1316,11 +1323,12 @@ Failed to install message handler for message %s in channel %s!
 Failed to open P2P network socket '%s'
 Failed to open UDP network socket '%s'
 Failed to save unsupported class
-Failed to set SteamNetSockets option '%s'
+Failed to set SteamNetworkingSockets option '%s'
 Failed to start listening for SDR on port %d.  Waiting and will retry
 Failed to unserialize message %s: expected message ID %u, encountered %u!
 FakeLag
 FakeLoss
+FakePacketLag_Recv
 FakeReorderDelay
 FakeReorderPct
 False
@@ -1407,6 +1415,7 @@ GameUIService_001
 GatherAllFieldOffsets_R
 GatherAllFieldOffsets_R:  local offset of %s::%s %u is too large (%u max)
 Generic
+Get or set SteamNetworkingSockets options such as fake packet lag and loss
 GetBitRange
 GetBitRange( %d -> %d ) end is before or same as start
 GetBool
@@ -1456,7 +1465,6 @@ INVALID_CPPTYPE
 INetChannel::SetCategories: Network category wasn't registered!
 INetworkSystem::RegisterNetworkCategory: Attempted to register category %u twice (debug name: %s and %s)
 INetworkSystem::RegisterNetworkCategory: all categories must have ids between 0-31!
-IQuickTime001
 IS1
 IS2
 IS3
@@ -1467,6 +1475,7 @@ Illegal jstype for int64, uint64, sint64, fixed64 or sfixed64 field:
 Import
 Import "
 Include/Exclude reasons for field %s::%s:
+Incomplete packer hashtable
 Index must be -1 for non-repeated fields
 Index must be -1 for singular fields.
 Index must be in range of repeated field values.
@@ -1517,14 +1526,14 @@ KeyValues::FindKey(char const*, bool)
 KeyValues::GetDataType(char const*) const
 KeyValues::GetFirstSubKey() const
 KeyValues::GetFirstTrueSubKey() const
-KeyValues::GetFloat(char const*, float)
-KeyValues::GetInt(char const*, int)
+KeyValues::GetFloat(char const*, float) const
+KeyValues::GetInt(char const*, int) const
 KeyValues::GetName() const
 KeyValues::GetNextKey() const
 KeyValues::GetNextTrueSubKey() const
-KeyValues::GetPtr(char const*, void*)
+KeyValues::GetPtr(char const*, void*) const
 KeyValues::GetString(char const*, char const*, char*, unsigned long)
-KeyValues::GetUint64(char const*, unsigned long long)
+KeyValues::GetUint64(char const*, unsigned long long) const
 KeyValues::KeyValues(char const*)
 KeyValues::SetFloat(char const*, float)
 KeyValues::SetInt(char const*, int)
@@ -1551,6 +1560,7 @@ LoggingSystem_RegisterLoggingChannel
 Logic problem? szsrc =
 M
 MATCHFRAMEWORK_001
+MIsBoxedFloatType
 MIsBoxedIntegerType
 MNetworkAlias
 MNetworkArraySerializer
@@ -1871,6 +1881,7 @@ Path_RemoveAll failed for read only CFieldPath
 Path_SetCount failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
 Peer To Peer
 PhysicsBuilderMgr001
+Plat_CPUTickFrequency
 Plat_DebugPrint
 Plat_ExitProcess
 Plat_FatalErrorFunc
@@ -1924,7 +1935,6 @@ ProtoBufHelper::ParseJSON: Ignoring extra JSON key '%s', which is not found in p
 ProtoBufHelper::ParseJSON: Object Begin found on invalid field!
 ProtoBufHelper::ParseJSON: received callback with message field but no message!
 ProtoBufHelper::ParseJSON: received callback with no current message field!
-Protobuf: %s(%d): %s
 Protocol Buffer map usage error:
 Protocol Buffer reflection usage error:  Method      : google::protobuf::Reflection::
 Push
@@ -1986,7 +1996,6 @@ RenderDevice003
 RenderDeviceMgr001
 RenderHardwareConfig002
 RenderService_001
-RenderSystemSurface001
 RenderUtils_001
 Repeated fields can't have default values.
 ReportClassError
@@ -2057,6 +2066,7 @@ SetUInt32
 SetUInt64
 Setting FS %s field %s to %s
 Setting max routable payload size from %d to %d for %s
+Shorthand for 'net_option FakePacketLag_Recv'
 Should dedicated server listen for new-style P2P?
 Should not reach here.
 Show connectionless UDP traffic.
@@ -2110,7 +2120,6 @@ SteamAPI_UnregisterCallback
 SteamAudio001
 SteamClient020
 SteamController008
-SteamDatagram Network Configuration
 SteamDatagramClient_Init
 SteamDatagramClient_Init failed.  %s
 SteamDatagramClient_InitSteam failed.  %s
@@ -2140,6 +2149,7 @@ SteamNetSockets
 SteamNetworking006
 SteamNetworkingMessages002
 SteamNetworkingMessages_LibV2
+SteamNetworkingSockets config option not found
 SteamNetworkingSockets not yet initialized.  Queuing command '%s'
 SteamNetworkingSockets012
 SteamNetworkingSockets_LibV12
@@ -2147,6 +2157,7 @@ SteamNetworkingUtils004
 SteamNetworkingUtils_LibV4
 SteamUser021
 SteamUtils010
+Stopping capture, %s samples written
 String field
 String literals cannot cross line boundaries.
 StringPrintfVector currently only supports up to
@@ -2164,6 +2175,7 @@ TestFormatD
 TestFormatE
 TestScriptMgr001
 TextLayout_001
+The 'sdr' console command has been renamed to 'net_option'.  Please update your scripts
 The JSON camel-case name of field "
 The [proto3_optional=true] option may only be set on proto3fields, not
 The extension
@@ -2183,6 +2195,7 @@ Toggle field path tracing to file
 Tokenizer::ParseFloat() passed text that could not have been tokenized as a float:
 Tokenizer::ParseStringAppend() passed text that could not have been tokenized as a string:
 Too many incoming messages on channel (%s) %d remain queued, limit per-frame is %d.
+Too many proxies for serializer %s.
 Too many queued messages on channel (%s) %d queued, limit is %d.
 ToolFramework2_002
 ToolSceneNodeFactory_001
@@ -2214,7 +2227,8 @@ Unknown enumeration value of "
 Unrecognized syntax:
 Unsupported
 Unsupported: type mismatch
-Usage: sdr <setting> [<value>]
+Usage: net_captureculldata <file path>
+Usage: net_option <setting> [<value>]
 Use network sockets layer even for listen server local player's packets (multiplayer only).
 Using Valve ICE implementation
 UtlMemory_Alloc
@@ -2238,12 +2252,6 @@ VERBOSE_TYPENAME
 VERBOSE_VALUE
 VEngineCvar007
 VFileSystem017
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
@@ -2265,6 +2273,7 @@ V_InitJSONConfig
 V_Int32ToString_Unsafe
 V_Int64ToString_Unsafe
 V_ParseJSONBuffer
+V_PrettifyNum
 V_SplitString(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int> >&)
 V_SplitStringOnSeparators(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int> >&)
 V_UInt32ToString_Unsafe
@@ -2348,6 +2357,7 @@ Z
 [+add recip %d]
 [A:%u:%u:%u]
 [C:%u:%u]
+[COMPLEX]
 [G:%u:%u]
 [GroupID]
 [Group]
@@ -2357,6 +2367,7 @@ Z
 [M:%u:%u:%u]
 [Name]
 [P:%u:%u]
+[SENTINEL]
 [T:%u:%u]
 [Type]
 [U:%u:%u:%u]
@@ -2806,10 +2817,13 @@ nIndex != m_priorityToOrderMap.InvalidIndex()
 nPriority != NETWORK_FIELD_CHANGE_DEFAULT_PRIORITY
 nTries < 10000000
 nan
+net_captureculldata
 net_channels
 net_compresspackets_minsize
 net_connections_stats
+net_culloptimization
 net_detailed_canpacket_log
+net_fakelag
 net_filelogging
 net_fs_showindirections
 net_listallmessages
@@ -2819,6 +2833,9 @@ net_max_message_queue_size
 net_maxroutable
 net_messageinfo
 net_messageinfo %s
+net_option
+net_option %s = %s
+net_option settings will not apply to loopback listenservers. To run a listenserver without loopback. Select your map with "map foo loopback=0"
 net_p2p_listen_dedicated
 net_public_adr
 net_qosinterval_spew
@@ -2957,8 +2974,6 @@ schemaclassinfo.cpp
 schemasystem
 schematype.cpp
 sdr
-sdr %s = %s
-sdr config option not found
 semicolon
 sendnode
 sent
@@ -3204,6 +3219,7 @@ std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char cons
 std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > >::operator=(std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > const&)
 stderr
 steamappid
+stop
 strchr
 strcmp
 strcpy
@@ -3302,10 +3318,12 @@ unreliable
 unreliable_bits
 upper
 usage: %s <name>
+usage: %s classname fieldname
 usage: fs_spew_readfieldlist entindex <optional min change bytes>
 utlvector
 utlvector count
 v
+valveextensions.proto
 vector2
 vector3
 vector4

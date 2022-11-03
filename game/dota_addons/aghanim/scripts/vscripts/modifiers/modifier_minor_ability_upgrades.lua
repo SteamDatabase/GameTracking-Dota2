@@ -78,7 +78,7 @@ function  modifier_minor_ability_upgrades:DeclareFunctions( )
 		MODIFIER_PROPERTY_OVERRIDE_ABILITY_SPECIAL,
 		MODIFIER_PROPERTY_OVERRIDE_ABILITY_SPECIAL_VALUE,
 		MODIFIER_PROPERTY_COOLDOWN_REDUCTION_CONSTANT,
-		MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE_STACKING,
+		MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE,
 		MODIFIER_PROPERTY_MANACOST_REDUCTION_CONSTANT,
 		MODIFIER_PROPERTY_MANACOST_PERCENTAGE_STACKING,
 	}
@@ -219,7 +219,7 @@ end
 
 -----------------------------------------------------------------------
 
-function modifier_minor_ability_upgrades:GetModifierPercentageCooldownStacking( params )
+function modifier_minor_ability_upgrades:GetModifierPercentageCooldown( params )
 	if self:GetParent() == nil or params.ability == nil then
 		return 0
 	end

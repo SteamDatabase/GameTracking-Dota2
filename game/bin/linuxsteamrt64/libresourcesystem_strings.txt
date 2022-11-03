@@ -1,13 +1,15 @@
 !m_bNeedsSort
 $ORIGIN
 % 5i:  [%32.32s]
+%d %d %d %d
 %d General references (More ResourceAddRef() calls than ResourceRelease())
 %d Manifest references (Still holding onto a HResourceManifest somewhere)
 %d Schema references (Most likely a resource referring to another resource)
 %d Strong handle references (Still holding onto a CStrongHandle somewhere)
-%f
+%f %f %f %f
 %g
 %hu
+%lf
 %lld
 %lld,
 %llu
@@ -30,6 +32,8 @@ $ORIGIN
 %s| Project: '%s' Binary: '%s'
 %s| SizeOf: %d
 %s| Virtual: %s; Abstract: %s; TrivialConstr: %s; TrivialDestr: %s
+%u
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%d,%d)
 (%s%s)
 *
@@ -57,14 +61,19 @@ $ORIGIN
 -> Matched %d of %d loaded resources
 -exit_on_resource_load_failure
 -force_all_resource_loads_to_fail
+-no_spread_finalize
 -resource_exit_after_time
 -resource_leaks
 -resource_system_verbose
 -start_resource_profiling
+..
 ../public/tier0/tslist.h
+../public/tier0/utlmemory.h
 ../public/tier0/utlreferencetracker.h
 ../public/tier0/utlsortvector.h
 ../public/tier0/utltshash.h
+0 0 0 0
+0 0 0 255
 10ConCommand
 10IAppSystem
 12CThreadEvent
@@ -129,6 +138,7 @@ $ORIGIN
 <No schemasystem>
 <invalid>
 <no failure reason set>
+<undefined>
 <unknown: %d>
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 AlignedByteArray not properly aligned
@@ -152,7 +162,6 @@ BinaryProperties_GetValue
 Blocking Manifest Load
 BlockingLoadResourceByNameIntoJustInTimeManifest
 CAnimVariant
-CAsyncResourceDataRequest
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
 CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
@@ -230,9 +239,9 @@ CThread::WaitForCreateComplete(CThreadEvent*)
 CThread::~CThread()
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSemaphore::CThreadSemaphore(int, int, char const*, bool)
 CThreadSemaphore::Release(int, int*)
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
 CThreadSpinRWLock::UnlockRead(char const*, int)
@@ -414,9 +423,14 @@ FIELD_VMATRIX_WORLDSPACE
 FIELD_VOID
 Failed to allocate an instance of a class
 Failed to load resource "%s" and -exit_on_resource_load_failure was set and it's not in badresources_whitelist.txt
+Failed to map from %s to content-path
+Failed to map from %s to game-path
 Failed to save unsupported class
 Failed to transfer KV3 data for resource '%s' - %s
 FileSystem
+Finalize queue Finalizing StartLoading(%s) @%.2f
+Finalize queue completed processed %d, %s, elapsed time %.2fMSEC %s @%.2f
+Finalize queue continue processed %d of %d, elapsed time %.2fMSEC %s @%.2f
 Find
 FindLessOrEqual
 FindOrRegisterResourceByName
@@ -426,6 +440,7 @@ FlattenedSerializersVersion001
 FontManager_001
 ForceSynchronizationAndBlockUntilManifestLoaded
 Forgot to remove resource type manager for type %s!
+GAMEROOT
 GCC: (SteamRT 5.4.0-7.really.6+steamrt1.2+srt2) 5.4.1 20160803
 GLIBC_2.14
 GLIBC_2.2.5
@@ -448,7 +463,6 @@ Grow
 HammerMapLoader001
 HelpSystem_001
 HostStateMgr001
-IQuickTime001
 Idle (ResourceSystemSleep)
 InfoForResourceTypeCAnimData
 InfoForResourceTypeCAnimationGroup
@@ -495,9 +509,10 @@ InstallResourceTypeManager
 InstallSchemaBindings
 InstallTypeManager
 Intentionally vague touch behavior for %p
+Invalid Path
 IsResourceManifestGroupKnown: Manifest group name is empty or null
 KeyValueCache001
-KeyValues::GetInt(char const*, int)
+KeyValues::GetInt(char const*, int) const
 LOG_GENERAL
 Leaked reference to ERROR resource for type %s!
 Leaked resource: Refcount %s for %s%s resource "%s" (%016llX).  This may result in a crash.
@@ -522,14 +537,17 @@ MATCHFRAMEWORK_001
 MGetKV3ClassDefaults
 MIsBoxedIntegerType
 MKV3TransferName
+MOD
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MPropertyCustomEditor
 MPropertyCustomFGDType
 MResourceTypeForInfoType
+MULTI FRAME
 ManifestTestResource_t
 MapListService_001
 MaterialUtils_001
+Max time to spend finalizing resources per frame in miliseconds.
 MaybeExitBecauseOfResourceLoadFailure
 MemAlloc_StrDupFunc
 MeshSystem001
@@ -550,6 +568,7 @@ PanoramaTextServices001
 PanoramaUIClient001
 PanoramaUIEngine001
 ParticleSystemMgr003
+Path Overflow, must be less than 4096 characters.
 PhysicsBuilderMgr001
 Plat_DebugPrint
 Plat_ExitProcess
@@ -562,7 +581,9 @@ Plat_MicroSecTickDiff
 Plat_NonFatalErrorFunc
 Plat_RelativeTicks
 Plat_ShouldCollectMiniDumpsForFatalErrors
+Plat_TickDiffMilliSec
 Plat_TickDiffMilliSecF
+Plat_TickDiffSecF
 Plat_USTime
 PostProcessingSystem_001
 PropertyEditorSystem_001
@@ -590,7 +611,6 @@ RenderDevice003
 RenderDeviceMgr001
 RenderHardwareConfig002
 RenderService_001
-RenderSystemSurface001
 RenderUtils_001
 ReportClassError
 Reporting references for leak tracker error: "%s"
@@ -611,6 +631,7 @@ ResourceSystem/SpewBlockingLoads
 ResourceSystem013
 ResourceSystemWaitingForFutureWork
 RotationVector
+SINGLE FRAME
 SceneSystem_002
 SceneUtils_001
 SchemaSystem_001
@@ -649,6 +670,7 @@ TestFormatD
 TestFormatE
 TestScriptMgr001
 TextLayout_001
+The filename may only contain lower case alphanumeric characters, dashes, and underscores.
 This convar is being accessed prior to ConVar_Register being called
 ThreadGetCurrentId
 ThreadGetCurrentProcessId
@@ -664,6 +686,7 @@ Tried to install a placeholder resource manager for an existing resource type "%
 Tried to install two resource managers for the same resource type "%lld"!
 Tried to load resource reference '%s' from a value without a resource reference flag.
 Tried to release UGC that hasn't been referenced: %lld
+Unknown Path Class
 Unrecognized resource leak tracking parameter: "%s", available configuration aliases:
 UnregisterNamedManifest called, but we are not shutting down!!!
 Unsupported version %d for resource '%s' (Expected %d)
@@ -679,12 +702,7 @@ VBik001
 VConComm001
 VEngineCvar007
 VFileSystem017
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
+VGAME
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
@@ -721,6 +739,10 @@ V_stristr_fast(char const*, char const*)
 V_strnlen
 V_uuid_t
 V_vsnprintf
+Valid Content Absolute Path
+Valid External Path
+Valid Game Absolute Path
+Valid Relative Path
 Vector2D
 Vector4D
 VectorAligned
@@ -741,6 +763,7 @@ WorldRendererMgr001
 [%u]
 []
 [refcount % 4d]
+\*
 _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
@@ -764,6 +787,7 @@ __memcpy_chk
 __pthread_key_create
 __stack_chk_fail
 __temp_unserialization_member__
+_addons
 _base
 _c
 _class
@@ -782,7 +806,9 @@ binary_lz4
 binary_zstd
 bool
 char
+color
 command
+content
 curve
 default
 disable_group_clearing
@@ -798,6 +824,9 @@ fltx4
 g_VProfCurrentProfile
 g_bUpdateStringTokenDatabase
 g_pMemAlloc
+game
+gameinfo.gi
+gameinfo.txt
 generic
 generic_data_type
 help
@@ -848,6 +877,7 @@ pthread_mutex_lock
 pthread_mutex_unlock
 pthread_mutexattr_init
 pthread_mutexattr_settype
+qangle
 require_exact_pairings
 resource
 resource_leaks %s
@@ -865,18 +895,24 @@ resource_reset_allocate_timing
 resourcefile
 resourcesystem
 resourcesystem.cpp
+resourcesystem_multiframe_finalize_time_msec
 rs_dump_stats - Dump resourcesystem stats.
 schemaclassinfo.cpp
 schemasystem
 schematype.cpp
+sdktools/bin/vproj.exe
+sdktools/bin/vprojUI.exe
 set_profile_mode
 singletons.cpp
 soundevent
+src
+src/public/tier0/platform.h
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()
 std::_Sp_counted_ptr<decltype(nullptr), (__gnu_cxx::_Lock_policy)2>::_M_dispose()
 strchr
 strcmp
 streamingresourcedata.cpp
+string
 strlen
 subclass
 text
@@ -894,6 +930,9 @@ uint16
 uint32
 uint64
 uint8
+vector2
+vector3
+vector4
 void
 vrgrp
 vtable for __cxxabiv1::__class_type_info
@@ -901,5 +940,6 @@ vtable for __cxxabiv1::__si_class_type_info
 vtable for __cxxabiv1::__vmi_class_type_info
 w
 z
+zD
 ~CLoadingResource
 ~CStreamingResourceData

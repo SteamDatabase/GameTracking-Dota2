@@ -97,8 +97,10 @@ $ORIGIN
 &
 '
 (
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%s): ADD %s = %s
 (%s): Setting %s to %s
+(*)3
 (On the line reading %s):
 (fWeightSumLeft + fWeightSumRight) > 0.0f
 (fWeightSumTop + fWeightSumBottom) > 0.0f
@@ -220,6 +222,7 @@ $ORIGIN
 ..
 ../public/tier0/memstack.h
 ../public/tier0/tslist.h
+../public/tier0/utlmemory.h
 ../public/tier0/utltshash.h
 ./inputlayoutbase.h
 ./renderresource.h
@@ -231,6 +234,7 @@ $ORIGIN
 .pfm
 .png
 .psd
+.rdc
 .tif
 .vcs
 .vpk
@@ -315,6 +319,7 @@ $ORIGIN
 16CRenderQueryBase
 16ICommandCallback
 16IRenderDeviceMgr
+17CConstantBufferGL
 17CGeometryShaderGL
 17CRenderDeviceBase
 17CRenderThreadBase
@@ -394,7 +399,6 @@ $ORIGIN
 < %d >
 <%s : %u>
 <%s, cat %d>
-<?>Q
 <??>
 <error>
 <invalid %d>
@@ -424,6 +428,7 @@ $ORIGIN
 @B
 A
 A':
+ABGR8888
 ALIGN_TYPE is wrong, please fix
 AMD
 ANDROID_VULKAN
@@ -433,6 +438,7 @@ ANDROID_VULKAN_5_0
 APPLICATION
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 ARB_texture_multisample
+ARGB8888
 ATI1N
 ATI2N
 ATIRadeon
@@ -442,8 +448,6 @@ ATIRadeonX1000
 ATIRadeonX2000
 ATIRage128
 ATIRagePro
-ATI_DST16
-ATI_DST24
 Adobe APP14 marker: version %d, flags 0x%04x 0x%04x, transform %d
 After hitting throttling limits for streamout, allow it to continue up to this number of milliseconds.
 AlignedByteArray not properly aligned
@@ -486,11 +490,12 @@ B channel not found!
 BC6h compression not supported on this target (windows only).
 BC7 compression not supported on this target (windows only).
 BGR565
-BGR888_BLUESCREEN
+BGR888
 BGRA1010102
 BGRA4444
-BGRA5551
+BGRA8888
 BGRA8888_LINEAR
+BGRX8888
 BGRX8888_LINEAR
 Backing store not supported
 Bad VTEX data for '%s'
@@ -539,6 +544,7 @@ CBufferString::RemoveFirstDir(CBufferString*)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::ShortenPath(bool)
+CBufferString::StartsWith(char const*) const
 CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
@@ -593,7 +599,6 @@ CTextureManagerBase::WasAsyncUpdatedThisFrame - Invalid texture handle.
 CTextureManagerGL::ComputeTextureObject: Tried to create a depth-stencil texture which is *not* a render target!
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadRWLock_FastRead::CThreadRWLock_FastRead()
 CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
 CThreadRWLock_FastRead::HaveWriteLock_BlockReadsNow(bool)
@@ -602,6 +607,7 @@ CThreadRWLock_FastRead::UnlockWrite(char const*, int)
 CThreadSemaphore::CThreadSemaphore(int, int, char const*, bool)
 CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::~CThreadSemaphore()
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
 CThreadSpinRWLock::UnlockRead(char const*, int)
@@ -733,10 +739,8 @@ CreateInterface
 CreateNewThreadPool
 CreateRenderThread
 CreateSimpleThread
-D15S1
 D16_SHADOW
 D24FS8
-D24X4S4
 D24X8
 D24X8_SHADOW
 D32FS8
@@ -816,7 +820,6 @@ EconItemToolModel_001
 Empty
 Empty JPEG image (DNL not supported)
 Empty input file
-EncodeBC7Blocks
 End Of Image
 End:
 Ending RenderDoc capture...
@@ -3016,6 +3019,7 @@ GetResourceManifestCount
 GetResourceManifests
 GetVfxShaderFile: Failed to unserialize CVfxShaderFile.  Is your shadercache out-of-date?  Try deleting it.
 Graphics Device changed, resetting video config
+Grow
 HEADER
 HIGH
 HS
@@ -3028,20 +3032,21 @@ HostStateMgr001
 Huffman code size table overflow
 Huffman table 0x%02x was not defined
 Hull Shader
+I8
 IA88
 IB: %d buffers, %.2f MB
 IBPool
 IDAT stream error
 IDAT stream too short
+IMAGE_FORMAT_R11G11B10_FLOAT
+INPUT_LAYOUT_VARIATION_DEFAULT
 INPUT_LAYOUT_VARIATION_MAX
-INPUT_LAYOUT_VARIATION_STREAM1_DRAWINDIRECT_ID
 INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID
 INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID_MORPH_VERT_ID
 IOS_VULKAN
 IOS_VULKAN_4_0
 IOS_VULKAN_4_1
 IOS_VULKAN_5_0
-IQuickTime001
 IS1
 IS2
 IS3
@@ -3136,21 +3141,20 @@ JFIF extension marker: type 0x%02x, length %u
 JPEG datastream contains no image
 JPEG parameter struct mismatch: library thinks size is %u, caller expects %u
 JPEGMEM
-KMeansQuantization
 KNQ
 KeyValueCache001
 KeyValues::FindKey(HKeySymbol) const
 KeyValues::FindKey(char const*, bool)
-KeyValues::GetColor(char const*, Color const&)
+KeyValues::GetColor(char const*, Color const&) const
 KeyValues::GetDataType(char const*) const
 KeyValues::GetFirstSubKey() const
-KeyValues::GetFloat(char const*, float)
-KeyValues::GetInt(char const*, int)
+KeyValues::GetFloat(char const*, float) const
+KeyValues::GetInt(char const*, int) const
 KeyValues::GetName() const
 KeyValues::GetNextKey() const
-KeyValues::GetPtr(char const*, void*)
+KeyValues::GetPtr(char const*, void*) const
 KeyValues::GetString(char const*, char const*, char*, unsigned long)
-KeyValues::GetUint64(char const*, unsigned long long)
+KeyValues::GetUint64(char const*, unsigned long long) const
 KeyValues::GetWString(char const*, wchar_t const*, wchar_t*, unsigned long)
 KeyValues::KeyValues(char const*)
 KeyValues::LoadFromFile(IFileSystem*, char const*, char const*, bool (*)(char const*, void*), void*, char const*)
@@ -3167,19 +3171,7 @@ KeyValues::operator delete(void*)
 KeyValues::operator new(unsigned long)
 KeyValues::~KeyValues()
 KeyValuesSystem
-LE_BGRA8888
-LE_BGRX8888
-LINEAR_ABGR8888
-LINEAR_ARGB8888
-LINEAR_BGR888
-LINEAR_BGRA8888
-LINEAR_BGRX5551
-LINEAR_BGRX8888
 LINEAR_D24S8
-LINEAR_I8
-LINEAR_RGB888
-LINEAR_RGBA16161616
-LINEAR_RGBA8888
 LOG_GENERAL
 LayerReference
 Link failed; no code produced.  Log string from driver:
@@ -3340,11 +3332,7 @@ NVGeForce2MX
 NVGeForce3
 NVGeForce8xxx
 NVGeForceFX
-NV_DST16
-NV_DST24
-NV_INTZ
 NV_NULL
-NV_RAWZ
 NetworkClientService_001
 NetworkMessagesVersion001
 NetworkP2PService_001
@@ -3358,7 +3346,6 @@ Normalize3ComponentVectorInAttributes
 Normalized3x3SobelEdgeFilterFrom
 Not a JPEG file: starts with 0x%02x 0x%02x
 Not implemented yet
-O
 OTHER
 OUTSTANDING_HOOKUP_REQUEST
 Obtained EMS handle %u
@@ -3380,7 +3367,6 @@ Overall System GPU memory use:
 Overflow of the sheet cache texture. Releasing and starting over. This is ok in asset browser, not so ok if the game is triggering this!
 Overflow of the sheet cache texture: Try increasing SheetCacheTextureRows in gameinfo.gi (current value %d)!
 P
-P8
 P@
 PC SM 3.0 (GLSL)
 PC SM 4.0 (D3D10)
@@ -3440,6 +3426,8 @@ Plat_GetDefaultMonitorIndex
 Plat_GetDesktopResolution
 Plat_GetEnv
 Plat_GetModuleFilename
+Plat_GetMonitorBounds
+Plat_GetMonitorCount
 Plat_GetOSType
 Plat_GetProcAddress
 Plat_GetWindowClientSize
@@ -3477,7 +3465,6 @@ Quaternion
 QuaternionStorage
 R channel not found
 R channel not found!
-R16F_EXPAND
 R16G16_UINT
 R16_UINT
 R32G32_UINT
@@ -3554,21 +3541,15 @@ RENDER_SLOT_PER_INSTANCE
 RENDER_SLOT_PER_VERTEX
 RG1616
 RG1616F
-RG1616F_EXPAND
 RG3232F
 RGB323232F
-RGB888_BLUESCREEN
-RGBA1010102F_EDRAM
+RGB565
+RGB888
+RGBA16161616
 RGBA16161616F
-RGBA16161616F_EDRAM_RGBA1010102F
-RGBA16161616F_EXPAND
-RGBA16161616F_EXPAND_EDRAM_RGBA1010102F
-RGBA16161616_EDRAM
-RGBA16161616_EDRAM_RGBA16161616
 RGBA32323232F
 RGBA32323232_UINT
 RGBA8888_LINEAR
-RGBX555
 RGBX8888
 RST%d
 RTX
@@ -3605,12 +3586,10 @@ RenderSystem
 RenderSystem/AllowPartialMipChainImmediateTexLoads
 RenderSystem/AllowSampleableDepthInVr
 RenderSystem/AlwaysPreloadTexturesInGame
-RenderSystem/GLUseTransformConstantBuffer
 RenderSystem/IndexBufferPoolSizeMB
 RenderSystem/MaxPreloadTextureResolution
 RenderSystem/MinStreamingPoolSizeMB
 RenderSystem/OpenGLForceSM30
-RenderSystemSurface001
 Rendering/Constant Buffers (MB)
 Rendering/Index Buffers (MB)
 Rendering/Texture Non-Evictable Size (MB)
@@ -3681,7 +3660,6 @@ S_SHADER_QUALITY
 S_SUBGROUP_WAVE_OPS
 S_SUPPORTS_CLIP_DISTANCE
 S_TOOLS_ENABLED
-S_TRANSFORM_CONSTANT_BUFFER
 S_VR
 Sampler object hash is full, increase cSamplerObjectHashSize
 Sampling factors too large for interleaved scan
@@ -3709,7 +3687,8 @@ ShaderIDColor
 ShadingComplexity
 Size of Texture Memory : %llu kb
 Skipped %d%% of all combos
-Skipping texture streaming: looks like the texture was reloaded while in the streaming list.
+Skipping texture streaming: looks like the texture was reloaded while in the streaming list (%s).
+Skipping texture streaming: texture resource handles don't match
 Slider
 Smoothing not supported with nonstandard sampling ratios
 SoundGuid_t
@@ -3754,6 +3733,7 @@ StaticComboRule(
 StatsService_001
 SteamAudio001
 Streaming Validation: %s
+SubsurfaceProfile
 Suspension not allowed here
 SwapChainTexture.vtex
 Sys
@@ -3822,7 +3802,6 @@ UNAVAILABLE
 UNDEFINED_BEHAVIOR
 UNKNOWN
 UV88
-UVLX8888
 UVWQ8888
 Unable to append GL program binary to cache file "%s".  Clearing cache.
 Unable to create dummy context for GLMDisplayDB.
@@ -3857,7 +3836,6 @@ Unsupported version or scanline
 Upper limit on texture pool size.
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
-V
 VApplication001
 VAsyncFileSystem2_001
 VAvi001
@@ -3872,12 +3850,6 @@ VFX_PROGRAM_MAX
 VFX_RECOMPILE
 VFileSystem017
 VGAME
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
 VGy#
 VMaterialSystem2_001
 VMatrix
@@ -4000,16 +3972,9 @@ Write failed on temporary file --- out of disk space?
 Write to EMS failed
 Write to XMS failed
 Wrong JPEG library version: library is %d, caller expects %d
-X
 X360
-X360_DST16
-X360_DST24
-X360_DST24F
-Y
-Z
 ZFP compression is not supported in this build
 ZFP compression is not supported.
-[
 [%s %s %dx%dx%d mips=%d slices=%d flags=%02lX%s]
 [%u]
 []
@@ -4023,6 +3988,7 @@ ZFP compression is not supported.
 ^$\.*+?()[]{}|
 ^\s*layout\s*\(\s*binding\s*=\s*[0-9]+\s*\)\s*uniform\s+sampler
 ^\s*uniform\s+sampler
+_%d
 _A16B16G16R16
 _A16B16G16R16F
 _A8
@@ -4073,6 +4039,7 @@ __SET_BY_FEATURE_NE__
 __SET_BY_FEATURE__
 __SetByArtistAndExpression__
 __SetByArtist__
+__UNUSED_SYSTEM_COMBO__
 ______<INVALID>______
 __assert_fail
 __bss_start
@@ -4103,6 +4070,7 @@ __tls_get_addr
 __vasprintf_chk
 _addons
 _c
+_capture
 _cs
 _ds
 _edata
@@ -4283,12 +4251,12 @@ float4x4
 float64
 floatbitmap.cpp
 floatbitmap.cpp(129): Unknown gamma type "%s"!
-floatbitmap.cpp(2703): Error loading %s
-floatbitmap.cpp(2727): Error! Unknown file type for %s
-floatbitmap.cpp(2746): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
+floatbitmap.cpp(2695): Error loading %s
+floatbitmap.cpp(2719): Error! Unknown file type for %s
+floatbitmap.cpp(2738): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
 floatbitmap.cpp(307): Conversion not supported yet!
 floatbitmap.cpp(393): Conversion not supported yet!
-floatbitmap.cpp(949): Unsupported color format "%s", skipping!
+floatbitmap.cpp(941): Unsupported color format "%s", skipping!
 floor
 floorf
 fltx4
@@ -5050,13 +5018,13 @@ rendercontextbase.cpp
 renderdevicebase.cpp
 renderdevicebase.cpp(1584):
 renderdevicebase.cpp(1748):
-renderdevicebase.cpp(1990):
-renderdevicebase.cpp(1994):
-renderdevicebase.cpp(3132):
-renderdevicebase.cpp(3365):
-renderdevicebase.cpp(3378):
-renderdevicebase.cpp(3481):
-renderdevicebase.cpp(3505):
+renderdevicebase.cpp(2023):
+renderdevicebase.cpp(2027):
+renderdevicebase.cpp(3165):
+renderdevicebase.cpp(3398):
+renderdevicebase.cpp(3411):
+renderdevicebase.cpp(3514):
+renderdevicebase.cpp(3538):
 renderdevicebase.cpp(919):
 renderdevicemgrbase.cpp
 renderdoc_captures
@@ -5388,15 +5356,15 @@ texture2darrayindex
 texture2dindex
 texture3dindex
 texturebase.cpp
-texturebase.cpp(2433):Error loading texture: %s
-texturebase.cpp(3451):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3481):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3499):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3517):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3536):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3557):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3568):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3579):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2434):Error loading texture: %s
+texturebase.cpp(3453):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3483):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3501):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3519):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3538):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3559):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3570):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3581):ResourceHandleToData( %s ) failed! Falling back to error texture!
 texturecubearrayindex
 texturecubeindex
 three
@@ -5476,7 +5444,7 @@ unknown error
 unknown header flags set
 unsigned int Etc::Image::IterateThroughWorstBlocks(unsigned int, unsigned int, unsigned int)
 upper
-utlsoacontainer.cpp:2528
+utlsoacontainer.cpp:2362
 v%d
 v2f
 vTexCoordScaleOffset
@@ -5586,6 +5554,7 @@ vtable for std::basic_stringbuf<char, std::char_traits<char>, std::allocator<cha
 vtable for std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >
 w
 wb
+wb+
 with %d x %d thumbnail image
 wrinkle
 xdigit

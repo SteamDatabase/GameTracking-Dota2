@@ -25,6 +25,8 @@ $ORIGIN
 %s - %s
 %s / %s
 %s Schema Type: %s
+%s allocation count overflow
+%s allocation count overflow( %llu > %llu )
 %s%s_%i
 %s+--
 %s+-- Schema Class: %s
@@ -43,6 +45,7 @@ $ORIGIN
 %s| SizeOf: %d
 %s| Virtual: %s; Abstract: %s; TrivialConstr: %s; TrivialDestr: %s
 'C
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%s%s)
 *
 *ZN21RayTracingEnvironment10RefineNodeEiPKiiPK16TriangleBounds_t6VectorS5_iP21CUtlMultiJobProcessorEUlvE0_
@@ -59,6 +62,7 @@ $ORIGIN
 -sse4
 ../public/scenesystem/memoryvertex.h(149):
 ../public/tier0/tslist.h
+../public/tier0/utlmemory.h
 ../public/tier0/utltshash.h
 0 0 0 0
 0 0 0 255
@@ -108,6 +112,7 @@ $ORIGIN
 18CMutableRefCountedI20CMutableRefCountBaseI6CRefMTEE
 18CRenderMeshManager
 19CBoneConstraintBase
+19CModelConfigElement
 19CSchemaRegistration
 2
 20CMutableRefCountBaseI6CRefMTE
@@ -168,7 +173,6 @@ $ORIGIN
 <undefined>
 <unknown: %d>
 >
->nL>nL>nL>nLbodygroup_driven_morph_list
 ?
 @?
 @@
@@ -189,6 +193,7 @@ AllocateResource: Error creating data for %s!
 AllocateResource: Error loading async data for %s
 Angle;
 AnimGraphEditorUtils001
+AnimVRFinger_t
 AnimVRHand_Left
 AnimVRHand_Right
 AnimVRHand_t
@@ -196,6 +201,7 @@ AnimVrFinger_Index
 AnimVrFinger_Middle
 AnimVrFinger_Pinky
 AnimVrFinger_Ring
+AnimVrFinger_Thumb
 AnimatableSceneObjectDesc
 Animated
 AnimationGroupResourceData_t
@@ -345,6 +351,7 @@ COrientConstraint
 CParentConstraint
 CPhysSurfaceProperties
 CPhysSurfacePropertiesAudio
+CPhysSurfacePropertiesSoundNames
 CPlayerSlot
 CPointConstraint
 CRC32_ProcessBuffer
@@ -359,11 +366,11 @@ CSplitScreenSlot
 CSplitString::Construct(char const*, char const**, int, bool)
 CStrongHandle
 CTSQueue corruption
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadMultiWaitEvent::CThreadMultiWaitEvent(bool)
 CThreadMultiWaitEvent::Reset()
 CThreadMultiWaitEvent::Set()
 CThreadMultiWaitEvent::~CThreadMultiWaitEvent()
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
 CThreadSpinRWLock::UnlockRead(char const*, int)
@@ -375,6 +382,7 @@ CUtlBinaryBlock
 CUtlBinaryBlock::Set(void const*, int)
 CUtlBinaryBlock::SetLength(int)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
+CUtlBinaryBlock::operator=(CUtlBinaryBlock&&)
 CUtlBlockMemory overflow!
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
@@ -433,6 +441,7 @@ CUtlVectorFixedGrowable
 CUtlVectorSIMDPaddedVector
 CVPhysXSurfacePropertiesList
 CVertexKDTree::BuildMidpoint(float const*, int, int)
+CVertexKDTree::BuildMidpointFromVertexSubSet(float const*, int, int const*, int)
 CVertexKDTree::FindVertsInBox(CUtlVectorFixedGrowable<float const*, 64ul, int>&, Vector const&, Vector const&, int) const
 CVrSkeletalInputSettings
 CWristBone
@@ -638,13 +647,14 @@ GetCPUInformation
 GetEyePosition() Can't get pstudiohdr ptr!
 GetResourceManifestCount
 GetResourceManifests
+Grow
 HB
 HELPER_BONE
 HammerMapLoader001
 Has Collision;
 HelpSystem_001
+Hitbox indexing is incorrect for set %s, hitbox %s. Hitboxes will not be setup properly.
 HostStateMgr001
-IQuickTime001
 Identity
 Infinite Joint Weights encountered: Skinning will not work! (At position %.3f %.3f %.3f)
 InfoForResourceTypeCAnimData
@@ -696,7 +706,7 @@ KV3 load transfer failed: %s
 KeyValueCache001
 KeyValues3
 KeyValues::GetFirstSubKey() const
-KeyValues::GetInt(char const*, int)
+KeyValues::GetInt(char const*, int) const
 KeyValues::GetName() const
 KeyValues::GetNextKey() const
 KeyValues::KeyValues(char const*)
@@ -757,6 +767,7 @@ MODEL_PROCESSING_SERVICES_INTERFACE_001
 MORPH_BUNDLE_TYPE_COUNT
 MORPH_BUNDLE_TYPE_NONE
 MORPH_BUNDLE_TYPE_NORMAL_WRINKLE
+MORPH_BUNDLE_TYPE_POSITION_SPEED
 MORPH_FLEXCONTROLLER_REMAP_2WAY
 MORPH_FLEXCONTROLLER_REMAP_EYELID
 MORPH_FLEXCONTROLLER_REMAP_NWAY
@@ -783,6 +794,7 @@ MemAlloc_GetSizeAlignedFunc
 MemAlloc_StrDupFunc
 Mesh contains %d blend weights per vertex;  truncating to %d
 Mesh needs recompiling: '%s' (invalid version: %d)Browse to the corresponding model in asset browser, right click and select Full Recompile.
+MeshDrawPrimitiveFlags_t
 MeshSystem
 MeshSystem001
 Missing resource blocks for mesh (%s: %d)
@@ -812,7 +824,6 @@ N37CTypesafeIntrospectedToKV3TypeManagerILy440006569334E13CMorphSetDataE28IKV3Re
 NULL RenderMesh with valid handle
 NWay(
 Need valid position to calculate face centers!
-NeedsLightProbe
 NetworkClientService_001
 NetworkMessagesVersion001
 NetworkP2PService_001
@@ -821,7 +832,6 @@ NetworkService_001
 NetworkSystemVersion001
 No DATA block for resource
 No DATA block for resource '%s'
-NoZPrepass
 Not safe to 'new' this class due to alignment requirements
 ORIENT
 OldFeEdge_t
@@ -838,6 +848,7 @@ PanoramaUIClient001
 PanoramaUIEngine001
 ParticleSystemMgr003
 PerVertexLighting
+PermModelDataAnimatedMaterialAttribute_t
 PermModelData_t
 PermModelExtPart_t
 PermModelInfo_t
@@ -888,7 +899,6 @@ RenderPrimitiveType_t
 RenderService_001
 RenderSkeletonBone_t
 RenderSlotType_t
-RenderSystemSurface001
 RenderUtils_001
 ReportClassError
 ResourceCompiler/MeshCompiler/UseMikkTSpace
@@ -976,13 +986,16 @@ ToolsStallMonitorInternal_BeginScope
 ToolsStallMonitorInternal_EndScope
 Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference flag.
+Tried to replace animations from model %s with no anim groups!
 Trying to concatenate meshes with different numbers of attributes!
 Trying to concatenate meshes with incompatible attribute sets!
+Trying to find a flex controller (%s) that doesn't actually exist in the model.
 Trying to override a material with an invalid draw call index
 Trying to override the same draw call with two different materials!Only the last override will be set!
 TypeManager
 USAGE: print_model_bind_pose <vmdl_name> [bone_name]
 Unable to read resource file %s!
+Unhandled vertex format %i for vertex attribute %s%i
 Unknown
 Unnormalized joint weights encountered (%f): Skinning may not work! (At position %.3f %.3f %.3f)
 Unrecognized resource version (%d): %s
@@ -997,12 +1010,6 @@ VBik001
 VConComm001
 VEngineCvar007
 VFileSystem017
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
@@ -1152,6 +1159,7 @@ blendweight
 blendweights
 body_groups
 bodygroup_choice
+bodygroup_driven_morph_list
 bodygroup_name
 bool
 break_list
@@ -1236,7 +1244,6 @@ g_pThreadPool
 generic
 health
 hidden
-highPitchOcclusion
 idle
 impactHardThreshold
 impacthard
@@ -1253,7 +1260,6 @@ libstdc++.so.6
 libtier0.so
 lightmap
 lightmapuv
-lowPitchOcclusion
 lowprecisionuv
 lowprecisionuv1
 m_AnimStrayRadii
@@ -1531,7 +1537,6 @@ m_flFalloff
 m_flFingerScaleRatio
 m_flFingerWeight
 m_flFootLength
-m_flHighPitchOcclusion
 m_flInertiaScale
 m_flInternalPressure
 m_flK
@@ -1541,7 +1546,6 @@ m_flLinearDampingRatio
 m_flLinearFrequency
 m_flLocalForce
 m_flLocalRotation
-m_flLowPitchOcclusion
 m_flMass
 m_flMassInv
 m_flMax
@@ -1553,11 +1557,11 @@ m_flMaxFraction
 m_flMaxPitch
 m_flMaxTorque
 m_flMaxYaw
-m_flMidPitchOcclusion
 m_flMin
 m_flMinAngle
 m_flMinPitch
 m_flMinYaw
+m_flOcclusionFactor
 m_flOffset
 m_flPitchBounce
 m_flPitchDamping
@@ -1954,7 +1958,6 @@ meshsystem
 meshsystem.cpp
 meshsystem.cpp(154): GetErrorModel() called before error model exists!
 meshutils.cpp
-midPitchOcclusion
 min
 min( %s, %s )
 model.cpp
@@ -2000,6 +2003,7 @@ nVertexNode
 nVirtElem
 nWeight
 norm
+occlusionFactor
 offset
 operator delete(void*)
 operator delete(void*, unsigned long)

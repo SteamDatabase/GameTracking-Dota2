@@ -94,7 +94,7 @@ function CAghanim:AddResultToSignOut()
 		if PlayerResource:IsValidPlayerID( nPlayerID ) then
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "steam_id" ] = PlayerResource:GetSteamID( nPlayerID )
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "hero_id" ] = PlayerResource:GetSelectedHeroID( nPlayerID )
-			self.SignOutTable[ "player_list" ][ nPlayerID ][ "current_ascension_level" ] = PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, "labyrinth_current_ascension_level" )
+			self.SignOutTable[ "player_list" ][ nPlayerID ][ "current_ascension_level" ] = PlayerResource:GetNetworkedEventActionClaimCountByName( nPlayerID, 39, "labyrinth_current_ascension_level" )
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "bp_remaining" ] = self:GetPointsCapRemaining( nPlayerID, true, false )
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "bp_total_cap" ] = self:GetPointsCapRemaining( nPlayerID, true, true )
 			self.SignOutTable[ "player_list" ][ nPlayerID ][ "fragments_remaining" ] = self:GetPointsCapRemaining( nPlayerID, false, false )

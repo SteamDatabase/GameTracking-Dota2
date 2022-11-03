@@ -386,6 +386,7 @@ $accept
 ( ( uint32 ) pLayoutBindingFlagsBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_pNumLayoutBindingsPerSet[ nDescriptorSet ] * sizeof( VkDescriptorBindingFlags ) )
 ( ( uint32 ) pLayoutBindingsBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_pNumLayoutBindingsPerSet[ nDescriptorSet ] * sizeof( VkDescriptorSetLayoutBinding ) )
 ( ( uint32 ) pPushConstantRangesBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_nNumPushConstantRanges * sizeof( VkPushConstantRange ) )
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%d,%d)
 (%s%s)
 (%s): ADD %s = %s
@@ -517,6 +518,7 @@ $accept
 , which cannot be used with the current execution modes:
 , xfb_stride
 , zero found
+,Grow
 ,f16vec
 ,f16vec4
 ,float,float
@@ -584,6 +586,7 @@ $accept
 -nogammaramp
 -noinitfallbacktextures
 -nomultigpu
+-noreflex
 -onethreadpool
 -preloadtextures
 -r_max_device_threads
@@ -608,7 +611,6 @@ $accept
 -vulkan_cmd_buffer_pool_size
 -vulkan_depth_texture_as_r32f
 -vulkan_descriptor_sets_per_pool
--vulkan_diagnostic_checkpoints
 -vulkan_disable_amd_memory_overallocation_behavior
 -vulkan_disable_async_compute
 -vulkan_disable_device_coherent_allocations
@@ -670,6 +672,7 @@ $accept
 ../public/tier0/memstack.h
 ../public/tier0/threadtoolstypes.h
 ../public/tier0/tslist.h
+../public/tier0/utlmemory.h
 ../public/tier0/utltshash.h
 ./inputlayoutbase.h
 ./renderresource.h
@@ -682,6 +685,7 @@ $accept
 .pfm
 .png
 .psd
+.rdc
 .tif
 .vcs
 .vpk
@@ -1080,6 +1084,7 @@ A structure containing an struct is not allowed as input in ES
 A':
 ABCDEF
 ABGR
+ABGR8888
 ACCSTRUCTEXT
 ACCSTRUCTNV
 ADD_ASSIGN
@@ -1095,11 +1100,10 @@ AND_ASSIGN
 AND_OP
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 ARGB
+ARGB8888
 ARM
 ATI1N
 ATI2N
-ATI_DST16
-ATI_DST24
 ATOMIC_UINT
 ATTRIBUTE
 Aboring OnReadBuffer because of GPU memory allocation failure.
@@ -1237,8 +1241,7 @@ ArrayStride
 Arrays not supported in texture template types
 Asin
 Asinh
-Asking for 2d Texture Array with Cube map as input and no compatible view found - returning error texture in CTextureManagerVK::GetImageView
-Asking for 2d Texture Array with Cube map as input and no compatible view found - returning error texture in CTextureManagerVK::GetImageView: "%s"
+Asking for 2d Texture Array with Cube map as input and no compatible view found when setting "%s" - returning error texture in CTextureManagerVK::GetImageView: "%s"
 AsmCallINTEL
 AsmINTEL
 AsmTargetINTEL
@@ -1330,11 +1333,12 @@ BC7
 BC7 compression not supported on this target (windows only).
 BFIU
 BGR565
-BGR888_BLUESCREEN
+BGR888
 BGRA1010102
 BGRA4444
-BGRA5551
+BGRA8888
 BGRA8888_LINEAR
+BGRX8888
 BGRX8888_LINEAR
 BOOL
 BOOLCONSTANT
@@ -1347,8 +1351,7 @@ Backing store not supported
 Bad VTEX data for '%s'
 Bad aggregation op
 Bad state seen for shader in compilation job
-Bad texture dimension type for texture "%s" - returning error texture in  CTextureManagerVK::GetImageView
-Bad texture dimension type for texture "%s" - returning error texture in CTextureManagerVulkan::GetResourceView
+Bad texture dimension %i for texture "%s" when setting "%s" (wants %i) - returning error texture in CTextureManagerVK::GetImageView
 Bad unary op
 Bailing out of OnBlockForQuery after %.3f seconds
 BakedLODBuilderMgr001
@@ -1458,6 +1461,7 @@ CBufferString::Replace(char const*, char const*, bool)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::ShortenPath(bool)
+CBufferString::StartsWith(char const*) const
 CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
@@ -1535,7 +1539,6 @@ CTextureManagerBase::WasAsyncUpdatedThisFrame - Invalid texture handle.
 CTextureManagerVulkan::ComputeTextureObject: Tried to create a depth-stencil texture which is *not* a render target!
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadRWLock::LockForWrite(char const*, int)
 CThreadRWLock::UnlockRead_LockForWrite(char const*, int)
 CThreadRWLock::UnlockWrite(char const*, int)
@@ -1551,6 +1554,7 @@ CThreadRWLock_FastRead::UnlockWrite_LockForRead(char const*, int)
 CThreadSemaphore::CThreadSemaphore(int, int, char const*, bool)
 CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::~CThreadSemaphore()
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
 CThreadSpinRWLock::UnlockRead(char const*, int)
@@ -2051,6 +2055,7 @@ Convert uint8_t to uint64
 Convert uvec2 to acceleration strucuture
 ConvertFToS
 ConvertFToU
+ConvertGammaToLinear
 ConvertImageToUNV
 ConvertPtrToU
 ConvertSToF
@@ -2113,11 +2118,9 @@ CullNoOpaqueKHR
 CullOpaqueKHR
 D
 D,,
-D15S1
 D16
 D16_SHADOW
 D24FS8
-D24X4S4
 D24X8
 D24X8_SHADOW
 D32
@@ -2370,7 +2373,6 @@ Enabling aggressive command pool rebalancing.
 Enabling instance extension: %s.
 Enabling synchronization validation.
 Enabling validation layer: %s.
-EncodeBC7Blocks
 Encoding
 Encountered extended instruction GLSLstd450Bad
 End Of Image
@@ -2778,7 +2780,6 @@ FIU,s,F,F
 FIU,s,F,F,I
 FJGK
 FLAT
-FLOAT
 FLOAT16CONSTANT
 FLOAT16_T
 FLOAT32_T
@@ -3435,6 +3436,7 @@ GroupUMaxNonUniformAMD
 GroupUMin
 GroupUMinNonUniformAMD
 GroupWaitEvents
+Grow
 H
 HEADER
 HIGH_PRECISION
@@ -3486,6 +3488,7 @@ I64IMAGECUBEARRAY
 I64VEC2
 I64VEC3
 I64VEC4
+I8
 I8VEC2
 I8VEC3
 I8VEC4
@@ -3517,6 +3520,7 @@ IIMAGE3D
 IIMAGEBUFFER
 IIMAGECUBE
 IIMAGECUBEARRAY
+IMAGE_FORMAT_R11G11B10_FLOAT
 IMix
 IMul32x16INTEL
 IN
@@ -3525,7 +3529,6 @@ INFO :
 INOUT
 INPUT_LAYOUT_VARIATION_DEFAULT
 INPUT_LAYOUT_VARIATION_MAX
-INPUT_LAYOUT_VARIATION_STREAM1_DRAWINDIRECT_ID
 INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID
 INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID_MORPH_VERT_ID
 INTERNAL ERROR:
@@ -3537,7 +3540,6 @@ IOS_VULKAN
 IOS_VULKAN_4_0
 IOS_VULKAN_4_1
 IOS_VULKAN_5_0
-IQuickTime001
 ISAMPLER1D
 ISAMPLER1DARRAY
 ISAMPLER2D
@@ -3899,7 +3901,6 @@ JPEG parameter struct mismatch: library thinks size is %u, caller expects %u
 JPEGMEM
 JSON version mismatches.
 K
-KMeansQuantization
 KNQ
 Kernel does not reference a function
 Kernel does not reference an entry-point
@@ -3909,16 +3910,16 @@ Kernel must refer only to GLCompute entry-points
 KeyValueCache001
 KeyValues::FindKey(HKeySymbol) const
 KeyValues::FindKey(char const*, bool)
-KeyValues::GetColor(char const*, Color const&)
+KeyValues::GetColor(char const*, Color const&) const
 KeyValues::GetDataType(char const*) const
 KeyValues::GetFirstSubKey() const
-KeyValues::GetFloat(char const*, float)
-KeyValues::GetInt(char const*, int)
+KeyValues::GetFloat(char const*, float) const
+KeyValues::GetInt(char const*, int) const
 KeyValues::GetName() const
 KeyValues::GetNextKey() const
-KeyValues::GetPtr(char const*, void*)
+KeyValues::GetPtr(char const*, void*) const
 KeyValues::GetString(char const*, char const*, char*, unsigned long)
-KeyValues::GetUint64(char const*, unsigned long long)
+KeyValues::GetUint64(char const*, unsigned long long) const
 KeyValues::GetWString(char const*, wchar_t const*, wchar_t*, unsigned long)
 KeyValues::KeyValues(char const*)
 KeyValues::LoadFromFile(IFileSystem*, char const*, char const*, bool (*)(char const*, void*), void*, char const*)
@@ -3948,20 +3949,8 @@ LEFT_BRACKET
 LEFT_OP
 LEFT_PAREN
 LEVEL
-LE_BGRA8888
-LE_BGRX8888
 LE_OP
-LINEAR_ABGR8888
-LINEAR_ARGB8888
-LINEAR_BGR888
-LINEAR_BGRA8888
-LINEAR_BGRX5551
-LINEAR_BGRX8888
 LINEAR_D24S8
-LINEAR_I8
-LINEAR_RGB888
-LINEAR_RGBA16161616
-LINEAR_RGBA8888
 LLVM/SPIR-V Translator
 LOG_GENERAL
 LOW_PRECISION
@@ -4238,11 +4227,7 @@ NSt6thread10_Impl_baseE
 NSt6thread5_ImplISt12_Bind_simpleIFZNSt13__future_base17_Async_state_implIS1_IFSt7_Mem_fnIMN3Etc5ImageEFjjjjEEPS6_jijEEjEC1EOSC_EUlvE_vEEEE
 NSt6thread5_ImplISt12_Bind_simpleIFZNSt13__future_base17_Async_state_implIS1_IFSt7_Mem_fnIMN3Etc5ImageEFvjjEEPS6_ijEEvEC1EOSC_EUlvE_vEEEE
 NVIDIA
-NV_DST16
-NV_DST24
-NV_INTZ
 NV_NULL
-NV_RAWZ
 Name must match an entry-point for Kernel
 NamedBarrierInitialize
 Nearest
@@ -4483,7 +4468,6 @@ Overflow of the sheet cache texture. Releasing and starting over. This is ok in 
 Overflow of the sheet cache texture: Try increasing SheetCacheTextureRows in gameinfo.gi (current value %d)!
 Override default %s Vulkan GPU memory pool size: %d MB (default: %d MB)
 P
-P8
 P@
 PACKED
 PATCH
@@ -4605,6 +4589,8 @@ Plat_GetDesktopResolution
 Plat_GetEnv
 Plat_GetModuleFilename
 Plat_GetModuleInterfaceFactory
+Plat_GetMonitorBounds
+Plat_GetMonitorCount
 Plat_GetMonitorResolution
 Plat_GetProcAddress
 Plat_GetWindowClientSize
@@ -4727,7 +4713,6 @@ R11_EAC
 R11fG11fB10f
 R16
 R16F
-R16F_EXPAND
 R16G16_UINT
 R16Snorm
 R16_UINT
@@ -4826,22 +4811,16 @@ RG
 RG11_EAC
 RG1616
 RG1616F
-RG1616F_EXPAND
 RG3232F
 RGB323232F
-RGB888_BLUESCREEN
+RGB565
+RGB888
 RGBA1010102
-RGBA1010102F_EDRAM
+RGBA16161616
 RGBA16161616F
-RGBA16161616F_EDRAM_RGBA1010102F
-RGBA16161616F_EXPAND
-RGBA16161616F_EXPAND_EDRAM_RGBA1010102F
-RGBA16161616_EDRAM
-RGBA16161616_EDRAM_RGBA16161616
 RGBA32323232F
 RGBA32323232_UINT
 RGBA8888_LINEAR
-RGBX555
 RGBX8888
 RGx
 RIGHT_ANGLE
@@ -4958,6 +4937,7 @@ Render pass
 RenderBufferFlags_t
 RenderDevice003
 RenderDeviceMgr001
+RenderDoc is active.  Disabling '%s' and '%s' to avoid texture paging leading to slow RenderDoc performance and lost device.
 RenderHardwareConfig002
 RenderInputLayoutField_t
 RenderMultisampleType_t
@@ -4970,6 +4950,7 @@ RenderSystem/AllowSampleableDepthInVr
 RenderSystem/AlwaysPreloadTexturesInGame
 RenderSystem/GraphicsPipelineLibrary
 RenderSystem/IndexBufferPoolSizeMB
+RenderSystem/LowLatency
 RenderSystem/MaxPreloadTextureResolution
 RenderSystem/MinStreamingPoolSizeMB
 RenderSystem/SwapChainSampleableDepth
@@ -4987,7 +4968,6 @@ RenderSystem/VulkanSteamShaderCache
 RenderSystem/VulkanUseExternalSubpassDependency
 RenderSystem/VulkanUseSecondaryCommandBuffers
 RenderSystem/VulkanUseTransformConstantBuffer
-RenderSystemSurface001
 RenderTarget
 RenderUtils_001
 Rendering/Constant Buffers (MB)
@@ -5362,7 +5342,6 @@ S_SHADER_QUALITY
 S_SUBGROUP_WAVE_OPS
 S_SUPPORTS_CLIP_DISTANCE
 S_TOOLS_ENABLED
-S_TRANSFORM_CONSTANT_BUFFER
 S_VR
 SampleId
 SampleInterlockOrderedEXT
@@ -5483,7 +5462,8 @@ SkipClosestHitShaderKHR
 SkipTrianglesKHR
 Skipped %d%% of all combos
 Skipping pipeline layout creation, encountered null descriptor set layout.
-Skipping texture streaming: looks like the texture was reloaded while in the streaming list.
+Skipping texture streaming: looks like the texture was reloaded while in the streaming list (%s).
+Skipping texture streaming: texture resource handles don't match
 Skipping vkDestroySurfaceKHR because it can't be called without first doing vkDestroySwapchainKHR.
 Skipping vkDestroySwapchainKHR to avoid bug in Android vulkan loader with VK_GOOGLE_display_timing requiring a valid ANativeWindow.
 Slider
@@ -5784,6 +5764,7 @@ Subpass %d preserve attachment %d not found in renderpass attachment list.
 SubpassData
 SubpassInput
 SubpassInputMS
+SubsurfaceProfile
 Successfully loaded Steam Shader Pre-cache database and pre-warmed registered shaders, total time: %0.2fs (pre-warm time: %0.2fs).
 Such variables must be identified with a Block decoration
 Such variables must be identified with a Block or BufferBlock decoration
@@ -5854,13 +5835,11 @@ TestFormatE
 TestScriptMgr001
 TextLayout_001
 Texture Streaming:
-Texture manager doesn't know about texture "%s" - returning error texture in CTextureManagerVK::GetImageView
-Texture manager doesn't know about texture "%s" - returning error texture in CTextureManagerVulkan::GetResourceView
+Texture manager doesn't know about texture "%s" when setting "%s" - returning error texture in CTextureManagerVK::GetImageView
 Texture manager out of space! Can't allocate new texture!
 Texture memory discrepancy! %llu != %llu
 Texture memory: %s / %s MB; in %s textures (%s MB non-evictable)
-Texture missing shader resource view - returning error texture in  CTextureManagerVK::GetImageView: "%s"
-Texture missing shader resource view - returning error texture in CTextureManagerVulkan::GetResourceView
+Texture missing shader resource view when setting "%s" - returning error texture in CTextureManagerVK::GetImageView: "%s"
 Texture streaming validation OK (%d texture loads in flight).
 Texture template struct return slots exceeded
 Texture template structure members must same basic type
@@ -6106,7 +6085,6 @@ UV88
 UVEC2
 UVEC3
 UVEC4
-UVLX8888
 UVWQ8888
 Unable to determine source language
 Unable to determine texture heap size, assuming %llu MB.
@@ -6264,12 +6242,6 @@ VFX_PROGRAM_MAX
 VFX_RECOMPILE
 VFileSystem017
 VGAME
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
 VGy#
 VK DEBUG %s %llu:%d: %s
 VK INFO %s %llu:%d: %s
@@ -6323,7 +6295,6 @@ VK_KHR_acceleration_structure
 VK_KHR_bind_memory2
 VK_KHR_buffer_device_address
 VK_KHR_create_renderpass2
-VK_KHR_deferred_host_operations
 VK_KHR_depth_stencil_resolve
 VK_KHR_descriptor_update_template
 VK_KHR_device_group
@@ -6778,9 +6749,6 @@ X must be a 32-bit unsigned integer OpConstant
 X-LEGEND
 X-LEGEND Mesa-IR/SPIR-V Translator
 X360
-X360_DST16
-X360_DST24
-X360_DST24F
 XOR_ASSIGN
 XOR_OP
 Xderef
@@ -7145,6 +7113,7 @@ __SET_BY_FEATURE_NE__
 __SET_BY_FEATURE__
 __SetByArtistAndExpression__
 __SetByArtist__
+__UNUSED_SYSTEM_COMBO__
 __VERSION__
 ______<INVALID>______
 __assert_fail
@@ -7191,6 +7160,7 @@ __xstat64
 _addons
 _arr_
 _c
+_capture
 _cs
 _ds
 _edata
@@ -8732,12 +8702,12 @@ floatBitsToInt
 floatBitsToUint
 floatbitmap.cpp
 floatbitmap.cpp(129): Unknown gamma type "%s"!
-floatbitmap.cpp(2703): Error loading %s
-floatbitmap.cpp(2727): Error! Unknown file type for %s
-floatbitmap.cpp(2746): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
+floatbitmap.cpp(2695): Error loading %s
+floatbitmap.cpp(2719): Error! Unknown file type for %s
+floatbitmap.cpp(2738): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
 floatbitmap.cpp(307): Conversion not supported yet!
 floatbitmap.cpp(393): Conversion not supported yet!
-floatbitmap.cpp(949): Unsupported color format "%s", skipping!
+floatbitmap.cpp(941): Unsupported color format "%s", skipping!
 floating-point fast math mode
 floating-point rounding mode
 floor
@@ -10590,13 +10560,13 @@ rendercontextbase.cpp
 renderdevicebase.cpp
 renderdevicebase.cpp(1584):
 renderdevicebase.cpp(1748):
-renderdevicebase.cpp(1990):
-renderdevicebase.cpp(1994):
-renderdevicebase.cpp(3132):
-renderdevicebase.cpp(3365):
-renderdevicebase.cpp(3378):
-renderdevicebase.cpp(3481):
-renderdevicebase.cpp(3505):
+renderdevicebase.cpp(2023):
+renderdevicebase.cpp(2027):
+renderdevicebase.cpp(3165):
+renderdevicebase.cpp(3398):
+renderdevicebase.cpp(3411):
+renderdevicebase.cpp(3514):
+renderdevicebase.cpp(3538):
 renderdevicebase.cpp(919):
 renderdevicemgrbase.cpp
 renderdoc_captures
@@ -11451,15 +11421,15 @@ textureSamples(
 textureSize
 textureSize(
 texturebase.cpp
-texturebase.cpp(2433):Error loading texture: %s
-texturebase.cpp(3451):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3481):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3499):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3517):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3536):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3557):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3568):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3579):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2434):Error loading texture: %s
+texturebase.cpp(3453):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3483):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3501):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3519):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3538):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3559):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3570):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3581):ResourceHandleToData( %s ) failed! Falling back to error texture!
 texturecubearrayindex
 texturecubeindex
 tgamma
@@ -11663,6 +11633,7 @@ unable to find output symbol for Append()
 unable to find patch constant function built-in variable
 unable to find texture symbol
 unable to locate patch function parameter name
+unable to write renderdoc capture to %s
 unary operator
 unary_expression
 unary_operator
@@ -11824,7 +11795,7 @@ utextureBuffer
 utextureCube
 utextureCubeArray
 utime
-utlsoacontainer.cpp:2528
+utlsoacontainer.cpp:2362
 uvec2 clock2x32ARB();uint64_t clockARB();uvec2 clockRealtime2x32EXT();uint64_t clockRealtimeEXT();
 uvec2 conversion to accelerationStructureEXT
 uvec2 conversion to reference
@@ -12502,7 +12473,7 @@ vkQueueSetPerformanceConfigurationINTEL
 vkQueueSubmit
 vkQueueSubmit( VulkanQueue(), 1, &submitInfo, VK_NULL_HANDLE )
 vkQueueSubmit( VulkanQueue(), 1, &submitInfo, m_pWaitForLeftEyeFenceAMD )
-vkQueueSubmit( VulkanQueue(), 1, &submitInfo, pFence )
+vkQueueSubmit( VulkanQueue(), 1, &submitInfo, pFence ? pFence->Get() : VK_NULL_HANDLE )
 vkQueueSubmit( VulkanQueue(), 1, &submitInfo, presentFence.m_pFence )
 vkQueueSubmit( pQueue, 1, &submitInfo, pFence->Get() )
 vkQueueSubmit2KHR
@@ -12640,10 +12611,9 @@ vulkan/memorymgrvulkan.cpp
 vulkan/pipelinecachemgrvulkan.cpp
 vulkan/pipelinemgrvulkan.cpp
 vulkan/rendercontextvulkan.cpp
-vulkan/rendercontextvulkan.cpp(448):
+vulkan/rendercontextvulkan.cpp(447):
 vulkan/renderdevicemgrvulkan.cpp
 vulkan/renderdevicevulkan.cpp
-vulkan/renderdevicevulkan.cpp(2769):
 vulkan/renderpipelinestatsvulkan.cpp
 vulkan/renderthreadvulkan.cpp
 vulkan/renderthreadvulkan.cpp(209): Error! NULL texture pointer sent to OnReadPixels()!
@@ -12671,6 +12641,7 @@ w+b
 warn
 warning:
 wb
+wb+
 wbx
 when Dim is either 1D or 2D.
 when more than one fragment shader output, all must have location qualifiers
@@ -12703,6 +12674,7 @@ writeInvocationAMD
 writeMask
 writePackedPrimitiveIndices4x8NV
 writeonly
+writing renderdoc capture to %s
 wrong number of arguments
 wrong number of matrix columns:
 wrong number of structure members

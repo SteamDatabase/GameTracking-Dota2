@@ -39,6 +39,7 @@ $ORIGIN
 &
 '
 (
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%s): ADD %s = %s
 (%s): Setting %s to %s
 )
@@ -84,12 +85,14 @@ $ORIGIN
 .
 ../public/tier0/memstack.h
 ../public/tier0/tslist.h
+../public/tier0/utlmemory.h
 ../public/tier0/utltshash.h
 .exr
 .jpg
 .pfm
 .png
 .psd
+.rdc
 .tif
 /
 0
@@ -189,13 +192,13 @@ $ORIGIN
 A
 A':
 A8
+ABGR8888
 ALIGN_TYPE is wrong, please fix
 AMD
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
+ARGB8888
 ATI1N
 ATI2N
-ATI_DST16
-ATI_DST24
 Adobe APP14 marker: version %d, flags 0x%04x 0x%04x, transform %d
 AlignedByteArray not properly aligned
 AllocTextureId
@@ -229,11 +232,12 @@ BC6h compression not supported on this target (windows only).
 BC7
 BC7 compression not supported on this target (windows only).
 BGR565
-BGR888_BLUESCREEN
+BGR888
 BGRA1010102
 BGRA4444
-BGRA5551
+BGRA8888
 BGRA8888_LINEAR
+BGRX8888
 BGRX8888_LINEAR
 Backing store not supported
 Bad VTEX data for '%s'
@@ -277,6 +281,7 @@ CBufferString::RemoveFirstDir(CBufferString*)
 CBufferString::SetExtension(char const*)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::ShortenPath(bool)
+CBufferString::StartsWith(char const*) const
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
 CCIR601 sampling not implemented yet
@@ -306,7 +311,6 @@ CTextureManagerBase::MarkAsyncUpdatedThisFrame - Invalid texture handle.
 CTextureManagerBase::WasAsyncUpdatedThisFrame - Invalid texture handle.
 CThreadEvent::CThreadEvent(bool)
 CThreadEvent::Set()
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadRWLock_FastRead::CThreadRWLock_FastRead()
 CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
 CThreadRWLock_FastRead::HaveWriteLock_BlockReadsNow(bool)
@@ -315,6 +319,7 @@ CThreadRWLock_FastRead::UnlockWrite(char const*, int)
 CThreadSemaphore::CThreadSemaphore(int, int, char const*, bool)
 CThreadSemaphore::Release(int, int*)
 CThreadSemaphore::~CThreadSemaphore()
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
 CThreadSpinRWLock::UnlockRead(char const*, int)
@@ -391,7 +396,6 @@ Component %d: dc=%d ac=%d
 Component index %d: mismatching sampling ratio %d:%d, %d:%d, %c
 Compressed texture decoded in %.2f ms
 ConnectInterfaceSingletons
-ConvertGammaToLinear
 Copyright (C) 2010, Thomas G. Lane, Guido Vollbeding
 Corrupt JPEG data: %u extraneous bytes before marker 0x%02x
 Corrupt JPEG data: bad Huffman code
@@ -400,11 +404,9 @@ Corrupt JPEG data: found marker 0x%02x instead of RST%d
 Corrupt JPEG data: premature end of data segment
 CreateInterface
 CreateNewThreadPool
-D15S1
 D16
 D16_SHADOW
 D24FS8
-D24X4S4
 D24X8
 D24X8_SHADOW
 D32
@@ -452,7 +454,6 @@ Empty
 Empty Driver
 Empty JPEG image (DNL not supported)
 Empty input file
-EncodeBC7Blocks
 End Of Image
 Ending RenderDoc capture...
 EngineServiceMgr001
@@ -530,22 +531,23 @@ GetGameInfoInt(char const*, int)
 GetResourceManifestCount
 GetResourceManifests
 Graphics Device changed, resetting video config
+Grow
 HammerMapLoader001
 HelpSystem_001
 HostStateMgr001
 Huffman code size table overflow
 Huffman table 0x%02x was not defined
+I8
 IA88
 IB: %d buffers, %.2f MB
 IBPool
 IDAT stream error
 IDAT stream too short
+IMAGE_FORMAT_R11G11B10_FLOAT
 INPUT_LAYOUT_VARIATION_DEFAULT
 INPUT_LAYOUT_VARIATION_MAX
-INPUT_LAYOUT_VARIATION_STREAM1_DRAWINDIRECT_ID
 INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID
 INPUT_LAYOUT_VARIATION_STREAM1_INSTANCEID_MORPH_VERT_ID
-IQuickTime001
 Image data size is zero or too large: width =
 Image too wide for this implementation
 Improper call to JPEG library in state %d
@@ -615,21 +617,20 @@ JFIF extension marker: type 0x%02x, length %u
 JPEG datastream contains no image
 JPEG parameter struct mismatch: library thinks size is %u, caller expects %u
 JPEGMEM
-KMeansQuantization
 KNQ
 KeyValueCache001
 KeyValues::FindKey(HKeySymbol) const
 KeyValues::FindKey(char const*, bool)
-KeyValues::GetColor(char const*, Color const&)
+KeyValues::GetColor(char const*, Color const&) const
 KeyValues::GetDataType(char const*) const
 KeyValues::GetFirstSubKey() const
-KeyValues::GetFloat(char const*, float)
-KeyValues::GetInt(char const*, int)
+KeyValues::GetFloat(char const*, float) const
+KeyValues::GetInt(char const*, int) const
 KeyValues::GetName() const
 KeyValues::GetNextKey() const
-KeyValues::GetPtr(char const*, void*)
+KeyValues::GetPtr(char const*, void*) const
 KeyValues::GetString(char const*, char const*, char*, unsigned long)
-KeyValues::GetUint64(char const*, unsigned long long)
+KeyValues::GetUint64(char const*, unsigned long long) const
 KeyValues::GetWString(char const*, wchar_t const*, wchar_t*, unsigned long)
 KeyValues::KeyValues(char const*)
 KeyValues::LoadFromFile(IFileSystem*, char const*, char const*, bool (*)(char const*, void*), void*, char const*)
@@ -644,19 +645,7 @@ KeyValues::operator delete(void*)
 KeyValues::operator new(unsigned long)
 KeyValues::~KeyValues()
 KeyValuesSystem
-LE_BGRA8888
-LE_BGRX8888
-LINEAR_ABGR8888
-LINEAR_ARGB8888
-LINEAR_BGR888
-LINEAR_BGRA8888
-LINEAR_BGRX5551
-LINEAR_BGRX8888
 LINEAR_D24S8
-LINEAR_I8
-LINEAR_RGB888
-LINEAR_RGBA16161616
-LINEAR_RGBA8888
 LOG_GENERAL
 Linear
 LoadEXRImageFromMemory failed! Error message: %s
@@ -704,11 +693,7 @@ Missing Huffman code table entry
 ModelDocUtils001
 Msg
 NSt13__future_base19_Async_state_commonE
-NV_DST16
-NV_DST24
-NV_INTZ
 NV_NULL
-NV_RAWZ
 NetworkClientService_001
 NetworkMessagesVersion001
 NetworkP2PService_001
@@ -722,7 +707,6 @@ Normalize3ComponentVectorInAttributes
 Normalized3x3SobelEdgeFilterFrom
 Not a JPEG file: starts with 0x%02x 0x%02x
 Not implemented yet
-O
 OUTSTANDING_HOOKUP_REQUEST
 Obtained EMS handle %u
 Obtained XMS handle %u
@@ -734,8 +718,6 @@ Output memory size is zero
 Overall System GPU memory use:
 Overflow of the sheet cache texture. Releasing and starting over. This is ok in asset browser, not so ok if the game is triggering this!
 Overflow of the sheet cache texture: Try increasing SheetCacheTextureRows in gameinfo.gi (current value %d)!
-P
-P8
 P@
 PERF WARNING: Texture pool size set to more than 80%% of total GPU memory.
 PF%d %d-1.000000
@@ -760,6 +742,8 @@ Plat_GetDefaultMonitorIndex
 Plat_GetDesktopResolution
 Plat_GetEnv
 Plat_GetModuleFilename
+Plat_GetMonitorBounds
+Plat_GetMonitorCount
 Plat_GetMonitorResolution
 Plat_GetProcAddress
 Plat_GetWindowMonitorIndex
@@ -792,7 +776,6 @@ R channel not found!
 R11_EAC
 R16
 R16F
-R16F_EXPAND
 R16G16_UINT
 R16_UINT
 R32F
@@ -871,23 +854,17 @@ RENDER_SLOT_PER_VERTEX
 RG11_EAC
 RG1616
 RG1616F
-RG1616F_EXPAND
 RG3232F
 RGB323232F
 RGB565
-RGB888_BLUESCREEN
+RGB888
 RGBA1010102
-RGBA1010102F_EDRAM
+RGBA16161616
 RGBA16161616F
-RGBA16161616F_EDRAM_RGBA1010102F
-RGBA16161616F_EXPAND
-RGBA16161616F_EXPAND_EDRAM_RGBA1010102F
-RGBA16161616_EDRAM
-RGBA16161616_EDRAM_RGBA16161616
 RGBA32323232F
 RGBA32323232_UINT
+RGBA8888
 RGBA8888_LINEAR
-RGBX555
 RGBX8888
 RST%d
 RadianEuler
@@ -916,7 +893,6 @@ RenderSystem/AlwaysPreloadTexturesInGame
 RenderSystem/IndexBufferPoolSizeMB
 RenderSystem/MaxPreloadTextureResolution
 RenderSystem/MinStreamingPoolSizeMB
-RenderSystemSurface001
 RenderUtils_001
 Rendering/Constant Buffers (MB)
 Rendering/Index Buffers (MB)
@@ -1019,10 +995,8 @@ Triggers a RenderDoc capture
 Trying to create a render target with invalid image format %s
 Trying to set dxlevel (%d) which is higher than the card can support (%d)!
 Trying to set dxlevel (%d) which is lower than the card can support (%d)!
-U
 UNKNOWN
 UV88
-UVLX8888
 UVWQ8888
 Unable to read file %s
 Unable to stream in resource file "%s" (Error: %s)
@@ -1047,7 +1021,6 @@ Unsupported version or scanline
 Upper limit on texture pool size.
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
-V
 VApplication001
 VAsyncFileSystem2_001
 VAvi001
@@ -1056,12 +1029,6 @@ VBik001
 VConComm001
 VEngineCvar007
 VFileSystem017
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
 VGy#
 VMaterialSystem2_001
 VMatrix
@@ -1144,17 +1111,11 @@ Write failed on temporary file --- out of disk space?
 Write to EMS failed
 Write to XMS failed
 Wrong JPEG library version: library is %d, caller expects %d
-X
-X360_DST16
-X360_DST24
-X360_DST24F
-Y
-Z
 ZFP compression is not supported in this build
 ZFP compression is not supported.
-[
 [%u]
 []
+_%d
 _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
@@ -1187,6 +1148,7 @@ __stack_chk_fail
 __tls_get_addr
 __vasprintf_chk
 _c
+_capture
 _edata
 _end
 _fini
@@ -1278,12 +1240,12 @@ float32
 float64
 floatbitmap.cpp
 floatbitmap.cpp(129): Unknown gamma type "%s"!
-floatbitmap.cpp(2703): Error loading %s
-floatbitmap.cpp(2727): Error! Unknown file type for %s
-floatbitmap.cpp(2746): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
+floatbitmap.cpp(2695): Error loading %s
+floatbitmap.cpp(2719): Error! Unknown file type for %s
+floatbitmap.cpp(2738): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
 floatbitmap.cpp(307): Conversion not supported yet!
 floatbitmap.cpp(393): Conversion not supported yet!
-floatbitmap.cpp(949): Unsupported color format "%s", skipping!
+floatbitmap.cpp(941): Unsupported color format "%s", skipping!
 floor
 floorf
 fltx4
@@ -1447,11 +1409,13 @@ realloc
 renderdevicebase.cpp
 renderdevicebase.cpp(1584):
 renderdevicebase.cpp(1748):
-renderdevicebase.cpp(3132):
-renderdevicebase.cpp(3365):
-renderdevicebase.cpp(3378):
-renderdevicebase.cpp(3481):
-renderdevicebase.cpp(3505):
+renderdevicebase.cpp(2023):
+renderdevicebase.cpp(2027):
+renderdevicebase.cpp(3165):
+renderdevicebase.cpp(3398):
+renderdevicebase.cpp(3411):
+renderdevicebase.cpp(3514):
+renderdevicebase.cpp(3538):
 renderdevicebase.cpp(919):
 renderdevicemgrbase.cpp
 renderdoc_captures
@@ -1576,15 +1540,15 @@ sub%dx%d.tga
 submrg%dx%d.tga
 success
 texturebase.cpp
-texturebase.cpp(2433):Error loading texture: %s
-texturebase.cpp(3451):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3481):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3499):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3517):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3536):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3557):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3568):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3579):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2434):Error loading texture: %s
+texturebase.cpp(3453):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3483):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3501):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3519):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3538):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3559):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3570):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3581):ResourceHandleToData( %s ) failed! Falling back to error texture!
 tiles
 tinyexr_impl.cpp:161
 too many length or distance symbols
@@ -1607,7 +1571,7 @@ unknown compression method
 unknown critical chunk
 unknown error
 unknown header flags set
-utlsoacontainer.cpp:2528
+utlsoacontainer.cpp:2362
 v2f
 vector2
 vector3
@@ -1635,6 +1599,7 @@ vtable for std::basic_streambuf<char, std::char_traits<char> >
 vtable for std::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >
 vtable for std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >
 wb
+wb+
 with %d x %d thumbnail image
 zD
 zlib error

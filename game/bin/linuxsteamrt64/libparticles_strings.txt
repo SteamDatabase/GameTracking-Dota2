@@ -83,6 +83,7 @@ $SPECULARWARP
 %02x
 %40s: Age: %6.2f, next sleep %6.2f NumActive: %3d, flags %d, Bounds Center: (%.2f,%.2f,%.2f) (0x%p)
 %4i:
+%50.50s: %2.2d bits == '%s'
 %8.3f
 %d "No animation data"
 %d %d %d %d
@@ -116,7 +117,9 @@ $SPECULARWARP
 &
 '
 (
+( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 ( m_nTextureType == SPRITECARD_TEXTURE_NORMALMAP || m_nTextureType == SPRITECARD_TEXTURE_ANIMMOTIONVEC || m_nTextureType == SPRITECARD_TEXTURE_6POINT_XYZ_A || m_nTextureType == SPRITECARD_TEXTURE_6POINT_NEGXYZ_E )
+(%d)
 (%d,%d)
 (%d,%d,%d)
 (%g,%g,%g)
@@ -146,6 +149,7 @@ $SPECULARWARP
 -1 1
 -1 for all asleep, 1 for all awake
 -2 2
+-> %s
 -avx
 -sse2
 -sse3
@@ -155,6 +159,7 @@ $SPECULARWARP
 ../../_build_/particles/_vpc_particles/default/linuxsteamrt64/_schema_/release/../../../../../../../src/particles/particlecollection.h
 ../public/scenesystem/vertexformat.h
 ../public/tier0/tslist.h
+../public/tier0/utlmemory.h
 ../public/tier0/utlsymboltable.h
 /
 0
@@ -275,6 +280,7 @@ $SPECULARWARP
 19C_OP_CurlNoiseForce
 19C_OP_DecayOffscreen
 19C_OP_ParentVortices
+19C_OP_RemapSpeedtoCP
 19C_OP_RenderAsModels
 19IParticleCollection
 1D Luminance to Color Lookup
@@ -338,6 +344,7 @@ $SPECULARWARP
 22C_INIT_Orient2DRelToCP
 22C_INIT_RemapCPtoScalar
 22C_INIT_RemapCPtoVector
+22C_OP_ConstrainDistance
 22C_OP_ContinuousEmitter
 22C_OP_ControlpointLight
 22C_OP_EndCapTimedFreeze
@@ -372,6 +379,7 @@ $SPECULARWARP
 24C_INIT_RandomTrailLength
 24C_OP_ConstrainLineLength
 24C_OP_DistanceBetweenVecs
+24C_OP_ModelDampenMovement
 24C_OP_OrientTo2dDirection
 24C_OP_QuantizeCPComponent
 24C_OP_RemapDotProductToCP
@@ -468,6 +476,7 @@ $SPECULARWARP
 28C_OP_SetControlPointToCenter
 28C_OP_SetControlPointToPlayer
 28C_OP_SetPerChildControlPoint
+28IRefCountedParticleAttribute
 29CSchemaRegistration_particles
 29C_INIT_CreateSequentialPathV2
 29C_INIT_DistanceToNeighborCull
@@ -674,6 +683,7 @@ $SPECULARWARP
 32CParticleFunctionDefinitionTypedI24C_INIT_RandomTrailLengthE
 32CParticleFunctionDefinitionTypedI24C_OP_ConstrainLineLengthE
 32CParticleFunctionDefinitionTypedI24C_OP_DistanceBetweenVecsE
+32CParticleFunctionDefinitionTypedI24C_OP_ModelDampenMovementE
 32CParticleFunctionDefinitionTypedI24C_OP_OrientTo2dDirectionE
 32CParticleFunctionDefinitionTypedI24C_OP_QuantizeCPComponentE
 32CParticleFunctionDefinitionTypedI24C_OP_RemapDotProductToCPE
@@ -852,6 +862,7 @@ $SPECULARWARP
 32CParticleFunctionDefinitionTypedI42C_OP_EnableChildrenFromParentParticleCountE
 32CParticleFunctionDefinitionTypedI42C_OP_MovementSkinnedPositionFromCPSnapshotE
 32CParticleFunctionDefinitionTypedI42C_OP_RemapCrossProductOfTwoVectorsToVectorE
+32CParticleFunctionDefinitionTypedI43C_INIT_SetVectorAttributeToVectorExpressionE
 32CParticleFunctionDefinitionTypedI43C_OP_RemapControlPointOrientationToRotationE
 32CParticleFunctionDefinitionTypedI43C_OP_SetControlPointFieldToScalarExpressionE
 32CParticleFunctionDefinitionTypedI43C_OP_SetControlPointOrientationToCPVelocityE
@@ -933,6 +944,7 @@ $SPECULARWARP
 42C_OP_EnableChildrenFromParentParticleCount
 42C_OP_MovementSkinnedPositionFromCPSnapshot
 42C_OP_RemapCrossProductOfTwoVectorsToVector
+43C_INIT_SetVectorAttributeToVectorExpression
 43C_OP_RemapControlPointOrientationToRotation
 43C_OP_SetControlPointFieldToScalarExpression
 43C_OP_SetControlPointOrientationToCPVelocity
@@ -1067,7 +1079,6 @@ BLURFILTER_BOX
 BLURFILTER_GAUSSIAN
 BONE_INDICES
 BONE_WEIGHTS
-Bad FloatInput %d
 Bad KV3 data (%s)
 Bad KV3 data for '%s': %s
 Bad KV3 data for resource: %s
@@ -1163,6 +1174,7 @@ CMemAllocSystemInitialize
 CMeshletDescriptor
 CMorphConstraint
 CMotionTransform
+CNewParticleEffect
 COLLISION_MODE_DISABLED
 COLLISION_MODE_INITIAL_TRACE_DOWN
 COLLISION_MODE_PER_FRAME_PLANESET
@@ -1240,9 +1252,9 @@ CStrAutoEncode::SetCopy(char const*, int)
 CStrongHandle
 CTSQueue corruption
 CThreadEvent::CThreadEvent(bool)
-CThreadFastMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadRWLock::LockForWrite(char const*, int)
 CThreadRWLock::UnlockWrite(char const*, int)
+CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
 CTiltTwistConstraint
@@ -1257,6 +1269,7 @@ CUtlBinaryBlock
 CUtlBinaryBlock::Set(void const*, int)
 CUtlBinaryBlock::SetLength(int)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
+CUtlBinaryBlock::operator=(CUtlBinaryBlock&&)
 CUtlBlockMemory overflow!
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
@@ -1312,6 +1325,7 @@ CVProfNode::EnterScope()
 CVProfNode::ExitScope()
 CVProfNode::GetSubNode(char const*, int, char const*, int)
 CVertexKDTree::BuildMidpoint(float const*, int, int)
+CVertexKDTree::BuildMidpointFromVertexSubSet(float const*, int, int const*, int)
 CVertexKDTree::FindVertsInBox(CUtlVectorFixedGrowable<float const*, 64ul, int>&, Vector const&, Vector const&, int) const
 CVrSkeletalInputSettings
 CWristBone
@@ -1353,6 +1367,7 @@ C_INIT_InitFromCPSnapshot: Unsupported attribute data type! (%d)
 C_INIT_InitFromCPSnapshot: cannot initialize PREV_XYZ - XYZ cannot be read!
 C_INIT_InitFromCPSnapshot: framerate unknown initializing PREV_XYZ! Defaulting to 30fps, but particle velocity may look wrong...
 C_INIT_InitFromParentKilled
+C_INIT_InitFromParentKilled: Unsupported attribute data type! (%d)
 C_INIT_InitSkinnedPositionFromCPSnapshot
 C_INIT_InitVec
 C_INIT_InitVecCollection
@@ -1423,6 +1438,7 @@ C_INIT_SequenceLifeTime
 C_INIT_SetHitboxToClosest
 C_INIT_SetHitboxToModel
 C_INIT_SetRigidAttachment
+C_INIT_SetVectorAttributeToVectorExpression
 C_INIT_StatusEffect
 C_INIT_StatusEffectCitadel
 C_INIT_VelocityFromCP
@@ -1511,6 +1527,7 @@ C_OP_MaintainEmitter
 C_OP_MaintainSequentialPath
 C_OP_MaxVelocity
 C_OP_ModelCull
+C_OP_ModelDampenMovement
 C_OP_MoveToHitbox
 C_OP_MovementLoopInsideSphere
 C_OP_MovementMaintainOffset
@@ -1791,6 +1808,7 @@ D_MULTIVIEW_BLOBULATOR
 D_NO_GBUFFER_NORMALS
 D_SUPPORT_FRAME_CROP
 D_USE_STATUS_EFFECTS_PROXY
+Dampen Movement relative to model
 Darken
 DebugPrintKV3(KeyValues3 const*)
 Decompression failure
@@ -1868,7 +1886,6 @@ EnsureCapacity
 Entire Path
 Entities Only
 Entity Hitbox Cache Field (Requires Stick on Collision)
-Error in child list of particle system %s [%p], parent: %p
 Error initializing particle system %s
 Error: Sort failed
 Everything
@@ -1881,7 +1898,6 @@ External wind force
 Extra Arc Data Point
 F
 FATAL ERROR: unable to register all schema data: %s
-FIXME:A particle control point is trying to use an invalid slot %d! Only 64 are available. Ignoring for now, but a crash may happen later if this system is used.
 FORCE_SCALE
 FX Light
 F_ADDRESS_V_CLAMP
@@ -1932,6 +1948,7 @@ Failed to transfer KV3 data for resource '%s' - %s
 False
 FeatureID
 FeetSettings
+FieldPathEncodeFinish
 Fifty Percent/Zero Percent Distance
 FillAttr
 FilterFrom
@@ -1997,6 +2014,7 @@ GetGameInfoBool(char const*, bool)
 GetGameInfoFloat(char const*, float)
 GetGameInfoInt(char const*, int)
 GetGameInfoKey(char const*)
+GetPathData failed for read only CFieldPath
 GetResourceManifestCount
 GetResourceManifests
 Global UI
@@ -2039,7 +2057,6 @@ INHERITABLE_BOOL_INHERIT
 INHERITABLE_BOOL_TRUE
 IParticleCollection
 IParticleSystemDefinition
-IQuickTime001
 IS_EFFECTS_LAYER
 IS_MBOIT_PASS
 IS_MODE_MIXED_RESOLUTION
@@ -2106,10 +2123,9 @@ IsoSurface
 J
 JIGGLE_BONE
 K
-KMeansQuantization
 KV3 load transfer failed: %s
 KeyValueCache001
-KeyValues::GetInt(char const*, int)
+KeyValues::GetInt(char const*, int) const
 KeyValues::KeyValues(char const*)
 KeyValues::operator=(KeyValues const&)
 KeyValues::~KeyValues()
@@ -2154,6 +2170,7 @@ Lighting and Shadows
 LightmapUV
 LightmapUVW
 Lightning Snapshot Generator
+Limit debug visualizations to substring match of effect name
 Line length constraint
 Line segments
 Linear Falloff
@@ -2241,7 +2258,6 @@ MaterialParam_t
 MaterialProxyType_t
 MaterialResourceData_t
 MaterialUtils_001
-MathLib_Init
 Max Confirmation Traces Per Fame
 Max Instances
 Max Particles
@@ -2352,6 +2368,9 @@ Noise animation time scale
 Noise force
 Noise scalar
 Noise vector
+NonTopoComplex
+NonTopoComplexPack4Bits
+NonTopoPenultimatePluseOne
 None
 Normal Map
 Normal align to CP
@@ -2734,6 +2753,10 @@ Particles/ParticleTraceOffsetOnlyHit
 Particles/ParticleVertexCBSlot
 ParticlesFoggedByDefault
 ParticlesLib
+Path_AddToTail failed for read only CFieldPath
+Path_AddToTail failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
+Path_PopLast failed for read only CFieldPath
+Path_RemoveAll failed for read only CFieldPath
 Pause particle simulation
 Per-Frame Planeset
 Per-Particle
@@ -2766,10 +2789,22 @@ Plat_NonFatalErrorFunc
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_USTime
 Play EndCap when Finished
+PlusFour
+PlusThree
+PlusTwo
 Point Away
 Point vector at next particle position
 PointDefinitionWithTimeValues_t
 PointDefinition_t
+PopAllButOnePlusN
+PopAllButOnePlusNPack3Bits
+PopAllButOnePlusNPack6Bits
+PopAllButOnePlusOne
+PopNAndNonTopographical
+PopNPlusN
+PopNPlusOne
+PopOnePlusN
+PopOnePlusOne
 Position Control Point
 Position On Grid
 Position Previous
@@ -2809,6 +2844,28 @@ Profile particle spike
 PropWorldOrigin
 PropertyEditorSystem_001
 Pull towards control point
+PushN
+PushNAndNonTopographical
+PushOneLeftDeltaNRightNonZero
+PushOneLeftDeltaNRightNonZeroPack6Bits
+PushOneLeftDeltaNRightNonZeroPack8Bits
+PushOneLeftDeltaNRightZero
+PushOneLeftDeltaOneRightNonZero
+PushOneLeftDeltaOneRightZero
+PushOneLeftDeltaZeroRightNonZero
+PushOneLeftDeltaZeroRightZero
+PushThreeLeftDeltaN
+PushThreeLeftDeltaOne
+PushThreeLeftDeltaZero
+PushThreePack5LeftDeltaN
+PushThreePack5LeftDeltaOne
+PushThreePack5LeftDeltaZero
+PushTwoLeftDeltaN
+PushTwoLeftDeltaOne
+PushTwoLeftDeltaZero
+PushTwoPack5LeftDeltaN
+PushTwoPack5LeftDeltaOne
+PushTwoPack5LeftDeltaZero
 Q
 Quadratic/Linear Bias
 Quadrilaterals
@@ -2962,7 +3019,6 @@ RenderPrimitiveType_t
 RenderService_001
 RenderSkeletonBone_t
 RenderSlotType_t
-RenderSystemSurface001
 RenderUtils_001
 Rendering Options
 Rendering filter
@@ -3274,7 +3330,6 @@ The maximum distance that particles will render
 Thin Plate
 This convar is being accessed prior to ConVar_Register being called
 ThreadGetCurrentId
-ThreadInMainThread
 ThreadSleep
 Time Since CP#%d Changed
 Time scale
@@ -3330,6 +3385,7 @@ Use Quaternians Internally
 Use Random Children in Group
 Use local coordinates for offset
 Use local space offset
+Use random seeds in debug
 Use scalar attribute for texture coordinate
 Use sequential CP pairs between start and end point
 Using 16-bit blend indices
@@ -3359,12 +3415,6 @@ VECTOR_FLOAT_EXPRESSION_INPUT1_NOISE
 VECTOR_FLOAT_EXPRESSION_UNINITIALIZED
 VEngineCvar007
 VFileSystem017
-VGUI_Input005
-VGUI_Panel010
-VGUI_Scheme010
-VGUI_Surface032
-VGUI_System010
-VGUI_ivgui008
 VMaterialSystem2_001
 VMatrix
 VMediaFoundation001
@@ -3521,6 +3571,7 @@ _V_strncat
 _V_strncmp
 _V_strncpy
 _V_strnicmp_fast
+__UNKNOWN__
 __bss_start
 __cxa_atexit
 __cxa_finalize
@@ -3675,6 +3726,7 @@ color warp texture (3d)
 color1
 color2
 comparison control point number
+comparison velocity
 component 0/1/2 X/Y/Z
 component scale factor
 compute normals from control points
@@ -3751,6 +3803,7 @@ cylinder outer output
 cylinder outer radius
 cylinder top control point
 d
+dampen outside instead of inside
 dampen scale
 data_offset
 data_size
@@ -3974,6 +4027,7 @@ ignore delta time
 ignore normal
 ignore radius
 impulse type
+include default contents trace hulls
 include water
 infinite bounds - don't cull
 inherit CP orientation
@@ -4091,6 +4145,7 @@ light 4 type 0=point 1=spot
 light amplification amount
 light bias
 light cookie string
+light has _fifty_percent_distance of %f but no zero_percent_distance
 light priority
 light radius multiplier
 light start falloff
@@ -4123,7 +4178,6 @@ m_BoundingBoxMin
 m_CenterOffset
 m_ChildRef
 m_Children
-m_Children.m_pHead: [%p]
 m_CollisionGroupName
 m_Color
 m_ColorFade
@@ -4288,6 +4342,7 @@ m_bEnabled
 m_bEndCap
 m_bEvenDistribution
 m_bExplosions
+m_bFinalEmitOnStop
 m_bFireOnEmissionEnd
 m_bFitToModelSize
 m_bFlipBasedOnYaw
@@ -4316,6 +4371,7 @@ m_bIgnoreNormal
 m_bIgnoreRadius
 m_bIgnoreRotation
 m_bIncludeChildren
+m_bIncludeShotHull
 m_bIncludeWater
 m_bInfiniteBounds
 m_bInfiniteLine
@@ -4376,6 +4432,7 @@ m_bOrientToHand
 m_bOrientToNormal
 m_bOrientZ
 m_bOriginalModel
+m_bOutside
 m_bOverrideTranslucentMaterials
 m_bParticles
 m_bPerParticle
@@ -4438,6 +4495,7 @@ m_bShouldDrawControlPointAxes
 m_bShouldDrawHitboxes
 m_bShouldHitboxesFallbackToRenderBounds
 m_bShouldPerformCullCheck
+m_bShouldSave
 m_bShouldSimulateDuringGamePaused
 m_bShouldSort
 m_bShuffle
@@ -5588,6 +5646,7 @@ m_vecCPOffset3
 m_vecCPOffset4
 m_vecCenter
 m_vecColorScale
+m_vecComparisonVelocity
 m_vecComponentScale
 m_vecCpOffset
 m_vecDefaultValue
@@ -5626,6 +5685,7 @@ m_vecPlaneNormal
 m_vecPoint1
 m_vecPoint2
 m_vecPointOffset
+m_vecPosOffset
 m_vecRateMax
 m_vecRateMin
 m_vecRotAxis
@@ -5716,6 +5776,7 @@ maximum velocity
 maximum visual screen size
 maximum visual screen-size
 maximum visual size
+mdl
 memcmp
 memcpy
 memmove
@@ -5984,6 +6045,7 @@ per-particle strength
 percentage bias
 percentage maximum
 percentage minimum
+perform final emit on stop
 pervertexlighting
 phys_res
 physaggregatedata.cpp
@@ -6041,7 +6103,9 @@ r_draw_particle_children_with_parents
 r_drawparticles
 r_freezeparticles
 r_particle_cables_cast_shadows
+r_particle_debug_filter
 r_particle_debug_force_simulation
+r_particle_debug_randomseeds
 r_particle_enable_fastpath
 r_particle_force_material_binds
 r_particle_max_detail_level
@@ -6050,6 +6114,7 @@ r_particle_max_texture_layers
 r_particle_min_timestep
 r_particle_mixed_resolution_viewstart
 r_particle_render_refreshes_sleep_timer
+r_particle_render_test
 r_particle_timescale
 r_threaded_particles
 radial strength
@@ -6130,7 +6195,6 @@ reverse z-buffer test
 rigid rotation interpolation
 rigid rotation offset pitch/yaw/roll
 rigid set rotation from bones
-root
 rope shake
 rotate normals
 rotate rate(dps)
@@ -6338,6 +6402,7 @@ tes_index_buffer
 tesselation resolution scale factor
 tessellation scale factor
 test direction
+test position offset
 texcoord
 texture UV horizontal Scale field
 texture UV vertical Scale field
@@ -6400,6 +6465,7 @@ uint32
 uint64
 uint8
 uniform speed
+unknown
 unspecified
 use bones instead of hitboxes
 use continuous emission
@@ -6427,7 +6493,7 @@ use the derivative
 use velocity for test direction
 useMotionDamping
 useSmoothPaths
-utlsoacontainer.cpp:2528
+utlsoacontainer.cpp:2362
 v
 v %g %g %g
 v %g %g %g%s

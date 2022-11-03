@@ -718,11 +718,11 @@ function CAghanim:GetNewPlayerList( )
 	local vecPlayerIDs = {}
 	for nPlayerID = 0, AGHANIM_PLAYERS - 1 do
 		if PlayerResource:IsValidPlayerID( nPlayerID ) and PlayerResource:GetTeam( nPlayerID ) == DOTA_TEAM_GOODGUYS then
-			local nGamePlayedCount = PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, "labyrinth_num_games_played" )
+			local nGamePlayedCount = PlayerResource:GetNetworkedEventActionClaimCountByName( nPlayerID, 39, "labyrinth_num_games_played" )
 			if nGamePlayedCount < 2 then
 				table.insert( vecPlayerIDs, nPlayerID )
 			end
-			if PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, "labyrinth_lost_to_beast" ) < 1 then
+			if PlayerResource:GetNetworkedEventActionClaimCountByName( nPlayerID, 39, "labyrinth_lost_to_beast" ) < 1 then
 				self.bLostToPrimalBeast = false
 			end
 		end
@@ -794,7 +794,7 @@ function CAghanim:ComputeHasNewPlayers()
 		return
 	end
 
-	if PlayerResource:HasSetEventGameCustomActionClaimCount() == false then
+	if PlayerResource:HasSetNetworkedEventActionClaimCount() == false then
 		return
 	end
 
@@ -2929,7 +2929,7 @@ function CAghanim:GrantPlayerPoints( nPlayerID, nDesiredPoints, bBattlePoints, s
 
 	-- Apply battle pass arcane fragment multiplier per player
 	if not bBattlePoints then
-		local nActionGranted = PlayerResource:GetEventGameCustomActionClaimCountByName( nPlayerID, "labyrinth_arcane_fragment_bonus_rate" )
+		local nActionGranted = PlayerResource:GetNetworkedEventActionClaimCountByName( nPlayerID, 39, "labyrinth_arcane_fragment_bonus_rate" )
 		local fMult = 1 + ARCANE_FRAGMENT_BP_BONUS_PER_GRANT * nActionGranted
 		nDesiredPoints = math.ceil( nDesiredPoints * fMult )
 	end
