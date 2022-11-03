@@ -1968,11 +1968,11 @@ function CWinter2022:SpawnGreevils()
 		self.hRoshan.hGreevilLeader = hGreevilLeader
 
 		-- we want to count existing Greevil Thieves that popped out of the candy buckets
-		local nNumGreevils = self.nGreevilSpawnCount - self:CountGreevils( false )
+		local nNumGreevils = math.max( 0, self.nGreevilSpawnCount - self:CountGreevils( false ) )
 		--printf( 'SPAWNING %d GREEVILS FROM THE LEADER SCRIPT', nNumGreevils )
 		self.m_bSpawningInitialGreevilWave = true
 		hGreevilLeader:SetContextThink( "greevil_spawn", function()
-			if nNumGreevils == 0 then
+			if nNumGreevils <= 0 then
 				self.m_bSpawningInitialGreevilWave = false
 				return
 			end
@@ -2039,7 +2039,14 @@ function CWinter2022:SpawnGreevilThieves()
 						-- special case for 1 candy - it won't be reduced below 1 so there's no thief to spawn here!
 						if tBucketData.nCandy > 1 then
 							-- spawn greevil thieves based on the candy delta
+							-- clip to a reasonable number per well
 							local nThievesToSpawn = math.max( 1, math.floor( nCandyDelta * WINTER2022_GREEVIL_THIEVES_SPAWNED_PER_CANDY ) )
+							nThievesToSpawn = math.min( nThievesToSpawn, WINTER2022_GREEVIL_THIEVES_MAX_PER_WELL )
+
+							-- clip globally to make sure we don't get out hand
+							local nTotalCurrentGreevils = self:CountGreevils( false )
+							nThievesToSpawn = math.min( nThievesToSpawn, WINTER2022_GREEVIL_COUNT_ABSOLUTE_MAX - nTotalCurrentGreevils )
+
 							for i=1, nThievesToSpawn do
 								self:SpawnGreevilThief( hUnit )
 							end

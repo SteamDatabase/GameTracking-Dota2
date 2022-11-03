@@ -1044,7 +1044,15 @@ end
 function CWinter2022:AddResultToSignOut( event )
 	self.SignOutTable["game_time"] = GameRules:GetDOTATime( false, true )
 	self.SignOutTable[ "winning_team" ] = event[ "winningteam" ]
-	self.SignOutTable["banned_heroes"] = GameRules:GetBannedHeroes()
+	self.SignOutTable["banned_heroes"] = {}
+
+	local nBanIdx = 0
+	local tBanHeroTable = GameRules:GetBannedHeroIDs()
+	for _,v in ipairs( tBanHeroTable ) do
+		self.SignOutTable["banned_heroes"][ ( "ban" .. nBanIdx ) ] = { hero_id = v }
+		nBanIdx = nBanIdx + 1
+	end
+
 	for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 		if PlayerResource:IsValidPlayerID( nPlayerID ) then
 			local PlayerEventMetaData = self.EventMetaData[nPlayerID] or {}
