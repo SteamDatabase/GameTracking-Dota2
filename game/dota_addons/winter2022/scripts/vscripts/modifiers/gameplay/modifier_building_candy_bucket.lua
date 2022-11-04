@@ -81,7 +81,7 @@ function modifier_building_candy_bucket:DeclareFunctions()
 		MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PHYSICAL,
 		MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL,
 		MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PURE,
-		MODIFIER_EVENT_ON_ATTACK_LANDED,
+		MODIFIER_EVENT_ON_ATTACK,
 		--MODIFIER_PROPERTY_EXTRA_HEALTH_BONUS,
 	}
 
@@ -140,7 +140,7 @@ end
 
 -----------------------------------------------------------------------------
 
-function modifier_building_candy_bucket:OnAttackLanded( params )
+function modifier_building_candy_bucket:OnAttack( params )
 	if IsServer() == false then
 		return
 	end

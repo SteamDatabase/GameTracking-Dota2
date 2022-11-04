@@ -55,7 +55,7 @@ function CWinter2022:GrantMount( nPlayerID, hHero, sChoice )
         end
 	end
 
-	self.SignOutTable["stats"]["player_stats"]["mount_index"] = mount_index
+	self.SignOutTable["stats"]["player_stats"][nPlayerID]["mount_index"] = mount_index
 
 	FireGameEvent( "dota_combat_event_message", {
         player_id = nPlayerID,
