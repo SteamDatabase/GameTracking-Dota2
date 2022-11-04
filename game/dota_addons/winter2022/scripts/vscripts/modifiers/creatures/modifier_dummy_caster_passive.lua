@@ -28,6 +28,7 @@ function modifier_dummy_caster_passive:CheckState()
 		state[ MODIFIER_STATE_DISARMED ] = true
 		state[ MODIFIER_STATE_ROOTED ] = true
 		state[ MODIFIER_STATE_ATTACK_IMMUNE ] = true
+		state[ MODIFIER_STATE_OUT_OF_GAME ] = true
 	end
 
 	return state

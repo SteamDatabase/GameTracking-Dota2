@@ -1771,6 +1771,15 @@ function CWinter2022:RoshanRetarget()
 		end
 	end
 
+	-- remove the "under attack" modifier from all wells as a safeguard against one of them becoming locked indefinitely
+	for _,tBucketData in pairs( self.tAllCandyBucketsData ) do
+		hUnit = tBucketData.hEntity
+		if hUnit ~= nil and hUnit:IsNull() == false and hUnit:IsAlive() then
+			--print( 'REMOVING modifier_building_roshan_attacking from ' .. hUnit:GetName() )
+			hUnit:RemoveModifierByName( 'modifier_building_roshan_attacking' )
+		end
+	end
+
 	if self.bFirstRoshanTarget == true then
 		self:GetGlobalAnnouncer():OnRoshanTargetsWell()
 		self.bFirstRoshanTarget = false

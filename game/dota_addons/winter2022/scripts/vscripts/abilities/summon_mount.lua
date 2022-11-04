@@ -86,6 +86,12 @@ function summon_penguin:OnSpellStart()
 				hCaster:RemoveModifierByName("modifier_mounted")
 			end
 		else
+			-- ensure previous mount despawns
+			if self.hMount ~= nil and not self.hMount:IsNull() and not self.hMount:HasModifier("modifier_kill") then
+				self.hMount:AddNewModifier(nil, nil, "modifier_kill", { duration = 10 })
+				self.hMount = nil
+			end
+
 			-- TODO: Cache mount choice
 			local mount = ""
 			if hCaster:HasModifier("modifier_mount_penguin") then mount = "npc_dota_mount_penguin"
