@@ -144,6 +144,7 @@ function CWinter2022:InitGameMode()
 	self.SignOutTable["stats"]["player_stats"] = {}
 	-- A list of roshan attacks and data surrounding it.
 	self.SignOutTable["stats"]["roshan_attacks"] = {}
+	self.SignOutTable["stats"]["roshan_targetting"] = {}
 
 	-- Initialize player stats 
 	printf( "Initializing player stats" )
@@ -1853,18 +1854,18 @@ function CWinter2022:SetTrickOrTreatTarget( hTarget )
 		end
 	end
 
-	-- Store a roshan attack record in the stats
-	local roshan_attack = {}
-	roshan_attack["game_time"] = GameRules:GetDOTATime( false, true )
+	-- Store a roshan target record in the stats
+	local roshan_targetting = {}
+	roshan_targetting["game_time"] = GameRules:GetDOTATime( false, true )
 	for _,tBucketData in pairs( self.tAllCandyBucketsData ) do
 		hUnit = tBucketData.hEntity
 		if hUnit ~= nil and hUnit:IsNull() == false then
 			local key_value_key = _G.WINTER2022_TOWER_NAME_TO_KV_KEY[ tBucketData.hEntity:GetName() ]
-			roshan_attack[key_value_key] = tBucketData.nCandy
+			roshan_targetting[key_value_key] = tBucketData.nCandy
 		end
 	end
 
-	table.insert( self.SignOutTable["stats"]["roshan_attacks"], roshan_attack)
+	table.insert( self.SignOutTable["stats"]["roshan_targetting"], roshan_targetting)
 
 	self.hRoshan.hTrickOrTreatTarget = hTarget
 	if self.hRoshan.hTrickOrTreatTarget ~= nil then

@@ -46,6 +46,9 @@ function modifier_building_candy_bucket:OnCreated( kv )
 		self.nRangeFX = nil
 	end
 	self.nPrevCount = 0
+
+	self.bUnderAttack = false
+
 	local fInterval = 0.05
 	self:StartIntervalThink( fInterval )
 end
@@ -167,8 +170,27 @@ function modifier_building_candy_bucket:OnAttack( params )
 
 	if nCandy <= 0 then
 		printf( "ERROR! Building %s has zero candy but was attacked by Roshan!", self:GetParent():GetUnitName() )
+		-- #EP_NOTE: Should bCanAttackWell be set back to true?
 		return
 	end
+
+	if self.bUnderAttack == false then
+		self.bUnderAttack = true
+
+		-- Store a roshan attack record in the stats
+		local roshan_attack = {}
+		roshan_attack["game_time"] = GameRules:GetDOTATime( false, true )
+		for _,tBucketData in pairs( GameRules.Winter2022.tAllCandyBucketsData ) do
+			local hUnit = tBucketData.hEntity
+			if hUnit ~= nil and hUnit:IsNull() == false then
+				local key_value_key = _G.WINTER2022_TOWER_NAME_TO_KV_KEY[ tBucketData.hEntity:GetName() ]
+				roshan_attack[key_value_key] = tBucketData.nCandy
+			end
+		end
+
+		table.insert( GameRules.Winter2022.SignOutTable["stats"]["roshan_attacks"], roshan_attack)
+	end
+
 
 	local nMaxCandy = self.nMaxCandy or nCandy
 	if nCandy > nMaxCandy then
@@ -213,15 +235,32 @@ function modifier_building_candy_bucket:OnIntervalThink()
 			self.nParticleFX = -1
 		end
 	elseif self.nPrevCount ~= nCandy then
-		local nStack = nCandy % 10
-		local nTensStack = math.floor( nCandy / 10 ) 
+
+		local nHundredsStack = math.floor( nCandy / 100 )
+		local nTensStack = math.floor( nCandy / 10 ) % 10
+		local nOnesStack = nCandy % 10
+		local bShowHundreds = nCandy >= 100
+		local bShowTens = nCandy >= 10
+		local bShowOnes = nCandy >= 1
+
+		--printf( 'nHundredsStack = %d, nTensStack = %d, nOnesStack = %d', nHundredsStack, nTensStack, nOnesStack )
+
+		if nCandy < 10 then
+			-- custom for single digit candies - use the tens digit to display so that it's centered
+			nTensStack = nOnesStack
+			nOnesStack = 0
+			bShowTens = true
+			bShowOnes = false
+		end
+
 		if self.nParticleFX == -1 then
 			self.nParticleFX = ParticleManager:CreateParticle( "particles/hw_fx/candy_carrying_building_overhead.vpcf", PATTACH_OVERHEAD_FOLLOW, self:GetParent() )
 			--printf( "candy count: %d; created overhead particle", nCandy )
 			--self:AddParticle( self.nParticleFX, false, false, 10, true, true )
 		end
-		ParticleManager:SetParticleControl( self.nParticleFX, 2, Vector( nTensStack, nStack, 0 ) )
+		ParticleManager:SetParticleControl( self.nParticleFX, 2, Vector( nHundredsStack, nTensStack, nOnesStack ) )
 		ParticleManager:SetParticleControl( self.nParticleFX, 3, Vector( ( 255 / 255 ), ( 255 / 255 ), ( 255 / 255 ) ) )
+		ParticleManager:SetParticleControl( self.nParticleFX, 4, Vector( (bShowHundreds and 1) or 0, (bShowTens and 1) or 0, (bShowOnes and 1) or 0 ) )
 
 		self.nPrevCount = nCandy
 	end
