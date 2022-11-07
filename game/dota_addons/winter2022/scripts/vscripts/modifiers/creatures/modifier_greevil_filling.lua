@@ -161,8 +161,9 @@ function modifier_greevil_filling:EjectFilling( bRoshanKill )
 			hCaster = GameRules.Winter2022.hRoshan
 		end
 
-		local hAbility = hCaster:FindAbilityByName( "roshan_launch_lava_blob" )
+		local hAbility = hCaster:AddAbility( "roshan_launch_lava_blob" )
 		if hAbility ~= nil then
+			hAbility:UpgradeAbility(true)
 			local nMinRangeFromCenter = 150
 			local bDoPathingCheck = false
 			print( 'ORANGE GREEVIL KILLED - CREATING LAVA BLOBS' )
