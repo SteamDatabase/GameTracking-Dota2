@@ -52,6 +52,7 @@ function CWinter2022:GrantMount( nPlayerID, hHero, sChoice )
 
 		if hBuffName == sChoice then
 			mount_index = i
+            break
         end
 	end
 
