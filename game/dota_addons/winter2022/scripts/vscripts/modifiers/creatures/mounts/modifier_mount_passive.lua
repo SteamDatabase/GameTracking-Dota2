@@ -92,7 +92,9 @@ function modifier_mount_passive:OnOrder( params )
 
 		if dismountOrders[nOrderType] then
 			if not self:GetParent():HasModifier("modifier_mount_movement") and not self:GetParent():HasModifier("modifier_mount_hop_movement") then
-				self:GetParent():AddNewModifier(nil, nil, "modifier_kill", { duration = 2 })
+				if not self:GetParent():HasModifier("modifier_kill") then
+					self:GetParent():AddNewModifier(nil, nil, "modifier_kill", { duration = 2 })
+				end
 			end
 
 			if self.hPlayer ~= nil and self.hPlayer:IsNull() == false then

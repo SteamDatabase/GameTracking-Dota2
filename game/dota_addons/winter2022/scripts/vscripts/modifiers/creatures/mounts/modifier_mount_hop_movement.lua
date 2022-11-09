@@ -310,10 +310,12 @@ function modifier_mount_hop_movement:EndHop( me, vEndPos )
 	self:GetParent():FadeGesture( self:GetAbility():GetAnimation_Movement() )
 
 	-- Set owner cooldown to the same as ours for a visual indicator of when the next hop is
+	--[[ Disabling because it prevents dismounting by using the ability
 	local hSummonAbility = self:GetCaster():GetOwnerEntity():FindAbilityByName("summon_penguin")
-	if hSummonAbility ~= nil then
+	if hSummonAbility ~= nil and self:IsHeroRiding() then
 		hSummonAbility:StartCooldown( math.max( self:GetAbility():GetCooldownTimeRemaining(), self.hop_pause ) )
 	end
+	--]]
 	
 	GridNav:DestroyTreesAroundPoint( self:GetParent():GetAbsOrigin(), self.nTreeDestroyRadius, false )
 	local vEndPos = GetClearSpaceForUnit( me, vEndPos )

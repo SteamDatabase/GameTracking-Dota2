@@ -84,11 +84,14 @@ function summon_penguin:OnSpellStart()
 				-- Already mounted, so dismount instead of channeling/summoning
 				hCaster:Interrupt()
 				hCaster:RemoveModifierByName("modifier_mounted")
+			else
+				-- don't start cooldown because we did nothing
+				self:EndCooldown()
 			end
 		else
 			-- ensure previous mount despawns
 			if self.hMount ~= nil and not self.hMount:IsNull() and not self.hMount:HasModifier("modifier_kill") then
-				self.hMount:AddNewModifier(nil, nil, "modifier_kill", { duration = 10 })
+				self.hMount:AddNewModifier(nil, nil, "modifier_kill", { duration = 5 })
 				self.hMount = nil
 			end
 

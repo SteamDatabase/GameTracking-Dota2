@@ -42,7 +42,10 @@ function modifier_summon_mount:OnIntervalThink()
 	end
 
 	if self:GetAbility() ~= nil and self:GetAbility():IsNull() == false and self:GetParent():FindModifierByName( "modifier_fountain_aura_buff" ) then
-		self:GetAbility():EndCooldown()
+		if self:GetAbility():GetCooldownTimeRemaining() > 1.0 and not self:GetParent():HasModifier("modifier_mounted") then
+			self:GetAbility():EndCooldown()
+			self:GetAbility():StartCooldown( 1.0 )
+		end
 	end
 end
 
