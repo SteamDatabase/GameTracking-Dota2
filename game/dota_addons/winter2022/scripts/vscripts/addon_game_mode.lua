@@ -1106,6 +1106,7 @@ function CWinter2022:StateStart( nNewState )
 
 	if nNewState == _G.WINTER2022_STATE_GOHOME then
 		self:ToggleDayNight()
+		self.hRoshan.hPreviousTarget = nil
 
 	elseif nNewState == _G.WINTER2022_STATE_GREEVILS then
 		self.m_nStateRoundNumber = self.m_nStateRoundNumber + 1
@@ -1841,7 +1842,6 @@ end
 ----------------------------------------------------------------------------------------
 
 function CWinter2022:SetTrickOrTreatTarget( hTarget )
-	local hOldTarget = self.hRoshan.hTrickOrTreatTarget
 	if self.hRoshan.hTrickOrTreatTarget ~= nil then
 		for nPlayerID = 0, ( DOTA_MAX_TEAM_PLAYERS - 1 ) do
 			if PlayerResource:HasSelectedHero( nPlayerID ) then
@@ -1867,15 +1867,20 @@ function CWinter2022:SetTrickOrTreatTarget( hTarget )
 
 	table.insert( self.SignOutTable["stats"]["roshan_targetting"], roshan_targetting)
 
+	if self.hRoshan.hTrickOrTreatTarget ~= nil then
+		self.hRoshan.hPreviousTarget = self.hRoshan.hTrickOrTreatTarget
+	end
+
 	self.hRoshan.hTrickOrTreatTarget = hTarget
 	if self.hRoshan.hTrickOrTreatTarget ~= nil then
 		self.hRoshan.nTrickOrTreatTeam = hTarget:GetTeamNumber()
+		
 		if self.hRoshan.hTrickOrTreatTarget:IsBuilding() then
 			self.hRoshan.nTreatMode = ROSHAN_TRICK_OR_TREAT_MODE_ATTACK
 
 			-- Grant redirect_roshan quest
-			if hOldTarget ~= nil and hOldTarget:IsNull() == false and hOldTarget:IsBuilding() then
-				local nOldTeam = hOldTarget:GetTeamNumber()
+			if self.hRoshan.hPreviousTarget ~= nil and self.hRoshan.hPreviousTarget:IsNull() == false and self.hRoshan.hPreviousTarget:IsBuilding() then
+				local nOldTeam = self.hRoshan.hPreviousTarget:GetTeamNumber()
 				if nOldTeam ~= self.hRoshan.nTrickOrTreatTeam and ( self.hRoshan.nTrickOrTreatTeam  == DOTA_TEAM_GOODGUYS or self.hRoshan.nTrickOrTreatTeam == DOTA_TEAM_BADGUYS ) then
 					-- ensure this is only granted once per game per team
 					local bShouldGrant = false

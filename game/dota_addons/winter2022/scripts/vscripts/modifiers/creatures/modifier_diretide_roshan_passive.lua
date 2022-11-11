@@ -304,7 +304,6 @@ function modifier_diretide_roshan_passive:OnIntervalThink()
 			print( "Retarget: ROSHAN RESET" )
 			self:ResetHero()
 			GameRules.Winter2022:DirectStateTransition( _G.WINTER2022_STATE_ROSHAN, false )
-			GameRules.Winter2022:RoshanRetarget()
 			self:Reset()
 			return
 		end
