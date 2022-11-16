@@ -144,6 +144,12 @@ function modifier_mount_movement:UpdateHorizontalMotion( me, dt )
 	local flAngleDiff = bHeroIsRiding and AngleDiff( self:GetParent().flDesiredYaw, curAngles.y ) or 0
 
 	local flTurnAmount = dt * ( self.turn_rate_min + self:GetSpeedMultiplier() * ( self.turn_rate_max - self.turn_rate_min ) )
+
+	-- boost turn rate for 2 seconds after crash
+	if self.flLastCrashTime ~= nil and GameRules:GetDOTATime(false, true) - self.flLastCrashTime <= 2.0 then
+		flTurnAmount = flTurnAmount * 1.5
+	end
+
 	flTurnAmount = math.min( flTurnAmount, math.abs( flAngleDiff ) )
 
 	if flAngleDiff < 0.0 then
@@ -181,6 +187,7 @@ function modifier_mount_movement:UpdateHorizontalMotion( me, dt )
 
 	-- Move
 	local vNewPos = self:GetParent():GetOrigin() + self:GetParent():GetForwardVector() * ( dt * self.flCurrentSpeed )
+
 	if not GridNav:CanFindPath( me:GetOrigin(), vNewPos ) then
 		-- if we are just crashing into trees, we can keep moving but will still slow down
 		GridNav:DestroyTreesAroundPoint( vNewPos, self.nTreeDestroyRadius, true )
@@ -375,7 +382,7 @@ function modifier_mount_movement:Crash( hHitUnit, bHitTree )
 		--self:GetHero():AddNewModifier( self:GetParent(), self:GetAbility(), "modifier_mount_impairment", { duration = 2.0 } )
 	end
 	
-	self.flCurrentSpeed = self:IsHeroRiding() and 100 or 0
+	self.flCurrentSpeed = self:IsHeroRiding() and math.max( 100, self.flCurrentSpeed / 2.0 ) or 0
 	self.bCrashScheduled = false
 	self.hCrashScheduledUnit = nil
 	

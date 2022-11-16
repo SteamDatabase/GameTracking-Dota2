@@ -69,6 +69,7 @@ function modifier_mount_hop_movement:OnCreated( kv )
 	self.can_move_up_cliffs = hAbility:GetSpecialValueFor("can_move_up_cliffs") == 1
 	self.hop_pause = hAbility:GetSpecialValueFor("hop_pause")
 	self.turn_rate = hAbility:GetSpecialValueFor( "turn_rate" )
+	self.hops_after_dismount = hAbility:GetSpecialValueFor( "hops_after_dismount" )
 
 	-- Landing
 	self.impact_radius = hAbility:GetSpecialValueFor("impact_radius")
@@ -189,13 +190,16 @@ function modifier_mount_hop_movement:UpdateHorizontalMotion( me, dt )
 		end
 
 		-- Check to despawn
-		if not bHeroIsRiding then
+		if not bHeroIsRiding and self.hops_after_dismount <= 0 then
 			self:Destroy()
 			return
 		end
 
 		if GameRules:GetDOTATime( false, true ) >= self.flHopTime then
 			self:StartHop()
+			if not bHeroIsRiding then
+				self.hops_after_dismount = self.hops_after_dismount - 1
+			end
 		end
 	
 		-- Set Hero Position too. Set here instead of in modifier_mounted so that update order doesn't matter
