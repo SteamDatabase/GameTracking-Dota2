@@ -147,6 +147,10 @@ function modifier_greevil_passive:OnTakeDamage( params )
 
 				GameRules.Winter2022.SignOutTable["stats"].CandyCounts.generated = GameRules.Winter2022.SignOutTable["stats"].CandyCounts.generated + nCandyToDrop
 
+				if hAttacker ~= nil and not hAttacker:IsNull() and hAttacker:IsOwnedByAnyPlayer() then
+					GameRules.Winter2022:GrantEventAction( hAttacker:GetPlayerOwnerID(), "winter2022_hit_greevils_for_candy", nCandyToDrop )
+				end
+
 				while nCandyToDrop > 0 do
 					local bBigBag = false
 					if nCandyToDrop >= _G._G.WINTER2022_CANDY_COUNT_IN_CANDY_BAG then

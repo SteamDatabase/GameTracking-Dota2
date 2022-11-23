@@ -340,7 +340,7 @@ function EnterEatGreevilState()
 
 			local hFillingBuff = thisEntity.hGreevilToEat:FindModifierByName( "modifier_greevil_filling" )
 			if hFillingBuff then
-				hFillingBuff:EjectFilling( true )
+				hFillingBuff:EjectFilling( true, thisEntity )
 
 				local vColor = WINTER2022_GREEVIL_FILLING_COLORS[ hFillingBuff:GetFillingType() ]
 				local nFXIndex = ParticleManager:CreateParticle( "particles/units/greevils/greevil_blood_spit.vpcf", PATTACH_CUSTOMORIGIN, item )

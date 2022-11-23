@@ -1103,16 +1103,33 @@ function CWinter2022:OnItemPickedUp( event )
 	local hPickup = EntIndexToHScript( event.ItemEntityIndex )
 	if hPickup ~= nil and hPickup:IsNull() == false then
 		local hContainer = hPickup:GetContainer()
-		if hContainer ~= nil and hContainer:IsNull() == false and hContainer.nGolemIndex ~= nil and hContainer.nItemIndex ~= nil then
-			local tItemTable = self.m_vecNeutralItemDrops[ hContainer.nGolemIndex ]
-			table.remove ( tItemTable, hContainer.nItemIndex )
-			-- reorder the other items
-			for i = 1,#tItemTable do
-				if tItemTable[i] ~= nil then
-					tItemTable[i].nItemIndex = i
+		if hContainer ~= nil and hContainer:IsNull() == false then
+			if hContainer.bIsLootDrop == true then
+				local playerID = -1
+				local entIndex = event.HeroEntityIndex ~= nil and event.HeroEntityIndex or event.UnitEntityIndex
+				if entIndex ~= nil then
+					local hUnit = EntIndexToHScript( entIndex )
+					if hUnit ~= nil and not hUnit:IsNull() and hUnit:IsOwnedByAnyPlayer() then
+						playerID = hUnit:GetPlayerOwnerID()
+					end
+				end
+
+				if playerID >= 0 then
+					GameRules.Winter2022:GrantEventAction( playerID, "winter2022_collect_treat", 1 )
 				end
 			end
-			self.m_vecNeutralItemDrops[ hContainer.nGolemIndex ] = tItemTable
+
+			if hContainer.nGolemIndex ~= nil and hContainer.nItemIndex ~= nil then
+				local tItemTable = self.m_vecNeutralItemDrops[ hContainer.nGolemIndex ]
+				table.remove ( tItemTable, hContainer.nItemIndex )
+				-- reorder the other items
+				for i = 1,#tItemTable do
+					if tItemTable[i] ~= nil then
+						tItemTable[i].nItemIndex = i
+					end
+				end
+				self.m_vecNeutralItemDrops[ hContainer.nGolemIndex ] = tItemTable
+			end
 		end
 	end
 end

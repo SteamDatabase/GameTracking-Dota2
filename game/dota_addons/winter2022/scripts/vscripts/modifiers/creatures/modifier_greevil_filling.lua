@@ -84,7 +84,7 @@ function modifier_greevil_filling:OnDeath( params )
 	end
 
 	if params.unit == self:GetParent() and self.bFillingEjected == false then
-		self:EjectFilling( false )
+		self:EjectFilling( false, params.attacker )
 
 		local vBloodDir = -self:GetParent():GetForwardVector()
 		local hAttacker = params.attacker
@@ -133,7 +133,7 @@ end
 
 --------------------------------------------------------------------------------
 
-function modifier_greevil_filling:EjectFilling( bRoshanKill )
+function modifier_greevil_filling:EjectFilling( bRoshanKill, hAttacker )
 	if IsServer() == false then
 		return
 	end
@@ -304,6 +304,10 @@ function modifier_greevil_filling:EjectFilling( bRoshanKill )
 				vDropTargetOffset = GameRules.Winter2022.hRoshan:GetForwardVector() * 800
 			end
 			GameRules.Winter2022:DropCandyAtPosition( vSpawnPos, nil, nil, false, 2.0, vDropTargetOffset )
+		end
+		
+		if hAttacker ~= nil and not hAttacker:IsNull() and hAttacker:IsOwnedByAnyPlayer() then
+			GameRules.Winter2022:GrantEventAction( hAttacker:GetPlayerOwnerID(), "winter2022_hit_greevils_for_candy", nCandyToDrop )
 		end
 			
 	elseif self.filling_type == WINTER2022_GREEVIL_FILLING_TYPE_BLACK then

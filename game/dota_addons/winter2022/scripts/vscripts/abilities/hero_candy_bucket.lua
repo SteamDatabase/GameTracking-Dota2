@@ -313,6 +313,41 @@ function hero_candy_bucket:OnChannelFinish( bInterrupted )
 		if self:GetCaster():IsStunned() or self:GetCaster():IsSilenced() or self:GetCaster():IsOutOfGame() then
 			self:StartCooldown( self:GetSpecialValueFor( "damage_scoring_block_duration" ) )
 		end
+
+		-- Detect if a specific player interrupted our channel and reward quest progress
+		-- Interruption from death covered in modifier_hero_candy_bucket:OnDeath
+		if bInterrupted and self:GetCaster():IsRealHero() and self:GetCaster():IsAlive() then
+			local hCaster = self:GetCaster()
+			local bStunned = hCaster:IsStunned()
+			local bSilenced = hCaster:IsSilenced()
+			local bTaunted = hCaster:IsTaunted()
+			local bFeared = hCaster:IsFeared()
+			local bHexed = hCaster:IsHexed()
+			local bFrozen = hCaster:IsFrozen()
+			local bOutOfGame = hCaster:IsOutOfGame()
+			local bCommandRestricted = hCaster:IsCommandRestricted()
+			for _,hModifier in pairs( hCaster:FindAllModifiers() ) do
+				local tState = {}
+				if hModifier ~= nil and hModifier:IsNull() == false then
+					hModifier:CheckStateToTable( tState )
+					if ( bStunned and tState[tostring(MODIFIER_STATE_STUNNED)] == true )
+						or ( bSilenced and tState[tostring(MODIFIER_STATE_SILENCED)] == true )
+						or ( bTaunted and tState[tostring(MODIFIER_STATE_TAUNTED)] == true )
+						or ( bFeared and tState[tostring(MODIFIER_STATE_FEARED)] == true )
+						or ( bHexed and tState[tostring(MODIFIER_STATE_HEXED)] == true )
+						or ( bFrozen and tState[tostring(MODIFIER_STATE_FROZEN)] == true )
+						or ( bOutOfGame and tState[tostring(MODIFIER_STATE_OUT_OF_GAME)] == true )
+						or ( bCommandRestricted and tState[tostring(MODIFIER_STATE_COMMAND_RESTRICTED)] == true )
+					then
+						local hStunCaster = hModifier:GetCaster()
+						if hStunCaster ~= nil and hStunCaster:IsNull() == false and hStunCaster:GetTeamNumber() ~= hCaster:GetTeamNumber() and hStunCaster:IsOwnedByAnyPlayer() then
+							--printf( "Candy Channel Interrupt! Hero %s is CC'd by %s", hCaster:GetUnitName(), hStunCaster:GetUnitName() )
+							GameRules.Winter2022:GrantEventAction( hStunCaster:GetPlayerOwnerID(), "winter2022_interrupt_candy_channel", 1 )
+						end
+					end
+				end
+			end
+		end
 	end
 end
 --------------------------------------------------------------------------------

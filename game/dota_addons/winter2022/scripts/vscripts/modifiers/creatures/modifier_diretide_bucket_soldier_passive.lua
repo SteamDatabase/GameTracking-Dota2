@@ -14,11 +14,17 @@ end
 --	return "particles/units/creatures/bucket_guardian/bucket_guardian_ambient.vpcf"
 --end
 
+function modifier_diretide_bucket_soldier_passive:OnCreated( kv )
+	self.attackers = {}
+end
+
 --------------------------------------------------------------------------------
 
 function modifier_diretide_bucket_soldier_passive:DeclareFunctions()
 	local funcs = 
 	{
+		MODIFIER_EVENT_ON_TAKEDAMAGE,
+		MODIFIER_EVENT_ON_DEATH,
 		MODIFIER_EVENT_ON_ATTACK_LANDED,
 		MODIFIER_PROPERTY_PROVIDES_FOW_POSITION,
 	}
@@ -78,4 +84,34 @@ function modifier_diretide_bucket_soldier_passive:GetModifierProvidesFOWVision( 
 		return 1
 	end
 	return 0
+end
+
+--------------------------------------------------------------------------------
+function modifier_diretide_bucket_soldier_passive:OnTakeDamage( params )
+	if IsServer() and self:GetParent() == params.unit then
+		local hAttacker = params.attacker
+		if hAttacker ~= nil and not hAttacker:IsNull() and hAttacker:IsOwnedByAnyPlayer() and hAttacker:GetTeamNumber() ~= self:GetCaster():GetTeamNumber() then
+			self.attackers[hAttacker:GetPlayerOwnerID()] = GameRules:GetDOTATime(false, true)
+		end
+	end
+end
+
+--------------------------------------------------------------------------------
+function modifier_diretide_bucket_soldier_passive:OnDeath( params )
+	if IsServer() and self:GetParent() == params.unit then
+		-- ensure the well didn't just die and kill bucket soldier
+		if params.attacker ~= nil then
+			local fTime = GameRules:GetDOTATime(false, true)
+			local rewardedPlayers = {}
+			for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
+				-- only reward assists for attackers in last 20 seconds. Matches hero assist timing in c++
+				if self.attackers[nPlayerID] ~= nil and self.attackers[nPlayerID] > fTime - 20.0 then
+					if rewardedPlayers[nPlayerID] == nil then
+						GameRules.Winter2022:GrantEventAction( nPlayerID, "winter2022_kill_bucket_soldier", 1 )
+						rewardedPlayers[nPlayerID] = true
+					end
+				end
+			end
+		end
+	end
 end

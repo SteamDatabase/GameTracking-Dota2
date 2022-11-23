@@ -94,6 +94,12 @@ end
 
 function modifier_hero_candy_bucket:OnDeath( params )
 	if IsServer() then
+		if self:GetAbility():IsChanneling() then
+			local hAttacker = params.attacker
+			if hAttacker ~= nil and not hAttacker:IsNull() and hAttacker:GetTeamNumber() ~= self:GetCaster():GetTeamNumber() and hAttacker:IsOwnedByAnyPlayer() then
+				GameRules.Winter2022:GrantEventAction( hAttacker:GetPlayerOwnerID(), "winter2022_interrupt_candy_channel", 1 )
+			end
+		end
 		if params.unit == self:GetParent() and params.unit:IsReincarnating() == false then
 			self:DropCandy( params.attacker )
 			self.nHealthLost = 0
