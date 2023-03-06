@@ -11,7 +11,6 @@ $ORIGIN
 %5s: %s (%.3f%% of all %s bindings)
 %d base classe%s:
 %d enumerators:
-%f
 %g
 %lld
 %llu
@@ -19,6 +18,8 @@ $ORIGIN
 %s #%d: '%s'/'%s': '%s' != '%s'
 %s %s bindings with metadata (out of %s); %s total metadata items; %s unique metadata names
 %s Schema Type: %s
+%s allocation count overflow
+%s allocation count overflow( add %llu + current %llu > max %llu )
 %s bytes in static binding info
 %s registrations; %s were redundant; %s were ignored (%s bytes of ignored data)
 %s schema bindings in %u modules (%s classes, %s enums)
@@ -31,6 +32,8 @@ $ORIGIN
 %s: '%s' != '%s'
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
+%s: invalid nBeforeIndex %d
+%s: invalid nSize %d
 %s:%s
 %s:%s needs base %s:%s to be registered
 %s< %d >
@@ -65,6 +68,7 @@ $ORIGIN
 -sse2
 -sse3
 -sse4
+-strict_type_combinations
 ../public/tier0/utlmemory.h
 ../public/tier0/utltshash.h
 10ConCommand
@@ -74,6 +78,7 @@ $ORIGIN
 13ConCommandRef
 13ISchemaSystem
 14CBaseAppSystemI13ISchemaSystemE
+14IErrorListener
 15CSchemaType_Ptr
 15CTier0AppSystemI13ISchemaSystemLx0EE
 15CTier1AppSystemI13ISchemaSystemLx0EE
@@ -91,6 +96,8 @@ $ORIGIN
 22CSchemaSystemTypeScope
 22CSchemaType_FixedArray
 22ISchemaSystemTypeScope
+23CKV3TransferContextBase
+23CKV3TransferSaveContext
 24CSchemaType_DeclaredEnum
 25CConCommandMemberAccessorI13CSchemaSystemE
 25CSchemaType_DeclaredClass
@@ -102,15 +109,22 @@ $ORIGIN
 35CExampleSchemaVData_PolymorphicBase
 39CExampleSchemaVData_PolymorphicDerivedA
 39CExampleSchemaVData_PolymorphicDerivedB
+:
 ::
 <
 <%s : %u>
 <%s, cat %d>
 <No schema binary for binding>
 <No schemasystem>
+<array: %u elements>
+<binary blob: %u bytes>
 <invalid>
 <no failure reason set>
+<pointer>
+<table: %u members>
+<unknown KV3 basic type '%s' (%d)>
 <unknown: %d>
+<unknown>
 ?
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 AlignedByteArray not properly aligned
@@ -144,6 +158,7 @@ CBufferString::Purge(int)
 CBufferString::RemoveAt(int, int)
 CBufferString::Replace(char const*, char const*, bool)
 CBufferString::ToLowerFast(int)
+CBufferString::TrimTail(char const*)
 CBufferStringN
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
 CCopyableUtlMap
@@ -169,6 +184,7 @@ CResourceNameTyped
 CResourcePointer
 CResourceString
 CResourceToKV3 encountered a non-array char... (%s)
+CSchemaSystemInternalRegistration
 CSchemaType
 CSoundEventName
 CSplitScreenSlot
@@ -178,8 +194,10 @@ CThreadSpinRWLock::LockForRead(char const*, int)
 CThreadSpinRWLock::SpinLockForWrite(char const*, int, unsigned long long)
 CThreadSpinRWLock::UnlockRead(char const*, int)
 CThreadSpinRWLock::UnlockWrite(char const*, int)
+CUniformRandomStreamImpl<CThreadNullMutex>::RandomFloat(float, float)
 CUtlBinaryBlock::SetLength(int)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
+CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
 CUtlBuffer::CUtlBuffer(void const*, int, int)
 CUtlBuffer::ParseToken(characterset_t const*, char*, int, bool)
@@ -187,6 +205,8 @@ CUtlIncrementalVector
 CUtlMap
 CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
+CUtlMemoryBlockAllocator::Purge()
+CUtlMemoryBlockAllocator::RemoveAll(unsigned long)
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
 CUtlMemoryPoolBase::Alloc()
 CUtlMemoryPoolBase::CUtlMemoryPoolBase(int, int, int, MemoryPoolGrowType_t, char const*, MemAllocAttribute_t)
@@ -198,11 +218,12 @@ CUtlPair
 CUtlRBTree overflow with %u elements!
 CUtlReference
 CUtlScratchMemoryPool::AllocAligned(int, int)
-CUtlString::Append(char const*)
+CUtlString::Acquire(CBufferString*, bool)
 CUtlString::Format(char const*, ...)
 CUtlString::FreeMemoryBlock()
 CUtlString::IsEqual_CaseSensitive(char const*) const
 CUtlString::IsEqual_FastCaseInsensitive(char const*) const
+CUtlString::Purge()
 CUtlString::Set(char const*)
 CUtlString::SetDirect(char const*, int)
 CUtlString::operator+(char const*) const
@@ -224,6 +245,7 @@ Cannot copy abstract class
 Cannot deallocate abstract class
 Cannot deduce for class
 Cannot destruct abstract class
+Cast of %s loses value information (returning %s)
 CharacterSetBuild
 Class
 Class '%s
@@ -267,6 +289,7 @@ Enumerator Value
 Exiting due to fatal schema validation errors, see log output
 ExternalReference
 FATAL ERROR: unable to register all schema data: %s
+FATAL: %s called on a pool context (no root available)
 FIELD_AI_SCHEDULE_BITS
 FIELD_AMMO_INDEX
 FIELD_ATTACHMENT_HANDLE
@@ -284,6 +307,8 @@ FIELD_CUSTOM
 FIELD_DIRECTION_VECTOR_WORLDSPACE
 FIELD_EHANDLE
 FIELD_EMBEDDED
+FIELD_ENGINE_TICK
+FIELD_ENGINE_TIME
 FIELD_FLOAT32
 FIELD_FLOAT64
 FIELD_FUNCTION
@@ -344,6 +369,7 @@ FIELD_VECTOR4D
 FIELD_VMATRIX
 FIELD_VMATRIX_WORLDSPACE
 FIELD_VOID
+FIELD_WORLD_GROUP_ID
 Failed to save unsupported class
 Fatal error: class '%s' has whitespace in its registration macro.
 FeEdgeDesc_t
@@ -391,7 +417,9 @@ InstallSchemaBindings
 InstallSchemaClassBinding
 Intentionally vague touch behavior for %p
 Invalid
+Invalid use of KV3 specific type %s with basic type %s, must be basic type %s
 Is Polymorphic: %s
+KV3 instances cannot be set to an unspecified specific type
 KeyValueCache001
 KeyValues3
 LOG_GENERAL
@@ -454,6 +482,7 @@ Plat_LoadModule
 Plat_NonFatalErrorFunc
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_UnloadModule
+Pointers cannot be used as numeric values
 PostProcessingResource_t
 PostProcessingSystem_001
 Project
@@ -514,14 +543,11 @@ StatsService_001
 SteamAudio001
 Struct
 Structure name collision: '%s' and '%s' (%d)
+TD_OFFSET_NORMAL
+TD_OFFSET_PACKED
 TRS_FALSE
 TRS_NONE
 TRS_TRUE
-TestFormatA
-TestFormatB
-TestFormatC
-TestFormatD
-TestFormatE
 TestScriptMgr001
 TextLayout_001
 This convar is being accessed prior to ConVar_Register being called
@@ -537,8 +563,10 @@ Type_DeclaredClass
 Type_DeclaredEnum
 Unaccounted
 UniqueId_t
+Unknown KV3 specific type %u
 Unknown disk indirection type %d for field %s
 UnknownSchemaIndirection
+Unsupported KV3 basic type '%s' (%d)!
 Unused
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
@@ -557,24 +585,38 @@ VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
 VProfService_001
-VR_001
 VRenderDeviceSetupV001
 VScript
 VScriptDbg
 VScriptManager010
 VStringTokenSystem001
 VTable?
+V_DoubleToString_Unsafe
+V_Int32ToString_Unsafe
+V_Int64ToString_Unsafe
 V_PrettifyNum
+V_StringParseError
+V_StringToBool
+V_StringToColor
+V_StringToFloat32
+V_StringToFloat64
+V_StringToInt16
+V_StringToInt32
+V_StringToInt64
+V_StringToQAngle
+V_StringToUint16
+V_StringToUint32
+V_StringToUint64
+V_StringToVector
+V_StringToVector2D
+V_StringToVector4D
+V_UInt64ToString_Unsafe
 V_acosd
 V_acosf
 V_asinf
 V_atan2f
 V_atanf
-V_atofloat32
-V_atofloat64
 V_atoi
-V_atoi64
-V_atoui64
 V_containsWhitespace
 V_cosd
 V_cosf
@@ -591,10 +633,9 @@ V_sincosf
 V_sind
 V_sinf
 V_snprintf
-V_sscanf
 V_stricmp_fast
 V_stristr_fast(char const*, char const*)
-V_strnlen
+V_strnlen(char const*, int)
 V_tanf
 V_uuid_t
 V_vsnprintf
@@ -607,10 +648,10 @@ WARNING: SchemaSystem tried to load schema data for module '%s' but failed to lo
 WARNING: SchemaSystem tried to load schema data for module '%s' but failed to locate InstallSchemaBindings.
 WARNING: Unknown schema class '%s' referenced.
 Warning
+WorldGroupId_t
 WorldRendererMgr001
 Y@UnknownSchemaType
 Yes
-[%u]
 []
 _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
@@ -638,27 +679,30 @@ _init
 _multibase
 _not_pickable
 all-scopes
-binary
-binary_auto
-binary_bc
-binary_lz4
-binary_zstd
+array
+binary_blob
 bitfield:%d
 bool
+bool8
+char8
+color32
 double
+ehandle
 enum
 false
 fieldtype_t
 float
 float32
 float64
+float64[%u]
 floor
 fltx4
 g_bUpdateStringTokenDatabase
 g_pMemAlloc
-generic
 generic_data_type
 global scope
+int32[%u]
+invalid
 libc.so.6
 libm.so.6
 libpthread.so.0
@@ -698,12 +742,15 @@ m_stringToken
 m_stringTokenWithStorage
 m_value
 mathlib.cpp
+matrix3x4
 memcmp
 memcpy
 memmove
 memset
+multiline_string
 nNode
 nSide
+null
 operator delete(void*)
 operator delete(void*, unsigned long)
 operator delete[](void*)
@@ -713,9 +760,13 @@ operator new[](unsigned long)
 operator new[](unsigned long, std::nothrow_t const&)
 panorama
 panorama_image
+pointer
+qangle
+quaternion
 resource
 resource_name
 resourcefile
+rotation_vector
 schema_all_list_bindings
 schema_all_list_bindings <substring> - List all scopes registered schema bindings (classes & enums). If no substring, list them all.
 schema_detailed_class_layout
@@ -733,8 +784,10 @@ schema_stats - Print a summary of various schemasystem statistics.
 schemaclassinfo.cpp
 schemalib
 schemasystem
+schemasystem.cpp
 schemasystem.h
 schematype.cpp
+single_quoted_string
 singletons.cpp
 soundevent
 sqrt
@@ -742,10 +795,13 @@ sqrtf
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()
 strchr
 strcmp
+string_token
 strlen
 strstr
 subclass
+table
 time
+transform
 true
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
@@ -753,13 +809,18 @@ typeinfo for std::_Sp_make_shared_tag
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
+uchar32
 uint
 uint16
 uint32
 uint64
 uint8
 unsigned char
+unspecified
+vector2d
+vector4d
 void
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__si_class_type_info
 vtable for __cxxabiv1::__vmi_class_type_info
+{%u}

@@ -9,7 +9,15 @@
 GAMEROOT=$(cd "${0%/*}" && echo $PWD)
 
 #determine platform
-UNAME=`uname`
+UNAMEPATH=`which uname`
+if [ -z $UNAMEPATH ]; then
+	if [ -f /usr/bin/uname ]; then
+		UNAMEPATH=/usr/bin/uname
+	elif [ -f /bin/uname ]; then
+		UNAMEPATH=/bin/uname
+	fi
+fi
+UNAME=`${UNAMEPATH}`
 if [ "$UNAME" == "Darwin" ]; then
    # Workaround OS X El Capitan 10.11 System Integrity Protection (SIP) which does not allow
    # DYLD_INSERT_LIBRARIES to be set for system processes.

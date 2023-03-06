@@ -24,6 +24,8 @@ $ORIGIN
 %s %p [%f %f %f]
 %s - %s(%d)
 %s <null>
+%s allocation count overflow
+%s allocation count overflow( add %llu + current %llu > max %llu )
 %s called with %d arguments - expected %d
 %s called with %d arguments - expected %d-%d
 %s connection attempt timed out
@@ -36,6 +38,8 @@ $ORIGIN
 %s%u
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
+%s: invalid nBeforeIndex %d
+%s: invalid nSize %d
 %s:%d: %s
 %s:%s:%u
 %s="%d"
@@ -84,11 +88,13 @@ $ORIGIN
 ----- /json:
 ----- WebSocket URL:
 -avx
+-convars_hidden_by_default
 -luadbg_inspector
 -luajit
 -sse2
 -sse3
 -sse4
+-strict_type_combinations
 -vscriptdebug_script
 .
 ... Waiting for an incoming Inspector connection, %llus so far, timeout in %llus
@@ -160,6 +166,8 @@ $ORIGIN
 <Global scope>
 <Global>
 <See locals>
+<array: %u elements>
+<binary blob: %u bytes>
 <eof>
 <goto %s> jumps into the scope of local '%s'
 <invalid>
@@ -167,8 +175,11 @@ $ORIGIN
 <name> or '...' expected
 <no failure reason set>
 <number>
+<pointer>
 <string>
+<table: %u members>
 <undefined>
+<unknown KV3 basic type '%s' (%d)>
 <unknown value type %d>
 <unknown>
 =
@@ -242,6 +253,7 @@ CBufferString::Insert(int, char const*, int, bool)
 CBufferString::Purge(int)
 CBufferString::RemoveAt(int, int)
 CBufferString::Replace(char const*, char const*, bool)
+CBufferString::SetPtr(char*, int, int, bool, bool)
 CBufferString::StartsWith(char const*) const
 CBufferString::ToLowerFast(int)
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
@@ -260,6 +272,7 @@ CSHA1::Update(void const*, unsigned int)
 CSS.
 CSplitString::Construct(char const*, char const**, int, bool)
 CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
+CUniformRandomStreamImpl<CThreadNullMutex>::RandomFloat(float, float)
 CUtlBinaryBlock::SetLength(int)
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
@@ -275,9 +288,10 @@ CUtlBuffer::PutString(char const*)
 CUtlBuffer::SeekGet(CUtlBuffer::SeekType_t, int)
 CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
+CUtlMemoryBlockAllocator::Purge()
+CUtlMemoryBlockAllocator::RemoveAll(unsigned long)
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
 CUtlString::Acquire(CBufferString*, bool)
-CUtlString::Append(char const*)
 CUtlString::Format(char const*, ...)
 CUtlString::FreeMemoryBlock()
 CUtlString::IsEqual_CaseSensitive(char const*) const
@@ -372,6 +386,7 @@ Eval
 F
 FAIL
 FATAL ERROR: unable to register all schema data: %s
+FATAL: %s called on a pool context (no root available)
 FDesc
 FILE*
 Failed to accept an incoming %s connection
@@ -466,6 +481,7 @@ Invalid setBreakpointByUrl message
 Invalid setInstrumentationBreakpoint message
 Invalid setVariableValue message
 Invalid stack level (%d)
+Invalid use of KV3 specific type %s with basic type %s, must be basic type %s
 IsBitSet
 IsNull
 IsNull called without an object - did you call obj.IsNull() instead of obj:IsNull()?
@@ -474,6 +490,7 @@ JIT compiler disabled
 Javanese
 JsVersion
 K
+KV3 instances cannot be set to an unspecified specific type
 Kaithi
 Kannada
 Katakana
@@ -764,6 +781,8 @@ Sundanese
 Syloti_Nagri
 Syriac
 T
+TD_OFFSET_NORMAL
+TD_OFFSET_PACKED
 THEN
 Tagalog
 Tagbanwa
@@ -776,11 +795,6 @@ Target.
 Target.attachedToTarget
 Target.targetCreated
 Telugu
-TestFormatA
-TestFormatB
-TestFormatC
-TestFormatD
-TestFormatE
 TestScriptMgr001
 TextLayout_001
 Thaana
@@ -836,6 +850,7 @@ Unable to set temporary breakpoint at %s:%u
 Unable to set value of '%s'
 Unable to update line number for the breakpoint with ID %s
 Unexpected HTTP GET URL '%s'
+Unknown KV3 specific type %u
 Unknown protocol.
 Unrecognized error.
 Up
@@ -852,6 +867,7 @@ VConComm001
 VEngineCvar007
 VFileSystem017
 VLua
+VM Capture Disabled Stub
 VM handler failed:
 VMaterialSystem2_001
 VMediaFoundation001
@@ -860,7 +876,6 @@ VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
 VProfService_001
-VR_001
 VRenderDeviceSetupV001
 VScript
 VScript Lua: Unhandled variant type %s.
@@ -870,17 +885,27 @@ VStringTokenSystem001
 V_FixSlashes
 V_IsAbsolutePath
 V_PrettifyNum
+V_StringToBool
+V_StringToColor
+V_StringToFloat32
+V_StringToFloat64
+V_StringToInt16
+V_StringToInt32
+V_StringToInt64
+V_StringToQAngle
+V_StringToUint16
+V_StringToUint32
+V_StringToUint64
+V_StringToVector
+V_StringToVector2D
+V_StringToVector4D
 V_UnqualifiedFileName
 V_acosd
 V_acosf
 V_asinf
 V_atan2f
 V_atanf
-V_atofloat32
-V_atofloat64
 V_atoi
-V_atoi64
-V_atoui64
 V_cosd
 V_cosf
 V_expf
@@ -895,10 +920,9 @@ V_sincosf
 V_sind
 V_sinf
 V_snprintf
-V_sscanf
 V_stricmp_fast
 V_stristr_fast(char const*, char const*)
-V_strnlen
+V_strnlen(char const*, int)
 V_tanf
 V_vsnprintf
 Vai
@@ -1108,15 +1132,12 @@ base64_decode
 base64_encode
 beforeScriptExecution
 beforeScriptWithSourceMapExecution
-binary
-binary_auto
-binary_bc
-binary_lz4
-binary_zstd
+binary_blob
 bind
 bit
 blank
 bool
+bool8
 boolean
 boolean or proxy expected
 break
@@ -1153,6 +1174,7 @@ cannot use '...' outside a vararg function
 ccode:/
 cdata
 char
+char8
 character
 character value in \u.... sequence is too large
 character value in \x{} or \o{} is too large
@@ -1165,6 +1187,7 @@ clearerr
 closing ) for (?C expected
 cntrl
 color
+color32
 columnNumber
 command
 concatenate
@@ -1260,6 +1283,7 @@ flnSu
 float
 float32
 float64
+float64[%u]
 floor
 fmod
 fopen64
@@ -1285,7 +1309,6 @@ fwrite
 g
 g_bUpdateStringTokenDatabase
 g_pMemAlloc
-generic
 get length of
 getIsolateId
 getNavigationHistory
@@ -1333,6 +1356,7 @@ info
 init
 instrumentation
 insufficient memory
+int32[%u]
 integer
 internal error: code overflow
 internal error: missing capturing bracket
@@ -1341,6 +1365,7 @@ internal error: overran compiling workspace
 internal error: previously-checked referenced subpattern not found
 internal error: unexpected repeat
 internal error: unknown opcode in find_fixedlength()
+invalid
 invalid UTF-16 string
 invalid UTF-32 string
 invalid UTF-8 string
@@ -1586,6 +1611,7 @@ malformed pattern (ends with '%')
 malformed pattern (missing ']')
 malloc
 math
+matrix3x4
 max_children
 max_data
 max_depth
@@ -1605,6 +1631,7 @@ module
 module '%s' not found:%s
 mprotect
 mremap
+multiline_string
 munmap
 n
 nS
@@ -1637,6 +1664,7 @@ not
 not enough memory
 nothing to repeat
 nparams
+null
 number
 number after (?C is > 255
 number is too big
@@ -1674,6 +1702,7 @@ pause
 pclose
 perform arithmetic on
 permessage-deflate
+pointer
 poll
 popen
 pow
@@ -1720,6 +1749,7 @@ resume
 return %s
 returnType
 revision
+rotation_vector
 run
 runIfWaitingForDebugger
 running
@@ -1771,6 +1801,7 @@ short_src
 shutdown
 sigaction
 sigemptyset
+single_quoted_string
 singletons.cpp
 sinh
 socket
@@ -1824,6 +1855,7 @@ string.buffer
 string/function/table expected
 string/number/__tostring
 string_t
+string_token
 strlen
 strrchr
 strstr
@@ -1872,11 +1904,14 @@ trace
 traceback
 trackComputedStyleUpdates
 transaction_id
+transform
 true
 two named subpatterns have the same name
 typeof process === 'undefined' || process.pid === undefined ? 'process not defined' : ({ processId: process.pid, nodeVersion: process.version, architecture: process.arch }
 typeof process === 'undefined' || process.pid === undefined ? 'process not defined' : Object.assign(process.env,
 u
+uchar32
+uint
 uint16
 uint32
 uint64
@@ -1910,6 +1945,7 @@ unrecognized character after (?P
 unrecognized character follows \
 unserializableValue
 unsigned
+unspecified
 until
 upper
 upval
@@ -1928,7 +1964,6 @@ value expected
 variable names
 variableName
 variant
-vector
 vector2
 vector2d
 vector3
@@ -1956,6 +1991,7 @@ y
 z
 {
 { "Browser" : " INSPECTOR_BROWSER_NAME ", "Protocol-Version" : " INSPECTOR_PROTOCOL_VERSION ", "User-Agent" : " INSPECTOR_USER_AGENT ", "webSocketDebuggerUrl" : "ws://localhost:41000/process/%u" }
+{%u}
 |
 |%u_
 |_

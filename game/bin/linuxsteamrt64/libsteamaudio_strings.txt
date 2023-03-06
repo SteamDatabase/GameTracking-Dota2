@@ -10,9 +10,11 @@ $ORIGIN
 %s
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
+%s allocation count overflow( add %llu + current %llu > max %llu )
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
-%u
+%s: invalid nBeforeIndex %d
+%s: invalid nSize %d
 ( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%d)
 (%d,%d)
@@ -20,9 +22,11 @@ $ORIGIN
 -> %s
 -avx
 -buildmachine
+-convars_hidden_by_default
 -sse2
 -sse3
 -sse4
+-strict_type_combinations
 ../../public/tier0/utlmemory.h
 ../public/tier0/utlmemory.h
 .sapaths
@@ -58,9 +62,15 @@ $ORIGIN
 23CSteamAudioMaterialList
 25CSurfacePropDataTableBase
 4
+<array: %u elements>
+<binary blob: %u bytes>
 <invalid>
 <no failure reason set>
+<pointer>
+<table: %u members>
 <undefined>
+<unknown KV3 basic type '%s' (%d)>
+<unknown>
 >
 ?
 @
@@ -92,6 +102,7 @@ Baked reverb (%zu bytes).
 BakedLODBuilderMgr001
 BenchmarkService001
 BinaryProperties_GetValue
+CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
@@ -113,7 +124,9 @@ CThreadEvent::Set()
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
+CUniformRandomStreamImpl<CThreadNullMutex>::RandomFloat(float, float)
 CUtlBinaryBlock::SetLength(int)
+CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
 CUtlBuffer::CUtlBuffer(void const*, int, int)
 CUtlBuffer::CheckArbitraryPeekGet(int, int&)
@@ -123,13 +136,16 @@ CUtlBuffer::ParseToken(characterset_t const*, char*, int, bool)
 CUtlBuffer::SeekGet(CUtlBuffer::SeekType_t, int)
 CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
+CUtlMemoryBlockAllocator::Purge()
+CUtlMemoryBlockAllocator::RemoveAll(unsigned long)
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
-CUtlString::Append(char const*)
+CUtlString::Acquire(CBufferString*, bool)
 CUtlString::CUtlString(CBufferString const&)
 CUtlString::Format(char const*, ...)
 CUtlString::FreeMemoryBlock()
 CUtlString::GetForModify()
 CUtlString::IsEqual_FastCaseInsensitive(char const*) const
+CUtlString::Purge()
 CUtlString::Replace(char const*, char const*, bool) const
 CUtlString::Set(char const*)
 CUtlString::operator+(char const*) const
@@ -143,9 +159,11 @@ CXXABI_1.3
 CXXABI_1.3.9
 ChangeCallbackOnChange
 ChangeCallbackOnChangeOrCreate
+ChangeCallbackOnChangeUtlVectorSubfield
 CharacterSetBuild
 CommandLine
 ConnectInterfaceSingletons
+Could not load custom hrtf properties file. %s
 CreateInterface
 CreateSimpleThread
 D,F
@@ -153,10 +171,12 @@ DemoUpconverterVersion001
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
 EconItemToolModel_001
+Enable custom HRTF loading.
 EngineServiceMgr001
 Exported scene as OBJ to %s.
 Exported scene as PHONONSCENE to %s.
 FATAL ERROR: unable to register all schema data: %s
+FATAL: %s called on a pool context (no root available)
 FRAME_NET_BLOCKING_LOAD_SPAWN_GROUP
 FRAME_NET_POST_PROCESS_NETWORKING
 FRAME_NET_PRE_PROCESS_NETWORKING
@@ -194,11 +214,15 @@ HelpSystem_001
 HostStateMgr001
 If set, baked pathing data is loaded. Steam Audio Hammer entities can successfully use pathing in this case.
 If set, baked reverb data is loaded. Reset it to zero during an format changes of baked data until all data is updated.
+Index of active HRTF.
 InputService_001
 InputStackSystemVersion001
 InputSystemVersion001
 InstallSchemaBindings
 Intentionally vague touch behavior for %p
+Invalid use of KV3 specific type %s with basic type %s, must be basic type %s
+KV3 instances cannot be set to an unspecified specific type
+Key field file or volume missing in custom hrtf properties file. Cannot load!
 KeyValueCache001
 KeyValues::GetFloat(char const*, float) const
 KeyValues::GetInt(char const*, int) const
@@ -206,6 +230,8 @@ LOG_GENERAL
 LoadBakedPathingData
 LoadBakedReverbData
 LoadKV3(CKeyValues3Context*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
+LoadKV3FromFile(CKeyValues3Context*, CUtlString*, char const*, char const*, KV3ID_t const&)
+Loaded custom HRTF [%s] with volume [%.2f]
 Localize_001
 LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
@@ -230,6 +256,7 @@ MemAlloc_FreeAlignedFunc
 MemAlloc_StrDupFunc
 MeshSystem001
 MeshUtils001
+Missing custom_hrtfs key field in custom hrtf properties file. Cannot load!
 ModelDocUtils001
 Msg
 N24CFieldPathHuffmanEncoder12InternalNodeE
@@ -266,6 +293,7 @@ ParticleSystemMgr003
 Path_AddToTail failed for read only CFieldPath
 Path_AddToTail failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
 Path_PopLast failed for read only CFieldPath
+Path_RemoveAll failed for read only CFieldPath
 Pathing: Baked data file is the wrong format version, skipping load. Consider re-baking. (%s)
 Pathing: Baked data file is the wrong format, skipping load. Consider re-baking. (%s)
 Pathing: Filesystem not initialized.
@@ -360,7 +388,7 @@ Reverb: No probes found in baked data file: %s.
 Reverb: Unable to create serialized object. (%d)
 Reverb: Unable to load baked data file (%s).
 Reverb: Unable to load probe batch. (%d)
-SABD
+SABDGrow
 SSE and SSE2 are required.
 SceneSystem_002
 SceneUtils_001
@@ -393,11 +421,8 @@ StatsService_001
 SteamAudio
 SteamAudio001
 SurfacePropertiesList
-TestFormatA
-TestFormatB
-TestFormatC
-TestFormatD
-TestFormatE
+TD_OFFSET_NORMAL
+TD_OFFSET_PACKED
 TestScriptMgr001
 TextLayout_001
 The amount of directional detail in the simulated by Steam Audio.
@@ -410,6 +435,7 @@ The time delay between a sound being emitted and the last audible reflection in 
 This convar is being accessed prior to ConVar_Register being called
 This variable is checked by soundstack to globally enabling pathing for audio processing.
 ThreadGetCurrentId
+ThreadInMainThread
 ThreadJoin
 ThreadSleep
 ToolFramework2_002
@@ -419,6 +445,8 @@ Unable to create direct effect [%d]
 Unable to create scene: %d.
 Unable to create serialized object for scene export.
 Unable to create static mesh: %d.
+Unable to load custom HRTF [%s]
+Unknown KV3 specific type %u
 Usage: snd_steamaudio_halton_sequence <order> <numsamples>.
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
@@ -436,22 +464,31 @@ VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
 VProfService_001
-VR_001
 VRenderDeviceSetupV001
 VScript
 VScriptDbg
 VScriptManager010
 VStringTokenSystem001
+V_StringToBool
+V_StringToColor
+V_StringToFloat32
+V_StringToFloat64
+V_StringToInt16
+V_StringToInt32
+V_StringToInt64
+V_StringToQAngle
+V_StringToUint16
+V_StringToUint32
+V_StringToUint64
+V_StringToVector
+V_StringToVector2D
+V_StringToVector4D
 V_acosd
 V_acosf
 V_asinf
 V_atan2f
 V_atanf
-V_atofloat32
-V_atofloat64
 V_atoi
-V_atoi64
-V_atoui64
 V_cosd
 V_cosf
 V_expf
@@ -469,14 +506,11 @@ V_sind
 V_sinf
 V_sinhf
 V_snprintf
-V_sscanf
 V_stricmp_fast
-V_strnlen
+V_strnlen(char const*, int)
 V_strtok
-V_strtoui64
 V_tand
 V_tanf
-V_vsnprintf
 VisBuilder_001
 Warning
 WorldRendererMgr001
@@ -502,18 +536,21 @@ _edata
 _end
 _fini
 aggegated
-binary
-binary_auto
-binary_bc
-binary_lz4
-binary_zstd
+array
+binary_blob
 bool
+bool8
 ceilf
+char8
 color
-default
+color32
+custom_hrtfs
+double
+ehandle
 false
 float32
 float64
+float64[%u]
 floor
 g_BitBuf_BitWriteMasks
 g_BitBuf_ExtraMasks
@@ -522,7 +559,8 @@ g_pMemAlloc
 generic
 highFreqAbsorption
 highFreqTransmission
-int
+int32[%u]
+invalid
 invalid_bone
 invalid_hitbox
 iplAirAbsorptionCalculate
@@ -601,13 +639,16 @@ libtier0.so
 lowFreqTransmission
 maps/
 mathlib.cpp
+matrix3x4
 memcmp
 memcpy
 memmove
 memset
 midFreqAbsorption
 midFreqTransmission
+multiline_string
 none
+null
 operator delete(void*)
 operator delete(void*, unsigned long)
 operator delete[](void*)
@@ -616,6 +657,7 @@ operator new(unsigned long, std::nothrow_t const&)
 operator new[](unsigned long)
 operator new[](unsigned long, std::nothrow_t const&)
 panorama
+pointer
 pthread_mutex_destroy
 pthread_mutex_init
 pthread_mutex_lock
@@ -623,16 +665,22 @@ pthread_mutex_unlock
 pthread_mutexattr_init
 pthread_mutexattr_settype
 qangle
+quaternion
 read
 regex
 resource
 resource_name
 rnd_down
 rnd_up
+rotation_vector
 scattering
+scripts/custom_hrtfs.txt
 scripts/surfaceproperties_steamaudio.txt
+single_quoted_string
 singletons.cpp
+snd_steamaudio_active_hrtf
 snd_steamaudio_ambisonics_order
+snd_steamaudio_enable_custom_hrtf
 snd_steamaudio_enable_pathing
 snd_steamaudio_halton_sequence
 snd_steamaudio_hybrid_reverb_overlap
@@ -657,22 +705,30 @@ steamaudio
 steamaudioscene.cpp
 strchr
 strcmp
-string
+string_token
 strlen
 subclass
 surfacePropertyName
 table
-text
+transform
 true
 typeinfo for CThreadSyncObject
+uchar32
+uint
+uint16
 uint32
 uint64
+uint8
+unspecified
 vector2
+vector2d
 vector3
 vector4
+vector4d
 vector::_M_default_append
+volume
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__si_class_type_info
 wb
 zero
-CGrow
+{%u}

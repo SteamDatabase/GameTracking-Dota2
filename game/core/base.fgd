@@ -122,13 +122,13 @@
 	output OnUser3(void) : "Fired in response to FireUser3 input."
 	output OnUser4(void) : "Fired in response to FireUser4 input."
 	
-	output OnKilled(void) : "Fired when the entity is killed and removed from the game."
+	output OnKilled(void) : "Fired when the entity is killed and removed from the game. Parameter is the inflictor."
 ] 
 
 
 @BaseClass base(GameEntity) = Targetname 
 [ 
-	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	targetname(target_source) { sort_priority = 90 } : "Name" : : "The name that other entities refer to this entity by."
 ]
 
 
@@ -151,7 +151,7 @@
 
 @BaseClass = Studiomodel
 [
-	model(studio) [report]: "World Model"
+	model(studio) { report = true sort_priority = 80 } : "World Model"
 	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : ""
 	
@@ -561,10 +561,6 @@
 		32 : "Break on Pressure" : 0
 	]
 	pressuredelay(float) [ group="Breakable Properties" ] : "Pressure Delay" : 0 : "Delay, in seconds, after 'broken' by pressure before breaking apart (allows for sound to play before breaking apart)."
-
-	// Inputs
-	input EnablePhyscannonPickup(void) : "Makes the breakable able to picked up by the physcannon."
-	input DisablePhyscannonPickup(void) : "Makes the breakable not able to picked up by the physcannon."
 
 	// Outputs
 	output OnTakeDamage(void) : "Fired each time this breakable takes any damage."
@@ -1406,53 +1402,6 @@
 
 	input SetDisplayText(string) : "Sets the display text."
 ]
-
-//-------------------------------------------------------------------------
-//
-// Cyclers
-//
-//-------------------------------------------------------------------------
-
-@PointClass base(Targetname, Parentname, CanBeClientOnly, RenderFxChoices, RenderFields) model()
-	metadata
-	{
-		model_archetypes = [ "animated_model" ]
-	}
-= cycler :
-	"An entity used to display a model for testing purposes. Shooting it with cycle through the model's animations."
-[
-	spawnflags(flags) =
-	[
-		1 : "Not Solid" : 0
-	]
-	model(studio) : "Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
-	testMode(choices) : "Test Mode" : 0 =
-	[
-		0 : "None"
-		1 : "Oscillate Pose Parameters"
-		2 : "Add/Remove Animation Layers"
-		3 : "Report Animation Events"
-		4 : "Toggle Base Layer Sequence"
-		5 : "Test Model Scale"
-		6 : "Client-Side Ragdoll"
-		7 : "Use Procedural Bones"
-		8 : "Reset Sequences"
-	]
-
-	doClientSideAnimation(boolean) : "Use Client-Side Animation" : 0
-	
-	sequenceName(sequence) : "Sequence Name" : "idle" : "Default animation sequence for the model to be playing after spawning."
-	sequenceName2(sequence) : "Sequence Name 2" : "" : "Used by the 'Toggle Base Layer Sequence' test."
-	poseParameterName(string) : "Pose Parameter Name" : "" : "Pose parameter to use for various unit tests"
-	layerSequence1(sequence) : "Layer 1 Sequence Name" : "" : "Layer sequence #1 for the Add/Remove Animation Layers test."
-	layerSequence2(sequence) : "Layer 2 Sequence Name" : "" : "Layer sequence #2 for the Add/Remove Animation Layers test."
-
-	// Inputs
-	input AddSequenceLayer(void) : "Adds a random sequence as a new layer"
-	input ClearAllSequenceLayers(void) : "Clears all sequence layers"
-]
-
 
 @PointClass base(Targetname, Parentname, RenderFxChoices, RenderFields, Studiomodel) model()
 	metadata
@@ -2480,18 +2429,6 @@
 	input Command(string) : "Command to execute."
 ]
 
-@PointClass base(Targetname) size(-8 -8 -8, 8 8 8) = point_bonusmaps_accessor : 
-	"An entity that relays bonus maps changes."
-[
-	filename(string) : "File Name" : ""
-	mapname(string) : "Map Name" : ""
-
-	// Inputs
-	input Unlock(void) : "Unlocks the filename/map combination."
-	input Complete(void) : "Completes the filename/map combination."
-	input Save(void) : "Saves bonus map data."
-]
-
 @PointClass base(Targetname) = point_entity_finder :
 	"An entity that will find an entity and pass it along as the !Caller with the OutEntity output.  Requires using !Caller as the parameter on the input."
 [
@@ -3161,8 +3098,8 @@
 	"A brush entity that's designed to be used for a player-useable button. When used by the player, it moves to a pressed position."
 [
 	lip(integer) : "Lip" : 0 : "The amount, in inches, of the button to leave sticking out of the wall it recedes into when pressed. Negative values make the button recede even further into the wall."
-	health(integer) : "Health (Obsolete)" : 0 : "Legacy method of specifying whether or not the button can be shot to activate it. Use the 'Damage Activates' spawnflag instead."
 	master(string) : "Master (Obsolete)" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this button cannot be pressed."
+	forcenpcexclude(boolean) : "Force NPC Exclude" : "0" : "NPC movement and collision will ignore this button"
 
 	spawnflags(flags) =
 	[
@@ -3174,6 +3111,7 @@
 		2048: "Starts locked" : 0
 		4096: "Sparks" : 0
 		16384: "Non-solid" : 0
+		32768: "No Animation" : 0		
 	]
 ]
 
@@ -3251,7 +3189,7 @@
 	]
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 	startposition(float) : "Start Position" : 0 : "Postion when spawned. The value is a range between 0.0 and 1.0, where 0 is the unrotated position and 1 is the rotated position + 'Distance'."
-	startdirection(choices) : "Start Direction" : "Forward" =
+	startdirection(choices) : "Start Direction" : -1 =
 	[
 		-1 : "Forward"		 // Reverses upon USE, so are
 		1 : "Backward"	 // reversed here.
@@ -3282,7 +3220,7 @@
 
 @BaseClass base(Targetname, Parentname, RenderFields, Global, Shadow) = Door
 [
-	speed(integer) : "Speed" : 100 : "The speed at which the door moves."
+	speed(float) : "Speed" : 100 : "The speed at which the door moves."
 	master(string) : "Master (Obsolete)" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this button cannot be used."
 	noise1(sound) : "Start Sound" : : "Sound to play when the door starts moving."
 	noise2(sound) : "Stop Sound" : : "Sound to play when the door stops moving."
@@ -3578,41 +3516,6 @@
 
 	// Outputs
 	output OnEndFollow(void) : "Fired when the point_viewcontrol deactivates, due to the Disable input being received, the Entity to Look At being destroyed, or the Hold Time expiring."
-]
-
-@PointClass base(Targetname) = point_posecontroller : 
-	"An entity that controls a pose parameter of a prop and cycles the pose clientside." 
-[
-	PropName(string) : "Prop Name" : : "Name of the prop to control."
-	PoseParameterName(string) : "Pose Parameter Name" : : "Name of the pose parameter to control."
-	PoseValue(float) : "Pose Parameter Value" : "0.0" : "Normalized value for the pose parameter from 0.0 and 1.0 (maps to min and max range)."
-	InterpolationTime(float) : "Interpolation Time" : "0.0" : "Number of seconds (0.0 to 10.0) for client to match absolue pose values."
-	InterpolationWrap(boolean) : "Should wrap from 0.0 to 1.0 when interpolating." : 0
-
-	CycleFrequency(float) : "Cycle Frequency" : "0.0" : "Base cycles per second from -10.0 to 10.0."
-	FModulationType(choices) : "Frequency Modulation Type" : 0 = 
-	[
-		0: "None"
-		1: "Sine"
-		2: "Square"
-		3: "Triangle"
-		4: "Sawtooth"
-		5: "Noise"
-	]
-	FModTimeOffset(float) : "Frequency Modulation Time Offset" : "0.0" : "Modulation time offset from -1.0f to 1.0."
-	FModRate(float) : "Frequency Modulation Rate" : "0.0" : "Modulation cycles per second from -10.0f to 10.0."
-	FModAmplitude(float) : "Frequency Modulation Amplitude" : "0.0" : "Modulation extents from 0.0f to 10.0."
-	
-	// Inputs
-	input SetPoseParameterName(string) : "Sets the pose parameter to control."
-	input SetPoseValue(float) : "Set the pose parameter to a normalized value between 0.0 and 1.0 (maps to min and max range)."
-	input SetInterpolationTime(float) : "Set the interpolation time to a number of seconds between 0.0 and 10.0."
-	input SetCycleFrequency(float) : "Set the pose parameter's base cycles per second from -10.0f to 10.0."
-	input SetFModType(integer) : "Set the type of frequency modulation."
-	input SetFModTimeOffset(float) : "Set the modulation time offset from -1.0f to 1.0."
-	input SetFModRate(float) : "Set the modulation cycles per second from -10.0f to 10.0."
-	input SetFModAmplitude(float) : "Set the modulation extents from 0.0f to 10.0."
-	input RandomizeFMod(float) : "Randomize the frequency modulation by an extremeness of 0.0 to 1.0."
 ]
 
 @PointClass base(Targetname) tags( Logic ) iconsprite("editor/logic_compare.vmat") = logic_compare :
@@ -3992,6 +3895,7 @@
 	]
 
 	UseRandomTime(boolean) : "Use Random Time" : 0
+	PauseAfterFiring(boolean) : "Pause After Firing" : 0
 	
 	LowerRandomBound(float) : "Minimum Random Interval" : : "If 'Use Random Time' is set, this is the minimum time between timer fires. The time will be a random number between this and the 'Maximum Random Interval'."
 	UpperRandomBound(float) : "Maximum Random Interval" : : "If 'Use Random Time' is set, this is the maximum time between timer fires. The time will be a random number between the 'Minimum Random Interval' and this."
@@ -4839,10 +4743,6 @@
 	damagetoenablemotion(integer) : "Health Level to Override Motion" : 0 : "If specified, this object will start motion disabled. Once its health has dropped below this specified amount, it will enable motion."
 	forcetoenablemotion(float) : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
 	enableuseoutput(boolean) : "Enable +Use Output" : 0 : "Enables OnPlayerUse output being fired when this object is used"
-	cannotgravitygrab(boolean) : "Cannot Gravity Grab" : 0
-	cannotgravitypunt(boolean) : "Cannot Gravity Punt" : 0
-	enablemotionongravitygrab(boolean) : "Enable Motion On Grab" : 0
-	gravitygrabignoremassandsize(boolean) : "Grab Ignores Mass" : 0 : "Gravity Grab is possible regardless of whether the object is too heavy or large."
 	health(integer) : "Strength" : 0 : "Number of points of damage to take before breaking.  0 means don't break."
 	preferredcarryangles(vector) : "Preferred Player-carry Angles" : "0 0 0" : "If the 'Use Preferred Carry Angles' spawnflag is set, this angle is the angle which the object should orient to when the player picks it up, with the physgun or +USE."
 	notsolid(choices) : "Not solid to world" : 0 =
@@ -4917,41 +4817,6 @@
 	input TurnOff(void) : "Disable the controller." 
 ]
 
-
-@PointClass base(Targetname) sphere(expradius) model() = physics_cannister : 
-	"A physically simulated gas cannister that can have its cap shot off, at which point gas will start escaping and cause the cannister to fly around. If it takes enough damage, it will explode."
-[
-	model(studio) : "World model" : "" : "The model to use for the cannister. The model must have an attachment point called 'nozzle', which is where the gas originates. "+
-		"The attachment point's up axis dictates the direction of gas thrust."
-
-	spawnflags(flags) = 
-	[
-		1 : "Start Asleep" : 0
-		2 : "Explodes" : 1
-	]
-
-	expdamage(string) : "Explosion Damage" : "200.0" : "The amount of damage done by the explosion created when the cannister blows up."
-	expradius(string) : "Explosion Radius" : "250.0" : "The radius of the explosion to create when the cannister blows up."
-	health(integer) : "Health" : 25 : "The amount of damage the cannister takes before exploding."
-
-	thrust(string) : "Thrust" : "3000.0" : "When the cap has been blown off, and the escaping gas is thrusting the cannister about, this is the amount of thrust generated."
-	fuel(string) : "Fuel Seconds" : "12.0" : "The amount of time that gas leaks from the cannister before being considered empty."
-	rendercolor(color255) : "Smoke Color (R G B)" : "255 255 255"
-	renderamt(integer) : "Smoke Alpha (0 - 255)" : 128
-	gassound(sound) : "Thruster Sound" : "ambient/objects/cannister_loop.wav" : "The sound played when the gas is escaping from the cannister."
-
-	// Inputs
-	input Activate(string) : "Start gas escaping from the cannister."
-	input Deactivate(string) : "Stop gas escaping from the cannister."
-	input Explode(string) : "Force the cannister to explode."
-	input Wake(void) : "Wakes up the cannister, if it is sleeping."
-
-	// Outputs
-	output OnActivate(void) : "Fired when gas starts to escape from the cannister."
-	output OnAwakened(void) : "Fired when this entity becomes awake (collision/force is applied)."
-]
-
-
 @PointClass base(Targetname, Parentname) tags( Physics ) size(-4 -4 -4, 4 4 4) = info_constraint_anchor : 
 	"An entity used to attach constraints to a local position on an entity. Usually constraints will attach to the center of mass of an object. "+
 	"Attach the desired constraint to this entity, and then parent this entity to the entity you want the constraint to apply to."
@@ -5008,7 +4873,7 @@
 	reversalsoundLarge(sound) : "Reversal sound (large)" : "" : "Play this sound when making a hard reverse over the large threshold"
 ]
 
-@PointClass halfgridsnap editormodel("models/editor/axis_helper") base(TwoObjectPhysics, ConstraintSoundInfo) tags( Physics ) = phys_hinge : 
+@PointClass halfgridsnap editormodel("models/editor/axis_helper") arc_range{ axis_key = "hingeaxis" is_local_axis = false min_angle_key = "min_rotation" max_angle_key = "max_rotation" } base(TwoObjectPhysics, ConstraintSoundInfo) tags( Physics ) = phys_hinge : 
 	"A physically simulated hinge. Use the helper to define the axis of rotation."
 [
 	hingefriction(float) : "Friction" : "0" : "Resistance/friction in the hinge. A value of 1 will hold the child object still under gravity"
@@ -5043,14 +4908,14 @@
 ]
 
 
-@PointClass halfgridsnap editormodel("models/editor/axis_helper") base(TwoObjectPhysics, ConstraintSoundInfo) tags( Physics ) = phys_hinge_local : 
+@PointClass halfgridsnap editormodel("models/editor/axis_helper") arc_range{ axis_key = "hingeaxis" is_local_axis = true min_angle_key = "min_rotation" max_angle_key = "max_rotation" } base(TwoObjectPhysics, ConstraintSoundInfo) tags( Physics ) = phys_hinge_local : 
 	"A physically simulated hinge. Use the helper to define the axis of rotation."
 [
 	hingefriction(float) : "Friction" : "0" : "Resistance/friction in the hinge"
 	min_rotation(float) [ min="-180.0", max="0.0" ]:  "Min Rotation Limit" : "0" : "Minimum rotation limit around hinge axis"
 	max_rotation(float) [ min="0.0", max="180.0" ] : "Max Rotation Limit" : "0" : "Maximum rotation limit around hinge axis"
 	initial_rotation(float) : "Initial rotation" : "0" : "Initial rotation of the hinge (values -1 to 1 where -1 mean open at minimum limit and 1 means open at maximum limit)"
-	hingeaxis(localaxis) : "Local Space Hinge Axis"
+	hingeaxis(localaxis) : "Local Space Hinge Axis" : "-8 0 0, 8 0 0"
 	motorfrequency(float) : "Motor frequency" : "10" : "Range 0 - 30 (only used when driving the relative angle through the angle input)"
 	motordampingratio(float) : "Motor damping ratio" : "1" : "Range 0 - 1 (only used when driving the relative angle through the angle input)"
 	SystemLoadScale(float) : "Load Scale" : "1" : "Scale of the load connected to this hinge (1=just the objects directly connected)"
@@ -5276,6 +5141,29 @@
 	]
 ]
 
+@PointClass editormodel("models/editor/axis_helper") arc_range{ is_local_axis = true align_pie_to_local_forward = true is_enabled_key = "enable_steering_limit" min_angle_key = "min_steering_angle" max_angle_key = "max_steering_angle" } axis_range{ is_local_axis = true is_enabled_key = "enable_suspension_limit" min_limit_key = "min_suspension_offset" max_limit_key = "max_suspension_offset" } base(TwoObjectPhysics) tags( Physics ) = phys_wheelconstraint : 
+	"Constraint to represent the suspension linkage for a wheel. Constrains steering angle and movement along the suspension axis (Z). Wheel spins about the Y axis."
+[
+	spawnflags(flags) =
+	[
+	]
+
+	suspension_frequency(float) : "Suspension Frequency" : "5" : "Oscillation frequency (stiffness) of the suspension spring"
+	suspension_damping_ratio(float) : "Suspension Damping Ratio" : "1" : "How heavily damped is the suspension? (Value should be roughly between 0 and 2)"
+	suspension_height_offset(float) : "Suspension Height Offset" : "0" : "Offset applied to raise or lower the vehicle's ride height. Can be used to compensate for soft suspension if your vehicle is sinking too much on its springs."
+
+	enable_suspension_limit(boolean) : "Enable Suspension Limit" : 1 : "Limit relative motion along the suspension axis"
+	min_suspension_offset(float) : "Min Suspension Offset" : "-10" : "Minimum limit on the suspension travel"
+	max_suspension_offset(float) : "Max Suspension Offset" : "10" : "Maximum limit on the suspension travel"
+
+	enable_steering_limit(boolean) : "Enable Steering Limit" : 1 : "Limit relative rotation around the steering axis"
+	min_steering_angle(float) : "Min Steering Angle" : "-45" : "Minimum angular limit about the steering axis"
+	max_steering_angle(float) : "Max Steering Angle" : "45" : "Maximum angular limit about the steering axis"
+
+	steering_axis_friction(float) : "Steering Axis Friction" : "0.01" : "Friction that resists rotation around the steering axis"
+	spin_axis_friction(float) : "Spin Axis Friction" : "0.01" : "Friction that resists rotation around the spin axis"
+]
+
 @BaseClass base(Targetname, BasePhysicsNoSettleAttached) = ForceController
 [
 	spawnflags(flags) =
@@ -5433,7 +5321,8 @@
 	[
 		64 : "Use Hitboxes for Renderbox" : 0
 		256 : "Start with collision disabled" : 0
-		512 : "Set to NAVIgnore" : 0
+		512 : "Set to Nav Ignore" : 0
+		1024 : "Set to Local-Nav Ignore (NPC will not try to avoid this entity)" : 0
 	]
 
 	disablelowviolence(choices) : "Turn Off in Low-Violence" : 0 =
@@ -5445,13 +5334,14 @@
 	DefaultAnim(sequence) { enabled={ function="NotUsingAnimGraph" } } : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
 	use_animgraph(boolean) { enabled={ function="ModelHasAnimGraph" } } : "Use Animgraph" : 1 : "Allow the model to use its animgraph it has one. If the model has no animgraph this setting has no effect and is disabled"
 
-	RandomAnimation(boolean) : "Randomly Animate" : 0 : "If set, this prop will randomly choose and play animations, based upon the times specified in 'Min/Max Random Anim Time'. Inbetween the random animations, it will revert to playing the 'Default Animation'."
-	HoldAnimation(boolean) : "Hold Animation" : 0 : "If set, the prop will not loop its animation, but hold the last frame."
+	AnimationLoopMode(choices) : "Animation Loop Mode" : "ANIM_LOOP_MODE_NOT_LOOPING" =
+	[
+		"ANIM_LOOP_MODE_NOT_LOOPING" : "Do Not Loop"
+		"ANIM_LOOP_MODE_LOOPING" : "Loop"
+	]
+
 	randomizecycle(boolean) : "Randomize cycle" : 0 : "If set, this prop will randomize its cycle when it begins animating. Use this to desynchronize animating props that use the same model."
 
-	MinAnimTime(float) : "Min Random Anim Time" : "5" : "Minimum time between random animations."
-	MaxAnimTime(float) : "Max Random Anim Time" : "10" : "Maximum time between random animations."
-	
 	LagCompensate(boolean) : "Lag Compensation" : 0 : "Enable to lag compensate this prop, should be use very sparingly!"
 	AnimateOnServer(boolean) : "Animate on server in multiplayer" : 0 : "Enable this to animate on the server in multiplayer games, such as for props with triggers parented to attachment points. Use sparingly as there is a performance cost."
 	ScriptedMovement(boolean) : "Scripted Movement" : 0 : "Set this to allow vscript code to move the prop via SetVelocity() calls."
@@ -5460,10 +5350,18 @@
 	avelocity(vector) : "Initial Rotational Velocity" : : "Only used if Scripted Movement is set, sets an initial rotational velocity for the entity."
 
 	// Inputs
-	input SetAnimation(string) : "Force the prop to play an animation. The parameter should be the name of the animation."
-	input SetAnimationNoReset(string) : "Force the prop to play an animation unless the prop is already playing the animation. The parameter should be the name of the animation."
-	input SetAnimationTransition(string) : "Force the prop to play an animation. The parameter should be the name of the animation. The second animation is the name of the animation it's transitioning from. If that one is still playing it'll just reverse from the current frame."
-	input SetDefaultAnimation(string) : "Set the Default Animation to the one specified in the parameter."
+	input SetAnimationLooping(string)			: "Force the prop to play an animation and force it to loop. The parameter should be the name of the animation."
+	input SetAnimationNoResetLooping(string)	: "Force the prop to play an animation and force it to loop unless the prop is already playing the animation. The parameter should be the name of the animation."
+	input SetDefaultAnimationLooping(string)	: "Set the Default Animation to the one specified in the parameter and force it to loop."
+
+	input SetAnimationNotLooping(string)		: "Force the prop to play an animation and force it to not loop. The parameter should be the name of the animation."
+	input SetAnimationNoResetNotLooping(string) : "Force the prop to play an animation and force it to not loop unless the prop is already playing the animation. The parameter should be the name of the animation."
+	input SetDefaultAnimationNotLooping(string) : "Set the Default Animation to the one specified in the parameter and force it to not loop."
+
+	input SetAnimation(string)					: "[OBSOLETE] Force the prop to play an animation. The parameter should be the name of the animation."
+	input SetAnimationNoReset(string)			: "[OBSOLETE] Force the prop to play an animation unless the prop is already playing the animation. The parameter should be the name of the animation."
+	input SetDefaultAnimation(string)			: "[OBSOLETE] Set the Default Animation to the one specified in the parameter."
+
 	input SetPlaybackRate(float) : "Set the playback rate for the animation."
 	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
 	input TurnOn(void) : "Make the prop visible."
@@ -5484,15 +5382,18 @@
 
 	renderamt(integer) : "Alpha" : 255 : "Alpha of the fade, where 0 = fully transparent and 255 = fully opaque." 
 	rendercolor(color255) : "Color (R G B)" : "255 255 255"
-	updatechildren(boolean) : "Update children" : 0 : "Update touches for any children that are attached to attachment points as this prop animates. "+
-		"This allows SetParentAttached triggers or func_brushes to touch properly."
 
 	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "0" : "Create a navigation obstacle to assist NPC pathfinding"
 
 	forcenpcexclude(boolean) : "Force NPC Exclude" : "0" : "If set, NPC movement will ignore this prop"
 ]
 
-@PointClass base(PosableSkeleton) tags( PropStatic ) color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) model(static) 
+@PointClass base(PosableSkeleton) tags( PropStatic ) color(255 255 0) line(255 0 255, targetname, cubemap) sphere(fademindist, 200 200 200) sphere(fademaxdist, 200, 200, 200) sphere(grass_exclusion_radius, 100 200 100, singleSelect) 
+	model
+	{
+		static = true
+		extra_vertex_data = true
+	}
 	metadata
 	{
 		model_archetypes = [ "static_prop_model" ]
@@ -5500,10 +5401,13 @@
 		entity_tool_group = "Content"
 		entity_tool_tip = "Adds a static model"
 		static_prop = true
+		has_static_mesh = true
 	}
 = prop_static
 [
 	model(resource:model) [report] : "World Model"
+	rendercolor(color255) : "Color (R G B)" : "255 255 255"
+
 	solid(choices) : "Collisions" : 6 =
 	[
 		0: "Not Solid"
@@ -5511,6 +5415,8 @@
 		3: "Use oriented Box"
 		6: "Use VPhysics"
 	]
+
+	visoccluder(boolean) : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility"	
 	
 	disableshadows(choices) [ group="Render Properties" ] : "Cast Shadows" : 0 : "Used to disable shadow casting from this entity." = 
 	[
@@ -5526,18 +5432,17 @@
 	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist" : -1 : "Distance at which the prop starts to fade (-1 = use fademaxdist)."
 	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out)."
 
-	detailgeometry(boolean) : "Detail Geometry" : 0 : "If true this geometry is not important for precomputed lighting"	
-	visoccluder(boolean) : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility"	
 	baketoworld(boolean) [ group="Build Settings" ] : "Bake To World" : 0 : "If true this geometry will be baked into the world geometry of the map so that the model is not referenced at runtime."
 	disablemerging(boolean) [ group="Build Settings" ] : "Disable Mesh Merging" : 0 : "If true this will not be merged with other geometry during map compile (reduces rendering efficiency)."
 	renderamt(integer) [ group="Render Properties" ] : "Alpha" : 255 : "Alpha of the fade, where 0 = fully transparent and 255 = fully opaque." 
-	rendercolor(color255) : "Color (R G B)" : "255 255 255"
+	
 	lightingorigin(target_destination) [ group="Render Properties" ]: "Lighting Origin" : "" : "Select a an entity to specify a location to sample lighting from, instead of using this entity's bounding box center."
 	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Will only be lit by lights affecting this group."
 	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"	
 	precomputelightprobes(boolean) [ group="Render Properties" ] : "Precompute Light Probes" : 1 : "Pre-compute environment map and light probe volume used on this object."
 	bakelightdoublesided(boolean) [ group = "Render Properties" ] : "Bake Lighting As If Double-Sided" : 0 : "Bake lighting as if this were double-sided geometry. Useful on geometry with pre-culled backfaces whose neighbors have lighting errors caused by saw-too-many-backfaces sample invalidation."
 	emissive(boolean) [ group = "Render Properties" ] : "Emissive Lighting" : 1 : "Allow this prop to emit lighting for raytraced lighting"
+	emissive_lighting_boost(float) { group = "Render Properties" min="0.0" max="8.0" enabled={ variable="emissive" value="1"  } } : "Emissive Lighting Boost" : "1.0" : "Emissive Lighting Boost"
 	materialoverride(material) [ group="Render Properties" ] : "Override Material" : ""
 	disableinlowquality(boolean) [ group="Render Properties" ] : "Disable in low quality mode" : 0 : "Do not render this prop when using the lowest quality video settings, it is an non-essential detail."
 	lightmapscalebias(choices) [ group="Render Properties" ] : "Lightmap Scale Bias" : 0 : "Use to scale the resolution of the lightmap for this object." =
@@ -5559,6 +5464,9 @@
 	]
 
 	renderwithdynamic(boolean) [ group="Render Properties" ] : "Render with Dynamic Objects" : 0 : "Render this object with other dynamic objects"
+
+	detailgeometry(boolean) [ group="Build Settings" ] : "Detail Geometry" : 0 : "If true this geometry is not important for precomputed lighting"	
+	
 ]
 
 
@@ -5594,15 +5502,9 @@
 		2 : "Don't take physics damage" : 0
 		4 : "Debris - Don't collide with the player or other debris" : 0
 		8 : "Motion Disabled" : 0
-		64 : "Enable motion on Physcannon grab (This also applies to the HLVR hand interaction)" : 0
-		256 : "Generate output on +USE " : 1
-		512 : "Prevent pickup" : 0
 		1024: "Prevent motion enable on player bump" : 0
 		4096: "Debris with trigger interaction" : 0
 		8192: "Force non-solid to players" : 0
-		32768: "Enable +use glow effect" : 0
-		1048576: "Physgun can ALWAYS pick up. No matter what." : 0
-		16777216: "Important Grabbity Glove target." : 0
 	]
 	
 	minhealthdmg(integer) [ group="Physics Properties" ] : "Min Damage to Hurt" : 0 : "The prop will ignore any damage events if the damage is less than this amount."
@@ -5627,12 +5529,14 @@
 	damagetoenablemotion(integer) [ group="Physics Properties" ] : "Health Level to Override Motion" : 0 : "If specified, this object will start motion disabled. Once its health has dropped below this specified amount, it will enable motion."
 	forcetoenablemotion(float) [ group="Physics Properties" ] : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
 
+	enableuseoutput(boolean) : "Enable +Use Output" : 0 : "Enables OnPlayerUse output being fired when this object is used"
 	puntsound(sound) [ group="Physics Properties" ] : "Sound to make when punted"
 
 	addon(string) [ group="Physics Properties" ] : "AI AddOn" : "" : "If specified this object will use this addon behavior when installed in a composite AI"
 	interactAs(string) [ group="Physics Properties" ] : "interactAs" : "" : "comma-separated list of interaction layers"
 	forcenavignore(boolean) [ group="Physics Properties" ] : "Force Nav Ignore" : "0" : "If set, NPCs will ignore this prop when navigating."
 	forcenpcexclude(boolean) [ group="Physics Properties" ] : "Force NPC Exclude" : "0" : "If set, NPC movement will ignore this prop"
+	nonavmeshblocker(boolean) [ group="Physics Properties" ] : "No Navmesh Blocker" : "0" : "If set, don't auto-create a navmesh blocker."
 	auto_convert_back_from_debris(boolean) [ group="Physics Properties" ] : "Auto Convert back from Debris" : "1" : "If set, this prop will automatically convert back to interactive debris after coming to rest as Debris."
 
 	// Inputs
@@ -5640,15 +5544,11 @@
 	input Sleep(void) : "Put this physics object to sleep. It will wake if given the Wake input, or if force is applied to it. Note that physics objects go to sleep automatically after coming to rest for a while, so you don't really need to use this."
 	input EnableMotion(void) : "Enable physics motion/collision response."
 	input DisableMotion(void) : "Disable physics motion/collision response."
-	input EnablePickup(void) : "Enable player pickup of this prop."
-	input DisablePickup(void) : "Disable player pickup of this prop."
 	input DisableFloating(void) : "Disable fluid/floating simulation to reduce cost."
 	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
 	input physdamagescale(float) : "Set the Physics Impact Damage Scale for this character. NOTE: 0 means this feature is disabled for backwards compatibility."
 	input EnableDamageForces(void) : "Damaging the entity applies physics forces to it."
 	input DisableDamageForces(void) : "Damaging the entity does *not* apply physics forces to it."
-	input EnablePuntSound(void) : "Allow this prop to play its own sound when punted"
-	input DisablePuntSound(void) : "Prevent this prop from playing its own sound when punted"
 	input SetAutoConvertBackFromDebris(boolean) : "Set whether or not this prop should automatically convert back to interactive debris after it comes to rest as debris."
 	input AddAttribute(string) : "Add an attribute with a value of 1."
 	input RemoveAttribute(string) : "Remove an attribute."
@@ -5657,7 +5557,6 @@
 	output OnMotionEnabled(void) : "Fired when motion is enabled on this prop, either via 'Health Level to Override Motion' or from the EnableMotion input."
 	output OnAwakened(void) : "Fired when this entity becomes awake (collision/force is applied to it while it's asleep)."
 	output OnPlayerUse(void) : "Fired when the player tries to +USE the prop. This output will fire only if the Generate output on +USE spawnflag is set."
-	output OnPlayerPickup(void) : "Fired whenever the player picks up this prop (with the physcannon or with +USE)."
 	output OnOutOfWorld(void) : "Fired whenever the prop is out of the allowed world bounds."
 ]
 
@@ -5787,7 +5686,7 @@
 = vehicle_entityio :
 	"Vehicle which does nothing but fire outputs based on IN_BUTTONS, typically used for prototyping."
 [
-	button1(choices) : "Button 1" : "" : "The button which fires the Button1-related outputs." =
+	button1(choices) : "Button 1" : : "The button which fires the Button1-related outputs." =
 	[
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
@@ -5804,7 +5703,7 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button2(choices) : "Button 2" : "" : "The button which fires the Button2-related outputs." =
+	button2(choices) : "Button 2" : : "The button which fires the Button2-related outputs." =
 	[
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
@@ -5821,7 +5720,7 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button3(choices) : "Button 3" : "" : "The button which fires the Button3-related outputs." =
+	button3(choices) : "Button 3" : : "The button which fires the Button3-related outputs." =
 	[
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
@@ -5838,7 +5737,7 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button4(choices) : "Button 4" : "" : "The button which fires the Button4-related outputs." =
+	button4(choices) : "Button 4" : : "The button which fires the Button4-related outputs." =
 	[
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
@@ -5855,7 +5754,7 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button5(choices) : "Button 5" : "" : "The button which fires the Button5-related outputs." =
+	button5(choices) : "Button 5" : : "The button which fires the Button5-related outputs." =
 	[
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
@@ -5872,7 +5771,7 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button6(choices) : "Button 6" : "" : "The button which fires the Button6-related outputs." =
+	button6(choices) : "Button 6" : : "The button which fires the Button6-related outputs." =
 	[
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
@@ -5889,7 +5788,7 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button7(choices) : "Button 7" : "" : "The button which fires the Button7-related outputs." =
+	button7(choices) : "Button 7" : : "The button which fires the Button7-related outputs." =
 	[
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
@@ -5906,7 +5805,7 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button8(choices) : "Button 8" : "" : "The button which fires the Button8-related outputs." =
+	button8(choices) : "Button 8" : : "The button which fires the Button8-related outputs." =
 	[
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
@@ -7616,6 +7515,7 @@
 	{
 		editor_only = true
 		path_node_class = "path_node_cable"
+		has_static_mesh = true
 	}
 = cable_static
 [
@@ -7630,6 +7530,12 @@
 	}
 = cable_dynamic
 [
+	spawnflags(flags) =
+	[
+		512 : "Set to Nav Ignore" : 0
+		1024 : "Set to Local-Nav Ignore (NPC will not try to avoid this entity)" : 0
+	]
+
 	secondary_material(material) : "Secondary Material" : "" : "Optional secondary material, can be selected using Skin(1)"
 	lightingorigin(target_destination) [ group="Render Properties" ] : "Lighting Origin" : "" : "Select an entity to specify a location to sample lighting from, instead of using this entity's origin."
 	disableshadows(choices) [ group="Render Properties" ] : "Cast Shadows" : 0 : "Used to disable shadow casting from this entity." = 
@@ -7713,6 +7619,8 @@
 ]
 
 //==================================================================================================
+
+
 @SolidClass base(Trigger)
  = trigger_buoyancy : "A volumetric trigger that affects the motion of vphysics objects that touch it by applying buoyancy to them."
 [
@@ -7720,5 +7628,12 @@
 	input SetFluidDensity(float) : "Fluid density, kg/liter"
 ]
 
+
+@PointClass base(Targetname)
+	iconsprite("editor/nav_walkable.vmat")
+	= point_nav_walkable :
+	"Causes nav mesh to be generated here and at all points that are reachable via ground movement from here."
+[
+]
 
 

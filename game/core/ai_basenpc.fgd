@@ -525,6 +525,18 @@
 [
 	subject(target_name_or_class) : "Subject NPC(s) whose opinion of Target(s) will change" : "" : "This is the NPC(s) whose disposition about the Target(s) will change. May be a targetname or a classname."
 	target(target_name_or_class) : "Target player or NPC(s) about whom Subject(s) will feel differently" : "" : "This is the player or NPC(s) about whom the Subject(s) will change their disposition. May be a targetname or a classname."
+	subjectclassify(choices) : "Subject NPC(s) Classification" : "0" : "This is the Classification of the NPC who's disposition will change. Optionally used instead of the subject targetname or classname." =
+	[
+		0 : "CLASS_NONE"
+		1 : "CLASS_PLAYER"
+		2 : "CLASS_PLAYER_ALLY"
+	]
+	targetclassify(choices) : "Target NPC(s) Classification" : "0" : "This is the Classification of the target(s) about whom the Subject(s) will change their disposition. Optionally used instead of the target targetname or classname." =
+	[
+		0 : "CLASS_NONE"
+		1 : "CLASS_PLAYER"
+		2 : "CLASS_PLAYER_ALLY"
+	]
 ]
 
 @BaseClass base(Targetname) = LeadGoalBase
@@ -601,14 +613,24 @@
 	output OnDone( void ) : "Fires when NPC completes behavior (any post-success or fail acting is complete)"
 ]
 
-
-@PointClass base(LeadGoalBase) tags( AI ) iconsprite("editor/ai_goal_lead.vmat") = ai_goal_lead : "AI Goal Lead"
+@BaseClass base(Targetname, EnableDisable) = AIGoalBase
 [
+	actor(target_destination) : "Actor(s) to affect"
+
 	SearchType(choices) : "Search Type" : 0 : "How to search for the entities using the targetname." = 
 	[
 		0 : "Entity Name"
 		1 : "Classname"
 	]
+
+	// Inputs
+	input Activate(void)
+	input Deactivate(void)
+]
+
+@PointClass base(LeadGoalBase, AIGoalBase) tags( AI ) iconsprite("editor/ai_goal_lead.vmat") = ai_goal_lead : "AI Goal Lead"
+[
+	
 ]
 
 
@@ -632,18 +654,10 @@
 //]
 
 
-@BaseClass base(Targetname) = FollowGoal
+@BaseClass base(AIGoalBase) = FollowGoal
 [
 	actor(target_name_or_class) : "Actor(s) to affect"
 	goal(target_destination) : "Target Entity" : : "The name of the entity to follow. If blank, and the actor likes the player, then defaults to player"
-
-	SearchType(choices) : "Search Type" : 0 : "How to search for the entities using the targetname." = 
-	[
-		0 : "Entity Name"
-		1 : "Classname"
-	] 
-
-	StartActive(boolean) : "Start Active" : 0
 
 	MaximumState(choices) : "Maximum state" : 1 =
 	[
@@ -660,10 +674,6 @@
 		6 : "Sidekick"
 		8 : "Vortigaunt (FIXME)"
 	]
-
-	// Inputs
-	input Activate( void ) : "Begin the follow behavior"
-	input Deactivate( void ) : "Cease the follow behavior"
 ]
 
 
@@ -697,229 +707,14 @@
 	input Deactivate(void)
 ]
 
-
-@PointClass base(Targetname) tags( AI ) iconsprite("editor/ai_goal_follow.vmat") = ai_goal_fightfromcover : "AI Fight from Cover"
-[
-	actor(target_destination) : "Actor(s) to affect"
-	goal(target_destination) : "Target Entity" : : "The name of the entity to follow. If blank, and the actor likes the player, then defaults to player"
-
-	DirectionalMarker(target_destination) : "Directional Marker" : "" : "Specify the entity that indicates the direction of battle"
-	GenericHintType(string) : "Generic Hint Type" : "" : "Behavior looks for 'generic' hints, and requires a text tag to search for"
-	width(float) : "Zone Width" : "600" : "Width of the hint search area"
-	length(float) : "Zone Length" : "480" : "Length of the hint search area"
-	height(float) : "Zone Height" : "2400" : "Offset in the direction of the hint search area"
-	bias(float) : "Zone Bias" : "60" : "Offset in the direction of the hint search area"
-
-	StartActive(boolean) : "Start Active" : 0
-
-	// Inputs
-	input Activate(void)
-	input Deactivate(void)
-	input SetDirectionalMarker(string) : "Specify the entity that indicates the direction of battle"
-]
-
-
-@PointClass base(Targetname) tags( AI ) iconsprite("editor/ai_goal_standoff.vmat") = ai_goal_standoff : "AI Goal Standoff"
-[
-	actor(target_name_or_class) : "Actor(s) to affect"
-//	goal(string) : "Target Entity (self by default) [NOT IMPLEMENTED]"
-
-	SearchType(choices) : "Search Type" : 0 : "How to search for the entities using the targetname." = 
-	[
-		0 : "Entity Name"
-		1 : "Classname"
-	] 
-
-	StartActive(boolean) : "Start Active" : 0
-
-	HintGroupChangeReaction(Choices) : "Reaction to tactical change" : 1 : "What to do if leader moves, threat is neutralized, hint group changes, etc" =
-	[
-		0 : "Move when ready (default AI)"
-		1 : "Move when seek cover"
-		2 : "Move immediately"
-	]
-
-	Aggressiveness(Choices) : "Aggressiveness" : 2 =
-	[
-		0 : "Very low"
-		1 : "Low"
-		2 : "Medium"
-		3 : "High"
-		4 : "Very High"
-		// Custom agression disabled
-		// 		100 : "Custom"
-	]
-
-	PlayerBattleline(boolean) : "Player battleline" : 1 : "Player defines a battle line, applies to allies only"
-
-	StayAtCover(boolean) : "Stay at cover location" : 0 : "When have suitable cover, don't change it (disables advancing to battle line)" 
-
-	AbandonIfEnemyHides(boolean) : "Abandon if enemies hide" : 0 : "If no enemy detected recently, stop the standoff"
-
-	// Custom aggression
-//	CustomCoverOnReload(boolean) : "Custom: Take cover to reload" : 1
-//	CustomMinTimeShots(float) : "Custom: Min time wait to shoot"	  : 2 : "Minimum duration of time after a burst of shooting before trying again"
-//	CustomMaxTimeShots(float) : "Custom: Max time wait to shoot"	  : 4 : "Minimum duration of time after a burst of shooting before trying again"
-//	CustomMinShots(integer) : "Custom: Min shots in a burst"	  : 1
-//	CustomMaxShots(integer) : "Custom: Max shots in a burst"	  : 4
-//	CustomOddsCover(integer) : "Custom: Odds cover on damage"	  : 25 : "If damaged, the chances react by taking immediate cover"
-
-	// Inputs
-	input Activate( void ) : "Begin contesting position"
-	input Deactivate( void ) : "Cease contesting position"
-	input SetAggressiveness(integer) : "Set aggressiveness"
-]
-
-
-@PointClass base(Targetname, Parentname) tags( AI ) sphere(policeradius) iconsprite("editor/ai_goal_police.vmat") = ai_goal_police : "AI Goal Police"
-[
-	spawnflags(Flags) = 
-	[
-		2 : "Knock-out target past crossing plane" : 0
-		4 : "Do not leave post" : 0
-	]
-
-	policeradius(float) : "Radius" : 512 : "Radius to police"
-	policetarget(string) : "Target" : "" : "Target to police"
-
-	// Inputs
-	input EnableKnockOut(void) : "Tells the goal to make the active policing NPC knock out its target"
-	input DisableKnockOut(void) : "Stop the active policing NPC from trying to knock out its target"
-
-	// Outputs
-	output OnFirstWarning(void) : "Fires the first time a policing cop warns a target"
-	output OnSecondWarning(void) : "Fires the second time a policing cop warns a target"
-	output OnLastWarning(void) : "Fires when a policing cop warns a target for the last time"
-	output OnSupressingTarget(void) : "Fires when a policing cop starts to suppress (ie. beat) a target"
-	output OnKnockOut(void) : "Fires when a target has been knocked out"
-]
-
-
-@PointClass base(Targetname, Parentname) iconsprite("editor/assault_rally.vmat") line(255 255 255, targetname, assaultpoint) = assault_rallypoint : 
-	"(Assault) rally point"
-[
-	assaultpoint(target_destination)  : "Assault Point" : "" : "Location to move to as assault begins"
-	assaultdelay(float) : "Assault Delay" : 0 : "How long to wait after cue is given before assault begins."
-	rallysequence(string) : "Rally Sequence" : "" : "Override the NPC's wait activity by entering a sequence name."
-	priority(integer) : "Priority" : 1 : "Higher priority rally points get selected first."
-
-	forcecrouch(boolean) : "Force Crouch" : 0 : "NPCs using this assault point are forced into crouching while holding it."
-
-	urgent(boolean) : "Urgent" : 0 : "If true, NPCs will consider movement to this rally point as Urgent Navigation."
-
-	lockpoint(boolean) : "Lock Point" : 1 : "Should this point be locked by a character using it."
-
-	output OnArrival(void) : "Fires when the NPC reaches this rally point"
-]
-
-
-@PointClass base(Targetname, Parentname) iconsprite("editor/assault_point.vmat") line(255 255 255, targetname, nextassaultpoint) = assault_assaultpoint : 
-	"(Assault) assault point"
-[
-	assaultgroup(string)  : "Assault Hint Group" : "" : "NPC's movements are constrained to this hint group once assault has begun"
-	nextassaultpoint(target_destination) : "Next assault point (optional)"
-	assaulttimeout(float) : "Assault time out" : "3.0" : "This point is cleared when no enemies are seen for this long (seconds)"
-	clearoncontact(boolean) : "Clear on contact with enemies" : 0 : "If you come in contact with enemies while approaching the assault point, clear our assault point"
-	allowdiversion(boolean) : "Allow diversion" : 0 : "If you come in contact with enemies while approaching the assault point, divert to kill them. Resume the assault once contact is lost."
-
-	allowdiversionradius(float) : "Diversion Proximity" : 0 : "If Allow Diversion is set, NPC will only divert from assault to attack an enemy that is within this distance of the assault point. 0 = No limit."
-
-	nevertimeout(boolean) : "Never Timeout" : 0 : "If set, the assault never ends for NPCs assaulting this point. Useful for forcing NPCs back to a point."
-
-	strict(choices) : "Strict?" : 0 =
-	[
-		0 : "No, NPC may move from point to attack"
-		1 : "Yes, NPC may not move to attack"
-	]
-
-	spawnflags(Flags) = 
-	[
-		1 : "Clear this point upon arrival, UNCONDITIONALLY" : 0
-	]
-
-	forcecrouch(boolean) : "Force Crouch" : 0 : "NPCs using this assault point are forced into crouching while holding it."
-
-	urgent(boolean) : "Urgent" : 0 : "If true, NPCs will consider movement to this assault point as Urgent Navigation."
-
-	assaulttolerance(choices) : "Attack Tolerance" : 36 : "How far this NPC may move from the assault point to try to attack an enemy." =
-	[
-		36 : "Tight (3ft)"
-		72 : "Medium (6ft)"
-		120 : "Large (10ft)"
-	]
-
-
-	// Inputs
-	input SetClearOnContact(integer) : "Set the clear on contact flag. NPCs who spot enemies while running to the assault point, or while waiting at it, will immediately Clear it."
-	input SetAllowDiversion(integer) : "Set the allow diversion flag. NPCs who spot enemies whil running to the assault point, or while waiting on it, will divert away (leave Assault mode) to deal with the enemies. Upon losing enemies, they'll go back to Assault mode, and return to this assault point."
-	input SetForceClear(integer) : "Set the Force Clear flag. NPCs who are currently running to the assault point will Clear it immediately. NPCs who acquire it in the future will Clear it automatically."
-
-	// Outputs
-	output OnArrival(void) : "Fires when the NPC reaches this assault point"
-	output OnAssaultClear(void) : "Fires when this assault point is cleared of enemies"
-]
-
-
-@PointClass base(Targetname) tags( AI ) = ai_goal_assault : 
-	"AI Goal Assault"
-[
-	actor(target_name_or_class) : "Actor(s) to affect" : "" : "NPC's that should perform this assault"
-	rallypoint(target_destination) : "Rally Point Set" : "" : "Root name of rally points for this assault. Use an asterisk '*' after the root name to match all with the same root."
-
-	SearchType(choices) : "Search Type" : 0 : "How to search for the entities using the targetname." = 
-	[
-		0 : "Entity Name"
-		1 : "Classname"
-	] 
-
-	StartActive(boolean) : "Start Active" : 0
-
-	AssaultCue(choices) : "Assault Cue" : 1 =
-	[
-		1 : "Entity System Input"
-		2 : "Gunfire"
-		3 : "Don't wait for a cue."
-	]
-
-	RallySelectMethod(choices) : "Rally Point Selection Method" : 0 = 
-	[
-		0 : "Priority, Closest (default)"
-		1 : "Random"
-		2 : "Priority, Furthest"
-	]
-
-	BranchingMethod(choices) : "Branching Assault Selection Method" : 0 = 
-	[
-		0 : "Random (default)"
-		1 : "Closest"
-		2 : "Furthest"
-	]
-
-	// Inputs
-	input Activate( void ) : "Begin the assault behavior"
-	input Deactivate( void ) : "Cease the assault behavior"
-	input BeginAssault( void ) : "Begin assault phase"
-]
-
-
-@BaseClass base(Targetname) = BaseActBusy
+@BaseClass base(AIGoalBase) = BaseActBusy
 [
 	actor(target_name_or_class) : "Actor(s) to affect" : "" : "NPC's that should act busy"
-
-	StartActive(boolean) : "Start Active" : 0
-
-	SearchType(choices) : "Search Type" : 0 : "How to search for the entities using the targetname." = 
-	[
-		0 : "Entity Name"
-		1 : "Classname"
-	] 
 
 	busysearchrange(float) : "Search Range for Busy Hints" : 2048
 	visibleonly(boolean) : "Visible Busy Hints Only" : 0
 
 	// Inputs
-	input Activate( void ) : "Begin acting busy"
-	input Deactivate( void ) : "Cease acting busy"
 	input SetBusySearchRange( float ) : "Update the busy search range for all actors."
 	input ForceNPCToActBusy( string ) : "Force an NPC to act busy. Takes parameters, separated by spaces: <Targetname> <hint node targetname> <optional:teleport> <optional:$customactivityorsequence> <maximum time to actbusy>. If no hint node targetname is specified, it'll search for a random one. If no max time is specified, it'll use the default. Specifying 0 as the max time will make the NPC act busy until disturbed. If the optional teleport parameter is specified, the NPC will teleport to the act busy point. A custom move animation can be specified by prepending $ to the name of it. i.e. $ACT_RUN will make the NPC Run. Sequence names can be used instead of activities."
 	input ForceThisNPCToActBusy( string ) : "Force an NPC outputted from another entity to act busy. (only usable from an output that specifies an entity)"

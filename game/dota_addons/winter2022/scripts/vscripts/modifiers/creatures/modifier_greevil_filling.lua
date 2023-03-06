@@ -96,8 +96,7 @@ function modifier_greevil_filling:OnDeath( params )
 		local vColor = WINTER2022_GREEVIL_FILLING_COLORS[ self:GetFillingType() ]
 		local nFXIndex = ParticleManager:CreateParticle( "particles/units/greevils/greevil_blood_death.vpcf", PATTACH_WORLDORIGIN, nil )
 		ParticleManager:SetParticleControl( nFXIndex, 0, self:GetParent():GetAbsOrigin() )
-		ParticleManager:SetParticleControl( nFXIndex, 1, self:GetParent():GetAbsOrigin() )
-		ParticleManager:SetParticleControlForward( nFXIndex, 1, vBloodDir )
+		ParticleManager:SetParticleControlTransformForward( nFXIndex, 1, self:GetParent():GetAbsOrigin(), vBloodDir )
 		ParticleManager:SetParticleControl( nFXIndex, 10, vColor )
 		ParticleManager:ReleaseParticleIndex( nFXIndex )
 

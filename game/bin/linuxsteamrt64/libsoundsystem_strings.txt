@@ -19,6 +19,11 @@ $toolgraphs
 %*sOperator Stack: %s%*sSize: %i
 %*sSoundEvent Hash: %d
 %*smixgroup: %s
+%1
+%2
+%3
+%4
+%5
 %d %d %d %d
 %d %s %s
 %d) %s
@@ -39,9 +44,9 @@ $toolgraphs
 %s = %f
 %s = %s: %i : %i : %i : %i : %i : %i
 %s Operator Fields: %i
-%s Schema Type: %s
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
+%s allocation count overflow( add %llu + current %llu > max %llu )
 %s changed to [
 %s references :
 %s set to %.2f
@@ -62,6 +67,8 @@ $toolgraphs
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
 %s: Sound event executionlist has too many active voices (%d). Index %i : %s
+%s: invalid nBeforeIndex %d
+%s: invalid nSize %d
 %s: params.pSfx is NULL.
 %s:%i
 %s:%s needs base %s:%s to be registered
@@ -89,7 +96,6 @@ $toolgraphs
 '
 (
 ( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
-(%2db) %6i : %s
 (%d,%d)
 (%s%s)
 (%s) %d
@@ -109,6 +115,10 @@ $toolgraphs
 *Z16GenerateSigmoid2R20CCubicSplineFunctionjffEUlffE_
 *ZN12CSoundSystem6UpdateEPK11CAudioStatebEUlvE_
 *ZN14CAsyncWaveData17StartAsyncLoadingERK17asyncwaveparams_tEUlP18IAsyncReadRequest220AsyncRequestStatus_tE_
+*ZNK17CSosOperatorFloat7ExecuteEPvP17CSosOperatorStackiEUlbbE0_
+*ZNK17CSosOperatorFloat7ExecuteEPvP17CSosOperatorStackiEUlbbE1_
+*ZNK17CSosOperatorFloat7ExecuteEPvP17CSosOperatorStackiEUlbbE2_
+*ZNK17CSosOperatorFloat7ExecuteEPvP17CSosOperatorStackiEUlbbE3_
 +
 ,
 -
@@ -119,12 +129,14 @@ $toolgraphs
 -36 3
 -altgameroot
 -avx
+-convars_hidden_by_default
 -memory_map_sound
 -nosound
 -sdlaudiodriver
 -sse2
 -sse3
 -sse4
+-strict_type_combinations
 -tools
 .
 ../../public/tier0/utlmemory.h
@@ -168,9 +180,11 @@ $toolgraphs
 14CSoundOpSystem
 14CSoundSamplers
 14CVoiceTraceKV3
+14IErrorListener
 14ISoundOpSystem
 14ISoundSamplers
 14IVSoundManager
+14IVoiceTraceKV3
 15CAudioMixerWave
 15CAudioProcessor
 15CSosEventInfo_t
@@ -215,7 +229,6 @@ $toolgraphs
 18CAudioSourceCached
 18CEQ8AudioProcessor
 18CSDLAudioSubsystem
-18CSosOperatorConvar
 18CSosOperatorCurve4
 18CSosOperatorFacing
 18CSosOperatorGroups
@@ -264,6 +277,7 @@ $toolgraphs
 21CSosGroupMatchPattern
 21CSosOperatorBlockTest
 21CSosOperatorCrossfade
+21CSosOperatorEvalFloat
 21CSosOperatorFalloffVR
 21CSosOperatorFindGroup
 21CSosOperatorGateLogic
@@ -307,7 +321,11 @@ $toolgraphs
 23CEnvelopeAudioProcessor
 23CKV3ResourceBlockHelper
 23CKV3ResourceTypeManagerILy2020175222EE
+23CKV3TransferContextBase
+23CKV3TransferLoadContext
+23CKV3TransferSaveContext
 23CModDelayAudioProcessor
+23CSosOperatorApplyEffect
 23CSosOperatorBlockEvents
 23CSosOperatorCalcDoppler
 23CSosOperatorDeltaFloat3
@@ -322,6 +340,7 @@ $toolgraphs
 23CSosOperatorSetBuiltins
 24CFractionalMonoDelayLine
 24CGeneratorAudioProcessor
+24CPlateverbAudioProcessor
 24CPresetDSPAudioProcessor
 24CSideChainAudioProcessor
 24CSosGroupActionTimeLimit
@@ -371,6 +390,8 @@ $toolgraphs
 26CSteamAudioDirectProcessor
 26CSteamAudioReverbProcessor
 26CStereoDelayAudioProcessor
+27CSosOperatorBypassAudioMute
+27CSosOperatorEntityGetHealth
 27CSosOperatorEntityWorldAABB
 27CSosOperatorFloatToSpeakers
 27CSosOperatorSoundEventParam
@@ -389,6 +410,7 @@ $toolgraphs
 29CSosOperatorCalcFixedRotation
 29CSosOperatorFloatAccumulate12
 29CSosOperatorGetOpVarDsppreset
+29CSosOperatorIsLocalPlayerSlot
 29CSosOperatorLogicSwitch3Float
 29CSosOperatorLogicSwitchFloat3
 29CSosOperatorRegisterSoundArea
@@ -430,8 +452,7 @@ $toolgraphs
 34IKV3TransferInterface_ResourceLoad
 35CSosOperatorIterateAndMergeSpeakers
 35CSosOperatorLogicSwitchStringHandle
-36CKV3Transfer_UtlSymbolLargeInterfaceI24CUtlSymbolTableLargeBaseILb0ELm2048E16CThreadNullMutexEE
-36IKV3TransferInterface_UtlSymbolLarge
+36CSosOperatorLogicSwitch3StringHandle
 37CSosOperatorCalcWeightedAvgSerialVec3
 3dB
 4
@@ -453,18 +474,19 @@ $toolgraphs
 : %s::
 ;
 <
-< %d >
-<%s : %u>
-<%s, cat %d>
 <EMPTY>
 <INVALID>
 <UNRESOLVED>
+<array: %u elements>
+<binary blob: %u bytes>
 <invalid soundevent name>
 <invalid>
 <no failure reason set>
 <null>
+<pointer>
+<table: %u members>
 <undefined>
-<unknown: %d>
+<unknown KV3 basic type '%s' (%d)>
 <unknown>
 =
 >
@@ -547,7 +569,6 @@ Block Max Count
 Blocks Events
 Branch Rules
 C
-CAnimVariant
 CAsyncWavDataCache:  %i sounds total %s, %.2f %% of capacity
 CAudioMixThread
 CAudioMixThread::MixAudioFrame
@@ -561,6 +582,7 @@ CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::FixSlashes(char)
 CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
+CBufferString::FormatTo(IFormatOutputStream*, CFormatStringElement) const
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeRelativePath(char const*, char const*)
@@ -576,6 +598,7 @@ CBufferString::ShortenPath(bool)
 CBufferString::StartsWith_FastCaseInsensitive(char const*) const
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
+CBufferString::TrimTail(char const*)
 CCircularBuffer::Advance(int)
 CCircularBuffer::CCircularBuffer(unsigned int)
 CCircularBuffer::Flush()
@@ -586,17 +609,13 @@ CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. S
 CDSPMixgroupModifier
 CDSPPresetMixgroupModifierTable
 CDspPresetModifierList
-CEntityIndex
 CFilterString::DoesMatchString(char const*, FilterStringMatchFlags_t) const
 CFilterString::SetString(char const*)
 CKeyValues_Data::Internal_GetString(char const*, char*, unsigned long)
 CKeyValues_Data::Internal_SetString(char const*)
-CLOSECAPTION
 CMemAllocSystemInitialize
-CMotionTransform
 COM_TimestampedLog
 CONTENTROOT
-CPlayerSlot
 CRC32_ProcessBuffer
 CRawAllocator::Alloc(RawAllocatorType_t, unsigned long, unsigned long*)
 CRawAllocator::Free(RawAllocatorType_t, void*, unsigned long)
@@ -607,6 +626,7 @@ CSosGroupActionTimeLimitSchema
 CSosGroupBranchPattern
 CSosGroupMatchPattern
 CSosOPeratorGetOpVarInfo
+CSosOperatorAudibility::Execute
 CSosOperatorConvar
 CSosOperatorFloatAccumulate12
 CSosOperatorGetOpVarArrayIndex
@@ -665,7 +685,6 @@ CSoundSampler: Max: %i
 CSoundSampler: Min: %i
 CSoundSampler: Sampler: %s
 CSoundSampler: SoundEvent: %s
-CSplitScreenSlot
 CSplitString::Construct(char const*, char const**, int, bool)
 CStableSymbolTable::GetId(char const*, bool*)
 CStrongHandle
@@ -680,19 +699,13 @@ CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volat
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
-CTransform
 CUE Operators:
 CURVES: %d
-CURVE_TANGENT_FREE
-CURVE_TANGENT_LINEAR
-CURVE_TANGENT_MIRROR
-CURVE_TANGENT_SINE
-CURVE_TANGENT_SPLINE
-CUniformRandomStream::CUniformRandomStream()
-CUniformRandomStream::RandomFloat(float, float)
-CUniformRandomStream::RandomInt(int, int)
-CUniformRandomStream::SetSeed(int)
-CUtlBinaryBlock
+CUniformRandomStreamImpl<CThreadNullMutex>::RandomFloat(float, float)
+CUniformRandomStreamImpl<CThreadSpinMutex>::CUniformRandomStreamImpl()
+CUniformRandomStreamImpl<CThreadSpinMutex>::RandomFloat(float, float)
+CUniformRandomStreamImpl<CThreadSpinMutex>::RandomInt(int, int)
+CUniformRandomStreamImpl<CThreadSpinMutex>::SetSeed(int)
 CUtlBinaryBlock::SetLength(int)
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
@@ -719,6 +732,8 @@ CUtlMemoryArena::MaxAvailableAllocSize()
 CUtlMemoryArena::~CUtlMemoryArena()
 CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
+CUtlMemoryBlockAllocator::Purge()
+CUtlMemoryBlockAllocator::RemoveAll(unsigned long)
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
 CUtlMemoryPoolBase::Alloc()
 CUtlMemoryPoolBase::CUtlMemoryPoolBase(int, int, int, MemoryPoolGrowType_t, char const*, MemAllocAttribute_t)
@@ -750,8 +765,6 @@ CUtlString::operator+=(char const*)
 CUtlString::operator=(CBufferString const&)
 CUtlString::operator==(CUtlString const&) const
 CUtlString::operator[](int) const
-CUtlSymbol
-CUtlSymbolLarge
 CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::AddString(char const*, int, bool*)
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
@@ -784,11 +797,10 @@ Cannot deallocate abstract class
 Cannot deduce for class
 Cannot destruct abstract class
 Cannot find mix input %s
-Casts a ray and starts a sound event where the ray hits. The sound event will retrigger periodically. Usage: snd_cast <eventname> [<retrigger time>] [<max distance>]. Arguments that are specified will become defaults for the remainder of the session.
+Casts a ray and starts a sound event where the ray hits. The sound event will retrigger periodically if cl_snd_cast_retrigger is set. The sound event will clear previous snd_cast events if cl_snd_cast_clear is set. Usage: snd_cast <eventname> [<retrigger time>] [<max distance>]. Arguments that are specified will become defaults for the remainder of the session.
 Catch up mixing failed: %d times
 CharacterSetBuild
 Clear the list of deferred soundevents for loading.
-Color
 CommandLine
 Compare the compiled and loaded contents of 2 soundevents.
 Compression Ratio
@@ -801,6 +813,7 @@ ControlOutput_
 Copying '%s' to '%s'
 Couldn't load KV3 for resource: %s
 Couldn't parse the input.
+Couldn't set effect on %s because we currently don't support setting effect names on voice graphs.
 CreateInterface
 CreateSimpleThread
 Cross 01
@@ -846,7 +859,6 @@ Decreased audio mix latency to %d buffers
 Default: %s
 Default_Mix
 Deferred Sound Event %s has timed out and will be removed from the deferred list
-DegreeEuler
 Delay Count
 Delay Scale
 Delay Type
@@ -878,7 +890,10 @@ Dump main graph control output values
 Duration: %f
 Dynamic
 E
-EMPHASIS
+ERROR: Attempt to covert between float(s) failed due to size mismatch or index overrun on field %s in %s
+ERROR: Attempt to covert between string handle and token on field %s in %s
+ERROR: Attempt to covert between string handle and vsnd on field %s in %s
+ERROR: Attempt to covert between unsupported types on field %s in %s
 ERROR: Invalid Group Branch Index
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: Schema registration error - class '%s' is not marked as MModuleLocalTypeScope but contains member '%s' with locally-scoped type '%s'
@@ -932,6 +947,7 @@ Exports scene currently used by Steam Audio as a phononscene file.
 Extra taps
 F
 FATAL ERROR: unable to register all schema data: %s
+FATAL: %s called on a pool context (no root available)
 FIELDATA COMPARE FAIL: %s->%s
 FIELDATASIZE COMPARE FAIL: %s->%s
 FIELINFO COMPARE FAIL: %s->%s
@@ -945,6 +961,10 @@ FILTER_NOTCH
 FILTER_PASSTHROUGH
 FILTER_PEAKING_EQ
 FILTER_SLOPE_12dB
+FILTER_SLOPE_1POLE_12dB
+FILTER_SLOPE_1POLE_18dB
+FILTER_SLOPE_1POLE_24dB
+FILTER_SLOPE_1POLE_6dB
 FILTER_SLOPE_24dB
 FILTER_SLOPE_36dB
 FILTER_SLOPE_48dB
@@ -961,7 +981,7 @@ Failed to decode %s
 Failed to get p4 file info for %s
 Failed to load soundstacks/mixgraph.vmix
 Failed to read soundmixers.txt as KV3: %s
-Failed to transfer KV3 data for resource '%s' - %s
+Failed to save unsupported class
 Feedback scale
 Field Name String Count: %i
 Field Type: %i
@@ -983,14 +1003,15 @@ FlattenedSerializersVersion001
 Flush all unlocked async audio data
 Flush and re-parse the sound operator system
 FontManager_001
+FormatArgumentsToBuffer(IFormatOutputStream*, char const*, CTypeErasedFormattingWrapper const*, int)
 Forward Saw
 Found %d probes in %s.
-Free
 Free ?: %s
 Frequency (Hz)
 G
 GAME
 GCC: (SteamRT 5.4.0-7.really.6+steamrt1.2+srt2) 5.4.1 20160803
+GLIBCXX_3.4
 GLIBCXX_3.4.14
 GLIBC_2.14
 GLIBC_2.2.5
@@ -1035,6 +1056,7 @@ H@
 HALL Detected
 HB
 HE
+HRTF calculations will calculate the player as being this far behind the camera.
 HammerMapLoader001
 HandleSetLibStackFieldsMessageQueue
 HandleSetSoundEventFieldsMessageQueue
@@ -1048,6 +1070,8 @@ HostStateMgr001
 Hovering voice %i, you could debug draw something too
 I
 ID of the sound device to use
+IFormatOutputStream::OutputIndentation()
+IFormatOutputStream::PutS(char const*)
 INDEX
 If set > 0, overrides how long the decay time is on all mix graphs (in seconds).
 If set to 1, report more error found when playing sounds.
@@ -1064,15 +1088,18 @@ Input Pan
 InputService_001
 InputStackSystemVersion001
 InputSystemVersion001
+InsertBeforeGetPtr
 InstallSchemaBindings
 Intentionally vague touch behavior for %p
 Invalid field type %s for field %s
+Invalid use of KV3 specific type %s with basic type %s, must be basic type %s
 Invert Match
 Is Oneshot
 IsKV3Data(CUtlBuffer const*, KV3ID_t*)
 IsKV3Data(void const*, int, KV3ID_t*)
 J
 K
+KV3 instances cannot be set to an unspecified specific type
 KeyValueCache001
 KeyValues::AddFloat(char const*, float)
 KeyValues::AddInt(char const*, int)
@@ -1159,7 +1186,6 @@ MATCHFRAMEWORK_001
 MGetKV3ClassDefaults
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
-MORPHS
 MPropertyAttributeChoiceEnumName
 MPropertyAttributeRange
 MPropertyAutoExpandSelf
@@ -1179,15 +1205,19 @@ Match Event Type: %i
 Match Rules
 Match SubString ?: %s
 MaterialUtils_001
+Math Eval expression had two operations in a row.
 MathLib_Init
 Max Time
+Max reverb gain amount for listener DSP.
+Max reverb gain amount for source-specific DSP.
 MemAlloc_AllocAlignedFunc
 MemAlloc_FreeAlignedFunc
 MemAlloc_StrDupFunc
 MeshSystem001
 MeshUtils001
 Mid EQ gain (dB)
-Mirror
+Min reverb gain amount amount for listener DSP.
+Min reverb gain amount for source-specific DSP.
 Missing file '%s'
 Missing wav file '%s'
 Mix value to blend spatial and non-spatial audio in Dota 2.
@@ -1209,8 +1239,6 @@ ModCutoff
 ModCutoffMax
 ModelDocUtils001
 Modification amount for listener DSP when source DSP is used.
-Modification amount for listener DSP.
-Modification amount for source-specific DSP.
 Modifier Table
 Modulation Depth
 Modulation Frequency
@@ -1246,7 +1274,6 @@ Number of materials not mapped = %d.
 Number of materials updated with new mapping = %d.
 O
 OPEN SIDED OUTDOOR AREA Detected
-OPTIONS
 OUTSIDE ALLEY Detected
 OUTSIDE COURTYARD Detected
 OUTSIDE STREET Detected
@@ -1272,8 +1299,6 @@ PANNER_TYPE_LINEAR
 PARAM COUNT COMPARE FAIL: %s->%s
 PARAMDATA COMPARE FAIL: %s->%s : %s
 PARAMINFO COMPARE FAIL: %s->%s
-PHRASE
-PLAINTEXT
 PanoramaTextServices001
 PanoramaUIClient001
 PanoramaUIEngine001
@@ -1318,6 +1343,7 @@ Plat_WindowToOsSpecificHandle
 Play a note from a specified sampler
 Play a sound at a specified volume.
 Play a sound.
+Pointers cannot be used as numeric values
 PostProcessingSystem_001
 Pre-delay (ms)
 Prewview VMIX voice on the game graph, preview will be different!
@@ -1350,9 +1376,6 @@ Purge and reload all vmidi data and files.
 PurgeAndDeleteAll: Deleting orphaned CSoundEvent pointer for %s via shutdown
 Push
 Q
-QAngle
-Quaternion
-QuaternionStorage
 Queued: elapsed time: %f, next sync time: %f, length: %f
 R
 R@
@@ -1361,7 +1384,6 @@ RESOURCE_TYPE_SOUNDEVENTSCRIPT
 RESOURCE_TYPE_SOUNDSTACKSCRIPT
 RESOURCE_TYPE_VMIX_LIST
 ROOM Detected
-RadianEuler
 Random
 Random Modulation
 RandomFloat
@@ -1392,7 +1414,6 @@ RetriggerSoundEvent
 Reverb Depth ms
 Reverb Height ms
 Reverb Width ms
-RotationVector
 Running snd_get_physics_surface_properties for %s mod.
 Running snd_set_physics_surface_properties for %s mod.
 S
@@ -1444,7 +1465,6 @@ SOS_EDIT_ITEM_TYPE_FIELD
 SOS_EDIT_ITEM_TYPE_LIBRARYSTACKS
 SOS_EDIT_ITEM_TYPE_OPERATOR
 SOS_EDIT_ITEM_TYPE_SOUNDEVENT
-SOS_EDIT_ITEM_TYPE_SOUNDEVENTS
 SOS_EDIT_ITEM_TYPE_STACK
 SOS_GROUPTYPE_DYNAMIC
 SOS_GROUPTYPE_STATIC
@@ -1462,9 +1482,9 @@ SUBGRAPH_INTERPOLATION_TEMPORAL_FADE_OUT
 S_Init( finish )
 S_MixSampleFrames
 S_UpdateVoicesPerFrame
-SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*)
+SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*, unsigned int)
 SaveKV3AsKV1Text(KeyValues3 const*, CUtlString*, CUtlBuffer*, KV1TextEscapeBehavior_t)
-SaveKV3Text_NoHeader(KeyValues3 const*, CUtlString*, CUtlBuffer*)
+SaveKV3Text_NoHeader(KeyValues3 const*, CUtlString*, CUtlBuffer*, unsigned int)
 SceneSystem_002
 SceneUtils_001
 SchemaSystem_001
@@ -1507,6 +1527,7 @@ Show async memory stats for just non-streamed music
 Show brief async memory stats
 Sine
 Size in bytes
+SkipBlanks
 SndOperators
 Sort Type
 SosActionSortType_t
@@ -1522,6 +1543,8 @@ SosOpFieldInfo_t::ValueToString: Unable to find ENUM tokenset on %s
 Sound Disabled
 Sound Event
 Sound Initialization: Finish, Sampling Rate: %i
+Sound device synchronization max delay (ms)
+Sound device synchronization shift (ms)
 Sound disabled
 Sound memory used %3.1f%%, %s bytes used, %s bytes total
 Sound memory used %3.1f%%, %s used, %s total
@@ -1532,7 +1555,6 @@ Sound volume
 SoundEvent %s, input_entity_index %i found but specified attachment %s was not
 SoundEvent %s, input_entity_index %i was valid but no longer is
 SoundEvent_error
-SoundGuid_t
 SoundMix
 SoundMixer %s:
 SoundMixers
@@ -1572,7 +1594,6 @@ Specifies the position (in degrees) of the virtual front left/right speakers.
 Specifies the position (in degrees) of the virtual rear left/right speakers.
 Spew data about the list of block entries.
 Spew message to console any time async sound loading blocks on file i/o.
-Spline
 Square Wave
 St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
 St16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
@@ -1610,19 +1631,16 @@ Sustain target amplitude
 Sustain time (ms)
 SystemAttributes
 T
-TIMES
+TD_OFFSET_NORMAL
+TD_OFFSET_PACKED
 TRUE
 TUNNEL Detected
 Table of mixgroup modifiers for effect names.
 Target
-TestFormatA
-TestFormatB
-TestFormatC
-TestFormatD
-TestFormatE
 TestScriptMgr001
 TextLayout_001
-The amount to multiply the volume by. 1.0 leaves the volume unchanged.
+The amount to multiply the volume of the non-spatialized reverb/dsp by when at the max reverb blend distance. 1.0 leaves the volume unchanged.
+The amount to multiply the volume of the non-spatialized reverb/dsp by when at the min reverb blend distance. 1.0 leaves the volume unchanged.
 The soundsystem requires the filesystem to run!
 This convar is being accessed prior to ConVar_Register being called
 ThreadGetCurrentId
@@ -1663,7 +1681,7 @@ Total: %.2f MB
 Tracing soundscapes is only supported in the Server.
 Triangle
 Tried to load a polymorphic pointer with no '%s' key
-Tried to load resource reference '%s' from a value without a resource reference flag.
+Tried to load resource reference '%s' from a value without a resource reference specific type.
 Triggering %s with retrigger interval = %f; maximum distance = %f
 TriggersSoundEvents
 Type Name: %s
@@ -1676,8 +1694,11 @@ Unable to create voice for vmix "%s" check script for %s.
 Unable to find graph for vmix %s
 Unable to find soundevent: %s
 Unable to load sound system data.Starting verification of Steam Game Cache.Retry launching after completion.
+Unknown KV3 specific type %u
 Unknown field type %s for field %s
 Unknown track name %s, will not play voice %s
+Unrecognized symbol in Sound Operator Stack math expression.
+Unsupported KV3 basic type '%s' (%d)!
 Unsupported version %d for resource '%s' (Expected %d)
 Update SoundEvent: %s
 Upward Ratio
@@ -1708,14 +1729,11 @@ Used stack: %s
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
 V
-VALUES
 VApplication001
 VAsyncFileSystem2_001
 VAvi001
 VBik001
 VConComm001
-VERSION
-VERSION 1.0
 VEngineCvar007
 VFileSystem017
 VMIX %s switching to subgraph %s
@@ -1728,7 +1746,6 @@ VMIX_CHAN_RIGHT
 VMIX_CHAN_STEREO
 VMIX_CHAN_SWAP
 VMaterialSystem2_001
-VMatrix
 VMediaFoundation001
 VMixAutoFilterDesc_t
 VMixBoxverbDesc_t
@@ -1754,10 +1771,12 @@ VMixOscDesc_t
 VMixPannerDesc_t
 VMixPannerType_t
 VMixPitchShiftDesc_t
+VMixPlateverbDesc_t
 VMixProcessorType_t
 VMixShaperDesc_t
 VMixStartup
 VMixSubgraphSwitchDesc_t
+VMixSubgraphSwitchInterpolationType_t
 VMixTableInit
 VMixUtilityDesc_t
 VMixVocoderDesc_t
@@ -1779,6 +1798,7 @@ VPROCESSOR_FULLWAVE_INTEGRATOR
 VPROCESSOR_MOD_DELAY
 VPROCESSOR_OSC
 VPROCESSOR_PANNER
+VPROCESSOR_PLATEVERB
 VPROCESSOR_PRESETDSP
 VPROCESSOR_RT_PITCH
 VPROCESSOR_SHAPER
@@ -1795,7 +1815,6 @@ VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
 VProfService_001
-VR_001
 VRenderDeviceSetupV001
 VSNDVEC COMPARE FAIL: %s->%s
 VSNDVEC COMPARE SIZE FAIL: %s->%s
@@ -1803,15 +1822,39 @@ VScript
 VScriptDbg
 VScriptManager010
 VStringTokenSystem001
+V_DoubleToString_Unsafe
 V_FixDoubleSlashes
+V_FloatToString_Unsafe
 V_GetFileExtension
+V_Int16ToString_Unsafe
+V_Int32ToString_Unsafe
+V_Int64ToString_Unsafe
+V_Int8ToString_Unsafe
 V_IsAbsolutePath
 V_ParseToken
 V_PathContainsPath
 V_PrettifyMem
 V_RemoveDotSlashes
+V_StringParseError
+V_StringToBool
+V_StringToColor
+V_StringToFloat32
+V_StringToFloat64
+V_StringToInt16
+V_StringToInt32
+V_StringToInt64
+V_StringToInt8
+V_StringToQAngle
+V_StringToUint16
+V_StringToUint32
+V_StringToUint64
+V_StringToVector
+V_StringToVector2D
+V_StringToVector4D
 V_TokenWaiting
 V_UInt16ToString_Unsafe
+V_UInt32ToString_Unsafe
+V_UInt64ToString_Unsafe
 V_UTF32ToUTF8
 V_UTF8ToUTF32
 V_UnqualifiedFileName
@@ -1822,7 +1865,6 @@ V_atan2f
 V_atanf
 V_atof
 V_atofloat32
-V_atofloat64
 V_atoi
 V_atoi64
 V_atoui64
@@ -1856,22 +1898,17 @@ V_stricmp_fast
 V_stristr_fast(char const*, char const*)
 V_strlower_fast
 V_strnchr
-V_strnlen
+V_strnlen(char const*, int)
 V_strtod
-V_strtoi64
 V_strtok
-V_strtoui64
 V_tand
 V_tanf
 V_tanhf
 V_tier0_ispunct
-V_uuid_t
 V_vsnprintf
 Value Operator Offset: %i
 Value Stack Offset: %i
 Vector2D
-Vector4D
-VectorAligned
 VisBuilder_001
 Visualize Sounds
 Voice Elapsed Time: %f
@@ -1884,8 +1921,6 @@ WARNING: Invalid vsnd version '%d' for file: %s
 WARNING: Stack %s Operator %s, opvar field %s overwriting existing parameter of the same name. THERE IS NO TYPE OR SIZE CHECKING IN PLACE, IT IS UP TO YOU TO MAKE SURE THEY ARE THE SAME.
 WARNING: Stack %s had %i stack field overwrite warnings. Set "snd_sos_show_parameter_overwrite_warnings 1" and recompile for details.
 WARNING: snd_sos_soundevent_profile disabled - ignoring!
-WORD
-WORDS
 Wait: elapsed time: %f, next sync time: %f, local elapsed: %f, local sync: %f, length: %f, num loops: %i
 Wall: surface = %s (%.2f)
 Warning
@@ -1907,7 +1942,7 @@ WorldRendererMgr001
 X
 XC
 Y
-Y@sos_import_stack
+Y@vmix_apply_effect
 Yes
 Z
 [
@@ -1915,8 +1950,6 @@ Z
 [ 1.0, 1.0, 0.227125, 0.227125, 2.0, 3.0 ]
 [%f,%f,%f,%f,%f,%f]
 [%s] %s : src %d : vol %.2f : time %.3f
-[%u]
-[]
 [],
 \
 ]
@@ -1963,6 +1996,7 @@ __cxa_guard_release
 __cxa_pure_virtual
 __fields
 __gmon_start__
+__memcpy_chk
 __move_to_end
 __pthread_key_create
 __remap_input
@@ -1974,6 +2008,7 @@ __temp_unserialization_member__
 __toolspreview__
 _builtins._delay
 _builtins._delay_override
+_builtins._startSample
 _builtins._voicegraph
 _class
 _edata
@@ -2012,6 +2047,7 @@ adsp_tunnel_min
 adsp_wall_height
 advanced
 allow_empty_match
+and_not
 anim_type
 aplay
 apply
@@ -2045,11 +2081,10 @@ band_2:inputPeak
 band_2:output
 band_2:outputPeak
 bar
-binary_auto
-binary_bc
-binary_lz4
-binary_zstd
+binary_blob
 block_equal_priority
+bool8
+bypass_audio_mute
 c
 calc_angles_facing
 calc_audibility
@@ -2075,14 +2110,16 @@ center1
 center2
 changes to final result of %.2f
 channels
-char
+char8
 check_event_data
-checksum
 circle
 circle_bounce
+cl_snd_cast_clear
+cl_snd_cast_retrigger
 clamp_range
 class_substring
 color
+color32
 command
 construction_stack
 control.copy
@@ -2108,6 +2145,7 @@ ctrl_gate
 ctrl_switch12_float
 ctrl_switch3_float
 ctrl_switch3_float3
+ctrl_switch3_string
 ctrl_switch_float
 ctrl_switch_float3
 ctrl_switch_speakers
@@ -2139,6 +2177,7 @@ dota2
 dota_enable_spatial_audio
 dota_ground_under_water
 dota_spatial_audio_mix
+double
 dry
 dsp: %3.2f
 dsp_automatic
@@ -2160,9 +2199,8 @@ duck_to_percent
 ducker_threshold
 dynamicEQScale
 e
-easeIn
-easeOut
 econ_replacement
+ehandle
 enum
 enum_decl
 enum_field
@@ -2172,6 +2210,7 @@ exclude_group_name
 execlp
 execute_once
 exit_if_blocked
+expression
 f
 fabs
 fade_type
@@ -2196,11 +2235,11 @@ float32
 float4
 float6
 float64
+float64[%u]
 float8
 float_max_speakers
 floor
 floorf
-fltx4
 force_direction
 fork
 frames
@@ -2212,6 +2251,7 @@ g_mastermixlayer:
 g_pMemAlloc
 g_pThreadPool
 gain of wet signal (dB)
+game_entity_get_health
 game_entity_info
 game_entity_world_aabb
 game_get_point_contents
@@ -2226,6 +2266,7 @@ greater_than_or_equal
 h
 headphones
 i
+ignore_import
 import_public_opvars
 index %i = %i guid : %i dependents
 input0
@@ -2259,6 +2300,7 @@ input_Y3
 input_Y4
 input_active
 input_add_dependent
+input_add_velocity_on_deleted_entity
 input_angles
 input_animation_direction
 input_animation_pct
@@ -2296,6 +2338,7 @@ input_effect
 input_effect_name
 input_elevation_angle
 input_end_value
+input_entity
 input_entity_index
 input_entry_count
 input_event_guid
@@ -2322,6 +2365,7 @@ input_goto_operator
 input_group_name
 input_group_result
 input_guid
+input_hold_position_on_deleted_entity
 input_hold_to_interval
 input_hrtf_mix
 input_hrtf_on
@@ -2370,6 +2414,7 @@ input_occlusion_mode
 input_occlusion_samples
 input_operator_name
 input_opvar
+input_owning_graph
 input_pathing_enabled
 input_pause
 input_pitch
@@ -2406,6 +2451,7 @@ input_rear_stereo_scale
 input_reset_event_time_on_restart
 input_restart_fade_in
 input_restart_loop_fade_out
+input_restart_preroll
 input_restart_start_time
 input_restart_time
 input_retrigger_on_finish
@@ -2460,9 +2506,14 @@ input_stop_at_time
 input_stop_immediate
 input_stop_on_finished
 input_stop_on_restart
+input_subgraph_name
 input_switch
 input_switch_offset
+input_sync_bpm_beats_field_name
+input_sync_bpm_field_name
+input_sync_end_point_field_name
 input_sync_field_name
+input_sync_start_point_field_name
 input_sync_track_name
 input_tail_max
 input_tail_min
@@ -2495,6 +2546,14 @@ input_use_namespace
 input_use_parent_seed
 input_vec_forward
 input_voicegraph
+input_volume1
+input_volume2
+input_volume3
+input_volume4
+input_volume5
+input_volume6
+input_volume7
+input_volume8
 input_volume_pos_max
 input_volume_pos_min
 input_vsnd
@@ -2516,6 +2575,7 @@ input_x
 input_y
 input_z
 instrument
+int32[%u]
 invalid
 invalid stack
 invalid_bone
@@ -2523,6 +2583,7 @@ invalid_vsnd
 invert
 invert_scale
 is_ducked
+is_local_player_slot
 is_untimed
 itemKVString
 itemName
@@ -2575,6 +2636,7 @@ m_actionType
 m_additionalOutputs
 m_audioMeters
 m_automaticControlInputs
+m_bApplyAntialiasing
 m_bBassMono
 m_bEnable
 m_bEnableFilter
@@ -2618,6 +2680,7 @@ m_flCompressionRatio
 m_flCrossfadeTime
 m_flCutoffFreq
 m_flDamp
+m_flDecay
 m_flDelay
 m_flDelayGain
 m_flDepth
@@ -2628,6 +2691,8 @@ m_flEntIndex
 m_flEnvelopeAmount
 m_flFeedback
 m_flFeedbackDepth
+m_flFeedbackDiffusion1
+m_flFeedbackDiffusion2
 m_flFeedbackGain
 m_flFeedbackHeight
 m_flFeedbackScale
@@ -2638,6 +2703,8 @@ m_flGlideTime
 m_flHeight
 m_flHighCutoffFreq
 m_flHoldTimeMS
+m_flInputDiffusion1
+m_flInputDiffusion2
 m_flInputPan
 m_flInterpolationTime
 m_flLFOAmount
@@ -2653,6 +2720,7 @@ m_flMix
 m_flModDepth
 m_flModRate
 m_flModifier
+m_flModifierMin
 m_flOpvar
 m_flOutputBalance
 m_flOutputGain
@@ -2660,6 +2728,7 @@ m_flPhase
 m_flPitch
 m_flPitchShift
 m_flPreDelayMS
+m_flPrefilter
 m_flQ
 m_flRMSTimeMS
 m_flRatio
@@ -2673,9 +2742,8 @@ m_flSendRoomDSP
 m_flSize
 m_flSizeMax
 m_flSizeMin
-m_flSlopeIncoming
-m_flSlopeOutgoing
 m_flSourceModifier
+m_flSourceModifierMin
 m_flStrength
 m_flSystemVolumeFadeRate
 m_flTaps
@@ -2722,19 +2790,18 @@ m_nFilterSlope
 m_nFilterType
 m_nGrainSampleCount
 m_nGraphOutputChannels
-m_nIncomingTangent
 m_nLFOShape
 m_nLayer
 m_nMaxCount
 m_nMixGroups
 m_nOp
-m_nOutgoingTangent
 m_nOversampleFactor
 m_nProcType
 m_nProcessorType
 m_nQuality
 m_nShape
 m_nSortType
+m_nStartSample
 m_nStopType
 m_nType
 m_nValue
@@ -2754,15 +2821,11 @@ m_soundEventName
 m_soundEventVMix
 m_soundName
 m_sounds
-m_spline
 m_stages
 m_subgraphs
 m_table
-m_tangents
 m_trackName
 m_vActions
-m_vDomainMaxs
-m_vDomainMins
 m_vHandLeft
 m_vHandRight
 m_vOrigin
@@ -2800,6 +2863,7 @@ math_delta_float3
 math_filter_float
 math_float
 math_float3
+math_float_eval
 math_func_float
 math_gain_to_db
 math_inrange_float
@@ -2816,8 +2880,7 @@ math_speakers
 math_string
 math_velocity
 mathlib.cpp
-matrix3x4_t
-matrix3x4a_t
+matrix3x4
 max_note
 max_output
 max_velocity_db
@@ -2860,7 +2923,7 @@ ms Delay (tap 3)
 ms delay max
 ms delay min
 ms of mod depth
-mute
+multiline_string
 mute: %3.2f
 muteTrackList
 n
@@ -2903,19 +2966,29 @@ operator_field_display_token
 operator_field_display_vsnd
 operator_variables
 opvar_get_bool
+opvar_get_bool operator %s in %s failed to get field %s
 opvar_get_dsp_preset
+opvar_get_dsp_preset operator %s in %s failed to get field %s
 opvar_get_float
+opvar_get_float operator %s in %s failed to get field %s
 opvar_get_float3
+opvar_get_float3 operator %s in %s failed to get field %s
 opvar_get_random_array_index
+opvar_get_random_array_index operator %s in %s failed to get field %s
 opvar_get_sndevt
+opvar_get_sndevt operator %s in %s failed to get field %s
 opvar_get_string
+opvar_get_string operator %s in %s failed to get field %s
 opvar_get_vsnd
+opvar_get_vsnd operator %s in %s failed to get field %s
 opvar_increment_float
+opvar_increment_float operator %s in %s failed to get field
 opvar_set_array_index
 opvar_set_float
 opvar_set_float3
 opvar_set_string
 opvar_set_vsnd
+or_not
 oscType
 output1
 output2
@@ -2943,6 +3016,7 @@ output_entity_is_actual_player_entity
 output_entity_is_player
 output_entity_scale
 output_event_finished
+output_event_playing
 output_events_matching
 output_goto_count
 output_guid
@@ -2976,6 +3050,7 @@ output_max_index
 output_mid
 output_mix
 output_mixgroups
+output_normalized
 output_not_selected
 output_occlusion
 output_opvar_elements
@@ -3043,6 +3118,7 @@ perlin
 playback
 playback_type
 playvol
+pointer
 pow
 preload_vsnds
 preview.editor
@@ -3088,6 +3164,7 @@ q
 qangle
 quad
 quantize_multiplier
+quaternion
 r
 r+b
 r@
@@ -3112,14 +3189,15 @@ right_side
 right_side1
 right_side2
 roll.cos
+roll.sin
 room
+rotation_vector
 round
 round_to_int
 s
 sampler_event
 saw
 schemaclassinfo.cpp
-schematype.cpp
 scripts/soundmixers.txt
 scripts/vmidi/vmidi_manifest.txt
 scroll
@@ -3133,6 +3211,7 @@ sequence_index
 sideChain
 sideChainPeak
 silence_dsp
+single_quoted_string
 singletons.cpp
 sinh
 slerp
@@ -3147,15 +3226,19 @@ snd_autodetect_latency
 snd_cast
 snd_compare_KV_convert
 snd_compare_soundevents
-snd_delay_sound_shift
+snd_delay_sound_ms_max
+snd_delay_sound_ms_shift
 snd_disable_mixer_duck
 snd_disable_mixer_solo
 snd_dma.cpp
+snd_dsp_distance_max
+snd_dsp_distance_min
 snd_duckerattacktime
 snd_duckerreleasetime
 snd_duckerthreshold
 snd_ducktovolume
 snd_enable_imgui
+snd_enable_subgraph_corenull_passthrough
 snd_enable_subgraph_log
 snd_envelope_rate
 snd_filter
@@ -3170,6 +3253,7 @@ snd_gamevolume
 snd_get_physics_surface_properties
 snd_headphone_pan_exponent
 snd_headphone_pan_radial_weight
+snd_hrtf_distance_behind
 snd_list
 snd_list_deferred_soundevents
 snd_list_soundevents
@@ -3193,6 +3277,7 @@ snd_occlusion_override
 snd_occlusion_rays
 snd_occlusion_report
 snd_occlusion_visualize
+snd_op_sys/sos_op_stop_soundevents.cpp
 snd_op_sys/sos_op_vmix.cpp
 snd_op_sys/sos_system.cpp
 snd_op_test_convar
@@ -3233,6 +3318,7 @@ snd_sos_default_update_stack
 snd_sos_flush_operators
 snd_sos_get_operator_field_info
 snd_sos_ingame_debug
+snd_sos_limit_self
 snd_sos_list_operator_updates
 snd_sos_max_event_base_depth
 snd_sos_opvar_debug
@@ -3318,6 +3404,7 @@ solo: %3.2f
 soloTrackList
 soloname
 sos_goto
+sos_import_stack
 sos_set_builtins
 sos_set_info
 sound/
@@ -3371,6 +3458,7 @@ soundsysteminfo
 source_soundscape
 spawn_orphans
 speaker_config
+spline
 sqr
 sqrt
 sqrtf
@@ -3382,6 +3470,7 @@ start_on_name_change
 start_vsnd
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()
 std::_Sp_counted_ptr<decltype(nullptr), (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+std::__throw_bad_alloc()
 std::__throw_bad_function_call()
 step
 stereo
@@ -3421,15 +3510,16 @@ threshold_type
 time slice ms
 tools/
 tools/audio:Source
-tools_no_extraction
 track_01
 track_queue
+transform
 transmissionHigh
 transmissionLow
 transmissionMid
 tri
 true
 typeinfo for CThreadSyncObject
+typeinfo for IFormatOutputStream
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_make_shared_tag
@@ -3437,11 +3527,13 @@ typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
 u
+uchar32
+uint
 uint16
 uint32
 uint64
 uint8
-unicode
+unspecified
 updateVoice
 use_%s
 use_entity_position_if_local_player
@@ -3465,8 +3557,10 @@ value%d
 value1
 value2
 vector2
+vector2d
 vector3
 vector4
+vector4d
 vector_facing_point
 velocity_zones
 vmix_debug_list
@@ -3491,17 +3585,14 @@ vmix_voicegraph_inputarray
 vmix_voicegraph_name_input
 vmix_voicelist.cpp
 vmix_vsnd_info
-voice_duck
 voice_fadeouttime
 voice_initial_buffer_ms
 voice_layer
 voice_loopback
 voice_min_buffer_ms
-voice_scale
 voice_stall_ms
 voice_threshold
 voice_threshold_delay
-void
 void S_Init( start )
 vol: %3.2f
 vsnd_c
@@ -3526,9 +3617,11 @@ x
 x@
 y
 z
-zCL
+zC(%2db) %6i : %s
+zD
 zE
 {
+{%u}
 |
 }
 ~

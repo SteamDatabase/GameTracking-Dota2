@@ -81,8 +81,7 @@
 		"HasModAppSystems" "1"
 		"Capable64Bit" "1"
 		"PanoramaUIClientFromClient" "1" // IPanoramaUIClient is implemented by client.dll
-		"HasGameUI" "1" // dota uses gameui
-		"GameUIFromClient" "1"  // AND that gameui comes from client.dll
+		"HasLegacyGameUI" "1" // dota uses some legacy gameui systems
 		"URLName" "dota2"
 		"MsaaOverrideType" "0"
 		"UsesBink" "0"

@@ -4,8 +4,6 @@ import "dota_gcmessages_common_lobby.proto";
 import "dota_gcmessages_common.proto";
 import "dota_shared_enums.proto";
 
-option cc_generic_services = false;
-
 message CDOTAMatchMetadataFile {
 	required int32 version = 1;
 	required uint64 match_id = 2;
@@ -14,6 +12,14 @@ message CDOTAMatchMetadataFile {
 }
 
 message CDOTAMatchMetadata {
+	message EconItem {
+		optional uint32 def_index = 1;
+		optional uint32 quality = 2 [default = 4];
+		repeated .CSOEconItemAttribute attribute = 3;
+		optional uint32 style = 4 [default = 0];
+		repeated .CSOEconItemEquipped equipped_state = 5;
+	}
+
 	message Team {
 		message PlayerKill {
 			optional uint32 victim_slot = 1;
@@ -21,19 +27,19 @@ message CDOTAMatchMetadata {
 		}
 
 		message ItemPurchase {
-			optional uint32 item_id = 1;
+			optional int32 item_id = 1 [default = -1];
 			optional int32 purchase_time = 2;
 		}
 
 		message InventorySnapshot {
-			repeated uint32 item_id = 1;
+			repeated int32 item_id = 1;
 			optional int32 game_time = 2;
 			optional uint32 kills = 3;
 			optional uint32 deaths = 4;
 			optional uint32 assists = 5;
 			optional uint32 level = 6;
-			repeated uint32 backpack_item_id = 7;
-			optional uint32 neutral_item_id = 8;
+			repeated int32 backpack_item_id = 7;
+			optional int32 neutral_item_id = 8 [default = -1];
 		}
 
 		message AutoStyleCriteria {
@@ -66,8 +72,8 @@ message CDOTAMatchMetadata {
 		}
 
 		message CavernChallengeResult {
-			optional uint32 completed_path_id = 1;
-			optional uint32 claimed_room_id = 2;
+			optional uint32 completed_path_id = 1 [default = 255];
+			optional uint32 claimed_room_id = 2 [default = 255];
 		}
 
 		message ActionGrant {
@@ -108,19 +114,13 @@ message CDOTAMatchMetadata {
 			repeated .CDOTAMatchMetadata.Team.CavernChallengeResult cavern_challenge_map_results = 17;
 			optional uint32 cavern_challenge_plus_shard_winnings = 18;
 			repeated .CDOTAMatchMetadata.Team.ActionGrant actions_granted = 19;
-			optional uint32 cavern_crawl_map_variant = 20;
+			optional uint32 cavern_crawl_map_variant = 20 [default = 255];
 			optional uint32 team_wager_bonus_pct = 21;
 			optional uint32 wager_streak_pct = 22;
 			repeated .CDOTAMatchMetadata.Team.CandyGrant candy_points_granted = 23;
 			optional uint32 active_season_id = 24;
 			optional bool cavern_crawl_half_credit = 25;
 			repeated .CDOTAMatchMetadata.Team.PeriodicResourceData periodic_resources = 26;
-		}
-
-		message GauntletProgress {
-			optional uint32 gauntlet_tier = 2;
-			optional uint32 gauntlet_wins = 3;
-			optional uint32 gauntlet_losses = 4;
 		}
 
 		message FeaturedGamemodeProgress {
@@ -140,10 +140,8 @@ message CDOTAMatchMetadata {
 				optional bool completed = 7;
 			}
 
-			optional uint32 account_id = 1;
-			repeated uint32 ability_upgrades = 2;
+			repeated int32 ability_upgrades = 2;
 			optional uint32 player_slot = 3;
-			repeated .CSOEconItem equipped_econ_items = 4;
 			repeated .CDOTAMatchMetadata.Team.PlayerKill kills = 5;
 			repeated .CDOTAMatchMetadata.Team.ItemPurchase items = 6;
 			optional uint32 avg_kills_x16 = 7;
@@ -184,7 +182,6 @@ message CDOTAMatchMetadata {
 			optional uint32 wards_dewarded = 44;
 			optional float stun_duration = 45;
 			optional .EDOTAMMRBoostType rank_mmr_boost_type = 46 [default = k_EDOTAMMRBoostType_None];
-			optional .CDOTAMatchMetadata.Team.GauntletProgress gauntlet_progress = 47;
 			repeated .CDOTAMatchMetadata.Team.Player.ContractProgress contract_progress = 48;
 			repeated uint32 guild_ids = 49;
 			repeated float graph_hero_damage = 50;
@@ -193,6 +190,7 @@ message CDOTAMatchMetadata {
 			optional .CDOTAMatchMetadata.Team.FeaturedGamemodeProgress featured_gamemode_progress = 53;
 			optional uint32 featured_hero_sticker_index = 54;
 			optional uint32 featured_hero_sticker_quality = 55;
+			repeated .CDOTAMatchMetadata.EconItem equipped_econ_items = 56;
 		}
 
 		optional uint32 dota_team = 1;
@@ -201,16 +199,14 @@ message CDOTAMatchMetadata {
 		repeated float graph_gold_earned = 4;
 		repeated float graph_net_worth = 5;
 		optional bool cm_first_pick = 6;
-		optional int32 cm_captain_player_id = 7;
-		repeated uint32 cm_bans = 8;
-		repeated uint32 cm_picks = 9;
+		optional int32 cm_captain_player_id = 7 [default = -1];
 		optional uint32 cm_penalty = 10;
 	}
 
 	message GuildChallengeProgress {
 		message IndividualProgress {
-			optional uint32 account_id = 1;
 			optional uint32 progress = 2;
+			optional uint32 player_slot = 3;
 		}
 
 		optional uint32 guild_id = 1;
@@ -223,17 +219,23 @@ message CDOTAMatchMetadata {
 		repeated .CDOTAMatchMetadata.GuildChallengeProgress.IndividualProgress individual_progress = 8;
 	}
 
+	message Tip {
+		optional uint32 source_player_slot = 1;
+		optional uint32 target_player_slot = 2;
+		optional uint32 tip_amount = 3;
+		optional .EEvent event_id = 4 [default = EVENT_ID_NONE];
+	}
+
 	repeated .CDOTAMatchMetadata.Team teams = 1;
-	repeated .CLobbyTimedRewardDetails item_rewards = 2;
 	optional fixed64 lobby_id = 3;
 	optional fixed64 report_until_time = 4;
 	optional bytes event_game_custom_table = 5;
 	optional uint32 primary_event_id = 6;
-	repeated .CMsgMatchTips match_tips = 7;
 	optional .CMsgMatchMatchmakingStats matchmaking_stats = 8;
 	optional .CMvpData mvp_data = 9;
 	repeated .CDOTAMatchMetadata.GuildChallengeProgress guild_challenge_progress = 10;
 	optional bytes custom_post_game_table = 11;
+	repeated .CDOTAMatchMetadata.Tip match_tips = 12;
 }
 
 message CDOTAMatchPrivateMetadata {
@@ -252,7 +254,7 @@ message CDOTAMatchPrivateMetadata {
 					}
 
 					optional uint32 source_unit_index = 3;
-					optional uint32 ability_id = 1;
+					optional int32 ability_id = 1 [default = -1];
 					repeated .CDOTAMatchPrivateMetadata.Team.Player.CombatSegment.DamageByAbility.ByHeroTarget by_hero_targets = 2;
 				}
 
@@ -263,7 +265,7 @@ message CDOTAMatchPrivateMetadata {
 					}
 
 					optional uint32 source_unit_index = 3;
-					optional uint32 ability_id = 1;
+					optional int32 ability_id = 1 [default = -1];
 					repeated .CDOTAMatchPrivateMetadata.Team.Player.CombatSegment.HealingByAbility.ByHeroTarget by_hero_targets = 2;
 				}
 
@@ -279,7 +281,7 @@ message CDOTAMatchPrivateMetadata {
 					optional bool is_hidden = 3;
 				}
 
-				optional uint32 buff_ability_id = 1;
+				optional int32 buff_ability_id = 1 [default = -1];
 				optional string buff_modifier_name = 3;
 				repeated .CDOTAMatchPrivateMetadata.Team.Player.BuffRecord.ByHeroTarget by_hero_targets = 2;
 			}
@@ -304,7 +306,6 @@ message CDOTAMatchPrivateMetadata {
 				optional uint32 other = 6;
 			}
 
-			optional uint32 account_id = 1;
 			optional uint32 player_slot = 2;
 			optional bytes position_stream = 3;
 			repeated .CDOTAMatchPrivateMetadata.Team.Player.CombatSegment combat_segments = 4;
@@ -336,9 +337,4 @@ message CDOTAMatchPrivateMetadata {
 	repeated .CDOTAMatchPrivateMetadata.Team teams = 1;
 	repeated float graph_win_probability = 2;
 	repeated .CDOTAMatchPrivateMetadata.StringName string_names = 3;
-}
-
-message CMsgDOTADPCMatch {
-	optional .CMsgDOTAMatch match = 1;
-	optional .CDOTAMatchMetadata metadata = 2;
 }

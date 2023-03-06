@@ -323,8 +323,7 @@ function EnterEatGreevilState()
 				local vColor = WINTER2022_GREEVIL_FILLING_COLORS[ hFillingBuff:GetFillingType() ]
 				local nFXIndex = ParticleManager:CreateParticle( "particles/units/greevils/greevil_blood.vpcf", PATTACH_CUSTOMORIGIN, item )
 				ParticleManager:SetParticleControlEnt( nFXIndex, 0, GameRules.Winter2022.hRoshan, PATTACH_POINT_FOLLOW, "attach_hitloc", GameRules.Winter2022.hRoshan:GetAbsOrigin(), true )
-				ParticleManager:SetParticleControl( nFXIndex, 1, GameRules.Winter2022.hRoshan:GetAbsOrigin() )
-				ParticleManager:SetParticleControlForward( nFXIndex, 1, -GameRules.Winter2022.hRoshan:GetForwardVector() )
+				ParticleManager:SetParticleControlTransformForward( nFXIndex, 1, GameRules.Winter2022.hRoshan:GetAbsOrigin(), -GameRules.Winter2022.hRoshan:GetForwardVector() )
 				ParticleManager:SetParticleControl( nFXIndex, 10, vColor )
 				ParticleManager:ReleaseParticleIndex( nFXIndex )
 			end
@@ -345,8 +344,7 @@ function EnterEatGreevilState()
 				local vColor = WINTER2022_GREEVIL_FILLING_COLORS[ hFillingBuff:GetFillingType() ]
 				local nFXIndex = ParticleManager:CreateParticle( "particles/units/greevils/greevil_blood_spit.vpcf", PATTACH_CUSTOMORIGIN, item )
 				ParticleManager:SetParticleControlEnt( nFXIndex, 0, GameRules.Winter2022.hRoshan, PATTACH_POINT_FOLLOW, "attach_hitloc", GameRules.Winter2022.hRoshan:GetAbsOrigin(), true )
-				ParticleManager:SetParticleControl( nFXIndex, 1, GameRules.Winter2022.hRoshan:GetAbsOrigin() )
-				ParticleManager:SetParticleControlForward( nFXIndex, 1, -GameRules.Winter2022.hRoshan:GetForwardVector() )
+				ParticleManager:SetParticleControlTransformForward( nFXIndex, 1, GameRules.Winter2022.hRoshan:GetAbsOrigin(), -GameRules.Winter2022.hRoshan:GetForwardVector() )
 				ParticleManager:SetParticleControl( nFXIndex, 10, vColor )
 				ParticleManager:ReleaseParticleIndex( nFXIndex )
 		

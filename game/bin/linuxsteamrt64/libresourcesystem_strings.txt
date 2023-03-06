@@ -1,4 +1,5 @@
 !m_bNeedsSort
+"%s"
 $ORIGIN
 % 5i:  [%32.32s]
 %d %d %d %d
@@ -13,7 +14,8 @@ $ORIGIN
 %lld
 %lld,
 %llu
-%s Schema Type: %s
+%s allocation count overflow
+%s allocation count overflow( add %llu + current %llu > max %llu )
 %s$Fence%d
 %s%s%s%sFinal operation count %llu
 %s+--
@@ -22,6 +24,8 @@ $ORIGIN
 %s: %s
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
+%s: invalid nBeforeIndex %d
+%s: invalid nSize %d
 %s:%s needs base %s:%s to be registered
 %sResource System profile stats unavailable. Compile with RESOURCE_SYSTEM_GATHER_STATS as 1 to gather stats.
 %s|  % 2d: %s [Offset: %d]
@@ -32,11 +36,9 @@ $ORIGIN
 %s| Project: '%s' Binary: '%s'
 %s| SizeOf: %d
 %s| Virtual: %s; Abstract: %s; TrivialConstr: %s; TrivialDestr: %s
-%u
 ( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%d,%d)
 (%s%s)
-*
 ** Forcing all resource loads to fail: "%s"
 *** Bad deletion request: Refcount for %s resource "%s" (%016llX) is greater than zero. (%d)!
 *ZN25CAsyncResourceDataRequest15InitForFileReadEPK21ResourceBindingBase_tb30ResourceManifestLoadPriority_tbPKcEUlP18IAsyncReadRequest220AsyncRequestStatus_tE_
@@ -59,6 +61,7 @@ $ORIGIN
 -- RESOURCE LOADING STATS ------------------------------------------------
 -- RESOURCE STREAMING STATS ----------------------------------------------
 -> Matched %d of %d loaded resources
+-convars_hidden_by_default
 -exit_on_resource_load_failure
 -force_all_resource_loads_to_fail
 -no_spread_finalize
@@ -66,7 +69,9 @@ $ORIGIN
 -resource_leaks
 -resource_system_verbose
 -start_resource_profiling
+-strict_type_combinations
 ..
+../../public/tier0/utlmemory.h
 ../public/tier0/tslist.h
 ../public/tier0/utlmemory.h
 ../public/tier0/utlreferencetracker.h
@@ -79,6 +84,7 @@ $ORIGIN
 12CThreadEvent
 13ConCommandRef
 14CBaseAppSystemI15IResourceSystemE
+14IErrorListener
 15CResourceSystem
 15CTier0AppSystemI15IResourceSystemLx0EE
 15CTier1AppSystemI15IResourceSystemLx0EE
@@ -100,6 +106,9 @@ $ORIGIN
 23CKV3ResourceBlockHelper
 23CKV3ResourceTypeManagerILy418564367478EE
 23CKV3ResourceTypeManagerILy500152235126EE
+23CKV3TransferContextBase
+23CKV3TransferLoadContext
+23CKV3TransferSaveContext
 23CResourceSystemProfiler
 23IResourceSystemProfiler
 25CAsyncResourceDataRequest
@@ -130,16 +139,18 @@ $ORIGIN
 38CDefaultKV3TransferResourceTypeManagerILy500152235126EE
 39CExampleSchemaVData_PolymorphicDerivedA
 39CExampleSchemaVData_PolymorphicDerivedB
-<
-< %d >
-<%s : %u>
-<%s, cat %d>
+:
 <INVALID>
 <No schemasystem>
+<array: %u elements>
+<binary blob: %u bytes>
 <invalid>
 <no failure reason set>
+<pointer>
+<table: %u members>
 <undefined>
-<unknown: %d>
+<unknown KV3 basic type '%s' (%d)>
+<unknown>
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 AlignedByteArray not properly aligned
 An attempt was made to create a resource manifest with debug name "%s" while the resource system was shutting down.
@@ -155,13 +166,13 @@ AssetSystem001
 AssetSystemTest001
 Attempted to register duplicate manifest name %s!
 Available resource leak tracking configuration aliases:
+BOOL
 Bad KV3 data for resource: %s
 BakedLODBuilderMgr001
 BenchmarkService001
 BinaryProperties_GetValue
 Blocking Manifest Load
 BlockingLoadResourceByNameIntoJustInTimeManifest
-CAnimVariant
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
 CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
@@ -173,6 +184,7 @@ CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::FixSlashes(char)
 CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
+CBufferString::FormatTo(IFormatOutputStream*, CFormatStringElement) const
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeRelativePath(char const*, char const*)
@@ -189,21 +201,21 @@ CBufferString::ShortenPath(bool)
 CBufferString::StripExtension()
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
+CBufferString::TrimTail(char const*)
 CCallStackCapture::CCallStackCapture(int (*)(unsigned long long, void**, int, int), unsigned int, unsigned int)
 CColorGradient
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
-CEntityIndex
 CExampleSchemaVData_Monomorphic
 CExampleSchemaVData_PolymorphicBase
 CExampleSchemaVData_PolymorphicDerivedA
 CExampleSchemaVData_PolymorphicDerivedB
+CFuseProgram
+CFuseSymbolTable
 CMemAllocSystemInitialize
-CMotionTransform
 CONTENT
 CONTENTROOT
 CPanoramaImageName
 CPiecewiseCurve
-CPlayerSlot
 CRC32_ProcessBuffer
 CRawAllocator::Alloc(RawAllocatorType_t, unsigned long, unsigned long*)
 CRawAllocator::Free(RawAllocatorType_t, void*, unsigned long)
@@ -219,7 +231,6 @@ CResourceSystem::BlockingFinishAllCurrentlyLoadingManifests is blocking
 CResourceSystem::FindOrCreateProceduralResource: Passed in an empty name for a procedural resource!
 CResourceSystem::ForceSynchronizationAndBlockUntilManifestLoaded blocked for %.3f ms on %s [%s]
 CSoundEventName
-CSplitScreenSlot
 CSplitString::Construct(char const*, char const**, int, bool)
 CStableSymbolTable::GetId(char const*, bool*)
 CStackTop_Base::CStackTop_Base()
@@ -227,6 +238,7 @@ CStackTop_Base::~CStackTop_Base()
 CStrongHandle
 CStrongHandleCopyable
 CStrongHandleVoid
+CStrongHandleVolatile
 CTSQueue corruption
 CThread::CThread()
 CThread::Init()
@@ -249,8 +261,6 @@ CThreadSpinRWLock::UnlockWrite(char const*, int)
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
-CTransform
-CUtlBinaryBlock
 CUtlBinaryBlock::SetLength(int)
 CUtlBlockMemory overflow!
 CUtlBuffer::AddNullTermination()
@@ -263,10 +273,13 @@ CUtlBuffer::Printf(char const*, ...)
 CUtlBuffer::Put(void const*, int)
 CUtlBuffer::PutString(char const*)
 CUtlBuffer::SeekPut(CUtlBuffer::SeekType_t, int)
+CUtlHashtable
 CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
 CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
+CUtlMemoryBlockAllocator::Purge()
+CUtlMemoryBlockAllocator::RemoveAll(unsigned long)
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
 CUtlMemoryPoolBase::Alloc()
 CUtlMemoryPoolBase::CUtlMemoryPoolBase(int, int, int, MemoryPoolGrowType_t, char const*, MemAllocAttribute_t)
@@ -277,22 +290,22 @@ CUtlReferenceTracker::Release() release counts for group outnumber addref counts
 CUtlScratchMemoryPool::AllocAligned(int, int)
 CUtlString
 CUtlString::Acquire(CBufferString*, bool)
-CUtlString::Append(char const*)
 CUtlString::CUtlString(CBufferString const&)
 CUtlString::Format(char const*, ...)
 CUtlString::FreeMemoryBlock()
 CUtlString::IsEqual_FastCaseInsensitive(char const*) const
+CUtlString::Purge()
 CUtlString::Set(char const*)
 CUtlString::SetDirect(char const*, int)
 CUtlString::operator+(char const*) const
 CUtlString::operator=(CBufferString const&)
-CUtlSymbol
-CUtlSymbolLarge
+CUtlStringToken
 CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
 CUtlSymbolTable::Find(char const*) const
 CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
+CUtlVector
 CVProfNode::EnterScope()
 CVProfNode::ExitScope()
 CVProfNode::GetSubNode(char const*, int, char const*, int)
@@ -304,18 +317,19 @@ CXXABI_1.3
 CXXABI_1.3.9
 Cannot allocate abstract class
 Cannot construct abstract class
+Cannot convert KV3 type '%s' (%u) to a string token
 Cannot copy abstract class
 Cannot deallocate abstract class
 Cannot deduce for class
 Cannot destruct abstract class
+Cast of %s loses value information (returning %s)
 CharacterSetBuild
-Color
 CommandLine
 ConnectInterfaceSingletons
+ConstantInfo_t
 Couldn't load KV3 for resource: %s
 CreateInterface
 DISABLED
-DegreeEuler
 DeleteResource
 Deleting empty loading resource
 DemoUpconverterVersion001
@@ -344,6 +358,7 @@ Error loading resource file "%s" (Error: %s)
 Error loading resource manifest "%s" (No DATA block)
 FATAL ERROR: %s resource '%s' (%016llX) is the wrong resource type! (This is likely caused by a hash collision between the strings '%s' and '%s')
 FATAL ERROR: unable to register all schema data: %s
+FATAL: %s called on a pool context (no root available)
 FIELD_AI_SCHEDULE_BITS
 FIELD_AMMO_INDEX
 FIELD_ATTACHMENT_HANDLE
@@ -361,6 +376,8 @@ FIELD_CUSTOM
 FIELD_DIRECTION_VECTOR_WORLDSPACE
 FIELD_EHANDLE
 FIELD_EMBEDDED
+FIELD_ENGINE_TICK
+FIELD_ENGINE_TIME
 FIELD_FLOAT32
 FIELD_FLOAT64
 FIELD_FUNCTION
@@ -421,12 +438,12 @@ FIELD_VECTOR4D
 FIELD_VMATRIX
 FIELD_VMATRIX_WORLDSPACE
 FIELD_VOID
+FIELD_WORLD_GROUP_ID
 Failed to allocate an instance of a class
 Failed to load resource "%s" and -exit_on_resource_load_failure was set and it's not in badresources_whitelist.txt
 Failed to map from %s to content-path
 Failed to map from %s to game-path
 Failed to save unsupported class
-Failed to transfer KV3 data for resource '%s' - %s
 FileSystem
 Finalize queue Finalizing StartLoading(%s) @%.2f
 Finalize queue completed processed %d, %s, elapsed time %.2fMSEC %s @%.2f
@@ -440,6 +457,12 @@ FlattenedSerializersVersion001
 FontManager_001
 ForceSynchronizationAndBlockUntilManifestLoaded
 Forgot to remove resource type manager for type %s!
+FormatArgumentsToBuffer(IFormatOutputStream*, char const*, CTypeErasedFormattingWrapper const*, int)
+FunctionInfo_t
+FuseFunctionIndex_t
+FuseVariableAccess_t
+FuseVariableIndex_t
+FuseVariableType_t
 GAMEROOT
 GCC: (SteamRT 5.4.0-7.really.6+steamrt1.2+srt2) 5.4.1 20160803
 GLIBC_2.14
@@ -463,9 +486,13 @@ Grow
 HammerMapLoader001
 HelpSystem_001
 HostStateMgr001
+IFormatOutputStream::OutputIndentation()
+IFormatOutputStream::PutS(char const*)
+INVALID
 Idle (ResourceSystemSleep)
 InfoForResourceTypeCAnimData
 InfoForResourceTypeCAnimationGroup
+InfoForResourceTypeCCSGOItem
 InfoForResourceTypeCChoreoSceneFileData
 InfoForResourceTypeCCompositeMaterialKit
 InfoForResourceTypeCDACGameDefsData
@@ -482,6 +509,7 @@ InfoForResourceTypeCPanoramaTypeScript
 InfoForResourceTypeCPhysAggregateData
 InfoForResourceTypeCPostProcessingResource
 InfoForResourceTypeCRenderMesh
+InfoForResourceTypeCResponseRulesList
 InfoForResourceTypeCSequenceGroupData
 InfoForResourceTypeCSmartProp
 InfoForResourceTypeCTextureBase
@@ -510,7 +538,9 @@ InstallSchemaBindings
 InstallTypeManager
 Intentionally vague touch behavior for %p
 Invalid Path
+Invalid use of KV3 specific type %s with basic type %s, must be basic type %s
 IsResourceManifestGroupKnown: Manifest group name is empty or null
+KV3 instances cannot be set to an unspecified specific type
 KeyValueCache001
 KeyValues::GetInt(char const*, int) const
 LOG_GENERAL
@@ -585,12 +615,11 @@ Plat_TickDiffMilliSec
 Plat_TickDiffMilliSecF
 Plat_TickDiffSecF
 Plat_USTime
+Pointers cannot be used as numeric values
 PostProcessingSystem_001
 PropertyEditorSystem_001
 Push
-QAngle
-Quaternion
-QuaternionStorage
+READ_ONLY
 RESOURCE_MANIFEST_HANDLE_INVALID
 RESOURCE_TYPE_NONE
 RESOURCE_TYPE_RESOURCE_MANIFEST
@@ -601,7 +630,6 @@ RKS_DISABLE_GROUP_CLEARING
 RKS_KEEP_ALL_RECORDS
 RKS_REQUIRE_EXACT_PAIRINGS
 RSProfilerTool
-RadianEuler
 Re-entrant calls to CResourceSystem::PreShutdown()
 RegisterConCommand: Unknown error registering con command "%s"!
 RegisterConVar: Unknown error registering convar "%s"!
@@ -630,7 +658,6 @@ ResourceSystem
 ResourceSystem/SpewBlockingLoads
 ResourceSystem013
 ResourceSystemWaitingForFutureWork
-RotationVector
 SINGLE FRAME
 SceneSystem_002
 SceneUtils_001
@@ -640,7 +667,6 @@ SchemaTestExternal_Two_001
 SerializedEntitiesVersion001
 SeriousWarning
 Sleeping
-SoundGuid_t
 SoundOpSystem001
 SoundOpSystemEdit001
 SoundService_001
@@ -663,11 +689,8 @@ St19_Sp_make_shared_tag
 Stack depth limit hit (%d)
 StatsService_001
 SteamAudio001
-TestFormatA
-TestFormatB
-TestFormatC
-TestFormatD
-TestFormatE
+TD_OFFSET_NORMAL
+TD_OFFSET_PACKED
 TestScriptMgr001
 TextLayout_001
 The filename may only contain lower case alphanumeric characters, dashes, and underscores.
@@ -684,11 +707,13 @@ Tried to double-register resource manager for two resource types! ( "%lld" and "
 Tried to install a NULL resource manager for resource type "%lld"!
 Tried to install a placeholder resource manager for an existing resource type "%lld"!
 Tried to install two resource managers for the same resource type "%lld"!
-Tried to load resource reference '%s' from a value without a resource reference flag.
+Tried to load resource reference '%s' from a value without a resource reference specific type.
 Tried to release UGC that hasn't been referenced: %lld
+Unknown KV3 specific type %u
 Unknown Path Class
 Unrecognized resource leak tracking parameter: "%s", available configuration aliases:
 UnregisterNamedManifest called, but we are not shutting down!!!
+Unsupported KV3 basic type '%s' (%d)!
 Unsupported version %d for resource '%s' (Expected %d)
 Update_Internal
 Usage: resource_leaks <resource_name>
@@ -704,48 +729,61 @@ VEngineCvar007
 VFileSystem017
 VGAME
 VMaterialSystem2_001
-VMatrix
 VMediaFoundation001
 VP4003
 VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
 VProfService_001
-VR_001
 VRenderDeviceSetupV001
 VScript
 VScriptDbg
 VScriptManager010
 VStringTokenSystem001
+V_DoubleToString_Unsafe
 V_FixDoubleSlashes
+V_FloatToString_Unsafe
 V_GetFileExtension
+V_Int32ToString_Unsafe
+V_Int64ToString_Unsafe
 V_IsAbsolutePath
 V_PathContainsPath
 V_PrettifyMem
 V_RemoveDotSlashes
+V_StringParseError
+V_StringToBool
+V_StringToColor
+V_StringToFloat32
+V_StringToFloat64
+V_StringToInt16
+V_StringToInt32
+V_StringToInt64
+V_StringToQAngle
+V_StringToUint16
+V_StringToUint32
+V_StringToUint64
+V_StringToUint8
+V_StringToVector
+V_StringToVector2D
+V_StringToVector4D
+V_UInt16ToString_Unsafe
+V_UInt64ToString_Unsafe
+V_UInt8ToString_Unsafe
 V_UnqualifiedFileName
-V_atofloat32
-V_atofloat64
 V_atoi
-V_atoi64
-V_atoui64
 V_fpclassifyd
 V_isnand
 V_qsort_s
 V_snprintf
-V_sscanf
 V_stricmp_fast
 V_stristr_fast(char const*, char const*)
-V_strnlen
-V_uuid_t
+V_strnlen(char const*, int)
 V_vsnprintf
 Valid Content Absolute Path
 Valid External Path
 Valid Game Absolute Path
 Valid Relative Path
-Vector2D
-Vector4D
-VectorAligned
+VariableInfo_t
 VisBuilder_001
 WARNING: %s resource '%s' (%016llX) requested but is not in the system. (Missing from from a manifest?)
 WARNING: Long frame update (%.2fms) for resource type manager '%s' in frame %d (%d long updates total for this manager)
@@ -755,13 +793,12 @@ WARNING: Resource system exiting at %.2f seconds due to '-resource_exit_after_ti
 WARNING: Trying to deallocate a resource after the type manager was uninstalled! ("%s")
 WARNING: Trying to deallocate a resource with no associated resource type! ("%s")
 WARNING: resource '%s' is an unrecognized resource type!
+WRITABLE
 WorldRendererMgr001
 [% 5ims alloc] [% 5ims async] [% 5ims final] [% 5i / %10s] %s
 [% 5ims alloc] [% 5ims async] [% 5ims final] [% 5i / %10s] TOTAL
 [% 5ims cb] [% 5ims async cb] [% 5i / %10s] %s
 [% 5ims cb] [% 5ims async cb] [% 5i / %10s] TOTAL
-[%u]
-[]
 [refcount % 4d]
 \*
 _ITM_deregisterTMCloneTable
@@ -798,28 +835,28 @@ _fini
 _multibase
 _not_pickable
 anonymous
+array
 badresources_whitelist.txt
-binary
-binary_auto
-binary_bc
-binary_lz4
-binary_zstd
+binary_blob
 bool
-char
+bool8
+char8
 color
+color32
 command
 content
 curve
-default
 disable_group_clearing
+double
+ehandle
 enable_profiling
-es
 exact
 false
 fieldtype_t
 filesystem_stdio
 float32
 float64
+float64[%u]
 fltx4
 g_VProfCurrentProfile
 g_bUpdateStringTokenDatabase
@@ -830,8 +867,11 @@ gameinfo.txt
 generic
 generic_data_type
 help
+int32[%u]
+invalid
 keep_all_records
 keepall
+key
 libc.so.6
 libpthread.so.0
 libresourcesystem.so
@@ -839,28 +879,44 @@ libstdc++.so.6
 libtier0.so
 loadingresource.cpp
 m_Value
+m_bIsPure
 m_child
+m_constants
+m_eAccess
+m_eVarType
+m_flValue
+m_functions
 m_hResource->m_nLoadingResource != LOADING_RESOURCE_INDEX_INVALID
 m_hResource->m_nStreamingResource != STREAMING_RESOURCE_DATA_INDEX_INVALID
 m_nDerivedA
 m_nDerivedB
 m_nExample1
 m_nExample2
+m_nIndex
+m_nMaxTempVarsUsed
+m_nNumComponents
 m_nPackedMax
 m_nPackedMin
+m_nParamCount
 m_name
+m_nameToken
+m_programBuffer
 m_vMaxBounds
 m_vMinBounds
+m_variables
+m_variablesRead
+m_variablesWritten
 mathlib_extended
-matrix3x4_t
-matrix3x4a_t
+matrix3x4
 mdl
 memcmp
 memcpy
 memmove
 memset
+multiline_string
 nTries < 10000000
 nogroup
+null
 operator delete(void*)
 operator delete(void*, unsigned long)
 operator delete[](void*)
@@ -870,6 +926,7 @@ operator new[](unsigned long)
 operator new[](unsigned long, std::nothrow_t const&)
 panorama
 panorama_image
+pointer
 profilehelpers.cpp
 pthread_mutex_destroy
 pthread_mutex_init
@@ -878,6 +935,7 @@ pthread_mutex_unlock
 pthread_mutexattr_init
 pthread_mutexattr_settype
 qangle
+quaternion
 require_exact_pairings
 resource
 resource_leaks %s
@@ -896,13 +954,14 @@ resourcefile
 resourcesystem
 resourcesystem.cpp
 resourcesystem_multiframe_finalize_time_msec
+rotation_vector
 rs_dump_stats - Dump resourcesystem stats.
 schemaclassinfo.cpp
 schemasystem
-schematype.cpp
 sdktools/bin/vproj.exe
 sdktools/bin/vprojUI.exe
 set_profile_mode
+single_quoted_string
 singletons.cpp
 soundevent
 src
@@ -912,34 +971,41 @@ std::_Sp_counted_ptr<decltype(nullptr), (__gnu_cxx::_Lock_policy)2>::_M_dispose(
 strchr
 strcmp
 streamingresourcedata.cpp
-string
+string_token
 strlen
 subclass
-text
+transform
 true
 typeinfo for CThread
 typeinfo for CThreadSyncObject
+typeinfo for IFormatOutputStream
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_make_shared_tag
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
+uchar32
 ugc:
+uint
 uint16
 uint32
 uint64
 uint8
+unspecified
+value
 vector2
+vector2d
 vector3
 vector4
-void
+vector4d
 vrgrp
+vrnmd
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__si_class_type_info
 vtable for __cxxabiv1::__vmi_class_type_info
-w
 z
 zD
+{%u}
 ~CLoadingResource
 ~CStreamingResourceData

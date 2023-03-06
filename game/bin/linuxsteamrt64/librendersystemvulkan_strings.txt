@@ -8,6 +8,7 @@
 !m_boolTransparent
 "
 " versus
+"%s"
 "%s" (%s)
 "(" expected after 'debug' keyword
 "(" expected after 'optimize' keyword
@@ -162,6 +163,7 @@ $accept
 %@,V,V
 %d %d %d %d
 %d (%s)
+%d.%d.%d.%d
 %d..%d
 %f %f %f %f
 %g
@@ -235,27 +237,29 @@ $accept
 %s     subgroupXor(%s);
 %s %s (
 %s (%d)
-%s - encountered shader with requiredSubgroupSize (%d), but VK_EXT_subgroup_size_control not enabled.  Will be ignored, might cause rendering artifacts.
+%s - encountered shader with requiredSubgroupSize (%d), but VK_EXT_subgroup_size_control not enabled.  Will be ignored, might cause rendering artifacts because device subgroup size is (%d).
+%s - encountered shader with requiredSubgroupSize (%d), but maxSubgroupSize is (%d).  Will be ignored, might cause rendering artifacts.
 %s / %s MB
 %s / %s MB (non-evictable: %s MB)
 %s 0..0
-%s Schema Type: %s
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
+%s allocation count overflow( add %llu + current %llu > max %llu )
 %s called on an immutable constant buffer
 %s is not a valid flag.  Flag passes should have the form '--pass_name[=pass_args]'. Special flag names also accepted: -O and -Os.
 %s profile; removed in version %d
 %s%d
 %s%s%s
-%s() isn't a known function.
 %s/%s
 %s: Can't concatenate input layouts with more than %d fields total!
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
 %s: Unable to compute hash for shader module
 %s: __pos (which is %zu) > this->size() (which is %zu)
+%s: invalid nBeforeIndex %d
+%s: invalid nSize %d
 %s: offset %d, type %x, size %d, index %d, binding %d, stages %d
-%s[line %d:%d]
+%s:%s,
 %s_%d
 %s_0
 %u (%s)
@@ -401,7 +405,6 @@ $accept
 (fWeightSumLeft + fWeightSumRight) > 0.0f
 (fWeightSumTop + fWeightSumBottom) > 0.0f
 (id)
-(knN
 (member index
 (must be 0 or 1)
 (must be 0, 1 or 2)
@@ -562,6 +565,7 @@ $accept
 -bit integer for the addressing model used in the module)
 -bit integer literals
 -component vector of
+-convars_hidden_by_default
 -debugdxsupport
 -deferTextureLoads
 -dev
@@ -571,8 +575,6 @@ $accept
 -dx11
 -element array of
 -empty
--force_recommend_gl
--gl
 -gpuraytracing
 -gpuraytracing requires vkGetPhysicalDeviceProperties2
 -ignoredxsupportcfg
@@ -600,13 +602,13 @@ $accept
 -sse2
 -sse3
 -sse4
+-strict_type_combinations
 -threads
 -tx-struct
 -vulkan
 -vulkan_aggressive_command_pool_rebalancing
 -vulkan_aggressive_command_pool_rebalancing_2gb
 -vulkan_alloc_callbacks
--vulkan_allow_nv_optimus_layer
 -vulkan_amd_disable_bind_vertex_buffers_workaround
 -vulkan_cmd_buffer_pool_size
 -vulkan_depth_texture_as_r32f
@@ -629,7 +631,6 @@ $accept
 -vulkan_disable_khr_maintenance1
 -vulkan_disable_khr_maintenance2
 -vulkan_disable_khr_swapchain_mutable_format
--vulkan_disable_mipgen_compute_shader
 -vulkan_disable_nv_dedicated_allocation
 -vulkan_disable_pipeline_cache
 -vulkan_disable_pool_textures
@@ -647,6 +648,7 @@ $accept
 -vulkan_dump_shaders
 -vulkan_enable_ext_extended_dynamic_state
 -vulkan_enable_ext_extended_dynamic_state_2
+-vulkan_enable_ext_extended_dynamic_state_3
 -vulkan_enable_gpu_validation
 -vulkan_enable_khr_dynamic_rendering
 -vulkan_enable_robust_buffer_access
@@ -655,6 +657,7 @@ $accept
 -vulkan_force_sm30
 -vulkan_force_sm60
 -vulkan_fossilize_log_verbose
+-vulkan_ignore_ctdl_bindless_non_blocking_issues
 -vulkan_metal_validation
 -vulkan_minimal_validation
 -vulkan_preload_fossilize
@@ -663,6 +666,7 @@ $accept
 -vulkan_trim_command_pools
 -vulkan_trim_command_pools_2gb
 -vulkan_validation_error_assert
+-vulkan_validation_error_exit_success
 -vulkan_validation_warnings
 -vulkanrenderthreadstack
 .
@@ -677,6 +681,7 @@ $accept
 ./inputlayoutbase.h
 ./renderresource.h
 .0123456789
+.bak
 .exr
 .ini
 .jpg
@@ -853,25 +858,19 @@ $accept
 32CVfxShaderFileRenderShaderBuffer
 33CRayTraceShaderBindingTableVulkan
 38CSchemaRegistration_rendersystemvulkan
-3_0_gl
-3_0_gles
-3_1_gles
 4
 4 columns of 3-component vectors of 32-bit floats.
 4.60 glslang Khronos. 11.8.0
 41
 4C
 4_0_android_vulkan
-4_0_gl
 4_0_ios_vulkan
 4_0_vulkan
 4_1_android_vulkan
-4_1_gl
 4_1_ios_vulkan
 4_1_vulkan
 5
 5_0_android_vulkan
-5_0_gl
 5_0_ios_vulkan
 5_0_vulkan
 6
@@ -1004,13 +1003,12 @@ $accept
 ;()[]
 ;:
 <
-< %d >
-<%s : %u>
-<%s, cat %d>
 <<
 <<=
 <??>
+<array: %u elements>
 <bad token>
+<binary blob: %u bytes>
 <float
 <instruction>
 <int
@@ -1018,11 +1016,13 @@ $accept
 <invalid>
 <no failure reason set>
 <none>
+<pointer>
+<table: %u members>
 <uint
 <undefined>
+<unknown KV3 basic type '%s' (%d)>
 <unknown multisample type
 <unknown op>
-<unknown: %d>
 <unknown>
 =
 = Phi[%
@@ -1134,6 +1134,7 @@ Acosh
 AcquireVfxShaderFile: Failed to unserialize CVfxShaderFile.  Is your shadercache out-of-date?  Try deleting it.
 AcquireVfxShaderFile: Failed to unserialize CVfxShaderFileVulkan.  Is your shadercache out-of-date?  Try deleting it.
 Actual Type
+Adapter: %dDriver Name:  %sDriver Version: %sVendorId / DeviceId:  0x%x / 0x%xSubSystem / Rev:  0x%x / 0x%x
 Additional fossilize database path: %s
 AddressQualifier must be a 32-bit unsigned integer OpConstant
 Addresses
@@ -1145,6 +1146,7 @@ After hitting throttling limits for streamout, allow it to continue up to this n
 Aliased
 AliasedPointer
 AliasedPointerEXT
+Aligned
 AlignedByteArray not properly aligned
 Alignment
 AlignmentId
@@ -1328,9 +1330,7 @@ B channel not found
 B channel not found!
 BANG
 BC6H
-BC6h compression not supported on this target (windows only).
 BC7
-BC7 compression not supported on this target (windows only).
 BFIU
 BGR565
 BGR888
@@ -1406,6 +1406,7 @@ Bogus sampling factors
 Bogus virtual array access
 Boolean
 Border color not supported by VK (%x), defaulting to white.
+Borderless Window
 BoundImageNV
 BoundSamplerNV
 Branch: Break
@@ -1435,7 +1436,6 @@ CALLDATAINNV
 CALLDATANV
 CARET
 CASE
-CAnimVariant
 CB
 CB: %u buffers, %.2f MB
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
@@ -1449,6 +1449,7 @@ CBufferString::ExtractFirstDir(char const*)
 CBufferString::FixSlashes(char)
 CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
+CBufferString::FormatTo(IFormatOutputStream*, CFormatStringElement) const
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeRelativePath(char const*, char const*)
@@ -1471,7 +1472,6 @@ CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. S
 CCommandBufferChunk CUtlMemoryPoolMT
 CDescriptorSetVulkan::Rebake - could not allocate descriptor in new pool.
 CENTROID
-CEntityIndex
 CFormatStringElement::CFormatStringElement(char const*)
 CKeyValues_Data::Internal_GetInt() const
 CLargeCommandBufferChunk CUtlMemoryPoolMT
@@ -1482,7 +1482,9 @@ CMemoryStack::CommitTo(unsigned char*)
 CMemoryStack::FreeAll(bool)
 CMemoryStack::Init(char const*, unsigned int, unsigned int, unsigned int, unsigned int)
 CMemoryStack::~CMemoryStack()
-CMotionTransform
+CMiniDumpComment::AppendComment(char const*)
+CMiniDumpComment::AppendFormattedComment(char const*, ...)
+CMiniDumpComment::EnsureEndsWithNumCharacters(char, int, bool)
 COMMA
 COMMON
 CONST
@@ -1492,7 +1494,6 @@ CONTINUE
 COneTimeEvent::Allocate()
 CPP_for_OpenCL
 CPacked
-CPlayerSlot
 CRC mismatch!
 CRC-32 check failed
 CRC32_ProcessBuffer
@@ -1509,7 +1510,6 @@ CRenderContextVulkan::CopyTexture failed to get resource.
 CRenderContextVulkan::EndQuery - Issued on an in-progress query!
 CRenderContextVulkan::ReadBuffer - attempted to read invalid handle.
 CRenderContextVulkan::SemaphoreWaitAtBegin - already set semaphore to wait on, can't set another one.
-CRenderContextVulkan::SetSteamVrCompositorTexture failed because no Vulkan image was found.
 CRenderDeviceBase
 CRenderDeviceBase::FindOrCreateTexture: Trying to load multiple mipmaps into 3d or array texture: %s
 CRenderDeviceBase::InitPerFrameMemoryStack
@@ -1527,7 +1527,6 @@ CRenderThreadVulkan::OnReadPixels not supported for MSAA depth.  Requires shader
 CS
 CSOAContainer(%d x %d x %d, channels=%?)
 CSOAContainer::SetAttributeType - ERROR, trying to change type of previously-defined attribute %d!
-CSplitScreenSlot
 CSplitString::Construct(char const*, char const**, int, bool)
 CStringPool::CStringPool(StringPoolCase_t)
 CStringPool::~CStringPool()
@@ -1564,8 +1563,7 @@ CThreadSpinRWLock::UnlockWrite(char const*, int)
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
-CTransform
-CUtlBinaryBlock
+CUniformRandomStreamImpl<CThreadNullMutex>::RandomFloat(float, float)
 CUtlBinaryBlock::SetLength(int)
 CUtlBlockMemory overflow!
 CUtlBuffer::AddNullTermination()
@@ -1590,11 +1588,14 @@ CUtlBuffer::SeekPut(CUtlBuffer::SeekType_t, int)
 CUtlBuffer::SetBigEndian(bool)
 CUtlBuffer::SetExternalBuffer(void*, int, int, int)
 CUtlBuffer::SetOverflowFuncs(bool (CUtlBuffer::*)(int), bool (CUtlBuffer::*)(int))
+CUtlBuffer::WriteToFile(char const*, bool)
 CUtlFixedMemory overflow!
 CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
 CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
+CUtlMemoryBlockAllocator::Purge()
+CUtlMemoryBlockAllocator::RemoveAll(unsigned long)
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
 CUtlMemoryPoolBase::Alloc()
 CUtlMemoryPoolBase::CUtlMemoryPoolBase(int, int, int, MemoryPoolGrowType_t, char const*, MemAllocAttribute_t)
@@ -1603,7 +1604,6 @@ CUtlMemoryPoolBase::Free(void*)
 CUtlMemoryPoolBase::~CUtlMemoryPoolBase()
 CUtlRBTree overflow with %u elements!
 CUtlStreamBuffer does not support TEXT_BUFFER's use CUtlBuffer
-CUtlString
 CUtlString::Acquire(CBufferString*, bool)
 CUtlString::Append(char const*)
 CUtlString::Append(char const*, int)
@@ -1625,8 +1625,6 @@ CUtlString::operator+=(char const*)
 CUtlString::operator+=(char)
 CUtlString::operator=(CBufferString const&)
 CUtlString::operator[](int) const
-CUtlSymbol
-CUtlSymbolLarge
 CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
 CUtlSymbolTable::Find(char const*) const
@@ -2169,6 +2167,7 @@ DVEC3
 DVEC4
 DWARF Version
 DX11
+DXLevel:  %dTexture memory:  %sVid:  %s, render at %i x %i, display at %i x %i
 DXT1
 DXT1_ONEBITALPHA
 DXT3
@@ -2243,7 +2242,6 @@ Define Arithmetic Table 0x%02x: 0x%02x
 Define Huffman Table 0x%02x
 Define Quantization Table %d  precision %d
 Define Restart Interval %u
-DegreeEuler
 Degrees
 Deleting texture with outstanding streaming request (%s)
 DemoUpconverterVersion001
@@ -2271,6 +2269,7 @@ Descriptor pool allocation failed, reducing descriptors to attempt allocating in
 Descriptor set layout
 DescriptorSet
 DescriptorSet must be a 32-bit unsigned integer OpConstant
+Desktop-friendly Fullscreen
 Detected RenderDoc %i.%i.%i
 Determinant
 Dev Shader
@@ -2327,6 +2326,7 @@ DrawIndexedInstancedIndirect failed - invalid drawarg buffer.
 DrawInstancedIndirect failed - invalid drawarg buffer.
 DrawParameters
 Dref sampling operation is invalid for multisample image
+Driver Name:  %sDriver Version: %sVendorId / DeviceId:  0x%x / 0x%xSubSystem / Rev:  0x%x / 0x%xDXLevel:  %dTexture memory:  %sVid:  %s, render at %i x %i, display at %i x %i, refresh rate %.2fHz (%uHz desktop)
 Dumps state of texture streaming at the next frame boundary.
 Duplicate non-aggregate type declarations are not allowed. Opcode:
 Dynamic )
@@ -2415,7 +2415,6 @@ Error creating the resolve rotated vertex shader!
 Error creating the resolve vertex shader!
 Error creating vertex input interface pipeline library
 Error from SDL_GetCurrentDisplayMode( %d ) = %s
-Error from SDL_GetDisplayMode( %d, %d ) = %s
 Error: Result Id is 0
 Error: Type Id is 0
 Error: discarding
@@ -2429,6 +2428,7 @@ EvaluateAttributeAtCentroid
 EvaluateAttributeAtSample
 EvaluateAttributeSnapped
 Evict all resident texture.
+Exclusive Fullscreen
 ExecuteCallableKHR
 ExecuteCallableNV
 Execution mode can only be used with a Geometry or tessellation execution model.
@@ -2652,10 +2652,8 @@ Expected vector sizes of Result Type and the condition to be equal:
 Expected vector sizes of Result Type and the operand to be equal:
 Expected vector sizes of Result Type and the operands to be
 Expected vector sizes of Result Type and the operands to be equal:
-Expecting %s
 ExplicitInterpAMD
 Export
-Expression Parser -
 ExtInstImport
 Extended instruction GLSLstd450IMix is not supported
 ExternalDescSet
@@ -2750,6 +2748,7 @@ F64VEC2
 F64VEC3
 F64VEC4
 FATAL ERROR: unable to register all schema data: %s
+FATAL: %s called on a pool context (no root available)
 FAbs
 FB
 FCOOPMATNV
@@ -2899,6 +2898,7 @@ File has not been opened!
 File size is zero :
 File size too short
 FileKeys
+FileSystem
 FillAttr
 FillGPUBuffer failed - invalid buffer.
 FilterFrom
@@ -3514,6 +3514,8 @@ IDENTIFIER
 IEEE
 IEqual
 IF
+IFormatOutputStream::OutputIndentation()
+IFormatOutputStream::PutS(char const*)
 IGNORE_INTERSECTION
 IIMAGE1D
 IIMAGE1DARRAY
@@ -3560,7 +3562,6 @@ ISAMPLERCUBEARRAY
 ISUBPASSINPUT
 ISUBPASSINPUTMS
 IS_DIRECTX
-IS_GL
 IS_MOBILE
 IS_PC
 IS_VULKAN
@@ -3869,6 +3870,7 @@ Invalid tile size x :
 Invalid tile size y :
 Invalid unsigned integer literal:
 Invalid use of 8- or 16-bit result
+Invalid use of KV3 specific type %s with basic type %s, must be basic type %s
 Invalid use of function result id
 Invalid use of function type result id
 Invalid variable index to flattened array
@@ -3908,6 +3910,8 @@ JPEGMEM
 JSON version mismatches.
 K
 KNQ
+KV3 instances cannot be set to an unspecified specific type
+Keeping resolution of (%dx%d)
 Kernel does not reference a function
 Kernel does not reference an entry-point
 Kernel must be a Kernel extended instruction
@@ -4045,9 +4049,6 @@ MN_DeallocateCacheableData
 MN_OnResourceFileLoaded
 MN_OnResourceLoadCompleted
 MN_OnResourceLoadFailed
-MOBILE_GLES
-MOBILE_GLES_3_0
-MOBILE_GLES_3_1
 MOD
 MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
@@ -4091,22 +4092,11 @@ MathLib_Init
 Matrix access is out of bounds, matrix has
 Matrix types can only be parameterized as having only 2, 3, or 4 columns.
 Matrix types can only be parameterized with floating-point types.
-MatrixAxisAngle
-MatrixAxisToAxis
-MatrixColorCorrect
-MatrixColorCorrect2
-MatrixColorTint
-MatrixColorTint2
-MatrixColorTint3
-MatrixIdentity
 MatrixInverse
-MatrixMultiply
-MatrixScale
 MatrixStride
 MatrixTimesMatrix
 MatrixTimesScalar
 MatrixTimesVector
-MatrixTranslate
 MaxByteOffset
 MaxByteOffsetId
 MaxConcurrencyINTEL
@@ -4177,8 +4167,6 @@ Missing function type definition.
 Missing functionality:
 Missing module.
 Missing required OpMemoryModel instruction.
-Mobile SM 3.0 (GLES 3.0)
-Mobile SM 3.0 (GLES 3.1)
 ModelDocUtils001
 Modes
 Modf
@@ -4195,6 +4183,7 @@ MultiView
 MultiViewport
 Multiple case constructs have branches to the case construct that targets
 Multiple function bodies in multiple compilation units for the same signature in the same stage:
+Multiply
 N
 N3Etc16Block4x4EncodingE
 N3Etc20Block4x4Encoding_R11E
@@ -4475,33 +4464,23 @@ Overflow of the sheet cache texture: Try increasing SheetCacheTextureRows in gam
 Override default %s Vulkan GPU memory pool size: %d MB (default: %d MB)
 P
 P@
-PACKED
 PATCH
 PAYLOADEXT
 PAYLOADINEXT
 PAYLOADINNV
 PAYLOADNV
-PC SM 3.0 (GLSL)
 PC SM 4.0 (D3D10)
-PC SM 4.0 (GLSL)
 PC SM 4.0 (VULKAN)
 PC SM 4.1 (D3D10.1)
-PC SM 4.1 (GLSL)
 PC SM 4.1 (VULKAN)
 PC SM 5.0 (D3D11)
-PC SM 5.0 (GLSL)
 PC SM 5.0 (VULKAN)
 PC SM 6.0 (VULKAN)
-PCGL
-PC_SM_3_0_GL
 PC_SM_4_0
-PC_SM_4_0_GL
 PC_SM_4_0_VULKAN
 PC_SM_4_1
-PC_SM_4_1_GL
 PC_SM_4_1_VULKAN
 PC_SM_5_0
-PC_SM_5_0_GL
 PC_SM_5_0_VULKAN
 PC_SM_6_0_VULKAN
 PERCENT
@@ -4587,6 +4566,7 @@ Plat_CPUTickFrequency
 Plat_DebugPrint
 Plat_ExitProcess
 Plat_FatalErrorFunc
+Plat_FileExists
 Plat_FloatTime
 Plat_GetClockStart
 Plat_GetCrtEnv
@@ -4613,6 +4593,7 @@ Plat_OsSpecificHandleToPlatWindow
 Plat_ReconfigureWindow
 Plat_RelativeTickFrequency
 Plat_RelativeTicks
+Plat_RemoveFile
 Plat_RequireSDL
 Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_TicksAfterSecsF
@@ -4693,7 +4674,6 @@ PushConstantNumWorkgroups
 PushConstantRegionGroupOffset
 PushConstantRegionOffset
 Q
-QAngle
 QC,A
 QUESTION
 QUEUEFAMILYCOHERENT
@@ -4708,8 +4688,6 @@ QuantizeToF16
 Quantizing to %d = %d*%d*%d colors
 Quantizing to %d colors
 QuarterSizeAttrWithBoxFilter
-Quaternion
-QuaternionStorage
 QueueFamily
 QueueFamilyKHR
 R
@@ -4853,7 +4831,6 @@ RWTexture1DArray
 RWTexture2D
 RWTexture2DArray
 RWTexture3D
-RadianEuler
 Radians
 Ran out of occlusion query slots.
 RandomFloat
@@ -4933,17 +4910,17 @@ Reject swapchain blit request to swapchain that is no longer valid.
 RelaxedPrecision
 ReleaseEvent
 ReleaseThreadHandle
-Remap01ScaleOffset
 RemoveTextureFromAnyQueues
 Removing
 Removing texture from pending streamable list (%s)
 Removing texture from streamable list (%s)
 Render Device Empty
 Render pass
+Render system:  %s
+Render system:  %s (initialized by %s)
 RenderBufferFlags_t
 RenderDevice003
 RenderDeviceMgr001
-RenderDoc is active.  Disabling '%s' and '%s' to avoid texture paging leading to slow RenderDoc performance and lost device.
 RenderHardwareConfig002
 RenderInputLayoutField_t
 RenderMultisampleType_t
@@ -4952,7 +4929,6 @@ RenderService_001
 RenderSlotType_t
 RenderSystem
 RenderSystem/AllowPartialMipChainImmediateTexLoads
-RenderSystem/AllowSampleableDepthInVr
 RenderSystem/AlwaysPreloadTexturesInGame
 RenderSystem/GraphicsPipelineLibrary
 RenderSystem/IndexBufferPoolSizeMB
@@ -4973,7 +4949,6 @@ RenderSystem/VulkanSteamDownloadedShaderCache
 RenderSystem/VulkanSteamShaderCache
 RenderSystem/VulkanUseExternalSubpassDependency
 RenderSystem/VulkanUseSecondaryCommandBuffers
-RenderSystem/VulkanUseTransformConstantBuffer
 RenderTarget
 RenderUtils_001
 Rendering/Constant Buffers (MB)
@@ -5060,7 +5035,6 @@ Rgba8
 Rgba8Snorm
 Rgba8i
 Rgba8ui
-RotationVector
 Round
 RoundEven
 RoundToInfinityINTEL
@@ -5374,7 +5348,7 @@ Sampling operation is invalid for multisample image
 SatConvertSToU
 SatConvertUToS
 SaturatedConversion
-SaveKV3ToFile(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, char const*, char const*)
+SaveKV3ToFile(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, char const*, char const*, unsigned int)
 SaveMemoryINTEL
 Saved video settings config to '%s'
 Scan script does not transmit all data
@@ -5477,7 +5451,6 @@ SmoothStep
 Smoothing not supported with nonstandard sampling ratios
 SnormInt16
 SnormInt8
-SoundGuid_t
 SoundOpSystem001
 SoundOpSystemEdit001
 SoundService_001
@@ -5527,8 +5500,6 @@ SpvOpCooperativeMatrixLoadNV Result Type <id> '
 SpvOpCooperativeMatrixStoreNV
 SpvOpCooperativeMatrixStoreNV Object type <id> '
 Sret
-SrgbGammaToLinear
-SrgbLinearToGamma
 Ss=%d, Se=%d, Ah=%d, Al=%d
 St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
 St12_Bind_simpleIFSt7_Mem_fnIMN3Etc5ImageEFjjjjEEPS2_jijEE
@@ -5776,6 +5747,9 @@ Such variables must be identified with a Block decoration
 Such variables must be identified with a Block or BufferBlock decoration
 Such variables must be typed as OpTypeStruct,
 Suspension not allowed here
+SwapChainDepthImage
+SwapChainIntermediateColorImage
+SwapChainIntermediateResolvedColorImage
 SwapChainTexture.vtex
 Swapchain extent(s) are 0, skipping swapchain creation
 Switch
@@ -5786,6 +5760,8 @@ SymbolicStrongSIVTest was unable to determine any dependence information.
 Sys
 T
 TBD functionality:
+TD_OFFSET_NORMAL
+TD_OFFSET_PACKED
 TERMINATE_INVOCATION
 TERMINATE_RAY
 TEX read request: %d KB; %s
@@ -5833,14 +5809,10 @@ TessellationControl
 TessellationEvaluation
 TessellationPointSize
 Test condition and select
-TestFormatA
-TestFormatB
-TestFormatC
-TestFormatD
-TestFormatE
 TestScriptMgr001
 TextLayout_001
 Texture Streaming:
+Texture data resident:  %s (panorama_rt %s; panorama_tex %s)
 Texture manager doesn't know about texture "%s" when setting "%s" - returning error texture in CTextureManagerVK::GetImageView
 Texture manager out of space! Can't allocate new texture!
 Texture memory discrepancy! %llu != %llu
@@ -5851,14 +5823,13 @@ Texture template struct return slots exceeded
 Texture template structure members must same basic type
 Texture2DMS
 Texture2DMSArray
-TextureAverageColor
+TextureBecameEvicted - %s is null!
 TextureBuffer
 TextureCube
 TextureCubeArray
 TextureDimLog2
 TextureOffset does not support sampler2DArrayShadow :
 TextureSheetData
-TextureSize
 Textures created overall: %s; textures evicted: %s
 The
 The 'False Label' operand for OpBranchConditional must be the ID of an OpLabel instruction
@@ -6105,6 +6076,7 @@ Unable to read file %s
 Unable to stream in resource file "%s" (Error: %s)
 Unable to write to pipeline cache file "%s".  Error: %s
 Unable to write validation shader cache %s file.
+Unavailable
 Underlying Types
 Unexpected marker 0x%02x
 Unexpected numeric literal type
@@ -6147,6 +6119,7 @@ Unknown Adobe color transform code %d
 Unknown DX level
 Unknown Error
 Unknown ExtInst
+Unknown KV3 specific type %u
 Unknown NonSemantic.ClspvReflection import version
 Unknown Path Class
 Unknown Stage.
@@ -6155,7 +6128,6 @@ Unknown compression type.
 Unknown constant
 Unknown flag '--%s'. Use --help for a list of valid flags
 Unknown glslang keyword
-Unknown variable name %s.
 Unordered
 UnormInt101010
 UnormInt101010_2
@@ -6202,6 +6174,8 @@ Upper limit on texture pool size.
 Use compute shader for mipgen.
 Use of device scope with VulkanKHR memory model requires the
 UserSemantic
+UserSettingsFileEx
+UserSettingsPathID
 UserTypeGOOGLE
 Using '%s' for Vulkan validation reporting.
 Using BuiltIn
@@ -6285,7 +6259,9 @@ VK_EXT_descriptor_indexing does not support required features, disabling.
 VK_EXT_descriptor_indexing support required because VulkanRequireDescriptorIndxing is set in gameinfo.gi, but are not supported.  Vulkan device creation failed.
 VK_EXT_extended_dynamic_state
 VK_EXT_extended_dynamic_state2
+VK_EXT_extended_dynamic_state3
 VK_EXT_extended_dynamic_state_2 does not support extendedDynamicState2PatchControlPoints, disabling.
+VK_EXT_extended_dynamic_state_2 does not support extendedDynamicState3DepthClampEnable, disabling.
 VK_EXT_graphics_pipeline_library
 VK_EXT_graphics_pipeline_library and dependent extensions enabled.
 VK_EXT_memory_budget
@@ -6294,6 +6270,7 @@ VK_EXT_pageable_device_local_memory
 VK_EXT_pipeline_creation_cache_control
 VK_EXT_separate_stencil_usage
 VK_EXT_subgroup_size_control
+VK_EXT_subgroup_size_control does not support required features, disabling.
 VK_EXT_validation_cache
 VK_GOOGLE_display_timing
 VK_INCOMPLETE
@@ -6307,10 +6284,12 @@ VK_KHR_device_group
 VK_KHR_device_group_creation
 VK_KHR_draw_indirect_count
 VK_KHR_dynamic_rendering
+VK_KHR_get_memory_requirements2
 VK_KHR_get_physical_device_properties2
 VK_KHR_image_format_list
 VK_KHR_maintenance1
 VK_KHR_maintenance2
+VK_KHR_maintenance3
 VK_KHR_pipeline_executable_properties
 VK_KHR_pipeline_library
 VK_KHR_ray_query
@@ -6353,6 +6332,8 @@ VK_OBJECT_TYPE_IMAGE
 VK_OBJECT_TYPE_IMAGE_VIEW
 VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV
 VK_OBJECT_TYPE_INSTANCE
+VK_OBJECT_TYPE_MICROMAP_EXT
+VK_OBJECT_TYPE_OPTICAL_FLOW_SESSION_NV
 VK_OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL
 VK_OBJECT_TYPE_PHYSICAL_DEVICE
 VK_OBJECT_TYPE_PIPELINE
@@ -6387,7 +6368,6 @@ VK_VALIDATION_FEATURE_DISABLE_SHADER_VALIDATION_CACHE_EXT
 VK_VALIDATION_FEATURE_DISABLE_THREAD_SAFETY_EXT
 VK_VALIDATION_FEATURE_DISABLE_UNIQUE_HANDLES_EXT
 VMaterialSystem2_001
-VMatrix
 VMediaFoundation001
 VOID
 VOLATILE
@@ -6397,9 +6377,6 @@ VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
 VProfService_001
-VR explicit timing mode for Vulkan
-VR: Creating Device on Adapter (%d) connected to HMD, ignoring passed in Adapter (%d).
-VR_001
 VRenderDeviceMgrBackdoor001
 VRenderDeviceSetupV001
 VS
@@ -6414,6 +6391,7 @@ VTT for std::basic_ostringstream<char, std::char_traits<char>, std::allocator<ch
 VTT for std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >
 V_CopyMemory3D
 V_FixDoubleSlashes
+V_FixSlashes
 V_GetFileExtension
 V_Get_stderr
 V_IsAbsolutePath
@@ -6424,6 +6402,21 @@ V_PathContainsPath
 V_PrettifyNum
 V_RemoveDotSlashes
 V_SplitString(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int> >&)
+V_StringToBool
+V_StringToColor
+V_StringToFloat32
+V_StringToFloat64
+V_StringToInt16
+V_StringToInt32
+V_StringToInt64
+V_StringToQAngle
+V_StringToUint16
+V_StringToUint32
+V_StringToUint64
+V_StringToVector
+V_StringToVector2D
+V_StringToVector4D
+V_StripTrailingSlash
 V_UnqualifiedFileName
 V_ZSTD_compressBound
 V_ZSTD_compress_usingCDict
@@ -6444,17 +6437,17 @@ V_asinf
 V_atan2f
 V_atanf
 V_atofloat32
-V_atofloat64
 V_atoi
-V_atoi64
-V_atoui64
 V_cosd
 V_cosf
 V_exp2f
 V_expf
+V_fclose
 V_fmodf
+V_fopenUTF8
 V_fpclassifyd
 V_fprintf
+V_fputc
 V_fread
 V_fwrite
 V_isnand
@@ -6462,10 +6455,12 @@ V_log10f
 V_log2_uint
 V_log2f
 V_logf
+V_longjmp
 V_powd
 V_powf
 V_qsort
 V_qsort_s
+V_setjmp
 V_sincosf
 V_sind
 V_sinf
@@ -6474,13 +6469,11 @@ V_sscanf
 V_stricmp_fast
 V_stristr_fast(char const*, char const*)
 V_strlower_fast
-V_strnlen
+V_strnlen(char const*, int)
 V_strspn
-V_strtod
 V_strtoi64
 V_strtoui64
 V_tanf
-V_uuid_t
 V_vsnprintf
 Valid Content Absolute Path
 Valid External Path
@@ -6516,9 +6509,6 @@ Varying
 VecTypeHint
 Vector access is out of bounds, vector size is
 Vector16
-Vector2D
-Vector4D
-VectorAligned
 VectorAnyINTEL
 VectorComputeCallableFunctionINTEL
 VectorComputeFunctionINTEL
@@ -6572,7 +6562,6 @@ Vulkan lazily allocating render targets.
 Vulkan missing requested extension '%s'.
 Vulkan physical device (%d): supports shader clip distance: %s
 Vulkan physical device (%d): using secondary command buffers: %s
-Vulkan physical device (%d): using transform constant buffer: %s
 Vulkan pipelines: %s; pipeline layouts: %s
 Vulkan shader pipeline cache file version is %d instead of %d for %s. Deleting.
 Vulkan spec allows BuiltIn
@@ -6725,6 +6714,7 @@ WeakZeroSourceSIVTest was unable to fold delta and coefficient to constants.
 When BuiltIn decoration is applied to a structure-type member,
 When declaring WorkgroupMemoryExplicitLayoutKHR, either all or none of the Workgroup Storage Class variables in the entry point interface must point to struct types decorated with Block.  Entry point id
 When declaring WorkgroupMemoryExplicitLayoutKHR, if more than one Workgroup Storage Class variable in the entry point interface point to a type decorated with Block, all of them must be decorated with Aliased. Entry point id
+Windowed
 Wine
 Wine VKD3D Shader Compiler
 Workaround AMD bug where vkCmdPipelineBarrier is needed prior to vkCmdResetQueryPool.
@@ -6776,7 +6766,6 @@ ZeroExtend
 Zext
 [
 [%d]
-[%u]
 [0]
 [4]
 [COMPLETE]
@@ -7029,11 +7018,6 @@ Zext
 [label="
 \
 \*
-\\
-\n
-\q
-\r
-\t
 ]
 ](
 ])
@@ -7048,14 +7032,17 @@ _ITM_deregisterTMCloneTable
 _ITM_registerTMCloneTable
 _Jv_RegisterClasses
 _Map_base::at
+_V_AppendSlash
 _V_ComposeFileName
 _V_ExtractFilePath
 _V_FixupPathName
 _V_SetExtension
 _V_StringAfterPrefix
+_V_StripExtension
 _V_StripLastDir
 _V_strEndsWith
 _V_strcspn
+_V_strncat
 _V_strncmp
 _V_strncpy
 _V_strnicmp_fast
@@ -7179,7 +7166,6 @@ _psrs
 _ptr_
 _rtx
 _runtimearr_
-_setjmp
 _struct_
 _tools.txt
 _vs
@@ -7392,6 +7378,7 @@ attribute with arguments not recognized, skipping
 attribute_list
 attributes don't apply to control declaration
 au
+auto
 auto-map-bindings
 auto-map-locations
 average
@@ -7439,10 +7426,7 @@ beginInvocationInterlockARB() must only be called once
 behavior for extension not specified
 behavior not supported:
 binary
-binary_auto
-binary_bc
-binary_lz4
-binary_zstd
+binary_blob
 binding is too large
 binding=
 bindingFlags
@@ -7525,6 +7509,7 @@ bool4x1
 bool4x2
 bool4x3
 bool4x4
+bool8
 boolean expression expected
 borderColor
 bordercolor
@@ -7787,14 +7772,15 @@ ceilf
 centroid
 centroid/sample/patch
 cfg-cleanup
-cfg/video.txt
-cfg/video_%02d.txt
+cfg/%svideo.txt
+cfg/%svideo_%02d.txt
 cfg/video_version.txt
 cfg/videodefaults.txt
 changing qualification after use
 channels
 char
 char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag)
+char8
 character literals not supported
 chlist
 chromaFilter
@@ -7817,6 +7803,7 @@ code-sink
 codeSize
 coherent
 coherent volatile
+color32
 colorAttachmentFormats
 colorAttachments
 colorBlendOp
@@ -8101,7 +8088,6 @@ decoration must not be applied to this storage class
 decoration on a non-struct type.
 decoration on target <id> '
 decoration targeting
-default
 default qualifier requires 'uniform', 'buffer', 'in', 'out' or 'shared' storage qualification
 default qualifier requires 'uniform', 'buffer', 'in', or 'out' storage qualification
 default std430 layout for uniform
@@ -8201,9 +8187,6 @@ dont_flatten
 dont_unroll
 dot
 dot-product
-dot2
-dot3
-dot4
 double floating-point suffix
 double fma(double, double, double);dvec2  fma(dvec2,  dvec2,  dvec2 );dvec3  fma(dvec3,  dvec3,  dvec3 );dvec4  fma(dvec4,  dvec4,  dvec4 );
 double frexp(double, out int);dvec2  frexp( dvec2, out ivec2);dvec3  frexp( dvec3, out ivec3);dvec4  frexp( dvec4, out ivec4);double ldexp(double, int);dvec2  ldexp( dvec2, ivec2);dvec3  ldexp( dvec3, ivec3);dvec4  ldexp( dvec4, ivec4);double packDouble2x32(uvec2);uvec2 unpackDouble2x32(double);
@@ -8271,6 +8254,7 @@ eaFO
 early_fragment_tests
 earlydepthstencil
 effortblocks = %d
+ehandle
 either the block needs a location, or all members need a location, or no members have a location
 eliminate-dead-branches
 eliminate-dead-code-aggressive
@@ -8593,7 +8577,6 @@ fast_length
 fast_normalize
 fastopt
 fclamp
-fclose
 fcoopmatNV
 fdim
 features
@@ -8695,6 +8678,7 @@ float4x2
 float4x3
 float4x4
 float64
+float64[%u]
 float64_t
 float64_t dFdx(float64_t);f64vec2   dFdx(f64vec2);f64vec3   dFdx(f64vec3);f64vec4   dFdx(f64vec4);float64_t dFdy(float64_t);f64vec2   dFdy(f64vec2);f64vec3   dFdy(f64vec3);f64vec4   dFdy(f64vec4);float64_t dFdxFine(float64_t);f64vec2   dFdxFine(f64vec2);f64vec3   dFdxFine(f64vec3);f64vec4   dFdxFine(f64vec4);float64_t dFdyFine(float64_t);f64vec2   dFdyFine(f64vec2);f64vec3   dFdyFine(f64vec3);f64vec4   dFdyFine(f64vec4);float64_t dFdxCoarse(float64_t);f64vec2   dFdxCoarse(f64vec2);f64vec3   dFdxCoarse(f64vec3);f64vec4   dFdxCoarse(f64vec4);float64_t dFdyCoarse(float64_t);f64vec2   dFdyCoarse(f64vec2);f64vec3   dFdyCoarse(f64vec3);f64vec4   dFdyCoarse(f64vec4);float64_t fwidth(float64_t);f64vec2   fwidth(f64vec2);f64vec3   fwidth(f64vec3);f64vec4   fwidth(f64vec4);float64_t fwidthFine(float64_t);f64vec2   fwidthFine(f64vec2);f64vec3   fwidthFine(f64vec3);f64vec4   fwidthFine(f64vec4);float64_t fwidthCoarse(float64_t);f64vec2   fwidthCoarse(f64vec2);f64vec3   fwidthCoarse(f64vec3);f64vec4   fwidthCoarse(f64vec4);
 float64_t fma(float64_t, float64_t, float64_t);f64vec2  fma(f64vec2,  f64vec2,  f64vec2 );f64vec3  fma(f64vec3,  f64vec3,  f64vec3 );f64vec4  fma(f64vec4,  f64vec4,  f64vec4 );
@@ -8706,18 +8690,19 @@ float64_t vector
 floatBitsToInt
 floatBitsToUint
 floatbitmap.cpp
-floatbitmap.cpp(129): Unknown gamma type "%s"!
-floatbitmap.cpp(2695): Error loading %s
-floatbitmap.cpp(2719): Error! Unknown file type for %s
-floatbitmap.cpp(2738): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
-floatbitmap.cpp(307): Conversion not supported yet!
-floatbitmap.cpp(393): Conversion not supported yet!
-floatbitmap.cpp(941): Unsupported color format "%s", skipping!
+floatbitmap.cpp(139): Unknown gamma type "%s"!
+floatbitmap.cpp(2859): Error loading %s
+floatbitmap.cpp(2883): Error! Unknown file type for %s
+floatbitmap.cpp(2902): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
+floatbitmap.cpp(317): Conversion not supported yet!
+floatbitmap.cpp(403): Conversion not supported yet!
+floatbitmap.cpp(962): Unsupported color format "%s", skipping!
+floatbitmap.cpp:2446
+floatbitmap.cpp:2465
 floating-point fast math mode
 floating-point rounding mode
 floor
 floorf
-fltx4
 fma
 fmax
 fmax_common
@@ -8862,7 +8847,10 @@ g_Mathlib_GammaToLinearByteTable
 g_TSPointerListNodes
 g_VProfCurrentProfile
 g_bUpdateStringTokenDatabase
+g_pEngineServiceMgr is NULL. Display mode information unavailable
 g_pMemAlloc
+g_pRenderDevice is NULL. %d adapter(s) available. Iterating adapters %d - %d
+g_pRenderHardwareConfig is NULL. Display mode information unavailable
 g_pThreadPool
 game
 gameinfo.gi
@@ -9454,6 +9442,7 @@ int scalar or vector with the same number of
 int sparseImageLoadARB(readonly volatile coherent
 int sparseImageLoadLodAMD(readonly volatile coherent
 int textureQueryLevels(
+int32[%u]
 int64_t abs(int64_t);i64vec2 abs(i64vec2);i64vec3 abs(i64vec3);i64vec4 abs(i64vec4);int64_t sign(int64_t);i64vec2 sign(i64vec2);i64vec3 sign(i64vec3);i64vec4 sign(i64vec4);int64_t  min(int64_t,  int64_t);i64vec2  min(i64vec2,  int64_t);i64vec3  min(i64vec3,  int64_t);i64vec4  min(i64vec4,  int64_t);i64vec2  min(i64vec2,  i64vec2);i64vec3  min(i64vec3,  i64vec3);i64vec4  min(i64vec4,  i64vec4);uint64_t min(uint64_t, uint64_t);u64vec2  min(u64vec2,  uint64_t);u64vec3  min(u64vec3,  uint64_t);u64vec4  min(u64vec4,  uint64_t);u64vec2  min(u64vec2,  u64vec2);u64vec3  min(u64vec3,  u64vec3);u64vec4  min(u64vec4,  u64vec4);int64_t  max(int64_t,  int64_t);i64vec2  max(i64vec2,  int64_t);i64vec3  max(i64vec3,  int64_t);i64vec4  max(i64vec4,  int64_t);i64vec2  max(i64vec2,  i64vec2);i64vec3  max(i64vec3,  i64vec3);i64vec4  max(i64vec4,  i64vec4);uint64_t max(uint64_t, uint64_t);u64vec2  max(u64vec2,  uint64_t);u64vec3  max(u64vec3,  uint64_t);u64vec4  max(u64vec4,  uint64_t);u64vec2  max(u64vec2,  u64vec2);u64vec3  max(u64vec3,  u64vec3);u64vec4  max(u64vec4,  u64vec4);int64_t  clamp(int64_t,  int64_t,  int64_t);i64vec2  clamp(i64vec2,  int64_t,  int64_t);i64vec3  clamp(i64vec3,  int64_t,  int64_t);i64vec4  clamp(i64vec4,  int64_t,  int64_t);i64vec2  clamp(i64vec2,  i64vec2,  i64vec2);i64vec3  clamp(i64vec3,  i64vec3,  i64vec3);i64vec4  clamp(i64vec4,  i64vec4,  i64vec4);uint64_t clamp(uint64_t, uint64_t, uint64_t);u64vec2  clamp(u64vec2,  uint64_t, uint64_t);u64vec3  clamp(u64vec3,  uint64_t, uint64_t);u64vec4  clamp(u64vec4,  uint64_t, uint64_t);u64vec2  clamp(u64vec2,  u64vec2,  u64vec2);u64vec3  clamp(u64vec3,  u64vec3,  u64vec3);u64vec4  clamp(u64vec4,  u64vec4,  u64vec4);int64_t  mix(int64_t,  int64_t,  bool);i64vec2  mix(i64vec2,  i64vec2,  bvec2);i64vec3  mix(i64vec3,  i64vec3,  bvec3);i64vec4  mix(i64vec4,  i64vec4,  bvec4);uint64_t mix(uint64_t, uint64_t, bool);u64vec2  mix(u64vec2,  u64vec2,  bvec2);u64vec3  mix(u64vec3,  u64vec3,  bvec3);u64vec4  mix(u64vec4,  u64vec4,  bvec4);int64_t doubleBitsToInt64(float64_t);i64vec2 doubleBitsToInt64(f64vec2);i64vec3 doubleBitsToInt64(f64vec3);i64vec4 doubleBitsToInt64(f64vec4);uint64_t doubleBitsToUint64(float64_t);u64vec2  doubleBitsToUint64(f64vec2);u64vec3  doubleBitsToUint64(f64vec3);u64vec4  doubleBitsToUint64(f64vec4);float64_t int64BitsToDouble(int64_t);f64vec2  int64BitsToDouble(i64vec2);f64vec3  int64BitsToDouble(i64vec3);f64vec4  int64BitsToDouble(i64vec4);float64_t uint64BitsToDouble(uint64_t);f64vec2  uint64BitsToDouble(u64vec2);f64vec3  uint64BitsToDouble(u64vec3);f64vec4  uint64BitsToDouble(u64vec4);int64_t  packInt2x32(ivec2);uint64_t packUint2x32(uvec2);ivec2    unpackInt2x32(int64_t);uvec2    unpackUint2x32(uint64_t);bvec2 lessThan(i64vec2, i64vec2);bvec3 lessThan(i64vec3, i64vec3);bvec4 lessThan(i64vec4, i64vec4);bvec2 lessThan(u64vec2, u64vec2);bvec3 lessThan(u64vec3, u64vec3);bvec4 lessThan(u64vec4, u64vec4);bvec2 lessThanEqual(i64vec2, i64vec2);bvec3 lessThanEqual(i64vec3, i64vec3);bvec4 lessThanEqual(i64vec4, i64vec4);bvec2 lessThanEqual(u64vec2, u64vec2);bvec3 lessThanEqual(u64vec3, u64vec3);bvec4 lessThanEqual(u64vec4, u64vec4);bvec2 greaterThan(i64vec2, i64vec2);bvec3 greaterThan(i64vec3, i64vec3);bvec4 greaterThan(i64vec4, i64vec4);bvec2 greaterThan(u64vec2, u64vec2);bvec3 greaterThan(u64vec3, u64vec3);bvec4 greaterThan(u64vec4, u64vec4);bvec2 greaterThanEqual(i64vec2, i64vec2);bvec3 greaterThanEqual(i64vec3, i64vec3);bvec4 greaterThanEqual(i64vec4, i64vec4);bvec2 greaterThanEqual(u64vec2, u64vec2);bvec3 greaterThanEqual(u64vec3, u64vec3);bvec4 greaterThanEqual(u64vec4, u64vec4);bvec2 equal(i64vec2, i64vec2);bvec3 equal(i64vec3, i64vec3);bvec4 equal(i64vec4, i64vec4);bvec2 equal(u64vec2, u64vec2);bvec3 equal(u64vec3, u64vec3);bvec4 equal(u64vec4, u64vec4);bvec2 notEqual(i64vec2, i64vec2);bvec3 notEqual(i64vec3, i64vec3);bvec4 notEqual(i64vec4, i64vec4);bvec2 notEqual(u64vec2, u64vec2);bvec3 notEqual(u64vec3, u64vec3);bvec4 notEqual(u64vec4, u64vec4);int64_t bitCount(int64_t);i64vec2 bitCount(i64vec2);i64vec3 bitCount(i64vec3);i64vec4 bitCount(i64vec4);int64_t bitCount(uint64_t);i64vec2 bitCount(u64vec2);i64vec3 bitCount(u64vec3);i64vec4 bitCount(u64vec4);int64_t findLSB(int64_t);i64vec2 findLSB(i64vec2);i64vec3 findLSB(i64vec3);i64vec4 findLSB(i64vec4);int64_t findLSB(uint64_t);i64vec2 findLSB(u64vec2);i64vec3 findLSB(u64vec3);i64vec4 findLSB(u64vec4);int64_t findMSB(int64_t);i64vec2 findMSB(i64vec2);i64vec3 findMSB(i64vec3);i64vec4 findMSB(i64vec4);int64_t findMSB(uint64_t);i64vec2 findMSB(u64vec2);i64vec3 findMSB(u64vec3);i64vec4 findMSB(u64vec4);
 int8_t abs(int8_t);i8vec2 abs(i8vec2);i8vec3 abs(i8vec3);i8vec4 abs(i8vec4);int8_t sign(int8_t);i8vec2 sign(i8vec2);i8vec3 sign(i8vec3);i8vec4 sign(i8vec4);int8_t min(int8_t x, int8_t y);i8vec2 min(i8vec2 x, int8_t y);i8vec3 min(i8vec3 x, int8_t y);i8vec4 min(i8vec4 x, int8_t y);i8vec2 min(i8vec2 x, i8vec2 y);i8vec3 min(i8vec3 x, i8vec3 y);i8vec4 min(i8vec4 x, i8vec4 y);uint8_t min(uint8_t x, uint8_t y);u8vec2 min(u8vec2 x, uint8_t y);u8vec3 min(u8vec3 x, uint8_t y);u8vec4 min(u8vec4 x, uint8_t y);u8vec2 min(u8vec2 x, u8vec2 y);u8vec3 min(u8vec3 x, u8vec3 y);u8vec4 min(u8vec4 x, u8vec4 y);int8_t max(int8_t x, int8_t y);i8vec2 max(i8vec2 x, int8_t y);i8vec3 max(i8vec3 x, int8_t y);i8vec4 max(i8vec4 x, int8_t y);i8vec2 max(i8vec2 x, i8vec2 y);i8vec3 max(i8vec3 x, i8vec3 y);i8vec4 max(i8vec4 x, i8vec4 y);uint8_t max(uint8_t x, uint8_t y);u8vec2 max(u8vec2 x, uint8_t y);u8vec3 max(u8vec3 x, uint8_t y);u8vec4 max(u8vec4 x, uint8_t y);u8vec2 max(u8vec2 x, u8vec2 y);u8vec3 max(u8vec3 x, u8vec3 y);u8vec4 max(u8vec4 x, u8vec4 y);int8_t    clamp(int8_t x, int8_t minVal, int8_t maxVal);i8vec2  clamp(i8vec2  x, int8_t minVal, int8_t maxVal);i8vec3  clamp(i8vec3  x, int8_t minVal, int8_t maxVal);i8vec4  clamp(i8vec4  x, int8_t minVal, int8_t maxVal);i8vec2  clamp(i8vec2  x, i8vec2  minVal, i8vec2  maxVal);i8vec3  clamp(i8vec3  x, i8vec3  minVal, i8vec3  maxVal);i8vec4  clamp(i8vec4  x, i8vec4  minVal, i8vec4  maxVal);uint8_t   clamp(uint8_t x, uint8_t minVal, uint8_t maxVal);u8vec2  clamp(u8vec2  x, uint8_t minVal, uint8_t maxVal);u8vec3  clamp(u8vec3  x, uint8_t minVal, uint8_t maxVal);u8vec4  clamp(u8vec4  x, uint8_t minVal, uint8_t maxVal);u8vec2  clamp(u8vec2  x, u8vec2  minVal, u8vec2  maxVal);u8vec3  clamp(u8vec3  x, u8vec3  minVal, u8vec3  maxVal);u8vec4  clamp(u8vec4  x, u8vec4  minVal, u8vec4  maxVal);int8_t  mix(int8_t,  int8_t,  bool);i8vec2  mix(i8vec2,  i8vec2,  bvec2);i8vec3  mix(i8vec3,  i8vec3,  bvec3);i8vec4  mix(i8vec4,  i8vec4,  bvec4);uint8_t mix(uint8_t, uint8_t, bool);u8vec2  mix(u8vec2,  u8vec2,  bvec2);u8vec3  mix(u8vec3,  u8vec3,  bvec3);u8vec4  mix(u8vec4,  u8vec4,  bvec4);bvec2 lessThan(i8vec2, i8vec2);bvec3 lessThan(i8vec3, i8vec3);bvec4 lessThan(i8vec4, i8vec4);bvec2 lessThan(u8vec2, u8vec2);bvec3 lessThan(u8vec3, u8vec3);bvec4 lessThan(u8vec4, u8vec4);bvec2 lessThanEqual(i8vec2, i8vec2);bvec3 lessThanEqual(i8vec3, i8vec3);bvec4 lessThanEqual(i8vec4, i8vec4);bvec2 lessThanEqual(u8vec2, u8vec2);bvec3 lessThanEqual(u8vec3, u8vec3);bvec4 lessThanEqual(u8vec4, u8vec4);bvec2 greaterThan(i8vec2, i8vec2);bvec3 greaterThan(i8vec3, i8vec3);bvec4 greaterThan(i8vec4, i8vec4);bvec2 greaterThan(u8vec2, u8vec2);bvec3 greaterThan(u8vec3, u8vec3);bvec4 greaterThan(u8vec4, u8vec4);bvec2 greaterThanEqual(i8vec2, i8vec2);bvec3 greaterThanEqual(i8vec3, i8vec3);bvec4 greaterThanEqual(i8vec4, i8vec4);bvec2 greaterThanEqual(u8vec2, u8vec2);bvec3 greaterThanEqual(u8vec3, u8vec3);bvec4 greaterThanEqual(u8vec4, u8vec4);bvec2 equal(i8vec2, i8vec2);bvec3 equal(i8vec3, i8vec3);bvec4 equal(i8vec4, i8vec4);bvec2 equal(u8vec2, u8vec2);bvec3 equal(u8vec3, u8vec3);bvec4 equal(u8vec4, u8vec4);bvec2 notEqual(i8vec2, i8vec2);bvec3 notEqual(i8vec3, i8vec3);bvec4 notEqual(i8vec4, i8vec4);bvec2 notEqual(u8vec2, u8vec2);bvec3 notEqual(u8vec3, u8vec3);bvec4 notEqual(u8vec4, u8vec4);  int8_t bitfieldExtract(  int8_t, int8_t, int8_t);i8vec2 bitfieldExtract(i8vec2, int8_t, int8_t);i8vec3 bitfieldExtract(i8vec3, int8_t, int8_t);i8vec4 bitfieldExtract(i8vec4, int8_t, int8_t); uint8_t bitfieldExtract( uint8_t, int8_t, int8_t);u8vec2 bitfieldExtract(u8vec2, int8_t, int8_t);u8vec3 bitfieldExtract(u8vec3, int8_t, int8_t);u8vec4 bitfieldExtract(u8vec4, int8_t, int8_t);  int8_t bitfieldInsert(  int8_t base,   int8_t, int8_t, int8_t);i8vec2 bitfieldInsert(i8vec2 base, i8vec2, int8_t, int8_t);i8vec3 bitfieldInsert(i8vec3 base, i8vec3, int8_t, int8_t);i8vec4 bitfieldInsert(i8vec4 base, i8vec4, int8_t, int8_t); uint8_t bitfieldInsert( uint8_t base,  uint8_t, int8_t, int8_t);u8vec2 bitfieldInsert(u8vec2 base, u8vec2, int8_t, int8_t);u8vec3 bitfieldInsert(u8vec3 base, u8vec3, int8_t, int8_t);u8vec4 bitfieldInsert(u8vec4 base, u8vec4, int8_t, int8_t);  int8_t bitCount(  int8_t);i8vec2 bitCount(i8vec2);i8vec3 bitCount(i8vec3);i8vec4 bitCount(i8vec4);  int8_t bitCount( uint8_t);i8vec2 bitCount(u8vec2);i8vec3 bitCount(u8vec3);i8vec4 bitCount(u8vec4);  int8_t findLSB(  int8_t);i8vec2 findLSB(i8vec2);i8vec3 findLSB(i8vec3);i8vec4 findLSB(i8vec4);  int8_t findLSB( uint8_t);i8vec2 findLSB(u8vec2);i8vec3 findLSB(u8vec3);i8vec4 findLSB(u8vec4);  int8_t findMSB(  int8_t);i8vec2 findMSB(i8vec2);i8vec3 findMSB(i8vec3);i8vec4 findMSB(i8vec4);  int8_t findMSB( uint8_t);i8vec2 findMSB(u8vec2);i8vec3 findMSB(u8vec3);i8vec4 findMSB(u8vec4);int16_t abs(int16_t);i16vec2 abs(i16vec2);i16vec3 abs(i16vec3);i16vec4 abs(i16vec4);int16_t sign(int16_t);i16vec2 sign(i16vec2);i16vec3 sign(i16vec3);i16vec4 sign(i16vec4);int16_t min(int16_t x, int16_t y);i16vec2 min(i16vec2 x, int16_t y);i16vec3 min(i16vec3 x, int16_t y);i16vec4 min(i16vec4 x, int16_t y);i16vec2 min(i16vec2 x, i16vec2 y);i16vec3 min(i16vec3 x, i16vec3 y);i16vec4 min(i16vec4 x, i16vec4 y);uint16_t min(uint16_t x, uint16_t y);u16vec2 min(u16vec2 x, uint16_t y);u16vec3 min(u16vec3 x, uint16_t y);u16vec4 min(u16vec4 x, uint16_t y);u16vec2 min(u16vec2 x, u16vec2 y);u16vec3 min(u16vec3 x, u16vec3 y);u16vec4 min(u16vec4 x, u16vec4 y);int16_t max(int16_t x, int16_t y);i16vec2 max(i16vec2 x, int16_t y);i16vec3 max(i16vec3 x, int16_t y);i16vec4 max(i16vec4 x, int16_t y);i16vec2 max(i16vec2 x, i16vec2 y);i16vec3 max(i16vec3 x, i16vec3 y);i16vec4 max(i16vec4 x, i16vec4 y);uint16_t max(uint16_t x, uint16_t y);u16vec2 max(u16vec2 x, uint16_t y);u16vec3 max(u16vec3 x, uint16_t y);u16vec4 max(u16vec4 x, uint16_t y);u16vec2 max(u16vec2 x, u16vec2 y);u16vec3 max(u16vec3 x, u16vec3 y);u16vec4 max(u16vec4 x, u16vec4 y);int16_t    clamp(int16_t x, int16_t minVal, int16_t maxVal);i16vec2  clamp(i16vec2  x, int16_t minVal, int16_t maxVal);i16vec3  clamp(i16vec3  x, int16_t minVal, int16_t maxVal);i16vec4  clamp(i16vec4  x, int16_t minVal, int16_t maxVal);i16vec2  clamp(i16vec2  x, i16vec2  minVal, i16vec2  maxVal);i16vec3  clamp(i16vec3  x, i16vec3  minVal, i16vec3  maxVal);i16vec4  clamp(i16vec4  x, i16vec4  minVal, i16vec4  maxVal);uint16_t   clamp(uint16_t x, uint16_t minVal, uint16_t maxVal);u16vec2  clamp(u16vec2  x, uint16_t minVal, uint16_t maxVal);u16vec3  clamp(u16vec3  x, uint16_t minVal, uint16_t maxVal);u16vec4  clamp(u16vec4  x, uint16_t minVal, uint16_t maxVal);u16vec2  clamp(u16vec2  x, u16vec2  minVal, u16vec2  maxVal);u16vec3  clamp(u16vec3  x, u16vec3  minVal, u16vec3  maxVal);u16vec4  clamp(u16vec4  x, u16vec4  minVal, u16vec4  maxVal);int16_t  mix(int16_t,  int16_t,  bool);i16vec2  mix(i16vec2,  i16vec2,  bvec2);i16vec3  mix(i16vec3,  i16vec3,  bvec3);i16vec4  mix(i16vec4,  i16vec4,  bvec4);uint16_t mix(uint16_t, uint16_t, bool);u16vec2  mix(u16vec2,  u16vec2,  bvec2);u16vec3  mix(u16vec3,  u16vec3,  bvec3);u16vec4  mix(u16vec4,  u16vec4,  bvec4);float16_t frexp(float16_t, out int16_t);f16vec2   frexp(f16vec2,   out i16vec2);f16vec3   frexp(f16vec3,   out i16vec3);f16vec4   frexp(f16vec4,   out i16vec4);float16_t ldexp(float16_t, int16_t);f16vec2   ldexp(f16vec2,   i16vec2);f16vec3   ldexp(f16vec3,   i16vec3);f16vec4   ldexp(f16vec4,   i16vec4);int16_t halfBitsToInt16(float16_t);i16vec2 halfBitsToInt16(f16vec2);i16vec3 halhBitsToInt16(f16vec3);i16vec4 halfBitsToInt16(f16vec4);uint16_t halfBitsToUint16(float16_t);u16vec2  halfBitsToUint16(f16vec2);u16vec3  halfBitsToUint16(f16vec3);u16vec4  halfBitsToUint16(f16vec4);int16_t float16BitsToInt16(float16_t);i16vec2 float16BitsToInt16(f16vec2);i16vec3 float16BitsToInt16(f16vec3);i16vec4 float16BitsToInt16(f16vec4);uint16_t float16BitsToUint16(float16_t);u16vec2  float16BitsToUint16(f16vec2);u16vec3  float16BitsToUint16(f16vec3);u16vec4  float16BitsToUint16(f16vec4);float16_t int16BitsToFloat16(int16_t);f16vec2   int16BitsToFloat16(i16vec2);f16vec3   int16BitsToFloat16(i16vec3);f16vec4   int16BitsToFloat16(i16vec4);float16_t uint16BitsToFloat16(uint16_t);f16vec2   uint16BitsToFloat16(u16vec2);f16vec3   uint16BitsToFloat16(u16vec3);f16vec4   uint16BitsToFloat16(u16vec4);float16_t int16BitsToHalf(int16_t);f16vec2   int16BitsToHalf(i16vec2);f16vec3   int16BitsToHalf(i16vec3);f16vec4   int16BitsToHalf(i16vec4);float16_t uint16BitsToHalf(uint16_t);f16vec2   uint16BitsToHalf(u16vec2);f16vec3   uint16BitsToHalf(u16vec3);f16vec4   uint16BitsToHalf(u16vec4);int      packInt2x16(i16vec2);uint     packUint2x16(u16vec2);int64_t  packInt4x16(i16vec4);uint64_t packUint4x16(u16vec4);i16vec2  unpackInt2x16(int);u16vec2  unpackUint2x16(uint);i16vec4  unpackInt4x16(int64_t);u16vec4  unpackUint4x16(uint64_t);bvec2 lessThan(i16vec2, i16vec2);bvec3 lessThan(i16vec3, i16vec3);bvec4 lessThan(i16vec4, i16vec4);bvec2 lessThan(u16vec2, u16vec2);bvec3 lessThan(u16vec3, u16vec3);bvec4 lessThan(u16vec4, u16vec4);bvec2 lessThanEqual(i16vec2, i16vec2);bvec3 lessThanEqual(i16vec3, i16vec3);bvec4 lessThanEqual(i16vec4, i16vec4);bvec2 lessThanEqual(u16vec2, u16vec2);bvec3 lessThanEqual(u16vec3, u16vec3);bvec4 lessThanEqual(u16vec4, u16vec4);bvec2 greaterThan(i16vec2, i16vec2);bvec3 greaterThan(i16vec3, i16vec3);bvec4 greaterThan(i16vec4, i16vec4);bvec2 greaterThan(u16vec2, u16vec2);bvec3 greaterThan(u16vec3, u16vec3);bvec4 greaterThan(u16vec4, u16vec4);bvec2 greaterThanEqual(i16vec2, i16vec2);bvec3 greaterThanEqual(i16vec3, i16vec3);bvec4 greaterThanEqual(i16vec4, i16vec4);bvec2 greaterThanEqual(u16vec2, u16vec2);bvec3 greaterThanEqual(u16vec3, u16vec3);bvec4 greaterThanEqual(u16vec4, u16vec4);bvec2 equal(i16vec2, i16vec2);bvec3 equal(i16vec3, i16vec3);bvec4 equal(i16vec4, i16vec4);bvec2 equal(u16vec2, u16vec2);bvec3 equal(u16vec3, u16vec3);bvec4 equal(u16vec4, u16vec4);bvec2 notEqual(i16vec2, i16vec2);bvec3 notEqual(i16vec3, i16vec3);bvec4 notEqual(i16vec4, i16vec4);bvec2 notEqual(u16vec2, u16vec2);bvec3 notEqual(u16vec3, u16vec3);bvec4 notEqual(u16vec4, u16vec4);  int16_t bitfieldExtract(  int16_t, int16_t, int16_t);i16vec2 bitfieldExtract(i16vec2, int16_t, int16_t);i16vec3 bitfieldExtract(i16vec3, int16_t, int16_t);i16vec4 bitfieldExtract(i16vec4, int16_t, int16_t); uint16_t bitfieldExtract( uint16_t, int16_t, int16_t);u16vec2 bitfieldExtract(u16vec2, int16_t, int16_t);u16vec3 bitfieldExtract(u16vec3, int16_t, int16_t);u16vec4 bitfieldExtract(u16vec4, int16_t, int16_t);  int16_t bitfieldInsert(  int16_t base,   int16_t, int16_t, int16_t);i16vec2 bitfieldInsert(i16vec2 base, i16vec2, int16_t, int16_t);i16vec3 bitfieldInsert(i16vec3 base, i16vec3, int16_t, int16_t);i16vec4 bitfieldInsert(i16vec4 base, i16vec4, int16_t, int16_t); uint16_t bitfieldInsert( uint16_t base,  uint16_t, int16_t, int16_t);u16vec2 bitfieldInsert(u16vec2 base, u16vec2, int16_t, int16_t);u16vec3 bitfieldInsert(u16vec3 base, u16vec3, int16_t, int16_t);u16vec4 bitfieldInsert(u16vec4 base, u16vec4, int16_t, int16_t);  int16_t bitCount(  int16_t);i16vec2 bitCount(i16vec2);i16vec3 bitCount(i16vec3);i16vec4 bitCount(i16vec4);  int16_t bitCount( uint16_t);i16vec2 bitCount(u16vec2);i16vec3 bitCount(u16vec3);i16vec4 bitCount(u16vec4);  int16_t findLSB(  int16_t);i16vec2 findLSB(i16vec2);i16vec3 findLSB(i16vec3);i16vec4 findLSB(i16vec4);  int16_t findLSB( uint16_t);i16vec2 findLSB(u16vec2);i16vec3 findLSB(u16vec3);i16vec4 findLSB(u16vec4);  int16_t findMSB(  int16_t);i16vec2 findMSB(i16vec2);i16vec3 findMSB(i16vec3);i16vec4 findMSB(i16vec4);  int16_t findMSB( uint16_t);i16vec2 findMSB(u16vec2);i16vec3 findMSB(u16vec3);i16vec4 findMSB(u16vec4);int16_t  pack16(i8vec2);uint16_t pack16(u8vec2);int32_t  pack32(i8vec4);uint32_t pack32(u8vec4);int32_t  pack32(i16vec2);uint32_t pack32(u16vec2);int64_t  pack64(i16vec4);uint64_t pack64(u16vec4);int64_t  pack64(i32vec2);uint64_t pack64(u32vec2);i8vec2   unpack8(int16_t);u8vec2   unpack8(uint16_t);i8vec4   unpack8(int32_t);u8vec4   unpack8(uint32_t);i16vec2  unpack16(int32_t);u16vec2  unpack16(uint32_t);i16vec4  unpack16(int64_t);u16vec4  unpack16(uint64_t);i32vec2  unpack32(int64_t);u32vec2  unpack32(uint64_t);
 int;
@@ -9861,8 +9850,7 @@ matrix type in buffer
 matrix-multiply
 matrix-scale
 matrix-times-vector
-matrix3x4_t
-matrix3x4a_t
+matrix3x4
 matrixCompMult
 max megabytes
 max megahertz
@@ -10020,6 +10008,9 @@ move second child to first child
 msad4
 mul
 mul() matrix size mismatch
+multigpu_skip_semaphores
+multigpu_skip_transfers
+multiline_string
 multiple prototypes for same function
 multiple times is not allowed.
 multiple times.
@@ -10153,7 +10144,6 @@ nonuniform
 nonuniformEXT
 nonwritable
 noperspective
-normalize_safe
 not
 not a ZIP archive
 not allowed before =.
@@ -10318,6 +10308,8 @@ packed
 packed vector format
 packoffset
 panorama
+panorama_
+panorama_rt_
 param
 parameter error
 parameter_declaration
@@ -10396,7 +10388,6 @@ protected
 provided in OpGroupMemberDecorate for struct <id>
 provided in OpMemberDecorate for struct <id>
 provokingVertexMode
-ps_3_0
 ps_4_0
 ps_4_1
 ps_5_0
@@ -10429,6 +10420,7 @@ qangle
 quads
 qualifier has no effect on non-output parameters
 quantization mode
+quaternion
 queued
 queuefamilycoherent
 r
@@ -10475,7 +10467,6 @@ r_textures_evict_all
 r_validate_texture_streaming
 r_wait_on_present
 radians
-random
 rasterizationSamples
 rasterizationState
 rasterizationStream
@@ -10563,21 +10554,20 @@ renderPasses
 renderPasses2
 rendercontextbase.cpp
 renderdevicebase.cpp
-renderdevicebase.cpp(1584):
-renderdevicebase.cpp(1748):
+renderdevicebase.cpp(1579):
+renderdevicebase.cpp(1743):
 renderdevicebase.cpp(2023):
 renderdevicebase.cpp(2027):
 renderdevicebase.cpp(3165):
+renderdevicebase.cpp(3385):
 renderdevicebase.cpp(3398):
-renderdevicebase.cpp(3411):
-renderdevicebase.cpp(3514):
-renderdevicebase.cpp(3538):
-renderdevicebase.cpp(919):
+renderdevicebase.cpp(3501):
+renderdevicebase.cpp(3525):
+renderdevicebase.cpp(915):
 renderdevicemgrbase.cpp
 renderdoc_captures
 renderstatehelper.h
 rendersystem (%s) tracked resources:
-rendersystemgl.dll
 rendersystemvulkan
 replace-desc-array-access-using-var-index
 replace-invalid-opcode
@@ -10632,8 +10622,7 @@ robustImageAccess
 robustImageAccess2
 rootn
 rotate
-rotate2d
-rotation2d
+rotation_vector
 round
 roundEven
 roundf
@@ -10654,6 +10643,7 @@ s
 s%lld
 s%p
 sBGRA
+sRGB
 sRGBA
 sRGBx
 s_abs
@@ -10714,7 +10704,6 @@ scalar swizzle
 scalar, vector, or struct type
 scalar-replacement=
 scalarCopy
-schematype.cpp
 scissorCount
 scissors
 scope ID
@@ -10819,6 +10808,7 @@ sincos
 single
 single_attribute
 single_declaration
+single_quoted_string
 single_type_qualifier
 singletons.cpp
 sizeQueryTemp
@@ -10940,7 +10930,6 @@ spv1.2
 spv1.3
 spv1.5
 spv1.6
-sqr
 sqrt
 sqrtf
 src
@@ -11140,12 +11129,15 @@ stream output type
 stream=
 strength-reduction
 string literal
+string_token
 strip-debug
 strip-nonsemantic
 strip-reflect
 strlen
 strncasecmp
+strnlen
 strstr
+strtod
 strtol
 strtoll
 strtoul
@@ -11426,15 +11418,15 @@ textureSamples(
 textureSize
 textureSize(
 texturebase.cpp
-texturebase.cpp(2434):Error loading texture: %s
-texturebase.cpp(3453):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3483):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3501):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3519):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3538):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3559):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3570):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3581):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2430):Error loading texture: %s
+texturebase.cpp(3449):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3479):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3497):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3515):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3534):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3555):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3566):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3577):ResourceHandleToData( %s ) failed! Falling back to error texture!
 texturecubearrayindex
 texturecubeindex
 tgamma
@@ -11507,6 +11499,7 @@ tried to delete shader twice
 true case
 true case is null
 trunc
+truncf
 trying to bind a deleted shader
 type ID
 type Result Type array
@@ -11539,6 +11532,7 @@ type_parameter_specifier_opt
 type_specifier_nonarray
 typedef
 typeinfo for CThreadSyncObject
+typeinfo for IFormatOutputStream
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_make_shared_tag
@@ -11583,6 +11577,7 @@ u_rhadd
 u_sub_sat
 u_upsample
 uaddCarry
+uchar32
 ucoopmatNV
 uiTransparentPixels < PIXELS
 uimage1D
@@ -11745,6 +11740,7 @@ unsigned int Etc::Image::IterateThroughWorstBlocks(unsigned int, unsigned int, u
 unsigned literal
 unsized
 unsized array
+unspecified
 unsupported construction
 unsupported domain type
 unsupported encryption
@@ -11800,7 +11796,7 @@ utextureBuffer
 utextureCube
 utextureCubeArray
 utime
-utlsoacontainer.cpp:2402
+utlsoacontainer.cpp:2401
 uvec2 clock2x32ARB();uint64_t clockARB();uvec2 clockRealtime2x32EXT();uint64_t clockRealtimeEXT();
 uvec2 conversion to accelerationStructureEXT
 uvec2 conversion to reference
@@ -11877,8 +11873,10 @@ vector-dce
 vector-scale
 vector-times-matrix
 vector2
+vector2d
 vector3
 vector4
+vector4d
 vector::_M_default_append
 vector::_M_emplace_back_aux
 vector::_M_fill_insert
@@ -11913,7 +11911,7 @@ vertexpainttintcolor
 vfx_common.cpp
 vfx_dx11
 vfx_shader_file.cpp
-vfx_vulkan_gl
+vfx_vulkan
 vfxc
 video.cfg
 video_version
@@ -11951,7 +11949,6 @@ vkAcquireNextImageKHR
 vkAcquireNextImageKHR returned %s
 vkAcquirePerformanceConfigurationINTEL
 vkAcquireProfilingLockKHR
-vkAcquireWinrtDisplayNV
 vkAllocateCommandBuffers
 vkAllocateCommandBuffers( m_pDeviceVulkan, &cmdBufferCreateinfo, &pCmdBuffer )
 vkAllocateDescriptorSets
@@ -11973,12 +11970,15 @@ vkBindImageMemory
 vkBindImageMemory( VulkanDevice(), m_pVulkanImage->m_pImage, m_pVulkanImage->m_pGPUMemory, m_pVulkanImage->m_nOffset )
 vkBindImageMemory( VulkanDevice(), pVulkanImage->m_pImage, pVulkanImage->m_pGPUMemory, pVulkanImage->m_nOffset )
 vkBindImageMemory( pDeviceVulkan, m_pDepthStencilImage->m_pImage, m_pDepthStencilImage->m_pGPUMemory, 0 )
+vkBindImageMemory( pDeviceVulkan, m_pIntermediateImageResolved->m_pImage, m_pIntermediateImageResolved->m_pGPUMemory, 0 )
 vkBindImageMemory( pDeviceVulkan, m_pIntermediateSwapChainImage->m_pImage, m_pIntermediateSwapChainImage->m_pGPUMemory, 0 )
 vkBindImageMemory2
 vkBindImageMemory2KHR
 vkBindImageMemory2KHR( VulkanDevice(), 1, &bindImageMemoryInfo )
+vkBindOpticalFlowSessionImageNV
 vkBindVideoSessionMemoryKHR
 vkBuildAccelerationStructuresKHR
+vkBuildMicromapsEXT
 vkCmdBeginConditionalRenderingEXT
 vkCmdBeginDebugUtilsLabelEXT
 vkCmdBeginQuery
@@ -11986,9 +11986,12 @@ vkCmdBeginQueryIndexedEXT
 vkCmdBeginRenderPass
 vkCmdBeginRenderPass2
 vkCmdBeginRenderPass2KHR
+vkCmdBeginRendering
 vkCmdBeginRenderingKHR
 vkCmdBeginTransformFeedbackEXT
 vkCmdBeginVideoCodingKHR
+vkCmdBindDescriptorBufferEmbeddedSamplersEXT
+vkCmdBindDescriptorBuffersEXT
 vkCmdBindDescriptorSets
 vkCmdBindIndexBuffer
 vkCmdBindInvocationMaskHUAWEI
@@ -11997,12 +12000,15 @@ vkCmdBindPipelineShaderGroupNV
 vkCmdBindShadingRateImageNV
 vkCmdBindTransformFeedbackBuffersEXT
 vkCmdBindVertexBuffers
+vkCmdBindVertexBuffers2
 vkCmdBindVertexBuffers2EXT
 vkCmdBlitImage
+vkCmdBlitImage2
 vkCmdBlitImage2KHR
 vkCmdBuildAccelerationStructureNV
 vkCmdBuildAccelerationStructuresIndirectKHR
 vkCmdBuildAccelerationStructuresKHR
+vkCmdBuildMicromapsEXT
 vkCmdClearAttachments
 vkCmdClearColorImage
 vkCmdClearDepthStencilImage
@@ -12011,20 +12017,31 @@ vkCmdCopyAccelerationStructureKHR
 vkCmdCopyAccelerationStructureNV
 vkCmdCopyAccelerationStructureToMemoryKHR
 vkCmdCopyBuffer
+vkCmdCopyBuffer2
 vkCmdCopyBuffer2KHR
 vkCmdCopyBufferToImage
+vkCmdCopyBufferToImage2
 vkCmdCopyBufferToImage2KHR
 vkCmdCopyImage
+vkCmdCopyImage2
 vkCmdCopyImage2KHR
 vkCmdCopyImageToBuffer
+vkCmdCopyImageToBuffer2
 vkCmdCopyImageToBuffer2KHR
+vkCmdCopyMemoryIndirectNV
 vkCmdCopyMemoryToAccelerationStructureKHR
+vkCmdCopyMemoryToImageIndirectNV
+vkCmdCopyMemoryToMicromapEXT
+vkCmdCopyMicromapEXT
+vkCmdCopyMicromapToMemoryEXT
 vkCmdCopyQueryPoolResults
 vkCmdCuLaunchKernelNVX
 vkCmdDebugMarkerBeginEXT
 vkCmdDebugMarkerEndEXT
 vkCmdDebugMarkerInsertEXT
 vkCmdDecodeVideoKHR
+vkCmdDecompressMemoryIndirectCountNV
+vkCmdDecompressMemoryNV
 vkCmdDispatch
 vkCmdDispatchBase
 vkCmdDispatchBaseKHR
@@ -12040,7 +12057,10 @@ vkCmdDrawIndirectByteCountEXT
 vkCmdDrawIndirectCount
 vkCmdDrawIndirectCountAMD
 vkCmdDrawIndirectCountKHR
+vkCmdDrawMeshTasksEXT
+vkCmdDrawMeshTasksIndirectCountEXT
 vkCmdDrawMeshTasksIndirectCountNV
+vkCmdDrawMeshTasksIndirectEXT
 vkCmdDrawMeshTasksIndirectNV
 vkCmdDrawMeshTasksNV
 vkCmdDrawMultiEXT
@@ -12053,6 +12073,7 @@ vkCmdEndQueryIndexedEXT
 vkCmdEndRenderPass
 vkCmdEndRenderPass2
 vkCmdEndRenderPass2KHR
+vkCmdEndRendering
 vkCmdEndRenderingKHR
 vkCmdEndTransformFeedbackEXT
 vkCmdEndVideoCodingKHR
@@ -12063,79 +12084,137 @@ vkCmdInsertDebugUtilsLabelEXT
 vkCmdNextSubpass
 vkCmdNextSubpass2
 vkCmdNextSubpass2KHR
+vkCmdOpticalFlowExecuteNV
 vkCmdPipelineBarrier
+vkCmdPipelineBarrier2
 vkCmdPipelineBarrier2KHR
 vkCmdPreprocessGeneratedCommandsNV
 vkCmdPushConstants
 vkCmdPushDescriptorSetKHR
 vkCmdPushDescriptorSetWithTemplateKHR
 vkCmdResetEvent
+vkCmdResetEvent2
 vkCmdResetEvent2KHR
 vkCmdResetQueryPool
 vkCmdResolveImage
+vkCmdResolveImage2
 vkCmdResolveImage2KHR
+vkCmdSetAlphaToCoverageEnableEXT
+vkCmdSetAlphaToOneEnableEXT
 vkCmdSetBlendConstants
 vkCmdSetCheckpointNV
 vkCmdSetCoarseSampleOrderNV
+vkCmdSetColorBlendAdvancedEXT
+vkCmdSetColorBlendEnableEXT
+vkCmdSetColorBlendEquationEXT
 vkCmdSetColorWriteEnableEXT
+vkCmdSetColorWriteMaskEXT
+vkCmdSetConservativeRasterizationModeEXT
+vkCmdSetCoverageModulationModeNV
+vkCmdSetCoverageModulationTableEnableNV
+vkCmdSetCoverageModulationTableNV
+vkCmdSetCoverageReductionModeNV
+vkCmdSetCoverageToColorEnableNV
+vkCmdSetCoverageToColorLocationNV
+vkCmdSetCullMode
 vkCmdSetCullModeEXT
 vkCmdSetDepthBias
+vkCmdSetDepthBiasEnable
 vkCmdSetDepthBiasEnableEXT
 vkCmdSetDepthBounds
+vkCmdSetDepthBoundsTestEnable
 vkCmdSetDepthBoundsTestEnableEXT
+vkCmdSetDepthClampEnableEXT
+vkCmdSetDepthClipEnableEXT
+vkCmdSetDepthClipNegativeOneToOneEXT
+vkCmdSetDepthCompareOp
 vkCmdSetDepthCompareOpEXT
+vkCmdSetDepthTestEnable
 vkCmdSetDepthTestEnableEXT
+vkCmdSetDepthWriteEnable
 vkCmdSetDepthWriteEnableEXT
+vkCmdSetDescriptorBufferOffsetsEXT
 vkCmdSetDeviceMask
 vkCmdSetDeviceMaskKHR
 vkCmdSetDiscardRectangleEXT
 vkCmdSetEvent
+vkCmdSetEvent2
 vkCmdSetEvent2KHR
 vkCmdSetExclusiveScissorNV
+vkCmdSetExtraPrimitiveOverestimationSizeEXT
 vkCmdSetFragmentShadingRateEnumNV
 vkCmdSetFragmentShadingRateKHR
+vkCmdSetFrontFace
 vkCmdSetFrontFaceEXT
+vkCmdSetLineRasterizationModeEXT
 vkCmdSetLineStippleEXT
+vkCmdSetLineStippleEnableEXT
 vkCmdSetLineWidth
 vkCmdSetLogicOpEXT
+vkCmdSetLogicOpEnableEXT
 vkCmdSetPatchControlPointsEXT
 vkCmdSetPerformanceMarkerINTEL
 vkCmdSetPerformanceOverrideINTEL
 vkCmdSetPerformanceStreamMarkerINTEL
+vkCmdSetPolygonModeEXT
+vkCmdSetPrimitiveRestartEnable
 vkCmdSetPrimitiveRestartEnableEXT
+vkCmdSetPrimitiveTopology
 vkCmdSetPrimitiveTopologyEXT
+vkCmdSetProvokingVertexModeEXT
+vkCmdSetRasterizationSamplesEXT
+vkCmdSetRasterizationStreamEXT
+vkCmdSetRasterizerDiscardEnable
 vkCmdSetRasterizerDiscardEnableEXT
 vkCmdSetRayTracingPipelineStackSizeKHR
+vkCmdSetRepresentativeFragmentTestEnableNV
 vkCmdSetSampleLocationsEXT
+vkCmdSetSampleLocationsEnableEXT
+vkCmdSetSampleMaskEXT
 vkCmdSetScissor
+vkCmdSetScissorWithCount
 vkCmdSetScissorWithCountEXT
+vkCmdSetShadingRateImageEnableNV
 vkCmdSetStencilCompareMask
+vkCmdSetStencilOp
 vkCmdSetStencilOpEXT
 vkCmdSetStencilReference
+vkCmdSetStencilTestEnable
 vkCmdSetStencilTestEnableEXT
 vkCmdSetStencilWriteMask
+vkCmdSetTessellationDomainOriginEXT
 vkCmdSetVertexInputEXT
 vkCmdSetViewport
 vkCmdSetViewportShadingRatePaletteNV
+vkCmdSetViewportSwizzleNV
+vkCmdSetViewportWScalingEnableNV
 vkCmdSetViewportWScalingNV
+vkCmdSetViewportWithCount
 vkCmdSetViewportWithCountEXT
 vkCmdSubpassShadingHUAWEI
+vkCmdTraceRaysIndirect2KHR
 vkCmdTraceRaysIndirectKHR
 vkCmdTraceRaysKHR
 vkCmdTraceRaysNV
 vkCmdUpdateBuffer
 vkCmdWaitEvents
+vkCmdWaitEvents2
 vkCmdWaitEvents2KHR
 vkCmdWriteAccelerationStructuresPropertiesKHR
 vkCmdWriteAccelerationStructuresPropertiesNV
 vkCmdWriteBufferMarker2AMD
 vkCmdWriteBufferMarkerAMD
+vkCmdWriteMicromapsPropertiesEXT
 vkCmdWriteTimestamp
+vkCmdWriteTimestamp2
 vkCmdWriteTimestamp2KHR
 vkCompileDeferredNV
 vkCopyAccelerationStructureKHR
 vkCopyAccelerationStructureToMemoryKHR
 vkCopyMemoryToAccelerationStructureKHR
+vkCopyMemoryToMicromapEXT
+vkCopyMicromapEXT
+vkCopyMicromapToMemoryEXT
 vkCreateAccelerationStructureKHR
 vkCreateAccelerationStructureKHR( Device(), &asci, nullptr, &m_pAccelerationStructure )
 vkCreateAccelerationStructureNV
@@ -12185,6 +12264,7 @@ vkCreateImage
 vkCreateImage( VulkanDevice(), &imageCreateInfo, NULL, &m_pVulkanImage->m_pImage )
 vkCreateImage( VulkanDevice(), &imageCreateInfo, NULL, &pVulkanImage->m_pImage )
 vkCreateImage() - failed to create cooperative fullscreen image.
+vkCreateImage() - failed to create cooperative fullscreen intermediate image.
 vkCreateImageView
 vkCreateImageView( VulkanDevice(), &colorTargetViewCreateInfo, NULL, m_ImageViews.m_ppColorTargetViewSrgb[ i ]->GetPtr() )
 vkCreateImageView( VulkanDevice(), &colorTargetViewCreateInfo, NULL, m_ImageViews.m_ppColorTargetView[ i ]->GetPtr() )
@@ -12204,6 +12284,8 @@ vkCreateImageView( VulkanDevice(), &imageViewCreateInfoSrgb, NULL, m_ImageViews.
 vkCreateIndirectCommandsLayoutNV
 vkCreateInstance
 vkCreateInstance failed, unable to create instance.
+vkCreateMicromapEXT
+vkCreateOpticalFlowSessionNV
 vkCreatePipelineCache
 vkCreatePipelineCache( m_pDeviceVulkan, &pipelineCacheCreateInfo, NULL, &m_pPerThreadPipelineCache[ nThread ] )
 vkCreatePipelineCache( m_pDeviceVulkan, &pipelineCacheCreateInfo, NULL, &m_pPipelineCache )
@@ -12211,6 +12293,7 @@ vkCreatePipelineLayout
 vkCreatePipelineLayout( m_pDevice, &plci, nullptr, &m_vkRayTracePipelineLayout )
 vkCreatePipelineLayout( m_pDeviceVulkan, &pipelineLayoutCreateInfo, NULL, &pPipelineLayoutOut->m_pPipelineLayout )
 vkCreatePipelineLayout( m_pDeviceVulkan, &pipelineLayoutCreateInfo, NULL, &pipelineLayout.m_pPipelineLayout )
+vkCreatePrivateDataSlot
 vkCreatePrivateDataSlotEXT
 vkCreateQueryPool
 vkCreateQueryPool( VulkanDevice(), &queryPoolCreateInfo, NULL, &m_pTimestampQueryPool )
@@ -12268,9 +12351,12 @@ vkDestroyImage
 vkDestroyImageView
 vkDestroyIndirectCommandsLayoutNV
 vkDestroyInstance
+vkDestroyMicromapEXT
+vkDestroyOpticalFlowSessionNV
 vkDestroyPipeline
 vkDestroyPipelineCache
 vkDestroyPipelineLayout
+vkDestroyPrivateDataSlot
 vkDestroyPrivateDataSlotEXT
 vkDestroyQueryPool
 vkDestroyRenderPass
@@ -12318,6 +12404,7 @@ vkGetAccelerationStructureBuildSizesKHR
 vkGetAccelerationStructureDeviceAddressKHR
 vkGetAccelerationStructureHandleNV
 vkGetAccelerationStructureMemoryRequirementsNV
+vkGetAccelerationStructureOpaqueCaptureDescriptorDataEXT
 vkGetBufferDeviceAddress
 vkGetBufferDeviceAddressEXT
 vkGetBufferDeviceAddressKHR
@@ -12326,22 +12413,33 @@ vkGetBufferMemoryRequirements2
 vkGetBufferMemoryRequirements2KHR
 vkGetBufferOpaqueCaptureAddress
 vkGetBufferOpaqueCaptureAddressKHR
+vkGetBufferOpaqueCaptureDescriptorDataEXT
 vkGetCalibratedTimestampsEXT
 vkGetDeferredOperationMaxConcurrencyKHR
 vkGetDeferredOperationResultKHR
+vkGetDescriptorEXT
+vkGetDescriptorSetHostMappingVALVE
+vkGetDescriptorSetLayoutBindingOffsetEXT
+vkGetDescriptorSetLayoutHostMappingInfoVALVE
+vkGetDescriptorSetLayoutSizeEXT
 vkGetDescriptorSetLayoutSupport
 vkGetDescriptorSetLayoutSupportKHR
 vkGetDeviceAccelerationStructureCompatibilityKHR
+vkGetDeviceBufferMemoryRequirements
 vkGetDeviceBufferMemoryRequirementsKHR
+vkGetDeviceFaultInfoEXT
 vkGetDeviceGroupPeerMemoryFeatures
 vkGetDeviceGroupPeerMemoryFeaturesKHR
 vkGetDeviceGroupPresentCapabilitiesKHR
 vkGetDeviceGroupSurfacePresentModesKHR
+vkGetDeviceImageMemoryRequirements
 vkGetDeviceImageMemoryRequirementsKHR
+vkGetDeviceImageSparseMemoryRequirements
 vkGetDeviceImageSparseMemoryRequirementsKHR
 vkGetDeviceMemoryCommitment
 vkGetDeviceMemoryOpaqueCaptureAddress
 vkGetDeviceMemoryOpaqueCaptureAddressKHR
+vkGetDeviceMicromapCompatibilityEXT
 vkGetDeviceProcAddr
 vkGetDeviceQueue
 vkGetDeviceQueue2
@@ -12352,25 +12450,31 @@ vkGetDisplayPlaneCapabilities2KHR
 vkGetDisplayPlaneCapabilitiesKHR
 vkGetDisplayPlaneSupportedDisplaysKHR
 vkGetDrmDisplayEXT
+vkGetDynamicRenderingTilePropertiesQCOM
 vkGetEventStatus
 vkGetFenceFdKHR
 vkGetFenceStatus
+vkGetFramebufferTilePropertiesQCOM
 vkGetGeneratedCommandsMemoryRequirementsNV
 vkGetImageDrmFormatModifierPropertiesEXT
 vkGetImageMemoryRequirements
 vkGetImageMemoryRequirements2
 vkGetImageMemoryRequirements2KHR
+vkGetImageOpaqueCaptureDescriptorDataEXT
 vkGetImageSparseMemoryRequirements
 vkGetImageSparseMemoryRequirements2
 vkGetImageSparseMemoryRequirements2KHR
 vkGetImageSubresourceLayout
+vkGetImageSubresourceLayout2EXT
 vkGetImageViewAddressNVX
 vkGetImageViewHandleNVX
+vkGetImageViewOpaqueCaptureDescriptorDataEXT
 vkGetInstanceProcAddr
 vkGetMemoryFdKHR
 vkGetMemoryFdPropertiesKHR
 vkGetMemoryHostPointerPropertiesEXT
 vkGetMemoryRemoteAddressNV
+vkGetMicromapBuildSizesEXT
 vkGetPastPresentationTimingGOOGLE
 vkGetPerformanceParameterINTEL
 vkGetPhysicalDeviceCalibrateableTimeDomainsEXT
@@ -12401,6 +12505,7 @@ vkGetPhysicalDeviceMemoryProperties
 vkGetPhysicalDeviceMemoryProperties2
 vkGetPhysicalDeviceMemoryProperties2KHR
 vkGetPhysicalDeviceMultisamplePropertiesEXT
+vkGetPhysicalDeviceOpticalFlowImageFormatsNV
 vkGetPhysicalDevicePresentRectanglesKHR
 vkGetPhysicalDeviceProperties
 vkGetPhysicalDeviceProperties2
@@ -12423,6 +12528,7 @@ vkGetPhysicalDeviceSurfacePresentModesKHR
 vkGetPhysicalDeviceSurfacePresentModesKHR( pPhysicalDeviceVulkan, m_pSurfaceKHR, &nPresentModeCount, NULL )
 vkGetPhysicalDeviceSurfacePresentModesKHR( pPhysicalDeviceVulkan, m_pSurfaceKHR, &nPresentModeCount, pPresentModes )
 vkGetPhysicalDeviceSurfaceSupportKHR
+vkGetPhysicalDeviceToolProperties
 vkGetPhysicalDeviceToolPropertiesEXT
 vkGetPhysicalDeviceVideoCapabilitiesKHR
 vkGetPhysicalDeviceVideoFormatPropertiesKHR
@@ -12435,6 +12541,8 @@ vkGetPipelineCacheSize failed, unable to store pipeline cache to disk.
 vkGetPipelineExecutableInternalRepresentationsKHR
 vkGetPipelineExecutablePropertiesKHR
 vkGetPipelineExecutableStatisticsKHR
+vkGetPipelinePropertiesEXT
+vkGetPrivateData
 vkGetPrivateDataEXT
 vkGetQueryPoolResults
 vkGetQueueCheckpointData2NV
@@ -12445,10 +12553,13 @@ vkGetRayTracingShaderGroupHandlesNV
 vkGetRayTracingShaderGroupStackSizeKHR
 vkGetRefreshCycleDurationGOOGLE
 vkGetRenderAreaGranularity
+vkGetSamplerOpaqueCaptureDescriptorDataEXT
 vkGetSemaphoreCounterValue
 vkGetSemaphoreCounterValueKHR
 vkGetSemaphoreFdKHR
 vkGetShaderInfoAMD
+vkGetShaderModuleCreateInfoIdentifierEXT
+vkGetShaderModuleIdentifierEXT
 vkGetSwapchainCounterEXT
 vkGetSwapchainImagesKHR
 vkGetSwapchainImagesKHR( m_pDeviceVulkan, m_pSwapChainKHR, &m_nSwapQueueImageCount, NULL )
@@ -12456,7 +12567,6 @@ vkGetSwapchainImagesKHR( m_pDeviceVulkan, m_pSwapChainKHR, &m_nSwapQueueImageCou
 vkGetSwapchainStatusKHR
 vkGetValidationCacheDataEXT
 vkGetVideoSessionMemoryRequirementsKHR
-vkGetWinrtDisplayNV
 vkImportFenceFdKHR
 vkImportSemaphoreFdKHR
 vkInitializePerformanceApiINTEL
@@ -12477,10 +12587,10 @@ vkQueuePresentKHR failed with error %d
 vkQueueSetPerformanceConfigurationINTEL
 vkQueueSubmit
 vkQueueSubmit( VulkanQueue(), 1, &submitInfo, VK_NULL_HANDLE )
-vkQueueSubmit( VulkanQueue(), 1, &submitInfo, m_pWaitForLeftEyeFenceAMD )
 vkQueueSubmit( VulkanQueue(), 1, &submitInfo, pFence ? pFence->Get() : VK_NULL_HANDLE )
 vkQueueSubmit( VulkanQueue(), 1, &submitInfo, presentFence.m_pFence )
 vkQueueSubmit( pQueue, 1, &submitInfo, pFence->Get() )
+vkQueueSubmit2
 vkQueueSubmit2KHR
 vkQueueWaitIdle
 vkQueueWaitIdle( VulkanQueue() )
@@ -12507,6 +12617,7 @@ vkSetDeviceMemoryPriorityEXT
 vkSetEvent
 vkSetHdrMetadataEXT
 vkSetLocalDimmingAMD
+vkSetPrivateData
 vkSetPrivateDataEXT
 vkSignalSemaphore
 vkSignalSemaphoreKHR
@@ -12524,6 +12635,7 @@ vkWaitForPresentKHR
 vkWaitSemaphores
 vkWaitSemaphoresKHR
 vkWriteAccelerationStructuresPropertiesKHR
+vkWriteMicromapsPropertiesEXT
 vload_half
 vload_halfn
 vloada_halfn
@@ -12580,11 +12692,6 @@ void subgroupMemoryBarrierShared();
 void traceNV(accelerationStructureNV,uint,uint,uint,uint,uint,vec3,float,vec3,float,int);void traceRayMotionNV(accelerationStructureNV,uint,uint,uint,uint,uint,vec3,float,vec3,float,float,int);void traceRayEXT(accelerationStructureEXT,uint,uint,uint,uint,uint,vec3,float,vec3,float,int);void executeCallableNV(uint, int);void executeCallableEXT(uint, int);
 void writePackedPrimitiveIndices4x8NV(uint, uint);
 volatile
-vr_explicit_timing_mode
-vr_multigpu_skip_semaphores
-vr_multigpu_skip_transfers
-vr_vulkan_wait_fence_between_eyes
-vs_3_0
 vs_4_0
 vs_4_1
 vs_5_0
@@ -12616,15 +12723,14 @@ vulkan/memorymgrvulkan.cpp
 vulkan/pipelinecachemgrvulkan.cpp
 vulkan/pipelinemgrvulkan.cpp
 vulkan/rendercontextvulkan.cpp
-vulkan/rendercontextvulkan.cpp(447):
+vulkan/rendercontextvulkan.cpp(424):
 vulkan/renderdevicemgrvulkan.cpp
 vulkan/renderdevicevulkan.cpp
-vulkan/renderdevicevulkan.cpp(2796):
 vulkan/renderpipelinestatsvulkan.cpp
 vulkan/renderthreadvulkan.cpp
-vulkan/renderthreadvulkan.cpp(209): Error! NULL texture pointer sent to OnReadPixels()!
+vulkan/renderthreadvulkan.cpp(195): Error! NULL texture pointer sent to OnReadPixels()!
 vulkan/shadertablevulkan.cpp
-vulkan/texturevulkan.cpp(1403):
+vulkan/texturevulkan.cpp(1389):
 vulkan1.1spv1.4
 vulkan_additional_semaphores
 vulkan_amd_timestamp_workaround
@@ -12719,6 +12825,7 @@ zlib error
 zlib init error
 {
 { } style initializers
+{%u}
 {}
 |
 |=

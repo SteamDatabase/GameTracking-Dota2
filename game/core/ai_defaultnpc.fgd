@@ -52,6 +52,7 @@
 	input EnableAbility( string ) : "Enables an ability on the NPC"
 	input DisableAbility( string ) : "Disables an ability on the NPC"
 	input RemoveAbility( string ) : "Removes an ability to the NPC"
+	input DisableAllAbilities( boolean ) : "Disable all abilities on the NPC. Parameter: 0 - Do not disable all abilities, 1 - Do disable all abilities"
 	input SetForceWalkRun(integer) : "Force this NPC to walk or run. Parameter: 0 - Return to AI, 1 - Force Walk, 2 - Force Run."
 	input SetForceAim(integer) : "Force this NPC to aim or not aim. Parameter: 0 - Return to AI, 1 - Force Aiming, 2 - Force Not Aiming. Note that an NPC forced to Not Aim may be non-functional in combat."
 ]
@@ -153,6 +154,12 @@
 	"AI Attached Item Manager - manages the items attached to one or more NPCs / ragdolls."
 [
 	target(target_name_or_class) : "Target(s)" : "" : "This is the entity who's items this manager should be managing. May be a targetname or a classname."
+	listen_entityspawns(boolean) : "Listen to Entity Spawns" : 0 : "If you want this manager to affect valid targets that are spawned after the manager, you need to set this. Most likely only needed if you want to target NPCs via a classname to catch all future spawns on that NPC type. It has a perf cost, so don't turn it on if you don't need it."
+	mark_as_removable(choices) : "Item Removal Allowed for Ammo Balancing" : "0" =
+	[
+		"0" : "No"
+		"1" : "Yes"
+	]
 	item_1( vdata_choice:scripts/grenades.vdata&scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 1" : "" : "Subclass of item or ability to attach in slot 1."
 	item_2( vdata_choice:scripts/grenades.vdata&scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 2" : "" : "Subclass of item or ability to attach in slot 2."
 	item_3( vdata_choice:scripts/grenades.vdata&scripts/misc.vdata&scripts/npc_abilities.vdata ) : "Item Or Ability Subclass 3" : "" : "Subclass of item or ability to attach in slot 3."
@@ -165,12 +172,7 @@
 	ability_remove_2( vdata_choice:scripts/npc_abilities.vdata ) : "Ability Subclass To Remove 2" : "" : "Subclass of 2nd ability to remove."
 	ability_remove_3( vdata_choice:scripts/npc_abilities.vdata ) : "Ability Subclass To Remove 3" : "" : "Subclass of 3rd ability to remove."
 	ability_remove_4( vdata_choice:scripts/npc_abilities.vdata ) : "Ability Subclass To Remove 4" : "" : "Subclass of 4th ability to remove."
-	listen_entityspawns(boolean) : "Listen to Entity Spawns" : 0 : "If you want this manager to affect valid targets that are spawned after the manager, you need to set this. Most likely only needed if you want to target NPCs via a classname to catch all future spawns on that NPC type. It has a perf cost, so don't turn it on if you don't need it."
-	mark_as_removable(choices) : "Item Removal Allowed for Ammo Balancing" : "0" =
-	[
-		"0" : "No"
-		"1" : "Yes"
-	]
+
 ]
 
 @PointClass base(DefaultNPC, Parentname, RenderFields, Shadow, Studiomodel) tags( Choreo ) studio() 
@@ -422,9 +424,17 @@
 		0 : "No"
 		1 : "Yes"
 	]
+
+	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
 ]
 
-@PointClass base(Targetname) tags( Choreo ) color(255 0 255) iconsprite("editor/aiscripted_schedule") = ai_scripted_idle :
+@PointClass base(Targetname) 
+	tags( Choreo ) 
+	color(255 0 255) 
+	iconsprite("editor/aiscripted_schedule") 
+	selected_line( 255 255 255, targetname, m_iszNPC ) 
+	selected_line( 255 255 255, targetname, m_iszTarget ) 
+= ai_scripted_idle :
 	"Forces an NPC to idle (optionally at a specified location), allowing you to control what will interrupt it."
 [
 	m_iszNPC(target_destination) : "Target NPC(s)" : : "The name or classname of an NPC to use. If multiple NPCs are found, all of them will be told to idle."
@@ -554,6 +564,8 @@
 	]
 
 	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
+
+	m_flPostScriptAbilityCooldown(float) : "Post Script Ability Cooldown" : "0.0" : "Amount of time after this script to cooldown all abilities on this NPC"
 
 	// Inputs
 	input PerformAbility(void) : "Tells all target NPC(s) to perform the ability."
