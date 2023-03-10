@@ -9,7 +9,7 @@
 GAMEROOT=$(cd "${0%/*}" && echo $PWD)
 
 #determine platform
-UNAMEPATH=`which uname`
+UNAMEPATH=`command -v uname`
 if [ -z $UNAMEPATH ]; then
 	if [ -f /usr/bin/uname ]; then
 		UNAMEPATH=/usr/bin/uname
