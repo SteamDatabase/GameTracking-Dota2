@@ -1316,6 +1316,7 @@
 	]	
 
 	interactAs(string) [ group="Physics Properties" ] : "interactAs" : "" : "comma-separated list of interaction layers"
+	interactExclude(string) [ group="Physics Properties" ] : "interactExclude" : "" : "comma-separated list of interaction layers to not collide with"
 	solidbsp(boolean) : "Solid BSP" : 0 : "Set this if this brush is in hierarchy with a moving object of some kind, and the player can stand on this brush."
 	ScriptedMovement(boolean) : "Scripted Movement" : 0 : "Set this to allow vscript code to move the brush via SetVelocity() calls."
 	vrad_brush_cast_shadows(boolean) : "Shadows" : 0 : "Set this if this brush casts lightmap shadows."
@@ -2585,6 +2586,11 @@
 	]
 ]
 
+@PointClass tags( Info ) base(Targetname, Parentname) editormodel("models/editor/info_target", nobounds ) = info_target_server_only : 
+	"An entity that does nothing. Not networked."
+[
+]
+
 
 @PointClass base(Targetname, Parentname) tags( Particles ) editormodel("models/editor/cone_helper.vmdl") = info_particle_target : 
 	"An entity that is a target for particle system control points"
@@ -2898,27 +2904,6 @@
 	output OnFullyClosed(void) : "Fired when the brush reaches the starting position."
 ]
 
-@SolidClass base(Targetname, Parentname) drawangles( movedir ) = func_water_analog :
-	"A water brush entity that moves linearly along a given distance, in a given direction"
-[
-	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the water will move, when told to 'Open'."
-	startposition(float) : "Start Position" : 0 : "Position of the water brush when spawned. The range is a value between 0.0 and 1.0, where 0 is the starting position and 1 is the starting position + (move direction * move distance)."	
-	speed(integer) : "Speed" : 100 : "The speed that the water brush moves, in inches per second."
-	movedistance(float) : "Move Distance" : 100 : "The distance from the starting point that the water brush should move, in inches."
-	startsound(sound) : "Sound played when the water brush starts moving."
-	stopsound(sound) : "Sound played when the water brush stops moving."
-	WaveHeight(string) : "Wave Height" : "3.0"
-
-	// Inputs
-	input Open(void) : "Move the water brush to the end position (starting position + (move direction * move distance))."
-	input Close(void) : "Move the water brush to the starting position."
-	input SetPosition(string) : "Move the water brush to a specific position between 0.0 and 1.0, where 0 is the starting position and 1 is the starting position + (move direction * move distance)."
-
-	// Outputs
-	output OnFullyOpen(void) : "Fired when the water brush reaches the end position (starting position + (move direction * move distance))."
-	output OnFullyClosed(void) : "Fired when the water brush reaches the starting position."
-]
-
 @SolidClass base(Targetname, Parentname, RenderFields, Shadow) = func_rotating : 
 	"A rotating brush entity."
 [
@@ -3064,6 +3049,8 @@
 	// Inputs
 	input Lock(void) : "Lock the button, preventing it from functioning."
 	input Unlock(void) : "Unlock the button, allowing it to function."
+	input Disable(void) : "Disable the button, preventing entities from finding the button (removes all capabilities of the button)"
+	input Enable(void) : "Enable the button, allowing entities to find the button again"
 	input Press(void) : "Activate the button as if it was pressed."
 	input PressIn(void) : "Activate the button as if it was pressed, sending it to the bottom position."
 	input PressOut(void) : "Unpress the button, sending it to the top position."
@@ -3104,6 +3091,7 @@
 	spawnflags(flags) =
 	[
 		1: "Don't move" : 0
+		2: "Starts Disabled" : 0
 		32: "Toggle" : 0
 		256: "Touch Activates": 0
 		512: "Damage Activates": 0
@@ -3111,7 +3099,7 @@
 		2048: "Starts locked" : 0
 		4096: "Sparks" : 0
 		16384: "Non-solid" : 0
-		32768: "No Animation" : 0		
+		32768: "Skip Player Animation" : 0	
 	]
 ]
 
@@ -3199,6 +3187,8 @@
 	// Inputs
 	input Lock(void) : "Lock the button, preventing it from functioning."
 	input Unlock(void) : "Unlock the button, allowing it to function."
+	input Disable(void) : "Disable the button, preventing entities from finding the button (removes all capabilities of the button)"
+	input Enable(void) : "Enable the button, allowing entities to find the button again"
 	input SetPosition(string) : "Move to a position. The parameter must be a value between 0 and 1, where 0 is the unrotated position and 1 is the rotated position + 'Distance'."
 	input SetPositionImmediately(string) : "Immediately teleport to a position. The parameter must be a value between 0 and 1, where 0 is the unrotated position and 1 is the rotated position + 'Distance'."
 
@@ -5358,10 +5348,6 @@
 	input SetAnimationNoResetNotLooping(string) : "Force the prop to play an animation and force it to not loop unless the prop is already playing the animation. The parameter should be the name of the animation."
 	input SetDefaultAnimationNotLooping(string) : "Set the Default Animation to the one specified in the parameter and force it to not loop."
 
-	input SetAnimation(string)					: "[OBSOLETE] Force the prop to play an animation. The parameter should be the name of the animation."
-	input SetAnimationNoReset(string)			: "[OBSOLETE] Force the prop to play an animation unless the prop is already playing the animation. The parameter should be the name of the animation."
-	input SetDefaultAnimation(string)			: "[OBSOLETE] Set the Default Animation to the one specified in the parameter."
-
 	input SetPlaybackRate(float) : "Set the playback rate for the animation."
 	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
 	input TurnOn(void) : "Make the prop visible."
@@ -5411,8 +5397,8 @@
 	solid(choices) : "Collisions" : 6 =
 	[
 		0: "Not Solid"
-		2: "Use axis-aligned box"
-		3: "Use oriented Box"
+//		2: "Use axis-aligned box"
+//		3: "Use oriented Box"
 		6: "Use VPhysics"
 	]
 
@@ -5686,8 +5672,9 @@
 = vehicle_entityio :
 	"Vehicle which does nothing but fire outputs based on IN_BUTTONS, typically used for prototyping."
 [
-	button1(choices) : "Button 1" : : "The button which fires the Button1-related outputs." =
+	button1(choices) : "Button 1" : 0 : "The button which fires the Button1-related outputs." =
 	[
+		0 : "IN_NONE"
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
 		4 : "IN_DUCK"
@@ -5703,8 +5690,9 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button2(choices) : "Button 2" : : "The button which fires the Button2-related outputs." =
+	button2(choices) : "Button 2" : 0 : "The button which fires the Button2-related outputs." =
 	[
+		0 : "IN_NONE"
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
 		4 : "IN_DUCK"
@@ -5720,8 +5708,9 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button3(choices) : "Button 3" : : "The button which fires the Button3-related outputs." =
+	button3(choices) : "Button 3" : 0 : "The button which fires the Button3-related outputs." =
 	[
+		0 : "IN_NONE"
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
 		4 : "IN_DUCK"
@@ -5737,8 +5726,9 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button4(choices) : "Button 4" : : "The button which fires the Button4-related outputs." =
+	button4(choices) : "Button 4" : 0 : "The button which fires the Button4-related outputs." =
 	[
+		0 : "IN_NONE"
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
 		4 : "IN_DUCK"
@@ -5754,8 +5744,9 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button5(choices) : "Button 5" : : "The button which fires the Button5-related outputs." =
+	button5(choices) : "Button 5" : 0 : "The button which fires the Button5-related outputs." =
 	[
+		0 : "IN_NONE"
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
 		4 : "IN_DUCK"
@@ -5771,8 +5762,9 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button6(choices) : "Button 6" : : "The button which fires the Button6-related outputs." =
+	button6(choices) : "Button 6" : 0 : "The button which fires the Button6-related outputs." =
 	[
+		0 : "IN_NONE"
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
 		4 : "IN_DUCK"
@@ -5788,8 +5780,9 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button7(choices) : "Button 7" : : "The button which fires the Button7-related outputs." =
+	button7(choices) : "Button 7" : 0 : "The button which fires the Button7-related outputs." =
 	[
+		0 : "IN_NONE"
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
 		4 : "IN_DUCK"
@@ -5805,8 +5798,9 @@
 		4096 : "IN_RELOAD"
 	]
 
-	button8(choices) : "Button 8" : : "The button which fires the Button8-related outputs." =
+	button8(choices) : "Button 8" : 0 : "The button which fires the Button8-related outputs." =
 	[
+		0 : "IN_NONE"
 		1 : "IN_ATTACK"
 		2 : "IN_JUMP"
 		4 : "IN_DUCK"
@@ -5922,19 +5916,6 @@
 	// Inputs
 	input  Toggle(void) : "Toggle the brush on/off. When off, the brush will be non-solid and invisible." 
 ]
-
-
-//@SolidClass base(Door) = func_water : 
-//	"Liquid"			// NEEDHELP
-//[
-//	spawnflags(flags) =
-//	[
-//		1 : "Starts Open" : 0
-//		256:"Use Only" : 0
-//	]
-//	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the water will move when it is told to 'Open'."
-//	WaveHeight(string) : "Wave Height" : "3.0"
-//]
 
 @SolidClass base(Targetname, Parentname, RenderFields, Global) = func_guntarget :
 	"This is a moving target that moves along a path of path_tracks. It can be shot and killed."
@@ -7062,12 +7043,6 @@
 	wait(integer) : "Wait here (secs)" : 0
 	speed(integer) : "Speed" : 0
 	yaw_speed(integer) : "New Train rot. Speed" : 0
-	moveactivity(choices) : "Move Activity" : "" =
-	[
-		"" : ""
-		"ACT_WALK" : "ACT_WALK"
-		"ACT_RUN" : "ACT_RUN"
-	]
 	radius(float) : "Radius" : 0
 
 	// Inputs 
@@ -7469,14 +7444,13 @@
 	pin_enabled(bool) : "Pin Enabled" : "1" : "If enabled, the rope simulation treats this node a locaiton to which the rope is attached."
 ]
 
-
-@PathClass base(Targetname) tags( Particles ) particle_rope() 
+@BaseClass base(Targetname) tags( Particles ) particle_rope() 
 	metadata
 	{
 		default_interpolation = "linear"
 		path_node_class = "path_node_particle_rope"
 	}
-= path_particle_rope
+= PathParticleRope
 [
 	effect_name(particlesystem) [report] : "Particle System Name" : "particles/entity/path_particle_cable_default.vpcf"
 	start_active(boolean) : "Start Active" : 1 : "Will the particle system be visible on spawn"
@@ -7487,7 +7461,11 @@
 	static_collision( bool ) : "Create Static Collision" : "0" : "Create a static physics representation of the path. Note the collision is generated based on the path, movement applied by the particle system will not be included."
 	surface_properties(surface_properties) : "Surface Properties" : "" : "Surface properties to apply to the static collision if generated"
 	color_tint(color255) : "Color Tint" : "255 255 255"
-			
+]
+
+
+@PathClass base(PathParticleRope) = path_particle_rope
+[
 	// Inputs
 	input Start(void) : "Tell the particle system to start emitting."
 	input Stop(void) : "Tell the particle system to stop emitting."
@@ -7496,6 +7474,19 @@
 	input SetRadius( float ) : "Set the radius parameter provided the particle system"
 	input SetSlack( float ) : "Set the slack parameter which may be used by the particle system to determine how much the rope droops."
 	input DisablePin( string ) : "Disable the contraint which pins a particle to the specified path node."
+]
+
+
+@PathClass base(PathParticleRope) tags( Particles ) particle_rope() 
+	metadata
+	{
+		class_game_keys =
+		[
+			{ key = "clientSideEntity" value = 1 }
+		]
+	}
+= path_particle_rope_clientside
+[
 ]
 
 
@@ -7619,15 +7610,6 @@
 ]
 
 //==================================================================================================
-
-
-@SolidClass base(Trigger)
- = trigger_buoyancy : "A volumetric trigger that affects the motion of vphysics objects that touch it by applying buoyancy to them."
-[
-	SetFluidDensity(float) : "Fluid density, kg/liter" : "1.0"
-	input SetFluidDensity(float) : "Fluid density, kg/liter"
-]
-
 
 @PointClass base(Targetname)
 	iconsprite("editor/nav_walkable.vmat")

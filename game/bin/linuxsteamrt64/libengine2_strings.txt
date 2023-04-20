@@ -340,7 +340,6 @@ $tI
 %s Unload
 %s [%s]
 %s allocation count overflow
-%s allocation count overflow( %llu > %llu )
 %s allocation count overflow( add %llu + current %llu > max %llu )
 %s appended
 %s client
@@ -376,7 +375,6 @@ $tI
 %s/loadaddress.txt
 %s/s%llut%llu
 %s/screenshot%04d.jpg
-%s0x%08X %s = "%s"
 %s0x%08X:%s = "%s"
 %s:
 %s:  AsyncLoadSpawnGroup -- spawn group already loaded
@@ -407,7 +405,7 @@ $tI
 %s:  PostSpawnGroupReadyMessage with NULL netchan (changing level?)
 %s:  PostSpawnGroupReadyMessage with SPAWN_GROUP_HANDLE_INVALID
 %s:  ProcessSpawnGroup_ManifestUpdate -- spawn group manifest update not supported for already loaded manifests
-%s:  RegisterPrerequisite %s
+%s:  RegisterLoadingSpawnGroups %s
 %s:  Sending creation tick for group to client '%s
 %s:  Sending load completed message to server
 %s:  Sending load group to client '%s'
@@ -480,10 +478,9 @@ $tI
 &amp;
 &final
 '
-'%s' forced immediate full update
+'%s' already awaiting full update
 '%s' is malformed
 (
-( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 ( Resource "%s type %lld", handle is%s set
 (%d dupes)
 (%d,%d)
@@ -615,7 +612,7 @@ $tI
 --- %s[%d]:
 --- Sample statistics after sorting and discarding the lowest and highest 10%% (20%% total discarded):
 --- Sample statistics:
---- SourceTV Status ---
+--- SourceTV[%d] Status ---
 --- System Information ---
 --- Total %i connected clients ---
 ----- Status -----
@@ -679,7 +676,6 @@ $tI
 -consolelog_notimestamp
 -consolelog_rotate
 -contentroot
--convars_hidden_by_default
 -coop_fullscreen
 -dac_offline
 -dedicated
@@ -742,6 +738,7 @@ $tI
 -nopvs
 -noscreenshot
 -nosound
+-nosse4
 -notoolsdev
 -novalveds
 -novconsole
@@ -788,7 +785,6 @@ $tI
 -steamlogin_accesscode
 -steamlogin_authority
 -steamport
--strict_type_combinations
 -stringtabledebug
 -subprocess
 -sw
@@ -828,7 +824,6 @@ $tI
 ................................................................................
 ...<truncated>...
 ../
-../../public/tier0/utlmemory.h
 ../common/protobuf_helpers.cpp
 ../public/appframework/materialsystem2app.cpp
 ../public/appframework/tier1app.h
@@ -838,11 +833,9 @@ $tI
 ../public/entity2/concreteentitylist.h
 ../public/networksystem/inetworkmessages.h
 ../public/networksystem/networkfieldscratchdata.h
-../public/scenesystem/scenevisibility.h
 ../public/tier0/eventdispatcher.h
 ../public/tier0/memstack.h
 ../public/tier0/tslist.h
-../public/tier0/utlmemory.h
 ../public/tier0/utlsignalslot.h
 ../public/tier0/utlsortvector.h
 ../public/tier0/utlsymboltable.h
@@ -921,6 +914,7 @@ $tI
 0.7.2
 00000000-0000-0000-0000-000000000000
 0123456789abcdef
+03:13:30
 0: Force z prepass off. 1: Force on. -1: Don't force
 0: Use normals reconstructed from depth. 1: Output correct normals in z prepass.
 0=Off, 1=Surface Wireframe, 2=Transparent Wireframe
@@ -1059,7 +1053,6 @@ $tI
 13ISoundService
 13IStatsService
 13IVProfService
-14:25:30
 14CAppSystemDict
 14CBaseAppSystemI10IAppSystemE
 14CBaseAppSystemI11INetSupportE
@@ -1361,7 +1354,6 @@ $tI
 18CBaseEngineServiceI20IGameResourceServiceE
 18CBaseEngineServiceI21INetworkClientServiceE
 18CBaseEngineServiceI21INetworkServerServiceE
-18CCLCMsg_ClientInfo
 18CCLCMsg_HltvReplay
 18CCLCMsg_ServerPing
 18CDefSaveRestoreOps
@@ -1383,7 +1375,6 @@ $tI
 18IMultipleWorkerJob
 18INetworkGameClient
 18INetworkGameServer
-18INetworkP2PService
 18INetworkStringDict
 18IRenderDeviceSetup
 19CCLCMsg_BaselineAck
@@ -1693,7 +1684,6 @@ $tI
 43CScreenshotServiceReadTexturePixelsCallback
 43IGameResourceManifestLoadCompletionCallback
 45CNetworkServerSpawnGroup_AllocatePrerequisite
-47
 48CNetworkClientSpawnGroup_WaitForChildSpawnGroups
 48CNetworkServerSpawnGroup_WaitForChildSpawnGroups
 49CNetworkClientSpawnGroup_LoadEntitiesPrerequisite
@@ -1728,7 +1718,6 @@ $tI
 9.1.15
 9CCallbackI13CSteam3Client17LowBatteryPower_tLb0EE
 9CCallbackI13CSteam3Client20PersonaStateChange_tLb0EE
-9CCallbackI13CSteam3Client22ClientGameServerDeny_tLb0EE
 9CCallbackI13CSteam3Client22GameOverlayActivated_tLb0EE
 9CCallbackI13CSteam3Client22SocketStatusCallback_tLb0EE
 9CCallbackI13CSteam3Client27GameServerChangeRequested_tLb0EE
@@ -1765,6 +1754,7 @@ $tI
 <classptr>
 <custom>
 <embedded>
+<empty member name>
 <empty>
 <font color="#%.2X%.2X%.2X">
 <function>
@@ -1813,7 +1803,7 @@ $tI
 @@invalid_hitbox
 @A
 @B
-@hltvclientstate.cpp
+@CHLTVDemoRecorder::CullSpawnGroups culling message at %d unable to unserialize
 A
 A command with the specified name already exists. Cannot create an alias with the same name.
 A file with this name is already in the pool.
@@ -1924,6 +1914,7 @@ Application transferred too few scanlines
 Application transferred too many scanlines
 Application unable to load gameinfo.gi file from directory "%s"!
 Apr
+Apr 20 2023
 Arabic
 Arithmetic table 0x%02x was not defined
 Armenian
@@ -2117,7 +2108,7 @@ CBufferString::ComposeFileName(char const*, char const*, char)
 CBufferString::Concat(char const*, char const*, ...)
 CBufferString::DefaultExtension(char const*)
 CBufferString::EnsureCapacity(int, char**, bool, bool)
-CBufferString::ExtendPath(char const*, char)
+CBufferString::ExtendPath(char const*, char, bool)
 CBufferString::ExtractFileBase(char const*)
 CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::FixSlashes(char)
@@ -2558,7 +2549,6 @@ CHLTVClientState::ProcessClassInfo: LinkClasses failed.
 CHLTVClientState::ProcessClassInfo: expecting to re-create serializers from server serializers! (i.e., host server for relay server cannot run with sv_sendtables 2?)
 CHLTVClientState::SendPacket
 CHLTVDemoRecorder::CullSpawnGroups culling message %s, spawngroup %s was never created
-CHLTVDemoRecorder::CullSpawnGroups culling message at %d unable to unserialize
 CHLTVDemoRecorder::CullSpawnGroups culling message at unknown handle
 CHLTVDemoRecorder::WriteNetMessage %s with %u bytes at %i (%d)
 CHLTVDemoRecorder::WriteSpawnGroupUpdateMessages AddSpawnMessageToDemoSpawnGroups tick=%d (from %d) sending message %s (spawn group %s)
@@ -2663,6 +2653,7 @@ CL: CNetworkGameClientBase::LinkClasses renamed %s to %s for replay compatabilit
 CL: ProcessPacketEntities server executed command %d but we only had created %d, adding %d fake commands, new outgoing command is %d
 CL: ProcessSpawnGroup_Load setting max spawn group creation sequence to (%u) due to tickcount
 CL: ProcessSpawnGroup_SetCreationTick setting max spawn group creation sequence to (%u) due to increase from (%u)
+CL: SendMovePacket sending % 3d commands at tick % 5d %8.3f [% 4d bytes] %s
 CLZSS::Compress(unsigned char*, int, unsigned int*, bool)
 CLZSS::GetActualSize(unsigned char*)
 CLZSS::SafeUncompress(unsigned char*, unsigned char*, unsigned int)
@@ -2763,10 +2754,12 @@ CNetworkServerSpawnGroup_WaitForClients
 CNetworkServerSpawnGroup_WaitForOwnerSpawnGroupPrerequisite
 CNetworkStringTable
 CNetworkStringTable::AddString:  client added string which server didn't put into table (consider SetAllowClientSideAddString?): %s %s
-CNetworkStringTableClient::ParseUpdate: message too large (%d bytes).
+CNetworkStringTableClient::ParseUpdate: message too large (%d bytes > %d).
+CNetworkStringTableContainer::CreateStringTable with nullptr table name!
 CNetworkStringTableContainer::DirectUpdate
 CNetworkStringTableContainer::WriteUpdateMessageAtTick
-CNetworkStringTableItem::SetUserData(%s) tried to write userdata of %d bytes, max size is %d
+CNetworkStringTableItem::SetUserData(%s) tried to write userdata of %d bytes, max possible size is %d
+CNetworkStringTableItem::SetUserData(%s) userdata of %d bytes is very large, threshold is %d bytes
 CNetworkUtlVectorBase
 CNetworkVarChainer
 CO-%u
@@ -3148,7 +3141,6 @@ Cheats cannot be enabled on this server.
 Check game code serializers
 Check serializer meta for duplication, add verbose to command for full spew
 CheckLimits culling until tick=%d
-CheckOriginInPVS:  cluster would read past end of pvs data (cluster %d, offset %u:%u)
 CheckReservation::Update(msg)
 CheckServerReservation: %d @ %s (%d conn)
 CheckServerReservationRelease: %s -> %d (%d conn)
@@ -3507,6 +3499,8 @@ Engine thread pool: %u thread(s)
 Engine window is on monitor %u, '%s' (default is %u)
 Engine2
 Engine2/AllowSaveGamesInMultiplayer
+Engine2/DefensiveConCommands
+Engine2/NoResetInputOnGameOverlay
 Engine2/RenderingPipeline/SupportsMSAA
 Engine2/SaveClientStateInSaveGames
 Engine2/SinglePlayerAsyncRendering
@@ -3551,7 +3545,6 @@ Enum value "$0" uses reserved number $1.
 Enum value in map must define 0 as the first value.
 Enums must contain at least one value.
 Environment %s value: %s
-Error %d in perftrace sockets
 Error - No tick marked
 Error - Not currently playing back a demo.
 Error in bitbuf [%s]: buffer overrun. Debug in bitbuf_errorhandler.cpp
@@ -4060,6 +4053,7 @@ GetDesignerNameForScriptClass
 GetDisableFocusBasedPriorityBoost
 GetDouble
 GetFloat
+GetGameInfoBool(char const*, bool)
 GetInputsForScriptClass
 GetInt32
 GetInt64
@@ -4069,7 +4063,6 @@ GetNameFromOSType
 GetNativeClassForScriptClass
 GetNativeOutputsForClass
 GetNetCmd
-GetPathData failed for read only CFieldPath
 GetPlayerNetworkIDString
 GetPrerequisiteStatus
 GetRawRepeatedField
@@ -4228,6 +4221,7 @@ Init
 InitSteamAppId
 InitSteamLogin_Internal
 Initial Window
+InitializeDummyRow
 InitializeEntityDLLFields
 Initiating forceful connect: awaiting %d @ %d
 Injection delay request for CDN rebroadcast frameworks, seconds
@@ -4328,7 +4322,6 @@ Invalid wire type for CPPTYPE_UINT32:
 Invalid wire type for CPPTYPE_UINT64:
 Is fixup operator client running at low FPS? Only %d/%d fixup ticks available for %s
 Is the server pausable.
-IsInPVS
 IsKeyValueUsed
 Issue an rcon command.
 J
@@ -4505,7 +4498,6 @@ Log server information in the log file.
 Log server information to only one file.
 Log when a tick is received
 Log when the tick delta >= this
-LogHandler
 LoggingSystem_CurrentStateIndex
 LoggingSystem_EnableBackdoorLoggingListeners
 LoggingSystem_FindChannel
@@ -4527,7 +4519,7 @@ LoggingSystem_ResetCurrentLoggingState
 LoggingSystem_SetChannelVerbosity
 LoggingSystem_UnregisterLoggingListener
 Logic problem? szsrc =
-LooksLikeKV3TextData(void const*, int, KV3ID_t*)
+LooksLikeKV3TextData(void const*, int, KV3ID_t*, char*, int)
 Loop "%s" contains a circular dependency with service "%s"!
 Loop named "%s" failed to init!
 LoopModeConsole
@@ -4607,7 +4599,6 @@ MapValueRef::SetStringValue
 MapValueRef::SetUInt32Value
 MapValueRef::SetUInt64Value
 Mar
-Mar  6 2023
 Marked tick %u in '%s'
 Marker,GPUTimeAvgMS,GPUTimeRangeMS,GPUTimeMinMS,GPUTimeMaxMS
 Marks the current demo playback tick for later use
@@ -4701,6 +4692,7 @@ MountAddonSearchPaths: Failed to find CONTENTADDONS search path.
 Mounting addon '%s'
 Mouse Control
 Move
+Move msg num cmds = %d, total size = %d B
 Moves the camera position + orientation to the named entity
 Moves the camera position + orientation to the specified position
 Movie
@@ -5012,6 +5004,7 @@ Note: should use "addip" instead of "banip".
 Nov
 Now recording to "%s", recorded length so far is %s.
 Num3dSkyboxSceneWorlds
+NumCols() <= V_ARRAYSIZE( s_DummyRow )
 Number of immediate Steam friends: %d (all friends %d)
 Number of immediate Steam friends: unavailable
 Number of minutes to ban users who fail rcon authentication
@@ -5026,6 +5019,7 @@ OBSOLETE replaced by mobile_fps_* - Battery saver mode. 0=off, 1=on
 OK
 OS type the engine is running on.
 OUT_OF_RANGE
+OVERFLOW range [% 5d->% 5d = % 5d cmds]
 Obtained EMS handle %u
 Obtained XMS handle %u
 Oct
@@ -5170,7 +5164,6 @@ Path Overflow, must be less than 4096 characters.
 Path_AddToTail failed for read only CFieldPath
 Path_AddToTail failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
 Path_PopLast failed for read only CFieldPath
-Path_RemoveAll failed for read only CFieldPath
 Path_SetCount failed, depth already == DEFAULT_MAX_PATH_DEPTH(%d)
 Paused: %s
 Pauses demo playback at server tick
@@ -5183,7 +5176,6 @@ Peak heap-like bytes:    %s
 Peak private bytes:      %s
 Peak resident memory:    %s
 Perf stats buffer full, no more data will be collected.
-PerfTrace Socket closed
 Performs a bind <key> "increment var <cvar> 0 1 1".
 Pf
 Pf%d %d-1.000000
@@ -5283,6 +5275,7 @@ Plat_RegistryReadInt
 Plat_RegistryReadString
 Plat_RegistryWriteInt
 Plat_RegistryWriteString
+Plat_RelativeTickFrequency
 Plat_RelativeTicks
 Plat_RemoveFile
 Plat_RequireSDL
@@ -5450,12 +5443,8 @@ Push
 PushN
 PushNAndNonTopographical
 PushOneLeftDeltaNRightNonZero
-PushOneLeftDeltaNRightNonZeroPack6Bits
-PushOneLeftDeltaNRightNonZeroPack8Bits
 PushOneLeftDeltaNRightZero
-PushOneLeftDeltaOneRightNonZero
 PushOneLeftDeltaOneRightZero
-PushOneLeftDeltaZeroRightNonZero
 PushOneLeftDeltaZeroRightZero
 PushThreeLeftDeltaN
 PushThreeLeftDeltaOne
@@ -5547,7 +5536,6 @@ Read from XMS failed
 ReadDemoHeader: %s has invalid demo header ID '%s', expecting '%s'.
 ReadDemoHeader: %s has invalid demo header.
 ReadDemoHeader: invalid pBuffer.
-ReadEnterPVS
 ReadOnly
 ReadPacket
 ReadPacketEntities
@@ -5740,6 +5728,7 @@ SPAWN_GROUP_GAMESYSTEMS_PRECACHE_START
 SPAWN_GROUP_READY_TO_SPAWN_ENTITIES
 SPAWN_GROUP_WORLD_LOADED
 SPLIT%d
+SRCDS_STEAM_SERVER_APP_ID
 SRGB8
 SRGB8A1
 SRGBA8
@@ -5801,7 +5790,7 @@ SV:  SendSnapshot(uncompressed)
 SV:  SendSnapshot(waiting for reliable ack)
 SV:  Sending full update to client %s (reason:  %s)
 SV:  Sending server info and initial spawn groups to %s
-SV:  Sending server info to client '%s' at %s
+SV:  Sending server info to client '%s' at %s, %.1fms
 SV:  Server shutting down: %s (%d)
 SV:  ServerSteamID=%s (%llu).
 SV:  Setting game load failed flag.
@@ -5834,7 +5823,6 @@ Save convars and config values
 Save the ban list to file.
 SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*, unsigned int)
 SaveKV3AsJSON(KeyValues3 const*, CUtlString*, CUtlBuffer*)
-SaveKV3Text_NoHeader(KeyValues3 const*, CUtlString*, CBufferString*, unsigned int)
 Saved '%s' to SteamRemoteStorage, %d bytes OK
 Saved console spew to %s
 Saved offline user config file '%s'
@@ -5888,7 +5876,6 @@ SendHltvReplaySnapshot: Retry Send
 SendMessageToUser failed with result %d sending %d byte message %s to %s!
 SendMovePacket overflowed.
 SendRebroadcastMessage
-SendSignonData
 Sending A2S_RESERVE_CHECK [%u protocol] %08X:%08X [%llu] to %s
 Sending C2S_CONNECT [%u protocol %u auth %d] to %s
 Sending RejectConnection to %s: %d: %s
@@ -5936,6 +5923,7 @@ Server:  %s
 ServerCmd called with %d bytes, cropping to %d
 ServerLog
 ServerRemoteAccess: Sending AdminUI message to non-AdminUI listener
+ServerResourceCompilerInfo_001
 ServerSimulateTick
 ServerToClient
 ServerVersion
@@ -6492,6 +6480,7 @@ Unable to open '%s' for writing.
 Unable to open logfiles at %s, logging disabled
 Unable to open netconsole on port %d
 Unable to open tty(%s) for output
+Unable to parse value for EKV key %s: %s
 Unable to query debug status of module "%s"
 Unable to read %s from %s!
 Unable to read default keybinding configuration (user_keys_default)!
@@ -6606,6 +6595,7 @@ UserSettingsPathID
 Using AVI will bring up a dialog for choosing the codec, which may not show if you are running the engine in fullscreen mode!
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
+UtlMemory_FailedAllocation
 V
 VApplication001
 VAsyncFileSystem2_001
@@ -6637,7 +6627,6 @@ VProf on.
 VProf peaks reset.
 VProf reset.
 VProfService_001
-VR NOT ENABLED
 VRenderDeviceSetupV001
 VScript
 VScriptDbg
@@ -6747,7 +6736,6 @@ V_strtod
 V_strtok
 V_tanf
 V_tier0_strcmp
-V_uuid_t
 V_vsnprintf
 Vai
 Valid Content Absolute Path
@@ -7041,6 +7029,7 @@ __xstat64
 _addons
 _attr_
 _build_
+_class
 _edata
 _end
 _filelog
@@ -7088,9 +7077,9 @@ alpha
 ambientColor
 ambient_direction_day
 ambient_direction_night
+ambientangles
 an argument is not allowed for (*ACCEPT), (*FAIL), or (*COMMIT)
 analogbindings
-angles
 angles[player %d]: %.3f,%.3f,%.3f
 animationsystem
 application
@@ -7099,6 +7088,7 @@ appsystemdict.cpp
 args were given.  Full format string was: "
 arguments.
 arithmetic overflow
+arraycount
 ascii
 asin
 assertion expected after (?(
@@ -7146,7 +7136,6 @@ benchmark time,
 beta
 bin/built_from_cl.txt
 bin/linuxsteamrt64
-binary_auto
 binary_bc
 binary_blob
 bind
@@ -7295,6 +7284,9 @@ cl_spewserializers
 cl_spewworldgroups
 cl_timeout
 cl_updaterate
+cl_usercmd_dbg
+cl_usercmd_maxcount
+cl_usercmd_showsize
 clamp
 class %s - %s instance%s (%.2f%%)
 clearColor
@@ -7319,7 +7311,6 @@ closecaption
 closing ) for (?C expected
 cmd
 cmdline,
-cmdrate
 cntrl
 code %d bits %d->%d
 color32
@@ -7378,6 +7369,7 @@ crash_error_thread
 crash_error_thread forcing error in non-main thread
 crash_job
 crash_thread
+createStringTableParams.m_pTableName
 createmove
 crescale
 csgo
@@ -7493,6 +7485,7 @@ echoln
 edem
 effortblocks = %d
 eg: 'demo_goto 6666' or 'demo_gototick 25%%' or 'demo_gototick 42min'
+ekv_%08x
 elerp
 empty distance tree with lengths
 en_US.UTF-8
@@ -7526,6 +7519,7 @@ engine_show_frame_dispatch
 engine_show_frame_multiple_ticks
 engine_show_frame_pacing
 engine_show_frame_ticks
+engine_sse42
 engine_vr_max_ticks_to_simulate
 enginegameui.cpp
 engineservicemgr.cpp
@@ -7584,18 +7578,20 @@ float Etc::Block4x4Encoding::CalcPixelError(Etc::ColorFloatRGBA, float, Etc::Col
 float Etc::Block4x4Encoding::GetError()
 float32
 float32-quantized
+float32[%u]
 float64
 float64[%u]
 floatbitmap.cpp
-floatbitmap.cpp(139): Unknown gamma type "%s"!
-floatbitmap.cpp(2859): Error loading %s
-floatbitmap.cpp(2883): Error! Unknown file type for %s
-floatbitmap.cpp(2902): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
-floatbitmap.cpp(317): Conversion not supported yet!
-floatbitmap.cpp(403): Conversion not supported yet!
-floatbitmap.cpp(962): Unsupported color format "%s", skipping!
-floatbitmap.cpp:2446
-floatbitmap.cpp:2465
+floatbitmap.cpp(140): Unknown gamma type "%s"!
+floatbitmap.cpp(2860): Error loading %s
+floatbitmap.cpp(2884): Error! Unknown file type for %s
+floatbitmap.cpp(2903): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
+floatbitmap.cpp(318): Conversion not supported yet!
+floatbitmap.cpp(404): Conversion not supported yet!
+floatbitmap.cpp(963): Unsupported color format "%s", skipping!
+floatbitmap.cpp:2447
+floatbitmap.cpp:2466
+floatbitmap.cpp:4728
 floor
 floorf
 fog_enable
@@ -7615,7 +7611,6 @@ force_fatal_error used, %d args
 force_hibernate
 forced by console
 forced dump
-forced immediate full update
 forcing debug of %s from commandline -stringtabledebug
 forcing new thread crash
 forcing parallel process non-main thread crash
@@ -7818,7 +7813,8 @@ hltv_slots
 hltv_spectate
 hltv_update_stats
 hltvbroadcast.cpp
-hltvserver.cpp:1897
+hltvclientstate.cpp
+hltvserver.cpp:1898
 host.cpp
 host_force_frametime_to_equal_tick_interval
 host_force_max_frametime_to_tick_interval
@@ -7922,6 +7918,7 @@ instant_replay_togglepause
 insufficient lookahead
 insufficient memory
 int google::protobuf::CalculateBase64EscapedLen(int, bool)
+int16[%u]
 int32[%u]
 integer
 internal
@@ -8035,7 +8032,6 @@ kickid_hltv
 kv 0x%p AddRef refcount == %d
 kv 0x%p Release refcount == %d
 l
-lag_compensation_errors
 landmarkname
 last_lit %u, last_dist %u, in %ld, out ~%ld(%ld%%)
 launch_url
@@ -8140,7 +8136,6 @@ m_hEntity
 m_hParentSpawnGroup != m_hSpawnGroupHandle
 m_hTarget
 m_iEventListCount
-m_id
 m_int
 m_iszPrivateVScripts
 m_mode == MODE_ETC1
@@ -8177,6 +8172,7 @@ m_pFrameSnapshotManager->Reset()
 m_pGameUIFuncs->Start
 m_pInfo
 m_pName
+m_pNetworkDataReferencedDescription
 m_pNetworkDataReferencedPtrPropDescription
 m_pNext
 m_pNextByClass
@@ -8243,6 +8239,7 @@ materialsystem2
 mathlib.cpp
 matrix3x4
 matrix3x4-world
+max number of CUserCmds to send in one packet
 maxtick
 mdl
 mem_compact
@@ -8286,7 +8283,6 @@ movie/%04d_%02d_%02d_%02d_%02d_%02d/%s
 mp4
 mp_disable_autokick
 mp_disable_autokick %d
-multiline_string
 multvar
 multvar: cvar "%s" not found
 multvar: no varname specified!
@@ -8326,7 +8322,7 @@ networkbasetypes.proto
 networkgameclient.cpp
 networkgameclientbase.cpp
 networkgameclientbase.h
-networkgameserver.cpp:815
+networkgameserver.cpp:829
 networkgameserver_interface.cpp
 networkgameserverbase.cpp
 networkp2pservice.cpp
@@ -8368,8 +8364,6 @@ not started
 notes
 nothing to repeat
 nullptr output boolean given.
-num_asserts
-num_prediction_errors
 number after (?C is > 255
 number is too big
 number too big in {} quantifier
@@ -8474,6 +8468,7 @@ png = outputs .png files
 png_screenshot
 pointer
 poll
+polymorphic_id
 pop_var_values
 pos [player %d]: %.3f,%.3f,%.3f
 pos-Vector
@@ -8758,6 +8753,7 @@ sfixed64
 shortname
 shot_
 show frame dispatch names.
+show usercmd payload sizing info for packets with more than this many usercmds
 showDebugRenderTarget
 showLPVVoxels
 showLightmapTexels
@@ -8776,7 +8772,6 @@ signup_fragment
 sigprocmask
 simple
 sin
-single_quoted_string
 singlethreaded combined
 singlethreaded split
 singletons.cpp
@@ -8784,6 +8779,8 @@ sint32
 sint64
 size too big:
 skipping %s during demo playback because haven't gotten sentinel yet
+skybox_angle_day
+skybox_angle_night
 slot
 slot %d
 snd_mute_losefocus
@@ -8816,6 +8813,7 @@ spec_replay_rate_base
 spec_replay_rate_limit
 specular_direction_day
 specular_direction_night
+specularangles
 splitscreen_mode
 splitter
 sqr
@@ -9036,7 +9034,6 @@ sv_ents_write_alarm
 sv_extra_client_connect_time
 sv_filterban
 sv_fps_max
-sv_frame_time
 sv_fullupdate
 sv_hibernate_postgame_delay
 sv_hibernate_when_empty
@@ -9129,6 +9126,7 @@ tan
 target entity not found
 target input not found
 target_type
+targetname
 tcgetattr
 tcsetattr
 temp/%s.wav
@@ -9184,6 +9182,7 @@ transform
 tried to sprint to a non-client
 trivial
 truncf
+turn on sse4.2 optimizations in the engine
 tv_advertise_watchable
 tv_allow_camera_man_override
 tv_autorecord
@@ -9307,6 +9306,7 @@ uint32_t google::protobuf::UnknownField::fixed32() const
 uint64_t google::protobuf::UnknownField::fixed64() const
 uint64_t google::protobuf::UnknownField::varint() const
 uint8
+uint8[%u]
 unable to get demo version from '%s'.
 unable to load demo upconverter (%s)
 unable to record server classes
@@ -9367,7 +9367,7 @@ usergroup
 userid "%d" not found
 userinfo
 users
-utlsoacontainer.cpp:2401
+utlsoacontainer.cpp:2424
 utlstringtoken
 v
 v2f
@@ -9533,6 +9533,7 @@ wb
 when non-empty allows for easy vconsole connection to the dedicated server.
 width,
 wild scan
+wind_angle
 wireframeColor
 with %d x %d thumbnail image
 with a type that does not implement MergeFrom. This is unsafe;

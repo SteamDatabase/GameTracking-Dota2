@@ -131,6 +131,7 @@ function CHeroDemo:InitGameMode()
 	CustomGameEventManager:RegisterListener( "SpawnRuneInvisibilityPressed", function(...) return self:OnSpawnRuneInvisibilityPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnRuneRegenerationPressed", function(...) return self:OnSpawnRuneRegenerationPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnRuneArcanePressed", function(...) return self:OnSpawnRuneArcanePressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "SpawnRuneShieldPressed", function(...) return self:OnSpawnRuneShieldPressed( ... ) end )
 
 	CustomGameEventManager:RegisterListener( "ChangeSpeedStep", function(...) return self:OnChangeSpeedStep( ... ) end )
 	

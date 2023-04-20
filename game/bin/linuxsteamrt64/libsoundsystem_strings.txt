@@ -95,7 +95,6 @@ $toolgraphs
 &
 '
 (
-( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%d,%d)
 (%s%s)
 (%s) %d
@@ -110,7 +109,6 @@ $toolgraphs
 **unload**
 *SoundEvent Data*
 *Z14GenerateArcTanR20CCubicSplineFunctionjffEUlffE_
-*Z15GenerateSigmoidR20CCubicSplineFunctionjffEUlffE_
 *Z16GenerateFuzzExp1R20CCubicSplineFunctionjffEUlffE_
 *Z16GenerateSigmoid2R20CCubicSplineFunctionjffEUlffE_
 *ZN12CSoundSystem6UpdateEPK11CAudioStatebEUlvE_
@@ -129,19 +127,15 @@ $toolgraphs
 -36 3
 -altgameroot
 -avx
--convars_hidden_by_default
 -memory_map_sound
 -nosound
 -sdlaudiodriver
 -sse2
 -sse3
 -sse4
--strict_type_combinations
 -tools
 .
-../../public/tier0/utlmemory.h
 ../public/tier0/tslist.h
-../public/tier0/utlmemory.h
 ../public/tier0/utlsymboltable.h
 .wav
 /
@@ -157,7 +151,6 @@ $toolgraphs
 1
 1.0
 10CDSPEditor
-10CVMixMixer
 10IAppSystem
 10IMixFilter
 11CAudioMixer
@@ -201,7 +194,6 @@ $toolgraphs
 15CTier2AppSystemI14ISoundOpSystemLx0EE
 15CTier2AppSystemI18ISoundOpSystemEditLx0EE
 15IAudioSubsystem
-15ISoundSequencer
 16CAudioSourceWave
 16CDSPTableManager
 16CSosOperatorGoTo
@@ -223,7 +215,6 @@ $toolgraphs
 17IVMixToolServices
 18CAsyncWavDataCache
 18CAudioMixerEncoded
-18CAudioMixerStretch
 18CAudioMixerWaveMP3
 18CAudioOutputStream
 18CAudioSourceCached
@@ -287,6 +278,7 @@ $toolgraphs
 21CSosOperatorLoopFloat
 21CSosOperatorOcclusion
 21CSosOperatorPrintVsnd
+21CSosOperatorScaleVec3
 21CSosOperatorSetConvar
 21CSosOperatorStackInfo
 21CSosOperatorStopTrack
@@ -323,7 +315,6 @@ $toolgraphs
 23CKV3ResourceTypeManagerILy2020175222EE
 23CKV3TransferContextBase
 23CKV3TransferLoadContext
-23CKV3TransferSaveContext
 23CModDelayAudioProcessor
 23CSosOperatorApplyEffect
 23CSosOperatorBlockEvents
@@ -407,6 +398,7 @@ $toolgraphs
 28CSosOperatorPauseSoundEvents
 28CSosOperatorPointInSoundArea
 28CSosOperatorRightAngleFloat3
+28CSosOperatorSetVoicePosition
 29CSosOperatorCalcFixedRotation
 29CSosOperatorFloatAccumulate12
 29CSosOperatorGetOpVarDsppreset
@@ -479,6 +471,7 @@ $toolgraphs
 <UNRESOLVED>
 <array: %u elements>
 <binary blob: %u bytes>
+<empty member name>
 <invalid soundevent name>
 <invalid>
 <no failure reason set>
@@ -493,6 +486,7 @@ $toolgraphs
 ?
 @
 @%s.output
+@18CAudioMixerStretch
 @?
 @?DSP NODE
 @@
@@ -511,6 +505,7 @@ AddNewSoundEvent:  %s has a hash collision with existing %s
 AddSoundEvent event with empty name
 AddSoundEvent:  %s has a hash collision with existing %s
 AddSoundEvent:AddSoundEvent event with empty name
+AddSoundEventDefinition: Overwriting existing soundevent %s
 AddSoundEvents: SoundEvent %s was unable to convert to KV3.
 AddSoundEvents: SoundEvent file %s was not compiled from a KeyValues3 file and is being converted. Please recompile.
 AddSoundEvents: event with empty name
@@ -577,7 +572,7 @@ CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::ComposeFileName(char const*, char const*, char)
 CBufferString::Concat(char const*, char const*, ...)
-CBufferString::ExtendPath(char const*, char)
+CBufferString::ExtendPath(char const*, char, bool)
 CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::FixSlashes(char)
 CBufferString::FixupPathName(char)
@@ -805,7 +800,6 @@ CommandLine
 Compare the compiled and loaded contents of 2 soundevents.
 Compression Ratio
 ConMsg(char const*, ...)
-Connect
 ConnectInterfaceSingletons
 Connection Offset: %i
 Continue: elapsed time: %f, next sync time: %f, local elapsed: %f, local sync: %f
@@ -1056,7 +1050,6 @@ H@
 HALL Detected
 HB
 HE
-HRTF calculations will calculate the player as being this far behind the camera.
 HammerMapLoader001
 HandleSetLibStackFieldsMessageQueue
 HandleSetSoundEventFieldsMessageQueue
@@ -1095,8 +1088,8 @@ Invalid field type %s for field %s
 Invalid use of KV3 specific type %s with basic type %s, must be basic type %s
 Invert Match
 Is Oneshot
-IsKV3Data(CUtlBuffer const*, KV3ID_t*)
-IsKV3Data(void const*, int, KV3ID_t*)
+IsKV3Data(CUtlBuffer const*, KV3ID_t*, char*, int)
+IsKV3Data(void const*, int, KV3ID_t*, char*, int)
 J
 K
 KV3 instances cannot be set to an unspecified specific type
@@ -1423,7 +1416,6 @@ SEQUENCER ERROR: Loading sequence file(error %s)!
 SEQUENCER ERROR: Loading vmidi manifest file(error %s)!
 SEQUENCER ERROR: Reading sequence file %s!
 SEQUENCER ERROR: Reading vmidi manifest file %s!
-SET VMIXGRAPH NAME: %s
 SND
 SNDLVL_100dB
 SNDLVL_105dB
@@ -1503,6 +1495,7 @@ SendVoiceInverseSends
 SendVoiceInverseTotalSend
 SendVoiceWithNamedSend
 SerializedEntitiesVersion001
+ServerResourceCompilerInfo_001
 Set an input mix value
 Set named Mixgroup of current mixer to mix vol, mute, solo.
 Set named Mixgroup of named mix layer to mix vol, mute, solo.
@@ -1543,6 +1536,7 @@ SosOpFieldInfo_t::ValueToString: Unable to find ENUM tokenset on %s
 Sound Disabled
 Sound Event
 Sound Initialization: Finish, Sampling Rate: %i
+Sound device in use (changing this does not change the soundsystem).
 Sound device synchronization max delay (ms)
 Sound device synchronization shift (ms)
 Sound disabled
@@ -1582,7 +1576,6 @@ Source2EngineToServerStringTable001
 Source2GameClients001
 Source2GameEntities001
 Source2Host001
-Source2SDLDefaultDevice
 Source2Server001
 Source2V8System001
 Speaker Config: %i
@@ -1679,6 +1672,7 @@ Total USED Stacks: %i
 Total soundevents %iTotal param bytes: %iTotal field bytes: %iTotal combined bytes: %i
 Total: %.2f MB
 Tracing soundscapes is only supported in the Server.
+Transient input %s set to %.2f
 Triangle
 Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference specific type.
@@ -1696,7 +1690,6 @@ Unable to find soundevent: %s
 Unable to load sound system data.Starting verification of Steam Game Cache.Retry launching after completion.
 Unknown KV3 specific type %u
 Unknown field type %s for field %s
-Unknown track name %s, will not play voice %s
 Unrecognized symbol in Sound Operator Stack math expression.
 Unsupported KV3 basic type '%s' (%d)!
 Unsupported version %d for resource '%s' (Expected %d)
@@ -1728,6 +1721,7 @@ Used main graph %s on voice %s
 Used stack: %s
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
+UtlMemory_FailedAllocation
 V
 VApplication001
 VAsyncFileSystem2_001
@@ -2051,6 +2045,7 @@ and_not
 anim_type
 aplay
 apply
+applyDirectivity
 applyTransmission
 area_shape
 area_type
@@ -2124,12 +2119,18 @@ command
 construction_stack
 control.copy
 control.curve
+control.evaluate_envelope
+control.increment_timer
+control.max
 control.output
 control.remap_linear
 control.remap_loglinear
 control.remap_sine
+control.reset_timer
+control.reset_transient
 control.sine_blend
 control.store
+control.store.transient
 control.store_db
 convar_get
 convar_set
@@ -2232,6 +2233,7 @@ filterQ
 float16
 float2
 float32
+float32[%u]
 float4
 float6
 float64
@@ -2575,6 +2577,7 @@ input_x
 input_y
 input_z
 instrument
+int16[%u]
 int32[%u]
 invalid
 invalid stack
@@ -2666,6 +2669,7 @@ m_controlInputs
 m_controlMeters
 m_controlOutputs
 m_controlPoints
+m_controlTransientInputs
 m_curves
 m_dspName
 m_effectsPreview
@@ -2818,7 +2822,6 @@ m_previewList
 m_sendList
 m_sendName
 m_soundEventName
-m_soundEventVMix
 m_soundName
 m_sounds
 m_stages
@@ -2876,6 +2879,7 @@ math_random_float3
 math_randomize_float
 math_remap_float
 math_right_angle_float3
+math_scale_float3
 math_speakers
 math_string
 math_velocity
@@ -2923,7 +2927,6 @@ ms Delay (tap 3)
 ms delay max
 ms delay min
 ms of mod depth
-multiline_string
 mute: %3.2f
 muteTrackList
 n
@@ -3211,7 +3214,6 @@ sequence_index
 sideChain
 sideChainPeak
 silence_dsp
-single_quoted_string
 singletons.cpp
 sinh
 slerp
@@ -3253,7 +3255,6 @@ snd_gamevolume
 snd_get_physics_surface_properties
 snd_headphone_pan_exponent
 snd_headphone_pan_radial_weight
-snd_hrtf_distance_behind
 snd_list
 snd_list_deferred_soundevents
 snd_list_soundevents
@@ -3357,6 +3358,7 @@ snd_sos_show_opvar_updates
 snd_sos_show_opvar_updates_filter
 snd_sos_show_parameter_overwrite_warnings
 snd_sos_show_queuetotrack
+snd_sos_show_soundevent_overwrites
 snd_sos_show_soundevent_param_overwrite
 snd_sos_show_soundevent_start
 snd_sos_show_track_list
@@ -3407,6 +3409,7 @@ sos_goto
 sos_import_stack
 sos_set_builtins
 sos_set_info
+sos_set_voice_position
 sound/
 sound_area_contains_point
 sound_area_register
@@ -3453,6 +3456,7 @@ soundstacks/soundeventgroups.vsndgrps
 soundstacks/soundstacks_manifest.vrman
 soundsystem
 soundsystem.cpp
+soundsystem_device_used
 soundsystem_lowlevel
 soundsysteminfo
 source_soundscape
@@ -3533,6 +3537,7 @@ uint16
 uint32
 uint64
 uint8
+uint8[%u]
 unspecified
 updateVoice
 use_%s

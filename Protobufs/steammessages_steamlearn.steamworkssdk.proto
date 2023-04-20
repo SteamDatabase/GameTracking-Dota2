@@ -54,6 +54,18 @@ enum ESteamLearnGetHMACKeysResult {
 	STEAMLEARN_GET_HMAC_KEYS_SUCCESS = 0;
 }
 
+enum ESteamLearnInferenceResult {
+	STEAMLEARN_INFERENCE_ERROR = 0;
+	STEAMLEARN_INFERENCE_SUCCESS = 1;
+	STEAMLEARN_INFERENCE_ERROR_INVALID_PROJECT_ID = 2;
+	STEAMLEARN_INFERENCE_ERROR_MISSING_CACHED_SCHEMA_DATA = 3;
+	STEAMLEARN_INFERENCE_ERROR_NO_PUBLISHED_CONFIG = 4;
+	STEAMLEARN_INFERENCE_ERROR_FORBIDDEN = 5;
+	STEAMLEARN_INFERENCE_ERROR_INVALID_TIMESTAMP = 6;
+	STEAMLEARN_INFERENCE_ERROR_INVALID_PUBLISHED_VERSION = 7;
+	STEAMLEARN_INFERENCE_ERROR_NO_FETCH_ID_FOUND = 8;
+}
+
 message CMsgSteamLearnDataSourceDescObject {
 	repeated .CMsgSteamLearnDataSourceDescElement elements = 1;
 }
@@ -176,6 +188,47 @@ message CMsgSteamLearn_GetHMACKeys_Response {
 	optional .CMsgSteamLearnHMACKeys keys = 2;
 }
 
+message CMsgSteamLearn_Inference_Request {
+	optional string access_token = 1;
+	optional .CMsgSteamLearn_AccessData access_data = 2;
+	optional uint32 project_id = 3;
+	optional uint32 published_version = 4;
+	optional uint32 override_train_id = 5;
+	optional .CMsgSteamLearnDataList data = 6;
+	repeated float additional_data = 7;
+}
+
+message CMsgSteamLearn_InferenceBackend_Response {
+	message BinaryCrossEntropyOutput {
+		optional float value = 1;
+	}
+
+	message MutliBinaryCrossEntropyOutput {
+		repeated float weight = 1;
+		repeated float value = 2;
+	}
+
+	message CategoricalCrossEntropyOutput {
+		repeated float weight = 1;
+		repeated float value = 2;
+	}
+
+	message Output {
+		oneof ResponseType {
+			.CMsgSteamLearn_InferenceBackend_Response.BinaryCrossEntropyOutput binary_crossentropy = 1;
+			.CMsgSteamLearn_InferenceBackend_Response.CategoricalCrossEntropyOutput categorical_crossentropy = 2;
+			.CMsgSteamLearn_InferenceBackend_Response.MutliBinaryCrossEntropyOutput multi_binary_crossentropy = 3;
+		}
+	}
+
+	repeated .CMsgSteamLearn_InferenceBackend_Response.Output outputs = 1;
+}
+
+message CMsgSteamLearn_Inference_Response {
+	optional .ESteamLearnInferenceResult inference_result = 1 [default = STEAMLEARN_INFERENCE_ERROR];
+	optional .CMsgSteamLearn_InferenceBackend_Response backend_response = 2;
+}
+
 service SteamLearn {
 	option (service_description) = "Service for submitting data, training, and inferencing with SteamLearn.";
 
@@ -197,5 +250,9 @@ service SteamLearn {
 
 	rpc GetHMACKeys (.CMsgSteamLearn_GetHMACKeys_Request) returns (.CMsgSteamLearn_GetHMACKeys_Response) {
 		option (method_description) = "Gets the HMAC keys needed for registering data sources, submitting data to them, and snapshotting projects";
+	}
+
+	rpc Inference (.CMsgSteamLearn_Inference_Request) returns (.CMsgSteamLearn_Inference_Response) {
+		option (method_description) = "Inferences using supplied data, or data associated with the specified key.";
 	}
 }

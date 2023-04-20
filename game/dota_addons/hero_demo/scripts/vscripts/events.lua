@@ -746,6 +746,19 @@ function CHeroDemo:OnSpawnRuneArcanePressed( eventSourceIndex, data )
 end
 
 --------------------------------------------------------------------------------
+-- ButtonEvent: OnSpawnRuneShieldPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnSpawnRuneShieldPressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+	
+	self:SpawnRuneInFrontOfUnit( hPlayerHero, DOTA_RUNE_SHIELD )
+	EmitGlobalSound( "UI.Button.Pressed" )
+end
+
+--------------------------------------------------------------------------------
 -- ButtonEvent: OnChangeSpeedStep
 --------------------------------------------------------------------------------
 function CHeroDemo:OnChangeSpeedStep( eventSourceIndex, data )

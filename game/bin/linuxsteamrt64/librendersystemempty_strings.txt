@@ -41,7 +41,6 @@ $ORIGIN
 &
 '
 (
-( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (%s): ADD %s = %s
 (%s): Setting %s to %s
 )
@@ -58,7 +57,6 @@ $ORIGIN
 -autoconfig
 -autoconfig_level
 -avx
--convars_hidden_by_default
 -debugdxsupport
 -deferTextureLoads
 -disallowhwmorph
@@ -87,7 +85,6 @@ $ORIGIN
 ...
 ../public/tier0/memstack.h
 ../public/tier0/tslist.h
-../public/tier0/utlmemory.h
 ../public/tier0/utltshash.h
 .bak
 .exr
@@ -263,7 +260,7 @@ CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::ComposeFileName(char const*, char const*, char)
 CBufferString::Concat(char const*, char const*, ...)
-CBufferString::ExtendPath(char const*, char)
+CBufferString::ExtendPath(char const*, char, bool)
 CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::FixSlashes(char)
 CBufferString::FixupPathName(char)
@@ -314,6 +311,7 @@ CThreadEvent::Set()
 CThreadRWLock_FastRead::CThreadRWLock_FastRead()
 CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
 CThreadRWLock_FastRead::HaveWriteLock_BlockReadsNow(bool)
+CThreadRWLock_FastRead::HaveWriteLock_UnblockReads()
 CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
 CThreadRWLock_FastRead::UnlockWrite(char const*, int)
 CThreadSemaphore::CThreadSemaphore(int, int, char const*, bool)
@@ -535,7 +533,6 @@ GetGameInfoInt(char const*, int)
 GetResourceManifestCount
 GetResourceManifests
 Graphics Device changed, resetting video config
-Grow
 HammerMapLoader001
 HelpSystem_001
 HostStateMgr001
@@ -558,6 +555,7 @@ Image data size is zero or too large: width =
 Image too wide for this implementation
 Improper call to JPEG library in state %d
 Inconsistent progression sequence for component %d coefficient %d
+InitializeDummyRow
 Input file read error
 InputLayoutVariation_t
 InputService_001
@@ -714,6 +712,7 @@ Normalize3ComponentVectorInAttributes
 Normalized3x3SobelEdgeFilterFrom
 Not a JPEG file: starts with 0x%02x 0x%02x
 Not implemented yet
+NumCols() <= V_ARRAYSIZE( s_DummyRow )
 OUTSTANDING_HOOKUP_REQUEST
 Obtained EMS handle %u
 Obtained XMS handle %u
@@ -900,6 +899,7 @@ RenderSystem/AllowPartialMipChainImmediateTexLoads
 RenderSystem/AlwaysPreloadTexturesInGame
 RenderSystem/IndexBufferPoolSizeMB
 RenderSystem/MaxPreloadTextureResolution
+RenderSystem/MinDXLevel
 RenderSystem/MinStreamingPoolSizeMB
 RenderUtils_001
 Rendering/Constant Buffers (MB)
@@ -931,6 +931,7 @@ Seek failed on temporary file
 Selected %d colors for quantization
 SerializedEntitiesVersion001
 SeriousWarning
+ServerResourceCompilerInfo_001
 Setting max texture resolution to: %dx%d
 Smoothing not supported with nonstandard sampling ratios
 SoundOpSystem001
@@ -999,7 +1000,6 @@ Triggers a RenderDoc capture
 Trying to create a render target with invalid image format %s
 Trying to set dxlevel (%d) which is higher than the card can support (%d)!
 Trying to set dxlevel (%d) which is lower than the card can support (%d)!
-UNKNOWN
 UV88
 UVWQ8888
 Unable to read file %s
@@ -1027,6 +1027,7 @@ UserSettingsFileEx
 UserSettingsPathID
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
+UtlMemory_FailedAllocation
 VApplication001
 VAsyncFileSystem2_001
 VAvi001
@@ -1255,15 +1256,16 @@ float
 float32
 float64
 floatbitmap.cpp
-floatbitmap.cpp(139): Unknown gamma type "%s"!
-floatbitmap.cpp(2859): Error loading %s
-floatbitmap.cpp(2883): Error! Unknown file type for %s
-floatbitmap.cpp(2902): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
-floatbitmap.cpp(317): Conversion not supported yet!
-floatbitmap.cpp(403): Conversion not supported yet!
-floatbitmap.cpp(962): Unsupported color format "%s", skipping!
-floatbitmap.cpp:2446
-floatbitmap.cpp:2465
+floatbitmap.cpp(140): Unknown gamma type "%s"!
+floatbitmap.cpp(2860): Error loading %s
+floatbitmap.cpp(2884): Error! Unknown file type for %s
+floatbitmap.cpp(2903): Error! Slice %d format %dx%dx%d Attr(%d) != previous slices of %dx%d Attr(%d) for %s
+floatbitmap.cpp(318): Conversion not supported yet!
+floatbitmap.cpp(404): Conversion not supported yet!
+floatbitmap.cpp(963): Unsupported color format "%s", skipping!
+floatbitmap.cpp:2447
+floatbitmap.cpp:2466
+floatbitmap.cpp:4728
 floor
 floorf
 fopen64
@@ -1405,6 +1407,7 @@ pthread_mutexattr_settype
 pthread_once
 qangle
 queued
+r_async_shader_compile_notify_frequency
 r_fallback_texture_orange
 r_fullscreen_gamma
 r_gpu_mem_stats
@@ -1426,16 +1429,16 @@ reached chunk/cache limits
 reached end-of-image state
 realloc
 renderdevicebase.cpp
-renderdevicebase.cpp(1579):
-renderdevicebase.cpp(1743):
-renderdevicebase.cpp(2023):
-renderdevicebase.cpp(2027):
-renderdevicebase.cpp(3165):
-renderdevicebase.cpp(3385):
-renderdevicebase.cpp(3398):
-renderdevicebase.cpp(3501):
-renderdevicebase.cpp(3525):
-renderdevicebase.cpp(915):
+renderdevicebase.cpp(1580):
+renderdevicebase.cpp(1744):
+renderdevicebase.cpp(2051):
+renderdevicebase.cpp(2055):
+renderdevicebase.cpp(3193):
+renderdevicebase.cpp(3413):
+renderdevicebase.cpp(3426):
+renderdevicebase.cpp(3524):
+renderdevicebase.cpp(3548):
+renderdevicebase.cpp(916):
 renderdevicemgrbase.cpp
 renderdoc_captures
 renderstatehelper.h
@@ -1557,15 +1560,15 @@ sub%dx%d.tga
 submrg%dx%d.tga
 success
 texturebase.cpp
-texturebase.cpp(2430):Error loading texture: %s
-texturebase.cpp(3449):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3479):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3497):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3515):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3534):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3555):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3566):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3577):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2432):Error loading texture: %s
+texturebase.cpp(3451):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3481):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3499):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3517):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3536):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3557):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3568):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3579):ResourceHandleToData( %s ) failed! Falling back to error texture!
 tiles
 tinyexr_impl.cpp:161
 too many length or distance symbols
@@ -1589,7 +1592,7 @@ unknown compression method
 unknown critical chunk
 unknown error
 unknown header flags set
-utlsoacontainer.cpp:2401
+utlsoacontainer.cpp:2424
 v2f
 vector2
 vector3

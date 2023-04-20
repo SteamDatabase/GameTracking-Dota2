@@ -118,6 +118,8 @@
 			"Product" "dota"
 			"Component" "dota"
 		}
+
+		"NoResetInputOnGameOverlay" "1"
 	}
 
 	SceneFileCache
@@ -149,6 +151,7 @@
 		"DeveloperHelpURL" "https://developer.valvesoftware.com/wiki/Dota_2_Workshop_Tools"
 		"ToolsProductName" "Dota2 Workshop Tools"
 		"HideCoreMod"	"1"
+		"SupportsActivities"	"1"
 	}
 
 	Hammer
@@ -182,7 +185,6 @@
 
 	ModelCompile
 	{
-		"AllowLegacyModelFormat"	"1" // modeldoc not required (yet)
 		"UseShadowFastPathHeuristic"	"1"
 	}
 	

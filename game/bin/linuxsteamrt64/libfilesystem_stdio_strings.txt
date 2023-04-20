@@ -1,3 +1,4 @@
+!m_bNeedsSort
 $ORIGIN
 %-20s "%s" %s%s
 %-20s %s
@@ -16,7 +17,6 @@ $ORIGIN
 %s: file too large
 %s_%03d.vpk
 %u
-( (int64)m_nAllocationCount + (int64)num ) <= 0x7FFFFFFF
 (Unique   ): [%s]\%s
 (vpk)
 *.*
@@ -27,7 +27,6 @@ $ORIGIN
 ---FS%s:  read %s %i 0x%llX (%.3f)
 ---FS%s:  write %s %i 0x%llX
 -async_memory_map
--convars_hidden_by_default
 -disable_auto_vpk_loading
 -fake_workshop_dir
 -log_opened_files
@@ -35,7 +34,7 @@ $ORIGIN
 -recordPerfStats
 ...
 ../public/tier0/threadtoolstypes.h
-../public/tier0/utlmemory.h
+../public/tier0/utlsortvector.h
 ../public/tier0/utlsymboltable.h
 ./
 .\
@@ -147,7 +146,7 @@ CBufferString::ComposeFileName(char const*, char const*, char)
 CBufferString::Concat(char const*, char const*, ...)
 CBufferString::EnsureCapacity(int, char**, bool, bool)
 CBufferString::EnsureTrailingSlash(char, bool)
-CBufferString::ExtendPath(char const*, char)
+CBufferString::ExtendPath(char const*, char, bool)
 CBufferString::ExtractFileBase(char const*)
 CBufferString::ExtractFileExtension(char const*)
 CBufferString::ExtractFilePath(char const*, bool)
@@ -272,10 +271,12 @@ CXXABI_1.3.9
 Cannot open %s for writing
 Cannot rename file "%s" that exists in a VPK or UGC file!
 Cannot rename file "%s" that exists in a read only search path!
+Chunk not found %d
 Clear the list of files that have been opened.
 CommandLine
 ConnectInterfaceSingletons
 Content being marked corrupt.  bMissingFilesOnly = %s, pFile specified as '%s', reason: '%s'
+Content file %s is corrupt. Verify integrity of game files.
 CopyAFile: Cannot copy into a VPK or UGC file '%s'
 CopyAFile: Failed to copy file %s.
 CopyAFile: dest '%s' must be absolute path.
@@ -314,9 +315,9 @@ FS:  Tried to Write NULL file handle!
 FS:  Tried to Write NULL file pointer inside valid file handle!
 FS: Specified two path IDs (%s, %s).
 Failed
+Failed to get file size to process chunk file
 Failed to load module %s
-Failed to map from %s to content-path
-Failed to map from %s to game-path
+Failed to open file handle to process chunk file
 Failed to read
 Failed to read %d bytes
 File %s was never closed
@@ -325,6 +326,7 @@ File Path:
 FileSystem
 Filename '%s' is invalid to be contained in a VPK
 Filesystem
+Find
 FioClose(int)
 FioCreateFile(char const*, EFioAccessFlags, EFioShareFlags, EFioCreateMode, unsigned int, int*)
 FioFileTimeToTimeT(unsigned long long)
@@ -419,17 +421,13 @@ OK
 Open( %llu microsecs, %s )
 Open( %s )
 Packed store %s with refcount > 0.
-Packedstore %s failed directory hash check
-Packedstore %s failed master chunk hash check
-Packedstore %s passed directory hash check
-Packedstore %s passed master chunk hash check
-Packedstore full path: %s data file: %s
+Packedstore failed checks: %s
+Packedstore passes all checks: %s
 PanoramaTextServices001
 PanoramaUIClient001
 PanoramaUIEngine001
 ParticleSystemMgr003
 Path ID:
-Path Overflow, must be less than 4096 characters.
 PhysicsBuilderMgr001
 Plat_CreateDirectory
 Plat_DebugPrint
@@ -492,9 +490,9 @@ SchemaTestExternal_One_001
 SchemaTestExternal_Two_001
 Sending Steam API content notification
 SerializedEntitiesVersion001
+ServerResourceCompilerInfo_001
 Set fs_report_long_reads 1 before loading to use this. Prints a list of files that were opened more than once and ~how long was spent reading from them.
 Show the filesystem path.
-Size mismatch determining size of signed data block (%d vs %d)
 Size of per file buffers. 0 for none
 SoundOpSystem001
 SoundOpSystemEdit001
@@ -529,9 +527,9 @@ SteamInternal_ContextInit
 SteamInternal_FindOrCreateUserInterface
 TD_OFFSET_NORMAL
 TD_OFFSET_PACKED
+TestHashChunkFraction
 TestScriptMgr001
 TextLayout_001
-The filename may only contain lower case alphanumeric characters, dashes, and underscores.
 This convar is being accessed prior to ConVar_Register being called
 ThreadGetCurrentId
 ThreadInMainThread
@@ -554,6 +552,7 @@ UnzipFile
 Use native FS or STDIO
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
+UtlMemory_FailedAllocation
 VApplication001
 VAsyncFileSystem2_001
 VAvi001
@@ -567,7 +566,8 @@ VMediaFoundation001
 VP4003
 VPK
 VPK directory for '%s' corrupt
-VPK signing not implemented
+VPK: Check file %s Length %d MD5 %s
+VPK: Wrote file %s Length %d MD5 %s
 VPhysics2_Handle_Interface_001
 VPhysics2_Interface_001
 VProcessUtils002
@@ -631,6 +631,7 @@ Valid Content Absolute Path
 Valid External Path
 Valid Game Absolute Path
 Valid Relative Path
+VerifyPackRead
 Version
 VisBuilder_001
 WARNING: File might be corrupt or missing - '%s'
@@ -657,6 +658,7 @@ _Jv_RegisterClasses
 _V_ComposeFileName
 _V_StringAfterPrefix
 _V_StripLastDir
+_V_binarytohex
 _V_strEndsWith
 _V_strncmp
 _V_strncpy
@@ -837,4 +839,3 @@ w
 wb
 wt
 zD
-~CCompletionQueue
