@@ -111,7 +111,7 @@ function UpdateTimer()
 
 	var nTeamsCreated = 0;
 	var nTeams = Game.GetAllTeamIDs().length
-	$.Msg( nTeams );
+	//$.Msg( nTeams );
 	for ( var teamId of Game.GetAllTeamIDs() )
 	{
 		var teamPanelToUse = null;
