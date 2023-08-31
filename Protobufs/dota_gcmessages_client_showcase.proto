@@ -1,0 +1,189 @@
+import "steammessages.proto";
+import "dota_shared_enums.proto";
+import "dota_gcmessages_common.proto";
+import "dota_gcmessages_webapi.proto";
+import "gcsdk_gcmessages.proto";
+import "base_gcmessages.proto";
+import "econ_gcmessages.proto";
+import "dota_gcmessages_client.proto";
+import "valveextensions.proto";
+
+enum EShowcaseType {
+	k_eShowcaseType_Invalid = 0;
+	k_eShowcaseType_Profile = 1;
+	k_eShowcaseType_MiniProfile = 2;
+}
+
+enum EShowcaseItemState {
+	k_eShowcaseItemState_Ok = 0;
+	k_eShowcaseItemState_ValidityUnknown = 1;
+	k_eShowcaseItemState_Failure = 2;
+	k_eShowcaseItemState_Invalid = 3;
+}
+
+message CMsgShowcaseEconItemReference {
+	optional uint64 id = 1;
+	optional uint64 original_id = 2;
+	optional uint32 definition_index = 3;
+}
+
+message CMsgShowcaseItem_Trophy {
+	message Data {
+		optional uint32 trophy_score = 1;
+	}
+
+	optional .CMsgShowcaseItem_Trophy.Data data = 1;
+	optional uint32 trophy_id = 2;
+}
+
+message CMsgShowcaseItem_EconItem {
+	message Data {
+		optional .CSOEconItem econ_item = 1;
+	}
+
+	optional .CMsgShowcaseItem_EconItem.Data data = 1;
+	optional .CMsgShowcaseEconItemReference ref = 2;
+}
+
+message CMsgShowcaseItem_Hero {
+	message Data {
+		repeated .CSOEconItem econ_items = 1;
+	}
+
+	optional .CMsgShowcaseItem_Hero.Data data = 1;
+	optional uint32 hero_id = 2;
+	repeated .CMsgShowcaseEconItemReference econ_item_refs = 3;
+}
+
+message CMsgShowcaseItem_PlayerMatch {
+	message Data {
+		optional uint32 hero_id = 1;
+		optional uint32 timestamp = 2;
+		optional uint32 duration = 3;
+		optional .DOTA_GameMode game_mode = 4 [default = DOTA_GAMEMODE_NONE];
+		optional .CMsgShowcaseItem_PlayerMatch.EPlayerOutcome outcome = 5 [default = k_eInvalid];
+		optional uint32 kills = 6;
+		optional uint32 deaths = 7;
+		optional uint32 assists = 8;
+	}
+
+	enum EPlayerOutcome {
+		k_eInvalid = 0;
+		k_eWin = 1;
+		k_eLoss = 2;
+		k_eNotScored = 3;
+	}
+
+	optional .CMsgShowcaseItem_PlayerMatch.Data data = 1;
+	optional uint64 match_id = 2;
+	optional uint32 player_slot = 3;
+}
+
+message CMsgShowcaseItem_ChatWheel {
+	message Data {
+	}
+
+	optional .CMsgShowcaseItem_ChatWheel.Data data = 1;
+	optional uint32 chat_wheel_message_id = 2 [default = 4294967295];
+}
+
+message CMsgShowcaseItem_Emoticon {
+	message Data {
+	}
+
+	optional .CMsgShowcaseItem_Emoticon.Data data = 1;
+	optional uint32 emoticon_id = 2;
+}
+
+message CMsgShowcaseItem_Widget {
+	message Data {
+	}
+
+	enum EWidget {
+		kSpiderGraph = 1;
+		kUserFeed = 2;
+		kAllHeroChallenge = 3;
+	}
+
+	optional .CMsgShowcaseItem_Widget.Data data = 1;
+	optional .CMsgShowcaseItem_Widget.EWidget widget = 2 [default = kSpiderGraph];
+}
+
+message CMsgShowcaseBackground {
+	message Data {
+		optional .CSOEconItem loading_screen = 1;
+	}
+
+	optional .CMsgShowcaseBackground.Data data = 1;
+	optional .CMsgShowcaseEconItemReference loading_screen_ref = 2;
+}
+
+message CMsgShowcaseItemData {
+	oneof item {
+		.CMsgShowcaseItem_Trophy trophy = 1;
+		.CMsgShowcaseItem_EconItem econ_item_icon = 2;
+		.CMsgShowcaseItem_EconItem sticker = 3;
+		.CMsgShowcaseItem_Hero hero_model = 4;
+		.CMsgShowcaseItem_PlayerMatch player_match = 5;
+		.CMsgShowcaseItem_ChatWheel chat_wheel = 6;
+		.CMsgShowcaseItem_ChatWheel spray = 7;
+		.CMsgShowcaseItem_Emoticon emoticon = 8;
+		.CMsgShowcaseItem_Widget widget = 9;
+		.CMsgShowcaseBackground background = 100;
+	}
+}
+
+message CMsgShowcaseItemPosition {
+	optional int32 position_x = 1;
+	optional int32 position_y = 2;
+	optional uint32 scale = 3;
+}
+
+message CMsgShowcaseItem {
+	optional uint32 showcase_item_id = 1;
+	optional .CMsgShowcaseItemPosition item_position = 2;
+	optional .CMsgShowcaseItemData item_data = 3;
+	optional .EShowcaseItemState state = 4 [default = k_eShowcaseItemState_Ok];
+}
+
+message CMsgShowcase {
+	repeated .CMsgShowcaseItem showcase_items = 1;
+	optional .CMsgShowcaseItem background = 3;
+}
+
+message CMsgClientToGCShowcaseGetUserData {
+	optional uint32 account_id = 1;
+	optional .EShowcaseType showcase_type = 2 [default = k_eShowcaseType_Invalid];
+}
+
+message CMsgClientToGCShowcaseGetUserDataResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+	}
+
+	optional .CMsgClientToGCShowcaseGetUserDataResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgShowcase showcase = 2;
+}
+
+message CMsgClientToGCShowcaseSetUserData {
+	optional .EShowcaseType showcase_type = 1 [default = k_eShowcaseType_Invalid];
+	optional .CMsgShowcase showcase = 2;
+}
+
+message CMsgClientToGCShowcaseSetUserDataResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalid = 5;
+	}
+
+	optional .CMsgClientToGCShowcaseSetUserDataResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgShowcase validated_showcase = 2;
+}

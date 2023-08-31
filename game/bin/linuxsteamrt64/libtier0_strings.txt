@@ -85,7 +85,6 @@ $ORIGIN
 %d
 %d %d %d %d
 %d frames sampled for %.2f seconds
-%d ranges given for subprogram
 %d total counted strings.
 %d.
 %d.%d.%d.%d:%d
@@ -145,8 +144,10 @@ $ORIGIN
 %s/%d
 %s/source_engine_%u.lock
 %s: %s
+%s: CDwarfVector count overflow
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
+%s: Invalid lock state %d
 %s: Unable to get executable filename (%d byte buffer).
 %s: Unable to load SDL
 %s: Unable to progress %d jobs to finished state (%llums elapsed)
@@ -181,6 +182,7 @@ $ORIGIN
 %u - %u
 %u segments found, of total size %u
 %u%%
+%u(%f):
 %u.
 %u_%u_%u
 %zd
@@ -311,7 +313,6 @@ $ORIGIN
 ( def. "%s" )
 (#/sec)
 (%d)
-(%f)
 (%s:
 (%x)
 (*%s*),
@@ -321,6 +322,9 @@ $ORIGIN
 (Unaccounted)
 (forced)
 (including user space up to 63 bits)
+(m_pCurMem=%p, m_nNumOutstanding=%d, m_pCurMemEnd=%p (avail=%d), m_nCurMemBlockIndex=%d, m_memoryBlocks=%[*]?)
+(m_pMemory=%p, m_nNumBytesAvailable=%d)
+(m_pMemory=%p, m_nNumBytesAvailable=%d, NONPOOLED)
 (main)
 (no name set)
 (none)
@@ -330,6 +334,7 @@ $ORIGIN
 )#
 *
 ***** OUT OF MEMORY! /+/ attempted allocation size: %llu ****
+***** OUT OF MEMORY! attempted allocation size: %llu ****
 ******** BEGIN VPROF REPORT ********
 ******** END VPROF REPORT ********
 *.*
@@ -355,6 +360,12 @@ $ORIGIN
 *NSt13__facet_shims12_GLOBAL__N_115moneypunct_shimIwLb1EEE
 *nullptr*
 +
++ %u header stack frames
++ full mem debug
++ light mem debug
++ light verifier
++ mem init
++ stackstats
 ++
 +-
 +4>
@@ -414,6 +425,7 @@ $ORIGIN
 -force_dpi
 -i
 -ignorecontentasserts
+-ignoresortcheck
 -in-
 -inf
 -inset_bottom
@@ -427,13 +439,14 @@ $ORIGIN
 -lmvmin
 -lmvnoguard
 -load_string_token_database
+-memstackstats_disable_pools
+-memstacktraceframes
 -no_assert_dialog
 -noassert
 -noautoargs
 -nocustomermachine
 -nohibernate
 -nowatchdog
--phased_window_create
 -profile
 -retail
 -spew_detailed_cpu_info
@@ -456,6 +469,7 @@ $ORIGIN
 ../public/tier0/globallist.h
 ../public/tier0/memstack.h
 ../public/tier0/threadmutex.h
+../public/tier0/threadtoolstypes.h
 ../public/tier0/tslist.h
 ../public/tier0/utltshash.h
 .\
@@ -523,8 +537,7 @@ $ORIGIN
 12CCommandLine
 12CRefCounted1I11IRefCounted20CRefCountServiceBaseI6CRefMTEE
 12CRefCounted1I11IThreadPool20CRefCountServiceBaseI6CRefMTEE
-12CStdMemAllocI9MemConfigILb0ELb0E27DefaultAdditionalPropertiesEE
-12CStdMemAllocI9MemConfigILb0ELb0E27RuntimeAdditionalPropertiesEE
+12CStdMemAllocI11MemConfig_tE
 12CThreadEvent
 12CThreadedJob
 12ICommandLine
@@ -539,6 +552,7 @@ $ORIGIN
 14CBaseAppSystemI14ITestScriptMgrE
 14CBaseAppSystemI21IUtlStringTokenSystemE
 14CBaseAppSystemI5ICvarE
+14CMemPassAllocTI33LowLevelAllocationScheme_jemallocE
 14CTestScriptMgr
 14IErrorListener
 14ITestScriptMgr
@@ -558,8 +572,6 @@ $ORIGIN
 16IKeyValuesSystem
 16ILoggingListener
 17CGlobalThreadPool
-17CStdMemAlloc_DataI9MemConfigILb0ELb0E27DefaultAdditionalPropertiesEE
-17CStdMemAlloc_DataI9MemConfigILb0ELb0E27RuntimeAdditionalPropertiesEE
 17CThreadSyncObject
 18CCountedStringPool
 18CThreadManualEvent
@@ -576,6 +588,7 @@ $ORIGIN
 19IKeyValuesErrorSpew
 1DBlend
 2
+20CKeyValuesSystemBase
 20CRefCountServiceBaseI6CRefMTE
 20CThreadedTraverseJob
 20IMobileEventListener
@@ -587,7 +600,6 @@ $ORIGIN
 21IUtlStringTokenSystem
 22CPerfTraceDepotDefault
 22CSimpleLoggingListener
-22CStdMemAlloc_Data_Base
 22IFiberThreadWorkerPool
 22ILoggingResponsePolicy
 24CStdIOFormatOutputStream
@@ -599,16 +611,16 @@ $ORIGIN
 25CConCommandMemberAccessorI5CCvarE
 25CVProfileOutputColumn_Sum
 26CDefaultKeyValuesErrorSpew
+26CDisposableKeyValuesSystem
 26CParallelProcessorAbstractI18CParallelProcessorIi27CMemberFuncJobItemProcessorIi10CCallQueueS2_ELi1EEE
 26CVProfileOutputColumn_Base
 26CVProfileOutputColumn_Name
 26CVProfileOutputColumn_Peak
 26ICommandCompletionCallback
+27CMemStdPurePassThroughAlloc
 27CMiniDumpCommentBuilderBase
 27CVProfileOutputColumn_Count
 27IKeyValuesDumpContextAsText
-28CStdMemAlloc_Data_StackStatsI9MemConfigILb0ELb0E27DefaultAdditionalPropertiesELb0EE
-28CStdMemAlloc_Data_StackStatsI9MemConfigILb0ELb0E27RuntimeAdditionalPropertiesELb0EE
 28CUtlBufferFormatOutputStream
 28CUtlStringFormatOutputStream
 29CCharBufferFormatOutputStream
@@ -667,7 +679,6 @@ $ORIGIN
 8CProcess
 8IProcess
 9
-9IMemAlloc
 9IPipeRead
 :
 ::*
@@ -831,7 +842,6 @@ Affinity preferences: no per-logical-processor information
 Affinity preferences: no preferences, skipping assignment
 Affinity preferences: no-pref all-procs does not set affinity
 Affinity preferences: only one logical processor
-AlignedByteArray not properly aligned
 AllocTag
 AllocUnlocked
 AllocateEvent
@@ -881,7 +891,6 @@ AppendMiniProfilerToList
 ApplyDiffs
 Apr
 April
-Arange terminator not at the end of a set
 Arenas
 Assert
 AssertValidStringPtr
@@ -964,31 +973,272 @@ C->D
 C->E
 CAddAnimNode
 CAimMatrixAnimNode
+CAndCondition
+CAnimActionBase
+CAnimActionBaseConstPtr
+CAnimActionBasePtr
+CAnimClipData
+CAnimClipDataConstPtr
+CAnimClipDataManager
+CAnimClipDataPtr
+CAnimComponentBase
+CAnimComponentBaseConstPtr
+CAnimComponentBasePtr
 CAnimComponentManager
+CAnimComponentState
 CAnimComponentStateTransition
+CAnimDocBlend2DAnimNode
+CAnimDocBlend2DItemBase
+CAnimDocBlend2DItemBaseConstPtr
+CAnimDocBlend2DItemBasePtr
+CAnimDocMotionItem
+CAnimDocMotionItemConstPtr
+CAnimDocMotionItemGroup
+CAnimDocMotionItemGroupConstPtr
+CAnimDocMotionItemGroupPtr
+CAnimDocMotionItemPtr
+CAnimDocNodeBlend2DItem
+CAnimDocParamSpan
+CAnimDocParamSpanConstPtr
+CAnimDocParamSpanPtr
+CAnimDocParamSpanSample
+CAnimDocSequenceBlend2DItem
+CAnimDocTagSpan
+CAnimDocTagSpanConstPtr
+CAnimDocTagSpanPtr
+CAnimGraphDoc_Action
+CAnimGraphDoc_ActionConstPtr
+CAnimGraphDoc_ActionPtr
+CAnimGraphDoc_AddNode
+CAnimGraphDoc_AimMatrixNode
+CAnimGraphDoc_AndCondition
+CAnimGraphDoc_BindPoseNode
+CAnimGraphDoc_Blend2DItem
+CAnimGraphDoc_Blend2DItemConstPtr
+CAnimGraphDoc_Blend2DItemNode
+CAnimGraphDoc_Blend2DItemPtr
+CAnimGraphDoc_Blend2DItemSequence
+CAnimGraphDoc_Blend2DNode
+CAnimGraphDoc_BlendNode
+CAnimGraphDoc_BlockSelectionMetric
+CAnimGraphDoc_BoneMaskNode
+CAnimGraphDoc_BonePositionMetric
+CAnimGraphDoc_BoneVelocityMetric
+CAnimGraphDoc_ChoiceNode
+CAnimGraphDoc_ChoreoNode
+CAnimGraphDoc_ClipData
+CAnimGraphDoc_ClipDataConstPtr
+CAnimGraphDoc_ClipDataManager
+CAnimGraphDoc_ClipDataPtr
+CAnimGraphDoc_CommentNode
+CAnimGraphDoc_Component
+CAnimGraphDoc_ComponentConstPtr
+CAnimGraphDoc_ComponentManager
+CAnimGraphDoc_ComponentPtr
+CAnimGraphDoc_ComponentState
+CAnimGraphDoc_ComponentStateTransition
+CAnimGraphDoc_Condition
+CAnimGraphDoc_ConditionConstPtr
+CAnimGraphDoc_ConditionContainer
+CAnimGraphDoc_ConditionPtr
+CAnimGraphDoc_ContainerNodeBase
+CAnimGraphDoc_CurrentRotationVelocityMetric
+CAnimGraphDoc_CurrentVelocityMetric
+CAnimGraphDoc_CycleCondition
+CAnimGraphDoc_CycleControlClipNode
+CAnimGraphDoc_CycleControlNode
+CAnimGraphDoc_DampedPathMotor
+CAnimGraphDoc_DirectPlaybackNode
+CAnimGraphDoc_DirectionalBlendNode
+CAnimGraphDoc_DistanceRemainingMetric
+CAnimGraphDoc_EmitTagAction
+CAnimGraphDoc_ExpressionAction
+CAnimGraphDoc_FinishedCondition
+CAnimGraphDoc_FollowAttachmentNode
+CAnimGraphDoc_FollowPathNode
+CAnimGraphDoc_FootAdjustmentNode
+CAnimGraphDoc_FootCycleMetric
+CAnimGraphDoc_FootLockNode
+CAnimGraphDoc_FootPinningNode
+CAnimGraphDoc_FootPositionMetric
+CAnimGraphDoc_FootStepTriggerNode
+CAnimGraphDoc_FutureFacingMetric
+CAnimGraphDoc_FutureVelocityMetric
+CAnimGraphDoc_Graph
+CAnimGraphDoc_GraphMotionItem
+CAnimGraphDoc_GroupInputNode
+CAnimGraphDoc_GroupNode
+CAnimGraphDoc_GroupOutputNode
+CAnimGraphDoc_HitReactNode
+CAnimGraphDoc_InputStreamNode
+CAnimGraphDoc_JiggleBoneNode
+CAnimGraphDoc_JumpHelperNode
+CAnimGraphDoc_LeanMatrixNode
+CAnimGraphDoc_LookAtNode
+CAnimGraphDoc_MotionGraphPreviewNode
+CAnimGraphDoc_MotionItem
+CAnimGraphDoc_MotionItemConstPtr
+CAnimGraphDoc_MotionItemGroup
+CAnimGraphDoc_MotionItemGroupConstPtr
+CAnimGraphDoc_MotionItemGroupPtr
+CAnimGraphDoc_MotionItemPtr
+CAnimGraphDoc_MotionMatchingNode
+CAnimGraphDoc_MotionMetric
+CAnimGraphDoc_MotionMetricConstPtr
+CAnimGraphDoc_MotionMetricPtr
+CAnimGraphDoc_MotionNodeBuilder
+CAnimGraphDoc_MotionNodeManager
+CAnimGraphDoc_MotionParameter
+CAnimGraphDoc_MotionParameterConstPtr
+CAnimGraphDoc_MotionParameterManager
+CAnimGraphDoc_MotionParameterPtr
+CAnimGraphDoc_Motor
+CAnimGraphDoc_MotorConstPtr
+CAnimGraphDoc_MotorPtr
+CAnimGraphDoc_MoverNode
+CAnimGraphDoc_Node
+CAnimGraphDoc_NodeBlend2D
+CAnimGraphDoc_NodeBlend2DItem
+CAnimGraphDoc_NodeConnection
+CAnimGraphDoc_NodeConstPtr
+CAnimGraphDoc_NodeList
+CAnimGraphDoc_NodeListConstPtr
+CAnimGraphDoc_NodeListPtr
+CAnimGraphDoc_NodeManager
+CAnimGraphDoc_NodePtr
+CAnimGraphDoc_NodeState
+CAnimGraphDoc_NodeStateTransition
+CAnimGraphDoc_OrCondition
+CAnimGraphDoc_ParamSpan
+CAnimGraphDoc_ParamSpanConstPtr
+CAnimGraphDoc_ParamSpanPtr
+CAnimGraphDoc_ParamSpanSample
+CAnimGraphDoc_ParameterCondition
+CAnimGraphDoc_ParameterManager
+CAnimGraphDoc_ParameterManagerConstPtr
+CAnimGraphDoc_ParameterManagerPtr
+CAnimGraphDoc_PathHelperNode
+CAnimGraphDoc_PathMetric
+CAnimGraphDoc_PathMotor
+CAnimGraphDoc_PathMotorBase
+CAnimGraphDoc_PlayerInputMotor
+CAnimGraphDoc_ProxyNodeBase
+CAnimGraphDoc_RagdollNode
+CAnimGraphDoc_RigidBodyWeightList
+CAnimGraphDoc_RigidBodyWeightListConstPtr
+CAnimGraphDoc_RigidBodyWeightListPtr
+CAnimGraphDoc_RootNode
+CAnimGraphDoc_ScriptEditManager
+CAnimGraphDoc_ScriptEditManagerConstPtr
+CAnimGraphDoc_ScriptEditManagerPtr
+CAnimGraphDoc_SelectorNode
+CAnimGraphDoc_SequenceBlend2DItem
+CAnimGraphDoc_SequenceMotionItem
+CAnimGraphDoc_SequenceNode
+CAnimGraphDoc_SetFacingNode
+CAnimGraphDoc_SetParameterAction
+CAnimGraphDoc_SingleFrameNode
+CAnimGraphDoc_SkeletalInputNode
+CAnimGraphDoc_SlowDownOnSlopesNode
+CAnimGraphDoc_SolveIKChainNode
+CAnimGraphDoc_SpeedScaleNode
+CAnimGraphDoc_StanceOverrideNode
+CAnimGraphDoc_StanceScaleNode
+CAnimGraphDoc_State
+CAnimGraphDoc_StateConstPtr
+CAnimGraphDoc_StateList
+CAnimGraphDoc_StateListConstPtr
+CAnimGraphDoc_StateListPtr
+CAnimGraphDoc_StateMachine
+CAnimGraphDoc_StateMachineNode
+CAnimGraphDoc_StatePtr
+CAnimGraphDoc_StateStatusCondition
+CAnimGraphDoc_StateTransition
+CAnimGraphDoc_StateTransitionConstPtr
+CAnimGraphDoc_StateTransitionPtr
+CAnimGraphDoc_StepsRemainingMetric
+CAnimGraphDoc_StopAtGoalNode
+CAnimGraphDoc_SubGraph
+CAnimGraphDoc_SubGraphManager
+CAnimGraphDoc_SubGraphManagerConstPtr
+CAnimGraphDoc_SubGraphManagerPtr
+CAnimGraphDoc_SubGraphNode
+CAnimGraphDoc_SubtractNode
+CAnimGraphDoc_TagCondition
+CAnimGraphDoc_TagManager
+CAnimGraphDoc_TagManagerConstPtr
+CAnimGraphDoc_TagManagerPtr
+CAnimGraphDoc_TagSpan
+CAnimGraphDoc_TagSpanConstPtr
+CAnimGraphDoc_TagSpanPtr
+CAnimGraphDoc_TimeCondition
+CAnimGraphDoc_TimeRemainingMetric
+CAnimGraphDoc_ToggleComponentAction
+CAnimGraphDoc_TurnHelperNode
+CAnimGraphDoc_TwoBoneIKNode
+CAnimGraphDoc_WayPointHelperNode
+CAnimGraphDoc_ZeroPoseNode
 CAnimGraphGeneralSettings
 CAnimGraphSettingsManager
 CAnimInputDamping
+CAnimMotorBase
+CAnimMotorBaseConstPtr
+CAnimMotorBasePtr
 CAnimMotorList
 CAnimMovementManager
 CAnimMovementUpdater
+CAnimNodeBase
+CAnimNodeBaseConstPtr
+CAnimNodeBasePtr
 CAnimNodeConnection
+CAnimNodeList
+CAnimNodeListConstPtr
+CAnimNodeListPtr
 CAnimNodeManager
 CAnimNodeState
 CAnimNodeStateTransition
+CAnimParamSpan
+CAnimParamSpanConstPtr
+CAnimParamSpanPtr
+CAnimParamSpanSample
+CAnimParameterList
+CAnimParameterListConstPtr
+CAnimParameterListPtr
 CAnimState
+CAnimStateConstPtr
+CAnimStateList
+CAnimStateListConstPtr
+CAnimStateListPtr
+CAnimStateMachine
+CAnimStatePtr
 CAnimStateTransition
+CAnimStateTransitionConstPtr
+CAnimStateTransitionPtr
+CAnimTagManager
+CAnimTagManagerConstPtr
+CAnimTagManagerPtr
+CAnimTagSpan
+CAnimTagSpanConstPtr
+CAnimTagSpanPtr
 CAnimUpdateSharedData
 CAnimationGraph
 CAnimationSubGraph
 CAuthPhysBody
 CAuthPhysJoint
+CBindPoseAnimNode
 CBlend2DAnimNode
 CBlend2DItem
+CBlend2DItemBase
+CBlend2DItemBaseConstPtr
+CBlend2DItemBasePtr
 CBlendAnimNode
 CBlockCompress::FastCompress(unsigned char const*, unsigned int, unsigned char*, unsigned int)
 CBlockCompress::FastDecompress(unsigned char const*, unsigned int, unsigned char*, unsigned int)
+CBlockSelectionMetric
 CBoneMaskAnimNode
+CBonePositionMetric
+CBoneVelocityMetric
+CBoolAnimParameter
 CBufferString::%s: unsafe self pointer provided as a modification input
 CBufferString::AppendConcat(char const*, char const*, ...)
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
@@ -1009,7 +1259,7 @@ CBufferString::EnsureLength(int, bool, int*)
 CBufferString::EnsureOwnedAllocation(CBufferString::EAllocationOption_t)
 CBufferString::EnsureTrailingSlash(char, bool)
 CBufferString::ExtendPath(char const*, char, bool)
-CBufferString::ExtractFileBase(char const*)
+CBufferString::ExtractFileBase(char const*, bool)
 CBufferString::ExtractFileExtension(char const*)
 CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::ExtractFirstDir(char const*)
@@ -1024,7 +1274,7 @@ CBufferString::GrowByChunks(int, int)
 CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MakeAbsolutePath(char const*, char const*)
 CBufferString::MakeFixedAbsolutePath(char const*, char const*, char)
-CBufferString::MakeRelativePath(char const*, char const*)
+CBufferString::MakeRelativePath(char const*, char const*, bool)
 CBufferString::MoveFrom(CBufferString&)
 CBufferString::Purge(int)
 CBufferString::Relinquish(CBufferString::EAllocationOption_t)
@@ -1035,14 +1285,14 @@ CBufferString::RemoveFilePath()
 CBufferString::RemoveFirstDir(CBufferString*)
 CBufferString::RemovePartialUTF8Tail(bool)
 CBufferString::RemoveTailUTF8(int)
-CBufferString::RemoveToFileBase()
+CBufferString::RemoveToFileBase(bool)
 CBufferString::RemoveWhitespace()
 CBufferString::Replace(char const*, char const*, bool)
 CBufferString::Replace(char, char)
 CBufferString::ReplaceAt(int, char const*, int, bool)
 CBufferString::ReplaceAt(int, int, char const*, int, bool)
 CBufferString::ReverseChars(int, int)
-CBufferString::SetExtension(char const*)
+CBufferString::SetExtension(char const*, bool)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
 CBufferString::SetUnusable()
@@ -1051,7 +1301,7 @@ CBufferString::StartsWith(char const*) const
 CBufferString::StartsWith_FastCaseInsensitive(char const*) const
 CBufferString::StrAppendFormat(char const*, ...)
 CBufferString::StrFormat(char const*, ...)
-CBufferString::StripExtension()
+CBufferString::StripExtension(bool)
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
 CBufferString::ToUpperFast(int)
@@ -1116,7 +1366,12 @@ CCommandBuffer::LockCommandBuffer(bool)
 CCommandBuffer::SetWaitDelayTime(int)
 CCommandBuffer::SplitCommands(char const*, int, CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int> >*)
 CCommandBuffer::~CCommandBuffer()
+CCommentAnimNode
+CConditionBase
+CConditionBaseConstPtr
+CConditionBasePtr
 CConditionContainer
+CContainerAnimNodeBase
 CControlValueCondition
 CCountedStringPool::CCountedStringPool(StringPoolCase_t)
 CCountedStringPool::DereferenceString(char const*)
@@ -1131,8 +1386,12 @@ CCountedStringPool::RestoreFromBuffer(CUtlBuffer&)
 CCountedStringPool::SaveToBuffer(CUtlBuffer&) const
 CCountedStringPool::SpewStrings() const
 CCountedStringPool::~CCountedStringPool()
+CCurrentRotationVelocityMetric
+CCurrentVelocityMetric
 CCycleCondition
 CCycleControlAnimNode
+CCycleControlClipAnimNode
+CDampedPathAnimMotor
 CDeferredCallStackMarker::Insert()
 CDeferredCallStackMarker::Remove()
 CDirIterator::CDirIterator()
@@ -1161,6 +1420,9 @@ CDirWatcher::GetChangedFiles(CUtlBuffer*, CUtlVector<char*, int, CUtlMemory<char
 CDirWatcher::SetDirToWatch(char const*, unsigned int, bool, void*, unsigned long)
 CDirWatcher::Stop()
 CDirectPlaybackAnimNode
+CDirectionalBlendAnimNode
+CDistanceRemainingMetric
+CDwarfVector capacity overflow
 CET
 CEmitTagAction
 CEnumAnimParameter
@@ -1183,6 +1445,7 @@ CEventRWLock_Debuggable<true>::AllocOrFreeReadLockMem(CEventRWLock_Debuggable<tr
 CEventRWLock_Debuggable<true>::DoesHaveAnyReadLocks(CEventListNode&)
 CEventRWLock_Debuggable<true>::DuplicateReadLock(CEventListNode&)
 CExecMultiWorkerJob CUtlMemoryPool
+CExpressionAction
 CExpressionEvaluator::CExpressionEvaluator()
 CExpressionEvaluator::Evaluate(bool&, char const*, bool (*)(char const*, void*), void (*)(char const*, void*), void*, void*)
 CExpressionEvaluator::~CExpressionEvaluator()
@@ -1224,22 +1487,29 @@ CFiber::WaitForJobCompletion(CEventListNode&)
 CFiber::~CFiber()
 CFilterString::DoesMatchString(char const*, FilterStringMatchFlags_t) const
 CFilterString::SetString(char const*)
+CFinishedCondition
 CFloatAnimParameter
 CFloatAnimValue
 CFollowAttachmentAnimNode
 CFollowPathAnimNode
+CFootAdjustmentAnimNode
+CFootCycleMetric
 CFootLockAnimNode
+CFootPinningAnimNode
+CFootPositionMetric
 CFootStepTriggerAnimNode
 CForceFacingCondition
 CFormatStringElement::CFormatStringElement(char const*)
 CFormatStringElement::EnforceTypeAndSize(char const*, char const*)
 CFormatStringElement::ParseElement(char const*)
+CFutureFacingMetric
 CFutureVelocityMetric
+CGraphMotionItem
 CGridStringPrinter::Clear()
 CGridStringPrinter::GetColumnHeader(int) const
 CGridStringPrinter::GetHeader(int)
 CGridStringPrinter::GetHeader(int) const
-CGridStringPrinter::GetLines(CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int> >&) const
+CGridStringPrinter::GetLines(CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int> >&, bool) const
 CGridStringPrinter::GetString(int, int) const
 CGridStringPrinter::NumColumns() const
 CGridStringPrinter::NumRows() const
@@ -1254,6 +1524,9 @@ CGridStringPrinter::SimpleSpew(int, char const*) const
 CGridStringPrinter::SimpleSpewColor(int, Color const&, char const*) const
 CGroundCondition
 CGroundIKSolveAnimNode
+CGroupAnimNode
+CGroupInputAnimNode
+CGroupOutputAnimNode
 CHitReactAnimNode
 CIE aug data missing LSDA encoding
 CIE aug data missing personality routine encoding
@@ -1263,14 +1536,16 @@ CIE code alignment (%llu) too large
 CIE count overflow
 CIE data alignment (%lld) out of range
 CIE return register (%llu) too large
+CInputStreamAnimNode
 CIntAnimParameter
 CJiggleBoneAnimNode
+CJumpHelperAnimNode
 CKeyValuesDumpContextAsDevMsg::KvBeginKey(KeyValues*, int)
 CKeyValuesDumpContextAsDevMsg::KvWriteText(char const*)
 CKeyValuesDumpContextToBufferString::KvWriteText(char const*)
 CKeyValuesDumpContextToLoggingChannel::KvWriteText(char const*)
-CKeyValuesSystem::hash_item_t CUtlMemoryPool
 CKeyValuesSystem::m_Strings
+CKeyValuesSystemBase::hash_item_t CUtlMemoryPool
 CKeyValues_Data::Internal_ClearAll()
 CKeyValues_Data::Internal_ClearData()
 CKeyValues_Data::Internal_CopyData(CKeyValues_Data const&)
@@ -1300,6 +1575,7 @@ CKeyValues_Data::Internal_SetString(char const*)
 CKeyValues_Data::Internal_SetSubKey(KeyValues*)
 CKeyValues_Data::Internal_SetUint64(unsigned long long)
 CKeyValues_Data::Internal_SetWString(wchar_t const*)
+CKeyValues_Data::KVSystem() const
 CKeyValues_Data::ResolveColorValue() const
 CKeyValues_Data::ResolveFloatValue() const
 CKeyValues_Data::ResolveIntValue() const
@@ -1319,6 +1595,7 @@ CLZSS::GetActualSize(unsigned char*)
 CLZSS::IsCompressed(unsigned char*)
 CLZSS::SafeUncompress(unsigned char*, unsigned char*, unsigned int)
 CLZSS::Uncompress(unsigned char*, unsigned char*)
+CLeanMatrixAnimNode
 CLoggingSystem::AllocTag overflowed!
 CLookAtAnimNode
 CLookComponent
@@ -1378,15 +1655,30 @@ CMotionBase
 CMotionClip
 CMotionClipBase
 CMotionClipGroup
+CMotionGraphPreviewNode
 CMotionGroup
 CMotionItem
+CMotionItemConstPtr
 CMotionItemGroup
+CMotionItemGroupConstPtr
+CMotionItemGroupPtr
+CMotionItemPtr
 CMotionMatchingAnimNode
+CMotionMetricBase
+CMotionMetricBaseConstPtr
+CMotionMetricBasePtr
+CMotionNodeBuilder
+CMotionNodeManager
+CMotionParameter
+CMotionParameterConstPtr
+CMotionParameterManager
+CMotionParameterPtr
 CMotionVariantBase
 CMotionVariantGroup
 CMovementComponent
 CMovementComponentUpdater
 CMoverAnimNode
+CNodeBlend2DItem
 COLLISION_MODE_INITIAL_TRACE_DOWN
 COLLISION_MODE_PER_FRAME_PLANESET
 COLLISION_MODE_PER_PARTICLE_TRACE
@@ -1398,6 +1690,7 @@ COMPARISONVALUETYPE_PARAMETER
 COM_TimestampedLog
 CONTENT
 COneTimeEvent::Allocate()
+COrCondition
 CPU information: physical %u, logical %u (fake mode %u)
 CPUInformation::GetIAFamilyModelStepping(unsigned int*, unsigned int*, unsigned int*)
 CPUInformation::GetWinLevelRevision(unsigned short*, unsigned short*)
@@ -1405,7 +1698,10 @@ CPU_MHZ
 CParameterAnimCondition
 CParameterCondition
 CParticleSystemDefinition
+CPathAnimMotor
+CPathAnimMotorBase
 CPathHelperAnimNode
+CPathMetric
 CPathStatusCondition
 CPathString::DeletePathStringBuffer(CPathString::Buffer_t*)
 CPathString::DeleteWCharPath()
@@ -1415,7 +1711,9 @@ CPathString::Reset()
 CPathString::Set(char const*)
 CPathString::Set(char const*, char const*)
 CPathString::~CPathString()
+CPlayerInputAnimMotor
 CPooledStdFunctionJob CUtlMemoryPool
+CProxyAnimNodeBase
 CPulseCell_
 CPulseCell_Inflow_Wait
 CPulseNode_
@@ -1423,9 +1721,13 @@ CQuaternionAnimParameter
 CRC32_GetTableEntry
 CRC32_ProcessBuffer
 CRC64_ProcessBuffer
+CRagdollAnimNode
 CRawAllocator::Alloc(RawAllocatorType_t, unsigned long, unsigned long*)
 CRawAllocator::Free(RawAllocatorType_t, void*, unsigned long)
 CRecursionCallStackMarker::CRecursionCallStackMarker(bool)
+CRigidBodyWeightList
+CRigidBodyWeightListConstPtr
+CRigidBodyWeightListPtr
 CRootAnimNode
 CSHA1::Final()
 CSHA1::GetHashHex(char*, int)
@@ -1435,19 +1737,25 @@ CSHA1::Transform(unsigned int*, unsigned char const*)
 CSHA1::Update(void const*, unsigned int)
 CSHAStr::CSHAStr(unsigned char const (&) [20])
 CST
-CSelectorAnimNode
+CScriptEditManager
+CScriptEditManagerConstPtr
+CScriptEditManagerPtr
 CSelectorUpdateNode
+CSequenceAnimNode
 CSequenceBlend2DItem
 CSequenceMotion
 CSequenceMotionClip
 CSequenceMotionItem
 CSequenceMotionVariant
 CSetFacingAnimNode
+CSetParameterAction
 CSingleAppInstance::CSingleAppInstance(char const*, bool, bool)
 CSingleAppInstance::CheckForOtherRunningInstances(bool, bool)
 CSingleAppInstance::CheckForRunningInstance(char const*)
 CSingleAppInstance::ShutdownInstance()
 CSingleAppInstance::~CSingleAppInstance()
+CSingleFrameAnimNode
+CSkeletalInputAnimNode
 CSlopeComponent
 CSlopeComponentUpdater
 CSlopeSettings
@@ -1525,11 +1833,15 @@ CStackTop_ReferenceParentStack::CStackTop_ReferenceParentStack(void const* const
 CStackTop_ReferenceParentStack::ChangeReferencedStack(void const* const*, int)
 CStackTop_ReferenceParentStack::ReleaseParentStackReferences()
 CStackTop_ReferenceParentStack::~CStackTop_ReferenceParentStack()
+CStanceOverrideAnimNode
+CStanceScaleAnimNode
 CStateAction
+CStateMachineAnimNode
 CStateStatusCondition
 CStdIOFormatOutputStream::PutC(char)
 CStdIOFormatOutputStream::PutChars(char const*, int)
 CStdIOFormatOutputStream::~CStdIOFormatOutputStream()
+CStepsRemainingMetric
 CStopAtGoalAnimNode
 CStrAutoEncode::Clear()
 CStrAutoEncode::Copy(CStrAutoEncode const&)
@@ -1564,6 +1876,10 @@ CStringRegistry::GetStringText(int)
 CStringRegistry::InvalidIndex() const
 CStringRegistry::Next(unsigned short) const
 CStringRegistry::~CStringRegistry()
+CSubGraphAnimNode
+CSubGraphManager
+CSubGraphManagerConstPtr
+CSubGraphManagerPtr
 CSubtractAnimNode
 CTSList
 CTSQueue
@@ -1661,6 +1977,8 @@ CThreadSpinRWLock::UnlockWrite(char const*, int)
 CThreadSpinRWLock::UnlockWrite_LockForRead(char const*, int)
 CThreadSwapContext_Base::CThreadSwapContext_Base(CThreadSwapTarget*, void*, unsigned long)
 CThreadSwapContext_Base::~CThreadSwapContext_Base()
+CThreadSwapJob::CThreadSwapJob(CThreadSwapTarget*)
+CThreadSwapJob::InternalRunJob(void (*)(void*), void*)
 CThreadSwapTarget::CThreadSwapTarget()
 CThreadSwapTarget::OwnerThreadRun()
 CThreadSwapTarget::ReleaseOwnerThread()
@@ -1686,10 +2004,13 @@ CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::Wait_NoDiagnostics(unsigned int)
 CThreadSyncObject::operator!() const
 CThreadSyncObject::~CThreadSyncObject()
+CThreadedJob
 CThreadedJob::Abort(bool)
 CThreadedJob::Execute()
 CThreadedTraverseJob
 CTimeCondition
+CTimeRemainingMetric
+CToggleComponentAction
 CTurnHelperAnimNode
 CTwoBoneIKAnimNode
 CUniformRandomStreamImpl<CThreadNullMutex>::CUniformRandomStreamImpl()
@@ -1815,6 +2136,9 @@ CUtlInplaceBuffer::InplaceGetLinePtr()
 CUtlInplaceBuffer::InplaceGetLinePtr(char**, int*)
 CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
+CUtlLocalStackAllocator::AllocateGuts(int)
+CUtlLocalStackAllocator::FormatTo(IFormatOutputStream*, CFormatStringElement) const
+CUtlLocalStackAllocator::FreeGuts(void const*)
 CUtlMemoryArena
 CUtlMemoryArena::Alloc(unsigned int)
 CUtlMemoryArena::CUtlMemoryArena(unsigned int, bool)
@@ -1995,10 +2319,12 @@ CVectorAnimParameter
 CVertexKDTree::BuildMidpoint(float const*, int, int)
 CVertexKDTree::BuildMidpointFromVertexSubSet(float const*, int, int const*, int)
 CVertexKDTree::BuildNode(int, int)
-CVertexKDTree::FindVertsInBox(CUtlVectorFixed<float const*, 64ul, int>&, Vector3DBase<float> const&, Vector3DBase<float> const&, int) const
-CVertexKDTree::FindVertsInBox(CUtlVectorFixedGrowable<float const*, 64ul, int>&, Vector3DBase<float> const&, Vector3DBase<float> const&, int) const
-CVertexKDTree::ForEachInBox(Vector3DBase<float> const&, Vector3DBase<float> const&, std::function<void (float const*)> const&, int) const
-CVertexKDTree::ForEachInSphere(Vector3DBase<float> const&, float, std::function<void (float const*)> const&, int) const
+CVertexKDTree::FindVertsInBox(CUtlVectorFixed<float const*, 64ul, int>&, Vec3D<float> const&, Vec3D<float> const&, int) const
+CVertexKDTree::FindVertsInBox(CUtlVectorFixedGrowable<float const*, 64ul, int>&, Vec3D<float> const&, Vec3D<float> const&, int) const
+CVertexKDTree::ForEachInBox(Vec3D<float> const&, Vec3D<float> const&, std::function<void (float const*)> const&, int) const
+CVertexKDTree::ForEachInSphere(Vec3D<float> const&, float, std::function<void (float const*)> const&, int) const
+CVertexKDTree::Nearest(Vec3D<float> const&) const
+CVertexKDTree::NearestInternal(Vec3D<float> const&, float&, float const**, int) const
 CVirtualMachineCallStackTranslationEncoder::CVirtualMachineCallStackTranslationEncoder(char const*)
 CVirtualMachineCallStackTranslationEncoder::DecodeFromNativePointer(void const*, CBufferString*, CBufferString*, unsigned int*)
 CVirtualMachineCallStackTranslationEncoder::EncodeAsNativePointer(char const*, char const*, unsigned int)
@@ -2025,6 +2351,7 @@ CVirtualMemorySnapshot::Purge()
 CVirtualMemorySnapshot::Report(int) const
 CVirtualMemorySnapshot::~CVirtualMemorySnapshot()
 CWayPointHelperAnimNode
+CZeroPoseAnimNode
 C_INIT_AddVectorToVector
 C_INIT_AgeNoise
 C_INIT_CreateFromCPs
@@ -2172,7 +2499,7 @@ Can't convert an empty string to uint64
 Can't open file (%s) passed to -testscript
 Can't write binary data to a text buffer.
 Cannot Start Process '%s'
-Cannot copy '%s' to '%s'
+Cannot copy '%s' to '%s'.
 Cannot create Dictionary from provided samples
 Cannot flush timstamped event log with no listener!
 Cannot mix and match tag specifiers with channel name specifiers.
@@ -2196,6 +2523,7 @@ Client Physics
 Client Rendering
 Client Simulation
 Client VScript
+ClientToolsInfo_001
 Client_Animation
 ClipIndex
 ClothEffectAnimEvent
@@ -2219,9 +2547,11 @@ ConMsg(char const*, ...)
 ConVar
 Conditional Error: %s
 ConfigAttachedModel
+Conflicting range base values given for compile_unit
 ConnectInterfaceSingletons
 Connection_Inparam
 Connection_Outflow
+Console History (reversed)
 Constructed dictionary of size %u
 Constructing partial suffix array
 Contents
@@ -2265,6 +2595,7 @@ ControlValue_TotalTranslation_TargetState
 ControlValue_WayPointDistance
 ControlValue_WayPointHeading
 ConvertKV3Format
+Copy failed.
 CopyDependencyToAlternateLocation
 CopyPending
 CopyUniqueId
@@ -2286,6 +2617,7 @@ Cover must have at least one input file
 Cover parameters incorrect
 CrackSmokingCompiler
 CreateCommandLine
+CreateDisposableKeyValuesSystem
 CreateInterface
 CreateNewThreadPool
 CreateSimpleProcess
@@ -2319,6 +2651,7 @@ DWARF UNWIND: unwind frame to IP 0x%llx, FP 0x%llx, SP 0x%llx
 DWARF UNWIND: unwind table build failed
 DWARF UNWIND: unwind table doesn't contain a row for VA 0x%llx
 DWARF UNWIND: unwound IP to 0x%llx but that's not in any module, aborting
+DWARF WARNING: arange terminator not at the end of a set
 DWARF deferred symbols
 DWARF:
 DWARF:   %s build ID does not match %s, ignoring
@@ -2384,6 +2717,7 @@ Dn
 Double-register of KV3 conversion (from '%s' to '%s')
 Download process succeeded but didn't write a local file
 Ds
+Du
 Dumps information about all logging channels.
 Duplicate abbrev code 0x%x at 0x%x
 DynamicConfigList
@@ -2396,6 +2730,7 @@ ENABLE_ASSERT_DIALOG_PRINT
 ENGLISH
 ERROR: %s
 ERROR: Alloc exceeded allocation limit /+/ %llu > %llu
+ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: Virtual reservation exceeded limit /+/ %llu > %llu
 EXECUTE_PER_TICK
 EXPORTSYSTEM_INTERFACE_VERSION_001
@@ -2458,6 +2793,7 @@ FASTCOVER parameters incorrect
 FATAL
 FATAL ERROR
 FATAL ERROR:
+FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to create temp directory under '%s'
 FATAL ERROR: unable to create temp file under '%s'
 FATAL: %s called on a pool context (no root available)
@@ -2513,6 +2849,7 @@ Find help about a convar/concommand.
 FindDiffs
 FindDiffsForLargeFiles
 FindDiffsLowMemory
+FindGlobalSymbol
 FindOrCreateQuantizedFloatEncoder
 FindRegisteredGlobalObjectInternal
 Finger_Curl_Index
@@ -2536,6 +2873,7 @@ FioFindFileInDirCaseInsensitive(char const*, CBufferString*, bool)
 FioFlush(int)
 FioGetActualFilenameCase(char const*, CBufferString*, bool)
 FioGetBaseFileInfo(char const*, FioBaseFileInfo_t*, unsigned int)
+FioGetDiskInfo(char const*, FioDiskInfo_t*)
 FioGetFileCRC32(char const*, unsigned int*, int)
 FioGetFileCRC32Buffer(char const*, unsigned int*, unsigned char*, int)
 FioGetFileIdentity(char const*, unsigned long long*, unsigned long long*)
@@ -2580,10 +2918,12 @@ FormatTo(IFormatOutputStream*, CFormatStringElement, float)
 FormatTo(IFormatOutputStream*, CFormatStringElement, int)
 FormatTo(IFormatOutputStream*, CFormatStringElement, long long)
 FormatTo(IFormatOutputStream*, CFormatStringElement, long)
+FormatTo(IFormatOutputStream*, CFormatStringElement, std::basic_string_view<char, std::char_traits<char> >)
 FormatTo(IFormatOutputStream*, CFormatStringElement, unsigned int)
 FormatTo(IFormatOutputStream*, CFormatStringElement, unsigned long long)
 FormatTo(IFormatOutputStream*, CFormatStringElement, unsigned long)
 FormatTo(IFormatOutputStream*, CFormatStringElement, void const*)
+FormatTo(IFormatOutputStream*, CFormatStringElement, wchar_t const*)
 Formatting_AdjustIndentation(int)
 Found Application AutoArgs file '%s'
 Found a '%s' token implying the start of a conditional.  KV3 doesn't support this - use bIgnoreConditionals or modify the source file.
@@ -2609,6 +2949,7 @@ GLIBC_2.12
 GLIBC_2.14
 GLIBC_2.15
 GLIBC_2.17
+GLIBC_2.18
 GLIBC_2.2.5
 GLIBC_2.27
 GLIBC_2.28
@@ -2663,9 +3004,10 @@ GetQuantizedFloatEncoderByReg
 GetQuantizedFloatEncoderNameByReg
 GetQuantizedFloatEncodersSharingReg
 GetReplacePtr
-GetSymbolForString
-GetSymbolForStringCaseSensitive
+GetSymbolForStringCaseSensitiveInternal
+GetSymbolForStringInternal
 GetSymbolNameFromAddress
+GetThreadLocalStackAllocator
 GetThreadedLoadLibraryFunc
 GetTotalTranslation_SourceState()
 GetTotalTranslation_TargetState()
@@ -2691,6 +3033,7 @@ HammerMapLoader001
 Header of Literals' block doesn't respect format specification
 Heap-like bytes: %s
 Heap: standard allocator
+Heap: standard allocator pass-through to low-level
 Help Text
 HelpSystem_001
 High PC attr without addr value (form %u)
@@ -2698,7 +3041,104 @@ Hit end of input before closing quote (%c)
 Hit end of line before closing quote (%c)
 HostStateMgr001
 I
+IAnimAction
+IAnimClipData
+IAnimClipDataManager
+IAnimComponent
+IAnimComponentManager
+IAnimCondition
+IAnimDocBlend2DAnimNode
+IAnimDocBlend2DItem
+IAnimDocMotionItem
+IAnimDocMotionItemGroup
+IAnimDocNodeBlend2DItem
+IAnimDocParamSpan
+IAnimDocParamSpanContainer
+IAnimDocSequenceBlend2DItem
+IAnimDocTagSpan
+IAnimDocTagSpanContainer
+IAnimGraphDoc_Action
+IAnimGraphDoc_AnimScriptComponent
+IAnimGraphDoc_Blend2DItem
+IAnimGraphDoc_Blend2DItemNode
+IAnimGraphDoc_Blend2DItemSequence
+IAnimGraphDoc_Blend2DNode
+IAnimGraphDoc_BlendedStateTransition
+IAnimGraphDoc_CPPScriptComponent
+IAnimGraphDoc_ClipData
+IAnimGraphDoc_ClipDataManager
+IAnimGraphDoc_CommentNode
+IAnimGraphDoc_Component
+IAnimGraphDoc_ComponentManager
+IAnimGraphDoc_Condition
+IAnimGraphDoc_ConditionContainer
+IAnimGraphDoc_ContainerNode
+IAnimGraphDoc_Graph
+IAnimGraphDoc_GraphMotionItem
+IAnimGraphDoc_JumpHelperNode
+IAnimGraphDoc_LookComponent
+IAnimGraphDoc_MotionGraphPreviewNode
+IAnimGraphDoc_MotionItem
+IAnimGraphDoc_MotionItemGroup
+IAnimGraphDoc_MotionMatchingNode
+IAnimGraphDoc_MotionMetric
+IAnimGraphDoc_MotionParameter
+IAnimGraphDoc_MotionParameterManager
+IAnimGraphDoc_Motor
+IAnimGraphDoc_MovementComponent
+IAnimGraphDoc_Node
+IAnimGraphDoc_NodeBlend2D
+IAnimGraphDoc_NodeBlend2DItem
+IAnimGraphDoc_NodeManager
+IAnimGraphDoc_ParamSpan
+IAnimGraphDoc_ParamSpanContainer
+IAnimGraphDoc_ParameterManager
+IAnimGraphDoc_ParameterProvider
+IAnimGraphDoc_ProxyNode
+IAnimGraphDoc_RigidBodyWeightList
+IAnimGraphDoc_RootNode
+IAnimGraphDoc_ScriptEditManager
+IAnimGraphDoc_SelectorNode
+IAnimGraphDoc_SequenceBlend2DItem
+IAnimGraphDoc_SequenceMotionItem
+IAnimGraphDoc_SequenceNode
+IAnimGraphDoc_SequencePreviewSource
+IAnimGraphDoc_SequenceUser
+IAnimGraphDoc_SingleFrameNode
+IAnimGraphDoc_SlopeComponent
+IAnimGraphDoc_SolveIKChainNode
+IAnimGraphDoc_State
+IAnimGraphDoc_StateMachine
+IAnimGraphDoc_StateTransition
+IAnimGraphDoc_SubGraph
+IAnimGraphDoc_SubGraphManager
+IAnimGraphDoc_SubGraphNode
+IAnimGraphDoc_TagManager
+IAnimGraphDoc_TagSpan
+IAnimGraphDoc_TagSpanContainer
+IAnimMotor
+IAnimNode
+IAnimNodeManager
+IAnimParamSpan
+IAnimParamSpanContainer
+IAnimParameterList
+IAnimScriptComponent
+IAnimState
+IAnimStateMachine
+IAnimStateTransition
+IAnimTagManager
+IAnimTagSpan
+IAnimTagSpanContainer
+IAnimationGraph
+IAnimationSubGraph
 IAssertionFailureListener::AssertionFailure()
+IBlend2DAnimNode
+IBlend2DItem
+IBlendedAnimStateTransition
+ICPPScriptComponent
+ICommentAnimNode
+IConditionContainer
+IContainerAnimNode
 ID%s:
 IEEE 754r decimal floating point (128 bits)
 IEEE 754r decimal floating point (32 bits)
@@ -2710,6 +3150,8 @@ IFormatOutputStream::PutChars(char const*, int)
 IFormatOutputStream::PutS(char const*)
 IFormatOutputStream::RemainingCapacity() const
 IFormatOutputStream::Terminate()
+IGraphMotionItem
+IJumpHelperAnimNode
 IKChainOld
 IKData
 IKLock
@@ -2723,16 +3165,42 @@ IKeyValuesDumpContextAsText::KvBeginKey(KeyValues*, int)
 IKeyValuesDumpContextAsText::KvEndKey(KeyValues*, int)
 IKeyValuesDumpContextAsText::KvWriteIndent(int)
 IKeyValuesDumpContextAsText::KvWriteValue(KeyValues*, int)
+ILookComponent
 IMemAlloc::DumpStats: could not open output file %s
 IMobileEventListener::OnEnterHibernationState()
 IMobileEventListener::OnExitHibernationState()
 IMobileEventListener::OnLowMemoryNotification()
+IMotionGraphPreviewNode
+IMotionItem
+IMotionItemGroup
+IMotionMatchingAnimNode
+IMotionMetric
+IMotionParameter
+IMotionParameterManager
+IMovementComponent
 INF
 INHERITABLE_BOOL_INHERIT
 INHERITABLE_BOOL_TRUE
 INTEGER
+INodeBlend2DItem
+IParameterProvider
+IProxyAnimNode
 IPulseSystem_001
+IRigidBodyWeightList
+IRootAnimNode
 IST
+IScriptEditManager
+ISelectorAnimNode
+ISequenceAnimNode
+ISequenceBlend2DItem
+ISequenceMotionItem
+ISequencePreviewSource
+ISequenceUser
+ISingleFrameAnimNode
+ISlopeComponent
+ISolveIKChainAnimNode
+ISubGraphAnimNode
+ISubGraphManager
 ITALIAN
 Ignore All Asserts
 Ignore For 24 Hours
@@ -2746,7 +3214,7 @@ Import_GetICVarFactory
 In empty slabs:      npageslabs: %zu huge, %zu nonhuge      nactive: %zu huge, %zu nonhuge       ndirty: %zu huge, %zu nonhuge       nretained: 0 huge, %zu nonhuge
 In full slabs:      npageslabs: %zu huge, %zu nonhuge      nactive: %zu huge, %zu nonhuge       ndirty: %zu huge, %zu nonhuge       nretained: 0 huge, %zu nonhuge
 InDefault
-Incomplete binary block: blob %i/%i, ret=%zu, input %u/%u
+Incomplete binary block: blob %i/%i, ret=%zx, input %u/%u
 Incomplete binary block: output %u/%u bytes, input %u/%u bytes
 Incorrect accel
 Incorrect k
@@ -2755,6 +3223,7 @@ Incorrect splitPoint
 Indicate to a test script that a checkpoint has been reached
 Indirect FDE pointer encoding is not supported
 Inflow_
+Inflow_Method
 InitFromCommandLine
 InitMiniDumpReportOptions
 InitWin32ConsoleColorContext
@@ -2788,6 +3257,7 @@ Invalid Mach-O header
 Invalid Mach-O program header %d
 Invalid Mach-O segment %d
 Invalid abbrev children setting %d
+Invalid alignment value %llu, must be a power of two and at least %llu
 Invalid arange debug info offset
 Invalid arange header address size
 Invalid arange header segment size
@@ -2838,6 +3308,7 @@ IsUniqueIdValid
 IterateCapturedStackAnnotations
 J
 JAPANESE
+JE_MALLOC_CONF
 JSON error, unterminated element:
 JST
 Jan
@@ -2908,7 +3379,8 @@ KeyValues::InsertSubKey(int, KeyValues*)
 KeyValues::IsEmpty(char const*) const
 KeyValues::IsEqual(KeyValues*)
 KeyValues::KeyValues(KeyValues const*, bool)
-KeyValues::KeyValues(char const*)
+KeyValues::KeyValues(char const*, IKeyValuesSystem*, bool)
+KeyValues::KeyValues(char const*, KeyValues::KV_DISPOSABLE_STRING_TABLE_STATE)
 KeyValues::KeyValues(char const*, char const*, bool)
 KeyValues::KeyValues(char const*, char const*, char const*)
 KeyValues::KeyValues(char const*, char const*, char const*, char const*, char const*)
@@ -2961,7 +3433,6 @@ KeyValuesJSONParser::KeyValuesJSONParser(CUtlBuffer const&)
 KeyValuesJSONParser::KeyValuesJSONParser(char const*, int)
 KeyValuesJSONParser::ParseFile()
 KeyValuesJSONParser::~KeyValuesJSONParser()
-KeyValuesSystem
 KeyValuesToJSON
 L
 LC_ADDRESS
@@ -3032,12 +3503,19 @@ LoadKV3Text_NoHeader(KeyValues3*, CUtlString*, char const*, KV3ID_t const&, char
 Loaded %s, got %p
 Loading multi-line string literals with metadata support enabled is not currently supported.
 Localize_001
+LockForWrite
 Log Function Help:     log_verbosity <channel specifiers> <verbosity>    log_color <channel specifiers> <hex color>    log_flags <channel specifiers> <+/-flag>All functions are case insensitive.A channel specifier is either:1) tag specifiers: +/-tag1 +/-tag2 ...      // Narrows down to channels with & without given tags.2) channel names: name1 name2 ...           // Lists channels by name.verbosity: off, essential, default,         // Sets how verbose a channel is allowed to be.           detailed, max                     // 'off' turns all spew off                                            // 'essential' turns on vital logs                                            // 'default' turns on most messages                                            // 'detailed' allows for walls of text that are usually useful                                            // 'max' allows everythinghex color: RRGGBBAA                         // A hexadecimal color value in the order RGBA.flag: <+/->DoNotEcho                        // Enable/disable a flag to turn off echoing to the console.      <+/->ConsoleOnly                      // Enable/disable a flag to send text only to the console.e.g.    log_verbosity +console -developer verbose   // Sets minimum spew level of channels with the tag                                            // 'console' but without the tag 'developer' to 'verbose'.    log_color renderdebug bsp 4080C0FF      // Sets the 'renderdebug' and 'bsp' channels to the RGBA color (64, 128, 192, 255).    log_flags +developer +donotecho         // Turns on the LCF_DO_NOT_ECHO flag for all channels with the 'developer' tag.
 LoggingChannel_t::HasTag(char const*) const
+LoggingSystem_AddLogCapture
+LoggingSystem_AddLogCaptureString
+LoggingSystem_AddLogCaptureV
 LoggingSystem_AddTagToChannel
 LoggingSystem_ChangeChannelIndent
+LoggingSystem_ClearLogCapture
 LoggingSystem_CurrentStateIndex
 LoggingSystem_EnableBackdoorLoggingListeners
+LoggingSystem_EnableLogCapture
+LoggingSystem_EnableLogCaptureInMiniDumpComment
 LoggingSystem_EnsureChannelVerbosity
 LoggingSystem_FindChannel
 LoggingSystem_FirstTag
@@ -3049,6 +3527,10 @@ LoggingSystem_GetChannelFlags
 LoggingSystem_GetChannelVerbosity
 LoggingSystem_GetFirstChannelID
 LoggingSystem_GetLastChannelLineComplete
+LoggingSystem_GetLogCapture(CMiniDumpComment*, bool)
+LoggingSystem_GetLogCapture(CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int> >*, bool)
+LoggingSystem_GetLogCaptureForMiniDump(CMiniDumpComment*, bool, char const*)
+LoggingSystem_GetMaxLogCaptureLines
 LoggingSystem_GetNextChannelID
 LoggingSystem_GetVerbosityForSeverity
 LoggingSystem_HasTag
@@ -3089,6 +3571,7 @@ LoggingSystem_SetChannelVerbosityByName
 LoggingSystem_SetChannelVerbosityByTag
 LoggingSystem_SetLastChannelLineComplete
 LoggingSystem_SetLoggingResponsePolicy
+LoggingSystem_SetMaxLogCaptureLines
 LoggingSystem_TagName
 LoggingSystem_UnregisterLoggingListener
 Logic Error in CExpressionEvaluator
@@ -3099,9 +3582,9 @@ LooksLikeKV3BinaryData(void const*, int, KV3ID_t*)
 LooksLikeKV3TextData(void const*, int, KV3ID_t*, char*, int)
 LooksLikeOldSchemaText(void const*, int, KV3ID_t*)
 Low PC attr without addr value
+Low-level allocator: jemalloc
 Lowest-level allocator stats:
 M
-MALLOC_CONF
 MATCHFRAMEWORK_001
 MB
 MD5Final
@@ -3113,7 +3596,6 @@ MD5_ProcessSingleBuffer
 MD5_PseudoRandom
 MENUBAR_ITEM
 MOBILE
-MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MST
 Mac OS
@@ -3146,6 +3628,8 @@ Mach-O DWARF symbols
 Mach-O fallback symbols
 MagnitudeOnly
 MailMiniDump
+MakeGlobalSymbol
+MakeGlobalSymbolCaseSensitive
 Malformed attribute list terminator
 MapListService_001
 Mar
@@ -3154,23 +3638,16 @@ MaterialUtils_001
 Max committed memory: %u KB out of %d KB
 Maximum thread-cached size class
 May
-MemAllocScratch
-MemAlloc_AllocAlignedFunc
 MemAlloc_AllocFunc
 MemAlloc_CallocFunc
-MemAlloc_FreeAlignedFunc
 MemAlloc_FreeFunc
 MemAlloc_GetAllocAttributesFunc
-MemAlloc_GetSizeAlignedFunc
 MemAlloc_GetSizeFunc
-MemAlloc_ReallocAlignedFunc
 MemAlloc_ReallocFunc
 MemAlloc_SetAllocAttributesFunc
 MemAlloc_StrDupFunc
 MemAlloc_StrDupWrapperFunc
 MemAlloc_WcStrDupFunc
-MemFreeScratch
-MemZeroMemory
 Merged arenas stats:
 MeshSystem001
 MeshUtils001
@@ -3278,6 +3755,7 @@ NSt7__cxx119money_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEEE
 NSt8ios_base7failureB5cxx11E
 NSt8ios_base7failureE
 Name attr without string value
+NavGameTest001
 NavMesh
 NetworkClientService_001
 NetworkMessagesVersion001
@@ -3301,6 +3779,7 @@ Not enough data for 4-byte element array
 Not enough data for 8-byte element array
 Not enough data for CIE/FDE
 Not enough data for arange set header
+Not enough data for compilation unit header
 Not enough data for compilation unit size
 Not enough data for line set header
 Not enough data for value
@@ -3426,7 +3905,6 @@ PanoramaUIEngine001
 Parameter file '%s' not found, skipping...
 Parameter is out of bound
 Parent and child ConVars with different default values! %s child: %s parent: %s (parent wins)
-ParseTokenFromCharString
 Particle Simulation
 Particle/Effect_Rendering
 ParticleSystemMgr003
@@ -3512,6 +3990,7 @@ Plat_GetCurrentHibernationState
 Plat_GetCurrentPrivateBytes
 Plat_GetCurrentRSS
 Plat_GetDPI
+Plat_GetDebugMonitor
 Plat_GetDefaultMonitorIndex
 Plat_GetDesktopBounds
 Plat_GetDesktopResolution
@@ -3523,7 +4002,6 @@ Plat_GetGameDirectory
 Plat_GetGlobalListRegistry
 Plat_GetLastGameInstanceMutex
 Plat_GetLocalTime
-Plat_GetMainWindowSwapChainScale
 Plat_GetMasterMobileEventHandler
 Plat_GetMemPageSize
 Plat_GetMiniDumpErrorString
@@ -3538,7 +4016,6 @@ Plat_GetMonitorContentsScale
 Plat_GetMonitorCount
 Plat_GetMonitorIndexFromName
 Plat_GetMonitorName
-Plat_GetMonitorPPI
 Plat_GetMonitorResolution
 Plat_GetOSDescriptionString
 Plat_GetOSType
@@ -3564,7 +4041,6 @@ Plat_GetWindowClientBounds
 Plat_GetWindowClientSize
 Plat_GetWindowContentsScale
 Plat_GetWindowMonitorIndex
-Plat_GetWindowPhysicalSize
 Plat_GetWindowSafeAreaInsets
 Plat_GlobalMemoryStatus
 Plat_HasClipboardText
@@ -3596,6 +4072,7 @@ Plat_IsModuleLoaded
 Plat_IsOSInLowPowerUseMode
 Plat_IsRunningOnCustomerMachine
 Plat_IsScreenKeyboardShown
+Plat_IsSymlink
 Plat_IsWindowFocused
 Plat_IsWindowMinimized
 Plat_IsWindowVisible
@@ -3661,7 +4138,6 @@ Plat_SetFullscreenMinimizeOnFocusLoss
 Plat_SetGameDirectories
 Plat_SetGlobalSafeAreaInsets
 Plat_SetIsConsoleApplication
-Plat_SetMainWindowSwapChainScale
 Plat_SetModuleFilename
 Plat_SetMouseCapture
 Plat_SetVirtualReserveFailLimit
@@ -3776,6 +4252,7 @@ RecursiveLoadFromBuffer:  got conditional between key and value
 RecursiveLoadFromBuffer:  got empty keyname
 RecursiveLoadFromBuffer:  got } in key
 RecursiveLoadFromBuffer:  recursion overflow
+Register offset set to invalid value (%llu)
 RegisterAssertionFailureListener
 RegisterConVar: Unknown error registering convar "%s"!
 RegisterFormatConversion
@@ -3832,63 +4309,76 @@ S
 SCAN UNWIND: found reasonable frame pointer 0x%llx below retaddr, using
 SCAN UNWIND: found reasonable return address 0x%llx on the stack at 0x%llx
 SCHINESE
-SDL_AudioStreamAvailable
-SDL_AudioStreamClear
-SDL_AudioStreamFlush
-SDL_AudioStreamGet
-SDL_AudioStreamPut
-SDL_BuildAudioCVT
+SDL_BlitSurfaceScaled
+SDL_ClearAudioStream
 SDL_ClearQueuedAudio
 SDL_CloseAudioDevice
-SDL_ConvertAudio
+SDL_CloseJoystick
+SDL_CreateAudioStream
 SDL_CreateColorCursor
 SDL_CreateCursor
-SDL_CreateRGBSurface
+SDL_CreateSurface
 SDL_CreateSystemCursor
-SDL_CreateWindow
+SDL_CreateWindowWithPosition
+SDL_DestroyAudioStream
+SDL_DestroyCursor
+SDL_DestroySurface
 SDL_DestroyWindow
 SDL_DisableScreenSaver
 SDL_EnableScreenSaver
-SDL_FreeAudioStream
-SDL_FreeCursor
-SDL_FreeSurface
+SDL_FlashWindow
+SDL_FlushAudioStream
 SDL_GL_SetAttribute
 SDL_GetAudioDeviceName
 SDL_GetAudioDeviceStatus
+SDL_GetAudioStreamAvailable
+SDL_GetAudioStreamData
 SDL_GetClipboardText
+SDL_GetClosestFullscreenDisplayMode
 SDL_GetCurrentAudioDriver
 SDL_GetCurrentDisplayMode
 SDL_GetCursor
 SDL_GetDefaultCursor
 SDL_GetDesktopDisplayMode
 SDL_GetDisplayBounds
-SDL_GetDisplayDPI
-SDL_GetDisplayMode
+SDL_GetDisplayContentScale
+SDL_GetDisplayForWindow
 SDL_GetDisplayName
+SDL_GetDisplays
 SDL_GetError
+SDL_GetFullscreenDisplayModes
 SDL_GetGlobalMouseState
 SDL_GetGrabbedWindow
 SDL_GetHint
+SDL_GetJoystickAxis
+SDL_GetJoystickButton
+SDL_GetJoystickHat
+SDL_GetJoystickInstanceID
+SDL_GetJoystickInstanceName
+SDL_GetJoystickName
+SDL_GetJoysticks
 SDL_GetKeyFromScancode
 SDL_GetKeyName
 SDL_GetKeyboardFocus
 SDL_GetKeyboardState
 SDL_GetModState
 SDL_GetNumAudioDevices
-SDL_GetNumDisplayModes
-SDL_GetNumVideoDisplays
+SDL_GetNumJoystickAxes
+SDL_GetNumJoystickButtons
+SDL_GetNumJoystickHats
 SDL_GetPowerInfo
 SDL_GetQueuedAudioSize
 SDL_GetRelativeMouseMode
 SDL_GetScancodeFromKey
 SDL_GetScancodeName
-SDL_GetWindowDisplayIndex
-SDL_GetWindowDisplayMode
 SDL_GetWindowFlags
 SDL_GetWindowFromID
+SDL_GetWindowFullscreenMode
 SDL_GetWindowGrab
+SDL_GetWindowPixelDensity
 SDL_GetWindowPosition
 SDL_GetWindowSize
+SDL_GetWindowSizeInPixels
 SDL_GetWindowTitle
 SDL_GetWindowWMInfo
 SDL_HapticClose
@@ -3900,33 +4390,17 @@ SDL_HasScreenKeyboardSupport
 SDL_HideWindow
 SDL_Init
 SDL_InitSubSystem
-SDL_IsScreenKeyboardShown
-SDL_IsScreenSaverEnabled
-SDL_IsTextInputActive
-SDL_JoystickClose
-SDL_JoystickGetAxis
-SDL_JoystickGetBall
-SDL_JoystickGetButton
-SDL_JoystickGetHat
-SDL_JoystickInstanceID
-SDL_JoystickName
-SDL_JoystickNameForIndex
-SDL_JoystickNumAxes
-SDL_JoystickNumBalls
-SDL_JoystickNumButtons
-SDL_JoystickNumHats
-SDL_JoystickOpen
-SDL_JoystickUpdate
 SDL_LoadBMP_RW
 SDL_MOUSE_FOCUS_CLICKTHROUGH
 SDL_MinimizeWindow
-SDL_NewAudioStream
-SDL_NumJoysticks
 SDL_OpenAudioDevice
+SDL_OpenJoystick
 SDL_PauseAudioDevice
 SDL_PeepEvents
+SDL_PlayAudioDevice
 SDL_PollEvent
 SDL_PumpEvents
+SDL_PutAudioStreamData
 SDL_QueueAudio
 SDL_Quit
 SDL_QuitSubSystem
@@ -3934,6 +4408,8 @@ SDL_RWFromFile
 SDL_RaiseWindow
 SDL_ResetKeyboard
 SDL_RestoreWindow
+SDL_ScreenKeyboardShown
+SDL_ScreenSaverEnabled
 SDL_SetClipboardText
 SDL_SetClipboardText failed: %s
 SDL_SetCursor
@@ -3942,9 +4418,8 @@ SDL_SetRelativeMouseMode
 SDL_SetTextInputRect
 SDL_SetThreadPriority
 SDL_SetWindowBordered
-SDL_SetWindowDisplayMode
 SDL_SetWindowFullscreen
-SDL_SetWindowGammaRamp
+SDL_SetWindowFullscreenMode
 SDL_SetWindowGrab
 SDL_SetWindowIcon
 SDL_SetWindowPosition
@@ -3955,7 +4430,8 @@ SDL_ShowMessageBox
 SDL_ShowWindow
 SDL_StartTextInput
 SDL_StopTextInput
-SDL_UpperBlitScaled
+SDL_TextInputActive
+SDL_UpdateJoysticks
 SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS
 SDL_VIDEO_X11_NET_WM_PING
 SDL_WaitEvent
@@ -3966,6 +4442,8 @@ SDL_WasInit
 SDL_free
 SDL_getenv
 SDL_iconv_string
+SDL_modff
+SDL_roundf
 SDL_setenv
 SDL_wcslen
 SEQUENCE_COMBINE_MODE_ALPHA_FROM0_RGB_FROM_1
@@ -4065,7 +4543,7 @@ Server Game
 Server Physics
 Server Simulation
 Server VScript
-ServerResourceCompilerInfo_001
+ServerToolsInfo_001
 Set the color of a logging channel.
 Set the flags on a logging channel.
 Set the spew level of a logging channel.
@@ -4097,6 +4575,7 @@ Slope_Angle_Forward
 Slope_Angle_Sideways
 Slope_Heading
 So
+SortCheck_Failure
 SoundMix
 SoundOpSystem001
 SoundOpSystemEdit001
@@ -4104,11 +4583,11 @@ SoundOperators
 SoundService_001
 SoundSystem001
 Source buffer is wrong
+Source file not found.
 Source line end address before start address
 Source line end address out of range
 Source line end sequence address out of range
 Source line program missing end sequence
-Source line start address out of range
 Source2Client002
 Source2ClientPrediction001
 Source2ClientUI001
@@ -4267,6 +4746,7 @@ StackTools_EnumerateVirtualMachineEncoders
 StackTools_InstallModuleMappingListener
 StackTools_RemoveModuleMappingListener
 StackTools_VerifyLoadedModuleMappings
+Standard memory allocator initialized with non-pass-through options
 Start a test script running..
 StateComparisonValue_FixedValue
 StateComparisonValue_Parameter
@@ -4275,6 +4755,9 @@ Statement list without data4/sec_offset value
 StatsService_001
 Steam
 SteamAudio001
+Step_CallExternalMethod
+Step_CallMethod
+Step_CallMethod node %d referenced unknown method %d
 Step_Generic
 Stop has been called on thread.
 StrReplaceChar
@@ -4473,7 +4956,6 @@ Unable to determine ELF default base address
 Unable to determine Mach-O default base address
 Unable to determine buffer encoding.
 Unable to exec '%s'
-Unable to load SDL2
 Unable to read .gnu_debuglink
 Unable to read ELF note
 Unable to read ELF program headers
@@ -4522,7 +5004,6 @@ Unknown (invalid)
 Unknown CIE version %u
 Unknown KV3 specific type %u
 Unknown arange header version
-Unknown compilation unit abbrev code
 Unknown compilation unit header version %u
 Unknown error
 Unknown extended instruction 0x%x
@@ -4533,6 +5014,7 @@ Unknown pointer encoding representation 0x%x
 Unknown reader format version %u
 Unknown standard instruction 0x%x
 UnknownOS
+Unlock
 Unrecognized ELF class
 Unrecognized ELF data layout or version
 Unrecognized Mach-O header magic
@@ -4550,6 +5032,7 @@ Unspecified error code
 Unsupported ELF compression type %u
 Unsupported ELF machine type %d
 Unsupported Mach-O machine type %d
+Unsupported allocation alignment (%llu), max is %u
 Unsupported binary encoding id.
 Unsupported combination of parameters
 Unsupported define_file instruction
@@ -4568,11 +5051,11 @@ UtlMemory_Alloc
 UtlMemory_AllocAligned
 UtlMemory_CalcNewAllocationCount
 UtlMemory_FailedAllocation
-UtlStringFastCompareLess
 V
 VALVE_CLOCK_SPEED_CALCULATION
 VALVE_TESTMODE
 VALVE_TEST_MONITOR_PROCESS
+VApplication001
 VAsyncFileSystem2_001
 VAvi001
 VBik001
@@ -4753,6 +5236,7 @@ V_StripTrailingSlash
 V_StripTrailingWhitespace
 V_TokenWaiting
 V_TranslateLineFeedsToUnix
+V_TryAndMakeFriendlyNameFromCppName
 V_UChar32ToUTF16
 V_UChar32ToUTF8
 V_UInt16ToString_Unsafe
@@ -5036,6 +5520,7 @@ VmPeak
 VmRSS
 VmSize
 VoidFnPtrLookup_Tier0
+Vrad3_001
 W
 WARNING: CDirWatcher not implemented
 WARNING: Command buffer full... ignoring!%s
@@ -5069,7 +5554,6 @@ Waypoint_Distance
 Waypoint_Heading
 Wed
 Wednesday
-WeightList
 Windows
 Windows 10
 Windows 11
@@ -5433,6 +5917,8 @@ __cxa_guard_release
 __cxa_init_primary_exception
 __cxa_pure_virtual
 __cxa_rethrow
+__cxa_thread_atexit
+__cxa_thread_atexit_impl
 __cxa_throw
 __cxa_throw_bad_array_new_length
 __cxxabiv1::__class_type_info::__do_catch(std::type_info const*, void**, unsigned int) const
@@ -5461,7 +5947,6 @@ __environ
 __errno_location
 __float128
 __float80
-__free_hook
 __freelocale
 __fxstat64
 __gcclibcxx_demangle_callback
@@ -5533,13 +6018,10 @@ __isoc99_vsscanf
 __isoc99_vswscanf
 __iswctype_l
 __lxstat64
-__malloc_hook
-__memalign_hook
 __newlocale
 __nl_langinfo_l
 __oldschema_object_name
 __pthread_key_create
-__realloc_hook
 __register_atfork
 __restrict
 __sched_cpucount
@@ -5590,7 +6072,6 @@ ae
 aem
 ai_model_info
 alarm
-aligned_alloc
 alignof
 alloc_dump
 allowstatic
@@ -5617,7 +6098,18 @@ animgraph17
 animgraph18
 animgraph19
 animgraph2
+animgraph20
+animgraph21
+animgraph22
+animgraph23
+animgraph24
+animgraph25
+animgraph26
+animgraph27
+animgraph28
+animgraph29
 animgraph3
+animgraph30
 animgraph4
 animgraph5
 animgraph6
@@ -5786,7 +6278,6 @@ bytes
 c
 cable
 cache*
-calloc
 cannot create shim for unknown locale::facet
 cannot switch from automatic to manual argument indexing
 cantdie
@@ -5852,7 +6343,7 @@ covariant virtual thunk to
 cpu.cpp
 create_particle
 ctl
-curl --connect-timeout 5 --max-time %u -s -o "%s" %s
+curl --connect-timeout 5 --no-progress-meter --max-time %u -s -o "%s" %s
 curlextents
 curregs
 curslabs
@@ -5944,6 +6435,7 @@ enable_limit
 enabled
 encoding
 english
+entity_name
 eo
 epoch
 epoll_create1
@@ -6011,7 +6503,6 @@ format specifier requires signed argument
 found %3u matches of length >= %i at pos %7u
 fr
 frame_end
-free
 freopen64
 frexp
 friction
@@ -6052,7 +6543,6 @@ game_keys
 generic
 getcwd
 getdtablesize
-getenv
 gethostbyname
 gethostname
 getloadavg
@@ -6184,6 +6674,7 @@ invalid format specifier for char
 invalid literal/length code
 invalid literal/lengths set
 invalid stored block lengths
+invalid type specifier
 invalid window size
 invert_orientation
 ioctl
@@ -6194,6 +6685,28 @@ is_debris
 j
 java Class for
 java resource
+je_aligned_alloc
+je_calloc
+je_dallocx
+je_free
+je_mallctl
+je_mallctlbymib
+je_mallctlnametomib
+je_malloc
+je_malloc_conf
+je_malloc_message
+je_malloc_stats_print
+je_malloc_usable_size
+je_mallocx
+je_memalign
+je_nallocx
+je_posix_memalign
+je_rallocx
+je_realloc
+je_sallocx
+je_sdallocx
+je_valloc
+je_xallocx
 jemalloc
 jemalloc_bg_thd
 jobthread.cpp
@@ -6262,6 +6775,15 @@ m
 mI
 mL
 m_AllowedSurfaceProperties
+m_Arg0
+m_Arg0Name
+m_Arg0Type
+m_Arg1
+m_Arg1Name
+m_Arg1Type
+m_ArgList
+m_ArgName
+m_Args
 m_Attributes
 m_Bone
 m_ChainData
@@ -6290,6 +6812,11 @@ m_Emitters
 m_EndEffectorBone
 m_EndEffectorTargetBone
 m_Ent
+m_ExpectedArg0Name
+m_ExpectedArg0Type
+m_ExpectedArg1Name
+m_ExpectedArg1Type
+m_ExpectedArgs
 m_Expression
 m_FloatComponentX
 m_FloatComponentY
@@ -6313,6 +6840,7 @@ m_LocalCoordinateSystemSpeedMax
 m_LocalCoordinateSystemSpeedMin
 m_LocalSpaceTransform
 m_Message
+m_MethodID
 m_Mode
 m_Modifiers
 m_MotorList
@@ -6644,6 +7172,8 @@ m_nScaleControlPoint
 m_nScaleControlPointField
 m_nSequenceCombineMode
 m_nSetMethod
+m_nSkin
+m_nSkinCP
 m_nSortMethod
 m_nStartCP
 m_nSwitchValue
@@ -6725,9 +7255,6 @@ m_velocityInput
 macos
 madvise
 madvises
-mallctl
-mallctlbymib
-mallctlnametomib
 mallinfo
 mallinfo.arena: %s
 mallinfo.fordblks: %s
@@ -6739,12 +7266,6 @@ mallinfo.ordblks: %s
 mallinfo.smblks: %s
 mallinfo.uordblks: %s
 mallinfo.usmblks: %s
-malloc
-malloc_conf
-malloc_message
-malloc_stats_print
-malloc_usable_size
-mallocx
 mapped:
 master_morph_weight
 material
@@ -6773,6 +7294,7 @@ menubar_item
 merged
 mesh
 meshes
+message
 metadata_thp:
 mi
 min. %f
@@ -6838,7 +7360,6 @@ n_spin_acq
 n_waiting
 nactive_huge
 nactive_nonhuge
-nallocx
 nan
 nanosleep
 narenas_ratio
@@ -6937,11 +7458,20 @@ opendir
 operation
 operator
 operator delete(void*)
+operator delete(void*, std::align_val_t)
 operator delete(void*, unsigned long)
+operator delete(void*, unsigned long, std::align_val_t)
 operator delete[](void*)
+operator delete[](void*, std::align_val_t)
+operator delete[](void*, unsigned long)
+operator delete[](void*, unsigned long, std::align_val_t)
 operator new(unsigned long)
+operator new(unsigned long, std::align_val_t)
+operator new(unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new(unsigned long, std::nothrow_t const&)
 operator new[](unsigned long)
+operator new[](unsigned long, std::align_val_t)
+operator new[](unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new[](unsigned long, std::nothrow_t const&)
 operator""
 opt
@@ -7052,7 +7582,6 @@ popen
 pose_control
 pose_control_type
 posix_fadvise64
-posix_memalign
 pow
 prctl
 pre
@@ -7130,7 +7659,6 @@ race
 radius0
 radius1
 raise
-rallocx
 random.cpp
 random_device could not be read
 random_device: rdrand failed
@@ -7145,7 +7673,6 @@ rdrnd
 rdseed
 readdir64
 readlink
-realloc
 recenter_on_parent_bone
 reference temporary #
 reference temporary for
@@ -7180,7 +7707,6 @@ s
 sP
 sZ
 safety_check_abort
-sallocx
 sample set too large : reduced to %u MB ...
 san_guard_large
 san_guard_small
@@ -7194,9 +7720,9 @@ sched_setaffinity
 sched_yield
 schema
 scrubber
-sdallocx
 sec_shard
 secondary
+secure_getenv
 semctl
 semget
 semop
@@ -7306,6 +7832,7 @@ stats.mutexes
 stats.resident
 stats.retained
 stats.zero_reallocs
+statvfs64
 std::
 std::Catalogs::_M_add(char const*, std::locale)
 std::Catalogs::_M_erase(int)
@@ -10489,7 +11016,6 @@ ux4
 uxX
 v
 valgrind
-valloc
 value of the environment variable MALLOC_CONF
 vanmgrph
 vconsole_fuzzy
@@ -10610,6 +11136,7 @@ vpcf54
 vpcf55
 vpcf56
 vpcf57
+vpcf58
 vpcf6
 vpcf7
 vpcf8
@@ -10622,6 +11149,7 @@ vpulse2
 vpulse3
 vpulse4
 vpulse5
+vpulse6
 vpulse_c1
 vr_carry_type
 vsmart;vsmart_template
@@ -10837,7 +11365,6 @@ workSpace buffer is not large enough
 writev
 wt
 x
-xallocx
 xdigit
 y
 yaw

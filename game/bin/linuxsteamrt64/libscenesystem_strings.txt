@@ -254,6 +254,7 @@ $0rpc $1($4.$2) returns ($5.$3)
 $0}
 $@
 $ORIGIN
+$tI
 %
 %%s: %s
 %*s%.*s
@@ -276,9 +277,9 @@ $ORIGIN
 %.1fms
 %.2f FPS
 %.2f px
-%.2f%% of pixels above %2.2f%% target @ %4.2f%%  Target Scalar = %4.2f  Min/Max( %4.2f, %4.2f )  Final Scalar: %4.2f
 %.2fsec
 %.3f V
+%.3f | %i%% %i/%i
 %.8f
 %0.2f
 %02d Hz
@@ -297,6 +298,7 @@ $ORIGIN
 %c%c%c
 %d %d %d %d
 %d (%d depth-only
+%d (%ukb), %d (%ukb)
 %d (0x%X)
 %d (0x%X) (%.02f secs)
 %d active allocations
@@ -371,7 +373,10 @@ $ORIGIN
 %s: Invalid grow amount %d
 %s: NULL
 %s: __pos (which is %zu) > this->size() (which is %zu)
+%s: invalid nBeforeIndex %d
+%s: invalid nSize %d
 %s:%d
+%sIndex: %d
 %sLOD Level: %d Draw Calls: %d Triangles: %d
 %s_%u
 %u ms
@@ -421,6 +426,7 @@ $ORIGIN
 )", which is not defined. The innermost scope is searched first in name resolution. Consider using a leading '.'(i.e., "(.
 )#
 ).  Contact the program author for an update.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
+*
 *=
 *@
 *CentralNode*
@@ -526,6 +532,7 @@ $ORIGIN
 ...)
 ...<truncated>...
 ../common/protobuf_helpers.cpp
+../public/tier0/memstack.h
 ../public/tier0/tslist.h
 ../public/tier0/utl3dallocator.h
 ../public/tier0/utlhashdict.h
@@ -554,6 +561,8 @@ $ORIGIN
 ./google/protobuf/stubs/stringpiece.h
 ./google/protobuf/unknown_field_set.h
 .PLACEHOLDER_VALUE
+.[\()*+?{|^$
+.[\*^$
 .dummy
 .foo = value".
 .placeholder.proto
@@ -682,6 +691,7 @@ $ORIGIN
 18IMultipleWorkerJob
 18IRenderingPipeline
 19
+19CClutterSceneObject
 19CDebugLayerRenderer
 19CNETMsg_SignonState
 19CRayTraceSceneWorld
@@ -690,7 +700,6 @@ $ORIGIN
 19CSceneMonitorObject
 19CSchemaRegistration
 19CSimpleQuadRenderer
-19CTonemapSystemMulti
 19ILightBinnerFactory
 19IRayTraceSceneWorld
 19IReadBufferCallback
@@ -711,7 +720,6 @@ $ORIGIN
 20CLightBinner2Factory
 20CNETMsg_DebugOverlay
 20CPostConnectCallback
-20CTonemapSystemLegacy
 20ISceneObjectDescBaseI21CSceneBarnLightObjectE
 20ISceneObjectDescBaseI21CSceneDebugTextObjectE
 20ISceneObjectDescBaseI25CSceneLPVSampleGridObjectE
@@ -726,6 +734,7 @@ $ORIGIN
 21CSceneBarnLightObject
 21CSceneDebugTextObject
 21CUtlMultiJobProcessor
+21IShaderReloadListener
 21IVConCommDataReceived
 22
 22C6FaceSkyboxObjectDesc
@@ -735,12 +744,12 @@ $ORIGIN
 22CSVCMsgList_GameEvents
 22CSceneAnimatableObject
 22CSchemaInstallCallback
-22CTonemapRendererLegacy
 22CVolumetricFogRenderer
 22IToolsResourceListener
 23
 23CBarnLightObjectDescGPU
 23CCharacterDecalRenderer
+23CClutterSceneObjectDesc
 23CFullscreenQuadRenderer
 23CKV3TransferContextBase
 23CKV3TransferLoadContext
@@ -902,7 +911,6 @@ $ORIGIN
 <td> CLEAR_COLOR %d </td>
 <td>,? (%llx)</td>
 <td>,?(%llx)</td>
-<td>3D_SKYBOX_LAYER</td>
 <td><font color="red">Clear() was suppressed</font></td>
 <td>CANNOT_BE_REFRACTED</td>
 <td>CAST_SHADOWS_ENABLED</td>
@@ -1008,9 +1016,10 @@ $ORIGIN
 >C
 ?
 ???
+?position
 @
 @@
-@@not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugs
+@@regex_error
 @A
 @B
 @DE
@@ -1036,6 +1045,7 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 ABGR8888
 ABORTED
 ABOUT THIS DEMO:
+ACK
 AE_CL_BODYGROUP_SET_VALUE
 AE_CL_DISABLE_BODYGROUP
 AE_CL_ENABLE_BODYGROUP
@@ -1139,6 +1149,7 @@ Animate
 Animated title %c %d###AnimatedTitle
 AnimationDecodeDebugDumpElement_t
 AnimationDecodeDebugDump_t
+AnimationProcessingType_t
 AnimationSnapshotBase_t
 AnimationSnapshotType_t
 AnimationSnapshot_t
@@ -1197,7 +1208,6 @@ Auto-scroll
 Auto/Current
 Avail %.2f
 Average
-AvgLum @ %4.2f%%  flTonemapMinAvgLum = %4.2f%%  Using %d pixels  Override(%s): %4.2f
 Avocado
 B
 B%d-%s%s
@@ -1239,13 +1249,14 @@ Banana
 Bar Plot
 Bar Plots
 BarnLight
-BarnLightCB
 BarnLightObjectDesc
 Barry
 Baseline of button will look misaligned with text..
 Basic
 Basic Horizontal Layout
 Basic trees
+Batches
+Batches: %d
 Be mindful that using right-alignment (e.g. size.x = -FLT_MIN) creates a feedback loop where contents width can feed into auto-column width can feed into contents width.
 Beatrice
 Beetroot
@@ -1263,6 +1274,7 @@ Betty
 Bibi
 BinCullParams_t
 BinaryProperties_GetValue
+BindBakedLightingInfoInPerViewLightingConstants
 BindlessFastPathDesc
 BindlessFastPathManifest
 BindlessFastPathPushConstants_t
@@ -1270,9 +1282,7 @@ BindlessFastPathSceneObject
 Blah blah blah
 Blah blahBlah Blah
 Blaine
-BloomScale = %4.2f  flTonemapRate = %4.2f  m_flAccelerateExposureDown = %4.2f
 Blue
-Blue is Av Lum. Green is percent target. Histogram is in linear space
 Blueberry
 Bobby
 BoneConstraintList
@@ -1320,11 +1330,9 @@ By default, right-clicking over a TableHeadersRow()/TableHeader() line will open
 Byte size calculation and serialization were inconsistent.  This may indicate a bug in protocol buffers or it may be caused by concurrent modification of
 C
 C++ lambdas can be passed as function pointers as well!
-C1
-C3
-C4
 C5
 C6
+CAN
 CANCELLED
 CAggregateSceneObject
 CAggregateSceneObjectDesc
@@ -1348,12 +1356,13 @@ CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MoveFrom(CBufferString&)
 CBufferString::Purge(int)
 CBufferString::RemoveAt(int, int)
-CBufferString::SetExtension(char const*)
+CBufferString::SetExtension(char const*, bool)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
 CBufferString::ToLowerFast(int)
 CBufferString::TrimTail(char const*)
 CCCCCCCCCCCC
+CClutterSceneObject
 CDebugLayerRenderer::ShowRenderTargets GetMode("Default") == NULL? Can't Render with material %s!
 CDebugTextObjectDesc
 CDirectionalLightObjectDescGpu
@@ -1650,6 +1659,7 @@ CHECK failed: uninterpreted_options_field != nullptr:
 CHECK failed: unknown_fields->SerializeToString(outstr):
 CHECK failed: value != nullptr:
 CHECK failed: z.first != NULL:
+CInvocations
 CJK text will only appears if the font was loaded with the appropriate CJK character ranges. Call io.Fonts->AddFontFromFileTTF() manually to load extra character ranges. Read docs/FONTS.md for details.
 CLASSIFY
 CLEAR
@@ -1661,6 +1671,11 @@ CMTNormalWrinkle
 CMTPositionSpeed
 CMTatlastexture_.vtex
 CMemAllocSystemInitialize
+CMemoryStack::CMemoryStack()
+CMemoryStack::CommitTo(unsigned char*)
+CMemoryStack::FreeAll(bool)
+CMemoryStack::Init(char const*, unsigned int, unsigned int, unsigned int, unsigned int)
+CMemoryStack::~CMemoryStack()
 CMesh Cannot create packed input layout, because the bone indices are out of range (0x%X)
 CPPTYPE_BOOL
 CPPTYPE_DOUBLE
@@ -1672,10 +1687,12 @@ CPPTYPE_STRING
 CPPTYPE_UINT32
 CPPTYPE_UINT64
 CPointLightObjectDescCPU
+CPrimitives
 CProjectedDecalSceneObjectDesc
 CRC64_ProcessBuffer
 CRawAllocator::Alloc(RawAllocatorType_t, unsigned long, unsigned long*)
 CRawAllocator::Free(RawAllocatorType_t, void*, unsigned long)
+CSInvocations
 CSM%i "%s" (%s)
 CSSDSEndFrameViewInfo
 CSSDSMsg_EndFrame
@@ -1751,8 +1768,6 @@ CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
 CTonemapRenderer is trying to render with an invalid occlusion query handle. Are we rendering while the screen isn't visible? Look for a previous warning saying we ran out of buckets.
 CTonemapRenderer needs to use a layer which has had a render attribute called "ColorBuffer" set!
-CTonemapRendererLegacy is trying to render with an invalid occlusion query handle. Are we rendering while the screen isn't visible? Look for a previous warning saying we ran out of buckets.
-CTonemapRendererLegacy needs to use a layer which has had a render attribute called "ColorBuffer" set!
 CTonemapSystem::GenerateRendererData ran out of buckets!!
 CURRENTLY APPENDING
 CUniformRandomStreamImpl<CThreadNullMutex>::CUniformRandomStreamImpl(int)
@@ -1773,7 +1788,7 @@ CUtlBuffer::SeekPut(CUtlBuffer::SeekType_t, int)
 CUtlBuffer::SetBigEndian(bool)
 CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
-CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
+CUtlMemoryBlockAllocator::Alloc(unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
 CUtlMemoryBlockAllocator::Purge()
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
@@ -1813,6 +1828,7 @@ CUtlSymbolTable::~CUtlSymbolTable()
 CVProfNode::EnterScope()
 CVProfNode::ExitScope()
 CVProfNode::GetSubNode(char const*, int, char const*, int)
+Cache: %.1f MB
 Call set methods to initialize MapKey.
 Callback %p, user_data %p
 Caller should provide us with *buffer_ when buffer is non-empty
@@ -1896,7 +1912,10 @@ Click on the color square to open a color picker.CTRL+click on individual compon
 Click on the color square to open a color picker.Click and hold to use drag and drop.Right-click on the color square to show options.CTRL+click on individual component to input value.
 Click to break in debugger!
 Client Rendering
+ClientToolsInfo_001
 Clipping
+Clipping Invocations - the number of primitives (triangles) that were executed in the primitive clipping stage.
+Clipping Primitives - the number of primitives (triangles) that were output by the primitive clipping stage.
 Close
 Close All Documents
 Close Console
@@ -1907,6 +1926,8 @@ ClosestHit0
 ClosestHit1
 ClosestHit2
 ClosestHit3
+ClutterDesc
+ClutterInstances
 Coconut
 Codepoint: U+%04X
 Collapsed=%d
@@ -1962,10 +1983,13 @@ Completion
 Completion, History, Edit Callbacks
 CompositeMorphTextureAtlas
 Compressed texture bits for mip %i are corrupt, decompression error!
+Compute Shader Invocations - the number of times the compute shader was invoked.
+Compute Skinning Stats
 ComputeCullBits
 ComputeLayerInfo
 ComputeScratchTargetActualSize
 ComputeSkinning
+ConditionallySetBakedLightingFromLightmapCombo
 Config/Build Information
 Configuration
 Configuration##2
@@ -2042,10 +2066,16 @@ D24X8
 D24X8_SHADOW
 D32FS8
 DATA_LOSS
+DC1
+DC2
+DC3
+DC4
 DDDD
 DEADLINE_EXCEEDED
 DEFAULT_WRITE_PATH
+DEL
 DISK
+DLE
 DND_DEMO_CELL
 DND_LEFT
 DND_RIGHT
@@ -2232,13 +2262,20 @@ E
 E;
 EEEE
 EET
+EM
 EMG %d
 EMG Signal
+ENQ
+EOT
 ERROR
 ERROR! Cannot load GpuLightBinnerManifest
+ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: Docking is not enabled! See Demo > Configuration.
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
+ESC
 ESCAPE to revert.
+ETB
+ETX
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
 Earth
@@ -2268,12 +2305,10 @@ Encountered bad skin weights, summing to %g (1.0 expected) at position %.3f %.3f
 End-of-file inside block comment.
 EndMarker
 EndTimestamp
-Engine2
 Engine2/RenderingPipeline
 Engine2/RenderingPipeline/AmbientOcclusionProxies
 Engine2/RenderingPipeline/OpaqueFade
 Engine2/RenderingPipeline/ShadowDepthCullFront
-Engine2/RenderingPipeline/Tonemapping_MultipleSystems
 EngineServiceMgr001
 EnsureCapacity
 Enter 'HELP' for help.
@@ -2357,6 +2392,7 @@ ExtractSubrange() when arena is non-nullptr is only supported when
 F
 FAILED_PRECONDITION
 FATAL
+FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FFFF
@@ -2537,8 +2573,10 @@ GNU
 GOOGL
 GPOS
 GPU Animated Vertex Cache allocation too large! Requested: %d, max allowed: %dUse smaller draw calls or increase cache buffer block size
-GPU Animated Vertex Cache overflow! Increase buffer size of number of buffers.
+GPU Instance Mem : % .1fM allocated, %.1fM used this frame
 GPU Memory Size
+GPU Transform Mem : % .1fM allocated, %.1fM used this frame
+GPUPipelineStats
 GPUSort
 GameResourceServiceClientV001
 GameResourceServiceServerV001
@@ -2598,6 +2636,7 @@ Gradient
 Gradients
 Grapefruit
 Grid Lines
+Group
 Groups are not supported in proto3 syntax.
 Grow
 H
@@ -2708,6 +2747,8 @@ I am the last one here.
 I8
 I@
 IA88
+IAPrimitives
+IAVertices
 ID
 ID: 0123456789
 ID=0x%08X
@@ -2718,6 +2759,10 @@ INTERNAL
 INVALID_ARGUMENT
 INVALID_CPPTYPE
 IPulseSystem_001
+IS1
+IS2
+IS3
+IS4
 ISO 8601
 IST
 ITEM: Button
@@ -2846,6 +2891,8 @@ InlayText
 InnerClipRect
 InnerRect
 Input %d: '%s', Oversample: (%d,%d), PixelSnapH: %d, Offset: (%.1f,%.1f)
+Input Assembly Primitives - the number of primitives (triangles) processed by the input assembly stage.
+Input Assembly Vertices - the number of vertices processed by the input assembly stage.
 Input flags:
 Input size too large:
 InputIndices
@@ -2854,6 +2901,7 @@ InputStackSystemVersion001
 InputSystemVersion001
 InputText
 Inputs, Navigation & Focus
+InsertBeforeGetPtr
 InstallSchemaBindings
 InstallTemplateViewFactory
 Instruct Dear ImGui to render a mouse cursor itself. Note that a mouse cursor rendered via your application GPU rendering path will feel more laggy than hardware cursor, but will be more in sync with your other visuals.Some desktop applications may use both kinds of cursors (e.g. enable software cursor only when resizing/dragging something).
@@ -2980,8 +3028,8 @@ LIGHTBINNER
 LINEAR_D24S8
 LLLLLLL
 LOG_GENERAL
+LPVIndex
 LPV_DirectShadows
-LPV_Irradiance
 Label1
 Label2
 Label3
@@ -3087,7 +3135,6 @@ M:000
 MATCHFRAMEWORK_001
 MIXED
 MMMM
-MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MSAAResolve
 MST
@@ -3159,13 +3206,12 @@ May
 Maybe
 MaybeAllocateAligned cannot fail here.
 Mb
-MemAlloc_AllocAlignedFunc
-MemAlloc_FreeAlignedFunc
 MemAlloc_StrDupFunc
 Menu inside a regular window
 Menu item
 MenuBarBg
 Menus inside a regular window
+Mesh
 Mesh contains %d blend weights per vertex;  truncating to %d
 Mesh: ElemCount: %d, VtxOffset: +%d, IdxOffset: +%d, Area: ~%0.f px
 MeshBuilderObject
@@ -3174,7 +3220,7 @@ MeshUtils001
 Meshbuilder2
 Meshbuilder2IndexData
 Meshbuilder2VertexData
-MeshletData
+Meshes: %d
 MeshletIndexCopyLoops
 Message class "
 Message does not support reflection (type
@@ -3232,6 +3278,7 @@ Monitors (%d)
 More content %d
 More spacing: Hello
 More..
+Morph
 MorphTextureAtlasWidth
 Most plotters can also be passed a function pointer for getting data.
 Mouse Left: drag to add lines,Mouse Right: drag to scroll, click for context menu.
@@ -3289,6 +3336,7 @@ N
 N-gon sides
 N/A
 N10__cxxabiv115__forced_unwindE
+N10__cxxabiv117__class_type_infoE
 N10__cxxabiv117__pbase_type_infoE
 N10__cxxabiv119__foreign_exceptionE
 N10__cxxabiv119__pointer_type_infoE
@@ -3382,7 +3430,6 @@ N6google8protobuf8internal12ExtensionSet8KeyValueE
 N6google8protobuf8internal12MapFieldBaseE
 N6google8protobuf8internal14ZeroFieldsBaseE
 N6google8protobuf8internal15DynamicMapFieldE
-N6google8protobuf8internal16InternalMetadata13ContainerBaseE
 N6google8protobuf8internal16InternalMetadata9ContainerINS0_15UnknownFieldSetEEE
 N6google8protobuf8internal16InternalMetadata9ContainerISsEE
 N6google8protobuf8internal16MapFieldAccessorE
@@ -3418,6 +3465,7 @@ N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
 N: MMMR: MMM
 N@
+NAK
 NAV,FOCUS
 NB: Cursor & selection are preserved when refocusing last used item in code.
 NOT_FOUND
@@ -3453,8 +3501,25 @@ NSt7__cxx119money_getIcSt19istreambuf_iteratorIcSt11char_traitsIcEEEE
 NSt7__cxx119money_getIwSt19istreambuf_iteratorIwSt11char_traitsIwEEEE
 NSt7__cxx119money_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEEE
 NSt7__cxx119money_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb0ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb0ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb1ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb1ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb0ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb0ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb1ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb1ELb1EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb0ELb0EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb0ELb1EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb1ELb0EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb1ELb1EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb0ELb0EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb0ELb1EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb1ELb0EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb1ELb1EEE
 NSt8ios_base7failureB5cxx11E
 NSt8ios_base7failureE
+NUL
 NV_NULL
 Name:       %s
 NameOffset: %d
@@ -3466,6 +3531,7 @@ NavEnableGamepad
 NavEnableKeyboard
 NavEnableSetMousePos
 NavFocusScopeId = 0x%08X
+NavGameTest001
 NavHighlight
 NavId: 0x%08X, NavLayer: %d
 NavInputSource: %s
@@ -3554,6 +3620,7 @@ Now
 NumCullRequests
 NumFragments
 NumKeysBuffer
+NumKeysIndex
 NumRequests
 Number of cascades in sunlight shadow
 Number of contexts created:
@@ -3568,7 +3635,7 @@ Number of pushconstant sets:
 Number of rendertarget binds:
 Number of resolves:
 Number of targets (%d) exceeds maximum (%d).  List of targets:
-Number of transform rows used:
+Number of transforms, instances allocated:
 Number of unique materials in the frame:
 Number of views allocated : %d
 Number of views rendered: %d (%d with world traversals)
@@ -3583,7 +3650,6 @@ Object %4d: 0x%p, class=%20s, origin=(%13g,%13g,%13g), bounds=(%13g,%13g,%13g):(
 OcclusionQueryIssueLayer
 Oct
 October
-Off
 Offset %.2f
 Offset X
 Offset and Stride
@@ -3591,7 +3657,6 @@ Offsets can be negative and/or larger than the actual data count.
 Offsetting is useful for realtime plots (see above) and circular buffers.
 Oh dear
 OmniLight
-On
 OneOneOne
 OneTwoThree
 Oneof must have at least one field.
@@ -3648,6 +3713,7 @@ P1
 P2
 P3
 P@
+PA
 PDd
 PDe
 PDf
@@ -3686,6 +3752,7 @@ PKx
 PKy
 PM
 PROGRAMMER GUIDE:
+PSInvocations
 PST
 Pa
 Package name is too long
@@ -3717,11 +3784,9 @@ Pd
 Pe
 Pear
 Pen Pressure: %.1f
+Per-frame scratch memory used: %s (high watermark %s)
 PerLayerConstantBuffer_t
 PerVertexLighting
-PerViewBarnLightConstantBuffer2_t
-PerViewBarnLightConstantBuffer_t
-PerViewBarnLightFogConstantBuffer_t
 PerViewConstantBuffer_t
 PerViewLightProbeVolumeConstantBuffer_t
 PerViewLightingConstantBufferGPU_t
@@ -3729,6 +3794,7 @@ PerViewLightingConstantBufferGPU_t NoShadow
 PerViewLightingConstantBufferGPU_t ViewModel
 PerViewLightingConstantBufferGpu_t
 Percentage of the transition between two lods we will apply a dither
+Perf Marker Group - defined in the rendering pipeline.
 Pf
 Pg
 Ph
@@ -3739,6 +3805,7 @@ Picker Mode
 Pie Charts
 Pineapple
 Pink
+Pixel Shader Invocations - the number of times the pixel shader was invoked.
 PixelVisibility_FractionVisible called with NULL queryHandle!
 PixelVisibility_IssueQuery called with NULL queryHandle!
 Pixels visible: %d (qh:%p) (frame:%d)
@@ -3819,9 +3886,9 @@ Pressed Up!
 PrevFrameTransformBuffer
 Previous
 Price
-Primitives
 Printing unusually long amount of text.
 Prints out the overall extra data allocation counts
+Priority
 Problem     :
 Problem     : Enum value did not match field type:    Expected  :
 Problem     : Field is not the right type for this message:    Expected  :
@@ -3961,6 +4028,7 @@ RenderPipelineAliases
 RenderReflections
 RenderService_001
 RenderStencilReflection
+RenderUnshadowedIfFailedShadowMapAllocation
 RenderUtils_001
 RendererHasViewports
 RendererHasVtxOffset
@@ -3995,11 +4063,12 @@ ResizeNESW
 ResizeNS
 ResizeNWSE
 ResizedColumn: %d, ReorderColumn: %d, HeldHeaderColumn: %d
-Resizing lock-free aggregate data pool to %s.
+Resizing lock-free scratch allocation pool to %s.
 ResolveMSAARenderTargetIfNecessary
 ResourceCompiler/BakedLighting/LPVAtlas
 ResourceCompiler/BakedLighting/LightmapChannels/direct_light_shadows
 ResourceCompiler/DefaultMapBuilders/bakedlighting
+ResourceCompiler/MeshCompiler/UseLegacyNormalEncoding
 ResourceCompiler/WorldRendererBuilder/UseStaticEnvMapForObjectsWithLightingOrigin
 ResourceCompilerSystem001
 ResourceHandleUtils001
@@ -4028,13 +4097,9 @@ Row height
 RowBg0
 RowBg1
 S
-S1
 S10
 S16
-S2
-S3
 S32
-S4
 S5
 S6
 S64
@@ -4044,11 +4109,17 @@ S: %7.3f
 S:%0.3f
 S:%3d
 SHIFT
+SI
+SO
+SOH
 SPHERE
 SSAOManifest
 SSAOOcclusionFactor
 SSE and SSE2 are required.
+STX
+SUB
 SUPER
+SYN
 S_BINDLESS_RUNTIME
 Sa
 Safe Area Padding
@@ -4073,6 +4144,7 @@ SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuff
 Saw
 Scale factor for requested texture size (texture streaming)
 Scale factor for requested texture size (texture streaming) - used for geo that doesn't have a precomputed UV density measure
+Scale for computed barnlight shadowmap size
 Scatter
 Scatter Plot
 Scatter Plots
@@ -4091,13 +4163,15 @@ SceneSystem/CMTAtlasWidth
 SceneSystem/CSMCascadeResolution
 SceneSystem/CameraTranslationInProjection
 SceneSystem/CharacterDecals
+SceneSystem/Compute Skinning Stats
+SceneSystem/ComputeShaderSkinning
 SceneSystem/CubemapFog
 SceneSystem/DefaultShadowTextureHeight
 SceneSystem/DefaultShadowTextureWidth
+SceneSystem/DisableLateAllocatedTransformBuffer
 SceneSystem/DisableShadowFullSort
 SceneSystem/FirstpersonLegs
 SceneSystem/FrameBufferCopyFormat
-SceneSystem/GPU Profiler
 SceneSystem/GpuLightBinner
 SceneSystem/GpuLightBinnerBinEnvMaps
 SceneSystem/GpuLightBinnerCachedShadowMapHeight
@@ -4133,6 +4207,7 @@ SceneSystem/SunLightShadowRenderMode
 SceneSystem/Tonemap Visualizer
 SceneSystem/Tonemapping
 SceneSystem/TransformTextureRowCount
+SceneSystem/TransformTextureRowCountToolsMode
 SceneSystem/VolumetricFog
 SceneSystem/WellKnownLightCookies
 SceneSystemInit
@@ -4150,6 +4225,8 @@ ScrambledHalton
 ScrambledHaltonPermutations
 Scratch Keys
 Scratch Payload
+Screen-size where clutter will be full density
+Screen-size where clutter will be gone
 Scroll %.1f/%.1f %.1f/%.1f
 Scroll Offset
 Scroll To Pos
@@ -4195,7 +4272,7 @@ SeparatorActive
 SeparatorHovered
 September
 SerializedEntitiesVersion001
-ServerResourceCompilerInfo_001
+ServerToolsInfo_001
 Set 'io.ConfigFlags |= NavEnableGamepad' for gamepad controls.
 Set 'io.ConfigFlags |= NavEnableKeyboard' for keyboard controls.
 Set as default
@@ -4259,6 +4336,7 @@ Show 2nd header
 Show Axes Rects
 Show Custom Labels
 Show Custom Ticks
+Show GPU Pipeline Stats
 Show Horizontal contents size demo window
 Show ImDrawCmd bounding boxes when hovering
 Show ImDrawCmd mesh when hovering
@@ -4310,6 +4388,7 @@ Sizing:
 SkeletalInputSettings
 SkinnedObject
 SkinningCS_Dispatch
+SkyAmbientBounce
 SkyBox
 SkyBrightnessExposureBias
 SliderFloat (0 -> 1)
@@ -4384,6 +4463,7 @@ St11__timepunctIcE
 St11__timepunctIwE
 St11logic_error
 St11range_error
+St11regex_error
 St12codecvt_base
 St12ctype_bynameIcE
 St12ctype_bynameIwE
@@ -4459,6 +4539,7 @@ St21__ctype_abstract_baseIwE
 St23_Sp_counted_ptr_inplaceI10CUtlVectorI20CMeshDrawPrimitive_ti10CUtlMemoryIS1_iEESaIS4_ELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceI13CViewDrawListSaIS0_ELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceI23CSceneViewDebugOverlaysSaIS0_ELN9__gnu_cxx12_Lock_policyE2EE
+St23_Sp_counted_ptr_inplaceINSt8__detail4_NFAISt12regex_traitsIcEEESaIS4_ELN9__gnu_cxx12_Lock_policyE2EE
 St23__codecvt_abstract_baseIDiDu11__mbstate_tE
 St23__codecvt_abstract_baseIDic11__mbstate_tE
 St23__codecvt_abstract_baseIDsDu11__mbstate_tE
@@ -4548,6 +4629,7 @@ Submit transform texture and other resource updates
 Suggested
 Suggested field numbers for
 Sun
+SunLightMinBrightness
 SunShadow
 SunShadow%u
 SunShadowClear
@@ -4679,6 +4761,7 @@ Those are old settings provided for convenience.However, the _correct_ way of sc
 Those flags are set by the backends (imgui_impl_xxx files) to specify their capabilities.Here we expose then as read-only fields to avoid breaking interactions with your backend.
 ThreadGetCurrentId
 ThreadInMainThread
+ThreadMultiWait
 ThreadMultiWaitObjectSetDestroy
 Thread_ProcessProceduralLayer
 Thread_RenderGpuCullingLayer
@@ -4727,8 +4810,8 @@ Tonemapping_DefaultRate
 Tonemapping_UseAlphaChannelForAutoExposure
 Tonemapping_UseLogLuminance
 Too many cached shadows requested (max %d) this frame (%d).
+Too many non-culled draws (alloc %u, need %u), resizing!
 Too many shadowed spot lights in the scene!  Some will be removed!
-Too many vertex cache update requests this frame (too many animated objects on screen)
 ToolFramework2_002
 ToolSceneNodeFactory_001
 ToolService_001
@@ -4751,6 +4834,7 @@ TopMost
 Total : %d (%ukb)
 TouchExtraPadding
 Track
+Transform
 Transparency
 Tree in column
 Tree node
@@ -4868,6 +4952,7 @@ VPhysics2_Interface_001
 VProcessUtils002
 VProfService_001
 VRenderDeviceSetupV001
+VSInvocations
 VScript
 VScriptDbg
 VScriptManager010
@@ -4934,6 +5019,7 @@ V_logf
 V_powf
 V_qsort
 V_qsort_s
+V_roundf
 V_sincosf
 V_sinf
 V_snprintf
@@ -4960,7 +5046,11 @@ Values
 Variables
 Vector2f
 Vert:
+VertCount
+Vertex Shader Invocations - the number of primitives (triangles) that were executed in the vetex shader stage.
 VertexColorUVPos_t
+VertexElementAnnotation
+VertexGenericIntegerData
 VertexPaintBlendParams
 VertexPaintBlendParams1
 VertexPaintTintColor
@@ -4974,6 +5064,9 @@ VertexWireFrame_t
 Vertical Sliders
 Vertical Text
 Vertical scrolling, with clipping
+Verts: %.1fK
+Verts: %.1fM
+Verts: %d
 View "%s": %d layers
 View "%s": %d render target usage
 View "%s": %d render targets
@@ -4994,8 +5087,11 @@ VisibleWindow
 VisualizeCulled
 Voltage
 VolumeFog
+VolumeMaxs
+VolumeMins
 VolumetricFogConstantBuffer_t
 VolumetricFogManifest
+Vrad3_001
 W
 W: %.1f
 WARNING
@@ -5107,7 +5203,6 @@ YAxisGrid
 YAxisGrid2
 YAxisGrid3
 Yellow
-Yellow mark below is the scalar value
 Yes
 Yes, you candrag this!
 You can also call ImGui::LogText() to output directly to the log without a visual output.
@@ -5157,6 +5252,7 @@ Zero-area light
 \U%08x
 \x%02x
 ^
+^$\.*+?()[]{}|
 ^=
 _
 _Accum
@@ -5336,6 +5432,7 @@ __gnu_cxx::__concurrence_unlock_error
 __gnu_cxx::__concurrence_unlock_error::what() const
 __gnu_cxx::__concurrence_unlock_error::~__concurrence_unlock_error()
 __gnu_cxx::__freeres()
+__gnu_cxx::__normal_iterator<std::string const*, std::vector<std::string, std::allocator<std::string> > > std::find<__gnu_cxx::__normal_iterator<std::string const*, std::vector<std::string, std::allocator<std::string> > >, std::string>(__gnu_cxx::__normal_iterator<std::string const*, std::vector<std::string, std::allocator<std::string> > >, __gnu_cxx::__normal_iterator<std::string const*, std::vector<std::string, std::allocator<std::string> > >, std::string const&)
 __gnu_cxx::__scoped_lock::~__scoped_lock()
 __gnu_cxx::__snprintf_lite(char*, unsigned long, char const*, __va_list_tag*)
 __gnu_cxx::__throw_concurrence_lock_error()
@@ -5418,6 +5515,7 @@ _base
 _c
 _class
 _editor
+_include
 _multibase
 _not_pickable
 _txnal_cow_string_C1_for_exceptions(void*, char const*, void*)
@@ -5427,6 +5525,7 @@ _txnal_cow_string_c_str(void const*)
 _txnal_logic_error_get_msg(void*)
 _txnal_runtime_error_get_msg(void*)
 _txnal_sso_string_c_str(void const*)
+`A
 ```
 `x@
 a
@@ -5450,9 +5549,12 @@ adding views while previous rendering is running. Someone needed to call WaitFor
 after sort
 aggregatedesc.cpp
 albedo for LPV debug grid
+alert
 alignof
 alnum
 alphatest
+ambientColor
+ampersand
 analog_%d
 analog_0
 analog_1
@@ -5461,25 +5563,28 @@ another one of those tree node...
 another popup
 ao_proxy_box_list
 ao_proxy_capsule_list
+apostrophe
 args were given.  Full format string was: "
 arguments.
-asbounce
+asterisk
 atan
 auto
 auto:
 avg %f
 avg lum: average scene luminance, calculated using average of pixels that fall withinmat_tonemap_force_log_lum_min, mat_tonemap_force_log_lum_max.(defaults 0.5,0.5 so average is half of pixels either side)
-aw
 az
 b
 b%d (%.02f secs)
 bDisableDynamicRefractionMap
 bReflectDynamicObjectsOnly
+backslash
+backspace
 bad_function_call
 baked_shadow_index
 baked_shadow_light_id
 bakedshadowindex
 barn
+barnlightconstants
 baselayer
 basic_filebuf::_M_convert_to_external conversion error
 basic_filebuf::underflow codecvt::max_length() is not valid
@@ -5537,6 +5642,11 @@ bool __gnu_cxx::operator==<wchar_t const*, std::basic_string<wchar_t, std::char_
 bool __gnu_cxx::operator==<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&)
 bool __gnu_cxx::operator==<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >(__gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&, __gnu_cxx::__normal_iterator<wchar_t*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&)
 bool google::protobuf::internal::RepeatedFieldRefIterator<T>::operator!=(const google::protobuf::internal::RepeatedFieldRefIterator<T>&) const [with T = google::protobuf::Message]
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>&)
+bool std::__detail::__regex_algo_impl<char const*, std::allocator<std::sub_match<char const*> >, char, std::regex_traits<char>, (std::__detail::_RegexExecutorPolicy)0, false>(char const*, char const*, std::match_results<char const*, std::allocator<std::sub_match<char const*> > >&, std::basic_regex<char, std::regex_traits<char> > const&, std::regex_constants::match_flag_type)
 bool std::has_facet<std::__cxx11::collate<char> >(std::locale const&)
 bool std::has_facet<std::__cxx11::collate<wchar_t> >(std::locale const&)
 bool std::has_facet<std::__cxx11::messages<char> >(std::locale const&)
@@ -5579,6 +5689,7 @@ bool std::has_facet<std::time_put<char, std::ostreambuf_iterator<char, std::char
 bool std::has_facet<std::time_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t> > > >(std::locale const&)
 bool8
 boolean
+bounce
 bounce_scale
 btowc
 byte
@@ -5589,7 +5700,10 @@ can fit within a text block.
 can't reach here.
 cannot be required.
 cannot create shim for unknown locale::facet
+cannot create std::deque larger than max_size()
+cannot create std::vector larger than max_size()
 canvas
+carriage-return
 castshadowmode
 ccc1.c
 ccc2.cpp
@@ -5608,14 +5722,17 @@ char32_t
 char8
 char8_t
 checkbox
+circumflex
 cl
 clearTargets
 click here
 close() failed:
+cluttermesh_instanced
 cm
 cntrl
 co
 co_await
+color
 color 1
 color 2
 color per batch
@@ -5629,6 +5746,9 @@ combo 1
 combo 2 (one-liner)
 combo 3 (array)
 combo 4 (function)
+comma
+commercial-at
+compressedtangentframe
 conflicts with an existing enum type.
 conflicts with an existing field.
 conflicts with an existing nested message type.
@@ -5641,7 +5761,6 @@ const google::protobuf::internal::ExtensionSet::KeyValue* google::protobuf::inte
 const string& google::protobuf::UnknownField::length_delimited() const
 const_cast
 construction vtable for
-contactshadow
 contains invalid UTF-8 data when
 copy_rt
 covariant return thunk to
@@ -5717,6 +5836,7 @@ directional_irradiance
 display very important message here!
 dl
 dl_iterate_phdr
+dollar-sign
 drag double
 drag double log
 drag float
@@ -5747,6 +5867,7 @@ drawindirectargs_recull
 drawmaterialquad2
 drawspotlights
 dt
+dummybuffer
 dv
 dynamic_cast
 e
@@ -5755,10 +5876,13 @@ eeee
 ehandle
 emissive_lighting_boost
 enter text here
+entity_name
 envMapLayout
 environmentmappeddynamic
 eq
+equals-sign
 exceeded maximum protobuf size of 2GB:
+exclamation-mark
 extend .$0 {
 extract.cpp
 f
@@ -5785,6 +5909,7 @@ filmic curve (log scale)
 fish_hat.c
 fish_hat.h
 fish_hat.inl
+five
 fl
 flags3
 float (indented)##1b
@@ -5809,6 +5934,8 @@ fogshadowmode
 foo
 fopen64
 forceZPrePass
+form-feed
+four
 fputc
 fputs
 fr
@@ -5832,15 +5959,22 @@ g_bShowLPVVoxels
 g_bShowLightmapTexels
 g_bUpdateStringTokenDatabase
 g_bindlessFastPathSet
+g_flSequentialFloats<float __vector(4)>
+g_flSequentialFloats<float>
+g_flTValues0To1Inclusive<float __vector(4)>
+g_flTValues0To1Inclusive<float>
 g_globalLateBoundBindlessSet
 g_lightBinnerCpuSet
 g_lightBinnerGpuSet
 g_lightProbeVolumeSet
 g_lightingSet
+g_nSequentialIndices<int __vector(4)>
+g_nSequentialIndices<int>
+g_nTailMask<int __vector(4)>
+g_nTailMask<int>
 g_nToolsVisMode
 g_pMemAlloc
 g_pThreadPool
-g_tFogIndirect
 g_tLastFrameFogVolume
 g_tLightingClipmap0
 g_tLightingClipmap1
@@ -5965,6 +6099,8 @@ google/protobuf/wire_format.cc
 google::protobuf::internal::ExtensionSet::KeyValue* google::protobuf::internal::ExtensionSet::flat_begin()
 google::protobuf::internal::ExtensionSet::KeyValue* google::protobuf::internal::ExtensionSet::flat_end()
 graph
+grave-accent
+greater-than-sign
 gt
 guard variable for
 guard variable for std::__cxx11::collate<char>::id
@@ -5983,6 +6119,10 @@ guard variable for std::__cxx11::numpunct<char>::id
 guard variable for std::__cxx11::numpunct<wchar_t>::id
 guard variable for std::__cxx11::time_get<char, std::istreambuf_iterator<char, std::char_traits<char> > >::id
 guard variable for std::__cxx11::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >::id
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>::operator()(char) const::__nul
 guard variable for std::__timepunct<char>::id
 guard variable for std::__timepunct<wchar_t>::id
 guard variable for std::collate<char>::id
@@ -6024,6 +6164,7 @@ hitgroup_shader_%p
 hmtx
 horizontal
 hue
+hyphen
 i
 i < V_ARRAYSIZE( s_szMissShaderNames )
 i < length_
@@ -6146,11 +6287,13 @@ l
 lS
 label
 lb_allow_time_sliced_shadow_map_rendering
+lb_barnlight_shadowmap_scale
 lb_bin_slices
 lb_convert_to_barn_lights_falloff_match_point
 lb_csm_cascade_size_override
 lb_csm_draw_alpha_tested
 lb_csm_draw_translucent
+lb_csm_fov_override
 lb_csm_override_staticgeo_cascades
 lb_csm_override_staticgeo_cascades_value
 lb_csm_receiver_plane_depth_bias
@@ -6182,8 +6325,12 @@ lb_use_ellipsoid_bounds
 lb_use_illumination_silhouette
 ld-linux-x86-64.so.2
 left pane
+left-curly-bracket
+left-parenthesis
+left-square-bracket
 len >= input_len
 length_ >= n
+less-than-sign
 libc.so.6
 libm.so.6
 libpthread.so.0
@@ -6193,8 +6340,8 @@ light AABB: %i clusters
 light frustum & illum bounds: %i clusters
 light frustum: %i clusters
 light illum bounds: %i clusters
-lightSetupPass
 light_cookie
+lightbinner
 lightbinner_gpu.cpp
 lightbinnerarray
 lighting_array_fog_RT1.vtex
@@ -6282,6 +6429,7 @@ m_nRequestedHeight
 m_nRequestedWidth
 m_nWidth
 m_poseParams
+m_processingType
 m_qOrientation
 m_rootToWorld
 m_vAngleFade
@@ -6306,19 +6454,6 @@ mapbuilder.blocklight
 mat_fullbright
 mat_tonemap_bloom_scale
 mat_tonemap_bloom_start_value
-mat_tonemap_csgo_bloom_scale
-mat_tonemap_csgo_bloom_start_value
-mat_tonemap_csgo_debug
-mat_tonemap_csgo_force_accelerate_exposure_down
-mat_tonemap_csgo_force_average_lum_min
-mat_tonemap_csgo_force_max
-mat_tonemap_csgo_force_min
-mat_tonemap_csgo_force_percent_bright_pixels
-mat_tonemap_csgo_force_percent_target
-mat_tonemap_csgo_force_rate
-mat_tonemap_csgo_force_scale
-mat_tonemap_csgo_force_use_alpha
-mat_tonemap_csgo_uncap_exposure
 mat_tonemap_debug
 mat_tonemap_force_accelerate_exposure_down
 mat_tonemap_force_average_lum_min
@@ -6407,7 +6542,6 @@ min scale:%.2f (%.1f stops)
 min, max scale: min/max exposure scale clamps, set using min/max exposure brightnessin post_processing_volume entity or mat_tonemap_force_min/max.
 min_row_height = %.2f
 mindate
-minroughness
 mintime
 mktime
 ml
@@ -6437,7 +6571,9 @@ network_connection.proto
 networkbasetypes.proto
 new
 new[]
+newline
 nextafterf
+nine
 no
 no blank
 noexcept
@@ -6452,10 +6588,13 @@ non-virtual thunk to std::basic_iostream<wchar_t, std::char_traits<wchar_t> >::~
 non-virtual thunk to std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::~basic_stringstream()
 non-virtual thunk to std::basic_stringstream<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::~basic_stringstream()
 none
+normal
+not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugs
 null
 null material
 nullptr output boolean given.
 num pixels
+number-sign
 nw
 nxnstripped
 o
@@ -6467,13 +6606,21 @@ offset_angles
 offset_origin
 operator
 operator delete(void*)
+operator delete(void*, std::align_val_t)
 operator delete(void*, std::nothrow_t const&)
 operator delete(void*, unsigned long)
+operator delete(void*, unsigned long, std::align_val_t)
 operator delete[](void*)
+operator delete[](void*, std::align_val_t)
 operator delete[](void*, unsigned long)
+operator delete[](void*, unsigned long, std::align_val_t)
 operator new(unsigned long)
+operator new(unsigned long, std::align_val_t)
+operator new(unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new(unsigned long, std::nothrow_t const&)
 operator new[](unsigned long)
+operator new[](unsigned long, std::align_val_t)
+operator new[](unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new[](unsigned long, std::nothrow_t const&)
 operator""
 option json_name is not allowed on extension fields.
@@ -6494,12 +6641,15 @@ password
 password (clear)
 password (w/ hint)
 path_trace_light_flags
+percent-sign
+period
 permutations
 pervertexlighting
 pixelvis_debug
 pl
 please implement MergeFrom for your type.
 plots
+plus-sign
 point0
 point1
 pointLightLayout
@@ -6513,7 +6663,6 @@ pow
 preserveColorBuffers
 prev layer not found
 previewbaked
-previewindexed
 print
 proto2
 proto3
@@ -6532,6 +6681,8 @@ qangle
 qu
 quadLayout
 quaternion
+question-mark
+quotation-mark
 r
 r+
 r+b
@@ -6548,7 +6699,6 @@ r_cpu_light_binner_default_spec_env_fade_time
 r_cpu_light_binner_shadow_target_size
 r_cpu_light_binner_spot_shadow_size
 r_cpu_light_binner_use_gpu
-r_cs_skinning
 r_cubemap_debug_colors
 r_directional_lightmaps
 r_dither_scale
@@ -6638,6 +6788,9 @@ resolved_rt
 resource_name
 restrict
 right-align
+right-curly-bracket
+right-parenthesis
+right-square-bracket
 rotation_vector
 roughness for LPV debug grid
 row bg target
@@ -6660,6 +6813,9 @@ sc_batch_layer_cb_updates
 sc_bounds_group_cull
 sc_cache_envmap_lpv_lookup
 sc_check_world
+sc_clutter_density_full_size
+sc_clutter_density_none_size
+sc_clutter_draw
 sc_disableThreading
 sc_disable_baked_lighting
 sc_disable_culling_boxes
@@ -6708,6 +6864,7 @@ sc_shadow_depth_bias
 sc_shadow_depth_bias_clamp
 sc_shadow_depth_bias_state_override
 sc_shadow_slopescale_depth_bias
+sc_show_cs_skinning_stats
 sc_show_gpu_profiler
 sc_show_rejected_objects
 sc_show_rejected_objects_range
@@ -6738,9 +6895,12 @@ scenesysCone
 scenesysDodecahedron
 scenesysPyramid
 scenesystem
-scenesystem.cpp(5746): Expecting 1 renderable pass for material "%s" but found %d!
-scenesystem.cpp:3597
+scenesystem.cpp
+scenesystem.cpp(5878): Expecting 1 renderable pass for material "%s" but found %d!
+scenesystem.cpp:3667
 scenesystemdebug
+scenesysteminstancedata
+scenesystemtransformdata
 scenetextureset_%d
 sceneview.cpp
 sceneviewdebugoverlays.cpp
@@ -6749,6 +6909,7 @@ scratchrendertarget_%d_%dx%d_%d_%d.vtex
 scratchrendertargetsystem.cpp
 screenmessage_show
 seaborn style
+semicolon
 seq_trans
 serialize
 serializing
@@ -6756,6 +6917,7 @@ service $0 {
 set3
 setlocale
 setvbuf
+seven
 sfixed32
 sfixed64
 shadow_atlas_depth_%d.vtex
@@ -6773,6 +6935,7 @@ sincos
 singletons.cpp
 sint32
 sint64
+six
 size too big:
 sizeof
 sizeof(size_t): %d, sizeof(ImDrawIdx): %d, sizeof(ImDrawVert): %d
@@ -6840,8 +7003,45 @@ std::Catalogs::_M_add(char const*, std::locale)
 std::Catalogs::_M_erase(int)
 std::Catalogs::_M_get(int) const
 std::Catalogs::~Catalogs()
+std::_Deque_base<long, std::allocator<long> >::_M_initialize_map(unsigned long)
+std::_Deque_base<long, std::allocator<long> >::~_Deque_base()
 std::_Fnv_hash_bytes(void const*, unsigned long, unsigned long)
+std::_Function_base::~_Function_base()
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
 std::_Hash_bytes(void const*, unsigned long, unsigned long)
+std::_Rb_tree<long, std::pair<long const, long>, std::_Select1st<std::pair<long const, long> >, std::less<long>, std::allocator<std::pair<long const, long> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<long const, long> >, long const&)
+std::_Rb_tree<long, std::pair<long const, long>, std::_Select1st<std::pair<long const, long> >, std::less<long>, std::allocator<std::pair<long const, long> > >::_M_get_insert_unique_pos(long const&)
 std::_Rb_tree_black_count(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base const*)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base*)
@@ -6853,6 +7053,10 @@ std::_Rb_tree_rotate_left(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*&)
 std::_Rb_tree_rotate_right(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*&)
 std::_Setfill<char> std::setfill<char>(char)
 std::_Setfill<wchar_t> std::setfill<wchar_t>(wchar_t)
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_destroy()
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&)
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::~_Sp_counted_ptr_inplace()
 std::_Sp_make_shared_tag::_S_ti()::__tag
 std::_V2::error_category::_M_message(int) const
 std::_V2::error_category::_M_message[abi:cxx11](int) const
@@ -7639,8 +7843,66 @@ std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::ch
 std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >::time_get_byname(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long)
 std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >::~time_get_byname()
 std::__destroy_ios_failure(void*)
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>::operator()(char) const::__nul
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>::_M_ready()
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::_M_apply(char, std::integral_constant<bool, false>) const::{lambda()#1}::operator()() const
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::_M_make_range(char, char)
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::_M_ready()
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::~_BracketMatcher()
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>::_M_apply(char, std::integral_constant<bool, false>) const::{lambda()#1}::operator()() const
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>::_M_ready()
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::_M_apply(char, std::integral_constant<bool, false>) const::{lambda()#1}::operator()() const
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::_M_make_range(char, char)
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::_M_ready()
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::~_BracketMatcher()
+std::__detail::_Compiler<std::regex_traits<char> >::_Compiler(char const*, char const*, std::locale const&, std::regex_constants::syntax_option_type)
+std::__detail::_Compiler<std::regex_traits<char> >::_M_alternative()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_assertion()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_atom()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_bracket_expression()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_cur_int_value(int)
+std::__detail::_Compiler<std::regex_traits<char> >::_M_disjunction()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_pop()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_quantifier()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_try_char()
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_dfs(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_handle_backref(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_is_word(char) const::__s
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_lookahead(long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_rep_once_more(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_word_boundary() const
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_dfs(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_handle_backref(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_is_word(char) const::__s
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_lookahead(long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_rep_once_more(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_word_boundary() const
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_dummy()
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_matcher(std::function<bool (char)>)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_repeat(long, long, bool)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_state(std::__detail::_State<char>)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_subexpr_begin()
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_subexpr_end()
 std::__detail::_Prime_rehash_policy::_M_need_rehash(unsigned long, unsigned long, unsigned long) const
 std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const
+std::__detail::_RegexTranslatorBase<std::regex_traits<char>, false, true>::_M_transform(char) const
+std::__detail::_RegexTranslatorBase<std::regex_traits<char>, true, true>::_M_transform(char) const
+std::__detail::_Scanner<char>::_M_eat_class(char)
+std::__detail::_Scanner<char>::_M_eat_escape_awk()
+std::__detail::_Scanner<char>::_M_eat_escape_ecma()
+std::__detail::_Scanner<char>::_M_eat_escape_posix()
+std::__detail::_Scanner<char>::_M_scan_in_brace()
+std::__detail::_Scanner<char>::_M_scan_in_bracket()
+std::__detail::_Scanner<char>::_M_scan_normal()
+std::__detail::_Scanner<char>::_Scanner(char const*, char const*, std::regex_constants::syntax_option_type, std::locale)
+std::__detail::_StateSeq<std::regex_traits<char> >::_M_clone()
 std::__detail::__prime_list
 std::__ios_failure::~__ios_failure()
 std::__iosfail_type_info::__do_upcast(__cxxabiv1::__class_type_info const*, void**) const
@@ -7696,6 +7958,7 @@ std::__throw_out_of_range(char const*)
 std::__throw_out_of_range_fmt(char const*, ...)
 std::__throw_overflow_error(char const*)
 std::__throw_range_error(char const*)
+std::__throw_regex_error(std::regex_constants::error_type)
 std::__throw_runtime_error(char const*)
 std::__throw_system_error(int)
 std::__throw_underflow_error(char const*)
@@ -8290,6 +8553,7 @@ std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_st
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<__gnu_cxx::__normal_iterator<char*, std::string> >(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, std::allocator<char> const&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char const*>(char const*, char const*, std::allocator<char> const&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*>(char*, char*, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string()
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)
 std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >(wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)
@@ -8677,6 +8941,8 @@ std::ctype_byname<wchar_t>::ctype_byname(char const*, unsigned long)
 std::ctype_byname<wchar_t>::ctype_byname(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long)
 std::ctype_byname<wchar_t>::ctype_byname(std::string const&, unsigned long)
 std::ctype_byname<wchar_t>::~ctype_byname()
+std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::_M_reallocate_map(unsigned long, bool)
+std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::push_back(std::__detail::_StateSeq<std::regex_traits<char> > const&)
 std::domain_error::domain_error(char const*)
 std::domain_error::domain_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 std::domain_error::domain_error(std::string const&)
@@ -9335,6 +9601,12 @@ std::range_error::range_error(char const*)
 std::range_error::range_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 std::range_error::range_error(std::string const&)
 std::range_error::~range_error()
+std::regex_error::regex_error(std::regex_constants::error_type)
+std::regex_error::~regex_error()
+std::regex_traits<char>::_RegexMask std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const
+std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const::__classnames
+std::regex_traits<char>::lookup_collatename<char const*>(char const*, char const*) const::__collatenames
+std::regex_traits<char>::translate_nocase(char) const
 std::runtime_error::operator=(std::runtime_error const&)
 std::runtime_error::operator=(std::runtime_error&&)
 std::runtime_error::runtime_error(char const*)
@@ -9348,6 +9620,9 @@ std::set_new_handler(void (*)())
 std::set_terminate(void (*)())
 std::set_unexpected(void (*)())
 std::string
+std::string std::regex_traits<char>::lookup_collatename<char const*>(char const*, char const*) const
+std::string std::regex_traits<char>::transform_primary<char const*>(char const*, char const*) const
+std::string std::regex_traits<char>::transform_primary<char*>(char*, char*) const
 std::string::_Alloc_hider::_Alloc_hider(char*, std::allocator<char> const&)
 std::string::_M_assign(char*, unsigned long, char)
 std::string::_M_check(unsigned long, char const*) const
@@ -9600,7 +9875,9 @@ std::underflow_error::underflow_error(std::__cxx11::basic_string<char, std::char
 std::underflow_error::underflow_error(std::string const&)
 std::underflow_error::~underflow_error()
 std::unexpected()
+std::vector<char, std::allocator<char> >::_M_erase(__gnu_cxx::__normal_iterator<char*, std::vector<char, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::vector<char, std::allocator<char> > >)
 std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*> >::_M_realloc_insert(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*> > >, std::Catalog_info* const&)
+std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > >::_M_fill_assign(unsigned long, std::sub_match<char const*> const&)
 std::wcerr
 std::wcin
 std::wclog
@@ -9667,6 +9944,7 @@ table_row_height
 table_scrollx
 table_scrolly
 table_sorting
+tangent
 tangentu_signv
 target avg lum
 target avg lum  tonemap scale:  %.2f (%.2f stops)
@@ -9682,6 +9960,7 @@ texture_memory
 texture_streaming
 textures/dev/blue_noise_256.vtex
 textures/dev/brdf_lut.vtex
+textures/dev/brdf_multiscatter_lut.vtex
 textures/dev/ggx_integrate_brdf_lut_schlick.vtex
 textures/dev/scrambled_halton.vdata
 the Element type supplies a MergeFrom() operation to make copies.
@@ -9692,6 +9971,7 @@ this cell %d
 this is a 300-wide button
 this is a tree node
 throw
+tilde
 timegm
 tint_color
 tonemap scale: final exposure scale used to scale HDR values before tonemapping.mid-grey in HDR becomes 'target average lum' after scaling -> mid-grey (0.18) in LDR.
@@ -9826,6 +10106,7 @@ typeinfo for signed char const*
 typeinfo for signed char*
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_V2::error_category
 typeinfo for std::__codecvt_abstract_base<char, char, __mbstate_t>
 typeinfo for std::__codecvt_abstract_base<char16_t, char, __mbstate_t>
@@ -9870,6 +10151,22 @@ typeinfo for std::__cxx11::time_get<char, std::istreambuf_iterator<char, std::ch
 typeinfo for std::__cxx11::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >
 typeinfo for std::__cxx11::time_get_byname<char, std::istreambuf_iterator<char, std::char_traits<char> > >
 typeinfo for std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, false, false>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, false, true>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, true, false>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, true, true>
 typeinfo for std::__ios_failure
 typeinfo for std::__iosfail_type_info
 typeinfo for std::__moneypunct_cache<char, false>
@@ -9969,6 +10266,7 @@ typeinfo for std::ostream
 typeinfo for std::out_of_range
 typeinfo for std::overflow_error
 typeinfo for std::range_error
+typeinfo for std::regex_error
 typeinfo for std::runtime_error
 typeinfo for std::system_error
 typeinfo for std::time_base
@@ -10080,6 +10378,7 @@ typeinfo name for signed char const*
 typeinfo name for signed char*
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
 typeinfo name for std::_V2::error_category
 typeinfo name for std::__codecvt_abstract_base<char, char, __mbstate_t>
@@ -10125,6 +10424,22 @@ typeinfo name for std::__cxx11::time_get<char, std::istreambuf_iterator<char, st
 typeinfo name for std::__cxx11::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >
 typeinfo name for std::__cxx11::time_get_byname<char, std::istreambuf_iterator<char, std::char_traits<char> > >
 typeinfo name for std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, false, false>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, false, true>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, true, false>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, true, true>
 typeinfo name for std::__ios_failure
 typeinfo name for std::__iosfail_type_info
 typeinfo name for std::__moneypunct_cache<char, false>
@@ -10224,6 +10539,7 @@ typeinfo name for std::ostream
 typeinfo name for std::out_of_range
 typeinfo name for std::overflow_error
 typeinfo name for std::range_error
+typeinfo name for std::regex_error
 typeinfo name for std::runtime_error
 typeinfo name for std::system_error
 typeinfo name for std::time_base
@@ -10271,6 +10587,7 @@ uint64
 uint64_t google::protobuf::UnknownField::fixed64() const
 uint64_t google::protobuf::UnknownField::varint() const
 uint8
+underscore
 ungetc
 ungetwc
 uniform_color
@@ -10313,6 +10630,8 @@ vector::_M_realloc_insert
 vector::reserve
 vertexbuffer
 vertical
+vertical-line
+vertical-tab
 view.bIsToolView
 virtual thunk to std::basic_fstream<char, std::char_traits<char> >::~basic_fstream()
 virtual thunk to std::basic_fstream<wchar_t, std::char_traits<wchar_t> >::~basic_fstream()
@@ -10349,6 +10668,14 @@ void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocat
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::_M_construct<wchar_t const*>(wchar_t const*, wchar_t const*, std::forward_iterator_tag)
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::_M_construct<wchar_t*>(wchar_t*, wchar_t*, std::forward_iterator_tag)
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::insert<__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<false, false>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<false, true>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<true, false>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<true, true>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<false, false>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<false, true>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<true, false>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<true, true>()
 void std::__facet_shims::__collate_transform<char>(std::integral_constant<bool, false>, std::locale::facet const*, std::__facet_shims::__any_string&, char const*, char const*)
 void std::__facet_shims::__collate_transform<char>(std::integral_constant<bool, true>, std::locale::facet const*, std::__facet_shims::__any_string&, char const*, char const*)
 void std::__facet_shims::__collate_transform<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, std::__facet_shims::__any_string&, wchar_t const*, wchar_t const*)
@@ -10373,7 +10700,18 @@ void std::__facet_shims::__numpunct_fill_cache<char>(std::integral_constant<bool
 void std::__facet_shims::__numpunct_fill_cache<char>(std::integral_constant<bool, true>, std::locale::facet const*, std::__numpunct_cache<char>*)
 void std::__facet_shims::__numpunct_fill_cache<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, std::__numpunct_cache<wchar_t>*)
 void std::__facet_shims::__numpunct_fill_cache<wchar_t>(std::integral_constant<bool, true>, std::locale::facet const*, std::__numpunct_cache<wchar_t>*)
+void std::__introsort_loop<unsigned short*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void> > >(unsigned short*, unsigned short*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void> >)
+void std::deque<long, std::allocator<long> >::_M_push_back_aux<long const&>(long const&)
+void std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::_M_push_back_aux<std::__detail::_StateSeq<std::regex_traits<char> > const&>(std::__detail::_StateSeq<std::regex_traits<char> > const&)
+void std::vector<char, std::allocator<char> >::_M_realloc_insert<char>(__gnu_cxx::__normal_iterator<char*, std::vector<char, std::allocator<char> > >, char&&)
 void std::vector<int, std::allocator<int> >::_M_realloc_insert<int const&>(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&)
+void std::vector<std::__detail::_State<char>, std::allocator<std::__detail::_State<char> > >::_M_realloc_insert<std::__detail::_State<char> >(__gnu_cxx::__normal_iterator<std::__detail::_State<char>*, std::vector<std::__detail::_State<char>, std::allocator<std::__detail::_State<char> > > >, std::__detail::_State<char>&&)
+void std::vector<std::pair<char, char>, std::allocator<std::pair<char, char> > >::_M_realloc_insert<std::pair<char, char> >(__gnu_cxx::__normal_iterator<std::pair<char, char>*, std::vector<std::pair<char, char>, std::allocator<std::pair<char, char> > > >, std::pair<char, char>&&)
+void std::vector<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > >, std::allocator<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > > > >::_M_realloc_insert<long&, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > const&>(__gnu_cxx::__normal_iterator<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > >*, std::vector<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > >, std::allocator<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > > > > >, long&, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > const&)
+void std::vector<std::pair<std::string, std::string>, std::allocator<std::pair<std::string, std::string> > >::_M_realloc_insert<std::pair<std::string, std::string> >(__gnu_cxx::__normal_iterator<std::pair<std::string, std::string>*, std::vector<std::pair<std::string, std::string>, std::allocator<std::pair<std::string, std::string> > > >, std::pair<std::string, std::string>&&)
+void std::vector<std::regex_traits<char>::_RegexMask, std::allocator<std::regex_traits<char>::_RegexMask> >::_M_realloc_insert<std::regex_traits<char>::_RegexMask const&>(__gnu_cxx::__normal_iterator<std::regex_traits<char>::_RegexMask*, std::vector<std::regex_traits<char>::_RegexMask, std::allocator<std::regex_traits<char>::_RegexMask> > >, std::regex_traits<char>::_RegexMask const&)
+void std::vector<std::string, std::allocator<std::string> >::_M_realloc_insert<std::string const&>(__gnu_cxx::__normal_iterator<std::string*, std::vector<std::string, std::allocator<std::string> > >, std::string const&)
+void std::vector<unsigned long, std::allocator<unsigned long> >::_M_realloc_insert<unsigned long const&>(__gnu_cxx::__normal_iterator<unsigned long*, std::vector<unsigned long, std::allocator<unsigned long> > >, unsigned long const&)
 void_context
 volatile
 volume_fog_clipmap_update
@@ -10407,6 +10745,7 @@ vtable for __gnu_cxx::stdio_filebuf<char, std::char_traits<char> >
 vtable for __gnu_cxx::stdio_filebuf<wchar_t, std::char_traits<wchar_t> >
 vtable for __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >
 vtable for __gnu_cxx::stdio_sync_filebuf<wchar_t, std::char_traits<wchar_t> >
+vtable for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
 vtable for std::_V2::error_category
 vtable for std::__codecvt_abstract_base<char, char, __mbstate_t>
 vtable for std::__codecvt_abstract_base<char16_t, char, __mbstate_t>
@@ -10545,6 +10884,7 @@ vtable for std::ostream
 vtable for std::out_of_range
 vtable for std::overflow_error
 vtable for std::range_error
+vtable for std::regex_error
 vtable for std::runtime_error
 vtable for std::system_error
 vtable for std::time_get<char, std::istreambuf_iterator<char, std::char_traits<char> > >
@@ -10616,7 +10956,6 @@ x%ixAA
 x-axis
 x=150
 x=300
-xC
 x^2
 xdigit
 y
@@ -10625,7 +10964,6 @@ y1
 y2
 yes
 you can drag analog signals over the rising/falling digital edge.
-z>
 zD
 zPrePassNormals
 {
@@ -10640,7 +10978,6 @@ zPrePassNormals
 |
 |/-\
 |=
-|?
 |B
 ||
 }

@@ -336,7 +336,7 @@ function StartDialog( event )
 
 	if ( g_nDialogEnt !== -1 )
 	{
-		var szSpeakingEntityName = $.Localize( "#" + Entities.GetUnitName( g_nDialogEnt ) );
+		var szSpeakingEntityName = GameUI.GetUnitNameLocalized( Entities.GetUnitName( g_nDialogEnt ) );
 		DialogPanel.SetDialogVariable( "dialog_npc_name", szSpeakingEntityName );
 	}
 }

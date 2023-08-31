@@ -30,6 +30,7 @@ $ORIGIN
 %s DynamicAtr:%s = '%s'
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
+%s allocation count overflow( add %llu + current %llu > max %llu )
 %s%s
 %s( No I/O Connections )
 %s0x%08X:%s = "%s"
@@ -37,6 +38,8 @@ $ORIGIN
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
 %s: __pos (which is %zu) > this->size() (which is %zu)
+%s: invalid nBeforeIndex %d
+%s: invalid nSize %d
 %s== World '%s' Entity Lump '%s': %d entities ==
 %sEntity %d (%s '%s'):
 %sI/O Connections:
@@ -90,12 +93,11 @@ $ORIGIN
 *ZN13CSOAContainer8FillAttrEifEUlvE_
 *ZN17CWorldRendererMgr22HandleGrassLoadRequestEP18GrassLoadRequest_tEUlP18IAsyncReadRequest220AsyncRequestStatus_tE_
 *ZN20CGrassTileObjectDesc20GenerateGrassTextureE11CWeakHandleI29InfoForResourceTypeIMaterial2ES0_I31InfoForResourceTypeCTextureBaseEibPK12CTextureDescEUlvE_
+*ZN3Etc13EncodeMipmapsEPfjjNS_5Image6FormatENS_11ErrorMetricEfjjjjPNS_8RawImageEPibEUlPhE_
 +
 ++
 +=
 ,
-, channels =
-, height =
 -+xX0123456789abcdef0123456789ABCDEF
 -+xX0123456789abcdefABCDEF
 --
@@ -109,6 +111,7 @@ $ORIGIN
 -sse2
 -sse3
 -sse4
+-tools
 .
 .*
 ...)
@@ -138,6 +141,7 @@ $ORIGIN
 0 0 0 255
 0 = Density corresponds to blade existance, 1 = Density corresponds to blade height, 2 = Both 0 and 1
 0 = Off, 1 = Low, 2 = Med, 3 = high, 4 = ultra
+0A
 10CEntityMgr
 10ConCommand
 10IAppSystem
@@ -177,7 +181,9 @@ $ORIGIN
 20CPostConnectCallback
 20CRefCountServiceBaseI6CRefMTE
 20CWorldSceneObjectRef
+20EntityKeyValueData_t
 20IResourceTypeManager
+20PermEntityLumpData_t
 21CGrassTileSceneObject
 21IGrassTileSceneObject
 22CDefScriptAccessorBase
@@ -306,7 +312,6 @@ BGRA8888_LINEAR
 BGRX8888
 BGRX8888_LINEAR
 Bad KV3 data for resource '%s': %s
-Bad KV3 data for resource: %s
 Bad type %d in saved CVariant
 BakedLODBuilderMgr001
 BakedLightingInfo_t
@@ -314,6 +319,7 @@ BaseSceneObjectDesc
 BenchmarkService001
 BinaryProperties_GetValue
 BindlessFastPathDesc
+Blue
 BoneConstraintList
 Broken promise
 C
@@ -321,15 +327,16 @@ CAI_ScheduleBits
 CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::Concat(char const*, char const*, ...)
-CBufferString::ExtractFileBase(char const*)
+CBufferString::ExtractFileBase(char const*, bool)
 CBufferString::ExtractFilePath(char const*, bool)
 CBufferString::FixSlashes(char)
 CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
 CBufferString::Insert(int, char const*, int, bool)
+CBufferString::MoveFrom(CBufferString&)
 CBufferString::Purge(int)
 CBufferString::RemoveAt(int, int)
-CBufferString::SetExtension(char const*)
+CBufferString::SetExtension(char const*, bool)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::SetPtr(char*, int, int, bool, bool)
 CBufferString::ToLowerFast(int)
@@ -344,6 +351,7 @@ CEntityIdentity
 CEntityIdentity *
 CEntityIdentity::SetEntityName called, but there is no entity name string table pointer!
 CEntityInstance
+CEntityKeyValues::LoadFromContext: Invalid version! Expected %d, encountered %d!
 CEntityKeyValues::Unserialize: Invalid version! Expected %d, encountered %d!
 CEntityKeyValues::Unserialize: Unable to read from a text-based utlbuffer!
 CEntityKeyValues::Unserialize: Unsupported keyvalue variant type (%d)!
@@ -374,7 +382,6 @@ CTransform-world
 CUtlBinaryBlock
 CUtlBinaryBlock::Set(void const*, int)
 CUtlBinaryBlock::SetLength(int)
-CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock&&)
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
@@ -386,7 +393,8 @@ CUtlBuffer::GetString(CBufferString*)
 CUtlBuffer::PeekStringLength()
 CUtlBuffer::SeekGet(CUtlBuffer::SeekType_t, int)
 CUtlBuffer::SetExternalBuffer(void*, int, int, int)
-CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
+CUtlLeanVector
+CUtlMemoryBlockAllocator::Alloc(unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
 CUtlMemoryBlockAllocator::Purge()
 CUtlMemoryBlockAllocator::RemoveAll(unsigned long)
@@ -433,6 +441,10 @@ ChangeAccessorFieldPathIndex_t
 ChangeCallbackOnChange
 ChangeCallbackOnChangeOrCreate
 ChangeCallbackOnChangeUtlVectorSubfield
+ClientToolsInfo_001
+ClutterSceneObjectDesc
+ClutterSceneObject_t
+ClutterTile_t
 CommandLine
 CompressAndUploadGrassTextureJob
 ConditionId_t
@@ -471,6 +483,7 @@ ENTITY_IO_TARGET_ENTITYNAME_OR_CLASSNAME
 ENTITY_IO_TARGET_INVALID
 ENTITY_NOT_DORMANT
 ENTITY_SUSPENDED
+ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 EST
 EXPORTSYSTEM_INTERFACE_VERSION_001
@@ -485,16 +498,17 @@ EntOutput_t
 Entity Load Unserialize
 Entity System
 EntityDormancyType_t
+EntityIOConnectionData_t
 EntityIOConnectionDesc_t
 EntityIOConnection_t
 EntityIOQueuePrioritizedEvent_t
-EntityKeyValueData_t
 Etc::DifferentialTrys::DifferentialTrys(Etc::ColorFloatRGBA, Etc::ColorFloatRGBA, const unsigned int*, const unsigned int*, unsigned int, int, int)
 Etc::Image::EncodingStatus Etc::Image::Encode(Etc::Image::Format, Etc::ErrorMetric, float, unsigned int, unsigned int)
 Etc::IndividualTrys::IndividualTrys(Etc::ColorFloatRGBA, Etc::ColorFloatRGBA, const unsigned int*, const unsigned int*, unsigned int)
 EventQueue
 ExtraVertexStreamOverride_t
 F
+FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FB
@@ -676,7 +690,6 @@ HammerMapLoader001
 HelpSystem_001
 Hitbox indexing is incorrect for set %s, hitbox %s. Hitboxes will not be setup properly.
 HostStateMgr001
-HostageSpawnRandomFactor
 I
 I8
 IA88
@@ -684,20 +697,16 @@ IHandleEntity
 IMAGE_FORMAT_R11G11B10_FLOAT
 IPulseSystem_001
 IST
+InfoForResourceTypeCEntityLump
 InfoForResourceTypeCModel
 InfoForResourceTypeCRenderMesh
-InfoForResourceTypeCTextureBase
 InfoForResourceTypeIMaterial2
 InfoOverlayData_t
 InputService_001
 InputStackSystemVersion001
 InputSystemVersion001
 InstallSchemaBindings
-Insufficient data length.
-Insufficient data size.
 Intentionally vague touch behavior for %p
-Invalid tile size x :
-Invalid tile size y :
 J
 JST
 Jan
@@ -731,6 +740,7 @@ LightmapUV
 LightmapUVW
 List all known entity lumps
 List all world layers
+LoadFromContext
 LoadKV3(CKeyValues3Context*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 LoadKV3(KeyValues3*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 Loaded List:
@@ -758,7 +768,6 @@ MNetworkSerializeAs
 MNetworkSerializer
 MNetworkUserGroup
 MNetworkVarNames
-MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MResourceTypeForInfoType
 MST
@@ -771,8 +780,6 @@ MathLib_Init
 Maximum lightmap resolution for directional_irradiance channel. -1 = use value of r_lightmap_size
 Maximum lightmap resolution.
 May
-MemAlloc_AllocAlignedFunc
-MemAlloc_FreeAlignedFunc
 MemAlloc_StrDupFunc
 MeshSystem001
 MeshUtils001
@@ -815,6 +822,7 @@ N9__gnu_cxx18stdio_sync_filebufIwSt11char_traitsIwEEE
 N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
+NETWORK_FIELD_CHANGED_ARRAY_NO_VALUE
 NETWORK_FIELD_CHANGED_ARRAY_WITH_VALUE
 NETWORK_FIELD_CHANGED_NO_VALUE
 NETWORK_FIELD_CHANGED_NO_VALUE_NO_CONTEXT
@@ -876,6 +884,7 @@ NSt7__cxx119money_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEEE
 NSt8ios_base7failureB5cxx11E
 NSt8ios_base7failureE
 NV_NULL
+NavGameTest001
 NetworkClientService_001
 NetworkMessagesVersion001
 NetworkP2PService_001
@@ -902,6 +911,7 @@ OBJECT_TYPE_MODEL
 OBJECT_TYPE_MODEL_HAS_LODS
 OBJECT_TYPE_NO_SHADOWS
 OBJECT_TYPE_NO_SUN_SHADOWS
+OBJECT_TYPE_OVERLAY
 OBJECT_TYPE_PRECOMPUTED_VISMEMBERS
 OBJECT_TYPE_RENDER_TO_CUBEMAPS
 OBJECT_TYPE_RENDER_WITH_DYNAMIC
@@ -912,6 +922,7 @@ October
 Output unserialization of entities on map load. 0 - off, 1 - client/server, 2 - server, 3 - client
 P
 P@
+PA
 PEvent
 PM
 PST
@@ -1021,7 +1032,7 @@ Sep
 September
 SerializeKey
 SerializedEntitiesVersion001
-ServerResourceCompilerInfo_001
+ServerToolsInfo_001
 Show or hide the specified world layer
 Si
 SkeletalInputSettings
@@ -1286,8 +1297,6 @@ V_UInt16ToString_Unsafe
 V_UInt32ToString_Unsafe
 V_UInt64ToString_Unsafe
 V_UInt8ToString_Unsafe
-V_cosf
-V_logf
 V_powf
 V_qsort
 V_qsort_s
@@ -1300,11 +1309,13 @@ Vector2D
 Vector2d
 Vector4D
 Vector4d
+VertexElementAnnotation
+VertexGenericIntegerData
 VertexPaintBlendParams
 VertexPaintBlendParams1
 VertexPaintTintColor
 VisBuilder_001
-Volume
+Vrad3_001
 W
 WARNING: Failed to convert introspected block for file: %s
 WARNING: Invalid resource version (%d): %s
@@ -1533,6 +1544,7 @@ _txnal_cow_string_c_str(void const*)
 _txnal_logic_error_get_msg(void*)
 _txnal_runtime_error_get_msg(void*)
 _txnal_sso_string_c_str(void const*)
+`A
 a
 a+
 a+b
@@ -1547,11 +1559,9 @@ aggegated
 alignof
 alnum
 alpha
-ambient_direction_day
-ambient_direction_night
-ambientangles
 arraycount
 attrib
+attributes
 auto
 auto:
 aw
@@ -1574,7 +1584,6 @@ basic_string::_M_create
 basic_string::_M_replace
 basic_string::_M_replace_aux
 basic_string::_S_construct null not valid
-basic_string::_S_create
 basic_string::append
 basic_string::assign
 basic_string::at: __n (which is %zu) >= this->size() (which is %zu)
@@ -1593,6 +1602,7 @@ binary_blob
 bind_textdomain_codeset
 bindtextdomain
 blank
+blendindices
 blendweight
 blendweights
 bool __gnu_cxx::operator==<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
@@ -1661,12 +1671,14 @@ char8_t
 character
 cl
 classname
+clear deallocate
 clock_gettime
 cm
 cntrl
 co
 co_await
 color32
+compressedtangentframe
 const
 const_cast
 construction vtable for
@@ -1676,7 +1688,6 @@ curvature
 d
 dV
 da
-data_height =
 dc
 debug_chart_color
 decimal128
@@ -1691,7 +1702,6 @@ delete
 delete[]
 deleted virtual method called
 detexConvertPixels: Too many temporary buffers needed
-detexConvertPixels: Unable to find conversion path
 detexSetErrorMessage: vasprintf returned error
 dgettext
 dl
@@ -1712,6 +1722,7 @@ entity_log_load_unserialize
 entity_lump_list
 entity_lump_spew
 entity_lump_spew %s %s
+entity_name
 entitykeyvalues.cpp
 eo
 eq
@@ -1725,10 +1736,7 @@ fWeightSumBottom > 0.0f
 fWeightSumLeft > 0.0f
 fWeightSumRight > 0.0f
 fWeightSumTop > 0.0f
-fadeinsecs
-fadeoutsecs
 false
-fanfriction
 fclose
 fdopen
 fesetround
@@ -1742,8 +1750,8 @@ float32
 float32-quantized
 float64
 floatbitmap.cpp
-floatbitmap.cpp(318): Conversion not supported yet!
-floatbitmap.cpp(963): Unsupported color format "%s", skipping!
+floatbitmap.cpp(324): Conversion not supported yet!
+floatbitmap.cpp(969): Unsupported color format "%s", skipping!
 fopen64
 fputc
 fputs
@@ -1759,6 +1767,14 @@ g_BitBuf_BitWriteMasks
 g_Mathlib_GammaToLinearByteTable
 g_TSPointerListNodes
 g_bUpdateStringTokenDatabase
+g_flSequentialFloats<float __vector(4)>
+g_flSequentialFloats<float>
+g_flTValues0To1Inclusive<float __vector(4)>
+g_flTValues0To1Inclusive<float>
+g_nSequentialIndices<int __vector(4)>
+g_nSequentialIndices<int>
+g_nTailMask<int __vector(4)>
+g_nTailMask<int>
 g_pMemAlloc
 g_pThreadPool
 generic
@@ -1812,7 +1828,6 @@ guard variable for std::time_put<char, std::ostreambuf_iterator<char, std::char_
 guard variable for std::time_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >::id
 h
 half
-health
 hidden alias for
 hscript
 hscript_lightbinding
@@ -1843,8 +1858,6 @@ iRed2 >= 0 && iRed2 <= 31
 iconv
 iconv_close
 iconv_open
-inspector_specular_direction_day
-inspector_specular_direction_night
 int std::__facet_shims::__collate_compare<char>(std::integral_constant<bool, false>, std::locale::facet const*, char const*, char const*, char const*, char const*)
 int std::__facet_shims::__collate_compare<char>(std::integral_constant<bool, true>, std::locale::facet const*, char const*, char const*, char const*, char const*)
 int std::__facet_shims::__collate_compare<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, wchar_t const*, wchar_t const*, wchar_t const*, wchar_t const*)
@@ -1871,6 +1884,7 @@ js_array
 js_object
 js_raw_args
 js_value
+keyValues3Data
 kv 0x%p AddRef refcount == %d
 kv 0x%p Release refcount == %d
 l
@@ -1882,8 +1896,6 @@ libm.so.6
 libpthread.so.0
 libtier0.so
 libworldrenderer.so
-light_direction_day
-light_direction_night
 lightmaps
 lightmapuv
 locale::_Impl::_M_replace_facet
@@ -1903,11 +1915,14 @@ lseek64
 m
 mI
 mL
+m_Bounds
+m_BoundsWs
 m_CScriptComponent
 m_ChildNodeIndices
 m_EnclosedClusterListBlock
 m_EnclosedClustersBlock
 m_Format
+m_InstanceOrientations32
 m_MasksBlock
 m_NodeBlock
 m_PathIndex
@@ -1935,7 +1950,7 @@ m_boolDiff
 m_boolDiff == true
 m_builderParams
 m_childLumps
-m_connections
+m_clutterSceneObjects
 m_designerName
 m_entityKeyValues
 m_entityLumps
@@ -1944,8 +1959,6 @@ m_extraVertexStreamOverrides
 m_extraVertexStreams
 m_fDataObjectTypes
 m_fError >= 0.0f
-m_fLODEndDrawDistance
-m_fLODStartDrawDistance
 m_fMaxObjectScale
 m_fSwitchDistances
 m_flDelay
@@ -1973,6 +1986,9 @@ m_iEventListCount
 m_infoOverlays
 m_inputLayoutFields
 m_inputName
+m_instancePositions
+m_instanceScales
+m_instanceTintSrgb
 m_int
 m_iszPrivateVScripts
 m_keyValuesData
@@ -1993,17 +2009,20 @@ m_nCubeMapPrecomputedHandshake
 m_nDrawCallIndex
 m_nElementCount
 m_nElementSizeInBytes
+m_nFirstInstance
 m_nFlags
 m_nInstanceStepRate
 m_nLODGroupMask
 m_nLODMask
 m_nLODOverride
 m_nLODSetupIndex
+m_nLastInstance
 m_nLayer
 m_nLightGroup
 m_nLightProbeVolumePrecomputedHandshake
 m_nLightmapGameVersionNumber
 m_nLightmapVersionNumber
+m_nObjectID
 m_nObjectTypeFlags
 m_nOffset
 m_nOutputID
@@ -2059,6 +2078,7 @@ m_targetDesc
 m_targetInput
 m_targetName
 m_targetType
+m_tiles
 m_transform
 m_uiAddedBlocks < m_uiImageBlocks
 m_uiAddedBlocks == m_uiImageBlocks
@@ -2069,7 +2089,6 @@ m_vLODOrigin
 m_vLightingOrigin
 m_vLightmapUvScale
 m_vMaxBounds
-m_vMinBounds
 m_vOrigin
 m_vTintColor
 m_vTransform
@@ -2130,12 +2149,20 @@ oR
 oo
 operator
 operator delete(void*)
+operator delete(void*, std::align_val_t)
 operator delete(void*, unsigned long)
+operator delete(void*, unsigned long, std::align_val_t)
 operator delete[](void*)
+operator delete[](void*, std::align_val_t)
 operator delete[](void*, unsigned long)
+operator delete[](void*, unsigned long, std::align_val_t)
 operator new(unsigned long)
+operator new(unsigned long, std::align_val_t)
+operator new(unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new(unsigned long, std::nothrow_t const&)
 operator new[](unsigned long)
+operator new[](unsigned long, std::align_val_t)
+operator new[](unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new[](unsigned long, std::nothrow_t const&)
 operator""
 optionallycompressedtangentframe
@@ -2226,7 +2253,6 @@ realloc
 reference temporary #
 regex
 reinterpret_cast
-renderamt
 resource_name
 resourcehandle
 resourcesystem
@@ -2248,18 +2274,12 @@ sin
 singletons.cpp
 sizeof
 sizeof...
-skybox_angle_day
-skybox_angle_night
 soundevent
 soundname
 space
-specular_direction_day
-specular_direction_night
-specularangles
 sqrt
 sqrtf
 standard
-startvalue
 static_cast
 std
 std::Catalogs::_M_add(char const*, std::locale)
@@ -5510,6 +5530,7 @@ v8array
 v8callback
 v8object
 v8value
+values
 variant
 vasprintf
 vector2
@@ -5519,6 +5540,7 @@ vector4
 vector4d
 vector::_M_default_append
 vector::_M_realloc_insert
+version
 virtual thunk to std::basic_fstream<char, std::char_traits<char> >::~basic_fstream()
 virtual thunk to std::basic_fstream<wchar_t, std::char_traits<wchar_t> >::~basic_fstream()
 virtual thunk to std::basic_ifstream<char, std::char_traits<char> >::~basic_ifstream()
@@ -5553,7 +5575,6 @@ virtual void Etc::Block4x4Encoding_RGB8A1_Opaque::PerformIteration(float)
 virtual void Etc::Block4x4Encoding_RGB8A1_Transparent::PerformIteration(float)
 virtual void Etc::Block4x4Encoding_RGBA8::PerformIteration(float)
 virtual void Etc::Block4x4Encoding_RGBA8_Opaque::PerformIteration(float)
-visionrange
 void
 void Etc::Block4x4::InitFromEtcEncodingBits(Etc::Image::Format, unsigned int, unsigned int, unsigned char*, Etc::Image*, Etc::ErrorMetric)
 void Etc::Block4x4::InitFromSource(Etc::Image*, unsigned int, unsigned int, unsigned char*, Etc::ErrorMetric)
@@ -5613,6 +5634,7 @@ void std::__facet_shims::__numpunct_fill_cache<char>(std::integral_constant<bool
 void std::__facet_shims::__numpunct_fill_cache<char>(std::integral_constant<bool, true>, std::locale::facet const*, std::__numpunct_cache<char>*)
 void std::__facet_shims::__numpunct_fill_cache<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, std::__numpunct_cache<wchar_t>*)
 void std::__facet_shims::__numpunct_fill_cache<wchar_t>(std::integral_constant<bool, true>, std::locale::facet const*, std::__numpunct_cache<wchar_t>*)
+void std::__introsort_loop<unsigned short*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void> > >(unsigned short*, unsigned short*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void> >)
 void std::vector<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > >::_M_realloc_insert<std::vector<unsigned long, std::allocator<unsigned long> > const&>(__gnu_cxx::__normal_iterator<std::vector<unsigned long, std::allocator<unsigned long> >*, std::vector<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > > >, std::vector<unsigned long, std::allocator<unsigned long> > const&)
 void std::vector<unsigned char, std::allocator<unsigned char> >::_M_realloc_insert<unsigned char const&>(__gnu_cxx::__normal_iterator<unsigned char*, std::vector<unsigned char, std::allocator<unsigned char> > >, unsigned char const&)
 volatile
@@ -5796,7 +5818,6 @@ wcslen
 wcsnrtombs
 wctob
 what():
-wind_angle
 wmemchr
 wmemcmp
 wmemcpy
@@ -5825,4 +5846,5 @@ zero
 ||
 }::
 ~
+
 C

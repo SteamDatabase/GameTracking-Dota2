@@ -21,7 +21,7 @@ $ORIGIN
 %s bytes in static binding info
 %s registrations; %s were redundant; %s were ignored (%s bytes of ignored data)
 %s schema bindings in %u modules (%s classes, %s enums)
-%s%s%s
+%s%c%s
 %s*
 %s+--
 %s+-- Schema Class: %s
@@ -71,9 +71,11 @@ $ORIGIN
 -DANGER_MODE_ignore_schema_mismatches
 -avx
 -in-
+-schema_validate_enum_scope
 -sse2
 -sse3
 -sse4
+-tools
 .*
 ...)
 ../public/tier0/utltshash.h
@@ -175,6 +177,8 @@ CEntityIndex
 CExampleSchemaVData_PolymorphicBase
 CExampleSchemaVData_PolymorphicDerivedA
 CExampleSchemaVData_PolymorphicDerivedB
+CGlobalSymbol
+CGlobalSymbolCaseSensitive
 CHandle
 CKeyValues3Context
 CMemAllocSystemInitialize
@@ -201,7 +205,7 @@ CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
 CUtlBuffer::CUtlBuffer(int, int, int)
 CUtlIncrementalVector
 CUtlMap
-CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
+CUtlMemoryBlockAllocator::Alloc(unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
 CUtlMemoryBlockAllocator::Purge()
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
@@ -227,6 +231,7 @@ CUtlSymbolLarge
 CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
 CUtlSymbolTable::Find(char const*) const
+CUtlSymbolTable::Find(char const*, int) const
 CUtlSymbolTable::~CUtlSymbolTable()
 CUtlVector
 CUtlVectorFixed
@@ -237,6 +242,7 @@ Class '%s
 Class Name
 Class Size
 Class: %7d bytes, %4d fields, %4d nonderived fields
+ClientToolsInfo_001
 CommandLine
 ConnectInterfaceSingletons
 ConvertOldIntrospectedResourceDataToKV3 - No introspection dictionary!
@@ -248,6 +254,7 @@ DoMismatchDialog
 Double-save to Member '%s'
 ERROR: CResourceToKV3 failed to DeduceDerivedTypeFromDisk
 ERROR: CResourceToKV3 failed to resolve extref  %016llX
+ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: Failed to register '%s' - inconsistent with '%s' (hash=%d,%d)
 ERROR: Inconsistent atomic type ID '%d': shared by '%s' and '%s' (check schema_atomic_types.cfg)
 ERROR: Inconsistent class ID '%d': shared by '%s' and '%s' (hash collision?)
@@ -255,6 +262,7 @@ ERROR: Inconsistent class handle for CSchemaType '%s' vs. '%s' ('%s:%s' vs. '%s:
 ERROR: Inconsistent enum ID '%d': shared by '%s' and '%s' (hash collision?)
 ERROR: Mismatched compile/runtime hash '%s' (%d != %d)
 ERROR: Schema mismatches reported! Aborting to prevent data corruption.All errors logged to console. First error (of %d):%s
+ERROR: Schema registration error - class '%s' is not marked as MGlobalTypeScope but derives from globally-scoped class '%s'
 ERROR: Schema registration error - class '%s' is not marked as MModuleLocalTypeScope but contains member '%s' with locally-scoped type '%s'
 ERROR: Schema registration error - class '%s' is not marked as MModuleLocalTypeScope but derives from locally-scoped class '%s'
 ERROR: Schema registration error - subclass '%s' registered before base class '%s'
@@ -272,6 +280,7 @@ Enumerator Name
 Enumerator Value
 Exiting due to fatal schema validation errors, see log output
 ExternalReference
+FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FIELD_AI_SCHEDULE_BITS
@@ -390,6 +399,7 @@ Has Trivial Destructor: %s
 HelpSystem_001
 HostStateMgr001
 IPulseSystem_001
+IS_TYPESAFE_INTEGER
 Ignorable Indirection
 Info
 InfoForResourceTypeCResourceManifestInternal
@@ -421,7 +431,6 @@ MFieldVerificationName
 MGetKV3ClassDefaults
 MIsBoxedIntegerType
 MNetworkSerializeAs
-MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MPropertyCustomFGDType
 MResourceTypeForInfoType
@@ -445,6 +454,7 @@ N10__cxxabiv121__vmi_class_type_infoE
 N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
+NavGameTest001
 NetworkClientService_001
 NetworkMessagesVersion001
 NetworkP2PService_001
@@ -505,7 +515,7 @@ SchemaSystem_001
 SchemaTestExternal_One_001
 SchemaTestExternal_Two_001
 SerializedEntitiesVersion001
-ServerResourceCompilerInfo_001
+ServerToolsInfo_001
 SetClass
 Size: %d bytes (%d unaccounted, of which %d is likely alignment)
 SoundGuid_t
@@ -599,7 +609,6 @@ V_UInt64ToString_Unsafe
 V_containsWhitespace
 V_qsort
 V_qsort_s
-V_snprintf
 V_stricmp_fast
 V_stristr_fast(char const*, char const*)
 V_uuid_t
@@ -608,6 +617,7 @@ ValidateAtomicType
 ValidateClasses
 VerifySchemaBindingConsistency
 VisBuilder_001
+Vrad3_001
 WARNING: SchemaSystem tried to load schema data for module '%s' but InstallSchemaBindings returned false.
 WARNING: SchemaSystem tried to load schema data for module '%s' but failed to load the module.
 WARNING: SchemaSystem tried to load schema data for module '%s' but failed to locate InstallSchemaBindings.
@@ -695,6 +705,7 @@ __vector(
 _base
 _class
 _editor
+_include
 _multibase
 _not_pickable
 aN
@@ -751,6 +762,7 @@ dv
 dynamic_cast
 eO
 ehandle
+entity_name
 enum
 eo
 eq
@@ -789,7 +801,6 @@ libpthread.so.0
 libschemasystem.so
 libtier0.so
 long double
-ls
 lt
 mI
 mL
@@ -830,6 +841,7 @@ mathlib.cpp
 matrix3x4
 memcmp
 memcpy
+memmove
 memset
 mi
 ml
@@ -849,11 +861,20 @@ oR
 oo
 operator
 operator delete(void*)
+operator delete(void*, std::align_val_t)
 operator delete(void*, unsigned long)
+operator delete(void*, unsigned long, std::align_val_t)
 operator delete[](void*)
+operator delete[](void*, std::align_val_t)
+operator delete[](void*, unsigned long)
+operator delete[](void*, unsigned long, std::align_val_t)
 operator new(unsigned long)
+operator new(unsigned long, std::align_val_t)
+operator new(unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new(unsigned long, std::nothrow_t const&)
 operator new[](unsigned long)
+operator new[](unsigned long, std::align_val_t)
+operator new[](unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new[](unsigned long, std::nothrow_t const&)
 operator""
 pL
@@ -947,7 +968,6 @@ strcmp
 string literal
 string_token
 strlen
-strstr
 subclass
 syscall
 sz

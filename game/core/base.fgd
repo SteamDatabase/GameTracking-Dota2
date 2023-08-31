@@ -48,6 +48,7 @@
 @VisGroupFilter { filter_type = "entityTag"		tag = "PropPhysics"		group = "Physics Props"		parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "PropDynamic"		group = "Dynamic Props"		parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "Overlay"			group = "Dynamic Overlays"	parent_group = "Entities" }
+@VisGroupFilter { filter_type = "entityTag"		tag = "PostProcessing"	group = "Post Processing"	parent_group = "Entities" }
 
 
 
@@ -173,6 +174,9 @@
 
 	// Outputs
 	output OnIgnite(void) : "Fired when this object catches fire."
+
+	add_attribute(string) : "Add Attribute" : "" : "Will add an additional attribute that AI/player entities can query when checking props for information (ex: 'DogToy' or 'GrabbableResource')"
+	add_modifier(string) : "Add Modifier" : "" : "Will add this modifier when the entity spawns."
 ]
 
 
@@ -275,51 +279,7 @@
 	input StopGlowing(void) : "Turn off this prop's glow effect."
 ]
 
-
-// Inherit from this to get the ability to only include an object in a range of dx levels.
-// NOTE!!: MAKE SURE THAT YOU DON'T USE THIS WITH ANYTHING THAT WILL BREAK SAVE-GAMES SWITCHING
-// BETWEEN SYSTEM LEVELS!!!!
-@BaseClass = SystemLevelChoice
-[ 
-	mincpulevel(choices) [ group="Render Properties" ] : "Minimum CPU Level" : 0 = 
-	[
-		0 : "default (low)"
-		1 : "low"
-		2 : "medium"
-		3 : "high"
-	]
-	maxcpulevel(choices) [ group="Render Properties" ] : "Maximum CPU Level" : 0 = 
-	[
-		0 : "default (high)"
-		1 : "low"
-		2 : "medium"
-		3 : "high"
-	]
-	mingpulevel(choices) [ group="Render Properties" ] : "Minimum GPU Level" : 0 = 
-	[
-		0 : "default (very low)"
-		1 : "very low"
-		2 : "low"
-		3 : "medium"
-		4 : "high"
-	]
-	maxgpulevel(choices) [ group="Render Properties" ] : "Maximum GPU Level" : 0 = 
-	[
-		0 : "default (high)"
-		1 : "very low"
-		2 : "low"
-		3 : "medium"
-		4 : "high"
-	]
-	disableX360(choices) [ group="Render Properties" ] : "Disable X360" : 0 =
-	[
-		0 : "No"
-		1 : "Yes"
-	] 
-]
-
-
-@BaseClass base(RenderFxChoices, RenderModeChoices, SystemLevelChoice) = RenderFields 
+@BaseClass base(RenderFxChoices, RenderModeChoices) = RenderFields 
 [
 	renderamt(integer) [ group="Render Properties" ] : "FX Amount (0 - 255)" : 255 : "The FX amount is used by the selected Render Mode."
 	rendercolor(color255) : "FX Color (R G B)" : "255 255 255" : "The FX color is used by the selected Render Mode."
@@ -343,7 +303,7 @@
 	]
 
 	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 0 : "If true, this geometry renders into baked cube maps"	
-	lightmapstatic(choices) [ group="Render Properties" ] : "Lightmap Static" : 0 : "How this geometry influences baked lighting." =
+	lightmapstatic(choices) [ group="Render Properties" ] : "Lightmap Static" : 0 : "Determines if this geometry be considered static & cast shadows/bounce light when baking lightmaps?" =
 	[
 		0 : "No"
 		1 : "Yes"
@@ -624,7 +584,6 @@
 		1024: "Physics debris" : 0
 		2048: "Only NPCs in vehicles (respects player ally flag)" : 0
 		4096: "Correctly account for object mass (trigger_push used to assume 100Kg) and multiple component physobjs (car, blob...)" : 1
-		8192: "Ignore client's hands" : 0
 	]
 
 	filtername(filterclass) : "Filter Name" : : "Filter to use to see if activator triggers me. See filter_activator_name for more explanation."
@@ -777,6 +736,13 @@
 
 @PointClass base(point_soundevent) tags( Sound ) iconsprite("editor/snd_event.vmat") box_oriented( box_mins, box_maxs ) = snd_event_alignedbox :
 	"Plays a sound event from a point, passes along the min and max positions of its AABB. The point can be this entity or a specified entity's position."
+[
+	box_mins(vector) : "Box Mins" : "-64 -64 -64"
+	box_maxs(vector) : "Box Maxs" : "64 64 64"
+]
+
+@PointClass base(point_soundevent) tags( Sound ) iconsprite("editor/snd_event.vmat") box_oriented( box_mins, box_maxs ) = snd_event_orientedbox :
+	"Plays a sound event from a point closest to the player on the box."
 [
 	box_mins(vector) : "Box Mins" : "-64 -64 -64"
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
@@ -949,6 +915,18 @@
 	pathCornerEntityName(target_destination) : "Path Corner Starting Entity" : "" : "The name of the entity that is at the start of the path"
 ]
 
+
+//@BaseClass = SndOpvarSetPointAutoRoomBase
+//[ 
+	//size(float) : "Size (radius)" : "25.0" : "Size of the room to analyze"
+	//height_tolerance(float) : "Height Tolerance (units)" : "50.0" : "If the player's height and the raycast height are within this many units, the difference is ignored when performing distance calculations"
+//]
+
+//@PointClass base( Targetname, SndOpvarSetPointAutoRoomBase, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) sphere(size, 250, 101, 252)= snd_opvar_set_auto_room :
+	//"Analyzes a mostly enclosed space and defines walls and doorways within that space. Sets an opvar value on a library stack based on distance from the doorways"
+//[
+//]
+
 @PointClass base( Targetname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb:
 [
 	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
@@ -993,22 +971,6 @@
 [
 	areaMin(vector) : "Sound Area Min" : "-32 -32 -32"
 	areaMax(vector) : "Sound Area Max" : "32 32 32"	
-]
-
-@PointClass base(Targetname) = env_zoom : 
-	"An entity that can be used to control the player's FOV. Useful for scenes where the player's view is being controlled, or player-usable binoculars/telescopes, etc."
-[
-	Rate(float) : "Seconds to reach target" : "1.0" : "Amount of time it should take to reach the specified FOV."
-	FOV(integer) : "Target FOV" : 75 : "FOV that this entity should set the player's FOV to when active."
-
-	// Inputs
-	input Zoom(void) : "Start controlling the player's FOV."
-	input UnZoom(void) : "Stop controlling the player's FOV."
-
-	spawnflags(flags) =
-	[
-		1: "Allow Suit Zoom" : 0
-	]
 ]
 
 @PointClass base(Targetname) = env_screenoverlay: 
@@ -1824,7 +1786,7 @@
 	input Ignite(void) : "Ignite the target entity."
 ]
 
-@PointClass fog() base(Targetname, SystemLevelChoice) tags( Lighting ) iconsprite("materials/editor/env_fog_controller.vmat") global( fog ) color(255 255 255) = env_fog_controller : 
+@PointClass fog() base(Targetname) tags( Lighting ) iconsprite("materials/editor/env_fog_controller.vmat") global( fog ) color(255 255 255) = env_fog_controller : 
 	"An entity that controls the fog and view distance in the map."
 [
 	// Inputs
@@ -2132,8 +2094,6 @@
 	position7(target_destination) : "Sound Position 7" : "" : "A sound position that will be referenced inside the soundscape text file. Usually used to position a set of sounds within the world."
 
 	// Inputs
-	input Enable(void) : "Enable the soundscape."
-	input Disabled(void) : "Disable the soundscape."
 	input ToggleEnabled(void) : "Toggle the soundscape enabled state."
 
 	// Outputs
@@ -2344,6 +2304,7 @@
 	spawnflags(flags) =
 	[
 		1: "Use Only" : 0
+		2: "Strip First" : 0
 	]
 	master(string) : "Team Master (Obsolete)" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this entity will not activate."	
 ]
@@ -2889,6 +2850,7 @@
 	startsound(sound) : "Sound played when the brush starts moving."
 	stopsound(sound) : "Sound played when the brush stops moving."
 	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "0" : "Create a navigation obstacle to assist NPC pathfinding"
+	CreateMovableNavMesh(boolean) : "Create Movable Nav Mesh" : "0" : "Create a navigation mesh that moves with the brush."
 	// Inputs
 	input Open(void) : "Move the brush to the end position (starting position + (move direction * move distance))."
 	input Close(void) : "Move the brush to the starting position."
@@ -2988,7 +2950,7 @@
 // Ropes and Cables
 //
 //-------------------------------------------------------------------------
-@BaseClass base(SystemLevelChoice) = RopeKeyFrame
+@BaseClass = RopeKeyFrame
 [
 	spawnflags(Flags) = 
 	[
@@ -3319,6 +3281,7 @@
 	]
 	
 	ajarangle(float) : "Ajar Angle" : "0" : "If the door 'Spawn Position' is set to Ajar, this is the angle to spawn at, relative to the closed position."
+	ajardoorshouldntalwaysopen(boolean) : "Ajar Shouldn't Always Open" : "0" : "By default, Ajar doors always open fully when +USEd. If this is set to true, Ajar doors will stop opening if they cross the close position."
 	spawnpos(choices) : "Spawn Position" : 0 =
 	[
 		0 : "Closed"
@@ -3343,7 +3306,7 @@
 	forceclosed(boolean) : "Force Closed" : 0 : "If set, this door will close no matter what. Useful for doors that have to close even if the player tries to block them with objects."
 
 	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"
-	lightmapstatic(choices) [ group="Render Properties" ] : "Lightmap Static" : 0 : "How this geometry influences baked lighting." =
+	lightmapstatic(choices) [ group="Render Properties" ] : "Lightmap Static" : 0 : "Determines if this geometry be considered static & cast shadows/bounce light when baking lightmaps?" =
 	[
 		0 : "No"
 		1 : "Yes"
@@ -3471,41 +3434,6 @@
 	output OnDemoMapSpawn(void) : "Fired when the map is loaded in Demo Mode."
 	output OnVREnabled(void) : "Fired when the map is loaded with a VR HMD active."
 	output OnVRNotEnabled(void) : "Fired when the map is loaded without a VR HMD active."
-]
-
-@PointClass base(Targetname,Parentname) editormodel("models/editor/camera.vmdl") = point_viewcontrol : 
-	"A camera entity that controls the player's view. While it's active, the player will see out of the camera." 
-[
-	fov(float) : "Field of view" : "90" : "Player FOV (if Set FOV spawnflag is set)"
-	fov_rate(float) : "Seconds to reach FOV target" : "1.0" : "Amount of time it should take to reach the specified FOV"
-
-	target(target_destination) : "Entity to Look At" : : "Name of the entity that the camera should point at and track while active."
-	targetattachment(string) : "Target Attachment Name" : : "If set, the camera will focus on the specified attachment on the 'Entity to Look At'."
-	wait(integer) : "Hold Time" : 10 : "The amount of time the camera should control the player's view for, after which it deactivates itself. If the camera should stay active until told to deactive, set the 'Infinite Hold Time' spawnflag."
-	moveto(target_destination) : "Path Corner" : : "The first path corner in a track that the camera should move along once it's activated. If not specified, the camera won't move."
-	interpolatepositiontoplayer(boolean) : "Interpolate Position To Player" : 0 : "Gradually interpolate player's position to here on start. (Episodic only)"
-
-	spawnflags(flags) =
-	[
-		1: "Start At Player" : 1
-		2: "Follow Player" : 1
-		4: "Freeze Player" : 0
-		8: "Infinite Hold Time" : 0
-		16:"Snap to goal angles" : 0
-		32:"Make Player non-solid" : 0
-		64:"Interruptable by Player" : 0
-		128:"Set FOV" : 0
-	]
-	speed(string) : "Initial Speed" : "0" : "The starting speed that the camera moves at, if it's on a path track."
-	acceleration(string) : "Acceleration units/sec^2" : "500" : "The speed at which the camera accelerates to path corner's desired speeds."
-	deceleration(string) : "Stop Deceleration units/sec^2" : "500" : "The speed at which the camera decelerates to path corner's desired speeds."
-
-	// Inputs
-	input Enable(void) : "Enable the point_viewcontrol, and start controlling the player's view."
-	input Disable(void) : "Disable the point_viewcontrol, and stop controlling the player's view."
-
-	// Outputs
-	output OnEndFollow(void) : "Fired when the point_viewcontrol deactivates, due to the Disable input being received, the Entity to Look At being destroyed, or the Hold Time expiring."
 ]
 
 @PointClass base(Targetname) tags( Logic ) iconsprite("editor/logic_compare.vmat") = logic_compare :
@@ -3897,8 +3825,6 @@
 	input RefireTime(float) : "Set a new Refire Interval."
 	input ResetTimer(void) : "Reset the timer. It will fire after the Refire Interval expires."
 	input FireTimer(void) : "Force the timer to fire immediately."
-	input Enable(void) : "Enable the timer."
-	input Disable(void) : "Disable the timer."
 	input Toggle(void) : "Toggle the timer on/off."
 	input LowerRandomBound(float) : "Set a new Minimum Random Interval."
 	input UpperRandomBound(float) : "Set a new Maximum Random Interval."
@@ -4636,6 +4562,7 @@
 		4 : "Change View Direction (VR)" : 0
 	]
 	teleport_parented_entities(boolean) : "Teleport Parented Ents" : "0"
+	teleport_use_current_angle(boolean) : "Teleport Uses Current Rotation" : "0"
 
 	// Inputs
 	input Teleport(void) : "Teleport the target entity."
@@ -4643,6 +4570,9 @@
 		"The Teleport input teleports to the initial position of the point_teleport, so this input was added to avoid breaking old content."
 
 	input TeleportEntity(target_destination) : "Teleport the entity specified by the parameter override. Use this to teleport an entity other than the one specified in the Entity To Teleport field."
+	input TeleportEntityToCurrentPos(void) : "Teleport the entity specified by the parameter override to wherever the point_teleport entity is currently. "+
+		"The Teleport input teleports to the current position of the point_teleport"
+
 ]
 
 @PointClass base(Targetname) sphere(DamageRadius) = point_hurt :
@@ -4801,7 +4731,7 @@
 
 	attach1(target_destination) : "Target Entity" : "" : "The entity to align to the desired angles."
 	angularlimit(float) : "Angular Limit" : "15" : "The maximum angular velocity that this controller can compensate for, in degrees per second."
-
+	dampAllRotation(boolean) : "Damp all rotation" : "" : "Forces the upright behavior to have perfect damping, instead of progressively damping."
 	// Inputs
 	input TurnOn(void) : "Enable the controller."
 	input TurnOff(void) : "Disable the controller." 
@@ -5262,7 +5192,7 @@
 //
 //-------------------------------------------------------------------------
 
-@BaseClass base(SystemLevelChoice) = prop_static_base
+@BaseClass = prop_static_base
 [
 	model(studio) [report] : "World Model"
 	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
@@ -5297,7 +5227,7 @@
 	]
 ]
 
-@BaseClass base(Parentname, CanBeClientOnly, Global, Studiomodel, BreakableProp, SystemLevelChoice, RenderFields, Glow) tags( PropDynamic ) = prop_dynamic_base
+@BaseClass base(Parentname, CanBeClientOnly, Global, Studiomodel, BreakableProp, RenderFields, Glow) tags( PropDynamic ) = prop_dynamic_base
 [
 	solid(choices) : "Collisions" : 6 =
 	[
@@ -5480,7 +5410,7 @@
 	health(integer) : "Health" : 0 : "Number of points of damage to take before breaking.  0 means don't break."	
 ]
 
-@BaseClass base(Parentname, Targetname, Global, CanBeClientOnly, Studiomodel, BreakableProp, SystemLevelChoice, Glow) tags( PropPhysics ) = BasePropPhysics
+@BaseClass base(Parentname, Targetname, Global, CanBeClientOnly, Studiomodel, BreakableProp, Glow) tags( PropPhysics ) = BasePropPhysics
 [ 
 	spawnflags(flags) [ group="Physics Properties" ] = 
 	[
@@ -5512,6 +5442,7 @@
 
 	inertiaScale(float) [ group="Physics Properties" ] : "Scale Factor For Inertia" : "1.0" : "Scales the angular mass of an object. Used to hack angular damage and collision response."
 	massScale(float) [ group="Physics Properties" ] : "Mass Scale" : "0" : "A scale multiplier for the object's mass."
+	buoyancyScale(float) [ group="Physics Properties" ] : "Buoyancy Scale" : "1.0" : "Scales how water forces affect this object."
 	damagetoenablemotion(integer) [ group="Physics Properties" ] : "Health Level to Override Motion" : 0 : "If specified, this object will start motion disabled. Once its health has dropped below this specified amount, it will enable motion."
 	forcetoenablemotion(float) [ group="Physics Properties" ] : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
 
@@ -5610,7 +5541,7 @@
 ]
 
 
-@PointClass base(Targetname, Studiomodel, SystemLevelChoice, BaseFadeProp, EnableDisable, PosableSkeleton, BasePhysicsSimulated) tags( PropPhysics ) sphere(fademindist) sphere(fademaxdist) model() = prop_ragdoll :
+@PointClass base(Targetname, Studiomodel, BaseFadeProp, EnableDisable, PosableSkeleton, BasePhysicsSimulated) tags( PropPhysics ) sphere(fademindist) sphere(fademaxdist) model() = prop_ragdoll :
 	"A prop that physically simulates and can be articulated with internal joints. The joint constraints are part of the physics model."
 [
 	spawnflags(flags) = 
@@ -7342,8 +7273,6 @@
 	input SetAnisotropy(float) : "Set anisotropy value"
 	input SetFadeSpeed(float) : "Set fade in/out speed"
 	input SetDrawDistance(float) : "Set draw distance"
-	input Enable(boolean) : "Enable"
-	input Disable(boolean) : "Disable"
 	input ForceRefresh(void) : "Forces the fog volume to update if a light's state has changed"
 	input EnableIndirect( bool ) : "Turns on/off indirect fogging"
 ]
@@ -7356,8 +7285,6 @@
 [
 	box_mins(vector) : "Box Mins" : "-64 -64 -64"
 	box_maxs(vector) : "Box Maxs" : "64 64 64"
-	input Enable(boolean) : "Enable"
-	input Disable(boolean) : "Disable"
 	FogStrength( float ) : "Fog strength" : "1.0" : "Technically the scattering value. Higher values make denser fog."
 	FalloffExponent( float ) : "Falloff Exponent" : "1.0" : "Controls the fall off curve for the fog at the edges"
 	Shape(choices) : "Falloff Shape" : "0" : "" = 
@@ -7444,13 +7371,13 @@
 	pin_enabled(bool) : "Pin Enabled" : "1" : "If enabled, the rope simulation treats this node a locaiton to which the rope is attached."
 ]
 
-@BaseClass base(Targetname) tags( Particles ) particle_rope() 
+@BaseClass base(Targetname) tags( Particles )
 	metadata
 	{
 		default_interpolation = "linear"
 		path_node_class = "path_node_particle_rope"
 	}
-= PathParticleRope
+= PathParticleRopeBase
 [
 	effect_name(particlesystem) [report] : "Particle System Name" : "particles/entity/path_particle_cable_default.vpcf"
 	start_active(boolean) : "Start Active" : 1 : "Will the particle system be visible on spawn"
@@ -7464,7 +7391,7 @@
 ]
 
 
-@PathClass base(PathParticleRope) = path_particle_rope
+@PathClass base(PathParticleRopeBase) particle_rope() = path_particle_rope
 [
 	// Inputs
 	input Start(void) : "Tell the particle system to start emitting."
@@ -7477,7 +7404,7 @@
 ]
 
 
-@PathClass base(PathParticleRope) tags( Particles ) particle_rope() 
+@PathClass base(PathParticleRopeBase) particle_rope() 
 	metadata
 	{
 		class_game_keys =

@@ -121,7 +121,7 @@ function _ScoreboardUpdater_UpdatePlayerPanel( scoreboardConfig, playersContaine
 		}
 		else
 		{
-			_ScoreboardUpdater_SetTextSafe( playerPanel, "HeroName", $.Localize( "#"+playerInfo.player_selected_hero ) )
+			_ScoreboardUpdater_SetTextSafe( playerPanel, "HeroName", GameUI.GetUnitNameLocalized( playerInfo.player_selected_hero ) )
 		}
 		
 		var heroNameAndDescription = playerPanel.FindChildInLayoutFile( "HeroNameAndDescription" );
@@ -133,7 +133,7 @@ function _ScoreboardUpdater_UpdatePlayerPanel( scoreboardConfig, playersContaine
 			}
 			else
 			{
-				heroNameAndDescription.SetDialogVariable( "hero_name", $.Localize( "#"+playerInfo.player_selected_hero ) );
+				heroNameAndDescription.SetDialogVariable( "hero_name", GameUI.GetUnitNameLocalized( playerInfo.player_selected_hero ) );
 			}
 			heroNameAndDescription.SetDialogVariableInt( "hero_level",  playerInfo.player_level );
 		}		

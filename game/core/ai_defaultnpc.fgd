@@ -49,12 +49,14 @@
 	input LookAtIgnoreHands( void ) : "NPC does not look at the player hands"
 	input LookAtUseHands( void ) : "NPC will look at the player hands"
 	input AddAbility( string ) : "Adds an ability to the NPC"
-	input EnableAbility( string ) : "Enables an ability on the NPC"
-	input DisableAbility( string ) : "Disables an ability on the NPC"
+	input ForceEnableAbility( string ) : "Enables an ability on the NPC."
+	input ForceDisableAbility( string ) : "Disables an ability on the NPC."
+	input ForceReturnToAIAbility( string ) : "Return the ability on the NPC to the AI's control (i.e. AI will decide whether or not the ability is enabled or disabled)"
 	input RemoveAbility( string ) : "Removes an ability to the NPC"
 	input DisableAllAbilities( boolean ) : "Disable all abilities on the NPC. Parameter: 0 - Do not disable all abilities, 1 - Do disable all abilities"
 	input SetForceWalkRun(integer) : "Force this NPC to walk or run. Parameter: 0 - Return to AI, 1 - Force Walk, 2 - Force Run."
 	input SetForceAim(integer) : "Force this NPC to aim or not aim. Parameter: 0 - Return to AI, 1 - Force Aiming, 2 - Force Not Aiming. Note that an NPC forced to Not Aim may be non-functional in combat."
+	input StartActBusy(string) : "Force an NPC to go into an Act Busy. The parameter is the act busy entry name found in actbusy.vdata"
 ]
 
 @BaseClass base(DefaultNPC) = TalkNPC
@@ -103,6 +105,8 @@
 
 	input EnableWeaponPickup(void) : "Enable Weapon Pickup"
 	input DisableWeaponPickup(void) : "Disable Weapon Pickup"
+	input EnableLimitedReloads(void) : "Enable Limited Reloads (if specified in VData)"
+	input DisableLimitedReloads(void) : "Disable Limited Reloads"
 
 	input GiveAbility(string) : "Gives the NPC an ability of the specified name (see npc_abilities.vdata)."
 	
@@ -113,6 +117,8 @@
 	input LockReadiness(float) : "Lock readiness at current setting for x seconds -1 = forever, 0 = unlock now"
 	
 	input ClearAllOutputs(void) : "Obliterate every output that this NPC has."
+
+	input ReviveCompleted(void) : "Force the NPC to revive itself from an incapacitated state. "
 
 	output OnWeaponPickup(void) : "Fires when this NPC picks a weapon off the ground or a gun rack."
 ]
@@ -299,7 +305,9 @@
 	sync_group(string) : "Synchronization Group" : : "If set, identifier used to match other scripted sequences to synchronze with (alternative to name-based sync)"
 	m_iszModifierToAddOnPlay(string) : "Modifier to add on Play" : "" : "A modifier name to add when the scripted sequence starts."
 	m_bAllowCameraMovement(boolean) : "Allow Player Camera Movement?" : 1
+	m_bLoopPreIdleSequence(boolean) : "Loop Pre Idle Animation?" : 0
 	m_bLoopActionSequence(boolean) : "Loop Action Animation?" : 0
+	m_bLoopPostIdleSequence(boolean) : "Loop Post Idle Animation?" : 0
 	m_bSynchPostIdles(boolean) : "Synch Post Idles?" : 0
 	m_bAllowCustomInterruptConditions(boolean) : "Allow custom interrupt conditions to be set." : 0
 	conflict_response(choices) : "Script Conflict Response" : 0 : "What to do if this scripted sequence begins and the actor is already executing a scripted sequence." = 
@@ -393,7 +401,6 @@
 		32: "No Interruptions" : 0
 		64: "Override AI" : 0
 		128: "Don't Teleport NPC On End" : 0
-		256: "Loop in Post Idle" : 0
 		512: "Priority Script" : 0
 		2048: "Hide Debug Complaints" : 0
 		4096: "Allow other NPC actors to continue after this NPC actor's death" : 0
@@ -513,6 +520,7 @@
 	// Inputs
 	input StartMoveTo(void) : "Starts all target NPC(s) moving to the target destination."
 	input StopMoveTo(void) : "Stops all target NPCs that are performing this move to."
+	input UpdateDestination(string) : "Stop the current move and start a new one pointing to this new target."
 
 	// Outputs
 	output OnSucceeded(void) : "Fired when any target NPC finishes moving to the destination."

@@ -251,7 +251,7 @@
 [
 	subclass_name( vdata_choice:scripts/npc_units.vdata ) : "Unit Name" : "" : "Name of the NPC Unit."
 	squadname(String) [ group="NPC Properties" ] : "Squad Name" : : "NPCs that are in the same squad (i.e. have matching squad names) will share information about enemies, and will take turns attacking and covering each other."
-	hintgroup(String) [ group="NPC Properties" ] : "Hint Group" : "" : "Hint groups are used by NPCs to restrict their hint-node searching to a subset of the map's hint nodes. Only hint nodes with matching hint group names will be considered by this NPC."
+	hintgroup(String) [ group="NPC Properties" ] : "Hint Group" : "" : "Hint groups are used by NPCs to restrict their hint-node searching to a subset of the map's hint nodes. Only hint nodes with matching hint group names will be considered by this NPC. Note that if this is empty, the NPC will be able to use any hint node, even nodes that have a hint group specified."
 
 	spawnflags(Flags) = 
 	[
@@ -330,6 +330,7 @@
 	input IgniteLifetime(float) : "Ignite, with a parameter lifetime."
 	input IgniteNumHitboxFires(integer) : "Ignite, with a parameter number of hitbox fires."
 	input IgniteHitboxFireScale(float) : "Ignite, with a parameter hitbox fire scale."
+	input Extinguish(void) : "Extinguish ourself if we're on fire"
 	input Break(void) : "Break, smash into pieces"
 	input SetSquad(string) : "Set the name of this NPC's squad. It will be removed from any existing squad automatically. Leaving the parameter blank will remove the NPC from any existing squad."
 	input Wake(void) : "Wakes up the NPC if it is sleeping."
@@ -339,6 +340,7 @@
 	input UpdateEnemyMemory(string) : "Update (or Create) this NPC's memory of an enemy and its location"
 	input BecomeRagdoll(void) : "This NPC will instantly become a ragdoll with ZERO force (just go limp). OnDeath, OnHalfHealth, etc. Outputs will **NOT** BE FIRED."
 	input SetEasingParameter(string) : "Set an easing parameter Format: <name=value>"
+	input SetNavRestrictionVolume(string) : "Set the nav restriction volume. Parameter is the name of the target markup volume. Empty parameter will clear the nav restriction."
 ]
 
 @BaseClass base(Targetname, Parentname) iconsprite("editor/npc_maker.vmat") color(0 0 255) = BaseNPCMaker
@@ -359,9 +361,13 @@
 	DestinationGroup(target_destination) : "Name of Destination Group" : : "If you'd like spawned NPCs to be created at an info_npc_spawn_destination entity, enter the name of that entity here. If you have more than one destination entity by that name, the Destination Criteria will be used to select one from the group."
 	CriterionVisibility(Choices) : "Dest. Criterion: Visible to player?" : 2 : "Should the NPC try to spawn at a destination that the player can see? Only applicable if a Destination Group is being used." =
 	[
-		0 : "Yes"
-		1 : "No"
+		0 : "Has LOS"
+		1 : "No LOS"
 		2 : "Don't Care"
+		3 : "In View Cone"
+		4 : "Not In View Cone"
+		5 : "Has LOS and In View Cone"
+		6 : "No LOS and Not View Cone"
 	]
 	CriterionDistance(Choices) : "Dest. Criterion: Distance to player?" : 2 : "Should the NPC try to spawn nearest to or farthest from the player's current location? Only applicable if a Destination Group is being used." =
 	[
@@ -376,6 +382,7 @@
 	SpawnFrequency(integer) : "Frequency" : 5 : "How often (in seconds) a new NPC will be spawned. If set to -1, a new NPC will be made when the last NPC dies."
 	RetryFrequency(integer) : "Retry Frequency" : -1 : "How long (in seconds) to wait before trying again after failing to spawn an NPC when no valid spot could be found. If set to -1, Spawn Frequency is used."
 	MaxLiveChildren(integer) : "Max Live NPCs" : 5 : "Maximum number of live children allowed at any one time (new ones will not be made until one dies). If set to -1, no limit is applied."
+	SpawnThreshold(integer) : "Spawn Threshold" : 1 : "Number of NPCs below max before we start spawning new ones. (ie, if set to 3, no NPCs will be spawned until we're 3 below our max, at which point we spawn until max)"
 	HullCheckMode(Choices) : "Hull Check Mode" : 0 : "How NPC's hull should be checked at spawn destination?" =
 	[
 		0 : "Default"
@@ -546,41 +553,57 @@
 	actor(target_name_or_class) : "Actor(s) to affect"
 	goal(target_destination) : "Target Entity"
 	WaitPointName(target_destination) : "Point to wait at if the target's not visible"
-	WaitDistance(float) : "Wait until player gets this close"
-	LeadDistance(float) : "Lead Distance" : "64" : "The player is considered to be lagging if he's beyond this distance.  The Actor will consider retrieving when the player is 4x 'Lead Distance' away."
-	RetrieveDistance(float) : "Retrieve Distance" : "96" : "The distance from the player that the NPC should return to when retrieving a lagging player. Must be between ('Lead Distance' + 24) and ('Lead Distance' * 4) to avoid the leader ping-ponging."
-	SuccessDistance(float) : "Success Distance" : "0" : "The distance from the player (to the NPC) that the player must be within for the Lead to succeed, once the NPC has reached the goal. If set to 0, it'll use the lead distance instead (for legacy support)."
-	Run(boolean) : "Run instead of Walk" : "0"
+	GoalTolerance(float) : "Goal Tolerance" : "-1" : "If the Actor doesn't get to the lead goal exactly, but gets within this distance, it considers itself as having reached the goal. -1 means use the NPC's default tolerance (which is half their hull width)."
+	WaitDistance(float) : "Wait until player gets within this distance before starting to Lead them. If set to 0, start Leading as soon as the player is visible."
+	StartSpeechDistance(float) : "Starting Speech Distance" : "48" : "The distance from the player that this NPC should move to before speaking the TLK_LEAD_START concept."
+	CloseDistance(float) : "Close Distance" : "64" : "The player is considered to be Close if they're within this distance."
+	LaggingDistance(float) : "Lagging Distance" : "96" : "The player is considered to be Lagging if they're beyond this distance. If the player is Lagging > 3-4s, they're considered Lost, and the NPC will go back to retrieve them. If the Retrieve Player option is set to 'No', the NPC will stop moving and wait instead."
+	SuccessDistance(float) : "Success Distance" : "64" : "The distance from the player (to the NPC) that the player must be within for the Lead to succeed, once the NPC has reached the goal. If set to 0, it'll use the lead distance instead (for legacy support)."
 
-	Retrieve(choices) : "Retrieve player?" : 1 =
+	Retrieve(choices) : "Retrieve Lost players?" : 1 =
 	[
-		0 : "No, just idle and wait"
-		1 : "Yes, move to retrieve"
+		0 : "No, just idle and wait."
+		1 : "Yes, move to retrieve."
 	]	
 	ComingBackWaitForSpeak(choices) : "Before Coming Back, Wait for speech?" : 1 =
 	[
-		0 : "No, come back while speaking"
-		1 : "Yes, wait for speech to finish"
+		0 : "No, come back while speaking."
+		1 : "Yes, wait for speech to finish."
 	]
 	RetrieveWaitForSpeak(choices) : "On Retrieve, Wait for speech?" : 1 =
 	[
-		0 : "No, start leading while speaking"
-		1 : "Yes, wait for speech to finish"
+		0 : "No, start leading while speaking."
+		1 : "Yes, wait for speech to finish before starting to lead."
 	]
 	DontSpeakStart(choices) : "Speak start greeting?" : 0 =
 	[
-		0 : "Yes, speak the start greeting"
-		1 : "No, don't speak the greeting"
+		0 : "Yes, speak the start greeting before starting to lead."
+		1 : "No, don't speak the greeting."
 	]
 	LeadDuringCombat(choices) : "Lead during combat?" : 0 =
 	[
 		0 : "No. Stop to fight, resume leading when safe."
 		1 : "Yes, lead while fighting."
 	]
-	GagLeader(choices) : "Gag Leader?" : 0 =
+	StopScenesWhenPlayerLost(choices) : "Stop Scenes When Player Lagging?" : 1 : "If set, pause any choreo scenes the Leader is running when the player lags. They'll be resumed after the player has been retrieved." =
 	[
-		0 : "No. Speak lead concepts normally, respecting other lead speech settings."
-		1 : "Yes, don't speak any lead concepts at all, overriding all other lead speech settings."
+		0 : "No, don't pause."
+		1 : "Yes, pause scenes player lags."
+	]
+	GagLeader(choices) : "Gag Leader?" : 0 : "Prevent the Leader from speaking any concepts related to the Lead behavior." = 
+	[
+		0 : "No."
+		1 : "Yes, prevent speech."
+	]
+	PreventSuccess(choices) : "Prevent Success?" : 0 : "If set, the Lead won't be allowed to succeed and finish. Use this when you want the Lead to continue forever, until some other external logic intervenes and tells it to stop." = 
+	[
+		0 : "No."
+		1 : "Yes. "
+	]
+	UseGoalFacing(choices) : "Use Goal Facing?" : 1 : "While waiting at the lead goal for the player to arrive, should the Leader face along the yaw specified by the goal entity?" =
+	[
+		0 : "No, let other AI dictate facing while waiting."
+		1 : "Yes, turn to face while waiting."
 	]
 	
 	AttractPlayerConceptModifier(string)	: "Attract player concept modifier" : "" : "Appended to the keyvalues passed into the response rules when the 'TLK_LEAD_ATTRACTPLAYER' concept is spoken."
@@ -592,17 +615,10 @@
 	ComingBackConceptModifier(string)	: "Coming Back concept modifier" : "" : "Appended to the keyvalues passed into the response rules when the 'TLK_LEAD_RETRIEVE' concept is spoken. Spoken as the NPC starts returning to the player to retrieve him."
 	RetrieveConceptModifier(string)		: "Retrieve concept modifier" : "" : "Appended to the keyvalues passed into the response rules when the 'TLK_LEAD_COMINGBACK' concept is spoken. Spoken when NPC has finally reached the player to retrieve him."
 	
-	// Spawnflags
-	spawnflags(Flags) = 
-	[
-		1 : "No def success" : 0
-		2 : "No def failure" : 0
-		4 : "Use goal facing" : 1
-	]
-
 	// Inputs
 	input Activate( void )  : "Begin the leading behavior"
 	input Deactivate( void )  : "Stop the leading behavior"
+	input UpdateLeadGoal( string ) : "Updates the Target Entity to the entity matching the string parameter."
 	
 	input SetSuccess( void ) : "Notify success of leading"
 	input SetFailure( void ) : "Notify failure of leading"
@@ -625,12 +641,15 @@
 		1 : "Classname"
 	]
 
+	StartActive(boolean) : "Start Active" : 0
+
 	// Inputs
 	input Activate(void)
 	input Deactivate(void)
 ]
 
-@PointClass base(LeadGoalBase, AIGoalBase) tags( AI ) iconsprite("editor/ai_goal_lead.vmat") = ai_goal_lead : "AI Goal Lead"
+@PointClass base(LeadGoalBase, AIGoalBase) tags( AI ) iconsprite("editor/ai_goal_lead.vmat") = ai_goal_lead : "A goal used to make the target NPC lead the player to a location in the world. It will move ahead of the player, pausing if the player lags behind, and moving back to retrieve the player if necessary.<p>
+	<img src='game:tools/images/hammer/ai_goal_lead_distances.png' />"
 [
 	
 ]

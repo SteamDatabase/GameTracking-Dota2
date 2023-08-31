@@ -6,19 +6,13 @@ $ORIGIN
 % 5i:  [%32.32s]
 %=
 %d %d %d %d
-%d General references (More ResourceAddRef() calls than ResourceRelease())
-%d Manifest references (Still holding onto a HResourceManifest somewhere)
-%d Schema references (Most likely a resource referring to another resource)
-%d Strong handle references (Still holding onto a CStrongHandle somewhere)
 %f %f %f %f
 %g
 %hu
 %lf
 %lld
-%lld,
 %llu
 %s$Fence%d
-%s%s%s%sFinal operation count %llu
 %s.%s
 %s: %s
 %s: Invalid capacity %u
@@ -33,25 +27,9 @@ $ORIGIN
 *** Bad deletion request: Refcount for %s resource "%s" (%016llX) is greater than zero. (%d)!
 *=
 *ZN25CAsyncResourceDataRequest15InitForFileReadEPK21ResourceBindingBase_tb30ResourceManifestLoadPriority_tbPKcEUlP18IAsyncReadRequest220AsyncRequestStatus_tE_
-+ CStrongHandle, %d operations: %s
-+ CStrongHandle, operation: %lld)
-+ Manifest, %d operations: %s
-+ Manifest, operation: %lld)
-+ ResourceAddRef(), %d operations: %s
-+ ResourceAddRef(), ResourceReferencePairingId_t: %d, operation: %lld
-+ Schematized reference, %d operations: %s
-+ Schematized reference, Pairing ID: %d, operation: %lld
 ++
 +=
 ,
-- CStrongHandle, %d operations: %s
-- CStrongHandle, operation: %lld)
-- Manifest, %d operations: %s
-- Manifest, operation: %lld)
-- ResourceRelease(), %d operations: %s
-- ResourceRelease(), ResourceReferencePairingId_t: %d, operation: %lld
-- Schematized reference, %d operations: %s
-- Schematized reference, Pairing ID: %d, operation: %lld
 --
 -- RESOURCE LOADING STATS ------------------------------------------------
 -- RESOURCE STREAMING STATS ----------------------------------------------
@@ -64,13 +42,12 @@ $ORIGIN
 -in-
 -no_spread_finalize
 -resource_exit_after_time
--resource_leaks
 -resource_system_verbose
 -start_resource_profiling
+-tools
 .*
 ...)
 ../public/tier0/tslist.h
-../public/tier0/utlreferencetracker.h
 ../public/tier0/utlsortvector.h
 ../public/tier0/utltshash.h
 /
@@ -170,9 +147,8 @@ AssetRenameSystem_001
 AssetSystem001
 AssetSystemTest001
 Attempted to register duplicate manifest name %s!
-Available resource leak tracking configuration aliases:
 BOOL
-Bad KV3 data for resource: %s
+Bad KV3 data for resource '%s': %s
 BakedLODBuilderMgr001
 BenchmarkService001
 BinaryProperties_GetValue
@@ -182,7 +158,6 @@ CAsyncResourceDataRequest
 CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::Concat(char const*, char const*, ...)
-CBufferString::ExtractFileBase(char const*)
 CBufferString::FixSlashes(char)
 CBufferString::FixupPathName(char)
 CBufferString::Format(char const*, ...)
@@ -191,9 +166,9 @@ CBufferString::MoveFrom(CBufferString&)
 CBufferString::Purge(int)
 CBufferString::Relinquish(CBufferString::EAllocationOption_t)
 CBufferString::RemoveAt(int, int)
-CBufferString::SetExtension(char const*)
+CBufferString::SetExtension(char const*, bool)
 CBufferString::SetLength(int, bool, int*)
-CBufferString::StripExtension()
+CBufferString::StripExtension(bool)
 CBufferString::ToLowerFast(int)
 CBufferString::TrimTail(char const*)
 CCallStackCapture::CCallStackCapture(int (*)(unsigned long long, void**, int, int), unsigned int, unsigned int)
@@ -203,7 +178,6 @@ CExampleSchemaVData_PolymorphicBase
 CExampleSchemaVData_PolymorphicDerivedA
 CExampleSchemaVData_PolymorphicDerivedB
 CFuseProgram
-CFuseSymbolTable
 CMemAllocSystemInitialize
 CPanoramaImageName
 CPiecewiseCurve
@@ -259,12 +233,10 @@ CUtlBuffer::CUtlBuffer(void const*, int, int)
 CUtlBuffer::CheckPut(int)
 CUtlBuffer::Printf(char const*, ...)
 CUtlBuffer::Put(void const*, int)
-CUtlBuffer::PutString(char const*)
 CUtlBuffer::SeekPut(CUtlBuffer::SeekType_t, int)
-CUtlHashtable
 CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
-CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
+CUtlMemoryBlockAllocator::Alloc(unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
 CUtlMemoryBlockAllocator::Purge()
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
@@ -274,7 +246,6 @@ CUtlMemoryPoolBase::Clear()
 CUtlMemoryPoolBase::Free(void*)
 CUtlMemoryPoolBase::~CUtlMemoryPoolBase()
 CUtlRBTree overflow with %u elements!
-CUtlReferenceTracker::Release() release counts for group outnumber addref counts for the same group
 CUtlString
 CUtlString::Acquire(CBufferString*, bool)
 CUtlString::FreeMemoryBlock()
@@ -298,6 +269,7 @@ CWeakHandleVoid
 Cannot allocate abstract class
 Cannot deduce for class
 Cast of %s loses value information (returning %s)
+ClientToolsInfo_001
 CommandLine
 ConnectInterfaceSingletons
 ConstantInfo_t
@@ -312,6 +284,7 @@ ERROR: %s resource %016llX is the wrong resource type!
 ERROR: %s resource %016llX requested but not resident. (Missing from from a manifest?)
 ERROR: %s resource '%s' (%016llX) requested is not loaded and may have been deleted.
 ERROR: %s resource '%s' (%016llX) requested is still pending and is not loaded.
+ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: No type manager for resource "%s"!
 ERROR: Reentrant call to CResourceSystem::BlockUntilManifestLoaded() while already in a frame update!
 ERROR: Reentrant call to CResourceSystem::FrameUpdate()!
@@ -326,6 +299,7 @@ Error initializing resource manager for resource type "%lld"!
 Error loading resource "%s" (Invalid header version: %d != %d)
 Error loading resource manifest "%s" (No DATA block)
 FATAL ERROR: %s resource '%s' (%016llX) is the wrong resource type! (This is likely caused by a hash collision between the strings '%s' and '%s')
+FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FIELD_AI_SCHEDULE_BITS
@@ -457,16 +431,16 @@ InfoForResourceTypeCCSGOEconItem
 InfoForResourceTypeCChoreoSceneFileData
 InfoForResourceTypeCCompositeMaterialKit
 InfoForResourceTypeCDACGameDefsData
+InfoForResourceTypeCDOTANovelsList
 InfoForResourceTypeCDOTAPatchNotesList
 InfoForResourceTypeCDotaItemDefinitionResource
 InfoForResourceTypeCEntityLump
+InfoForResourceTypeCJavaScriptResource
 InfoForResourceTypeCModel
 InfoForResourceTypeCMorphSetData
 InfoForResourceTypeCPanoramaDynamicImages
 InfoForResourceTypeCPanoramaLayout
-InfoForResourceTypeCPanoramaScript
 InfoForResourceTypeCPanoramaStyle
-InfoForResourceTypeCPanoramaTypeScript
 InfoForResourceTypeCPhysAggregateData
 InfoForResourceTypeCPostProcessingResource
 InfoForResourceTypeCRenderMesh
@@ -474,6 +448,7 @@ InfoForResourceTypeCResponseRulesList
 InfoForResourceTypeCSequenceGroupData
 InfoForResourceTypeCSmartProp
 InfoForResourceTypeCTextureBase
+InfoForResourceTypeCTypeScriptResource
 InfoForResourceTypeCVDataResource
 InfoForResourceTypeCVMixListResource
 InfoForResourceTypeCVPhysXSurfacePropertiesList
@@ -511,7 +486,6 @@ LoadKV3(CKeyValues3Context*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char cons
 LoadKV3(KeyValues3*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 Localize_001
 Log time spent in Allocate for all resource types
-LoggingSystem_GetChannelVerbosity
 LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
 LoggingSystem_Log(int, LoggingSeverity_t, Color, char const*, ...)
@@ -524,7 +498,6 @@ MATCHFRAMEWORK_001
 MGetKV3ClassDefaults
 MIsBoxedIntegerType
 MKV3TransferName
-MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MPropertyCustomEditor
 MPropertyCustomFGDType
@@ -549,6 +522,7 @@ N25CAsyncResourceDataRequest23CAsyncProcessDataThreadE
 N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
+NavGameTest001
 NetworkClientService_001
 NetworkMessagesVersion001
 NetworkP2PService_001
@@ -558,6 +532,7 @@ NetworkSystemVersion001
 No DATA block for resource
 Not safe to 'new' this class due to alignment requirements
 OnAsyncProcessResourceData
+Only wrote %d (of %d) values when saving map!
 PanoramaTextServices001
 PanoramaUIClient001
 PanoramaUIEngine001
@@ -585,10 +560,6 @@ RESOURCE_TYPE_NONE
 RESOURCE_TYPE_RESOURCE_MANIFEST
 RESOURCE_TYPE_TEST
 RESOURCE_TYPE_VDATA
-RKS_DEFAULT
-RKS_DISABLE_GROUP_CLEARING
-RKS_KEEP_ALL_RECORDS
-RKS_REQUIRE_EXACT_PAIRINGS
 RSProfilerTool
 Re-entrant calls to CResourceSystem::PreShutdown()
 RegisterConCommand: Unknown error registering con command "%s"!
@@ -601,14 +572,11 @@ RenderHardwareConfig002
 RenderService_001
 RenderUtils_001
 ReportClassError
-Reporting references for leak tracker error: "%s"
-Reporting references for resource "%s":
 Reset tracked time spent in Allocate (see resource_log_allocate_timing)
 Resource "%s" was explicitly loaded with a blocking load.
 Resource "%s" was not precached and could not be loaded by a just in time blocking load.
 Resource "%s" was not precached but was loaded by a just in time blocking load.
-Resource Leak Breakdown
-Resource leak tracking is disabled, run with "-resource_leaks" to track references
+Resource leak tracking is not supported in this build.
 Resource system profile mode %s
 ResourceBinding_t
 ResourceCompilerSystem001
@@ -627,7 +595,7 @@ SchemaTestExternal_One_001
 SchemaTestExternal_Two_001
 SerializedEntitiesVersion001
 SeriousWarning
-ServerResourceCompilerInfo_001
+ServerToolsInfo_001
 Sleeping
 SoundOpSystem001
 SoundOpSystemEdit001
@@ -676,7 +644,6 @@ Tried to install two resource managers for the same resource type "%lld"!
 Tried to load resource reference '%s' from a value without a resource reference specific type.
 Tried to release UGC that hasn't been referenced: %lld
 Unknown KV3 specific type %u
-Unrecognized resource leak tracking parameter: "%s", available configuration aliases:
 UnregisterNamedManifest called, but we are not shutting down!!!
 Unsupported KV3 basic type '%s' (%d)!
 Unsupported version %d for resource '%s' (Expected %d)
@@ -732,12 +699,11 @@ V_UInt64ToString_Unsafe
 V_UnqualifiedFileName
 V_atoi
 V_qsort_s
-V_snprintf
 V_stricmp_fast
 V_stristr_fast(char const*, char const*)
-V_vsnprintf
 VariableInfo_t
 VisBuilder_001
+Vrad3_001
 WARNING: %s resource '%s' (%016llX) requested but is not in the system. (Missing from from a manifest?)
 WARNING: Long frame update (%.2fms) for resource type manager '%s' in frame %d (%d long updates total for this manager)
 WARNING: Long resource system update - should have taken no more than %dns, but took %.4fs! (Frame #%d)
@@ -767,7 +733,6 @@ _ITM_registerTMCloneTable
 _Imaginary
 _Sat
 _V_StringAfterPrefix
-_V_strncat
 _V_strncpy
 ___error_resource__
 __cxa_allocate_dependent_exception
@@ -835,6 +800,7 @@ _base
 _c
 _class
 _editor
+_include
 _multibase
 _not_pickable
 aN
@@ -882,11 +848,9 @@ decimal64
 decltype (
 decltype(auto)
 decltype(nullptr)
-default
 delete
 delete[]
 deleted virtual method called
-disable_group_clearing
 dl
 dl_iterate_phdr
 dt
@@ -895,9 +859,9 @@ dynamic_cast
 eO
 ehandle
 enable_profiling
+entity_name
 eo
 eq
-exact
 fL
 fR
 false
@@ -920,16 +884,14 @@ generic
 generic_data_type
 global constructors keyed to
 global destructors keyed to
+gs
 gt
 guard variable for
 half
-help
 hidden alias for
 ix
 java Class for
 java resource
-keep_all_records
-keepall
 lS
 ld-linux-x86-64.so.2
 li
@@ -939,15 +901,18 @@ libresourcesystem.so
 libtier0.so
 loadingresource.cpp
 long double
-ls
+lt
 mI
 mL
+m_Value
 m_bIsPure
 m_child
+m_constantMap
 m_constants
 m_eAccess
 m_eVarType
 m_flValue
+m_functionMap
 m_functions
 m_hResource->m_nLoadingResource != LOADING_RESOURCE_INDEX_INVALID
 m_hResource->m_nStreamingResource != STREAMING_RESOURCE_DATA_INDEX_INVALID
@@ -965,6 +930,7 @@ m_name
 m_programBuffer
 m_vMaxBounds
 m_vMinBounds
+m_variableMap
 m_variables
 m_variablesRead
 m_variablesWritten
@@ -984,7 +950,6 @@ ne
 new
 new[]
 noexcept
-nogroup
 non-transaction clone for
 non-virtual thunk to
 null
@@ -993,11 +958,20 @@ oR
 oo
 operator
 operator delete(void*)
+operator delete(void*, std::align_val_t)
 operator delete(void*, unsigned long)
+operator delete(void*, unsigned long, std::align_val_t)
 operator delete[](void*)
+operator delete[](void*, std::align_val_t)
+operator delete[](void*, unsigned long)
+operator delete[](void*, unsigned long, std::align_val_t)
 operator new(unsigned long)
+operator new(unsigned long, std::align_val_t)
+operator new(unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new(unsigned long, std::nothrow_t const&)
 operator new[](unsigned long)
+operator new[](unsigned long, std::align_val_t)
+operator new[](unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new[](unsigned long, std::nothrow_t const&)
 operator""
 pL
@@ -1025,7 +999,7 @@ rc
 realloc
 reference temporary #
 reinterpret_cast
-require_exact_pairings
+resource_leaks
 resource_leaks %s
 resource_leaks <resource_name>: Show resource leaks for the named resource
 resource_leaks: Invalid resource name '%s'

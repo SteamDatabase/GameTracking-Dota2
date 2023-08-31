@@ -122,7 +122,7 @@ function HandleGameEnd()
 				var playerHeroNameLabel = playerRow.FindChildInLayoutFile( playerRowPanelPrefix + "HeroName" );
 
 				var szPlayerNameString = Players.GetPlayerSelectedHero( playerID );
-				playerHeroNameLabel.text = $.Localize( "#" + szPlayerNameString )
+				playerHeroNameLabel.text = GameUI.GetUnitNameLocalized( szPlayerNameString )
 
 				var playerNameLabel = playerRow.FindChildInLayoutFile( playerRowPanelPrefix + "PlayerName" );
 				playerNameLabel.text = Players.GetPlayerName( playerID );

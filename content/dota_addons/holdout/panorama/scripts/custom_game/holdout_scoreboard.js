@@ -339,7 +339,7 @@ function InitializeScoreboard()
 
 			var playerHeroNameLabel = playerRow.FindChildInLayoutFile( playerRowPanelPrefix + "HeroName" );
 			var szPlayerNameString = Players.GetPlayerSelectedHero( playerID );
-			playerHeroNameLabel.text = $.Localize( "#" + szPlayerNameString );
+			playerHeroNameLabel.text = GameUI.GetUnitNameLocalized( szPlayerNameString );
 			if ( playerHeroNameLabel.text === "invalid index" )
 			{
 				 playerHeroNameLabel.text = "";

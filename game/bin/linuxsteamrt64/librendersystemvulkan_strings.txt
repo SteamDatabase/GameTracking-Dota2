@@ -38,7 +38,6 @@
 #;
 #RenderSystem_UnableToStartGame
 #Vulkan_DisableInstructions
-#Vulkan_InitializationFailure
 #Vulkan_RequiredExtensionMissing
 #define
 #define GL_ANY_HIT_SHADER_EXT 1
@@ -446,6 +445,7 @@ $accept
 *N12_GLOBAL__N_121future_error_categoryE
 *N12_GLOBAL__N_121system_error_categoryE
 *N12_GLOBAL__N_122generic_error_categoryE
+*N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN23CRayTracePipelineVulkanC4EP10VkDevice_TRK33RayTracePipelineStateCreateDesc_tEUliE0_EviiPKcT0_iiiEUliE_EE
 *NSt13__facet_shims12_GLOBAL__N_112collate_shimIcEE
 *NSt13__facet_shims12_GLOBAL__N_112collate_shimIwEE
 *NSt13__facet_shims12_GLOBAL__N_113messages_shimIcEE
@@ -580,7 +580,6 @@ $accept
 -element array of
 -empty
 -gpuraytracing
--gpuraytracing requires vkGetPhysicalDeviceProperties2
 -ignoredxsupportcfg
 -in-
 -maxdxlevel
@@ -589,7 +588,6 @@ $accept
 -maxtextureres_2gb
 -multigpu
 -no_render_thread_priority
--nogammaramp
 -noinitfallbacktextures
 -nomultigpu
 -noreflex
@@ -607,6 +605,7 @@ $accept
 -sse3
 -sse4
 -threads
+-tools
 -tx-struct
 -vulkan
 -vulkan_aggressive_command_pool_rebalancing
@@ -621,6 +620,7 @@ $accept
 -vulkan_disable_device_coherent_allocations
 -vulkan_disable_ext_memory_budget
 -vulkan_disable_ext_memory_priority
+-vulkan_disable_ext_multi_draw
 -vulkan_disable_ext_pageable_device_local_memory
 -vulkan_disable_ext_pipeline_creation_cache_control
 -vulkan_disable_ext_separate_stencil_usage
@@ -629,14 +629,15 @@ $accept
 -vulkan_disable_fossilize_whitelist
 -vulkan_disable_graphics_pipeline_library
 -vulkan_disable_khr_buffer_device_address
+-vulkan_disable_khr_dedicated_allocation
 -vulkan_disable_khr_descriptor_update_template
 -vulkan_disable_khr_image_format_list
 -vulkan_disable_khr_maintenance1
 -vulkan_disable_khr_maintenance2
+-vulkan_disable_khr_separate_depth_stencil_layouts
+-vulkan_disable_khr_shader_float16_int8
 -vulkan_disable_khr_swapchain_mutable_format
--vulkan_disable_nv_dedicated_allocation
 -vulkan_disable_pipeline_cache
--vulkan_disable_pool_textures
 -vulkan_disable_secondary_command_buffers
 -vulkan_disable_steam_app_shader_cache
 -vulkan_disable_steam_downloaded_shader_cache
@@ -657,6 +658,7 @@ $accept
 -vulkan_enable_robust_buffer_access
 -vulkan_enable_sync_validation
 -vulkan_enable_validation
+-vulkan_force_enable_debug_utils
 -vulkan_force_sm30
 -vulkan_force_sm60
 -vulkan_fossilize_log_verbose
@@ -672,6 +674,7 @@ $accept
 -vulkan_validation_error_assert
 -vulkan_validation_error_exit_success
 -vulkan_validation_warnings
+-vulkan_vma_defrag_each_frame
 -vulkanrenderthreadstack
 .
 . Found
@@ -680,9 +683,12 @@ $accept
 ../public/tier0/memstack.h
 ../public/tier0/threadtoolstypes.h
 ../public/tier0/tslist.h
+../public/tier0/utltshash.h
 ./inputlayoutbase.h
 ./renderresource.h
 .0123456789
+.[\()*+?{|^$
+.[\*^$
 .bak
 .length
 .length() on vectors and matrices
@@ -731,6 +737,8 @@ $accept
 13CRenderDocAPI
 13CVulkanObjectIP11VkSampler_TXadL_Z16vkDestroySamplerEEE
 13CVulkanObjectIP13VkImageView_TXadL_Z18vkDestroyImageViewEEE
+13CVulkanObjectIP14VkBufferView_TXadL_Z19vkDestroyBufferViewEEE
+13CVulkanObjectIP28VkAccelerationStructureKHR_TXadL_Z33vkDestroyAccelerationStructureKHREEE
 13ConCommandRef
 13IRenderDevice
 14CBaseAppSystemI12IRenderUtilsE
@@ -773,7 +781,6 @@ $accept
 16CSwapChainVulkan
 16ICommandCallback
 16IRenderDeviceMgr
-17CMemoryRefTracker
 17CRenderDeviceBase
 17CRenderPassVulkan
 17CRenderThreadBase
@@ -785,6 +792,8 @@ $accept
 18CRenderContextBase
 18CShaderTableVulkan
 18IMultipleWorkerJob
+18IVmaAllocationBase
+19CImageLayoutTracker
 19CRenderDeviceVulkan
 19CRenderThreadVulkan
 19CSchemaRegistration
@@ -793,6 +802,7 @@ $accept
 19CVertexShaderVulkan
 19IReadBufferCallback
 19IRenderReadCallback
+19IVmaAllocationImage
 2
 2 Entry points cannot share the same name and ExecutionMode.
 20CBarrierHelperVulkan
@@ -804,14 +814,18 @@ $accept
 20CRenderDeviceMgrBase
 20CVfxShaderFileVulkan
 20CVulkanSamplerObject
+20IBufferMovedListener
 20IMobileEventListener
 20IResourceTypeManager
+20IVmaAllocationBuffer
 21CConstantBufferVulkan
 21CFramebufferMgrVulkan
 21CRenderHardwareConfig
 21CTextureManagerVulkan
 21IRenderHardwareConfig
 21IRenderShaderByteCode
+21VmaBlockMetadata_TLSF
+22CFallbackTextureVulkan
 22CFossilizeStateCreator
 22CPipelineManagerVulkan
 22CRenderDeviceMgrVulkan
@@ -820,6 +834,7 @@ $accept
 22IToolsResourceListener
 23CRayTracePipelineVulkan
 23CTextureStreamingHelper
+23VmaBlockMetadata_Linear
 24CRenderPassManagerVulkan
 24CVulkanPooledFenceObject
 25CAsyncCompileHelperVulkan
@@ -836,9 +851,10 @@ $accept
 27CPipelineCacheManagerVulkan
 27IRaytraceShaderBindingTable
 28CBufferedDescriptorSetVulkan
-29CMemoryReferenceManagerVulkan
+28CVulkanTextureObjectToDelete
 2b
 3
+30CVmaAllocationDeferredDeletion
 31CParallelProcessorAbstract_Base
 32-bit signed integer
 32-bit signed integer vector
@@ -848,6 +864,7 @@ $accept
 32CBaseAccelerationStructureVulkan
 32CVfxShaderFileRenderShaderBuffer
 33CRayTraceShaderBindingTableVulkan
+36CBufferMovedListenerDeferredDeletion
 38CSchemaRegistration_rendersystemvulkan
 4
 4 columns of 3-component vectors of 32-bit floats.
@@ -975,6 +992,7 @@ $accept
 : struct mismatch.
 : truncated
 :%d
+://
 ::*
 ;
 ; 0x
@@ -1039,6 +1057,7 @@ $accept
 @>
 @?
 @@
+@A
 @Avirtual void Etc::Block4x4Encoding_RG11::SetEncodingBits()
 @B
 @DZ
@@ -1071,6 +1090,7 @@ ABGR
 ABGR8888
 ACCSTRUCTEXT
 ACCSTRUCTNV
+ACK
 ADD_ASSIGN
 AKST
 ALIGN_TYPE is wrong, please fix
@@ -1100,6 +1120,8 @@ AbsISubINTEL
 AbsUSubINTEL
 Absolute value
 AccelStruct
+AccelStructBuffer
+AccelStructBuffer [Compact]
 AccelStructScratch
 Access chain index is wider than 64 bits, but Int64 is not declared:
 AccessQualifier must be a 32-bit unsigned integer OpConstant
@@ -1131,6 +1153,7 @@ Addressing model must be Logical or PhysicalStorageBuffer64
 Addressing model must be Logical.  Found
 Addressing model must be Physical32 or Physical64
 Adobe APP14 marker: version %d, flags 0x%04x 0x%04x, transform %d
+After failure, vkCreateGraphicsPipelines retry %d was successful.
 After hitting throttling limits for streamout, allow it to continue up to this number of milliseconds.
 Aliased
 AliasedPointer
@@ -1148,6 +1171,9 @@ AllocateAndUploadSequenceData
 Allocating a variable containing a 16-bit element in
 Allocating a variable containing a 8-bit element in
 Allocation falling back to non-device local heap failed.
+AllocationBytes
+AllocationSizeMax
+AllocationSizeMin
 Allow immediately loading mips of textures (when possible) when their headers are loaded, saving IO & reducing latency.
 AllowContractFastINTEL
 AllowReassocINTEL
@@ -1303,7 +1329,6 @@ Attempted to begin renderpass on invalid renderpass handle.
 Attempted to get underlying data type via member index for non-struct type.
 Attempted to update an image layout for an image that was not transitioned in this command buffer.
 Attempted to update invalid descriptor set.
-Attempting fallback GPU allocation in system memory.
 Attempting to create UAV for compressed image.  This is not supported without VK_KHR_maintenance2.
 Attempting to create a Vulkan compute pipeline without a compute shader bound, aborting pipeline creation.
 Attempting to create a Vulkan pipeline with too many descriptors, aborting pipeline creation.
@@ -1378,6 +1403,8 @@ BitReverse
 Bitcast
 Bitwise not
 Block(s)
+BlockBytes
+BlockCount
 BlockingPipesINTEL
 Bogus DAC index %d
 Bogus DAC value 0x%x
@@ -1405,10 +1432,13 @@ Branch: TerminateRayKHR
 Branch: Unknown Branch
 BranchConditional
 Broken promise
+Budget
+BudgetBytes
 Buffer block reflection:
 Buffer passed to JPEG library is too small
 Buffer variable reflection:
 BufferBlock
+Build
 BuildNDRange
 BuiltIn
 BuiltIn (No allowed mixing of built-in variables and
@@ -1421,6 +1451,7 @@ CALLDATAEXT
 CALLDATAINEXT
 CALLDATAINNV
 CALLDATANV
+CAN
 CARET
 CASE
 CB
@@ -1435,7 +1466,7 @@ CBufferString::Insert(int, char const*, int, bool)
 CBufferString::MoveFrom(CBufferString&)
 CBufferString::Purge(int)
 CBufferString::RemoveAt(int, int)
-CBufferString::SetExtension(char const*)
+CBufferString::SetExtension(char const*, bool)
 CBufferString::SetLength(int, bool, int*)
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
@@ -1468,8 +1499,9 @@ CPacked
 CRC mismatch!
 CRawAllocator::Alloc(RawAllocatorType_t, unsigned long, unsigned long*)
 CRawAllocator::Free(RawAllocatorType_t, void*, unsigned long)
+CRayTracePipelineVulkan
 CRenderContextVulkan:: Trying to resolve from a rect that is outside of the src rendertarget
-CRenderContextVulkan::BeginQuery - Issued a Begin on a non-occlusion query
+CRenderContextVulkan::BeginQuery - Issued a Begin on a non-occlusion/pipeline stats query
 CRenderContextVulkan::BeginQuery - Issued on an in-progress query!
 CRenderContextVulkan::ClearUnorderedAccessViewUint could not get CVulkanImage for texture %s.
 CRenderContextVulkan::CopyFromVolumeTexture - Trying to copy from a rect that is outside of the src texture
@@ -1552,7 +1584,7 @@ CUtlBuffer::SetOverflowFuncs(bool (CUtlBuffer::*)(int), bool (CUtlBuffer::*)(int
 CUtlFixedMemory overflow!
 CUtlLinkedList overflow! (exhausted index range)
 CUtlLinkedList overflow! (exhausted memory allocator)
-CUtlMemoryBlockAllocator::AllocAndCopy(char const*, unsigned int)
+CUtlMemoryBlockAllocator::Alloc(unsigned int)
 CUtlMemoryBlockAllocator::CUtlMemoryBlockAllocator(int, unsigned int, RawAllocatorType_t)
 CUtlMemoryBlockAllocator::Purge()
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
@@ -1618,7 +1650,6 @@ Cannot put a negative number in an unsigned literal
 Cannot quantize more than %d color components
 Cannot quantize to fewer than %d colors
 Cannot quantize to more than %d colors
-Cannot read a file
 Cannot reconstruct lineOffset table in DecodeEXRImage.
 Cannot reuse block name within the same interface:
 Cannot set ID
@@ -1656,6 +1687,7 @@ Cleanup: discarding lookahead
 Cleanup: popping
 ClearLayout
 Clearing TEXTURE_WAITING_FOR_IO flag because it's has no streaming request id anymore
+ClientToolsInfo_001
 ClobberINTEL
 Closed temporary file %s
 ClosestHitKHR
@@ -1674,6 +1706,7 @@ Columns in a matrix must be of type vector.
 Comma
 Command stream pools: %s bytes in base, %s bytes in medium, %s bytes in large (%s extra data fallbacks)
 CommandLine
+Compacted: %llu buffers, %.2f MB (%.1f%% of %.2f MB uncompacted)
 Compare Equal
 Compare Greater Than
 Compare Greater Than or Equal
@@ -1682,7 +1715,6 @@ Compare Less Than or Equal
 Compare Not Equal
 Compilation failed.  Log string from glslang %s
 Compile Targets
-CompileTargets
 Component
 Component %d: %dhx%dv q=%d
 Component %d: dc=%d ac=%d
@@ -1702,7 +1734,6 @@ ComputeTextureSpecificationFromMipDelta Adjusted
 ComputeTextureSpecificationFromMipDelta Disk
 ConcatentateInputLayouts
 Condition operand for OpBranchConditional must be of boolean type
-Connect
 ConnectInterfaceSingletons
 Const
 ConstOffset
@@ -2044,6 +2075,8 @@ CullBackFacingTrianglesKHR
 CullFrontFacingTrianglesKHR
 CullNoOpaqueKHR
 CullOpaqueKHR
+CustomData
+CustomPools
 D
 D,,
 D16
@@ -2055,17 +2088,27 @@ D32
 D32FS8
 D3DCOLORtoUBYTE4
 DASH
+DC1
+DC2
+DC3
+DC4
 DCT coefficient out of range
 DCT scaled block size %dx%d not supported
 DEC_OP
 DEFAULT
+DEFAULT_WRITE_PATH
+DEL
 DEMOTE
 DEVICECOHERENT
+DEVICE_COHERENT_AMD
+DEVICE_LOCAL
+DEVICE_UNCACHED_AMD
 DFUI
 DFUI,,
 DFUI,U
 DISCARD
 DIV_ASSIGN
+DLE
 DMAT2
 DMAT2X2
 DMAT2X3
@@ -2088,7 +2131,6 @@ DPdxFine
 DPdy
 DPdyCoarse
 DPdyFine
-DS
 DVEC2
 DVEC3
 DVEC4
@@ -2162,12 +2204,15 @@ DecorateId
 DecorationGroup
 Decorations taking ID parameters may not be used with OpDecorateId
 Decorations that don't take ID parameters may not be used with OpDecorateId
+DedicatedAllocations
 Default must be an OpLabel instruction
+DefaultPools
 DefaultVB
 Define Arithmetic Table 0x%02x: 0x%02x
 Define Huffman Table 0x%02x
 Define Quantization Table %d  precision %d
 Define Restart Interval %u
+Defrag algorithm 0=Fast 1=Balanced 2=full 3=Extensive
 Degrees
 Deleting texture with outstanding streaming request (%s)
 DemoUpconverterVersion001
@@ -2189,17 +2234,16 @@ Derivative instructions require DerivativeGroupQuadsNV or DerivativeGroupLinearN
 Derivative instructions require Fragment or GLCompute execution model:
 DerivativeControl
 DerivativeGroupLinearNV
-Description
 Descriptor pool allocation failed on available pool, reducing descriptors to attempt allocating in pool to %d
 Descriptor pool allocation failed, reducing descriptors to attempt allocating in pool to %d
 Descriptor set layout
 DescriptorSet
 DescriptorSet must be a 32-bit unsigned integer OpConstant
 Desktop-friendly Fullscreen
+Details
 Detected RenderDoc %i.%i.%i
 Determinant
 Dev Shader
-DevShader
 DevWarning(char const*, ...)
 Device ID mismatch in pipeline cache file (Got: %x Expected: %x).  Deleting %s in order to regenerate it.
 Device, Workgroup and Invocation
@@ -2231,7 +2275,6 @@ Discarding abandoned streaming texture load for %s
 DispatchComputeShaderIndirect failed - invalid dispatch buffer.
 Display GPU memory usage.
 Display fallback texture as orange
-Domain Shader
 DontInline
 DontStaticallyCoalesceINTEL
 DotProduct
@@ -2252,23 +2295,33 @@ DrawInstancedIndirect failed - invalid drawarg buffer.
 DrawParameters
 Dref sampling operation is invalid for multisample image
 Driver Name:  %sDriver Version: %sVendorId / DeviceId:  0x%x / 0x%xSubSystem / Rev:  0x%x / 0x%xDXLevel:  %dTexture memory:  %sVid:  %s, render at %i x %i, display at %i x %i, refresh rate %.2fHz (%uHz desktop)
+Dump .json file for use by GpuMemDumpVis.py
 Dumps state of texture streaming at the next frame boundary.
 Duplicate non-aggregate type declarations are not allowed. Opcode:
+During a VMA defrag, number of MB in moves per pass.
+During a VMA defrag, number of moves per pass.
+During a VMA defrag, number of moves to process for a pass in a single frame update.
 DynamicPoolPMB_%s
 Dynamically adjust texture streaming budget based on GPU memory usage.
 E
 E;
 EET
 ELSE
+ENQ
+EOT
 EQ_OP
 ERROR :
 ERROR! VK call failed! result = %s ( %s )
+ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: Failed to open file: %s
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR_not_op_extension
 ES Profile
+ESC
 ESSL
 EST
+ETB
+ETX
 EXECUTABLE_PATH
 EXPLICITINTERPAMD
 EXPORTSYSTEM_INTERFACE_VERSION_001
@@ -2277,6 +2330,7 @@ EXRReadFile() - B channel not found!
 EXRReadFile() - G channel not found!
 EXRReadFile() - R channel not found!
 EXRReadFile() - cannot read image data!
+EXTERNAL: %.2f MB
 EarlyFragmentTests
 EarlyInit_Tier0
 EconItemToolModel_001
@@ -2334,7 +2388,6 @@ Error creating the resolve rotated vertex shader!
 Error creating the resolve vertex shader!
 Error creating vertex input interface pipeline library
 Error from SDL_GetCurrentDisplayMode( %d ) = %s
-Error from SDL_GetDisplayMode( %d, %d ) = %s
 Error: Result Id is 0
 Error: Type Id is 0
 Error: discarding
@@ -2665,6 +2718,7 @@ F64MAT4X4
 F64VEC2
 F64VEC3
 F64VEC4
+FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FAbs
@@ -2734,6 +2788,8 @@ FPRoundingMode decoration can be applied only to a width-only conversion instruc
 FPRoundingMode decoration can be applied only to the Object operand of an OpStore in the StorageBuffer, PhysicalStorageBufferEXT, Uniform, PushConstant, Input, or Output Storage Classes.
 FPRoundingMode decoration can be applied only to the Object operand of an OpStore storing through a pointer to a 16-bit floating-point scalar or vector object.
 FPRoundingMode decoration can be applied only to the Object operand of an OpStore.
+FRAGMENTATION: %.2f MB
+FREE
 FRem
 FSign
 FSub
@@ -2759,8 +2815,6 @@ FUnordLessThanEqual
 FUnordNotEqual
 FaceForward
 Failed AllocateTexture for '%s'
-Failed fallback GPU allocation in system memory.
-Failed to allocate GPU memory for object.
 Failed to compute channel layout.
 Failed to create VK shader module.
 Failed to create VkSurfaceKHR.
@@ -2768,6 +2822,7 @@ Failed to create Vulkan pipeline cache from file %s  - deleting so it can be reg
 Failed to create Vulkan pipeline object.
 Failed to create depth stencil image with VK.
 Failed to create linked graphics pipeline library executable.
+Failed to create renderpass.
 Failed to create temporary file %s
 Failed to find adequate memory type for buffer.
 Failed to find instance extension for validation.  '%s' and '%s' not supported.
@@ -2778,9 +2833,8 @@ Failed to get size of blob from cache.
 Failed to get size of resource hashes.
 Failed to get swapchain from texture, renderpass will be missing swapchain per-color texture info.
 Failed to initialize Vulkan memory manager.
+Failed to initialized Vulkan Memory Allocator.
 Failed to open validation shader cache %s, might not exit yet.
-Failed to parse attribute
-Failed to parse channel info
 Failed to parse channel info.
 Failed to parse pNext chain for sType: %d
 Failed to prepare fossilize database: '%s'
@@ -2792,7 +2846,6 @@ Feb
 February
 File
 File has not been opened!
-File size is zero :
 FileKeys
 FileSystem
 FillAttr
@@ -2801,6 +2854,7 @@ Finalizer
 FindILsb
 FindOrCreateTexture: Cannot create static textures with no data!
 FindOrCreateTexture: Cannot load multiple mipmaps into cubemap texture: %s
+FindOrCreateTexture: Dimensions %dx%dx%d exceed maximum supported by device (%dx%dx%d)!
 FindOrCreateTexture: Only dynamic textures can have non-global scope!
 FindOrCreateTexture: Texture scope is unspecified!
 FindOrCreateTexture: Texture usage is unspecified!
@@ -2857,6 +2911,7 @@ For OpExecutionModeId all Extra Operand ids must be constant instructions.
 For Vulkan with RuntimeDescriptorArrayEXT, a variable
 For Vulkan, OpTypeStruct variables containing
 For Vulkan, an OpTypeStruct variable containing an
+Force defragmenting memory with VMA
 ForceLoadShader
 ForcePow2DepthINTEL
 Forward pointers must point to a structure
@@ -2961,6 +3016,7 @@ GENERAL
 GE_OP
 GLCompute
 GLIBC_2.14
+GLIBC_2.16
 GLIBC_2.17
 GLIBC_2.2.5
 GLIBC_2.27
@@ -3141,6 +3197,7 @@ GL_OVR_multiview
 GL_OVR_multiview2
 GMT
 GNU
+GPU
 GPU memory available (%d MB of %d MB used). Increasing texture pool size %d MB -> %d MB.
 GPU memory available (%d MB of %d MB used). Reducing texture pool size %d MB -> %d MB
 GPU reports %dMB available memory which is too low, using %d MB
@@ -3149,6 +3206,7 @@ GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameUIService_001
 Gather operation is invalid for multisample image
+General
 Generating SPIR-V array-of-arrays, but Vulkan only supports single array level for this resource
 Generating variable pointers requires capability
 GenericCastToPtr
@@ -3167,6 +3225,7 @@ GetDefaultQueue
 GetDependence found an unsupported loop form. Assuming <=> for loop.
 GetDependence found source_node || destination_node as CanNotCompute. Abandoning evaluation for this subscript.
 GetDeviceSpecificTexture
+GetGPUFrameTimeMS called without setting RENDERDEBUGFLAG_ENABLE_GPU_TIMESTAMPS.
 GetGameInfoBool(char const*, bool)
 GetGameInfoInt(char const*, int)
 GetGameInfoString(char const*, char const*, char*, unsigned long)
@@ -3183,6 +3242,7 @@ GetRenderTargetSampleCount
 GetRenderTargetSamplePosition
 GetResourceManifestCount
 GetResourceManifests
+GetVulkanCommandBuffer() && GetVulkanCommandBuffer()->m_nCommandBufferType != SECONDARY_COMMAND_BUFFER
 GlobalInvocationId
 GlobalLinearId
 GlobalVariableOffsetINTEL
@@ -3275,13 +3335,16 @@ HITATTREXT
 HITATTRNV
 HLSL
 HLSL SM6.0 level subgroup wave ops supported, subgroup size = %d
-HS
+HOST_CACHED
+HOST_COHERENT
+HOST_VISIBLE
 HST
 HalfFloat
 HammerMapLoader001
 Having
 Header block
 Header size does not contain enough data in pipeline cache file %s.  Deleting.
+Heap
 HeightBlend
 HeightCorrection
 HelpSystem_001
@@ -3297,7 +3360,6 @@ HostOnlyINTEL
 HostStateMgr001
 Huffman code size table overflow
 Huffman table 0x%02x was not defined
-Hull Shader
 I
 I16VEC2
 I16VEC3
@@ -3350,6 +3412,9 @@ IIMAGEBUFFER
 IIMAGECUBE
 IIMAGECUBEARRAY
 IMAGE_FORMAT_R11G11B10_FLOAT
+IMAGE_LINEAR
+IMAGE_OPTIMAL
+IMAGE_UNKNOWN
 IMix
 IMul32x16INTEL
 IN
@@ -3370,6 +3435,10 @@ IOS_VULKAN_4_0
 IOS_VULKAN_4_1
 IOS_VULKAN_5_0
 IPulseSystem_001
+IS1
+IS2
+IS3
+IS4
 ISAMPLER1D
 ISAMPLER1DARRAY
 ISAMPLER2D
@@ -3522,7 +3591,6 @@ IncomingRayFlagsKHR
 IncomingRayPayloadKHR
 IncomingRayPayloadNV
 Inconsistent progression sequence for component %d coefficient %d
-Incorrect primitive topology for bound shader. Shader expects RENDER_PRIM_%d_CONTROL_POINT_PATCHLIST. Rendering will be corrupt.
 Increase texture memory pool size by this many MB / s when under budget.
 Index
 Index can only be applied to Fragment output variables
@@ -3622,14 +3690,15 @@ Invalid SPIR-V.  The id bound is larger than the max id bound
 Invalid Sampled
 Invalid Uniform variable name :
 Invalid Uniform variable type :
+Invalid `part number' in EXR header chunks.
 Invalid argument for --convert-to-sampled-image: %s
 Invalid argument for --set-spec-const-default-value: %s
 Invalid argument for DecodeEXRImage().
 Invalid argument for LoadEXRImageFromMemory
+Invalid argument for LoadEXRMultipartImageFromMemory()
 Invalid argument. `memory` or `exr_header` argument is null in ParseEXRHeaderFromMemory()
 Invalid binding:
 Invalid block member name:
-Invalid channels format
 Invalid color quantization mode change
 Invalid component ID %d in SOS
 Invalid crop request
@@ -3646,10 +3715,10 @@ Invalid instruction Op
 Invalid instruction word count:
 Invalid literal string '
 Invalid location:
-Invalid magic number
 Invalid member count in texture template structure
 Invalid memory pool code %d
 Invalid number of bits (
+Invalid offset size in EXR header chunks.
 Invalid offset value in DecodeEXRImage.
 Invalid opcode:
 Invalid pairs of descriptor set and binding '%s'. Expected a string of <descriptor set>:<binding> pairs.
@@ -3739,7 +3808,7 @@ KeyValues::GetName() const
 KeyValues::GetNextKey() const
 KeyValues::GetString(char const*, char const*, char*, unsigned long)
 KeyValues::GetUint64(char const*, unsigned long long) const
-KeyValues::KeyValues(char const*)
+KeyValues::KeyValues(char const*, IKeyValuesSystem*, bool)
 KeyValues::LoadFromFile(IFileSystem*, char const*, char const*, bool (*)(char const*, void*), void*, char const*)
 KeyValues::RecursiveSaveToFile(CUtlBuffer&, int, bool, bool)
 KeyValues::SetInt(char const*, int)
@@ -3755,6 +3824,7 @@ Khronos SPIR-V Tools Assembler
 Khronos SPIR-V Tools Linker
 K~
 L
+LAZILY_ALLOCATED
 LC_ADDRESS
 LC_COLLATE
 LC_CTYPE
@@ -3858,21 +3928,19 @@ MN_OnResourceFileLoaded
 MN_OnResourceLoadCompleted
 MN_OnResourceLoadFailed
 MOD
-MODEL_PROCESSING_SCRIPT_INTERFACE_001
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MOD_ASSIGN
 MS must be 0 in the OpenCL environment.
 MSP Shader Compiler
 MST
+MULTI_INSTANCE
 MUL_ASSIGN
 Macro redefined; different argument names:
 Macro redefined; different number of arguments:
 Macro redefined; different substitutions:
 Macro redefined; function-like versus object-like:
 MainCs
-MainDs
 MainGs
-MainHs
 MainPs
 MainVs
 MakeAvailableKHR
@@ -3889,6 +3957,7 @@ MakeTexelVisible
 MakeTexelVisibleKHR
 MakeVisibleKHR
 MapListService_001
+MapRefCount
 Mar
 March
 MarkIssuesCommands
@@ -3924,11 +3993,8 @@ Maximum supported image dimension is %u pixels
 May
 MbcntAMD
 MediaBlockIOINTEL
-MemAlloc_AllocAlignedFunc
 MemAlloc_AllocFunc
-MemAlloc_FreeAlignedFunc
 MemAlloc_FreeFunc
-MemAlloc_ReallocAlignedFunc
 MemAlloc_StrDupFunc
 Member #
 Member index
@@ -3945,7 +4011,9 @@ Memory accesses with PhysicalStorageBufferEXT must use Aligned.
 Memory model must be OpenCL in the OpenCL environment.
 Memory qualifiers must match:
 MemoryBarrierAtomicCounter
+MemoryInfo
 MemoryNamedBarrier
+MemoryPools
 Merge Block
 Merge Block and Continue Target must be different ids
 Merge Block may not be the block containing the OpLoopMerge
@@ -4023,6 +4091,7 @@ N9__gnu_cxx18stdio_sync_filebufIwSt11char_traitsIwEEE
 N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
+NAK
 NClamp
 NE_OP
 NMax
@@ -4077,12 +4146,30 @@ NSt7__cxx119money_getIcSt19istreambuf_iteratorIcSt11char_traitsIcEEEE
 NSt7__cxx119money_getIwSt19istreambuf_iteratorIwSt11char_traitsIwEEEE
 NSt7__cxx119money_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEEE
 NSt7__cxx119money_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb0ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb0ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb1ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb0ELb1ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb0ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb0ELb1EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb1ELb0EEE
+NSt8__detail11_AnyMatcherISt12regex_traitsIcELb1ELb1ELb1EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb0ELb0EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb0ELb1EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb1ELb0EEE
+NSt8__detail12_CharMatcherISt12regex_traitsIcELb1ELb1EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb0ELb0EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb0ELb1EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb1ELb0EEE
+NSt8__detail15_BracketMatcherISt12regex_traitsIcELb1ELb1EEE
 NSt8ios_base7failureB5cxx11E
 NSt8ios_base7failureE
+NUL
 NVIDIA
 NV_NULL
 Name must match an entry-point for Kernel
 NamedBarrierInitialize
+NavGameTest001
 Nearest
 Negate conditional
 Negate value
@@ -4176,6 +4263,7 @@ Oct
 October
 Offset must be a 32-bit unsigned integer OpConstant
 OnMultiGpuTransferTexture: No texture specification for destination texture, skipping transfer.
+OnUpdateSwappedImageLayout
 Only one push_constant block is allowed per stage
 Only one shaderRecordNV buffer block is allowed per stage
 Only one taskNV interface block is allowed per shader
@@ -4307,6 +4395,7 @@ OriginUpperLeft
 Other warnings have been suppressed.
 OuterProduct
 Output file write error --- out of disk space?
+Output memory size is zero
 OutputLineStrip
 OutputLinesNV
 OutputMemory
@@ -4319,9 +4408,9 @@ OutputVertices
 Overall System GPU memory use:
 Overflow of the sheet cache texture. Releasing and starting over. This is ok in asset browser, not so ok if the game is triggering this!
 Overflow of the sheet cache texture: Try increasing SheetCacheTextureRows in gameinfo.gi (current value %d)!
-Override default %s Vulkan GPU memory pool size: %d MB (default: %d MB)
 P
 P@
+PA
 PATCH
 PAYLOADEXT
 PAYLOADINEXT
@@ -4350,6 +4439,7 @@ PERVIEWNV
 PLUS
 PM
 PRECISE
+PROTECTED
 PS
 PSIZE
 PST
@@ -4430,6 +4520,7 @@ Plat_GetWindowClientSize
 Plat_GetWindowContentsScale
 Plat_GetWindowMonitorIndex
 Plat_GlobalMemoryStatus
+Plat_IsConsoleApplication
 Plat_IsInDebugSession
 Plat_IsWindowMinimized
 Plat_MessageBox
@@ -4453,8 +4544,6 @@ Pointer can only be converted to another pointer, int scalar or 32-bit int vecto
 Pointer operand
 Pointer storage class must be PhysicalStorageBuffer:
 Pointer type in OpTypeForwardPointer is not a pointer type.
-Pool Type ( %s ):
-Pool: %s (Free: %0.2f MB)
 PooledDynamicConstantBuffer
 Possible extensions include:
 Post-Decrement
@@ -4466,6 +4555,7 @@ Pre-Increment
 Precision qualifiers must match:
 Predecessors for
 Prefer shader loop unrolling.
+PreferredBlockSize
 PrefetchINTEL
 PreloadTextureBits
 Premature end of JPEG file
@@ -4477,7 +4567,6 @@ PrimitiveId
 PrimitiveShadingRateKHR
 Prints out detailed memory fragmentation stats for the Vulkan memory manager
 Prints out stats for the Vulkan Framebuffer manager
-Prints out stats for the Vulkan Pipeline manager
 Prints out stats for the Vulkan memory manager
 Prints out stats for the Vulkan shader table
 Prior to SPIR-V 1.4, specialization constant operation UConvert requires Kernel capability or extension SPV_AMD_gpu_shader_int16
@@ -4583,38 +4672,6 @@ RENDER_MULTISAMPLE_8X
 RENDER_MULTISAMPLE_INVALID
 RENDER_MULTISAMPLE_NONE
 RENDER_MULTISAMPLE_TYPE_COUNT
-RENDER_PRIM_10_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_11_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_12_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_13_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_14_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_15_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_16_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_17_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_18_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_19_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_1_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_20_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_21_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_22_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_23_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_24_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_25_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_26_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_27_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_28_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_29_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_2_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_30_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_31_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_32_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_3_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_4_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_5_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_6_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_7_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_8_CONTROL_POINT_PATCHLIST
-RENDER_PRIM_9_CONTROL_POINT_PATCHLIST
 RENDER_PRIM_COMPUTE_SHADER
 RENDER_PRIM_HETEROGENOUS
 RENDER_PRIM_INSTANCED_QUADS
@@ -4777,13 +4834,14 @@ RenderSystem/LowLatency
 RenderSystem/MaxPreloadTextureResolution
 RenderSystem/MinDXLevel
 RenderSystem/MinStreamingPoolSizeMB
+RenderSystem/ReserveMemoryForNonTextureUseMB
 RenderSystem/SwapChainSampleableDepth
 RenderSystem/Use32BitDepthBuffer
+RenderSystem/Use32BitDepthBufferWithoutStencil
 RenderSystem/VulkanAdditionalShaderCache
 RenderSystem/VulkanLazilyAllocateRenderTargets
 RenderSystem/VulkanMutableSwapchain
 RenderSystem/VulkanOnly
-RenderSystem/VulkanPoolSize%s
 RenderSystem/VulkanRequireDescriptorIndexing
 RenderSystem/VulkanRequireSubgroupWaveOpSupport
 RenderSystem/VulkanStagingPMBSizeLimitMB
@@ -4906,7 +4964,6 @@ SAbs
 SBT
 SClamp
 SConvert
-SDL failed to set window gamma ramp: %s
 SDiv
 SDot
 SDotAccSat
@@ -4917,6 +4974,7 @@ SGreaterThan
 SGreaterThanEqual
 SHADERCALLCOHERENT
 SHARED
+SI
 SIGNED_R11
 SIGNED_RG11
 SIMTCallINTEL
@@ -4932,6 +4990,7 @@ SMin3AMD
 SMod
 SMulExtended
 SNegate
+SOH
 SPIR-V 1.0 (under OpenCL 1.2 Embedded Profile semantics)
 SPIR-V 1.0 (under OpenCL 1.2 Full Profile semantics)
 SPIR-V 1.0 (under OpenCL 2.0 Embedded Profile semantics)
@@ -5105,6 +5164,8 @@ STORAGE_IMAGE
 STORAGE_TEXEL_BUFFER
 STRING_LITERAL
 STRUCT
+STX
+SUB
 SUBGROUPCOHERENT
 SUBROUTINE
 SUB_ASSIGN
@@ -5154,6 +5215,7 @@ SV_TESSFACTOR
 SV_VERTEXID
 SV_VIEWPORTARRAYINDEX
 SWITCH
+SYN
 S_BINDLESS_RUNTIME
 S_MOLTEN_VK
 S_REVERSE_DEPTH_BUFFER
@@ -5222,7 +5284,7 @@ SequentiallyConsistent
 SequentiallyConsistent memory semantics cannot be used with the VulkanKHR memory model.
 SerializedEntitiesVersion001
 SeriousWarning
-ServerResourceCompilerInfo_001
+ServerToolsInfo_001
 SetAssociatedThreadIndex
 SetConstantBufferDataInternal
 SetUserEventStatus
@@ -5355,6 +5417,7 @@ St11__timepunctIcE
 St11__timepunctIwE
 St11logic_error
 St11range_error
+St11regex_error
 St12codecvt_base
 St12ctype_bynameIcE
 St12ctype_bynameIwE
@@ -5432,6 +5495,7 @@ St23_Sp_counted_ptr_inplaceINSt13__future_base15_Deferred_stateINSt6thread8_Invo
 St23_Sp_counted_ptr_inplaceINSt13__future_base15_Deferred_stateINSt6thread8_InvokerISt5tupleIJMN3Etc5ImageEFvjjEPS6_ijEEEEvEESaISC_ELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceINSt13__future_base17_Async_state_implINSt6thread8_InvokerISt5tupleIJMN3Etc5ImageEFjjjjEPS6_jijEEEEjEESaISC_ELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceINSt13__future_base17_Async_state_implINSt6thread8_InvokerISt5tupleIJMN3Etc5ImageEFvjjEPS6_ijEEEEvEESaISC_ELN9__gnu_cxx12_Lock_policyE2EE
+St23_Sp_counted_ptr_inplaceINSt8__detail4_NFAISt12regex_traitsIcEEESaIS4_ELN9__gnu_cxx12_Lock_policyE2EE
 St23__codecvt_abstract_baseIDiDu11__mbstate_tE
 St23__codecvt_abstract_baseIDic11__mbstate_tE
 St23__codecvt_abstract_baseIDsDu11__mbstate_tE
@@ -5487,12 +5551,12 @@ Start of Image
 Starting RenderDoc capture...
 Starting parse
 Static Member Declaration
-StaticPoolMemory_%s
-StaticPool_%s
+Stats
 StatsService_001
 SteamAudio001
 StencilExportEXT
 StencilRefReplacingEXT
+StopCurrentRenderPass
 Storage Buffer
 Storage Class
 Storage buffer id '
@@ -5553,6 +5617,7 @@ SubGroupInvocation
 SubGroupLeMask
 SubGroupLtMask
 SubGroupSize
+Suballocations
 Subgroup wave op support required because VulkanRequireSubgroupWaveOpSupport is set in gameinfo.gi, but subgroup wave ops are not supported.  Vulkan device creation failed.
 SubgroupAllEqualKHR
 SubgroupAllKHR
@@ -5706,6 +5771,7 @@ Such variables must be identified with a Block or BufferBlock decoration
 Such variables must be typed as OpTypeStruct,
 Sun
 Sunday
+SupportsRayTracing
 Suspension not allowed here
 SwapChainDepthImage
 SwapChainIntermediateColorImage
@@ -5742,6 +5808,7 @@ TEXTURESTREAMING: Filled %d fallback textures in %.3f ms
 TEXTURESTREAMING: Resource view ptr or texture resources are still NULL after waiting.
 TF<)
 TILDE
+TLASInstance_t %d/%d has mask 0, which means no rays can possibly intersect it, and it should not be part of the TLAS. This has been known to stall on AMD GPUs. Must fix immediately.
 TLASInstances
 TLS init function for
 TLS wrapper function for
@@ -5853,15 +5920,16 @@ ToolsStallMonitorInternal_BeginScope
 ToolsStallMonitorInternal_EndScope
 TornadoVM
 TornadoVM SPIRV Beehive Toolkit
+Total
 Total Combined ( %llu MB )
-Total Dynamic ( %llu MB )
 Total PMB ( %llu MB )
 Total PSOs: %d (Per-Stage Libraries: %d) This frame [Pre-Warmed: %d, Draw-Time: %d, Per-Stage: %d, Linked Libraries: %d] (Total time this frame: %0.2f ms Driver time this frame: %0.2f ms)
 Total Shader Modules Requested: %.2fMB
 Total Shader Modules Stored: %.2fMB
 Total Shader Requested: %.2fMB
-Total Static ( %llu MB )
+Total VMA ( %llu MB ) ( Free %llu MB )
 Total size of the texture pool in MB
+TotalBytes
 TraceMotionNV
 TraceNV
 TraceRayKHR
@@ -5879,6 +5947,7 @@ Trying to set dxlevel (%d) which is higher than the card can support (%d)!
 Trying to set dxlevel (%d) which is lower than the card can support (%d)!
 Tue
 Tuesday
+Type
 Type Id
 Type Qualifier
 Type for
@@ -6041,6 +6110,7 @@ Unable to stream in resource file "%s" (Error: %s)
 Unable to write to pipeline cache file "%s".  Error: %s
 Unable to write validation shader cache %s file.
 Unavailable
+Uncompacted: %llu buffers, %.2f MB
 Underlying Types
 Unexpected marker 0x%02x
 Unexpected numeric literal type
@@ -6123,9 +6193,15 @@ Unsupported JPEG process: SOF type 0x%02x
 Unsupported PSD color mode!
 Unsupported color conversion request
 Unsupported marker type 0x%02x
+UnusedBytes
+UnusedRangeCount
+UnusedRangeSizeMax
+UnusedRangeSizeMin
+UnusedRanges
 UpdateDescriptorSetPool
 UpdateExternalTexture called on unknown external texture '%s'
 Upper limit on texture pool size.
+UsageBytes
 Use compute shader for mipgen.
 Use of device scope with VulkanKHR memory model requires the
 UserSemantic
@@ -6162,8 +6238,10 @@ V4,V3
 V4,V3,,
 VALIDATION
 VARYING
+VApplication001
 VAsyncFileSystem2_001
 VAvi001
+VB-BLAS: %llu buffers, %.2f MB
 VB: %d buffers, %.2f MB
 VBik001
 VConComm001
@@ -6216,6 +6294,7 @@ VK_EXT_graphics_pipeline_library
 VK_EXT_graphics_pipeline_library and dependent extensions enabled.
 VK_EXT_memory_budget
 VK_EXT_memory_priority
+VK_EXT_multi_draw
 VK_EXT_pageable_device_local_memory
 VK_EXT_pipeline_creation_cache_control
 VK_EXT_separate_stencil_usage
@@ -6228,6 +6307,7 @@ VK_KHR_acceleration_structure
 VK_KHR_bind_memory2
 VK_KHR_buffer_device_address
 VK_KHR_create_renderpass2
+VK_KHR_dedicated_allocation
 VK_KHR_deferred_host_operations
 VK_KHR_depth_stencil_resolve
 VK_KHR_descriptor_update_template
@@ -6245,6 +6325,10 @@ VK_KHR_pipeline_executable_properties
 VK_KHR_pipeline_library
 VK_KHR_ray_query
 VK_KHR_ray_tracing_pipeline
+VK_KHR_separate_depth_stencil_layouts
+VK_KHR_separate_depth_stencil_layouts does not support separateDepthStencilLayouts, disabling.
+VK_KHR_shader_float16_int8
+VK_KHR_shader_float16_int8 does not support shaderFloat16, disabling.
 VK_KHR_shader_non_semantic_info
 VK_KHR_surface
 VK_KHR_swapchain
@@ -6258,7 +6342,6 @@ VK_LAYER_LUNARG_parameter_validation
 VK_LAYER_LUNARG_standard_validation
 VK_LAYER_LUNARG_swapchain
 VK_NOT_READY
-VK_NV_dedicated_allocation
 VK_NV_device_diagnostic_checkpoints
 VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR
 VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV
@@ -6322,6 +6405,12 @@ VK_VALIDATION_FEATURE_DISABLE_SHADERS_EXT
 VK_VALIDATION_FEATURE_DISABLE_SHADER_VALIDATION_CACHE_EXT
 VK_VALIDATION_FEATURE_DISABLE_THREAD_SAFETY_EXT
 VK_VALIDATION_FEATURE_DISABLE_UNIQUE_HANDLES_EXT
+VMA breaking defragmentation pass due to allocation.
+VMA defrag completed after %d passes.
+VMA defrag pass %d
+VMA defragmentation completed. AFTER:
+VMA starting defragmentation. BEFORE:
+VMA: Allocated %llu MB (Free: %llu MB)
 VMaterialSystem2_001
 VMediaFoundation001
 VOID
@@ -6334,7 +6423,6 @@ VProcessUtils002
 VProfService_001
 VRenderDeviceMgrBackdoor001
 VRenderDeviceSetupV001
-VS_INPUT
 VScript
 VScriptDbg
 VScriptManager010
@@ -6362,6 +6450,7 @@ V_CopyMemory3D
 V_GetFileExtension
 V_IsAbsolutePath
 V_LZ4_decompress_safe
+V_PrettifyMem
 V_PrettifyNum
 V_RemoveDotSlashes
 V_SplitString(char const*, char const*, CUtlVector<char*, int, CUtlMemory<char*, int> >&)
@@ -6389,6 +6478,7 @@ V_powd
 V_powf
 V_qsort
 V_qsort_s
+V_roundf
 V_sinf
 V_snprintf
 V_sscanf
@@ -6451,20 +6541,23 @@ Video config version number changed ( '%s' is version %i, current version is %i 
 Virtual array controller messed up
 VisBuilder_001
 VkPipelineCacheHeaderVersion mismatch in pipeline cache file (Got: %d Expected: %d).  Deleting %s in order to regenerate it.
+VmaCreateNewVulkanObject '%s' unexpectedly failed to create an object.
+VmaDefragAssign
+VmaDefragCopyPass
+VmaDefragThread
 Volatile mask setting must match for Equal and Unequal memory semantics
 VolatileTexel
 VolatileTexelKHR
 VolatileType
-Vulkan
+Vrad3_001
 Vulkan Command Buffer Pool Threshold(%d)
 Vulkan Command Buffers:
-Vulkan Dynamic Memory Manager Stats:
 Vulkan Framebuffer Manager Stats:
 Vulkan MultiGPU Rendering - Enabled!
 Vulkan MultiGPU Rendering - using %d GPUs
 Vulkan PMB Memory Manager Stats:
 Vulkan Physical Device: %s
-Vulkan Static Memory Manager Stats:
+Vulkan Total Mem: %s; Fragmentation: %s; PMB mem: %s; command buffers: %s
 Vulkan device does not support precise occlusion queries, this may result in incorrect rendering that relies on accurate occlusion queries (such as tonemapping).
 Vulkan driver doesn't support MultiDrawIndexedInstancedIndirectCount.
 Vulkan driver version Major = %d, Minor = %d, Patch = %d
@@ -6522,7 +6615,6 @@ Vulkan spec doesn't allow BuiltIn VertexId to be used.
 Vulkan spec doesn't allow TessLevelOuter/TessLevelInner to be used for variables with Input storage class if execution model is TessellationControl.
 Vulkan spec doesn't allow TessLevelOuter/TessLevelInner to be used for variables with Output storage class if execution model is TessellationEvaluation.
 Vulkan spec requires BuiltIn WorkgroupSize to be a constant.
-Vulkan static mem: %s; PMB mem: %s; command buffers: %s
 Vulkan swapchain does not support VK_IMAGE_USAGE_TRANSFER_DST_BIT. Upscaling desktop friendly fullscreen not supported.
 Vulkan swapchain does not support VK_IMAGE_USAGE_TRANSFER_SRC_BIT. Screenshots not supported.
 Vulkan swapchain out-of-date, suboptimal, or surface lost - recreating.  Result: (%s)
@@ -6535,10 +6627,6 @@ Vulkan/Pipeline Layout Count
 Vulkan/Pipeline State Object Count
 Vulkan/Staging Dynamic Total Pool Count
 Vulkan/Staging Dynamic Total Pool Size (MB)
-Vulkan/Texture Static Free Space (MB)
-Vulkan/Texture Static Largest Free Block (MB)
-Vulkan/Texture Static Total Pool Count
-Vulkan/Texture Static Total Pool Size (MB)
 VulkanKHR
 VulkanMemoryModel
 VulkanMemoryModelDeviceScope
@@ -6655,6 +6743,7 @@ WriteOnly
 WritePackedPrimitiveIndices4x8NV
 WritePipeBlockingINTEL
 Wrong JPEG library version: library is %d, caller expects %d
+Wrote %s
 Wrote RenderDoc capture to %s
 X
 X must be a 32-bit unsigned integer OpConstant
@@ -6941,6 +7030,7 @@ Zext
 ],S
 ]]
 ^
+^$\.*+?()[]{}|
 ^=
 ^M
 ^^
@@ -7054,7 +7144,6 @@ __RenderStateLiteral__
 __SET_BY_FEATURE_EQ__
 __SET_BY_FEATURE_NE__
 __SetByArtistAndExpression__
-__SetByArtist__
 __VERSION__
 ______<INVALID>______
 __assert_fail
@@ -7124,6 +7213,7 @@ __gnu_cxx::__concurrence_unlock_error
 __gnu_cxx::__concurrence_unlock_error::what() const
 __gnu_cxx::__concurrence_unlock_error::~__concurrence_unlock_error()
 __gnu_cxx::__freeres()
+__gnu_cxx::__normal_iterator<std::string const*, std::vector<std::string, std::allocator<std::string> > > std::find<__gnu_cxx::__normal_iterator<std::string const*, std::vector<std::string, std::allocator<std::string> > >, std::string>(__gnu_cxx::__normal_iterator<std::string const*, std::vector<std::string, std::allocator<std::string> > >, __gnu_cxx::__normal_iterator<std::string const*, std::vector<std::string, std::allocator<std::string> > >, std::string const&)
 __gnu_cxx::__scoped_lock::~__scoped_lock()
 __gnu_cxx::__snprintf_lite(char*, unsigned long, char const*, __va_list_tag*)
 __gnu_cxx::__throw_concurrence_lock_error()
@@ -7209,12 +7299,10 @@ __wctype_l
 __xstat64
 _arr_
 _cs
-_ds
 _edata
 _end
 _feature
 _gs
-_hs
 _ps
 _psrs
 _ptr_
@@ -7232,6 +7320,7 @@ _txnal_runtime_error_get_msg(void*)
 _txnal_sso_string_c_str(void const*)
 _vs
 `
+`A
 a
 a storage class of PhysicalStorageBuffer.
 a+
@@ -7243,7 +7332,6 @@ a_fDecodedAlpha >= 0.0f
 a_uiMultithreadingStride > 0
 a_uiRadius <= MAX_RADIUS
 aa
-ab
 abcdef
 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789
 abort
@@ -7279,7 +7367,9 @@ addressu
 addressv
 addressw
 aggShadow
+alert
 align=
+aligned_alloc
 alignof
 all default precisions are highp; use precision statements to quiet warning, e.g.:         "precision mediump int; precision highp float;"
 all members of that structure type must also be decorated with
@@ -7300,6 +7390,7 @@ ambiguous best function under implicit type conversion
 ambiguous function signature match: multiple signatures match under implicit type conversion
 ambiguous patch constant function
 amd-ext-to-khr
+ampersand
 and
 and OpImageFetch
 and ending with
@@ -7313,6 +7404,7 @@ anyHitShader
 anyInvocation
 anyInvocationARB
 apiVersion
+apostrophe
 appear as the final member of an OpTypeStruct, thus cannot
 appears in the binary before its dominator
 appendstructuredbuffer
@@ -7377,6 +7469,7 @@ assignment expression in initializer list
 assignment_expression
 assignment_operator
 assuming binding count of one for compile-time checking of binding numbers for unsized array
+asterisk
 asuint
 at minimum or one of the following extensions:
 at minimum.
@@ -7451,6 +7544,8 @@ b
 bValid
 back-edge block
 back-edge blocks but the standard requires exactly one
+backslash
+backspace
 bad argument
 bad character in float exponent
 bad digit in hexadecimal literal
@@ -7476,7 +7571,6 @@ basic_ostream
 basic_string::_M_construct null not valid
 basic_string::_M_create
 basic_string::_M_replace
-basic_string::_M_replace_aux
 basic_string::_S_construct null not valid
 basic_string::_S_create
 basic_string::append
@@ -7553,6 +7647,7 @@ blend_support_screen
 blend_support_softlight
 blendindices
 blendweight
+blendweights
 block <ID>
 block declaration
 block initializer
@@ -7578,6 +7673,11 @@ bool gl_HelperInvocation;flat in highp int gl_PrimitiveID;flat in highp int gl_L
 bool helperInvocationEXT();
 bool reportIntersectionNV(float, uint);bool reportIntersectionEXT(float, uint);
 bool sparseTexelsResidentARB(int code);
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>&)
+bool std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>&)
+bool std::__detail::__regex_algo_impl<char const*, std::allocator<std::sub_match<char const*> >, char, std::regex_traits<char>, (std::__detail::_RegexExecutorPolicy)0, false>(char const*, char const*, std::match_results<char const*, std::allocator<std::sub_match<char const*> > >&, std::basic_regex<char, std::regex_traits<char> > const&, std::regex_constants::match_flag_type)
 bool std::has_facet<std::__cxx11::collate<char> >(std::locale const&)
 bool std::has_facet<std::__cxx11::collate<wchar_t> >(std::locale const&)
 bool std::has_facet<std::__cxx11::messages<char> >(std::locale const&)
@@ -7642,6 +7742,7 @@ boolean
 boolean expression expected
 borderColor
 bordercolor
+box2i
 branch
 branches to the
 break statement only allowed in switch and loops
@@ -7651,6 +7752,7 @@ buffer block
 buffer is too large:
 buffer reference indexing
 buffer reference math
+bufferImageGranularity
 buffer_reference
 buffer_reference_align
 buffer_reference_align=
@@ -7887,6 +7989,7 @@ cannot use spirv_literal qualifier
 cannot use storage or interpolation qualifiers on structure members
 capabilities
 capability.
+carriage-return
 case entry block
 case exit block
 case expression
@@ -7915,8 +8018,10 @@ char16_t
 char32_t
 char8_t
 character literals not supported
+chlist
 chromaFilter
 chunkCount
+circumflex
 client opengl100
 client vulkan100
 clip
@@ -7951,6 +8056,8 @@ combined (Vector1 + Vector2) size of
 combined token is invalid
 combined tokens are too long
 combinerOps
+comma
+commercial-at
 committed
 compact-ids
 compareEnable
@@ -8151,11 +8258,11 @@ coordTemp
 copy object
 copy-propagate-arrays
 copysign
-core
 correlatedViewMasks
 correlationMasks
 corresponding member type of Result Type struct
 could not create assignment
+count=
 countLeadingZeros
 countTrailingZeros
 countbits
@@ -8282,8 +8389,8 @@ descriptorSetTable
 descriptorType
 determinant
 detexConvertPixels: Too many temporary buffers needed
-detexConvertPixels: Unable to find conversion path
 detexSetErrorMessage: vasprintf returned error
+deviceType
 device_event
 devicecoherent
 dgettext
@@ -8328,6 +8435,7 @@ does not operate on types containing float16
 does not produce a result ID.
 does not reference an OpExtInstImport result Id
 does not strictly dominate
+dollar-sign
 domainOrigin
 dont_flatten
 dont_unroll
@@ -8364,8 +8472,6 @@ double4x4
 doubleBitsToInt64
 doubleBitsToUint64
 doubles cannot start on an odd-numbered component
-ds_5_0
-ds_6_0
 dst
 dstAccessMask
 dstAlphaBlendFactor
@@ -8425,10 +8531,12 @@ eq
 equal
 equal_spacing
 equality_expression
+equals-sign
 erf
 erfc
 error adding atomic counter to atomic counter block
 error adding uniform to default uniform block
+exclamation-mark
 exclusive or second child into first child
 exclusive-or
 exclusive_or_expression
@@ -8720,7 +8828,6 @@ fdopen
 features
 fesetround
 fflush
-file://
 filename-based #line
 filename-based __FILE__
 fileno
@@ -8733,6 +8840,7 @@ first argument must be an interpolant, or interpolant-array element
 first member a float scalar or vector, second member a
 firstbithigh
 firstbitlow
+five
 fix-storage-class
 fixed
 fl
@@ -8814,8 +8922,8 @@ float64_t sqrt(float64_t);f64vec2  sqrt(f64vec2);f64vec3  sqrt(f64vec3);f64vec4 
 float64_t vector
 floatBitsToInt
 floatBitsToUint
-floatbitmap.cpp(318): Conversion not supported yet!
-floatbitmap.cpp(963): Unsupported color format "%s", skipping!
+floatbitmap.cpp(324): Conversion not supported yet!
+floatbitmap.cpp(969): Unsupported color format "%s", skipping!
 floating-point fast math mode
 floating-point rounding mode
 floor
@@ -8842,6 +8950,7 @@ forceExplicitReconstruction
 forcecase
 forcing 32-bit vector type to non 64-bit scalar
 forcing non 32-bit vector type
+form-feed
 format requires readonly or writeonly memory qualifier
 format_r11fg11fb10f
 format_r16
@@ -8883,6 +8992,7 @@ format_rgba8i
 format_rgba8snorm
 format_rgba8ui
 forward_pointer(
+four
 fp
 fputc
 fputs
@@ -8965,6 +9075,14 @@ g_Mathlib_GammaToLinearByteTable
 g_TSPointerListNodes
 g_VProfCurrentProfile
 g_bUpdateStringTokenDatabase
+g_flSequentialFloats<float __vector(4)>
+g_flSequentialFloats<float>
+g_flTValues0To1Inclusive<float __vector(4)>
+g_flTValues0To1Inclusive<float>
+g_nSequentialIndices<int __vector(4)>
+g_nSequentialIndices<int>
+g_nTailMask<int __vector(4)>
+g_nTailMask<int>
 g_pEngineServiceMgr is NULL. Display mode information unavailable
 g_pMemAlloc
 g_pRenderDevice is NULL. %d adapter(s) available. Iterating adapters %d - %d
@@ -8979,7 +9097,6 @@ geometry shaders
 get_nprocs
 gets larger than 3
 gettimeofday
-gfx
 gfx-rs community
 gfx-rs community Naga
 gl_
@@ -9217,6 +9334,8 @@ goto
 graph
 graphics-robust-access
 graphicsPipelines
+grave-accent
+greater-than-sign
 greaterThan
 greaterThanEqual
 group operation
@@ -9225,7 +9344,7 @@ gs_4_0
 gs_4_1
 gs_5_0
 gs_6_0
-gshs
+gscs
 gt
 guard variable for
 guard variable for std::__cxx11::collate<char>::id
@@ -9244,6 +9363,10 @@ guard variable for std::__cxx11::numpunct<char>::id
 guard variable for std::__cxx11::numpunct<wchar_t>::id
 guard variable for std::__cxx11::time_get<char, std::istreambuf_iterator<char, std::char_traits<char> > >::id
 guard variable for std::__cxx11::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >::id
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>::operator()(char) const::__nul
+guard variable for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>::operator()(char) const::__nul
 guard variable for std::__timepunct<char>::id
 guard variable for std::__timepunct<wchar_t>::id
 guard variable for std::collate<char>::id
@@ -9356,11 +9479,10 @@ hitAttributeNV
 hitAttributeNV block
 hlsl-iomap
 hlsl-offsets
-hs_5_0
-hs_6_0
 hvec2
 hvec3
 hvec4
+hyphen
 hypot
 i
 i+
@@ -9794,9 +9916,13 @@ ldexp
 left angle bracket
 left of '[' is not of type array, matrix, or vector
 left shift second child into first child
+left-curly-bracket
+left-parenthesis
 left-shift
+left-square-bracket
 legalize-hlsl
 lerp
+less-than-sign
 lessThan
 lessThanEqual
 lgamma
@@ -9849,6 +9975,7 @@ local_size_y_id
 local_size_z
 local_size_z_id
 locale::_Impl::_M_replace_facet
+locale::_S_normalize_category category not found
 locale::facet::_S_create_c_locale name not valid
 locale::facet::_S_lc_ctype_c_locale duplocale error
 locale::facet::_S_lc_ctype_c_locale newlocale error
@@ -9972,6 +10099,7 @@ maxInvocationsInclusiveScanNonUniformAMD
 maxInvocationsNonUniform
 maxInvocationsNonUniformAMD
 maxLod
+maxMemoryAllocationCount
 maxPipelineRayHitAttributeSize
 maxPipelineRayPayloadSize
 maxPipelineRayRecursionDepth
@@ -10023,6 +10151,8 @@ memoryBarrierAtomicCounter
 memoryBarrierBuffer
 memoryBarrierImage
 memoryBarrierShared
+memoryHeapCount
+memoryTypeCount
 merge block
 merge-blocks
 merge-return
@@ -10163,6 +10293,16 @@ mutable
 mutableDescriptorTypeLists
 n
 nB
+nResult = vmaAllocateMemoryForBuffer( GetVmaAllocator(), pBuffer, &allocInfo, ppVmaAllocationOut, nullptr )
+nResult = vmaAllocateMemoryForBuffer( m_pVmaAllocator, pBuffer, pVmaAllocInfo, ppVmaAllocationOut, nullptr )
+nResult = vmaAllocateMemoryForImage( GetVmaAllocator(), pImage, &allocInfo, ppVmaAllocationOut, nullptr )
+nResult = vmaAllocateMemoryForImage( m_pVmaAllocator, pImage, pVmaAllocInfo, ppVmaAllocationOut, nullptr )
+nResult = vmaBindBufferMemory( m_pVmaAllocator, pMove->dstTmpAllocation, ( VkBuffer ) nNewObject )
+nResult = vmaBindImageMemory( m_pVmaAllocator, pMove->dstTmpAllocation, ( VkImage ) nNewObject )
+nResult = vmaCreateAllocator( &allocatorCreateInfo, &m_pVmaAllocator )
+nResult = vmaCreateBuffer( m_pVmaAllocator, &bufferCreateInfo, &allocInfo, ppVKBufferOut, ppVmaAllocationOut, nullptr )
+nResult = vmaCreateBufferWithAlignment( m_pVmaAllocator, &bufferCreateInfo, &allocInfo, nAlignmentBytes, ppVKBufferOut, ppVmaAllocationOut, nullptr )
+nResult = vmaCreatePool( m_pVmaAllocator, &poolCreateInfo, &pVmaAllocInfo->pool )
 nTries < 10000000
 na
 name already defined
@@ -10193,7 +10333,9 @@ needs a const type
 needs a literal integer
 new
 new[]
+newline
 nextafter
+nine
 no callableDataEXT/callableDataInEXT declared
 no declaration found for redeclaration
 no longer supported in
@@ -10238,6 +10380,7 @@ non-virtual thunk to std::basic_iostream<wchar_t, std::char_traits<wchar_t> >::~
 non-virtual thunk to std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::~basic_stringstream()
 non-virtual thunk to std::basic_stringstream<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::~basic_stringstream()
 non-void function must return a value
+nonCoherentAtomSize
 non_uniform_qualifier
 nonportable when expanded from macros for preprocessor expression
 nonprivate
@@ -10279,6 +10422,7 @@ numUsedVgprs
 num_views
 number as Result Type
 number of invocations must match between compilation units
+number-sign
 numeric literal too big
 numeric literal too long
 numerical scalar type
@@ -10345,13 +10489,21 @@ operand of
 operand of the result type.
 operator
 operator delete(void*)
+operator delete(void*, std::align_val_t)
 operator delete(void*, std::nothrow_t const&)
 operator delete(void*, unsigned long)
+operator delete(void*, unsigned long, std::align_val_t)
 operator delete[](void*)
+operator delete[](void*, std::align_val_t)
 operator delete[](void*, unsigned long)
+operator delete[](void*, unsigned long, std::align_val_t)
 operator new(unsigned long)
+operator new(unsigned long, std::align_val_t)
+operator new(unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new(unsigned long, std::nothrow_t const&)
 operator new[](unsigned long)
+operator new[](unsigned long, std::align_val_t)
+operator new[](unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new[](unsigned long, std::nothrow_t const&)
 operator""
 operator[] on a non-RW texture must be an r-value
@@ -10428,6 +10580,8 @@ patchconstantfunc
 payload number
 pbucket->plinkLast->GetNext() == nullptr
 peel_count
+percent-sign
+period
 perprimitiveNV
 perprimitiveNV out gl_MeshPerPrimitiveNV {int gl_PrimitiveID;int gl_Layer;int gl_ViewportIndex;int gl_ViewportMask[];perviewNV int gl_LayerPerViewNV[];perviewNV int gl_ViewportMaskPerViewNV[][];} gl_MeshPrimitivesNV[];
 pervertexNV
@@ -10443,6 +10597,7 @@ pixelAspectRatio
 pixel_center_integer
 pixel_interlock_ordered
 pixel_interlock_unordered
+plus-sign
 pm
 pm"U
 png/jpg
@@ -10531,7 +10686,9 @@ qu
 quads
 qualifier has no effect on non-output parameters
 quantization mode
+question-mark
 queuefamilycoherent
+quotation-mark
 r
 r+
 r+b
@@ -10578,6 +10735,13 @@ r_texture_streamout_unthrottle_ms
 r_texturefilteringquality
 r_textures_evict_all
 r_validate_texture_streaming
+r_vma_defrag_algorithm
+r_vma_defrag_enabled
+r_vma_defrag_max_allocation_count_per_pass
+r_vma_defrag_max_allocation_size_per_pass
+r_vma_defrag_moves_per_frame
+r_vma_defrag_threshold_mb
+r_vma_report_fragmentation
 r_wait_on_present
 radians
 random_device could not be read
@@ -10655,6 +10819,7 @@ reductionMode
 reference conversion to uvec2
 reference temporary #
 refract
+regex_error
 register
 register number description
 reinterpret_cast
@@ -10673,7 +10838,6 @@ renderPasses2
 rendercontextbase.cpp
 renderdevicebase.cpp
 renderstatehelper.h
-rendersystem (%s) tracked resources:
 rendersystemvulkan
 replace-desc-array-access-using-var-index
 replace-invalid-opcode
@@ -10720,7 +10884,10 @@ rgba16_snorm
 rgba8_snorm
 right angle bracket
 right shift second child into first child
+right-curly-bracket
+right-parenthesis
 right-shift
+right-square-bracket
 robustBufferAccess
 robustBufferAccess2
 robustImageAccess
@@ -10729,9 +10896,10 @@ rootn
 rotate
 round
 roundEven
-roundf
 row_major
 rq
+rtx_allow_blas_compact
+rtx_allow_blas_create
 rules: A Block or BufferBlock cannot be nested within another Block or BufferBlock.
 runtime-sized array of
 rwbuffer
@@ -10860,6 +11028,7 @@ setting.refreshrate_numerator
 setting.resettodefaults
 setting.shaderquality
 setvbuf
+seven
 shader input/output
 shader record EXT
 shader record NV
@@ -10913,6 +11082,7 @@ single_attribute
 single_declaration
 single_type_qualifier
 singletons.cpp
+six
 sizeQueryTemp
 sizeof
 sizeof...
@@ -11058,9 +11228,46 @@ std::Catalogs::_M_add(char const*, std::locale)
 std::Catalogs::_M_erase(int)
 std::Catalogs::_M_get(int) const
 std::Catalogs::~Catalogs()
+std::_Deque_base<long, std::allocator<long> >::_M_initialize_map(unsigned long)
+std::_Deque_base<long, std::allocator<long> >::~_Deque_base()
 std::_Fnv_hash_bytes(void const*, unsigned long, unsigned long)
+std::_Function_base::~_Function_base()
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, false, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, false> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, true> >::_M_invoke(std::_Any_data const&, char&&)
+std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
 std::_Hash_bytes(void const*, unsigned long, unsigned long)
 std::_Hashtable<unsigned long, unsigned long, std::allocator<unsigned long>, std::__detail::_Identity, std::equal_to<unsigned long>, std::hash<unsigned long>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::count(unsigned long const&) const
+std::_Rb_tree<long, std::pair<long const, long>, std::_Select1st<std::pair<long const, long> >, std::less<long>, std::allocator<std::pair<long const, long> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<long const, long> >, long const&)
+std::_Rb_tree<long, std::pair<long const, long>, std::_Select1st<std::pair<long const, long> >, std::less<long>, std::allocator<std::pair<long const, long> > >::_M_get_insert_unique_pos(long const&)
 std::_Rb_tree_black_count(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base const*)
 std::_Rb_tree_decrement(std::_Rb_tree_node_base*)
@@ -11074,6 +11281,10 @@ std::_Setfill<char> std::setfill<char>(char)
 std::_Setfill<wchar_t> std::setfill<wchar_t>(wchar_t)
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()
 std::_Sp_counted_ptr<decltype(nullptr), (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_destroy()
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&)
+std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>::~_Sp_counted_ptr_inplace()
 std::_Sp_make_shared_tag::_S_ti()::__tag
 std::_V2::error_category::_M_message(int) const
 std::_V2::error_category::_M_message[abi:cxx11](int) const
@@ -11863,13 +12074,71 @@ std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::ch
 std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >::time_get_byname(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long)
 std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >::~time_get_byname()
 std::__destroy_ios_failure(void*)
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>::operator()(char) const::__nul
+std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>::operator()(char) const::__nul
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>::_M_ready()
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::_M_apply(char, std::integral_constant<bool, false>) const::{lambda()#1}::operator()() const
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::_M_make_range(char, char)
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::_M_ready()
+std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>::~_BracketMatcher()
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>::_M_apply(char, std::integral_constant<bool, false>) const::{lambda()#1}::operator()() const
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>::_M_ready()
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::_M_apply(char, std::integral_constant<bool, false>) const::{lambda()#1}::operator()() const
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::_M_make_range(char, char)
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::_M_ready()
+std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>::~_BracketMatcher()
+std::__detail::_Compiler<std::regex_traits<char> >::_Compiler(char const*, char const*, std::locale const&, std::regex_constants::syntax_option_type)
+std::__detail::_Compiler<std::regex_traits<char> >::_M_alternative()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_assertion()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_atom()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_bracket_expression()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_cur_int_value(int)
+std::__detail::_Compiler<std::regex_traits<char> >::_M_disjunction()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<false, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, true>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_pop()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_quantifier()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_try_char()
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_dfs(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_handle_backref(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_is_word(char) const::__s
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_lookahead(long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_rep_once_more(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_word_boundary() const
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_dfs(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_handle_backref(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_is_word(char) const::__s
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_lookahead(long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_rep_once_more(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
+std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_word_boundary() const
 std::__detail::_List_node_base::_M_hook(std::__detail::_List_node_base*)
 std::__detail::_List_node_base::_M_reverse()
 std::__detail::_List_node_base::_M_transfer(std::__detail::_List_node_base*, std::__detail::_List_node_base*)
 std::__detail::_List_node_base::_M_unhook()
 std::__detail::_List_node_base::swap(std::__detail::_List_node_base&, std::__detail::_List_node_base&)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_dummy()
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_matcher(std::function<bool (char)>)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_repeat(long, long, bool)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_state(std::__detail::_State<char>)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_subexpr_begin()
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_subexpr_end()
 std::__detail::_Prime_rehash_policy::_M_need_rehash(unsigned long, unsigned long, unsigned long) const
 std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const
+std::__detail::_RegexTranslatorBase<std::regex_traits<char>, false, true>::_M_transform(char) const
+std::__detail::_RegexTranslatorBase<std::regex_traits<char>, true, true>::_M_transform(char) const
+std::__detail::_Scanner<char>::_M_eat_class(char)
+std::__detail::_Scanner<char>::_M_eat_escape_awk()
+std::__detail::_Scanner<char>::_M_eat_escape_ecma()
+std::__detail::_Scanner<char>::_M_eat_escape_posix()
+std::__detail::_Scanner<char>::_M_scan_in_brace()
+std::__detail::_Scanner<char>::_M_scan_in_bracket()
+std::__detail::_Scanner<char>::_M_scan_normal()
+std::__detail::_Scanner<char>::_Scanner(char const*, char const*, std::regex_constants::syntax_option_type, std::locale)
+std::__detail::_StateSeq<std::regex_traits<char> >::_M_clone()
 std::__detail::__prime_list
 std::__exception_ptr::exception_ptr::_M_addref()
 std::__exception_ptr::exception_ptr::_M_get() const
@@ -11946,6 +12215,7 @@ std::__throw_out_of_range(char const*)
 std::__throw_out_of_range_fmt(char const*, ...)
 std::__throw_overflow_error(char const*)
 std::__throw_range_error(char const*)
+std::__throw_regex_error(std::regex_constants::error_type)
 std::__throw_runtime_error(char const*)
 std::__throw_system_error(int)
 std::__throw_underflow_error(char const*)
@@ -12936,6 +13206,8 @@ std::ctype_byname<wchar_t>::ctype_byname(std::__cxx11::basic_string<char, std::c
 std::ctype_byname<wchar_t>::ctype_byname(std::string const&, unsigned long)
 std::ctype_byname<wchar_t>::~ctype_byname()
 std::current_exception()
+std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::_M_reallocate_map(unsigned long, bool)
+std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::push_back(std::__detail::_StateSeq<std::regex_traits<char> > const&)
 std::domain_error::domain_error(char const*)
 std::domain_error::domain_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 std::domain_error::domain_error(std::string const&)
@@ -13628,6 +13900,12 @@ std::range_error::range_error(char const*)
 std::range_error::range_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 std::range_error::range_error(std::string const&)
 std::range_error::~range_error()
+std::regex_error::regex_error(std::regex_constants::error_type)
+std::regex_error::~regex_error()
+std::regex_traits<char>::_RegexMask std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const
+std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const::__classnames
+std::regex_traits<char>::lookup_collatename<char const*>(char const*, char const*) const::__collatenames
+std::regex_traits<char>::translate_nocase(char) const
 std::rethrow_exception(std::__exception_ptr::exception_ptr)
 std::runtime_error::operator=(std::runtime_error const&)
 std::runtime_error::operator=(std::runtime_error&&)
@@ -13642,6 +13920,9 @@ std::set_new_handler(void (*)())
 std::set_terminate(void (*)())
 std::set_unexpected(void (*)())
 std::string
+std::string std::regex_traits<char>::lookup_collatename<char const*>(char const*, char const*) const
+std::string std::regex_traits<char>::transform_primary<char const*>(char const*, char const*) const
+std::string std::regex_traits<char>::transform_primary<char*>(char*, char*) const
 std::string::_Alloc_hider::_Alloc_hider(char*, std::allocator<char> const&)
 std::string::_M_assign(char*, unsigned long, char)
 std::string::_M_check(unsigned long, char const*) const
@@ -13662,7 +13943,6 @@ std::string::_M_replace_aux(unsigned long, unsigned long, unsigned long, char)
 std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long)
 std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long)
 std::string::_Rep::_M_destroy(std::allocator<char> const&)
-std::string::_Rep::_M_dispose(std::allocator<char> const&)
 std::string::_Rep::_M_grab(std::allocator<char> const&, std::allocator<char> const&)
 std::string::_Rep::_M_is_leaked() const
 std::string::_Rep::_M_is_shared() const
@@ -13685,13 +13965,10 @@ std::string::_S_copy_chars(char*, char const*, char const*)
 std::string::_S_copy_chars(char*, char*, char*)
 std::string::_S_empty_rep()
 std::string::append(char const*)
-std::string::append(char const*, unsigned long)
 std::string::append(std::initializer_list<char>)
-std::string::append(std::string const&)
 std::string::append(std::string const&, unsigned long, unsigned long)
 std::string::append(unsigned long, char)
 std::string::assign(char const*)
-std::string::assign(char const*, unsigned long)
 std::string::assign(std::initializer_list<char>)
 std::string::assign(std::string const&)
 std::string::assign(std::string const&, unsigned long, unsigned long)
@@ -13903,8 +14180,10 @@ std::underflow_error::underflow_error(std::string const&)
 std::underflow_error::~underflow_error()
 std::unexpected()
 std::unique_ptr<std::__future_base::_State_baseV2::_Make_ready, std::default_delete<std::__future_base::_State_baseV2::_Make_ready> >::~unique_ptr()
+std::vector<char, std::allocator<char> >::_M_erase(__gnu_cxx::__normal_iterator<char*, std::vector<char, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::vector<char, std::allocator<char> > >)
 std::vector<float, std::allocator<float> >::_M_default_append(unsigned long)
 std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*> >::_M_realloc_insert(__gnu_cxx::__normal_iterator<std::Catalog_info**, std::vector<std::Catalog_info*, std::allocator<std::Catalog_info*> > >, std::Catalog_info* const&)
+std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > >::_M_fill_assign(unsigned long, std::sub_match<char const*> const&)
 std::vector<unsigned char, std::allocator<unsigned char> >::_M_default_append(unsigned long)
 std::wcerr
 std::wcin
@@ -14233,15 +14512,15 @@ textureSamples(
 textureSize
 textureSize(
 texturebase.cpp
-texturebase.cpp(2432):Error loading texture: %s
-texturebase.cpp(3451):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3481):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3499):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3517):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3536):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3557):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3568):ResourceHandleToData( %s ) failed! Falling back to error texture!
-texturebase.cpp(3579):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(2436):Error loading texture: %s
+texturebase.cpp(3453):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3485):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3505):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3523):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3542):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3563):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3574):ResourceHandleToData( %s ) failed! Falling back to error texture!
+texturebase.cpp(3585):ResourceHandleToData( %s ) failed! Falling back to error texture!
 texturecubearrayindex
 texturecubeindex
 tgamma
@@ -14251,7 +14530,9 @@ the same type as Result Type components
 then statement
 there is no such layout identifier for this stage taking an assigned value
 this instruction is currently limited to 32-bit width
+three
 throw
+tilde
 tiles
 time
 timeAMD
@@ -14351,6 +14632,7 @@ true case is null
 trunc
 trying to bind a deleted shader
 tw
+two
 type ID
 type Result Type array
 type Result Type matrix
@@ -14398,6 +14680,7 @@ typeinfo for __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >
 typeinfo for __gnu_cxx::stdio_sync_filebuf<wchar_t, std::char_traits<wchar_t> >
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_V2::error_category
 typeinfo for std::__codecvt_abstract_base<char, char, __mbstate_t>
 typeinfo for std::__codecvt_abstract_base<char16_t, char, __mbstate_t>
@@ -14442,6 +14725,22 @@ typeinfo for std::__cxx11::time_get<char, std::istreambuf_iterator<char, std::ch
 typeinfo for std::__cxx11::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >
 typeinfo for std::__cxx11::time_get_byname<char, std::istreambuf_iterator<char, std::char_traits<char> > >
 typeinfo for std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false>
+typeinfo for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>
+typeinfo for std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, false, false>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, false, true>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, true, false>
+typeinfo for std::__detail::_CharMatcher<std::regex_traits<char>, true, true>
 typeinfo for std::__future_base::_Result_base
 typeinfo for std::__ios_failure
 typeinfo for std::__iosfail_type_info
@@ -14543,6 +14842,7 @@ typeinfo for std::ostream
 typeinfo for std::out_of_range
 typeinfo for std::overflow_error
 typeinfo for std::range_error
+typeinfo for std::regex_error
 typeinfo for std::runtime_error
 typeinfo for std::system_error
 typeinfo for std::thread::_State
@@ -14572,6 +14872,7 @@ typeinfo name for __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >
 typeinfo name for __gnu_cxx::stdio_sync_filebuf<wchar_t, std::char_traits<wchar_t> >
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo name for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
 typeinfo name for std::_V2::error_category
 typeinfo name for std::__codecvt_abstract_base<char, char, __mbstate_t>
@@ -14617,6 +14918,22 @@ typeinfo name for std::__cxx11::time_get<char, std::istreambuf_iterator<char, st
 typeinfo name for std::__cxx11::time_get<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >
 typeinfo name for std::__cxx11::time_get_byname<char, std::istreambuf_iterator<char, std::char_traits<char> > >
 typeinfo name for std::__cxx11::time_get_byname<wchar_t, std::istreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, false, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, false, true, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, false, true>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, false>
+typeinfo name for std::__detail::_AnyMatcher<std::regex_traits<char>, true, true, true>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, false, false>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, false, true>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>
+typeinfo name for std::__detail::_BracketMatcher<std::regex_traits<char>, true, true>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, false, false>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, false, true>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, true, false>
+typeinfo name for std::__detail::_CharMatcher<std::regex_traits<char>, true, true>
 typeinfo name for std::__future_base::_Result_base
 typeinfo name for std::__ios_failure
 typeinfo name for std::__iosfail_type_info
@@ -14718,6 +15035,7 @@ typeinfo name for std::ostream
 typeinfo name for std::out_of_range
 typeinfo name for std::overflow_error
 typeinfo name for std::range_error
+typeinfo name for std::regex_error
 typeinfo name for std::runtime_error
 typeinfo name for std::system_error
 typeinfo name for std::thread::_State
@@ -14827,6 +15145,7 @@ unary_expression
 unary_operator
 undeclared identifier
 undefined macro in expression not allowed in es profile
+underscore
 unexpected
 unexpected '#'
 unexpected initializer-list type:
@@ -14989,6 +15308,7 @@ uvec2 conversion to accelerationStructureEXT
 uvec2 conversion to reference
 uvec4  subgroupPartitionNV(%s);
 v
+v2f
 validation.cache
 value is out of range:
 value must be 0 or 1
@@ -15061,7 +15381,6 @@ vector-times-matrix
 vector2
 vector3
 vector4
-vector::_M_default_append
 vector::_M_emplace_back_aux
 vector::_M_fill_insert
 vector::_M_insert_aux
@@ -15092,6 +15411,8 @@ vertexBindingDivisorCount
 vertexBindingDivisors
 vertexInputState
 vertexpainttintcolor
+vertical-line
+vertical-tab
 vfx_dx11
 vfx_shader_file.cpp
 vfx_vulkan
@@ -15164,14 +15485,8 @@ vkBindBufferMemory
 vkBindBufferMemory2
 vkBindBufferMemory2KHR
 vkBindImageMemory
-vkBindImageMemory( VulkanDevice(), m_pVulkanImage->m_pImage, m_pVulkanImage->m_pGPUMemory, m_pVulkanImage->m_nOffset )
-vkBindImageMemory( VulkanDevice(), pVulkanImage->m_pImage, pVulkanImage->m_pGPUMemory, pVulkanImage->m_nOffset )
-vkBindImageMemory( pDeviceVulkan, m_pDepthStencilImage->m_pImage, m_pDepthStencilImage->m_pGPUMemory, 0 )
-vkBindImageMemory( pDeviceVulkan, m_pIntermediateImageResolved->m_pImage, m_pIntermediateImageResolved->m_pGPUMemory, 0 )
-vkBindImageMemory( pDeviceVulkan, m_pIntermediateSwapChainImage->m_pImage, m_pIntermediateSwapChainImage->m_pGPUMemory, 0 )
 vkBindImageMemory2
 vkBindImageMemory2KHR
-vkBindImageMemory2KHR( VulkanDevice(), 1, &bindImageMemoryInfo )
 vkBindOpticalFlowSessionImageNV
 vkBindVideoSessionMemoryKHR
 vkBuildAccelerationStructuresKHR
@@ -15416,8 +15731,9 @@ vkCreateAccelerationStructureKHR
 vkCreateAccelerationStructureKHR( Device(), &asci, nullptr, &m_pAccelerationStructure )
 vkCreateAccelerationStructureNV
 vkCreateBuffer
-vkCreateBuffer( m_pDeviceVulkan, &bufferCreateInfo, NULL, &newMemoryPool.m_pVulkanBuffer )
 vkCreateBuffer( m_pDeviceVulkan, &bufferCreateInfo, NULL, &pNewMemoryPool->m_pVulkanBuffer )
+vkCreateBuffer( m_pDeviceVulkan, &bufferCreateInfo, NULL, ppVKBufferOut )
+vkCreateBuffer( m_pDeviceVulkan, &bufferCreateInfo, nullptr, &pBuffer )
 vkCreateBufferView
 vkCreateBufferView( m_pDeviceVulkan, &bufferViewCreateInfo, NULL, &m_pTexelBufferView )
 vkCreateCommandPool
@@ -15431,6 +15747,7 @@ vkCreateDebugReportCallbackEXT was unsuccessful.
 vkCreateDebugUtilsMessengerEXT
 vkCreateDebugUtilsMessengerEXT( m_InstanceVulkan, &debugUtilsMessengerCreateInfo, nullptr, &m_pDebugUtilsMessengerVulkan )
 vkCreateDeferredOperationKHR
+vkCreateDeferredOperationKHR( m_pDevice, VK_NULL_HANDLE, &hDeferredOp )
 vkCreateDescriptorPool
 vkCreateDescriptorPool( m_pDeviceVulkan, &descriptorPoolCreateInfo, NULL, &pDescriptorPool )
 vkCreateDescriptorSetLayout
@@ -15451,14 +15768,14 @@ vkCreateFramebuffer( m_pDeviceVulkan, &framebufferCreateInfo, NULL, &pFramebuffe
 vkCreateFramebuffer( m_pDeviceVulkan, &framebufferCreateInfo, NULL, &pFramebufferVulkan )
 vkCreateFramebuffer( m_pDeviceVulkan, &framebufferCreateInfo, NULL, &pSwapChainFramebuffer )
 vkCreateGraphicsPipelines
+vkCreateGraphicsPipelines failed after %d retries. Giving up.
 vkCreateGraphicsPipelines( m_pDeviceVulkan, VK_NULL_HANDLE, 1, &pipelineCreateInfo, NULL, &pPipelineOut->m_pPipeline )
 vkCreateGraphicsPipelines( m_pDeviceVulkan, pPipelineCache, 1, &executablePipelineCreateInfo, NULL, &pLinkTimeOptimizedPipeline )
 vkCreateGraphicsPipelines( m_pDeviceVulkan, pPipelineCache, 1, &executablePipelineCreateInfo, NULL, &pPipelineOut->m_pPipeline )
 vkCreateGraphicsPipelines( m_pDeviceVulkan, pPipelineCacheToUse, 1, &pipelineCreateInfo, NULL, &pPipelineOut->m_pPipeline )
 vkCreateHeadlessSurfaceEXT
 vkCreateImage
-vkCreateImage( VulkanDevice(), &imageCreateInfo, NULL, &m_pVulkanImage->m_pImage )
-vkCreateImage( VulkanDevice(), &imageCreateInfo, NULL, &pVulkanImage->m_pImage )
+vkCreateImage( VulkanDevice(), &imageCreateInfo, NULL, &pImage )
 vkCreateImage() - failed to create cooperative fullscreen image.
 vkCreateImage() - failed to create cooperative fullscreen intermediate image.
 vkCreateImageView
@@ -15495,7 +15812,7 @@ vkCreateQueryPool
 vkCreateQueryPool( VulkanDevice(), &queryPoolCreateInfo, NULL, &m_pTimestampQueryPool )
 vkCreateQueryPool( m_pDeviceVulkan, &queryPoolCreateInfo, NULL, &newQueryPool.m_pQueryPool )
 vkCreateRayTracingPipelinesKHR
-vkCreateRayTracingPipelinesKHR( m_pDevice, VK_NULL_HANDLE, VK_NULL_HANDLE, 1, &rpci, nullptr, &m_vkRayTracePipeline )
+vkCreateRayTracingPipelinesKHR( m_pDevice, VK_NULL_HANDLE, pPipelineCache, 1, &rpci, nullptr, &m_vkRayTracePipeline )
 vkCreateRayTracingPipelinesNV
 vkCreateRenderPass
 vkCreateRenderPass( VulkanDevice(), pRenderPassCreateInfo, nullptr, &pFossilizeRenderPass->m_pExplicitRenderPass )
@@ -15612,6 +15929,7 @@ vkGetBufferOpaqueCaptureDescriptorDataEXT
 vkGetCalibratedTimestampsEXT
 vkGetDeferredOperationMaxConcurrencyKHR
 vkGetDeferredOperationResultKHR
+vkGetDeferredOperationResultKHR( m_pDevice, hDeferredOp )
 vkGetDescriptorEXT
 vkGetDescriptorSetHostMappingVALVE
 vkGetDescriptorSetLayoutBindingOffsetEXT
@@ -15702,7 +16020,6 @@ vkGetPhysicalDeviceMemoryProperties2KHR
 vkGetPhysicalDeviceMultisamplePropertiesEXT
 vkGetPhysicalDeviceOpticalFlowImageFormatsNV
 vkGetPhysicalDevicePresentRectanglesKHR
-vkGetPhysicalDeviceProperties
 vkGetPhysicalDeviceProperties2
 vkGetPhysicalDeviceProperties2KHR
 vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR
@@ -15834,6 +16151,16 @@ vload_half
 vload_halfn
 vloada_halfn
 vloadn
+vmaBeginDefragmentationPass defrag failed with error: %s
+vmaBeginDefragmentationPass: %.2f ms
+vmaBindImageMemory( GetVmaAllocator(), m_pDepthStencilImage->m_pVmaAllocation, m_pDepthStencilImage->m_pImage )
+vmaBindImageMemory( GetVmaAllocator(), m_pIntermediateImageResolved->m_pVmaAllocation, m_pIntermediateImageResolved->m_pImage )
+vmaBindImageMemory( GetVmaAllocator(), m_pIntermediateSwapChainImage->m_pVmaAllocation, m_pIntermediateSwapChainImage->m_pImage )
+vmaBindImageMemory( GetVmaAllocator(), m_pVulkanImage->m_pVmaAllocation, m_pVulkanImage->m_pImage )
+vmaBindImageMemory( GetVmaAllocator(), pVulkanImage->m_pVmaAllocation, pVulkanImage->m_pImage )
+vmaBindImageMemory2( GetVmaAllocator(), pVulkanImage->m_pVmaAllocation, 0, pVulkanImage->m_pImage, &bindImageMemoryInfo )
+vmaCreatePool failed with error: %d
+vma_memdump%d.json
 void EmitStreamVertex(int);void EndStreamPrimitive(int);
 void EmitVertex();void EndPrimitive();
 void Etc::Block4x4::InitFromEtcEncodingBits(Etc::Image::Format, unsigned int, unsigned int, unsigned char*, Etc::Image*, Etc::ErrorMetric)
@@ -15888,6 +16215,14 @@ void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocat
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::_M_construct<wchar_t const*>(wchar_t const*, wchar_t const*, std::forward_iterator_tag)
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::_M_construct<wchar_t*>(wchar_t*, wchar_t*, std::forward_iterator_tag)
 void std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::insert<__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >(__gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, __gnu_cxx::__normal_iterator<wchar_t*, std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<false, false>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<false, true>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<true, false>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_bracket_matcher<true, true>(bool)
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<false, false>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<false, true>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<true, false>()
+void std::__detail::_Compiler<std::regex_traits<char> >::_M_insert_character_class_matcher<true, true>()
 void std::__facet_shims::__collate_transform<char>(std::integral_constant<bool, false>, std::locale::facet const*, std::__facet_shims::__any_string&, char const*, char const*)
 void std::__facet_shims::__collate_transform<char>(std::integral_constant<bool, true>, std::locale::facet const*, std::__facet_shims::__any_string&, char const*, char const*)
 void std::__facet_shims::__collate_transform<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, std::__facet_shims::__any_string&, wchar_t const*, wchar_t const*)
@@ -15912,8 +16247,19 @@ void std::__facet_shims::__numpunct_fill_cache<char>(std::integral_constant<bool
 void std::__facet_shims::__numpunct_fill_cache<char>(std::integral_constant<bool, true>, std::locale::facet const*, std::__numpunct_cache<char>*)
 void std::__facet_shims::__numpunct_fill_cache<wchar_t>(std::integral_constant<bool, false>, std::locale::facet const*, std::__numpunct_cache<wchar_t>*)
 void std::__facet_shims::__numpunct_fill_cache<wchar_t>(std::integral_constant<bool, true>, std::locale::facet const*, std::__numpunct_cache<wchar_t>*)
+void std::__introsort_loop<int*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void> > >(int*, int*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void> >)
+void std::deque<long, std::allocator<long> >::_M_push_back_aux<long const&>(long const&)
+void std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::_M_push_back_aux<std::__detail::_StateSeq<std::regex_traits<char> > const&>(std::__detail::_StateSeq<std::regex_traits<char> > const&)
+void std::vector<char, std::allocator<char> >::_M_realloc_insert<char>(__gnu_cxx::__normal_iterator<char*, std::vector<char, std::allocator<char> > >, char&&)
+void std::vector<std::__detail::_State<char>, std::allocator<std::__detail::_State<char> > >::_M_realloc_insert<std::__detail::_State<char> >(__gnu_cxx::__normal_iterator<std::__detail::_State<char>*, std::vector<std::__detail::_State<char>, std::allocator<std::__detail::_State<char> > > >, std::__detail::_State<char>&&)
+void std::vector<std::pair<char, char>, std::allocator<std::pair<char, char> > >::_M_realloc_insert<std::pair<char, char> >(__gnu_cxx::__normal_iterator<std::pair<char, char>*, std::vector<std::pair<char, char>, std::allocator<std::pair<char, char> > > >, std::pair<char, char>&&)
+void std::vector<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > >, std::allocator<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > > > >::_M_realloc_insert<long&, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > const&>(__gnu_cxx::__normal_iterator<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > >*, std::vector<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > >, std::allocator<std::pair<long, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > > > > >, long&, std::vector<std::sub_match<char const*>, std::allocator<std::sub_match<char const*> > > const&)
+void std::vector<std::pair<std::string, std::string>, std::allocator<std::pair<std::string, std::string> > >::_M_realloc_insert<std::pair<std::string, std::string> >(__gnu_cxx::__normal_iterator<std::pair<std::string, std::string>*, std::vector<std::pair<std::string, std::string>, std::allocator<std::pair<std::string, std::string> > > >, std::pair<std::string, std::string>&&)
+void std::vector<std::regex_traits<char>::_RegexMask, std::allocator<std::regex_traits<char>::_RegexMask> >::_M_realloc_insert<std::regex_traits<char>::_RegexMask const&>(__gnu_cxx::__normal_iterator<std::regex_traits<char>::_RegexMask*, std::vector<std::regex_traits<char>::_RegexMask, std::allocator<std::regex_traits<char>::_RegexMask> > >, std::regex_traits<char>::_RegexMask const&)
+void std::vector<std::string, std::allocator<std::string> >::_M_realloc_insert<std::string const&>(__gnu_cxx::__normal_iterator<std::string*, std::vector<std::string, std::allocator<std::string> > >, std::string const&)
 void std::vector<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > >::_M_realloc_insert<std::vector<unsigned long, std::allocator<unsigned long> > const&>(__gnu_cxx::__normal_iterator<std::vector<unsigned long, std::allocator<unsigned long> >*, std::vector<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > > >, std::vector<unsigned long, std::allocator<unsigned long> > const&)
 void std::vector<unsigned char, std::allocator<unsigned char> >::_M_realloc_insert<unsigned char const&>(__gnu_cxx::__normal_iterator<unsigned char*, std::vector<unsigned char, std::allocator<unsigned char> > >, unsigned char const&)
+void std::vector<unsigned long, std::allocator<unsigned long> >::_M_realloc_insert<unsigned long const&>(__gnu_cxx::__normal_iterator<unsigned long*, std::vector<unsigned long, std::allocator<unsigned long> > >, unsigned long const&)
 void subgroupBarrier();void subgroupMemoryBarrier();void subgroupMemoryBarrierBuffer();void subgroupMemoryBarrierImage();bool subgroupElect();bool   subgroupAll(bool);bool   subgroupAny(bool);uvec4  subgroupBallot(bool);bool   subgroupInverseBallot(uvec4);bool   subgroupBallotBitExtract(uvec4, uint);uint   subgroupBallotBitCount(uvec4);uint   subgroupBallotInclusiveBitCount(uvec4);uint   subgroupBallotExclusiveBitCount(uvec4);uint   subgroupBallotFindLSB(uvec4);uint   subgroupBallotFindMSB(uvec4);
 void subgroupMemoryBarrierShared();
 void traceNV(accelerationStructureNV,uint,uint,uint,uint,uint,vec3,float,vec3,float,int);void traceRayMotionNV(accelerationStructureNV,uint,uint,uint,uint,uint,vec3,float,vec3,float,float,int);void traceRayEXT(accelerationStructureEXT,uint,uint,uint,uint,uint,vec3,float,vec3,float,int);void executeCallableNV(uint, int);void executeCallableEXT(uint, int);
@@ -15942,6 +16288,7 @@ vtable for __gnu_cxx::stdio_filebuf<char, std::char_traits<char> >
 vtable for __gnu_cxx::stdio_filebuf<wchar_t, std::char_traits<wchar_t> >
 vtable for __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >
 vtable for __gnu_cxx::stdio_sync_filebuf<wchar_t, std::char_traits<wchar_t> >
+vtable for std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::regex_traits<char> >, std::allocator<std::__detail::_NFA<std::regex_traits<char> > >, (__gnu_cxx::_Lock_policy)2>
 vtable for std::_V2::error_category
 vtable for std::__codecvt_abstract_base<char, char, __mbstate_t>
 vtable for std::__codecvt_abstract_base<char16_t, char, __mbstate_t>
@@ -16082,6 +16429,7 @@ vtable for std::ostream
 vtable for std::out_of_range
 vtable for std::overflow_error
 vtable for std::range_error
+vtable for std::regex_error
 vtable for std::runtime_error
 vtable for std::system_error
 vtable for std::thread::_State
@@ -16101,15 +16449,16 @@ vulkan/framebuffermgrvulkan.cpp
 vulkan/memorymgrvulkan.cpp
 vulkan/pipelinecachemgrvulkan.cpp
 vulkan/pipelinemgrvulkan.cpp
+vulkan/raytracevulkan.cpp
 vulkan/rendercontextvulkan.cpp
 vulkan/rendercontextvulkan.cpp(424):
-vulkan/renderdevicemgrvulkan.cpp
 vulkan/renderdevicevulkan.cpp
 vulkan/renderpassvulkan.cpp
 vulkan/renderthreadvulkan.cpp
 vulkan/renderthreadvulkan.cpp(195): Error! NULL texture pointer sent to OnReadPixels()!
 vulkan/shadertablevulkan.cpp
-vulkan/texturevulkan.cpp(1409):
+vulkan/texturevulkan.cpp(1443):
+vulkan/vmaimpl.cpp
 vulkan1.1spv1.4
 vulkan_additional_semaphores
 vulkan_amd_timestamp_workaround
@@ -16119,6 +16468,7 @@ vulkan_dedicated_allocation_threshold
 vulkan_framebuffermgr_print
 vulkan_link_time_optimize_libraries
 vulkan_memgr_fragmentation_print
+vulkan_memgr_print
 vulkan_memgr_telemetry_stats
 vulkan_peer2peer_mgpu.vtex
 vulkan_pipeline_compile_spew
@@ -16126,6 +16476,8 @@ vulkan_pipeline_compile_throttle_ms
 vulkan_pipelinemgr_print
 vulkan_readpixels_resolve.vtex
 vulkan_shader_table_print
+vulkan_vma_defrag
+vulkan_vma_gpu_mem_dump
 w
 w+
 w+b

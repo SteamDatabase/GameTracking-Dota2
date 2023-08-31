@@ -289,6 +289,7 @@ $tI
 %s    %9d%9d%9d%9d%9d%9d%9d%9d%9d
 %s    Dropped   :%11s pkts%7.2f%%
 %s    Duplicate :%11s pkts%7.2f%%
+%s    OOOFixed  :%11s pkts%7.2f%%
 %s    OutOfOrder:%11s pkts%7.2f%%
 %s    Pth0 later:%11s pkts
 %s    Pth0 w seq:%11s pkts
@@ -509,7 +510,9 @@ $tI
 //
 ///
 /data/src/common/crypto_25519_openssl.cpp
+/data/src/common/crypto_digest_opensslevp.cpp
 /data/src/common/crypto_openssl.cpp
+/data/src/common/crypto_symmetric_opensslevp.cpp
 /data/src/common/crypto_textencode.cpp
 /data/src/common/keypair.cpp
 /data/src/common/opensslwrapper.cpp
@@ -1202,7 +1205,6 @@ Assertion Failed: adr.HasIP()
 Assertion Failed: alt.m_nPenalty == k_nSDRAltAddressPenalty_PingOnly
 Assertion Failed: authScope.m_timeExpiry > 0
 Assertion Failed: bEncryptedOK
-Assertion Failed: bHasOverride
 Assertion Failed: bOK
 Assertion Failed: bStillInQueue == ( ( pSeg->m_hdr[0] & 0x20 ) == 0 )
 Assertion Failed: bStillInQueue == ( pSeg->m_nOffset + pSeg->m_cbSegSize < pSeg->m_pMsg->m_cbSize )
@@ -1378,6 +1380,7 @@ Assertion Failed: m_bConnectionInitiatedRemotely
 Assertion Failed: m_bCryptKeysValid
 Assertion Failed: m_bGameServer
 Assertion Failed: m_bHaveLowLevelRef
+Assertion Failed: m_bUsedRelayOverride
 Assertion Failed: m_callback.m_fnCallback
 Assertion Failed: m_cbMaxEncryptedPayload >= 0
 Assertion Failed: m_cbSize >= 0
@@ -1493,11 +1496,14 @@ Assertion Failed: m_pMessagesEndPointSessionOwner == nullptr
 Assertion Failed: m_pOut <= m_pMaxOut
 Assertion Failed: m_pOuter && m_method
 Assertion Failed: m_pOuter == pOuter
+Assertion Failed: m_pOwner == nullptr
+Assertion Failed: m_pOwner->m_pPossibleOutOfOrderPacket == this
 Assertion Failed: m_pParentListenSocket == nullptr
 Assertion Failed: m_pParentListenSocket == nullptr || m_pSteamNetworkingSocketsInterface == m_pParentListenSocket->m_pSteamNetworkingSocketsInterface
 Assertion Failed: m_pPartner
 Assertion Failed: m_pPartner->m_pPartner == nullptr
 Assertion Failed: m_pPollGroup && pMsg->m_linksSecondaryQueue.m_pQueue == &m_pPollGroup->m_queueRecvMessages
+Assertion Failed: m_pPossibleOutOfOrderPacket == nullptr
 Assertion Failed: m_pRawSock == nullptr
 Assertion Failed: m_pServer->m_nReplyTimeoutsSinceLastRecv == 0
 Assertion Failed: m_pSignaling == nullptr
@@ -1639,7 +1645,6 @@ Assertion Failed: nFrontPingRemote >= 0 && nFrontPingRemote < 5000
 Assertion Failed: nGap != 0
 Assertion Failed: nGap >= -8 * (int64)sizeof(TLinkStatsTracker::m_recvPktNumberMask)
 Assertion Failed: nGrowSize >= 0
-Assertion Failed: nInteriorPing >= 0
 Assertion Failed: nLanes <= nConfiguredLanes
 Assertion Failed: nLastPktToAck < m_statsEndToEnd.m_nMaxRecvPktNum || usecWhenRecvLastPktToAck == m_statsEndToEnd.m_usecTimeLastRecvSeq
 Assertion Failed: nLastPktToAck <= m_statsEndToEnd.m_nMaxRecvPktNum
@@ -1763,6 +1768,8 @@ Assertion Failed: pMsg->m_linksSecondaryQueue.m_pQueue == nullptr
 Assertion Failed: pMsg->m_linksSecondaryQueue.m_pQueue == pCheckQueue
 Assertion Failed: pMsg->m_nMessageNumber > nLastMsgNumForUnreliable
 Assertion Failed: pMsg->m_pfnFreeData == CSteamNetworkingMessage::DefaultFreeData
+Assertion Failed: pMsgInsertBefore->m_links.m_pQueue == &m_queueRecvMessages
+Assertion Failed: pMsgInsertBefore->m_linksSecondaryQueue.m_pQueue == nullptr
 Assertion Failed: pOldConn->m_identityRemote == identityRemote
 Assertion Failed: pOut == pExpectedOutEnd
 Assertion Failed: pOutDigest
@@ -2726,6 +2733,7 @@ Cert is not authorized for POPID %s, only %s
 Cert is not authorized for POPID %s, only %s (and %d more)
 Cert is not authorized for appid %u, only %u
 Cert is not authorized for appid %u, only %u (and %d more)
+Cert is not restricted by IP address
 Cert is not restricted by POPID, but CA trust chain is, and does not authorize %s
 Cert is not restricted by appid, but CA trust chain is, and does not authorize %u
 Cert isn't a valid PEM-like text block
@@ -2821,7 +2829,7 @@ Content-Type: text/plain
 Control character 0x%02x is illegal in string
 Control message of type %d failed serialization consistency check!  (%d, expected %d)
 Control message of type %d is too big.  (%d bytes; max is %d)
-Could not bind socket %s.
+Could not bind to %s.  %s
 Could not create an instance of
 Could not find type "
 Couldn't parse default value "
@@ -3623,6 +3631,7 @@ INVALID
 INVALID_ARGUMENT
 INVALID_CPPTYPE
 IP
+IP %s not authorized by cert.  (Cert has %d IPs; the first is %s)
 IP Address
 IP Address:%d.%d.%d.%d
 IP Address:<invalid>
@@ -4922,7 +4931,7 @@ Rejecting connection request from %s for unknown virtual port %d
 Relay %s downtime warning adjusted?  %.1f second earlier than before, %d seconds from now
 Relay %s is going offline in %d seconds
 Relay %s sent CMsgSteamDatagramRouterPingReply with extra route info about data center %x, but no ping for that data center?.
-Relay ack was pended for %lld usec, cannot pack delay properly!  usecNow=%llx, timestamp=%llx, usecThen=%llx
+Relay ack was pended for %lld usec, cannot pack delay properly!  [%s] usecNow=%llx, timestamp=%llx, usecThen=%llx
 Relay session bookkeeping bug!  Relay found in listen socket's global list, but not in client!
 Relay session table bookkeeping duplication
 Relay session table bookkeeping missing
@@ -4942,7 +4951,6 @@ ReleaseLast
 ReleaseLast() called on a RepeatedPtrField that is on an arena,
 ReleaseMessage
 Reliable message number lurch.  Last reliable %lld, offset %llu, highest seen %lld
-Reliable message size %d too large for remaining space in message queue.
 Reliable message size %d too large.
 Reliable message size too large.  (%llu<<5 + %d)
 ReliableRTO
@@ -5104,7 +5112,7 @@ SN
 SNILS
 SNMPv2
 SNP data chunk decode overflow, varint for %s
-SNP decode ack latest pktnum %lld (%llx mod %llx), but next outoing packet is %lld (%llx).
+SNP decode ack latest pktnum %lld (%llx mod %llx), but next outoing packet is %lld (%llx)
 SNP decode ack latest pktnum underflow.  %llx mod %llx, next send %llx
 SNP decode first reliable stream pos underflow.  %llx mod %llx, expected next %llx
 SNP decode overrun %d bytes for %s segment data.
@@ -5836,6 +5844,7 @@ ZxF
 [%s] Guessed ICE failure to be %d: %s
 [%s] ICE already failed (%d %s) while changing role to server.  We won't try again.
 [%s] ICE failed %d %s
+[%s] Ignore cert failure (%s)  Connection is not secure.
 [%s] Ignored bad %s.  %s
 [%s] Ignoring ConnectOK.  %s
 [%s] Ignoring ConnectOK.  Remote connection ID changed #%u -> #%u?
@@ -5859,6 +5868,7 @@ ZxF
 [%s] Lost primary session %s %s
 [%s] No relevant changes to SDR routing messsage, revision %d.
 [%s] Not using STUN servers as per P2P_Transport_ICE_Enable
+[%s] Not using TURN servers as per P2P_Transport_ICE_Enable
 [%s] Our cert expires in %d seconds.
 [%s] Outbound symmetric connection (local vport %d, remote vport %d) and matched to incoming connect request remote cxn ID #%u.  You should configure the listen socket in symmetric mode
 [%s] P2P connect request actively rejected by app, sending rejection (%s)
@@ -5880,6 +5890,7 @@ ZxF
 [%s] Received ConnectOK in P2P Rendezvous.
 [%s] Received ConnectOK.
 [%s] Received GameserverSessionEstablished from %s
+[%s] Received Msg %lld out of order.  %d message(s) queued with higher numbers, IDs %lld ... %lld
 [%s] Received NoSession from %s, RelaySessionID=%u.  Discarded relay session (remote conn #%u).  %d session(s) remain to talk to this client
 [%s] Received NoSession from %s, RelaySessionID=%u.  Ignoring, since remote client connection ID #%u is incorrect, correct connection ID is #%u
 [%s] Received P2P routes ack for revision %u (latest revision is %u).
@@ -5903,6 +5914,7 @@ ZxF
 [%s] Reflexive candidates enabled by P2P_Transport_ICE_Enable, but P2P_STUN_ServerList is empty
 [%s] Relay %s acked routing forwarding revision %u.
 [%s] Relay %s acking wrong routing forwarding revision (%u instead of %u); forcing re-ack.
+[%s] Relay candidates enabled by P2P_Transport_ICE_Enable, but P2P_TURN_ServerList is empty
 [%s] Reliable messages can't be send in signals!
 [%s] Remote host is using an unsigned cert.  Allowing connection, but it's not secure!
 [%s] Reply timeout, last recv %.1fms ago.  Sending keepalive.
@@ -5951,10 +5963,12 @@ ZxF
 [%s] Symmetric role resolution for connect request remote cxn ID #%u says we should act as server.  But we are already the server!  Why haven't we transitioned out of connecting state.  Dropping incoming request
 [%s] Symmetric role resolution for connect request remote cxn ID #%u says we should act as server.  But we cannot change our role, since we are already in state %d!  Dropping incoming request
 [%s] Symmetric role resolution for connect request remote cxn ID #%u says we should act as server.  Changing role
+[%s] TURN user/pass list is not same length as address list.  Treating all servers as unauthenticated!
 [%s] Timed out.  %.1fms since last recv, %.1fms since timeout started, %d consecutive failures
 [%s] Timed out.  Cannot send end-to-end.  %.1fms since last recv, %d consecutive failures
 [%s] Unlinking connection in state %d
 [%s] Using STUN server list: %s
+[%s] Using TURN server list: %s
 [%s] Using loopback for P2P connection to local identity %s on %s.  Partner is [%s]
 [%s] We are in state %d and have been waiting %.1fs to be cleaned up.  Did you forget to call CloseConnection()?
 [%s] We have sessions and just received valid end-to-end packet, but we cannot select a session as active?
@@ -7654,6 +7668,7 @@ getgid
 gethostbyname
 gethostbyname addr is not af inet
 getifaddrs
+getifaddrs failed, returning %d
 getifaddrs() failed, returned %d
 getnameinfo
 getpid
@@ -8469,7 +8484,7 @@ length is greater than %ld
 length too long
 length_ >= n
 level_add_node
-lib Dec 13 2022 18:32:12
+lib Jul 13 2023 21:18:10
 lib(%lu)
 libc.so.6
 libm.so.6
@@ -9990,6 +10005,7 @@ tsa untrusted
 tst info setup error
 tt"
 ttt
+turn:
 typ
 type
 type does not match
