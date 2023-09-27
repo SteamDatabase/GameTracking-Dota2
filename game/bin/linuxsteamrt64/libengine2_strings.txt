@@ -323,6 +323,7 @@ $tI
 %s <filename> [path id]: execute an async script and wait for it to finish
 %s <protected>
 %s = %s
+%s = %s was changed between from/to ticks but is missed by CalcDelta (i.e., encoded values are same)
 %s = %zu (%6zu:%6zu)
 %s Build, service overhead %5f ms
 %s ManifestUpdate
@@ -509,8 +510,6 @@ $tI
 )#
 ).  Contact the program author for an update.  If you compiled the program yourself, make sure that your headers are from the same version of Protocol Buffers as your link-time library.  (Version verification failed in "
 *
-*  This server will operate in LAN mode only.  *
-*  Unable to load Steam support library.       *
 * (No VConComm)
 * (No toolframework)
 * ToolFramework.AlwaysRenderAllWindows = %d
@@ -524,7 +523,6 @@ $tI
 ** No active loop **
 *** Map Load Complete
 ***************** ERROR: Cannot call CAppSystemDict::AddSystems without initializing first!
-************************************************
 ***PROTECTED***
 *.sav
 *=
@@ -713,7 +711,6 @@ $tI
 -hideconsole
 -high
 -highdpi
--hushsteam
 -ignoreassertafterminidump
 -in-
 -inf
@@ -919,10 +916,12 @@ $tI
 0 0 0 255
 00000000-0000-0000-0000-000000000000
 0123456789abcdef
+05:04:25
 0: Force z prepass off. 1: Force on. -1: Don't force
 0: Use normals reconstructed from depth. 1: Output correct normals in z prepass.
 0: run all send jobs on main thread; 1: send jobs run asynchronously (except on dedicated server); 2: send jobs asynchronously; 3: send jobs run in parallel but block to not overlap the next tick; 4: main server clients' send jobs run in parallel, then HLTV server jobs; this approximately matches pre-async profile for a single HLTV server configuration
 0=Off, 1=Surface Wireframe, 2=Transparent Wireframe
+0=Off, 1=Visualize trace from camera, 2=Visualize occlusion
 0A
 0x%x,
 1
@@ -960,6 +959,7 @@ $tI
 12CDelayedCallI16CHLTVServerAsyncNS0_13DumpMemCall_tEE
 12CDelayedCallI16CHLTVServerAsyncNS0_20StartBroadcastCall_tEE
 12CDelayedCallI16CHLTVServerAsyncNS0_20StartRecordingCall_tEE
+12CDelayedCallI16CHLTVServerAsyncNS0_22WriteDemoMessageCall_tEE
 12CDelayedCallI16CHLTVServerAsyncNS0_24StartAutoRecordingCall_tEE
 12CDelayedCallI16CHLTVServerAsyncNS0_28PrintBroadcastTVStatusCall_tEE
 12CDelayedCallI16CHLTVServerAsyncNS0_29AppendSpawnGroupMessageCall_tEE
@@ -995,6 +995,7 @@ $tI
 13CDelayedCall2I16CHLTVServerAsyncS0_NS0_13DumpMemCall_tE7empty_tE
 13CDelayedCall2I16CHLTVServerAsyncS0_NS0_20StartBroadcastCall_tE7empty_tE
 13CDelayedCall2I16CHLTVServerAsyncS0_NS0_20StartRecordingCall_tE7empty_tE
+13CDelayedCall2I16CHLTVServerAsyncS0_NS0_22WriteDemoMessageCall_tE7empty_tE
 13CDelayedCall2I16CHLTVServerAsyncS0_NS0_24StartAutoRecordingCall_tE7empty_tE
 13CDelayedCall2I16CHLTVServerAsyncS0_NS0_28PrintBroadcastTVStatusCall_tE7empty_tE
 13CDelayedCall2I16CHLTVServerAsyncS0_NS0_29AppendSpawnGroupMessageCall_tE7empty_tE
@@ -1341,6 +1342,7 @@ $tI
 16CScriptComponent
 16ICommandCallback
 16IDebugVisualizer
+16IDemoMessageSink
 16IGameEventSystem
 16ILoggingListener
 16ILoopModeFactory
@@ -1378,7 +1380,6 @@ $tI
 17IEnginePVSManager
 17IEngineServiceMgr
 17IGameEventWatcher
-18:31:36
 18CBannedUsersFilter
 18CBaseEngineServiceI12IToolServiceE
 18CBaseEngineServiceI13IInputServiceE
@@ -1718,7 +1719,6 @@ $tI
 39CBaseServerSpawnGroupCreatePrerequisite
 39CNetworkServerSpawnGroup_WaitForClients
 3_6?
-3dSkyboxFog
 3dSkyboxWorldOffset
 4
 40CBreakpadPassiveAssertionFailureListener
@@ -1875,6 +1875,7 @@ AVX
 AVX2
 Accepted SourceTV relay proxy from whitelisted IP address: %s
 Accepting P2PSessionRequest_t from %s
+Activate
 ActivateGameUI()
 ActivateMainWindow
 ActivateSteamGameServer(finished)
@@ -1897,6 +1898,7 @@ AddFloat
 AddInt32
 AddInt64
 AddMessage
+AddMultipleToTail
 AddPostDataUpdateCall
 AddRenderSystem
 AddResourceInternal: %s
@@ -1930,7 +1932,6 @@ Allow cheats on server
 Allow clients to use rcon commands on server.
 Allow playback of demo even if game directories are not matched [may crash or fail to load].
 AllowAddonDependencies
-Allows cameraman_override to have effect. When this is set, the primary interactive caster will have all the relevant fields present in all network packets, in every snapshot. This allows the secondary cameraman (-interactivecaster that connects to a tv port) to override those fields some seconds later regardless of whether they changed originally or not.
 Allows the client to playback screenshot and jpeg commands in demos.
 Allows the console to be activated.
 Already recording movie!
@@ -1993,8 +1994,6 @@ Attempted to switch to unknown loop "%s"!
 AudioLanguage
 AudioSubLanguage
 Aug
-Aug 30 2023
-Aug 31 2023
 August
 AutoBugComponent
 AutoBugProduct
@@ -2006,7 +2005,7 @@ Avestan
 B
 BC6H
 BC7
-BCompleted SourceTV demo "%s", recording time %.1f
+BCompleted SourceTV demo "%s", recording time %.1f, size %d (%d per tick)
 BGR565
 BGR888
 BGRA1010102
@@ -2077,7 +2076,6 @@ Bounds ( %f %f %f ) ( %f %f %f )
 Brahmi
 Braille
 Break in debugger when missing resource match is found.Format: cl_break_on_missing_resource <substring> /(empty to break on all) / 0 to turn off.
-Breakpad Signal
 BreakpadAppId_Tools
 Broadcast Player: failed to create demo net channel
 Broadcast backlog of http requests in flight is too high (%d > %d), dropping %d/full and %d/delta.
@@ -2846,11 +2844,11 @@ CStableSymbolTable::GetId(char const*, bool*)
 CStackTop_Base::CStackTop_Base()
 CStackTop_Base::~CStackTop_Base()
 CStatsService
-CSteam3Client::Activate failed!
 CSteam3Client::Activate succeeded.  SteamID is %s (%llu), AppID is %d
 CSteam3Client::OnGameServerChangeRequested:  no password ConVar!!!
 CSteam3Client::Shutdown
 CSteam3ServerS1::ShutdownGameServer
+CSteamAPIContext failed
 CStrAutoEncode::Clear()
 CStrAutoEncode::InitEmpty()
 CStrAutoEncode::SetCopy(char const*, int)
@@ -3244,6 +3242,7 @@ CreateDebuggerWindow
 CreateNewThreadPool
 CreateSimpleThread
 CreateStringTable
+CreateStringTable @%d
 Creating NetChan for user %d '%s' @ %s
 Cs
 Cuneiform
@@ -3281,6 +3280,7 @@ DEFINE
 DEFINE group contains more than one branch
 DEMO
 DEV_BUILD
+DLL load denials: %u, last '%s'
 DO NOT PARSE: fields may be stripped and missing.
 DXT1
 DXT1_ONEBITALPHA
@@ -3302,6 +3302,7 @@ December
 DeclareCurrentThreadIsMainThread
 DecodeClassBaseline
 DecodeClassBaseline: NULL instance baseline table
+DecodeDemoNetMessage Failed to parse spawn group message
 Decrement the timescale by one step
 Dedicated Server
 Dedicated server frame rate limiter. 0=tick rate. Only applies to the dedicated server.
@@ -3324,7 +3325,6 @@ Demo %s finished
 Demo contents for %s:
 Demo fast skipping disabled. Fullpackets_version != DEMOFILE_FULLPACKETS_VERSION. (%d != %d)
 Demo paused at server tick %i
-Demo playback finished ( %.1f seconds, %i render frames, %.2f fps).
 Demo recorded for game '%s', current game is '%s' [demo_allow_game_mismatch = %d]
 Demo recorded with '%s' addons, currently have '%s' addons.
 Demo recording custom data for unregistered callback.
@@ -3373,7 +3373,6 @@ Done. Perf stats saved to %s File log saved to %s
 Double registration of demo custom data callback.
 Double-save to Member '%s'
 Draw alien blood
-Draw clusters in a sphere of radius around the camera
 Draw human blood
 Driver %s (vendorid %x, deviceid %x DXSupport Level %d)
 Driver version below recommended version. Required: %d.%02d Got: %d.%02d
@@ -3463,6 +3462,7 @@ Engine2
 Engine2/AllowKeyChordBindings
 Engine2/AllowSaveGamesInMultiplayer
 Engine2/DefensiveConCommands
+Engine2/InitFilterTextEarly
 Engine2/MinimumDriverVersions
 Engine2/NoResetInputOnGameOverlay
 Engine2/PauseSinglePlayerOnGameOverlay
@@ -3523,7 +3523,6 @@ Error reporting not implemented.
 Error text not found (please report)
 Error trying to register a handler for an unknown game event type!
 Error while parsing option value for "
-Error writing offline user config file '%s'
 Error writing user config file '%s'
 Error: Unable to process input keybinding %s
 Escape key allowed to hide game UI
@@ -3748,6 +3747,7 @@ Failed to find "VTPause()" in "vtuneapi.dll".
 Failed to find "VTResume()" in "vtuneapi.dll".
 Failed to get requested UGC id %llu. Result %d
 Failed to init steam in anonymous mode?
+Failed to initialize Steamworks SDK for gameserver.  %s
 Failed to initialize video!
 Failed to load %s, which is the default rendersystem and should not fail to load. Please verify the game install in Steam.
 Failed to load %s. Your launch options or video config may be incorrect or out-of-date.  Falling back to the default rendersystem %s.
@@ -3762,8 +3762,10 @@ Failed to parse imported ConVar '%s' from string '%s'
 Failed to parse input ConVar '%s' from string '%s'
 Failed to parse network ConVar '%s' from string '%s'
 Failed to read demo header on '%s'.
+Failed to read file %s, configFileType %d, nSlot %d
 Failed to save unsupported class
 Failed to serialize KV3 to JSON.  %s
+Failed to write file %s, configFileType %d, nSlot %d
 False
 FastHexToBuffer() wants non-negative integers, not
 FatalErrorThreadProc
@@ -4050,6 +4052,7 @@ Header "%s": %s
 Heap is corrupt
 Heap-like bytes:         %s
 Hebrew
+Hello world!
 HelpSystem_001
 Hex and octal numbers must be integers.
 Hide the console.
@@ -4090,7 +4093,6 @@ IA88
 ID filter list has %i entries
 ID: %i, "%s" %s, Time %s, %s, In %.1f, Out %.1f.
 IEngineClient::RecordDemoCustomData(): Not recording a demo.
-IHandleEntity
 IMAGE_FORMAT_R11G11B10_FLOAT
 INETSUPPORT_001
 INTERNAL
@@ -4502,7 +4504,7 @@ March
 Marked tick %u in '%s'
 Marker,GPUTimeAvgMS,GPUTimeRangeMS,GPUTimeMinMS,GPUTimeMaxMS
 Marks the current demo playback tick for later use
-Master "%s", delay %.0f
+Master "%s", delay %.0f, frames %d / ticks %d
 Match start status: %u/%u
 MatchSession
 Matchmaking failed; Waiting on %d/%d clients
@@ -4681,10 +4683,12 @@ N15CDemoStreamHttp16CFragmentRequestE
 N16CHLTVServerAsync10CAsyncCallINS_13DumpMemCall_tEEE
 N16CHLTVServerAsync10CAsyncCallINS_20StartBroadcastCall_tEEE
 N16CHLTVServerAsync10CAsyncCallINS_20StartRecordingCall_tEEE
+N16CHLTVServerAsync10CAsyncCallINS_22WriteDemoMessageCall_tEEE
 N16CHLTVServerAsync10CAsyncCallINS_24StartAutoRecordingCall_tEEE
 N16CHLTVServerAsync10CAsyncCallINS_28PrintBroadcastTVStatusCall_tEEE
 N16CHLTVServerAsync12CReverseCallINS_31OnStartedRecordingReverseCall_tEEE
 N16CHLTVServerAsync13CDeferredCallINS_29AppendSpawnGroupMessageCall_tEEE
+N16CHLTVServerAsync22CHLTVDemoRecorderProxyE
 N16CHLTVServerAsync22CSendClientMessagesJobE
 N17CServerSideClient14CSendJob_EmptyE
 N17CServerSideClient16CSendJob_RegularE
@@ -4827,6 +4831,7 @@ N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
 NAK
+NETWORK_DISCONNECT_REJECT to %s: rejected by game rules with code %d
 NETWORK_DISCONNECT_REJECT_SERVERFULL to %s: Cannot get free client
 NETWORK_DISCONNECT_REJECT_SERVERFULL to %s: GetNumClients()[%d] - GetNumFakeClients()[%d] + numSlotsRequested[%d] > m_numGameSlots[%d]
 NETWORK_FIELD_CHANGED_ARRAY_NO_VALUE
@@ -5135,6 +5140,7 @@ Package name is too long
 PackedEntity size=%s includes SerializedEntity size=%s
 Packet Entities has a larger spawn group creation sequence (%u) than we received, discarding, our max is %u
 Packet Entities has a larger spawn group creation sequence (%u) than we received, forcing to max %u
+PacketEntities @%d
 Panorama Anim Update
 Panorama Debugger
 Panorama HUD
@@ -5228,6 +5234,7 @@ Plat_GetDesktopBounds
 Plat_GetDesktopResolution
 Plat_GetEnv
 Plat_GetGameDirectory
+Plat_GetLastDllLoadDenial
 Plat_GetLocalTime
 Plat_GetMasterMobileEventHandler
 Plat_GetMiniDumpErrorString
@@ -5320,7 +5327,6 @@ Player %s reconnecting, disconnecting prior connection
 Playing '%s'
 Playing Broadcast (%s)
 Playing Demo (%s)
-Playing Demo File "%s"
 Playing back demo: '%s' at tick %u
 Playing demo from '%s'.
 Pm
@@ -5702,11 +5708,12 @@ STEAMINVENTORY_INTERFACE_V003
 STEAMMUSICREMOTE_INTERFACE_VERSION001
 STEAMMUSIC_INTERFACE_VERSION001
 STEAMPARENTALSETTINGS_INTERFACE_VERSION001
+STEAMREMOTEPLAY_INTERFACE_VERSION002
 STEAMREMOTESTORAGE_INTERFACE_VERSION016
 STEAMSCREENSHOTS_INTERFACE_VERSION003
-STEAMUGC_INTERFACE_VERSION016
+STEAMUGC_INTERFACE_VERSION018
 STEAMUSERSTATS_INTERFACE_VERSION012
-STEAMVIDEO_INTERFACE_V002
+STEAMVIDEO_INTERFACE_V003
 STEAM_
 STEAM_ID_LAN
 STEAM_ID_PENDING
@@ -5715,6 +5722,7 @@ SUB
 SUNLIGHT/SHADOW ATLAS IN FULL USE HERE.
 SV
 SV:  % 3d %40.40s not resolved
+SV:  %d/%s:  changes %d, expected %d
 SV:  %d/%s:  requested resolve all %d changes, actually resolved only %d changes
 SV:  %i player server started
 SV:  %s
@@ -5729,6 +5737,7 @@ SV:  CNetworkStringTableContainer::WriteBaselines, overflow error writing string
 SV:  CNetworkStringTableContainer::WriteBaselines, overflowed writing uncompressed string table data for %s
 SV:  CSVCMsg_FlattenedSerializer_t overflow.
 SV:  ChangeLevel( "%s", "%s" ) failed, map is not valid
+SV:  Connection to Steam servers successful.
 SV:  Disconnect client '%s' from server(%d): %s
 SV:  Dropped client '%s' from server(%d): %s
 SV:  Forcing client reconnect (%s) for client '%s'
@@ -5760,6 +5769,7 @@ SV:  WriteBaselines:  %d tables required %d bytes
 SV:  WriteClassInfosBuffer overflow.
 SV:  addon='%s'
 SV:  maxplayers set to %i
+SV: CNetworkGameServerBase::WriteDeltaEntity merging changes added in %d additional fields!
 SV: Canceling k_EAuthSessionResponseAuthTicketCanceled for %s because %s.
 SV: Cheat command '%s' ignored.
 SV: Cheat command '%s' ignored. Set sv_cheats to 1 enable cheats.
@@ -5783,9 +5793,8 @@ SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuff
 SaveKV3AsJSON(KeyValues3 const*, CUtlString*, CUtlBuffer*)
 Saved '%s' to SteamRemoteStorage, %d bytes OK
 Saved console spew to %s
-Saved offline user config file '%s'
 Saved screenshot to %s
-Saved user config file '%s'
+Saved user config file '%s': type %d
 Saves current key bindings to disk.
 Saves out the user config values.
 Sc
@@ -5849,6 +5858,7 @@ Sending S2C_CONNECTION to %s [addons:'%s']
 Sending connect to %s
 Sending voice from: %s - playerslot: %d [ xuid %llx ]
 Sep
+Sep 27 2023
 September
 Serialized Async Reads
 SerializedEntitiesVersion001
@@ -6294,9 +6304,10 @@ Steam headless module not loaded
 Steam headless re-logged in OK
 Steam headless reset embedded client token
 Steam headless using stored credential info
+Steam init failed!  %s
+Steam text filtering initialized %s
 SteamAPI_GetHSteamUser
-SteamAPI_Init
-SteamAPI_Init not yet successful.
+SteamAPI_Init failed.  %s
 SteamAPI_Init succeeded.  SteamID is %s (%llu), AppID is %d
 SteamAPI_InitAnonymousUser
 SteamAPI_RegisterCallResult
@@ -6321,16 +6332,22 @@ SteamGameServer_GetHSteamUser
 SteamGameServer_Init() OK, logging on to Steam
 SteamGameServer_RunCallbacks
 SteamGameServer_Shutdown
+SteamInput006
 SteamInternal_ContextInit
 SteamInternal_CreateInterface
 SteamInternal_FindOrCreateGameServerInterface
 SteamInternal_FindOrCreateUserInterface
-SteamInternal_GameServer_Init
+SteamInternal_GameServer_Init_V2
+SteamInternal_SteamAPI_Init
 SteamMatchGameSearch001
 SteamMatchMaking009
 SteamMatchMakingServers002
 SteamNetworking006
 SteamNetworkingIdentity_ToString
+SteamNetworkingMessages002
+SteamNetworkingSockets012
+SteamNetworkingUtils004
+SteamParties002
 SteamRun
 SteamRun failed, error %d
 SteamServersDisconnected
@@ -6344,7 +6361,6 @@ Stop recording movie frames.
 Stopping.
 Stops SourceTV demo recording.
 Stops the SourceTV broadcast.
-StoreDemoSpawnGroupMessage Failed to parse spawn group message
 StrReplaceChar
 Stream Re-sync @%d...
 String Command
@@ -6392,7 +6408,6 @@ TGAWriter: Failed to serialize screenshot pixels (%d x %d, %s).
 THEN
 TLS init function for
 TLS wrapper function for
-TODO demo file name
 TRUE
 Tagalog
 Tagbanwa
@@ -6439,6 +6454,7 @@ This ZeroCopyOutputStream doesn't support aliasing. Reaching here usually means 
 This can't happen; base64 decoder state =
 This convar is being accessed prior to ConVar_Register being called
 This device does not meet the minimum requirements. The game requires at least %s of device memory to run reliably, you may not be able to complete a game on this device.The device appears to have %s of memory.
+This fixes bugs where pure calcdelta is used due to recipient changing but it doesn't pick up a field change where the value was changed back to same value as the from snapshot even though the destination fields change list does note the change. Set to 2 to spew any changes merged in by this fix.
 This is a fade of current voices that is called when the game is disconnected. -1.f for no fade on disconnect
 This is a test of the emergency broadcast system.
 This number of relay client connections are reserved for SourceTV relays.
@@ -6449,6 +6465,7 @@ This shouldn't be called if all the sizes are equal.
 This soundevent is called to stop the desired soundevents when the game is disconnected.
 ThreadGetCurrentId
 ThreadGetCurrentProcessHandle
+ThreadGetMainThreadId
 ThreadGetProcessPriority
 ThreadInMainThread
 ThreadNanoSleep
@@ -6624,12 +6641,12 @@ Unsupported color conversion request
 Unsupported marker type 0x%02x
 Unsupported: type mismatch
 Update self-referencing, connection dropped.
+UpdateStringTable @%d
 Uptime( %f )Total frames( %llu )
 Usage %s classname
 Usage %s substring
 Usage:   load [save file name]
 Usage:  %s <cluster # |-1>
-Usage:  %s <radius>
 Usage:  %s <soundresource>
 Usage:  %s <tablename | all> <sv | cl> <verbose | simple> <element>
 Usage:  addip < minutes > < ipaddress >Use 0 minutes for permanent
@@ -6778,7 +6795,6 @@ V_UnqualifiedFileName
 V_acosf
 V_asinf
 V_atan2f
-V_atof
 V_atofloat32
 V_atoi
 V_atoui64
@@ -6840,7 +6856,6 @@ VerifyTest() vanilla result = Pass
 VersionDate
 VersionTime
 Virtual array controller messed up
-Vis debug sphere at %.3f, %.3f, %.3f
 VisBuilder_001
 Visibility %s.
 Voice
@@ -6881,6 +6896,7 @@ When enabled, this allows for entity packing to use the property changes for bui
 When enabled, this will collect all information for relay sending into a single datagram to ensure that the data stays together through a potentially large number of relays
 When enabled, this will use a uniquely generated server code to authenticate relay connections. This code is coordinated via the GC or some external means rather than by clients directly
 When enabled, this will use a uniquely generated server code to authenticate relay to relay connections. This code is coordinated via the GC or some external means rather than by clients directly
+When r_low_latency is enabled, this moves the low latency sleep on tick frames to happen after client simulation.
 When receiving packets out of sequence, wait this many seconds for missing sequences to arrive
 When the client is catching up in low frame rate situations, should we run client simulate more than once a frame?
 When the client is catching up in low frame rate situations, should we run tick more than once a frame?
@@ -6986,7 +7002,9 @@ Zs
 [mirror]
 [packed = true] can only be specified for repeated primitive fields.
 [player %d]: Key "%s" is not bound.
+[scratch]
 [server]
+[test]
 [unknown]
 \
 \ at end of pattern
@@ -7255,6 +7273,7 @@ _class
 _edata
 _end
 _filelog
+_lastclouded
 _record <demoname>
 _root_keyname
 _spawngroup_logging/log_%s_group_%s.txt
@@ -7326,7 +7345,6 @@ asyncwrite
 at current version
 atan2
 attrib
-auth succeeded
 auto
 auto-%04i%02i%02i-%02i%02i-%s-%s.dem
 auto:
@@ -7602,7 +7620,6 @@ clamp
 class %s - %s instance%s (%.2f%%)
 clear deallocate
 clearColor
-clearTargets
 clearall
 clearalpha
 clerp
@@ -7644,6 +7661,7 @@ con_logfile_suffix
 conditional group contains more than two branches
 condump
 condump%03d.txt
+configconflictresolutiondialog
 conflicts with an existing enum type.
 conflicts with an existing field.
 conflicts with an existing nested message type.
@@ -7817,6 +7835,7 @@ engine_allow_multiple_ticks_per_frame
 engine_client_tick_pad_enable
 engine_cpu_info_extended
 engine_gcmessages.proto
+engine_low_latency_sleep_after_client_tick
 engine_max_resource_system_update_time
 engine_no_focus_sleep
 engine_no_focus_sleep_vconsole_suppress
@@ -7873,6 +7892,7 @@ fWeightSumTop > 0.0f
 failed to get memory
 failed!
 fakeView
+fake_test_config
 false
 fcntl
 fdopen
@@ -8178,7 +8198,7 @@ hltv_update_stats
 hltvbroadcast.cpp
 hltvclientstate.cpp
 hltvdemo.cpp
-hltvserver_async.cpp:965
+hltvserver_async.cpp:1026
 host.cpp
 host_force_frametime_to_equal_tick_interval
 host_force_max_frametime_to_tick_interval
@@ -8587,6 +8607,7 @@ mat_luxels
 mat_max_lighting_complexity
 mat_overdraw
 mat_shading_complexity
+mat_show_distance_field
 mat_wireframe
 materials
 materials/console_background.vmat
@@ -8838,7 +8859,6 @@ playdemo %s
 playdemo <demoname> [
 player
 player0_using_joystick
-playerIndex
 playercount
 playerlist
 players  : %i humans, %i bots (%i max) (%s) (%s)
@@ -9031,8 +9051,10 @@ removeip:  filter removed for %s
 removeip:  filter removed for %s, IP %s
 removeip:  invalid slot %i
 removeip: "<><><>" was unbanned by "%s" (IP "%s")
+renderDecals
 renderReflectiveObjects
 renderSSAO
+renderSky
 renderSun
 renderTime
 renderToTexture
@@ -9166,6 +9188,8 @@ shot_
 show frame dispatch names.
 show usercmd payload sizing info for packets with more than this many usercmds
 showDebugRenderTarget
+showDistanceField
+showLPVVoxels
 showLightmapTexels
 showQuadOverdraw
 showShadingComplexity
@@ -9221,6 +9245,7 @@ spec_replay_on_death
 spec_replay_rate_base
 spec_replay_rate_limit
 splitscreen_mode
+splitscreen_testreadconfigconflict
 splitter
 sqr
 sqrt
@@ -12231,6 +12256,7 @@ subpattern name expected
 subpattern name is too long (maximum 32 characters)
 subtype mismatch
 success
+successfully
 support for \P, \p, and \X has not been compiled
 sv_alternatebaselinemgr.cpp
 sv_alternateticks
@@ -12270,6 +12296,7 @@ sv_maxclientframes
 sv_maxrate
 sv_maxreplay
 sv_memlimit
+sv_merge_changes_after_tick_with_calcdelta
 sv_metaduplication
 sv_minrate
 sv_mmqueue_reservation
@@ -12278,8 +12305,8 @@ sv_mmqueue_reservation_timeout
 sv_networkvar_perfieldtracking
 sv_networkvar_validate
 sv_packedentities.cpp
-sv_packedentities.cpp:1015
-sv_packedentities.cpp:1035
+sv_packedentities.cpp:1017
+sv_packedentities.cpp:997
 sv_packstats
 sv_parallel_packentities
 sv_parallel_sendsnapshot
@@ -12314,6 +12341,7 @@ sv_snapshot_unlimited
 sv_spewmeta
 sv_spewworldgroups
 sv_stats
+sv_steamauth.cpp
 sv_steamgroup
 sv_steamgroup_exclusive
 sv_stressbots
@@ -12434,7 +12462,6 @@ tried to sprint to a non-client
 trivial
 turn on sse4.2 optimizations in the engine
 tv_advertise_watchable
-tv_allow_camera_man_override
 tv_autorecord
 tv_autoretry
 tv_broadcast
@@ -12492,6 +12519,8 @@ tv_port
 tv_port1
 tv_rate_multiplier
 tv_record
+tv_record starting the moment tv_record was executed, not tv_delay earlier
+tv_record_immediate
 tv_relay
 tv_relay %s
 tv_relay_hard_shutdown
@@ -13231,7 +13260,6 @@ vis_debug_lock
 vis_debug_record_start
 vis_debug_record_stop
 vis_debug_show
-vis_debug_sphere
 vis_debug_sunclusters
 vis_debug_tracelos
 vis_enable
@@ -13556,6 +13584,7 @@ wild scan
 with %d x %d thumbnail image
 with a type that does not implement MergeFrom. This is unsafe;
 with bitrate=%dMbps
+with error
 wmemchr
 wmemcmp
 wmemcpy
@@ -13604,5 +13633,6 @@ zero
 }::
 ~
 ~CServerChangelevelState with non empty m_Clients, failed change level to %s!!!
+~CSteam3ServerS1 is active at destruction - must be shut down properly in the main server shutdown sequence
 
 C

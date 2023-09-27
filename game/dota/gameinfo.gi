@@ -226,12 +226,6 @@
 		"EnvMapBake"	"Dota"
 	}
 	
-	AnimationSystem
-	{
-		NumDecodeCaches "16"
-		DecodeCacheMemoryKB "512"
-	}
-
 	Particles
 	{
 		"GameSupportsLegacyShaders"			"1"

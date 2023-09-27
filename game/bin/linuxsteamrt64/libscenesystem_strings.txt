@@ -482,7 +482,7 @@ $tI
 +=
 ,
 , %d depth-only alpha-tested
-, %s agg [%s fragments, %s meshlets]
+, %s agg [%s fragments (%s merged draws), %s meshlets]
 , but was
 , from:
 , lo=
@@ -727,6 +727,7 @@ $tI
 20ISceneObjectDescBaseI28CBindlessFastPathSceneObjectE
 20ISceneObjectDescBaseI28CSceneLightProbeVolumeObjectE
 20ISceneObjectDescBaseI33CAmbientOcclusionProxySceneObjectE
+20ISceneObjectDescBaseI33CDistanceFieldInstanceSceneObjectE
 20ISceneObjectDescBaseIN23CCharacterDecalRenderer26CCharacterDecalSceneObjectEE
 21
 21CAggregateSceneObject
@@ -818,6 +819,7 @@ $tI
 32CSVCMsg_GameSessionConfiguration
 33
 33CAmbientOcclusionProxySceneObject
+33CDistanceFieldInstanceSceneObject
 33CNETMsg_SpawnGroup_ManifestUpdate
 34CNETMsg_SpawnGroup_SetCreationTick
 34CSimplePostProcessingLayerRenderer
@@ -826,6 +828,7 @@ $tI
 35CSceneLPVSampleGridObjectDescriptor
 36
 37CAmbientOcclusionProxySceneObjectDesc
+37CDistanceFieldInstanceSceneObjectDesc
 38
 38IMaxSwapChainDimensionsChangedListener
 39
@@ -1018,12 +1021,12 @@ $tI
 ???
 ?position
 @
+@<unknown>
 @@
 @@regex_error
 @A
 @B
 @DE
-@Overrides the map's fog settings (-1 populates fog_ vars with map's values)
 @j@
 A
 A Rather Long Title
@@ -1366,6 +1369,7 @@ CClutterSceneObject
 CDebugLayerRenderer::ShowRenderTargets GetMode("Default") == NULL? Can't Render with material %s!
 CDebugTextObjectDesc
 CDirectionalLightObjectDescGpu
+CDistanceFieldInstanceSceneObjectDesc
 CET
 CEnvMapLightObjectDesc
 CEnvMapLightObjectDescCPU
@@ -1829,6 +1833,9 @@ CVProfNode::EnterScope()
 CVProfNode::ExitScope()
 CVProfNode::GetSubNode(char const*, int, char const*, int)
 Cache: %.1f MB
+Cached Fog Shadow
+CachedShadowDepthBuffer
+CachedShadowDepthBufferNoCmp
 Call set methods to initialize MapKey.
 Callback %p, user_data %p
 Caller should provide us with *buffer_ when buffer is non-empty
@@ -2189,6 +2196,7 @@ Display all characters as '*'.Disable clipboard cut and copy.Disable logging.
 Display headers
 DisplaySafeAreaPadding
 Distance to cull the AO proxy as a factor of size
+DistanceFieldAtlas.vtex
 Division or mod by zero: dividend.hi=
 Dn
 DoNotCastShadows
@@ -2307,6 +2315,7 @@ EndMarker
 EndTimestamp
 Engine2/RenderingPipeline
 Engine2/RenderingPipeline/AmbientOcclusionProxies
+Engine2/RenderingPipeline/DistanceField
 Engine2/RenderingPipeline/OpaqueFade
 Engine2/RenderingPipeline/ShadowDepthCullFront
 EngineServiceMgr001
@@ -2511,6 +2520,7 @@ FontManager_001
 Fonts##Selector
 For envmaps in low quality shader mode, how much of the fade region to scale the envmap box by.
 Force respect TTL even when clearing scopes
+ForceEnableShadowCasting
 ForceFullResolve
 Forces all ray traced geometry to use default hit shaders instead of specialized ones.
 Forward
@@ -2636,7 +2646,6 @@ Gradient
 Gradients
 Grapefruit
 Grid Lines
-Group
 Groups are not supported in proto3 syntax.
 Grow
 H
@@ -3024,7 +3033,6 @@ LC_TELEPHONE
 LC_TIME
 LDR histogram (Exposure Scaled HDR & Filmic Tonemapped)
 LEVERAGEBUZZWORD
-LIGHTBINNER
 LINEAR_D24S8
 LLLLLLL
 LOG_GENERAL
@@ -3057,6 +3065,7 @@ Light Bounds Debugger
 Light Cookies
 LightBinnerCullingData_t
 LightCookieTexture
+LightGroup
 LightProbeVolumeDebugColors
 LightProbeVolumeDebugColors_%s
 LightProbeVolumeDesc
@@ -3221,6 +3230,7 @@ Meshbuilder2
 Meshbuilder2IndexData
 Meshbuilder2VertexData
 Meshes: %d
+MeshletData
 MeshletIndexCopyLoops
 Message class "
 Message does not support reflection (type
@@ -3602,6 +3612,7 @@ Non-repeated Any specified multiple times.
 Non-repeated field "
 None
 Normal buttons
+NormalAccumVB
 Normalize
 North
 Not Available
@@ -4327,8 +4338,6 @@ Shaded Plots##
 Shadow Atlas Debugger
 ShadowAtlasHeight
 ShadowAtlasWidth
-ShadowDepthBuffer
-ShadowDepthBufferNoCmp
 Short Text
 Should not reach here.
 Show
@@ -4385,7 +4394,6 @@ Sizes
 Sizing Policy
 Sizing policies
 Sizing:
-SkeletalInputSettings
 SkinnedObject
 SkinningCS_Dispatch
 SkyAmbientBounce
@@ -4684,6 +4692,7 @@ Tailor
 TangentSpaceOffset
 Target RowBg0 to override the alternating odd/even colors,Target RowBg1 to blend with them.
 Tell debugoverlay to not draw any entries that have aged out by the time of rendering. Useful if sim runs more often than rendering.
+TempBufferStartIndex
 Template view factory "%s" was registered twice!
 Test of different widgets react and impact the work rectangle growing when horizontal scrolling is enabled.Use 'Metrics->Tools->Show windows rectangles' to visualize rectangles.
 Test paragraph %d:
@@ -5048,6 +5057,7 @@ Vector2f
 Vert:
 VertCount
 Vertex Shader Invocations - the number of primitives (triangles) that were executed in the vetex shader stage.
+VertexCacheVB
 VertexColorUVPos_t
 VertexElementAnnotation
 VertexGenericIntegerData
@@ -5254,7 +5264,6 @@ Zero-area light
 ^
 ^$\.*+?()[]{}|
 ^=
-_
 _Accum
 _BindlessFastCB_PS_t
 _BindlessFastCB_VS_t
@@ -5566,6 +5575,7 @@ ao_proxy_capsule_list
 apostrophe
 args were given.  Full format string was: "
 arguments.
+asbounce
 asterisk
 atan
 auto
@@ -5689,7 +5699,6 @@ bool std::has_facet<std::time_put<char, std::ostreambuf_iterator<char, std::char
 bool std::has_facet<std::time_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t> > > >(std::locale const&)
 bool8
 boolean
-bounce
 bounce_scale
 btowc
 byte
@@ -5761,6 +5770,7 @@ const google::protobuf::internal::ExtensionSet::KeyValue* google::protobuf::inte
 const string& google::protobuf::UnknownField::length_delimited() const
 const_cast
 construction vtable for
+contactshadow
 contains invalid UTF-8 data when
 copy_rt
 covariant return thunk to
@@ -6178,6 +6188,7 @@ illum
 illumfrustum
 illumination_volume
 imGUI detached window
+imgui
 imgui_atlas
 imgui_log.txt
 imgui_render.cpp
@@ -6475,6 +6486,7 @@ materials/deferred_lights/spotlight_shadowed.vmat
 materials/deferred_lights/sunlight.vmat
 materials/dev/aoproxy_splat.vmat
 materials/dev/compute_depthbin_cullbits.vmat
+materials/dev/compute_smooth_normals_cs.vmat
 materials/dev/compute_tile_cullbits.vmat
 materials/dev/cs_parallel_sort.vmat
 materials/dev/cs_volumetric_fog.vmat
@@ -6542,6 +6554,7 @@ min scale:%.2f (%.1f stops)
 min, max scale: min/max exposure scale clamps, set using min/max exposure brightnessin post_processing_volume entity or mat_tonemap_force_min/max.
 min_row_height = %.2f
 mindate
+minroughness
 mintime
 mktime
 ml
@@ -6663,6 +6676,7 @@ pow
 preserveColorBuffers
 prev layer not found
 previewbaked
+previewindexed
 print
 proto2
 proto3
@@ -6725,6 +6739,7 @@ r_shadows
 r_size_cull_threshold_fade
 r_size_cull_threshold_shadow
 r_skinning_enabled
+r_smooth_morph_normals
 r_ssao_bias
 r_ssao_blur
 r_ssao_radius
@@ -6801,6 +6816,7 @@ rtx_random_samples.vtex
 s
 sP
 sZ
+sc_aggregate_fragment_merging
 sc_aggregate_gpu_culling
 sc_aggregate_gpu_culling_conservative_bounds
 sc_aggregate_gpu_culling_show_culled
@@ -6896,8 +6912,8 @@ scenesysDodecahedron
 scenesysPyramid
 scenesystem
 scenesystem.cpp
-scenesystem.cpp(5878): Expecting 1 renderable pass for material "%s" but found %d!
-scenesystem.cpp:3667
+scenesystem.cpp(5892): Expecting 1 renderable pass for material "%s" but found %d!
+scenesystem.cpp:3680
 scenesystemdebug
 scenesysteminstancedata
 scenesystemtransformdata
@@ -6981,6 +6997,7 @@ slider u64 reverse
 slider u8 full
 slider u8 reverse
 small
+smoothnormalsscratchbuffer
 some more text
 soundevent
 sphere radius (world) for LPV debug grid

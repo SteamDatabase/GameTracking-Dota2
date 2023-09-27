@@ -336,7 +336,7 @@ message CMsgDOTADPCTeamFavoriteRankings {
 	repeated .CMsgDOTADPCTeamFavoriteRankings.Team teams = 1;
 }
 
-message CMsgDotaFantasyCraftingUserData {
+message CMsgDotaFantasyCraftingTabletPeriodData {
 	message Gem {
 		optional .Fantasy_Gem_Type type = 1 [default = FANTASY_GEM_TYPE_RUBY];
 		optional uint32 slot = 2;
@@ -352,20 +352,61 @@ message CMsgDotaFantasyCraftingUserData {
 		optional uint32 account_id = 4;
 		optional uint32 prefix = 5;
 		optional uint32 suffix = 6;
-		repeated .CMsgDotaFantasyCraftingUserData.Gem gems = 7;
+		repeated .CMsgDotaFantasyCraftingTabletPeriodData.Gem gems = 7;
+		optional float score = 8;
+		optional uint32 best_series = 9;
 	}
 
-	repeated .CMsgDotaFantasyCraftingUserData.Tablet tablets = 1;
-	repeated uint32 available_rolls = 2;
-	optional uint32 roll_tokens = 3;
+	optional uint32 fantasy_period = 1 [default = 4294967295];
+	repeated .CMsgDotaFantasyCraftingTabletPeriodData.Tablet tablets = 2;
 }
 
-message CMsgClientToGCFantasyCraftingGetUserData {
+message CMsgDotaFantasyCraftingTabletData {
+	message TabletPeriodDataEntry {
+		optional uint32 key = 1;
+		optional .CMsgDotaFantasyCraftingTabletPeriodData value = 2;
+	}
+
+	repeated .CMsgDotaFantasyCraftingTabletData.TabletPeriodDataEntry tablet_period_data = 1;
+}
+
+message CMsgDotaFantasyCraftingUserData {
+	message PeriodScore {
+		optional float total_score = 1;
+		optional float percentile = 2;
+	}
+
+	message PeriodRollTokensEntry {
+		optional uint32 key = 1;
+		optional uint32 value = 2;
+	}
+
+	message PeriodScoresEntry {
+		optional uint32 key = 1;
+		optional .CMsgDotaFantasyCraftingUserData.PeriodScore value = 2;
+	}
+
+	repeated uint32 available_rolls = 1;
+	repeated .CMsgDotaFantasyCraftingUserData.PeriodRollTokensEntry period_roll_tokens = 2;
+	repeated .CMsgDotaFantasyCraftingUserData.PeriodScoresEntry period_scores = 3;
+}
+
+message CMsgDotaFantasyCraftingDataCache {
+	message CacheEntry {
+		optional uint32 account_id = 1;
+		optional uint32 fantasy_league = 2;
+		optional .CMsgGCToClientFantasyCraftingDataUpdated cache_data = 3;
+	}
+
+	repeated .CMsgDotaFantasyCraftingDataCache.CacheEntry cache_entries = 1;
+}
+
+message CMsgClientToGCFantasyCraftingGetData {
 	optional uint32 fantasy_league = 1;
 	optional uint32 account_id = 2;
 }
 
-message CMsgClientToGCFantasyCraftingGetUserDataResponse {
+message CMsgClientToGCFantasyCraftingGetDataResponse {
 	enum EResponse {
 		k_eInternalError = 0;
 		k_eSuccess = 1;
@@ -375,8 +416,9 @@ message CMsgClientToGCFantasyCraftingGetUserDataResponse {
 		k_eInvalidLeague = 5;
 	}
 
-	optional .CMsgClientToGCFantasyCraftingGetUserDataResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgClientToGCFantasyCraftingGetDataResponse.EResponse response = 1 [default = k_eInternalError];
 	optional .CMsgDotaFantasyCraftingUserData user_data = 2;
+	optional .CMsgDotaFantasyCraftingTabletData tablet_data = 4;
 }
 
 message CMsgClientToGCFantasyCraftingPerformOperation {
@@ -405,6 +447,9 @@ message CMsgClientToGCFantasyCraftingPerformOperationResponse {
 
 	optional .CMsgClientToGCFantasyCraftingPerformOperationResponse.EResponse response = 1 [default = k_eInternalError];
 	optional uint32 operation_id = 2;
+	optional uint32 tablet_id = 7;
+	optional .CMsgDotaFantasyCraftingUserData user_data = 8;
+	optional .CMsgDotaFantasyCraftingTabletData tablet_data = 9;
 	repeated uint32 player_choices = 3;
 	repeated uint32 prefix_choices = 4;
 	repeated uint32 suffix_choices = 5;
@@ -414,13 +459,15 @@ message CMsgClientToGCFantasyCraftingPerformOperationResponse {
 message CMsgGCToClientFantasyCraftingDataUpdated {
 	optional uint32 fantasy_league = 1;
 	optional .CMsgDotaFantasyCraftingUserData user_data = 2;
+	optional .CMsgDotaFantasyCraftingTabletData tablet_data = 4;
 }
 
 message CMsgClientToGCFantasyCraftingDevModifyTablet {
 	optional uint32 fantasy_league = 1;
 	optional bool reset_tablet = 2;
 	optional uint32 modify_tokens = 3;
-	optional uint32 tablet_level = 4;
+	optional bool upgrade_tablets = 6;
+	optional uint32 fantasy_period = 5 [default = 4294967295];
 }
 
 message CMsgClientToGCFantasyCraftingDevModifyTabletResponse {
@@ -434,4 +481,84 @@ message CMsgClientToGCFantasyCraftingDevModifyTabletResponse {
 	}
 
 	optional .CMsgClientToGCFantasyCraftingDevModifyTabletResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgDotaFantasyCraftingUserData user_data = 2;
+	optional .CMsgDotaFantasyCraftingTabletData tablet_data = 3;
+}
+
+message CMsgClientToGCFantasyCraftingSelectPlayer {
+	optional uint32 fantasy_league = 1;
+	optional uint32 account_id = 2;
+}
+
+message CMsgClientToGCFantasyCraftingSelectPlayerResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalidLeague = 5;
+		k_eInvalidPlayer = 6;
+	}
+
+	optional .CMsgClientToGCFantasyCraftingSelectPlayerResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgDotaFantasyCraftingTabletData tablet_data = 2;
+}
+
+message CMsgClientToGCFantasyCraftingGenerateTablets {
+	optional uint32 fantasy_league = 1;
+	repeated uint32 account_ids = 2;
+}
+
+message CMsgClientToGCFantasyCraftingGenerateTabletsResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalidLeague = 5;
+		k_eInvalidPlayer = 6;
+	}
+
+	optional .CMsgClientToGCFantasyCraftingGenerateTabletsResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgDotaFantasyCraftingUserData user_data = 2;
+	optional .CMsgDotaFantasyCraftingTabletData tablet_data = 3;
+}
+
+message CMsgClientToGcFantasyCraftingUpgradeTablets {
+	optional uint32 fantasy_league = 1;
+}
+
+message CMsgClientToGcFantasyCraftingUpgradeTabletsResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalidLeague = 5;
+	}
+
+	optional .CMsgClientToGcFantasyCraftingUpgradeTabletsResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgDotaFantasyCraftingTabletData tablet_data = 3;
+}
+
+message CMsgClientToGCFantasyCraftingRerollOptions {
+	optional uint32 fantasy_league = 1;
+}
+
+message CMsgClientToGCFantasyCraftingRerollOptionsResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalidLeague = 5;
+		k_eInsufficientTokens = 6;
+	}
+
+	optional .CMsgClientToGCFantasyCraftingRerollOptionsResponse.EResponse response = 1 [default = k_eInternalError];
+	optional .CMsgDotaFantasyCraftingUserData user_data = 2;
 }

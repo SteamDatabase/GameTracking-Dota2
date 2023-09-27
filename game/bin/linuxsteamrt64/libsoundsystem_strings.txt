@@ -17,6 +17,7 @@ $toolgraphs
 %*sOperator Stack: %s%*sSize: %i%*sDepend: %i
 %*sSoundEvent Hash: %d
 %*smixgroup: %s
+%.1f / %.1f
 %1
 %2
 %3
@@ -25,6 +26,7 @@ $toolgraphs
 %=
 %d %d %d %d
 %d %s %s
+%d channels, %d bits per sample, %d Hz
 %d) %s
 %d) %s %s -> %s
 %d: %s (%08lx :: %08lx) %s [%.1fs]
@@ -724,6 +726,7 @@ Audio Occlusion: No occlusion for path from %0.1f,%0.1f,%0.1f to %0.1f,%0.1f,%0.
 Audio Occlusion: No walls found, no occlusion
 Audio Occlusion: Occluded by audio blocker with occlusion value %.2f
 Audio Occlusion: occlusion factor %.2f based on direct path; indirect ratio of %.2f based on finding %.2f paths lerped between %.2f and %.2f
+Audio Occlusion: occlusion factor %.2f based on direct path; indirect ratio of %.2f based on pathing
 Audio Occlusion: occlusion factor overridden to %.2f
 Audio Occlusion: path from %0.1f,%0.1f,%0.1f to %0.1f,%0.1f,%0.1f encountered one wall. surface = %s (occlusion = %0.2f), thickness = %.2f
 Audio device starved %d samples
@@ -782,6 +785,7 @@ CONTENT
 CRawAllocator::Alloc(RawAllocatorType_t, unsigned long, unsigned long*)
 CRawAllocator::Free(RawAllocatorType_t, void*, unsigned long)
 CSequence: %s
+CSosGroupActionLimitSchema
 CSosGroupActionSchema
 CSosGroupActionSetSoundeventParameterSchema
 CSosGroupActionTimeLimitSchema
@@ -924,7 +928,6 @@ CUtlSymbolTable::SaveToBuffer(CUtlBuffer&) const
 CUtlSymbolTable::SetPageSize(unsigned int)
 CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
-CUtlVector
 CVProfNode::EnterScope()
 CVProfNode::ExitScope()
 CVProfNode::GetSubNode(char const*, int, char const*, int)
@@ -933,7 +936,6 @@ CVSoundStackScriptTypeManager::Allocate can't parse stack %s
 CVSoundStackScriptTypeManager::Allocate can't parse stack KV %s
 CVSoundStackScriptTypeManager::Allocate stack with empty name
 Can't find mix layer %s
-Can't find mixgroup name %s for submix
 Can't find sound event to remove for %s!
 Can't parse mp3 encoding %u
 Can't read from type %d for field %s
@@ -1049,9 +1051,7 @@ Element Count: %i
 Enable SIMD code path for diffusor processor.
 Enable SIMD code path for shoebox reverb processor.
 Enable Steam Audio Reverb processor.
-Enable path visualization for calc_distance operator.
 Enable path visualization for steam_audio_source operator.
-Enable real-time pathin validation against dynamic geometry.
 Enable real-time pathing validation against dynamic geometry.
 Engine client not found.
 EngineServiceMgr001
@@ -1189,7 +1189,6 @@ GetSoundEventStackHash: unable to get event by name %s
 GetSoundEventStackName: unable to get event by hash %i
 GetSoundEventUpdateGroups: unable to get event by hash %i
 GetVSndNameForSoundEvent( %s ) missing
-Global flag to disable pathing for calc_distance operator.
 Graphs
 Group Index: %i does not reference a valid group.
 Group Name
@@ -1386,7 +1385,6 @@ Modulation Depth
 Modulation Frequency
 Music volume
 N10__cxxabiv115__forced_unwindE
-N10__cxxabiv117__class_type_infoE
 N10__cxxabiv119__foreign_exceptionE
 N10__cxxabiv120__si_class_type_infoE
 N10__cxxabiv121__vmi_class_type_infoE
@@ -1784,7 +1782,6 @@ Stop Type
 Stop a note from a specified sampler
 Stop sound event: %s
 StopTime: %f
-Stopped voice %d, graph reloaded
 Stopping All Sounds...
 Stops a specified soundevent
 Stops all currently playing sequences
@@ -1920,6 +1917,7 @@ VMixDiffusorDesc_t
 VMixDynamics3BandDesc_t
 VMixDynamicsCompressorDesc_t
 VMixDynamicsDesc_t
+VMixEQ8Desc_t
 VMixEditTool001
 VMixEffectChainDesc_t
 VMixEnvelopeDesc_t
@@ -2093,9 +2091,9 @@ WorldRendererMgr001
 XC
 Y@vmix_apply_effect
 Yes
-ZN20CLibStackFieldsQueue20SetLibraryStackFieldEjjRK13CSosFieldDataiEUlvE_
+ZN20CLibStackFieldsQueue20SetLibraryStackFieldEj15CUtlStringTokenRK13CSosFieldDataiEUlvE_
 ZN20CLibStackFieldsQueue21SetLibraryStackFieldsEjPKviEUlvE_
-ZN22CSoundEventFieldsQueue18SetSoundEventFieldE16SoundEventGuid_tjRK13CSosFieldDataiEUlvE_
+ZN22CSoundEventFieldsQueue18SetSoundEventFieldE16SoundEventGuid_t15CUtlStringTokenRK13CSosFieldDataiEUlvE_
 ZN22CSoundEventFieldsQueue19SetSoundEventFieldsE16SoundEventGuid_tPKviEUlvE_
 [ 0.005714, 0.3, 1.083, 1.083, 2.0, 3.0 ]
 [ 1.0, 1.0, 0.227125, 0.227125, 2.0, 3.0 ]
@@ -2220,10 +2218,8 @@ __tls_get_addr
 __toolspreview__
 __vector(
 _base
-_builtins._delay
-_builtins._delay_override
-_builtins._startSample
 _builtins._voicegraph
+_delay_override
 _editor_
 _exit
 _field_properties
@@ -2234,6 +2230,7 @@ _multibase
 _not_pickable
 _operator_properties
 _stack_properties
+_startSample
 _system_properties
 _txnal_cow_string_C1_for_exceptions(void*, char const*, void*)
 _txnal_cow_string_D1(void*)
@@ -2286,6 +2283,7 @@ assigned
 async_load
 atan
 attachment
+attack
 audio_stream_attached.cpp
 auto:
 auto_connect_public_fields
@@ -2440,6 +2438,7 @@ decimal64
 decltype (
 decltype(auto)
 decltype(nullptr)
+defaultValue
 default_to_max
 deferred Sound Events:
 delay count
@@ -2656,6 +2655,7 @@ input_hold_to_interval
 input_hrtf_mix
 input_hrtf_on
 input_index
+input_indirect_override
 input_interval
 input_invalidate_global_stack
 input_inverse_distance_scalar
@@ -2703,6 +2703,7 @@ input_operator_name
 input_opvar
 input_owning_graph
 input_pathing_enabled
+input_pathing_eq_enabled
 input_pause
 input_pitch
 input_pitch1
@@ -3111,7 +3112,6 @@ m_soundEventName
 m_soundEventVMix
 m_soundName
 m_sounds
-m_stages
 m_subgraphs
 m_table
 m_trackName
@@ -3382,6 +3382,7 @@ output_occlusion
 output_opvar_elements
 output_opvar_exists
 output_pathing_coeffs
+output_pathing_direction
 output_pathing_distance_ratio
 output_pathing_eq
 output_pathing_turn_ratio
@@ -3479,21 +3480,10 @@ pthread_mutexattr_settype
 pthread_once
 public
 public.
-public.attack
-public.dsp_preset
-public.enable_retrigger
 public.end_point
-public.pitch
-public.position
-public.release
-public.retrigger_interval_max
-public.retrigger_interval_min
-public.retrigger_radius
-public.sample
 public.start_point
 public.sync_bpm
 public.sync_bpm_beats
-public.volume
 public_field_name
 pure virtual method called
 qangle
@@ -3520,6 +3510,7 @@ reference_operator
 reference_stack
 regex
 reinterpret_cast
+release
 reserve_array
 resource_name
 resourcesystem
@@ -3575,10 +3566,6 @@ snd_async_spew_blocking
 snd_autodetect_latency
 snd_boxverb_simd
 snd_boxverb_simd_svf
-snd_calc_distance_debug_visualize_paths
-snd_calc_distance_debug_visualize_paths_duration
-snd_calc_distance_disable_pathing
-snd_calc_distance_pathing_enable_validation
 snd_cast
 snd_compare_KV_convert
 snd_compare_soundevents
@@ -3752,6 +3739,7 @@ snd_stereo_speaker_pan_radial_weight
 snd_surround_speaker_pan_exponent
 snd_surround_speaker_pan_radial_weight
 snd_toolvolume
+snd_use_baked_occlusion
 snd_vmidi_flush
 snd_vmix_override_mix_decay_time
 snd_vmix_show_input_updates
@@ -4477,7 +4465,6 @@ updateVoice
 use_%s
 use_entity_position_if_local_player
 use_local_namespace
-use_pathing
 use_world_position
 use_world_position_if_dormant
 util_draw_radius
@@ -4524,7 +4511,6 @@ vmix_voice_start
 vmix_voicegraph_input
 vmix_voicegraph_inputarray
 vmix_voicegraph_name_input
-vmix_voicelist.cpp
 vmix_vsnd_info
 voice_fadeouttime
 voice_initial_buffer_ms
