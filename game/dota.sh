@@ -81,6 +81,9 @@ if [ "$USE_STEAM_RUNTIME" = "1" ]; then
     fi
 fi
 
+# Remove when Source 2 supports Wayland
+export SDL_VIDEO_DRIVER=x11
+
 # Do the following for strace:
 # 	GAME_DEBUGGER="strace -f -o strace.log"
 # Do the following for tcmalloc
