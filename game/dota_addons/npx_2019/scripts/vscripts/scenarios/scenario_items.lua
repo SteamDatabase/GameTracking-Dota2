@@ -67,7 +67,10 @@ function CDotaNPXScenario_Items:SetupScenario()
 
 	self.hHintShopLoc = Entities:FindByName( nil, "hint_location_1" )
 	self.bStage1Complete = false
-	self.nStage = 0 -- Stage 1 - Needs Tango, Stage 2 - Needs Arcane or Booster, Stage 3 - Needs Booster or Aether Lens, Stage 4 - Needs Boots or Boots of Travel
+	self.nStage = 0 
+	-- Stage 1 - Needs Tango, 
+	-- Stage 2 - Needs Vanguard or Vitality Booster, 
+	-- Stage 3 - Needs Rod of Atos or Vitality Booster
 
 	self.nTaskListener = ListenToGameEvent( "trigger_start_touch", Dynamic_Wrap( CDotaNPXScenario_Items, "OnTriggerStartTouch" ), self )
 end
@@ -183,13 +186,13 @@ function CDotaNPXScenario_Items:SetupStage2Tasks()
 	table.insert( self.Tasks, rootTask )
 	rootTask.CheckTaskStart = function() return true end
 	-- Stage 2
-	local disassembleArcaneBoots = rootTask:AddTask( CDotaNPXTask_DisassembleItem( {
-		TaskName = "disassemble_arcane_boots",
+	local disassembleVanguard = rootTask:AddTask( CDotaNPXTask_DisassembleItem( {
+		TaskName = "disassemble_vanguard",
 		TaskType = "task_disassemble_item",
 		UseHints = true,
 		TaskParams = 
 		{
-			ItemName = "item_boots",
+			ItemName = "item_vitality_booster",
 		},
 		CheckTaskStart = 
 		function() 
@@ -198,61 +201,32 @@ function CDotaNPXScenario_Items:SetupStage2Tasks()
 		end,
 	}, self ), 0.0 )
 
-	local unlockBooster = rootTask:AddTask( CDotaNPXTask_UnlockItem( {
-		TaskName = "unlock_booster",
+	local unlockVitalityBooster = rootTask:AddTask( CDotaNPXTask_UnlockItem( {
+		TaskName = "unlock_vitality_booster",
 		TaskType = "task_unlock_item",
 		UseHints = true,
 		TaskParams = 
 		{
-			ItemName = "item_energy_booster",
+			ItemName = "item_vitality_booster",
 		},
 		CheckTaskStart = 
 		function() 
-			return GameRules.DotaNPX:IsTaskComplete( "disassemble_arcane_boots" )
+			return GameRules.DotaNPX:IsTaskComplete( "disassemble_vanguard" )
 		end,
 	}, self ), 0.0 )
 
-	local buyAetherLens = rootTask:AddTask( CDotaNPXTask_BuyItem( {
-		TaskName = "buy_aether_lens",
+	local buyRodOfAtos = rootTask:AddTask( CDotaNPXTask_BuyItem( {
+		TaskName = "buy_rod_of_atos",
 		TaskType = "task_buy_item",
 		UseHints = true,
 		TaskParams = 
 		{
-			ItemName = "item_recipe_aether_lens",
-			WhiteList = { "item_recipe_aether_lens", "item_aether_lens" },
+			ItemName = "item_recipe_rod_of_atos",
+			WhiteList = { "item_recipe_rod_of_atos", "item_rod_of_atos" },
 		},
 		CheckTaskStart = 
 		function() 
-			return GameRules.DotaNPX:IsTaskComplete( "unlock_booster" )
-		end,
-	}, self ), 0.0 )
-
-	local unlockBoots = rootTask:AddTask( CDotaNPXTask_UnlockItem( {
-		TaskName = "unlock_boots",
-		TaskType = "task_unlock_item",
-		UseHints = true,
-		TaskParams = 
-		{
-			ItemName = "item_boots",
-		},
-		CheckTaskStart = 
-		function() 
-			return GameRules.DotaNPX:IsTaskComplete( "buy_aether_lens" )
-		end,
-	}, self ), 0.0 )
-
-	local buyTravelBoots = rootTask:AddTask( CDotaNPXTask_BuyItem( {
-		TaskName = "buy_boots_of_travel",
-		TaskType = "task_buy_item",
-		UseHints = true,
-		TaskParams = 
-		{
-			ItemName = "item_recipe_travel_boots",
-			WhiteList = { "item_recipe_travel_boots", "item_travel_boots" },
-		},
-		CheckTaskStart = 
-		function() 
-			return GameRules.DotaNPX:IsTaskComplete( "unlock_boots" )
+			return GameRules.DotaNPX:IsTaskComplete( "unlock_vitality_booster" )
 		end,
 	}, self ), 0.0 )
 
@@ -295,26 +269,21 @@ function CDotaNPXScenario_Items:OnTaskStarted( event )
 		self.nStage = 0
 		self:ShowItemHint( "item_tango" )
 		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "sell", 89, -1 )
-	elseif event.task_name == "disassemble_arcane_boots" then
+	elseif event.task_name == "disassemble_vanguard" then
 		self.nStage = 2
-		self:ShowItemHint( "item_arcane_boots" )
+		self:ShowItemHint( "item_vanguard" )
 		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "disassemble", 89, -1 )
 		self:ShowWizardTip( "scenario_items_wizard_tip_disassemble", 15.0 )
 	elseif event.task_name == "unlock_booster" then
-		self:ShowItemHint( "item_energy_booster" )
+		self:ShowItemHint( "item_ring_of_health" )
 		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "unlock_booster", 89, -1 )
 		--self:ShowWizardTip( "scenario_items_wizard_tip_unlock", 15.0 )
-	elseif event.task_name == "buy_aether_lens" then
+	elseif event.task_name == "unlock_vitality_booster" then
 		self.nStage = 3
-		self.hHero:SetGold( GetCostOfItem( "item_recipe_aether_lens" ), true )
-		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "recipe_aether", 89, -1 )
-		self:ShowWizardTip( "scenario_items_wizard_tip_recipe", 15.0 )
-	elseif event.task_name == "unlock_boots" then
-		self.nStage = 4
-		self:ShowItemHint( "item_boots" )
+		self:ShowItemHint( "item_vitality_booster" )
 		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "unlock_boots", 89, -1 )
-	elseif event.task_name == "buy_boots_of_travel" then
-		self.hHero:SetGold( GetCostOfItem( "item_recipe_travel_boots" ), true )
+	elseif event.task_name == "buy_rod_of_atos" then
+		self.hHero:SetGold( GetCostOfItem( "item_recipe_rod_of_atos" ), true )
 		--self:HintWorldText( self.hHintShopLoc:GetAbsOrigin(), "recipe_travel", 89, -1 )
 	end
 end
@@ -328,7 +297,7 @@ function CDotaNPXScenario_Items:OnTaskCompleted( event )
 		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 1, function()
 			self:SetupStage2()
 		end )
-	elseif event.task_name == "buy_boots_of_travel" then
+	elseif event.task_name == "buy_rod_of_atos" then
 		self:ScheduleFunctionAtGameTime( GameRules:GetDOTATime( false, false ) + 2, function()
 			self:OnScenarioRankAchieved( 1 )
 		end )
@@ -355,8 +324,8 @@ function CDotaNPXScenario_Items:SetupStage2()
 	self.hHero:HeroLevelUp( false )
 	LearnHeroAbilities( self.hHero, {} )
 
-	self.hHero:AddItemByName("item_arcane_boots")
-	self.hHero:AddItemByName("item_void_stone")
+	self.hHero:AddItemByName("item_vanguard")
+	self.hHero:AddItemByName("item_staff_of_wizardry")
 	self.bHeroRefreshed = true
 	self:GetPlayerHero():Stop()
 	SendToConsole( "+dota_camera_center_on_hero" )
@@ -401,31 +370,15 @@ function CDotaNPXScenario_Items:OnThink()
 			self.nStage = 0
 		end
 	elseif self.nStage == 2 then
-		if self.hHero:FindItemInInventory( "item_arcane_boots" ) == nil and self.hHero:FindItemInInventory( "item_energy_booster" ) == nil then
-			print( "Sold Arcane Boots instead of Disassembled" )
-			self:OnScenarioComplete( false, "scenario_items_failure_item_lost" )
-			self.nStage = 0
-		elseif self.hHero:FindItemInInventory( "item_void_stone" ) == nil then
-			print( "Sold Void Stone" )
+		if self.hHero:FindItemInInventory( "item_vanguard" ) == nil and self.hHero:FindItemInInventory( "item_vitality_booster" ) == nil then
+			print( "Sold Vanguard instead of Disassembled" )
 			self:OnScenarioComplete( false, "scenario_items_failure_item_lost" )
 			self.nStage = 0
 		end
 	elseif self.nStage == 3 then
-		if self.hHero:FindItemInInventory( "item_aether_lens" ) == nil then
-			if self.hHero:FindItemInInventory( "item_void_stone" ) == nil or self.hHero:FindItemInInventory( "item_energy_booster" ) == nil then
-				print( "Sold Energy Booster instead of Unlocked or Sold Void Stone" )
-				self:OnScenarioComplete( false, "scenario_items_failure_item_lost" )
-				self.nStage = 0
-			end
-		elseif self.hHero:FindItemInInventory( "item_boots" ) == nil then
-			print( "Sold Boots" )
-			self:OnScenarioComplete( false, "scenario_items_failure_item_lost" )
-			self.nStage = 0
-		end
-	elseif self.nStage == 4 then
-		if self.hHero:FindItemInInventory( "item_boots" ) == nil and
-			self.hHero:FindItemInInventory( "item_travel_boots" ) == nil then
-			print( "Sold Boots instead of Unlocked" )
+		if self.hHero:FindItemInInventory( "item_vitality_booster" ) == nil and
+			self.hHero:FindItemInInventory( "item_rod_of_atos" ) == nil then
+			print( "Sold Vitality Booster instead of Unlocked" )
 			self:OnScenarioComplete( false, "scenario_items_failure_item_lost" )
 			self.nStage = 0
 		end

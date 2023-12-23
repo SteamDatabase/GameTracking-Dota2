@@ -38,12 +38,12 @@ function CDOTANPXScenario_Economy:InitScenarioKeys()
 		StartingHeroLevel	= 8,
 		StartingXP 			= ( GetXPNeededToReachNextLevel( 8 ) - GetXPNeededToReachNextLevel( 7 ) ) * 0.7,
 		Team 				= DOTA_TEAM_GOODGUYS,
-		StartingGold		= ( GetCostOfItem( "item_tpscroll" ) * 2 ) + GetCostOfItem( "item_sobi_mask" ) + GetCostOfItem( "item_quarterstaff" ) + ( GetCostOfItem( "item_robe" ) / 2 ),
+		StartingGold		= ( GetCostOfItem( "item_tpscroll" ) * 2 ) + GetCostOfItem( "item_broadsword" ) + GetCostOfItem( "item_ogre_axe" ) + ( GetCostOfItem( "item_void_stone" ) / 2 ),
 		StartingItems 		=
 		{
 			"item_bracer",
 			"item_power_treads",
-			"item_ogre_axe",
+			"item_bracer",
 			"item_vladmir",
 			"item_bracer",
 		},
@@ -227,54 +227,53 @@ function CDOTANPXScenario_Economy:SetupTask_CompleteEchoSabre()
 		GameRules:SetWhiteListEnabled( true )
 	end
 
-	local buyQuarterStaffTask = buyInitialItemsTask:AddTask( CDotaNPXTask_BuyItem( {
-		TaskName = "buy_quarter_staff",
+	local buyOgreAxe = buyInitialItemsTask:AddTask( CDotaNPXTask_BuyItem( {
+		TaskName = "buy_ogre_axe",
 		UseHints = true,
 		TaskParams = 
 		{
-			ItemName = "item_quarterstaff",
-			WhiteList = { "item_quarterstaff", },
+			ItemName = "item_ogre_axe",
+			WhiteList = { "item_ogre_axe", },
 		},
 
 	}, self ), 2 )
 
-	buyQuarterStaffTask.StartTask = function( task )
+	buyOgreAxe.StartTask = function( task )
 		CDotaNPXTask_BuyItem.StartTask( task )
 		task:GetScenario():ShowUIHint( "QuickBuySlot0" )
 	end
 
 
-	buyQuarterStaffTask.CompleteTask = function( task )
+	buyOgreAxe.CompleteTask = function( task )
 		CDotaNPXTask_BuyItem.CompleteTask( task )
 		GameRules:SetWhiteListEnabled( true )
 		task:GetScenario():HideUIHint()
 	end
 
-	local buySobiMaskTask = buyInitialItemsTask:AddTask( CDotaNPXTask_BuyItem( {
-		TaskName = "buy_sobi_mask",
+	local buyBroadsword = buyInitialItemsTask:AddTask( CDotaNPXTask_BuyItem( {
+		TaskName = "buy_broadsword",
 		UseHints = true,
 		TaskParams = 
 		{
-			ItemName = "item_sobi_mask",
-			WhiteList = { "item_sobi_mask", },
+			ItemName = "item_broadsword",
+			WhiteList = { "item_broadsword", },
 		},
 
 	}, self ), 2 )
 
 
-	buySobiMaskTask.StartTask = function( task )
+	buyBroadsword.StartTask = function( task )
 		CDotaNPXTask_BuyItem.StartTask( task )
 		task:GetScenario():ShowUIHint( "QuickBuySlot0" )
 	end
 
-	buySobiMaskTask.CompleteTask = function( task )
+	buyBroadsword.CompleteTask = function( task )
 		CDotaNPXTask_BuyItem.CompleteTask( task )
 
 		task:GetScenario():ShowWizardTip( "scenario_economy_wizard_tip_last_hit_enemy_creeps", 12.0 )
 		GameRules:SetWhiteListEnabled( true )
 		task:GetScenario():HideUIHint()
 	end
-
 
 	local buyTPTask = buyInitialItemsTask:AddTask( CDotaNPXTask_BuyItem( {
 		TaskName = "buy_tp_scroll",
@@ -357,7 +356,7 @@ function CDOTANPXScenario_Economy:SetupTask_CompleteEchoSabre()
 		TaskName = "earn_gold_for_robe",
 		TaskParams =
 		{
-			Gold = GetCostOfItem( "item_robe" ) / 2,
+			Gold = GetCostOfItem( "item_void_stone" ) / 2,
 		},
 	}, self ), 0 )
 
@@ -371,37 +370,37 @@ function CDOTANPXScenario_Economy:SetupTask_CompleteEchoSabre()
 		end
 	end
 
-	local buyRobeTask = buyInitialItemsTask:AddTask( CDotaNPXTask_BuyItem( {
-		TaskName = "buy_robe",
+	local buyVoidStone = buyInitialItemsTask:AddTask( CDotaNPXTask_BuyItem( {
+		TaskName = "buy_void_stone",
 		UseHints = true,
 		TaskParams = 
 		{
-			ItemName = "item_robe",
-			WhiteList = { "item_robe", },
+			ItemName = "item_void_stone",
+			WhiteList = { "item_void_stone", },
 		},
 
 	}, self ), 2 )
 
-	buyRobeTask.StartTask = function( task )
+	buyVoidStone.StartTask = function( task )
 		CDotaNPXTask_BuyItem.StartTask( task )
 		task:GetScenario():ShowUIHint( "QuickBuySlot0" )
 	end
 
-	buyRobeTask.CompleteTask = function( task )
+	buyVoidStone.CompleteTask = function( task )
 		CDotaNPXTask_BuyItem.CompleteTask( task )
 		task:GetScenario():HideUIHint()
 	end
 
-	local retrieveRobeTask = buyInitialItemsTask:AddTask( CDotaNPXTask_CourierRetrieveItem( {
-		TaskName = "retrieve_robe_with_courier",
+	local retrieveVoidStoneTask = buyInitialItemsTask:AddTask( CDotaNPXTask_CourierRetrieveItem( {
+		TaskName = "retrieve_void_stone_with_courier",
 		TaskParams =
 		{
-			ItemNames = { "item_robe", },
+			ItemNames = { "item_void_stone", },
 		},
 	}, self ), 2 )
 
 
-	retrieveRobeTask.StartTask = function( task )
+	retrieveVoidStoneTask.StartTask = function( task )
 		CDotaNPXTask_CourierRetrieveItem.StartTask( task )
 		local hPlayer = PlayerResource:GetPlayer( 0 )
 		if hPlayer and hSpawnEnt then
@@ -417,7 +416,7 @@ function CDOTANPXScenario_Economy:SetupTask_CompleteEchoSabre()
 		end
 	end
 
-	retrieveRobeTask.CompleteTask = function( task )
+	retrieveVoidStoneTask.CompleteTask = function( task )
 		CDotaNPXTask_CourierRetrieveItem.CompleteTask( task, true )
 		task:GetScenario():HintLocation( vPos, true )
 		task:GetScenario():HideUIHint()
@@ -426,15 +425,15 @@ function CDOTANPXScenario_Economy:SetupTask_CompleteEchoSabre()
 		task:GetScenario():ShowWizardTip( "scenario_economy_wizard_tip_safe_courier_usage", 15.0 )
 	end
 
-	local deliverRobeTask = buyInitialItemsTask:AddTask( CDotaNPXTask_CourierDeliverItem( {
-		TaskName = "deliver_robe_with_courier",
+	local deliverVoidStoneTask = buyInitialItemsTask:AddTask( CDotaNPXTask_CourierDeliverItem( {
+		TaskName = "deliver_void_stone_with_courier",
 		TaskParams =
 		{
-			ItemNames = { "item_robe", },
+			ItemNames = { "item_void_stone", },
 		},
 	}, self ), 2 )
 
-	deliverRobeTask.CompleteTask = function( task )
+	deliverVoidStoneTask.CompleteTask = function( task )
 		CDotaNPXTask_CourierDeliverItem.CompleteTask( task, true )
 		task:GetScenario():HintLocation( vPos, false )
 
