@@ -43,6 +43,10 @@ function CHeroDemo:OnNPCSpawned( event )
 		spawnedUnit:SetContextThink( "self:Think_InitializeNeutralCaster", function() return self:Think_InitializeNeutralCaster( spawnedUnit ) end, 0 )
 	end
 
+	if spawnedUnit:GetUnitName() == "npc_dota_courier" then
+		spawnedUnit:SetContextThink( "self:Think_InitializeCourier", function() return self:Think_InitializeCourier( spawnedUnit ) end, 0 )
+	end
+
 	if spawnedUnit:GetPlayerOwnerID() == 0 and spawnedUnit:IsRealHero() and not spawnedUnit:IsClone() and not spawnedUnit:IsTempestDouble() then
 		print( "spawnedUnit is player's hero" )
 
@@ -102,6 +106,28 @@ function CHeroDemo:Think_InitializePlayerHero( hPlayerHero )
 
 		for _, hUnit in pairs( hAllPlayerUnits ) do
 			hUnit:AddNewModifier( hPlayerHero, nil, "lm_take_no_damage", nil )
+		end
+	end
+
+	return
+end
+
+--------------------------------------------------------------------------------
+-- Think_InitializeCourier
+--------------------------------------------------------------------------------
+function CHeroDemo:Think_InitializeCourier( hCourier )
+	if not hCourier then
+		return 0.1
+	end
+
+	-- Move any couriers spawned to their respective fountains.
+	local nTeam = hCourier:GetTeamNumber();
+	local invulUnits = FindUnitsInRadius( nTeam, Vector( 0, 0, 0 ), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_ANY_ORDER, false )
+	for _,hFountain in pairs( invulUnits ) do
+		if hFountain:GetUnitName() == "dota_fountain" then
+			-- print( "Moving courier to fountain..." )
+			FindClearSpaceForUnit( hCourier, hFountain:GetAbsOrigin(), true )
+			break
 		end
 	end
 
@@ -441,10 +467,14 @@ function CHeroDemo:OnResetHero( eventSourceIndex, data )
 	local nHeroEntIndex = tonumber( data.str )
 	local hHero = EntIndexToHScript( nHeroEntIndex )
 	if ( hHero ~= nil and hHero:IsNull() == false ) then
-		--print( 'OnResetHero! - found hero with ent index = ' .. nHeroEntIndex )
-		GameRules:SetSpeechUseSpawnInsteadOfRespawnConcept( true )
-		PlayerResource:ReplaceHeroWithNoTransfer( hHero:GetPlayerOwnerID(), hHero:GetUnitName(), -1, 0 )
-		GameRules:SetSpeechUseSpawnInsteadOfRespawnConcept( false )
+		if hHero:IsHero() then
+			--print( 'OnResetHero! - found hero with ent index = ' .. nHeroEntIndex )
+			GameRules:SetSpeechUseSpawnInsteadOfRespawnConcept( true )
+			PlayerResource:ReplaceHeroWithNoTransfer( hHero:GetPlayerOwnerID(), hHero:GetUnitName(), -1, 0 )
+			GameRules:SetSpeechUseSpawnInsteadOfRespawnConcept( false )
+		elseif hHero:IsCourier() then
+			hHero:RespawnCourier()
+		end
 	end
 end
 

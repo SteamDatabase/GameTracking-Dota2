@@ -509,7 +509,7 @@ function CHoldoutGameRound:_CheckForGoldBagDrop( killedUnit )
 	newItem:SetCurrentCharges( nGoldToDrop )
 	local drop = CreateItemOnPositionSync( killedUnit:GetAbsOrigin(), newItem )
 	local dropTarget = killedUnit:GetAbsOrigin() + RandomVector( RandomFloat( 50, 350 ) )
-	newItem:LaunchLoot( true, 300, 0.75, dropTarget )
+	newItem:LaunchLoot( true, 300, 0.75, dropTarget, nil )
 end
 
 --------------------------------------------------------------------------------
@@ -545,7 +545,7 @@ function CHoldoutGameRound:CheckForGiftItemDrop( killedUnit )
 		local drop = CreateItemOnPositionSync( killedUnit:GetAbsOrigin(), newItem )
 		drop.Holdout_IsLootDrop = true
 		local dropTarget = killedUnit:GetAbsOrigin() + RandomVector( RandomFloat( 50, 350 ) )
-		newItem:LaunchLoot( true, 300, 0.75, dropTarget )
+		newItem:LaunchLoot( true, 300, 0.75, dropTarget, nil )
 
 		self._nGiftsDroppedThisRound = self._nGiftsDroppedThisRound + 1
 	end

@@ -57,7 +57,10 @@
 			PublicContent		dota_core
 			PublicContent		core
 		}
-
+		
+		"UserSettingsPathID"	"USRLOCAL"
+		"LegacyUserSettingsPathID"	"MOD"
+				
 		AddonsChangeDefaultWritePath 0
 	}
 
@@ -137,6 +140,7 @@
 	SoundSystem
 	{
 		"SteamAudioEnabled" "0"
+		"snd_event_browser_default_stack" "dota_update_default"
 	}
 
 	ToolsEnvironment
@@ -170,6 +174,7 @@
 		"OverlayBoxSize"			"16"
 		"TileGridBlendOrderBGRA"	"1"
 		"TileGridBlendDefaultColor"	"0 255 0"
+		"UseFirstAnimationAsDefault" "1"
 	}
 
 	MaterialEditor
@@ -218,6 +223,11 @@
 			MinimumVolumePerClusteredMesh       "1024"
 			MaxPrecomputedVisClusterMembership  "16"
 		}
+		SoundStackScripts
+		{
+			CompilerVersion "1"
+		//	CompileForCompare "1"
+		}
 	}
 
 	RenderPipelineAliases
@@ -232,15 +242,9 @@
 		"features"							"no_gpu_blobs"
 	}
 
-	Panorama
-	{
-		"UsesSvg" "1"
-	}
-
 	RenderSystem
 	{
 		SwapChainSampleableDepth 1
-		//"VulkanUseSecondaryCommandBuffers"	"1" // Use secondary command buffers for more efficiency on tiled based renderers. All platforms to limit configurations. (Disabled due to GPU blobulator incompatibility)
 		"VulkanSteamShaderCache"			"1"
 		"OpenGLForceSM30"					"1"
 		"LowLatency"						"1"
@@ -254,8 +258,8 @@
 	ConVars
 	{
 		"r_size_cull_threshold"		"0.4"
-		"cl_interp"					"0.016"
 		"cl_predict"				"0"
+		"cl_usesocketsforloopback" "1"
 	}
 }
 

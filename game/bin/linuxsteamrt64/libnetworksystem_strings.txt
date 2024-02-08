@@ -1,5 +1,4 @@
 
-!"Allowing insert of dupe without explicit dupe insertion. Fix code callpoint to allow dupes."
 !(
 !=
 !is_large()
@@ -107,12 +106,11 @@ $tI
 %-10s % 5d no fastpath because field %s base depth is too large (pointer metadata change?)
 %-10s % 5d no fastpath because field %s not resolvable
 %-10s %d %s: %s at offset %d, 0x%p array %s struct %s: index %d array size %d in %s
-%-5d %-20s : [%-5d -> %-5d] %-5s bits:  %-32s %-80s : '%s' %s
 %-75s %-75s offset %10.10s %9.9s %s
 %.*g
+%.12s @ %s
 %.1f
 %.3f %% of entities have non-zero metadata entries
-%12.12s %21.21s[%d]
 %20.20s
 %20.20s %s is variant %d/%d of %s
 %20.20s omit %d types for %s [convar net_max_polymorphic_spew=%d]
@@ -145,6 +143,7 @@ $tI
 %f %f %f %f
 %g
 %g,
+%i:  culled %-20s:  %s -> %s (%s)
 %lf
 %lld
 %llu
@@ -160,8 +159,6 @@ $tI
 %s %s:  [%d] %s queue %s [type %s] %son 0x%p [alloc %u] [order %d] %s
 %s %s:  [%d] %s queue %s [type %s] 0x%p %s
 %s '%s':  encoding mismatched %d vs. %d bits
-%s (%s) SendMessage reliable failed with EResult: %d, bytes written %d
-%s (%s) SendMessage unreliable failed with EResult: %d, bytes written %d
 %s + % 4d classes
 %s - Argument expected (message ID or name).
 %s - Invalid net message index: %d
@@ -170,6 +167,7 @@ $tI
 %s -> %s::%s is marked for networking but is not a CNetworkVar!
 %s : %s = '%s'
 %s Gathering field offsets in %s
+%s SendMessages %s failed with EResult %d
 %s allocation count overflow
 %s allocation count overflow( %llu > %llu )
 %s allocation count overflow( add %llu + current %llu > max %llu )
@@ -178,6 +176,7 @@ $tI
 %s encoding as %d bits '
 %s had %d different permutations
 %s has MNetworkBitCount (or other float field tags) but is type cat '%s' (type %s)
+%s has flag %s
 %s rebuild %s::%s at %u
 %s!fake
 %s%s
@@ -195,16 +194,15 @@ $tI
 %s0x%p %s Initializing
 %s:  %d : %s bits %d to %d [%d bits] : %s
 %s:  %s
-%s:  %s timing out, last received %f [%.2f seconds ago]
 %s:  (%d bits/%d bytes):
 %s:  CNetChan::Transmit( %s ) while suppressing transmit
-%s:  CNetChan::TransmitSNP(%s) SinceLastSend=%.1fs, Sent=%d, pending R/U=%d/%d, queueTime=%.1fms
-%s:  NetChan QoS flow %s: %4dms latency, %5d/%5d dropped (%.1f%%)
+%s:  CNetChan::Transmit(%s) SinceLastSend=%.1fs, Sent=%d, pending R/U=%d/%d, queueTime=%.1fms
+%s:  NetChan QoS flow %s: %4dms engine latency, %5d/%5d dropped (%.1f%%)
 %s:  NetChan Setting Timeout to %4.2f seconds
 %s:  couldn't find serializer %s in %s
 %s:  encodeded data mismatched %d bits
 %s:  encoding mismatched %d vs. %d bits
-%s:  high packet loss detected flow %s: %4dms latency, %5d/%5d dropped (%.1f%%)
+%s:  high packet loss detected flow %s: %4dms engine latency, %5d/%5d dropped (%.1f%%)
 %s:  in serializer '%s' couldn't find field %s::%s, possibly already marked MNetworkExclude
 %s:  meta info problem %s
 %s:  metadata( %d: '% -10s' %s = %u )
@@ -215,8 +213,9 @@ $tI
 %s: %s
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
-%s: SendMessage reliable failed with k_EResultLimitExceeded, crashing connection.
-%s: SendMessage unreliable failed with k_EResultLimitExceeded, crashing connection.
+%s: SendMessage %s failed with k_EResultLimitExceeded, crashing connection.
+%s: SendMessage reliable failed AllocateMessage (%d).
+%s: SendMessage unreliable failed AllocateMessage (%d).
 %s: Unsupported raw allocator type %u
 %s: __pos (which is %zu) > this->size() (which is %zu)
 %s: field %s has MNetworkSendProxyRecipientsFilter but is not declared using CNetworkVarEmbeddedNotFlattened
@@ -225,7 +224,9 @@ $tI
 %s: rebasing delegate [ 0x%p -> 0x%p ]
 %s: recreation removing deallocation
 %s: shrinking removes delegate [0x%p]
+%s: timing out, last received %f [%.2f seconds ago]
 %s:%d
+%s::%s has more than one MNetworkChangeCallback that requires passing network value into handler, this is unsupported
 %s::%s was in the original serializer at offset %u but that offset isn't in the ignore list!!!
 %s::%s:%u (%s ) already encountered at %s::%s:%u (%s)
 %s:Dropped %i packets at %i
@@ -234,6 +235,7 @@ $tI
 %sCulled %s::%s
 %sProcess includes/excludes %s %s [%d fields]
 %s[%d]
+%s[%d],
 %s_%s_%s
 %sconsider %s at depth %d
 %sexcluding %s::%s due to MNetworkNoBase
@@ -302,14 +304,15 @@ $tI
 - %d Scratch Buffers in use (%llu bytes)
 - Config: %s, %i connections
 - Data:    net total out  %.1f, in %.1f kB/s
-- Latency: avg out %.2fs, in %.2fs
 - Loss:    avg out %.1f, in %.1f
 - Packets: net total out  %.1f/s, in %.1f/s
+- Ping:    avg %.2fs
 - Ports:
 - exclude
 - flow: in %.1f, out %.1f kB/s
 - keeping around as cacheable shared connection
-- latency: %.1f, loss %.2f
+- latency: net %.0f  engine %.0f  local %.0f  peer %.0f
+- loss: in %.1f%%, out %.1f%%
 - online: %.3f seconds
 - packets: in %.1f/s, out %.1f/s
 - reliable: %s
@@ -339,7 +342,6 @@ $tI
 -networkspewexcludes
 -networkspewfakefields
 -networkvar_validate
--nodns
 -noip
 -perfectworld
 -snallownoauth
@@ -355,15 +357,17 @@ $tI
 ... }
 ...)
 ...<truncated>...
-../common/protobuf_helpers.cpp
 ../public/networksystem/serializedentity.h
 ../public/tier0/eventdispatcher.h
+../public/tier0/quantizedfloatencoder.h
 ../public/tier0/tslist.h
+../public/tier0/utldict.h
 ../public/tier0/utlrbtree.h
 ../public/tier0/utlsignalslot.h
 ../public/tier0/utlsortvector.h
 ../public/tier0/utlsymboltable.h
 ../public/tier0/utltshash.h
+./
 ./google/protobuf/arena.h
 ./google/protobuf/arena_impl.h
 ./google/protobuf/arenastring.h
@@ -466,7 +470,6 @@ $tI
 17CSVCMsg_VoiceInit
 18CCLCMsg_ClientInfo
 18CCLCMsg_HltvReplay
-18CCLCMsg_ServerPing
 18CNETMsg_Disconnect
 18CSVCMsg_HLTVStatus
 18CSVCMsg_HltvReplay
@@ -581,6 +584,7 @@ $tI
 43CSVCMsg_PacketEntities_alternate_baseline_t
 43CSVCMsg_PacketEntities_command_queue_info_t
 48CSerializedEntityPolymorphicFieldsMetadataHelper
+49CSVCMsg_PacketEntities_non_transmitted_entities_t
 4C
 5
 51ProtoFlattenedSerializerField_t_polymorphic_field_t
@@ -620,6 +624,7 @@ $tI
 @@
 @@regex_error
 @B
+@INetworkSystem::RegisterNetworkCategory: all categories must have ids between 0-31!
 A
 A file with this name is already in the pool.
 A protocol message was rejected because it was too big (more than
@@ -641,7 +646,6 @@ AddBool
 AddCleared() can only be used on a RepeatedPtrField not on an arena.
 AddDouble
 AddEnum
-AddFieldPathAndOffset
 AddFloat
 AddInt32
 AddInt64
@@ -652,8 +656,8 @@ AddString
 AddToTail
 AddUInt32
 AddUInt64
-Adding 0--%dms of additional latency to %g%% packets, for random reordering
-Adding additional packet lag of %dms (when received), Bernoulli loss of %g%%.
+Adding 0--%dms of additional latency to %g%% packets, for jitter / random reordering
+Adding additional packet lag of %dms (%dms send, %dms recv), Bernoulli loss of %g%%.
 AlignedByteArray not properly aligned
 Allowing IP connections without auth
 Already saw decimal point or exponent; can't have another one.
@@ -671,6 +675,8 @@ AssetPreviewSystem_001
 AssetRenameSystem_001
 AssetSystem001
 AssetSystemTest001
+AssignRangeMultipler with bitcount=32!
+AssignRangeMultiplier
 AssignSharedChangeCallbackIndex
 AssociateNetMessageGroupIdWithChannelCategory: Couldn't find or create group %s!
 AssociateNetMessageGroupIdWithChannelCategory: Trying to use an unregistered netchannel category!
@@ -685,7 +691,6 @@ Average Backing Raw Paths         :  %8.3f
 Average Data Bytes                :  %8.3f bytes
 Average Memory Usage Per Entity   :  %8.3f bytes
 Average Number of Field Paths     :  %8.3f
-B
 BackUp() can not exceed the size of the last Next() call.
 BackUp() can only be called after Next().
 BackUp() can only be called after a successful Next().
@@ -699,7 +704,6 @@ Buffer overflow in net channel %s
 BuildDelta
 BuildDeltaProperties fieldDataBuf
 BuildEntityClassNetworkSerializer
-BuildHierarchy_IterateFields
 BuildHierarchy_R
 BuildMergedSerializedEntity:  delta header with corrupt array count [ ent %d ]:  entry %d/%d == %u!
 BuildMergedSerializedEntity:  ignoring %s, was in previous state only, now outside of valid range for root field %s [array count %d, base index %d]
@@ -760,6 +764,7 @@ CFlattenedSerializer::WriteFieldList fieldDataBuf
 CFlattenedSerializer::[ent %d] Decode path %s array index %d out of range %d for field %s::%s [%d] %s
 CFlattenedSerializers::BuildMergedSerializedEntity fieldDataBuf
 CFlattenedSerializers::SpewSerializer: called with NULL serializer!!!
+CGlobalSymbol
 CGridStringPrinter::GetLines(CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int> >&, bool) const
 CGridStringPrinter::NumRows() const
 CGridStringPrinter::SetColumnHeader(int, char const*)
@@ -1056,16 +1061,14 @@ CHandle<
 CLcx
 CMemAllocSystemInitialize
 CMergedEntityOffsetBuilder::Expecting at least one bit in offset
+CNetChan::BUF_RELIABLE
+CNetChan::BUF_UNRELIABLE
+CNetChan::BUF_VOICE
 CNetChan::SendNetMessage: SerializeAbstract for message %s failed!
 CNetChan::SendNetMessage: Trying to send message %s, which is an invalid category for this channel!
 CNetChan::SendNetMessage: Unable to send message %s, buffer is full!
-CNetChan::SetMaxBufferSize: cant preserve exiting data %i>%i.
 CNetChan::Setup for %s
 CNetChan::UpdateMessageStats, bit counter about to roll over with addition of %d bits, resetting to zero
-CNetChan::m_StreamReliable
-CNetChan::m_StreamUnreliable
-CNetChan::m_StreamVoice
-CNetChan_TransmitBits->send
 CNetworkFieldChangedEventQueue::QueueChange:  ran out of scratch data space!!!
 CNetworkMessages::AllocateAndCopyConstructNetMessageAbstract unable to allocate unknown message type!
 CNetworkMessages::AllocateUnserializedMessage unable to allocate unknown message type!
@@ -1076,15 +1079,14 @@ CNetworkMessages::FindOrCreateNetMessage: Message %s is expected to have already
 CNetworkMessages::Serialize attempted to serialize a non-serializeable message [%s]!
 CNetworkMessages::Unserialize encountered unknown network message type %u!
 CNetworkSerializer: Unable to find network encoder named %s!
+CNetworkSerializer::Init:  Couldn't find field %s in iterator for %s
 CNetworkSystem::BufferToBufferDecompress with improperly sized dest buffer (%u in, %llu needed)
 CNetworkSystem::BufferToBufferDecompress with improperly sized dest buffer (%u in, %u needed)
 CNetworkSystem::CleanupDebugOutputFunction()
 CNetworkSystem::CloseAllSockets()
-CNetworkSystem::FlushPeerToPeerChannels
-CNetworkSystem::Init() m_SteamAPIContextClient.Init ( ) failed (no Steam?)
-CNetworkSystem::InitGameServer: CSteamGameServerAPIContext::Init Failed
-CNetworkSystem::InitGameServer: CSteamGameServerAPIContext::Init OK
-CNetworkSystem::SendToNsAddress ISteamNetworkingSockets::SendMessageToConnection %s returned %d when sending %d bytes
+CNetworkSystem::Init() failed - no SteamNetworking()
+CNetworkSystem::InitGameServer: SteamGameServerNetworking() NULL
+CNetworkSystem::InitGameServer: SteamGameServerNetworking() OK
 CNetworkSystem::Shutdown()
 CNetworkSystem::ShutdownGameServer
 CNetworkedQuantizedFloat
@@ -1213,6 +1215,8 @@ Cannot open file %s
 Cannot reconnect loopback after initializing steam networking!
 Cannot register change callback priorities at this stage! Must do it earlier!
 Cannot show available settings until SteamNetworkingUtils initialized
+Cannot show net_fakelag until SteamNetworkingUtils initialized
+Cannot show net_fakeloss until SteamNetworkingUtils initialized
 Cannot show values of SteamNetworkingSockets configuration values until initialized
 Cannot skip field value, unexpected token:
 Cannot use priority equal to NETWORK_FIELD_CHANGE_DEFAULT_PRIORITY!
@@ -1222,6 +1226,8 @@ ChangeAccessorFieldPathIndex_t
 ChangeCallbackOnChange
 ChangeCallbackOnChangeOrCreate
 ChangeCallbackOnChangeUtlVectorSubfield
+Class does not allow allocation from its schema binding
+Class does not allow deallocation from its schema binding
 Class,Field,Field Path,Decode Count,Total Bits,Avg Bits,Total Index Bits,Avg Index Bits,Priority,=SUM(E:E),Full Name,Notes
 ClearField
 ClientToolsInfo_001
@@ -1239,7 +1245,6 @@ Compress network traffic
 ComputeDepth
 ComputeOrderForPriority
 ConfirmAllMessageHandlersInstalled
-ConnectInterfaceSingletons
 ConnectSocket(%s) failed
 ConnectToHostedDedicatedServer(%s) failed
 Connected loopback %s=%x@%s <-> %s=%x@%s
@@ -1327,6 +1332,7 @@ Enum value "$0" is reserved.
 Enum value "$0" uses reserved number $1.
 Enum value in map must define 0 as the first value.
 Enums must contain at least one value.
+Error
 Error installing message handlers into a net channel: missing handlers in channel %s!
 Error parsing net channel %s, net message %s
 Error parsing text-format
@@ -1385,6 +1391,16 @@ FALSE
 FATAL
 FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
+FRAME_NET_BLOCKING_LOAD_SPAWN_GROUP
+FRAME_NET_POST_PROCESS_NETWORKING
+FRAME_NET_PRE_PROCESS_NETWORKING
+FRAME_NET_UPDATE_END
+FRAME_NET_UPDATE_FULL_UPDATE_RECEIVED
+FRAME_NET_UPDATE_POSTDATAUPDATE_END
+FRAME_NET_UPDATE_POSTDATAUPDATE_START
+FRAME_NET_UPDATE_PREDICTION
+FRAME_NET_UPDATE_START
+FRAME_SIMULATE
 Failed to create poll group for socket '%s'?
 Failed to install message handler for message %s in channel %s!
 Failed to open P2P network socket '%s'
@@ -1395,7 +1411,6 @@ Failed to start listening for SDR on port %d.  Waiting and will retry
 Failed to unserialize message %s: expected message ID %u, encountered %u!
 FakeLag
 FakeLoss
-FakePacketLag_Recv
 FakeReorderDelay
 FakeReorderPct
 False
@@ -1461,6 +1476,8 @@ Fixed Array
 FlattenedSerializersVersion001
 FontManager_001
 For servers behind NAT/DHCP meant to be exposed to the public internet, this is the public facing ip address string: ("x.x.x.x" )
+Found existing value when inserting into dict - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound.
+Found existing value when inserting into tree - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound. If duplicate entries are intended, use InsertWithDupes.
 Found invalid proto option data for:
 Fri
 Friday
@@ -1478,7 +1495,6 @@ GNU
 GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameUIService_001
-GatherAllFieldOffsets_R
 GatherAllFieldOffsets_R:  local offset of %s::%s %u is too large (%u max)
 Get or set SteamNetworkingSockets options such as fake packet lag and loss
 GetBitRange
@@ -1491,6 +1507,7 @@ GetFloat
 GetInt32
 GetInt64
 GetMessage
+GetPacket
 GetPathData failed for read only CFieldPath
 GetRawRepeatedField
 GetRepeatedBool
@@ -1549,7 +1566,6 @@ Index out-of-bounds (field is empty).
 InitFakeField
 InitFakeField:  Couldn't find schema lookup for '%s' of type '%s'
 InitFakeField:  Parser function returned false for '%s' of type '%s'
-InitField
 InitGameServer
 InitSteamNetworking
 Input size too large:
@@ -1569,6 +1585,8 @@ Invalid file descriptor data passed to EncodedDescriptorDatabase::Add().
 Invalid float number:
 Invalid key for map field.
 Invalid message set extension.
+Invalid net_fakelag value '%s'
+Invalid net_fakeloss value '%s'
 Invalid package name:
 Invalid proto descriptor for file "
 Invalid public dependency index.
@@ -1622,7 +1640,6 @@ LoadKV3(KeyValues3*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 Localize_001
 Log network processing
 Log packets to files
-LogHandler
 LoggingSystem_GetChannelVerbosity
 LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
@@ -1669,6 +1686,7 @@ MNetworkVarsDisable
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MResourceTypeForInfoType
 MST
+MakeGlobalSymbol
 MakeSerializersMatchByMeta failed for %s
 MapKey::GetBoolValue
 MapKey::GetInt32Value
@@ -1702,7 +1720,6 @@ MapValueRef::SetUInt64Value
 Mar
 March
 MaterialUtils_001
-MathLib_Init
 Max polymorphic variants to spew when spewing a flattened serializer.
 Maximum number of messages to allow waiting in queue after processing; exceeding this disconnects the client. 0 == no limit
 Maximum number of messages to process from a client in a single frame (0 == no limit).
@@ -1710,7 +1727,6 @@ May
 MaybeAllocateAligned cannot fail here.
 MemAlloc_StrDupFunc
 Merge
-MergeDeltas
 MeshSystem001
 MeshUtils001
 Message class "
@@ -1839,6 +1855,7 @@ N6google8protobuf8internal12ExtensionSet8KeyValueE
 N6google8protobuf8internal12MapFieldBaseE
 N6google8protobuf8internal14ZeroFieldsBaseE
 N6google8protobuf8internal15DynamicMapFieldE
+N6google8protobuf8internal16InternalMetadata13ContainerBaseE
 N6google8protobuf8internal16InternalMetadata9ContainerINS0_15UnknownFieldSetEEE
 N6google8protobuf8internal16InternalMetadata9ContainerISsEE
 N6google8protobuf8internal16MapFieldAccessorE
@@ -1946,12 +1963,15 @@ NavGameTest001
 Need space between identifier and decimal point.
 Need space between number and identifier.
 Net graph %s
-Net packet timing values don't make sense.  Send time=%llu, Recv time=%llu, Now=%llu, Peer delay=%d
 Net status for host %s:
 NetChan %s ProcessMessages has taken more than %dms to process %d messages.  (Current message type: '%s')
+NetChan %s ProcessMessages tok %dms to process %d messages.
+NetChanTransmitReliable
+NetChanTransmitUnreliable
 NetChannel '%s':
 NetMessage '%s' still using auto-assigned, has to generate id from name CUtlStringToken hashcode = %d
 NetSteamConn
+Netchan [%s] already associated with hconn #%u, but now we are getting messages on new hconn #%u using the same 'from' address
 Network System Initialized
 Network field tried to use a priority that has not been registered!
 Network socket '%s' opened on port %d
@@ -1977,6 +1997,9 @@ Non-repeated field "
 NonTopoComplex
 NonTopoComplexPack4Bits
 NonTopoPenultimatePluseOne
+Not allowed to change net_fakelag
+Not allowed to change net_fakeloss
+Not allowed to change net_option '%s'
 Not implemented field number
 Not safe to 'new' this class due to alignment requirements
 Not supported.
@@ -2083,7 +2106,6 @@ Plat_IsInDebugSession
 Plat_IsInTestMode
 Plat_NonFatalErrorFunc
 Plat_RelativeTicks
-Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_TickDiffMilliSecF
 Plat_USTime
 PlusFour
@@ -2111,7 +2133,7 @@ Problem     : Enum value did not match field type:    Expected  :
 Problem     : Field is not the right type for this message:    Expected  :
 ProcessMessages
 ProcessOverride encountered unknown directive NetworkOverrideType_t(%d)
-ProcessPacketSNP %s:%s packet %i at %i
+ProcessPacket %s:%s packet %i at %i
 Processing
 PropertyEditorSystem_001
 Proto
@@ -2163,7 +2185,6 @@ Reached an unintended state: CPPTYPE_MESSAGE
 Reached impossible case in HasBit().
 Reached maximum recursion limit for nested messages.
 ReadFields
-ReceiveDatagram
 Recursion limit at end of parse should be
 RegisterConVar: Unknown error registering convar "%s"!
 RegisterFieldChangeCallbackPriority
@@ -2183,6 +2204,7 @@ RemoveArrayElementsOutsideOfArrayMetadataBounds:  %s [ent %d] removing change '%
 RemoveFakeFields(%s) restoring clone %s:%d with original at %s:%d
 RemoveLast
 Removed fake field %s at %d
+Removed fake polymorphic serializer %s for field %s
 Removing Steam Net Connection for %s, handle #%u
 RenderDevice003
 RenderDeviceMgr001
@@ -2190,8 +2212,6 @@ RenderHardwareConfig002
 RenderService_001
 RenderUtils_001
 Repeated fields can't have default values.
-ReportClassError
-Requested max packet size before packets are 'split'.
 Requested size is too large to fit into size_t.
 Required fields are not allowed in proto3.
 Reserved numbers must be positive integers.
@@ -2208,19 +2228,6 @@ SI
 SO
 SOH
 SSE and SSE2 are required.
-STEAMAPPLIST_INTERFACE_VERSION001
-STEAMAPPS_INTERFACE_VERSION008
-STEAMHTMLSURFACE_INTERFACE_VERSION_005
-STEAMHTTP_INTERFACE_VERSION003
-STEAMINVENTORY_INTERFACE_V003
-STEAMMUSICREMOTE_INTERFACE_VERSION001
-STEAMMUSIC_INTERFACE_VERSION001
-STEAMPARENTALSETTINGS_INTERFACE_VERSION001
-STEAMREMOTESTORAGE_INTERFACE_VERSION016
-STEAMSCREENSHOTS_INTERFACE_VERSION003
-STEAMUGC_INTERFACE_VERSION018
-STEAMUSERSTATS_INTERFACE_VERSION012
-STEAMVIDEO_INTERFACE_V003
 STX
 SUB
 SYN
@@ -2236,7 +2243,6 @@ SchemaTestExternal_Two_001
 Sd
 Second argument to Swap() (of type "
 Second argument to SwapFields() (of type "
-Sending %d byte message to %s on socket %s
 Sep
 September
 SerializedEntitiesVersion001
@@ -2263,8 +2269,8 @@ SetString
 SetUInt32
 SetUInt64
 Setting FS %s field %s to %s
-Setting max routable payload size from %d to %d for %s
-Shorthand for 'net_option FakePacketLag_Recv'
+Shortcut to set both FakePacketLag_Recv and FakePacketLag_Send net options
+Shortcut to set both FakePacketLoss_Recv and FakePacketLoss_Send net options
 Should dedicated server listen for new-style P2P?
 Should not reach here.
 Show connectionless UDP traffic.
@@ -2274,7 +2280,6 @@ Show messages for large packets only: <size>
 Shows current network status
 Shows net channel info
 Si
-SkipPropData_
 So
 Socket '%s' bound to '%s' [%s]:
 Socket '%s' listening for %s on port %d:
@@ -2444,7 +2449,6 @@ SteamAPI_RegisterCallback
 SteamAPI_UnregisterCallResult
 SteamAPI_UnregisterCallback
 SteamAudio001
-SteamController008
 SteamDatagramClient_Init
 SteamDatagramClient_Init failed.  %s
 SteamDatagramClient_InitSteam failed.  %s
@@ -2457,22 +2461,15 @@ SteamDatagramServer_Kill
 SteamDatagram_Internal_SteamAPIKludge
 SteamDatagram_SetAppID
 SteamDatagram_SetUniverse
-SteamFriends017
 SteamGameServer014
 SteamGameServerNetworkingSockets_LibV12
-SteamGameServerStats001
 SteamGameServer_GetHSteamPipe
 SteamGameServer_GetHSteamUser
-SteamInput006
 SteamInternal_ContextInit
 SteamInternal_CreateInterface
 SteamInternal_FindOrCreateGameServerInterface
 SteamInternal_FindOrCreateUserInterface
-SteamMatchGameSearch001
-SteamMatchMaking009
-SteamMatchMakingServers002
 SteamNetSockets
-SteamNetworking006
 SteamNetworkingMessages002
 SteamNetworkingMessages_LibV2
 SteamNetworkingSockets config option not found
@@ -2536,7 +2533,6 @@ ToolSceneNodeFactory_001
 ToolService_001
 Tried to merge messages of different types
 Tried to register a non-generated type with the generated type registry.
-Tried to send ad-hoc to address %s, but address is not in list of steam net connections!
 True
 Tue
 Tuesday
@@ -2544,7 +2540,6 @@ Type appears to be in generated pool but wasn't
 Type is already registered:
 U
 UDP -> %s: sz=%5i seq=%5i ack=%5i rel=%1i tm=%8.3f
-UDP -> %s: sz=%i OOB (%d)
 UDP <- %s: sz=%5i seq=%5i ack=%5i rel=%1i tm=%8.3f
 UDP <- %s: sz=%i OOB (%d)
 UE
@@ -2570,7 +2565,6 @@ Unsupported KV3 basic type '%s' (%d)!
 Unsupported: type mismatch
 Usage: net_captureculldata <file path>
 Usage: net_option <setting> [<value>]
-Use network sockets layer even for listen server local player's packets (multiplayer only).
 Using Valve ICE implementation
 UtlMemory_Alloc
 UtlMemory_CalcNewAllocationCount
@@ -2700,6 +2694,8 @@ Yr)
 [$0]
 [%d]/
 [%s]
+[%s] Calculated recv margin is %lld usec, which is suspicious, discarding
+[%s] setting extremely high timeout
 [%s]:
 [+%d]
 [+add recip %d]
@@ -3014,7 +3010,6 @@ basic_ostream
 basic_string::_M_construct null not valid
 basic_string::_M_create
 basic_string::_M_replace
-basic_string::_M_replace_aux
 basic_string::_S_construct null not valid
 basic_string::_S_create
 basic_string::append
@@ -3107,7 +3102,7 @@ cannot be required.
 cannot create shim for unknown locale::facet
 cannot create std::vector larger than max_size()
 carriage-return
-cb(%s[%d])
+cb(
 chained via %s
 change
 char google::protobuf::stringpiece_internal::StringPiece::operator[](google::protobuf::stringpiece_internal::StringPiece::size_type) const
@@ -3515,6 +3510,8 @@ lseek64
 m
 mI
 mL
+m_Value
+m_arBuf[ BUF_VOICE ].m_stream
 m_bCanStillRegisterCallbackPriorities
 m_nSharedChangeCallbackCount must be <= 32
 malloc
@@ -3528,7 +3525,6 @@ marked MNetworkIncludeByName
 marked by name (recurse children)
 marked by nobase
 marked by user group
-mathlib.cpp
 matrix3x4
 matrix3x4_t
 matrix3x4a_t
@@ -3546,6 +3542,7 @@ mm
 mt19937
 n
 n/a
+nBits != 32
 nIndex != m_priorityToOrderMap.InvalidIndex()
 nPriority != NETWORK_FIELD_CHANGE_DEFAULT_PRIORITY
 nTries < 10000000
@@ -3558,6 +3555,9 @@ net_connections_stats
 net_culloptimization
 net_detailed_canpacket_log
 net_fakelag
+net_fakelag = %dms  (net_option FakePacketLag_Send = %dms, net_option FakePacketLag_Recv = %dms)
+net_fakeloss
+net_fakeloss = %g%%  (net_option FakePacketLoss_Send = %g%%, net_option FakePacketLoss_Recv = %g%%)
 net_filelogging
 net_fs_showindirections
 net_listallmessages
@@ -3565,7 +3565,6 @@ net_log_processing
 net_max_message_process_count
 net_max_message_queue_size
 net_max_polymorphic_spew
-net_maxroutable
 net_messageinfo
 net_messageinfo %s
 net_option
@@ -3588,8 +3587,8 @@ net_showudp_remoteonly
 net_spewcounts
 net_spewserializer
 net_status
+net_use_delta_property_fastpath
 net_use_packet_compression
-net_usesocketsforloopback
 net_validatemessages
 net_validatemessages = %d
 net_why_field_excluded
@@ -3625,7 +3624,6 @@ next state only
 nine
 no
 no CSerializedEntity memory being used
-no context
 no fastpath
 no metadata!
 noexcept
@@ -3775,7 +3773,6 @@ s
 sP
 sZ
 sc
-schemaclassinfo.cpp
 schemasystem
 sdr
 semicolon
@@ -3794,14 +3791,12 @@ seven
 sfixed32
 sfixed64
 shutdown
-singletons.cpp
 sint32
 sint64
 six
 size too big:
 sizeof
 sizeof...
-skipping MatchToSerializerByMeta for %s
 soundevent
 sprintf
 sqrt
@@ -7347,7 +7342,6 @@ uint64
 uint64_t google::protobuf::UnknownField::fixed64() const
 uint64_t google::protobuf::UnknownField::varint() const
 uint8
-unable to find polymorphic type %s in %s, no likely matches found
 unable to match %s::%s (type %s) in %s, no likely matches found
 underscore
 unfiltered_server_framerate

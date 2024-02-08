@@ -1,5 +1,4 @@
 !
-!"Allowing insert of dupe without explicit dupe insertion. Fix code callpoint to allow dupes."
 !=
 #include
 $ORIGIN
@@ -80,8 +79,8 @@ $ORIGIN
 -tools
 .*
 ...)
+../../public/tier0/utldict.h
 ../../public/tier0/utlrbtree.h
-../public/tier0/utlrbtree.h
 .[\()*+?{|^$
 .[\*^$
 .vcd
@@ -171,12 +170,13 @@ ASCII
 ASCII//TRANSLIT
 AST
 AddMultipleToTail
+AlignedByteArray not properly aligned
 AnimGraphEditorUtils001
 AnimationSystemUtils_001
 AnimationSystem_001
 Apr
 April
-Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&)
+Assert_ConditionFailed(_AssertCompileTimeConstantStruct_t const&, char const*, ...)
 AssetBrowserSystem_001
 AssetPreviewSystem_001
 AssetRenameSystem_001
@@ -265,6 +265,7 @@ CUtlSymbolTable::RemoveAll()
 CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
 CUtlVector
+Call Pulse
 Cast of %s loses value information (returning %s)
 Chance
 CharacterSetBuild
@@ -275,7 +276,6 @@ ChoreoSceneFileDataManifest_Staging
 ClientToolsInfo_001
 CommandLine
 Concept
-ConnectInterfaceSingletons
 CreateInterface
 D
 DC1
@@ -318,6 +318,7 @@ FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FIRE token in response needs exactly three parameters.
 Failed to allocate an instance of a class
+Failed to expand response group '%s' due to an unknown template variable '%s'
 Failed to save %s
 Failed to save unsupported class
 Failed to upconvert %s
@@ -329,6 +330,8 @@ FixupResourceName: Illegal path, missing extension passed in ("%s")!
 FlattenedSerializersVersion001
 FontManager_001
 Found %i matching rules, selecting slot %i
+Found existing value when inserting into dict - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound.
+Found existing value when inserting into tree - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound. If duplicate entries are intended, use InsertWithDupes.
 Fri
 Friday
 G
@@ -389,8 +392,6 @@ LC_NUMERIC
 LC_PAPER
 LC_TELEPHONE
 LC_TIME
-LOG_GENERAL
-LoadFromBuffer
 LoadKV3(CKeyValues3Context*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 LoadResponseSystem
 LoadResponseSystem %s - Finish
@@ -403,7 +404,6 @@ Localize_001
 LoggingSystem_IsChannelEnabled
 LoggingSystem_Log
 LoggingSystem_Log(int, LoggingSeverity_t, Color, char const*, ...)
-LoggingSystem_Log(int, LoggingSeverity_t, LeafCodeInfo_t const&, char const*, ...)
 LoggingSystem_RegisterLoggingChannel
 M
 MATCHFRAMEWORK_001
@@ -511,10 +511,9 @@ PanoramaUIEngine001
 ParticleSystemMgr003
 PhysicsBuilderMgr001
 Plat_DebugPrint
-Plat_ExitProcess
 Plat_FatalErrorFunc
 Plat_FloatTime
-Plat_ShouldCollectMiniDumpsForFatalErrors
+Plat_NonFatalErrorFunc
 Pointers cannot be used as numeric values
 PostProcessingSystem_001
 Print (for prototyping)
@@ -525,6 +524,7 @@ RESPONSEDOC_LIB
 RESPONSE_ENTITYIO
 RESPONSE_NONE
 RESPONSE_PRINT
+RESPONSE_PULSE
 RESPONSE_RESPONSE
 RESPONSE_RULES
 RESPONSE_SPEAK
@@ -550,6 +550,7 @@ Response group '%s' is trying to use embedded responses, but it has no embedded 
 ResponseGroup '%s' is NOT named uniquely!
 ResponseGroup '%s' isn't referenced by any rule - adding a dummy embedded rule
 ResponseGroup has no name, and no embedded rule - adding a dummy embedded rule
+ResponseParams
 ResponseRulesCache001
 Root
 Rule '%s' and ResponseGroup '%s' names don't match!
@@ -697,7 +698,6 @@ St7codecvtIDsc11__mbstate_tE
 St7codecvtIcc11__mbstate_tE
 St7codecvtIwc11__mbstate_tE
 St7collateIcE
-St7collateIwE
 St7num_getIcSt19istreambuf_iteratorIcSt11char_traitsIcEEE
 St7num_getIwSt19istreambuf_iteratorIwSt11char_traitsIwEEE
 St7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE
@@ -746,7 +746,6 @@ ThenSimple rule generated in response '%s'.
 This convar is being accessed prior to ConVar_Register being called
 Thu
 Thursday
-TokenWaiting
 ToolFramework2_002
 ToolSceneNodeFactory_001
 ToolService_001
@@ -980,7 +979,6 @@ __strftime_l
 __strtod_l
 __strtof_l
 __strxfrm_l
-__temp_unserialization_member__
 __tls_get_addr
 __towlower_l
 __towupper_l
@@ -1372,6 +1370,7 @@ m_responses
 m_selectedResponses
 m_selectedRules
 m_soundEventActorOverride
+m_speakerType
 m_szMatchingRule
 m_szResponseName
 m_szSpeakerContext
@@ -1476,6 +1475,7 @@ realloc
 reference temporary #
 reinterpret_cast
 required
+resource
 resource_name
 resourcesystem
 respeakdelay
@@ -1484,8 +1484,6 @@ response entry '%s' with unknown command '%s'
 response entry '%s' with unknown response type '%s'
 response_rules
 response_rules_staging
-response_system_parser.h
-responsedoc_legacy_text_importer.cpp
 restrict
 right-curly-bracket
 right-parenthesis
@@ -1514,7 +1512,6 @@ semicolon
 sequential
 setlocale
 seven
-singletons.cpp
 six
 sizeof
 sizeof...
@@ -2372,6 +2369,8 @@ std::__detail::_Compiler<std::regex_traits<char> >::_M_atom()
 std::__detail::_Compiler<std::regex_traits<char> >::_M_bracket_expression()
 std::__detail::_Compiler<std::regex_traits<char> >::_M_cur_int_value(int)
 std::__detail::_Compiler<std::regex_traits<char> >::_M_disjunction()
+std::__detail::_Compiler<std::regex_traits<char> >::_M_expression_term<true, false>(std::pair<bool, char>&, std::__detail::_BracketMatcher<std::regex_traits<char>, true, false>&)::{lambda(char)#1}::operator()(char) const
+std::__detail::_Compiler<std::regex_traits<char> >::_M_pop()
 std::__detail::_Compiler<std::regex_traits<char> >::_M_quantifier()
 std::__detail::_Compiler<std::regex_traits<char> >::_M_try_char()
 std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_M_dfs(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, false>::_Match_mode, long)
@@ -2386,7 +2385,10 @@ std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*>
 std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_lookahead(long)
 std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_rep_once_more(std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_Match_mode, long)
 std::__detail::_Executor<char const*, std::allocator<std::sub_match<char const*> >, std::regex_traits<char>, true>::_M_word_boundary() const
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_dummy()
 std::__detail::_NFA<std::regex_traits<char> >::_M_insert_matcher(std::function<bool (char)>)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_repeat(long, long, bool)
+std::__detail::_NFA<std::regex_traits<char> >::_M_insert_state(std::__detail::_State<char>)
 std::__detail::_NFA<std::regex_traits<char> >::_M_insert_subexpr_begin()
 std::__detail::_NFA<std::regex_traits<char> >::_M_insert_subexpr_end()
 std::__detail::_RegexTranslatorBase<std::regex_traits<char>, false, true>::_M_transform(char) const
@@ -3292,6 +3294,7 @@ std::ctype_byname<wchar_t>::ctype_byname(std::__cxx11::basic_string<char, std::c
 std::ctype_byname<wchar_t>::ctype_byname(std::string const&, unsigned long)
 std::ctype_byname<wchar_t>::~ctype_byname()
 std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::_M_reallocate_map(unsigned long, bool)
+std::deque<std::__detail::_StateSeq<std::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::regex_traits<char> > > >::push_back(std::__detail::_StateSeq<std::regex_traits<char> > const&)
 std::domain_error::domain_error(char const*)
 std::domain_error::domain_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 std::domain_error::domain_error(std::string const&)
@@ -3952,6 +3955,7 @@ std::regex_error::~regex_error()
 std::regex_traits<char>::_RegexMask std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const
 std::regex_traits<char>::lookup_classname<char const*>(char const*, char const*, bool) const::__classnames
 std::regex_traits<char>::lookup_collatename<char const*>(char const*, char const*) const::__collatenames
+std::regex_traits<char>::translate_nocase(char) const
 std::runtime_error::operator=(std::runtime_error const&)
 std::runtime_error::operator=(std::runtime_error&&)
 std::runtime_error::runtime_error(char const*)
@@ -4656,6 +4660,7 @@ uint64
 uint8
 underscore
 uninitialized __any_string
+unnamed
 unsigned
 unsigned __int128
 unsigned char

@@ -1,7 +1,6 @@
 
 !
 !!
-!"Allowing insert of dupe without explicit dupe insertion. Fix code callpoint to allow dupes."
 !=
 !@
 !O
@@ -81,6 +80,7 @@ $ORIGIN
 %s: Invalid capacity %u
 %s: Invalid grow amount %d
 %s: Warning: No compile targets specified! Shader will not be compiled!
+%s: __pos (which is %zu) > this->size() (which is %zu)
 %s\
 %s__font_page_%d
 %s_intermediate_%d.vtex
@@ -218,6 +218,8 @@ $ORIGIN
 *;
 *=
 *C
+*N12_GLOBAL__N_121system_error_categoryE
+*N12_GLOBAL__N_122generic_error_categoryE
 *N24CParallelProcessLauncher18CParallelLambdaJobIZ48CompileComboAndGetVariables_DynamicShaderCompileR10CUtlVectorI26DynamicShaderCompileTask_ti10CUtlMemoryIS2_iEEPFviiEEUliE_EE
 *Z31CompileAllShadersForStaticComboyR19CVfxStaticComboDataR4CVfx12VfxProgram_tP4IVfxEUlRiE_
 *ZN10CMaterial222IssueAsyncLoadRequestsER14CUtlLeanVectorI32MaterialStaticComboLoadRequest_tsE11CWeakHandleI29InfoForResourceTypeIMaterial2E16ShaderLoadMode_tEUlP25IAsyncResourceDataRequestE_
@@ -323,6 +325,8 @@ $ORIGIN
 /=
 /H
 /data/src/vfx/compiletargetexpr.g
+/dev/random
+/dev/urandom
 0
 0 0 0 0
 0 0 0 255
@@ -412,6 +416,7 @@ $ORIGIN
 23CKV3ResourceBlockHelper
 23CKV3TransferContextBase
 23CKV3TransferLoadContext
+23CKV3TransferSaveContext
 23CUtlStackMachineBuilder
 25
 25IAsyncProcessedDataResult
@@ -574,6 +579,7 @@ $ORIGIN
 @$
 @1
 @?
+@@0123456789
 @B
 A
 A(
@@ -748,7 +754,6 @@ CThreadSyncObject::~CThreadSyncObject()
 CUtlBinaryBlock
 CUtlBinaryBlock::Set(void const*, int)
 CUtlBinaryBlock::SetLength(int)
-CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock&&)
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::CUtlBuffer(int, int, int)
@@ -788,6 +793,7 @@ CUtlString::Acquire(CBufferString*, bool)
 CUtlString::Append(char const*)
 CUtlString::Append(char const*, int)
 CUtlString::DirName() const
+CUtlString::Format(char const*, ...)
 CUtlString::FreeMemoryBlock()
 CUtlString::GetForModify()
 CUtlString::IsEqual_CaseSensitive(char const*) const
@@ -813,12 +819,14 @@ CUtlSymbolTable::Find(char const*) const
 CUtlSymbolTable::RemoveAll()
 CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
+CUtlVector
 CalcStaticComboIdFromValues
 Cannot allocate abstract class
 Cast of %s loses value information (returning %s)
 CheckBox
 ChildOf
 ChildOf(
+Class does not allow allocation from its schema binding
 Clears the shader cache used for dynamic shader compile.
 ClientToolsInfo_001
 ColorCorrectionTex0
@@ -843,10 +851,8 @@ Compiled %i shaders in %.1fs
 Compiling %i shaders:
 Compute Shader
 ComputeMaterialBatchableFlags
-ConnectInterfaceSingletons
 Constant %s is marked dynamic in the .vmat file.
 Constant %s.
-Construct
 Cost
 Courier
 Courier New
@@ -874,7 +880,6 @@ DXT5_NM
 D_
 D_COLOR_CORRECTION_TEXTURE_COUNT
 D_DISPATCH_MODE
-D_ENDPOINT_OPTIMIZATION
 D_FADE_COLOR
 D_PERCEPTUAL_ERROR_METRIC
 Decompress
@@ -927,7 +932,6 @@ Error parsing supported compile targets from vfx file "%s"
 Error reading default value from variable description
 Error resolving symbol "%s"
 Error! Cannot find GAME\%s file in current search paths! If this is a new shader, you must run vfxcompile.exe at least once, and then reload shaders.
-ExecuteMaterialCommandBuffers
 ExternalDescSet
 Extraneous token
 F
@@ -938,6 +942,7 @@ F0
 F?
 FA
 FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
+FATAL ERROR: attempting to render with error material for '%s'
 FATAL ERROR: unable to register all schema data: %s
 FATAL: %s called on a pool context (no root available)
 FEATURES
@@ -996,6 +1001,7 @@ Found %d materials
 Found %d textures ( %d references ) %s MB (mem) %s MB (disk) | Mem = %s MB (streamable) %s MB (RTs) %s MB (non-mip'd non-RTs)
 Found %d unique vfx files, %s unique shader handles
 Found 0 materials
+Found existing value when inserting into tree - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound. If duplicate entries are intended, use InsertWithDupes.
 G
 G#
 G'
@@ -1019,9 +1025,9 @@ GameUIService_001
 Gb
 Geometry Shader
 GetCPUInformation
+GetGameInfoBool(char const*, bool)
 GetResourceManifestCount
 GetResourceManifests
-GetVariableTextureValue
 Glyph Miss: FontHandle_t:0x%8.8llx (%s), %s
 Grow
 H
@@ -1159,12 +1165,12 @@ MaterialParam_t
 MaterialResourceData_t
 MaterialSystem
 MaterialSystem2
+MaterialSystem2/ErrorMaterialIsFatalError
 MaterialSystem2/ToolsShadingComplexity/TargetRenderMode
 MaterialSystem2DefaultDebugFont
 MaterialSystem2DefaultDebugFontOutline
 MaterialUtilsInit
 MaterialUtils_001
-MathLib_Init
 MatrixAxisAngle
 MatrixAxisToAxis
 MatrixColorCorrect
@@ -1186,12 +1192,12 @@ MeshSystem001
 MeshUtils001
 Microsoft (R) HLSL Shader Compiler 9.29.952.3111
 Mismatched Token Exception
+Missing required transfer interface: %s
 Missing token
 Mode "%s"
 ModelDocUtils001
 More than 8 active color correction lookup textures!
 Msg
-Must run with -shaderstats to use mat_shading_complexity!
 N
 N10CMaterial224AsyncStaticComboResult_tE
 N10__cxxabiv115__forced_unwindE
@@ -1212,6 +1218,7 @@ NORMAL
 NOTE: Currently showing on disk format without accounting for picmip level or streaming state!
 NOTE: Each static combo creates multiple shader programs based on the dynamic combos available.
 NOTE: Use mat_print_materials instead, and then click on the hyperlink for a given material. That will call this concommand with the correctly formatted argument.
+NSt3_V214error_categoryE
 NULL shader pointer!
 NV_NULL
 NavGameTest001
@@ -1283,7 +1290,6 @@ Plat_IsDirectory
 Plat_LoadInterface
 Plat_LoadModuleRaw
 Plat_NonFatalErrorFunc
-Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_UnloadModule
 Pointers cannot be used as numeric values
 Polygon too large (%d points / max %d, %d indices / max %d), ignoring
@@ -1323,6 +1329,7 @@ R16G16_UINT
 R16_UINT
 R32F
 R32G32_UINT
+R32_SINT
 R32_UINT
 R8
 R8G8B8A8_ETC2_EAC
@@ -1370,7 +1377,6 @@ RenderModes
 RenderService_001
 RenderUtils
 RenderUtils_001
-ReportClassError
 RepresentativeTexture
 Requires
 Requires%d
@@ -1391,7 +1397,6 @@ SHADER_SOURCE
 SHADER_SOURCE_ROOT
 SM
 SR
-SSE and SSE2 are required.
 SUPPORTS_CS
 SUPPORTS_GS
 SV_ClipDistance
@@ -1452,12 +1457,25 @@ Spawning %d compile jobs
 Spew information about font manager fonts
 SrgbGammaToLinear
 SrgbLinearToGamma
+St10bad_typeid
 St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
+St11logic_error
+St11range_error
+St12domain_error
+St12length_error
+St12out_of_range
+St12system_error
 St13bad_exception
+St13runtime_error
+St14overflow_error
+St15underflow_error
 St16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE
+St16invalid_argument
 St17bad_function_call
 St19_Sp_make_shared_tag
 St23_Sp_counted_ptr_inplaceIN19CVfxStaticComboData23DecompressedComboData_tESaIS1_ELN9__gnu_cxx12_Lock_policyE2EE
+St8bad_cast
+St9bad_alloc
 St9exception
 St9type_info
 Stack depth limit hit (%d)
@@ -1556,7 +1574,6 @@ VFONT1
 VFX value %s out of range %d-%d: %d
 VFX_DLL_001
 VFX_PROGRAM_MAX
-VFileSystem017
 VIEW_FADE_CONSTANT_COLOR
 VIEW_FADE_MOD2X
 VIEW_FADE_MODULATE
@@ -1648,8 +1665,6 @@ VertexColorUVPos_t
 VertexUVPosColorNormalAndTangent_t
 Vfx Error: attribute type does not exist or does not support attribute literals.
 Vfx file "%s" has both compute shader and other shaders. Compute shaders must be the only shader type in a vfx file.
-VfxFindOrBuildFeatureComboData
-VfxFindOrBuildFeatureComboVertexShaderInputSignatureStep1
 VfxInit
 VguiTexture
 Viewport
@@ -1733,7 +1748,12 @@ _Accum
 _Complex
 _Fract
 _GLOBAL_
+_ITM_RU1
+_ITM_RU8
+_ITM_addUserCommitAction
 _ITM_deregisterTMCloneTable
+_ITM_memcpyRnWt
+_ITM_memcpyRtWn
 _ITM_registerTMCloneTable
 _Imaginary
 _O
@@ -1804,9 +1824,11 @@ __cxxabiv1::__vmi_class_type_info::__do_dyncast(long, __cxxabiv1::__class_type_i
 __cxxabiv1::__vmi_class_type_info::__do_find_public_src(long, void const*, __cxxabiv1::__class_type_info const*, void const*) const
 __cxxabiv1::__vmi_class_type_info::__do_upcast(__cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info::__upcast_result&) const
 __cxxabiv1::__vmi_class_type_info::~__vmi_class_type_info()
+__errno_location
 __float128
 __gcclibcxx_demangle_callback
 __gmon_start__
+__gnu_cxx::__concat_size_t(char*, unsigned long, unsigned long)
 __gnu_cxx::__concurrence_lock_error
 __gnu_cxx::__concurrence_lock_error::what() const
 __gnu_cxx::__concurrence_lock_error::~__concurrence_lock_error()
@@ -1814,7 +1836,9 @@ __gnu_cxx::__concurrence_unlock_error
 __gnu_cxx::__concurrence_unlock_error::what() const
 __gnu_cxx::__concurrence_unlock_error::~__concurrence_unlock_error()
 __gnu_cxx::__freeres()
+__gnu_cxx::__snprintf_lite(char*, unsigned long, char const*, __va_list_tag*)
 __gnu_cxx::__throw_concurrence_lock_error()
+__gnu_cxx::__throw_insufficient_space(char const*, char const*)
 __gnu_cxx::__verbose_terminate_handler()
 __gnu_cxx::recursive_init_error::recursive_init_error()
 __gnu_cxx::recursive_init_error::~recursive_init_error()
@@ -1830,6 +1854,13 @@ _gs
 _ps
 _psrs
 _rtx
+_txnal_cow_string_C1_for_exceptions(void*, char const*, void*)
+_txnal_cow_string_D1(void*)
+_txnal_cow_string_D1_commit(void*)
+_txnal_cow_string_c_str(void const*)
+_txnal_logic_error_get_msg(void*)
+_txnal_runtime_error_get_msg(void*)
+_txnal_sso_string_c_str(void const*)
 _vs
 `
 `8
@@ -1865,8 +1896,28 @@ bad_function_call
 basic_iostream
 basic_istream
 basic_ostream
+basic_string::_M_construct null not valid
+basic_string::_M_replace
+basic_string::_M_replace_aux
+basic_string::_S_construct null not valid
+basic_string::_S_create
+basic_string::append
+basic_string::assign
+basic_string::at: __n (which is %zu) >= this->size() (which is %zu)
+basic_string::basic_string
+basic_string::compare
+basic_string::copy
+basic_string::erase
+basic_string::insert
+basic_string::replace
+basic_string::resize
+basic_string::substr
 binary_blob
 bool
+bool __gnu_cxx::operator==<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
+bool __gnu_cxx::operator==<char const*, std::string>(__gnu_cxx::__normal_iterator<char const*, std::string> const&, __gnu_cxx::__normal_iterator<char const*, std::string> const&)
+bool __gnu_cxx::operator==<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
+bool __gnu_cxx::operator==<char*, std::string>(__gnu_cxx::__normal_iterator<char*, std::string> const&, __gnu_cxx::__normal_iterator<char*, std::string> const&)
 bool2
 bool3
 bool4
@@ -1880,6 +1931,9 @@ c\
 cbuffer
 cc
 ceil
+char* std::string::_S_construct<__gnu_cxx::__normal_iterator<char*, std::string> >(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, std::allocator<char> const&, std::forward_iterator_tag)
+char* std::string::_S_construct<char const*>(char const*, char const*, std::allocator<char> const&, std::forward_iterator_tag)
+char* std::string::_S_construct<char*>(char*, char*, std::allocator<char> const&, std::forward_iterator_tag)
 char16_t
 char32_t
 char8
@@ -1887,6 +1941,7 @@ char8_t
 charset
 cl
 clamp
+close
 cm
 co
 co_await
@@ -1915,6 +1970,7 @@ decimal64
 decltype (
 decltype(auto)
 decltype(nullptr)
+default
 degrees
 delete
 delete[]
@@ -1975,7 +2031,6 @@ float4x4
 float64
 floor
 font_show_glyph_miss
-fontmanager/fontmanager.cpp
 fontmanager/fonttexturecache.cpp
 fputc
 fputs
@@ -2110,6 +2165,7 @@ game
 game_controls
 gamelayer
 generic
+gettext
 global constructors keyed to
 global destructors keyed to
 gs_4_0
@@ -2139,6 +2195,7 @@ iOS SM 5.0 (VULKAN)
 iX
 int
 int4
+ioctl
 is also the end of the line, so you must check your lexer rules
 ix
 j
@@ -2320,33 +2377,31 @@ material2.cpp(2237): DxSupportLevel %d not supported!
 material2.cpp(2584): Dynamic Combos should be assumed to be unique for dynamic shader compile! %d != %d
 material2.cpp(2663): Dynamic shader compile failed for %s in material "%s"!
 material2.cpp(2952): Failed call to FindOrLoadStaticComboData()!
-material2.cpp(3255): All bad! The error material failed in dynamic shader compile!
-material2.cpp(3895): Find a graphics programmer! Trying to bind a "%s" shader that doesn't exist! for %s
+material2.cpp(3282): All bad! The error material failed in dynamic shader compile!
+material2.cpp(3922): Find a graphics programmer! Trying to bind a "%s" shader that doesn't exist! for %s
 material2.cpp(596): Material "%s" is requesting a bad mode "%s"!
 material2.cpp(711): Error! Material "%s" doesn't have any valid layers to get the CVsInputSignatureVector from!
 material2.cpp(743): Error! Material "%s" doesn't have a CVsInputSignatureVector!
 material2.cpp(761): Error! Material "%s" has invalid signature index %d!
 material2.cpp:2603
-material_command_buffer.cpp
-material_shader_params.cpp
 material_shader_params.cpp(1071): Invalid data type for render state variable %s in material "%s"!
 material_shader_params.cpp(1078): Error evaluating expression for render state variable %s in material "%s"!
 material_shader_params.cpp(1084): Invalid variable source type for render state variable %s in material "%s"!
-material_shader_params.cpp(1155): Unsupported render state type in material "%s"!
-material_shader_params.cpp(1173): Sampler index %d out of bounds for "%s" in material "%s"!
-material_shader_params.cpp(1246): Unsupported sampler state type for "%s" in material "%s"!
-material_shader_params.cpp(1328): Could not bind constant buffer "%s" because the constant buffer handle was invalid in material "%s"!
-material_shader_params.cpp(1346): Error setting constant for REGISTER_FLOAT4 for "%s" in material "%s"! Talk to a programmer!
-material_shader_params.cpp(1444): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"
-material_shader_params.cpp(1449): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!
-material_shader_params.cpp(1729): Invalid data type for render state variable %s in material "%s"!
-material_shader_params.cpp(1765): Invalid data type for render state variable %s in material "%s"!
-material_shader_params.cpp(1851): Invalid data type for render state variable %s in material "%s"!
-material_shader_params.cpp(1859): Invalid variable source type for render state variable %s in material "%s"!
-material_shader_params.cpp(1957): Unsupported render state type in material "%s"!
-material_shader_params.cpp(2108): Unsupported render state in material "%s"!
-material_shader_params.cpp(2181): Unsupported sampler state type for "%s" in material "%s"!
-material_shader_params.cpp(2203): Unsupported sampler state type for "%s" in material "%s"!
+material_shader_params.cpp(1143): Unsupported render state type in material "%s"!
+material_shader_params.cpp(1161): Sampler index %d out of bounds for "%s" in material "%s"!
+material_shader_params.cpp(1234): Unsupported sampler state type for "%s" in material "%s"!
+material_shader_params.cpp(1316): Could not bind constant buffer "%s" because the constant buffer handle was invalid in material "%s"!
+material_shader_params.cpp(1334): Error setting constant for REGISTER_FLOAT4 for "%s" in material "%s"! Talk to a programmer!
+material_shader_params.cpp(1432): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"
+material_shader_params.cpp(1437): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!
+material_shader_params.cpp(1717): Invalid data type for render state variable %s in material "%s"!
+material_shader_params.cpp(1753): Invalid data type for render state variable %s in material "%s"!
+material_shader_params.cpp(1839): Invalid data type for render state variable %s in material "%s"!
+material_shader_params.cpp(1847): Invalid variable source type for render state variable %s in material "%s"!
+material_shader_params.cpp(1912): Unsupported render state type in material "%s"!
+material_shader_params.cpp(2060): Unsupported render state in material "%s"!
+material_shader_params.cpp(2133): Unsupported sampler state type for "%s" in material "%s"!
+material_shader_params.cpp(2155): Unsupported sampler state type for "%s" in material "%s"!
 material_shader_params.cpp(410): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"
 material_shader_params.cpp(415): Bad VFX_VARIABlE type for VFX_VARIABLE_SOURCE_SET_BY_ARTIST %s in material "%s"!
 material_shader_params.cpp(470): Trying to set VFX_VARIABLE_TYPE_MATRIX_* but this isn't supported yet! In material "%s"
@@ -2362,19 +2417,19 @@ materials/dev/debug_solid.vmat
 materials/dev/debug_wireframe.vmat
 materials/error.vmat
 materialsystem2
-materialsystem2.cpp
-materialsystem2.cpp(147): ERROR! Empty shader mode string found! Use "Default" instead!
-materialsystem2.cpp(163): ERROR! Shader mode "%s" has unsupported type "%s" specified gameinfo.gi!
-materialsystem2.cpp(3370): pVfx == NULL!
-materialsystem2.cpp(3419): pVfx == NULL!
-materialsystem2.cpp(3690): Error reading index!
-materialsystem2.cpp(422): ERROR!!! Materials not released by other systems on shutdown! (See spew above)
-materialsystem2.cpp(427): ERROR!!! Shaders not freed on shutdown, likely due to unreleased materials! (See spew above)
-materialsystem2.cpp(441): GetErrorMaterial() called when m_pMaterialTypeManager == NULL!
-materialsystem2.cpp(988): ERROR!!! Shaders not freed before shader reload! (See spew above)
+materialsystem2.cpp(152): ERROR! Empty shader mode string found! Use "Default" instead!
+materialsystem2.cpp(168): ERROR! Shader mode "%s" has unsupported type "%s" specified gameinfo.gi!
+materialsystem2.cpp(3383): pVfx == NULL!
+materialsystem2.cpp(3432): pVfx == NULL!
+materialsystem2.cpp(3703): Error reading index!
+materialsystem2.cpp(430): ERROR!!! Materials not released by other systems on shutdown! (See spew above)
+materialsystem2.cpp(435): ERROR!!! Shaders not freed on shutdown, likely due to unreleased materials! (See spew above)
+materialsystem2.cpp(449): GetErrorMaterial() called when m_pMaterialTypeManager == NULL!
+materialsystem2.cpp(996): ERROR!!! Shaders not freed before shader reload! (See spew above)
 matrix3x4
 matsystemtexture_%s_%lld.vtex
 max
+memchr
 memcmp
 memcpy
 memmove
@@ -2383,6 +2438,7 @@ mi
 min
 ml
 mm
+mt19937
 n
 n&
 nBatchIndices <= nMaxIndexCountPerPass
@@ -2402,6 +2458,7 @@ non-virtual thunk to
 normal
 normalize
 normalize_safe
+not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugsbasic_string::_M_create
 null
 nw
 o
@@ -2410,6 +2467,7 @@ oD
 oN
 oR
 oo
+open
 operator
 operator delete(void*)
 operator delete(void*, std::align_val_t)
@@ -2484,8 +2542,14 @@ rS
 rY
 r`
 radians
-random
+random_device could not be read
+random_device: rdseed failed
+random_device::random_device(const std::string&): device not available
+random_device::random_device(const std::string&): unsupported token
 rc
+rdrand
+rdrnd
+rdseed
 realloc
 reference temporary #
 reinterpret_cast
@@ -2525,7 +2589,6 @@ samplerCUBEARRAY
 samplerstateindex
 saturate
 sc
-schemaclassinfo.cpp
 schemasystem
 setting.shaderquality
 shaders/vfx
@@ -2533,9 +2596,7 @@ shaders_android_vulkan.vpk
 shaders_ios_vulkan.vpk
 shaders_pc.vpk
 shaders_vulkan.vpk
-sign
 sincos
-singletons.cpp
 sizeof
 sizeof...
 slant
@@ -2551,29 +2612,481 @@ std
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()
 std::_Sp_counted_ptr<decltype(nullptr), (__gnu_cxx::_Lock_policy)2>::_M_dispose()
 std::_Sp_make_shared_tag::_S_ti()::__tag
+std::_V2::error_category::_M_message(int) const
+std::_V2::error_category::_M_message[abi:cxx11](int) const
+std::_V2::error_category::default_error_condition(int) const
+std::_V2::error_category::equivalent(int, std::error_condition const&) const
+std::_V2::error_category::equivalent(std::error_code const&, int) const
+std::_V2::error_category::~error_category()
+std::_V2::generic_category()
+std::_V2::system_category()
+std::__cow_string::__cow_string()
+std::__cow_string::__cow_string(char const*, unsigned long)
+std::__cow_string::__cow_string(std::__cow_string const&)
+std::__cow_string::__cow_string(std::__cow_string&&)
+std::__cow_string::__cow_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cow_string::__cow_string(std::string const&)
+std::__cow_string::operator=(std::__cow_string const&)
+std::__cow_string::operator=(std::__cow_string&&)
+std::__cow_string::~__cow_string()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Alloc_hider::_Alloc_hider(char*, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Alloc_hider::_Alloc_hider(char*, std::allocator<char>&&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_append(char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_capacity(unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_check(unsigned long, char const*) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_check_length(unsigned long, unsigned long, char const*) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct(unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct_aux_2(unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_create(unsigned long&, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_data() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_data(char*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_destroy(unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_disjunct(char const*) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_erase(unsigned long, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_get_allocator()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_get_allocator() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_is_local() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_length(unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_limit(unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_local_data()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_local_data() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_mutate(unsigned long, unsigned long, char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_replace(unsigned long, unsigned long, char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_replace_aux(unsigned long, unsigned long, unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_set_length(unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_assign(char*, unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_compare(unsigned long, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy(char*, char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, char const*, char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_copy_chars(char*, char*, char*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_move(char*, char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(std::initializer_list<char>)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(std::initializer_list<char>)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::at(unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::at(unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::back()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::back() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, unsigned long, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, unsigned long, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::initializer_list<char>, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(unsigned long, char, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, void>(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char const*, void>(char const*, char const*, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*, void>(char*, char*, std::allocator<char> const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::begin()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::begin() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::c_str() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::capacity() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::cbegin() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::cend() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::clear()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::compare(char const*) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::compare(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::compare(unsigned long, unsigned long, char const*) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::compare(unsigned long, unsigned long, char const*, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::compare(unsigned long, unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::compare(unsigned long, unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::copy(char*, unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::crbegin() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::crend() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::data() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::empty() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::end()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::end() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::erase(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::erase(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::erase(unsigned long, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find(char const*, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find(char const*, unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find(char, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_first_not_of(char const*, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_first_not_of(char const*, unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_first_not_of(char, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_first_not_of(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_first_of(char const*, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_first_of(char const*, unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_first_of(char, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_first_of(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_last_not_of(char const*, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_last_not_of(char const*, unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_last_not_of(char, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_last_not_of(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_last_of(char const*, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_last_of(char const*, unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_last_of(char, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::find_last_of(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::front()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::front() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::get_allocator() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::initializer_list<char>)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::initializer_list<char>)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(unsigned long, char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(unsigned long, char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::insert(unsigned long, unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::length() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::max_size() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::npos
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator+=(char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator+=(char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator+=(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator+=(std::initializer_list<char>)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator=(char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator=(char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator=(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator=(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator=(std::initializer_list<char>)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator[](unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator[](unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::pop_back()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::push_back(char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::rbegin()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::rbegin() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::rend()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::rend() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, char const*, char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, char*, char*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::initializer_list<char>)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(unsigned long, unsigned long, char const*)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(unsigned long, unsigned long, char const*, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(unsigned long, unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(unsigned long, unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long, unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::replace(unsigned long, unsigned long, unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::reserve(unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::resize(unsigned long)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::resize(unsigned long, char)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::rfind(char const*, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::rfind(char const*, unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::rfind(char, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::rfind(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::shrink_to_fit()
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::size() const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::substr(unsigned long, unsigned long) const
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::swap(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string()
+std::__sso_string::__sso_string()
+std::__sso_string::__sso_string(char const*, unsigned long)
+std::__sso_string::__sso_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::__sso_string::__sso_string(std::__sso_string const&)
+std::__sso_string::__sso_string(std::__sso_string&&)
+std::__sso_string::__sso_string(std::string const&)
+std::__sso_string::operator=(std::__sso_string const&)
+std::__sso_string::operator=(std::__sso_string&&)
+std::__sso_string::~__sso_string()
+std::__throw_bad_alloc()
+std::__throw_bad_cast()
+std::__throw_bad_exception()
 std::__throw_bad_function_call()
+std::__throw_bad_typeid()
+std::__throw_domain_error(char const*)
+std::__throw_invalid_argument(char const*)
+std::__throw_length_error(char const*)
+std::__throw_logic_error(char const*)
+std::__throw_out_of_range(char const*)
+std::__throw_out_of_range_fmt(char const*, ...)
+std::__throw_overflow_error(char const*)
+std::__throw_range_error(char const*)
+std::__throw_runtime_error(char const*)
+std::__throw_system_error(int)
+std::__throw_underflow_error(char const*)
 std::allocator
+std::bad_alloc::what() const
+std::bad_alloc::~bad_alloc()
+std::bad_cast
+std::bad_cast::what() const
+std::bad_cast::~bad_cast()
 std::bad_exception
 std::bad_exception::what() const
 std::bad_exception::~bad_exception()
 std::bad_function_call::what() const
 std::bad_function_call::~bad_function_call()
+std::bad_typeid
+std::bad_typeid::what() const
+std::bad_typeid::~bad_typeid()
 std::basic_iostream<char, std::char_traits<char> >
 std::basic_istream<char, std::char_traits<char> >
 std::basic_ostream<char, std::char_traits<char> >
 std::basic_string
 std::basic_string<char, std::char_traits<char>, std::allocator<char> >
+std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string()
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, unsigned long, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::initializer_list<char>, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&, unsigned long, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&, unsigned long, unsigned long)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&, unsigned long, unsigned long, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string&&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string&&, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(unsigned long, char, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<__gnu_cxx::__normal_iterator<char*, std::string> >(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char const*>(char const*, char const*, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<char*>(char*, char*, std::allocator<char> const&)
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string()
+std::domain_error::domain_error(char const*)
+std::domain_error::domain_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::domain_error::domain_error(std::string const&)
+std::domain_error::~domain_error()
+std::error_code::default_error_condition() const
 std::exception
 std::exception::what() const
 std::exception::~exception()
 std::get_terminate()
 std::get_unexpected()
+std::invalid_argument::invalid_argument(char const*)
+std::invalid_argument::invalid_argument(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::invalid_argument::invalid_argument(std::string const&)
+std::invalid_argument::~invalid_argument()
 std::iostream
 std::istream
+std::length_error::length_error(char const*)
+std::length_error::length_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::length_error::length_error(std::string const&)
+std::length_error::~length_error()
+std::logic_error::logic_error(char const*)
+std::logic_error::logic_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::logic_error::logic_error(std::logic_error const&)
+std::logic_error::logic_error(std::logic_error&&)
+std::logic_error::logic_error(std::string const&)
+std::logic_error::operator=(std::logic_error const&)
+std::logic_error::operator=(std::logic_error&&)
+std::logic_error::what() const
+std::logic_error::~logic_error()
 std::ostream
+std::out_of_range::out_of_range(char const*)
+std::out_of_range::out_of_range(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::out_of_range::out_of_range(std::string const&)
+std::out_of_range::~out_of_range()
+std::overflow_error::overflow_error(char const*)
+std::overflow_error::overflow_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::overflow_error::overflow_error(std::string const&)
+std::overflow_error::~overflow_error()
+std::random_device::_M_fini()
+std::random_device::_M_getentropy() const
+std::random_device::_M_getval()
+std::random_device::_M_getval_pretr1()
+std::random_device::_M_init(char const*, unsigned long)
+std::random_device::_M_init(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::random_device::_M_init(std::string const&)
+std::random_device::_M_init_pretr1(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::random_device::_M_init_pretr1(std::string const&)
+std::range_error::range_error(char const*)
+std::range_error::range_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::range_error::range_error(std::string const&)
+std::range_error::~range_error()
+std::runtime_error::operator=(std::runtime_error const&)
+std::runtime_error::operator=(std::runtime_error&&)
+std::runtime_error::runtime_error(char const*)
+std::runtime_error::runtime_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::runtime_error::runtime_error(std::runtime_error const&)
+std::runtime_error::runtime_error(std::runtime_error&&)
+std::runtime_error::runtime_error(std::string const&)
+std::runtime_error::what() const
+std::runtime_error::~runtime_error()
 std::set_terminate(void (*)())
 std::set_unexpected(void (*)())
 std::string
+std::string::_Alloc_hider::_Alloc_hider(char*, std::allocator<char> const&)
+std::string::_M_assign(char*, unsigned long, char)
+std::string::_M_check(unsigned long, char const*) const
+std::string::_M_check_length(unsigned long, unsigned long, char const*) const
+std::string::_M_copy(char*, char const*, unsigned long)
+std::string::_M_data() const
+std::string::_M_data(char*)
+std::string::_M_disjunct(char const*) const
+std::string::_M_ibegin() const
+std::string::_M_iend() const
+std::string::_M_leak()
+std::string::_M_leak_hard()
+std::string::_M_limit(unsigned long, unsigned long) const
+std::string::_M_move(char*, char const*, unsigned long)
+std::string::_M_mutate(unsigned long, unsigned long, unsigned long)
+std::string::_M_rep() const
+std::string::_M_replace_aux(unsigned long, unsigned long, unsigned long, char)
+std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long)
+std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long)
+std::string::_Rep::_M_destroy(std::allocator<char> const&)
+std::string::_Rep::_M_dispose(std::allocator<char> const&)
+std::string::_Rep::_M_grab(std::allocator<char> const&, std::allocator<char> const&)
+std::string::_Rep::_M_is_leaked() const
+std::string::_Rep::_M_is_shared() const
+std::string::_Rep::_M_refcopy()
+std::string::_Rep::_M_refdata()
+std::string::_Rep::_M_set_leaked()
+std::string::_Rep::_M_set_length_and_sharable(unsigned long)
+std::string::_Rep::_M_set_sharable()
+std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&)
+std::string::_Rep::_S_empty_rep()
+std::string::_Rep::_S_empty_rep_storage
+std::string::_Rep::_S_max_size
+std::string::_Rep::_S_terminal
+std::string::_S_compare(unsigned long, unsigned long)
+std::string::_S_construct(unsigned long, char, std::allocator<char> const&)
+std::string::_S_construct_aux_2(unsigned long, char, std::allocator<char> const&)
+std::string::_S_copy_chars(char*, __gnu_cxx::__normal_iterator<char const*, std::string>, __gnu_cxx::__normal_iterator<char const*, std::string>)
+std::string::_S_copy_chars(char*, __gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>)
+std::string::_S_copy_chars(char*, char const*, char const*)
+std::string::_S_copy_chars(char*, char*, char*)
+std::string::_S_empty_rep()
+std::string::append(char const*)
+std::string::append(char const*, unsigned long)
+std::string::append(std::initializer_list<char>)
+std::string::append(std::string const&)
+std::string::append(std::string const&, unsigned long, unsigned long)
+std::string::append(unsigned long, char)
+std::string::assign(char const*)
+std::string::assign(char const*, unsigned long)
+std::string::assign(std::initializer_list<char>)
+std::string::assign(std::string const&)
+std::string::assign(std::string const&, unsigned long, unsigned long)
+std::string::assign(std::string&&)
+std::string::assign(unsigned long, char)
+std::string::at(unsigned long)
+std::string::at(unsigned long) const
+std::string::back()
+std::string::back() const
+std::string::begin()
+std::string::begin() const
+std::string::c_str() const
+std::string::capacity() const
+std::string::cbegin() const
+std::string::cend() const
+std::string::clear()
+std::string::compare(char const*) const
+std::string::compare(std::string const&) const
+std::string::compare(unsigned long, unsigned long, char const*) const
+std::string::compare(unsigned long, unsigned long, char const*, unsigned long) const
+std::string::compare(unsigned long, unsigned long, std::string const&) const
+std::string::compare(unsigned long, unsigned long, std::string const&, unsigned long, unsigned long) const
+std::string::copy(char*, unsigned long, unsigned long) const
+std::string::crbegin() const
+std::string::crend() const
+std::string::data() const
+std::string::empty() const
+std::string::end()
+std::string::end() const
+std::string::erase(__gnu_cxx::__normal_iterator<char*, std::string>)
+std::string::erase(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>)
+std::string::erase(unsigned long, unsigned long)
+std::string::find(char const*, unsigned long) const
+std::string::find(char const*, unsigned long, unsigned long) const
+std::string::find(char, unsigned long) const
+std::string::find(std::string const&, unsigned long) const
+std::string::find_first_not_of(char const*, unsigned long) const
+std::string::find_first_not_of(char const*, unsigned long, unsigned long) const
+std::string::find_first_not_of(char, unsigned long) const
+std::string::find_first_not_of(std::string const&, unsigned long) const
+std::string::find_first_of(char const*, unsigned long) const
+std::string::find_first_of(char const*, unsigned long, unsigned long) const
+std::string::find_first_of(char, unsigned long) const
+std::string::find_first_of(std::string const&, unsigned long) const
+std::string::find_last_not_of(char const*, unsigned long) const
+std::string::find_last_not_of(char const*, unsigned long, unsigned long) const
+std::string::find_last_not_of(char, unsigned long) const
+std::string::find_last_not_of(std::string const&, unsigned long) const
+std::string::find_last_of(char const*, unsigned long) const
+std::string::find_last_of(char const*, unsigned long, unsigned long) const
+std::string::find_last_of(char, unsigned long) const
+std::string::find_last_of(std::string const&, unsigned long) const
+std::string::front()
+std::string::front() const
+std::string::get_allocator() const
+std::string::insert(__gnu_cxx::__normal_iterator<char*, std::string>, char)
+std::string::insert(__gnu_cxx::__normal_iterator<char*, std::string>, std::initializer_list<char>)
+std::string::insert(__gnu_cxx::__normal_iterator<char*, std::string>, unsigned long, char)
+std::string::insert(unsigned long, char const*)
+std::string::insert(unsigned long, char const*, unsigned long)
+std::string::insert(unsigned long, std::string const&)
+std::string::insert(unsigned long, std::string const&, unsigned long, unsigned long)
+std::string::insert(unsigned long, unsigned long, char)
+std::string::length() const
+std::string::max_size() const
+std::string::npos
+std::string::operator+=(char const*)
+std::string::operator+=(char)
+std::string::operator+=(std::initializer_list<char>)
+std::string::operator+=(std::string const&)
+std::string::operator=(char const*)
+std::string::operator=(char)
+std::string::operator=(std::initializer_list<char>)
+std::string::operator=(std::string const&)
+std::string::operator=(std::string&&)
+std::string::operator[](unsigned long)
+std::string::operator[](unsigned long) const
+std::string::pop_back()
+std::string::push_back(char)
+std::string::rbegin()
+std::string::rbegin() const
+std::string::rend()
+std::string::rend() const
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char const*, std::string>, __gnu_cxx::__normal_iterator<char const*, std::string>)
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>)
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, char const*)
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, char const*, char const*)
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, char const*, unsigned long)
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, char*, char*)
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, std::initializer_list<char>)
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, std::string const&)
+std::string::replace(__gnu_cxx::__normal_iterator<char*, std::string>, __gnu_cxx::__normal_iterator<char*, std::string>, unsigned long, char)
+std::string::replace(unsigned long, unsigned long, char const*)
+std::string::replace(unsigned long, unsigned long, char const*, unsigned long)
+std::string::replace(unsigned long, unsigned long, std::string const&)
+std::string::replace(unsigned long, unsigned long, std::string const&, unsigned long, unsigned long)
+std::string::replace(unsigned long, unsigned long, unsigned long, char)
+std::string::reserve(unsigned long)
+std::string::resize(unsigned long)
+std::string::resize(unsigned long, char)
+std::string::rfind(char const*, unsigned long) const
+std::string::rfind(char const*, unsigned long, unsigned long) const
+std::string::rfind(char, unsigned long) const
+std::string::rfind(std::string const&, unsigned long) const
+std::string::shrink_to_fit()
+std::string::size() const
+std::string::substr(unsigned long, unsigned long) const
+std::string::swap(std::string&)
+std::system_error::~system_error()
 std::terminate()
 std::type_info::__do_catch(std::type_info const*, void**, unsigned int) const
 std::type_info::__do_upcast(__cxxabiv1::__class_type_info const*, void**) const
@@ -2582,14 +3095,21 @@ std::type_info::__is_pointer_p() const
 std::type_info::~type_info()
 std::uncaught_exception()
 std::uncaught_exceptions()
+std::underflow_error::underflow_error(char const*)
+std::underflow_error::underflow_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+std::underflow_error::underflow_error(std::string const&)
+std::underflow_error::~underflow_error()
 std::unexpected()
 strchr
 strcmp
 strcpy
+strerror
 string literal
+string::string
 string_token
 strlen
 strstr
+struct
 struct GS_INPUT
 struct PS_INPUT
 struct VS_INPUT
@@ -2615,11 +3135,41 @@ texturedictionary.cpp
 this
 throw
 time
-tr
+transaction clone for operator delete(void*)
+transaction clone for operator new[](unsigned long)
 transaction clone for std::bad_exception::what() const
 transaction clone for std::bad_exception::~bad_exception() const
+transaction clone for std::domain_error::domain_error(char const*)
+transaction clone for std::domain_error::domain_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::domain_error::~domain_error()
 transaction clone for std::exception::what() const
 transaction clone for std::exception::~exception() const
+transaction clone for std::invalid_argument::invalid_argument(char const*)
+transaction clone for std::invalid_argument::invalid_argument(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::invalid_argument::~invalid_argument()
+transaction clone for std::length_error::length_error(char const*)
+transaction clone for std::length_error::length_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::length_error::~length_error()
+transaction clone for std::logic_error::logic_error(char const*)
+transaction clone for std::logic_error::logic_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::logic_error::what() const
+transaction clone for std::logic_error::~logic_error()
+transaction clone for std::out_of_range::out_of_range(char const*)
+transaction clone for std::out_of_range::out_of_range(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::out_of_range::~out_of_range()
+transaction clone for std::overflow_error::overflow_error(char const*)
+transaction clone for std::overflow_error::overflow_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::overflow_error::~overflow_error()
+transaction clone for std::range_error::range_error(char const*)
+transaction clone for std::range_error::range_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::range_error::~range_error()
+transaction clone for std::runtime_error::runtime_error(char const*)
+transaction clone for std::runtime_error::runtime_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::runtime_error::what() const
+transaction clone for std::runtime_error::~runtime_error()
+transaction clone for std::underflow_error::underflow_error(char const*)
+transaction clone for std::underflow_error::underflow_error(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+transaction clone for std::underflow_error::~underflow_error()
 transaction_safe
 transform
 true
@@ -2637,10 +3187,24 @@ typeinfo for __gnu_cxx::__concurrence_unlock_error
 typeinfo for __gnu_cxx::recursive_init_error
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
+typeinfo for std::_V2::error_category
+typeinfo for std::bad_alloc
+typeinfo for std::bad_cast
 typeinfo for std::bad_exception
 typeinfo for std::bad_function_call
+typeinfo for std::bad_typeid
+typeinfo for std::domain_error
 typeinfo for std::exception
+typeinfo for std::invalid_argument
+typeinfo for std::length_error
+typeinfo for std::logic_error
+typeinfo for std::out_of_range
+typeinfo for std::overflow_error
+typeinfo for std::range_error
+typeinfo for std::runtime_error
+typeinfo for std::system_error
 typeinfo for std::type_info
+typeinfo for std::underflow_error
 typeinfo name for
 typeinfo name for __cxxabiv1::__class_type_info
 typeinfo name for __cxxabiv1::__forced_unwind
@@ -2653,10 +3217,24 @@ typeinfo name for __gnu_cxx::recursive_init_error
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
+typeinfo name for std::_V2::error_category
+typeinfo name for std::bad_alloc
+typeinfo name for std::bad_cast
 typeinfo name for std::bad_exception
 typeinfo name for std::bad_function_call
+typeinfo name for std::bad_typeid
+typeinfo name for std::domain_error
 typeinfo name for std::exception
+typeinfo name for std::invalid_argument
+typeinfo name for std::length_error
+typeinfo name for std::logic_error
+typeinfo name for std::out_of_range
+typeinfo name for std::overflow_error
+typeinfo name for std::range_error
+typeinfo name for std::runtime_error
+typeinfo name for std::system_error
 typeinfo name for std::type_info
+typeinfo name for std::underflow_error
 u
 u`
 uchar32
@@ -2666,6 +3244,7 @@ uint32
 uint64
 uint8
 ul
+unknown
 unsigned
 unsigned __int128
 unsigned char
@@ -2707,6 +3286,10 @@ vfx_dx11
 vfx_vulkan
 vfxc
 void
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::forward_iterator_tag)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::forward_iterator_tag)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
+void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag)
 void std::__introsort_loop<PostProcessPriorityGroup_t*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void> > >(PostProcessPriorityGroup_t*, PostProcessPriorityGroup_t*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void> >)
 volatile
 vs_4_0
@@ -2721,10 +3304,24 @@ vtable for __cxxabiv1::__vmi_class_type_info
 vtable for __gnu_cxx::__concurrence_lock_error
 vtable for __gnu_cxx::__concurrence_unlock_error
 vtable for __gnu_cxx::recursive_init_error
+vtable for std::_V2::error_category
+vtable for std::bad_alloc
+vtable for std::bad_cast
 vtable for std::bad_exception
 vtable for std::bad_function_call
+vtable for std::bad_typeid
+vtable for std::domain_error
 vtable for std::exception
+vtable for std::invalid_argument
+vtable for std::length_error
+vtable for std::logic_error
+vtable for std::out_of_range
+vtable for std::overflow_error
+vtable for std::range_error
+vtable for std::runtime_error
+vtable for std::system_error
 vtable for std::type_info
+vtable for std::underflow_error
 w
 w3
 w7

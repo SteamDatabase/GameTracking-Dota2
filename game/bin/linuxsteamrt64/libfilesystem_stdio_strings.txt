@@ -1,6 +1,5 @@
 
 !
-!"Allowing insert of dupe without explicit dupe insertion. Fix code callpoint to allow dupes."
 !(meth->ext_flags & SSL_EXT_FLAG_SENT)
 !=
 !expected_len || s->s3->previous_client_finished_len
@@ -122,6 +121,7 @@ $g*
 %s: __pos (which is %zu) > this->size() (which is %zu)
 %s: file too large
 %s:%d: rec->data != rec->input
+%sFailed to load file (%s)!
 %s_%03d.vpk
 %u
 &
@@ -196,6 +196,7 @@ $g*
 ....................
 ../common/opensslwrapper.cpp
 ../public/tier0/threadtoolstypes.h
+../public/tier0/utldict.h
 ../public/tier0/utlrbtree.h
 ../public/tier0/utlsortvector.h
 ../public/tier0/utlsymboltable.h
@@ -650,7 +651,6 @@ BinaryProperties_GetValue
 Biometric Info
 Blocked change to read-only path %s!
 Buffer too small
-BuildHashTables
 C
 CA Compromise
 CA Issuers
@@ -745,6 +745,7 @@ CHECK_CONTENT
 CHECK_NAME_CONSTRAINTS
 CHECK_PADDING_MD
 CHECK_SUITEB_CIPHER_LIST
+CKeyValues_Data::Internal_GetString(char const*, char*, unsigned long)
 CLIENT_CERTIFICATE
 CLNT
 CMAC
@@ -867,7 +868,6 @@ COPY_EMAIL
 COPY_ISSUER
 COpenSSLConnection
 COpenSSLContext
-CPackedStore
 CRC32_ProcessBuffer
 CRL Sign
 CRL has expired
@@ -971,19 +971,19 @@ Certificate:
 Cessation Of Operation
 Cg*
 Char=
-Chunk not found %d
+Chunk hash not found.
 Clear the list of files that have been opened.
 ClientToolsInfo_001
 Code Signing
 Code=
 Cofactor:
 CommandLine
-ConnectInterfaceSingletons
 Content being marked corrupt.  bMissingFilesOnly = %s, pFile specified as '%s', reason: '%s'
 Content file %s is corrupt (Chunk: %s). Verify integrity of game files.
+Content file %s is corrupt. Hashing could not be verified. Verify integrity of game files.
 Content file %s is corrupt. Verify integrity of game files.
-Content is corrupt
-Content is corrupt. Verify integrity of game files
+Content file %s is corrupt; Chunk hash not found (expected: %d, found: %d)
+Content file %s is corrupt; signature couldn't be verified. Verify integrity of game files
 Content-Disposition: attachment;
 Content-Transfer-Encoding: base64%s
 Content-Transfer-Encoding: base64%s%s
@@ -1427,6 +1427,7 @@ Enter PEM pass phrase:
 Enterprises
 Eric Young's PKCS#1 RSA
 Error in encoding
+Error reading from loaded packed store "%s"
 Excluded
 Expecting:
 Experimental
@@ -1489,6 +1490,8 @@ FioIsDotDir(char const*)
 FioReadAt(int, unsigned long long, void*, int, int*)
 FlattenedSerializersVersion001
 FontManager_001
+Found existing value when inserting into dict - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound.
+Found existing value when inserting into tree - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound. If duplicate entries are intended, use InsertWithDupes.
 From Steam: [%s]\%s
 G
 G:
@@ -1646,14 +1649,18 @@ Key Agreement
 Key Compromise
 Key Encipherment
 KeyValueCache001
+KeyValues::GetDataType(char const*) const
+KeyValues::GetFirstSubKey()
+KeyValues::GetName() const
+KeyValues::GetNextKey()
 KeyValues::KeyValues(char const*, IKeyValuesSystem*, bool)
 KeyValues::LoadFromFile(IFileSystem*, char const*, char const*, bool (*)(char const*, void*), void*, char const*)
 KeyValues::operator new(unsigned long)
+KeyValues::~KeyValues()
 Kg*
 L
 LINEBUFFER_CTRL
 LOAD_IV
-LOG_GENERAL
 LONG_C2I
 LOW
 LengthOfMatchingPaths
@@ -2103,7 +2110,6 @@ PhysicsBuilderMgr001
 Plat_CreateDirectory
 Plat_DebugPrint
 Plat_DebugString
-Plat_ExitProcess
 Plat_FatalErrorFunc
 Plat_FileSize
 Plat_FloatTime
@@ -2120,7 +2126,6 @@ Plat_RemoveDirectory
 Plat_RemoveFile
 Plat_RenameFile
 Plat_SetFileReadOnly
-Plat_ShouldCollectMiniDumpsForFatalErrors
 Plat_TickDiffMicroSec
 Plat_TickDiffMicroSecF
 Plat_TranslateSymbolicLinks
@@ -2462,6 +2467,7 @@ Set fs_report_long_reads 1 before loading to use this. Prints a list of files th
 Show the filesystem path.
 Signature Algorithm:
 Signature failed for %s (reason: %d)
+Signature verification failed.
 Signature verified for %s.
 Signature was invalid for %s (reason: %d), allowing anyways.
 Size of per file buffers. 0 for none
@@ -2587,7 +2593,6 @@ TS_VERIFY
 TS_VERIFY_CERT
 TS_VERIFY_CTX_new
 TYPE=
-TestHashChunkFraction
 TestScriptMgr001
 TextLayout_001
 This convar is being accessed prior to ConVar_Register being called
@@ -2657,7 +2662,6 @@ V2I_SUBJECT_ALT
 V3_ADDR_VALIDATE_PATH_INTERNAL
 V3_GENERIC_EXTENSION
 VApplication001
-VAsyncFileSystem2_001
 VAvi001
 VBik001
 VConComm001
@@ -2706,6 +2710,7 @@ V_StringToUint64
 V_StringToVector
 V_StringToVector2D
 V_StringToVector4D
+V_StripFilename
 V_UnqualifiedFileName
 V_atoi
 V_fclose
@@ -2729,7 +2734,6 @@ V_vsnprintf
 Validity
 Verify error:
 Verify failure
-VerifyPackRead
 Verifying - %s
 VisBuilder_001
 Vrad3_001
@@ -2940,7 +2944,9 @@ _ITM_memcpyRtWn
 _ITM_registerTMCloneTable
 _Imaginary
 _Sat
+_V_FileBase
 _V_StringAfterPrefix
+_V_hextobinary
 _V_strncmp
 _V_strncpy
 _V_strnicmp_fast
@@ -5116,8 +5122,11 @@ packedstore.cpp
 packet length too long
 padding check failed
 pagerTelephoneNumber
+pak
 pak%02d.vpk
 pak*_dir.vpk
+pakxx
+pakxx=off
 parameter encoding error
 parse tlsext
 partyName
@@ -5712,7 +5721,6 @@ simpleSecurityObject
 singleExtensions
 singleLevelQuality
 singleRequestExtensions
-singletons.cpp
 sizeof
 sizeof...
 slot full
@@ -6370,6 +6378,7 @@ strrchr
 strstr
 strtol
 strtoul
+subdirectory
 subgroup factor:
 subgroup order:
 subject
@@ -6625,6 +6634,7 @@ uncompressedSize
 undefined
 undefined generator
 undefined order
+unexpected
 unexpected eoc
 unexpected message
 unexpected record
@@ -6802,7 +6812,9 @@ void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<cha
 void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
 void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag)
 volatile
+vpk.signatures
 vpk:
+vpkname
 vtable for __cxxabiv1::__class_type_info
 vtable for __cxxabiv1::__forced_unwind
 vtable for __cxxabiv1::__foreign_exception

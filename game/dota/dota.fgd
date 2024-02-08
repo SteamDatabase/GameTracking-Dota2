@@ -44,10 +44,15 @@
 
 @OverrideClass = prop_dynamic_base
 [
-	RandomAnimation(boolean) : "Randomly Animate" : 0 : "If set, this prop will randomly choose and play animations, based upon the times specified in 'Min/Max Random Anim Time'. Inbetween the random animations, it will revert to playing the 'Default Animation'."
-	MinAnimTime(float) : "Min Random Anim Time" : "5" : "Minimum time between random animations."
-	MaxAnimTime(float) : "Max Random Anim Time" : "10" : "Maximum time between random animations."
+	StartingAnim(sequence) { is_preview_animation=true preview_animation_priority = 2 } : "Starting Animation" : "" : "The name of a starting animation that this prop will start with when it spawns. After completion, it will switch to the Idle sequence, if it is specified."
+	StartingAnimationLoopMode(choices) : "Start Animation Loop Mode" : "ANIM_LOOP_MODE_USE_SEQUENCE_SETTINGS" =
+	[
+		"ANIM_LOOP_MODE_NOT_LOOPING" : "Do Not Loop"
+		"ANIM_LOOP_MODE_LOOPING" : "Loop"
+		"ANIM_LOOP_MODE_USE_SEQUENCE_SETTINGS" : "Use Sequence Settings"
+	]
 
+	IdleAnim(sequence) { is_preview_animation=true } : "Idle Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation."
 	AnimationLoopMode(choices) : "Animation Loop Mode" : "ANIM_LOOP_MODE_USE_SEQUENCE_SETTINGS" =
 	[
 		"ANIM_LOOP_MODE_NOT_LOOPING" : "Do Not Loop"
@@ -55,9 +60,22 @@
 		"ANIM_LOOP_MODE_USE_SEQUENCE_SETTINGS" : "Use Sequence Settings"
 	]
 
-	input SetAnimation(string)					: "Force the prop to play an animation. The parameter should be the name of the animation."
-	input SetAnimationNoReset(string)			: "Force the prop to play an animation unless the prop is already playing the animation. The parameter should be the name of the animation."
-	input SetDefaultAnimation(string)			: "Set the Default Animation to the one specified in the parameter."
+	RandomAnimation(boolean) : "Randomly Animate" : 0 : "If set, this prop will randomly choose and play animations, based upon the times specified in 'Min/Max Random Anim Time'. Inbetween the random animations, it will revert to playing the 'Default Animation'."
+	MinAnimTime(float) : "Min Random Anim Time" : "5" : "Minimum time between random animations."
+	MaxAnimTime(float) : "Max Random Anim Time" : "10" : "Maximum time between random animations."
+
+	// Inputs
+	input SetAnimationLooping(string)			: "Force the prop to play an animation and force it to loop. The parameter should be the name of the animation."
+	input SetAnimationNoResetLooping(string)	: "Force the prop to play an animation and force it to loop unless the prop is already playing the animation. The parameter should be the name of the animation."
+	input SetIdleAnimationLooping(string)		: "Changes the Idle Animation to the one specified in the parameter and force it to loop."
+
+	input SetAnimationNotLooping(string)		: "Force the prop to play an animation and force it to not loop. The parameter should be the name of the animation."
+	input SetAnimationNoResetNotLooping(string) : "Force the prop to play an animation and force it to not loop unless the prop is already playing the animation. The parameter should be the name of the animation."
+	input SetIdleAnimationNotLooping(string)	: "Changes the Idle Animation to the one specified in the parameter and force it to not loop."
+
+	input SetAnimation(string)					: "[OBSOLETE] Force the prop to play an animation. The parameter should be the name of the animation."
+	input SetAnimationNoReset(string)			: "[OBSOLETE] Force the prop to play an animation unless the prop is already playing the animation. The parameter should be the name of the animation."
+	input SetDefaultAnimation(string)			: "[OBSOLETE] Set the Default Animation to the one specified in the parameter."
 ]
 
 
@@ -437,19 +455,19 @@
 	output OnDisabled(void) : "Called when the player start is disabled."
 ]
 
-@PointClass base(PlayerClass, DotaPlayerStart) studio("models/editor/playerstart.mdl") = info_player_start_goodguys :
+@PointClass base(PlayerClass, DotaPlayerStart) studio("models/heroes/axe/axe.vmdl") = info_player_start_goodguys :
 	"Spawn point for Radiant heroes."
 [
 
 ]
 
-@PointClass base(PlayerClass, DotaPlayerStart) studio("models/editor/playerstart.mdl") = info_player_start_badguys :
+@PointClass base(PlayerClass, DotaPlayerStart) studio("models/heroes/axe/axe.vmdl") = info_player_start_badguys :
 	"Spawn point for Dire heroes."
 [
 
 ]
 
-@PointClass base(PlayerClass, Targetname, teamnumber, DotaPlayerStart) studio("models/editor/playerstart.mdl") = info_player_start_dota :
+@PointClass base(PlayerClass, Targetname, teamnumber, DotaPlayerStart) studio("models/heroes/axe/axe.vmdl") = info_player_start_dota :
 	"Spawn point for heroes of any team."
 [
 ]
@@ -1304,4 +1322,13 @@
 
 	trap_target( local_point ) : "Trap Target" : "0 0 0"
 	DefaultAnim(sequence) : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation."
+]
+
+@PointClass base(Targetname) gameUnitModel( MapUnitName ) = npc_dota_creature_spawner: 
+	"Spawns creatures."
+[
+	MapUnitName(gameunitclass) : "Unit Name" : "" : "Name of the NPC script used to spawn this character."
+	SpawnEffectName(resource:particle) : "Spawn Effect" : "" : "Effect to play when spawning."
+	RespawnTime(float) : "Respawn Time" : 0
+	SpawnOnActivate(boolean) : "Spawn on Activate" : 1
 ]

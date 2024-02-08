@@ -7,7 +7,6 @@
 !  note : calculated dictionary significantly larger than requested (%u > %u)
 !  note : larger dictionaries are not necessarily better, test its efficiency on samples
 !  warning : selected content significantly smaller than requested (%u < %u)
-!"Allowing insert of dupe without explicit dupe insertion. Fix code callpoint to allow dupes."
 !=
 "
 ""
@@ -112,6 +111,7 @@ $ORIGIN
 %s (%i) : %s
 %s (before "%s")
 %s * %f
+%s + 0x%llx
 %s allocation count overflow
 %s allocation count overflow( add %llu + current %llu > max %llu )
 %s bytes used out of %s bytes available (%.2f%%)
@@ -135,7 +135,7 @@ $ORIGIN
 %s unable to allocate %u bytes
 %s%s
 %s%s#%d
-%s%s_%d_%02d%02d_%02d%02d%02d_%d%s%s.mdmp
+%s%s%s_%d_%02d%02d_%02d%02d%02d_%d%s%s.mdmp
 %s(
 %s():%s
 %s,
@@ -469,9 +469,11 @@ $ORIGIN
 ../
 ../public/tier0/globallist.h
 ../public/tier0/memstack.h
+../public/tier0/quantizedfloatencoder.h
 ../public/tier0/threadmutex.h
 ../public/tier0/threadtoolstypes.h
 ../public/tier0/tslist.h
+../public/tier0/utldict.h
 ../public/tier0/utlrbtree.h
 ../public/tier0/utltshash.h
 .\
@@ -554,8 +556,10 @@ $ORIGIN
 14CBaseAppSystemI14ITestScriptMgrE
 14CBaseAppSystemI21IUtlStringTokenSystemE
 14CBaseAppSystemI5ICvarE
-14CMemPassAllocTI33LowLevelAllocationScheme_jemallocE
+14CMemPassAllocTI23LLA_AddAlignedSelectorsI33LowLevelAllocationScheme_jemallocEE
 14CTestScriptMgr
+14CVBinaryModule
+14CVSymbolModule
 14IErrorListener
 14ITestScriptMgr
 15CStdFunctionJob
@@ -579,12 +583,14 @@ $ORIGIN
 18CThreadManualEvent
 18CUtlCharConversion
 18CUtlJSONConversion
+18CVNullBinaryModule
 18CVNullSymbolModule
 18IMemAlloc_Internal
 18IMultipleWorkerJob
 19CDmSymbolTableLarge
 19CExecMultiWorkerJob
 19CUtlNoEscConversion
+19CVDwarfBinaryModule
 19CVDwarfSymbolModule
 19IFormatOutputStream
 19IKeyValuesErrorSpew
@@ -602,6 +608,7 @@ $ORIGIN
 21IUtlStringTokenSystem
 22CPerfTraceDepotDefault
 22CSimpleLoggingListener
+22CVImageHlpBinaryModule
 22IFiberThreadWorkerPool
 22ILoggingResponsePolicy
 24CStdIOFormatOutputStream
@@ -630,6 +637,7 @@ $ORIGIN
 29CKeyValuesDumpContextAsDevMsg
 3
 30CAsyncScheduledFunctionManager
+31CBufferStringFormatOutputStream
 31CParallelProcessorAbstract_Base
 31CTier0MasterMobileEventListener
 31IForceSignalNumberIntoCallStack
@@ -681,6 +689,7 @@ $ORIGIN
 8CProcess
 8IProcess
 9
+9IMemAlloc
 9IPipeRead
 :
 ::*
@@ -782,6 +791,7 @@ A
 A->B
 AE_ACTION_SET_TURN_RATE_SCALE
 AE_BLIND_ZOMBIE_SNIFF
+AE_BODYGROUP_SET_VALUE
 AE_CL_ADD_PARTICLE_EFFECT_CP
 AE_CL_BODYGROUP_SET_VALUE
 AE_CL_CLOTH_STIFFEN
@@ -804,6 +814,7 @@ AE_NPC_START_POWERED_RAGDOLL
 AE_NPC_WEAPON_FIRE
 AE_PASSENGER_PHYSICS_PUSH
 AE_SCRIPT_EVENT_FIREEVENT
+AE_SV_BODYGROUP_SET_VALUE
 AE_SV_DUSTTRAIL
 AE_VORTIGAUNT_START_HEAL_GLOW
 AE_VORTIGAUNT_START_HURT_GLOW
@@ -844,9 +855,7 @@ Affinity preferences: no per-logical-processor information
 Affinity preferences: no preferences, skipping assignment
 Affinity preferences: no-pref all-procs does not set affinity
 Affinity preferences: only one logical processor
-AllocTag
 AllocUnlocked
-AllocateEvent
 Allocated: %zu, active: %zu, metadata: %zu (n_thp %zu), resident: %zu, mapped: %zu, retained: %zu
 Allocation error : not enough memory
 Always Ignore
@@ -912,6 +921,8 @@ AssetPreviewSystem_001
 AssetRenameSystem_001
 AssetSystem001
 AssetSystemTest001
+AssignRangeMultipler with bitcount=32!
+AssignRangeMultiplier
 AsyncScheduledFunctions
 Attempted to add job to job queue that has already been completed
 Aug
@@ -960,6 +971,7 @@ Block-level external sequence producer returned an error code
 BodyGroup
 BodyGroupChoice
 Boundary_Radius
+Break on unknown stall cause
 BreakCommand
 BreakPieceEmbedded
 BreakPieceExternal
@@ -1313,6 +1325,8 @@ CBufferString::TrimTail(char const*)
 CBufferString::TruncateAt(char const*, bool)
 CBufferString::TruncateAt(int, bool)
 CBufferString::UnicodeCaseConvert(int, EStringConvertErrorPolicy)
+CBufferStringFormatOutputStream::PutC(char)
+CBufferStringFormatOutputStream::~CBufferStringFormatOutputStream()
 CByteswap::SwapFieldToTargetEndian(void*, void*, typedescription_t*)
 CByteswap::SwapFieldsToTargetEndian(void*, void*, datamap_t*)
 CCallQueue::ParallelCallQueued(char const*, IThreadPool*)
@@ -1352,9 +1366,10 @@ CCircularBuffer::Peek(void*, int)
 CCircularBuffer::Read(void*, int)
 CCircularBuffer::Resize(int)
 CCircularBuffer::Write(void const*, int)
+CCircularBuffer::WriteZeroed(int)
 CCircularBuffer::~CCircularBuffer()
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
-CCommandBuffer::AddText(char const*, int, int)
+CCommandBuffer::AddText(char const*, int, int, double)
 CCommandBuffer::BeginProcessingCommands(int)
 CCommandBuffer::CCommandBuffer()
 CCommandBuffer::DelayAllQueuedCommands(int)
@@ -1450,6 +1465,7 @@ CExecMultiWorkerJob CUtlMemoryPool
 CExpressionAction
 CExpressionEvaluator::CExpressionEvaluator()
 CExpressionEvaluator::Evaluate(bool&, char const*, bool (*)(char const*, void*), void (*)(char const*, void*), void*, void*)
+CExpressionEvaluator::EvaluateAsUnmarkedSymbols(bool&, char const*, bool (*)(char const*, void*), void (*)(char const*, void*), void*, void*)
 CExpressionEvaluator::~CExpressionEvaluator()
 CFA advance has a zero size
 CFA advances off the end of the FDE
@@ -1686,6 +1702,14 @@ COLLISION_MODE_PER_FRAME_PLANESET
 COLLISION_MODE_PER_PARTICLE_TRACE
 COLLISION_MODE_USE_NEAREST_TRACE
 COLOR
+COMBAT_INTERRUPTABILITY
+COMPACT UNWIND: can't read register saved at 0x%llx
+COMPACT UNWIND: can't read register saved at 0x%x
+COMPACT UNWIND: can't read return address saved at 0x%llx
+COMPACT UNWIND: can't read return address saved at 0x%x
+COMPACT UNWIND: failed to read indirect stack size from 0x%llx
+COMPACT UNWIND: failed to recover previous stack frame
+COMPACT UNWIND: invalid unwind mode 0x%08x
 COMPARISONVALUETYPE_CONTROLVALUE
 COMPARISONVALUETYPE_FIXEDVALUE
 COMPARISONVALUETYPE_PARAMETER
@@ -1718,6 +1742,9 @@ CPooledStdFunctionJob CUtlMemoryPool
 CProxyAnimNodeBase
 CPulseCell_
 CPulseCell_Inflow_Wait
+CPulseCell_Outflow_NPCScriptedFaceEntity
+CPulseCell_Outflow_NPCScriptedMoveTo
+CPulseCell_Outflow_NPCUseScriptedAbility
 CPulseNode_
 CQuaternionAnimParameter
 CRC32_GetTableEntry
@@ -1866,18 +1893,6 @@ CStringPool::Count() const
 CStringPool::Find(char const*)
 CStringPool::FreeAll()
 CStringPool::~CStringPool()
-CStringRegistry::AddString(char const*, int, ERBTreeInsertBehavior)
-CStringRegistry::CStringRegistry()
-CStringRegistry::ClearStrings()
-CStringRegistry::First() const
-CStringRegistry::GetIDForKey(unsigned short)
-CStringRegistry::GetNumStrings() const
-CStringRegistry::GetStringForKey(unsigned short)
-CStringRegistry::GetStringID(char const*)
-CStringRegistry::GetStringText(int)
-CStringRegistry::InvalidIndex() const
-CStringRegistry::Next(unsigned short) const
-CStringRegistry::~CStringRegistry()
 CSubGraphAnimNode
 CSubGraphManager
 CSubGraphManagerConstPtr
@@ -1934,7 +1949,6 @@ CThreadLocalScope::GetScopeListMutex()
 CThreadLocalScope::IsLocalThreadScope() const
 CThreadLocalScope::SetThreadName(char const*)
 CThreadLocalScope::~CThreadLocalScope()
-CThreadMultiWaitEvent
 CThreadMultiWaitEvent::CThreadMultiWaitEvent(bool)
 CThreadMultiWaitEvent::Reset()
 CThreadMultiWaitEvent::Set()
@@ -1942,7 +1956,6 @@ CThreadMultiWaitEvent::~CThreadMultiWaitEvent()
 CThreadMultiWaitObject::CThreadMultiWaitObject()
 CThreadMultiWaitObject::Signal()
 CThreadMultiWaitObject::~CThreadMultiWaitObject()
-CThreadMultiWaitSemaphore
 CThreadMultiWaitSemaphore::CThreadMultiWaitSemaphore()
 CThreadMultiWaitSemaphore::Release()
 CThreadMultiWaitSemaphore::~CThreadMultiWaitSemaphore()
@@ -2249,6 +2262,7 @@ CUtlString::operator==(CBufferString const&) const
 CUtlString::operator==(CUtlString const&) const
 CUtlString::operator[](int) const
 CUtlStringFormatOutputStream::PutC(char)
+CUtlStringFormatOutputStream::PutChars(char const*, int)
 CUtlStringFormatOutputStream::~CUtlStringFormatOutputStream()
 CUtlStringToken::FormatTo(IFormatOutputStream*, CFormatStringElement) const
 CUtlStringToken::TrackTokenCreation(char const*, char const*)
@@ -2467,6 +2481,7 @@ C_OP_RemapCPtoVelocity
 C_OP_RemapModelVolumetoCP
 C_OP_RemapSpeedtoCP
 C_OP_RemapTransformToVelocity
+C_OP_RenderProjected
 C_OP_RenderRopes
 C_OP_RenderSprites
 C_OP_RenderStandardLight
@@ -2525,7 +2540,6 @@ Client Input/Output
 Client Physics
 Client Rendering
 Client Simulation
-Client VScript
 ClientToolsInfo_001
 Client_Animation
 ClipIndex
@@ -2541,7 +2555,12 @@ CommandProcedure
 CommandProcedureList
 Comment unavailable. CMiniDumpComment encountered an error while generating the comment
 Comp dir attr without string value
+Compact unwind index entries are not sorted
+Compact unwind info can't hold a header
+Compact unwind info is too large to save
 Compilation units ran off the end of .debug_info
+Compressed entry encoding index out of range (%u)
+Compressed entry table is not sorted
 Compression unsupported for format %u
 Computing frequencies
 ConColorMsg(Color const&, char const*, ...)
@@ -2551,7 +2570,6 @@ ConVar
 Conditional Error: %s
 ConfigAttachedModel
 Conflicting range base values given for compile_unit
-ConnectInterfaceSingletons
 Connection_Inparam
 Connection_Outflow
 Console History (reversed)
@@ -2600,9 +2618,7 @@ ControlValue_WayPointHeading
 ConvertKV3Format
 Copy failed.
 CopyDependencyToAlternateLocation
-CopyPending
 CopyUniqueId
-Corefile
 Coroutine[%s] performance problem: excessive stack size (%d bytes)
 Coroutine_Continue
 Coroutine_Create
@@ -2628,6 +2644,8 @@ CreateSimpleThread
 CreateUniqueId
 Cycle or diamond double-reference to '%s'
 D
+DAMAGEORDEATH_INTERRUPTABILITY
+DEATH_INTERRUPTABILITY
 DEBUG_EXITPROCESS
 DEFAULT_WRITE_PATH
 DEMO
@@ -2735,6 +2753,9 @@ ERROR: %s
 ERROR: Alloc exceeded allocation limit /+/ %llu > %llu
 ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 ERROR: Virtual reservation exceeded limit /+/ %llu > %llu
+EVICTb:
+EVICTs:
+EVICTu:
 EXECUTE_PER_TICK
 EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
@@ -2758,7 +2779,6 @@ Error parsing string '%s' as uint, parsed to: '%s'
 Error reading args file
 Error setting dss
 Error starting testscript '%s'
-ErrorIfNotInitted
 Exception
 Exit Process
 Exiting due to logging LR_ABORT request.
@@ -2846,6 +2866,7 @@ Field %s was flagged to both round up and down, these flags are mutually exclusi
 Field %s was flagged to encode zero exactly, but min/max range doesn't span zero [%f->%f]
 File: %sLine: %iExpr: %s
 FileSystem
+Final compact unwind index entry is not a last-address marker
 Find concommands by flags.
 Find concommands with the specified string in their name/help text.
 Find help about a convar/concommand.
@@ -2853,6 +2874,7 @@ FindDiffs
 FindDiffsForLargeFiles
 FindDiffsLowMemory
 FindGlobalSymbol
+FindGlobalSymbolByHash
 FindOrCreateQuantizedFloatEncoder
 FindRegisteredGlobalObjectInternal
 Finger_Curl_Index
@@ -2907,7 +2929,6 @@ Float array only parsed %u value(s) when expecting %u
 Float value %f above maximum %f
 Float value %f below minimum %f
 Flow_Generic
-FlushBuffer
 FontManager_001
 FormatArgumentsToBuffer(IFormatOutputStream*, char const*, CTypeErasedFormattingWrapper const*, int)
 FormatEnumHelper(IFormatOutputStream*, CFormatStringElement, int, std::initializer_list<std::pair<int, char const*> >)
@@ -2931,6 +2952,8 @@ Formatting_AdjustIndentation(int)
 Found Application AutoArgs file '%s'
 Found a '%s' token implying the start of a conditional.  KV3 doesn't support this - use bIgnoreConditionals or modify the source file.
 Found duplicate member '%s'
+Found existing value when inserting into dict - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound.
+Found existing value when inserting into tree - replacing existing value with new value. If this is intended behavior, use InsertOrReplace. If leaving existing values alone is intended, use InsertIfNotFound. If duplicate entries are intended, use InsertWithDupes.
 Found extraneous tokens past end of KV3 document.
 Found leading plus sign while parsing string '%s' as float64, ignoring it
 Frame Boundary
@@ -2946,6 +2969,7 @@ GAMECONSOLE
 GAMEDLL
 GCC: (SteamRT 10.3.0-3+steamrt3.1+bsrt3.1) 10.3.0
 GCoroutineMgr().IsValidCoroutine( hCoroutine )
+GENERAL_INTERRUPTABILITY
 GERMAN
 GLIBC_2.11
 GLIBC_2.12
@@ -2970,9 +2994,7 @@ GNU
 GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameUIService_001
-General
 GenericGameData
-Generic_x86
 GenuineIntel
 GetAddressInlineCallData
 GetAddressTranslationData
@@ -3007,8 +3029,6 @@ GetQuantizedFloatEncoderByReg
 GetQuantizedFloatEncoderNameByReg
 GetQuantizedFloatEncodersSharingReg
 GetReplacePtr
-GetSymbolForStringCaseSensitiveInternal
-GetSymbolForStringInternal
 GetSymbolNameFromAddress
 GetThreadLocalStackAllocator
 GetThreadedLoadLibraryFunc
@@ -3211,7 +3231,6 @@ Ignore This File
 IgnoreAssertForADay
 IgnoreAssertsInCurrentFile
 IgnoreAssertsNearby
-Illegal char string format specifier '%c' (%d) in '%s'
 Illegal wchar_t string format specifier '%c' (%d) in '%s'
 Import_GetICVarFactory
 In empty slabs:      npageslabs: %zu huge, %zu nonhuge      nactive: %zu huge, %zu nonhuge       ndirty: %zu huge, %zu nonhuge       nretained: 0 huge, %zu nonhuge
@@ -3227,7 +3246,6 @@ Indicate to a test script that a checkpoint has been reached
 Indirect FDE pointer encoding is not supported
 Inflow_
 Inflow_Method
-InitFromCommandLine
 InitMiniDumpReportOptions
 InitWin32ConsoleColorContext
 Initial CFA instructions advance location
@@ -3245,7 +3263,6 @@ Int value %lld above maximum %lld
 Int value %lld below minimum %lld
 Intentionally vague touch behavior for %p
 Internal error reading fat arch header
-InternalInit
 Internal_Coroutine_Continue
 Interpolation
 Invalid CIE address size %u (ptr size %u)
@@ -3257,6 +3274,7 @@ Invalid ELF Shdr
 Invalid ELF program header %d
 Invalid ELF string section size 0x%llx
 Invalid FDE table ID 0x%x at offset 0x%x
+Invalid LSDA index offset (0x%x)
 Invalid Mach-O header
 Invalid Mach-O program header %d
 Invalid Mach-O segment %d
@@ -3270,6 +3288,7 @@ Invalid arange start address 0x%llx (base 0x%llx), table at offset 0x%x
 Invalid attr strp offset 0x%llx
 Invalid attribute value 0x%llx
 Invalid code point \u%04x
+Invalid common encodings block location (0x%x : 0x%x)
 Invalid compilation unit abbrev offset
 Invalid compilation unit header address size
 Invalid compressed buffer size
@@ -3284,16 +3303,24 @@ Invalid header
 Invalid high PC offset 0x%llx (low PC RVA 0x%x)
 Invalid high PC value 0x%llx (base 0x%llx)
 Invalid include directory index
+Invalid index block location (0x%x : 0x%x)
 Invalid indirect form 0x%llx
 Invalid line header size
 Invalid low PC value 0x%llx (base 0x%llx)
 Invalid member name '%s'
 Invalid number (%u) of fat binary architectures
 Invalid number starting with '%s'
+Invalid personality array block location (0x%x : 0x%x)
 Invalid range end value 0x%llx (base 0x%llx)
 Invalid range start value 0x%llx (base 0x%llx)
 Invalid range with start greater than end
 Invalid register number (%llu)
+Invalid second level encodings table count (0x%x)
+Invalid second level encodings table offset (0x%x)
+Invalid second level entry table count (0x%x)
+Invalid second level entry table offset (0x%x)
+Invalid second level page kind (%u)
+Invalid second level page offset (0x%x)
 Invalid set_address instruction
 Invalid set_discriminator size
 Invalid settings for bin_shards
@@ -3506,7 +3533,8 @@ Loaded %s, got %p
 Loading multi-line string literals with metadata support enabled is not currently supported.
 Localize_001
 LockForWrite
-Log Function Help:     log_verbosity <channel specifiers> <verbosity>    log_color <channel specifiers> <hex color>    log_flags <channel specifiers> <+/-flag>All functions are case insensitive.A channel specifier is either:1) tag specifiers: +/-tag1 +/-tag2 ...      // Narrows down to channels with & without given tags.2) channel names: name1 name2 ...           // Lists channels by name.verbosity: off, essential, default,         // Sets how verbose a channel is allowed to be.           detailed, max                     // 'off' turns all spew off                                            // 'essential' turns on vital logs                                            // 'default' turns on most messages                                            // 'detailed' allows for walls of text that are usually useful                                            // 'max' allows everythinghex color: RRGGBBAA                         // A hexadecimal color value in the order RGBA.flag: <+/->DoNotEcho                        // Enable/disable a flag to turn off echoing to the console.      <+/->ConsoleOnly                      // Enable/disable a flag to send text only to the console.e.g.    log_verbosity +console -developer verbose   // Sets minimum spew level of channels with the tag                                            // 'console' but without the tag 'developer' to 'verbose'.    log_color renderdebug bsp 4080C0FF      // Sets the 'renderdebug' and 'bsp' channels to the RGBA color (64, 128, 192, 255).    log_flags +developer +donotecho         // Turns on the LCF_DO_NOT_ECHO flag for all channels with the 'developer' tag.
+Log Function Help:     log_verbosity <channel specifiers> <verbosity>    log_color <channel specifiers> <hex color>    log_flags <channel specifiers> <+/-flag>All functions are case insensitive.A channel specifier is either:1) tag specifiers: +/-tag1 +/-tag2 ...      // Narrows down to channels with & without given tags.2) channel names: name1 name2 ...           // Lists channels by name.verbosity: off, essential, default,         // Sets how verbose a channel is allowed to be.           detailed, max                    // 'off' turns all spew off                                            // 'essential' turns on vital logs                                            // 'default' turns on most messages                                            // 'detailed' allows for walls of text that are usually useful                                            // 'max' allows everythinghex color: RRGGBBAA                         // A hexadecimal color value in the order RGBA.flag: <+/->DoNotEcho                        // Enable/disable a flag to turn off echoing to the console.      <+/->ConsoleOnly                      // Enable/disable a flag to send text only to the console.e.g.    log_verbosity +console -developer verbose   // Sets minimum spew level of channels with the tag                                            // 'console' but without the tag 'developer' to 'verbose'.    log_color renderdebug bsp 4080C0FF      // Sets the 'renderdebug' and 'bsp' channels to the RGBA color (64, 128, 192, 255).    log_flags +developer +donotecho         // Turns on the LCF_DO_NOT_ECHO flag for all channels with the 'developer' tag.
+Log verbosity levels are locked.
 LoggingChannel_t::HasTag(char const*) const
 LoggingSystem_AddLogCapture
 LoggingSystem_AddLogCaptureString
@@ -3597,6 +3625,7 @@ MD5_Print
 MD5_ProcessSingleBuffer
 MD5_PseudoRandom
 MENUBAR_ITEM
+MERGE:
 MOBILE
 MODEL_PROCESSING_SERVICES_INTERFACE_001
 MST
@@ -3785,7 +3814,6 @@ Not enough data for compilation unit header
 Not enough data for compilation unit size
 Not enough data for line set header
 Not enough data for value
-NoteAlloc
 Notes:
 Nov
 November
@@ -3810,7 +3838,6 @@ Operation made no progress over multiple calls, due to input being empty
 Operation made no progress over multiple calls, due to output buffer being full
 Operation not authorized at current processing stage
 Operation on NULL destination buffer
-Other VScript
 Out of keyvalue string space
 Out of logging channels.
 Out of memory allocation hash_item_t
@@ -3824,6 +3851,8 @@ Outflow_
 Outflow_Generic
 Outflow_If
 Outflow_IntSwitch
+Outflow_NPCScriptedFaceEntity
+Outflow_NPCUseScriptedAbility
 Outflow_Simultaneous
 P
 PARTICLE_DEPTH_FEATHERING_OFF
@@ -3860,7 +3889,6 @@ PARTICLE_VRHAND_CP
 PARTICLE_VRHAND_CP_OBJECT
 PARTICLE_VRHAND_LEFT
 PARTICLE_VRHAND_RIGHT
-PC
 PF_BIAS_TYPE_EXPONENTIAL
 PF_BIAS_TYPE_STANDARD
 PF_MAP_TYPE_CURVE
@@ -3976,6 +4004,7 @@ Plat_FileExists
 Plat_FileIsReadOnly
 Plat_FileSize
 Plat_FindModuleByName
+Plat_FindOrCreateWrappedPlatWindow
 Plat_FlashWindow
 Plat_FloatTime
 Plat_GetAllocationGranularity
@@ -4020,6 +4049,7 @@ Plat_GetMonitorCount
 Plat_GetMonitorIndexFromName
 Plat_GetMonitorName
 Plat_GetMonitorResolution
+Plat_GetNumberCpusOnline
 Plat_GetOSDescriptionString
 Plat_GetOSType
 Plat_GetPageSize
@@ -4034,6 +4064,7 @@ Plat_GetRawCallStack
 Plat_GetRegisteredModules
 Plat_GetShellWindow
 Plat_GetSteamLoginWithAccessCode
+Plat_GetSystemLoad
 Plat_GetTempDirectory
 Plat_GetThreadIndex
 Plat_GetTime
@@ -4048,6 +4079,7 @@ Plat_GetWindowSafeAreaInsets
 Plat_GlobalMemoryStatus
 Plat_HasClipboardText
 Plat_HasDefaultMonitorIndexChanged
+Plat_HasEnteredFatalState
 Plat_HasEnv
 Plat_HookSpecialThread
 Plat_IAPConsumePurchase
@@ -4073,6 +4105,7 @@ Plat_IsInHeadlessMode
 Plat_IsInTestMode
 Plat_IsModuleLoaded
 Plat_IsOSInLowPowerUseMode
+Plat_IsPointerOnStack
 Plat_IsRunningOnCustomerMachine
 Plat_IsScreenKeyboardShown
 Plat_IsSymlink
@@ -4201,6 +4234,7 @@ PreviewPresetList
 Private bytes: %s
 Program launched from bad shortcut. Please delete this shortcut or unpin from the taskbar.
 PropertyEditorSystem_001
+PulseEntFireMode_t::HANDLE
 Push
 PushMiniProfilerTS
 PushPopThread
@@ -4259,10 +4293,10 @@ RecursiveLoadFromBuffer:  recursion overflow
 Register offset set to invalid value (%llu)
 RegisterAssertionFailureListener
 RegisterConVar: Unknown error registering convar "%s"!
-RegisterFormatConversion
 RegisterLoggingChannel
 RegisterMobileEventListener
 RegisterStringToken
+Regular entry table is not sorted
 Release
 ReleaseThreadHandle
 RemoveAssertionCallback
@@ -4317,6 +4351,7 @@ SDL.window.x11.window
 SDL_AudioDevicePaused
 SDL_BlitSurfaceScaled
 SDL_ClearAudioStream
+SDL_CloseHaptic
 SDL_CloseJoystick
 SDL_CreateAudioStream
 SDL_CreateColorCursor
@@ -4335,6 +4370,8 @@ SDL_EnableScreenSaver
 SDL_FlashWindow
 SDL_FlushAudioStream
 SDL_GL_SetAttribute
+SDL_GetAudioCaptureDevices
+SDL_GetAudioDeviceFormat
 SDL_GetAudioDeviceName
 SDL_GetAudioOutputDevices
 SDL_GetAudioStreamAvailable
@@ -4358,6 +4395,7 @@ SDL_GetError
 SDL_GetFullscreenDisplayModes
 SDL_GetGlobalMouseState
 SDL_GetGrabbedWindow
+SDL_GetHaptics
 SDL_GetHint
 SDL_GetJoystickAxis
 SDL_GetJoystickButton
@@ -4381,6 +4419,7 @@ SDL_GetPropertyType
 SDL_GetRelativeMouseMode
 SDL_GetScancodeFromKey
 SDL_GetScancodeName
+SDL_GetTicksNS
 SDL_GetWindowFlags
 SDL_GetWindowFromID
 SDL_GetWindowFullscreenMode
@@ -4391,23 +4430,22 @@ SDL_GetWindowProperties
 SDL_GetWindowSize
 SDL_GetWindowSizeInPixels
 SDL_GetWindowTitle
-SDL_HapticClose
-SDL_HapticOpen
-SDL_HapticRumbleInit
-SDL_HapticRumblePlay
 SDL_HasClipboardText
 SDL_HasScreenKeyboardSupport
 SDL_HideWindow
 SDL_Init
+SDL_InitHapticRumble
 SDL_InitSubSystem
 SDL_LoadBMP_RW
 SDL_LockAudioStream
 SDL_MOUSE_FOCUS_CLICKTHROUGH
 SDL_MinimizeWindow
 SDL_OpenAudioDeviceStream
+SDL_OpenHaptic
 SDL_OpenJoystick
 SDL_PauseAudioDevice
 SDL_PeepEvents
+SDL_PlayHapticRumble
 SDL_PollEvent
 SDL_PumpEvents
 SDL_PutAudioStreamData
@@ -4425,6 +4463,7 @@ SDL_SetClipboardText failed: %s
 SDL_SetCursor
 SDL_SetHint
 SDL_SetNumberProperty
+SDL_SetProperty
 SDL_SetRelativeMouseMode
 SDL_SetStringProperty
 SDL_SetTextInputRect
@@ -4442,11 +4481,14 @@ SDL_ShowMessageBox
 SDL_ShowWindow
 SDL_StartTextInput
 SDL_StopTextInput
+SDL_SyncWindow
 SDL_TextInputActive
 SDL_UnlockAudioStream
 SDL_UpdateJoysticks
 SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS
 SDL_VIDEO_X11_NET_WM_PING
+SDL_Vulkan_CreateSurface
+SDL_Vulkan_GetInstanceExtensions
 SDL_WaitEvent
 SDL_WaitEventTimeout
 SDL_WarpMouseGlobal
@@ -4555,7 +4597,6 @@ Server Animation
 Server Game
 Server Physics
 Server Simulation
-Server VScript
 ServerToolsInfo_001
 Set the color of a logging channel.
 Set the flags on a logging channel.
@@ -4567,7 +4608,6 @@ SetCPUMonitoringInterval
 SetDefaultMiniDumpHandler
 SetDisableFocusBasedPriorityBoost
 SetKV3LoadFlags(unsigned int)
-SetListener
 SetPtr
 SetRawAllocatorType
 SetThreadedLoadLibraryFunc
@@ -4614,11 +4654,7 @@ Source2Host001
 Source2Server001
 Source2V8System001
 SourceStateBlendWeight
-SpecialCommand_Test_Run
-SpecialCommand_Test_SetEvent
 SpecialCommand_Test_SetEvent <event name> : requires an event name.
-SpecialCommand_Test_Wait
-SpecialCommand_Test_WaitForCheckPoint
 Specific type %s cannot be a basic type %s
 Specification attr value (0x%llx) out of range
 Specification attr without reference value (form 0x%x)
@@ -4771,6 +4807,7 @@ SteamAudio001
 Step_CallExternalMethod
 Step_CallMethod
 Step_CallMethod node %d referenced unknown method %d
+Step_EntFire
 Step_Generic
 Stop has been called on thread.
 StrReplaceChar
@@ -4827,12 +4864,15 @@ Test_LoopLoopForNumSeconds: requires a loop name and number of seconds to loop.
 Test_RandomChance
 Test_RandomChance <percent chance, 0-100> <token1> <token2...> - Roll the dice and maybe run the command following the percentage chance.
 Test_RandomChance: requires percentage chance parameter (0-100) followed by command to execute.
+Test_Run
 Test_RunFrame
+Test_SetEvent
 Test_StartLoop
 Test_StartLoop <loop name> - Denote the start of a loop. Really just defines a named point you can jump to.
 Test_StartLoop: requires a loop name.
 Test_StartScript
 Test_StartScript: requires filename of script to start (file must be under testscripts directory).
+Test_Wait
 Test_Wait: requires seconds parameter.
 Test_WaitForCheckPoint
 Test_WaitForCheckPoint <checkpoint name> [once]: requires checkpoint name.
@@ -4881,7 +4921,6 @@ ThreadPoolTest:   To completion
 ThreadPoolTest: Job distribution speed
 ThreadPoolTest: Jobs doing work, %s main thread
 ThreadReadProcessMemory
-ThreadScopeChangeEventHandler_ThreadID
 ThreadSetAffinityPreference
 ThreadSetDebugNameS2
 ThreadSetPriority
@@ -4910,9 +4949,12 @@ TimestampedEventMsgV
 TimestampedEvent_RegisterListenerAndFlushBuffer
 ToLowerFast
 ToUpperFast
+Too few compact unwind index entries (0x%x)
 Too many CIE initial instructions (%u)
 Too many FDE instructions (%u)
 Too many channel specifiers (max: %d).
+Too many compact unwind common encodings (0x%x)
+Too many compact unwind index entries (0x%x)
 ToolFramework2_002
 ToolSceneNodeFactory_001
 ToolService_001
@@ -4948,10 +4990,11 @@ U
 U&a
 UCS-2
 UNLOGGED
+UNWIND %u: unwind IP 0x%llx (%s); FP 0x%llx; SP 0x%llx
 UNWIND: unable to find debug info for %s
 UNWIND: unable to init dbghelp for process
 UNWIND: unable to load dbghelp
-UNWIND: unwind IP 0x%llx (%s); FP 0x%llx; SP 0x%llx
+UPDATE:
 UPDATE_STRING_TOKEN_DATABASE
 USED
 USERINFO
@@ -5049,6 +5092,7 @@ Unsupported Mach-O machine type %d
 Unsupported allocation alignment (%llu), max is %u
 Unsupported binary encoding id.
 Unsupported combination of parameters
+Unsupported compact unwind version %u (expected %u)
 Unsupported define_file instruction
 Unsupported escape character '\%c'
 Unsupported frame parameter
@@ -5087,7 +5131,6 @@ VECTOR3
 VECTOR4
 VEngineCvar007
 VFileSystem017
-VGAME
 VMaterialSystem2_001
 VMediaFoundation001
 VP4003
@@ -5207,7 +5250,7 @@ V_PrettifyNum
 V_RandomString(int)
 V_RemoveDotSlashes
 V_RemoveFormatSpecifications
-V_SanitizeTextForCommandLine(char const*, CBufferString*)
+V_SanitizeTextForCommandLine(char const*, CBufferString*, bool)
 V_SanitizeTextForCommandLine(char const*, char*, int)
 V_SetErrno
 V_SplitNumbers(char const*, char, CUtlVector<double, int, CUtlMemory<double, int> >&)
@@ -5831,6 +5874,7 @@ ZSTD_writeSkippableFrame
 ^
 ^=
 _
+_-report-_
 _Accum
 _AssertValidReadPtr
 _AssertValidReadWritePtr
@@ -6179,6 +6223,8 @@ auto:
 auto_unragdoll_duration
 az
 b
+bForceLookAtPath
+bReacquireAfterBreak
 bUpdate
 background_thread_global
 backtrace
@@ -6296,6 +6342,7 @@ break_uniform_burst
 breakable_count
 breakable_model
 breakable_skin
+breakpad
 broadcast
 btowc
 buildid/
@@ -6368,7 +6415,6 @@ corrupted entry
 cosh
 covariant return thunk to
 covariant virtual thunk to
-cpu.cpp
 create_particle
 ctl
 curl --connect-timeout 5 --no-progress-meter --max-time %u -s -o "%s" %s
@@ -6382,6 +6428,7 @@ cvarlist:  [log logfile] [ partial ]
 d
 d=%u
 dV
+darwin
 darwin/
 dbg.cpp
 dc
@@ -6418,7 +6465,6 @@ devonly
 dgettext
 dictBufferCapacity must be at least %u
 diff buff needs increase
-diff buffer overrun
 differences
 dioxXu
 dirty:
@@ -6454,6 +6500,10 @@ dynstr
 dynsym
 e
 e/
+eCombat
+eDamageOrDeath
+eDeath
+eGeneral
 eO
 edata_cache
 ehandle
@@ -6517,6 +6567,7 @@ finding patterns ...
 fl
 flMaxDistance
 flMinDistance
+flStopRadius
 float
 float( %f )
 float32
@@ -6637,6 +6688,8 @@ guard variable for std::time_put<char, std::ostreambuf_iterator<char, std::char_
 guard variable for std::time_put<wchar_t, std::ostreambuf_iterator<wchar_t, std::char_traits<wchar_t> > >::id
 h
 hEntity
+hEntityNPC
+hEntityTarget
 hTarget
 half
 handindex
@@ -6841,6 +6894,8 @@ m_Emitters
 m_EndEffectorBone
 m_EndEffectorTargetBone
 m_Ent
+m_EntityNPC
+m_EntityTarget
 m_ExpectedArg0Name
 m_ExpectedArg0Type
 m_ExpectedArg1Name
@@ -6865,6 +6920,7 @@ m_JointConstraintPairs
 m_JointName
 m_Joints
 m_LiteralColor
+m_LiteralValue
 m_LocalCoordinateSystemSpeedMax
 m_LocalCoordinateSystemSpeedMin
 m_LocalSpaceTransform
@@ -6875,8 +6931,13 @@ m_Modifiers
 m_MotorList
 m_Name
 m_NodeID
+m_OnCanceled
+m_OnFailedToPerform
+m_OnFinished
 m_Operators
 m_Param
+m_ParamAbilityName
+m_ParamStopRadius
 m_ParameterName
 m_Parameters
 m_PreEmissionOperators
@@ -6891,6 +6952,7 @@ m_SourceOutflowName
 m_SourceOutparamName
 m_SwitchValue
 m_Target
+m_TargetHandle
 m_TargetName
 m_TargetSettingSource
 m_TargetSource
@@ -6903,6 +6965,7 @@ m_TransformInput
 m_TransformStart
 m_Type
 m_Value
+m_ValueSource
 m_VariableName
 m_VariableValue
 m_Variables
@@ -6929,7 +6992,6 @@ m_bForceLoopingAnimation
 m_bGameWritable
 m_bGraphWritable
 m_bHasRandomSignFlip
-m_bIgnoreDetailGeometry
 m_bIgnoreDirection
 m_bIgnoreEntities
 m_bIgnoreModels
@@ -6952,6 +7014,8 @@ m_bNormalMap
 m_bNormalizeToStopTime
 m_bOffsetExistingPos
 m_bOnlyAllowedAtMaxDepth
+m_bParamForceLookatPath
+m_bParamReacquireAfterBreak
 m_bParticleFeathering
 m_bPerParticle
 m_bRandomlyFlipDirection
@@ -7116,14 +7180,17 @@ m_flThickness
 m_flTraceLength
 m_flWeight
 m_flYaw
+m_flYawTolerance
 m_flZoomAmount0
 m_flZoomAmount1
 m_flZoomMax
 m_flZoomScale
 m_groups
 m_hAlyx
+m_hMaterial
 m_hMotionVectorsTexture
 m_hNormalTexture
+m_hProjectedMaterial
 m_hSnapshot
 m_hTexture
 m_id
@@ -7165,6 +7232,7 @@ m_nFeatheringMode
 m_nField
 m_nFieldInput
 m_nFieldOutput
+m_nFireMode
 m_nFirstMultipleOverride_BackwardCompat
 m_nFogType
 m_nHand
@@ -7189,6 +7257,7 @@ m_nOutputBlendMode
 m_nOutputField
 m_nOverrideCP
 m_nOverrideCP2
+m_nParamInterruptability
 m_nParticleNumber
 m_nParticleSelection
 m_nParticlesToEmit
@@ -7212,6 +7281,7 @@ m_nTraceMissBehavior
 m_nTranslations == 1
 m_nType
 m_nValue
+m_nVarOrConstID
 m_nVectorAttribute
 m_nVectorComponent
 m_nViewModelEffect
@@ -7276,6 +7346,7 @@ m_vecMax
 m_vecMin
 m_vecOutputMax
 m_vecOutputMin
+m_vecProjectedMaterials
 m_vecSamplePosition
 m_vecScale
 m_vecTailColorScale
@@ -7298,6 +7369,7 @@ mallinfo.usmblks: %s
 mapped:
 master_morph_weight
 material
+materials/particle/base_projected.vmat
 materials/particle/base_sprite.vtex
 matrix3x4
 max. %f
@@ -7366,6 +7438,7 @@ modeldoc3
 modeldoc30
 modeldoc31
 modeldoc32
+modeldoc33
 modeldoc4
 modeldoc5
 modeldoc6
@@ -7375,12 +7448,15 @@ modeldoc9
 moredetailed
 mprotect
 mt19937
+mtx
 multiplayer_break
 munmap
 mutex
 muzzy:
 muzzy_bytes
 n
+nBits != 32
+nInterruptability
 nOffset < m_nAllocationSize
 nTries < 10000000
 n_lock_ops
@@ -7568,6 +7644,7 @@ out of order
 p
 p4 add -t binary "%s"
 p4 edit -t binary "%s"
+pAbilityName
 pClass
 pFrameBottom > m_pStackHigh || pFrameTop < m_pStackLow
 pL
@@ -7599,7 +7676,6 @@ placement_attach
 placement_bone
 placement_mode
 platform.cpp
-platform_sdl.cpp
 play_endcap
 pledged buffer stability condition is not respected
 pm
@@ -7769,7 +7845,6 @@ sigfillset
 sigprocmask
 sincos
 singleplayer
-singletons.cpp
 sinh
 sizeof
 sizeof...
@@ -10590,7 +10665,6 @@ test_angles_relative
 test_hooks_arena_new_hook
 test_hooks_libc_hook
 testscript_debug
-testscriptmgr.cpp
 texturescale
 this
 threadtools.cpp
@@ -10601,6 +10675,7 @@ timegm
 timestamped.log
 title
 too many length or distance symbols
+tools_stall_monitor_break_on_unknown_cause
 total:
 total_wait_ns
 total_wait_time
@@ -10650,6 +10725,7 @@ type info for
 type info name for
 typeinfo fn for
 typeinfo for
+typeinfo for CBufferStringFormatOutputStream
 typeinfo for CCharBufferFormatOutputStream
 typeinfo for CKeyValuesDumpContextAsDevMsg
 typeinfo for CKeyValuesDumpContextToBufferString
@@ -10826,6 +10902,7 @@ typeinfo for std::time_put_byname<wchar_t, std::ostreambuf_iterator<wchar_t, std
 typeinfo for std::type_info
 typeinfo for std::underflow_error
 typeinfo name for
+typeinfo name for CBufferStringFormatOutputStream
 typeinfo name for CCharBufferFormatOutputStream
 typeinfo name for CKeyValuesDumpContextAsDevMsg
 typeinfo name for CKeyValuesDumpContextToBufferString
@@ -11050,6 +11127,7 @@ value of the environment variable MALLOC_CONF
 vanmgrph
 vconsole_fuzzy
 vconsole_set_focus
+vec
 vector2
 vector2d
 vector3
@@ -11167,6 +11245,7 @@ vpcf55
 vpcf56
 vpcf57
 vpcf58
+vpcf59
 vpcf6
 vpcf7
 vpcf8
@@ -11175,16 +11254,21 @@ vpk:
 vprof.cpp
 vpulse
 vpulse1
+vpulse10
 vpulse2
 vpulse3
 vpulse4
 vpulse5
 vpulse6
+vpulse7
+vpulse8
+vpulse9
 vpulse_c1
 vr_carry_type
 vsmart;vsmart_template
 vsnap
 vswprintf
+vtable for CBufferStringFormatOutputStream
 vtable for CCharBufferFormatOutputStream
 vtable for CKeyValuesDumpContextAsDevMsg
 vtable for CKeyValuesDumpContextToBufferString
@@ -11356,6 +11440,7 @@ vtable for std::type_info
 vtable for std::underflow_error
 vtest
 vtune
+vulkan
 w
 w'
 w+

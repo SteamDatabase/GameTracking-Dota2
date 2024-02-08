@@ -287,8 +287,6 @@
 
 	disablereceiveshadows(boolean) [ group="Render Properties" ] : "Disable Receiving Shadows" : 0
 
-	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Will only be lit by lights affecting this group."
-
 	input Alpha(integer) : "Set the sprite's alpha (0 - 255)."
 	input Color(color255) : "Set the sprite's color (R G B)."
 
@@ -906,8 +904,7 @@
 	box_outer_mins(vector) : "Box Outer Mins" : "-64 -64 -64"
 	box_outer_maxs(vector) : "Box Outer Maxs" : "64 64 64"	
 ]
-
-@PointClass base( Targetname, snd_opvar_set_aabb ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_inner_mins, box_inner_maxs ) box_oriented( box_outer_mins, box_outer_maxs ) = snd_opvar_set_obb :
+@PointClass base( Targetname, snd_opvar_set_aabb ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented{ box_min = "box_inner_mins" box_max = "box_inner_maxs" draw_unselected_box = false} box_oriented{ box_min = "box_outer_mins" box_max = "box_outer_maxs" draw_unselected_box = false} = snd_opvar_set_obb :
 [
 ]
 
@@ -916,17 +913,16 @@
 	pathCornerEntityName(target_destination) : "Path Corner Starting Entity" : "" : "The name of the entity that is at the start of the path"
 ]
 
+@BaseClass = SndOpvarSetPointAutoRoomBase
+[ 
+	size(float) : "Size (radius)" : "25.0" : "Size of the room to analyze"
+	height_tolerance(float) : "Height Tolerance (units)" : "50.0" : "If the player's height and the raycast height are within this many units, the difference is ignored when performing distance calculations"
+]
 
-//@BaseClass = SndOpvarSetPointAutoRoomBase
-//[ 
-	//size(float) : "Size (radius)" : "25.0" : "Size of the room to analyze"
-	//height_tolerance(float) : "Height Tolerance (units)" : "50.0" : "If the player's height and the raycast height are within this many units, the difference is ignored when performing distance calculations"
-//]
-
-//@PointClass base( Targetname, SndOpvarSetPointAutoRoomBase, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) sphere(size, 250, 101, 252)= snd_opvar_set_auto_room :
-	//"Analyzes a mostly enclosed space and defines walls and doorways within that space. Sets an opvar value on a library stack based on distance from the doorways"
-//[
-//]
+@PointClass base( Targetname, SndOpvarSetPointAutoRoomBase, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) sphere(size, 250, 101, 252)= snd_opvar_set_auto_room :
+	"Analyzes a mostly enclosed space and defines walls and doorways within that space. Sets an opvar value on a library stack based on distance from the doorways"
+[
+]
 
 @PointClass base( Targetname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb:
 [
@@ -1938,6 +1934,7 @@
 		16: "Ropes" : 0		// shakes ropes too.
 		32: "DON'T shake view (for shaking ropes or physics only)" : 0
 		64: "DON'T Rumble Controller" : 0
+		256: "Water" : 0	// shake water too.
 	]
 
 	limittoentity(target_destination) : "Limit to entity" : "" : "Limit the shake to entity or entities matching the name or class name."
@@ -2247,21 +2244,19 @@
 	"An entity used to control the 3D Skybox. Its origin is used to determine the 3D Skybox's position relative to the map. Place this entity, in the 3D Skybox, at the point where the origin of the map should be."
 [
 	scale(integer) : "3D Skybox scale" : 16 : "Scale of the skybox."
-	fogenable(boolean) : "Fog Enable" : 0
-	fogblend(boolean) : "Fog Blend" : 0
-	use_angles(boolean) : "Use Angles for Fog Dir" : 0
 	clip_3D_skybox_near_to_world_far(boolean) : "Clip 3D sky near plane to world far plane" : 0
 	clip_3D_skybox_near_to_world_far_offset(string) : "3D sky near plane offset" : "0.0" : "Offset for the near clip plane for the 3D sky in world units.  This is only used if the above field is true.  Negative values to pull closer, etc."
-	fogcolor(color255) : "Primary Fog Color" : "255 255 255"
-	fogcolor2(color255) : "Secondary Fog Color" : "255 255 255"
-	fogdir(string) : "Primary Fog Direction" : "1 0 0"
-	fogstart(string) : "Fog Start" : "500.0" : "Distance at which the skybox fog should start."
-	fogend(string) : "Fog End" : "2000.0" : "Distance at which the skybox fog should be fully opaque."
-	fogmaxdensity(float) : "Fog Max Density [0..1]" : "1"
-
-	HDRColorScale(float) : "HDR color scale." : "1.0" : "float value to multiply fog color by when running in HDR mode."
-
-	SkyboxSlot(string) : "SkyboxSlot" : "" : "Name of the skybox this camera belongs to."
+	SkyboxSlot(string) : "SkyboxSlot" : "" : "Name of the skybox this camera belongs to."	
+	fogenable(boolean) [ group = "Fog" ] : "Fog Enable" : 0
+	fogblend(boolean) [ group = "Fog" ] : "Fog Blend" : 0
+	use_angles(boolean) [ group = "Fog" ] : "Use Angles for Fog Dir" : 0
+	fogcolor(color255) [ group = "Fog" ] : "Primary Fog Color" : "255 255 255"
+	fogcolor2(color255) [ group = "Fog" ] : "Secondary Fog Color" : "255 255 255"
+	fogdir(string) [ group = "Fog" ] : "Primary Fog Direction" : "1 0 0"
+	fogstart(string) [ group = "Fog" ] : "Fog Start" : "500.0" : "Distance at which the skybox fog should start."
+	fogend(string) [ group = "Fog" ] : "Fog End" : "2000.0" : "Distance at which the skybox fog should be fully opaque."
+	fogmaxdensity(float) [ group = "Fog" ] : "Fog Max Density [0..1]" : "1"
+	HDRColorScale(float) [ group = "Fog" ] : "HDR color scale." : "1.0" : "float value to multiply fog color by when running in HDR mode."
 ]
 
 @BaseClass base(Targetname, ResponseContext) = BaseSpeaker
@@ -2308,6 +2303,32 @@
 		2: "Strip First" : 0
 	]
 	master(string) : "Team Master (Obsolete)" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this entity will not activate."	
+
+	weapon0(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon1(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon2(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon3(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon4(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon5(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon6(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon7(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon8(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon9(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon10(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon11(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon12(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon13(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon14(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon15(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon16(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon17(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon18(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon19(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon20(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+	weapon21(string)	 : "Weapon" : "" : "Classname of item to equip, eg 'weapon_ak47'."
+
+	input TriggerForAllPlayers(void) : "This will force all connected players to take the weapon(s) specified."
+	input TriggerForActivatedPlayer(string) : "This will force the player who activated to equip the specified weapon."
 ]
 
 @PointClass base(Targetname) iconsprite("editor/game_text.vmat") = game_text : 
@@ -2433,7 +2454,7 @@
 
 // A decal to be applied to a prop or the world using specified origin and orientation and radius, uses an orientation angle and a radius to determine
 //  ray to cast for projection
-@PointClass base(Targetname) tags( Overlay ) decal() drawangles() editormodel("models/editor/axis_helper_thick.vmdl") = info_projecteddecal : 
+@PointClass base(Targetname) tags( Overlay ) decal() drawangles{} editormodel("models/editor/axis_helper_thick.vmdl") = info_projecteddecal : 
 	"An entity that projects a decal onto the world (or props). If the decal has no target name, it will immediately apply itself when "+
 	"the level is loaded. If it has a name specified, it won't apply until it receives the 'Activate' input."
 [
@@ -2829,7 +2850,7 @@
 	]
 ]
 
-@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local( movedir ) = func_movelinear :
+@SolidClass base(Targetname, Parentname, RenderFields) drawangles_local{ angles_key = "movedir" } = func_movelinear :
 	"A brush entity that moves linearly along a given distance, in a given direction."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the brushes will move, when told to."
@@ -2888,6 +2909,7 @@
 		512: "Large Sound Radius" : 1
 		1024: "Client-side Animation" : 0
 		2048: "Unblockable by Player" : 0
+		4096: "Rotate in world space" : 0
 	]
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 	dmg(integer) : "Blocking Damage" : 0 : "Damage done to any entity that blocks the rotation, per frame."
@@ -2899,7 +2921,7 @@
 	]
 
 	// Inputs
-	input SetSpeed(integer) : "Set the speed as a ratio of the specified Max Rotation Speed, where 0 is stopped and 1 is the Max Rotation Speed. Negative values rotate backwards."
+	input SetSpeed(float) : "Set the speed as a ratio of the specified Max Rotation Speed, where 0 is stopped and 1 is the Max Rotation Speed. Negative values rotate backwards."
 	input SnapToStartPos(void) : "Snap to the initial position and stop moving."
 	input Start(void) : "Start the rotator rotating."
 	input Stop(void) : "Stop the rotator from rotating."
@@ -2909,6 +2931,12 @@
 	input StartBackward(void) : "Start the rotator rotating backward at maximum speed."
 	input Toggle(void) : "Toggle the rotator between rotating and not rotating."
 	input Reverse(void) : "Reverse the direction of rotation of the rotator, preserving the current speed."
+	input EnableAccelDecel(void) : "Enables the acceleration and deceleration of this rotator"
+	input DisableAccelDecel(void) : "Disables the acceleration and deceleration of this rotator (instantly starts/stops)"
+	
+	output OnStopped(void) : "Fired this brush has stopped moving."
+	output OnStarted(void) : "Fired this brush has started moving"
+	output OnReachedStart(void) : "Fired this brush has stopped moving."
 ]
 
 @SolidClass base(Targetname, Parentname, RenderFields, BasePlat, Shadow) = func_platrot : 
@@ -3044,7 +3072,7 @@
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 ]
 
-@SolidClass base(BaseFuncButton) drawangles_local( movedir ) = func_button : 
+@SolidClass base(BaseFuncButton) drawangles_local{ angles_key = "movedir" } = func_button : 
 	"A brush entity that's designed to be used for a player-useable button. When used by the player, it moves to a pressed position."
 [
 	lip(integer) : "Lip" : 0 : "The amount, in inches, of the button to leave sticking out of the wall it recedes into when pressed. Negative values make the button recede even further into the wall."
@@ -3066,7 +3094,7 @@
 	]
 ]
 
-@SolidClass base(BaseFuncButton) drawangles_local( movedir ) = func_physical_button : 
+@SolidClass base(BaseFuncButton) drawangles_local{ angles_key = "movedir" } = func_physical_button : 
 	"A brush entity that's designed to be used for a rotating player-useable button. When used by the player, it rotates to a pressed position."
 [
 	spawnflags(flags) =
@@ -3232,7 +3260,7 @@
 	input SetSpeed(float) : "Set the door speed."
 ]
 
-@SolidClass base(Door) drawangles_local( movedir ) = func_door : 
+@SolidClass base(Door) drawangles_local{ angles_key = "movedir" } = func_door : 
 	"A brush entity for use as a player-useable door."
 [
 	movedir(angle) : "Move Direction (Pitch Yaw Roll)" : "0 0 0" : "The direction the door will move, when it opens."
@@ -4161,6 +4189,17 @@
 	selected_line( 255 255 255, targetname, Template63 )
 	selected_line( 255 255 255, targetname, Template64 )
 	iconsprite("editor/point_template.vmat")
+	metadata
+	{
+		create_entity_template_lumps = 
+		[
+			{
+				lumpMode = "PointTemplate"
+				targetWorldKey = "worldName"
+				targetLumpKey = "entityLumpName"
+			}
+		]
+	}
 = point_template : 
 	"Turns an entity, or set of entities, into a single template that can be instanced anywhere, and multiple times. "+
 	"If there are interdependencies (entity I/O, hierarchy, or other name references) between the entities "+
@@ -4459,6 +4498,10 @@
 [
 ]
 
+@FilterClass base(BaseFilter) iconsprite("editor/filter_class.vmat") = filter_modifier : "A filter that filters entities by active modifiers applied to them"
+[
+	filtermodifier(string) : "Modifier Name" : : "The name of the modifier to filter entities by"
+]
 
 //-------------------------------------------------------------------------
 //
@@ -4938,7 +4981,7 @@
 [
 	addlength(float) : "Additional Length" : "0" : "Add (or subtract) this amount to the rest length of the rope."
 	minlength(float) : "Minimum Length" : "0" : "If the constraint is not rigid, this is the minimum length it can be."
-	attachpoint(vecline) : "Attached object 2 point" : "The position the rope attaches to object 2"
+	attachpoint(vecline) : "Attached object 2 point" : "0 0 0" : "The position the rope attaches to object 2"
 	enablecollision(boolean) : "Enable Collision" : "0" : "Constraints disable collision between the attached entities. In some rare cases we want to enable this collision."
 	spawnflags(flags) =
 	[
@@ -5215,12 +5258,9 @@
 
 	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist/Pixels" : -1 : "Distance at which the prop starts to fade (<0 = subtract from fademaxdist)."
 	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist/Pixels" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out)."
-
-	detailgeometry(boolean) [ group="Render Properties" ] : "Detail Geometry" : 0 : "If true this geometry is not important for precomputed lighting"	
 	visoccluder(boolean) [ group="Render Properties" ] : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility"	
 	renderamt(integer) [ group="Render Properties" ] : "Alpha" : 255 : "Alpha of the fade, where 0 = fully transparent and 255 = fully opaque." 
 	rendercolor(color255) : "Color (R G B)" : "255 255 255"
-
 	disablelowviolence(choices) [ group="Render Properties" ] : "Turn Off in Low-Violence" : 0 =
 	[
 		0: "No"
@@ -5252,10 +5292,17 @@
 		1: "Yes"
 	]
 
-	DefaultAnim(sequence) { enabled={ function="NotUsingAnimGraph" } } : "Default Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
 	use_animgraph(boolean) { enabled={ function="ModelHasAnimGraph" } } : "Use Animgraph" : 1 : "Allow the model to use its animgraph it has one. If the model has no animgraph this setting has no effect and is disabled"
 
-	AnimationLoopMode(choices) : "Animation Loop Mode" : "ANIM_LOOP_MODE_NOT_LOOPING" =
+	StartingAnim(sequence) { enabled={ function="NotUsingAnimGraph" } is_preview_animation=true preview_animation_priority = 2 } : "Starting Animation" : "" : "The name of a starting animation that this prop will start with when it spawns. After completion, it will switch to the Idle sequence, if it is specified. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
+	StartingAnimationLoopMode(choices) : "Start Animation Loop Mode" : "ANIM_LOOP_MODE_NOT_LOOPING" =
+	[
+		"ANIM_LOOP_MODE_NOT_LOOPING" : "Do Not Loop"
+		"ANIM_LOOP_MODE_LOOPING" : "Loop"
+	]
+
+	IdleAnim(sequence) { enabled={ function="NotUsingAnimGraph" } is_preview_animation=true } : "Idle Animation" : "" : "The name of the idle animation that this prop will revert to whenever it finishes a random or forced animation. This setting is ignored for models with an animgraph when Use Animgraph is enabled."
+	IdleAnimationLoopMode(choices) : "Idle Animation Loop Mode" : "ANIM_LOOP_MODE_NOT_LOOPING" =
 	[
 		"ANIM_LOOP_MODE_NOT_LOOPING" : "Do Not Loop"
 		"ANIM_LOOP_MODE_LOOPING" : "Loop"
@@ -5265,19 +5312,15 @@
 
 	LagCompensate(boolean) : "Lag Compensation" : 0 : "Enable to lag compensate this prop, should be use very sparingly!"
 	AnimateOnServer(boolean) : "Animate on server in multiplayer" : 0 : "Enable this to animate on the server in multiplayer games, such as for props with triggers parented to attachment points. Use sparingly as there is a performance cost."
-	ScriptedMovement(boolean) : "Scripted Movement" : 0 : "Set this to allow vscript code to move the prop via SetVelocity() calls."
-	
-	velocity(vector) : "Initial Velocity" : : "Only used if Scripted Movement is set, sets an initial linear velocity for the entity."
-	avelocity(vector) : "Initial Rotational Velocity" : : "Only used if Scripted Movement is set, sets an initial rotational velocity for the entity."
 
 	// Inputs
 	input SetAnimationLooping(string)			: "Force the prop to play an animation and force it to loop. The parameter should be the name of the animation."
 	input SetAnimationNoResetLooping(string)	: "Force the prop to play an animation and force it to loop unless the prop is already playing the animation. The parameter should be the name of the animation."
-	input SetDefaultAnimationLooping(string)	: "Set the Default Animation to the one specified in the parameter and force it to loop."
+	input SetIdleAnimationLooping(string)		: "Changes the Idle Animation to the one specified in the parameter and force it to loop."
 
 	input SetAnimationNotLooping(string)		: "Force the prop to play an animation and force it to not loop. The parameter should be the name of the animation."
 	input SetAnimationNoResetNotLooping(string) : "Force the prop to play an animation and force it to not loop unless the prop is already playing the animation. The parameter should be the name of the animation."
-	input SetDefaultAnimationNotLooping(string) : "Set the Default Animation to the one specified in the parameter and force it to not loop."
+	input SetIdleAnimationNotLooping(string)	: "Changes the Idle Animation to the one specified in the parameter and force it to not loop."
 
 	input SetPlaybackRate(float) : "Set the playback rate for the animation."
 	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
@@ -5322,10 +5365,12 @@
 	}
 = prop_static
 [
-	model(resource:model) [report] : "World Model"
-	rendercolor(color255) : "Color (R G B)" : "255 255 255"
+	model(resource:model) [report] : "Model"
+	rendercolor(color255) : "Tint Color" : "255 255 255"
+	skin(materialgroup) : "Material Group" : "default" : "Some props have multiple matieral variations called Material Groups, here you can see what material groups are available for selection."	
 
-	solid(choices) : "Collisions" : 6 =
+//	Collision
+	solid(choices) [ group="Collision" ] : "Collision Type" : 6 =
 	[
 		0: "Not Solid"
 //		2: "Use axis-aligned box"
@@ -5333,36 +5378,24 @@
 		6: "Use VPhysics"
 	]
 
-	visoccluder(boolean) : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility"	
-	
-	disableshadows(choices) [ group="Render Properties" ] : "Cast Shadows" : 0 : "Used to disable shadow casting from this entity." = 
+
+	// Lighting	
+	bakelighting(choices) [ group="Lighting" ] : "Lighting Type" : -1 : "Selects whether to use lightmapping or lightprobes for this mesh. Note: Selecting light probes will disable mesh merging/batching, creating extra draw calls. To merge lightprobed meshes, enable the Bake to World parameter."=
 	[
-		0: "Enabled"
-		1: "No Shadows"
-		2: "Only Realtime Shadows"
-		3: "Only Baked Shadows"
+		-1 : "Default"
+		1 : "Lightmapped"
+		0 : "Lightprobed"
 	]
-
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
-	lodlevel(lod_level)  [ group="Render Properties" ] : "LOD Level" : "-1" : "LOD level to be displayed in game. Set to Auto for standard automatic selection, or set to a specific level to always use that level."
-
-	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist" : -1 : "Distance at which the prop starts to fade (-1 = use fademaxdist)."
-	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out)."
-
-	baketoworld(boolean) [ group="Build Settings" ] : "Bake To World" : 0 : "If true this geometry will be baked into the world geometry of the map so that the model is not referenced at runtime."
-	disablemerging(boolean) [ group="Build Settings" ] : "Disable Mesh Merging" : 0 : "If true this will not be merged with other geometry during map compile (reduces rendering efficiency)."
-	renderamt(integer) [ group="Render Properties" ] : "Alpha" : 255 : "Alpha of the fade, where 0 = fully transparent and 255 = fully opaque." 
-	
-	lightingorigin(target_destination) [ group="Render Properties" ]: "Lighting Origin" : "" : "Select a an entity to specify a location to sample lighting from, instead of using this entity's bounding box center."
-	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Will only be lit by lights affecting this group."
-	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"	
-	precomputelightprobes(boolean) [ group="Render Properties" ] : "Precompute Light Probes" : 1 : "Pre-compute environment map and light probe volume used on this object."
-	bakelightdoublesided(boolean) [ group = "Render Properties" ] : "Bake Lighting As If Double-Sided" : 0 : "Bake lighting as if this were double-sided geometry. Useful on geometry with pre-culled backfaces whose neighbors have lighting errors caused by saw-too-many-backfaces sample invalidation."
-	emissive(boolean) [ group = "Render Properties" ] : "Emissive Lighting" : 1 : "Allow this prop to emit lighting for raytraced lighting"
-	emissive_lighting_boost(float) { group = "Render Properties" min="0.0" max="8.0" enabled={ variable="emissive" value="1"  } } : "Emissive Lighting Boost" : "1.0" : "Emissive Lighting Boost"
-	materialoverride(material) [ group="Render Properties" ] : "Override Material" : ""
-	disableinlowquality(boolean) [ group="Render Properties" ] : "Disable in low quality mode" : 0 : "Do not render this prop when using the lowest quality video settings, it is an non-essential detail."
-	lightmapscalebias(choices) [ group="Render Properties" ] : "Lightmap Scale Bias" : 0 : "Use to scale the resolution of the lightmap for this object." =
+	disableshadows(choices) [ group="Lighting" ] : "Shadow Type" : 0 : "Selects the type of shadows that should be cast from this prop_static." = 
+	[
+		0: "Baked & Dynamic"
+		3: "Only Baked"
+		2: "Only Dynamic"
+		1: "None"
+	]
+	emissive(boolean) [ group = "Lighting" ] : "Emissive" : 1 : "Allow this prop to emit lighting. Note that this only works on materials with Self Illum parameters, and is only visible in the GPU Path Tracing Preview and in the final lightmap bake."
+	emissive_lighting_boost(float) { group = "Lighting" min="0.0" max="8.0" enabled={ variable="emissive" value="1"  } } : "Emissive Boost" : "1.0" : "Used to boost emissive lighting from a mesh. Note that boosting emissive on smaller meshes can create more lighting artifacts/noise."
+	lightmapscalebias(choices) [ group="Lighting" ] : "Lightmap Scale Bias" : 0 : "Used to scale the resolution of the lightmap for this mesh." =
 	[
 		-3 : "Scale down by 8"
 		-2 : "Scale down by 4"
@@ -5372,18 +5405,24 @@
 		2 : "Scale up by 4"
 		3 : "Scale up by 8"
 	]
+	lightingorigin(target_destination) [ group="Lighting" ]: "Explicit Light Probe/Cubemap Volume" : "" : "Used to manually assign a named env_cubemap, env_cubemap_box or env_combined_light_probe_volume to a mesh. Note: this disables mesh merging and forces it into a slower rendering path, use with caution."
+	bakelightdoublesided(boolean) [ group = "Lighting" ] : "Bake As Double-Sided" : 0 : "Bakes the mesh as if it were double-sided geometry in the lightmapper. Useful on geometry with 'Render Backfaces' enabled via it's material (such as foliage). When the lightmapper sees many and/or large backfaces it will invalidate lightmap samples as an optimization, which can lead to lightmap errors/reduced quality in some circumstances."
 
-	bakelighting(choices) [ group="Render Properties" ] : "Bake Lighting" : -1 =
-	[
-		-1 : "Default"
-		0 : "No"
-		1 : "Yes"
-	]
+	// Vis
+	visoccluder(boolean) [ group="Precomputed Visibility" ] : "Vis Occluder" : 0 : "If true this geometry is used as an occluder for precomputed visibility. As a rule this geometry should be as simplistic as possible"	
 
+	// Material Override?
+	materialoverride(material) [ group="Material Override " ] : "Material Override" : "" : "This will override all materials on a selected mesh with a specific material"
+
+	// Render Properties
+	lodlevel(lod_level)  [ group="Render Properties" ] : "Render LOD" : "-1" : "Auto for standard LOD behaviour, or select an explicit LOD to use. Note that LODs take up more room in the lightmap and do not merge, potentially making them less performant if used on many objects (Set to Auto)."
+	fademindist(float) [ group="Render Properties" ] : "Start Fade Dist" : -1 : "Distance at which the prop starts to fade (-1 = use fademaxdist)."
+	fademaxdist(float) [ group="Render Properties" ] : "End Fade Dist" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out)."
+	baketoworld(boolean) [ group="Build Settings" ] : "Force Bake To World" : 0 : "If true mesh will be baked/merged into the world geometry of the map so that the model is not referenced at runtime. Use this if you want light probed static meshes to merge"
+	disablemerging(boolean) [ group="Build Settings" ] : "Disable Mesh Merging" : 0 : "If true this will not be merged with other geometry during map compile (reduces rendering efficiency)."
+	renderamt(integer) [ group="Render Properties" ] : "Alpha" : 255 : "Alpha of the fade, where 0 = fully transparent and 255 = fully opaque." 
+	rendertocubemaps(boolean) [ group="Render Properties" ] : "Render to Cubemaps" : 1 : "If true, this geometry renders into baked cube maps"	
 	renderwithdynamic(boolean) [ group="Render Properties" ] : "Render with Dynamic Objects" : 0 : "Render this object with other dynamic objects"
-
-	detailgeometry(boolean) [ group="Build Settings" ] : "Detail Geometry" : 0 : "If true this geometry is not important for precomputed lighting"	
-	
 ]
 
 
@@ -5463,6 +5502,8 @@
 	input EnableMotion(void) : "Enable physics motion/collision response."
 	input DisableMotion(void) : "Disable physics motion/collision response."
 	input DisableFloating(void) : "Disable fluid/floating simulation to reduce cost."
+	input EnableGravity(void) : "Enable gravity on physics object"
+	input DisableGravity(void) : "Disable gravity on physics object"
 	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
 	input physdamagescale(float) : "Set the Physics Impact Damage Scale for this character. NOTE: 0 means this feature is disabled for backwards compatibility."
 	input EnableDamageForces(void) : "Damaging the entity applies physics forces to it."
@@ -5490,8 +5531,6 @@
 	input IgniteLifetime(float) : "Ignite, with a parameter lifetime."
 	input IgniteNumHitboxFires(integer) : "Ignite, with a parameternumber of hitbox fires."
 	input IgniteHitboxFireScale(float) : "Ignite, with a parameter hitbox fire scale."
-
-	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Will only be lit by lights affecting this group."
 ]
 
 @PointClass base(BasePropPhysics, RenderFields, BasePhysicsSimulated) model() sphere(fademindist) sphere(fademaxdist) 
@@ -6073,7 +6112,7 @@
 	movementsound(sound) : "Vehicle Movement Sound" : "vehicles/tank_treads_loop1.wav"
 ]
 
-@PointClass base(Targetname, Parentname) cylinder(255 255 255, targetname, target, radius, targetname, targetname, radius) drawangles() line(255 255 255, targetname, target, targetname, targetname) color(255 192 0) size(16 16 16) = path_track : 
+@PointClass base(Targetname, Parentname) cylinder(255 255 255, targetname, target, radius, targetname, targetname, radius) drawangles{} line(255 255 255, targetname, target, targetname, targetname) color(255 192 0) size(16 16 16) = path_track : 
 	"An entity used to build paths for other entities to follow. Each path_track is a node on the path, each holding the name of the next path_track in the path."
 [
 	spawnflags(Flags) =
@@ -6261,6 +6300,7 @@
 	// Outputs
 	output OnTrigger(void) : "Fired whenever the trigger is activated."
 	output OnTouching(void) : "Fired when the TestTouch input is true (something is touching the trigger.)"
+	output OnTouchingEachEntity(void) : "Fires for each entity inside the trigger when the TestTouch input is true. Each call provides the individual entity as the activator."
 	output OnNotTouching(void) : "Fired when the TestTouch input is not true (nothing is touching the trigger.)"
 ]
 
@@ -6315,7 +6355,7 @@
 	output OnEndLook(void) : "Fired when the player was looking and unlooked while still touching."
 ]
 
-@SolidClass base(Trigger) drawangles_local( pushdir )= trigger_push : 
+@SolidClass base(Trigger) drawangles_local{ angles_key = "pushdir" } = trigger_push : 
 	"A trigger volume that pushes entities that touch it."
 [
 	pushdir(angle) : "Push Direction (Pitch Yaw Roll)" : "0 0 0" : "Angles indicating the direction to push touched entities."
@@ -6327,7 +6367,6 @@
 	]
 
 	speed(integer) : "Speed of Push" : 40 : "The speed at which to push entities away, in inches / second."
-	alternateticksfix(float) : "Scale force for alternate ticks" : "0" : "If nonzero, scale the force by this amount when running with alternate ticks. This fixes problems with an overly large force due to the longer frametime on when running with sv_alternateticks 1."
 
 	triggeronstarttouch(boolean) : "Trigger on Start Touch" : 0 : "Trigger on start touch instead of on touch."
 	
@@ -6947,25 +6986,13 @@
 	ColorCorrectionName(target_destination) : "ColorCorrection Name" : : "The name of the color_correction entity associated with this volume."
 ]
 
-@SolidClass base( Targetname, Parentname, EnableDisable ) = func_distance_occluder : 
-	"An entity that acts as an occluder together with some impostor geometry."
-[
-	FadeStartDist(float) : "Fade Start Distance" : 128 : "When the viewer is closer than this distance, the alpha is set to 'TranslucencyLimit'."
-	FadeEndDist(float) : "Fade End Distance"   : 512 : "When the viewer is at this distance, the portal becomes solid and closes off."
-	TranslucencyLimit(float) : "Translucency limit"  : "0" : "This value limits the translucency of the bmodel and prevents it from becoming invisible when the viewer is right on top of it."
-	
-	// Inputs
-	input SetFadeStartDistance(float) : "Set fade start distance."
-	input SetFadeEndDistance(float) : "Set fade end distance."
-]
-
 @PointClass base(Targetname) editormodel("models/editor/axis_helper_thick") = point_workplane :
 	"A dummy entity used to bookmark a frequently used workplane origin and angles. Not compiled into the map."
 [
 	editor_only(boolean) : "Editor only" : 1
 ]
 
-@PointClass base(Targetname) size(16 16 16) line(255 255 255, targetname, target) drawangles() color(247 181 82) = path_corner : "Generic path point"
+@PointClass base(Targetname) size(16 16 16) line(255 255 255, targetname, target) drawangles{} color(247 181 82) = path_corner : "Generic path point"
 [
 	spawnflags(Flags) =
 	[
@@ -7241,8 +7268,6 @@
 		0: "Glass"
 		1: "Concrete"
 	]
-
-	lightgroup(string) [ group="Render Properties" ] : "Light Group" : "" : "Will only be lit by lights affecting this group."
 ]
 
 @PointClass base(Targetname, Parentname, EnableDisable) tags( Lighting ) sphere() 
