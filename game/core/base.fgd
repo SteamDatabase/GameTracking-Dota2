@@ -591,14 +591,14 @@
 	input Toggle(void) : "Toggles this trigger between enabled and disabled states."
 
 	// Outputs
-	output OnStartTouch(void) : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
+	output OnStartTouch(void) { is_activator_important = true } : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
 ]
 
 @BaseClass base(Targetname, Parentname, EnableDisable, TriggerOnce) = Trigger
 [
-	output OnStartTouchAll(void) : "Fired when an entity starts touching this trigger, and no other entities are touching it. Only entities that passed this trigger's filters are considered."
-	output OnEndTouch(void) : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
-	output OnEndTouchAll(void) : "Fires when an entity stops touching this trigger, and no other entities are touching it. Only entities that passed this trigger's filters are considered."
+	output OnStartTouchAll(void) { is_activator_important = true } : "Fired when an entity starts touching this trigger, and no other entities are touching it. Only entities that passed this trigger's filters are considered."
+	output OnEndTouch(void) { is_activator_important = true } : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
+	output OnEndTouchAll(void) { is_activator_important = true } : "Fires when an entity stops touching this trigger, and no other entities are touching it. Only entities that passed this trigger's filters are considered."
 ]
 
 @BaseClass = worldbase
@@ -1047,7 +1047,7 @@
 ]
 
 @PointClass base(Targetname) color(255 255 255) 
-	editormodel( "models/editor/light_environment", lightModeTint, "124 255 157", "255 64 64" )
+	editormodel( "models/editor/light_environment", lightModeTint2, "124 255 157", "255 196 64", "255 64 64" )
 	iconsprite
 	{
 		image = "materials/editor/env_sun.vmat"
@@ -3069,7 +3069,7 @@
 	speed(integer) : "Speed" : 5 : "The speed that the button moves, in inches per second."
 	glow(target_destination) : "Glow Entity" : : "The name of an entity that will get the +use glow for this button."
 	wait(float) : "Delay Before Reset (-1 stay)" : 3 : "Amount of time, in seconds, after the button has been pressed before it returns to the starting position. Once it has returned, it can be used again. If the value is set to -1, the button never returns."
-	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
+	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."	
 ]
 
 @SolidClass base(BaseFuncButton) drawangles_local{ angles_key = "movedir" } = func_button : 
@@ -3077,6 +3077,7 @@
 [
 	lip(integer) : "Lip" : 0 : "The amount, in inches, of the button to leave sticking out of the wall it recedes into when pressed. Negative values make the button recede even further into the wall."
 	master(string) : "Master (Obsolete)" : : "Legacy support: The name of a master entity. If the master hasn't been activated, this button cannot be pressed."
+	override_anticipation_name(string) : "Override Anticipation Action Name" : : "Specify an override for the GetUsePreviewAction for this button (the anticipation type)"
 	forcenpcexclude(boolean) : "Force NPC Exclude" : "0" : "NPC movement and collision will ignore this button"
 
 	spawnflags(flags) =
@@ -3897,9 +3898,10 @@
 @PointClass base(Targetname) tags( Logic ) size(-4 -4 -4, 4 4 4) color(0 255 0) = logic_collision_pair : 
 	"An entity that can be used to enables/disable vphysics collisions between two target entities."
 [
-	attach1(target_destination) : "Attachment 1" : "" : "First entity.  Must be a single entity."
-	attach2(target_destination) : "Attachment 2" : "" : "Second entity.  Must be a single entity."
+	attach1(target_destination) : "Attachment 1" : "" : "First entity.  Must be a single entity unless \"Support multiple entities with same name\" is specified."
+	attach2(target_destination) : "Attachment 2" : "" : "Second entity.  Must be a single entity unless \"Support multiple entities with same name\" is specified."
 
+	support_multiple_entities_with_same_name(boolean) : "Support multiple entities with same name" : 0 : "If true, we affect all entities matching our attachment names. If false, we only affect the first entity found matching each attachment name."
 	startdisabled(boolean) : "Start with collisions disabled" : 1
 
 	// Inputs
@@ -3934,13 +3936,17 @@
 
 	spawnflags(flags) =
 	[
-		1 : "Hears combat sounds" : 1
-		2 : "Hears world sounds" : 1
-		4 : "Hears player sounds" : 1
-		8 : "Hears bullet impacts" : 1
 		16: "Swallows sounds routed through speakers" : 0
 		32: "Hears explosions" : 0
 		64: "Ignores non-attenuated sounds" : 0
+	]
+
+	SoundType(choices) : "Listen For Sound Type" : "Combat" =
+	[
+		1 : "Combat"
+		2 : "Player"
+		3 : "Danger"
+		4 : "Bullet Impacts"
 	]
 
 	Sensitivity(float) : "Sensitivity (0 - 10)" : 1 : "Microphone sensitivity, 0=deaf, 1=default, 10=extremely sensitive). Only applicable in Measuring mode."
@@ -5524,7 +5530,7 @@
 	"or other constraints. It can also be configured to break when it takes enough damage. Health can be overridden on this version."
 [
 	health(integer) : "Health" : 0 : "Number of points of damage to take before breaking.  0 means don't break."
-	propdata_override(string) : "Prop Data Override" : "" : "Prop Data names defined in propdata.txt are typically defined in the VMDL used by this prop. For prototyping, this allows you to select a specific one and ignore the name in the VMDL."
+	propdata_override(string) : "Prop Data Override" : "" : "Prop Data names defined in propdata.vdata are typically defined in the VMDL used by this prop. For prototyping, this allows you to select a specific one and ignore the name in the VMDL."
 	
 	// Inputs
 	input Ignite(void) : "Ignite, burst into flames."
@@ -7280,8 +7286,10 @@
 	DrawDistance( float ) : "Draw distance" : "600.0" : "Maximum distance to draw fog - WARNING! Changing from default will make fog blockier." 
 	FadeInStart( float ) : "Fade-in start" : "20.0" : "Distance from the eye at which fog starts to fade in." 
 	FadeInEnd( float ) : "Fade-in end" : "100.0" : "Distance from the eye at which fog finishes fading in and is at full strength." 
+	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
 
 	IndirectEnabled( bool ) [ group="Indirect Lighting" ] : "Enable indirect lighting" : "0"
+	IndirectUseLPVs( bool ) [ group="Indirect Lighting" ] : "Indirect lighting uses LPVs" : "0"
 	IndirectStrength( float ) [ group="Indirect Lighting" ] : "Indirect light strength" : "1.0" 
 	IndirectVoxelDim(choices) [ group="Indirect Lighting" ] : "Indirect Lighting Dimension" : "256.0" : "" = 
 	[
@@ -7291,13 +7299,19 @@
 		"64.0" : "Low Resolution (64x)"
 	]
 
-	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
-	Anisotropy( float ) : "Anisotropy" : "1.0" : "How much the fog should get brighter when you stare directly at the light." 
-	fogirradiancevolume(resource:texture) : "Fog Irradiance Texture" : "" : "Name of the fog irradiance texture"
+	// Map compiler will automatically populate this and we do not want it shown in the UI.
+	//fogirradiancevolume(resource:texture) [ group="Indirect Lighting" ] : "Fog Irradiance Texture" : "" : "Name of the fog irradiance texture"
+
+	// Disabled in shader currently.
+	//Anisotropy( float ) : "Anisotropy" : "1.0" : "How much the fog should get brighter when you stare directly at the light." 
+
+	NoiseSpeed( float ) { group="Noise" min="0.0" } : "Noise Speed" : "0.0" : "Speed of noise function change"
+	NoiseStrength( float ) { group="Noise" min="0.0" max="1.0" } : "Noise Strength" : "0.0" : "How much noise to add to fog density"
+	NoiseScale( vector ) { group="Noise" } : "Noise Scale" : ".01 .01 .01" : "Scale of noise (smaller - smoother, larger - more detailed)"
 
 	input SetToDefaults(void) : "Resets scattering and anisotropy to default values"
 	input SetFogStrength(float) : "Set overall fog strength"
-	input SetAnisotropy(float) : "Set anisotropy value"
+	//input SetAnisotropy(float) : "Set anisotropy value"
 	input SetFadeSpeed(float) : "Set fade in/out speed"
 	input SetDrawDistance(float) : "Set draw distance"
 	input ForceRefresh(void) : "Forces the fog volume to update if a light's state has changed"
@@ -7318,7 +7332,20 @@
 	[
 		"0" : "Linear (Box) Falloff"
 		"1" : "Radial (Sphere) Falloff"
+		"2" : "Height (Box) Falloff"
 	]
+
+	HeightFogDepth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Vertical Depth" : 48 : "Vertical depth before height fog is maximum intensity"
+	HeightFogEdgeWidth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Edge Width" : 96 : "Horizonal fade width of height fog"
+
+	OverrideFogIndirectStrength(bool) : "Override Fog Indirect Lighting Strength" : "0"
+	FogIndirectStrength(float) { min="0.0" enabled={ variable="OverrideFogIndirectStrength" value="1" } } : "Fog Indirect Lighting Strength" : "1.0" : "Volume-local scalar for indirect lighting strength"
+
+	OverrideFogSunLightStrength(bool) : "Override Fog Sun Light Strength" : "0"
+	FogSunLightStrength(float) { min="0.0" enabled={ variable="OverrideFogSunLightStrength" value="1" } } : "Fog Sun Light Strength" : "1.0" : "Volume-local scalar for sun (light_environment) light strength"
+
+	OverrideFogNoiseStrength(bool) : "Override Fog Noise Strength" : "0"
+	FogNoiseStrength(float) { min="0.0" enabled={ variable="OverrideFogNoiseStrength" value="1" } } : "Fog Noise Strength" : "1.0" : "Volume-local fog noise strength"
 ]
 
 @PointClass tags( Info, VisPreview ) iconsprite( "materials/editor/visibility_hint.vmat" ) box_world_aligned( box_mins, box_maxs) = visibility_hint
@@ -7453,6 +7480,17 @@
 [
 	radius_scale(float) : "Radius Scale" : "1.0" : "Radius multiplier value"
 	color_tint(color255) : "Color Tint" : "255 255 255"
+]
+
+@PathClass base(Targetname)
+	metadata
+	{
+		path_node_class = "path_node_generic"
+		entity_tool_tip = "Specifies a path that will be exported to game and can be referenced by other entities"
+		
+	}
+	= path_simple : "Specifies a path that will be exported to game and can be referenced by other entities"
+[
 ]
 
 @CableClass

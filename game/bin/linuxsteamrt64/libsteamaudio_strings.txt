@@ -103,21 +103,25 @@ $g*
 15CTier1AppSystemI11ISteamAudioLx0EE
 15CTier2AppSystemI11ISteamAudioLx0EE
 16CDirectProcessor
-16CReverbProcessor
+16CImpulseResponse
 16CSteamAudioScene
 16IDirectProcessor
-16IReverbProcessor
+16IImpulseResponse
 16ISourceProcessor
 16ISteamAudioScene
 17CPathingProcessor
 17CSteamAudioProbes
+17CSteamAudioSource
 17IPathingProcessor
+17ISteamAudioSource
 18CSource3DProcessor
 1g*
 2
 20CPostConnectCallback
 21CSurfacePropDataTableI19CSteamAudioMaterialE
+22CHybridReverbProcessor
 22CSchemaInstallCallback
+22IHybridReverbProcessor
 23CSteamAudioMaterialList
 25CSurfacePropDataTableBase
 2g*
@@ -291,6 +295,7 @@ CBufferString::StripExtension(bool)
 CBufferString::StripTrailingSlash()
 CBufferString::ToLowerFast(int)
 CDirectProcessor
+CHybridReverbProcessor
 CMAC
 CMS routines
 CMemAllocSystemInitialize
@@ -304,6 +309,10 @@ CT Certificate SCTs
 CT Precertificate Poison
 CT Precertificate SCTs
 CT Precertificate Signer
+CTSListBase::CTSListBase()
+CTSListBase::Detach()
+CTSListBase::InternalPop()
+CTSListBase::InternalPush(TSLNodeBase_t*)
 CThreadEvent::CThreadEvent(char const*, bool, bool)
 CThreadEvent::Check()
 CThreadEvent::Reset()
@@ -359,6 +368,7 @@ Content file %s is corrupt. Hashing could not be verified. Verify integrity of g
 Content file %s is corrupt. Verify integrity of game files.
 Content file %s is corrupt; Chunk hash not found (expected: %d, found: %d)
 Content file %s is corrupt; signature couldn't be verified. Verify integrity of game files
+Continue using previous prrobes if probe lookup for reverb fails.
 Could not load custom hrtf properties file. %s
 CreateInterface
 CreateSimpleThread
@@ -857,6 +867,7 @@ TestScriptMgr001
 TextLayout_001
 The amount of directional detail in the rendered audio by Steam Audio.
 The amount of directional detail in the simulated by Steam Audio.
+The maximum number of rays that can be traced for volumetric occlusion by Steam Audio.
 The maximum number of simultaneous sources that can be modeled by Steam Audio.
 The maximum number of times any ray can bounce when using Steam Audio.
 The number of directions considered for ray bounce by Steam Audio.
@@ -876,8 +887,11 @@ Trust Root
 U
 UID
 UNDEF
+Unable to create Ambisonics decode effect [%d]
 Unable to create custom HRTF [%s]
 Unable to create direct effect [%d]
+Unable to create impulse response [%d]
+Unable to create reflections effect [%d]
 Unable to create scene: %d.
 Unable to create serialized object for scene export.
 Unable to create static mesh: %d.
@@ -1433,6 +1447,7 @@ emailAddress
 emailProtection
 enable_dc_correction_for_phase_interpolation
 enable_paths_from_all_source_probes
+enable_reverb_probe_caching_for_missing_probes
 encrypted track 2
 engine
 engine routines
@@ -1790,7 +1805,6 @@ ioctlsocket
 iplAirAbsorptionCalculate
 iplAmbisonicsDecodeEffectApply
 iplAmbisonicsDecodeEffectCreate
-iplAmbisonicsDecodeEffectRelease
 iplBinauralEffectApply
 iplBinauralEffectCreate
 iplBinauralEffectRelease
@@ -1807,6 +1821,15 @@ iplEmbreeDeviceCreate
 iplEmbreeDeviceRelease
 iplHRTFCreate
 iplHRTFRelease
+iplImpulseResponse2AddChannel
+iplImpulseResponse2AddSample
+iplImpulseResponse2Create
+iplImpulseResponse2Release
+iplImpulseResponse2Reset
+iplImpulseResponse2SetChannel
+iplImpulseResponse2SetSample
+iplImpulseResponse2Swap
+iplImpulseResponse2SwapSource
 iplPathBakerBake
 iplPathBakerCancelBake
 iplPathEffectApply
@@ -1831,11 +1854,21 @@ iplProbeNeighborhoodCreate
 iplProbeNeighborhoodRelease
 iplProbeNeighborhoodReset
 iplProbeNeighborhoodResize
-iplReflectionEffectApply
-iplReflectionEffectCreate
-iplReflectionEffectRelease
 iplReflectionsBakerBake
 iplReflectionsBakerCancelBake
+iplReflectionsEffect2Apply
+iplReflectionsEffect2Create
+iplReflectionsEffect2Release
+iplReflectionsEffect2SetBuffer
+iplReflectionsEffect2SetFloat
+iplReflectionsEffect2SetInt32
+iplReflectionsPartitioner2AddTask
+iplReflectionsPartitioner2Commit
+iplReflectionsPartitioner2Create
+iplReflectionsPartitioner2Release
+iplReflectionsPartitioner2RemoveTask
+iplReflectionsPartitioner2Retain
+iplReflectionsPartitioner2RunTasks
 iplSceneCommit
 iplSceneCreate
 iplSceneRelease
@@ -2384,6 +2417,7 @@ snd_steamaudio_enable_custom_hrtf
 snd_steamaudio_enable_pathing
 snd_steamaudio_enable_perspective_correction
 snd_steamaudio_enable_probeneighborhood_caching
+snd_steamaudio_enable_reverb_probe_caching_for_missing_probes
 snd_steamaudio_enable_spatial_blend_fix
 snd_steamaudio_halton_sequence
 snd_steamaudio_hybrid_reverb_overlap

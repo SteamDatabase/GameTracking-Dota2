@@ -129,6 +129,11 @@ enum EGCItemMsg {
 	k_EMsgClientToGCGetLimitedItemPurchaseQuantity = 2609;
 	k_EMsgClientToGCGetLimitedItemPurchaseQuantityResponse = 2610;
 	k_EMsgGCToGCBetaDeleteItems = 2611;
+	k_EMsgClientToGCGetInFlightItemCharges = 2612;
+	k_EMsgClientToGCGetInFlightItemChargesResponse = 2613;
+	k_EMsgGCToClientInFlightChargesUpdated = 2614;
+	k_EMsgClientToGCPurchaseChargeCostItems = 2615;
+	k_EMsgClientToGCPurchaseChargeCostItemsResponse = 2616;
 }
 
 enum EGCMsgInitiateTradeResponse {
@@ -846,6 +851,7 @@ message CMsgProcessTransactionOrder {
 		optional int32 parent_stack_index = 7;
 		optional bool default_price = 8;
 		optional bool is_user_facing = 9;
+		optional int32 price_index = 11;
 	}
 
 	optional uint64 txn_id = 1;
@@ -994,6 +1000,63 @@ message CMsgClientToGCGetLimitedItemPurchaseQuantityResponse {
 
 	optional .CMsgClientToGCGetLimitedItemPurchaseQuantityResponse.EResponse result = 1 [default = k_eInternalError];
 	optional uint32 quantity_purchased = 2;
+}
+
+message CMsgClientToGCGetInFlightItemCharges {
+	optional uint32 item_def = 1;
+}
+
+message CMsgClientToGCGetInFlightItemChargesResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalidItemDef = 5;
+	}
+
+	optional .CMsgClientToGCGetInFlightItemChargesResponse.EResponse result = 1 [default = k_eInternalError];
+	optional uint32 charges_in_flight = 2;
+}
+
+message CMsgClientToGCPurchaseChargeCostItems {
+	message Item {
+		optional uint32 item_def_index = 1;
+		optional uint32 quantity = 2;
+		optional uint64 source_reference_id = 3;
+		optional int32 price_index = 4;
+	}
+
+	repeated .CMsgClientToGCPurchaseChargeCostItems.Item items = 1;
+	optional uint32 currency = 2;
+}
+
+message CMsgClientToGCPurchaseChargeCostItemsResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eInvalidParam = 5;
+		k_eInvalidPrice = 6;
+		k_eInsufficientCharges = 7;
+		k_eLimitedItem = 8;
+		k_eMissingPrereq = 10;
+	}
+
+	optional .CMsgClientToGCPurchaseChargeCostItemsResponse.EResponse result = 1 [default = k_eInternalError];
+	repeated uint64 item_ids = 2;
+}
+
+message CMsgGCToClientInFlightChargesUpdated {
+	message ItemCharges {
+		optional uint32 item_def = 1;
+		optional uint32 charges_in_flight = 2;
+	}
+
+	repeated .CMsgGCToClientInFlightChargesUpdated.ItemCharges in_flight_charges = 2;
 }
 
 message CMsgGCToGCUpdateWelcomeMsg {

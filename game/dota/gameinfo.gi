@@ -12,7 +12,6 @@
 	nohimodel 1
 	nocrosshair 0
 	GameData	"dota.fgd"
-	SupportsDX8	0
 	nodegraph 0
 	tonemapping 0 // Hide tonemapping ui in tools mode
 
@@ -87,7 +86,6 @@
 		"HasLegacyGameUI" "1" // dota uses some legacy gameui systems
 		"URLName" "dota2"
 		"MsaaOverrideType" "0"
-		"UsesBink" "0"
         "MaxNetworkableEntities" "10000"
         "MaxNonNetworkableEntities" "10000"
         // The shader binary cache on non-Windows can be over 500MB.

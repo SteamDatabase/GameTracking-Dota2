@@ -21,12 +21,14 @@ $ORIGIN
 %s allocation count overflow( add %llu + current %llu > max %llu )
 %s%s_%i
 %s: %s
-%s: Invalid capacity %u
 %s: Invalid grow amount %d
 %s: __pos (which is %zu) > this->size() (which is %zu)
 %s: invalid nBeforeIndex %d
 %s: invalid nSize %d
 %s_color
+%s_hair_ao
+%s_hair_density
+%s_hairsim_PosVel
 %s_matgrp
 &&
 &=
@@ -97,6 +99,7 @@ $ORIGIN
 10IMeshUtils
 11CMeshSystem
 11CRefCountedI20CRefCountServiceBaseI6CRefMTEE
+11CRenderMesh
 11IMeshSystem
 11IRefCounted
 12CRefCounted1I13IMeshRayTrace20CRefCountServiceBaseI6CRefMTEE
@@ -129,7 +132,6 @@ $ORIGIN
 17CModelTypeManager
 17COrientConstraint
 17CParentConstraint
-17IGenericInterface
 18CBreakLegacyParser
 18CMorphSetManagerV0
 18CMutableRefCountedI20CMutableRefCountBaseI6CRefMTEE
@@ -371,6 +373,11 @@ CRenderSkeleton
 CST
 CSplitString::Construct(char const*, char const**, int, bool)
 CStrongHandle
+CStrongHandleCopyable
+CTSListBase::CTSListBase()
+CTSListBase::Detach()
+CTSListBase::InternalPop()
+CTSListBase::InternalPush(TSLNodeBase_t*)
 CThreadMultiWaitEvent::CThreadMultiWaitEvent(bool)
 CThreadMultiWaitEvent::Reset()
 CThreadMultiWaitEvent::Set()
@@ -394,7 +401,7 @@ CUtlMemoryBlockAllocator::Purge()
 CUtlMemoryBlockAllocator::~CUtlMemoryBlockAllocator()
 CUtlMemoryPoolBase::Alloc()
 CUtlMemoryPoolBase::CUtlMemoryPoolBase(int, int, int, MemoryPoolGrowType_t, char const*, MemAllocAttribute_t)
-CUtlMemoryPoolBase::Clear()
+CUtlMemoryPoolBase::ClearDestruct(void (*)(void*))
 CUtlMemoryPoolBase::Free(void*)
 CUtlMemoryPoolBase::~CUtlMemoryPoolBase()
 CUtlRBTree overflow with %u elements!
@@ -451,6 +458,7 @@ EXPORTSYSTEM_INTERFACE_VERSION_001
 EarlyInit_Tier0
 EconItemToolModel_001
 EngineServiceMgr001
+EnsureCapacity
 F
 FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
 FATAL ERROR: unable to register all schema data: %s
@@ -668,6 +676,7 @@ MORPH_FLEXCONTROLLER_REMAP_NWAY
 MORPH_FLEXCONTROLLER_REMAP_PASSTHRU
 MPropertyEditClassAsString
 MPropertyFriendlyName
+MPropertySuppressEnumerator
 MST
 MapListService_001
 Mar
@@ -884,6 +893,7 @@ Rejecting load for legacy model: '%s'
 Release
 RenderDevice003
 RenderDeviceMgr001
+RenderHairStrandInfo_t
 RenderHardwareConfig002
 RenderService_001
 RenderSkeletonBone_t
@@ -1190,7 +1200,6 @@ V_sscanf
 V_stricmp_fast
 V_stristr_fast(char const*, char const*)
 V_strlower_fast
-Vector2D
 Vector4D
 VectorAligned
 VertexElementAnnotation
@@ -1424,6 +1433,7 @@ aN
 aS
 aa
 ab
+ad
 alignof
 alnum
 alpha
@@ -1667,10 +1677,10 @@ g_flSequentialFloats<float>
 g_flTValues0To1Inclusive<float __vector(4)>
 g_flTValues0To1Inclusive<float>
 g_hSkeletonMeshLayout
+g_nSequentialBytes<int __vector(4)>
+g_nSequentialBytes<int>
 g_nSequentialIndices<int __vector(4)>
 g_nSequentialIndices<int>
-g_nTailMask<int __vector(4)>
-g_nTailMask<int>
 g_pMemAlloc
 g_pThreadPool
 generic
@@ -1944,11 +1954,13 @@ m_bBoneMergeFlex
 m_bCanBatchWithDynamicShaderConstants
 m_bClamp
 m_bComputeDynamicMeshTensionAfterAnimation
+m_bDisableSmoothVertexCacheNormals
 m_bDrawLast
 m_bEnableAngularMotor
 m_bEnableCollision
 m_bEnableLinearLimit
 m_bEnableLinearMotor
+m_bEnableSimulation
 m_bEnableSwingLimit
 m_bEnableTwistLimit
 m_bHasBakedLightingFromLightMap
@@ -2132,6 +2144,7 @@ m_goalAngularVelocity
 m_goalOrientation
 m_goalPosition
 m_hModel
+m_hSimParamsMat
 m_hairs
 m_hardThreshold
 m_hardVelocityThreshold
@@ -2165,6 +2178,7 @@ m_material
 m_materialGroups
 m_maxForce
 m_maxTorque
+m_meleeImpact
 m_meshDeformParams
 m_meshGroups
 m_meshes
@@ -2178,7 +2192,6 @@ m_morphSet
 m_nAttachBoneIdx
 m_nAttachMeshDrawCallIdx
 m_nAttachMeshIdx
-m_nBaseTriIdx
 m_nBaseVertex
 m_nBindOffsetBytes
 m_nBody1
@@ -2212,7 +2225,7 @@ m_nFrameCount
 m_nGroomGroupID
 m_nGroupId
 m_nGuideHairCount
-m_nGuideIdx
+m_nGuideHairIndices_nSurfaceTriIndex
 m_nHairCount
 m_nHeight
 m_nHitBoxIndex
@@ -2226,8 +2239,9 @@ m_nNodeBaseJiggleboneDependsCount
 m_nNodeCount
 m_nNumChannels
 m_nNumMeshlets
-m_nPackedBaseMeshUv
-m_nPad
+m_nPackedBaseUv
+m_nPackedSurfaceNormalOs
+m_nPackedSurfaceTangentOs
 m_nParent
 m_nParentBoneNameHash
 m_nParticle
@@ -2291,6 +2305,7 @@ m_parts
 m_physics
 m_projectionAngularTolerance
 m_projectionLinearTolerance
+m_pushOff
 m_qAimOffset
 m_qBaseOrientation
 m_qChildBindRotation
@@ -2325,6 +2340,7 @@ m_sceneObjects
 m_scrapeRough
 m_scrapeSmooth
 m_skeleton
+m_skidStop
 m_slaves
 m_softContactDampingRatio
 m_softContactFrequency
@@ -2360,13 +2376,12 @@ m_twistLowLimitRestitution
 m_twistLowLimitSpring
 m_twistLowLimitValue
 m_vAngularTargetVelocity
-m_vBaseBarycentric
 m_vBasePosition
 m_vCenter
 m_vCentroid
 m_vConeApex
 m_vEyePosition
-m_vGuideBarycentric
+m_vGuideBary_vBaseBary
 m_vHeelOffset
 m_vHullMax
 m_vHullMin
@@ -2405,6 +2420,7 @@ max
 mbrtowc
 mbsnrtowcs
 mbsrtowcs
+meleeimpact
 mesh_calculate_curvature_smooth_invert
 mesh_calculate_curvature_smooth_pass_count
 mesh_calculate_curvature_smooth_weight
@@ -2522,6 +2538,7 @@ pthread_mutexattr_settype
 pthread_once
 punct
 pure virtual method called
+pushoff
 putwc
 qAdjust
 qangle
@@ -2560,6 +2577,7 @@ setlocale
 setvbuf
 sizeof
 sizeof...
+skidstop
 softcontactdampingratio
 soundevent
 space
@@ -5891,3 +5909,4 @@ y
 ~
 
 C
+phys_res

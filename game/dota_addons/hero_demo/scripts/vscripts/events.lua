@@ -21,6 +21,11 @@ function CHeroDemo:OnGameRulesStateChange()
 			--print( "loading demo mode scenario: " .. sLoadScenario )
 			SendToServerConsole( "dota_load_demo_mode_scenario " .. sLoadScenario )
 		end
+
+		local sCustomStartupString = GameRules:GetGameSessionConfigValue( "demo_hero_custom_start_message", "" )
+		if sCustomStartupString ~= "" then
+			GameRules:SendCustomMessage( sCustomStartupString, 0, -1 )
+		end
 	end
 end
 

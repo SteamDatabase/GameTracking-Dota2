@@ -50,6 +50,7 @@ enum EBaseUserMessages {
 	UM_RequestDiagnostic = 162;
 	UM_DiagnosticResponse = 163;
 	UM_ExtraUserData = 164;
+	UM_NotifyResponseFound = 165;
 	UM_MAX_BASE = 200;
 }
 
@@ -101,6 +102,8 @@ enum PARTICLE_MESSAGE {
 	GAME_PARTICLE_MANAGER_EVENT_UPDATE_TRANSFORM = 27;
 	GAME_PARTICLE_MANAGER_EVENT_FREEZE_TRANSITION_OVERRIDE = 28;
 	GAME_PARTICLE_MANAGER_EVENT_FREEZE_INVOLVING = 29;
+	GAME_PARTICLE_MANAGER_EVENT_ADD_MODELLIST_OVERRIDE_ELEMENT = 30;
+	GAME_PARTICLE_MANAGER_EVENT_CLEAR_MODELLIST_OVERRIDE = 31;
 }
 
 enum EHapticPulseType {
@@ -485,6 +488,16 @@ message CUserMsg_ParticleManager {
 		optional uint32 entity_handle = 3 [default = 16777215];
 	}
 
+	message AddModellistOverrideElement {
+		optional string model_name = 1;
+		optional float spawn_probability = 2;
+		optional uint32 groupid = 3;
+	}
+
+	message ClearModellistOverride {
+		optional uint32 groupid = 1;
+	}
+
 	message SetParticleNamedValueContext {
 		message FloatContextValue {
 			optional uint32 value_name_hash = 1;
@@ -544,6 +557,8 @@ message CUserMsg_ParticleManager {
 	optional .CUserMsg_ParticleManager.UpdateParticleTransform update_particle_transform = 30;
 	optional .CUserMsg_ParticleManager.ParticleFreezeTransitionOverride particle_freeze_transition_override = 31;
 	optional .CUserMsg_ParticleManager.FreezeParticleInvolving freeze_particle_involving = 32;
+	optional .CUserMsg_ParticleManager.AddModellistOverrideElement add_modellist_override_element = 33;
+	optional .CUserMsg_ParticleManager.ClearModellistOverride clear_modellist_override = 34;
 
 	extensions 100 to 201;
 }
@@ -573,18 +588,6 @@ message CUserMessageHapticsManagerEffect {
 message CUserMessageAnimStateGraphState {
 	optional int32 entity_index = 1;
 	optional bytes data = 2;
-}
-
-message CUserMessageCommandQueueState {
-	message command_queue_info_t {
-		optional uint32 commands_queued = 1;
-		optional uint32 command_queue_desired_size = 2;
-		optional uint32 starved_command_ticks = 3;
-		optional int32 time_dilation_percent = 4;
-	}
-
-	optional int32 player_slot = 1 [default = -1];
-	optional .CUserMessageCommandQueueState.command_queue_info_t command_queue_info = 2;
 }
 
 message CUserMessageUpdateCssClasses {
@@ -749,4 +752,17 @@ message CUserMessage_ExtraUserData {
 	optional int64 value2 = 3;
 	repeated bytes detail1 = 4;
 	repeated bytes detail2 = 5;
+}
+
+message CUserMessage_NotifyResponseFound {
+	message Criteria {
+		optional string name = 1;
+		optional string value = 2;
+	}
+
+	optional int32 ent_index = 1 [default = -1];
+	optional string rule_name = 2;
+	optional string response_value = 3;
+	optional string response_concept = 4;
+	repeated .CUserMessage_NotifyResponseFound.Criteria criteria = 5;
 }
