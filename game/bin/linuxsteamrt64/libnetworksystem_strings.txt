@@ -2,6 +2,7 @@
 !(
 !=
 !is_large()
+!m_NetworkChangeTagCallback.IsEmpty()
 !m_bNeedsSort
 !}#@
 "
@@ -206,7 +207,6 @@ $tI
 %s:  encoding mismatched %d vs. %d bits
 %s:  high packet loss detected flow %s: %4dms engine latency, %5d/%5d dropped (%.1f%%)
 %s:  in serializer '%s' couldn't find field %s::%s, possibly already marked MNetworkExclude
-%s:  meta info problem %s
 %s:  metadata( %d: '% -10s' %s = %u )
 %s:  specified different usergroup proxy functions for '%s'
 %s:  value %u: count %d
@@ -232,6 +232,7 @@ $tI
 %s: shrinking removes delegate [0x%p]
 %s: timing out, last received %f [%.2f seconds ago]
 %s:%d
+%s::
 %s::%s has more than one MNetworkChangeCallback that requires passing network value into handler, this is unsupported
 %s::%s was in the original serializer at offset %u but that offset isn't in the ignore list!!!
 %s::%s:%u (%s ) already encountered at %s::%s:%u (%s)
@@ -242,7 +243,6 @@ $tI
 %sCulled %s::%s
 %sProcess includes/excludes %s %s [%d fields]
 %s[%d]
-%s[%d],
 %s_%s_%s
 %sconsider %s at depth %d
 %sexcluding %s::%s due to MNetworkNoBase
@@ -365,6 +365,7 @@ $tI
 ... }
 ...)
 ...<truncated>...
+../public/networksystem/serializedentity.cpp
 ../public/networksystem/serializedentity.h
 ../public/tier0/eventdispatcher.h
 ../public/tier0/quantizedfloatencoder.h
@@ -375,7 +376,6 @@ $tI
 ../public/tier0/utlsortvector.h
 ../public/tier0/utlsymboltable.h
 ../public/tier0/utltshash.h
-./
 ./google/protobuf/arena.h
 ./google/protobuf/arena_impl.h
 ./google/protobuf/arenastring.h
@@ -457,6 +457,7 @@ $tI
 15CTier1AppSystemI14INetworkSystemLx0EE
 15CTier2AppSystemI14INetworkSystemLx0EE
 15INetChannelInfo
+16CDeltaCalculator
 16CNetworkMessages
 16CSVCMsg_BSPDecal
 16CSVCMsg_FixAngle
@@ -478,7 +479,6 @@ $tI
 17CSVCMsg_VoiceInit
 18CCLCMsg_ClientInfo
 18CCLCMsg_HltvReplay
-18CNETMsg_Disconnect
 18CSVCMsg_HLTVStatus
 18CSVCMsg_HltvReplay
 18CSVCMsg_ServerInfo
@@ -538,6 +538,7 @@ $tI
 25CCLCMsg_RconServerDetails
 25CConCommandMemberAccessorI16CNetworkMessagesE
 25CFieldShadowSpewCollector
+25CNETMsg_Disconnect_Legacy
 25CNETMsg_SpawnGroup_Unload
 25CNETMsg_SplitScreenUser_t
 25CSVCMsg_Broadcast_Command
@@ -547,8 +548,6 @@ $tI
 25CSVCMsg_UpdateStringTable
 25IFieldShadowSpewCollector
 26CCLCMsg_SplitPlayerConnect
-26CParallelProcessorAbstractI18CParallelProcessorI30BuildFlattenedSerializerInfo_t27CMemberFuncJobItemProcessorIS1_37CBuildNetworkSerializerHierarchyOrderS3_ELi1EEE
-26CParallelProcessorAbstractI18CParallelProcessorIN37CBuildNetworkSerializerHierarchyOrder12BuildEntry_tE27CMemberFuncJobItemProcessorIS2_S1_S1_ELi1EEE
 26CSVCMsg_Sounds_sounddata_t
 26ICommandCompletionCallback
 26IPolymorphicMetadataHelper
@@ -574,7 +573,7 @@ $tI
 30CNetworkFieldChangedEventQueue
 30CSVCMsgList_GameEvents_event_t
 30INetworkFieldChangedEventQueue
-31CParallelProcessorAbstract_Base
+30ISerializedEntityErrorSpewHook
 31CSVCMsg_HltvFixupOperatorStatus
 31ProtoFlattenedSerializerField_t
 32CFlattenedSerializerSpewFunc_Log
@@ -621,6 +620,7 @@ $tI
 =
 = { <proto text format> }". To set fields within it, use syntax like "
 =%s
+=%u
 ==
 =O&
 >
@@ -712,9 +712,13 @@ Bitfield
 Boolean default must be true or false.
 Buffer overflow in net channel %s
 BuildDelta
+BuildDeltaProperites_Old
 BuildDeltaProperties fieldDataBuf
+BuildDeltaProperties_New
 BuildEntityClassNetworkSerializer
 BuildHierarchy_R
+BuildMergedSerializedEntity
+BuildMergedSerializedEntity with bogus offsets!
 BuildMergedSerializedEntity:  delta header with corrupt array count [ ent %d ]:  entry %d/%d == %u!
 BuildMergedSerializedEntity:  ignoring %s, was in previous state only, now outside of valid range for root field %s [array count %d, base index %d]
 BuildMergedSerializedEntity:  problem writing %s:  %d bits [%d to %d] is < 1 bit!
@@ -736,7 +740,10 @@ CBufferString::SetLength(int, bool, int*)
 CBufferString::ToLowerFast(int)
 CBufferString::Trim(char const*)
 CBufferString::TrimTail(char const*)
+CBuildNetworkSerializerHierarchyOrder::ComputeDepth
 CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!
+CDeltaCalculator::ErrorMsg %s %d
+CDeltaCalculator::ErrorMsg: %s
 CDeltaCalculator::FieldCalcDelta fromBits
 CDeltaCalculator::FieldCalcDelta toBits
 CET
@@ -1068,6 +1075,7 @@ CHECK failed: unknown_fields->SerializeToString(outstr):
 CHECK failed: value != nullptr:
 CHECK failed: z.first != NULL:
 CHandle<
+CKeyValues_Data::Internal_GetString(char const*, char*, unsigned long)
 CLcx
 CMemAllocSystemInitialize
 CMergedEntityOffsetBuilder::Expecting at least one bit in offset
@@ -1086,6 +1094,7 @@ CNetworkMessages::DeallocateUnserializedMessage unable to deallocate unknown mes
 CNetworkMessages::FindOrCreateGroupId: Too many network groups!
 CNetworkMessages::FindOrCreateNetMessage: It is illegal to register new net messages after serialization!
 CNetworkMessages::FindOrCreateNetMessage: Message %s is expected to have already been registered!
+CNetworkMessages::InitNetworkChangeTag - missing m_NetworkChangeTagCallback, should have been installed by CEntitySystem::Init call to g_pNetworkMessages->RegisterNetworkChangeTagCallback!
 CNetworkMessages::Serialize attempted to serialize a non-serializeable message [%s]!
 CNetworkMessages::Unserialize encountered unknown network message type %u!
 CNetworkSerializer: Unable to find network encoder named %s!
@@ -1118,6 +1127,8 @@ CSerializedEntities::CompareSerializedEntities from field %s '%s' not present in
 CSerializedEntities::CompareSerializedEntities to field %s '%s' not present in from
 CSerializedEntities::CompareSerializedEntities:  from serializer is '%s' and to serializer is '%s', comparison doesn't make sense!
 CSerializedEntities::CompareSerializedEntities:  to pointer is %s and from pointer is %s
+CSerializedEntity::SetFieldInfo with bogus offsets!
+CSerializedEntity::SetPackedFieldOffsets with bogus offsets!
 CStrongHandle
 CTSListBase::CTSListBase()
 CTSListBase::Detach()
@@ -1256,7 +1267,6 @@ Color
 CommandLine
 Comment started here.
 Compress network traffic
-ComputeDepth
 ComputeOrderForPriority
 ConfirmAllMessageHandlersInstalled
 ConnectSocket(%s) failed
@@ -1288,6 +1298,7 @@ DTI: was unable to open file '%s' for write!
 DTI: wrote client stats into %s. Session duration = %0.2f seconds, rowcount %d.
 Dd
 De
+Deadlock
 DebugCallback
 Dec
 December
@@ -1400,7 +1411,6 @@ ExtractSubrange() when arena is non-nullptr is only supported when
 F
 FAILED_PRECONDITION
 FAKE array size
-FAKE pointer
 FALSE
 FATAL
 FATAL ERROR: CUtlSymbolTableLarge element limit of %u exceeded
@@ -1581,6 +1591,7 @@ InitFakeField
 InitFakeField:  Couldn't find schema lookup for '%s' of type '%s'
 InitFakeField:  Parser function returned false for '%s' of type '%s'
 InitGameServer
+InitNetworkChangeTag
 InitSteamNetworking
 Input size too large:
 InputService_001
@@ -1627,6 +1638,7 @@ K
 Key in map fields cannot be enum types.
 Key in map fields cannot be float/double, bytes or message types.
 KeyValueCache001
+KeyValues::FindKey(char const*) const
 KeyValues::FindKey(char const*, bool)
 KeyValues::GetFirstTrueSubKey()
 KeyValues::GetFloat(char const*, float) const
@@ -1670,6 +1682,7 @@ MNetworkArraySerializer
 MNetworkBitCount
 MNetworkChangeCallback
 MNetworkChangePointerCallback
+MNetworkChangeTag
 MNetworkDisable
 MNetworkEnable
 MNetworkEncodeFlags
@@ -1778,7 +1791,7 @@ N10__cxxabiv121__vmi_class_type_infoE
 N10__cxxabiv123__fundamental_type_infoE
 N10__cxxabiv129__pointer_to_member_type_infoE
 N13CNetMessagePBILi0E11CNETMsg_NOPL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
-N13CNetMessagePBILi1E18CNETMsg_DisconnectL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
+N13CNetMessagePBILi1E25CNETMsg_Disconnect_LegacyL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi35E25CCLCMsg_RconServerDetailsL13SignonGroup_t0EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi3E23CNETMsg_SplitScreenUserL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILin1E19NetMessagePacketEndL13SignonGroup_t11EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
@@ -1789,6 +1802,8 @@ N13CNetMessagePBILin1E32NetMessageSplitscreenUserChangedL13SignonGroup_t11EL19Ne
 N24CFieldPathHuffmanEncoder12InternalNodeE
 N24CFieldPathHuffmanEncoder5INodeE
 N24CFieldPathHuffmanEncoder8LeafNodeE
+N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder12ComputeDepthEP30BuildFlattenedSerializerInfo_tiEUliE_EviiPKcT0_ii13JobPriority_tEUliE_EE
+N24CParallelProcessLauncher18CParallelLambdaJobIZ11ParallelForILb1EZN37CBuildNetworkSerializerHierarchyOrder7ProcessEbEUliE_EviiPKcT0_ii13JobPriority_tEUliE_EE
 N6google8protobuf10TextFormat17BaseTextGeneratorE
 N6google8protobuf10TextFormat17FieldValuePrinterE
 N6google8protobuf10TextFormat21FastFieldValuePrinterE
@@ -1914,6 +1929,7 @@ NETWORK_FIELD_CHANGED_ARRAY_WITH_VALUE
 NETWORK_FIELD_CHANGED_NO_VALUE
 NETWORK_FIELD_CHANGED_NO_VALUE_NO_CONTEXT
 NETWORK_FIELD_CHANGED_REPLAY_COMPAT
+NETWORK_FIELD_CHANGED_TAG
 NETWORK_FIELD_CHANGED_TYPE_NONE
 NETWORK_FIELD_CHANGED_WITH_VALUE
 NETWORK_FIELD_CHANGES_OFTEN_PRIORITY
@@ -2202,6 +2218,8 @@ RandomInt
 Reached an unintended state: CPPTYPE_MESSAGE
 Reached impossible case in HasBit().
 Reached maximum recursion limit for nested messages.
+ReadFieldList
+ReadFieldList with bogus offsets!
 ReadFields
 Recursion limit at end of parse should be
 RegisterConVar: Unknown error registering convar "%s"!
@@ -2271,9 +2289,11 @@ SetAllocatedMessage
 SetBool
 SetDouble
 SetEnum
+SetFieldInfo
 SetFloat
 SetInt32
 SetInt64
+SetPackedFieldOffsets
 SetRawAllocatorType
 SetRecursiveProxyIndices_R
 SetRepeatedBool
@@ -2309,6 +2329,7 @@ SoundOpSystem001
 SoundOpSystemEdit001
 SoundService_001
 SoundSystem001
+Source 2 Unit Tests
 Source of CopyFrom cannot be a descendant of the target.
 Source2Client002
 Source2ClientPrediction001
@@ -2533,7 +2554,6 @@ This program requires version
 This program was compiled against version
 This shouldn't be called if all the sizes are equal.
 ThreadGetCurrentId
-ThreadInMainThread
 ThreadSleep
 Thu
 Thursday
@@ -2673,6 +2693,7 @@ V_stricmp_fast
 V_stristr_fast(char const*, char const*)
 V_vsnprintf
 Validate
+ValidateOffsets(false)
 ValidateSerializedEntity:  %s [ent %d] invalid change '%s' for field %s (value '%s') on array that has metadata with only %d array elements!
 ValidateSerializedEntity:  expected metadata entry of ARRAYCOUNT for %s but got %s instead
 ValidateSerializedEntity:  metadata incorrect entry for %s [%d expected %d]
@@ -3189,6 +3210,7 @@ decltype (
 decltype(auto)
 decltype(nullptr)
 decode
+decoding FAKE
 definition file imports the proto which defines the option.
 delete
 delete[]
@@ -3196,6 +3218,7 @@ deleted
 deleted virtual method called
 delta
 delta >= 1u
+delta_error
 details:
 dgettext
 disabled
@@ -3235,11 +3258,11 @@ fR
 failed to construct fake field from metadata %s::%s (%s) in %s
 fake
 false
+fc=%d, m=%d, sum=%d (poly:%d), bits=%u
 fclose
 fcntl
 fdopen
 fflush
-field %s not present in %s
 field not in previous encoding
 field pointer
 field serializer '%s' already matched to meta variant %d, cloning serializer to allow matching to different meta variant %d
@@ -3260,6 +3283,10 @@ flags=%d,
 flattenedserializer.cpp
 flattenedserializers.cpp
 flattenedserializers_database.cpp
+flc_columns
+flc_file_ids
+flc_file_list
+flc_lines
 float
 float32
 float64
@@ -3272,9 +3299,6 @@ fputs
 fr
 fread
 free
-from
-from meta %u != to meta %u
-from missing
 fs_spew_readfieldlist
 fseeko64
 ftello64
@@ -3287,6 +3311,7 @@ g_pSteamGameServerNetworkingSockets
 g_pSteamNetworkingSockets
 g_pSteamNetworkingUtils
 g_pThreadPool
+game
 generic
 gethostname
 global constructors keyed to
@@ -3663,7 +3688,6 @@ normal
 noscale
 not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugs
 not found
-nothing
 null
 nullptr != pFieldOwnerStruct
 nullptr output boolean given.
@@ -3696,6 +3720,7 @@ operator""
 option json_name is not allowed on extension fields.
 optional
 org(%g,%g,%g) ang(%g,%g,%g)
+original
 out of order
 outgoing
 outgoing_data_bytespersecond
@@ -3703,8 +3728,10 @@ outgoing_sequence
 outgoing_sequence_start
 output specified is nullptr
 p
+pEntity->ValidateOffsets()
 pFSField
 pL
+pMerged->ValidateOffsets()
 package $0;
 packet_status
 panorama
@@ -6746,6 +6773,7 @@ syntax = "$0";
 syscall
 sz
 t
+tag='%s':%u
 target struct
 template parameter object for
 terminate called after throwing an instance of '
@@ -6759,7 +6787,6 @@ this
 three
 throw
 tilde
-to missing
 transaction clone for operator delete(void*)
 transaction clone for operator new[](unsigned long)
 transaction clone for std::bad_exception::what() const
@@ -7383,6 +7410,8 @@ unsigned long
 unsigned long long
 unsigned short
 unspecified
+updated
+updated field %d/%d: %s
 upper
 usage: %s <client|server>
 usage: %s <name> <server>

@@ -6,6 +6,8 @@
 "
 "%s"
 #
+# Instances Playing Required To Reach Loudest Volume
+# Instances Playing Until We Get Louder Than Quietest Volume
 #OS_Default_Device
 $
 $@
@@ -137,6 +139,8 @@ $
 *ZN13VMixOscDesc_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri10CUtlMemoryIS2_iEEE13CAttr_oscType
 *ZN13VMixOscDesc_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri10CUtlMemoryIS2_iEEE15CAttr_m_flPhase
 *ZN14CAsyncWaveData17StartAsyncLoadingERK17asyncwaveparams_tEUlP18IAsyncReadRequest220AsyncRequestStatus_tE_
+*ZN14CVMixMixerTree16FlattenVoiceTreeEvEUlR42CMixerAssembledContainerGraphExecutionListPNS_16VMixGraphVoice_tEE_
+*ZN14CVMixMixerTree23BuildContainerVoiceTreeE11CWeakHandleI38InfoForResourceTypeCVoiceContainerBaseEiPNS_16VMixGraphVoice_tEEUlPKN19CContainerVoiceTree12GraphEntry_tES4_E_
 *ZN16VMixFilterDesc_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri10CUtlMemoryIS2_iEEE11CAttr_m_flQ
 *ZN16VMixFilterDesc_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri10CUtlMemoryIS2_iEEE16CAttr_m_bEnabled
 *ZN16VMixFilterDesc_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri10CUtlMemoryIS2_iEEE16CAttr_m_fldbGain
@@ -199,6 +203,9 @@ $
 *ZN28VMixDynamicsCompressorDesc_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri10CUtlMemoryIS2_iEEE26CAttr_m_flCompressionRatio
 *ZN28VMixDynamicsCompressorDesc_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri10CUtlMemoryIS2_iEEE32CAttr_m_fldbCompressionThreshold
 *ZN33CVoiceContainerRealtimeFMSineWave18BindInstanceParamsER10CUtlVectorISt10unique_ptrIN19CVoiceContainerBase14CParameterBaseESt14default_deleteIS3_EEi10CUtlMemoryIS6_iEEEUlPNS_15CFMSineInstanceERKfE_
+*ZN34CVoiceContainerStaticAdditiveSynth17Finalize_InternalEvEUlvE_
+*ZN34CVoiceContainerStaticAdditiveSynth18BindInstanceParamsER10CUtlVectorISt10unique_ptrIN19CVoiceContainerBase14CParameterBaseESt14default_deleteIS3_EEi10CUtlMemoryIS6_iEEEUlPNS_26CAdditiveSynthInstanceViewERKiE0_
+*ZN34CVoiceContainerStaticAdditiveSynth18BindInstanceParamsER10CUtlVectorISt10unique_ptrIN19CVoiceContainerBase14CParameterBaseESt14default_deleteIS3_EEi10CUtlMemoryIS6_iEEEUlPNS_26CAdditiveSynthInstanceViewERKiE_
 *ZNK17CSosOperatorFloat7ExecuteEPvP17CSosOperatorStackiEUlbbE0_
 *ZNK17CSosOperatorFloat7ExecuteEPvP17CSosOperatorStackiEUlbbE1_
 *ZNK17CSosOperatorFloat7ExecuteEPvP17CSosOperatorStackiEUlbbE2_
@@ -258,7 +265,6 @@ $
 1
 1.0
 10CDSPEditor
-10CVMixMixer
 10IAppSystem
 10IMixFilter
 11CAudioMixer
@@ -283,6 +289,7 @@ $
 14COversampler16
 14CSoundOpSystem
 14CSoundSamplers
+14CVMixMixerTree
 14CVoiceTraceKV3
 14IErrorListener
 14ISoundOpSystem
@@ -290,6 +297,7 @@ $
 14IVSoundManager
 14IVoiceTraceKV3
 15CAudioProcessor
+15CAudioSourceMP3
 15CSosEventInfo_t
 15CSosGroupAction
 15CSosOperatorLFO
@@ -349,6 +357,7 @@ $
 17CSoundViewerState
 17IAudioCacheHandle
 17IAudioInputStream
+17IAudioMixInstance
 17ISequenceArranger
 17IVMixToolServices
 18CAsyncWavDataCache
@@ -388,7 +397,6 @@ $
 1^$
 2
 20CAudioDecoderEncoded
-20CAudioDecoderStretch
 20CAudioDecoderWaveMP3
 20CDelayAudioProcessor
 20CPostConnectCallback
@@ -403,7 +411,6 @@ $
 20CSosOperatorVelocity
 20CSosOperatorVsndInfo
 20CSoundMixGroupSystem
-20CVoiceContainerBlend
 20IResourceTypeManager
 20ISoundMixGroupSystem
 20IToolAttr_TypedValueI14VMixLFOShape_tE
@@ -458,6 +465,7 @@ $
 21CSosOperatorTimerRamp
 21CSosOperatorVMixInput
 21CSoundDebugVisualizer
+21CVoiceContainerSwitch
 21IVConCommDataReceived
 22+<
 22+<voice_loopback
@@ -482,6 +490,7 @@ $
 22CSyncVSndResourceUtils
 22CUtilityAudioProcessor
 22CVocoderAudioProcessor
+22CVoiceContainerBlender
 22CVoiceContainerDefault
 22IAddonListChangeNotify
 22IVDataResourceListener
@@ -532,6 +541,8 @@ $
 25CSosOperatorFloat3ToFloat
 25CSosOperatorFloatToFloat3
 25CSosOperatorGetOpVarFloat
+25CSosOperatorGroupGetFloat
+25CSosOperatorGroupSetFloat
 25CSosOperatorIntervalTimer
 25CSosOperatorMixGraphInput
 25CSosOperatorNormalizeVec3
@@ -590,6 +601,7 @@ $
 27CSosOperatorStartSoundEvent
 27CSosOperatorStopSoundEvents
 27CSosOperatorThresholdLogic3
+27CSosOperatorValOnFirstFrame
 27CToolAttrDirectMemberAccessI14VMixLFOShape_t13VMixOscDesc_tE
 27CToolAttrDirectMemberAccessI14VMixLFOShape_t20VMixAutoFilterDesc_tE
 27CToolAttrDirectMemberAccessI16VMixFilterDesc_t20VMixAutoFilterDesc_tE
@@ -629,7 +641,6 @@ $
 28CSosOperatorRightAngleFloat3
 28CSosOperatorSetVoicePosition
 28CSosOperatorSteamAudioReverb
-28CVoiceContainerRandomSampler
 29CConcreteToolAttrDirectMemberI14VMixLFOShape_t13VMixOscDesc_tE
 29CConcreteToolAttrDirectMemberI14VMixLFOShape_t20VMixAutoFilterDesc_tE
 29CConcreteToolAttrDirectMemberI16VMixFilterDesc_t20VMixAutoFilterDesc_tE
@@ -654,6 +665,7 @@ $
 29CSosOperatorCalcFixedRotation
 29CSosOperatorFloatAccumulate12
 29CSosOperatorGetContainerCurve
+29CSosOperatorGetEnemyRelevance
 29CSosOperatorGetMixLayerAmount
 29CSosOperatorGetOpVarDsppreset
 29CSosOperatorIsLocalPlayerSlot
@@ -694,35 +706,42 @@ $
 32CSosGroupActionSoundeventCluster
 32CSosOperatorArrangementTrackStop
 32CSosOperatorDotaGroundUnderWater
+32CSosOperatorEntityRandomPosition
 32CSosOperatorOrientVectorToEntity
 32CSosOperatorParameterAccumulator
+32CSosOperatorRenderRelevanceDebug
 32CSteamAudioHybridReverbProcessor
 33CDynamicsCompressorAudioProcessor
 33CFullWaveIntegratorAudioProcessor
+33CSosGroupActionSoundeventPriority
 33CSosOperatorGameEntityPerspective
 33CSosOperatorMixGraphInputGetFloat
 33CSosOperatorOpvarGetElementFloat8
 33CVoiceContainerRealtimeFMSineWave
 34CKV3Transfer_ResourceLoadInterface
+34CSosGroupActionMemberCountEnvelope
 34CSosOperatorMixGraphInputDSPPreset
 34CSosOperatorRenderPerspectiveDebug
 34CSosOperatorSpatializeSpeakersHRTF
+34CVoiceContainerStaticAdditiveSynth
 34IKV3TransferInterface_ResourceLoad
 35CSosGroupActionTimeBlockLimitSchema
 35CSosOperatorIterateAndMergeSpeakers
 35CSosOperatorLogicSwitchStringHandle
 35CVoiceContainerOutputStreamAttached
-36CSosGroupActionLeakyIntegratorSchema
 36CSosOperatorLogicSwitch3StringHandle
 36CVoiceContainerAmpedDecayingSineWave
 37CSosGroupActionSetSoundeventParameter
 37CSosOperatorCalcWeightedAvgSerialVec3
 37CSosOperatorSetContainerInstanceParam
 38CSosGroupActionSoundeventClusterSchema
+39CKV3Transfer_EmptyResourceLoadInterface
+39CSosGroupActionSoundeventPrioritySchema
 39CSosOperatorLogicPerspectiveSwitchFloat
 3dB
 4
 40CSchemaRegistration_soundsystem_lowlevel
+40CSosGroupActionMemberCountEnvelopeSchema
 40CSosOperatorLogicPerspectiveSwitchString
 41CSosOperatorCalcInterpolatedRotationAngle
 43CSosGroupActionSetSoundeventParameterSchema
@@ -736,6 +755,8 @@ $
 7
 8
 8CSosEdit
+8CVMixAPI
+8IVMixAPI
 9
 9CAudioSDL
 9CSfxTable
@@ -756,7 +777,6 @@ $
 <array: %u elements>
 <binary blob: %u bytes>
 <empty member name>
-<empty vmix>
 <invalid soundevent name>
 <no failure reason set>
 <null>
@@ -791,6 +811,7 @@ AG
 AOG
 APPSYSTEM: In ConnectInterfaces(), s_nRegistrationCount is %d!
 AVa
+A_Sharp
 Abort processing sound event %s (scheduled recursively will not process this frame)
 Above Threshold(dB)
 Action Type
@@ -809,12 +830,14 @@ AddStackKV3: Cannot find "operators" array in stack %s
 Added %s to RANDOM SELECTOR.
 Added %s to TRASHSYNTH.
 Adding operator stack matching existing name: %s
+Additive Synth Container
 Addon unloaded, unloading sound resources.
 Adjust overall volume (dB) of the output from Steam Audio Reverb processor.
 AlignedByteArray not properly aligned
 AllPass
 AllocateResource failed for %s
 Amped Decaying Sine Wave Container
+An array of containers
 An8
 Analysis Container
 AnimGraphEditorUtils001
@@ -823,6 +846,7 @@ AnimationSystem_001
 Aoh
 Application is not loaded.
 Apply cos(angle) * weight before pan law
+Arg Name: "%s" Type: %s
 Args: [Asset directory Path]
 Args: [Voice Container Path]
 Arrangement: %s
@@ -873,8 +897,6 @@ Bass Mono
 Below Threshold(dB)
 BenchmarkService001
 BinaryProperties_GetValue
-Blend Amount (0-1)
-Blend Container
 Block Max Count
 Blocks Events
 Branch Rules
@@ -886,10 +908,10 @@ CAsyncWavDataCache:  %i sounds total %s, %.2f %% of capacity
 CAudioMixThread::MixAudioFrame
 CAudioPhonemeTag
 CAudioSentence
+CBufferString::AppendConcat(int, char const* const*, int const*, bool)
 CBufferString::AppendFormat(char const*, ...)
 CBufferString::AppendFormatV(char const*, __va_list_tag*)
 CBufferString::ComposeFileName(char const*, char const*, char)
-CBufferString::Concat(char const*, char const*, ...)
 CBufferString::EnsureTrailingSlash(char, bool)
 CBufferString::FixSlashes(char)
 CBufferString::FixupPathName(char)
@@ -923,11 +945,12 @@ CPiecewiseCurve
 CRawAllocator::Alloc(RawAllocatorType_t, unsigned long, unsigned long*)
 CRawAllocator::Free(RawAllocatorType_t, void*, unsigned long)
 CSequence: %s
-CSosGroupActionLeakyIntegratorSchema
 CSosGroupActionLimitSchema
+CSosGroupActionMemberCountEnvelopeSchema
 CSosGroupActionSchema
 CSosGroupActionSetSoundeventParameterSchema
 CSosGroupActionSoundeventClusterSchema
+CSosGroupActionSoundeventPrioritySchema
 CSosGroupActionTimeBlockLimitSchema
 CSosGroupActionTimeLimitSchema
 CSosGroupBranchPattern
@@ -979,7 +1002,6 @@ CSosOperatorSystem::StartSoundEvent Unable to find soundevent %s
 CSosOperatorSystem::StartSoundEvent Unable to start soundevent %s
 CSosOperatorSystem::StartSoundEvent called with invalid soundevent hash
 CSosSoundEventGroupListSchema
-CSosSoundEventGroupSchema
 CSoundDebugVisualizer
 CSoundEvent: %sBase: %sType: %sFields:
 CSoundEventMetaData
@@ -1086,16 +1108,15 @@ CUtlSymbolTable::SetPageSize(unsigned int)
 CUtlSymbolTable::String(CUtlSymbol) const
 CUtlSymbolTable::~CUtlSymbolTable()
 CUtlVector
+CVSound
 CVSoundEventScriptTypeManager::AddSoundEvent:  %s has a hash collision with existing %s
 CVSoundFormat_t
 CVSoundStackScriptTypeManager::Allocate can't parse stack %s
 CVSoundStackScriptTypeManager::Allocate can't parse stack KV %s
 CVSoundStackScriptTypeManager::Allocate stack with empty name
 CVoiceContainerAmpedDecayingSineWave
-CVoiceContainerAmpedDecayingSineWave::m_flGainAmount
 CVoiceContainerBase
-CVoiceContainerBlend
-CVoiceContainerBlend::m_flBlendAmount
+CVoiceContainerBlender
 CVoiceContainerDecayingSineWave
 CVoiceContainerDefault
 CVoiceContainerEnvelopeAnalyzer
@@ -1104,11 +1125,13 @@ CVoiceContainerRandomSampler
 CVoiceContainerRandomSampler: Cleaning up data for %d instances.
 CVoiceContainerRandomSampler: Loaded %d grains into table Total of %lld samples, %f MB.
 CVoiceContainerRealtimeFMSineWave
-CVoiceContainerRealtimeFMSineWave::m_flCarrierFrequency
-CVoiceContainerRealtimeFMSineWave::m_flModulatorAmount
-CVoiceContainerRealtimeFMSineWave::m_flModulatorFrequency
 CVoiceContainerSelector
+CVoiceContainerStaticAdditiveSynth::CGainScalePerInstance
+CVoiceContainerStaticAdditiveSynth::CHarmonic
+CVoiceContainerStaticAdditiveSynth::CTone
+C_Sharp
 Can't find mix layer %s
+Can't find mixgroup name %s for submix
 Can't find sound event to remove for %s!
 Can't parse mp3 encoding %u
 Can't read from type %d for field %s
@@ -1118,7 +1141,9 @@ Cannot deduce for class
 Cast of %s loses value information (returning %s)
 Casts a ray and starts a sound event where the ray hits. The sound event will retrigger periodically if cl_snd_cast_retrigger is set. The sound event will clear previous snd_cast events if cl_snd_cast_clear is set. Usage: snd_cast <eventname> [<retrigger time>] [<max distance>]. Arguments that are specified will become defaults for the remainder of the session.
 Catch up mixing failed: %d times
+Cents To Detune ( -100:100 )
 ChangeCallbackOnChange
+Class does not allow allocation from its schema binding
 Cleaning up leaked audio capture stream.
 Cleaning up leaked audio stream!
 Clear the list of deferred soundevents for loading.
@@ -1132,8 +1157,12 @@ Compression Ratio
 ConMsg(char const*, ...)
 Connection Offset: %i
 Container Analyzers
+Container List
+Container Switch
+Container has %d Arguments:
 Container has %d Parameters:
 Continue: elapsed time: %f, next sync time: %f, local elapsed: %f, local sync: %f
+Contribute to the priority system, but volume is unaffected by it (bool)
 ControlInput_
 ControlOutput_
 Copying '%s' to '%s'
@@ -1142,6 +1171,7 @@ Couldn't load KV3 for resource: %s
 Couldn't parse the input.
 Couldn't read asset %s
 Couldn't set effect on %s because we currently don't support setting effect names on voice graphs.
+Count Envelope
 CreateInterface
 CreateProceduralSfx
 CreateProceduralSfx: File %s missing sounds dir. Fixing for now.
@@ -1179,6 +1209,7 @@ DSP: Warning, failed to allocate lfo or mdy for chorus.
 DSP: Warning, failed to allocate pitch shifter.
 DSP: Warning, failed to allocate reverb.
 DUCT Detected
+D_Sharp
 Data Count: %i
 Data Size: %i
 Debug dump the list of available vmix graphs
@@ -1212,6 +1243,7 @@ Distortion Mix (1.0 = wet)
 Distortion Threshold
 Distortion feedback
 Does Not Play Sound, member of CVoiceContainerDefaultDefault
+Don't contribute to the priority system, but volume is affected by it (bool)
 Double-save to Member '%s'
 Downward Ratio
 Drive (dB)
@@ -1224,12 +1256,14 @@ Duration: %f
 Dynamic
 E
 EJ
+EMidiNote
 EMode_t
 ERROR: Attempt to covert between float(s) failed due to size mismatch or index overrun on field %s in %s
 ERROR: Attempt to covert between string handle and token on field %s in %s
 ERROR: Attempt to covert between string handle and vsnd on field %s in %s
 ERROR: Attempt to covert between unsupported types on field %s in %s
 ERROR: CUtlSymbolTableLarge element limit of %u exceeded
+ERROR: Invalid Group Branch
 ERROR: Invalid Group Branch Index
 ERROR: Resource name "%s" has the incorrect extension "%s" for the specified resource type (expected "%s")!
 ERROR: missing enum name!
@@ -1254,6 +1288,7 @@ Enable real-time pathing validation against dynamic geometry.
 Engine client not found.
 EngineServiceMgr001
 EnsureCapacity
+Envelope (Relative to Tone Envelope)
 Envelope Amount
 Envelope Analyzer
 Envelope Curve
@@ -1325,11 +1360,13 @@ FRAME_NET_UPDATE_PREDICTION
 FRAME_NET_UPDATE_START
 FRAME_SIMULATE
 FX Mix (1.0 == wet)
+F_Sharp
 Fade In
 Fade Out
 Failed parsing mix modifier table %s: %s
 Failed to allocate an instance of a class
 Failed to allocate an instance of class '%s'
+Failed to apply FLC data to resource '%s': %s
 Failed to decode %s
 Failed to get p4 file info for %s
 Failed to load soundstacks/mixgraph.vmix
@@ -1338,6 +1375,7 @@ Failed to read soundmixers.txt as KV3: %s
 Failed to save unsupported class
 Failed to start voice for %s
 Feedback scale
+Feeds two vsounds into a voice graph.
 Field Name String Count: %i
 Field Type: %i
 File %s did not have sounds directory in path, appending path and loading, but path needs to be fixed in resource file.
@@ -1351,7 +1389,6 @@ Filter Type
 Filter bandwidth
 FilteredLinear
 FindElement
-First Sound
 Fixup corrupted .wav file if engine crashed during startmovie/endmovie, etc.
 FixupResourceName: Illegal full path passed in ("%s")!
 FixupResourceName: Illegal path, missing extension passed in ("%s")!
@@ -1377,6 +1414,7 @@ GLIBC_2.2.5
 GLIBC_2.29
 GLIBC_2.3
 GNU
+G_Sharp
 Game v.o. volume
 Game volume
 Game/Sound System Debugger
@@ -1384,7 +1422,6 @@ GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameStartup
 GameUIService_001
-Generate some example voice containers in content to test
 Generated a nulled out container.
 Generates an Envelope Curve on compile
 Generating RANDOM SELECTOR.
@@ -1423,6 +1460,7 @@ HRTF calculations will calculate the player as being this far behind the camera.
 HammerMapLoader001
 HandleSetLibStackFieldsMessageQueue
 HandleSetSoundEventFieldsMessageQueue
+Harmonics
 Height Reflectivity
 HelpSystem_001
 High Cutoff Freq (Hz)
@@ -1444,11 +1482,11 @@ If set to >= 0, we will use this mix modifier for source-specific DSP effects. O
 Incorrect sampling rate in %s (mp3 frames are at %dHz, .vsnd file has %dHz)
 Increased audio mix latency to %d buffers
 InfoForResourceTypeCVMixListResource
-InfoForResourceTypeCVoiceContainerBase
 Input %s: %.3f
 Input %s: %x (%s)
 Input %s: (%s)
 Input Gain (dB)
+Input Name
 Input Pan
 InputService_001
 InputStackSystemVersion001
@@ -1531,6 +1569,7 @@ Load the audio content into the kv3 content
 LoadKV3(CKeyValues3Context*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 LoadKV3(KeyValues3*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 LoadKV3(KeyValues3*, CUtlString*, char const*, KV3ID_t const&, char const*)
+LoadKV3FromFile(CKeyValues3Context*, CUtlString*, char const*, char const*, KV3ID_t const&)
 LoadKV3FromKV3OrKV1(KeyValues3*, CUtlString*, CUtlBuffer*, KV3ID_t const&, char const*)
 LoadKV3Object error: %s
 LoadKV3ObjectInPlace error: %s
@@ -1544,6 +1583,7 @@ LoggingSystem_Log
 LoggingSystem_Log(int, LoggingSeverity_t, Color, char const*, ...)
 LoggingSystem_Log(int, LoggingSeverity_t, LeafCodeInfo_t const&, char const*, ...)
 LoggingSystem_RegisterLoggingChannel
+Loudest Volume
 Low Cutoff Freq (Hz)
 Low EQ gain (dB)
 LowPass
@@ -1558,6 +1598,7 @@ MFgdFromSchemaEditablePolymorphicThisClass
 MGetKV3ClassDefaults
 MNetworkBitCount
 MNetworkChangeCallback
+MNetworkChangeTag
 MNetworkEncoder
 MNetworkOverride_Invalid
 MNetworkPriority
@@ -1576,8 +1617,6 @@ MPropertySuppressExpr
 MPropertySuppressField
 MVDataFileExtension
 MVDataNodeType
-MVSndPropertyControlledAtRuntime
-MVSndPropertyGuaranteeConstant
 MXR_LoadAllSoundMixers
 Main Output
 MapListService_001
@@ -1589,6 +1628,7 @@ Match Rules
 Match SubString ?: %s
 MaterialUtils_001
 Math Eval expression had two operations in a row.
+Max Target Count
 Max Time
 Max reverb gain amount for listener DSP.
 Max reverb gain amount for source-specific DSP.
@@ -1598,6 +1638,7 @@ Member Lifespan Time
 MeshSystem001
 MeshUtils001
 Mid EQ gain (dB)
+Min Threshold Count
 Min reverb gain amount amount for listener DSP.
 Min reverb gain amount for source-specific DSP.
 Minimum Nearby Soundevents
@@ -1611,7 +1652,6 @@ MixGroup %s: %f : %f : %f : %f : %f
 MixLayer triggered %s:
 MixLayers
 MixLayers %s:
-Mixes two sounds in real time
 Mixgroup Modifiers
 Mixgroup Name
 Mod Amount (Hz)
@@ -1639,15 +1679,15 @@ N10__cxxabiv120__si_class_type_infoE
 N10__cxxabiv121__vmi_class_type_infoE
 N19CVoiceContainerBase10CParameterIN28CVoiceContainerRandomSampler26CRandomSamplerInstanceViewEiEE
 N19CVoiceContainerBase10CParameterIN33CVoiceContainerRealtimeFMSineWave15CFMSineInstanceEfEE
+N19CVoiceContainerBase10CParameterIN34CVoiceContainerStaticAdditiveSynth26CAdditiveSynthInstanceViewEiEE
 N19CVoiceContainerBase10CParameterINS_13CInstanceBaseEiEE
 N19CVoiceContainerBase13CInstanceBaseE
 N19CVoiceContainerBase14CParameterBaseE
 N19CVoiceContainerBase16CDecoderInstanceE
-N19CVoiceContainerNull9CInstanceE
+N19CVoiceContainerBase18CInstanceGeneratorE
+N19CVoiceContainerNull22CNullContainerInstanceE
 N19CVoiceContainerVOIP13CVOIPInstanceE
 N19CVoiceContainerVOIP17CVOIPPlaybackDataE
-N20CVoiceContainerBlend14CBlendInstanceE
-N23CVoiceContainerSelector17CSelectorInstanceE
 N24CFieldPathHuffmanEncoder12InternalNodeE
 N24CFieldPathHuffmanEncoder5INodeE
 N24CFieldPathHuffmanEncoder8LeafNodeE
@@ -1655,12 +1695,14 @@ N28CVoiceContainerRandomSampler26CRandomSamplerInstanceViewE
 N29CVSoundStackScriptTypeManager19CAsyncProcessResultE
 N31CVoiceContainerDecayingSineWave13CSineInstanceE
 N33CVoiceContainerRealtimeFMSineWave15CFMSineInstanceE
-N35CVoiceContainerOutputStreamAttached9CInstanceE
-N36CVoiceContainerAmpedDecayingSineWave9CInstanceE
+N34CVoiceContainerStaticAdditiveSynth26CAdditiveSynthInstanceViewE
+N35CVoiceContainerOutputStreamAttached29COutputStreamAttachedInstanceE
+N36CVoiceContainerAmpedDecayingSineWave23CAmpedDecaySineInstanceE
 N9__gnu_cxx20recursive_init_errorE
 N9__gnu_cxx24__concurrence_lock_errorE
 N9__gnu_cxx26__concurrence_unlock_errorE
 N@
+NETWORK_FIELD_CHANGED_TAG
 NETWORK_FIELD_LOWEST_PRIORITY
 NOTE OFF: %u : %f
 NOTE ON: %u : %f : %s
@@ -1684,6 +1726,7 @@ No filename specified to export Steam Audio scene.
 No map found.
 No probes found in %s.
 No scene loaded to export as Steam Audio scene.
+Noise
 Not safe to 'new' this class due to alignment requirements
 Note: Array declaration using table syntax on field %s in stack %s. Please convert.
 Note: Double array found in field %s in stack %s, value: %s
@@ -1711,14 +1754,13 @@ Operator Field: %s
 Operator Field: %s =
 Operator Index: %i
 Operator Stack: %sDependencies: %i
-Operator Variable
-Operator Variable Value
 Operators: %s -> %s
+Opvar Float
+Opvar String
 Output %s: %.3f
 Output Balance
 Output Gain (dB)
 OutputPosToVmix
-Override
 Oversampling
 P
 P@
@@ -1733,7 +1775,6 @@ PanoramaTextServices001
 PanoramaUIClient001
 PanoramaUIEngine001
 Param Name: "%s" Type: %s
-Parameter %s is bindable
 Parameter Name
 Parameters: mix group name, [vol, mute, solo], value
 Parameters: mix group name, layer name, [vol, mute, solo], value, amount
@@ -1747,6 +1788,7 @@ Pause the specified soundevent in the list
 Peak Amplitude
 Peak mode
 Performing fixup on '%s'
+Phase ( 0 - 1 )
 Phase (degrees)
 PhysicsBuilderMgr001
 PhysicsSurfaceProperties
@@ -1769,6 +1811,7 @@ Plat_SetDenormalsAreZero
 Plat_TickDiffSecF
 Plat_UnloadModule
 Plat_WindowToOsSpecificHandle
+Play All Instances In Sync
 Play a note from a specified sampler
 Play a sound at a specified volume.
 Play a sound.
@@ -1792,6 +1835,9 @@ Prints the current stack execution list
 Prints the current state of the groups system
 Prints the current state of tool properties.
 Prints the sizes of relevant sos classes.
+Priority Value, typically 0.0 to 1.0
+Priority volume scalar: %f
+Priority-Based Volume Multiplier, 0.0 to 1.0
 ProcessSoundEvent:  %s unable to get referenced stack %s. Soundevent deleted and removed.
 ProcessSoundEvent: %s Attempting to set more static groups than allowed
 ProcessSoundEvent: %s `field name %s either in public or event data on stack %s.
@@ -1812,6 +1858,7 @@ Q
 QU
 Queued: elapsed time: %f, next sync time: %f, length: %f
 Quick example for how we'd derive traits from voice containers.
+Quietest Volume
 R
 RESOURCE_TYPE_SOUND
 RESOURCE_TYPE_SOUNDEVENTSCRIPT
@@ -1855,6 +1902,8 @@ ResourceCompilerSystem001
 ResourceHandleUtils001
 ResourceManifestRegistry001
 ResourceSystem013
+Result Variable Name
+Retrigger Tone
 RetriggerSoundEvent
 Reverb Depth ms
 Reverb Height ms
@@ -1902,13 +1951,14 @@ SNDLVL_TALKING
 SOS PRINT FLOAT3: %s: %f, %f, %f
 SOS PRINT FLOAT: %s: %f
 SOS PRINT STRING: %s: %s
+SOS_ACTION_COUNT_ENVELOPE
 SOS_ACTION_LIMITER
 SOS_ACTION_NONE
 SOS_ACTION_SET_SOUNDEVENT_PARAM
 SOS_ACTION_SOUNDEVENT_CLUSTER
+SOS_ACTION_SOUNDEVENT_PRIORITY
 SOS_ACTION_TIME_BLOCK_LIMITER
 SOS_ACTION_TIME_LIMIT
-SOS_ACTION_VALUE_INTEGRATOR
 SOS_EDIT_ITEM_TYPE_FIELD
 SOS_EDIT_ITEM_TYPE_LIBRARYSTACKS
 SOS_EDIT_ITEM_TYPE_OPERATOR
@@ -1930,6 +1980,7 @@ SUBGRAPH_INTERPOLATION_TEMPORAL_FADE_OUT
 S_Init( finish )
 S_MixSampleFrames
 S_UpdateVoicesPerFrame
+Save Result to Group
 SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*, unsigned int)
 SaveKV3AsKV1Text(KeyValues3 const*, CUtlString*, CUtlBuffer*, KV1TextEscapeBehavior_t)
 SaveKV3Text_NoHeader(KeyValues3 const*, CUtlString*, CBufferString*, unsigned int)
@@ -1940,7 +1991,7 @@ SchemaSystem_001
 SchemaTestExternal_One_001
 SchemaTestExternal_Two_001
 Search Radius to Cluster Soundevents
-Second Sound
+Select Tone
 SelectedEditItemInfo_t
 SendAllVoices
 SendAllVoicesWithMaxSendLevel
@@ -2026,6 +2077,7 @@ SoundSystem/WaveDataCacheSizeMB
 SoundSystem/WaveDataCacheSizeMB_LowFragmentation
 SoundSystem001
 Soundevent Cluster
+Soundevent Priority
 Soundevent param overwrites: %s:
 Sounds To play
 SoundsystemVMixLoader
@@ -2052,6 +2104,7 @@ Specifies the position (in degrees) of the virtual rear left/right speakers.
 Spew data about the list of block entries.
 Spew message to console any time async sound loading blocks on file i/o.
 Spline
+Square
 Square Wave
 St10bad_typeid
 St11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE
@@ -2124,6 +2177,8 @@ TRUE
 TUNNEL Detected
 Table of mixgroup modifiers for effect names.
 Target
+Target Value
+Test nesting voice containers.
 TestScriptMgr001
 TextLayout_001
 The amount of attenuation .
@@ -2134,12 +2189,14 @@ The frequency of the sine tone modulating this sine tone.
 The frequency of this sine tone.
 The soundsystem requires the filesystem to run!
 This convar is being accessed prior to ConVar_Register being called
+This is a static additive synth that can scale components of the synth based on how many instances are running.
 ThreadGetCurrentId
 ThreadJoin
 ThreadSetAffinityPreference
 ThreadSetPriority
 ThreadSleep
 Threshold (dB)
+Threshold Value
 Threshold dB
 Threshold detection time (ms)
 Time Limiter
@@ -2182,6 +2239,7 @@ Tried to load the underlying audio data for procedural asset %s
 Tried to load uncompiled asset %s
 Tried to load unknown asset %s
 Tried to play random sampler before the grain table finished loading. Will start playing late.
+Tried to play tone %d on an additive synth container that only has tones 0-%d
 Triggering %s with retrigger interval = %f; maximum distance = %f
 TriggersSoundEvents
 Trimming grain for %s from %f to %f seconds
@@ -2252,6 +2310,7 @@ VMIX_CHAN_STEREO
 VMIX_CHAN_SWAP
 VMaterialSystem2_001
 VMediaFoundation001
+VMix Name
 VMixAutoFilterDesc_t
 VMixBoxverbDesc_t
 VMixConvolutionDesc_t
@@ -2401,7 +2460,6 @@ V_tand
 V_tanf
 V_tanhf
 V_vsnprintf
-Value Integrator
 Value Operator Offset: %i
 Value Stack Offset: %i
 Vector2D
@@ -2410,8 +2468,10 @@ Visualize Sounds
 Voice Container Async Render Work
 Voice Container Base
 Voice Container Default
+Voice Containers: Attempted to set invalid param: %s
 Voice Elapsed Time: %f
 Voice volume
+Voiceless Graph
 Volume of sounds in tools (e.g. Hammer, SFM)
 Vrad3_001
 W
@@ -2429,6 +2489,7 @@ Wall: surface = %s (%.2f), thickness = %.2f
 Warning
 Warning: %s (error %s)!
 Warning: Can't find sos strings file: %s!
+Warning: Soundevent %s attempted to generate a random entity position for the World entity index
 Warning: Soundevent %s, failed to get mix layer %s!
 Warning: Stack %s has %i VSND operators
 Warning: Unable to acquire convar value: %s
@@ -2440,7 +2501,6 @@ Warning: track_queue: No track name specified on %s, playing without track featu
 Warning: vsnd %s is not yet loaded, queueing for load on next play.
 When a source has source-specific DSP, this can be used as an additional mix stage for the listener reverb amount.
 When on, silences all DSP mixes.
-When set to zero, Only play First Sound. When set to 1, only play Second Sound. In between, we linearly mix the two.
 Width Reflectivity
 Won't age handle!
 WorldRendererMgr001
@@ -2638,13 +2698,13 @@ adsp_street_min
 adsp_tunnel_min
 adsp_wall_height
 advanced
+after_first_frame
 aggegated
 alg_quant
 alg_unquant
 alignof
 allow_empty_match
 amp2Log2
-amped_sine_wave.vsnd
 and_not
 anim_type
 anti_collapse
@@ -2668,6 +2728,7 @@ attached_output_stall_ms
 attachment
 attack
 audio_input_test_signal
+audio_stream.cpp
 auto:
 auto_connect_public_fields
 az
@@ -2802,7 +2863,6 @@ compute_gru
 compute_stereo_width
 const
 const_cast
-constant_synthesis_container.vsnd
 construction vtable for
 construction_stack
 container_sample_curve
@@ -2936,13 +2996,13 @@ ec_tell_frac
 econ_replacement
 ehandle
 encode_size
+entity_info_relevance
 entity_name
 enum
 enum_decl
 enum_field
 equal_power
 equal_power_amount
-eternal_sine_wave.vsnd
 exclude_group_name
 execlp
 execute_once
@@ -2963,6 +3023,10 @@ filterFreq
 filterGain
 filterQ
 fl
+flc_columns
+flc_file_ids
+flc_file_list
+flc_lines
 float16
 float2
 float32
@@ -2988,6 +3052,7 @@ g_pMemAlloc
 g_pThreadPool
 gain of wet signal (dB)
 game_entity_get_health
+game_entity_get_random_position
 game_entity_info
 game_entity_perspective
 game_entity_world_aabb
@@ -2995,7 +3060,6 @@ game_get_point_contents
 game_get_source_info
 generate_null_container
 generate_trash_synth
-generate_voice_containers
 generic
 generic_data_type
 get_entity_info.output_position
@@ -3024,6 +3088,7 @@ impulseresponse.reset
 impulseresponse.store
 index %i = %i guid : %i dependents
 init_caps
+initial_value
 input0
 input10
 input11
@@ -3115,6 +3180,7 @@ input_float8
 input_floor
 input_folliage_loss
 input_force_end_value
+input_force_group
 input_force_positive_z
 input_force_start_value
 input_frequency
@@ -3144,7 +3210,7 @@ input_latch_output_high
 input_level
 input_lifespan_time
 input_limit_max_events
-input_limit_opvar
+input_limit_priority
 input_line_end
 input_line_start
 input_listener_angles
@@ -3160,6 +3226,8 @@ input_looped_vsnd_defeats_restart
 input_map_max
 input_map_min
 input_master_volume
+input_match_float
+input_match_string
 input_max
 input_max_events
 input_max_gain_change_per_second
@@ -3180,11 +3248,11 @@ input_observer_position
 input_occlusion_method
 input_occlusion_mode
 input_occlusion_samples
+input_offset_X
 input_on_note_off
 input_on_note_on
 input_operator_name
 input_opponent_value
-input_opvar
 input_owner_entity_index
 input_owning_graph
 input_participant_perspective
@@ -3223,6 +3291,7 @@ input_radius_min
 input_rand_max
 input_rand_min
 input_rear_stereo_scale
+input_relevance_value
 input_reset_event_time_on_restart
 input_restart_fade_in
 input_restart_loop_fade_out
@@ -3372,6 +3441,7 @@ invalid argument
 invalid stack
 invalid state
 invalid_bone
+invalid_hitbox
 invalid_vsnd
 invert
 invert_scale
@@ -3464,14 +3534,18 @@ m_bMatchEntIndex
 m_bMatchEventName
 m_bMatchEventSubString
 m_bMatchOpvar
+m_bMatchString
 m_bOnlyTailsOnFadeOut
 m_bParallel
 m_bPeakMode
 m_bPhaseInvert
 m_bPreviewInGame
+m_bPriorityReadButDontContribute
+m_bSaveToGroup
 m_bShouldPause
 m_bShouldVoiceDuck
 m_bSolo
+m_bSyncInstances
 m_bandDesc
 m_branchPattern
 m_clusterSizeOpvar
@@ -3489,12 +3563,15 @@ m_encodedHeader
 m_feedbackFilter
 m_filter
 m_filterType
+m_firstSoundTrackName
 m_flAmplitudeJitter
+m_flAttack
 m_flAttackTimeMS
 m_flBandwidth
+m_flBaseValue
 m_flBassFreq
-m_flBlendAmount
 m_flCarrierFrequency
+m_flCents
 m_flClusterEpsilon
 m_flComplexity
 m_flCompressionRatio
@@ -3545,8 +3622,10 @@ m_flLowCutoffFreq
 m_flMaxDuration
 m_flMaxLength
 m_flMaxValue
+m_flMaxVolume
 m_flMaxVolumeChangePerBuffer
 m_flMinValue
+m_flMinVolume
 m_flMix
 m_flModDepth
 m_flModRate
@@ -3575,7 +3654,6 @@ m_flSendRoomDSP
 m_flSize
 m_flSizeMax
 m_flSizeMin
-m_flSlopeIncoming
 m_flSlopeOutgoing
 m_flSourceModifier
 m_flSourceModifierMin
@@ -3583,6 +3661,7 @@ m_flStartTime
 m_flStrength
 m_flSystemVolumeFadeRate
 m_flTaps
+m_flTargetValue
 m_flThreshold
 m_flTime
 m_flTimeJitter
@@ -3615,8 +3694,6 @@ m_graphPreview
 m_groupBoundingBoxMaxsOpvar
 m_groupBoundingBoxMinsOpvar
 m_groupList
-m_hSoundOne
-m_hSoundTwo
 m_impulseResponseInputs
 m_impulseResponseValues
 m_inputName
@@ -3627,6 +3704,7 @@ m_matchSoundEventSubString
 m_modifiers
 m_morphData
 m_nBandCount
+m_nBaseCount
 m_nBlockMaxCount
 m_nChannelSelect
 m_nChannels
@@ -3635,8 +3713,11 @@ m_nDebugBand
 m_nFilterSlope
 m_nFilterType
 m_nFormat
+m_nFundamental
 m_nGrainSampleCount
 m_nGraphOutputChannels
+m_nInstancesAtMaxVolume
+m_nInstancesAtMinVolume
 m_nLFOShape
 m_nLayer
 m_nLoopEnd
@@ -3646,6 +3727,7 @@ m_nMemSize: %i -> %i
 m_nMinNearby
 m_nMixGroups
 m_nNumDelayVariations
+m_nOctave
 m_nOp
 m_nOutgoingTangent
 m_nOversampleFactor
@@ -3662,21 +3744,30 @@ m_nSortType
 m_nStartSample
 m_nStopType
 m_nStreamingSize
+m_nTargetCount
 m_nType
 m_nValue
 m_nVoiceId
+m_nWaveform
 m_nameHashCodes
 m_nameInputMeters
 m_nameInputs
 m_nameStrings
 m_opvarName
+m_opvarString
 m_pHandle
 m_pStack
 m_pVoice
 m_params
 m_previewGraphInput
 m_previewList
+m_priorityContributeButDontRead
+m_priorityValue
+m_priorityVolumeScalar
+m_resultVarName
 m_samples
+m_secondSound
+m_secondSoundTrackName
 m_sendList
 m_sendName
 m_shouldPlayClusterChild
@@ -3700,6 +3791,7 @@ m_vOrigin
 m_vSound
 m_valueArrays
 m_values
+m_volumeScaling
 m_vsndInputs
 m_vsndName
 m_vsndReference
@@ -3836,6 +3928,7 @@ nw
 o
 oR
 occlusion_db_loss
+on_first_frame
 oo
 opFields
 op_pvq_search_c
@@ -3924,6 +4017,7 @@ opus_repacketizer_out_range
 opus_repacketizer_out_range_impl
 opus_strerror
 opus_unittest_test_signal
+opvar
 opvar_get_bool
 opvar_get_bool operator %s in %s failed to get field %s
 opvar_get_dsp_preset
@@ -3998,6 +4092,7 @@ output_ir
 output_is_blocked
 output_is_looped
 output_is_selected_by_local_player
+output_is_targeting_local_player
 output_is_valid
 output_level
 output_listener_angles
@@ -4115,7 +4210,10 @@ preload_vsnds
 preview.editor
 preview.editor.000
 preview.editor.001
+priority_contribute_dont_read
 priority_override
+priority_read_dont_contribute
+priority_volume_scalar
 process_steamaudio_source
 processor
 processor.setimpulseresponse
@@ -4159,7 +4257,6 @@ random_device::random_device(const std::string&): device not available
 random_device::random_device(const std::string&): unsupported token
 random_exclusive
 random_weighted
-randomselector
 rc
 rdrand
 rdrnd
@@ -4445,6 +4542,8 @@ snd_gamevoicevolume
 snd_gamevolume
 snd_get_physics_surface_properties
 snd_group_cluster_debug
+snd_group_priority_debug
+snd_group_priority_max_tolerance
 snd_headphone_pan_exponent
 snd_headphone_pan_radial_weight
 snd_hrtf_distance_behind
@@ -4625,10 +4724,12 @@ soundevent_control
 soundevent_data
 soundevent_get_info
 soundevent_group_find
+soundevent_group_get_float
 soundevent_group_info
 soundevent_group_join
 soundevent_group_opvars
 soundevent_group_quit
+soundevent_group_set_float
 soundevent_group_stop
 soundevent_limiter
 soundevent_name
@@ -4655,7 +4756,6 @@ soundmixer_set_vmix
 sounds/
 sounds/__attached_output_stream_wrapper_%d.vsnd
 sounds/common/null.vsnd
-sounds/damage
 sounds\
 soundstacks/dsp_mix_modifiers.vdata
 soundstacks/generated/generator_templates.txt
@@ -5220,6 +5320,7 @@ tanh
 template parameter object for
 terminate called after throwing an instance of '
 terminate called without an active exception
+test_voice_container_nesting
 test_voice_containers
 tf_select_table
 this
@@ -5273,7 +5374,6 @@ transaction clone for std::underflow_error::~underflow_error()
 transaction_safe
 transform
 transmissionHigh
-trashsynth
 tri
 true
 tw
@@ -5369,8 +5469,10 @@ use_world_position
 use_world_position_if_dormant
 util_draw_perspective
 util_draw_radius
+util_draw_relevance
 util_elements_float3
 util_float_to_speakers
+util_frame_switch_float
 util_interval_timer
 util_metronome
 util_null
@@ -5417,6 +5519,14 @@ vmix_voicegraph_input_steamaudio_ir
 vmix_voicegraph_inputarray
 vmix_voicegraph_name_input
 vmix_vsnd_info
+voiceA
+voiceB
+voiceC
+voiceD
+voiceE
+voiceF
+voiceG
+voice_containers_get_instance_args
 voice_containers_get_instance_params
 voice_fadeouttime
 voice_initial_buffer_ms

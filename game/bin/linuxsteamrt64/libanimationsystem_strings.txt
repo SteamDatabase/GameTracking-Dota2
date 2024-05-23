@@ -11,12 +11,12 @@
 !m_bIsReading
 !m_basePath.IsEmpty()
 !m_cachedPoseBufferID.IsValid()
+!m_pRootMotionDebugger->HasDebugBasePathSet()
 !m_pRootNode->IsInitialized()
 !m_pSampledEventsBuffer->HasDebugBasePathSet()
 !m_pTaskSystem->HasDebugBasePathSet()
 !m_pool[ nMaskIdx ].m_bIsUsed
 !m_poseBuffers[ nFreeBufferIdx ].m_bIsUsed
-!m_rootMotionDebugger.HasDebugBasePathSet()
 !pCachedPoseBuffer->m_bIsUsed
 !slot.m_bIsUsed
 !}#@
@@ -551,6 +551,7 @@ $tI
 19CAnimUpdateNodeBase
 19CBindPoseUpdateNode
 19CBlendPoseOperation
+19CBoneConstraintBase
 19CBoneMaskUpdateNode
 19CCompressedFullBool
 19CCompressedFullChar
@@ -590,7 +591,7 @@ $tI
 20CPathMetricEvaluator
 20CPoseUpdateResources
 20CPostConnectCallback
-20CSetFacingUpdateNode
+20CRefCountServiceBaseI6CRefMTE
 20CSymbolAnimParameter
 20CTiltTwistConstraint
 20CTwoBoneIKUpdateNode
@@ -611,6 +612,7 @@ $tI
 21CFollowPathUpdateNode
 21CGameInfo_CCSGameInfo
 21CGenericExpr_Property
+21CHandshakeAnimTagBase
 21CJiggleBoneUpdateNode
 21CJumpHelperUpdateNode
 21CLODComponentInstance
@@ -625,7 +627,6 @@ $tI
 21CTaskHandshakeAnimTag
 21CTurnHelperUpdateNode
 21CVirtualAnimParameter
-21IAnimGraphDebugReplay
 21IAnimationSystemUtils
 21IClothSettingsAnimTag
 21IMotionMetricInstance
@@ -683,6 +684,7 @@ $tI
 23CCompressedFullVector4D
 23CCycleControlUpdateNode
 23CDebugVisualizerAbsTime
+23CFollowTargetUpdateNode
 23CGameInfo_CDotaGameInfo
 23CGenericExpr_IntLiteral
 23CKV3ResourceBlockHelper
@@ -749,6 +751,7 @@ $tI
 25CMotionMatchingUpdateNode
 25CMovementComponentUpdater
 25CMovementHandshakeAnimTag
+25CNmControlParameterIDNode
 25CNmVirtualParameterIDNode
 25CPathAnimMotorUpdaterBase
 25CRagdollComponentInstance
@@ -770,6 +773,7 @@ $tI
 26CCPPScriptComponentUpdater
 26CClothAttrSequenceCompiler
 26CEnumAnimParameterInstance
+26CFollowTargetPoseOperation
 26CFootStepTriggerUpdateNode
 26CGenericExpr_StringLiteral
 26CMovementComponentInstance
@@ -788,6 +792,7 @@ $tI
 27CDirectionalBlendUpdateNode
 27CFollowAttachmentUpdateNode
 27CModelConfigElement_Command
+27CNmControlParameterBoolNode
 27CNmVirtualParameterBoolNode
 27CRelativeOffsetArrayDataOpsI14CRelativeArrayIfELi1EE
 27CSchemaRegistration_animlib
@@ -811,6 +816,7 @@ $tI
 28CModelConfigElement_UserPick
 28CModelDocAnimResourceSeqBase
 28CNMGraphVariationTypeManager
+28CNmControlParameterFloatNode
 28CNmVirtualParameterFloatNode
 28CPlayerInputAnimMotorUpdater
 28CSchemaRegistration_modellib
@@ -825,6 +831,8 @@ $tI
 29CDemoSettingsComponentUpdater
 29CDifferenceBlendPoseOperation
 29CModelDocAnimResourceSeqDelta
+29CNmControlParameterTargetNode
+29CNmControlParameterVectorNode
 29CNmVirtualParameterTargetNode
 29CNmVirtualParameterVectorNode
 29CPlayerInputAnimMotorInstance
@@ -977,7 +985,7 @@ $tI
 @@regex_error
 @A
 @B
-@V@const char* Reflection::Internal::GetFuncName() [with T = IMovementComponentInstance]
+@V@const char* Reflection::Internal::GetFuncName() [with T = CMovementComponentInstance]
 @animsynctrack.cpp
 A
 A file with this name is already in the pool.
@@ -1192,6 +1200,7 @@ AnimParamNetworkSetting
 AnimParamType_t
 AnimPathData:AllowMovementOffPath
 AnimPathData:BoundaryRadius
+AnimPathData:IsStop
 AnimPathData:Pos
 AnimPathData:m_count
 AnimPathData:m_startIndex
@@ -1273,6 +1282,7 @@ BLEND_PREALIGNED|
 BackUp() can not exceed the size of the last Next() call.
 BackUp() can only be called after Next().
 BackUp() can only be called after a successful Next().
+Bad FLC data for resource '%s': %s
 Bad KV3 data for resource '%s': %s
 Bad KV3 data in control block for '%s': %s
 Bad block type for embedded animation data
@@ -1814,6 +1824,7 @@ CHECK failed: uninterpreted_options_field != nullptr:
 CHECK failed: unknown_fields->SerializeToString(outstr):
 CHECK failed: value != nullptr:
 CHECK failed: z.first != NULL:
+CHandshakeAnimTagBase
 CHitBoxSetList
 CHitReactUpdateNode
 CIKJointConstraintData_Hinge
@@ -1881,6 +1892,11 @@ CNmCachedPoseWriteTask
 CNmChildGraphNode::CDefinition
 CNmClip
 CNmClipNode::CDefinition
+CNmControlParameterBoolNode::CDefinition
+CNmControlParameterFloatNode::CDefinition
+CNmControlParameterIDNode::CDefinition
+CNmControlParameterTargetNode::CDefinition
+CNmControlParameterVectorNode::CDefinition
 CNmEvent
 CNmFloatValueNode::CDefinition
 CNmFootEvent
@@ -1974,7 +1990,6 @@ CSeqSynthAnimDesc
 CSeqTransition
 CSequenceFinishedAnimTag
 CSequenceGroupData
-CSetFacingUpdateNode
 CSingleFrameUpdateNode
 CSlopeComponentUpdater
 CSlowDownOnSlopesUpdateNode
@@ -1997,6 +2012,7 @@ CTSListBase::CTSListBase()
 CTSListBase::Detach()
 CTSListBase::InternalPop()
 CTSListBase::InternalPush(TSLNodeBase_t*)
+CTaskHandshakeAnimTag
 CTiltTwistConstraint
 CTimeRemainingMetricEvaluator
 CToggleComponentActionUpdater
@@ -2020,8 +2036,10 @@ CUtlBuffer::CUtlBuffer(void const*, int, int)
 CUtlBuffer::CheckArbitraryPeekGet(int, int&)
 CUtlBuffer::CheckGet(int)
 CUtlBuffer::CheckPut(int)
+CUtlBuffer::GetString(CBufferString*)
 CUtlBuffer::Printf(char const*, ...)
 CUtlBuffer::Put(void const*, int)
+CUtlBuffer::PutString(char const*)
 CUtlBuffer::SeekGet(CUtlBuffer::SeekType_t, int)
 CUtlBuffer::SeekPut(CUtlBuffer::SeekType_t, int)
 CUtlBuffer::SetExternalBuffer(void*, int, int, int)
@@ -2214,6 +2232,7 @@ DirectionAndMagnitude
 DirectionalBlendNode
 Disable Replication
 DisableRootMotionSampling
+Disables Handshake
 Disallowed variable name: %s
 DisconnectExternalGraph
 Distance Remaining
@@ -2265,6 +2284,7 @@ EndSourceTransition
 Ending
 EngineServiceMgr001
 EnsureCapacity
+Entity_Facing_Mode_Use_Path
 Entry
 Enum name
 Enum type "
@@ -2435,10 +2455,12 @@ FOOTSOUND_UseOverrideSound
 FORCE_UINT
 Face Down Path
 Face Look Target
+Facing Heading
 Facing Mode
-FacingDirection
+FacingMode_Invalid
 FacingMode_LookTarget
 FacingMode_Manual
+FacingMode_ManualPosition
 FacingMode_Path
 Fade in time of the animation
 Fade out time of the animation
@@ -2447,6 +2469,7 @@ Failed to allocate a parser for '%s'. (Out of memory?)
 Failed to allocate a token stream for '%s'. (Out of memory?)
 Failed to allocate an instance of a class
 Failed to allocate an instance of class '%s'
+Failed to apply FLC data to resource '%s': %s
 Failed to call CBaseIntrospectedToKV3TypeManager::Init
 Failed to compile Fuse script: %s
 Failed to load Animation Graph Resource: %s
@@ -2522,6 +2545,7 @@ Float Parameter
 Float( %f )
 Floor
 FollowAttachmentSettings_t
+FollowTargetOpFixedSettings_t
 FontManager_001
 Foot 3
 Foot 4
@@ -2700,7 +2724,6 @@ IKTARGETSOURCE_COUNT
 IKTargetCoordinateSystem
 IKTargetSettings_t
 IKTargetSource
-IKV3TransferInterface_ResourceLoad
 IKV3TransferInterface_UtlSymbolLarge
 INFO
 INTERNAL
@@ -2965,8 +2988,11 @@ Magnitude Only
 MagnitudeOnly
 MakeGlobalSymbol
 Managers
+Manual Direction
 Manual Facing Direction
-Manual Facing Heading
+Manual Position
+Manual Target World Space
+ManualTarget_WorldSpace
 MapKey::GetBoolValue
 MapKey::GetInt32Value
 MapKey::GetInt64Value
@@ -3012,10 +3038,7 @@ MatterialAttributeTagType_t
 Max IK Rotation Error
 Max IK Translation Error
 Max Move Speed
-Max Rotation Error
-Max Scale Error
 Max Stretch
-Max Translation Error
 Max Value
 MaxMoveSpeed
 May
@@ -3207,7 +3230,6 @@ N10Reflection6Detail14CTypeInfoMakerI20CChoreoPoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI20CLODComponentUpdaterEE
 N10Reflection6Detail14CTypeInfoMakerI20CLookAtPoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI20CPathMetricEvaluatorEE
-N10Reflection6Detail14CTypeInfoMakerI20CSetFacingUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI20CSymbolAnimParameterEE
 N10Reflection6Detail14CTypeInfoMakerI20CTwoBoneIKUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI20CVectorAnimParameterEE
@@ -3217,6 +3239,7 @@ N10Reflection6Detail14CTypeInfoMakerI21CAnimNodeInstanceBaseEE
 N10Reflection6Detail14CTypeInfoMakerI21CClothSettingsAnimTagEE
 N10Reflection6Detail14CTypeInfoMakerI21CEmitTagActionUpdaterEE
 N10Reflection6Detail14CTypeInfoMakerI21CFollowPathUpdateNodeEE
+N10Reflection6Detail14CTypeInfoMakerI21CHandshakeAnimTagBaseEE
 N10Reflection6Detail14CTypeInfoMakerI21CJiggleBoneUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI21CJumpHelperUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI21CLODComponentInstanceEE
@@ -3264,6 +3287,7 @@ N10Reflection6Detail14CTypeInfoMakerI23CAnimTagManagerInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI23CAnimationGraphInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI23CChoreoAnimNodeInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI23CCycleControlUpdateNodeEE
+N10Reflection6Detail14CTypeInfoMakerI23CFollowTargetUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI23CSlopeComponentInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI23CSolveIKChainUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI23CStateMachineUpdateNodeEE
@@ -3307,6 +3331,7 @@ N10Reflection6Detail14CTypeInfoMakerI25ISequenceAnimNodeInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI26CAnimParameterListInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI26CCPPScriptComponentUpdaterEE
 N10Reflection6Detail14CTypeInfoMakerI26CEnumAnimParameterInstanceEE
+N10Reflection6Detail14CTypeInfoMakerI26CFollowTargetPoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI26CFootStepTriggerUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI26CMovementComponentInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI26CSetParameterActionUpdaterEE
@@ -3488,9 +3513,14 @@ N24CAnimNodeInstanceFactory14CFactoryMakerTI31CMotionMatchingAnimNodeInstanceEE
 N24CFieldPathHuffmanEncoder12InternalNodeE
 N24CFieldPathHuffmanEncoder5INodeE
 N24CFieldPathHuffmanEncoder8LeafNodeE
+N25CNmControlParameterIDNode11CDefinitionE
 N25CNmVirtualParameterIDNode11CDefinitionE
+N27CNmControlParameterBoolNode11CDefinitionE
 N27CNmVirtualParameterBoolNode11CDefinitionE
+N28CNmControlParameterFloatNode11CDefinitionE
 N28CNmVirtualParameterFloatNode11CDefinitionE
+N29CNmControlParameterTargetNode11CDefinitionE
+N29CNmControlParameterVectorNode11CDefinitionE
 N29CNmVirtualParameterTargetNode11CDefinitionE
 N29CNmVirtualParameterVectorNode11CDefinitionE
 N2IK16CAnimPoseWrapperE
@@ -3674,6 +3704,7 @@ N9Attribute6Detail7GetterTI22CAnimParameterInstanceRK10CUtlStringEE
 N9Attribute6Detail7GetterTI24CActionComponentInstanceRK10CUtlStringEE
 N9Attribute6Detail7GetterTI26CMovementComponentInstance10CUtlVectorINS_2UI8Choice_tEi10CUtlMemoryIS5_iEEEE
 N9Attribute6Detail7GetterTI28CAnimScriptComponentInstanceRK10CUtlStringEE
+N9Attribute6Detail7GetterTI29CDampedValueComponentInstanceRK10CUtlStringEE
 N9Attribute6Detail7GetterTI30CStateMachineComponentInstanceRK10CUtlStringEE
 N9Attribute6Detail7GetterTI8IAnimTag13CGlobalSymbolEE
 N9Attribute6Detail7GetterTI8IAnimTagRK10CUtlStringEE
@@ -3835,6 +3866,7 @@ Outdent() without matching Indent().
 Output:
 Overlay Blend (Masked): %.2f%%
 Overlay Blend: %.2f%%
+OverlayProjectionDirection
 Override Sound
 P
 P@
@@ -4146,6 +4178,7 @@ Root to tilt bone original
 RootMotionSpeed
 RootMotionTurnSpeed
 RootMotionVelocity
+Rotation Error Range
 Round
 S
 SEMICOLON
@@ -4183,6 +4216,7 @@ Sat
 Saturday
 SaveKV3(KV3ID_t const&, KV3ID_t const&, KeyValues3 const*, CUtlString*, CUtlBuffer*, unsigned int)
 Scale Animation Motion
+Scale Error Range
 ScaleWeights
 SceneSystem_002
 SceneUtils_001
@@ -4356,6 +4390,7 @@ St12_Mem_fn_baseIM22CAnimParameterInstanceKFRK10CUtlStringvELb1EE
 St12_Mem_fn_baseIM24CActionComponentInstanceKFRK10CUtlStringvELb1EE
 St12_Mem_fn_baseIM26CMovementComponentInstanceKF10CUtlVectorIN9Attribute2UI8Choice_tEi10CUtlMemoryIS4_iEEvELb1EE
 St12_Mem_fn_baseIM28CAnimScriptComponentInstanceKFRK10CUtlStringvELb1EE
+St12_Mem_fn_baseIM29CDampedValueComponentInstanceKFRK10CUtlStringvELb1EE
 St12_Mem_fn_baseIM30CStateMachineComponentInstanceKFRK10CUtlStringvELb1EE
 St12_Mem_fn_baseIM8IAnimTagFv13CGlobalSymbolELb1EE
 St12_Mem_fn_baseIM8IAnimTagFvRK10CUtlStringELb1EE
@@ -4406,6 +4441,7 @@ St14unary_functionIPK22CAnimParameterInstanceRK10CUtlStringE
 St14unary_functionIPK24CActionComponentInstanceRK10CUtlStringE
 St14unary_functionIPK26CMovementComponentInstance10CUtlVectorIN9Attribute2UI8Choice_tEi10CUtlMemoryIS6_iEEE
 St14unary_functionIPK28CAnimScriptComponentInstanceRK10CUtlStringE
+St14unary_functionIPK29CDampedValueComponentInstanceRK10CUtlStringE
 St14unary_functionIPK30CStateMachineComponentInstanceRK10CUtlStringE
 St14unary_functionIPK8IAnimTag13CGlobalSymbolE
 St14unary_functionIPK8IAnimTagRK10CUtlStringE
@@ -4487,6 +4523,7 @@ St31_Maybe_unary_or_binary_functionIRK10CUtlStringJPK19CAnimUpdateNodeBaseEE
 St31_Maybe_unary_or_binary_functionIRK10CUtlStringJPK22CAnimParameterInstanceEE
 St31_Maybe_unary_or_binary_functionIRK10CUtlStringJPK24CActionComponentInstanceEE
 St31_Maybe_unary_or_binary_functionIRK10CUtlStringJPK28CAnimScriptComponentInstanceEE
+St31_Maybe_unary_or_binary_functionIRK10CUtlStringJPK29CDampedValueComponentInstanceEE
 St31_Maybe_unary_or_binary_functionIRK10CUtlStringJPK30CStateMachineComponentInstanceEE
 St31_Maybe_unary_or_binary_functionIRK10CUtlStringJPK8IAnimTagEE
 St31_Maybe_unary_or_binary_functionIRK13CGlobalSymbolJPK8IAnimTagEE
@@ -4521,6 +4558,7 @@ St7_Mem_fnIM22CAnimParameterInstanceKFRK10CUtlStringvEE
 St7_Mem_fnIM24CActionComponentInstanceKFRK10CUtlStringvEE
 St7_Mem_fnIM26CMovementComponentInstanceKF10CUtlVectorIN9Attribute2UI8Choice_tEi10CUtlMemoryIS4_iEEvEE
 St7_Mem_fnIM28CAnimScriptComponentInstanceKFRK10CUtlStringvEE
+St7_Mem_fnIM29CDampedValueComponentInstanceKFRK10CUtlStringvEE
 St7_Mem_fnIM30CStateMachineComponentInstanceKFRK10CUtlStringvEE
 St7_Mem_fnIM8IAnimTagFv13CGlobalSymbolEE
 St7_Mem_fnIM8IAnimTagFvRK10CUtlStringEE
@@ -4649,6 +4687,7 @@ ToolSceneNodeFactory_001
 ToolService_001
 TrackActiveNode
 TransferDependencyPoseBuffer
+Translation Error Range
 Tried to load a polymorphic pointer with no '%s' key
 Tried to load resource reference '%s' from a value without a resource reference specific type.
 Tried to merge messages of different types
@@ -5196,7 +5235,7 @@ anim_resource_validate_on_load
 animationsystem
 animblender.cpp
 animdebug.cpp
-animgraph30
+animgraph31
 animgraph_debug_max_poseop_count
 animgraph_enable_dirty_netvar_optimization
 animgraph_footlock_auto_ledge_detection
@@ -5489,7 +5528,6 @@ const char* Reflection::Internal::GetFuncName() [with T = CBlendPoseOperation]
 const char* Reflection::Internal::GetFuncName() [with T = CBlendUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CBlockSelectionMetricEvaluator]
 const char* Reflection::Internal::GetFuncName() [with T = CBodyGroupAnimTag]
-const char* Reflection::Internal::GetFuncName() [with T = CBoneMaskPoseOperation]
 const char* Reflection::Internal::GetFuncName() [with T = CBoneMaskUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CBonePositionMetricEvaluator]
 const char* Reflection::Internal::GetFuncName() [with T = CBoneVelocityMetricEvaluator]
@@ -5521,6 +5559,8 @@ const char* Reflection::Internal::GetFuncName() [with T = CFloatAnimParameter]
 const char* Reflection::Internal::GetFuncName() [with T = CFollowAttachmentPoseOperation]
 const char* Reflection::Internal::GetFuncName() [with T = CFollowAttachmentUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CFollowPathUpdateNode]
+const char* Reflection::Internal::GetFuncName() [with T = CFollowTargetPoseOperation]
+const char* Reflection::Internal::GetFuncName() [with T = CFollowTargetUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CFootAdjustmentUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CFootCycleMetricEvaluator]
 const char* Reflection::Internal::GetFuncName() [with T = CFootFallAnimTag]
@@ -5536,6 +5576,7 @@ const char* Reflection::Internal::GetFuncName() [with T = CFootstepLandedAnimTag
 const char* Reflection::Internal::GetFuncName() [with T = CFutureFacingMetricEvaluator]
 const char* Reflection::Internal::GetFuncName() [with T = CFutureVelocityMetricEvaluator]
 const char* Reflection::Internal::GetFuncName() [with T = CGlobalSymbol]
+const char* Reflection::Internal::GetFuncName() [with T = CHandshakeAnimTagBase]
 const char* Reflection::Internal::GetFuncName() [with T = CHitReactPoseOperation]
 const char* Reflection::Internal::GetFuncName() [with T = CHitReactUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CInputStreamAnimNodeInstance]
@@ -5561,7 +5602,6 @@ const char* Reflection::Internal::GetFuncName() [with T = CMotionMetricEvaluator
 const char* Reflection::Internal::GetFuncName() [with T = CMotionMetricInstance]
 const char* Reflection::Internal::GetFuncName() [with T = CMotionNodeBlend1D]
 const char* Reflection::Internal::GetFuncName() [with T = CMotionNodeSequence]
-const char* Reflection::Internal::GetFuncName() [with T = CMovementComponentInstance]
 const char* Reflection::Internal::GetFuncName() [with T = CMovementComponentUpdater]
 const char* Reflection::Internal::GetFuncName() [with T = CMovementHandshakeAnimTag]
 const char* Reflection::Internal::GetFuncName() [with T = CMoverUpdateNode]
@@ -5581,7 +5621,6 @@ const char* Reflection::Internal::GetFuncName() [with T = CSelectorUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CSequenceAnimNodeInstance]
 const char* Reflection::Internal::GetFuncName() [with T = CSequenceFinishedAnimTag]
 const char* Reflection::Internal::GetFuncName() [with T = CSequenceUpdateNode]
-const char* Reflection::Internal::GetFuncName() [with T = CSetFacingUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CSetParameterActionUpdater]
 const char* Reflection::Internal::GetFuncName() [with T = CSingleFramePoseOperation]
 const char* Reflection::Internal::GetFuncName() [with T = CSingleFrameUpdateNode]
@@ -5655,6 +5694,7 @@ const char* Reflection::Internal::GetFuncName() [with T = IMaterialAttributeAnim
 const char* Reflection::Internal::GetFuncName() [with T = IMotionGraphPreviewNodeInstance]
 const char* Reflection::Internal::GetFuncName() [with T = IMotionMatchingAnimNodeInstance]
 const char* Reflection::Internal::GetFuncName() [with T = IMotionMetricInstance]
+const char* Reflection::Internal::GetFuncName() [with T = IMovementComponentInstance]
 const char* Reflection::Internal::GetFuncName() [with T = IParticleAnimTag]
 const char* Reflection::Internal::GetFuncName() [with T = IPathAnimMotorInstance]
 const char* Reflection::Internal::GetFuncName() [with T = IPlayerInputAnimMotorInstance]
@@ -5797,6 +5837,10 @@ flTwistRelax
 flVolumetricSolveStrength
 flWeight0
 flWorldFriction
+flc_columns
+flc_file_ids
+flc_file_list
+flc_lines
 float
 float32
 float64
@@ -6365,11 +6409,13 @@ m_bApplyHipShift
 m_bApplyLegTwistLimits
 m_bApplyMovement
 m_bApplyRotation
+m_bApplyScale
 m_bApplyTilt
 m_bApplyToFootMotion
 m_bAutoReset
 m_bAutoplay
 m_bAwaken
+m_bBakedTwoSided
 m_bBlockNonPathMovement
 m_bBlockWaningTags
 m_bBoneMergeFlex
@@ -6387,7 +6433,6 @@ m_bDefault
 m_bDelta
 m_bDestroy
 m_bDetachFromOwner
-m_bDisableSmoothVertexCacheNormals
 m_bDisabled
 m_bDoBonesOrientAlongPositiveX
 m_bDontResetSameSelection
@@ -6540,6 +6585,7 @@ m_bTranslationAxis
 m_bTranslationOnly
 m_bTurnToFace
 m_bUseAcceleration
+m_bUseBiasAndClamp
 m_bUseBlendScale
 m_bUseCompressedNormalTangent
 m_bUseCustomDuration
@@ -6551,6 +6597,7 @@ m_bUseNewPoleVectorForAxis
 m_bUseShadowFastPath
 m_bUserSpecifiedColor
 m_bUserSpecifiedMaterialGroup
+m_bWorldCoodinateTarget
 m_bX
 m_bXFade
 m_bY
@@ -6558,6 +6605,7 @@ m_bZ
 m_baseNameHash
 m_baseSequence
 m_bbox
+m_biasAndClampBlendCurve
 m_bindPose
 m_blendCurve
 m_blendDuration
@@ -6589,6 +6637,7 @@ m_boneScaleParent
 m_boneSelectionMode
 m_boneSetupMask
 m_boneSphere
+m_boneTargetIndex
 m_boneTransforms
 m_bones
 m_bonesHash
@@ -6671,8 +6720,6 @@ m_durationOverrideNodeIdx
 m_eBehavior
 m_eBlendMode
 m_eCorrectionMethod
-m_eDefaultFacingMode
-m_eFacingMode
 m_eMode
 m_eNetworkSetting
 m_eParamType
@@ -6698,7 +6745,6 @@ m_executeEvents
 m_exitEvents
 m_externalGraphSlots
 m_externalGraphs.IsEmpty()
-m_fAngleIncrement
 m_fMaxValue
 m_fMinValue
 m_fSpeedScale
@@ -6732,6 +6778,8 @@ m_flBaseMinLeft
 m_flBaseMinUp
 m_flBaseStiffness
 m_flBaseUpFriction
+m_flBiasAndClampPitchOffset
+m_flBiasAndClampYawOffset
 m_flBindPoseDirectionMS
 m_flBlendWeight >= 0.0f && m_flBlendWeight <= 1.0f
 m_flBoneScaleArray
@@ -6773,6 +6821,11 @@ m_flEnd
 m_flEndCycle
 m_flEndOffset
 m_flEntitySimTime
+m_flErrorQuantizationRotationMax
+m_flErrorQuantizationScaleMax
+m_flErrorQuantizationTranslationMax
+m_flErrorSplineScaleMax
+m_flErrorSplineTranslationMax
 m_flExtensionScale
 m_flFPS
 m_flFadeIn
@@ -6820,7 +6873,6 @@ m_flLockBlendTime
 m_flLockBreakDistance
 m_flLockBreakTolerance
 m_flLoop
-m_flManualFacingHeading
 m_flMass
 m_flMassInv
 m_flMax
@@ -6835,16 +6887,12 @@ m_flMaxIKLength
 m_flMaxImpactForce
 m_flMaxLegTwist
 m_flMaxPitch
-m_flMaxQuantizationErrorRotation
-m_flMaxQuantizationErrorScale
-m_flMaxQuantizationErrorTranslation
+m_flMaxPitchAngle
 m_flMaxRadians
 m_flMaxRootHeightOffset
 m_flMaxRotationLeft
 m_flMaxRotationRight
 m_flMaxScale
-m_flMaxSplineErrorScale
-m_flMaxSplineErrorTranslation
 m_flMaxSpringTension
 m_flMaxStretch
 m_flMaxStretchAmount
@@ -6853,6 +6901,7 @@ m_flMaxTorque
 m_flMaxTwist
 m_flMaxValue
 m_flMaxYaw
+m_flMaxYawAngle
 m_flMin
 m_flMinAngle
 m_flMinDelayBetweenHits
@@ -6866,6 +6915,7 @@ m_flMinSpeedScale
 m_flMinSpringTension
 m_flMinTimeRemaining
 m_flMinYaw
+m_flMotionSmoothCDT
 m_flNextAnimTime
 m_flNextStart
 m_flOcclusionFactor
@@ -6882,6 +6932,7 @@ m_flPosition
 m_flPredictionScale
 m_flPrevAnimTime
 m_flPrevCycleUnclamped
+m_flPrevFacingHeading
 m_flProgression
 m_flPropagationScale
 m_flQuadVelocitySmoothRate
@@ -6920,6 +6971,7 @@ m_flStoppingSpeedScale
 m_flStretchExtensionScale
 m_flStrideCurveLimitScale
 m_flStrideCurveScale
+m_flSumOfAllHairLengths
 m_flSurfaceArea
 m_flTargetFacing
 m_flTargetSpeed
@@ -6935,7 +6987,6 @@ m_flTolerance
 m_flTraceAngleBlend
 m_flTraceHeight
 m_flTraceRadius
-m_flTranslationalErrorFactor
 m_flTurnAmount
 m_flTurnTimeMax
 m_flTurnTimeMin
@@ -7181,6 +7232,7 @@ m_nEntParent
 m_nExtraGoalIterations
 m_nExtraIterations
 m_nExtraPressureIterations
+m_nFacingMode
 m_nFirstFreePoolIdx < 127
 m_nFirstFreePoolIdx < nCurrentPoolSize
 m_nFirstFreePoolIdx == 0
@@ -7204,6 +7256,7 @@ m_nGroupSize
 m_nGuideHairCount
 m_nGuideHairIndices_nSurfaceTriIndex
 m_nHairCount
+m_nHandshakeMaskToDisableFirst
 m_nHeight
 m_nHipBoneIndex
 m_nHitBoxIndex
@@ -7613,6 +7666,8 @@ m_vInputVectorWS
 m_vLinearTargetVelocity
 m_vLookTarget
 m_vLsFallbackHingeAxis
+m_vManualFacingDirection
+m_vManualFacingTarget
 m_vMassCenterOverride
 m_vMax
 m_vMaxBounds
@@ -7652,6 +7707,11 @@ m_vecBoneWorldMax
 m_vecBoneWorldMin
 m_vecCenter
 m_vecEnumReferenced
+m_vecErrorRangeQuantizationRotation
+m_vecErrorRangeQuantizationScale
+m_vecErrorRangeQuantizationTranslation
+m_vecErrorRangeSplineScale
+m_vecErrorRangeSplineTranslation
 m_vecRootMax
 m_vecRootMin
 m_vecSize
@@ -7830,7 +7890,10 @@ pDefinition->m_layerDefinition[i].m_bIsStateMachineLayer
 pDependencyTask != nullptr && pDependencyTask->m_bIsComplete && pDependencyTask->m_bufferIdx != NM_INVALID_INDEX
 pEvent != nullptr
 pExternalGraphInstance != nullptr
+pFinalRootMotionDebugger != nullptr
+pFinalSampledEventsBuffer != nullptr
 pFinalTask->IsComplete()
+pFinalTaskSystem != nullptr
 pFoundCachedPoseBuffer != nullptr
 pFoundState != nullptr
 pGraphDef->m_nodeDefinitions.Count() == numNodes
@@ -7839,7 +7902,6 @@ pMaskToScale != nullptr
 pOutPose != nullptr && pOutPose->GetSkeleton() == m_skeleton.GetData()
 pPoseBuffer != nullptr
 pPoseBuffer->IsPoseSet()
-pSampledEventsBuffer != nullptr
 pSourceAndResultLayerContext != nullptr && pTargetLayerContext != nullptr
 pSourceBoneMaskTaskList != nullptr
 pSourceMask != nullptr

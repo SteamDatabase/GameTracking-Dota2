@@ -258,6 +258,12 @@
 		"r_size_cull_threshold"		"0.4"
 		"cl_predict"				"0"
 		"cl_usesocketsforloopback" "1"
+		"sv_early_network_message_processing" "1"
+	}
+
+	pulse
+	{
+		"pulse_enabled"					"1"
 	}
 }
 

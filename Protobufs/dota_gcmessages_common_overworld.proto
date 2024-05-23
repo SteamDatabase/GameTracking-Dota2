@@ -151,10 +151,17 @@ message CMsgClientToGCOverworldCompletePathResponse {
 	optional .CMsgDOTAClaimEventActionResponse claim_response = 2;
 }
 
+message CMsgOverworldEncounterPitFighterRewardData {
+	optional uint32 token_id = 1;
+	optional uint32 choice = 2;
+}
+
 message CMsgClientToGCOverworldClaimEncounterReward {
 	optional uint32 overworld_id = 1;
 	optional uint32 node_id = 2;
 	optional uint32 reward_data = 3;
+	optional uint32 periodic_resource_id = 4;
+	optional .CMsgOverworldEncounterData extra_reward_data = 5;
 }
 
 message CMsgClientToGCOverworldClaimEncounterRewardResponse {
@@ -171,8 +178,9 @@ message CMsgClientToGCOverworldClaimEncounterRewardResponse {
 		k_eNodeNotEncounter = 9;
 		k_eEncounterMissingRewards = 10;
 		k_eInvalidEncounterRewardStyle = 11;
-		k_eInvalidEncounterRewardData = 12;
+		k_eInvalidEncounterData = 12;
 		k_eNotEnoughTokensForReward = 13;
+		k_eNotEnoughResourceForReward = 14;
 	}
 
 	optional .CMsgClientToGCOverworldClaimEncounterRewardResponse.EResponse response = 1 [default = k_eInternalError];
@@ -223,9 +231,18 @@ message CMsgClientToGCOverworldMoveToNodeResponse {
 }
 
 message CMsgClientToGCOverworldTradeTokens {
+	enum ETradeRecipe {
+		k_eThreeToOneChosen = 1;
+		k_eFourToOneChosen = 2;
+		k_eThreeToTwoRandom = 3;
+		k_eSixScrapToOneChosen = 4;
+	}
+
 	optional uint32 overworld_id = 1;
 	optional .CMsgOverworldTokenQuantity token_offer = 2;
 	optional .CMsgOverworldTokenQuantity token_request = 3;
+	optional .CMsgClientToGCOverworldTradeTokens.ETradeRecipe recipe = 4 [default = k_eThreeToOneChosen];
+	optional uint32 encounter_id = 5;
 }
 
 message CMsgClientToGCOverworldTradeTokensResponse {
@@ -240,10 +257,38 @@ message CMsgClientToGCOverworldTradeTokensResponse {
 		k_eInvalidOverworld = 7;
 		k_eInvalidOffer = 8;
 		k_eNotEnoughTokens = 9;
+		k_eInvalidNode = 10;
+		k_eInvalidEncounter = 11;
 	}
 
 	optional .CMsgClientToGCOverworldTradeTokensResponse.EResponse response = 1 [default = k_eInternalError];
 	optional .CMsgOverworldTokenQuantity tokens_received = 2;
+}
+
+message CMsgClientToGCOverworldGiftTokens {
+	optional uint32 overworld_id = 1;
+	optional .CMsgOverworldTokenCount token_gift = 2;
+	optional uint32 recipient_account_id = 3;
+	optional uint32 periodic_resource_id = 4;
+}
+
+message CMsgClientToGCOverworldGiftTokensResponse {
+	enum EResponse {
+		k_eInternalError = 0;
+		k_eSuccess = 1;
+		k_eTooBusy = 2;
+		k_eDisabled = 3;
+		k_eTimeout = 4;
+		k_eNotAllowed = 5;
+		k_eNodeLocked = 6;
+		k_eInvalidOverworld = 7;
+		k_eInvalidGift = 8;
+		k_eNotEnoughTokens = 9;
+		k_eInvalidRecipient = 10;
+		k_eNotEnoughPeriodicResource = 11;
+	}
+
+	optional .CMsgClientToGCOverworldGiftTokensResponse.EResponse response = 1 [default = k_eInternalError];
 }
 
 message CMsgClientToGCOverworldDevResetAll {

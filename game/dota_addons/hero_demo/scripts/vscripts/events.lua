@@ -68,8 +68,10 @@ function CHeroDemo:OnNPCSpawned( event )
 
 		local event_data =
 		{
-			hero_id = spawnedUnit:GetHeroID()
+			hero_id = spawnedUnit:GetHeroID(),
+			hero_variant = spawnedUnit:GetHeroFacetID()
 		}
+
 		CustomGameEventManager:Send_ServerToAllClients( "set_player_hero_id", event_data )
 
 		local hPlayerHero = spawnedUnit
@@ -296,8 +298,9 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 	local hPlayer = PlayerResource:GetPlayer( data.PlayerID )
 
 	local sHeroToSpawn = Convars:GetStr( "dota_hero_demo_default_enemy" )
+	local nHeroVariant = Convars:GetInt( "dota_hero_demo_default_enemy_variant" );
 
-	DebugCreateUnit( hPlayer, sHeroToSpawn, self.m_nENEMIES_TEAM, false,
+	DebugCreateHeroWithVariant( hPlayer, sHeroToSpawn, nHeroVariant, self.m_nENEMIES_TEAM, false,
 		function( hEnemy )
 			hEnemy:SetControllableByPlayer( self.m_nPlayerID, false )
 			hEnemy:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
@@ -340,15 +343,21 @@ end
 -- ButtonEvent: SelectMainHeroButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnSelectMainHeroButtonPressed( eventSourceIndex, data )
-	local sHero = DOTAGameManager:GetHeroUnitNameByID( tonumber( data.str ) )
+
+    local sep, fields = ":", {}
+    local pattern = string.format("([^%s]+)", sep)
+    data.str:gsub(pattern, function(c) fields[#fields+1] = c end)
+
+	local sHero = DOTAGameManager:GetHeroUnitNameByID( tonumber( fields[1] ) )
 	--EmitGlobalSound( "UI.Button.Pressed" )
 
 	--print( 'MAIN HERO PICK!' )
 
 	local event_data =
 	{
-		hero_id = tonumber( data.str ),
-		hero_name = sHero
+		hero_id = tonumber( fields[1] ),
+		hero_name = sHero,
+		hero_variant = tonumber( fields[2] )
 	}
 	CustomGameEventManager:Send_ServerToAllClients( "set_main_hero_id", event_data )
 end
@@ -357,16 +366,24 @@ end
 -- ButtonEvent: SelectSpawnHeroButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnSelectSpawnHeroButtonPressed( eventSourceIndex, data )
-	local sHeroToSpawn = DOTAGameManager:GetHeroUnitNameByID( tonumber( data.str ) )
+
+    local sep, fields = ":", {}
+    local pattern = string.format("([^%s]+)", sep)
+    data.str:gsub(pattern, function(c) fields[#fields+1] = c end)
+
+	local sHeroToSpawn = DOTAGameManager:GetHeroUnitNameByID( tonumber( fields[1] ) )
+
 	Convars:SetStr( "dota_hero_demo_default_enemy", sHeroToSpawn )
+	Convars:SetInt( "dota_hero_demo_default_enemy_variant", tonumber( fields[2] ) )
 	--EmitGlobalSound( "UI.Button.Pressed" )
 
 	--print( 'SPAWN HERO PICK!' )
 
 	local event_data =
 	{
-		hero_id = tonumber( data.str ),
-		hero_name = sHeroToSpawn
+		hero_id = tonumber( fields[1] ),
+		hero_name = sHeroToSpawn,
+		hero_variant = tonumber( fields[2] )
 	}
 	CustomGameEventManager:Send_ServerToAllClients( "set_spawn_hero_id", event_data )
 end
@@ -492,11 +509,15 @@ function CHeroDemo:OnSpawnAllyButtonPressed( eventSourceIndex, data )
 		return
 	end
 
+	print( 'OnSpawnAllyPressed!')
+	DeepPrintTable( data )
+
 	local hPlayer = PlayerResource:GetPlayer( data.PlayerID )
 
 	local sHeroToSpawn = Convars:GetStr( "dota_hero_demo_default_enemy" )
+	local nHeroVariant = Convars:GetInt( "dota_hero_demo_default_enemy_variant" );
 
-	DebugCreateUnit( hPlayer, sHeroToSpawn, self.m_nALLIES_TEAM, false,
+	DebugCreateHeroWithVariant( hPlayer, sHeroToSpawn, nHeroVariant, self.m_nALLIES_TEAM, false,
 		function( hAlly )
 			hAlly:SetControllableByPlayer( self.m_nPlayerID, false )
 			hAlly:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
