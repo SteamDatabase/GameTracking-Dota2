@@ -327,15 +327,17 @@ function CDotaNPXScenario_Dodging:OnTaskCompleted( event )
 						StartingItems = 
 						{
 							"item_aether_lens",
+							"item_aghanims_shard",
 						},
 						StartingAbilities	= 
 						{
 							"tinker_rearm",
 							"tinker_heat_seeking_missiles",
+							"tinker_warp_grenade",
 						}, 
 						AbilityBuild = 
 						{
-							AbilityPriority = { "tinker_heat_seeking_missiles" },
+							AbilityPriority = { "tinker_warp_grenade" },
 						},
 					},
 				},
@@ -359,15 +361,17 @@ function CDotaNPXScenario_Dodging:OnTaskCompleted( event )
 						StartingItems = 
 						{
 							"item_aether_lens",
+							"item_aghanims_shard",
 						},
 						StartingAbilities	= 
 						{
 							"tinker_rearm",
 							"tinker_heat_seeking_missiles",
+							"tinker_warp_grenade",
 						}, 
 						AbilityBuild = 
 						{
-							AbilityPriority = { "tinker_heat_seeking_missiles" },
+							AbilityPriority = { "tinker_warp_grenade" },
 						},
 					},
 				},

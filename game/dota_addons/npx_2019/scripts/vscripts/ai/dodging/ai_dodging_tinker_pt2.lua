@@ -15,7 +15,7 @@ end
 function CDodgingTinkerBot:constructor( me )
 	self.me = me
 
-	self.hAbilityMissiles = self.me:FindAbilityByName( "tinker_heat_seeking_missile" )
+	self.hAbilityMissiles = self.me:FindAbilityByName( "tinker_warp_grenade" )
 	self.hAbilityRearm = self.me:FindAbilityByName( "tinker_rearm" )
 
 
@@ -99,8 +99,9 @@ function CDodgingTinkerBot:BotThink()
 
 				ExecuteOrderFromTable( {
 				UnitIndex = self.me:entindex(),
-				OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
+				OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
 				AbilityIndex = self.hAbilityMissiles:entindex(),
+				TargetIndex = self.hAttackTarget:entindex(),
 				Queue = true
 			} )
 			self.LastMissileTime = GameRules:GetGameTime()
