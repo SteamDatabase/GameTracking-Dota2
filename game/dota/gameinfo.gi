@@ -259,6 +259,7 @@
 		"cl_predict"				"0"
 		"cl_usesocketsforloopback" "1"
 		"sv_early_network_message_processing" "1"
+		"disable_source_soundscape_trace" "1"
 	}
 
 	pulse

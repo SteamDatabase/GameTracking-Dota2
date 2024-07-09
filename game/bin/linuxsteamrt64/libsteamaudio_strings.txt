@@ -335,6 +335,7 @@ BakeReverb
 BakeReverb: Cancelled
 BakeReverb: Max probes (%u) limit exceeded (%d). Bake cancelled.
 BakeReverb: Saved %zu bytes.
+BakeReverb: Unable to create probe array. (%d)
 BakeReverb: Unable to create probe batch. (%d)
 BakeReverb: Unable to create serialized object. (%d)
 BakedLODBuilderMgr001
@@ -451,6 +452,7 @@ CUtlBuffer::EnsureCapacity(int)
 CUtlBuffer::Get(void*, int)
 CUtlBuffer::GetLine(char*, int)
 CUtlBuffer::GetString(CBufferString*)
+CUtlBuffer::GetUpTo(void*, int)
 CUtlBuffer::Printf(char const*, ...)
 CUtlBuffer::Put(void const*, int)
 CUtlBuffer::SeekGet(CUtlBuffer::SeekType_t, int)
@@ -503,7 +505,6 @@ CreateInterface
 CreateSimpleThread
 CrlID
 D
-D,F
 D16_UNORM
 D24_UNORM_S8_UINT
 D32_FLOAT
@@ -565,7 +566,6 @@ EarlyInit_Tier0
 EconItemToolModel_001
 Edge [ %d / %d ] connection count: %d
 Eg*
-Enable SIMD code path for shoebox reverb processor.
 Enable caching listener probe neighborhood for pathing.
 Enable custom HRTF loading.
 Enable perspective correction for 3D audio.
@@ -654,7 +654,6 @@ GetNearestNav: Area[%d] blocked
 GetNearestNav: Area[%d] completely disconnected
 GetNearestNav: Area[%d] failed LOS to original point
 GetNearestNav: Area[%d] failed LOS to original point above the area
-GetNearestNav: Area[%d] failed to find closest point on poly
 GetNearestNav: Area[%d] is terminus
 GetNearestNav: Area[%d] only has incoming connections
 GetNearestNav: Area[%d] only outside connections
@@ -669,6 +668,7 @@ GetNearestNav: Empty Grid
 GetNearestNav: Invalid Ground Height
 GetNearestNav: Pos Invalid
 GetNearestNav: Returning area [%d]
+GetNearestNav: [%d] Areas that failed poly test
 GetResourceManifestCount
 GetResourceManifests
 Gg*
@@ -1121,6 +1121,9 @@ ResourceCompiler/SteamAudio/PathingDefaults/ProbeVisRadius
 ResourceCompiler/SteamAudio/PathingDefaults/ProbeVisThreshold
 ResourceCompiler/SteamAudio/PathingDefaults/RebakeOption
 ResourceCompiler/SteamAudio/Reverb/AmbisonicsOrder
+ResourceCompiler/SteamAudio/ReverbDefaults/ClusteringCubemapResolution
+ResourceCompiler/SteamAudio/ReverbDefaults/ClusteringDepthThreshold
+ResourceCompiler/SteamAudio/ReverbDefaults/ClusteringEnabled
 ResourceCompiler/SteamAudio/ReverbDefaults/GridSpacing
 ResourceCompiler/SteamAudio/ReverbDefaults/GridType
 ResourceCompiler/SteamAudio/ReverbDefaults/HeightAboveFloor
@@ -1331,6 +1334,7 @@ TLS Web Server Authentication
 TLS init function for
 TLS wrapper function for
 TS lib
+TanFrameQuat
 TestScriptMgr001
 TextLayout_001
 The Navigation Mesh was built with an old server dll - reanalyze the mesh!
@@ -1421,6 +1425,7 @@ VTT for std::basic_ostream<wchar_t, std::char_traits<wchar_t> >
 VTT for std::iostream
 VTT for std::istream
 VTT for std::ostream
+VWebm001
 V_DoubleToString_Unsafe
 V_FixDoubleSlashes
 V_FloatToString_Unsafe
@@ -2614,9 +2619,11 @@ iplHRTFRelease
 iplImpulseResponse2AddChannel
 iplImpulseResponse2AddSample
 iplImpulseResponse2Create
+iplImpulseResponse2GetChannel
 iplImpulseResponse2Release
 iplImpulseResponse2Reset
 iplImpulseResponse2SetChannel
+iplImpulseResponse2SetChannelDelayed
 iplImpulseResponse2SetSample
 iplImpulseResponse2Swap
 iplImpulseResponse2SwapSource
@@ -2630,12 +2637,18 @@ iplProbeArrayGenerateProbes
 iplProbeArrayGetNumProbes
 iplProbeArrayGetProbe
 iplProbeArrayRelease
+iplProbeArrayResize
+iplProbeArraySetProbe
 iplProbeBatchAddProbe
+iplProbeBatchAddProbeArray
+iplProbeBatchAddProbeArrayAndCluster
 iplProbeBatchCommit
 iplProbeBatchCreate
+iplProbeBatchCreateNonUniform
 iplProbeBatchGetInfluencingProbes
 iplProbeBatchGetProbeArray
 iplProbeBatchLoad
+iplProbeBatchLoadNonUniform
 iplProbeBatchRelease
 iplProbeBatchSave
 iplProbeNeighborhoodCalculateWeights
@@ -5983,6 +5996,9 @@ steamaudio_pathing_visibility_samples
 steamaudio_pathing_visibility_threshold
 steamaudio_reverb_ambisonic_order
 steamaudio_reverb_bounces
+steamaudio_reverb_clustering_cubemap_resolution
+steamaudio_reverb_clustering_depth_threshold
+steamaudio_reverb_clustering_enable
 steamaudio_reverb_grid_spacing
 steamaudio_reverb_grid_type
 steamaudio_reverb_height_above_floor
