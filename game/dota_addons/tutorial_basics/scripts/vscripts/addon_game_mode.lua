@@ -331,7 +331,7 @@ function CTutorialBasics:OnLastHit( event )
 end
 
 function CTutorialBasics:OnTowerKill( event )
-	if ( event.teamnumber == 3 ) then
+	if ( event.teamnumber == 2 ) then
 		self:_FireEvent( ON_TOWER_KILL_GOOD )
 	else
 		self:_FireEvent( ON_TOWER_KILL_BAD )
