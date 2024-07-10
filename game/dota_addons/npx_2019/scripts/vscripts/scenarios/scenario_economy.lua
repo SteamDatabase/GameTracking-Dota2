@@ -353,7 +353,7 @@ function CDOTANPXScenario_Economy:SetupTask_CompleteEchoSabre()
 	end 
 
 	local earnGoldTask = buyInitialItemsTask:AddTask( CDotaNPXTask_EarnGold( {
-		TaskName = "earn_gold_for_robe",
+		TaskName = "earn_gold_for_void_stone",
 		TaskParams =
 		{
 			Gold = GetCostOfItem( "item_void_stone" ) / 2,
@@ -512,7 +512,7 @@ function CDOTANPXScenario_Economy:SetupTask_EarnLevelsAndExperience()
 		TaskName = "learn_a_talent",
 		TaskParams = 
 		{
-			AbilityName = "special_bonus_attack_speed_15",
+			AbilityName = "special_bonus_attack_speed_20",
 			WhiteList = true,
 		},
 	}, self ), 2 )
