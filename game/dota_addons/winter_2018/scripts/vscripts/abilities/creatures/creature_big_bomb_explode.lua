@@ -45,7 +45,7 @@ function creature_big_bomb_explode:OnSpellStart()
 							attacker = self:GetCaster(), 
 							damage = flDamage,
 							damage_type = DAMAGE_TYPE_PHYSICAL,
-							damage_flags = DOTA_DAMAGE_FLAG_BYPASSES_BLOCK,
+							damage_flags = DOTA_DAMAGE_FLAG_BYPASSES_PHYSICAL_BLOCK,
 							ability = self
 						}
 						ApplyDamage( damage )
