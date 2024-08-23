@@ -4,8 +4,6 @@
 //
 //==================================================================================================
 
-@mapsize(-16384, 16384)
-
 
 //--------------------------------------------------------------------------------------------------
 // Auto vis groups
@@ -32,6 +30,7 @@
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsoccluder.vmat"			group =	"Occluder"			parent_group = "Tool Brushes" }
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsprecipitation.vmat"	group =	"Precipitation"		parent_group = "Tool Brushes" }
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsblockbullets.vmat"		group =	"Bullets"			parent_group = "Clip" }
+@VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsnavspaceclip.vmat"		group =	"Nav Space Clip"	parent_group = "Clip" }
 
 @VisGroupFilter { filter_type = "entityTag"		tag = "Lighting"		group = "Lighting"			parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "Sound"			group = "Sound"				parent_group = "Entities" }
@@ -49,7 +48,7 @@
 @VisGroupFilter { filter_type = "entityTag"		tag = "PropDynamic"		group = "Dynamic Props"		parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "Overlay"			group = "Dynamic Overlays"	parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "PostProcessing"	group = "Post Processing"	parent_group = "Entities" }
-
+@VisGroupFilter { filter_type = "entityTag"		tag = "PlayerPosition"	group = "Player Positions"	parent_group = "Entities" }
 
 
 //-------------------------------------------------------------------------
@@ -109,6 +108,7 @@
 [
 	input Kill(void) : "Removes this entity from the world."
 	input KillHierarchy(void) : "Removes this entity and all its children from the world."
+	input KillConstrained(void) : "Removes this entity, all its children, and anything constrained to it, from the world."
 
 	// Inputs
 	input AddOutput(string) : "Adds an entity I/O connection to this entity. Parameter format: outputname>targetname>inputname>parameter>delay>max times to fire (-1 == infinite). Very dangerous, use with care."
@@ -2493,17 +2493,15 @@
 	input Activate(void) : "Force the decal to apply itself to the world."
 ]
 
-@PointClass base(Targetname, EnableDisable, PlayerClass) tags( Info ) editormodel("models/editor/playerstart.vmdl", fixedbounds) = info_player_start :
+@PointClass base(Targetname, EnableDisable, PlayerClass) tags( Info, PlayerPosition ) editormodel("models/editor/playerstart.vmdl", fixedbounds) = info_player_start :
 	"This entity indicates the position and facing direction at which the player will spawn. Any number of "+
 	"info_player_start entities may be placed in a map for when working in cordoned-off portions of the map. "+
 	"When multiple info_player_start entities are present in a map, set the 'Master' spawnflag on one of them "+
 	"to indicate which one should be used when running the entire map."
 [
-	spawnflags(flags) =
-	[
-		1: "Master (Has priority if multiple info_player_starts exist)" : 0
-		2: "VR Anchor location (vs player location)" : 0
-	]
+	StartDisabled(boolean) : "Start Disabled" : 0
+	IsMaster(boolean) : "Master" : 0 : "Master has priority if multiple info_player_starts exist"
+	PawnSubclass( vdata_choice:scripts/player.vdata ) : "Pawn Subclass" : "" : "Subclass of the player pawn to spawn."
 
 	input Toggle(void) : "Toggle the enable/disable state of this player spawn position."
 ]
@@ -2704,6 +2702,9 @@
 	input StopPlayEndCap(void) : "Tell the particle system to stop emitting and play its End Cap Effect."
 	input DestroyImmediately(void) : "Destroy the particle system and remove all particles immediately."
 	input SetControlPoint(string) : "Set a Control Point via format - CP: X Y Z"
+	input SetDataControlPointX(float) : "Set X Component of Data Control Point"
+	input SetDataControlPointY(float) : "Set Y Component of Data Control Point"
+	input SetDataControlPointZ(float) : "Set Z Component of Data Control Point"
 ]
 
 
@@ -2895,6 +2896,7 @@
 		2 : "Closed position (position = 0)"
 	]
 	NoInterpolate(boolean) [ group="Misc" ] : "Disable Client-Side Interpolation" : 0
+	MoveWithoutPushingBlockers(boolean) [ group="Misc" ] : "Move Without Pushing Blockers" : 0 : "Just moves the entity and anything attached to it, without going the expensive process of finding and pushing potentially blocking brush entities and NPCs. Will still push dynamic physics entities."
 
 	speed(integer) : "Speed" : 100 : "The speed that the brush moves, in inches per second."
 	movedistance(float) : "Move Distance" : 100 : "The distance from the starting point that the brush should move, in inches."
@@ -2944,6 +2946,7 @@
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 	dmg(integer) : "Blocking Damage" : 0 : "Damage done to any entity that blocks the rotation, per frame."
 	NoInterpolate(boolean) [ group="Misc" ] : "Disable Client-Side Interpolation" : 0
+	MoveWithoutPushingBlockers(boolean) [ group="Misc" ] : "Move Without Pushing Blockers" : 0 : "Just rotates the entity and anything attached to it, without going the expensive process of finding and pushing potentially blocking brush entities and NPCs. Will still push dynamic physics entities."
 
 	solidbsp(choices) : "Solid Type" : 0 =
 	[
@@ -2952,9 +2955,9 @@
 	]
 
 	// Inputs
-	input SetSpeed(float) : "Set the speed as a ratio of the specified Max Rotation Speed, where 0 is stopped and 1 is the Max Rotation Speed. Negative values rotate backwards."
+	input SetSpeed(float) : "Sets the speed as a ratio of the specified Max Rotation Speed, where 0 is stopped and 1 is the Max Rotation Speed. Negative values rotate backwards. Any non-zero values with this call will cause rotating to start"
 	input SnapToStartPos(void) : "Snap to the initial position and stop moving."
-	input Start(void) : "Start the rotator rotating."
+	input Start(void) : "Start the rotator rotating at maximum Speed"
 	input Stop(void) : "Stop the rotator from rotating."
 	input StopAtStartPos(void) : "Stop the rotator from rotating when it gets around to the start position again (on its rotation axis)."
 	input SetStartPos(vector) : "Set angles that can be snapped back to."
@@ -7316,6 +7319,8 @@
 	DamagePositioningEntity02(target_destination) : "Damage Position 02" : : "If set, this helper position is used for Hit input damage."
 	DamagePositioningEntity03(target_destination) : "Damage Position 03" : : "If set, this helper position is used for Hit input damage."
 	DamagePositioningEntity04(target_destination) : "Damage Position 04" : : "If set, this helper position is used for Hit input damage."
+	
+	DamagedMaterial(material) : "Damaged Material" : "" : "Material to swap to when damaged (optional)"
 ]
 
 @PointClass base(Targetname, Parentname, EnableDisable) tags( Lighting ) sphere() 
@@ -7390,6 +7395,7 @@
 	HeightFogDepth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Vertical Depth" : 48 : "Vertical depth before height fog is maximum intensity"
 	HeightFogEdgeWidth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Edge Width" : 96 : "Horizonal fade width of height fog"
 
+    AllowLPVIndirect(bool) : "Allow LPV Indirect" : "1" : "Allow using LPVs for indirect lighting: higher resolution, but will not honor fog lighting enable/disable on lights"
 	OverrideFogIndirectStrength(bool) : "Override Fog Indirect Lighting Strength" : "0"
 	FogIndirectStrength(float) { min="0.0" enabled={ variable="OverrideFogIndirectStrength" value="1" } } : "Fog Indirect Lighting Strength" : "1.0" : "Volume-local scalar for indirect lighting strength"
 
@@ -7498,6 +7504,7 @@ centered_box_oriented
 	}
 = path_node_particle_rope
 [
+	node_name(string) : "Node Name" : "" : "A name to assign to the node that can be used to refer to the node on the path to toggle pinning on specific path nodes via entity I/O."
 	radius_scale(float) : "Radius Scale" : "1.0" : "Radius multiplier value"
 	color_tint(color255) : "Color Tint" : "255 255 255"
 	pin_enabled(bool) : "Pin Enabled" : "1" : "If enabled, the rope simulation treats this node a locaiton to which the rope is attached."

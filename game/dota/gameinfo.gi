@@ -206,11 +206,11 @@
 
 		"DeprecatedBehaviorVersionsAllowed"	"1"
 
-	        MeshCompiler
-	        {
-	            EncodeVertexBuffer      "1"
-	            EncodeIndexBuffer       "1"
-	        }
+		MeshCompiler
+		{
+			EncodeVertexBuffer      "1"
+			EncodeIndexBuffer       "1"
+		}
 
 		WorldRendererBuilder
 		{
@@ -225,6 +225,12 @@
 		{
 			CompilerVersion "1"
 		//	CompileForCompare "1"
+		}
+
+		ExperimentalVDataLocalization
+		{
+			GameOutputPath	"resource/localization/vdata"
+			TokenPrefix		"DOTA_VData_"
 		}
 	}
 

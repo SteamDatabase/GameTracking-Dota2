@@ -142,7 +142,6 @@ $toolgraphs
 *ZN21VMixEffectChainDesc_t22GetAttributeTable_ImplEP10CUtlVectorIP13IBaseToolAttri10CUtlMemoryIS2_iEEE23CAttr_m_flCrossfadeTime
 *ZN25CVoiceContainerGranulator17Finalize_InternalEvEUlvE_
 *ZN25CVoiceContainerGranulator18BindInstanceParamsER10CUtlVectorISt10unique_ptrIN19CVoiceContainerBase14CParameterBaseESt14default_deleteIS3_EEi10CUtlMemoryIS6_iEEEUlPNS_19CGranulatorInstanceERKfE1_
-*ZN25CVoiceContainerGranulator18BindInstanceParamsER10CUtlVectorISt10unique_ptrIN19CVoiceContainerBase14CParameterBaseESt14default_deleteIS3_EEi10CUtlMemoryIS6_iEEEUlPNS_19CGranulatorInstanceERKfE2_
 *ZN25CVoiceContainerGranulator18BindInstanceParamsER10CUtlVectorISt10unique_ptrIN19CVoiceContainerBase14CParameterBaseESt14default_deleteIS3_EEi10CUtlMemoryIS6_iEEEUlPNS_19CGranulatorInstanceERKiE0_
 *ZN25CVoiceContainerGranulator18BindInstanceParamsER10CUtlVectorISt10unique_ptrIN19CVoiceContainerBase14CParameterBaseESt14default_deleteIS3_EEi10CUtlMemoryIS6_iEEEUlPNS_19CGranulatorInstanceERKiE_
 *ZN28CVoiceContainerRandomSampler17Finalize_InternalEvEUlvE_
@@ -323,9 +322,11 @@ $toolgraphs
 19CSosOperatorGlobals
 19CSosOperatorPosVec8
 19CTestBlendContainer
+19CVSndParameterTable
 19CVoiceContainerBase
 19CVoiceContainerNull
 19CVoiceContainerVOIP
+19IVSndParameterTable
 1:1: Tokens : ( T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | TOK_COLON | OPEN_BRACE | CLOSE_BRACE | OPEN_PAREN | CLOSE_PAREN | OPEN_BRACKET | CLOSE_BRACKET | SEMICOLON | OP_EQUAL | COMMA | DOUBLE_AND | NEGATIVE_TOK | DOUBLE_OR | LITERAL_TRUE | LITERAL_FALSE | POS_INTLITERAL | POS_FLOATLITERAL | ID | DOUBLE_QUOTED_STRING | SINGLE_QUOTED_STRING | SINGLE_LINE_COMMENT | ML_COMMENT | WS | UNRECOGNIZED );
 20CAudioDecoderEncoded
 20CAudioDecoderStretch
@@ -523,6 +524,7 @@ $toolgraphs
 26CSteamAudioDirectProcessor
 26CStereoDelayAudioProcessor
 26CVoiceContainerLoopTrigger
+26CVoiceContainerShapedNoise
 27CSosOperatorEntityGetHealth
 27CSosOperatorEntityWorldAABB
 27CSosOperatorFloatToSpeakers
@@ -671,6 +673,7 @@ $toolgraphs
 36CSosOperatorLogicSwitch3StringHandle
 36CVoiceContainerAmpedDecayingSineWave
 37CSosGroupActionSetSoundeventParameter
+37CSosGroupActionSoundeventMinMaxValues
 37CSosOperatorCalcWeightedAvgSerialVec3
 37CSosOperatorSetContainerInstanceParam
 38CSosGroupActionSoundeventClusterSchema
@@ -682,6 +685,7 @@ $toolgraphs
 40CSosOperatorLogicPerspectiveSwitchString
 41CSosOperatorCalcInterpolatedRotationAngle
 43CSosGroupActionSetSoundeventParameterSchema
+43CSosGroupActionSoundeventMinMaxValuesSchema
 47CSchemaRegistration_soundsystem_voicecontainers
 488:1: POS_FLOATLITERAL : ( ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )? | '.' ( DIGIT )+ ( EXPONENT )? | ( DIGIT )+ EXPONENT );
 4Set Num Grains
@@ -712,8 +716,8 @@ $toolgraphs
 ?Unknown graph input %s\n
 ?__procedural__
 ?convar_set
-?m_nGuid
-?snd_rear_stereo_speaker_position
+?m_vOrigin
+?snd_front_stereo_speaker_position
 ?soundeventdata_start
 ?soundmixer_get_mixgroup
 @%s.output
@@ -746,7 +750,6 @@ AddSoundEvents: SoundEvent %s was unable to convert to KV3.
 AddSoundEvents: SoundEvent file %s was not compiled from a KeyValues3 file and is being converted. Please recompile.\n
 AddSoundEvents: event with empty name\n
 AddStackKV3: Cannot find "operators" array in stack %s\n
-Added %s to RANDOM SELECTOR.\n
 Added %s to TRASHSYNTH.\n
 Adding operator stack matching existing name: %s\n
 Additive Synth Container
@@ -761,7 +764,6 @@ An array of containers that are played all at once.
 Analysis Container
 Application is not loaded.
 Apply cos(angle) * weight before pan law
-Arg Name: "%s" Type: %s
 Args: [Asset directory Path]
 Args: [Voice Container Path]
 Arrangement: %s\n
@@ -861,6 +863,7 @@ CSosGroupActionSchema
 CSosGroupActionSetSoundeventParameterSchema
 CSosGroupActionSoundeventClusterSchema
 CSosGroupActionSoundeventCountSchema
+CSosGroupActionSoundeventMinMaxValuesSchema
 CSosGroupActionSoundeventPrioritySchema
 CSosGroupActionTimeBlockLimitSchema
 CSosGroupActionTimeLimitSchema
@@ -912,12 +915,14 @@ CSosOperatorStack::SetOpFieldData: Incoming data size %i greater than field %s, 
 CSosOperatorStartSoundEvent
 CSosOperatorSystem::SetOpField: Unable to find operator stack %s\n
 CSosOperatorSystem::SetOpField: Unable to find operator stack from guid %d\n
+CSosOperatorSystem::StartSoundEvent Unable to find soundevent "core.empty" \n
 CSosOperatorSystem::StartSoundEvent Unable to find soundevent %s\n
 CSosOperatorSystem::StartSoundEvent Unable to start soundevent %s\n
 CSosOperatorSystem::StartSoundEvent called with invalid soundevent hash\n
 CSosSoundEventGroupListSchema
 CSosSoundEventGroupSchema
 CSoundContainerReference
+CSoundContainerReferenceArray
 CSoundDebugVisualizer
 CSoundEvent: %s\nBase: %s\nType: %s\nFields:\n
 CSoundEventMetaData
@@ -963,12 +968,12 @@ CVoiceContainerGranulator
 CVoiceContainerLoopTrigger
 CVoiceContainerNull
 CVoiceContainerRandomSampler
-CVoiceContainerRandomSampler: Cleaning up data for %d instances.\n
 CVoiceContainerRandomSampler: Loaded %d grains into table Total of %lld samples, %f MB.\n
 CVoiceContainerRealtimeFMSineWave
 CVoiceContainerSelector
 CVoiceContainerSet
 CVoiceContainerSetElement
+CVoiceContainerShapedNoise
 CVoiceContainerStaticAdditiveSynth
 CVoiceContainerStaticAdditiveSynth::CGainScalePerInstance
 CVoiceContainerStaticAdditiveSynth::CHarmonic
@@ -1162,6 +1167,10 @@ Event Data: %i\n
 Event Name
 Event VSNDS:\n
 Exclude Stopped Sounds from Count
+Exclude delayed sounds from evaluation
+Exclude sounds from evaluation greater than or equal to a max value threshold.
+Exclude sounds from evaluation less than or equal to a min value threshold.
+Exclude stopped sounds from evaluation
 Exponential
 Exponential Ramp
 Exports scene currently used by Steam Audio as a phononscene file.
@@ -1232,16 +1241,18 @@ Float( %f )
 Flush all unlocked async audio data
 Flush and re-parse the sound operator system
 For testing the audio input pathway with a sine tone instead of SDL3.
+Force
 Forward Saw
 Found %d probes in %s.\n
 Free ?: %s\n
+Frequency Sweep
 G_Sharp
+Gain Sweep (in Decibels)
 Game v.o. volume
 Game volume
 Game/Sound System Debugger
 Generated a nulled out container.
 Generates an Envelope Curve on compile
-Generating RANDOM SELECTOR.\n
 Generating TRASHSYNTH.\n
 Ges-8R
 Get data related to mix group matching string
@@ -1370,12 +1381,14 @@ Max Target Count
 Max Time
 Max reverb gain amount for listener DSP.
 Max reverb gain amount for source-specific DSP.
+Max value property name
 Maximum Value
 Member Lifespan Time
 Mid EQ gain (dB)
 Min Threshold Count
 Min reverb gain amount amount for listener DSP.
 Min reverb gain amount for source-specific DSP.
+Min value property name
 Minimum Nearby Soundevents
 Minimum Value
 Mirror
@@ -1415,6 +1428,7 @@ N19CVoiceContainerBase10CParameterIN25CVoiceContainerGranulator19CGranulatorInst
 N19CVoiceContainerBase10CParameterIN28CVoiceContainerRandomSampler26CRandomSamplerInstanceViewEiEE
 N19CVoiceContainerBase10CParameterIN33CVoiceContainerRealtimeFMSineWave15CFMSineInstanceEfEE
 N19CVoiceContainerBase10CParameterIN34CVoiceContainerStaticAdditiveSynth26CAdditiveSynthInstanceViewEiEE
+N19CVoiceContainerBase10CParameterINS_13CInstanceBaseEfEE
 N19CVoiceContainerBase10CParameterINS_13CInstanceBaseEiEE
 N19CVoiceContainerBase13CInstanceBaseE
 N19CVoiceContainerBase14CParameterBaseE
@@ -1424,6 +1438,7 @@ N19CVoiceContainerNull22CNullContainerInstanceE
 N19CVoiceContainerVOIP13CVOIPInstanceE
 N19CVoiceContainerVOIP17CVOIPPlaybackDataE
 N25CVoiceContainerGranulator19CGranulatorInstanceE
+N26CVoiceContainerShapedNoise9CInstanceE
 N28CVoiceContainerRandomSampler26CRandomSamplerInstanceViewE
 N29CVSoundStackScriptTypeManager19CAsyncProcessResultE
 N31CVoiceContainerDecayingSineWave13CSineInstanceE
@@ -1449,7 +1464,6 @@ No input data for '%s'. (Empty buffer.)
 No map found.
 No probes found in %s.\n
 No scene loaded to export as Steam Audio scene.\n
-Noise
 Not safe to 'new' this class due to alignment requirements
 Note: Array declaration using table syntax on field %s in stack %s. Please convert.\n
 Note: Double array found in field %s in stack %s, value: %s\n
@@ -1488,7 +1502,6 @@ Output Balance
 Output Gain (dB)
 OutputPosToVmix
 Oversampling
-PA:C
 PANNER_TYPE_EQUAL_POWER
 PANNER_TYPE_LINEAR
 PARAM COUNT COMPARE FAIL: %s->%s\n
@@ -1557,6 +1570,8 @@ ProcessSoundEvent: Sound Event %s field %s data count doesn't match field type.\
 ProcessSoundEvent: Sound Event %s field %s illegal empty array detected.\n
 ProcessSoundEvent: Sound Event %s, field %s: array length exceeds currently maximum of %i".\n
 ProcessSoundEvent: Sound Event %s, field %s: total array length of all soundevent_data has exceeded maximum selection bits for "random_exclusive".\n\t%i selection bytes reguired\n\t%i bytes available!\n
+Public field 'delay' name.
+Public field name to query.
 Purge and reload all vmidi data and files.
 PurgeAndDeleteAll: Deleting orphaned CSoundEvent pointer for %s via shutdown\n
 Q8>w
@@ -1586,13 +1601,16 @@ Recognition exception
 Reference dB at snd_refdist
 Reference distance for snd_refdb
 Reference to a vsnd file or another container.
+Reference to list of vsnd files or other containers.
 Regenerate curve on compile
+Relative Weights
 Release Time MS
 Release time (ms)
 Reload soundmixers.txt file.
 Remove all soundevents
 Remove the specified soundevent
 Resolve the inputs and execute one specified operator from a specified stack
+Resonance Sweep
 Result Current Count
 Result Variable Name
 Retrigger Tone
@@ -1650,6 +1668,7 @@ SOS_ACTION_NONE
 SOS_ACTION_SET_SOUNDEVENT_PARAM
 SOS_ACTION_SOUNDEVENT_CLUSTER
 SOS_ACTION_SOUNDEVENT_COUNT
+SOS_ACTION_SOUNDEVENT_MIN_MAX_VALUES
 SOS_ACTION_SOUNDEVENT_PRIORITY
 SOS_ACTION_TIME_BLOCK_LIMITER
 SOS_ACTION_TIME_LIMIT
@@ -1734,10 +1753,11 @@ SosOpFieldInfo_t::GetValue: index %i out of range on %s\n
 SosOpFieldInfo_t::SetValue: index %i out of range on %s\n
 SosOpFieldInfo_t::ValueToString: Unable to find ENUM match for %i on %s\n
 SosOpFieldInfo_t::ValueToString: Unable to find ENUM tokenset on %s\n
+Sound Array 
 Sound Disabled
 Sound Disabled.\n
 Sound Event
-Sound Initialization: Finish, Sampling Rate: %i\n
+Sound Initialization: Finish, Device Sampling Rate: %i\n
 Sound device in use (changing this does not change the soundsystem).
 Sound device synchronization max delay (ms)
 Sound device synchronization shift (ms)
@@ -1761,9 +1781,9 @@ SoundSystem/WaveDataCacheSizeMB
 SoundSystem/WaveDataCacheSizeMB_LowFragmentation
 SoundSystemDebug
 SoundSystemLowLevel
-SoundWithProbability_t
 Soundevent Cluster
 Soundevent Count
+Soundevent Min/Max Values
 Soundevent Priority
 Soundevent param overwrites: %s:\n
 Sounds To play
@@ -1804,6 +1824,7 @@ StartTime: %f\n
 Starts VSND: %s\nStarts Event(s): %s\n
 Starts a specified soundevent
 Starts a specified soundevent at the given position
+Starts a specified stack via an empty soundevent
 Starts the specified arrangement.
 Static
 Status: \t%d, %d (mix channels:%d)\n
@@ -1840,8 +1861,11 @@ The amount to multiply the volume of the non-spatialized reverb/dsp by when at t
 The amount to multiply the volume of the non-spatialized reverb/dsp by when at the min reverb blend distance. 1.0 leaves the volume unchanged.
 The frequency of the sine tone modulating this sine tone.
 The frequency of this sine tone.
+The maximum threshold value to exclude sounds.
+The minimum threshold value to exclude sounds.
 The soundsystem requires the filesystem to run!\n
 This is a static additive synth that can scale components of the synth based on how many instances are running.
+This is a synth meant to generate whoosh noises.
 Threshold (dB)
 Threshold Value
 Threshold dB
@@ -2051,6 +2075,7 @@ Warning: vsnd %s is not yet loaded, queueing for load on next play.\n
 When a source has source-specific DSP, this can be used as an additional mix stage for the listener reverb amount.
 When on, silences all DSP mixes.
 Width Reflectivity
+Wind Generator Container
 Won't age handle!\n
 Wrong arg count for '%s' %d, expected 1
 Wrong arg count for '%s' %d, expected 2
@@ -2119,6 +2144,7 @@ _editor_
 _field_properties
 _fixed
 _include
+_localization_path
 _math_delta
 _multibase
 _not_pickable
@@ -2249,6 +2275,7 @@ convar_get
 convar_set
 core.auto
 core.default
+core.empty
 core.null
 core.voip
 core_update_default
@@ -2792,6 +2819,9 @@ m_bBassMono
 m_bCrossFade
 m_bEnable
 m_bEnableFilter
+m_bExcludSoundsAboveThreshold
+m_bExcludeDelayedSounds
+m_bExcludeSoundsBelowThreshold
 m_bExcludeStoppedSounds
 m_bInvertMatch
 m_bIsBlocking
@@ -2817,6 +2847,15 @@ m_bShouldPause
 m_bShouldVoiceDuck
 m_bSolo
 m_bSyncInstances
+m_bUseCurveForAmplitude
+m_bUseCurveForAmplitude == 0
+m_bUseCurveForAmplitude == 1
+m_bUseCurveForFrequency
+m_bUseCurveForFrequency == 0
+m_bUseCurveForFrequency == 1
+m_bUseCurveForResonance
+m_bUseCurveForResonance == 0
+m_bUseCurveForResonance == 1
 m_bUseReference
 m_bUseReference == 0
 m_bUseReference == 1
@@ -2835,7 +2874,7 @@ m_dspName
 m_effectName
 m_effectsPreview
 m_encodedHeader
-m_fProbabilityWeight
+m_fProbabilityWeights
 m_feedbackFilter
 m_filter
 m_filterType
@@ -2867,6 +2906,8 @@ m_flEaseOut
 m_flElapsedTime
 m_flEntIndex
 m_flEnvelopeAmount
+m_flExcludeSoundsMaxThresholdValue
+m_flExcludeSoundsMinThresholdValue
 m_flFadeTime
 m_flFeedback
 m_flFeedbackDepth
@@ -2880,6 +2921,7 @@ m_flFreqRangeEnd
 m_flFreqRangeStart
 m_flFrequency
 m_flGainAmount
+m_flGainInDecibels
 m_flGlideTime
 m_flGrainCrossfadeAmount
 m_flGrainLength
@@ -2925,6 +2967,7 @@ m_flRatio
 m_flRatioAbove
 m_flRatioBelow
 m_flReleaseTimeMS
+m_flResonance
 m_flRetriggerTimeMax
 m_flRetriggerTimeMin
 m_flRoomSize
@@ -2969,6 +3012,8 @@ m_fldbThresholdAbove
 m_fldbThresholdBelow
 m_flxfade
 m_freq
+m_frequencySweep
+m_gainSweep
 m_grainResources
 m_graphName
 m_graphPreview
@@ -3000,6 +3045,7 @@ m_nFormat
 m_nFundamental
 m_nGrainSampleCount
 m_nGraphOutputChannels
+m_nGuid
 m_nInstancesAtMaxVolume
 m_nInstancesAtMinVolume
 m_nLFOShape
@@ -3038,6 +3084,7 @@ m_opvarName
 m_opvarString
 m_pHandle
 m_pSound
+m_pSounds
 m_pStack
 m_pVoice
 m_params
@@ -3046,6 +3093,7 @@ m_previewList
 m_priorityContributeButDontRead
 m_priorityValue
 m_priorityVolumeScalar
+m_resonanceSweep
 m_resultVarName
 m_samples
 m_secondSound
@@ -3062,6 +3110,10 @@ m_soundsToPlay
 m_sourceAudio
 m_stages
 m_strCountKeyName
+m_strDelayPublicFieldName
+m_strMaxValueName
+m_strMinValueName
+m_strQueryPublicFieldName
 m_subgraphs
 m_table
 m_times
@@ -3070,7 +3122,6 @@ m_trackName
 m_vActions
 m_vHandLeft
 m_vHandRight
-m_vOrigin
 m_vSound
 m_valueArrays
 m_values
@@ -3137,6 +3188,7 @@ memcpy
 memmove
 memset
 metadata
+min_max_query
 min_note
 min_output
 min_velocity_db
@@ -3278,6 +3330,7 @@ output_entity_scale
 output_event_finished
 output_event_playing
 output_events_matching
+output_frame_time
 output_goto_count
 output_guid
 output_host_elapsed_time
@@ -3347,6 +3400,7 @@ output_snd_gamesound_convar
 output_snd_gamevoice_convar
 output_snd_musicvolume_convar
 output_sound_areas_exist
+output_soundevent_name
 output_spread
 output_stop_elapsed_time
 output_stopped
@@ -3492,7 +3546,6 @@ snd_enable_subgraph_log
 snd_envelope_rate
 snd_filter
 snd_front_headphone_position
-snd_front_stereo_speaker_position
 snd_front_surround_speaker_position
 snd_gain
 snd_gain_max
@@ -3544,6 +3597,7 @@ snd_print_soundevent %s
 snd_print_soundevent_default_public_properties
 snd_rear_headphone_position
 snd_rear_stereo_scale
+snd_rear_stereo_speaker_position
 snd_rear_surround_speaker_position
 snd_refdb
 snd_remove_all_soundevents
@@ -3625,6 +3679,7 @@ snd_sos_soundevent_max_deferred_time
 snd_sos_soundevent_profile
 snd_sos_start_soundevent
 snd_sos_start_soundevent_at_pos
+snd_sos_start_stack
 snd_sos_stop_all_soundevents
 snd_sos_stop_soundevent_guid
 snd_sos_stop_soundevent_index
@@ -3693,7 +3748,6 @@ soundevent_group_quit
 soundevent_group_set_float
 soundevent_group_stop
 soundevent_limiter
-soundevent_name
 soundevent_param
 soundevent_pause
 soundevent_samples

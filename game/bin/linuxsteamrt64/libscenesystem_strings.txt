@@ -23,6 +23,7 @@
   w/ large threshold: %d,
   w/ zero threshold: %d,
   w/ zero threshold: (%.1f, %.1f)
+ (EXTERN)
  (Frozen)
  (Owned)
  (auto)
@@ -291,6 +292,7 @@
 %.10f grams
 %.1fmb / %.1fmb filtered resident
 %.1fmb / %.1fmb resident
+%.1fms culling, %.1fms rendering in %i jobs\n
 %.2f px
 %.2f x %.2f
 %.2f\nsec
@@ -329,7 +331,9 @@
 %i The quick brown fox jumps over the lazy dog\n
 %i dynamic, %i cached, %i failed, %i lru'd in %ix%i atlas
 %i filtered textures
+%i object%s, %i draw call%s, %s tris
 %i resources used
+%i shadowmaps [%i dynamic, %i mixed], %i empty mixed shadows culled\n
 %i textures
 %i tiles used, %i tiles rendered, %i tiles recycled, %i failed in %ix%i atlas
 %ix%i %s:%i
@@ -371,13 +375,14 @@
 (<-- right-click here)
 (ActiveIdUsing: AllKeyboardKeys: %d, NavDirMask: 0x%X)
 (Click and drag to scroll)
+(Context Name: "%s")
 (Debug Log: Auto-disabled some ImGuiDebugLogFlags after 2 frames)\n
 (Dock node)
 (Hold SHIFT to display a dummy viewport)
 (Left) Using ImGui::PushClipRect():\nWill alter ImGui hit-testing logic + ImDrawList rendering.\n(use this if you want your clipping rectangle to affect interactions)\n\n(Center) Using ImDrawList::PushClipRect():\nWill alter ImDrawList rendering only.\n(use this as a shortcut if you are only using ImDrawList calls)\n\n(Right) Using ImDrawList::AddText() with a fine ClipRect:\nWill alter only this specific ImDrawList::AddText() rendering.\nThis is often used internally to avoid altering the clipping rectangle and minimize draw calls.
 (Main menu bar)
 (Popup)
-(R = radius, N = number of segments)
+(R = radius, N = approx number of segments)
 (SceneWorld 3D Dump contains %d large objects - they are scaled down and will render red.)\n
 (Untitled)
 (Use ImGui::SameLine() to keep adding items to the right of the preceding item)
@@ -451,7 +456,7 @@
 0xDDDDDDDD
 1 = visualize bounds, 2 = visualize sceneobject mesh materials, 3 = required texture size, 4 = bounds group, 5 = LOD, 6 == LPV Binding, 7 == instancing
 1. I am selectable
-1.90.8
+1.90.9
 10CSceneView
 10ISceneView
 11CDefaultPVS
@@ -723,6 +728,7 @@
 <tr><td><b>m_viewConstantBufferData.g_vInvProjRow3</b></td><td>[%.3f %.3f %.3f %.3f]</td></tr>
 <unknown enum value>
 <unnamed>
+=Error: View "%s", layer "%s", render target "%s": \n\tIt is illegal to do a non-MSAA write to a MSAA back buffer or HRenderTexture!\n
 =ffn?
 =n4X?e
 =uvz?
@@ -739,6 +745,7 @@
 >qxs?{7
 >sh1?
 >uYL>
+?<no failure reason set>
 ?Bxt>
 ?CMeshBuilderSceneObjectDesc
 ?Got request to send CSceneSystemStats to vconsole\n
@@ -869,6 +876,7 @@ Add 1000 lines
 Add Debug Error
 Add Debug Text
 Add another modal..
+AddMultipleToTail
 AddToView
 Additional alpha multiplier for disabled items (multiply over current value of Alpha).
 Adjust shadow penumbra based on light size
@@ -879,7 +887,7 @@ After reordering, contents of channel 0 appears below channel 1.
 AgeList
 AggregateDesc
 AggregateSceneObjectManifest
-Al&PK
+Al&H
 Align label with current X position
 Align to right edge
 Align to right edge minus 100
@@ -916,6 +924,11 @@ AlwaysAutoResize
 AmbientLightingSHB
 AmbientLightingSHG
 AmbientLightingSHR
+AmbientOcclusionProxyAmbientStrength
+AmbientOcclusionProxyLightConeAngles
+AmbientOcclusionProxyLightPosition_1
+AmbientOcclusionProxyLightPosition_2
+AmbientOcclusionProxyLightPosition_3
 Amplitude
 An extra line here.
 And now some textured buttons..
@@ -1121,6 +1134,7 @@ CAnimationDecodeContext::AddAnimationDecodeDesc ran out of allocator memory (2)\
 CAnimationDecodeContext::AddAnimationDecodeDesc ran out of allocator memory (3)\n
 CBarnLightObjectDescGpu
 CBlitTextureToBackBufferLayer
+CBufferUAV
 CCCCCCCCCCCC
 CClutterSceneObject
 CClutterSceneObjectDesc
@@ -1150,6 +1164,8 @@ COLOR_ATTACHMENT_OUTPUT
 COLOR_ATTACHMENT_READ_BIT
 COLOR_ATTACHMENT_WRITE_BIT
 COMPUTE_SHADER
+CPU Cull
+CPU Render
 CPointLightObjectDescGpu
 CPrimitives
 CProjectedDecalSceneObjectDesc
@@ -1392,6 +1408,7 @@ Constraint
 Content
 ContentIdeal
 ContentRegionRect
+Context Shadow bit: %i\n
 ContextLocked: %s
 ConvertFloatToChannel: Trying to convert to a a float to a destation of byte size %d\n
 ConvertFloatToChannel: Trying to convert to a a normalized float to a destation of byte size %d\n
@@ -1461,7 +1478,7 @@ D16_UNORM
 D24_UNORM_S8_UINT
 D32_FLOAT
 D32_FLOAT_S8X24_UINT
-D333?
+D333?P
 D333D33
 DEPTH_STENCIL_ATTACHMENT_OPTIMAL
 DEPTH_STENCIL_ATTACHMENT_READ_BIT
@@ -1498,11 +1515,11 @@ D_OCCLUSION_CULLING
 D_ORTHOGRAPHIC_VIEW
 D_OVERWRITE_DEPTH
 D_PASS
+D_ROUGHNESS_TEXTURE
 D_SCENE_DEPTH_MSAA
 D_SELF_SHADOW
 D_STRAND_COLOR_VARIATION
 D_SUBGROUP_SIZE_32
-D_TEMPORAL_INTEGRATE
 D_VARIANT
 D_VISUALIZE_SCENEOBJECTS
 D_VIS_CULLING
@@ -1515,7 +1532,7 @@ Data: %p\nSize: %d\nCapacity: %d
 Days
 Dear ImGui %s
 Dear ImGui %s (%d)
-Dear ImGui 1.90.8 (19080)
+Dear ImGui 1.90.9 (19090)
 Dear ImGui Debug Log
 Dear ImGui Demo
 Dear ImGui ID Stack Tool
@@ -1616,6 +1633,7 @@ Dockspace
 Document "%s"
 Dogs
 Don't ask me next time
+Don't render shadows for mixed shadowmaps with no dynamics objects in view
 Done (%.2f seconds)\n
 Double click edges to expand rect to plot extents.
 Double left-click axis labels to fit the individual axis.
@@ -1648,9 +1666,9 @@ DragFloat (-inf -> 1)
 DragFloat (0 -> +inf)
 DragFloat (0 -> 1)
 DragInt (0 -> 100)
+Draw Calls
 Draw Channels
 Draw Proxy: qh:%p org:<%d,%d,%d> (frame:%d)\n
-Draw calls: %s\n
 Draw frame with background (e.g. for CollapsingHeader)
 Draw in Background draw list
 Draw in Foreground draw list
@@ -1698,6 +1716,7 @@ Enable outer-most padding (default if ImGuiTableFlags_BordersOuterV is set)
 Enable resizing of windows from their edges and from the lower-left corner.\nThis requires (io.BackendFlags & ImGuiBackendFlags_HasMouseCursors) because it needs mouse cursor feedback.
 Enable turning DragXXX widgets into text input with a simple mouse click-release (without moving).
 Enable various tools calling IM_DEBUG_BREAK().\n\nRequires a debugger being attached, otherwise IM_DEBUG_BREAK() options will appear to crash your application.
+Enable wrapping around from max to min and from min to max (only supported by DragXXX() functions)
 EnableAlphaTint
 EnableSorting
 EnableViewModelSunlight
@@ -1717,7 +1736,6 @@ Error Bars
 Error loading barn light: %s\n
 Error: View "%s", layer "%s", render target "%s": \nAttempted to bind the back buffers of two different swap chains in a single layer!\n
 Error: View "%s", layer "%s", render target "%s": \n\tAttempted to set up a render target output w/ MSAA %d where the color targets have different MSAA settings %d!\n
-Error: View "%s", layer "%s", render target "%s": \n\tIt is illegal to do a non-MSAA write to a MSAA back buffer or HRenderTexture!\n
 Error: View "%s", layer "%s": \n\tIt is illegal to indicate LAYERFLAGS_DOESNT_MODIFY_COLOR_BUFFERS but also do a color clear or discard!\n
 Error: View "%s", layer "%s": \n\tIt is illegal to indicate LAYERFLAGS_DOESNT_MODIFY_DEPTH_STENCIL_BUFFER but also do a depth/stencil clear or discard!\n
 Error: View "%s", layer "%s": \n\tIt is illegal to indicate LAYERFLAGS_PRESERVE_COLOR_BUFFERS but also do a color clear or use LAYERFLAGS_DISCARD_COLOR_BUFFERS!\n
@@ -1769,7 +1787,6 @@ Explicit content size
 Export
 Exposure Scale
 Extend hit area to all available width instead of allowing more items to be laid out after the node.
-F<no failure reason set>
 FFFF
 FORCE_UINT
 FRAGMENT_SHADER
@@ -1893,9 +1910,9 @@ GLOBAL
 GOOGL
 GPOS
 GPU Animated Vertex Cache allocation too large! Requested: %d, max allowed: %d\nUse smaller draw calls or increase cache buffer block size\n
-GPU Instance Mem : % .1fM allocated, %.1fM used this frame
+GPU Instance Mem : %s allocated, %s used this frame
 GPU Memory Size
-GPU Transform Mem : % .1fM allocated, %.1fM used this frame
+GPU Transform Mem : %s allocated, %s used this frame
 GPUPipelineStats
 GPUProfiler
 GPUSort
@@ -1938,6 +1955,7 @@ Gingrich
 Giving access to some ImGuiStyle value in this demo for convenience.
 Global Alpha
 GlobalEnvironmentMapConstantBuffer_t
+GlobalStats
 Glyph
 Glyphs
 Glyphs (%d)
@@ -1957,6 +1975,7 @@ GraveAccent
 Gravity
 Greys
 Grid Lines
+Groom Sim
 GuideHairCount
 GuideHairVertexCacheOffset
 H Clinton
@@ -1989,10 +2008,14 @@ HairLengthScale
 HairLightingTexture
 HairOffsets
 HairRendererManifest
+HairRoughnessPalette
+HairRoughnessTexture
 HairShadingAtlas
 HairShadowTexture
+HairShadowTileCompute
 HairStrandInfo
 HairThickness
+HairVolumeShadowConstants_t
 HairVolumeTexDim
 Half True
 Half of available width.\n(~ right-cursor_pos)\n(works within a column set)
@@ -2155,7 +2178,9 @@ ImGuiSliderFlags_AlwaysClamp
 ImGuiSliderFlags_Logarithmic
 ImGuiSliderFlags_NoInput
 ImGuiSliderFlags_NoRoundToFormat
+ImGuiSliderFlags_WrapAround
 ImGuiTabBarFlags_AutoSelectNewTabs
+ImGuiTabBarFlags_DrawSelectedOverline
 ImGuiTabBarFlags_FittingPolicyResizeDown
 ImGuiTabBarFlags_FittingPolicyScroll
 ImGuiTabBarFlags_NoCloseWithMiddleMouseButton
@@ -2297,6 +2322,8 @@ InstancedMesh %s, mesh %i has %i sceneobjects: only the first will be drawn.\n
 InstancedMeshSceneObjectManifest
 Instruct Dear ImGui to render a mouse cursor itself. Note that a mouse cursor rendered via your application GPU rendering path will feel more laggy than hardware cursor, but will be more in sync with your other visuals.\n\nSome desktop applications may use both kinds of cursors (e.g. enable software cursor only when resizing/dragging something).
 Instruct backend to not alter mouse cursor shape and visibility.
+Instruct dear imgui to disable keyboard inputs and interactions.
+Instruct dear imgui to disable mouse inputs and interactions.
 Instruct navigation to move the mouse cursor. See comment for ImGuiConfigFlags_NavEnableSetMousePos.
 Interactive Data
 Internal inconsistency between the layout format and attribute is detected.\nTry changing the number of bones per vertex or the skin weighting, and send Sergiy a repro mesh with this error description.\n
@@ -2345,6 +2372,7 @@ ItemSpacing
 Items (%d)
 J Bush
 JJJJ
+Jobs
 Joint Indices (%d) Out Of Range for SINT16: Skinning will not work!\n
 Joint Indices (%d) Out Of Range for UINT10: Skinning will not work!\n
 Joint Indices (%d) Out Of Range for UINT8: Skinning will not work!\n
@@ -2380,6 +2408,7 @@ Keys mods: %s%s%s%s
 Keys pressed:
 Keys released:
 Kiwi
+L1\fC=
 L@33
 LATE_FRAGMENT_TESTS
 LDR histogram (Exposure Scaled HDR & Filmic Tonemapped)
@@ -2428,7 +2457,6 @@ LeftCtrl
 LeftShift
 LeftSuper
 Legacy Columns API
-LegacyPointLightShadowsEnabled
 Legend Options
 Legend Popups
 LegendBg
@@ -2452,7 +2480,7 @@ LightSim_Opacity
 LightSim_Opacity_A
 LightmapUV
 LightmapUVW
-Lights in view (unshadowed+shadowed): %d+%d omni, %d+%d spot, %d+%d barn %d env %d lpv\n
+Lights in view (unshadowed+shadowed): %d+%d omni, %d+%d spot, %d+%d barn %d env %d lpv.\n
 Like this one
 Limits
 Limits Constraints
@@ -2577,7 +2605,6 @@ MeshData
 Meshbuilder2
 Meshbuilder2IndexData
 Meshbuilder2VertexData
-MeshletData
 MeshletIndexCopyLoops
 Midterm Exam
 Min / Max
@@ -2706,7 +2733,6 @@ N19CRenderGraphBuilder9LayerPassE
 N19IRayTraceSceneWorld9IPipelineE
 N23CCharacterDecalRenderer26CCharacterDecalSceneObjectE
 N23CCharacterDecalRenderer27CCharacterDecalRendererDescE
-N: MMM\nR: MMM
 NASSE and SSE2 are required.
 NAV,FOCUS
 NB: Cursor & selection are preserved when refocusing last used item in code.
@@ -2731,6 +2757,7 @@ NavWindow: '%s'
 NavWindowingDimBg
 NavWindowingHighlight
 NavWindowingTarget: '%s'
+NeedsLightProbe
 NeedsStaticLPV
 NewFrame(): ClearActiveID() because it isn't marked alive anymore!\n
 Nice try, but the number of rows and columns must be greater than 0!
@@ -2834,6 +2861,7 @@ Open Markers
 Open Popup
 Open Recent
 Open:  $%.2f
+Opened:
 Opposite
 Option to deactivate io.AddFocusEvent(false) handling. May facilitate interactions with a debugger when focus loss leads to clearing inputs data.
 Option to save .ini data with extra comments (particularly helpful for Docking, but makes saving slower).
@@ -2846,6 +2874,7 @@ OrthoLight
 OrthographicView
 Other:
 Out Mem
+OutLightingFroxelTexture
 OutScatteringTexture
 OuterRect
 OuterRect: Pos: (%.1f,%.1f) Size: (%.1f,%.1f) Sizing: '%s'
@@ -2872,7 +2901,6 @@ Override. Old default was 45.
 Override. Old value was 1.0
 OverrideMod
 Overrides the map's fog settings (-1 populates fog_ vars with map's values)
-PCAnimatableSceneObjectDesc
 PFvP12CSceneObjectE
 PRESSED
 PRE_RASTERIZATION_SHADERS
@@ -2884,6 +2912,7 @@ PageUp
 Paired
 Palin
 Pants on Fire
+Parent
 ParentNode
 ParentWindow
 ParentWindowForFocusRoute
@@ -2925,6 +2954,7 @@ Pixels visible: %d (qh:%p) (frame:%d)\n
 Pixels visible: %d (qh:%p) Pixels possible: %d (qh:%p) (frame:%d)\n
 Pixels: %f
 Plasma
+Player
 Player Overlay
 Plot 1 Sources: Legend Item Labels
 Plot 1 Targets: Plot, Y-Axes, Legend
@@ -3064,6 +3094,7 @@ R8_TYPELESS
 R8_UNORM
 R9G9B9E5_SHAREDEXP
 R: %.f\nN: %d
+R: MMM\nN: MMM
 R:%0.3f
 R:%3d
 R?vlD>
@@ -3119,11 +3150,12 @@ Rename
 Rename..
 Rename...
 Render Graph
+Render2DDebugOverlays
 Render2DLineOverlays
 Render2DTextOverlays
+Render3DDebugOverlays
 Render3DLineOverlays
 Render3DSphereOverlays
-Render3DTriangleOverlays
 Render3DVectorTextOverlays
 RenderAsQuads
 RenderGraph
@@ -3201,6 +3233,7 @@ RootViewTanHalfFov
 RootWindow
 RootWindowDockTree
 Roughness
+RoughnessTextureCombo
 Row %d
 Row %d Column %d
 Row Ratios
@@ -3253,7 +3286,8 @@ SceneDepth
 SceneGfxResources_RayTracing
 SceneLPVDebugGridObjectDesc
 SceneLPVDebugGridObjectVB
-SceneObjects drawn: %s in %s batchlists\n
+SceneObjects
+SceneObjects drawn: %s in %s draw calls\n
 SceneSystem
 SceneSystem/Aggregates/Draw Aggregates
 SceneSystem/Aggregates/Show GPU Culled Meshes
@@ -3322,6 +3356,7 @@ SceneSystem/Tonemap Visualizer
 SceneSystem/Tonemapping
 SceneSystem/TransformTextureRowCount
 SceneSystem/TransformTextureRowCountToolsMode
+SceneSystem/View Profiler
 SceneSystem/VolumetricFog
 SceneSystem/WellKnownLightCookies
 SceneSystemInit
@@ -3335,11 +3370,11 @@ Scenesystem render target token too large! Increase MAX_RT_NAME_SIZE in scenesys
 Score
 Scott
 ScrambledHalton
-ScrambledHaltonPermutations
 Scratch Keys
 Scratch Payload
 Screen-size where clutter will be full density
 Screen-size where clutter will be gone
+Screen-size: %.2f, alpha-fade %.2f, scale %.2f, fog scale %.2f 
 ScreenSizeScaleForLOD
 Scroll %.1f/%.1f %.1f/%.1f
 Scroll Offset
@@ -3447,6 +3482,7 @@ ShadingSampleColumns
 ShadingSamplesPerRow
 ShadingSamplesPerStrand
 Shadow Atlas Debugger
+Shadow strength %.2f, penumbra %.2f, filter radius %i\n
 ShadowAtlas
 ShadowAtlasHeight
 ShadowAtlasWidth
@@ -3654,16 +3690,18 @@ TUBE
 TUBE_WITH_END_CAPS
 Tab Bars (%d)
 Tab bar
-TabActive
 TabBar+Tabs
 TabBarBorderSize
 TabBars
 TabBorderSize
+TabDimmed
+TabDimmedSelected
+TabDimmedSelectedOverline
 TabHovered
 TabItemButton & Leading/Trailing flags
 TabRounding
-TabUnfocused
-TabUnfocusedActive
+TabSelected
+TabSelectedOverline
 Table 0x%08X (%d columns, in '%s')
 Table 0x%08X (%d columns, in '%s')%s
 Table Size: %d
@@ -3838,7 +3876,7 @@ Tree in column
 Tree node
 Tree nodes
 TreeNode (w/ double-click)
-Triangles rendered: 
+Triangles rendered: %s\n
 Tried to move layer to be after non-existant label
 Trump
 Tube light with end caps
@@ -3873,6 +3911,7 @@ UpArrow
 Update delay for shadow size
 Update hysteresis for shadow size
 UpdateDirtyObjects
+UpdateGroomDensityAndAo
 Use 24 Hour Clock
 Use ISO 8601
 Use Local Time
@@ -3917,6 +3956,7 @@ VelocityVolumeDim
 Vert:
 VertCount
 Vertex Shader Invocations - the number of primitives (triangles) that were executed in the vetex shader stage.
+VertexColorPos_t
 VertexColorUVPos_t
 VertexElementAnnotation
 VertexGenericIntegerData
@@ -4163,6 +4203,7 @@ ZoomMod
 ZoomRate
 [%04d] Window
 [%05d] [%s] Hello, current time is %.1f, here's a word: '%s'\n
+[%s] [%05d] 
 [%s][0x%08X,%d]\n
 [%s][Data]\n
 [DUMP: Scene World %d: 0x%p '%s': %d objects]\n
@@ -4170,6 +4211,10 @@ ZoomRate
 [beta] Enable beta multi-viewports support. See ImGuiPlatformIO for details.
 [c0.x0 c0.y0 ... cn.x0 cn.y0 c0.x1 c0.y1 ... cn.x1 cn.y1 ... cn.xm cn.ym]
 [docking] - Tab 0x%08X '%s' Order %d\n
+[docking] DockBuilderAddNode 0x%08X flags=%08X\n
+[docking] DockBuilderDockWindow '%s' to node 0x%08X\n
+[docking] DockBuilderRemoveNode 0x%08X\n
+[docking] DockBuilderSplitNode: node 0x%08X, split_dir %d\n
 [docking] DockContextAddNode 0x%08X\n
 [docking] DockContextProcessDock node 0x%08X target '%s' dock window '%s', split_dir %d\n
 [docking] DockContextProcessDock node 0x%08X, split_dir %d\n
@@ -4186,7 +4231,8 @@ ZoomRate
 [docking] DockSpace: dockspace node 0x%08X: setup WindowClass 0x%08X -> 0x%08X\n
 [docking] In node 0x%08X: %d new appearing tabs:%s\n
 [docking] SelectedTabId = 0x%08X, NavWindow->TabId = 0x%08X\n
-[dragdrop] BeginDragDropSource() DragDropActive = true, source_id = %08X\n
+[dragdrop] AcceptDragDropPayload(): 0x%08X: payload delivery\n
+[dragdrop] BeginDragDropSource() DragDropActive = true, source_id = 0x%08X%s\n
 [dragdrop] ClearDragDrop()\n
 [drop here]
 [error]
@@ -4236,12 +4282,13 @@ ZoomRate
 \n<i>Not using PerViewConstantBuffer_t</i>
 \n<i>PerViewConstantBuffer_t</i>
 \n<i>Procedural Layer</i>
+\nCAnimatableSceneObjectDesc
+\n\v\f../public/tier0/utlrbtree.h
 \tD333@
 \tLayer %d "%s": %d inputs, %d outputs\n
 \tLayer %d "%s"\n
 \tRT %dx%d %s %dx MSAA used by %s\n
 \tTarget %d "%s": [FMT-> %s] [MSAA-> %s] [%s size : %d %d]\n
-\t\n\v../public/tier0/utlrbtree.h
 \t\tInputs:\n
 \t\tLayer %d (%32s):\t
 \t\tOutputs:\n
@@ -4300,6 +4347,7 @@ __cxxabiv1::__function_type_info::__is_function_p() const
 __cxxabiv1::__function_type_info::~__function_type_info()
 _base
 _include
+_localization_path
 _multibase
 _not_pickable
 aaa1.c
@@ -4365,6 +4413,7 @@ cfg/imgui_%s
 cfg_infos
 checkbox
 clap
+clearTargets
 click here
 click on a button to set focus
 cluttermesh_instanced
@@ -4435,6 +4484,7 @@ debugmeshletdrawargs
 debugoverlay_force_respect_ttl
 debugoverlay_show_text_outline
 debugoverlay_text_scale
+debugui
 default pushback
 define: IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 define: IMGUI_DISABLE_OBSOLETE_KEYIO
@@ -4444,7 +4494,6 @@ define: __GNUC__=%d
 define: __cplusplus=%d
 define: __linux__
 depth pass
-depth viz
 depthTarget
 desktop.ini
 digital_%d
@@ -4452,6 +4501,7 @@ digital_0
 digital_1
 dimensions
 display very important message here!
+distancefieldscene.cpp
 drag double
 drag double log
 drag float
@@ -4461,6 +4511,7 @@ drag float3
 drag float4
 drag int
 drag int 0..100
+drag int wrap 100..200
 drag int2
 drag int3
 drag int4
@@ -4498,6 +4549,7 @@ f(x) = sin(x)*3+1
 f(x) = sin(x)+1
 f(x) = sin(x+.5)*100+200 
 f?yu
+fakeview
 fastshadowlayout_transform
 fclose
 ff&?ChooseLightProbeVolume
@@ -4540,11 +4592,11 @@ fullscreenquad
 func
 fwrite
 g?Q1
+g_ScrambledHaltonPermutations
 g_bEnableFrustumCulling
 g_bEnableSizeCulling
 g_globalLateBoundBindlessSet
 g_lightBinnerGpuSet
-g_tLastFrameFogVolume
 generatecullrequests
 generic_data_type
 global scale
@@ -4655,6 +4707,7 @@ io.ConfigFlags: DockingEnable
 io.ConfigFlags: NavEnableGamepad
 io.ConfigFlags: NavEnableKeyboard
 io.ConfigFlags: NavEnableSetMousePos
+io.ConfigFlags: NoKeyboard
 io.ConfigFlags: NoMouse
 io.ConfigFlags: NoMouseCursorChange
 io.ConfigFlags: ViewportsEnable
@@ -4736,6 +4789,10 @@ lb_low_quality_shader_fade_region_rescale
 lb_max_visible_barn_lights_override
 lb_max_visible_envmaps_override
 lb_mixed_shadows
+lb_override_barn_light_fade_sizes
+lb_override_barn_light_fade_sizes_enable
+lb_override_barn_light_shadow_fade_sizes
+lb_shadow_map_cull_empty_mixed
 lb_shadow_map_culling
 lb_shadow_texture_height_override
 lb_shadow_texture_width_override
@@ -4787,6 +4844,8 @@ m_bHasBakedLightingFromVertexStream
 m_bHasDecodeDump
 m_bIsNotMatchedToMaterial
 m_bLightInsideFrustum
+m_bNoShadow
+m_bOnlyShadow
 m_bSphericalCookie
 m_bUseCompressedNormalTangent
 m_boneSetupMask
@@ -4866,6 +4925,7 @@ materials/dev/debug_solid.vmat
 materials/dev/debug_ui.vmat
 materials/dev/debug_wireframe.vmat
 materials/dev/debug_wireframe_2d.vmat
+materials/dev/deferred_hair_shadowtile_compute.vmat
 materials/dev/downsample.vmat
 materials/dev/generalfilter.vmat
 materials/dev/generate_aggregate_cull_requests.vmat
@@ -4964,7 +5024,6 @@ pos2Dtex2D
 postprocess
 posxyz
 prev layer not found
-previewbaked
 pxs?
 pxs?{7
 quadLayout
@@ -4998,6 +5057,7 @@ r_pixelvisibility_spew
 r_render_to_cubemap_debug
 r_reset_character_decals
 r_shadows
+r_shadowtile_waveops
 r_skinning_enabled
 r_smooth_morph_normals
 r_ssao_bias
@@ -5024,6 +5084,7 @@ reflection_outputcolor
 reflection_outputdepth
 refraction_clip_plane
 refraction_outputcolor
+render3DSkybox
 renderDecals
 renderOpaque
 renderSky
@@ -5057,6 +5118,7 @@ sc_aggregate_gpu_vis_culling
 sc_aggregate_indirect_draw_compaction
 sc_aggregate_indirect_draw_compaction_threshold
 sc_aggregate_material_solo
+sc_aggregate_show_outside_vis
 sc_allow_dithered_lod
 sc_allow_dynamic_constant_batching
 sc_allow_write_depth_before_blend
@@ -5129,6 +5191,7 @@ sc_show_cs_skinning_stats
 sc_show_gpu_profiler
 sc_show_texture_visualizer
 sc_show_tonemap_visualizer
+sc_show_view_profiler
 sc_showclasses
 sc_skip_traversal
 sc_spew_cmt_usage
@@ -5152,8 +5215,8 @@ scenesysCone
 scenesysDodecahedron
 scenesysPyramid
 scenesystem.cpp
-scenesystem.cpp(5350): Expecting 1 renderable pass for material "%s" but found %d!\n
-scenesystem.cpp:3455
+scenesystem.cpp(5373): Expecting 1 renderable pass for material "%s" but found %d!\n
+scenesystem.cpp:3482
 scenesystemdebug
 scenesysteminstancedata
 scenesystemtransformdata
@@ -5322,6 +5385,7 @@ vertical
 vertical split
 view.bIsToolView
 viewport
+views
 void std::__introsort_loop<unsigned short*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void>>>(unsigned short*, unsigned short*, long, __gnu_cxx::__ops::_Iter_comp_iter<std::less<void>>)
 void_context
 volume_fog_debug_volumes

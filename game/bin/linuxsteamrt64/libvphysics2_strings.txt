@@ -146,7 +146,7 @@
 </table></tt></small>
 <Cast Face %d Entry
 <Operation
-<PushBack
+<Source Hull
 <div align=center style="padding:3px;font-size:15px;text-align:center;background-color:#ff9966;">
 <div align=center style="padding:3px;font-size:15px;text-align:center;color:black;background-color:#
 <font color="blue">%s</font>
@@ -158,14 +158,12 @@
 <p><b>No</b> reason to hit found</p>
 <p><font color="blue">Body</font> is %s</p>
 <p><font color="blue">Shape</font>-as, <font color="red">Query</font>-with: 
-<p><font color="red">Query</font> ObjectSetMask excludes <b>dynamic</b> or <b>keyframed</b> bodies</p>
+<p><font color="red">Query</font> ObjectSetMask excludes <b>dynamic</b> bodies</p>
+<p><font color="red">Query</font> ObjectSetMask excludes <b>keyframed</b> bodies</p>
 <p><font color="red">Query</font> ObjectSetMask excludes static bodies</p>
-<p><font color="red">Query</font> ObjectSetMask includes both dynamic and keyframed - proceed</p>
-<p><font color="red">Query</font> ObjectSetMask includes dynamic (only) - proceed</p>
-<p><font color="red">Query</font> ObjectSetMask includes kinematic (only) - proceed</p>
+<p><font color="red">Query</font> ObjectSetMask includes dynamic bodies - proceed</p>
+<p><font color="red">Query</font> ObjectSetMask includes keyframed bodies - proceed</p>
 <p><font color="red">Query</font> ObjectSetMask includes static bodies - proceed</p>
-<p><font color="red">Query</font> ObjectSetMask only specifies <b>dynamic</b> bodies</p>
-<p><font color="red">Query</font> ObjectSetMask only specifies <b>keyframed</b> bodies</p>
 <p><font color="red">Query</font> ignores entity id 0x%X</p>
 <p><font color="red">Query</font> should <b>not</b> hit solid</p>
 <p><font color="red">Query</font> should <b>not</b> hit trigger</p>
@@ -347,17 +345,16 @@ CStrongHandleCopyable
 CTiltTwistConstraint
 CTwistConstraint
 CUtlLeanVector
-CUtlVectorFixedGrowable
+CUtlLeanVectorFixedGrowable
 CUtlVectorSIMDPaddedVector
 CVPhys2AggregateInstance::OnReallocate( new: 0x%p, old: 0x%p )\n
 CVPhys2World - Dumped World '%s'.
 CVPhysXSurfacePropertiesList
 Can <b>Not</b> Hit: %s
-Can <b>Not</b> Hit: %s <font color="blue">body</font>
+Can <b>Not</b> Hit: Dynamic <font color="blue">body</font>
+Can <b>Not</b> Hit: Keyframed <font color="blue">body</font>
 Can <b>Not</b> Hit: Static <font color="blue">body</font>
 Can <b>Not</b> Hit: ignoring entity id 0x%X
-Can <b>Not</b> Hit: non-dynamic
-Can <b>Not</b> Hit: non-keyframed <font color="blue">body</font>
 Can Hit
 Can't restore aggregate state, different part count!!!\n
 CanTranslatePointer
@@ -494,6 +491,7 @@ FeAxialEdgeBend_t
 FeBandBendLimit_t
 FeBoxRigid_t
 FeBuildBoxRigid_t
+FeBuildSDFRigid_t
 FeBuildSphereRigid_t
 FeBuildTaperedCapsuleRigid_t
 FeCollisionPlane_t
@@ -516,6 +514,7 @@ FeProxyVertexMap_t
 FeQuad_t
 FeRigidColliderIndices_t
 FeRodConstraint_t
+FeSDFRigid_t
 FeSimdAnimStrayRadius_t
 FeSimdNodeBase_t
 FeSimdQuad_t
@@ -553,7 +552,7 @@ GetInlineCallData
 GetMappedModuleName
 GetTranslationData
 Goals
-HBm_influenceFlags
+HBm_vertexBuffers
 HELPER_BONE
 Hierarchy id is the same on both shapes (%d)\n
 Hull%d.obj
@@ -562,7 +561,6 @@ IBphys
 IKV3TransferInterface_ResourceLoad
 IKV3TransferInterface_UtlSymbolLarge
 IPhysicsPlayerController
-IS_TYPESAFE_INTEGER
 Identity
 If enabled, surfaces with default material are highlighted in physics debug geometry.
 Ignore Entity 0x%X
@@ -614,6 +612,7 @@ LoadOwningPointer failed for '%s' (%s)\n
 LoadOwningPointer failed for '%s'\n
 LoadPhysicsDebugMaterials
 LoadSurfaceProperties
+Local Damp
 Locked
 LookAtList
 MESH_DRAW_FLAGS_CAN_BATCH_WITH_DYNAMIC_SHADER_CONSTANTS
@@ -625,7 +624,6 @@ MESH_DRAW_FLAGS_USE_SHADOW_FAST_PATH
 MESH_DRAW_FLAGS_USE_UNCOMPRESSED_PER_VERTEX_LIGHTING
 MESH_DRAW_INPUT_LAYOUT_IS_NOT_MATCHED_TO_MATERIAL
 MGetKV3ClassDefaults
-MIsBoxedIntegerType
 MKV3TransferName
 MODEL_BONE_FLEX_INVALID
 MODEL_BONE_FLEX_TX
@@ -732,6 +730,7 @@ Physics doesn't know how to handle Comm request %d (data:%d)\n
 Physics/BuildMeshWings
 PhysicsConicalJointSave_t
 PhysicsGenericJointSave_t
+PhysicsNullJointSave_t
 PhysicsPrismaticJointSave_t
 PhysicsPulleyJointSave_t
 PhysicsRevoluteJointSave_t
@@ -748,6 +747,7 @@ Predict
 Prevent jiggle bones from pointing directly away from their target in case of numerical instability.
 Projectile
 PropWorldOrigin
+PushBack
 QUAT_ORTHOTWIST_JOINT
 QuaternionStorage
 Query and shape in hierarchy id=%d
@@ -898,7 +898,6 @@ Solid Contacts: <font color = "red">%s</font>, <font color = "blue">%s</font>\n
 Solid contact enabled on both shapes\nThe groups 
 Solve Islands
 Solve Trivial Islands
-Source Hull
 Source Hull F=%d V=%d hE=%d
 Speedup
 SphereBase_t
@@ -1030,7 +1029,7 @@ body1
 body2
 bodyMassScale
 breakable_glass
-broadphase.inl:157
+broadphase.inl:158
 bulletimpact
 burstRandomize
 c%d m%d pt%d
@@ -1062,6 +1061,9 @@ cloth_guard_threshold
 cloth_interpolation_strategy
 cloth_legacy_stretch_force
 cloth_legacy_support
+cloth_local_damp0
+cloth_local_damp1
+cloth_local_damp2
 cloth_max_ticks_per_frame
 cloth_node_debug_axis_length
 cloth_quad_smooth_iterations
@@ -1256,6 +1258,7 @@ m_CtrlOsOffsets
 m_CtrlSoftOffsets
 m_CullingData
 m_Data
+m_Distances
 m_DynNodeFriction
 m_DynNodeVertexSet
 m_DynNodeWindBases
@@ -1339,6 +1342,7 @@ m_ReverseOffsets
 m_RigidColliderPriorities
 m_Rods
 m_Ropes
+m_SDFRigids
 m_SimStateBones
 m_SimdAnimStrayRadii
 m_SimdNodeBases
@@ -1409,7 +1413,6 @@ m_bEnableTwistLimit
 m_bGravityDisabled
 m_bHasBakedLightingFromLightMap
 m_bHasBakedLightingFromVertexStream
-m_bHasHairPositionOffsets
 m_bHasShadowController
 m_bHidden
 m_bHideMaterialGroupInTools
@@ -1426,6 +1429,8 @@ m_bIsEnabled
 m_bIsNotMatchedToMaterial
 m_bIsRigid
 m_bIsTautLineEnabled
+m_bNoShadow
+m_bOnlyShadow
 m_bOverrideMassCenter
 m_bPredicted
 m_bRecomputeSmoothNormalsAfterAnimation
@@ -1435,6 +1440,7 @@ m_bSpeculativeEnabled
 m_bTeleport
 m_bTeleportTick
 m_bTopLevel
+m_bTrackTouchingEntities
 m_bTranslationOnly
 m_bUseAsyncSimulation
 m_bUseBlockSolver
@@ -1691,6 +1697,7 @@ m_impactSoft
 m_indexBuffer
 m_indexHash
 m_indexNames
+m_influenceFlags
 m_influenceIndices
 m_influenceNames
 m_influenceOffsets
@@ -1750,6 +1757,7 @@ m_nCollisionMask
 m_nCollisionPlaneIndex
 m_nDebugFlags
 m_nDefaultMeshGroupMask
+m_nDepth
 m_nDynamicNodeFlags
 m_nEdge
 m_nEntIndex
@@ -1813,6 +1821,7 @@ m_nRodVelocitySmoothIterations
 m_nRopeCount
 m_nRotLockStaticNodes
 m_nRotateMotion
+m_nSDFRigidIndex
 m_nScaleSourceNode
 m_nSegmentsPerHairStrand
 m_nSemanticIndex
@@ -2010,7 +2019,6 @@ m_vecNodePositions
 m_vecNodeVelocities
 m_vecPrevNodeTargets
 m_vecSize
-m_vertexBuffers
 m_wheelDrag
 materials/dev/debug_cloth.vmat
 materials/dev/debug_physics_noedges.vmat
@@ -2228,6 +2236,8 @@ use_block_solver
 v %f %f %f\n#%d ComponentIndex %d, queue %d, angle %.1f; ring:
 v %g %g %g\n
 vCenterOfMass
+vLocalMax
+vLocalMin
 vShape
 vSize
 vSphere
@@ -2256,8 +2266,8 @@ window
 wireframe
 wireframe 
 with
-world.cpp:2039
-world.cpp:2240
+world.cpp:2072
+world.cpp:2273
 worldAxisDirection
 worldGeometry
 worldPosition
