@@ -1,0 +1,31 @@
+class CBaseAchievement
+{
+	char* m_pszName;
+	int32 m_iAchievementID;
+	int32 m_iFlags;
+	int32 m_iGoal;
+	int32 m_iProgressMsgIncrement;
+	int32 m_iProgressMsgMinimum;
+	int32 m_iPointValue;
+	bool m_bHideUntilAchieved;
+	bool m_bStoreProgressInSteam;
+	char* m_pInflictorClassNameFilter;
+	char* m_pInflictorEntityNameFilter;
+	char* m_pVictimClassNameFilter;
+	char* m_pAttackerClassNameFilter;
+	char* m_pMapNameFilter;
+	char* m_pGameDirFilter;
+	char** m_pszComponentNames;
+	char** m_pszComponentDisplayNames;
+	int32 m_iNumComponents;
+	char* m_pszComponentPrefix;
+	int32 m_iComponentPrefixLen;
+	bool m_bAchieved;
+	int32 m_iCount;
+	int32 m_iProgressShown;
+	uint64 m_iComponentBits;
+	int32 m_nUserSlot;
+	int32 m_iDisplayOrder;
+	bool m_bShowOnHUD;
+	int32 m_iAssetAwardID;
+}

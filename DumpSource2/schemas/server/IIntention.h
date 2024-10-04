@@ -1,0 +1,3 @@
+class IIntention : public INextBotComponent
+{
+}

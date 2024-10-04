@@ -1,0 +1,9 @@
+class CDOTA_Modifier_Invoker_EMP_Pull : public CDOTA_Buff
+{
+	int32 shard_drag_speed;
+	float32 aura_origin_x;
+	float32 aura_origin_y;
+	ParticleIndex_t m_nFXIndex;
+	Vector m_vCenter;
+	GameTime_t m_flLastThinkTime;
+}

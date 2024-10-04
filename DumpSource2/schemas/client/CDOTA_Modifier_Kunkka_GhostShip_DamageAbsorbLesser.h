@@ -1,0 +1,3 @@
+class CDOTA_Modifier_Kunkka_GhostShip_DamageAbsorbLesser : public CDOTA_Modifier_Kunkka_GhostShip_DamageAbsorb
+{
+}

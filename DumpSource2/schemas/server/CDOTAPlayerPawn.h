@@ -1,0 +1,3 @@
+class CDOTAPlayerPawn : public CBasePlayerPawn
+{
+}

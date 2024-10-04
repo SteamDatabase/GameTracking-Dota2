@@ -1,0 +1,7 @@
+class CDOTA_Modifier_Greevil_Miniboss_Purple_VenomousGale : public CDOTA_Buff
+{
+	int32 movement_slow;
+	int32 tick_damage;
+	float32 tick_interval;
+	float32 duration;
+}

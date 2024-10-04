@@ -1,0 +1,36 @@
+class CDOTA_Modifier_Nian_Dive : public CDOTA_Buff
+{
+	float32 m_flTotalTimeInAir;
+	float32 m_flInitialVelocity;
+	Vector m_vStartPosition;
+	Vector m_vTargetHorizontalDirection;
+	Vector m_vTargetPosition;
+	float32 m_flCurrentTimeHoriz;
+	float32 m_flCurrentTimeVert;
+	bool m_bInterrupted;
+	float32 m_flHorizDelayTime;
+	float32 m_flVertDelayTime;
+	float32 m_flLeapSequenceDuration;
+	float32 m_flClawDamageTime;
+	float32 m_flPlaybackRate;
+	CHandle< CBaseEntity > m_hTarget;
+	bool m_bPlayedSwipeSound;
+	int32 pounce_distance;
+	float32 pounce_speed;
+	float32 pounce_acceleration;
+	int32 pounce_radius;
+	int32 pounce_damage;
+	int32 stun_radius;
+	float32 stun_duration;
+	float32 leash_duration;
+	float32 initial_delay;
+	float32 landing_delay;
+	float32 vertical_adjust;
+	float32 vertical_adjust_max_distance;
+	float32 vertical_adjust_min_distance;
+	int32 claw_damage;
+	int32 claw_damage_radius;
+	float32 claw_damage_delay;
+	float32 claw_damage_duration;
+	CUtlVector< CHandle< CBaseEntity > > m_vHitEntities;
+}

@@ -1,0 +1,3 @@
+class CMatchTrackedStatsEntity : public CBaseTrackedStatsEntity
+{
+}

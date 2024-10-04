@@ -1,0 +1,3 @@
+class C_DOTA_Ability_Phoenix_BlindingSun : public C_DOTABaseAbility
+{
+}

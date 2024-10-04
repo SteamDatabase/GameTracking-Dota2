@@ -1,0 +1,3 @@
+class CAdditionalWearable : public CDynamicProp
+{
+}

@@ -1,0 +1,3 @@
+class CDOTA_Ability_Courier_ReturnStashItems : public CDOTABaseAbility
+{
+}

@@ -1,0 +1,3 @@
+class CLocomotionBase : public INextBotComponent
+{
+}

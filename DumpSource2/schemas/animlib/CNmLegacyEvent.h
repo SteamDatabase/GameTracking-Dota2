@@ -1,0 +1,3 @@
+class CNmLegacyEvent : public CNmEvent
+{
+}

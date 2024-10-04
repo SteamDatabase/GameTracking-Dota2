@@ -1,0 +1,3 @@
+class CDOTA_Modifier_Aghsfort_Aziyog_Underlord_Portal_Warp_Channel_Soundstop : public CDOTA_Buff
+{
+}

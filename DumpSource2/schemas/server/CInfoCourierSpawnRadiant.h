@@ -1,0 +1,3 @@
+class CInfoCourierSpawnRadiant : public CPointEntity
+{
+}

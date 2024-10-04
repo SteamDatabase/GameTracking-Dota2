@@ -1,0 +1,3 @@
+class CDOTAEmptyAbility : public CDOTABaseAbility
+{
+}

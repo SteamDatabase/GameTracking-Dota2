@@ -1,0 +1,41 @@
+class CIngameEvent_Base : public CBaseEntity
+{
+	bool m_bInitialized;
+	int32[24] m_CompendiumChallengeEventID;
+	int32[24] m_CompendiumChallengeSequenceID;
+	int32[24] m_CompendiumChallengeCoinReward;
+	int32[24] m_CompendiumChallengeCoinSplash;
+	int32[24] m_CompendiumChallengePointReward;
+	bool[24] m_CompendiumChallengeCompleted;
+	bool[24] m_CompendiumChallengeFailed;
+	int32[24] m_CompendiumChallengeProgress;
+	int32[24] m_QueryIDForProgress;
+	CUtlVectorEmbeddedNetworkVar< CDOTASubChallengeInfo > m_SubChallenges;
+	int32[10] m_CompendiumCoinWager;
+	itemid_t[10] m_CompendiumTokenWagerItemID;
+	int32[10] m_CompendiumWagerTokenBonusPct;
+	int32[10] m_CompendiumCoinWagerResults;
+	int32[10] m_CompendiumRankWagers;
+	float32 m_flWagerTimer;
+	GameTime_t m_flWagerEndTime;
+	CUtlVectorEmbeddedNetworkVar< CDOTA_PlayerChallengeInfo > m_CompendiumChallengeInfo;
+	CUtlVectorEmbeddedNetworkVar< CDOTA_CombatLogQueryProgress > m_PlayerQueryIDs;
+	int32[100] m_ProgressForQueryID;
+	int32[100] m_GoalForQueryID;
+	int32[10] m_PlayerQuestRankPreviouslyCompleted;
+	int32[10] m_PlayerQuestRankCompleted;
+	PlayerID_t[10] m_PlayerBountyTarget;
+	GameTime_t[10] m_flPlayerBountyTimestamp;
+	int32[10] m_PlayerBountyCount;
+	bool[10] m_bHasSpentWager;
+	bool[10] m_bPendingWagerSpend;
+	bool[24] m_bCavernCrawlActive;
+	CavernCrawlMapVariant_t[24] m_nCavernCrawlMapVariant;
+	bool m_bCavernHalfCredit;
+	bool[24] m_bBountyReminded;
+	bool[24] m_bBountyAnnounced;
+	uint32[24] m_pCavernCrawlWinnings;
+	uint32[24] m_pCavernCrawlPlusShardWinnings;
+	CUtlVector< DOTACavernCrawlMapResult_t >*[24] m_ppVecCavernCrawlMapResult;
+	int32 m_event_lobby_updated;
+}

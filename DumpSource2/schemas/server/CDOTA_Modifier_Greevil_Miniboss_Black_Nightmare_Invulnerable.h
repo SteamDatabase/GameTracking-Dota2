@@ -1,0 +1,3 @@
+class CDOTA_Modifier_Greevil_Miniboss_Black_Nightmare_Invulnerable : public CDOTA_Modifier_Invulnerable
+{
+}

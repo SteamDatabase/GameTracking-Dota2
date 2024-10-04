@@ -1,0 +1,3 @@
+class CDOTABehavior_NPCControllerGlue
+{
+}

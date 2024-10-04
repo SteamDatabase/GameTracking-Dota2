@@ -1,0 +1,3 @@
+class CDOTA_Modifier_Elder_Titan_EarthSplitterScepter : public CDOTA_Modifier_Elder_Titan_EarthSplitter
+{
+}

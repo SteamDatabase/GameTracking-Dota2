@@ -1,0 +1,31 @@
+class C_IngameEvent_Base : public C_BaseEntity
+{
+	bool m_bInitialized;
+	int32[24] m_CompendiumChallengeEventID;
+	int32[24] m_CompendiumChallengeSequenceID;
+	int32[24] m_CompendiumChallengeCoinReward;
+	int32[24] m_CompendiumChallengeCoinSplash;
+	int32[24] m_CompendiumChallengePointReward;
+	bool[24] m_CompendiumChallengeCompleted;
+	bool[24] m_CompendiumChallengeFailed;
+	int32[24] m_CompendiumChallengeProgress;
+	int32[24] m_QueryIDForProgress;
+	C_UtlVectorEmbeddedNetworkVar< CDOTASubChallengeInfo > m_SubChallenges;
+	int32[10] m_CompendiumCoinWager;
+	itemid_t[10] m_CompendiumTokenWagerItemID;
+	int32[10] m_CompendiumWagerTokenBonusPct;
+	int32[10] m_CompendiumCoinWagerResults;
+	int32[10] m_CompendiumRankWagers;
+	float32 m_flWagerTimer;
+	GameTime_t m_flWagerEndTime;
+	C_UtlVectorEmbeddedNetworkVar< CDOTA_PlayerChallengeInfo > m_CompendiumChallengeInfo;
+	C_UtlVectorEmbeddedNetworkVar< C_DOTA_CombatLogQueryProgress > m_PlayerQueryIDs;
+	int32[100] m_ProgressForQueryID;
+	int32[100] m_GoalForQueryID;
+	int32[10] m_PlayerQuestRankPreviouslyCompleted;
+	int32[10] m_PlayerQuestRankCompleted;
+	PlayerID_t[10] m_PlayerBountyTarget;
+	GameTime_t[10] m_flPlayerBountyTimestamp;
+	int32[10] m_PlayerBountyCount;
+	int32[24] m_PlayerBountyTimestamp_Obsolete;
+}
