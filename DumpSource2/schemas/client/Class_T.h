@@ -1,0 +1,7 @@
+enum Class_T : uint32_t
+{
+	CLASS_NONE = 0,
+	CLASS_PLAYER = 1,
+	CLASS_PLAYER_ALLY = 2,
+	NUM_CLASSIFY_CLASSES = 3,
+};

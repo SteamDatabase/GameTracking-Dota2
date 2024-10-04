@@ -7,4 +7,4 @@ class CDOTA_Modifier_VoidSpirit_AetherRemnant_Pull : public CDOTA_Buff
 	float32 think_interval;
 	float32 artifice_pct_effectiveness;
 	bool bIsArtifice;
-}
+};

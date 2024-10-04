@@ -10,4 +10,4 @@ class CDOTA_Modifier_Invoker_ColdSnap : public CDOTA_Buff
 	int32 nQuasApplications;
 	int32 nExortApplications;
 	CountdownTimer m_freezeCooldownTimer;
-}
+};

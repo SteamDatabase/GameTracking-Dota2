@@ -9,4 +9,4 @@ class CDOTA_Modifier_AghsFort_Creature_Phoenix_Sun : public CDOTA_Buff
 	CHandle< CBaseEntity > m_hSecondaryTarget;
 	int32 m_iAttackCount;
 	int32 creep_attacks_count;
-}
+};

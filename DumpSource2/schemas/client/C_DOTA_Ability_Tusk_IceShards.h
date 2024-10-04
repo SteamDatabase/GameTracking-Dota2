@@ -11,4 +11,4 @@ class C_DOTA_Ability_Tusk_IceShards : public C_DOTABaseAbility
 	Vector m_vSpawnOrigin;
 	Vector m_vDirection;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecShards;
-}
+};

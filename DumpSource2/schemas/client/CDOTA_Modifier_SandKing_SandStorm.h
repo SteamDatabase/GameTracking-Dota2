@@ -9,4 +9,4 @@ class CDOTA_Modifier_SandKing_SandStorm : public CDOTA_Buff
 	CHandle< C_BaseEntity > m_hThinker;
 	int32 sand_storm_move_speed_pct;
 	Vector vecSpawnPos;
-}
+};

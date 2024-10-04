@@ -8,4 +8,4 @@ class CDOTA_Modifier_Alchemist_UnstableConcoction : public CDOTA_Buff
 	bool m_bHasStunned;
 	int32 damage_resistance;
 	int32 move_speed;
-}
+};

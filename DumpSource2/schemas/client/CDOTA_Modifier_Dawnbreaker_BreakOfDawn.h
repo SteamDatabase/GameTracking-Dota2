@@ -10,4 +10,4 @@ class CDOTA_Modifier_Dawnbreaker_BreakOfDawn : public CDOTA_Buff
 	GameTime_t m_flFullRevealLinger;
 	GameTime_t m_flConcealTime;
 	bool m_bWasDayTime;
-}
+};

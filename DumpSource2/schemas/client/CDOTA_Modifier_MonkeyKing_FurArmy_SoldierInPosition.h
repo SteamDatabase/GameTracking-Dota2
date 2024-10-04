@@ -10,4 +10,4 @@ class CDOTA_Modifier_MonkeyKing_FurArmy_SoldierInPosition : public CDOTA_Buff
 	GameTime_t m_flNextAttackTime;
 	ParticleIndex_t m_nFXIndex;
 	bool m_bAutoSpawn;
-}
+};

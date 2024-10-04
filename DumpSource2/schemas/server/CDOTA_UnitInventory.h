@@ -8,4 +8,4 @@ class CDOTA_UnitInventory
 	bool m_bIsActive;
 	bool m_bStashEnabled;
 	CHandle< CBaseEntity > m_hTransientCastItem;
-}
+};

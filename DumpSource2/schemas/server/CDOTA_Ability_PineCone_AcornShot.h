@@ -5,4 +5,4 @@ class CDOTA_Ability_PineCone_AcornShot : public CDOTABaseAbility
 	float32 bounce_delay;
 	int32 bounce_range;
 	int32 bounce_count;
-}
+};

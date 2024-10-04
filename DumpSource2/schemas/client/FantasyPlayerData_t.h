@@ -5,4 +5,4 @@ class FantasyPlayerData_t
 	ELeagueRegion m_eRegion;
 	CUtlString m_strPlayerName;
 	bool m_bIsValid;
-}
+};

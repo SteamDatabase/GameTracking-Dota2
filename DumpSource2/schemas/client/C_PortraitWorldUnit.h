@@ -22,4 +22,4 @@ class C_PortraitWorldUnit : public C_DOTA_BaseNPC
 	CUtlSymbolLarge m_cameraName;
 	ParticleIndex_t m_nPortraitParticle;
 	int32 m_nCourierType;
-}
+};

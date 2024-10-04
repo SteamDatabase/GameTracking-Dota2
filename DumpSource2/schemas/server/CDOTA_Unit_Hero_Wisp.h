@@ -8,4 +8,4 @@ class CDOTA_Unit_Hero_Wisp : public CDOTA_BaseNPC_Hero
 	bool m_bParticleStunned;
 	bool m_bDetermineAmbientEffect;
 	float32 m_flPrevHealth;
-}
+};

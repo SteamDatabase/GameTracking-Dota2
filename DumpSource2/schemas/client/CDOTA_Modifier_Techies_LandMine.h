@@ -8,4 +8,4 @@ class CDOTA_Modifier_Techies_LandMine : public CDOTA_Modifier_Invisible
 	int32 min_distance;
 	bool bActivated;
 	CountdownTimer m_Timer;
-}
+};

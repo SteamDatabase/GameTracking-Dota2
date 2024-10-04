@@ -6,4 +6,4 @@ class CDOTA_Modifier_Item_Lotus_Orb_ChannelCheck : public CDOTA_Buff
 	GameTime_t m_fChannelEnd;
 	bool m_bInterrupt;
 	bool m_bExpired;
-}
+};

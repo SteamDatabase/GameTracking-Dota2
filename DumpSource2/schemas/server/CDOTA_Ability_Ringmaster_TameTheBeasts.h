@@ -9,4 +9,4 @@ class CDOTA_Ability_Ringmaster_TameTheBeasts : public CDOTABaseAbility
 	bool m_bWhiped;
 	GameTime_t m_flStartTime;
 	Vector m_vStartLocation;
-}
+};

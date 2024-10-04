@@ -17,4 +17,4 @@ class CDOTA_Modifier_DeathProphet_Exorcism : public CDOTA_Buff
 	bool m_bForceExpired;
 	CUtlVector< CHandle< CBaseEntity > > m_vecDeadHeroes;
 	CUtlVector< sSpiritInfo* > m_vecSpirits;
-}
+};

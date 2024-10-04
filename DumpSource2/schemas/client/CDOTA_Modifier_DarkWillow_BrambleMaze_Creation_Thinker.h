@@ -6,4 +6,4 @@ class CDOTA_Modifier_DarkWillow_BrambleMaze_Creation_Thinker : public CDOTA_Buff
 	float32 placement_duration;
 	float32 extra_brambles_placement_duration;
 	int32 m_iBramblesIndex;
-}
+};

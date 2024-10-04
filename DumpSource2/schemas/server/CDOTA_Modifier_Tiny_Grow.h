@@ -6,4 +6,4 @@ class CDOTA_Modifier_Tiny_Grow : public CDOTA_Buff
 	float32 tree_bonus_damage_pct;
 	float32 move_speed;
 	ParticleIndex_t m_nFXIndex;
-}
+};

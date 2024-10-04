@@ -8,4 +8,4 @@ class CDOTA_Modifier_Mirana_SolarFlare : public CDOTA_Buff
 	int32 evasion;
 	int32 m_iTotalAmount;
 	int32 ally_pct;
-}
+};

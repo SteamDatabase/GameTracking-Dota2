@@ -6,4 +6,4 @@ class CDOTA_Ability_EnragedWildkin_Hurricane : public CDOTABaseAbility
 	Vector m_vFacePosition;
 	Vector m_vTravelDir;
 	float32 m_fTravelDistance;
-}
+};

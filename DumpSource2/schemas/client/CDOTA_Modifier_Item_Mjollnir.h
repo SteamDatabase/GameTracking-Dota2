@@ -11,4 +11,4 @@ class CDOTA_Modifier_Item_Mjollnir : public CDOTA_Buff_Item
 	float32 chain_cooldown;
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	CountdownTimer m_ChainTimer;
-}
+};

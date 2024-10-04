@@ -12,4 +12,4 @@ class CDOTA_Modifier_Beastmaster_DrumsOfSlom : public CDOTA_Buff
 	float32 min_drum_hit_interval;
 	GameTime_t m_flLastStackChangeTime;
 	GameTime_t m_flLastDrumHitTime;
-}
+};

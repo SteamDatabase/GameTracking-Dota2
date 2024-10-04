@@ -12,4 +12,4 @@ class CDOTA_Ability_DrowRanger_Multishot : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > > m_vHitTargets4;
 	CUtlVector< CHandle< CBaseEntity > > m_vHitTargets5;
 	CUtlVector< CHandle< CBaseEntity > > m_vHitTargets6;
-}
+};

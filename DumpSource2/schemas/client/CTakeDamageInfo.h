@@ -22,4 +22,4 @@ class CTakeDamageInfo
 	int16 m_iRecord;
 	HSCRIPT m_hScriptInstance;
 	bool m_bInTakeDamageFlow;
-}
+};

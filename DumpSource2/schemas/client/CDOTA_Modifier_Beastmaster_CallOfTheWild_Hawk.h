@@ -10,4 +10,4 @@ class CDOTA_Modifier_Beastmaster_CallOfTheWild_Hawk : public CDOTA_Buff
 	int32 max_move_speed;
 	int32 m_iPreviousHawkCount;
 	float32 m_flRotation;
-}
+};

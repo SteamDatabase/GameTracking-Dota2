@@ -19,4 +19,4 @@ class CShmupBulletInfo
 	float32 m_flInterval;
 	Vector2D m_vFixedDirection;
 	bool m_bUseStoredPlayerLocation;
-}
+};

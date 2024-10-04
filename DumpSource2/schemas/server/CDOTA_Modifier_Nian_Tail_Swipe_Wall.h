@@ -15,4 +15,4 @@ class CDOTA_Modifier_Nian_Tail_Swipe_Wall : public CDOTA_Buff
 	GameTime_t m_flWallStartTime;
 	float32 m_flScalar;
 	CUtlVector< CHandle< CBaseEntity > > m_EntitiesToExclude;
-}
+};

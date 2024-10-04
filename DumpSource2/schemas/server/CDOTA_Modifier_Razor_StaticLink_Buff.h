@@ -5,4 +5,4 @@ class CDOTA_Modifier_Razor_StaticLink_Buff : public CDOTA_Buff
 	float32 drain_length;
 	int32 attack_speed_factor;
 	int32 drain_armor;
-}
+};

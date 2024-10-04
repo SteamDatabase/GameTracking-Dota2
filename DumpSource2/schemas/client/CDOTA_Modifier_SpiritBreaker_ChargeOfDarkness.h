@@ -10,4 +10,4 @@ class CDOTA_Modifier_SpiritBreaker_ChargeOfDarkness : public CDOTA_Buff
 	float32 m_flCurrentMovespeedBonus;
 	CHandle< C_BaseEntity > m_hTarget;
 	bool m_bGestureStarted;
-}
+};

@@ -6,4 +6,4 @@ class CDOTA_Modifier_Wind_Waker : public CDOTA_Buff
 	float32 m_flCurTime;
 	float32 m_flHeightT;
 	Vector m_vMoveToPos;
-}
+};

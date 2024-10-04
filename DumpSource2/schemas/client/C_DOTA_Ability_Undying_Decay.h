@@ -5,4 +5,4 @@ class C_DOTA_Ability_Undying_Decay : public C_DOTABaseAbility
 	float32 decay_duration;
 	int32 str_steal;
 	float32 creep_damage_multiplier;
-}
+};

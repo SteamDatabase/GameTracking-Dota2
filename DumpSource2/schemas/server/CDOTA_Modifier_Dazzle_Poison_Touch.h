@@ -6,4 +6,4 @@ class CDOTA_Modifier_Dazzle_Poison_Touch : public CDOTA_Buff
 	float32 flAccummulatedBonusSlow;
 	int32 iAccummulatedBonusDamage;
 	int32 attack_range_bonus;
-}
+};

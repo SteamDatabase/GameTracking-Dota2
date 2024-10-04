@@ -9,4 +9,4 @@ class CDOTA_Modifier_ArcWarden_MagneticField_AttackRange : public CDOTA_Buff
 	float32 aura_origin_x;
 	float32 aura_origin_y;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

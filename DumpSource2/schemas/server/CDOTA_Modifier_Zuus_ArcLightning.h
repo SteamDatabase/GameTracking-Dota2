@@ -9,4 +9,4 @@ class CDOTA_Modifier_Zuus_ArcLightning : public CDOTA_Buff
 	bool trigger_spell_absorb;
 	Vector m_vCurTargetLoc;
 	CUtlVector< CHandle< CBaseEntity > > m_hHitEntities;
-}
+};

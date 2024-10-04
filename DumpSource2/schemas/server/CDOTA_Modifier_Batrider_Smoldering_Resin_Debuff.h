@@ -5,4 +5,4 @@ class CDOTA_Modifier_Batrider_Smoldering_Resin_Debuff : public CDOTA_Buff
 	int32 tick_attack_damage_pct;
 	int32 total_ticks;
 	CUtlVector< float32 > m_nDamageQueue;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Unit_Hero_MonkeyKing : public CDOTA_BaseNPC_Hero
 	float32 m_fTotalDistOnCloud;
 	float32 m_fTotalDistoffCloud;
 	float32 m_fBackOnCloudThresh;
-}
+};

@@ -9,4 +9,4 @@ class CDOTA_Ability_Creature_Ice_Breath : public CDOTABaseAbility
 	CountdownTimer ctTimer;
 	Vector m_vecStartRot;
 	Vector m_vecEndRot;
-}
+};

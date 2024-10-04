@@ -7,4 +7,4 @@ class CDOTA_Modifier_Nian_Whirlpool_Pull : public CDOTA_Buff
 	float32 tick_rate;
 	GameTime_t m_flDamageTick;
 	CHandle< CBaseEntity > m_hThinker;
-}
+};

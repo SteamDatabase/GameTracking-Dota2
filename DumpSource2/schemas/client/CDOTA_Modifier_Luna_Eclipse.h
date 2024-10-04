@@ -13,4 +13,4 @@ class CDOTA_Modifier_Luna_Eclipse : public CDOTA_Buff
 	ParticleIndex_t m_nMoonlightFXIndex;
 	CUtlVector< CHandle< C_BaseEntity > > m_HitTargets;
 	float32 m_flBeamStun;
-}
+};

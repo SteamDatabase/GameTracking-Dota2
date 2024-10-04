@@ -4,4 +4,4 @@ class CDOTA_Modifier_KeeperOfTheLight_ManaLeak : public CDOTA_Buff
 	Vector vLastPos;
 	bool bResetPosition;
 	float32 m_fAccumulatedManaLeak;
-}
+};

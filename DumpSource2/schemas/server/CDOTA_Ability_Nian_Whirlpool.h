@@ -7,4 +7,4 @@ class CDOTA_Ability_Nian_Whirlpool : public CDOTABaseAbility
 	float32 fire_interval;
 	CountdownTimer m_ctTimer;
 	float32 m_flTiming;
-}
+};

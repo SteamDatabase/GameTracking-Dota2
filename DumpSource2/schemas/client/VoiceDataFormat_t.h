@@ -1,0 +1,6 @@
+enum VoiceDataFormat_t : uint32_t
+{
+	VOICEDATA_FORMAT_STEAM = 0,
+	VOICEDATA_FORMAT_ENGINE = 1,
+	VOICEDATA_FORMAT_OPUS = 2,
+};

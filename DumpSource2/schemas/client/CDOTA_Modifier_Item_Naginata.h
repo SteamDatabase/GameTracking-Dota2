@@ -7,4 +7,4 @@ class CDOTA_Modifier_Item_Naginata : public CDOTA_Buff_Item
 	float32 bonus_mana_regen;
 	int32 cooldown_reduction_percent;
 	int32 bonus_chance;
-}
+};

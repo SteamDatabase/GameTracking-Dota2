@@ -9,4 +9,4 @@ class sAcquireHistory
 	CUtlVector< AbilityID_t > m_vecItemList;
 	CUtlVector< AbilityID_t > m_vecTalentSkilledList;
 	CUtlVector< AbilityID_t > m_vecAvailableNeutralItemList;
-}
+};

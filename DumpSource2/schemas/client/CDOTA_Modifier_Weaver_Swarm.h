@@ -6,4 +6,4 @@ class CDOTA_Modifier_Weaver_Swarm : public CDOTA_Buff
 	Vector m_vDirection;
 	Vector m_vStartLoc;
 	CHandle< C_BaseEntity > m_hAttachTarget;
-}
+};

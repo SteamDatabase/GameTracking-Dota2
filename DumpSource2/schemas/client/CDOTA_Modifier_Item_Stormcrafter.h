@@ -8,4 +8,4 @@ class CDOTA_Modifier_Item_Stormcrafter : public CDOTA_Buff_Item
 	float32 slow_duration;
 	float32 bonus_mana_regen;
 	int32 max_targets;
-}
+};

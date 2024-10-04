@@ -12,4 +12,4 @@ class CDOTA_Modifier_Legion_Commander_Duel : public CDOTA_Buff
 	CUtlVector< CHandle< C_BaseEntity > > hAlreadyHitList;
 	CUtlVector< CHandle< C_BaseEntity > > m_hAllyAssisters;
 	CUtlVector< CHandle< C_BaseEntity > > m_hEnemyAssisters;
-}
+};

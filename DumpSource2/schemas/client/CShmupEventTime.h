@@ -9,4 +9,4 @@ class CShmupEventTime
 	Vector m_vOffset;
 	Vector m_vRepeatOffset;
 	CUtlVector< CShmupEventTime > m_children;
-}
+};

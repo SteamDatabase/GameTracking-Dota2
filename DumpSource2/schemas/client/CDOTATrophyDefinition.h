@@ -14,4 +14,4 @@ class CDOTATrophyDefinition
 	CUtlString m_sLocDescription;
 	CUtlString m_sLocUnitsPluralizable;
 	CUtlVector< TrophyLevel_t > m_vecLevels;
-}
+};

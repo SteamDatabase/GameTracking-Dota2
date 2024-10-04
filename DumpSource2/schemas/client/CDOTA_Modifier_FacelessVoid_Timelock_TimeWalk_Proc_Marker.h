@@ -1,3 +1,3 @@
 class CDOTA_Modifier_FacelessVoid_Timelock_TimeWalk_Proc_Marker : public CDOTA_Buff
 {
-}
+};

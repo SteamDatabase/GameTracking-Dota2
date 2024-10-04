@@ -10,4 +10,4 @@ class CDOTA_GuildBannerDynamic : public CDynamicProp
 	GuildID_t m_unGuildID;
 	uint32 m_unGuildFlags;
 	bool m_bUsePanelCache;
-}
+};

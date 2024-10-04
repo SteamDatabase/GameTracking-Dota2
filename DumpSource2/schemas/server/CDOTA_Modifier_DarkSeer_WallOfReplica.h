@@ -8,4 +8,4 @@ class CDOTA_Modifier_DarkSeer_WallOfReplica : public CDOTA_Buff
 	float32 slow_duration;
 	int32 replica_damage_incoming;
 	int32 replica_damage_outgoing;
-}
+};

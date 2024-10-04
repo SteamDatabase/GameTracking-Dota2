@@ -12,4 +12,4 @@ class CDOTA_Ability_Oracle_FortunesEnd : public CDOTABaseAbility
 	bool m_bAbsorbed;
 	CHandle< CBaseEntity > m_hTarget;
 	ParticleIndex_t m_nFXIndex;
-}
+};

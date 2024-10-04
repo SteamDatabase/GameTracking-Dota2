@@ -5,4 +5,4 @@ class CDOTA_Modifier_Item_Fallen_Sky : public CDOTA_Buff_Item
 	float32 bonus_health_regen;
 	float32 bonus_mana_regen;
 	float32 blink_damage_cooldown;
-}
+};

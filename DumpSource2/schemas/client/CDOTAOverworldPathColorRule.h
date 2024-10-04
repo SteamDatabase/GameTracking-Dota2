@@ -5,4 +5,4 @@ class CDOTAOverworldPathColorRule
 	Color m_cCompleteColor;
 	uint8 m_unLockedThickness;
 	uint8 m_unCompleteThickness;
-}
+};

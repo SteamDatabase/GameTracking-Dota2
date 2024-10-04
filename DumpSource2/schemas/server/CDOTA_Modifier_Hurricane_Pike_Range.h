@@ -5,4 +5,4 @@ class CDOTA_Modifier_Hurricane_Pike_Range : public CDOTA_Buff
 	int32 m_iNumAttacks;
 	bool bActive;
 	int32 bonus_attack_speed;
-}
+};

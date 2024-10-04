@@ -6,4 +6,4 @@ class CDOTA_Unit_Roshan : public CDOTA_BaseNPC_Additive
 	CUtlVector< CHandle< CBaseEntity > > m_hAttackingHeroes;
 	bool m_bGoldenRoshan;
 	bool m_bIsNightTimeMode;
-}
+};

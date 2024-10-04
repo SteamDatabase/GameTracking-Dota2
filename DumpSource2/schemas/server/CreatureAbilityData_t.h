@@ -22,4 +22,4 @@ class CreatureAbilityData_t
 	float32 flInitialCooldownMin;
 	float32 flInitialCooldownMax;
 	CreatureAbilityType nAbilityType;
-}
+};

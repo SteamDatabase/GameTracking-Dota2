@@ -5,4 +5,4 @@ class CDOTA_Modifier_Morphling_ScepterStatsDrain_Intelligence_Buff : public CDOT
 	int32 nStrengthSteal;
 	int32 nIntSteal;
 	int32 nAgilitySteal;
-}
+};

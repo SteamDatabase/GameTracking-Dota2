@@ -7,4 +7,4 @@ class CDOTA_Modifier_Treant_LeechSeed : public CDOTA_Buff
 	int32 projectile_speed;
 	bool ground_plant;
 	CHandle< CDOTA_TempTree > m_hTree;
-}
+};

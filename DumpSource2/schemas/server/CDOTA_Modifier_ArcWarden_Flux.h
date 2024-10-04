@@ -13,4 +13,4 @@ class CDOTA_Modifier_ArcWarden_Flux : public CDOTA_Buff
 	int32 m_nCurrentStatusResistance;
 	ParticleIndex_t m_nFXIndex;
 	bool m_bIsTempestVersion;
-}
+};

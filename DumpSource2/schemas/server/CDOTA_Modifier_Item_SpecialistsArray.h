@@ -5,4 +5,4 @@ class CDOTA_Modifier_Item_SpecialistsArray : public CDOTA_Buff_Item
 	int32 proc_bonus_damage;
 	int32 count;
 	int32 secondary_target_range_bonus;
-}
+};

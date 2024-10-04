@@ -7,4 +7,4 @@ class C_DOTA_Unit_Courier : public C_DOTA_BaseNPC_Additive
 	GameTime_t m_flRespawnTime;
 	CourierState_t m_nCourierState;
 	CHandle< C_BaseEntity > m_hCourierStateEntity;
-}
+};

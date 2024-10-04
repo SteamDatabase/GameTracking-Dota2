@@ -10,4 +10,4 @@ class CDOTA_Modifier_Grimstroke_InkCreature : public CDOTA_Buff
 	float32 speed;
 	int32 destroy_attacks;
 	int32 hero_attack_multiplier;
-}
+};

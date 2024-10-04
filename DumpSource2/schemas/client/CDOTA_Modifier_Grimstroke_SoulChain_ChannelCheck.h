@@ -7,4 +7,4 @@ class CDOTA_Modifier_Grimstroke_SoulChain_ChannelCheck : public CDOTA_Buff
 	GameTime_t m_fChannelEnd;
 	bool m_bInterrupt;
 	bool m_bExpired;
-}
+};

@@ -17,4 +17,4 @@ class C_DOTA_BaseNPC_Building : public C_DOTA_BaseNPC
 	PlayerID_t m_iHeroStatueOwnerPlayerID;
 	Color m_ParticleTintColor;
 	FowCustomTeams_t m_nFoWTeam;
-}
+};

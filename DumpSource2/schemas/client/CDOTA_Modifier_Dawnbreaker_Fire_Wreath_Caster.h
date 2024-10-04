@@ -20,4 +20,4 @@ class CDOTA_Modifier_Dawnbreaker_Fire_Wreath_Caster : public CDOTA_Buff
 	float32 animation_rate;
 	float32 turn_rate;
 	float32 m_flFacingTarget;
-}
+};

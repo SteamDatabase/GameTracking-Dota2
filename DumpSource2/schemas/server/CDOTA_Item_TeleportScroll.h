@@ -7,4 +7,4 @@ class CDOTA_Item_TeleportScroll : public CDOTA_Item
 	int32 m_iMinDistance;
 	float32 m_flBaseTeleportTime;
 	float32 m_flExtraTeleportTime;
-}
+};

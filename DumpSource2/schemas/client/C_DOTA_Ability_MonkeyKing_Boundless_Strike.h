@@ -6,4 +6,4 @@ class C_DOTA_Ability_MonkeyKing_Boundless_Strike : public C_DOTABaseAbility
 	ParticleIndex_t m_nFXIndex;
 	bool m_bIsAltCastState;
 	CUtlVector< C_DOTA_BaseNPC* > struckEntities;
-}
+};

@@ -6,4 +6,4 @@ class CavernCrawlRoom_t
 	bool m_bAlwaysVisible;
 	bool m_bStartingRoom;
 	bool m_bFinalTreasure;
-}
+};

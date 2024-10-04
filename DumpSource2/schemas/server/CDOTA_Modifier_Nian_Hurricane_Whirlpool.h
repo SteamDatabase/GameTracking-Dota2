@@ -4,4 +4,4 @@ class CDOTA_Modifier_Nian_Hurricane_Whirlpool : public CDOTA_Buff
 	int32 pull_speed;
 	bool m_bForward;
 	ParticleIndex_t m_nfxIndex;
-}
+};

@@ -10,4 +10,4 @@ class C_DOTAAppCheers : public C_BaseEntity
 	int16 m_nDireSilverCheers;
 	int16 m_nDireGoldCheers;
 	ECrowdLevel m_nDireCrowdLevel;
-}
+};

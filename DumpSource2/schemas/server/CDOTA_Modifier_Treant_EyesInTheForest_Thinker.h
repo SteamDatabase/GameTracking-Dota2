@@ -5,4 +5,4 @@ class CDOTA_Modifier_Treant_EyesInTheForest_Thinker : public CDOTA_Buff
 	CHandle< CBaseEntity > m_hTree;
 	ParticleIndex_t m_nFXIndex;
 	bool m_bUpgradedVision;
-}
+};

@@ -11,4 +11,4 @@ class CDOTA_Modifier_Nian_Frenzy : public CDOTA_Buff
 	float32 stun_duration;
 	int32 m_nTickCounter;
 	CUtlVector< CHandle< CBaseEntity > > m_hEnemies;
-}
+};

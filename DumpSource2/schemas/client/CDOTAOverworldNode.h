@@ -13,4 +13,4 @@ class CDOTAOverworldNode
 	CUtlString m_sEncounterName;
 	CUtlVector< CUtlString > m_vecUnlockMapClasses;
 	CUtlVector< CUtlString > m_vecVisitMapClasses;
-}
+};

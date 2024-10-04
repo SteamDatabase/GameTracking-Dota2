@@ -5,4 +5,4 @@ class CDOTA_Modifier_Lich_Ice_Spire : public CDOTA_Buff
 	CountdownTimer m_Timer;
 	bool has_aura;
 	CHandle< C_BaseEntity > hVictim;
-}
+};

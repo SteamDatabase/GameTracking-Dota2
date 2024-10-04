@@ -10,4 +10,4 @@ class CDOTA_Modifier_Knockback : public CDOTA_Buff
 	bool m_bShouldStun;
 	bool m_bRespectLeash;
 	bool m_bReversePolarity;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Ability_Hoodwink_Decoy : public CDOTABaseAbility
 	int32 decoy_detonate_radius;
 	int32 projectile_speed;
 	ParticleIndex_t m_nFXIndex;
-}
+};

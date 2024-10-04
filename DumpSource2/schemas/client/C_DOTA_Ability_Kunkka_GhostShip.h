@@ -8,4 +8,4 @@ class C_DOTA_Ability_Kunkka_GhostShip : public C_DOTABaseAbility
 	Vector m_vFinalDestination;
 	Vector m_vStartingPoint;
 	int32 m_hProjectileID;
-}
+};

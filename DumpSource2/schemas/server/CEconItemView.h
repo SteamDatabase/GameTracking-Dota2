@@ -16,4 +16,4 @@ class CEconItemView : public IEconItemInterface
 	uint8 m_unClientFlags;
 	eEconItemOrigin m_unOverrideOrigin;
 	CAttributeList m_AttributeList;
-}
+};

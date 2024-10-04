@@ -5,4 +5,4 @@ class C_DOTA_Item_RuneSpawner_Powerup : public CBaseAnimatingActivity
 	float32 m_flNextSpawnTime;
 	bool m_bNextRuneIsWater;
 	bool m_bWillSpawnNextPowerRune;
-}
+};

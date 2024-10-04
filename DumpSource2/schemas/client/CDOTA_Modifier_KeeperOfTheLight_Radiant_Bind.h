@@ -9,4 +9,4 @@ class CDOTA_Modifier_KeeperOfTheLight_Radiant_Bind : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nStatusFXIndex;
 	bool m_bStunned;
-}
+};

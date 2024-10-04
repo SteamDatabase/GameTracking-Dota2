@@ -7,4 +7,4 @@ class CDOTA_Modifier_AghsFort_PoisonNova_Creature_Thinker : public CDOTA_Buff
 	int32 radius;
 	int32 start_radius;
 	float32 duration;
-}
+};

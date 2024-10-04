@@ -5,4 +5,4 @@ class CDOTA_Modifier_Winter_Wyvern_Winters_Curse : public CDOTA_Buff
 	int32 damage_reduction;
 	int32 damage_amplification;
 	int32 bonus_attack_speed;
-}
+};

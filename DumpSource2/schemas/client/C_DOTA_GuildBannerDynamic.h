@@ -11,4 +11,4 @@ class C_DOTA_GuildBannerDynamic : public C_DynamicProp
 	uint32 m_unGuildFlags;
 	bool m_bUsePanelCache;
 	CHandle< C_BaseEntity > m_hClientEntity;
-}
+};

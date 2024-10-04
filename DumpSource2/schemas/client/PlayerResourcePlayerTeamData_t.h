@@ -74,4 +74,4 @@ class PlayerResourcePlayerTeamData_t
 	uint32 m_iObsoleteEventPointAdjustmentsRemaining;
 	uint32 m_iObsoleteAvailableSalutes;
 	uint32 m_iObsoleteSaluteAmounts;
-}
+};

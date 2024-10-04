@@ -5,4 +5,4 @@ class CDOTA_Modifier_Enigma_Malefice : public CDOTA_Buff
 	int32 damage;
 	float32 duration;
 	int32 m_nEidolonSpawnNum;
-}
+};

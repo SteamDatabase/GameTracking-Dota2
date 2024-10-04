@@ -6,4 +6,4 @@ class CDOTA_Modifier_Lich_Chain_Frost_Thinker : public CDOTA_Buff
 	bool m_bFirstJump;
 	CHandle< C_BaseEntity > m_hTarget;
 	CHandle< C_BaseEntity > m_hAvoidTarget;
-}
+};

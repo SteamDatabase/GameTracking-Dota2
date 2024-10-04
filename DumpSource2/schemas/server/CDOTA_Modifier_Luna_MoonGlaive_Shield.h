@@ -14,4 +14,4 @@ class CDOTA_Modifier_Luna_MoonGlaive_Shield : public CDOTA_Buff
 	float32 m_flSecondsPerRotation;
 	float32 m_flMaxRadius;
 	GameTime_t m_flStartTime;
-}
+};

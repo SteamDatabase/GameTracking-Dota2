@@ -9,4 +9,4 @@ class CDOTA_Modifier_Primal_Beast_Uproar_Projectile_Thinker : public CDOTA_Buff
 	int32 projectile_waves;
 	int32 m_nCurrentWaveCount;
 	int32 tectonic_shift_projectiles;
-}
+};

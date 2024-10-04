@@ -11,4 +11,4 @@ class CDOTASubChallengeInfo
 	int32 nSequenceID;
 	HeroID_t nRequiredHero;
 	int32 nCompleted;
-}
+};

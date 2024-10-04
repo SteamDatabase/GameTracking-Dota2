@@ -18,4 +18,4 @@ class CDOTASpectatorGraphManager
 	CUtlVector< sPlayerSnapshot >[24] m_vecPlayerSnapshots;
 	int32 m_event_dota_player_killed;
 	int32 m_event_server_pre_shutdown;
-}
+};

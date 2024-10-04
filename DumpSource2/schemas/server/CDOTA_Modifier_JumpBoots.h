@@ -4,4 +4,4 @@ class CDOTA_Modifier_JumpBoots : public CDOTA_Buff
 	float32 m_flStartZ;
 	float32 m_flCurTime;
 	int32 push_length;
-}
+};

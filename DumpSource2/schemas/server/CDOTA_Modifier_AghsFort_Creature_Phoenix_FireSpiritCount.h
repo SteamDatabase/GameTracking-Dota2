@@ -2,4 +2,4 @@ class CDOTA_Modifier_AghsFort_Creature_Phoenix_FireSpiritCount : public CDOTA_Bu
 {
 	int32 spirit_count;
 	ParticleIndex_t m_nFXIndex;
-}
+};

@@ -9,4 +9,4 @@ class CDOTA_Modifier_Terrorblade_Metamorphosis_Fear_Thinker : public CDOTA_Buff
 	int32 scepter_radius;
 	float32 damage;
 	bool m_bFirstThink;
-}
+};

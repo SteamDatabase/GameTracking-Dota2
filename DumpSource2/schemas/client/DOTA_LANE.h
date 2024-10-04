@@ -1,0 +1,8 @@
+enum DOTA_LANE : uint32_t
+{
+	DOTA_LANE_NONE = 0,
+	DOTA_LANE_TOP = 1,
+	DOTA_LANE_MIDDLE = 2,
+	DOTA_LANE_BOTTOM = 3,
+	DOTA_LANE_MAX = 4,
+};

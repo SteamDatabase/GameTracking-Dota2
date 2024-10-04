@@ -60,4 +60,4 @@ class CDOTAPlayerController : public CBasePlayerController
 	uint8[10] m_pOrderRetirementHistory;
 	uint16 m_nOrderRetirementSum;
 	int32 m_nOrderRetirementLastTick;
-}
+};

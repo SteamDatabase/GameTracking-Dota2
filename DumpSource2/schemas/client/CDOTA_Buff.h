@@ -35,4 +35,4 @@ class CDOTA_Buff : public C_HorizontalMotionController
 	CUtlVector< CDOTA_BuffParticle > m_iParticles;
 	CUtlVector< CHandle< C_BaseEntity > > m_hAuraUnits;
 	HSCRIPT m_hScriptScope;
-}
+};

@@ -11,4 +11,4 @@ class PortraitWorldLightConfig_t
 	Color m_color;
 	bool m_bShowGizmos;
 	bool m_bShadows;
-}
+};

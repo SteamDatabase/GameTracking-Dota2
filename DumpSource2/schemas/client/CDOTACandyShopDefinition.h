@@ -21,4 +21,4 @@ class CDOTACandyShopDefinition
 	CUtlVector< CandyShopCandyType_t > m_vecCandyTypes;
 	CUtlVector< CandyShopRewardSlot_t > m_vecRewardSlots;
 	CUtlVector< CandyShopRewardOption_t > m_vecDefaultRewardOptions;
-}
+};

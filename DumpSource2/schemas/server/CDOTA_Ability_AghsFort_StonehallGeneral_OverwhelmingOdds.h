@@ -5,4 +5,4 @@ class CDOTA_Ability_AghsFort_StonehallGeneral_OverwhelmingOdds : public CDOTABas
 	Vector m_vDir;
 	int32 m_nSteps;
 	ParticleIndex_t m_nFXIndex;
-}
+};

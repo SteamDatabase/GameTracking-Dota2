@@ -5,4 +5,4 @@ class CDOTABehaviorCommandMoveToPositionToCast
 	CHandle< CBaseEntity > m_hAbility;
 	bool m_bTurningToTarget;
 	float32 m_flTargetAngle;
-}
+};

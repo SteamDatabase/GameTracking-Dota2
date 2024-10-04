@@ -7,4 +7,4 @@ class C_DOTA_Ability_Nian_Whirlpool : public C_DOTABaseAbility
 	float32 fire_interval;
 	CountdownTimer m_ctTimer;
 	float32 m_flTiming;
-}
+};

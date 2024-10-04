@@ -94,4 +94,4 @@ class C_DOTABaseGameMode : public C_BaseEntity
 	float32 m_flWaterRuneSpawnInterval;
 	C_NetworkUtlVectorBase< CHandle< C_DOTA_BaseNPC > > m_vecBigHealthBarUnits;
 	uint32 m_nHUDVisibilityBitsPrevious;
-}
+};

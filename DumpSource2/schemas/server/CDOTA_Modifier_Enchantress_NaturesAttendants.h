@@ -7,4 +7,4 @@ class CDOTA_Modifier_Enchantress_NaturesAttendants : public CDOTA_Buff
 	int32 wisp_count;
 	ParticleIndex_t m_nWispFXIndex;
 	bool m_bAutoWisps;
-}
+};

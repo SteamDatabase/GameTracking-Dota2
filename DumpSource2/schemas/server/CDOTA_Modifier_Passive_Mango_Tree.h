@@ -7,4 +7,4 @@ class CDOTA_Modifier_Passive_Mango_Tree : public CDOTA_Buff
 	CountdownTimer m_RespawnTimer;
 	int32 m_nMangosAvailable;
 	int32 m_nChannelCount;
-}
+};

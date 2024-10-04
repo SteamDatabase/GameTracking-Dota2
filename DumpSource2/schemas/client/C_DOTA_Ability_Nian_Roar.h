@@ -16,4 +16,4 @@ class C_DOTA_Ability_Nian_Roar : public C_DOTABaseAbility
 	CountdownTimer m_ctTimer;
 	float32 m_flTiming;
 	bool m_bScriptRoar;
-}
+};

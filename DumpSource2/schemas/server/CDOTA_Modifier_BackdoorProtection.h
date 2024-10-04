@@ -6,4 +6,4 @@ class CDOTA_Modifier_BackdoorProtection : public CDOTA_Buff
 	float32 activation_time;
 	int32 regen_rate;
 	CountdownTimer m_TimerToActivate;
-}
+};

@@ -10,4 +10,4 @@ class CDOTABingoGameDefinition
 	CUtlVector< uint32 > m_vecLeaguePhases;
 	CUtlVector< CUtlVector< int32 > > m_vecValidStatRangesPerPhase;
 	CUtlOrderedMap< CUtlString, CDOTABingoStatDefinition > m_mapBingoStatsByName;
-}
+};

@@ -38,4 +38,4 @@ class CIngameEvent_Base : public CBaseEntity
 	uint32[24] m_pCavernCrawlPlusShardWinnings;
 	CUtlVector< DOTACavernCrawlMapResult_t >*[24] m_ppVecCavernCrawlMapResult;
 	int32 m_event_lobby_updated;
-}
+};

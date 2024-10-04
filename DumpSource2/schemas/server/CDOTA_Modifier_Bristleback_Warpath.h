@@ -9,4 +9,4 @@ class CDOTA_Modifier_Bristleback_Warpath : public CDOTA_Buff
 	float32 active_bonus_movement_percent;
 	GameTime_t m_flMaxStackStartTime;
 	bool m_bSuppressKillEater;
-}
+};

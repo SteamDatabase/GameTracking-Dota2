@@ -4,4 +4,4 @@ class CShmupPathEvent
 	int32 m_nBulletPatternIndex;
 	float32 m_flTime;
 	float32 m_flSpeed;
-}
+};

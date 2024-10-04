@@ -5,4 +5,4 @@ class CDOTA_Ability_Snapfire_Scatterblast : public CDOTABaseAbility
 	int32 point_blank_range;
 	float32 point_blank_dmg_bonus_pct;
 	int32 blast_width_end;
-}
+};

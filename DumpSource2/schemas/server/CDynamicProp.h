@@ -26,4 +26,4 @@ class CDynamicProp : public CBreakableProp
 	int32 m_nGlowRangeMin;
 	Color m_glowColor;
 	int32 m_nGlowTeam;
-}
+};

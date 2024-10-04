@@ -11,4 +11,4 @@ class CDOTA_Modifier_Gyrocopter_Call_Down : public CDOTA_Buff
 	ParticleIndex_t m_nMarkerIndex;
 	bool m_bIsTrackingMissile;
 	CHandle< CBaseEntity > m_hTrackingTarget;
-}
+};

@@ -5,4 +5,4 @@ class CMoverPathNode : public CPointEntity
 	CUtlSymbolLarge m_szParentPathUniqueID;
 	CEntityIOOutput m_OnPassThrough;
 	CHandle< CPathMover > m_hMover;
-}
+};

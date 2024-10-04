@@ -45,4 +45,4 @@ class CGlobalLightBase
 	CHandle< C_BaseEntity > m_hEnvSky;
 	float32 m_fSmoothedAmount;
 	float32 m_fSlowSmoothedAmount;
-}
+};

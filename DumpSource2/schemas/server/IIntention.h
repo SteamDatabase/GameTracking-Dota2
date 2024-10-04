@@ -1,3 +1,3 @@
 class IIntention : public INextBotComponent
 {
-}
+};

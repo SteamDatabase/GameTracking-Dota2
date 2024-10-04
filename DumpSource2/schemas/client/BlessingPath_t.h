@@ -5,4 +5,4 @@ class BlessingPath_t
 	bool bOneWay;
 	float32 flCircleInvRadius;
 	Color color;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Modifier_Item_Overwhelming_Blink_Debuff : public CDOTA_Buff
 	int32 attack_slow;
 	float32 damage_pct_over_time;
 	float32 m_flTickDamage;
-}
+};

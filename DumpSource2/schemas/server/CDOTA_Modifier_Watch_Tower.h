@@ -12,4 +12,4 @@ class CDOTA_Modifier_Watch_Tower : public CDOTA_Buff
 	int32 m_iBonusCount;
 	ParticleIndex_t m_nFxOutpostAmbient;
 	ParticleIndex_t m_nFxOutpostInitialAmbient;
-}
+};

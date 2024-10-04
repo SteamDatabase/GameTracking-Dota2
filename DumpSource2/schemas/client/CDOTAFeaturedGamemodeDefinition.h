@@ -7,4 +7,4 @@ class CDOTAFeaturedGamemodeDefinition
 	int32 m_nShardsPerLoss;
 	CUtlString m_sStartTime;
 	CUtlString m_sEndTime;
-}
+};

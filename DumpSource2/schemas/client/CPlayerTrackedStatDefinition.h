@@ -6,4 +6,4 @@ class CPlayerTrackedStatDefinition
 	TrackedStatCombatQueryData_t m_combatQueryData;
 	TrackedStatExpressionData_t m_expressionData;
 	TrackedStatHeroAdjectiveData_t m_heroAdjectiveData;
-}
+};

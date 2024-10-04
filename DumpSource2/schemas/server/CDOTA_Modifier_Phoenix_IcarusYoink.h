@@ -13,4 +13,4 @@ class CDOTA_Modifier_Phoenix_IcarusYoink : public CDOTA_Buff
 	float32 impact_damage;
 	CUtlVector< CHandle< CBaseEntity > > m_vecHitEntities;
 	CHandle< CBaseEntity > hTarget;
-}
+};

@@ -17,4 +17,4 @@ class CDOTA_Modifier_LootDrop_Thinker : public CDOTA_Buff
 	Vector m_vEndPos;
 	float32 m_fPickupRadius;
 	CUtlString m_strTransitionEffect;
-}
+};

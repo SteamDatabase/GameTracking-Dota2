@@ -7,4 +7,4 @@ class CDOTA_Modifier_Item_SangeAndYasha : public CDOTA_Buff_Item
 	int32 hp_regen_amp;
 	int32 status_resistance;
 	int32 slow_resistance;
-}
+};

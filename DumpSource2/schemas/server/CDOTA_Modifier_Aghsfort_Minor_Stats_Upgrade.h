@@ -16,4 +16,4 @@ class CDOTA_Modifier_Aghsfort_Minor_Stats_Upgrade : public CDOTA_Buff
 	int32 bonus_evasion;
 	int32 bonus_magic_resist;
 	int32 bonus_lifesteal;
-}
+};

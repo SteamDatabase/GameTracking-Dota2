@@ -6,4 +6,4 @@ class C_DOTA_SimpleObstruction : public C_BaseEntity
 	uint32 m_unOccluderID;
 	bool m_bBlockingGridNav;
 	bool m_bPrevEnabled;
-}
+};

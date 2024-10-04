@@ -4,4 +4,4 @@ class CDOTA_Ability_Razor_StaticLink : public CDOTABaseAbility
 	CountdownTimer m_ViewerTimer;
 	float32 vision_duration;
 	bool m_bIsAltCastState;
-}
+};

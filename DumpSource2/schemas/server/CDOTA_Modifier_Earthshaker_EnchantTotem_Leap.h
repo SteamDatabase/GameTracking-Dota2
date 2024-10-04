@@ -15,4 +15,4 @@ class CDOTA_Modifier_Earthshaker_EnchantTotem_Leap : public CDOTA_Buff
 	int32 scepter_height_arcbuffer;
 	int32 scepter_acceleration_z;
 	int32 scepter_acceleration_horizontal;
-}
+};

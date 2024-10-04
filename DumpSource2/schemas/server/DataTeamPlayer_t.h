@@ -86,4 +86,4 @@ class DataTeamPlayer_t
 	int32 m_iLotusesTaken;
 	int32 m_iTormentorKills;
 	int32 m_iCourierKills;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_Item_CraniumBasher : public CDOTA_Buff_Item
 	int32 bonus_chance_damage;
 	int32 bonus_damage;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

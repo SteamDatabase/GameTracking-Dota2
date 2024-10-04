@@ -4,4 +4,4 @@ class CDOTACustomGameHeroPickRules : public CDOTABaseCustomHeroPickRules
 	int32 m_nNumBansPerTeam;
 	GameTime_t m_flEnterTime;
 	int32 m_nNumHeroesPicked;
-}
+};

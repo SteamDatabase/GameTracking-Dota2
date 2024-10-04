@@ -5,4 +5,4 @@ class CDOTA_Modifier_Zuus_Lightning_Hands : public CDOTA_Buff
 	int32 arc_lightning_damage_pct;
 	int32 arc_lightning_damage_illusion_pct;
 	int32 attack_speed_bonus;
-}
+};

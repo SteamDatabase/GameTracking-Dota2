@@ -7,4 +7,4 @@ class CDOTA_Modifier_NightStalker_CripplingFear_Aura : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	float32 base_duration;
 	GameTime_t m_flStartTime;
-}
+};

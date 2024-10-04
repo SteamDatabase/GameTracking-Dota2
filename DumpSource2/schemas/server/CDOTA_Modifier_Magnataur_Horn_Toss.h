@@ -9,4 +9,4 @@ class CDOTA_Modifier_Magnataur_Horn_Toss : public CDOTA_Buff
 	float32 m_flJumpDuration;
 	float32 m_flJumpHeight;
 	Vector m_vTargetHorizontalDirection;
-}
+};

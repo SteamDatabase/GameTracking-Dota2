@@ -5,4 +5,4 @@ class CDOTA_Modifier_Item_Lotus_Orb : public CDOTA_Buff_Item
 	int32 bonus_armor;
 	int32 bonus_mana;
 	float32 block_cooldown;
-}
+};

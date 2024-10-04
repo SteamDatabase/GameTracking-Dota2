@@ -20,4 +20,4 @@ class C_DOTAGameManager
 	bool[9] m_bLoadedPortraits;
 	KeyValues* m_pControlGroupsKeyValues;
 	bool[256] m_CurrentHeroAvailable;
-}
+};

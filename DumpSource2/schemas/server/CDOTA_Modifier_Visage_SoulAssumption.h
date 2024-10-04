@@ -10,4 +10,4 @@ class CDOTA_Modifier_Visage_SoulAssumption : public CDOTA_Buff
 	ParticleIndex_t m_nFxIndexB;
 	int32 iCur_stack;
 	float32 m_fTotalDamage;
-}
+};

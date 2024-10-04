@@ -6,4 +6,4 @@ class CDOTA_Modifier_Jakiro_Macropyre_Thinker : public CDOTA_Buff
 	int32 cast_range;
 	float32 linger_duration;
 	bool m_bTestedGem;
-}
+};

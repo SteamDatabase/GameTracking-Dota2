@@ -6,4 +6,4 @@ class CDOTA_Ability_Hoodwink_HuntersBoomerang : public CDOTABaseAbility
 	float32 mark_duration;
 	CHandle< CBaseEntity > m_hTarget;
 	CUtlVector< CHandle< CBaseEntity > > m_vecHitEntities;
-}
+};

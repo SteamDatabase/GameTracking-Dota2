@@ -7,4 +7,4 @@ class CDOTA_Modifier_AghsFort_StonehallGeneral_OverwhelmingOdds_Thinker : public
 	int32 m_nRadiusStep;
 	ParticleIndex_t m_nFXIndex;
 	Vector m_vDir;
-}
+};

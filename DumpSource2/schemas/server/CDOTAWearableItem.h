@@ -5,4 +5,4 @@ class CDOTAWearableItem : public CEconWearable
 	bool m_bIsItemVisibleOnGeneratedEntity;
 	bool m_bHideWearableButDrawAdditionalWearables;
 	CHandle< CBaseAnimatingActivity > m_hAdditionalWearable;
-}
+};

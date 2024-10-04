@@ -7,4 +7,4 @@ class C_DOTA_Ability_EmberSpirit_Activate_FireRemnant : public C_DOTABaseAbility
 	CHandle< C_BaseEntity > m_hRemnantToKill;
 	bool m_bProjectileStarted;
 	CUtlVector< CHandle< C_BaseEntity > > hAlreadyHitList;
-}
+};

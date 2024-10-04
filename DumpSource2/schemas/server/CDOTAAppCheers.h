@@ -10,4 +10,4 @@ class CDOTAAppCheers : public CBaseEntity
 	int16 m_nDireSilverCheers;
 	int16 m_nDireGoldCheers;
 	ECrowdLevel m_nDireCrowdLevel;
-}
+};

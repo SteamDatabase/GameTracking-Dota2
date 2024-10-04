@@ -8,4 +8,4 @@ class PingConfirmationState_t
 	int32 m_nID;
 	PingConfirmationIconType m_IconType;
 	int32[24] m_nAgreeState;
-}
+};

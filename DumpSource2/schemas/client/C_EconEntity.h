@@ -12,4 +12,4 @@ class C_EconEntity : public C_BaseFlex
 	style_index_t m_iOldStyle;
 	CHandle< C_BaseEntity > m_hOldProvidee;
 	CUtlVector< C_EconEntity::AttachedModelData_t > m_vecAttachedModels;
-}
+};

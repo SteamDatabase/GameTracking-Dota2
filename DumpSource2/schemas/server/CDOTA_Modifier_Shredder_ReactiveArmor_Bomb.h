@@ -12,4 +12,4 @@ class CDOTA_Modifier_Shredder_ReactiveArmor_Bomb : public CDOTA_Buff
 	GameTime_t m_timeLastTick;
 	GameTime_t m_StartTime;
 	int32 m_nLastParticleTime;
-}
+};

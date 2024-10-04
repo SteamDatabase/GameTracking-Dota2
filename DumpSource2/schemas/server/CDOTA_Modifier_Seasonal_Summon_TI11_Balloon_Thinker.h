@@ -19,4 +19,4 @@ class CDOTA_Modifier_Seasonal_Summon_TI11_Balloon_Thinker : public CDOTA_Buff
 	int32 m_nTimesBounced;
 	float32 m_flModelScale;
 	CHandle< CBaseEntity > m_hLastHit;
-}
+};

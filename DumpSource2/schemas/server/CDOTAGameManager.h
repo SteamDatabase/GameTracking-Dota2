@@ -18,4 +18,4 @@ class CDOTAGameManager
 	KeyValues3 m_AddonInfoKeyValues;
 	KeyValues* m_pCountryKeyValues;
 	bool[256] m_CurrentHeroAvailable;
-}
+};

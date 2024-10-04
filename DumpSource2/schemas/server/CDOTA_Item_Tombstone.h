@@ -6,4 +6,4 @@ class CDOTA_Item_Tombstone : public CDOTA_Item
 	Vector m_vContainerPosition;
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXIndex2;
-}
+};

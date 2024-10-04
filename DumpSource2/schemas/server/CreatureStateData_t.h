@@ -5,4 +5,4 @@ class CreatureStateData_t
 	float32 flAvoidance;
 	float32 flSupport;
 	float32 flRoamDistance;
-}
+};

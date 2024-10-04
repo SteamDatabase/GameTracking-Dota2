@@ -5,4 +5,4 @@ class CDOTABehaviorCommandPatrol
 	CUtlVector< Vector > m_vPatrolPoints;
 	int32 m_nCurrentTargetIndex;
 	int32 m_nDirection;
-}
+};

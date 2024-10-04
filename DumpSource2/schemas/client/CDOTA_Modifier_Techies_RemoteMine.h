@@ -8,4 +8,4 @@ class CDOTA_Modifier_Techies_RemoteMine : public CDOTA_Modifier_Invisible
 	float32 vision_duration;
 	int32 model_scale;
 	bool bExploding;
-}
+};

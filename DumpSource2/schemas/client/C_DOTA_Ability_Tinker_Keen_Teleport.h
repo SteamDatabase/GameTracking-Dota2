@@ -10,4 +10,4 @@ class C_DOTA_Ability_Tinker_Keen_Teleport : public C_DOTABaseAbility
 	Vector m_vDestination;
 	int32 m_iMinDistance;
 	float32 m_flBaseTeleportTime;
-}
+};

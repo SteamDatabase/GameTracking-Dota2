@@ -6,4 +6,4 @@ class CDOTA_Modifier_Item_VoidwalkerScythe : public CDOTA_Buff_Item
 	float32 buff_duration;
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	int32 m_nCounter;
-}
+};

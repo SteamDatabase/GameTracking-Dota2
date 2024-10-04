@@ -9,4 +9,4 @@ class CDOTA_Modifier_Brewmaster_Primal_Companion : public CDOTA_Buff
 	int32 cooldown_penalty_pct;
 	int32 bonus_brewling_hp;
 	int32 bonus_damage;
-}
+};

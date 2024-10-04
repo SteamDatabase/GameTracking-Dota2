@@ -7,4 +7,4 @@ class CDOTABehaviorMoveTo
 	float32 m_flTargetDist;
 	bool m_bIsDirectional;
 	bool m_bIsRelative;
-}
+};

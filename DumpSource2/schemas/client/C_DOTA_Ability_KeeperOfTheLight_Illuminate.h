@@ -8,4 +8,4 @@ class C_DOTA_Ability_KeeperOfTheLight_Illuminate : public C_DOTABaseAbility
 	Vector m_vPos;
 	int32 total_damage;
 	bool m_bStarted;
-}
+};

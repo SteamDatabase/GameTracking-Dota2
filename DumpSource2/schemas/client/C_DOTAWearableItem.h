@@ -14,4 +14,4 @@ class C_DOTAWearableItem : public C_EconWearable
 	bool m_bCombinerMaterialOverrideListChanged;
 	bool m_bRubickFollower;
 	bool m_bHasPlayerModel;
-}
+};

@@ -1,3 +1,3 @@
 class C_DOTA_Ability_Special_Bonus_Unique_Elder_Titan_2 : public C_DOTABaseAbility
 {
-}
+};

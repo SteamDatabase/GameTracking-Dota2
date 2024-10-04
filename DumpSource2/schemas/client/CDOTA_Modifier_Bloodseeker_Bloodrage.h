@@ -5,4 +5,4 @@ class CDOTA_Modifier_Bloodseeker_Bloodrage : public CDOTA_Buff
 	float32 shard_max_health_dmg;
 	float32 damage_pct;
 	float32 flTickRate;
-}
+};

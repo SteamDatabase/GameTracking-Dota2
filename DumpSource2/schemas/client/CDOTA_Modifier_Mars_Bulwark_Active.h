@@ -14,4 +14,4 @@ class CDOTA_Modifier_Mars_Bulwark_Active : public CDOTA_Buff
 	int32 m_nLastMaxDirection;
 	Vector m_vLastOrigin;
 	GameTime_t m_flLastGameTime;
-}
+};

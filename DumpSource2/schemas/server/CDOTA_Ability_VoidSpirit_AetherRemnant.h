@@ -7,4 +7,4 @@ class CDOTA_Ability_VoidSpirit_AetherRemnant : public CDOTABaseAbility
 	Vector m_vDashPosition;
 	Vector m_vFacePosition;
 	Vector m_vEndpoint;
-}
+};

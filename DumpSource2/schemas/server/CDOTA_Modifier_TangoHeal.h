@@ -4,4 +4,4 @@ class CDOTA_Modifier_TangoHeal : public CDOTA_Buff
 	bool superheal;
 	float32 m_fHealingDone;
 	CUtlString m_sAbilityClassname;
-}
+};

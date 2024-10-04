@@ -15,4 +15,4 @@ class CDOTA_Modifier_Windrunner_FocusFire : public CDOTA_Buff
 	bool m_bFocusFireProcessProcs;
 	ParticleIndex_t m_nFXFocusFire;
 	GameTime_t m_flLastFocusFireAttackTime;
-}
+};

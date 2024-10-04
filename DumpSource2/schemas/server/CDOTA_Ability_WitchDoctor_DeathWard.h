@@ -7,4 +7,4 @@ class CDOTA_Ability_WitchDoctor_DeathWard : public CDOTABaseAbility
 	GameTime_t m_fWardExpireTime;
 	ParticleIndex_t m_nFXIndex;
 	CUtlVector< sBounceInfo > m_BounceInfo;
-}
+};

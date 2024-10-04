@@ -17,4 +17,4 @@ class CDOTA_Modifier_Pugna_LifeDrain : public CDOTA_Buff
 	int32 spell_amp_drain_rate_ward;
 	int32 spell_amp_drain_max;
 	int32 health_to_mana_rate;
-}
+};

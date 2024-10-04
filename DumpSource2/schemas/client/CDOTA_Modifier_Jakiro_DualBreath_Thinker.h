@@ -5,4 +5,4 @@ class CDOTA_Modifier_Jakiro_DualBreath_Thinker : public CDOTA_Buff
 	GameTime_t m_fStartTime;
 	float32 m_fTotalTime;
 	Vector m_vCastPosition;
-}
+};

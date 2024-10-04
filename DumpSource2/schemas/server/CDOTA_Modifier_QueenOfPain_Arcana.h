@@ -6,4 +6,4 @@ class CDOTA_Modifier_QueenOfPain_Arcana : public CDOTA_Buff
 	bool m_bSpeechComplete;
 	bool m_bMessageComplete;
 	bool m_bIsMeleeAttack;
-}
+};

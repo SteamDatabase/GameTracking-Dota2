@@ -13,4 +13,4 @@ class CDOTA_Modifier_ItemWiggle_Thinker : public CDOTA_Buff
 	float32 m_flScaleAmplitude;
 	float32 m_flStartFrequency;
 	float32 m_flEndFrequency;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_Bristleback_Warpath : public CDOTA_Buff
 	int32 aspd_per_stack;
 	float32 active_bonus_attack_percent;
 	float32 active_bonus_movement_percent;
-}
+};

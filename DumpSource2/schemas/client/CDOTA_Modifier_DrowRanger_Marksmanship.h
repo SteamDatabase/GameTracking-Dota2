@@ -11,4 +11,4 @@ class CDOTA_Modifier_DrowRanger_Marksmanship : public CDOTA_Buff
 	int32 split_count;
 	int32 split_range;
 	bool m_bGlacialAttack;
-}
+};

@@ -50,4 +50,4 @@ class C_DOTA_Item : public C_DOTABaseAbility
 	int32 m_iOldCharges;
 	PlayerID_t m_iPlayerOwnerID;
 	C_NetworkUtlVectorBase< uint8 > m_vecPreGameTransferPlayerIDs;
-}
+};

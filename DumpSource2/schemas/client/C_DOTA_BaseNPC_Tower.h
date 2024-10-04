@@ -18,4 +18,4 @@ class C_DOTA_BaseNPC_Tower : public C_DOTA_BaseNPC_Building
 	float32 m_flLastAimYaw;
 	bool m_bClientSideCustomTower;
 	CountdownTimer m_IdleRareAnimationTime;
-}
+};

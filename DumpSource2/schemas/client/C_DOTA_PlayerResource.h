@@ -25,4 +25,4 @@ class C_DOTA_PlayerResource : public C_BaseEntity
 	int32 m_nEventNPCReplaced;
 	int32 m_nEventPlayerInfo;
 	int32 m_nInventoryUpdated;
-}
+};

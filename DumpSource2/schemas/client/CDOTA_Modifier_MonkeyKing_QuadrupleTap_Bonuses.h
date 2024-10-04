@@ -6,4 +6,4 @@ class CDOTA_Modifier_MonkeyKing_QuadrupleTap_Bonuses : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	int32 m_nIgnoreStrikeIndex;
 	bool m_bIsAttackAnim;
-}
+};

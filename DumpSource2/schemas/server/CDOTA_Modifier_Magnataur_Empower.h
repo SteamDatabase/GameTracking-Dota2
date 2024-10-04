@@ -7,4 +7,4 @@ class CDOTA_Modifier_Magnataur_Empower : public CDOTA_Buff
 	int32 cleave_distance;
 	float32 self_multiplier;
 	int32 secondary_cleave_distance;
-}
+};

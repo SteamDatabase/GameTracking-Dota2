@@ -26,4 +26,4 @@ class CDOTABehaviorPet : public CDOTABehaviorCompanion
 	CHandle< CBaseEntity > m_tempGoalEntity;
 	bool m_bFollowingTempGoal;
 	int32 m_event_dota_illusions_created;
-}
+};

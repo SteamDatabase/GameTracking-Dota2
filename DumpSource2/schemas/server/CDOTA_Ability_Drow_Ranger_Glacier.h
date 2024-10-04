@@ -10,4 +10,4 @@ class CDOTA_Ability_Drow_Ranger_Glacier : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > > m_vecShards;
 	CDOTABaseAbility* m_pIceShardsStop;
 	ParticleIndex_t m_nFXIndex;
-}
+};

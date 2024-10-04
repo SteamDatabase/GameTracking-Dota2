@@ -4,4 +4,4 @@ class CDOTA_Modifier_Lycan_Wolf_Bite_Lifesteal : public CDOTA_Buff
 	int32 lifesteal_percent;
 	int32 lifesteal_range;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecTargets;
-}
+};

@@ -33,4 +33,4 @@ class PlayerResourcePlayerData_t
 	int32 m_nCommLevel;
 	int32 m_nBehaviorLevel;
 	float32 m_flLastCommsTime;
-}
+};

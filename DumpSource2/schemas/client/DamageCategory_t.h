@@ -1,0 +1,5 @@
+enum DamageCategory_t : uint32_t
+{
+	DOTA_DAMAGE_CATEGORY_SPELL = 0,
+	DOTA_DAMAGE_CATEGORY_ATTACK = 1,
+};

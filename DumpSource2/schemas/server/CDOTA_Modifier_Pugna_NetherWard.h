@@ -7,4 +7,4 @@ class CDOTA_Modifier_Pugna_NetherWard : public CDOTA_Buff
 	int32 health_restore_pct;
 	int32 mana_restore_pct;
 	int32 self_restoration_range;
-}
+};

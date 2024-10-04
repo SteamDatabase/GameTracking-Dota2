@@ -28,4 +28,4 @@ class CBaseAchievement
 	int32 m_iDisplayOrder;
 	bool m_bShowOnHUD;
 	int32 m_iAssetAwardID;
-}
+};

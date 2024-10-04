@@ -9,4 +9,4 @@ class CDOTA_Modifier_Marci_Unleash_Flurry : public CDOTA_Buff
 	bool m_bIsDoingFlurryAttack;
 	bool m_bIsDoingFlurryPulseAttack;
 	GameTime_t m_fLastAttackTime;
-}
+};

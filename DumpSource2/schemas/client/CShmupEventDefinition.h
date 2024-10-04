@@ -4,4 +4,4 @@ class CShmupEventDefinition
 	CUtlVector< CShmupEventEnemySpawn > m_vecEnemySpawns;
 	CUtlString m_strPathName;
 	CUtlString m_strUIEvent;
-}
+};

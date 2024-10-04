@@ -4,4 +4,4 @@ class CDOTA_Ability_AghsFort_Ravage_Potion : public C_DOTA_Item
 	int32 damage;
 	float32 duration;
 	float32 spend_charge_delay;
-}
+};

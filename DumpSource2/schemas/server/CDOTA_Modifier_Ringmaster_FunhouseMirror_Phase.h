@@ -5,4 +5,4 @@ class CDOTA_Modifier_Ringmaster_FunhouseMirror_Phase : public CDOTA_Buff
 	int32 images_do_damage_percent_melee;
 	int32 images_take_damage_percent;
 	int32 images_count;
-}
+};

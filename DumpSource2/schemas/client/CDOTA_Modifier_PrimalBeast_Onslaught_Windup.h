@@ -5,4 +5,4 @@ class CDOTA_Modifier_PrimalBeast_Onslaught_Windup : public CDOTA_Buff
 	float32 turn_rate;
 	float32 base_power;
 	int32 charge_speed;
-}
+};

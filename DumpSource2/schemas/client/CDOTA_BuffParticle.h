@@ -6,4 +6,4 @@ class CDOTA_BuffParticle
 	bool m_bStatusEffect;
 	bool m_bHeroEffect;
 	bool m_bOverheadEffectOffset;
-}
+};

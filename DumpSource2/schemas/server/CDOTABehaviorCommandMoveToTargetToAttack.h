@@ -11,4 +11,4 @@ class CDOTABehaviorCommandMoveToTargetToAttack
 	bool m_bTurningToTarget;
 	float32 m_flTargetAngle;
 	Vector m_vMoveToOrderPosition;
-}
+};

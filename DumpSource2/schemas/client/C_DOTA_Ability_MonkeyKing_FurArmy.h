@@ -8,4 +8,4 @@ class C_DOTA_Ability_MonkeyKing_FurArmy : public C_DOTABaseAbility
 	GameTime_t m_flNextCreationTime;
 	GameTime_t m_flScepterTime;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecSoldiers;
-}
+};

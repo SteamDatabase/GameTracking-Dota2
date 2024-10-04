@@ -5,4 +5,4 @@ class CDOTA_Modifier_Crystal_Maiden_Crystal_Clone_Statue : public CDOTA_Buff
 	bool m_bActivated;
 	int32 clone_health;
 	float32 m_flDamageTaken;
-}
+};

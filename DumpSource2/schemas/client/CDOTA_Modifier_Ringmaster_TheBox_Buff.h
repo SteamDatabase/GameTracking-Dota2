@@ -13,4 +13,4 @@ class CDOTA_Modifier_Ringmaster_TheBox_Buff : public CDOTA_Buff
 	float32 m_flDamageTaken;
 	GameTime_t m_flCancelTime;
 	ParticleIndex_t m_nCircleFXIndex;
-}
+};

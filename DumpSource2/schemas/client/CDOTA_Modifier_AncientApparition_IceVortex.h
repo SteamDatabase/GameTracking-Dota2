@@ -9,4 +9,4 @@ class CDOTA_Modifier_AncientApparition_IceVortex : public CDOTA_Buff
 	int32 shard_attack_speed_reduction;
 	int32 frost_stacks;
 	Vector m_vCenter;
-}
+};

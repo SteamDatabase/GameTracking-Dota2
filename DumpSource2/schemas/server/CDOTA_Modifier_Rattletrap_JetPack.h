@@ -11,4 +11,4 @@ class CDOTA_Modifier_Rattletrap_JetPack : public CDOTA_Buff
 	CUtlVector< CHandle< CBaseEntity > > m_vecHeroesHitLastRicochet;
 	CUtlVector< CHandle< CBaseEntity > > m_vecHeroesCredited;
 	CUtlVector< CHandle< CBaseEntity > > m_vecHeroesHitCurrentRicochet;
-}
+};

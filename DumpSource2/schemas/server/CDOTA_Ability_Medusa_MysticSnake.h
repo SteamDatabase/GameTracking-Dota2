@@ -11,4 +11,4 @@ class CDOTA_Ability_Medusa_MysticSnake : public CDOTABaseAbility
 	int32 return_speed;
 	float32 jump_delay;
 	float32 slow_duration;
-}
+};

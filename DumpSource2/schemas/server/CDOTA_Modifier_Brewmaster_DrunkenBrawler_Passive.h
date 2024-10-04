@@ -14,4 +14,4 @@ class CDOTA_Modifier_Brewmaster_DrunkenBrawler_Passive : public CDOTA_Buff
 	int32 armor;
 	int32 magic_resist;
 	float32 m_flLastBash;
-}
+};

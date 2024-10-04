@@ -4,4 +4,4 @@ class CDOTA_Ability_AghsFort_TrapRoom_Hookshot : public CDOTABaseAbility
 	Vector m_vProjectileVelocity;
 	bool m_bRetract;
 	CHandle< CBaseEntity > m_hSourceCaster;
-}
+};

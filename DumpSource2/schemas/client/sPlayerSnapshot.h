@@ -6,4 +6,4 @@ class sPlayerSnapshot
 	uint8 unDeaths;
 	uint8 unAssists;
 	uint8 unLevel;
-}
+};

@@ -12,4 +12,4 @@ class CDOTALabyrinthBlessingsMap
 	CUtlDict< BlessingType_t > m_mapBlessingTypes;
 	CUtlDict< Blessing_t > m_mapBlessings;
 	CUtlVector< BlessingPath_t > m_vecPaths;
-}
+};

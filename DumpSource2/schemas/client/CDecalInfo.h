@@ -10,4 +10,4 @@ class CDecalInfo
 	CDecalInfo* m_pNext;
 	CDecalInfo* m_pPrev;
 	int32 m_nDecalMaterialIndex;
-}
+};

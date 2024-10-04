@@ -13,4 +13,4 @@ class CDOTA_Modifier_Techies_StickyBombThrow : public CDOTA_Buff
 	float32 m_flInitialVelocityZ;
 	bool m_bDone;
 	float32 radius;
-}
+};

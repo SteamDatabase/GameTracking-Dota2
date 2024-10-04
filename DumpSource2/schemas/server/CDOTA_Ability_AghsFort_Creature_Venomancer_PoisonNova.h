@@ -2,4 +2,4 @@ class CDOTA_Ability_AghsFort_Creature_Venomancer_PoisonNova : public CDOTABaseAb
 {
 	ParticleIndex_t m_nFXPreview;
 	float32 radius;
-}
+};

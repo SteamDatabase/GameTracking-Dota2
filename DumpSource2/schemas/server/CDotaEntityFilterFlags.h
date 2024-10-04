@@ -14,4 +14,4 @@ class CDotaEntityFilterFlags
 	bool m_bIsIllusion;
 	bool m_bIsCreep;
 	bool m_bIsLaneCreep;
-}
+};

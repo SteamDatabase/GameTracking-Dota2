@@ -13,4 +13,4 @@ class C_PointCommentaryNode : public CBaseAnimatingActivity
 	bool m_bListenedTo;
 	CHandle< C_BaseEntity > m_hViewPosition;
 	bool m_bRestartAfterRestore;
-}
+};

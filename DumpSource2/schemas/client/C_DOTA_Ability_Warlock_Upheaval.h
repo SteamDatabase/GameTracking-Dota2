@@ -17,4 +17,4 @@ class C_DOTA_Ability_Warlock_Upheaval : public C_DOTABaseAbility
 	ParticleIndex_t m_nFXIndex;
 	bool m_bTargetCast;
 	CHandle< C_BaseEntity > m_hTarget;
-}
+};

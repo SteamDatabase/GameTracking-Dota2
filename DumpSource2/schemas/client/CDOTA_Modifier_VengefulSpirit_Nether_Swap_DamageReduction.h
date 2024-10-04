@@ -4,4 +4,4 @@ class CDOTA_Modifier_VengefulSpirit_Nether_Swap_DamageReduction : public CDOTA_B
 	ParticleIndex_t nFXIndex;
 	float32 damage;
 	int32 m_nDamageAbsorbed;
-}
+};

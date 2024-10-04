@@ -25,4 +25,4 @@ class CDOTA_Ability_Dawnbreaker_Celestial_Hammer : public C_DOTABaseAbility
 	float32 flare_debuff_duration;
 	int32 return_anim_distance_threshold;
 	float32 range;
-}
+};

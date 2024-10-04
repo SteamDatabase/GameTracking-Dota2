@@ -5,4 +5,4 @@ class CDOTANewPlayerPoolGameMode : public CDOTABaseGameMode
 	CUtlVector< float32 > m_ExtraRangedCreepTimes;
 	CUtlVector< float32 > m_ExtraSiegeCreepTimes;
 	bool m_bInOvertime;
-}
+};

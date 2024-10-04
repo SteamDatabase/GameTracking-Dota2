@@ -17,4 +17,4 @@ class C_DotaTutorialNetworker : public C_BaseEntity
 	int32 m_nPreShopState;
 	Vector m_vecPrevTargetLocation;
 	CHandle< C_BaseEntity > m_hPrevTargetEntity;
-}
+};

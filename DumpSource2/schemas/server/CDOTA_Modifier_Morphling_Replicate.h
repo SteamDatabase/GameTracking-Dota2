@@ -16,4 +16,4 @@ class CDOTA_Modifier_Morphling_Replicate : public CDOTA_Buff
 	int32 m_iOriginalAttackCapability;
 	float32 m_flOriginalHealthPercentage;
 	float32 m_flOriginalManaPercentage;
-}
+};

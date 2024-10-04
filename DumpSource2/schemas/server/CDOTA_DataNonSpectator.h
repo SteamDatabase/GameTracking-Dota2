@@ -21,4 +21,4 @@ class CDOTA_DataNonSpectator : public CBaseEntity
 	float32[100] m_vPossibleWardRadii;
 	CUtlVectorEmbeddedNetworkVar< DOTATeleportInfo_t > m_vecTrackedTeleports;
 	int32 m_iTowerKills;
-}
+};

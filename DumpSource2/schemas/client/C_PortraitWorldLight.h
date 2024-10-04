@@ -12,4 +12,4 @@ class C_PortraitWorldLight : public C_EnvDeferredLight
 	float32 m_flPreviousBoundingSphereRadius;
 	float32 m_flBoundingSphereRadiusChangeSpeed;
 	bool m_bPreviousValuesInitialized;
-}
+};

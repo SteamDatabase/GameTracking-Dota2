@@ -5,4 +5,4 @@ class CDOTA_Modifier_SkeletonKing_Reincarnation_Scepter_Active : public CDOTA_Bu
 	CHandle< C_BaseEntity > m_hTarget;
 	bool m_bPassive;
 	bool m_bKillAtEnd;
-}
+};

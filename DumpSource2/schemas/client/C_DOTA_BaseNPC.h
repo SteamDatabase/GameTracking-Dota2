@@ -193,4 +193,4 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	bool m_bUnitModelVariantChanged;
 	bool m_bWearablesAreTaunting;
 	bool m_bShowCannotBeDisabledIcon;
-}
+};

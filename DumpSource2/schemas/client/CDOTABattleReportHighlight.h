@@ -12,4 +12,4 @@ class CDOTABattleReportHighlight
 	EHighlightNumberFormat m_eFormat;
 	CUtlVector< CMsgBattleReport_Role > m_vecRoles;
 	CUtlVector< CDOTABattleReportHighlightTier_t > m_vecTiers;
-}
+};

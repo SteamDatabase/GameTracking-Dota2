@@ -8,4 +8,4 @@ class CDOTA_Modifier_Viper_Nose_Dive : public CDOTA_Buff
 	float32 effect_duration;
 	int32 dive_speed;
 	float32 start_height;
-}
+};

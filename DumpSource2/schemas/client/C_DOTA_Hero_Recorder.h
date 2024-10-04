@@ -13,4 +13,4 @@ class C_DOTA_Hero_Recorder : public C_BaseEntity
 	float32 m_flStartTime;
 	CUtlVector< float32 > m_flCycles;
 	CUtlVector< CUtlString* > m_pBatchFiles;
-}
+};

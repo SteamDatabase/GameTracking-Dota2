@@ -12,4 +12,4 @@ class CDOTA_Modifier_PrimalBeast_Uproar : public CDOTA_Modifier_Stacking_Base
 	float32 slow_duration;
 	float32 m_fTotalDamage;
 	GameTime_t m_flLastStackTime;
-}
+};

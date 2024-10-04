@@ -6,4 +6,4 @@ class C_DOTA_Ability_Mirana_Arrow : public C_DOTABaseAbility
 	CUtlVector< CHandle< C_BaseEntity > >[2] hAlreadyHitList;
 	CUtlVector< CHandle< C_BaseEntity > >[2] hStarfallList;
 	int32 m_nActiveArrow;
-}
+};

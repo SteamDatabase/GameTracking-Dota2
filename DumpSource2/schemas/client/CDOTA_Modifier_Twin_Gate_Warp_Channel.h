@@ -7,4 +7,4 @@ class CDOTA_Modifier_Twin_Gate_Warp_Channel : public CDOTA_Buff
 	ParticleIndex_t m_nfxPortal2;
 	float32 animation_rate;
 	int32 stop_distance;
-}
+};

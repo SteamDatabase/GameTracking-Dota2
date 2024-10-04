@@ -6,4 +6,4 @@ class C_DOTA_Ability_Hoodwink_HuntersBoomerang : public C_DOTABaseAbility
 	float32 mark_duration;
 	CHandle< C_BaseEntity > m_hTarget;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecHitEntities;
-}
+};

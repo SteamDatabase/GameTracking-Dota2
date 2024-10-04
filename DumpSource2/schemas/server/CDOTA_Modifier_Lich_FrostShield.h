@@ -6,4 +6,4 @@ class CDOTA_Modifier_Lich_FrostShield : public CDOTA_Buff
 	int32 health_regen;
 	float32 bonus_duration_per_hero_killed;
 	float32 bonus_duration_per_creep_killed;
-}
+};

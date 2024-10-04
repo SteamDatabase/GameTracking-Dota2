@@ -30,4 +30,4 @@ class CDOTAOverworldDefinition
 	CUtlVector< CDOTAOverworldHero* > m_vecHeroes;
 	CUtlVector< CDOTAOverworldCharacter* > m_vecCharacters;
 	CUtlVector< CDOTAOverworldClickable* > m_vecClickables;
-}
+};

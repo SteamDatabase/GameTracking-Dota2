@@ -7,4 +7,4 @@ class CDOTABehaviorChase
 	float32 m_flForwardDistance;
 	float32 m_flRightDistance;
 	CountdownTimer m_PositionFuzziness;
-}
+};

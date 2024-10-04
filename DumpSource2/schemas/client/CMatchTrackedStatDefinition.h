@@ -4,4 +4,4 @@ class CMatchTrackedStatDefinition
 	EMatchTrackedStatImpl m_eStatImpl;
 	TrackedStatExpressionData_t m_expressionData;
 	TrackedStatAggregateData_t m_aggregateData;
-}
+};

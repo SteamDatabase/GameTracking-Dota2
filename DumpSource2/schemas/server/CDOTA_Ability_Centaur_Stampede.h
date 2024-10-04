@@ -8,4 +8,4 @@ class CDOTA_Ability_Centaur_Stampede : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > > m_hHitEntities;
 	int32 m_nHeroesHit;
 	bool m_bHitInvisibleHero;
-}
+};

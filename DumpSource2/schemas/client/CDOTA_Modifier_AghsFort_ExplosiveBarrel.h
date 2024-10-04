@@ -8,4 +8,4 @@ class CDOTA_Modifier_AghsFort_ExplosiveBarrel : public CDOTA_Buff
 	int32 model_scale;
 	bool bExploding;
 	float32 stun_duration;
-}
+};

@@ -5,4 +5,4 @@ class CMatch3AbilityParamDefinition
 	CUtlString str;
 	CResourceName resource;
 	CUtlString desc;
-}
+};

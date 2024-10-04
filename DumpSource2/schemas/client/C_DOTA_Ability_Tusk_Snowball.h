@@ -22,4 +22,4 @@ class C_DOTA_Ability_Tusk_Snowball : public C_DOTABaseAbility
 	CHandle< C_BaseEntity > m_hPrimaryTarget;
 	int32 m_nContainedValidUnits;
 	bool m_bEndingSnowball;
-}
+};

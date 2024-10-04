@@ -14,4 +14,4 @@ class CDOTA_Modifier_Earthshaker_Fissure_Line_Thinker : public CDOTA_Buff
 	float32 m_flDurationOriginal;
 	float32 m_flTotalDistanceMoved;
 	ParticleIndex_t m_nFissureEffectIndex;
-}
+};

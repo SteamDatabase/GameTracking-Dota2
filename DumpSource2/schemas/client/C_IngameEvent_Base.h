@@ -28,4 +28,4 @@ class C_IngameEvent_Base : public C_BaseEntity
 	GameTime_t[10] m_flPlayerBountyTimestamp;
 	int32[10] m_PlayerBountyCount;
 	int32[24] m_PlayerBountyTimestamp_Obsolete;
-}
+};

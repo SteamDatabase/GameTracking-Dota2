@@ -12,4 +12,4 @@ class CDOTA_Ability_AncientApparition_IceBlast : public C_DOTABaseAbility
 	float32 frostbite_duration;
 	float32 target_sight_radius;
 	CUtlVector< CHandle< C_BaseEntity > > m_hFrostbittenEntities;
-}
+};

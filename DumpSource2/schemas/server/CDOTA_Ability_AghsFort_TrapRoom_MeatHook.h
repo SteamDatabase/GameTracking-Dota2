@@ -15,4 +15,4 @@ class CDOTA_Ability_AghsFort_TrapRoom_MeatHook : public CDOTABaseAbility
 	int32 m_nManaCost;
 	CHandle< CBaseEntity > m_hSourceCaster;
 	int32 m_nNextConsecutiveHitCount;
-}
+};

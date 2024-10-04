@@ -4,4 +4,4 @@ class CBaseAnimatingActivity : public CBaseModelEntity
 	bool m_bInitiallyPopulateInterpHistory;
 	bool m_bAnimationUpdateScheduled;
 	CUtlVector< CUtlString >* m_pSuppressedAnimEventTags;
-}
+};

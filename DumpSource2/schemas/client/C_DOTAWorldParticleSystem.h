@@ -14,4 +14,4 @@ class C_DOTAWorldParticleSystem : public C_BaseModelEntity
 	bool m_bShowInFow;
 	bool m_bShowWhileDynamicWeatherActive;
 	bool m_bAnimateDuringGameplayPause;
-}
+};

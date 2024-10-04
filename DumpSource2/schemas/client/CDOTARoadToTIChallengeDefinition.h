@@ -7,4 +7,4 @@ class CDOTARoadToTIChallengeDefinition
 	item_definition_index_t m_unCullingBladeItemDef;
 	item_definition_index_t m_unRerollItemDef;
 	CUtlVector< RoadToTIQuestDefinition_t > m_vecQuests;
-}
+};

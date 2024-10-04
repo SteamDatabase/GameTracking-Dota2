@@ -17,4 +17,4 @@ class CDOTA_Ability_Marci_Companion_Run : public CDOTABaseAbility
 	Vector m_vFacePosition;
 	Vector m_vTravelDir;
 	float32 m_fTravelDistance;
-}
+};

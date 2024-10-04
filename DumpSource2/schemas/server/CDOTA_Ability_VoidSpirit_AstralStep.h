@@ -8,4 +8,4 @@ class CDOTA_Ability_VoidSpirit_AstralStep : public CDOTABaseAbility
 	int32 max_travel_distance;
 	float32 debuff_duration;
 	float32 pop_damage_delay;
-}
+};

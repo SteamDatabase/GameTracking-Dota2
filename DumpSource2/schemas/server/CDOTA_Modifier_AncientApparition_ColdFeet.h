@@ -6,4 +6,4 @@ class CDOTA_Modifier_AncientApparition_ColdFeet : public CDOTA_Buff
 	float32 stun_duration;
 	int32 frost_stacks;
 	float32 aoe;
-}
+};

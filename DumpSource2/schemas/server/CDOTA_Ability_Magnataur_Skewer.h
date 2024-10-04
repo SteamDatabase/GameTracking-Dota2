@@ -12,4 +12,4 @@ class CDOTA_Ability_Magnataur_Skewer : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > > m_hEnemiesSkewered;
 	GameTime_t m_flLastTerrainObstructionHitTime;
 	int32 m_nTargetsHit;
-}
+};

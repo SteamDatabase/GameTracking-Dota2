@@ -7,4 +7,4 @@ class CDOTA_Modifier_Kunkka_Torrent : public CDOTA_Buff
 	float32 m_flStartZ;
 	float32 m_flCurTime;
 	bool m_bTorrentStorm;
-}
+};

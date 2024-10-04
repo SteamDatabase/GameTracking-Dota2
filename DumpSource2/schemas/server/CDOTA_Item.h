@@ -57,4 +57,4 @@ class CDOTA_Item : public CDOTABaseAbility
 	PlayerID_t m_iPlayerOwnerID;
 	bool m_bPurchasedWhileDead;
 	int32 m_nCombineVersion;
-}
+};

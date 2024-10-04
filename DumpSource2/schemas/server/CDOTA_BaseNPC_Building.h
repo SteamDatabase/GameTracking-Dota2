@@ -37,4 +37,4 @@ class CDOTA_BaseNPC_Building : public CDOTA_BaseNPC
 	int32 m_nOverrideInitialAngles;
 	CountdownTimer m_IdleRareAnimationTime;
 	FowCustomTeams_t m_nFoWTeam;
-}
+};

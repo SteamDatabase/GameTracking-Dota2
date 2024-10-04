@@ -5,4 +5,4 @@ class CDOTA_Modifier_Spectre_Haunt : public CDOTA_Buff
 	GameTime_t m_fStartAttackTime;
 	CHandle< CBaseEntity > hTarget;
 	bool m_bTargetIsAlive;
-}
+};

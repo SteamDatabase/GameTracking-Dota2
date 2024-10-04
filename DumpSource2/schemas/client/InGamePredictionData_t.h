@@ -5,4 +5,4 @@ class InGamePredictionData_t
 	uint32 m_nRawValue;
 	uint8 m_nValueState;
 	bool m_bValueIsMask;
-}
+};

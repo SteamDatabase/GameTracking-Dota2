@@ -6,4 +6,4 @@ class CDOTA_Modifier_Invoker_SunStrike : public CDOTA_Buff
 	float32 vision_duration;
 	float32 spell_amp;
 	float32 spell_lifesteal;
-}
+};

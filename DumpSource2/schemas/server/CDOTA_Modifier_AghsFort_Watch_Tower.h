@@ -15,4 +15,4 @@ class CDOTA_Modifier_AghsFort_Watch_Tower : public CDOTA_Buff
 	CUtlString m_strNextRoomName;
 	CUtlString m_strNextEncounterName;
 	bool m_bStartedBeamFacing;
-}
+};

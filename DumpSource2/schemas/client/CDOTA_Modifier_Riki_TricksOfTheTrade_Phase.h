@@ -9,4 +9,4 @@ class CDOTA_Modifier_Riki_TricksOfTheTrade_Phase : public CDOTA_Buff
 	int32 agility_pct;
 	float32 creep_agility_multiplier;
 	float32 m_flMultiplier;
-}
+};

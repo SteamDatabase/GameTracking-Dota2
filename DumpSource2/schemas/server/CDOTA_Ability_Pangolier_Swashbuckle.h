@@ -13,4 +13,4 @@ class CDOTA_Ability_Pangolier_Swashbuckle : public CDOTABaseAbility
 	Vector m_vSlashDir;
 	int32 m_nDashProjectileID;
 	Vector m_vDashProjectileLocation;
-}
+};

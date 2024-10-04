@@ -13,4 +13,4 @@ class C_DOTATeam : public C_Team
 	bool m_bTeamCanSeeNextPowerRune;
 	Color m_CustomHealthbarColor;
 	char[33] m_szTag;
-}
+};

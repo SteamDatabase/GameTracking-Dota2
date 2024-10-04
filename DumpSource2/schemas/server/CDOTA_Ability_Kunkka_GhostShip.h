@@ -8,4 +8,4 @@ class CDOTA_Ability_Kunkka_GhostShip : public CDOTABaseAbility
 	Vector m_vFinalDestination;
 	Vector m_vStartingPoint;
 	int32 m_hProjectileID;
-}
+};

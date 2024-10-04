@@ -7,4 +7,4 @@ class CDOTA_Modifier_WitchDoctor_DeathWard : public CDOTA_Buff
 	bool m_bFirstAttack;
 	int32 initial_target_count;
 	int32 secondary_attack_damage_pct;
-}
+};

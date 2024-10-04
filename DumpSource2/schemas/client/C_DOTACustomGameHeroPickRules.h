@@ -4,4 +4,4 @@ class C_DOTACustomGameHeroPickRules : public C_DOTABaseCustomHeroPickRules
 	int32 m_nNumBansPerTeam;
 	GameTime_t m_flEnterTime;
 	int32 m_nNumHeroesPicked;
-}
+};

@@ -17,4 +17,4 @@ class CDOTA_Modifier_Beastmaster_WildAxes : public CDOTA_Buff
 	float32 duration;
 	float32 min_throw_duration;
 	float32 max_throw_duration;
-}
+};

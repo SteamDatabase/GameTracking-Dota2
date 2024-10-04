@@ -221,4 +221,4 @@ class C_DOTAGamerules : public C_MultiplayRules
 	float64 m_flLastPerfSampleSendTime;
 	bool m_bDidSeeStrategyTime;
 	float64 m_flLastUnfocusedSleepTime;
-}
+};

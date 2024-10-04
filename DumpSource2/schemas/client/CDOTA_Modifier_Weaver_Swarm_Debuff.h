@@ -5,4 +5,4 @@ class CDOTA_Modifier_Weaver_Swarm_Debuff : public CDOTA_Buff
 	int32 experience_gain;
 	float32 m_flCurrentArmorReduction;
 	CHandle< C_BaseEntity > m_hSwarmBug;
-}
+};

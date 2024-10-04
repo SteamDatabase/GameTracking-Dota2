@@ -7,4 +7,4 @@ class CDOTA_Modifier_FacelessVoid_TimeDilation_Slow : public CDOTA_Buff
 	int32 cooldown_percentage;
 	int32 damage_per_stack;
 	int32 base_damage;
-}
+};

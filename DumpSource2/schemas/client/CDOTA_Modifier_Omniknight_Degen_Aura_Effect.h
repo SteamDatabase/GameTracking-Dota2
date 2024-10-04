@@ -7,4 +7,4 @@ class CDOTA_Modifier_Omniknight_Degen_Aura_Effect : public CDOTA_Buff
 	int32 max_stacks;
 	bool m_bActive;
 	GameTime_t m_flLastActiveTime;
-}
+};

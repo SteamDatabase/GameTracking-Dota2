@@ -4,4 +4,4 @@ class CDOTA_Modifier_Jakiro_LiquidFire_Burn : public CDOTA_Buff
 	float32 damage;
 	float32 pct_health_damage;
 	float32 tick_rate;
-}
+};

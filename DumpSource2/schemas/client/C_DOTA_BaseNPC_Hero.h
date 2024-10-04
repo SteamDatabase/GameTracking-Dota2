@@ -56,4 +56,4 @@ class C_DOTA_BaseNPC_Hero : public C_DOTA_BaseNPC_Additive
 	bitfield:1 m_bStoreOldVisibility;
 	bitfield:1 m_bResetVisibility;
 	bitfield:1 m_bStoredVisibility;
-}
+};

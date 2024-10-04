@@ -7,4 +7,4 @@ class CDOTA_Modifier_Rattletrap_Hookshot : public CDOTA_Buff
 	float32 damage;
 	float32 duration;
 	float32 ally_shield_duration;
-}
+};

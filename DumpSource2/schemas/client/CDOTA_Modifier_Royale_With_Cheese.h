@@ -7,4 +7,4 @@ class CDOTA_Modifier_Royale_With_Cheese : public CDOTA_Buff
 	GameTime_t m_timeLastTick;
 	GameTime_t m_timeLastDamage;
 	ParticleIndex_t nFXIndex;
-}
+};

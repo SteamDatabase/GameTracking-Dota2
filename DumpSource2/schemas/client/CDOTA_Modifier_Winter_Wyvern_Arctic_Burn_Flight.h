@@ -8,4 +8,4 @@ class CDOTA_Modifier_Winter_Wyvern_Arctic_Burn_Flight : public CDOTA_Buff
 	CUtlSymbolLarge m_iszRangedAttackEffect;
 	int32 max_attacks;
 	int32 m_iNumAttacks;
-}
+};

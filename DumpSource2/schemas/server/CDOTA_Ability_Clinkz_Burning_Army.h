@@ -5,4 +5,4 @@ class CDOTA_Ability_Clinkz_Burning_Army : public CDOTABaseAbility
 	Vector m_vSlashDir;
 	int32 m_nDashProjectileID;
 	Vector m_vDashProjectileLocation;
-}
+};

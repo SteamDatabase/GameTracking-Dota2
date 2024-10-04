@@ -13,4 +13,4 @@ class CDOTA_Modifier_Razor_StaticLink : public CDOTA_Buff
 	CDOTA_Buff* m_pBuffPositive;
 	CDOTA_Buff* m_pNegative;
 	GameTime_t m_flLastThinkTime;
-}
+};

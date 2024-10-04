@@ -7,4 +7,4 @@ class CDOTA_Modifier_Grimstroke_InkCreature_Latched : public CDOTA_Buff
 	int32 pop_damage;
 	int32 latched_unit_offset;
 	int32 latched_unit_offset_short;
-}
+};

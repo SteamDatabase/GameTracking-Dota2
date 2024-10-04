@@ -9,4 +9,4 @@ class CDeferredLightBase
 	float32 m_flDistanceFalloff;
 	uint32 m_nFlags;
 	char[512] m_ProjectedTextureName;
-}
+};

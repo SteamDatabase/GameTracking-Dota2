@@ -17,4 +17,4 @@ class CDOTA_Modifier_Grimstroke_SpiritWalk_Buff : public CDOTA_Buff
 	int32 shard_heal_pct;
 	float32 shard_creep_penalty;
 	bool m_bIsReflection;
-}
+};

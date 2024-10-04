@@ -7,4 +7,4 @@ class CDotaTutorialNPCBlocker : public CBaseEntity
 	bool m_bEnabled;
 	bool m_bStartDisabled;
 	bool m_bHidden;
-}
+};

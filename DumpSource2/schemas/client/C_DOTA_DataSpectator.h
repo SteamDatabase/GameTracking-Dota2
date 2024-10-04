@@ -18,4 +18,4 @@ class C_DOTA_DataSpectator : public C_DOTA_DataNonSpectator
 	int32[24] m_nRunesActivated;
 	int32[24] m_nCampsStacked;
 	C_UtlVectorEmbeddedNetworkVar< DOTAThreatLevelInfo_t > m_ThreatLevelInfos;
-}
+};

@@ -20,4 +20,4 @@ class CDOTA_Ability_DataDriven : public CDOTABaseAbility
 	KeyValues* m_pOnToggleOnKV;
 	KeyValues* m_pOnToggleOffKV;
 	KeyValues* m_pOnCreatedKV;
-}
+};

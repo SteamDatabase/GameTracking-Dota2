@@ -8,4 +8,4 @@ class CDOTA_Modifier_Obsidian_Destroyer_Equilibrium : public CDOTA_Buff
 	float32 scepter_max_mana_barrier_pct;
 	float32 mana_increase_duration;
 	float32 mana_as_ms;
-}
+};

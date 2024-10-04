@@ -8,4 +8,4 @@ class CDOTA_Ability_Mars_Spear : public CDOTABaseAbility
 	bool m_bHadBulwarkEnabled;
 	Vector m_vLastTrailThinkerLocation;
 	bool bHasStartedBurning;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_Morphling_Accumulation : public CDOTA_Buff
 	float32 m_flIntellectGain;
 	int32 nAttributeLevels;
 	int32 bonus_all_stats_per_level_of_attributes;
-}
+};

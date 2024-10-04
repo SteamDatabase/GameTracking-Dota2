@@ -12,4 +12,4 @@ class C_DOTA_Ability_Puck_IllusoryOrb : public C_DOTABaseAbility
 	float32 vision_duration;
 	int32 damage;
 	ParticleIndex_t m_nCurvePathPreviewFXIndex;
-}
+};

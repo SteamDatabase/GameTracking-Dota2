@@ -16,4 +16,4 @@ class CDOTA_Ability_Aghsfort_Bonus_Pudge_MeatHook : public CDOTABaseAbility
 	CHandle< CBaseEntity > m_hSourceCaster;
 	int32 m_nNextConsecutiveHitCount;
 	int32 m_nConsecutiveHits;
-}
+};

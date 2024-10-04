@@ -8,4 +8,4 @@ class C_DOTA_Unit_Hero_Wisp : public C_DOTA_BaseNPC_Hero
 	bool m_bParticleStunned;
 	bool m_bDetermineAmbientEffect;
 	float32 m_flPrevHealth;
-}
+};

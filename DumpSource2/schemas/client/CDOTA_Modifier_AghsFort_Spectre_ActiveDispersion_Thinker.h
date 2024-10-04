@@ -10,4 +10,4 @@ class CDOTA_Modifier_AghsFort_Spectre_ActiveDispersion_Thinker : public CDOTA_Bu
 	CUtlVector< CHandle< C_BaseEntity > > m_EntitiesHit;
 	int32 speed;
 	int32 radius;
-}
+};

@@ -8,4 +8,4 @@ class C_DOTA_Ability_PrimalBeast_Onslaught : public C_DOTABaseAbility
 	Vector m_vStartPos;
 	ParticleIndex_t m_nFXIndex;
 	int32 m_nProjectileID;
-}
+};

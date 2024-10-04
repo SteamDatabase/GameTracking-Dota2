@@ -6,4 +6,4 @@ class CDOTA_Modifier_Huskar_Berserkers_Blood : public CDOTA_Buff
 	int32 hp_threshold_max;
 	bool m_bIsActive;
 	int32 aura_effectiveness;
-}
+};

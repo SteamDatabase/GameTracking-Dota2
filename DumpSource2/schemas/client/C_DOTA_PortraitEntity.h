@@ -8,4 +8,4 @@ class C_DOTA_PortraitEntity : public C_DOTA_BaseNPC
 	CUtlVector< CUtlSymbol > m_CustomActivityModifiers;
 	bool m_bIsSimulationActive;
 	CEntityHandle m_hAppearanceFromNPC;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Modifier_BountyHunter_Jinada : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndexA;
 	ParticleIndex_t m_nFXIndexB;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

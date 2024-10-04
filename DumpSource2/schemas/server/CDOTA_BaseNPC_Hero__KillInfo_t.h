@@ -6,4 +6,4 @@ class CDOTA_BaseNPC_Hero::KillInfo_t
 	bool m_bWasFirstBlood;
 	int32 m_iKillCount;
 	float32 m_flBlinkTime;
-}
+};

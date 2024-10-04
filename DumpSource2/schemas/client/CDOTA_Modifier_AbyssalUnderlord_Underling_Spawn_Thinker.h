@@ -8,4 +8,4 @@ class CDOTA_Modifier_AbyssalUnderlord_Underling_Spawn_Thinker : public CDOTA_Buf
 	int32 hull_radius;
 	int32 gold_bounty;
 	int32 xp_bounty;
-}
+};

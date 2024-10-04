@@ -10,4 +10,4 @@ class CDOTA_Modifier_Bristleback_Bristleback : public CDOTA_Buff
 	bool m_bSideHit;
 	float32 m_flDamageAccumulated;
 	int32 m_nAccumulatedHits;
-}
+};

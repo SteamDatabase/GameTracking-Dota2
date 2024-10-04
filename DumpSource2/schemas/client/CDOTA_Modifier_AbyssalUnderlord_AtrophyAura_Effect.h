@@ -5,4 +5,4 @@ class CDOTA_Modifier_AbyssalUnderlord_AtrophyAura_Effect : public CDOTA_Buff
 	float32 bonus_damage_from_creep;
 	float32 bonus_damage_from_hero;
 	bool m_bWasHidden;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_Mars_ArenaOfBlood_Thinker : public CDOTA_Buff
 	bool m_bCaughtOne;
 	bool m_bKilledOne;
 	CUtlVector< CHandle< CBaseEntity > > m_vecVisionBlockers;
-}
+};

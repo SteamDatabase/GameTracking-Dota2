@@ -11,4 +11,4 @@ class CDOTA_Modifier_Pangolier_ShieldCrash_Jump : public CDOTA_Buff
 	int32 jump_horizontal_distance;
 	Vector m_vTargetHorizontalDirection;
 	float32 m_flPreviousElapsedTime;
-}
+};

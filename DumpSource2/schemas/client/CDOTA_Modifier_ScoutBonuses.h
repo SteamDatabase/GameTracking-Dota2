@@ -5,4 +5,4 @@ class CDOTA_Modifier_ScoutBonuses : public CDOTA_Buff
 	int32 max_health;
 	float32 increase_armor;
 	float32 max_armor;
-}
+};

@@ -4,4 +4,4 @@ class CDOTA_Modifier_Enchantress_Impetus : public CDOTA_Buff
 	int32 distance_cap;
 	float32 creep_multiplier;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

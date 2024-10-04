@@ -13,4 +13,4 @@ class CDOTA_Modifier_Leshrac_Lightning_Storm : public CDOTA_Buff
 	bool m_bGrantedGem;
 	bool m_bBounceTwice;
 	CHandle< CBaseEntity > m_eLastTarget;
-}
+};

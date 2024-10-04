@@ -314,4 +314,4 @@ class CDOTAGameRules : public CMultiplayRules
 	CNetworkUtlVectorBase< RegionTriggerBoxes_t > m_RegionTriggerBoxes;
 	float64[15] m_flLastItemSuggestionRequestTime;
 	float64 m_flLastPerfSampleTime;
-}
+};

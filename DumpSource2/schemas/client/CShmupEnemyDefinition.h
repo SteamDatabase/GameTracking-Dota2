@@ -10,4 +10,4 @@ class CShmupEnemyDefinition
 	CUtlVector< CShmupBulletInfo > m_vecBulletPatterns;
 	CUtlVector< CShmupBulletInfo > m_vecOnDeathBulletPatterns;
 	CUtlVector< CShmupBulletInfo > m_vecSelfDestroyBulletPatterns;
-}
+};

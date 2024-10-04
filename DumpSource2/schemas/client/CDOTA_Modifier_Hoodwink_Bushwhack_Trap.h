@@ -7,4 +7,4 @@ class CDOTA_Modifier_Hoodwink_Bushwhack_Trap : public CDOTA_Buff
 	uint32 m_TreeId;
 	float32 m_flDamagePerTick;
 	int32 m_nDamageTicks;
-}
+};

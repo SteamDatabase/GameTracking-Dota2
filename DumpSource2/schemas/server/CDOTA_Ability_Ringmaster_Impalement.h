@@ -4,4 +4,4 @@ class CDOTA_Ability_Ringmaster_Impalement : public CDOTABaseAbility
 	int32 dagger_width;
 	CUtlVector< int32 > m_ImpactedProjectiles;
 	CUtlVector< CUtlPair< int32, CHandle< CBaseEntity > > > m_vecBoxedUnitHits;
-}
+};

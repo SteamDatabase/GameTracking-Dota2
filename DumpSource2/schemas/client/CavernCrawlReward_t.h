@@ -12,4 +12,4 @@ class CavernCrawlReward_t
 	bool m_bImageIsBundleItemDef;
 	bool m_bCannotBeReplacedWithUltraRareReward;
 	bool m_bIsUltraRareReward;
-}
+};

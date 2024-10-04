@@ -5,4 +5,4 @@ class C_NextBotCombatCharacter : public C_BaseCombatCharacter
 	int32 m_nInFrustumFrame;
 	float32 m_flFrustumDistanceSqr;
 	uint8 m_nLod;
-}
+};

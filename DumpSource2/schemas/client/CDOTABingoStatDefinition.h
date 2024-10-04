@@ -13,4 +13,4 @@ class CDOTABingoStatDefinition
 	float32 m_fMainEventStatStdDev;
 	CUtlString m_sLocName;
 	CUtlString m_sLocTooltip;
-}
+};

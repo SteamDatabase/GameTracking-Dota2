@@ -9,4 +9,4 @@ class CDOTA_Modifier_Seasonal_TI11_RockPaperScissors : public CDOTA_Buff
 	GameTime_t m_flRevealTime;
 	bool m_bFirstThink;
 	PlayerID_t m_nRevealOpponentPlayerID;
-}
+};

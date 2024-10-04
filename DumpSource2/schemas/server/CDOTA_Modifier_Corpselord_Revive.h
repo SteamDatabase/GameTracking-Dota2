@@ -5,4 +5,4 @@ class CDOTA_Modifier_Corpselord_Revive : public CDOTA_Buff
 	float32 tick_interval;
 	CHandle< CDOTA_BaseNPC > m_pReviveTarget;
 	int32 m_nCurrentTicks;
-}
+};

@@ -6,4 +6,4 @@ class CDOTA_Ability_AghsFort_DragonKnight_BreatheFire : public CDOTABaseAbility
 	Vector m_vStartPos;
 	GameTime_t m_fStartTime;
 	float32 m_fTotalTime;
-}
+};

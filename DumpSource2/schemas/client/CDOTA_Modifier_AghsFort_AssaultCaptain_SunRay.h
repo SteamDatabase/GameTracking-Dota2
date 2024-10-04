@@ -23,4 +23,4 @@ class CDOTA_Modifier_AghsFort_AssaultCaptain_SunRay : public CDOTA_Buff
 	CHandle< C_BaseEntity > m_hBeamEnd;
 	bool m_bCreatedVisionThinkers;
 	CHandle< C_BaseEntity > m_hBeamEndSound;
-}
+};

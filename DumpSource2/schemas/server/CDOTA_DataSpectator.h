@@ -11,4 +11,4 @@ class CDOTA_DataSpectator : public CDOTA_DataNonSpectator
 	int32[24] m_iNetWorth;
 	float32 m_fRadiantWinProbability;
 	CUtlVectorEmbeddedNetworkVar< DOTAThreatLevelInfo_t > m_ThreatLevelInfos;
-}
+};

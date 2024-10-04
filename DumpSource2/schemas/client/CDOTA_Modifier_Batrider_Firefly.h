@@ -13,4 +13,4 @@ class CDOTA_Modifier_Batrider_Firefly : public CDOTA_Buff
 	GameTime_t m_fNextDamageTick;
 	Vector m_vLastFirePoolLoc;
 	int32 bonus_vision;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_TrollWarlord_BerserkersRage : public CDOTA_Buff
 	int32 maim_chance;
 	int32 maim_damage;
 	float32 maim_duration;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Ability_Mirana_Arrow : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > >[2] hAlreadyHitList;
 	CUtlVector< CHandle< CBaseEntity > >[2] hStarfallList;
 	int32 m_nActiveArrow;
-}
+};

@@ -1,3 +1,3 @@
 class CDOTA_Modifier_Earth_Spirit_StoneCaller_ChargeCounter : public CDOTA_Modifier_LegacyChargeCounter
 {
-}
+};

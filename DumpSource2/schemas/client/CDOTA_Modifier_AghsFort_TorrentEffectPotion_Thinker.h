@@ -7,4 +7,4 @@ class CDOTA_Modifier_AghsFort_TorrentEffectPotion_Thinker : public CDOTA_Buff_It
 	float32 m_fSlowDuration;
 	float32 m_fDelay;
 	int32 m_nTorrentDamage;
-}
+};

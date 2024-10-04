@@ -5,4 +5,4 @@ class CDOTA_Modifier_FacelessVoid_TimeZone_Projectile_Effect : public CDOTA_Buff
 	Vector2D vCenter;
 	Vector2D vLeft;
 	Vector2D vForward;
-}
+};

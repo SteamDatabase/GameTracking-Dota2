@@ -54,4 +54,4 @@ class CDOTA_AttackRecord
 	ParticleIndex_t m_iCustomFXIndex;
 	DOTAProjectileAttachment_t m_iCustomProjectileAttachment;
 	KeyValues3 m_kvExtraData;
-}
+};

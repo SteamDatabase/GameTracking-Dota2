@@ -4,4 +4,4 @@ class sPendingTreeModelChange
 	int32 nIndex;
 	CUtlString strModel;
 	int32 nChangeToken;
-}
+};

@@ -6,4 +6,4 @@ class CDOTA_Modifier_Disruptor_ElectromagneticRepulsion_Passive : public CDOTA_B
 	float32 knockback_duration;
 	float32 damage_reset_interval;
 	float32 m_flAccumulatedDamage;
-}
+};

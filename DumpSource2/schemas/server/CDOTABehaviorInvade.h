@@ -5,4 +5,4 @@ class CDOTABehaviorInvade
 	CHandle< CBaseEntity > m_nextGoalEntity;
 	bool m_bReachedFinalGoal;
 	bool m_bRequireReachingEndPath;
-}
+};

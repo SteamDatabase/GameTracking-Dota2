@@ -7,4 +7,4 @@ class CDOTA_Modifier_Invoker_EMP : public CDOTA_Buff
 	float32 spell_amp;
 	int32 self_mana_restore_pct;
 	CHandle< C_BaseEntity > m_hPullThinker;
-}
+};

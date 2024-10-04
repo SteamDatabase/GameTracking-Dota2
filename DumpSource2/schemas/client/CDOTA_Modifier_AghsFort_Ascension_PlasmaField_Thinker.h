@@ -15,4 +15,4 @@ class CDOTA_Modifier_AghsFort_Ascension_PlasmaField_Thinker : public CDOTA_Buff
 	int32 slow_max;
 	float32 slow_duration;
 	float32 windup_time;
-}
+};

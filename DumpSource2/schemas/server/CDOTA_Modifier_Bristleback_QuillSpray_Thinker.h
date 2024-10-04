@@ -10,4 +10,4 @@ class CDOTA_Modifier_Bristleback_QuillSpray_Thinker : public CDOTA_Buff
 	bool m_bDelayed;
 	int32 m_nAngleRestriction;
 	Vector m_vFacing;
-}
+};

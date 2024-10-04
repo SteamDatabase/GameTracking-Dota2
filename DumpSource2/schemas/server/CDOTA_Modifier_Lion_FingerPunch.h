@@ -8,4 +8,4 @@ class CDOTA_Modifier_Lion_FingerPunch : public CDOTA_Buff
 	int32 cleave_distance;
 	int32 cleave_damage;
 	int32 m_iOriginalAttackCapabilities;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_Meepo_MegaMeepo : public CDOTA_Buff
 	bool m_bInterrupted;
 	bool m_bHasBeenDestroyed;
 	bool m_bIsHighestMeepo;
-}
+};

@@ -16,4 +16,4 @@ class CDOTA_Modifier_Wisp_Tether : public CDOTA_Buff
 	float32 tether_mana_amp;
 	GameTime_t m_flHealMessageTime;
 	GameTime_t m_flManaMessageTime;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Modifier_Underlord_Portal_FX : public CDOTA_Buff
 	ParticleIndex_t m_nChannelFX;
 	int32 m_nChannelCount;
 	ParticleIndex_t m_nCountdownFX;
-}
+};

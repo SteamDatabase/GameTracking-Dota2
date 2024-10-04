@@ -5,4 +5,4 @@ class CDOTA_Modifier_Mars_Bulwark : public CDOTA_Buff
 	float32 forward_angle;
 	float32 side_angle;
 	float32 m_flRecentDamage;
-}
+};

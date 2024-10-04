@@ -10,4 +10,4 @@ class CDOTA_Modifier_PrimalBeast_Pulverize_Self : public CDOTA_Buff
 	int32 bonus_damage_per_hit;
 	int32 m_nHitCount;
 	float32 bonus_aoe_duration;
-}
+};

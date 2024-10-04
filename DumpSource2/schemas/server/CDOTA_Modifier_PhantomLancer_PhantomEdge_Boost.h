@@ -5,4 +5,4 @@ class CDOTA_Modifier_PhantomLancer_PhantomEdge_Boost : public CDOTA_Buff
 	bool m_bGiveAgility;
 	CHandle< CBaseEntity > m_hTarget;
 	int32 bonus_agility;
-}
+};

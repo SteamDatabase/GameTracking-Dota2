@@ -18,4 +18,4 @@ class CMatch3OpponentDefinition
 	CUtlVector< CMatch3OpponentActionInstanceDefinition > m_vecIntroActions;
 	CUtlVector< CMatch3OpponentActionInstanceDefinition > m_vecRepeatingActions;
 	CUtlVector< CMatch3OpponentActionInstanceDefinition > m_vecOutroActions;
-}
+};

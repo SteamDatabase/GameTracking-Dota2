@@ -21,4 +21,4 @@ class CDOTA_Modifier_Snapfire_MortimerKisses : public CDOTA_Buff
 	float32 min_lob_travel_time;
 	float32 max_lob_travel_time;
 	float32 delay_after_last_projectile;
-}
+};

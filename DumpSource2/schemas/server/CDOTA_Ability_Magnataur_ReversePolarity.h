@@ -6,4 +6,4 @@ class CDOTA_Ability_Magnataur_ReversePolarity : public CDOTABaseAbility
 	float32 max_knockback_distance;
 	float32 pull_radius;
 	float32 flEffectRadius;
-}
+};

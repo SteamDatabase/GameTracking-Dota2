@@ -7,4 +7,4 @@ class C_PlayerCosmeticPropClientside : public C_DynamicPropClientside
 	bool m_bGeneratedShowcaseProps;
 	CUtlVector< C_PlayerCosmeticPropClientside* > m_vecShowcaseProps;
 	C_EconItemView* m_pShowcaseItem;
-}
+};

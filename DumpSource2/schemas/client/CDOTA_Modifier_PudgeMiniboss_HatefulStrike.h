@@ -4,4 +4,4 @@ class CDOTA_Modifier_PudgeMiniboss_HatefulStrike : public CDOTA_Buff
 	int32 maxhp_percent_damage;
 	int32 every_n_attacks;
 	bool crit_active;
-}
+};

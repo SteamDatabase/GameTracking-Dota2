@@ -48,4 +48,4 @@ class CDOTA_BaseNPC_Creature : public CDOTA_BaseNPC_Creep
 	GameTime_t m_flRespawnTime;
 	bool m_bIsCurrentlyChanneling;
 	float32 m_flChannelCycle;
-}
+};

@@ -5,4 +5,4 @@ class NeutralSpawnBoxes_t
 	CUtlString strCampName;
 	CEntityIndex iSpawnerEntIndex;
 	int32 nCampType;
-}
+};

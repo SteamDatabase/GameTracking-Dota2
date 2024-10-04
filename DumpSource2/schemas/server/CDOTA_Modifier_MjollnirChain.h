@@ -8,4 +8,4 @@ class CDOTA_Modifier_MjollnirChain : public CDOTA_Buff
 	int32 m_iCurJumpCount;
 	Vector m_vCurTargetLoc;
 	CUtlVector< CHandle< CBaseEntity > > m_hHitEntities;
-}
+};

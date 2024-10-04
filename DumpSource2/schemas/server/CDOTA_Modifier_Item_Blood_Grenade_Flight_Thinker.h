@@ -8,4 +8,4 @@ class CDOTA_Modifier_Item_Blood_Grenade_Flight_Thinker : public CDOTA_Buff
 	int32 movespeed_slow;
 	float32 tick_rate;
 	ParticleIndex_t m_nFXIndex;
-}
+};

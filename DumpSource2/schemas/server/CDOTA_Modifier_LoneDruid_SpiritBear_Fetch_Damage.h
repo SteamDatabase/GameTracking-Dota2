@@ -4,4 +4,4 @@ class CDOTA_Modifier_LoneDruid_SpiritBear_Fetch_Damage : public CDOTA_Buff
 	float32 damage;
 	float32 duration;
 	float32 tick_rate;
-}
+};

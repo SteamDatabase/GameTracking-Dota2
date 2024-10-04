@@ -6,4 +6,4 @@ class C_DOTA_Ability_Shredder_TwistedChakram : public C_DOTABaseAbility
 	float32 debuff_duration;
 	CHandle< C_BaseEntity > m_hTarget;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecHitEntities;
-}
+};

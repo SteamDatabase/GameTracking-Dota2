@@ -6,4 +6,4 @@ class CDOTA_Modifier_Brewmaster_PrimalSplit : public CDOTA_Buff
 	CHandle< C_BaseEntity > m_hFourthTarget;
 	CHandle< C_BaseEntity > m_hReturnBrewling;
 	int32 m_nFXIndex;
-}
+};

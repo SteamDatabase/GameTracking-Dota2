@@ -1,0 +1,21 @@
+enum EDOTATriviaQuestionCategory : uint32_t
+{
+	k_EDOTATriviaQuestionCategory_AbilityIcon = 0,
+	k_EDOTATriviaQuestionCategory_AbilityCooldown = 1,
+	k_EDOTATriviaQuestionCategory_HeroAttributes = 2,
+	k_EDOTATriviaQuestionCategory_HeroMovementSpeed = 3,
+	k_EDOTATriviaQuestionCategory_TalentTree = 4,
+	k_EDOTATriviaQuestionCategory_HeroStats = 5,
+	k_EDOTATriviaQuestionCategory_ItemPrice = 6,
+	k_EDOTATriviaQuestionCategory_AbilitySound = 7,
+	k_EDOTATriviaQuestionCategory_InvokerSpells = 8,
+	k_EDOTATriviaQuestionCategory_AbilityManaCost = 9,
+	k_EDOTATriviaQuestionCategory_HeroAttackSound = 10,
+	k_EDOTATriviaQuestionCategory_AbilityName = 11,
+	k_EDOTATriviaQuestionCategory_ItemComponents = 12,
+	k_EDOTATriviaQuestionCategory_ItemLore = 13,
+	k_EDOTATriviaQuestionCategory_ItemPassives = 14,
+	k_EDOTATriviaQuestionCategory_STATIC_QUESTIONS_END = 15,
+	k_EDOTATriviaQuestionCategory_DYNAMIC_QUESTIONS_START = 99,
+	k_EDOTATriviaQuestionCategory_Dynamic_ItemBuild = 100,
+};

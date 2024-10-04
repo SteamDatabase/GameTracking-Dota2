@@ -4,4 +4,4 @@ class ItemDropData_t
 	float32 flChance;
 	int32 nReqLevel;
 	bool bMustBeChampion;
-}
+};

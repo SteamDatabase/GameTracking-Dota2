@@ -7,4 +7,4 @@ class CDOTA_Modifier_Item_TranquilBoots2 : public CDOTA_Buff_Item
 	int32 break_threshold;
 	int32 break_time;
 	int32 break_count;
-}
+};

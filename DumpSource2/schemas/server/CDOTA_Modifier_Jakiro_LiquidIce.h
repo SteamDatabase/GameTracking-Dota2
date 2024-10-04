@@ -6,4 +6,4 @@ class CDOTA_Modifier_Jakiro_LiquidIce : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	bool double_head;
 	bool m_bForceProc;
-}
+};

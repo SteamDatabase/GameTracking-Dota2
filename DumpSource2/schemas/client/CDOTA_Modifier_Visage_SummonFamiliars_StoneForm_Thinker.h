@@ -6,4 +6,4 @@ class CDOTA_Modifier_Visage_SummonFamiliars_StoneForm_Thinker : public CDOTA_Buf
 	float32 stun_duration;
 	float32 stone_duration;
 	int32 m_iIntervalCount;
-}
+};

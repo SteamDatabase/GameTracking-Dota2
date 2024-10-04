@@ -7,4 +7,4 @@ class C_DOTA_Item_Physical : public CBaseAnimatingActivity
 	ParticleIndex_t m_nFXIndex;
 	bool m_bShowingTooltip;
 	bool m_bShowingSimpleTooltip;
-}
+};

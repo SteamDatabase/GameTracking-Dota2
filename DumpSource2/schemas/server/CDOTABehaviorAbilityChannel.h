@@ -5,4 +5,4 @@ class CDOTABehaviorAbilityChannel
 	CHandle< CBaseEntity > m_hAbility;
 	CHandle< CBaseEntity > m_hTarget;
 	bool m_bCompletedChanneling;
-}
+};

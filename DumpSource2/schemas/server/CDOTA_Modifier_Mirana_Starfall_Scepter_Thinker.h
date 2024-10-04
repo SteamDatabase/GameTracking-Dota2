@@ -4,4 +4,4 @@ class CDOTA_Modifier_Mirana_Starfall_Scepter_Thinker : public CDOTA_Buff
 	bool bInBufferTime;
 	int32 damage;
 	GameTime_t m_flLastApplyTime;
-}
+};

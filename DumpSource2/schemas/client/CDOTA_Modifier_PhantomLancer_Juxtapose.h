@@ -9,4 +9,4 @@ class CDOTA_Modifier_PhantomLancer_Juxtapose : public CDOTA_Buff
 	int32 shard_bonus_illusions;
 	int32 uncontrollable_illusions;
 	int32 new_target_radius;
-}
+};

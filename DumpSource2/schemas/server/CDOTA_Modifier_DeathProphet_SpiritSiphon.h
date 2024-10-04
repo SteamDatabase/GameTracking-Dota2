@@ -14,4 +14,4 @@ class CDOTA_Modifier_DeathProphet_SpiritSiphon : public CDOTA_Buff
 	bool m_bAppliedFear;
 	float32 shard_fear_duration;
 	float32 shard_consecutive_siphon_duration;
-}
+};

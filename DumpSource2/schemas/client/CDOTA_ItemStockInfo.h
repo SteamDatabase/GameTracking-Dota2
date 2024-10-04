@@ -9,4 +9,4 @@ class CDOTA_ItemStockInfo
 	float32 fInitialStockDuration;
 	PlayerID_t iPlayerID;
 	int32 iBonusDelayedStockCount;
-}
+};

@@ -4,4 +4,4 @@ class CDOTA_Modifier_Seasonal_PartyHat : public CDOTA_Buff
 	bool child_modifier;
 	CUtlString m_strEffectName;
 	ParticleIndex_t m_nHatFXIndex;
-}
+};

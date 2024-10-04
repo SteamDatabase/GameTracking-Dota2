@@ -8,4 +8,4 @@ class CDOTAFishingGameFish
 	float32 m_flBonusDifficulty;
 	int32 m_nSceneModelBodyIndex;
 	CUtlString m_strFlatSceneModel;
-}
+};

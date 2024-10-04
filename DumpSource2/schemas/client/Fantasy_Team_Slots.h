@@ -1,0 +1,8 @@
+enum Fantasy_Team_Slots : uint32_t
+{
+	FANTASY_SLOT_NONE = 0,
+	FANTASY_SLOT_CORE = 1,
+	FANTASY_SLOT_SUPPORT = 2,
+	FANTASY_SLOT_ANY = 3,
+	FANTASY_SLOT_BENCH = 4,
+};

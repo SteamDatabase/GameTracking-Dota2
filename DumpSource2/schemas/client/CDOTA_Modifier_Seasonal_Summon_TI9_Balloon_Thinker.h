@@ -14,4 +14,4 @@ class CDOTA_Modifier_Seasonal_Summon_TI9_Balloon_Thinker : public CDOTA_Buff
 	float32 m_flDistRemaining;
 	float32 m_flTreeTimeRemaining;
 	CHandle< C_BaseEntity > m_hLastHit;
-}
+};

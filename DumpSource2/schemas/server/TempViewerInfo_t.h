@@ -10,4 +10,4 @@ class TempViewerInfo_t
 	GameTime_t flEndTime;
 	int32 nFoWID;
 	CHandle< CBaseEntity > hOwner;
-}
+};

@@ -9,4 +9,4 @@ class CDOTA_Modifier_Bloodseeker_Thirst : public CDOTA_Buff
 	int32 active_movement_speed;
 	float32 linger_duration;
 	ParticleIndex_t m_nFXIndex;
-}
+};

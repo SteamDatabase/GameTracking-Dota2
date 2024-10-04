@@ -11,4 +11,4 @@ class C_DOTA_Ability_Aghanim_UrnUpheaval : public C_DOTABaseAbility
 	ParticleIndex_t m_nFXIndex;
 	CountdownTimer m_SlowTimer;
 	CountdownTimer m_timer;
-}
+};

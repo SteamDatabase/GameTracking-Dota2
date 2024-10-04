@@ -5,4 +5,4 @@ class CDOTA_Ability_Tidehunter_ArmOfTheDeep : public CDOTABaseAbility
 	int32 speed;
 	float32 damage;
 	float32 range;
-}
+};

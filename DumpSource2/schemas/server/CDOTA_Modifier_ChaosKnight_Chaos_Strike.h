@@ -8,4 +8,4 @@ class CDOTA_Modifier_ChaosKnight_Chaos_Strike : public CDOTA_Buff
 	float32 chance;
 	int32 m_nNextCrit;
 	CUtlVector< int16 > m_vCritRecords;
-}
+};

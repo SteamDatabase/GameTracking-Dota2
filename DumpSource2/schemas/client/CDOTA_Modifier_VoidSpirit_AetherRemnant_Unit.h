@@ -17,4 +17,4 @@ class CDOTA_Modifier_VoidSpirit_AetherRemnant_Unit : public CDOTA_Buff
 	bool bIsArtifice;
 	float32 artifice_duration_override;
 	float32 artifice_pct_effectiveness;
-}
+};

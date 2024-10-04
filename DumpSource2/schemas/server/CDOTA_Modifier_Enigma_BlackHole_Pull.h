@@ -8,4 +8,4 @@ class CDOTA_Modifier_Enigma_BlackHole_Pull : public CDOTA_Buff
 	float32 animation_rate;
 	float32 scepter_pct_damage;
 	GameTime_t m_flDamageTick;
-}
+};

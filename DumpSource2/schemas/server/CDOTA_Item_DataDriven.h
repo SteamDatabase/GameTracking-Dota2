@@ -20,4 +20,4 @@ class CDOTA_Item_DataDriven : public CDOTA_Item
 	KeyValues* m_pOnEquipKV;
 	KeyValues* m_pOnUnequipKV;
 	KeyValues* m_pOnCreatedKV;
-}
+};

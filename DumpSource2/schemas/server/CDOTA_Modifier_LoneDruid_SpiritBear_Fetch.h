@@ -5,4 +5,4 @@ class CDOTA_Modifier_LoneDruid_SpiritBear_Fetch : public CDOTA_Buff
 	int32 break_distance;
 	Vector vPreviousLocation;
 	CHandle< CDOTA_BaseNPC > m_hAnchor;
-}
+};

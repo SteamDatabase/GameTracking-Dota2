@@ -8,4 +8,4 @@ class CDOTA_Ability_Creature_Fire_Breath : public CDOTABaseAbility
 	CountdownTimer ctTimer;
 	Vector m_vecStartRot;
 	Vector m_vecEndRot;
-}
+};

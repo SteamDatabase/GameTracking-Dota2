@@ -12,4 +12,4 @@ class CDOTA_Modifier_EarthSpirit_Magnetize : public CDOTA_Buff
 	CUtlVector< CHandle< CBaseEntity > > m_hExplodedRocks;
 	float32 duration;
 	bool m_bShowOverhead;
-}
+};

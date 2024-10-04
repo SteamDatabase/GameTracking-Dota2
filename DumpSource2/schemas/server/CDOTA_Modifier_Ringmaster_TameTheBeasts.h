@@ -6,4 +6,4 @@ class CDOTA_Modifier_Ringmaster_TameTheBeasts : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	int32 has_debuff_immunity;
 	int32 magic_resist;
-}
+};

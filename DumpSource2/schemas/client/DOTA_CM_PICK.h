@@ -1,0 +1,6 @@
+enum DOTA_CM_PICK : uint32_t
+{
+	DOTA_CM_RANDOM = 0,
+	DOTA_CM_GOOD_GUYS = 1,
+	DOTA_CM_BAD_GUYS = 2,
+};

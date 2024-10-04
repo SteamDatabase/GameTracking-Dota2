@@ -12,4 +12,4 @@ class CDOTA_Modifier_Marci_Grapple_VictimMotion : public CDOTA_Buff
 	float32 m_flJumpDuration;
 	float32 m_flJumpHeight;
 	Vector m_vTargetHorizontalDirection;
-}
+};

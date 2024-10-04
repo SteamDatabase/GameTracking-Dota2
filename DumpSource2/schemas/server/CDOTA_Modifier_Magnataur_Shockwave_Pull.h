@@ -5,4 +5,4 @@ class CDOTA_Modifier_Magnataur_Shockwave_Pull : public CDOTA_Buff
 	float32 m_flCurTime;
 	float32 pull_duration;
 	float32 effective_distance;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Modifier_Item_VindicatorsAxe : public CDOTA_Buff_Item
 	int32 bonus_armor;
 	int32 bonus_slow_resist;
 	ParticleIndex_t m_nFxIndex;
-}
+};

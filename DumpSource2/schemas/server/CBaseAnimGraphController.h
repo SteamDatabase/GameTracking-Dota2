@@ -13,4 +13,4 @@ class CBaseAnimGraphController : public CSkeletonAnimationController
 	bool m_bNetworkedSequenceChanged;
 	bool m_bLastUpdateSkipped;
 	GameTime_t m_flPrevAnimUpdateTime;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Modifier_FacelessVoid_TimeLock_ForceProc : public CDOTA_Buff
 	int32 bonus_damage;
 	float32 delay;
 	CHandle< C_DOTA_BaseNPC > m_hTarget;
-}
+};

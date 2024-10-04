@@ -12,4 +12,4 @@ class CDOTA_RoshanSpawner : public CPointEntity
 	Vector m_vRoshanAltLocation;
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXIndex2;
-}
+};

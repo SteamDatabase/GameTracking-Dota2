@@ -8,4 +8,4 @@ class CDOTA_Modifier_Batrider_StickyNapalm : public CDOTA_Modifier_Stacking_Base
 	int32 creep_damage_pct;
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXStackIndex;
-}
+};

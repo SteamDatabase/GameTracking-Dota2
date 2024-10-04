@@ -7,4 +7,4 @@ class CDOTA_Modifier_Item_AetherialHalo : public CDOTA_Buff_Item
 	float32 mana_regen_multiplier;
 	float32 spell_lifesteal_amp;
 	int32 bonus_aoe;
-}
+};

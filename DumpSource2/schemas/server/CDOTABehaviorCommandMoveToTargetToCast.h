@@ -8,4 +8,4 @@ class CDOTABehaviorCommandMoveToTargetToCast
 	float32 m_flTargetRange;
 	bool m_bTurningToTarget;
 	float32 m_flTargetAngle;
-}
+};

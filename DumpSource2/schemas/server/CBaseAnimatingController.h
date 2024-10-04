@@ -19,4 +19,4 @@ class CBaseAnimatingController : public CSkeletonAnimationController
 	SequenceFinishNotifyState_t m_nNotifyState;
 	bool m_bHasEverDispatchedAnimEvents;
 	CSequenceTransitioner2 m_SequenceTransitioner;
-}
+};

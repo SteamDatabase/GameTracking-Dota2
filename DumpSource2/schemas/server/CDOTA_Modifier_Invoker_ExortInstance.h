@@ -5,4 +5,4 @@ class CDOTA_Modifier_Invoker_ExortInstance : public CDOTA_Modifier_Invoker_Insta
 	float32 resist_debuff_duration;
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	char* m_pSlotName;
-}
+};

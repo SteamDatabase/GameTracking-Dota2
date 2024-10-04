@@ -12,4 +12,4 @@ class CDOTA_Modifier_Underlord_Portal_Warp_Channel : public CDOTA_Buff
 	float32 m_flElapsedTimePortion;
 	float32 animation_rate;
 	int32 stop_distance;
-}
+};

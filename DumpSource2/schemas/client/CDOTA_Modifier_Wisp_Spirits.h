@@ -14,4 +14,4 @@ class CDOTA_Modifier_Wisp_Spirits : public CDOTA_Buff
 	int32 spirit_movement_rate;
 	GameTime_t m_flNextSpawn;
 	CUtlString m_strSpiritsOutSwapAbility;
-}
+};

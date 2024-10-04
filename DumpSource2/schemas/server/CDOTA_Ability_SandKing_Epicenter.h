@@ -4,4 +4,4 @@ class CDOTA_Ability_SandKing_Epicenter : public CDOTABaseAbility
 	int32 m_iExplosionQuadrant;
 	int32 m_iExplosionDistance;
 	ParticleIndex_t m_nFXIndex;
-}
+};

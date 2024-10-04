@@ -7,4 +7,4 @@ class CDOTA_Modifier_AghsFort_RockGolem_Avalanche : public CDOTA_Buff
 	int32 tick_count;
 	int32 m_damage;
 	int32 m_nTicks;
-}
+};

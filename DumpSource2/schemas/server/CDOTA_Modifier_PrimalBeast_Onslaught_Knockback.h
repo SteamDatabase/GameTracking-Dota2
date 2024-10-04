@@ -10,4 +10,4 @@ class CDOTA_Modifier_PrimalBeast_Onslaught_Knockback : public CDOTA_Buff
 	Vector m_vHorizontalVelocity;
 	Vector m_vLastKnownTargetPosition;
 	float32 m_flInitialVelocityZ;
-}
+};

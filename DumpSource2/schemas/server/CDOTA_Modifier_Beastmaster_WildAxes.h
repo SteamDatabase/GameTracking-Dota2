@@ -19,4 +19,4 @@ class CDOTA_Modifier_Beastmaster_WildAxes : public CDOTA_Buff
 	float32 max_throw_duration;
 	CUtlVector< CHandle< CBaseEntity > > m_vecUniqueHitList;
 	bool m_bHitInvisibleHero;
-}
+};

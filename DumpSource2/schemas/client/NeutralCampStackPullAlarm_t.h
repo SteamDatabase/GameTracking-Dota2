@@ -5,4 +5,4 @@ class NeutralCampStackPullAlarm_t
 	float32 m_flStackAlarmTime;
 	int32 m_nCampIndex;
 	int32 m_nAlarmTypes;
-}
+};

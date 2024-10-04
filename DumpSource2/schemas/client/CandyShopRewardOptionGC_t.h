@@ -10,4 +10,4 @@ class CandyShopRewardOptionGC_t
 	EEvent m_eEvent;
 	uint32 m_unEventActionID;
 	uint32 m_unEventPoints;
-}
+};

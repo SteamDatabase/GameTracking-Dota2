@@ -6,4 +6,4 @@ class CShmupGameDefinition
 	int32 m_nComboBaseScore;
 	CShmupPlayerDefinition m_player;
 	CShmupBossDefinition m_boss;
-}
+};

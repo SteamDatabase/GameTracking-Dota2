@@ -6,4 +6,4 @@ class CBaseAnimatingActivity : public C_BaseModelEntity
 	CUtlVector< CUtlString >* m_pSuppressedAnimEventTags;
 	bool m_bHasAnimatedMaterialAttributes;
 	bool m_bSuppressAnimEventSounds;
-}
+};

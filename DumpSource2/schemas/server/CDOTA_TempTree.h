@@ -7,4 +7,4 @@ class CDOTA_TempTree : public CBaseAnimatingActivity
 	CUtlVector< ParticleIndex_t > m_ParticleList;
 	bool m_bIsPartOfFowSystem;
 	bool[15] m_bForceVisible;
-}
+};

@@ -1,3 +1,3 @@
 class CDOTA_Ability_Special_Bonus_Gold_lvl10_l : public CDOTA_Ability_Special_Bonus_Gold_Ability_Draft
 {
-}
+};

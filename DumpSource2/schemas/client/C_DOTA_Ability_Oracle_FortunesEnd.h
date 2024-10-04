@@ -12,4 +12,4 @@ class C_DOTA_Ability_Oracle_FortunesEnd : public C_DOTABaseAbility
 	bool m_bAbsorbed;
 	CHandle< C_BaseEntity > m_hTarget;
 	ParticleIndex_t m_nFXIndex;
-}
+};

@@ -6,4 +6,4 @@ class CDOTA_Modifier_Beastmaster_Hawk_Perch_Flight : public CDOTA_Buff
 	float32 m_flZDelta;
 	Vector m_vStart;
 	CHandle< CBaseEntity > m_hTarget;
-}
+};

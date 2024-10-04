@@ -17,4 +17,4 @@ class CDOTA_Modifier_Seasonal_TI9_Monkey_Thinker : public CDOTA_Buff
 	CountdownTimer m_AttackTimer;
 	CountdownTimer m_AttackProjectileTimer;
 	CountdownTimer m_HappyTimer;
-}
+};

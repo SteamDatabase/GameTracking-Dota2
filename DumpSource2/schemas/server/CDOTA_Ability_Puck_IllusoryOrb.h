@@ -13,4 +13,4 @@ class CDOTA_Ability_Puck_IllusoryOrb : public CDOTABaseAbility
 	int32 damage;
 	CSoundPatch* m_pSoundPatch;
 	ParticleIndex_t m_nCurvePathFXIndex;
-}
+};

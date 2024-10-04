@@ -12,4 +12,4 @@ class C_DOTA_Ability_DrowRanger_Multishot : public C_DOTABaseAbility
 	CUtlVector< CHandle< C_BaseEntity > > m_vHitTargets4;
 	CUtlVector< CHandle< C_BaseEntity > > m_vHitTargets5;
 	CUtlVector< CHandle< C_BaseEntity > > m_vHitTargets6;
-}
+};

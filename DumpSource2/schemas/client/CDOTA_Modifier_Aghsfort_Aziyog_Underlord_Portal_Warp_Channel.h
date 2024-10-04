@@ -7,4 +7,4 @@ class CDOTA_Modifier_Aghsfort_Aziyog_Underlord_Portal_Warp_Channel : public CDOT
 	ParticleIndex_t m_nfxPortal2;
 	float32 animation_rate;
 	int32 stop_distance;
-}
+};

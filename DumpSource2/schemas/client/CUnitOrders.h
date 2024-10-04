@@ -8,4 +8,4 @@ class CUnitOrders
 	CEntityIndex m_nTargetIndex;
 	CEntityIndex m_nAbilityIndex;
 	uint32 m_nFlags;
-}
+};

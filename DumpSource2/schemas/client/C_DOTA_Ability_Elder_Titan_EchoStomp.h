@@ -11,4 +11,4 @@ class C_DOTA_Ability_Elder_Titan_EchoStomp : public C_DOTABaseAbility
 	CUtlVector< CHandle< C_BaseEntity > > m_vecStompedHeroes;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecStompedHeroes_BuffCounted;
 	bool m_bStompedInvisibleHero;
-}
+};

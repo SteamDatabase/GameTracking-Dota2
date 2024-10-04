@@ -4,4 +4,4 @@ class CDOTA_Modifier_EmberSpirit_SearingChains : public CDOTA_Buff
 	float32 tick_interval;
 	float32 tick_damage;
 	float32 duration;
-}
+};

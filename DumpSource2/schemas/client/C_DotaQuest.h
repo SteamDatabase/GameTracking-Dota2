@@ -13,4 +13,4 @@ class C_DotaQuest : public C_BaseEntity
 	char[64] m_pszTextReplaceString;
 	int32 m_nTextReplaceValueVersion;
 	bool m_bWasCompleted;
-}
+};

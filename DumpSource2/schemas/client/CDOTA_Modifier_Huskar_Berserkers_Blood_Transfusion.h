@@ -6,4 +6,4 @@ class CDOTA_Modifier_Huskar_Berserkers_Blood_Transfusion : public CDOTA_Buff
 	int32 hp_threshold_max;
 	ParticleIndex_t m_nFxHuskIndex;
 	ParticleIndex_t m_nFxIndexA;
-}
+};

@@ -25,4 +25,4 @@ class CDOTA_Modifier_Phoenix_SunRay : public CDOTA_Buff
 	CHandle< CBaseEntity > m_hBeamEnd;
 	bool m_bCreatedVisionThinkers;
 	CHandle< CBaseEntity > m_hBeamEndSound;
-}
+};

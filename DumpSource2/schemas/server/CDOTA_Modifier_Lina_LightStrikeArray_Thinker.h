@@ -5,4 +5,4 @@ class CDOTA_Modifier_Lina_LightStrikeArray_Thinker : public CDOTA_Buff
 	int32 light_strike_array_aoe;
 	int32 light_strike_array_damage;
 	float32 light_strike_array_stun_duration;
-}
+};

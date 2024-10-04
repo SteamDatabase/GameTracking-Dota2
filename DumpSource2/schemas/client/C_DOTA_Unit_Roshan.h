@@ -6,4 +6,4 @@ class C_DOTA_Unit_Roshan : public C_DOTA_BaseNPC_Additive
 	CUtlVector< CHandle< C_BaseEntity > > m_hAttackingHeroes;
 	bool m_bGoldenRoshan;
 	bool m_bIsNightTimeMode;
-}
+};

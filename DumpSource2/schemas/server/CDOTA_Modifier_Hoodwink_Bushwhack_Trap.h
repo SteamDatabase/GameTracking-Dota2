@@ -12,4 +12,4 @@ class CDOTA_Modifier_Hoodwink_Bushwhack_Trap : public CDOTA_Buff
 	CDOTA_Tree* m_pTree;
 	Vector m_vPullPosition;
 	Vector m_vDir;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_Shredder_Flamethrower : public CDOTA_Buff
 	GameTime_t m_flLastHit;
 	CUtlVector< CBaseEntity* > m_vecBurningTrees;
 	CHandle< CBaseEntity > m_hTreeFireThinker;
-}
+};

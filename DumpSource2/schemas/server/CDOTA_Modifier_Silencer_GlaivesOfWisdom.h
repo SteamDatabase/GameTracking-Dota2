@@ -4,4 +4,4 @@ class CDOTA_Modifier_Silencer_GlaivesOfWisdom : public CDOTA_Buff
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	CUtlVector< int16 > m_InFlightSilenceAttackRecords;
 	CDOTA_Buff* m_pAttackCounterBuff;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_Spectre_Dispersion : public CDOTA_Buff
 	GameTime_t m_flLastDispersionPulseEffectTime;
 	float32 m_fDamageCounter;
 	float32 m_fLastTime;
-}
+};

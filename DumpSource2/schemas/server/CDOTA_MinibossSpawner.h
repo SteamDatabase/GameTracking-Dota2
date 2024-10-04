@@ -9,4 +9,4 @@ class CDOTA_MinibossSpawner : public CPointEntity
 	int32 m_nSentMinibossRespawn;
 	int32 m_nTimesSpawned;
 	float32 m_fMinibossRespawnDuration;
-}
+};

@@ -11,4 +11,4 @@ class CDOTA_Modifier_Zuus_Heavenly_Jump : public CDOTA_Buff
 	Vector m_vTargetHorizontalDirection;
 	CUtlVector< CHandle< CBaseEntity > > hUnitsToHit;
 	bool m_bLaunched;
-}
+};

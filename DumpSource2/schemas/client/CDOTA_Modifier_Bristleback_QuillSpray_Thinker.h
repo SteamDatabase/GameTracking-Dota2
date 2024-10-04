@@ -6,4 +6,4 @@ class CDOTA_Modifier_Bristleback_QuillSpray_Thinker : public CDOTA_Buff
 	CountdownTimer m_ViewerTimer;
 	int32 projectile_speed;
 	float32 radius;
-}
+};

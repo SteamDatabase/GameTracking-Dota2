@@ -10,4 +10,4 @@ class CDOTABehaviorAttackPhase
 	float32 m_flAnimSpeed;
 	float32 m_flAttackPortionPriorToTimer;
 	HSequence m_iSequence;
-}
+};

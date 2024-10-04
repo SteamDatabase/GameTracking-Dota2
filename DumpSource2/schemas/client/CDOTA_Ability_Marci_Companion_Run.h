@@ -13,4 +13,4 @@ class CDOTA_Ability_Marci_Companion_Run : public C_DOTABaseAbility
 	Vector m_vEndpoint;
 	ParticleIndex_t m_nToBounceFXIndex;
 	ParticleIndex_t m_nToTargetFXIndex;
-}
+};

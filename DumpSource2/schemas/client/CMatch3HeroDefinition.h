@@ -5,4 +5,4 @@ class CMatch3HeroDefinition
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sAttackParticleEffect;
 	CUtlString m_sSuperAbility;
 	CUtlString m_sUltraAbility;
-}
+};

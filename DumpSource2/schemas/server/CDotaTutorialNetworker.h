@@ -11,4 +11,4 @@ class CDotaTutorialNetworker : public CBaseEntity
 	int32 m_nLocationID;
 	char[256] m_GuideStr;
 	char[256] m_QuickBuyStr;
-}
+};

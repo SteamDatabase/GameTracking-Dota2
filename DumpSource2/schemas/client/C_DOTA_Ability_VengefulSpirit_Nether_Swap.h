@@ -4,4 +4,4 @@ class C_DOTA_Ability_VengefulSpirit_Nether_Swap : public C_DOTABaseAbility
 	int32 damage;
 	float32 damage_reduction;
 	float32 damage_reduction_duration;
-}
+};

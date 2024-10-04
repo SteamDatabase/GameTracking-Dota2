@@ -22,4 +22,4 @@ class CDOTA_Modifier_Bristleback_Active_ConicalQuillSpray : public CDOTA_Buff
 	int32 m_nLastMaxDirection;
 	Vector m_vLastOrigin;
 	GameTime_t m_flLastGameTime;
-}
+};

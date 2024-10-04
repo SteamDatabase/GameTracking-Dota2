@@ -6,4 +6,4 @@ class CDOTA_Modifier_Centaur_Cart : public CDOTA_Buff
 	Vector m_vecOldForward;
 	int32 break_distance;
 	Vector m_vecPreviousLocation;
-}
+};

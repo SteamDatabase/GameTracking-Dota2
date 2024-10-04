@@ -9,4 +9,4 @@ class CDOTA_Modifier_Voidwalker_Phased : public CDOTA_Buff
 	float32 m_flFadeTime;
 	float32 m_flDamageScale;
 	float32 duration;
-}
+};

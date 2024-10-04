@@ -5,4 +5,4 @@ class CDOTA_Modifier_Elder_Titan_EarthSplitter_Thinker : public CDOTA_Buff
 	float32 slow_duration;
 	float32 slow_duration_scepter;
 	CDOTA_Buff* m_pParentModifier;
-}
+};

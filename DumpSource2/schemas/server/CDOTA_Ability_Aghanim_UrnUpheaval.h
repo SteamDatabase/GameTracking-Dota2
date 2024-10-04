@@ -11,4 +11,4 @@ class CDOTA_Ability_Aghanim_UrnUpheaval : public CDOTABaseAbility
 	ParticleIndex_t m_nFXIndex;
 	CountdownTimer m_SlowTimer;
 	CountdownTimer m_timer;
-}
+};

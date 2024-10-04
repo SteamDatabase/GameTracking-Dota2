@@ -8,4 +8,4 @@ class CDOTA_Modifier_AghsFort_Creature_Phoenix_Sun : public CDOTA_Buff
 	float32 caster_life_pct;
 	CHandle< C_BaseEntity > m_hSecondaryTarget;
 	int32 m_iAttackCount;
-}
+};

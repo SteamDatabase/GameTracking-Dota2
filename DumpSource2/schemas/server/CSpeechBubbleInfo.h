@@ -7,4 +7,4 @@ class CSpeechBubbleInfo
 	uint32 m_unOffsetX;
 	uint32 m_unOffsetY;
 	uint16 m_unCount;
-}
+};

@@ -74,4 +74,4 @@ class CModifierParams
 	CHandle< C_BaseEntity > hunit;
 	CHandle< C_DOTABaseAbility > inflictor;
 	CDOTA_Buff* pAddedBuff;
-}
+};

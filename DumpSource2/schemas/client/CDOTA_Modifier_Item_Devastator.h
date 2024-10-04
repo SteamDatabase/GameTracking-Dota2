@@ -11,4 +11,4 @@ class CDOTA_Modifier_Item_Devastator : public CDOTA_Buff_Item
 	int32 damage_penalty;
 	int32 passive_cooldown;
 	CUtlVector< int16 > m_InFlightWitchBladeAttackRecords;
-}
+};

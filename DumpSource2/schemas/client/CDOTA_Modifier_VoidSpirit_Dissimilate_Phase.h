@@ -21,4 +21,4 @@ class CDOTA_Modifier_VoidSpirit_Dissimilate_Phase : public CDOTA_Buff
 	float32 debuff_duration;
 	int32 aether_remnant_count;
 	float32 artifice_extra_offset;
-}
+};

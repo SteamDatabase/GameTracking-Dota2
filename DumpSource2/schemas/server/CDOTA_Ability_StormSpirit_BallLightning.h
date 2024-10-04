@@ -12,4 +12,4 @@ class CDOTA_Ability_StormSpirit_BallLightning : public CDOTABaseAbility
 	float32 m_fDistanceAccumulator;
 	float32 m_fTalentDistanceAccumulator;
 	int32 scepter_remnant_interval;
-}
+};

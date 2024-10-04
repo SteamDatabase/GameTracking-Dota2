@@ -5,4 +5,4 @@ class C_DOTA_Ability_Tidehunter_ArmOfTheDeep : public C_DOTABaseAbility
 	int32 speed;
 	float32 damage;
 	float32 range;
-}
+};

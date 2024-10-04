@@ -5,4 +5,4 @@ class CDOTA_Unit_Hero_Spectre : public CDOTA_BaseNPC_Hero
 	uint8 m_unBestArcanaKillStreak;
 	PlayerID_t m_nVictimPlayerID;
 	bool m_bArcanaKillstreakRecordBroken;
-}
+};

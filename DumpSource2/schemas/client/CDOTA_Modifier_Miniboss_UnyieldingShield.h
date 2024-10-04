@@ -6,4 +6,4 @@ class CDOTA_Modifier_Miniboss_UnyieldingShield : public CDOTA_Buff
 	int32 m_nDamageAbsorbed;
 	GameTime_t m_timeLastTick;
 	ParticleIndex_t nFXIndex;
-}
+};

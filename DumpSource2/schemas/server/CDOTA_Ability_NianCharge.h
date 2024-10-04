@@ -11,4 +11,4 @@ class CDOTA_Ability_NianCharge : public CDOTABaseAbility
 	CUtlVector< CDOTA_Tree* > m_hTrackingProjectileTrees;
 	int32 nFXIndex;
 	int32 m_iCurProjectileIndex;
-}
+};

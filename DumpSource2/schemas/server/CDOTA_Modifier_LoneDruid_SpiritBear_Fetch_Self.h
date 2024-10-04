@@ -7,4 +7,4 @@ class CDOTA_Modifier_LoneDruid_SpiritBear_Fetch_Self : public CDOTA_Buff
 	Vector m_vPreviousLoc;
 	int32 drag_distance;
 	int32 break_distance;
-}
+};

@@ -20,4 +20,4 @@ class C_DOTA_Item_DataDriven : public C_DOTA_Item
 	KeyValues* m_pOnEquipKV;
 	KeyValues* m_pOnUnequipKV;
 	KeyValues* m_pOnCreatedKV;
-}
+};

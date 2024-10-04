@@ -7,4 +7,4 @@ class CDOTA_Modifier_Invoker_GhostWalk_Self : public CDOTA_Modifier_Invisible
 	float32 mana_regen;
 	float32 disable_time;
 	GameTime_t m_timeLastDamage;
-}
+};

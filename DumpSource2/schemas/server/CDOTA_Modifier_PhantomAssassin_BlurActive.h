@@ -10,4 +10,4 @@ class CDOTA_Modifier_PhantomAssassin_BlurActive : public CDOTA_Buff
 	float32 buff_duration_after_break;
 	int32 active_movespeed_bonus;
 	GameTime_t m_rtLastTime;
-}
+};

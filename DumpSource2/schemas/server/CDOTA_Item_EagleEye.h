@@ -4,4 +4,4 @@ class CDOTA_Item_EagleEye : public CDOTA_Item
 	int32 m_iTeam;
 	int32 m_nFXIndex;
 	CHandle< CBaseEntity > m_hThinker;
-}
+};

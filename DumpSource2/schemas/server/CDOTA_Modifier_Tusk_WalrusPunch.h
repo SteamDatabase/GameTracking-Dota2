@@ -10,4 +10,4 @@ class CDOTA_Modifier_Tusk_WalrusPunch : public CDOTA_Buff
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	ParticleIndex_t m_nFXIndex;
 	int32 m_nAttackRecord;
-}
+};

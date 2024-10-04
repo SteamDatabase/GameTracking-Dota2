@@ -7,4 +7,4 @@ class CDOTA_Modifier_Viper_CorrosiveSkin_Slow : public CDOTA_Buff
 	int32 bonus_status_resistance;
 	int32 nethertoxin_bonus_pct;
 	bool m_bEffectMultiplied;
-}
+};

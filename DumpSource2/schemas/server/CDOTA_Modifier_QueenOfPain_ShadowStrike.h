@@ -7,4 +7,4 @@ class CDOTA_Modifier_QueenOfPain_ShadowStrike : public CDOTA_Buff
 	float32 m_flSlowStep;
 	float32 m_flSlowStepStep;
 	float32 attack_buff_duration;
-}
+};

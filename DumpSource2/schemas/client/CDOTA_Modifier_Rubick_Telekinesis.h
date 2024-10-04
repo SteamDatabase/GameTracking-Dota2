@@ -10,4 +10,4 @@ class CDOTA_Modifier_Rubick_Telekinesis : public CDOTA_Buff
 	float32 fall_duration;
 	bool m_bOverrideDuration;
 	float32 m_flOverrideDuration;
-}
+};

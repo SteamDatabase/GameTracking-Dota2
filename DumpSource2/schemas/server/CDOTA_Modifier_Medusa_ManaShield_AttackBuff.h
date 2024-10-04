@@ -7,4 +7,4 @@ class CDOTA_Modifier_Medusa_ManaShield_AttackBuff : public CDOTA_Buff
 	GameTime_t flMaxAspdGameTime;
 	int32 m_iTotalAmount;
 	float32 m_flStartingAttackSpeed;
-}
+};

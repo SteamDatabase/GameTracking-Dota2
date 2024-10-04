@@ -17,4 +17,4 @@ class CDOTA_Modifier_Grimstroke_SoulChain : public CDOTA_Buff
 	float32 chain_duration;
 	float32 creep_duration_pct;
 	int32 bonus_reflected_spell_damage;
-}
+};

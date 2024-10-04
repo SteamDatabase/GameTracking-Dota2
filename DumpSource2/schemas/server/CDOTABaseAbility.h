@@ -50,4 +50,4 @@ class CDOTABaseAbility : public CBaseEntity
 	CHandle< CBaseEntity > m_pReflectionSourceAbility;
 	item_definition_index_t m_nBackedByEconItemIndex;
 	bool m_bAltCastOrdered;
-}
+};

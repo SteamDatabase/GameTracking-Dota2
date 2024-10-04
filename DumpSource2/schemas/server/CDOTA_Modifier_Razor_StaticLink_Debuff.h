@@ -4,4 +4,4 @@ class CDOTA_Modifier_Razor_StaticLink_Debuff : public CDOTA_Buff
 	int32 attack_speed_factor;
 	int32 drain_rate;
 	int32 drain_armor;
-}
+};

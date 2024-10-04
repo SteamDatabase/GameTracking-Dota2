@@ -8,4 +8,4 @@ class C_DOTA_Ability_Drow_Ranger_Glacier : public C_DOTABaseAbility
 	Vector m_vSpawnOrigin;
 	Vector m_vDirection;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecShards;
-}
+};

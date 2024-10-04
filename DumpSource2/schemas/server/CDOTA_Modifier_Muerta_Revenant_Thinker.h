@@ -18,4 +18,4 @@ class CDOTA_Modifier_Muerta_Revenant_Thinker : public CDOTA_Buff
 	ParticleIndex_t m_nWarningFX;
 	CUtlVector< sRevenantDef > m_SpiritDefs;
 	int32 m_nRevenantImpacts;
-}
+};

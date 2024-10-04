@@ -17,4 +17,4 @@ class C_DOTASpectatorGraphManager
 	CountdownTimer m_HeroInventorySnapshotTimer;
 	CUtlVector< sPlayerSnapshot >[24] m_vecPlayerSnapshots;
 	uint32 m_unDataChangedCount;
-}
+};

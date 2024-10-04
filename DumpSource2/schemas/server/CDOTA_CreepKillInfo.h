@@ -4,4 +4,4 @@ class CDOTA_CreepKillInfo
 	float32 m_flDeathFlightDuration;
 	Vector m_vWsKillDirection;
 	Vector m_vWsKillOrigin;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_Leshrac_Lightning_Storm : public CDOTA_Buff
 	float32 jump_delay;
 	CHandle< C_BaseEntity > hInitialTarget;
 	float32 m_flDamage;
-}
+};

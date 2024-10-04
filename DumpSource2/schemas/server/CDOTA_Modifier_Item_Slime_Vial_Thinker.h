@@ -8,4 +8,4 @@ class CDOTA_Modifier_Item_Slime_Vial_Thinker : public CDOTA_Buff
 	int32 spill_radius;
 	int32 spill_damage;
 	float32 spill_debuff_duration;
-}
+};

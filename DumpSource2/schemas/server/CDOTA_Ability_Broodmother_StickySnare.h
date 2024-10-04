@@ -5,4 +5,4 @@ class CDOTA_Ability_Broodmother_StickySnare : public CDOTABaseAbility
 	int32 width;
 	bool m_bStolenSnareCheck;
 	CUtlVector< CHandle< CBaseEntity > > m_vecSnares;
-}
+};

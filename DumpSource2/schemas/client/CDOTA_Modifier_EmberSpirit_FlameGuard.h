@@ -9,4 +9,4 @@ class CDOTA_Modifier_EmberSpirit_FlameGuard : public CDOTA_Buff
 	float32 m_flShowParticleInterval;
 	bool m_bDestroy;
 	float32 linger_duration;
-}
+};

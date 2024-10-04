@@ -5,4 +5,4 @@ class C_DOTA_Ability_PineCone_AcornShot : public C_DOTABaseAbility
 	float32 bounce_delay;
 	int32 bounce_range;
 	int32 bounce_count;
-}
+};

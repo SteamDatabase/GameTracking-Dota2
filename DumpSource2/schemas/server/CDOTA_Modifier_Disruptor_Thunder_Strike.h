@@ -11,4 +11,4 @@ class CDOTA_Modifier_Disruptor_Thunder_Strike : public CDOTA_Buff
 	int32 m_nThinkerViewer;
 	int32 m_nThinkerViewerTeam;
 	int32 m_nStrikeCount;
-}
+};

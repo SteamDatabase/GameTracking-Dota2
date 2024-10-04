@@ -5,4 +5,4 @@ class CDOTA_Ability_Elder_Titan_EarthSplitter : public C_DOTABaseAbility
 	int32 speed;
 	int32 vision_width;
 	float32 crack_time;
-}
+};

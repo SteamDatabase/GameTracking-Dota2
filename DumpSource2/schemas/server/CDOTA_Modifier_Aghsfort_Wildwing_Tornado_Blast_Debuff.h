@@ -4,4 +4,4 @@ class CDOTA_Modifier_Aghsfort_Wildwing_Tornado_Blast_Debuff : public CDOTA_Buff
 	Vector m_vStartPos;
 	float32 m_flCurTime;
 	float32 m_flHeightT;
-}
+};

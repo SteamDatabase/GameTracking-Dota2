@@ -6,4 +6,4 @@ class CDOTA_Modifier_Juggernaut_Bladeform : public CDOTA_Buff
 	float32 movement_speed_pct_per_stack;
 	float32 linger_duration;
 	ParticleIndex_t m_nFXIndex;
-}
+};

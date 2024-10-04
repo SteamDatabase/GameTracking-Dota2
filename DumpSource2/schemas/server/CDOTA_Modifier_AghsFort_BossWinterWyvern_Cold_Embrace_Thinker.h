@@ -5,4 +5,4 @@ class CDOTA_Modifier_AghsFort_BossWinterWyvern_Cold_Embrace_Thinker : public CDO
 	float32 freeze_debuff_duration;
 	float32 freeze_delay;
 	ParticleIndex_t m_nFXIndex;
-}
+};

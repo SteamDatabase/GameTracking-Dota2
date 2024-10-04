@@ -13,4 +13,4 @@ class CDOTA_Modifier_MonkeyKing_BoundlessStrike_ShardMovement : public CDOTA_Buf
 	int32 min_height_above_highest;
 	int32 max_horizontal_acceleration;
 	int32 spring_channel_pct;
-}
+};

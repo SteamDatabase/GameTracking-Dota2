@@ -5,4 +5,4 @@ class CDOTA_Modifier_Windrunner_Windrun : public CDOTA_Buff
 	int32 movespeed_bonus_pct;
 	bool m_bDispellable;
 	int32 physical_damage_pct;
-}
+};

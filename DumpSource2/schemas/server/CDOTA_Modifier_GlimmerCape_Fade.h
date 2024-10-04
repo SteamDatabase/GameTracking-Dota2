@@ -8,4 +8,4 @@ class CDOTA_Modifier_GlimmerCape_Fade : public CDOTA_Buff
 	float32 m_flFadeTime;
 	float32 m_flCurentFadeDelay;
 	GameTime_t m_flLastActionTime;
-}
+};

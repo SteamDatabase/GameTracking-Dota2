@@ -10,4 +10,4 @@ class CDOTA_Modifier_FacelessVoid_TimeLock : public CDOTA_Buff
 	GameTime_t apply_activity_modifier_until;
 	GameTime_t disable_activity_modifier_until;
 	CUtlOrderedMap< CHandle< C_DOTA_BaseNPC >, int32 > m_mapTargets;
-}
+};

@@ -5,4 +5,4 @@ class C_DOTA_Ability_AghsFort_StonehallGeneral_OverwhelmingOdds : public C_DOTAB
 	Vector m_vDir;
 	int32 m_nSteps;
 	ParticleIndex_t m_nFXIndex;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Ability_EmberSpirit_Activate_FireRemnant : public CDOTABaseAbility
 	CHandle< CBaseEntity > m_hRemnantToKill;
 	bool m_bProjectileStarted;
 	CUtlVector< CHandle< CBaseEntity > > hAlreadyHitList;
-}
+};

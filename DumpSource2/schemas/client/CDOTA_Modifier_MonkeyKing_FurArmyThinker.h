@@ -11,4 +11,4 @@ class CDOTA_Modifier_MonkeyKing_FurArmyThinker : public CDOTA_Buff
 	ParticleIndex_t m_nRingFXIndex;
 	int32 final_radius;
 	float32 leadership_time_buffer;
-}
+};

@@ -15,4 +15,4 @@ class CDOTA_PlayerChallengeInfo
 	int32 nSequenceID;
 	int32 nCompleted;
 	int32 nRank;
-}
+};

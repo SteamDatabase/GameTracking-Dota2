@@ -5,4 +5,4 @@ class CDOTA_Modifier_Death_Prophet_MourningRitual : public CDOTA_Buff
 	float32 damage_interval;
 	float32 m_flDamageMultiplier;
 	bool m_bApplyingDelayedDamage;
-}
+};

@@ -13,4 +13,4 @@ class CDOTA_Modifier_Elder_Titan_AncestralSpirit_Buff : public CDOTA_Buff
 	int32 m_nDamage;
 	int32 m_nArmor;
 	bool m_bSpellImmunity;
-}
+};

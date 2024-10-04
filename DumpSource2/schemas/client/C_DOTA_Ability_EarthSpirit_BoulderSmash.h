@@ -12,4 +12,4 @@ class C_DOTA_Ability_EarthSpirit_BoulderSmash : public C_DOTABaseAbility
 	bool m_bUsedStone;
 	CHandle< C_BaseEntity > m_hTarget;
 	bool m_bTargetStone;
-}
+};

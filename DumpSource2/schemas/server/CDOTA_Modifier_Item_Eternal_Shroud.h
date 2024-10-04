@@ -10,4 +10,4 @@ class CDOTA_Modifier_Item_Eternal_Shroud : public CDOTA_Buff_Item
 	float32 stack_duration;
 	int32 max_stacks;
 	float32 m_flCumulativeDamage;
-}
+};

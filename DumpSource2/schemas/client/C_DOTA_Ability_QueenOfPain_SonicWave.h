@@ -5,4 +5,4 @@ class C_DOTA_Ability_QueenOfPain_SonicWave : public C_DOTABaseAbility
 	ParticleIndex_t m_nFXIndex;
 	int32 starting_aoe;
 	int32 final_aoe;
-}
+};

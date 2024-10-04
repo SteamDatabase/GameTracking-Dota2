@@ -5,4 +5,4 @@ class CDOTA_Modifier_Furion_SpiritOfTheForest : public CDOTA_Buff
 	float32 multiplier;
 	int32 radius_treant;
 	int32 m_nTreeAmount;
-}
+};

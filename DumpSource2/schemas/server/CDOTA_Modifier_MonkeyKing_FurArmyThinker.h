@@ -12,4 +12,4 @@ class CDOTA_Modifier_MonkeyKing_FurArmyThinker : public CDOTA_Buff
 	int32 final_radius;
 	float32 leadership_time_buffer;
 	GameTime_t m_flLastTimeInsideRing;
-}
+};

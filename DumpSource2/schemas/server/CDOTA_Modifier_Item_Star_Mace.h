@@ -6,4 +6,4 @@ class CDOTA_Modifier_Item_Star_Mace : public CDOTA_Buff_Item
 	int32 cleave_starting_width;
 	int32 cleave_ending_width;
 	int32 cleave_distance;
-}
+};

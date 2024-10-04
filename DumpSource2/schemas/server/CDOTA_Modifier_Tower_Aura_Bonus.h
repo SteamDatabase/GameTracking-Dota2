@@ -5,4 +5,4 @@ class CDOTA_Modifier_Tower_Aura_Bonus : public CDOTA_Buff
 	bool m_bOverrideArmor;
 	bool m_bOverrideRegen;
 	bool m_bSentFirstRefresh;
-}
+};

@@ -4,4 +4,4 @@ class CDOTA_Ability_AncientApparition_IceAge : public C_DOTABaseAbility
 	int32 health_degen;
 	float32 duration;
 	int32 damage;
-}
+};

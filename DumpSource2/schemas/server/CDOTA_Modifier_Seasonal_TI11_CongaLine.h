@@ -9,4 +9,4 @@ class CDOTA_Modifier_Seasonal_TI11_CongaLine : public CDOTA_Buff
 	int32 m_nGesture;
 	CUtlVector< CHandle< CDOTA_BaseNPC > > m_vecDancers;
 	bool m_bIsGesturing;
-}
+};

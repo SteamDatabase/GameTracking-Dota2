@@ -5,4 +5,4 @@ class CDOTA_Modifier_Stacking_Base : public CDOTA_Buff
 	float32 sub_modifier_forced_duration;
 	CUtlString m_szSubModifierName;
 	KeyValues* m_pSubModifierKV;
-}
+};

@@ -7,4 +7,4 @@ class CDOTABehaviorAbilityPhase
 	bool m_bActionLocked;
 	bool m_bTargetTeleported;
 	bool m_bOriginalTargetTeleported;
-}
+};

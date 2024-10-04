@@ -5,4 +5,4 @@ class CDOTA_Modifier_Zuus_ThundergodsWrathThinker : public CDOTA_Buff
 	float32 sight_duration;
 	float32 growing_delay;
 	float32 grow_kill_amp;
-}
+};

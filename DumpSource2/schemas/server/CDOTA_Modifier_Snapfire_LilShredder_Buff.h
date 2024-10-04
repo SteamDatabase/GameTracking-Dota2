@@ -9,4 +9,4 @@ class CDOTA_Modifier_Snapfire_LilShredder_Buff : public CDOTA_Buff
 	int32 attack_speed_bonus;
 	float32 armor_duration;
 	int32 extra_targets;
-}
+};

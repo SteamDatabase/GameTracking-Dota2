@@ -8,4 +8,4 @@ class FantasyCraftSetupData_t
 	CUtlVector< FantasyCraftingQualityData_t > m_vecQualities;
 	CUtlVector< FantasyCraftingTabletData_t > m_vecTablets;
 	CUtlVector< FantasyCraftOperationBucket_t > m_vecOperations;
-}
+};

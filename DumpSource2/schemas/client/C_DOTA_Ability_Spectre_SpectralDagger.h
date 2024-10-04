@@ -10,4 +10,4 @@ class C_DOTA_Ability_Spectre_SpectralDagger : public C_DOTABaseAbility
 	CUtlVector< CHandle< C_BaseEntity > > m_hUnitsHit;
 	bool m_bIsThinkHit;
 	CHandle< C_BaseEntity > m_hTrackingTarget;
-}
+};

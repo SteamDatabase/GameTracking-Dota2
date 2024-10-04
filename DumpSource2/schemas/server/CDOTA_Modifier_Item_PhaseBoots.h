@@ -8,4 +8,4 @@ class CDOTA_Modifier_Item_PhaseBoots : public CDOTA_Buff_Item
 	int32 block_chance;
 	int32 bonus_attack_speed;
 	int32 bonus_armor;
-}
+};

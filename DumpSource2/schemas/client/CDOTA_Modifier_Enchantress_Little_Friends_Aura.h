@@ -10,4 +10,4 @@ class CDOTA_Modifier_Enchantress_Little_Friends_Aura : public CDOTA_Buff
 	float32 root_per_target;
 	float32 max_root;
 	GameTime_t m_flLastSeen;
-}
+};

@@ -15,4 +15,4 @@ class CDOTA_Modifier_MonkeyKing_Transform : public CDOTA_Buff
 	uint32 m_nMischiefUnitType;
 	int32 m_nMischiefHealthbarOffset;
 	float32 invul_duration;
-}
+};

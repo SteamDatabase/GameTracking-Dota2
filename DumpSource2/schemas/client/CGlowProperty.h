@@ -10,4 +10,4 @@ class CGlowProperty
 	float32 m_flGlowTime;
 	float32 m_flGlowStartTime;
 	bool m_bGlowing;
-}
+};

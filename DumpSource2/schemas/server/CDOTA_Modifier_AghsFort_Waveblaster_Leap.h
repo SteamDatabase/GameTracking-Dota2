@@ -9,4 +9,4 @@ class CDOTA_Modifier_AghsFort_Waveblaster_Leap : public CDOTA_Buff
 	bool m_bInterrupted;
 	float32 leap_speed;
 	float32 leap_acceleration;
-}
+};

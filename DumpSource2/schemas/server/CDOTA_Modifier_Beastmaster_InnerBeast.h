@@ -4,4 +4,4 @@ class CDOTA_Modifier_Beastmaster_InnerBeast : public CDOTA_Buff
 	int32 attack_speed_per_unit;
 	int32 magic_resist;
 	int32 nTotalUnits;
-}
+};

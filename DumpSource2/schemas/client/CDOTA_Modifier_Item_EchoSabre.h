@@ -7,4 +7,4 @@ class CDOTA_Modifier_Item_EchoSabre : public CDOTA_Buff_Item
 	int32 bonus_strength;
 	float32 slow_duration;
 	bool bonus_speed;
-}
+};

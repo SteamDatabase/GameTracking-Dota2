@@ -8,4 +8,4 @@ class CDOTA_Modifier_Kunkka_Tidebringer : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	int32 cleave_damage;
 	float32 cooldown_reduction_per_hero_hit;
-}
+};

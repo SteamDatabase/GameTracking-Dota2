@@ -9,4 +9,4 @@ class CDOTA_Modifier_Visage_GravekeepersCloak : public CDOTA_Buff
 	ParticleIndex_t[4] m_nFXIndex;
 	ParticleIndex_t m_nFXIndexB;
 	CUtlVector< CDOTA_Modifier_Visage_GravekeepersCloak_Stack* > vStacks;
-}
+};

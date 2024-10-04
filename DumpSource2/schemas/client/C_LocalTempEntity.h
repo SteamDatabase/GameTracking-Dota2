@@ -25,4 +25,4 @@ class C_LocalTempEntity : public CBaseAnimatingActivity
 	Vector m_vecTempEntVelocity;
 	Vector m_vecPrevAbsOrigin;
 	Vector m_vecTempEntAcceleration;
-}
+};

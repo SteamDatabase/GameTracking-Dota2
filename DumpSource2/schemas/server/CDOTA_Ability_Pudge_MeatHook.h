@@ -30,4 +30,4 @@ class CDOTA_Ability_Pudge_MeatHook : public CDOTABaseAbility
 	int32 curve_hook_debug;
 	float32 m_fTimeRemaining;
 	float32 m_flFacingTarget;
-}
+};

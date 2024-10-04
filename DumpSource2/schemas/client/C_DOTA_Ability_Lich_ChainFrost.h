@@ -8,4 +8,4 @@ class C_DOTA_Ability_Lich_ChainFrost : public C_DOTABaseAbility
 	int32 initial_projectile_speed;
 	int32 bonus_jumps_per_hero_killed;
 	int32 bonus_jumps_per_creep_killed;
-}
+};

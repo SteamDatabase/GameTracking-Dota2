@@ -10,4 +10,4 @@ class CDOTA_Ability_Spectre_SpectralDagger : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > > m_hUnitsHit;
 	bool m_bIsThinkHit;
 	CHandle< CBaseEntity > m_hTrackingTarget;
-}
+};

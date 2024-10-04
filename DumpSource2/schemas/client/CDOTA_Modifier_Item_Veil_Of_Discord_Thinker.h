@@ -6,4 +6,4 @@ class CDOTA_Modifier_Item_Veil_Of_Discord_Thinker : public CDOTA_Buff
 	int32 m_nHeroesHit;
 	bool m_bHitInvisibleHero;
 	bool m_bFirstPulse;
-}
+};

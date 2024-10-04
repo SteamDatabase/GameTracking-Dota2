@@ -6,4 +6,4 @@ class C_DOTA_TempTree : public CBaseAnimatingActivity
 	bool m_bIsMangoTree;
 	CUtlVector< ParticleIndex_t > m_ParticleList;
 	bool m_bIsPartOfFowSystem;
-}
+};

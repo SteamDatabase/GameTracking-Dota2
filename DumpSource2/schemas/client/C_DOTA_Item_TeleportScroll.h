@@ -7,4 +7,4 @@ class C_DOTA_Item_TeleportScroll : public C_DOTA_Item
 	int32 m_iMinDistance;
 	float32 m_flBaseTeleportTime;
 	float32 m_flExtraTeleportTime;
-}
+};

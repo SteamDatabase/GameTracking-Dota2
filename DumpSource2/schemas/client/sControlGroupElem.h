@@ -6,4 +6,4 @@ class sControlGroupElem
 	CHandle< C_BaseEntity > m_hEntity;
 	bool m_bIsIllusion;
 	char[4096] m_IllusionLabel;
-}
+};

@@ -31,4 +31,4 @@ class CDOTA_Ability_Grimstroke_DarkArtistry : public CDOTABaseAbility
 	float32 bonus_damage_per_target;
 	float32 vector_deg_turn_divisor;
 	float32 vision_duration;
-}
+};

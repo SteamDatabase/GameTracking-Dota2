@@ -23,4 +23,4 @@ class CShmupPlayerDefinition
 	int32 m_nTicksPerSpecialAttack;
 	int32 m_nMaxBulletAbsorption;
 	float32 m_flBulletSpread;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_ModifierManager
 	uint16 m_nProvidesFOWPositionForTeamValid;
 	int32 m_iBuffIndex;
 	int32 m_iLockRefCount;
-}
+};

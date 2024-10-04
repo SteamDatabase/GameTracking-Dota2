@@ -6,4 +6,4 @@ class CHeadLookParams
 	char* m_pReasonStr;
 	bool m_bWaitForSteady;
 	float32 m_flEaseInTime;
-}
+};

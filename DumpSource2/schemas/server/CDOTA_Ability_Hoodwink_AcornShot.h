@@ -9,4 +9,4 @@ class CDOTA_Ability_Hoodwink_AcornShot : public CDOTABaseAbility
 	int32 can_bounce_off_of_trees;
 	int32 bounces_after_tree_bounce;
 	bool bBouncedOffTree;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_Muerta_PierceTheVeil_Buff : public CDOTA_Buff
 	int32 attack_range_bonus;
 	int32 m_iOriginalAttackCapabilities;
 	ParticleIndex_t m_nScreenFXIndex;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_MonkeyKing_FurArmy_Soldier : public CDOTA_Buff
 	bool m_bIsInPosition;
 	ParticleIndex_t m_nFXIndex;
 	bool m_bAutoSpawn;
-}
+};

@@ -9,4 +9,4 @@ class CDOTA_Modifier_Ringmaster_Spotlight_Thinker : public CDOTA_Buff
 	Vector m_vStartLocation;
 	Vector m_vTargetLocation;
 	float32 m_flTargetReachedTime;
-}
+};

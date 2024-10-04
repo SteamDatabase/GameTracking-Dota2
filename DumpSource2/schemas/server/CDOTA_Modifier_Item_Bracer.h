@@ -7,4 +7,4 @@ class CDOTA_Modifier_Item_Bracer : public CDOTA_Buff_Item
 	int32 bonus_damage;
 	int32 bonus_slow_resistance;
 	int32 bonus_health;
-}
+};

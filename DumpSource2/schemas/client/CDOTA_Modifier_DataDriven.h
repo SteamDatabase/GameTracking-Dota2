@@ -62,4 +62,4 @@ class CDOTA_Modifier_DataDriven : public CDOTA_Buff
 	KeyValues* m_pOnHealReceived;
 	KeyValues* m_pOnAttackFinished;
 	KeyValues* m_pOnAttackCancelled;
-}
+};

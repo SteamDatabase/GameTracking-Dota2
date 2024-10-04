@@ -8,4 +8,4 @@ class CDOTA_Modifier_Disruptor_KineticField : public CDOTA_Buff
 	Vector m_vWallRight;
 	bool is_wall;
 	float32 m_flWallThickness;
-}
+};

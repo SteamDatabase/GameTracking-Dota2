@@ -8,4 +8,4 @@ class CBasePlayerWeapon : public CBaseAnimatingActivity
 	int32 m_iClip2;
 	int32[2] m_pReserveAmmo;
 	CEntityIOOutput m_OnPlayerUse;
-}
+};

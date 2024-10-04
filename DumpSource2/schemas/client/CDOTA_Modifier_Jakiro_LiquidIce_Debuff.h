@@ -6,4 +6,4 @@ class CDOTA_Modifier_Jakiro_LiquidIce_Debuff : public CDOTA_Buff
 	int32 slow_attack_speed_pct;
 	float32 tick_rate;
 	int32 bonus_instance_damage_from_other_abilities;
-}
+};

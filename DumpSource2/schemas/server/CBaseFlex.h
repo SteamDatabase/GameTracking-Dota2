@@ -7,4 +7,4 @@ class CBaseFlex : public CBaseAnimatingOverlay
 	GameTime_t m_flLastFlexAnimationTime;
 	SceneEventId_t m_nNextSceneEventId;
 	bool m_bUpdateLayerPriorities;
-}
+};

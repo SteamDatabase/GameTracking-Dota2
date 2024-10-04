@@ -7,4 +7,4 @@ class CPhysSurfacePropertiesPhysics
 	float32 m_softContactFrequency;
 	float32 m_softContactDampingRatio;
 	float32 m_wheelDrag;
-}
+};

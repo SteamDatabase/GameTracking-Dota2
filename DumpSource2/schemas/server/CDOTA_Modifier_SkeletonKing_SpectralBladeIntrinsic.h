@@ -7,4 +7,4 @@ class CDOTA_Modifier_SkeletonKing_SpectralBladeIntrinsic : public CDOTA_Buff
 	float32 curse_cooldown;
 	float32 curse_cooldown_creep;
 	float32 curse_delay;
-}
+};

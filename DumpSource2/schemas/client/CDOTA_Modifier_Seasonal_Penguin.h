@@ -31,4 +31,4 @@ class CDOTA_Modifier_Seasonal_Penguin : public CDOTA_Buff
 	float32 max_gainable_lifetime;
 	float32 lifetime_gain_per_hero_bump;
 	float32 min_speech_repeat_time;
-}
+};

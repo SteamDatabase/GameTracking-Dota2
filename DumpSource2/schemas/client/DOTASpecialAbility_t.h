@@ -21,4 +21,4 @@ class DOTASpecialAbility_t
 	bool m_bAffectedByAoEIncrease;
 	bool m_bDynamicValue;
 	EDOTASpecialBonusOperation m_eSpecialBonusOperation;
-}
+};

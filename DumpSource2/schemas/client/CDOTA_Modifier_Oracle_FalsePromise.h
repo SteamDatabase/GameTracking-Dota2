@@ -8,4 +8,4 @@ class CDOTA_Modifier_Oracle_FalsePromise : public CDOTA_Buff
 	float32 m_flRunningDmg;
 	float32 m_flRunningHealth;
 	int32 bonus_armor;
-}
+};

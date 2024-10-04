@@ -24,4 +24,4 @@ class C_DOTA_Ability_EarthSpirit_RollingBoulder : public C_DOTABaseAbility
 	bool m_bUsedStone;
 	bool m_bRolledOverAlliedHero;
 	Vector m_vRollDirection;
-}
+};

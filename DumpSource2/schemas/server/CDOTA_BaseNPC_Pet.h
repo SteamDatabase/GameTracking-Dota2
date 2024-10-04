@@ -10,4 +10,4 @@ class CDOTA_BaseNPC_Pet : public CDOTA_BaseNPC
 	int32 m_nPetLevel;
 	PetLevelup_Rule_t m_nLevelupRule;
 	int32 m_nXPCompendiumEventID;
-}
+};

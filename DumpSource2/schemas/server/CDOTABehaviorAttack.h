@@ -5,4 +5,4 @@ class CDOTABehaviorAttack
 	bool m_bCastAttack;
 	float32 m_flBackswingTime;
 	float32 m_flAnimSpeed;
-}
+};

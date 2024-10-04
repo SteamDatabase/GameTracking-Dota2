@@ -7,4 +7,4 @@ class CDOTA_Modifier_DragonKnight_SplashAttack : public CDOTA_Buff
 	int32 cleave_ending_width;
 	int32 cleave_distance;
 	int32 cleave_damage;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Modifier_Shadow_Demon_Disruption : public CDOTA_Buff
 	CHandle< CBaseEntity > m_hDisseminateAbility;
 	ParticleIndex_t m_nFXIndex;
 	bool m_bCanCast;
-}
+};

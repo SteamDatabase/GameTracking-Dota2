@@ -10,4 +10,4 @@ class CDOTA_Modifier_AghsFort_PlayerTransform : public CDOTA_Buff
 	char* s_pszDonkeyDisguise;
 	float32 invul_duration;
 	bool m_bParticlesSpawned;
-}
+};

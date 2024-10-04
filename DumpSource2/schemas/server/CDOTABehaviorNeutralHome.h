@@ -5,4 +5,4 @@ class CDOTABehaviorNeutralHome
 	Vector m_vHomeFacing;
 	bool m_bHomePositionSet;
 	CountdownTimer m_IdleRareAnimationTime;
-}
+};

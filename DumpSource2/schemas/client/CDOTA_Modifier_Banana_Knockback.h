@@ -11,4 +11,4 @@ class CDOTA_Modifier_Banana_Knockback : public CDOTA_Buff
 	float32 m_fCurrentTimeVert;
 	bool m_bShouldStun;
 	float32 flTimeSinceChange;
-}
+};

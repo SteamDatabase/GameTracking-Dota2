@@ -5,4 +5,4 @@ class CDOTA_Ability_Wisp_Tether : public CDOTABaseAbility
 	bool m_bProjectileActive;
 	int32 latch_distance;
 	int32 m_iProjectileIndex;
-}
+};

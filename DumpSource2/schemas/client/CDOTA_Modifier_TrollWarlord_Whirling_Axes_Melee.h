@@ -16,4 +16,4 @@ class CDOTA_Modifier_TrollWarlord_Whirling_Axes_Melee : public CDOTA_Buff
 	int32 m_nHeroesHitForRelic;
 	CUtlVector< CHandle< C_BaseEntity > > hitEntities;
 	CUtlVector< CHandle< C_BaseEntity > > m_hAxes;
-}
+};

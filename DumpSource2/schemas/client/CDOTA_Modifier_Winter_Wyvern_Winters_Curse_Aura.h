@@ -7,4 +7,4 @@ class CDOTA_Modifier_Winter_Wyvern_Winters_Curse_Aura : public CDOTA_Buff
 	int32 damage_amplification;
 	int32 damage_reduction;
 	GameTime_t m_flLastSeen;
-}
+};

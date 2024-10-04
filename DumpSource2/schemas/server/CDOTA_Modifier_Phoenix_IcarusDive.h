@@ -12,4 +12,4 @@ class CDOTA_Modifier_Phoenix_IcarusDive : public CDOTA_Buff
 	float32 dive_duration;
 	float32 impact_damage;
 	CUtlVector< CHandle< CBaseEntity > > m_vecHitEntities;
-}
+};

@@ -6,4 +6,4 @@ class CDOTA_Modifier_Kunkka_Ghost_Ship_Fire_Cannons : public CDOTA_Buff
 	float32 m_flProjectileRadius;
 	int32 m_hGhostShipProjectile;
 	int32 m_nVolleyNumber;
-}
+};

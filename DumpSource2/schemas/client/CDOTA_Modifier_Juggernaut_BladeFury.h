@@ -8,4 +8,4 @@ class CDOTA_Modifier_Juggernaut_BladeFury : public CDOTA_Buff
 	int32 bonus_movespeed;
 	GameTime_t m_flNextAttack;
 	bool m_bIgnoreAttackRestriction;
-}
+};

@@ -4,4 +4,4 @@ class CDOTABehaviorCommandMoveToPosition
 	Vector m_vPosition;
 	bool m_bDirectional;
 	bool m_bRelative;
-}
+};

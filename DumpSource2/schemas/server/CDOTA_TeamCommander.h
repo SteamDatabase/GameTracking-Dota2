@@ -75,4 +75,4 @@ class CDOTA_TeamCommander
 	GameTick_t m_nScriptPathAvoidanceUpdateTick;
 	float32[30] m_fExecutionTime;
 	int32 m_iCurExecutionTime;
-}
+};

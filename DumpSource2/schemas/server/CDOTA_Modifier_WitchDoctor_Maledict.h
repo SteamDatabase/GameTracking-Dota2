@@ -6,4 +6,4 @@ class CDOTA_Modifier_WitchDoctor_Maledict : public CDOTA_Buff
 	int32 ticks;
 	int32 iCurrentTick;
 	int32 health_restoration_reduction;
-}
+};

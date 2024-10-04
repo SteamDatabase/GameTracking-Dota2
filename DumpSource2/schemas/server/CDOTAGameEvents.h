@@ -6,4 +6,4 @@ class CDOTAGameEvents : public CBaseEntity
 	CEntityIOOutput m_OnDireFortDestroyed;
 	CEntityIOOutput m_OnGameEnded;
 	CEntityIOOutput m_OnGameStarted;
-}
+};

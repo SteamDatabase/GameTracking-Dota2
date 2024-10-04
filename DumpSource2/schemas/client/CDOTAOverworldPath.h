@@ -6,4 +6,4 @@ class CDOTAOverworldPath
 	uint8 m_unCost;
 	float32 m_flCircleInvRadius;
 	CUtlVector< CUtlString > m_vecRequiredTokenNames;
-}
+};

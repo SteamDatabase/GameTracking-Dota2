@@ -4,4 +4,4 @@ class CDOTA_Ability_VoidSpirit_ResonantPulse : public CDOTABaseAbility
 	float32 buff_duration;
 	int32 base_absorb_amount;
 	int32 absorb_per_hero_hit;
-}
+};

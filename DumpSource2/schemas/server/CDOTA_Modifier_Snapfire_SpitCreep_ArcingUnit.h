@@ -23,4 +23,4 @@ class CDOTA_Modifier_Snapfire_SpitCreep_ArcingUnit : public CDOTA_Buff
 	float32 min_height_above_highest;
 	float32 min_acceleration;
 	float32 max_acceleration;
-}
+};

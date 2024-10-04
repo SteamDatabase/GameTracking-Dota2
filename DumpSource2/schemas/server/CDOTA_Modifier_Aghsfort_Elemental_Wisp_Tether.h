@@ -14,4 +14,4 @@ class CDOTA_Modifier_Aghsfort_Elemental_Wisp_Tether : public CDOTA_Buff
 	float32 tether_heal_amp;
 	GameTime_t m_flHealMessageTime;
 	GameTime_t m_flManaMessageTime;
-}
+};

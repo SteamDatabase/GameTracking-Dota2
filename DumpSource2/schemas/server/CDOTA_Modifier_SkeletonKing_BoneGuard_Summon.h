@@ -11,4 +11,4 @@ class CDOTA_Modifier_SkeletonKing_BoneGuard_Summon : public CDOTA_Buff
 	int32 xp_bounty;
 	int32 skeleton_building_damage_reduction;
 	int32 skeleton_bonus_hero_damage;
-}
+};

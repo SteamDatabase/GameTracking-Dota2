@@ -5,4 +5,4 @@ class C_DOTA_Ability_DrowRanger_WaveOfSilence : public C_DOTABaseAbility
 	float32 silence_duration;
 	float32 knockback_distance_max;
 	int32 m_nHeroesHit;
-}
+};

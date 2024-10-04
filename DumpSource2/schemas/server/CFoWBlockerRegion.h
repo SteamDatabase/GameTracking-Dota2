@@ -6,4 +6,4 @@ class CFoWBlockerRegion : public CBaseEntity
 	float32 m_flMinY;
 	float32 m_flMaxY;
 	float32 m_flGridSize;
-}
+};

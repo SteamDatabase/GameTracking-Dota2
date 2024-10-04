@@ -5,4 +5,4 @@ class CDOTA_Modifier_Venomancer_PoisonStingBase : public CDOTA_Buff
 	int32 m_nTicksRemaining;
 	float32 m_flAttackDamage;
 	int32 hp_regen_reduction;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_Item_Samurai_Tabi_Agi : public CDOTA_Buff_Item
 	float32 agi_counter_cooldown;
 	GameTime_t m_flLastCounterTime;
 	int32 iCurrentTickCount;
-}
+};

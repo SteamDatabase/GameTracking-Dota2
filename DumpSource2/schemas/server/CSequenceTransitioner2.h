@@ -5,4 +5,4 @@ class CSequenceTransitioner2
 	GameTime_t m_flCurrentAnimTime;
 	TransitioningLayer_t[4] m_transitioningLayers;
 	CBaseAnimatingController* m_pOwner;
-}
+};

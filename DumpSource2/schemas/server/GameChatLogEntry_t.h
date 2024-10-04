@@ -4,4 +4,4 @@ class GameChatLogEntry_t
 	PlayerID_t m_nPlayerID;
 	CUtlString m_sText;
 	GameTime_t m_flGameTime;
-}
+};

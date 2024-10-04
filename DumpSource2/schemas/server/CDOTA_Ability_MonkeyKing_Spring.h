@@ -5,4 +5,4 @@ class CDOTA_Ability_MonkeyKing_Spring : public CDOTABaseAbility
 	CHandle< CBaseEntity > m_hThinker;
 	ParticleIndex_t m_nFxIndex;
 	int32 m_nRefCount;
-}
+};

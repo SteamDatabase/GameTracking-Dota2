@@ -18,4 +18,4 @@ class CAnimationLayer
 	float32 m_flFadeInFraction;
 	float32 m_flFadeOutFraction;
 	bool m_bHasFadedIn;
-}
+};

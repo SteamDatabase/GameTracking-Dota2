@@ -10,4 +10,4 @@ class CDOTA_Modifier_Pangolier_ShieldCrash_Buff : public CDOTA_Buff
 	int32 parry_swashbuckles;
 	int32 parry_damage_threshold;
 	GameTime_t m_flLastParryTime;
-}
+};

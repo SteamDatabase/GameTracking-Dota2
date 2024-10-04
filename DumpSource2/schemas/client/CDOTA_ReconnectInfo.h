@@ -4,4 +4,4 @@ class CDOTA_ReconnectInfo
 	int32 m_iTeam;
 	CEntityIndex m_iUnitControlled;
 	bool m_bWantsRandomHero;
-}
+};

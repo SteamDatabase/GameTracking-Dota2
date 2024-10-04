@@ -8,4 +8,4 @@ class sSpiritInfo
 	int32 iMaxDamage;
 	ParticleIndex_t nFXAmbientIndex;
 	CHandle< C_BaseEntity > hDeadHero;
-}
+};

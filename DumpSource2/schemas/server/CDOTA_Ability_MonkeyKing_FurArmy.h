@@ -8,4 +8,4 @@ class CDOTA_Ability_MonkeyKing_FurArmy : public CDOTABaseAbility
 	GameTime_t m_flNextCreationTime;
 	GameTime_t m_flScepterTime;
 	CUtlVector< CHandle< CBaseEntity > > m_vecSoldiers;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Ability_PrimalBeast_Onslaught : public CDOTABaseAbility
 	Vector m_vStartPos;
 	ParticleIndex_t m_nFXIndex;
 	int32 m_nProjectileID;
-}
+};

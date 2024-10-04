@@ -12,4 +12,4 @@ class CDOTA_Modifier_Tiny_Tree_Grab : public CDOTA_Buff
 	CHandle< CBaseEntity > m_hStolenTree;
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXAttackIndex;
-}
+};

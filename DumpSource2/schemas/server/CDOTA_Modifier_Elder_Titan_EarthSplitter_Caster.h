@@ -13,4 +13,4 @@ class CDOTA_Modifier_Elder_Titan_EarthSplitter_Caster : public CDOTA_Buff
 	Vector m_vCastDirection;
 	int32 m_nHumHeroesHit;
 	bool m_bHitInvisibleHero;
-}
+};

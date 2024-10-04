@@ -11,4 +11,4 @@ class CDOTA_Ability_SpiritBreaker_ChargeOfDarkness : public CDOTABaseAbility
 	int32 nFXIndex;
 	int32 m_iCurProjectileIndex;
 	Vector m_vChargeStartPos;
-}
+};

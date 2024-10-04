@@ -10,4 +10,4 @@ class CDOTA_Modifier_Dawnbreaker_Luminosity_Attack_Buff : public CDOTA_Buff
 	float32 m_flTotalToHeal;
 	bool m_bHasProccedCooldownReduction;
 	float32 cooldown_reduction;
-}
+};

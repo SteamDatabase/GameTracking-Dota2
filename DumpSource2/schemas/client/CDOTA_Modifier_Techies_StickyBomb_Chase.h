@@ -7,4 +7,4 @@ class CDOTA_Modifier_Techies_StickyBomb_Chase : public CDOTA_Buff
 	CHandle< C_BaseEntity > m_hAttachTarget;
 	Vector m_vStartPosition;
 	CountdownTimer m_MoveTime;
-}
+};

@@ -10,4 +10,4 @@ class CDOTA_Modifier_AghsFort_DragonPotion : public CDOTA_Buff_Item
 	int32 model_scale;
 	int32 skin_number;
 	bool flying_movement;
-}
+};

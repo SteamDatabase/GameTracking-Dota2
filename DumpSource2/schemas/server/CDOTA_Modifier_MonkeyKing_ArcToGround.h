@@ -13,4 +13,4 @@ class CDOTA_Modifier_MonkeyKing_ArcToGround : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex2;
 	float32 m_flOriginalHeight;
 	bool m_bRightClickHop;
-}
+};

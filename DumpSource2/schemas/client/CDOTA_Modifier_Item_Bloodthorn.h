@@ -12,4 +12,4 @@ class CDOTA_Modifier_Item_Bloodthorn : public CDOTA_Buff_Item
 	int32 passive_proc_damage;
 	int32 proc_chance;
 	float32 bonus_health_regen;
-}
+};

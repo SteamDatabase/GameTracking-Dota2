@@ -6,4 +6,4 @@ class CDOTA_Modifier_Disruptor_StaticStormThinker : public CDOTA_Buff
 	int32 pulses;
 	float32 duration;
 	bool m_bHasGrantedThreeHeroKillEater;
-}
+};

@@ -24,4 +24,4 @@ class CDOTA_Modifier_Shredder_TwistedChakram : public CDOTA_Buff
 	float32 pass_slow_duration;
 	float32 min_throw_duration;
 	float32 max_throw_duration;
-}
+};

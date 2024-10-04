@@ -11,4 +11,4 @@ class CDOTA_Modifier_DarkWillow_Bedlam : public CDOTA_Buff
 	bool m_bTravelling;
 	int32 travel_speed;
 	int32 damage_reduction_pct;
-}
+};

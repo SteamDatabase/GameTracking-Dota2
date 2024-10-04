@@ -8,4 +8,4 @@ class CDOTA_Modifier_VoidSpirit_ResonantPulse_Ring : public CDOTA_Buff
 	int32 speed;
 	int32 radius;
 	int32 damage;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Ability_EmberSpirit_SleightOfFist : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > > m_hAttackEntities;
 	ParticleIndex_t m_nFXMarkerIndex;
 	CHandle< CBaseEntity > m_hDoubleHitEntity;
-}
+};

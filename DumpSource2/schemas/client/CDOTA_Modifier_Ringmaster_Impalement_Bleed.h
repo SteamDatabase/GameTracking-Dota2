@@ -6,4 +6,4 @@ class CDOTA_Modifier_Ringmaster_Impalement_Bleed : public CDOTA_Buff
 	float32 slow_percent;
 	float32 bleed_creep_dps;
 	float32 slow_duration;
-}
+};

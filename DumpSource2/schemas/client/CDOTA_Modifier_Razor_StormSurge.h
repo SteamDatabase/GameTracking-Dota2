@@ -10,4 +10,4 @@ class CDOTA_Modifier_Razor_StormSurge : public CDOTA_Buff
 	float32 strike_internal_cd;
 	float32 strike_cd_reduction_during_storm;
 	int32 eye_of_the_storm_chance_multiplier;
-}
+};

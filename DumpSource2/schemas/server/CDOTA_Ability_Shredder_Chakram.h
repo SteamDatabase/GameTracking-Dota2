@@ -13,4 +13,4 @@ class CDOTA_Ability_Shredder_Chakram : public CDOTABaseAbility
 	int32 m_nProjectileIndex;
 	CHandle< CBaseEntity > m_hThinker;
 	CUtlVector< CHandle< CBaseEntity > > m_hReturnHits;
-}
+};

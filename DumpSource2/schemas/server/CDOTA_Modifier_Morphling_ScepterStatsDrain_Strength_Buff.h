@@ -5,4 +5,4 @@ class CDOTA_Modifier_Morphling_ScepterStatsDrain_Strength_Buff : public CDOTA_Bu
 	int32 nStrengthSteal;
 	int32 nAgiSteal;
 	int32 nIntSteal;
-}
+};

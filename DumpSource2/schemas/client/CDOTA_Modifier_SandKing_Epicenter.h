@@ -10,4 +10,4 @@ class CDOTA_Modifier_SandKing_Epicenter : public CDOTA_Buff
 	float32 spine_tick_rate;
 	GameTime_t m_flLastDamageTime;
 	GameTime_t m_flLastSpineTime;
-}
+};

@@ -6,4 +6,4 @@ class C_DOTA_Ability_DragonKnight_BreatheFire : public C_DOTABaseAbility
 	Vector m_vStartPos;
 	GameTime_t m_fStartTime;
 	float32 m_fTotalTime;
-}
+};

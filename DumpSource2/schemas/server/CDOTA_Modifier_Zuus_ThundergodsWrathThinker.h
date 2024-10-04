@@ -9,4 +9,4 @@ class CDOTA_Modifier_Zuus_ThundergodsWrathThinker : public CDOTA_Buff
 	CUtlVector< CHandle< CBaseEntity > > m_hTargetEntities;
 	int32 m_nFarKills;
 	int32 m_nKills;
-}
+};

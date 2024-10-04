@@ -7,4 +7,4 @@ class CDOTA_Modifier_Bane_Nightmare : public CDOTA_Buff
 	float32 turn_rate;
 	GameTime_t m_flLastThinkTime;
 	float32 m_flWalkAngle;
-}
+};

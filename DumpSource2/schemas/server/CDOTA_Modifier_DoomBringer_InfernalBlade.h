@@ -4,4 +4,4 @@ class CDOTA_Modifier_DoomBringer_InfernalBlade : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	float32 burn_duration;
 	float32 ministun_duration;
-}
+};

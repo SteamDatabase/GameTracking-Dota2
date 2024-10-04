@@ -4,4 +4,4 @@ class CDOTA_Modifier_Lycan_Shapeshift : public CDOTA_Buff
 	float32 kill_duration_extension;
 	ParticleIndex_t m_nFXIndex;
 	int32 m_iOriginalAttackCapability;
-}
+};

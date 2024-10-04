@@ -9,4 +9,4 @@ class CDOTA_Ability_Beastmaster_PrimalRoar : public CDOTABaseAbility
 	float32 push_distance;
 	int32 damage;
 	float32 movement_speed_duration;
-}
+};

@@ -10,4 +10,4 @@ class CDOTA_Ability_Tinker_Keen_Teleport : public CDOTABaseAbility
 	Vector m_vDestination;
 	int32 m_iMinDistance;
 	float32 m_flBaseTeleportTime;
-}
+};

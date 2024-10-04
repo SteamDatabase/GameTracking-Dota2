@@ -7,4 +7,4 @@ class C_DOTA_Ability_Nian_Apocalypse : public C_DOTABaseAbility
 	float32 target_range;
 	CountdownTimer m_ctTimer;
 	float32 m_flTiming;
-}
+};

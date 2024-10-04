@@ -9,4 +9,4 @@ class CDOTA_Modifier_AbyssalUnderlord_Firestorm_Thinker : public CDOTA_Buff
 	float32 first_wave_delay;
 	float32 building_damage;
 	CHandle< C_BaseEntity > m_hTarget;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_Magnataur_Skewer_Impact : public CDOTA_Buff
 	Vector m_vStartPos;
 	float32 m_flEndTime;
 	float32 m_flCurTime;
-}
+};

@@ -119,4 +119,4 @@ class CDOTA_PlayerResource : public CBaseEntity
 	int32[24] m_iPortalsUsed;
 	int32[24] m_iWisdomRunesGained;
 	int32[24] m_iShieldRunesGained;
-}
+};

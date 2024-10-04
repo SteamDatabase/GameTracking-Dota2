@@ -1,0 +1,23 @@
+enum EPlayerVoiceListenState : uint32_t
+{
+	kPVLS_None = 0,
+	kPVLS_DeniedChatBanned = 1,
+	kPVLS_DeniedPartner = 2,
+	kPVLS_DeniedHLTVTalkerNotSpectator = 3,
+	kPVLS_DeniedHLTVNoTalkerPlayerID = 4,
+	kPVLS_DeniedHLTVTalkerNotBroadcaster = 5,
+	kPVLS_DeniedTeamSpectator = 6,
+	kPVLS_DeniedStudent = 8,
+	kPVLS_DeniedPrivateCoach = 9,
+	kPVLS_Denied = 64,
+	kPVLS_AllowHLTVTalkerIsBroadcaster = 65,
+	kPVLS_AllowCoBroadcaster = 66,
+	kPVLS_AllowAllChat = 67,
+	kPVLS_AllowStudentToCoach = 68,
+	kPVLS_AllowFellowStudent = 69,
+	kPVLS_AllowTalkerIsCoach = 70,
+	kPVLS_AllowCoachHearTeam = 71,
+	kPVLS_AllowSameTeam = 72,
+	kPVLS_AllowShowcase = 73,
+	kPVLS_AllowPrivateCoach = 74,
+};

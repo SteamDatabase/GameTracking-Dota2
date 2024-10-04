@@ -6,4 +6,4 @@ class CDOTA_Ability_DeathProphet_CarrionSwarm : public CDOTABaseAbility
 	float32 m_fTotalTime;
 	int32 m_nProjectileHandle;
 	ParticleIndex_t m_nFXIndex;
-}
+};

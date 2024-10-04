@@ -6,4 +6,4 @@ class CDOTA_Modifier_Marci_Bodyguarded : public CDOTA_Buff
 	float32 counter_cooldown;
 	GameTime_t m_flLastCounterTime;
 	bool bHasCountered;
-}
+};

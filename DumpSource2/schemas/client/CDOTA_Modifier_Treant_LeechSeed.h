@@ -6,4 +6,4 @@ class CDOTA_Modifier_Treant_LeechSeed : public CDOTA_Buff
 	float32 radius;
 	int32 projectile_speed;
 	bool ground_plant;
-}
+};

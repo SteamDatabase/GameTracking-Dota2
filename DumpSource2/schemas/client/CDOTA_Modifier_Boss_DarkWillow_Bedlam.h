@@ -10,4 +10,4 @@ class CDOTA_Modifier_Boss_DarkWillow_Bedlam : public CDOTA_Buff
 	float32 attack_interval;
 	bool m_bSetupWarning;
 	ParticleIndex_t m_nPreviewFX;
-}
+};

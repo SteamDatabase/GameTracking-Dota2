@@ -13,4 +13,4 @@ class CDOTA_Modifier_Clinkz_BurningBarrage : public CDOTA_Buff
 	float32 m_flCycleDelay;
 	float32 m_flTimeWaste;
 	GameTime_t m_flExpectedTime;
-}
+};

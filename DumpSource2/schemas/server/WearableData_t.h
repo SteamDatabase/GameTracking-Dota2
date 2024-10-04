@@ -4,4 +4,4 @@ class WearableData_t
 	int32 nSkin;
 	int32 nGroup;
 	CHandle< CBaseEntity > hWearable;
-}
+};

@@ -9,4 +9,4 @@ class CDOTA_Modifier_OgreSealTotem_Active : public CDOTA_Buff
 	bool m_bLaunched;
 	float32 m_flFacingTarget;
 	float32 movement_turn_rate;
-}
+};

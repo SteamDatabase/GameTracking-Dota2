@@ -6,4 +6,4 @@ class CDOTA_Ability_MonkeyKing_Boundless_Strike : public CDOTABaseAbility
 	ParticleIndex_t m_nFXIndex;
 	bool m_bIsAltCastState;
 	CUtlVector< CDOTA_BaseNPC* > struckEntities;
-}
+};

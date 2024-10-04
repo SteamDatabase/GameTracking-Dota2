@@ -7,4 +7,4 @@ class CDOTA_Ability_Invoker_ChaosMeteor : public CDOTA_Ability_Invoker_InvokedBa
 	float32 main_damage;
 	float32 burn_duration;
 	float32 burn_dps;
-}
+};

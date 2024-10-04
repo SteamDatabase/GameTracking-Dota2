@@ -4,4 +4,4 @@ class CDOTA_Modifier_Marci_Bodyguard_Self : public CDOTA_Buff
 	int32 bonus_damage;
 	int32 creep_lifesteal_reduction_pct;
 	CHandle< CBaseEntity > m_hPartner;
-}
+};

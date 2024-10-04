@@ -7,4 +7,4 @@ class C_DOTA_Ability_Pangolier_Swashbuckle : public C_DOTABaseAbility
 	int32 damage;
 	int32 attack_damage;
 	int32 procs_onhit_effects;
-}
+};

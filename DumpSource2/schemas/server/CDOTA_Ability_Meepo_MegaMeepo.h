@@ -4,4 +4,4 @@ class CDOTA_Ability_Meepo_MegaMeepo : public CDOTABaseAbility
 	CHandle< CBaseEntity > hMegameepoFrame;
 	CUtlVector< CHandle< CBaseEntity > > hListOfMeepos;
 	bool m_bHasSwappedAbilities;
-}
+};

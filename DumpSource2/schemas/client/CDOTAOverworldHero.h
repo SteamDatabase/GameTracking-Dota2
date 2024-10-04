@@ -5,4 +5,4 @@ class CDOTAOverworldHero
 	CUtlVector< OverworldNodeID_t > m_vecBlockedNodes;
 	CDOTAOverworldCharacterBase m_baseAppearance;
 	CUtlVector< CUtlPair< CDOTAOverworldCharacterConditional, CDOTAOverworldCharacterBase > > m_vecOverrides;
-}
+};

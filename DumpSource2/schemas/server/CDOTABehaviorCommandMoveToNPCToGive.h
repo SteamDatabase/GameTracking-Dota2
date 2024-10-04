@@ -5,4 +5,4 @@ class CDOTABehaviorCommandMoveToNPCToGive
 	int32 m_nMovementState;
 	CHandle< CBaseEntity > m_hItem;
 	float32 m_flRange;
-}
+};

@@ -13,4 +13,4 @@ class C_DOTA_Ability_Shredder_Chakram : public C_DOTABaseAbility
 	int32 m_nProjectileIndex;
 	CHandle< C_BaseEntity > m_hThinker;
 	CUtlVector< CHandle< C_BaseEntity > > m_hReturnHits;
-}
+};

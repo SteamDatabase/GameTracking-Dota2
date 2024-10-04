@@ -20,4 +20,4 @@ class CDOTA_Modifier_CrystalMaiden_FreezingField : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	CUtlVector< CHandle< C_BaseEntity > > m_hHitEntities;
 	int32 can_move;
-}
+};

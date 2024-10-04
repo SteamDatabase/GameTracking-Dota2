@@ -6,4 +6,4 @@ class CDOTA_Modifier_Necrolyte_GhostShroud_Active : public CDOTA_Buff
 	float32 movement_transfer;
 	float32 movement_speed;
 	float32 m_flMovementSpeedAmp;
-}
+};

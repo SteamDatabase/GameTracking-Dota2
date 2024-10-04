@@ -9,4 +9,4 @@ class CDOTA_Modifier_Neutral_Upgrade : public CDOTA_Buff
 	int32 increase_xp;
 	int32 current_level;
 	int32 max_level;
-}
+};

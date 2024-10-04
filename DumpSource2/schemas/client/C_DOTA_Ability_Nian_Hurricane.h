@@ -13,4 +13,4 @@ class C_DOTA_Ability_Nian_Hurricane : public C_DOTABaseAbility
 	bool m_bUseWind;
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nfxIndex_roar;
-}
+};

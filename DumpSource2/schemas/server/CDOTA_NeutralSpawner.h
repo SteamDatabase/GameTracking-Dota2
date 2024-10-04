@@ -22,4 +22,4 @@ class CDOTA_NeutralSpawner : public CPointEntity
 	int32 m_Type;
 	int32 m_PullType;
 	int32 m_AggroType;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Ability_DrowRanger_WaveOfSilence : public CDOTABaseAbility
 	float32 silence_duration;
 	float32 knockback_distance_max;
 	int32 m_nHeroesHit;
-}
+};

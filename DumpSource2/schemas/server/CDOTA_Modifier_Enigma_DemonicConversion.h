@@ -8,4 +8,4 @@ class CDOTA_Modifier_Enigma_DemonicConversion : public CDOTA_Modifier_Kill
 	int32 eidolon_bonus_attack_speed;
 	bool m_bAllowSplit;
 	int32 m_nSpawnNum;
-}
+};

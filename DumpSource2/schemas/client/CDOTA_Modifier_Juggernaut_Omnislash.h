@@ -15,4 +15,4 @@ class CDOTA_Modifier_Juggernaut_Omnislash : public CDOTA_Buff
 	bool m_bScepterCast;
 	bool m_bReflection;
 	bool m_bEndNext;
-}
+};

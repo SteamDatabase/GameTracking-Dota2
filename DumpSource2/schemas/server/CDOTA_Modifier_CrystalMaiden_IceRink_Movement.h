@@ -8,4 +8,4 @@ class CDOTA_Modifier_CrystalMaiden_IceRink_Movement : public CDOTA_Buff
 	GameTime_t m_flHitEndTime;
 	float32 hit_recover_time;
 	Vector m_vDirection;
-}
+};

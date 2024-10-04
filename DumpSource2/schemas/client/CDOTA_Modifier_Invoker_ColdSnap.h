@@ -9,4 +9,4 @@ class CDOTA_Modifier_Invoker_ColdSnap : public CDOTA_Buff
 	float32 freeze_heal;
 	int32 nQuasApplications;
 	int32 nExortApplications;
-}
+};

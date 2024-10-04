@@ -22,4 +22,4 @@ class CBasePlayerWeaponVData
 	CUtlOrderedMap< WeaponSound_t, CSoundEventName > m_aShootSounds;
 	int32 m_iSlot;
 	int32 m_iPosition;
-}
+};

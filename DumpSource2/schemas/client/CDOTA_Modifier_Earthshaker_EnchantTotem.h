@@ -6,4 +6,4 @@ class CDOTA_Modifier_Earthshaker_EnchantTotem : public CDOTA_Buff
 	float32 scepter_cleave_starting_width;
 	float32 scepter_cleave_ending_width;
 	float32 scepter_cleave_distance;
-}
+};

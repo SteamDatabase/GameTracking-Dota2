@@ -3,4 +3,4 @@ class CDOTA_Modifier_ArcWarden_MagneticField_Thinker_AttackRange : public CDOTA_
 	float32 radius;
 	int32 affects_buildings;
 	Vector m_vPos;
-}
+};

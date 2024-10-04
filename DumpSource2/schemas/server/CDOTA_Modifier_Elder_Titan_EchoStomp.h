@@ -5,4 +5,4 @@ class CDOTA_Modifier_Elder_Titan_EchoStomp : public CDOTA_Buff
 	float32 initial_stun_duration;
 	CountdownTimer ctStunTimer;
 	float32 m_flDamageTaken;
-}
+};

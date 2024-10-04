@@ -5,4 +5,4 @@ class CDOTA_Item_Rune : public CBaseAnimatingActivity
 	float32 m_flRuneTime;
 	int32 m_nMapLocationTeam;
 	char[512] m_szLocation;
-}
+};

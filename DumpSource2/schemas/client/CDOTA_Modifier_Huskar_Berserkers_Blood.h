@@ -8,4 +8,4 @@ class CDOTA_Modifier_Huskar_Berserkers_Blood : public CDOTA_Buff
 	int32 aura_effectiveness;
 	ParticleIndex_t m_nFxHuskIndex;
 	ParticleIndex_t m_nFxIndexA;
-}
+};

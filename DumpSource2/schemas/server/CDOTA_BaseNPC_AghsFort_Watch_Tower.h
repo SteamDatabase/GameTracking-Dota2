@@ -17,4 +17,4 @@ class CDOTA_BaseNPC_AghsFort_Watch_Tower : public CDOTA_BaseNPC_Building
 	CHandle< CBaseAnimatingActivity > m_hRoomGate;
 	bool m_bIsBeingChanneled;
 	float32 m_flGoalCaptureProgress;
-}
+};

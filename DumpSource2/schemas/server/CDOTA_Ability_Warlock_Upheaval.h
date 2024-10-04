@@ -17,4 +17,4 @@ class CDOTA_Ability_Warlock_Upheaval : public CDOTABaseAbility
 	ParticleIndex_t m_nFXIndex;
 	bool m_bTargetCast;
 	CHandle< CBaseEntity > m_hTarget;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_Spirit_Bear_Attack_Damage : public CDOTA_Buff
 	int32 hp_gain_per_druid_level;
 	int32 damage_gain_per_druid_level;
 	float32 model_scale;
-}
+};

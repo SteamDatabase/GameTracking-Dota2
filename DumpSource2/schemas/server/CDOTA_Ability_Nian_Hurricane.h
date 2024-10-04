@@ -13,4 +13,4 @@ class CDOTA_Ability_Nian_Hurricane : public CDOTABaseAbility
 	bool m_bUseWind;
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nfxIndex_roar;
-}
+};

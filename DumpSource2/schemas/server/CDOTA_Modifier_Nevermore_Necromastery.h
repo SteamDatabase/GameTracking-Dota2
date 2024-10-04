@@ -10,4 +10,4 @@ class CDOTA_Modifier_Nevermore_Necromastery : public CDOTA_Buff
 	ParticleIndex_t m_iParticleSoulsIndex;
 	ParticleIndex_t m_FXIndex;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

@@ -6,4 +6,4 @@ class CDOTA_Modifier_VoidSpirit_AetherRemnantThinker : public CDOTA_Buff
 	bool m_bTriggered;
 	float32 m_flCurThink;
 	bool bIsArtifice;
-}
+};

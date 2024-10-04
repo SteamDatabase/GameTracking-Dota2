@@ -10,4 +10,4 @@ class CDOTA_Ability_Elder_Titan_AncestralSpirit : public CDOTABaseAbility
 	CHandle< CBaseEntity > m_hAncestralSpirit;
 	ParticleIndex_t m_nReturnFXIndex;
 	CUtlString m_strMoveSpiritSwapAbility;
-}
+};

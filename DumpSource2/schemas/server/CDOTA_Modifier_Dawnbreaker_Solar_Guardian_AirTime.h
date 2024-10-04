@@ -9,4 +9,4 @@ class CDOTA_Modifier_Dawnbreaker_Solar_Guardian_AirTime : public CDOTA_Buff
 	Vector m_vDesiredTargetPosition;
 	Vector m_vStartPosition;
 	int32 airtime_scepter_movement_speed;
-}
+};

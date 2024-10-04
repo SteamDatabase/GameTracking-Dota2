@@ -12,4 +12,4 @@ class CDOTA_Modifier_Item_Battlefury : public CDOTA_Buff_Item
 	int32 upgraded_damage_bonus;
 	int32 quelling_bonus;
 	int32 quelling_bonus_ranged;
-}
+};

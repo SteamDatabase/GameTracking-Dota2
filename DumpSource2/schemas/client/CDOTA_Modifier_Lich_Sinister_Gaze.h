@@ -6,4 +6,4 @@ class CDOTA_Modifier_Lich_Sinister_Gaze : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	float32 creep_damage;
 	bool m_bBlasted;
-}
+};

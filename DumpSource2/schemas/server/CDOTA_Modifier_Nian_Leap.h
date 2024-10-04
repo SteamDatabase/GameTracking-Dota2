@@ -17,4 +17,4 @@ class CDOTA_Modifier_Nian_Leap : public CDOTA_Buff
 	float32 pounce_acceleration;
 	float32 initial_delay;
 	float32 landing_delay;
-}
+};

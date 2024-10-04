@@ -21,4 +21,4 @@ class CDOTA_Modifier_Pangolier_Gyroshell : public CDOTA_Modifier_DebuffImmune
 	CUtlVector< CHandle< C_BaseEntity > > m_vecHeroesHitLastRicochet;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecHeroesCredited;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecHeroesHitCurrentRicochet;
-}
+};

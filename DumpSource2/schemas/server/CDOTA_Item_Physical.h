@@ -5,4 +5,4 @@ class CDOTA_Item_Physical : public CBaseAnimatingActivity
 	GameTime_t m_fCreationTime;
 	CHandle< CDOTA_Item > m_hItem;
 	bool m_bIsLowPriorityHoverItem;
-}
+};

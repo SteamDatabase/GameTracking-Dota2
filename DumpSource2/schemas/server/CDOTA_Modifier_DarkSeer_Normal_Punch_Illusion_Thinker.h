@@ -4,4 +4,4 @@ class CDOTA_Modifier_DarkSeer_Normal_Punch_Illusion_Thinker : public CDOTA_Buff
 	int32 speed;
 	CHandle< CBaseEntity > m_hTarget;
 	ParticleIndex_t m_nFXIndex;
-}
+};

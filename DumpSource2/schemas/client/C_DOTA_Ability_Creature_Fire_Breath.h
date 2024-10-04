@@ -8,4 +8,4 @@ class C_DOTA_Ability_Creature_Fire_Breath : public C_DOTABaseAbility
 	CountdownTimer ctTimer;
 	Vector m_vecStartRot;
 	Vector m_vecEndRot;
-}
+};

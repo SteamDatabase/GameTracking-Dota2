@@ -18,4 +18,4 @@ class CDOTA_Modifier_MonkeyKing_BounceLeap : public CDOTA_Buff
 	int32 m_nLeapSpeed;
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXIndex2;
-}
+};

@@ -9,4 +9,4 @@ class CDOTA_Modifier_Jakiro_IcePath_Thinker : public CDOTA_Buff
 	Vector m_vPathStart;
 	Vector m_vPathEnd;
 	GameTime_t m_fStartTime;
-}
+};

@@ -4,4 +4,4 @@ class CDOTA_Modifier_Item_AncientGuardian : public CDOTA_Buff_Item
 	int32 extra_bonus_damage;
 	int32 bonus_damage;
 	float32 radius;
-}
+};

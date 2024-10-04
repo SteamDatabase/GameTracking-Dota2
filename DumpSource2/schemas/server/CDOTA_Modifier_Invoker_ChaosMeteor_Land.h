@@ -6,4 +6,4 @@ class CDOTA_Modifier_Invoker_ChaosMeteor_Land : public CDOTA_Buff
 	int32 vision_distance;
 	float32 spell_amp;
 	float32 spell_lifesteal;
-}
+};

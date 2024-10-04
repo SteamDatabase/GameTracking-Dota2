@@ -8,4 +8,4 @@ class CDOTA_Modifier_Kunkka_Torrent_Thinker : public CDOTA_Buff
 	float32 flFirstDamage;
 	float32 damage_tick_interval;
 	float32 percent_instant;
-}
+};

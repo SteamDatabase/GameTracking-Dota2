@@ -7,4 +7,4 @@ class CDOTA_Modifier_Nyx_Assassin_Vendetta : public CDOTA_Modifier_Invisible
 	int32 attack_animation_bonus;
 	int32 attack_range_bonus;
 	int32 free_pathing_movement_speed_bonus;
-}
+};

@@ -12,4 +12,4 @@ class CDOTA_Modifier_Marci_Lunge_TrackingMotion : public CDOTA_Buff
 	Vector m_vDestination;
 	CHandle< CBaseEntity > m_hBounceEntity;
 	CHandle< CBaseEntity > m_hBounceEntityClient;
-}
+};

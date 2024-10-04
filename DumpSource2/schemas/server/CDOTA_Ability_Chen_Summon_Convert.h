@@ -7,4 +7,4 @@ class CDOTA_Ability_Chen_Summon_Convert : public CDOTABaseAbility
 	bool summon_hellbears;
 	bool summon_trolls;
 	bool summon_satyrs;
-}
+};

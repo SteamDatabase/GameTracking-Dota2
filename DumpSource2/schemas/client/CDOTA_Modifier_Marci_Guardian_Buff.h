@@ -10,4 +10,4 @@ class CDOTA_Modifier_Marci_Guardian_Buff : public CDOTA_Buff
 	float32 m_fDamageAbsorbed;
 	bool m_bActive;
 	ParticleIndex_t m_nFxIndex;
-}
+};

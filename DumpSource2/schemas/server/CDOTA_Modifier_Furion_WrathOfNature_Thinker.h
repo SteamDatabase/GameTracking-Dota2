@@ -11,4 +11,4 @@ class CDOTA_Modifier_Furion_WrathOfNature_Thinker : public CDOTA_Buff
 	int32 m_nBaseDamage;
 	int32 m_nMaxTargets;
 	float32 m_flJumpDelay;
-}
+};

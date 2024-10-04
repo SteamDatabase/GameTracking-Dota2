@@ -5,4 +5,4 @@ class CDOTABehaviorCommandMoveToNPC
 	int32 m_nMovementState;
 	bool m_bInRange;
 	bool m_bWasAttacking;
-}
+};

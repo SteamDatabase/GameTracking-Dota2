@@ -13,4 +13,4 @@ class CDOTA_Ability_Tusk_IceShards : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > > m_vecShards;
 	CDOTABaseAbility* m_pIceShardsStop;
 	ParticleIndex_t m_nFXIndex;
-}
+};

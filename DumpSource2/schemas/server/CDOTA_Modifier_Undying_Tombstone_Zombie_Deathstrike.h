@@ -5,4 +5,4 @@ class CDOTA_Modifier_Undying_Tombstone_Zombie_Deathstrike : public CDOTA_Buff
 	float32 duration;
 	CHandle< CDOTABaseAbility > m_hTombstoneSourceAbility;
 	CHandle< CBaseEntity > m_hChaseUnit;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_Item_Phylactery : public CDOTA_Buff_Item
 	float32 slow_duration;
 	int32 bonus_all_stats;
 	CUtlVector< C_DOTABaseAbility* > vecActivatedAbilities;
-}
+};

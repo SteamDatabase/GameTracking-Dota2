@@ -13,4 +13,4 @@ class CDOTA_Modifier_Visage_SummonFamiliars_In_Formation : public CDOTA_Buff
 	bool m_bTeleporting;
 	int32 familiar_attack_range;
 	int32 additional_target_search_radius;
-}
+};

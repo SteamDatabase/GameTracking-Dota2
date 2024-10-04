@@ -27,4 +27,4 @@ class CDOTA_Modifier_Marci_Lunge_Arc : public CDOTA_Buff
 	float32 impact_damage;
 	int32 impact_position_offset;
 	float32 ally_buff_duration;
-}
+};

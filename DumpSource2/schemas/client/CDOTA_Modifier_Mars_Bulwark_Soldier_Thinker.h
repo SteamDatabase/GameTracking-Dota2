@@ -9,4 +9,4 @@ class CDOTA_Modifier_Mars_Bulwark_Soldier_Thinker : public CDOTA_Buff
 	GameTime_t m_flLastStationaryTime;
 	Vector m_vLastStationaryPosition;
 	float32 stationary_attack_delay;
-}
+};

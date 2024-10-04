@@ -10,4 +10,4 @@ class RoadToTIQuestDefinition_t
 	uint32 m_unTeamID;
 	CUtlVector< HeroID_t > m_vecHeroes;
 	bool m_bDeveloper;
-}
+};

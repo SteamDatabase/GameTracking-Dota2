@@ -12,4 +12,4 @@ class CDOTA_Modifier_Spirit_Bear_Necessities : public CDOTA_Buff
 	int32 bonus_mana;
 	float32 bonus_evasion;
 	int32 item_slots;
-}
+};

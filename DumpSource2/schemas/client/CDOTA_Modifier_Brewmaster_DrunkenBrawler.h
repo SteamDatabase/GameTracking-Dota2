@@ -6,4 +6,4 @@ class CDOTA_Modifier_Brewmaster_DrunkenBrawler : public CDOTA_Buff
 	int32 max_movement;
 	int32 m_iMovementBonus;
 	GameTime_t m_flNextUpdateTime;
-}
+};

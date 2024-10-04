@@ -7,4 +7,4 @@ class CDOTA_Modifier_Slark_ShadowDance_Passive : public CDOTA_Buff
 	bool m_bPendingRefresh;
 	GameTime_t m_fPendingStateChangeTime;
 	CountdownTimer m_NeutralHitTimer;
-}
+};

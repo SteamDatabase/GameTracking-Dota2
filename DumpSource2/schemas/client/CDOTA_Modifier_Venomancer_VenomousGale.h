@@ -6,4 +6,4 @@ class CDOTA_Modifier_Venomancer_VenomousGale : public CDOTA_Buff
 	int32 tick_damage;
 	float32 tick_interval;
 	float32 duration;
-}
+};

@@ -6,4 +6,4 @@ class C_DOTA_Ability_Windrunner_Shackleshot : public C_DOTABaseAbility
 	Vector m_vArrowStartPos2;
 	Vector m_vArrowStartPos3;
 	CHandle< C_BaseEntity > m_hTarget;
-}
+};

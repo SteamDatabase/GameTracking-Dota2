@@ -11,4 +11,4 @@ class CDOTA_Modifier_Aghsfort_Aziyog_Underlord_Portal_Warp_Channel : public CDOT
 	float32 m_flElapsedTimePortion;
 	float32 animation_rate;
 	int32 stop_distance;
-}
+};

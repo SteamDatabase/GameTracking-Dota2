@@ -11,4 +11,4 @@ class CDOTA_Modifier_Elder_Titan_EarthSplitter_Caster : public CDOTA_Buff
 	Vector m_vEnd;
 	Vector m_vNextVisionLocation;
 	Vector m_vCastDirection;
-}
+};

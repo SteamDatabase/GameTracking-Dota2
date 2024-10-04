@@ -37,4 +37,4 @@ class CFuncMover : public CBaseModelEntity
 	float32 m_flTimeToBlendToNewOrientation;
 	float32 m_flDurationBlendToNewOrientationRan;
 	Quaternion m_qOriginalOrientation;
-}
+};

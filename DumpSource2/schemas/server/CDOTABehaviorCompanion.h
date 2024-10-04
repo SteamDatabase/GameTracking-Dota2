@@ -6,4 +6,4 @@ class CDOTABehaviorCompanion
 	int32 m_iRightOffset;
 	int32 m_iForwardOffset;
 	CountdownTimer m_PositionFuzziness;
-}
+};

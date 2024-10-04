@@ -6,4 +6,4 @@ class CDOTA_Modifier_Item_SheepStick : public CDOTA_Buff_Item
 	float32 bonus_mana_regen;
 	int32 bonus_mana;
 	int32 cast_range_bonus;
-}
+};

@@ -11,4 +11,4 @@ class CDOTA_Ability_Elder_Titan_EchoStomp : public CDOTABaseAbility
 	CUtlVector< CHandle< CBaseEntity > > m_vecStompedHeroes;
 	CUtlVector< CHandle< CBaseEntity > > m_vecStompedHeroes_BuffCounted;
 	bool m_bStompedInvisibleHero;
-}
+};

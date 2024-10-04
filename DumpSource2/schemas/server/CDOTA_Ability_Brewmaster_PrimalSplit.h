@@ -9,4 +9,4 @@ class CDOTA_Ability_Brewmaster_PrimalSplit : public CDOTABaseAbility
 	GameTime_t m_fCyclone_CooldownTime;
 	GameTime_t m_fWindWalk_CooldownTime;
 	GameTime_t m_fAstralPulse_CooldownTime;
-}
+};

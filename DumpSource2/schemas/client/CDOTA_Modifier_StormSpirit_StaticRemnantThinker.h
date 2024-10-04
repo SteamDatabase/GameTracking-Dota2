@@ -12,4 +12,4 @@ class CDOTA_Modifier_StormSpirit_StaticRemnantThinker : public CDOTA_Buff
 	Vector m_vTargetLocation;
 	GameTime_t m_flCreateTime;
 	GameTime_t m_flLastMoveTime;
-}
+};

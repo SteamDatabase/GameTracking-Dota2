@@ -9,4 +9,4 @@ class CDOTA_Modifier_Item_Mjollnir_Static : public CDOTA_Buff
 	float32 static_cooldown;
 	int32 chain_damage_per_charge;
 	CountdownTimer m_StaticTimer;
-}
+};

@@ -9,4 +9,4 @@ class C_DOTA_Ability_VengefulSpirit_WaveOfTerror : public C_DOTABaseAbility
 	int32 damage;
 	int32 m_nNumHeroesHit;
 	CountdownTimer m_ViewerTimer;
-}
+};

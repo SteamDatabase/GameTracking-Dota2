@@ -8,4 +8,4 @@ class Blessing_t
 	Vector2D vecPos;
 	float32 flSize;
 	Color color;
-}
+};

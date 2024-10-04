@@ -4,4 +4,4 @@ class FantasyCraftingQualityData_t
 	CUtlString m_sLocName;
 	int32 m_nBonus;
 	int32 m_nRollWeight;
-}
+};

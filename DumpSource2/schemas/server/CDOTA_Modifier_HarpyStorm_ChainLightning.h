@@ -6,4 +6,4 @@ class CDOTA_Modifier_HarpyStorm_ChainLightning : public CDOTA_Buff
 	float32 m_flCurDamage;
 	Vector m_vJumpPosition;
 	CUtlVector< CHandle< CBaseEntity > > m_hHitEntities;
-}
+};

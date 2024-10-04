@@ -6,4 +6,4 @@ class CDOTA_Modifier_Invoker_EMP_Pull : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	Vector m_vCenter;
 	GameTime_t m_flLastThinkTime;
-}
+};

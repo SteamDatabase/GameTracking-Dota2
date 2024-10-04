@@ -5,4 +5,4 @@ class CDOTA_Modifier_Medusa_StoneGaze : public CDOTA_Buff
 	float32 duration;
 	int32 speed_boost;
 	CUtlVector< CHandle< C_BaseEntity > > m_hHitEntities;
-}
+};

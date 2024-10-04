@@ -8,4 +8,4 @@ class CDOTA_Modifier_Earthshaker_Fissure_Shard : public CDOTA_Buff
 	Vector m_vEndPos;
 	Vector m_vMoveDir;
 	float32 m_flTotalDistanceMoved;
-}
+};

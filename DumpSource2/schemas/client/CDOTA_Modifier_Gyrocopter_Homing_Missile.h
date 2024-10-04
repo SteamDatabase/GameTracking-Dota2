@@ -16,4 +16,4 @@ class CDOTA_Modifier_Gyrocopter_Homing_Missile : public CDOTA_Buff
 	Vector m_vStartPosition;
 	CountdownTimer m_EnemyVision;
 	CountdownTimer m_MoveTime;
-}
+};

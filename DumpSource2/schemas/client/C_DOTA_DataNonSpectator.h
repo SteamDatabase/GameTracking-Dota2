@@ -22,4 +22,4 @@ class C_DOTA_DataNonSpectator : public C_BaseEntity
 	Vector2D[100] m_vPossibleWardPlacement;
 	float32[100] m_vPossibleWardRadii;
 	C_UtlVectorEmbeddedNetworkVar< DOTATeleportInfo_t > m_vecTrackedTeleports;
-}
+};

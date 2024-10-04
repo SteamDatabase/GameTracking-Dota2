@@ -11,4 +11,4 @@ class CShmupBossDefinition
 	float32 m_flSplinterBlastDuration;
 	float32 m_flColdEmbraceDuration;
 	Vector2D m_vIdlePosition;
-}
+};

@@ -9,4 +9,4 @@ class CDOTA_DB_Page_StickerEntity : public C_BaseEntity
 	bool m_bVisible;
 	uint32 m_hDecalSpawnGroupHandle;
 	uint32 m_hDynamicPropSpawnGroupHandle;
-}
+};

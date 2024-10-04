@@ -15,4 +15,4 @@ class CDOTA_Modifier_Bristleback_Active_ConicalQuillSpray : public CDOTA_Buff
 	float32 m_flFacingTarget;
 	Vector m_vFacing;
 	int32 m_nNumSprays;
-}
+};

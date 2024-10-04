@@ -7,4 +7,4 @@ class CDOTA_Modifier_Item_Witch_Blade : public CDOTA_Buff_Item
 	float32 bonus_mana_regen;
 	int32 projectile_speed;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

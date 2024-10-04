@@ -7,4 +7,4 @@ class CDOTA_Modifier_PrimalBeast_Pulverize : public CDOTA_Buff
 	float32 animation_rate;
 	bool m_bInterrupted;
 	bool m_bHasBeenDestroyed;
-}
+};

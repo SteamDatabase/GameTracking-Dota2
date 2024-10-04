@@ -6,4 +6,4 @@ class CDOTA_Modifier_Windrunner_GaleForce : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	GameTime_t m_flLastThinkTime;
 	float32 wind_strength;
-}
+};

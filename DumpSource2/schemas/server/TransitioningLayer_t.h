@@ -7,4 +7,4 @@ class TransitioningLayer_t
 	int32 m_nOrder;
 	float32 m_flPlaybackRate;
 	float32 m_flFadeOutDuration;
-}
+};

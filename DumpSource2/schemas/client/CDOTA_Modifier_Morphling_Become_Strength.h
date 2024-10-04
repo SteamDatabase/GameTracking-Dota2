@@ -6,4 +6,4 @@ class CDOTA_Modifier_Morphling_Become_Strength : public CDOTA_Buff
 	float32 max_cooldown_speed_pct;
 	float32 m_flCooldownSpeed;
 	float32 m_flCooldownPercentTooltip;
-}
+};

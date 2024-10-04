@@ -5,4 +5,4 @@ class CDOTA_Modifier_Sniper_Headshot : public CDOTA_Buff
 	float32 knockback_distance;
 	int32 bonus_damage_creeps;
 	int32 damage;
-}
+};

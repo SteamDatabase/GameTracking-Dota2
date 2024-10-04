@@ -28,4 +28,4 @@ class CDOTAFlappySkywrathDefinition
 	float32 flTopOffsetToTip;
 	float32 flBottomOffsetToTip;
 	CUtlVector< CDOTAFlappySkywrathInputAction > vecInputActions;
-}
+};

@@ -9,4 +9,4 @@ class C_DOTA_UnitInventory
 	bool m_bStashEnabled;
 	CHandle< C_BaseEntity > m_hTransientCastItem;
 	bool m_bSendChangedMsg;
-}
+};

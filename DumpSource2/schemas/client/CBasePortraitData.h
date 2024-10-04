@@ -4,4 +4,4 @@ class CBasePortraitData
 	CUtlStringToken m_skin;
 	bool m_bHasSetupView;
 	float32 m_flRotation;
-}
+};

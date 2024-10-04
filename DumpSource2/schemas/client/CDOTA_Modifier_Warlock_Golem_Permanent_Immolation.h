@@ -5,4 +5,4 @@ class CDOTA_Modifier_Warlock_Golem_Permanent_Immolation : public CDOTA_Buff
 	float32 manahealthboost;
 	float32 manaboost_scale_mult;
 	float32 m_flAdditionalDamage;
-}
+};

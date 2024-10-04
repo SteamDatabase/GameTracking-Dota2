@@ -5,4 +5,4 @@ class CDOTA_Modifier_DarkWillow_BrambleMaze_Thinker : public CDOTA_Buff
 	float32 latch_creation_delay;
 	float32 latch_duration;
 	bool m_bActive;
-}
+};

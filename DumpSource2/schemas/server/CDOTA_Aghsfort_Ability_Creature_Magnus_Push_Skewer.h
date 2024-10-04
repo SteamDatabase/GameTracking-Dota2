@@ -5,4 +5,4 @@ class CDOTA_Aghsfort_Ability_Creature_Magnus_Push_Skewer : public CDOTABaseAbili
 	float32 range;
 	int32 tree_radius;
 	int32 m_nProjectileID;
-}
+};

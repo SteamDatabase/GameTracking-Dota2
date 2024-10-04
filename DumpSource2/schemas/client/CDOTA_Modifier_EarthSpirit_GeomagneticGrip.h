@@ -10,4 +10,4 @@ class CDOTA_Modifier_EarthSpirit_GeomagneticGrip : public CDOTA_Buff
 	Vector m_vDestination;
 	Vector m_vLocation;
 	CUtlVector< CHandle< C_BaseEntity > > m_hHitEntities;
-}
+};

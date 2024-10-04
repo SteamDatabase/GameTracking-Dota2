@@ -12,4 +12,4 @@ class CDOTA_Ability_EarthSpirit_BoulderSmash : public CDOTABaseAbility
 	bool m_bUsedStone;
 	CHandle< CBaseEntity > m_hTarget;
 	bool m_bTargetStone;
-}
+};

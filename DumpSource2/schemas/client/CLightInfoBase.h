@@ -100,4 +100,4 @@ class CLightInfoBase
 	float32 m_flLightningFluctuation;
 	float32 m_flLightningAngle;
 	float32 m_flLightningEventPercentage;
-}
+};

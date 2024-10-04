@@ -6,4 +6,4 @@ class CDOTA_Modifier_Clinkz_Burning_Army : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	int32 skeleton_building_damage_reduction;
 	int32 m_nDamageCounter;
-}
+};

@@ -1,0 +1,6 @@
+enum Fantasy_Gem_Type : uint32_t
+{
+	FANTASY_GEM_TYPE_RUBY = 0,
+	FANTASY_GEM_TYPE_SAPPHIRE = 1,
+	FANTASY_GEM_TYPE_EMERALD = 2,
+};

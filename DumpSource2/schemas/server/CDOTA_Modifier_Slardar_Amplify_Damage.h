@@ -8,4 +8,4 @@ class CDOTA_Modifier_Slardar_Amplify_Damage : public CDOTA_Buff
 	Vector m_vecLastPuddle;
 	CHandle< CBaseEntity > m_hPuddle;
 	int32 m_nSelfBuffSerialNumber;
-}
+};

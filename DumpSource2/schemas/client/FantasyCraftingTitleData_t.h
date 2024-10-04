@@ -8,4 +8,4 @@ class FantasyCraftingTitleData_t
 	EFantasyStatMatchMode m_eMode;
 	CUtlVector< FantasyCraftingTrackedStat_t > m_vecStats;
 	int32 m_nBonus;
-}
+};

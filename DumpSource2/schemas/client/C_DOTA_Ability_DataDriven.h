@@ -20,4 +20,4 @@ class C_DOTA_Ability_DataDriven : public C_DOTABaseAbility
 	KeyValues* m_pOnToggleOnKV;
 	KeyValues* m_pOnToggleOffKV;
 	KeyValues* m_pOnCreatedKV;
-}
+};

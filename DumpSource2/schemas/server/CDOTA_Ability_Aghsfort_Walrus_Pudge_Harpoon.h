@@ -15,4 +15,4 @@ class CDOTA_Ability_Aghsfort_Walrus_Pudge_Harpoon : public CDOTABaseAbility
 	int32 m_nManaCost;
 	CHandle< CBaseEntity > m_hSourceCaster;
 	ParticleIndex_t m_nPreviewFX;
-}
+};

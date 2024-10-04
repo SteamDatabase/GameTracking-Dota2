@@ -6,4 +6,4 @@ class CDOTA_Modifier_Light_Collector : public CDOTA_Buff_Item
 	int32 radius;
 	int32 movespeed_pct;
 	int32 penalty;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Modifier_Mutation_Spellcast : public CDOTA_Buff
 	float32 m_fCastInterval;
 	float32 m_fWarningTime;
 	int32 m_iNextAbility;
-}
+};

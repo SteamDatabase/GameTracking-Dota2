@@ -8,4 +8,4 @@ class CDOTA_Modifier_Item_TranquilBoots : public CDOTA_Buff_Item
 	int32 break_time;
 	int32 break_count;
 	float32 m_flResetTime;
-}
+};

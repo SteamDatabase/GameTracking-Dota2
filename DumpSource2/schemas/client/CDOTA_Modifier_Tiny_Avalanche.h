@@ -8,4 +8,4 @@ class CDOTA_Modifier_Tiny_Avalanche : public CDOTA_Buff
 	int32 toss_damage_bonus_pct;
 	int32 m_damage;
 	int32 m_nTicks;
-}
+};

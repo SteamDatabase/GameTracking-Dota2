@@ -12,4 +12,4 @@ class CDOTA_Modifier_ArcWarden_SparkWraith_Thinker : public CDOTA_Buff
 	int32 m_nViewerTeam;
 	bool m_bActive;
 	bool m_bOriginal;
-}
+};

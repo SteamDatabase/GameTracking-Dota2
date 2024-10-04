@@ -61,4 +61,4 @@ class PlayerResourcePlayerTeamData_t
 	int8 m_nPlayerDraftPreferredTeam;
 	uint8 m_nAvailableGifts;
 	uint8 m_unFowTeam;
-}
+};

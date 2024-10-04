@@ -4,4 +4,4 @@ class CDOTAFlappySkywrathCharacter
 	float32 flMaxSpeed;
 	float32 flAcceleration;
 	float32 flActionCooldown;
-}
+};

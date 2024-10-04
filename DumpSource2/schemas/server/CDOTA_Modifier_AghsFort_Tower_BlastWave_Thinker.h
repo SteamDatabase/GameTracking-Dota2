@@ -8,4 +8,4 @@ class CDOTA_Modifier_AghsFort_Tower_BlastWave_Thinker : public CDOTA_Buff
 	CUtlVector< CHandle< CBaseEntity > > m_EntitiesHit;
 	int32 speed;
 	int32 radius;
-}
+};

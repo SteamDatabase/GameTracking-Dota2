@@ -6,4 +6,4 @@ class FantasyLeagueData_t
 	CUtlVector< LeagueID_t > m_nLeagues;
 	CUtlVector< FantasyRoleData_t > m_vecPlayers;
 	CUtlVector< FantasyPeriodData_t > m_vecPeriods;
-}
+};

@@ -18,4 +18,4 @@ class CDOTA_Modifier_Aghsfort_Hoodwink_ArcingBoomerang : public CDOTA_Buff
 	int32 damage;
 	float32 min_throw_duration;
 	float32 max_throw_duration;
-}
+};

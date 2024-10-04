@@ -6,4 +6,4 @@ class CDOTA_Ability_Nyx_Assassin_Impale : public CDOTABaseAbility
 	int32 length;
 	int32 speed;
 	Vector vOriginalCast;
-}
+};

@@ -11,4 +11,4 @@ class CDOTA_Modifier_Primal_Beast_Uproar_Projectile_Thinker : public CDOTA_Buff
 	int32 tectonic_shift_projectiles;
 	CUtlVector< CHandle< CBaseEntity > > m_vecEnemiesHit;
 	CUtlVector< int32 > m_vecProjectileHandles;
-}
+};

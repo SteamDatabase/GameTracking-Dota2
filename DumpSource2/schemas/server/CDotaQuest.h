@@ -14,4 +14,4 @@ class CDotaQuest : public CBaseEntity
 	int32 m_nTextReplaceValueVersion;
 	int32 m_nQuestCompleteFadeAlpha;
 	char[256] m_pszQuestName;
-}
+};

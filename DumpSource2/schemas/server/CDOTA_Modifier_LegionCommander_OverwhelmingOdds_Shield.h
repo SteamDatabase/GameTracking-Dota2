@@ -7,4 +7,4 @@ class CDOTA_Modifier_LegionCommander_OverwhelmingOdds_Shield : public CDOTA_Buff
 	int32 shield;
 	int32 total_shield;
 	float32 restore_time;
-}
+};

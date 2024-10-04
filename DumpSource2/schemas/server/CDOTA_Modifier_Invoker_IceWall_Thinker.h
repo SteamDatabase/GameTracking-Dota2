@@ -8,4 +8,4 @@ class CDOTA_Modifier_Invoker_IceWall_Thinker : public CDOTA_Buff
 	float32 spell_lifesteal;
 	Vector m_vWallDir;
 	bool m_bGrantedGem;
-}
+};

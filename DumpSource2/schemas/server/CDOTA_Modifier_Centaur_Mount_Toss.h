@@ -15,4 +15,4 @@ class CDOTA_Modifier_Centaur_Mount_Toss : public CDOTA_Buff
 	Vector m_vLastKnownTargetPosition;
 	float32 m_flInitialVelocityZ;
 	bool m_bDone;
-}
+};

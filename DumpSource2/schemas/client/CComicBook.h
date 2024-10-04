@@ -12,4 +12,4 @@ class CComicBook
 	CUtlOrderedMap< ELanguage, ELanguage > m_LanguageOverrideMap;
 	CUtlVector< int32 > m_StartPages;
 	int32 m_nCacheBustingVersion;
-}
+};

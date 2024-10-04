@@ -11,4 +11,4 @@ class C_DOTA_Ability_Medusa_MysticSnake : public C_DOTABaseAbility
 	int32 return_speed;
 	float32 jump_delay;
 	float32 slow_duration;
-}
+};

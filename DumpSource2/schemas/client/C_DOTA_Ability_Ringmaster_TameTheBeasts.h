@@ -9,4 +9,4 @@ class C_DOTA_Ability_Ringmaster_TameTheBeasts : public C_DOTABaseAbility
 	bool m_bWhiped;
 	GameTime_t m_flStartTime;
 	Vector m_vStartLocation;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_Ursa_Earthshock_Move : public CDOTA_Buff
 	float32 m_flJumpDuration;
 	float32 m_flJumpHeight;
 	Vector m_vTargetHorizontalDirection;
-}
+};

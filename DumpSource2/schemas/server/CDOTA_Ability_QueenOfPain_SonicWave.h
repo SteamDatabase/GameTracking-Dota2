@@ -5,4 +5,4 @@ class CDOTA_Ability_QueenOfPain_SonicWave : public CDOTABaseAbility
 	ParticleIndex_t m_nFXIndex;
 	int32 starting_aoe;
 	int32 final_aoe;
-}
+};

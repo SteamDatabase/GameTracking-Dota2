@@ -8,4 +8,4 @@ class CDOTA_Modifier_Pudge_Dismember : public CDOTA_Buff
 	int32 m_nMaxTicks;
 	float32 m_flTickRate;
 	float32 animation_rate;
-}
+};

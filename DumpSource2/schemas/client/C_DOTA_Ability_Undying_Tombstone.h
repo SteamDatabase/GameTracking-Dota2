@@ -4,4 +4,4 @@ class C_DOTA_Ability_Undying_Tombstone : public C_DOTABaseAbility
 	CHandle< C_BaseEntity > hTombstone;
 	float32 radius;
 	float32 duration;
-}
+};

@@ -11,4 +11,4 @@ class CDOTA_Modifier_Dawnbreaker_Celestial_Hammer_Movement : public CDOTA_Buff
 	int32 flare_radius;
 	bool bHasStartedBurning;
 	float32 flare_debuff_duration;
-}
+};

@@ -12,4 +12,4 @@ class CDOTA_Ability_Windrunner_Powershot : public CDOTABaseAbility
 	bool m_bAwardedKillEater;
 	int32 m_nHeroesHit;
 	ParticleIndex_t m_nFXIndex;
-}
+};

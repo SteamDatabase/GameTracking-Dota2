@@ -10,4 +10,4 @@ class CDOTA_Modifier_PhantomLancer_Juxtapose : public CDOTA_Buff
 	int32 uncontrollable_illusions;
 	int32 new_target_radius;
 	CUtlVector< CHandle< CBaseEntity > > m_vecAttackedEntities;
-}
+};

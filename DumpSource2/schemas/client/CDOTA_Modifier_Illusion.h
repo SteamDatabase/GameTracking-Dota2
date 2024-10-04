@@ -9,4 +9,4 @@ class CDOTA_Modifier_Illusion : public CDOTA_Buff
 	CUtlString m_strIllusionType;
 	char[64] m_szIllusionLabel;
 	bool m_bHidden;
-}
+};

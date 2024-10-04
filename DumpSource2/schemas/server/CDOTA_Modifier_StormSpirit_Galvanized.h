@@ -6,4 +6,4 @@ class CDOTA_Modifier_StormSpirit_Galvanized : public CDOTA_Buff
 	int32 charges_per_ult;
 	int32 charges_per_death;
 	int32 m_nCounter;
-}
+};

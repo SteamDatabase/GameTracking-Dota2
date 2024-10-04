@@ -45,4 +45,4 @@ class C_DOTABaseAbility : public C_BaseEntity
 	float32 m_flTotalExtendedChannelTime;
 	bool m_bGrantedByFacet;
 	float32 m_flLastCastClickTime;
-}
+};

@@ -4,4 +4,4 @@ class FantasyCraftingTrackedStat_t
 	EFantasyStatType m_eStatType;
 	uint32 m_unThresholdValue;
 	bool m_bThresholdIsMin;
-}
+};

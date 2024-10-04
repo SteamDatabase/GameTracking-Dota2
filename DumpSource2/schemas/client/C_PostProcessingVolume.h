@@ -12,4 +12,4 @@ class C_PostProcessingVolume : public C_BaseTrigger
 	float32 m_flTonemapEVSmoothingRange;
 	bool m_bMaster;
 	bool m_bExposureControl;
-}
+};

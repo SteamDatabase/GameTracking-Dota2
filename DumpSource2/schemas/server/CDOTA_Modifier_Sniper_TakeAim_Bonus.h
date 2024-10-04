@@ -5,4 +5,4 @@ class CDOTA_Modifier_Sniper_TakeAim_Bonus : public CDOTA_Buff
 	int32 does_root;
 	bool no_reveal;
 	int32 bonus_armor;
-}
+};

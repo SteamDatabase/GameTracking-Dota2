@@ -4,4 +4,4 @@ class CDOTA_Modifier_Ursa_Enrage : public CDOTA_Buff
 	int32 status_resistance;
 	float32 health_as_damage_pct;
 	float32 damage_increase;
-}
+};

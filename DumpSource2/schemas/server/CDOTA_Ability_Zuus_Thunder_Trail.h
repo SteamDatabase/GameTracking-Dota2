@@ -6,4 +6,4 @@ class CDOTA_Ability_Zuus_Thunder_Trail : public CDOTABaseAbility
 	int32 debuff_spell_amp_max;
 	Vector m_vStartPos;
 	int32 m_nMaxRange;
-}
+};

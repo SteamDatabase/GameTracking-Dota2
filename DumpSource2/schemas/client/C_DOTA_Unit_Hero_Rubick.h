@@ -11,4 +11,4 @@ class C_DOTA_Unit_Hero_Rubick : public C_DOTA_BaseNPC_Hero
 	Vector m_currAbilityColorHSV2;
 	Vector m_currAbilityFXColorHSV;
 	GameTime_t m_flStartTime;
-}
+};

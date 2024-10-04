@@ -6,4 +6,4 @@ class CDOTA_Modifier_Legion_Commander_OverwhelmingOdds : public CDOTA_Buff
 	float32 armor_per_hero;
 	int32 m_nTotalBonus;
 	float32 m_flBonusArmor;
-}
+};

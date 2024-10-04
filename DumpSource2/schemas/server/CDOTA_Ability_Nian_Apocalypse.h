@@ -7,4 +7,4 @@ class CDOTA_Ability_Nian_Apocalypse : public CDOTABaseAbility
 	float32 target_range;
 	CountdownTimer m_ctTimer;
 	float32 m_flTiming;
-}
+};

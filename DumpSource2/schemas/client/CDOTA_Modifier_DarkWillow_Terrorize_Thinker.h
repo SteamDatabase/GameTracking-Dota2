@@ -15,4 +15,4 @@ class CDOTA_Modifier_DarkWillow_Terrorize_Thinker : public CDOTA_Buff
 	float32 m_fEstimatedTravelTime;
 	float32 think_interval;
 	bool m_bInFlight;
-}
+};

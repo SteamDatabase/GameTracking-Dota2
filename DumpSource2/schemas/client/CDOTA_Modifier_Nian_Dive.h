@@ -18,4 +18,4 @@ class CDOTA_Modifier_Nian_Dive : public CDOTA_Buff
 	float32 claw_damage_delay;
 	float32 claw_damage_duration;
 	CUtlVector< CHandle< C_BaseEntity > > m_vHitEntities;
-}
+};

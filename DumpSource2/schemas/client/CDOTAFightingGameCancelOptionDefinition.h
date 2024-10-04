@@ -10,4 +10,4 @@ class CDOTAFightingGameCancelOptionDefinition
 	bool m_bAllowCancelOnWhiff;
 	EFightingGameActionID m_nCancelActionID;
 	CUtlString m_strCancelActionName;
-}
+};

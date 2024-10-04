@@ -11,4 +11,4 @@ class CDOTA_Modifier_AbyssalUnderlord_Underling_Spawn_Thinker : public CDOTA_Buf
 	CUtlVector< CHandle< CBaseEntity > > m_vecAttackedEnemies;
 	bool m_bSpawnsStarted;
 	int32 nSpawnsCompleted;
-}
+};

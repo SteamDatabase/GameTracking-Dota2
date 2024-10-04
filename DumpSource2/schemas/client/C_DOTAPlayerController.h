@@ -100,4 +100,4 @@ class C_DOTAPlayerController : public CBasePlayerController
 	CUtlVector< sControlGroupElem >[10] m_ControlGroups;
 	KeyValues* m_pkvControlGroupKV;
 	float32 m_flAltHeldStartTime;
-}
+};

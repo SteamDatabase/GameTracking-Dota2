@@ -11,4 +11,4 @@ class CDOTA_Modifier_Item_Tenderizer : public CDOTA_Buff_Item
 	int32 weaken_per_hit;
 	float32 weaken_duration;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

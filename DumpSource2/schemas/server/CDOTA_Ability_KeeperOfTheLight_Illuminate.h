@@ -8,4 +8,4 @@ class CDOTA_Ability_KeeperOfTheLight_Illuminate : public CDOTABaseAbility
 	Vector m_vPos;
 	int32 total_damage;
 	bool m_bStarted;
-}
+};

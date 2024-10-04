@@ -6,4 +6,4 @@ class CDOTA_Modifier_Lich_Chain_Frost_Frostbound : public CDOTA_Buff
 	int32 heroes_killed;
 	bool m_bFoundTarget;
 	ParticleIndex_t m_nFXIndex;
-}
+};

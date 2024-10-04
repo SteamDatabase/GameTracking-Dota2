@@ -6,4 +6,4 @@ class CDOTA_Modifier_Plus_HighFiveRequested : public CDOTA_Buff
 	bool m_bAcknowledged;
 	bool m_bFirstThink;
 	int32 high_five_level;
-}
+};

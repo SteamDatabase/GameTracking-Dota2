@@ -22,4 +22,4 @@ class C_BaseAnimatingController : public CSkeletonAnimationController
 	bool m_bHasEverDispatchedAnimEvents;
 	C_CSequenceTransitioner2 m_SequenceTransitioner;
 	HSequence m_hLastAnimEventSequence;
-}
+};

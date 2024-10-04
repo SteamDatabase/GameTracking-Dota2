@@ -6,4 +6,4 @@ class CDOTA_Modifier_Creep_Bonus_XP : public CDOTA_Buff
 	int32 m_iGoldBounty;
 	ParticleIndex_t iBannerEffect;
 	ParticleIndex_t iRingEffect;
-}
+};

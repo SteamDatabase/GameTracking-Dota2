@@ -5,4 +5,4 @@ class CDOTA_Ability_AghsFort_Creature_Phoenix_LaunchFireSpirit : public CDOTABas
 	int32 radius;
 	int32 hp_cost_perc;
 	ParticleIndex_t m_nFXIndex;
-}
+};

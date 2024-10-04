@@ -81,4 +81,4 @@ class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 	CUtlVector< sAcquireHistory > m_vecNeutralItemEquippedHistory;
 	CUtlVector< CHandle< CDOTA_BaseNPC_Hero > > m_vecExpiredIllusions;
 	float32 m_flLastTimeLookedAtByDirector;
-}
+};

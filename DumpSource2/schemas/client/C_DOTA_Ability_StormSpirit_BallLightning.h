@@ -12,4 +12,4 @@ class C_DOTA_Ability_StormSpirit_BallLightning : public C_DOTABaseAbility
 	float32 m_fDistanceAccumulator;
 	float32 m_fTalentDistanceAccumulator;
 	int32 scepter_remnant_interval;
-}
+};

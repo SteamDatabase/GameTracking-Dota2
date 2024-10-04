@@ -6,4 +6,4 @@ class CDOTA_Modifier_Terrorblade_Demon_Zeal : public CDOTA_Buff
 	int32 hp_regen;
 	int32 reflection_pct;
 	int32 melee_bonus;
-}
+};

@@ -5,4 +5,4 @@ class CDOTA_Modifier_Medusa_ManaShield : public CDOTA_Buff
 	float32 damage_per_mana;
 	float32 damage_per_mana_per_level;
 	float32 illusion_percentage;
-}
+};

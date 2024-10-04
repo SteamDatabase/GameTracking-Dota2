@@ -4,4 +4,4 @@ class FantasyCraftingShapeData_t
 	EFantasyShapeBehavior m_eShapeBehavior;
 	CUtlString m_sLocName;
 	CUtlString m_sLocExplanation;
-}
+};

@@ -4,4 +4,4 @@ class CDOTA_Modifier_Necrolyte_ReapersScythe : public CDOTA_Modifier_Stunned
 	bool m_bIllusion;
 	bool m_bArcWardenClone;
 	bool m_bSpiritBear;
-}
+};

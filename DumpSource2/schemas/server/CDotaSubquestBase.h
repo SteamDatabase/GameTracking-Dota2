@@ -9,4 +9,4 @@ class CDotaSubquestBase : public CBaseEntity
 	char[64] m_pszTextReplaceString;
 	int32 m_nTextReplaceValueVersion;
 	char[256] m_pszSubquestName;
-}
+};

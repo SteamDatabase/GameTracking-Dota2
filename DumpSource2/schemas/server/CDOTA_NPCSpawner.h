@@ -15,4 +15,4 @@ class CDOTA_NPCSpawner : public CPointEntity
 	bool m_bFirstWave;
 	bool m_bShouldSpawnStrongCreep;
 	CUtlVector< CHandle< CDOTA_BaseNPC > > m_Units;
-}
+};

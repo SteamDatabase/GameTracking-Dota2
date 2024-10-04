@@ -4,4 +4,4 @@ class CDOTA_Modifier_Ogre_Magi_Fireblast_Multicast : public CDOTA_Buff
 	float32 multicast_delay;
 	int32 m_nMultiCastCount;
 	bool m_bTalentCast;
-}
+};

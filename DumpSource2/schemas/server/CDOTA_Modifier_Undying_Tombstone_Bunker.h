@@ -5,4 +5,4 @@ class CDOTA_Modifier_Undying_Tombstone_Bunker : public CDOTA_Buff
 	float32 tombstone_stun_penalty;
 	CHandle< CBaseEntity > m_hLoadedUnit;
 	ParticleIndex_t m_nBunkerEnterFXIndex;
-}
+};

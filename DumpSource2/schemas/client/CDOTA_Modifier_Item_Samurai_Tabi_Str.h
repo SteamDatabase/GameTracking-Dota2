@@ -11,4 +11,4 @@ class CDOTA_Modifier_Item_Samurai_Tabi_Str : public CDOTA_Buff_Item
 	int32 iCurrentTickCount;
 	GameTime_t m_flLastRootTime;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

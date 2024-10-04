@@ -9,4 +9,4 @@ class CDOTA_Modifier_Leshrac_Diabolic_Edict : public CDOTA_Buff
 	int32 targets;
 	int32 iDamageType;
 	bool m_bTalentActive;
-}
+};

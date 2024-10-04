@@ -8,4 +8,4 @@ class CDOTA_Ability_TrollWarlord_WhirlingAxes_Ranged : public CDOTABaseAbility
 	int32 axe_spread;
 	int32 axe_count;
 	CUtlVector< CHandle< CBaseEntity > > m_hHitUnits;
-}
+};

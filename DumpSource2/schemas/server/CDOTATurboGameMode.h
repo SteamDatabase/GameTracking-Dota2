@@ -11,4 +11,4 @@ class CDOTATurboGameMode : public CDOTABaseGameMode
 	float32 m_flNextNeutralItemDistributionTime;
 	bool m_bInOvertime;
 	bool m_bDistributingPassiveGoldAndXp;
-}
+};

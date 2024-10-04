@@ -12,4 +12,4 @@ class CDOTA_Modifier_Item_Angels_Demise : public CDOTA_Buff_Item
 	int32 spell_crit_multiplier;
 	int32 spell_crit_flat;
 	CUtlVector< CDOTABaseAbility* > vecActivatedAbilities;
-}
+};

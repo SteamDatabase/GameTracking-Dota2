@@ -14,4 +14,4 @@ class CDOTA_Modifier_KeeperOfTheLight_Will_O_Wisp_Aura : public CDOTA_Buff
 	GameTime_t m_flNextTime;
 	CUtlVector< CHandle< CBaseEntity > > m_vecDamagedEntities;
 	float32 m_flCorrectionTime;
-}
+};

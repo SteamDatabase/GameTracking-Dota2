@@ -6,4 +6,4 @@ class CDOTA_Modifier_Item_Orb_of_Pestilence : public CDOTA_Buff_Item
 	float32 poison_damage;
 	int32 armor;
 	float32 hp_regen;
-}
+};

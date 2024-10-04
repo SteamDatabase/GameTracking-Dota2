@@ -6,4 +6,4 @@ class CDOTA_Modifier_Shredder_WhirlingDeath_Debuff : public CDOTA_Buff
 	float32 flStatLossStr;
 	float32 flStatLossAgi;
 	float32 flStatLossInt;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_AghsFort_RestorativeFlower : public CDOTA_Buff
 	bool bExploding;
 	float32 stun_duration;
 	ParticleIndex_t m_nFXAmbient;
-}
+};

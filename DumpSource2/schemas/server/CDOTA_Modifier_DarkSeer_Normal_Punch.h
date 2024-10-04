@@ -4,4 +4,4 @@ class CDOTA_Modifier_DarkSeer_Normal_Punch : public CDOTA_Buff
 	ParticleIndex_t m_nNormalPunchBuffIndex;
 	float32 m_flDistanceTraveled;
 	bool m_bIsValidTarget;
-}
+};

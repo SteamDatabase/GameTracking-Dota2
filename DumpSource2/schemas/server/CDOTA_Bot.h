@@ -68,4 +68,4 @@ class CDOTA_Bot
 	bool m_bPendingActionBypass;
 	int32 m_nForceAbility;
 	GameTime_t m_flLastDebugTime;
-}
+};

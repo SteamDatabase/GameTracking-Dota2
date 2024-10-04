@@ -7,4 +7,4 @@ class CDOTA_Modifier_PhantomAssassin_CoupdeGrace : public CDOTA_Buff
 	int32 dagger_crit_chance;
 	bool crit_active;
 	float32 duration;
-}
+};

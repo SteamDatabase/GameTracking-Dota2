@@ -11,4 +11,4 @@ class CDOTA_Modifier_Marci_Guardian_Buff : public CDOTA_Buff
 	bool m_bActive;
 	ParticleIndex_t m_nFxIndex;
 	CHandle< CBaseEntity > m_hPartner;
-}
+};

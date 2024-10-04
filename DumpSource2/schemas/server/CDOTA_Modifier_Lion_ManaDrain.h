@@ -11,4 +11,4 @@ class CDOTA_Modifier_Lion_ManaDrain : public CDOTA_Buff
 	int32 m_nTotalManaDrained;
 	int32 m_nSelfBuffSerialNumber;
 	int32 m_nTargetDebuffSerialNumber;
-}
+};

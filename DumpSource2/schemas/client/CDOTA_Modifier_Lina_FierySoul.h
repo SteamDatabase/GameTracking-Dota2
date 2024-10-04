@@ -7,4 +7,4 @@ class CDOTA_Modifier_Lina_FierySoul : public CDOTA_Buff
 	float32 fiery_soul_stack_duration;
 	ParticleIndex_t m_nFXIndex;
 	GameTime_t m_flFierySoulDieTime;
-}
+};

@@ -14,4 +14,4 @@ class CDOTA_Modifier_Broodmother_StickySnare : public CDOTA_Buff
 	int32 m_nTeamID;
 	CUtlVector< CHandle< CBaseEntity > > m_vecAffectedHeroes;
 	ParticleIndex_t m_nWarmupFXIndex;
-}
+};

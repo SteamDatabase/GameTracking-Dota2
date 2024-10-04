@@ -9,4 +9,4 @@ class CDOTAFlappySkywrathDifficulty
 	float32 flCollisionSpeedReduction;
 	float32 flLandedMaxSpeed;
 	float32 flCollisionInputCooldown;
-}
+};

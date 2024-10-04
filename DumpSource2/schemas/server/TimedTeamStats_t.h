@@ -5,4 +5,4 @@ class TimedTeamStats_t
 	uint16 m_nEnemyBarracksStatus;
 	uint8 m_nEnemyTowersKilled;
 	uint8 m_nEnemyBarracksKilled;
-}
+};

@@ -7,4 +7,4 @@ class CDOTA_Modifier_LoneDruid_SpiritLink : public CDOTA_Buff
 	int32 active_bonus;
 	int32 lifesteal_both_ways;
 	CHandle< C_BaseEntity > m_hTarget;
-}
+};

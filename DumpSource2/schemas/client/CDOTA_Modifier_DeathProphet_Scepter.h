@@ -12,4 +12,4 @@ class CDOTA_Modifier_DeathProphet_Scepter : public CDOTA_Buff
 	GameTime_t m_fLastThinkTime;
 	bool m_bExpired;
 	sSpiritInfo* m_SpiritInfo;
-}
+};

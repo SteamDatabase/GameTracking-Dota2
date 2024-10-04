@@ -12,4 +12,4 @@ class CDOTA_Modifier_Lycan_SummonWolves_Spirited : public CDOTA_Buff
 	bool m_bInitialized;
 	bool m_bDeathFxTriggered;
 	float32 death_fx_time;
-}
+};

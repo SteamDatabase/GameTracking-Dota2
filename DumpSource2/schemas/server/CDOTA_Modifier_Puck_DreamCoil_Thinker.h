@@ -8,4 +8,4 @@ class CDOTA_Modifier_Puck_DreamCoil_Thinker : public CDOTA_Buff
 	float32 coil_duration;
 	int32 coil_break_damage;
 	CUtlVector< ParticleIndex_t > m_FXIndex;
-}
+};

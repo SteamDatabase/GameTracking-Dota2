@@ -9,4 +9,4 @@ class CDOTA_Modifier_Item_Falcon_Blade : public CDOTA_Buff_Item
 	int32 stack_limit;
 	float32 stack_duration;
 	GameTime_t m_flStackDieTime;
-}
+};

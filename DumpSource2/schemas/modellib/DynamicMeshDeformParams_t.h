@@ -4,4 +4,4 @@ class DynamicMeshDeformParams_t
 	float32 m_flTensionStretchScale;
 	bool m_bRecomputeSmoothNormalsAfterAnimation;
 	bool m_bComputeDynamicMeshTensionAfterAnimation;
-}
+};

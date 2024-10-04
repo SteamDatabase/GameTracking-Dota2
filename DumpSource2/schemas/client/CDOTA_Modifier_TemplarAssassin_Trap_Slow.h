@@ -9,4 +9,4 @@ class CDOTA_Modifier_TemplarAssassin_Trap_Slow : public CDOTA_Buff
 	float32 stage;
 	float32 flDamagePerTick;
 	bool bExtraDamage;
-}
+};

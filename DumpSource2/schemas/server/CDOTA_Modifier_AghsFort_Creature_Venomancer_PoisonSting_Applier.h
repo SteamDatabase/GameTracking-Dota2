@@ -2,4 +2,4 @@ class CDOTA_Modifier_AghsFort_Creature_Venomancer_PoisonSting_Applier : public C
 {
 	float32 duration;
 	int32 damage;
-}
+};

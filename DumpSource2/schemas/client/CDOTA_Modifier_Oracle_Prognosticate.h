@@ -5,4 +5,4 @@ class CDOTA_Modifier_Oracle_Prognosticate : public CDOTA_Buff
 	int32 current_rune_type;
 	bool started_spawning;
 	float32 next_rune_spawn_time;
-}
+};

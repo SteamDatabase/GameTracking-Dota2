@@ -14,4 +14,4 @@ class CDOTAFightingGameHeroDefinition
 	float32 m_HeroPick_XOffset_Left;
 	float32 m_HeroPick_Angle_Left;
 	float32 m_HeroPick_Scale;
-}
+};

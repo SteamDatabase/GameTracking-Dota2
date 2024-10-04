@@ -12,4 +12,4 @@ class SPingWheelMessageDefinition
 	EEvent eUnlockEvent;
 	uint32 nUnlockEventActionID;
 	int32 nMinimapIcon;
-}
+};

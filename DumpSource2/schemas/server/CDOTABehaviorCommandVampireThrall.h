@@ -13,4 +13,4 @@ class CDOTABehaviorCommandVampireThrall
 	Vector m_vFollowOffset;
 	Vector m_vMoveToPosition;
 	CHandle< CBaseEntity > m_hMaster;
-}
+};

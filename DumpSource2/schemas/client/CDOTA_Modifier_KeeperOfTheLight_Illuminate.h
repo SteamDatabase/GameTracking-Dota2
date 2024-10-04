@@ -17,4 +17,4 @@ class CDOTA_Modifier_KeeperOfTheLight_Illuminate : public CDOTA_Buff
 	ParticleIndex_t m_nFXIndex;
 	bool m_bIsSpiritForm;
 	GameTime_t m_fStartTime;
-}
+};

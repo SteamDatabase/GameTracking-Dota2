@@ -5,4 +5,4 @@ class FantasyCraftOperation_t
 	EFantasyOperationTarget m_eTarget;
 	CUtlString m_sLocDescription;
 	CUtlVector< FantasyCraftingGemMutation_t > m_vecOperations;
-}
+};

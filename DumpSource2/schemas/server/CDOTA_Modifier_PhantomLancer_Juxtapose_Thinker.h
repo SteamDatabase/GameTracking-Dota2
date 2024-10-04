@@ -7,4 +7,4 @@ class CDOTA_Modifier_PhantomLancer_Juxtapose_Thinker : public CDOTA_Buff
 	int32 illusion_damage_in_pct;
 	float32 scepter_bonus_duration;
 	int32 m_iIllusionsSoFar;
-}
+};

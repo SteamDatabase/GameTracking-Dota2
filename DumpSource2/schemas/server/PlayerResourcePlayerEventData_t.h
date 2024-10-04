@@ -24,4 +24,4 @@ class PlayerResourcePlayerEventData_t
 	uint32 m_iObsoleteRankWagersMax;
 	uint32 m_iObsoleteEventPointAdjustmentsRemaining;
 	uint16 m_iObsoleteEventRanks;
-}
+};

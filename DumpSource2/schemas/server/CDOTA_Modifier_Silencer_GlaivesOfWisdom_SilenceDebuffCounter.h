@@ -2,4 +2,4 @@ class CDOTA_Modifier_Silencer_GlaivesOfWisdom_SilenceDebuffCounter : public CDOT
 {
 	int32 movement_speed;
 	ParticleIndex_t m_nFXStackIndex;
-}
+};

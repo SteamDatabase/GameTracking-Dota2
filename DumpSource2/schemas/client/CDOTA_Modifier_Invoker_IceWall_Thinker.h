@@ -7,4 +7,4 @@ class CDOTA_Modifier_Invoker_IceWall_Thinker : public CDOTA_Buff
 	float32 spell_amp;
 	float32 spell_lifesteal;
 	Vector m_vWallDir;
-}
+};

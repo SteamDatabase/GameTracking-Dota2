@@ -254,4 +254,4 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	CHandle< CDOTA_BaseNPC > m_hDirectionalRangedFakeTarget;
 	bool m_bShouldComputeRemainingPathLength;
 	float32 m_flRemainingPathLength;
-}
+};

@@ -10,4 +10,4 @@ class C_DOTA_Ability_Elder_Titan_AncestralSpirit : public C_DOTABaseAbility
 	CHandle< C_BaseEntity > m_hAncestralSpirit;
 	ParticleIndex_t m_nReturnFXIndex;
 	CUtlString m_strMoveSpiritSwapAbility;
-}
+};

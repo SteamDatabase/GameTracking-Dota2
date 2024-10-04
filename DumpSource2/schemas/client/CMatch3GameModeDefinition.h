@@ -9,4 +9,4 @@ class CMatch3GameModeDefinition
 	float32 m_flPlayerHealth;
 	CUtlVector< CUtlString > m_vecHeroes;
 	CUtlVector< CMatch3Level* > m_vecLevels;
-}
+};

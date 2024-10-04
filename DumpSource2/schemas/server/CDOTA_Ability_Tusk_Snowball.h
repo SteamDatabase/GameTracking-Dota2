@@ -22,4 +22,4 @@ class CDOTA_Ability_Tusk_Snowball : public CDOTABaseAbility
 	CHandle< CBaseEntity > m_hPrimaryTarget;
 	int32 m_nContainedValidUnits;
 	bool m_bEndingSnowball;
-}
+};

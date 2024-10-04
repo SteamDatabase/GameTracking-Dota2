@@ -6,4 +6,4 @@ class C_DOTA_Ability_Invoker_Tornado : public CDOTA_Ability_Invoker_InvokedBase
 	float32 base_damage;
 	float32 quas_damage;
 	float32 wex_damage;
-}
+};

@@ -12,4 +12,4 @@ class C_DOTA_Ability_Windrunner_Powershot : public C_DOTABaseAbility
 	bool m_bAwardedKillEater;
 	int32 m_nHeroesHit;
 	ParticleIndex_t m_nFXIndex;
-}
+};

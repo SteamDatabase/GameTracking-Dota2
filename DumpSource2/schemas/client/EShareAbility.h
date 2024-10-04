@@ -1,0 +1,6 @@
+enum EShareAbility : uint32_t
+{
+	ITEM_FULLY_SHAREABLE = 0,
+	ITEM_PARTIALLY_SHAREABLE = 1,
+	ITEM_NOT_SHAREABLE = 2,
+};

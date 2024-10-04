@@ -18,4 +18,4 @@ class CDOTA_ScriptedSpawner : public CPointEntity
 	CUtlVector< CHandle< CDOTA_BaseNPC > > m_Units;
 	CHandle< CBaseEntity > m_hSpawnpoint;
 	CUtlSymbolLarge m_szCustomNPCName;
-}
+};

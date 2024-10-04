@@ -6,4 +6,4 @@ class CDOTA_Modifier_ShadowShaman_Shackles : public CDOTA_Buff
 	float32 channel_time;
 	float32 heal_percentage;
 	bool bApplyHeal;
-}
+};

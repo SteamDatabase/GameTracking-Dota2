@@ -7,4 +7,4 @@ class CDOTA_Modifier_VoidSpirit_AetherRemnant_WatchThinker : public CDOTA_Buff
 	bool m_bPiercesCreeps;
 	bool bIsArtifice;
 	float32 artifice_pct_effectiveness;
-}
+};

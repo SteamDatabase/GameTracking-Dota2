@@ -6,4 +6,4 @@ class CDOTA_Ability_Rubick_SpellSteal : public CDOTABaseAbility
 	CHandle< CDOTABaseAbility > m_hStealAbility;
 	ParticleIndex_t m_nFXIndex;
 	int32 m_hProjectile;
-}
+};

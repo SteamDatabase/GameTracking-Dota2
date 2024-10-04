@@ -8,4 +8,4 @@ class CDOTA_Modifier_Luna_MoonGlaive_Shield : public CDOTA_Buff
 	float32 rotating_glaives_damage_reduction;
 	int32 unclamp_max_radius;
 	float32 rotating_glaives_duration;
-}
+};

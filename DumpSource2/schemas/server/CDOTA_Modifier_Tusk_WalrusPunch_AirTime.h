@@ -9,4 +9,4 @@ class CDOTA_Modifier_Tusk_WalrusPunch_AirTime : public CDOTA_Buff
 	Vector m_vDirection;
 	float32 m_flEndTime;
 	float32 air_time;
-}
+};

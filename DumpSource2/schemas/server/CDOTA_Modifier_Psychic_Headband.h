@@ -5,4 +5,4 @@ class CDOTA_Modifier_Psychic_Headband : public CDOTA_Buff
 	float32 m_flCurTime;
 	float32 push_length;
 	float32 push_duration;
-}
+};

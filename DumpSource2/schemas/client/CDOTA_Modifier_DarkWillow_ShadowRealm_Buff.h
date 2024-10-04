@@ -10,4 +10,4 @@ class CDOTA_Modifier_DarkWillow_ShadowRealm_Buff : public CDOTA_Buff
 	float32 m_flDamageScale;
 	float32 duration;
 	float32 aura_radius;
-}
+};

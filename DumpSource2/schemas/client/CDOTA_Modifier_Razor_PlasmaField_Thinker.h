@@ -16,4 +16,4 @@ class CDOTA_Modifier_Razor_PlasmaField_Thinker : public CDOTA_Buff
 	float32 slow_duration;
 	bool m_bHasCreatedFx;
 	float32 total_ability_time;
-}
+};

@@ -8,4 +8,4 @@ class CDOTA_Modifier_Medusa_StoneGaze_Facing : public CDOTA_Buff
 	CountdownTimer ctFacing;
 	bool m_bAlreadyStoned;
 	ParticleIndex_t m_nFXIndex;
-}
+};

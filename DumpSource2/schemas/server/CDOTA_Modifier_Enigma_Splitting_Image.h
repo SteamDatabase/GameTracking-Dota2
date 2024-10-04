@@ -5,4 +5,4 @@ class CDOTA_Modifier_Enigma_Splitting_Image : public CDOTA_Buff
 	float32 damage_reset_interval;
 	int32 eidolon_spawns;
 	int32 m_nEidolonSpawnNum;
-}
+};

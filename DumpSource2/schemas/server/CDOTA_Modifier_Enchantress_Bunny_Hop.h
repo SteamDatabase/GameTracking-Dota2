@@ -10,4 +10,4 @@ class CDOTA_Modifier_Enchantress_Bunny_Hop : public CDOTA_Buff
 	Vector m_vTargetHorizontalDirection;
 	CUtlVector< CHandle< CBaseEntity > > hUnitsToHit;
 	bool m_bLaunched;
-}
+};

@@ -45,4 +45,4 @@ class CDOTAFightingGameActionDefinition
 	bool m_bNoAttackerPushback;
 	bool m_bIsSpecialMove;
 	CUtlVector< CDOTAFightingGameCancelOptionDefinition > m_vecCancelOptions;
-}
+};

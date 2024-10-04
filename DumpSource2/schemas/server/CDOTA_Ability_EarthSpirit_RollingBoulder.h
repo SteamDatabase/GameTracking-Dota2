@@ -24,4 +24,4 @@ class CDOTA_Ability_EarthSpirit_RollingBoulder : public CDOTABaseAbility
 	bool m_bUsedStone;
 	bool m_bRolledOverAlliedHero;
 	Vector m_vRollDirection;
-}
+};

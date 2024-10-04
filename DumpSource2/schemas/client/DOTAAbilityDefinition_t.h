@@ -97,4 +97,4 @@ class DOTAAbilityDefinition_t
 	bitfield:1 m_bRestrictToMaxLevel;
 	bitfield:1 m_bHasDynamicValue;
 	bitfield:1 m_bBreakable;
-}
+};

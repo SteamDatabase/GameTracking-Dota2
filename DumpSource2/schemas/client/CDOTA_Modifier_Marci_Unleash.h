@@ -5,4 +5,4 @@ class CDOTA_Modifier_Marci_Unleash : public CDOTA_Buff
 	int32 flurry_charge_increment;
 	int32 bonus_movespeed;
 	CUtlVector< int16 > m_InFlightAttackRecords;
-}
+};

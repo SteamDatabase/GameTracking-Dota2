@@ -23,4 +23,4 @@ class CDOTA_Modifier_Hoodwink_ArcingBoomerang : public CDOTA_Buff
 	float32 mark_duration;
 	float32 min_throw_duration;
 	float32 max_throw_duration;
-}
+};
