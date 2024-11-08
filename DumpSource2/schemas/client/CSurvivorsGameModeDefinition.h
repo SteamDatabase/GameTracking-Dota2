@@ -39,6 +39,8 @@ class CSurvivorsGameModeDefinition
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sDamageNumbersEffectPlayer;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sDamageNumbersEffectCriticalStrike;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sCollisionIndicatorEffect;
+	Vector m_vCollisionIndicatorColorPlayer;
+	Vector m_vCollisionIndicatorColorEnemy;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sPhysicalWeaknessEffect;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sGenericStunEffect;
 	Color m_cEliteGlowColor;
