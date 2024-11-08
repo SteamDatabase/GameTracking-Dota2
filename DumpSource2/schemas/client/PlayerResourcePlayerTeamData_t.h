@@ -62,6 +62,8 @@ class PlayerResourcePlayerTeamData_t
 	int8 m_nPlayerDraftPreferredTeam;
 	uint8 m_nAvailableGifts;
 	uint8 m_unFowTeam;
+	C_NetworkUtlVectorBase< AbilityID_t > m_vecItemPreferenceLiked;
+	C_NetworkUtlVectorBase< AbilityID_t > m_vecItemPreferenceDisliked;
 	uint32 m_iObsoleteEventPoints;
 	uint32 m_iObsoleteEventPremiumPoints;
 	uint32 m_iObsoleteEventWagerTokensRemaining;

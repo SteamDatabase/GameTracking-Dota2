@@ -272,5 +272,14 @@
 	{
 		"pulse_enabled"					"1"
 	}
+
+	Memory
+	{
+		"EstimatedMaxCPUMemUsageMB"	"1"
+		"EstimatedMinGPUMemUsageMB"	"1"
+
+		"ShowInsufficientPageFileMessageBox" "1"
+		"ShowLowAvailableVirtualMemoryMessageBox" "1"
+	}
 }
 

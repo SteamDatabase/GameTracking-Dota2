@@ -19,5 +19,6 @@ class C_DOTAGameManager
 	KeyValues* m_pCountryKeyValues;
 	bool[9] m_bLoadedPortraits;
 	KeyValues* m_pControlGroupsKeyValues;
+	KeyValues3* m_pItemSuggestPreferenceKeyValues;
 	bool[256] m_CurrentHeroAvailable;
 };

@@ -97,12 +97,10 @@
 %s:  (%d bits/%d bytes):\n
 %s:  CNetChan::Transmit( %s ) while suppressing transmit\n
 %s:  CNetChan::Transmit(%s) SinceLastSend=%.1fs, Sent=%d, pending R/U=%d/%d, queueTime=%.1fms\n
-%s:  NetChan QoS flow %s: %4dms engine latency, %5d/%5d dropped (%.1f%%)\n
 %s:  NetChan Setting Timeout to %4.2f seconds\n
 %s:  couldn't find serializer %s in %s\n
 %s:  encodeded data mismatched %d bits\n
 %s:  encoding mismatched %d vs. %d bits\n
-%s:  high packet loss detected flow %s: %4dms engine latency, %5d/%5d dropped (%.1f%%)\n
 %s:  in serializer '%s' couldn't find field %s::%s, possibly already marked MNetworkExclude\n
 %s:  meta info problem %s\n
 %s:  metadata( %d: '% -10s' %s = %u )
@@ -124,7 +122,12 @@
 %s::%s has more than one MNetworkChangeCallback that requires passing network value into handler, this is unsupported\n
 %s::%s was in the original serializer at offset %u but that offset isn't in the ignore list!!!\n
 %s::%s:%u (%s ) already encountered at %s::%s:%u (%s)
-%s:Dropped %i packets at %i\n
+%s:Inbound net frame %d dropped\n
+%s:Inbound net frame %d duplicated\n
+%s:Inbound net frame %d out of order (latest received is %d)\n
+%s:Inbound net frames %d..%d dropped (%d frames)\n
+%s:Outbound net frame %d dropped\n
+%s:Outbound net frame %d out of order\n
 %sApplying %s\n
 %sCull fields for %s\n
 %sCulled %s::%s\n
@@ -166,20 +169,6 @@
 - total: in %.1f, out %.1f MB\n\n
 --- %s has duplicate fields\n
 -FLT_MAX
--dti
--net_no_parallel_build
--networkprofile_fsbuild
--networkspew
--networkspewcreate
--networkspewentity
--networkspewentity_readfieldlist
--networkspeweverything
--networkspewexcludes
--networkspewfakefields
--networkvar_validate
--noip
--steamnetworkingsockets_use_steamclient
--use_valve_ice
 ../public/networksystem/serializedentity.h
 .Afc=%d, m=%d, sum=%d (poly:%d), bits=%u
 0 bit issue, changes
@@ -562,6 +551,7 @@ Overrides IP for multihomed hosts
 PACKET_STATUS_DROPPED
 PACKET_STATUS_INVALID
 PACKET_STATUS_NORMAL
+PACKET_STATUS_OUT_OF_ORDER
 ParseMessages
 Path_Remove failed for read only CFieldPath
 Path_RemoveAll failed for read only CFieldPath
@@ -585,7 +575,6 @@ Print current simulated network condifions
 Print detailed network statistics for each network connection
 ProcessMessages
 ProcessOverride encountered unknown directive NetworkOverrideType_t(%d)\n
-ProcessPacket %s:%s packet %i at %i\n
 Processing
 Proto 
 PushN
@@ -636,6 +625,10 @@ SDR connect
 SDR ping location: %s\n
 SDR relay network status: %s (%d %d %d)\n
 Schema
+Server will not buffer more than N kb from connected clients
+Server will not buffer more than N messages from connected clients
+Server will reject message larger than N kb
+Server will reject packets with more than N segments
 SetRecursiveProxyIndices_R
 Setting FS %s field %s to %s\n
 Shortcut to set both FakePacketLag_Recv and FakePacketLag_Send net options
@@ -701,9 +694,10 @@ Unable to unambiguously match %s::%s in %s, %d possible matches found\n
 Unexpected argument '%s'\n
 Unknown jitter profile '%s'.\n
 Unknown message type %u
+Unreliable header too small
 Usage: net_captureculldata <file path>\n
 Usage: net_option <setting> [<value>]\n
-Usage:\nnet_fakejitter [send|recv] AVG [PCT] [MAX]\nnet_fakejitter [send|recv] PROFILE\n\nsend|recv  If present, applies the changes to the specified direction only.\nAVG        Mean delay, for packets that are jittered, in ms.  The random\n           delay is chosen using the exponential distribution.\nPCT        Percentage of packets (0...100) that will receive a random delay.\nMAX        Clamp random jitter delay to MAX ms.\nPROFILE    One of: off, low, med, high\n\nUse net_fakestatus to display current simulated network conditions.\n
+Usage:\nnet_fakejitter [send|recv] AVG [PCT] [MAX]\nnet_fakejitter [send|recv] PROFILE\n\nsend|recv  If present, applies the changes to the specified direction only.\nAVG        Mean delay, for packets that are jittered, in ms.  The random\n           delay is chosen using the exponential distribution.\nPCT        Percentage of packets (0...100) that will receive a random delay.\nMAX        Clamp random jitter delay to MAX ms.\nPROFILE    One of: off, low, med, high, huge\n\nUse net_fakestatus to display current simulated network conditions.\n
 Using Valve ICE implementation\n
 VERBOSE_BITCOUNT
 VERBOSE_ENDBIT
@@ -728,6 +722,8 @@ WriteFields
 WriteToBuffer Message %s is not initialized! Probably missing required fields!\n
 Writing %d bits for path %s of serializer %s entity %d, this will fail to parse\n
 [ Net Message Info: %s ]\n
+[%s] high frame misdelivery %.1f%%, %d/%d of %d frames dropped/reordered, %.0fms ping\n
+[%s] misdelivery %.1f%%, %d/%d of %d frames dropped/reordered, %.0fms ping\n
 [%s] setting extremely high timeout\n
 [GroupID]
 [Group]
@@ -756,7 +752,6 @@ avg_packet_in
 avg_packet_loss
 avg_packet_out
 backing paths
-badpacket%03i.dat
 bit %d - %d (%d bits/%d bytes):\n
 bitcount=%d, 
 both states
@@ -790,7 +785,6 @@ dt_instrumentation.cpp
 dti_%02d%02d%02d-%02d%02d%02d_%s.csv
 dti_enabled
 due to MNetworkNoBase
-duplicate
 eight
 embedded field
 encoding_stats
@@ -827,8 +821,8 @@ g_pSteamNetworkingUtils
 groupindex
 groupnames
 has_network_encoding_data
-high
 hostip
+huge
 identified %d entity related c++ field shadowing issues:\n
 including
 incoming_data_bytespersecond
@@ -873,6 +867,10 @@ net_fakeloss = %g%%  (net_option FakePacketLoss_Send = %g%%, net_option FakePack
 net_fakestatus
 net_filelogging
 net_fs_showindirections
+net_limit_sv_recv_max_message_size_kb
+net_limit_sv_recv_segments_per_packet
+net_limit_sv_recvbuffer_kb
+net_limit_sv_recvbuffer_msg
 net_listallmessages
 net_log_processing
 net_max_message_process_count
@@ -923,6 +921,7 @@ nothing
 null
 nullptr != pFieldOwnerStruct
 org(%g,%g,%g) ang(%g,%g,%g)
+out-of-order
 outgoing_data_bytespersecond
 outgoing_sequence
 outgoing_sequence_start

@@ -1,7 +1,7 @@
 class CGameScriptedMoveData
 {
 	Vector m_vAccumulatedRootMotion;
-	Vector m_vDest;
+	float32 m_flAccumulatedRootMotionRotation;
 	Vector m_vSrc;
 	QAngle m_angSrc;
 	QAngle m_angDst;
@@ -17,4 +17,6 @@ class CGameScriptedMoveData
 	bool m_bSuccess;
 	ForcedCrouchState_t m_nForcedCrouchState;
 	bool m_bIgnoreCollisions;
+	Vector m_vDest;
+	CHandle< CBaseEntity > m_hDestEntity;
 };

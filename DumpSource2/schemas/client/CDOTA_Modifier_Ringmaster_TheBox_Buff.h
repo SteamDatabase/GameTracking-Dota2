@@ -1,7 +1,7 @@
 class CDOTA_Modifier_Ringmaster_TheBox_Buff : public CDOTA_Buff
 {
 	int32 leash_radius;
-	Vector vLeashLocation;
+	Vector m_vLeashLocation;
 	float32 transform_time;
 	float32 invis_duration;
 	int32 radius;

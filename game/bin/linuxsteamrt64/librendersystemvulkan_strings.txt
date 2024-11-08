@@ -41,6 +41,7 @@
 %s - unable to compute pipeline/pipeline layout.\n
 %s - vkCreateIndirectExecutionSetEXT returned error %s.\n
 %s called on an immutable constant buffer\n
+%s does not support all required features, disabling.\n
 %s free space
 %s: Can't concatenate input layouts with more than %d fields total!\n
 %s: Unable to compute hash for shader module\n
@@ -63,6 +64,7 @@
 ( ( uint32 ) pImmutableSamplersBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_nNumImmutableSamplers * sizeof( PipelineLayoutImmutableSampler_t ) )
 ( ( uint32 ) pLayoutBindingFlagsBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_numLayoutBindingsPerSet[ nDescriptorSet ] * sizeof( VkDescriptorBindingFlags ) )
 ( ( uint32 ) pLayoutBindingsBlob->GetBinaryBlobSize() ) == ( pipelineLayoutHash.m_numLayoutBindingsPerSet[ nDescriptorSet ] * sizeof( VkDescriptorSetLayoutBinding ) )
+( nResult == VK_OPERATION_DEFERRED_KHR ) || ( nResult == VK_OPERATION_NOT_DEFERRED_KHR )
 (%s): ADD %s = %s\n
 (%s): Setting %s to %s\n
 *** IB "%s": Tried to lock a GPU-only buffer!\n
@@ -93,55 +95,28 @@
 *ZN20CRenderContextVulkan12QueuePresentEP19SwapChainHandle_t__iP28IRenderDevicePresentCallbackEUlvE_
 *ZN22CPipelineManagerVulkan19LinkPipelineLibraryEPK15CPipelineVulkanP22PipelineObjectVulkan_tP17VkPipelineCache_TEUlvE_
 *ZN23CTextureStreamingHelper23IssueTextureLoadRequestEP12CTextureBaseRK22TextureSpecification_tEUlP25IAsyncResourceDataRequestSt10unique_ptrI25IAsyncProcessedDataResultSt14default_deleteIS8_EEE_
+*ZN25CAsyncCompileHelperVulkan18FlushPipelineCacheEvEUlvE_
 *ZN25CAsyncCompileHelperVulkan18QueueShaderCompileEP17CShaderVulkanBaseEUlvE_
 *ZN27CPipelineCacheManagerVulkan12LoadFromPathEP22CPipelineManagerVulkanRK10CUtlStringRK14CUtlStringListS4_iEUlvE_
 , channels = 
 , height = 
 --------------------------------------------\n
 -CSOAContainer::SetAttributeType - ERROR, trying to change type of previously-defined attribute %d!\n
--antilag
--autoconfig
--autoconfig_level
--deferTextureLoads
 -disable_async_shaders
--dontEvictTextures
 -dx11
 -empty
--ignoredxsupportcfg
--maxdxlevel
--maxtexturepoolsize_2gb
--maxtextureres
--maxtextureres_2gb
--multigpu
--no_render_thread_affinity
--no_render_thread_priority
--noinitfallbacktextures
--nomultigpu
--noreflex
--onethreadpool
--preloadtextures
+-nogpuraytracing
 -r_max_device_threads
 -r_vulkan_render_threads
--reflex
--renderdoc
--renderdoc_capture_validation_errors
 -sSO\
--sgpu
 -shaderdebugging
--shaderstats
--shadowTargetSize
--vulkan_aggressive_command_pool_rebalancing
--vulkan_aggressive_command_pool_rebalancing_2gb
 -vulkan_alloc_callbacks
 -vulkan_allow_cpu
 -vulkan_allow_virtual_gpu
 -vulkan_amd_disable_bind_vertex_buffers_workaround
--vulkan_cmd_buffer_pool_size
--vulkan_depth_texture_as_r32f
 -vulkan_descriptor_sets_per_pool
 -vulkan_disable_amd_memory_overallocation_behavior
 -vulkan_disable_async_compute
--vulkan_disable_device_coherent_allocations
 -vulkan_disable_ext_depth_bias_control
 -vulkan_disable_ext_extended_dynamic_state
 -vulkan_disable_ext_extended_dynamic_state_2
@@ -154,7 +129,6 @@
 -vulkan_disable_ext_pipeline_creation_cache_control
 -vulkan_disable_ext_validation_cache
 -vulkan_disable_external_subpass_dependency
--vulkan_disable_fossilize_whitelist
 -vulkan_disable_graphics_pipeline_library
 -vulkan_disable_khr_buffer_device_address
 -vulkan_disable_khr_dynamic_rendering
@@ -162,7 +136,6 @@
 -vulkan_disable_khr_separate_depth_stencil_layouts
 -vulkan_disable_khr_shader_clock
 -vulkan_disable_khr_swapchain_mutable_format
--vulkan_disable_pipeline_cache
 -vulkan_disable_steam_app_shader_cache
 -vulkan_disable_steam_downloaded_shader_cache
 -vulkan_disable_steam_shader_cache
@@ -173,32 +146,25 @@
 -vulkan_disable_validation_shaders
 -vulkan_disable_validation_thread_safety
 -vulkan_disable_validation_unique_handles
--vulkan_dump_shaders
 -vulkan_enable_ext_device_generated_commands
+-vulkan_enable_ext_pipeline_robustness
 -vulkan_enable_google_display_timing
 -vulkan_enable_gpu_validation
--vulkan_enable_nv_raytracing_validation
 -vulkan_enable_robustness
 -vulkan_enable_sync_validation
 -vulkan_enable_validation
 -vulkan_force_cpu
--vulkan_force_enable_debug_utils
 -vulkan_force_sm60
--vulkan_fossilize_log_verbose
 -vulkan_ignore_ctdl_bindless_non_blocking_issues
 -vulkan_ignore_minspec
 -vulkan_metal_validation
--vulkan_preload_fossilize
 -vulkan_trim_all_command_pools
 -vulkan_trim_all_command_pools_2gb
 -vulkan_trim_command_pools
 -vulkan_trim_command_pools_2gb
--vulkan_validation_error_assert
--vulkan_validation_error_exit_success
+-vulkan_validation_info
 -vulkan_validation_warnings
 -vulkan_vma_defrag_each_frame
--vulkan_vma_shutdown
--vulkanrenderthreadstack
 ./inputlayoutbase.h
 ./renderresource.h
 .bak
@@ -375,6 +341,7 @@ Android SM 5.0 (VULKAN)
 AngularSpan
 Asking for 2d Texture Array with Cube map as input and no compatible view found when setting "%s" - returning error texture in CTextureManagerVK::GetImageView: "%s"\n
 AssertIsValidTextureSpec
+Async Flush Pipeline Cache
 Async Link Time Optimize PSO
 Async Pipeline Compile
 Async shader compile
@@ -737,7 +704,9 @@ MbP?vkCreateAccelerationStructureKHR( Device(), &asci, nullptr, &pNewAccleration
 MemoryInfo
 MemoryPools
 MinDeviceID
+Minimum VRAM required: %s MB\n
 Modes
+MotionVectorsMaxDistance
 MultiDrawIndexedInstancedIndirect failed - invalid drawarg buffer\n.
 MultiDrawIndexedInstancedIndirectCount failed - invalid drawarg buffer\n.
 MultiDrawIndexedInstancedIndirectCount failed - invalid drawcount buffer\n.
@@ -747,6 +716,7 @@ N9Fossilize18ConcurrentDatabaseE
 N9Fossilize21StateCreatorInterfaceE
 NV Raytracing Validation
 NVIDIA Driver Version: %d.%d, disable r_low_latency_trigger_flash by default to workaround driver bug.\n
+NVIDIA Driver Version: %d.%d, disabling Reflex for Deadlock to avoid trigger flash driver bug (fixed in 561.09+).\n
 No Pool
 No Vulkan heaps support system memory allocation for this resource.\n
 No displayable format found for swapchain that supports the requested display mode.\n
@@ -786,6 +756,7 @@ ParseEXRHeaderFromMemory() failed! Error message: %s\n
 Pipeline cache data not found.  Deleting %s.\n
 Pipeline creation time of %fms exceeded throttle limit of %fms.\n
 Pipeline layout
+Pipeline() != VK_NULL_HANDLE
 Pixel Shader
 Pixel Shader Render State
 PooledDynamicConstantBuffer
@@ -834,6 +805,7 @@ RenderSystem/VertexBufferPoolSizeMB
 RenderSystem/VulkanAdditionalShaderCache
 RenderSystem/VulkanDefrag
 RenderSystem/VulkanLazilyAllocateRenderTargets
+RenderSystem/VulkanMinAPIVersion
 RenderSystem/VulkanMutableSwapchain
 RenderSystem/VulkanRequireDescriptorIndexing
 RenderSystem/VulkanRequireSubgroupWaveOpSupport
@@ -888,6 +860,7 @@ SUPPORTS_CS
 SUPPORTS_GS
 SV_Position
 S_BINDLESS_RUNTIME
+S_EXECUTION_REORDERING
 S_MOLTEN_VK
 S_REVERSE_DEPTH_BUFFER
 S_SHADER_QUALITY
@@ -919,7 +892,6 @@ Source2
 Staging
 Starting RenderDoc capture...\n
 Starting RenderDoc frame capture...\n
-Stats
 Streaming Validation: %s 
 Suballocations
 Subgroup wave op support required because VulkanRequireSubgroupWaveOpSupport is set in gameinfo.gi, but subgroup wave ops are not supported.  Vulkan device creation failed.\n
@@ -1098,6 +1070,7 @@ VK_EXT_memory_priority
 VK_EXT_multi_draw
 VK_EXT_pageable_device_local_memory
 VK_EXT_pipeline_creation_cache_control
+VK_EXT_pipeline_robustness
 VK_EXT_robustness2
 VK_EXT_subgroup_size_control
 VK_EXT_subgroup_size_control does not support required features, disabling.\n
@@ -1141,6 +1114,7 @@ VK_LAYER_LUNARG_standard_validation
 VK_NOT_READY
 VK_NV_device_diagnostic_checkpoints
 VK_NV_low_latency2
+VK_NV_ray_tracing_invocation_reorder
 VK_NV_ray_tracing_validation
 VK_NV_ray_tracing_validation not found.  Did you set NV_ALLOW_RAYTRACING_VALIDATION=1 in the environment?\n
 VK_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR
@@ -1228,7 +1202,7 @@ VmaCreateNewVulkanObject '%s' unexpectedly failed to create an object.\n
 VmaDefragAssign
 VmaDefragCopyPass
 VmaDefragThread
-Vulkan 1.2+ required, only Vulkan %d.%d supported.\n
+Vulkan %d.%d.%d+ required, only Vulkan %d.%d.%d supported.\n
 Vulkan Command Buffer Pool Threshold(%d)\n
 Vulkan Command Buffers:\n
 Vulkan Framebuffer Manager Stats:\n
@@ -1242,7 +1216,7 @@ Vulkan device does not support precise occlusion queries, this may result in inc
 Vulkan driver doesn't support MultiDrawIndexedInstancedIndirectCount\n.
 Vulkan driver version Major = %d, Minor = %d, Patch = %d\n
 Vulkan driver version: %d.%d.%d.%d\n
-Vulkan encountered unrecoverable error VK_ERROR_DEVICE_LOST.  If on NVIDIA, try reproducing with -aftermath -aftermath_full added to your command-line to gather GPU crash dump.\n
+Vulkan encountered unrecoverable error VK_ERROR_DEVICE_LOST.
 Vulkan extension enabled: %s\n
 Vulkan failed to create descriptor pool.\n
 Vulkan framebuffers: %s; renderpasses: %s\n
@@ -1368,6 +1342,7 @@ channels
 chlist
 chromaFilter
 chunkCount
+citadel
 closestHitShader
 codeSize
 colorAttachmentFormats
@@ -1402,7 +1377,6 @@ dataSize
 dataWindow
 data_height = 
 data_with or data_height too large. data_width: 
-dedicated
 dependencies
 dependencyFlags
 depthAttachmentFormat
@@ -1541,6 +1515,7 @@ logicOpEnable
 longjmp
 m_ppAcquireNextImageSemaphores != nullptr
 m_ppAcquireNextImageSemaphores[ nSemaphoreIndex ] != VK_NULL_HANDLE
+m_vkRayTracePipeline != VK_NULL_HANDLE
 magFilter
 main
 makemelast
@@ -1580,7 +1555,7 @@ nResult = vmaBindImageMemory( m_pVmaAllocator, pMove->dstTmpAllocation, ( VkImag
 nResult = vmaCreateAllocator( &allocatorCreateInfo, &m_pVmaAllocator )
 nResult = vmaCreateBuffer( m_pVmaAllocator, &bufferCreateInfo, &allocInfo, ppVKBufferOut, ppVmaAllocationOut, nullptr )
 nResult = vmaCreatePool( m_pVmaAllocator, &poolCreateInfo, &allocInfo.pool )
-nResult = vmaCreatePool( m_pVmaAllocator, &poolCreateInfo, &pVmaAllocInfo->pool )
+nResult = vmaCreatePool( m_pVmaAllocator, &poolCreateInfo, &pNewPool )
 nSemaphoreIndex < static_cast< int32 >( m_nSwapQueueImageCount )
 nSemaphoreIndex >= 0
 no message
@@ -1643,6 +1618,7 @@ renderPasses
 renderPasses2
 rendercontextbase.cpp
 renderdevicebase.cpp
+renderdoc
 renderdoc_captures
 renderstatehelper.h
 rendersystem (%s) tracked resources:\n
@@ -1700,6 +1676,7 @@ setting.SuppressPixelShaderCentroidHackFixup
 setting.Unsupported
 setting.knowndevice
 setting.maxdxlevel
+setting.monitor_index
 setting.recommendedheight
 setting.recommendedwidth
 setting.resettodefaults
@@ -1770,15 +1747,15 @@ texture2dms
 texture2dmsarray
 texture3dindex
 texturebase.cpp
-texturebase.cpp(2423):Error loading texture: %s\n
-texturebase.cpp(3449):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3481):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3501):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3519):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3538):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3559):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3570):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
-texturebase.cpp(3581):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(2424):Error loading texture: %s\n
+texturebase.cpp(3450):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3482):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3502):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3520):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3539):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3560):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3571):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
+texturebase.cpp(3582):ResourceHandleToData( %s ) failed! Falling back to error texture!\n
 texturecube
 texturecubearray
 texturecubearrayindex
@@ -2460,6 +2437,7 @@ vkGetQueueCheckpointData2NV
 vkGetQueueCheckpointDataNV
 vkGetRayTracingCaptureReplayShaderGroupHandlesKHR
 vkGetRayTracingShaderGroupHandlesKHR
+vkGetRayTracingShaderGroupHandlesKHR( m_pDevice, Pipeline(), 0, nTotalNumShaderGroups, m_ShaderHandles.ByteCount(), m_ShaderHandles.Base() )
 vkGetRayTracingShaderGroupHandlesNV
 vkGetRayTracingShaderGroupStackSizeKHR
 vkGetRefreshCycleDurationGOOGLE
@@ -2593,30 +2571,32 @@ vtable for std::__future_base::_State_baseV2
 vulkan/asynccompilehelpervulkan.cpp
 vulkan/framebuffermgrvulkan.cpp
 vulkan/memorymgrvulkan.cpp
-vulkan/memorymgrvulkan.cpp(1494): vmaCreatePool failed with error: %d\n
-vulkan/memorymgrvulkan.cpp(1565): vmaCreatePool failed with error: %d\n
-vulkan/memorymgrvulkan.cpp:716
+vulkan/memorymgrvulkan.cpp(1513): vmaCreatePool failed with error: %d\n
+vulkan/memorymgrvulkan.cpp(1584): vmaCreatePool failed with error: %d\n
+vulkan/memorymgrvulkan.cpp:717
 vulkan/pipelinecachemgrvulkan.cpp
 vulkan/pipelinemgrvulkan.cpp
+vulkan/pipelinemgrvulkan.h
+vulkan/raytracevulkan.cpp
 vulkan/rendercontextvulkan.cpp
-vulkan/rendercontextvulkan.cpp(419): 
+vulkan/rendercontextvulkan.cpp(421): 
 vulkan/renderdevicevulkan.cpp
-vulkan/renderdevicevulkan.cpp(9214): Unable to get Vulkan image for %s.\n
-vulkan/renderdevicevulkan.cpp(9221): Allocation already set for %s, it is not valid to assign a new allocation.\n
-vulkan/renderdevicevulkan.cpp(9233): failed to allocate GPU memory in custom pool for %s.\n
-vulkan/renderdevicevulkan.cpp(9245): vmaBindImageMemory failed for image %s with error %d.\n
-vulkan/renderdevicevulkan.cpp(9267): Unable to get Vulkan image for %s.\n
-vulkan/renderdevicevulkan.cpp(9273): no allocation for image %s.\n
-vulkan/renderdevicevulkan.cpp(9311): failed to allocate GPU memory in custom pool for %s.\n
-vulkan/renderdevicevulkan.cpp(9321): vmaBindImageMemory failed for buffer %s with error %d.\n
-vulkan/renderdevicevulkan.cpp(9370): Unable to get Vulkan buffer.\n
-vulkan/renderdevicevulkan.cpp(9376): no allocation for buffer %s.\n
-vulkan/renderdevicevulkan.cpp(9390): Unable to get Vulkan image for %s.\n
-vulkan/renderdevicevulkan.cpp(9396): no allocation for image %s.\n
-vulkan/renderdevicevulkan.cpp(9415): Unable to get Vulkan buffer.\n
-vulkan/renderdevicevulkan.cpp(9421): no allocation for buffer %s.\n
+vulkan/renderdevicevulkan.cpp(9326): Unable to get Vulkan image for %s.\n
+vulkan/renderdevicevulkan.cpp(9333): Allocation already set for %s, it is not valid to assign a new allocation.\n
+vulkan/renderdevicevulkan.cpp(9345): failed to allocate GPU memory in custom pool for %s.\n
+vulkan/renderdevicevulkan.cpp(9357): vmaBindImageMemory failed for image %s with error %d.\n
+vulkan/renderdevicevulkan.cpp(9379): Unable to get Vulkan image for %s.\n
+vulkan/renderdevicevulkan.cpp(9385): no allocation for image %s.\n
+vulkan/renderdevicevulkan.cpp(9423): failed to allocate GPU memory in custom pool for %s.\n
+vulkan/renderdevicevulkan.cpp(9433): vmaBindImageMemory failed for buffer %s with error %d.\n
+vulkan/renderdevicevulkan.cpp(9482): Unable to get Vulkan buffer.\n
+vulkan/renderdevicevulkan.cpp(9488): no allocation for buffer %s.\n
+vulkan/renderdevicevulkan.cpp(9502): Unable to get Vulkan image for %s.\n
+vulkan/renderdevicevulkan.cpp(9508): no allocation for image %s.\n
+vulkan/renderdevicevulkan.cpp(9527): Unable to get Vulkan buffer.\n
+vulkan/renderdevicevulkan.cpp(9533): no allocation for buffer %s.\n
 vulkan/renderthreadvulkan.cpp
-vulkan/renderthreadvulkan.cpp(203): Error! NULL texture pointer sent to OnReadPixels()!\n
+vulkan/renderthreadvulkan.cpp(204): Error! NULL texture pointer sent to OnReadPixels()!\n
 vulkan/shadertablevulkan.cpp
 vulkan/texturevulkan.cpp
 vulkan/texturevulkan.cpp(1480): 

@@ -2,6 +2,7 @@ class FeSDFRigid_t
 {
 	Vector vLocalMin;
 	Vector vLocalMax;
+	float32 flBounciness;
 	uint16 nNode;
 	uint16 nCollisionMask;
 	uint16 nVertexMapIndex;

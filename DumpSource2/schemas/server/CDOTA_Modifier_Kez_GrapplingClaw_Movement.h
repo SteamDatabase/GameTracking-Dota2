@@ -1,0 +1,29 @@
+class CDOTA_Modifier_Kez_GrapplingClaw_Movement : public CDOTA_Buff
+{
+	Vector m_vGrappleHookPos;
+	Vector m_vInitialDir;
+	Vector m_vHookDir;
+	Vector m_vLastVelocity;
+	float32 m_flHookDistance;
+	float32 m_flCurrentHookRetractSpeed;
+	float32 m_flCurrentHookLength;
+	float32 m_flCurHookDistDelta;
+	float32 m_flCurMomentumDistDelta;
+	float32 m_flDecelerationRate;
+	float32 m_flMaxHeight;
+	float32 m_flInitialSpeed;
+	float32 m_flDT;
+	float32 m_flAccumDist;
+	bool m_bHookAttached;
+	int32 grapple_speed;
+	int32 impact_damage;
+	int32 land_distance;
+	int32 bonus_flat_lifesteal;
+	int32 lifesteal_pct;
+	int32 creep_lifesteal_reduction_pct;
+	CHandle< CBaseEntity > m_hTarget;
+	bool m_bDidAttack;
+	bool m_bStartedAnimation;
+	GameActivity_t m_Activity;
+	float32 m_flTimeLeftForActivity;
+};

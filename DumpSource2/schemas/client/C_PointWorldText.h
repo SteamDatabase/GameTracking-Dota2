@@ -8,6 +8,7 @@ class C_PointWorldText : public C_ModelPointEntity
 	float32 m_flWorldUnitsPerPx;
 	float32 m_flFontSize;
 	float32 m_flDepthOffset;
+	bool m_bDrawBackground;
 	Color m_Color;
 	PointWorldTextJustifyHorizontal_t m_nJustifyHorizontal;
 	PointWorldTextJustifyVertical_t m_nJustifyVertical;

@@ -1,7 +1,6 @@
 class CPhysBox : public CBreakable
 {
 	int32 m_damageType;
-	float32 m_massScale;
 	int32 m_damageToEnableMotion;
 	float32 m_flForceToEnableMotion;
 	QAngle m_angPreferredCarryAngles;

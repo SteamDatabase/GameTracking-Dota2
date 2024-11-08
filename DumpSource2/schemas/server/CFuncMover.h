@@ -11,8 +11,6 @@ class CFuncMover : public CBaseModelEntity
 	float32 m_flT;
 	int32 m_nCurrentNodeIndex;
 	int32 m_nPreviousNodeIndex;
-	bool m_bFixedOrientation;
-	bool m_bFixedPitch;
 	SolidType_t m_eSolidType;
 	bool m_bIsMoving;
 	float32 m_flTimeToReachMaxSpeed;
@@ -37,4 +35,18 @@ class CFuncMover : public CBaseModelEntity
 	float32 m_flTimeToBlendToNewOrientation;
 	float32 m_flDurationBlendToNewOrientationRan;
 	Quaternion m_qOriginalOrientation;
+	bool m_bCreateMovableNavMesh;
+	CEntityIOOutput m_OnNodePassed;
+	CUtlSymbolLarge m_iszOrientationMatchEntityName;
+	CHandle< CBaseEntity > m_hOrientationMatchEntity;
+	float32 m_flTimeToTraverseToNextNode;
+	Vector m_vLerpToNewPositionStart;
+	Vector m_vLerpToNewPositionEnd;
+	float32 m_flLerpToPositionT;
+	float32 m_flLerpToPositionDeltaT;
+	CEntityIOOutput m_OnLerpToPositionComplete;
+	bool m_bIsPaused;
+	CFuncMover::TransitionToPathNodeAction_t m_eTransitionedToPathNodeAction;
+	int32 m_nDelayedTeleportToNode;
+	bool m_bIsVerboseLogging;
 };

@@ -16,6 +16,8 @@ class CBaseRendererSource2 : public CParticleFunctionRenderer
 	float32 m_flAnimationRate;
 	AnimationType_t m_nAnimationType;
 	bool m_bAnimateInFPS;
+	CParticleCollectionRendererFloatInput m_flMotionVectorScaleU;
+	CParticleCollectionRendererFloatInput m_flMotionVectorScaleV;
 	CParticleCollectionRendererFloatInput m_flSelfIllumAmount;
 	CParticleCollectionRendererFloatInput m_flDiffuseAmount;
 	CParticleCollectionRendererFloatInput m_flDiffuseClamp;
@@ -58,6 +60,7 @@ class CBaseRendererSource2 : public CParticleFunctionRenderer
 	CParticleCollectionRendererFloatInput m_flFeatheringMinDist;
 	CParticleCollectionRendererFloatInput m_flFeatheringMaxDist;
 	CParticleCollectionRendererFloatInput m_flFeatheringFilter;
+	CParticleCollectionRendererFloatInput m_flFeatheringDepthMapFilter;
 	CParticleCollectionRendererFloatInput m_flDepthBias;
 	ParticleSortingChoiceList_t m_nSortMethod;
 	bool m_bBlendFramesSeq0;

@@ -1,6 +1,7 @@
 class CShmupPlayerDefinition
 {
 	int32 m_nLives;
+	int32 m_nFirstTimeBonusLives;
 	float32 m_flModelScale;
 	float32 m_flShieldRadius;
 	float32 m_flHeartRadius;

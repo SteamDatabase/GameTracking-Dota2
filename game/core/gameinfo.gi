@@ -93,4 +93,15 @@
 		"models_gamedata"	"models_base.fgd"
 		"features"			"animgraph"
 	}
+
+	Memory
+	{
+		"EstimatedMaxCPUMemUsageMB"	"1"
+		"EstimatedMinGPUMemUsageMB"	"1"
+	}
+	ConVars
+	{
+		snd_envelope_rate 100
+		snd_soundmixer_update_maximum_frame_rate 0
+	}
 }

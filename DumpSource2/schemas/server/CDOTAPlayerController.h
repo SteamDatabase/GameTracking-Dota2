@@ -16,8 +16,6 @@ class CDOTAPlayerController : public CBasePlayerController
 	int32 m_iHighPriorityScore;
 	AbilityID_t[9] m_quickBuyItems;
 	bool[9] m_quickBuyIsPurchasable;
-	float32 m_flFrameTime;
-	float32 m_flFrameTimeStdDev;
 	float32 m_flUnfilteredFrameTime;
 	bool m_bUsingAssistedCameraOperator;
 	bool m_bUsingCameraMan;

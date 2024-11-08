@@ -7,4 +7,5 @@ class CAnimationGroup
 	CStrongHandle< InfoForResourceTypeCSequenceGroupData > m_directHSeqGroup_Handle;
 	CAnimKeyData m_decodeKey;
 	CUtlVector< CBufferString > m_szScripts;
+	CUtlVector< CStrongHandleVoid > m_AdditionalExtRefs;
 };

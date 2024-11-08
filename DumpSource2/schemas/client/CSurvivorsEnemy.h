@@ -1,0 +1,35 @@
+class CSurvivorsEnemy : public CSurvivorsUnit
+{
+	GameActivity_t m_activity;
+	CSurvivorsSpawner* m_pSpawner;
+	SurvivorsEnemyID_t m_enemyID;
+	bool m_bIsDying;
+	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sDeathEffectParticle;
+	bool m_bSpawnPickupsOnDeath;
+	float32 m_flRunPlaybackRate;
+	float32 m_flIdlePlaybackRate;
+	float32 m_flTurnRate;
+	float32 m_flCollisionRadius;
+	int32 m_nSeperationTickCounter;
+	int32 m_nCurrentAttackIndex;
+	float32 m_flTouchDamage;
+	float32 m_flTouchTimeout;
+	float32 m_flTouchCooldown;
+	bool m_bDieOnTouch;
+	float32 m_flDespawnTimer;
+	bool m_bTryDespawn;
+	ESurvivorsEnemyMovementBehavior m_eMovementBehavior;
+	ESurvivorsEnemyMovementCapability m_eMovementCapability;
+	Vector2D m_vOriginalFacing;
+	float32 m_flSinTurnTimer;
+	float32 m_flDeathEffectTimer;
+	Vector m_vDeathAnimationDirection;
+	Vector m_vCurrentSeparationVelocity;
+	bool m_bCenterRooted;
+	bool m_bRotates;
+	bool m_bIsElite;
+	bool m_bIsMiniboss;
+	float32 m_flSpawnerExpirationTime;
+	float32 m_flOverrideDespawnRadiusBuffer;
+	Vector m_vSeparationVector;
+};

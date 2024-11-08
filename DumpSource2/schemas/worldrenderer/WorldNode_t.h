@@ -13,4 +13,5 @@ class WorldNode_t
 	CUtlVector< uint8 > m_overlayLayerIndices;
 	CUtlString m_grassFileName;
 	BakedLightingInfo_t m_nodeLightingInfo;
+	bool m_bHasBakedGeometryFlag;
 };

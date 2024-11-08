@@ -22,4 +22,6 @@ enum EGCBaseMsg : uint32_t
 	k_EMsgClientToGCIntegrityStatus = 4522,
 	k_EMsgClientToGCAggregateMetrics = 4523,
 	k_EMsgGCToClientAggregateMetricsBackoff = 4524,
+	k_EMsgGCToServerSteamLearnAccessTokensChanged = 4525,
+	k_EMsgGCToServerSteamLearnUseHTTP = 4526,
 };

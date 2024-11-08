@@ -5,4 +5,5 @@ class CTakeDamageResult
 	int32 m_nDamageTaken;
 	int32 m_nTotalledHealthLost;
 	int32 m_nTotalledDamageTaken;
+	float32 m_flTotalledDamageAbsorbed;
 };

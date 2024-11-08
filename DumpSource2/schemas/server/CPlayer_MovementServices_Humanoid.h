@@ -13,5 +13,6 @@ class CPlayer_MovementServices_Humanoid : public CPlayer_MovementServices
 	CUtlStringToken m_surfaceProps;
 	int32 m_nStepside;
 	int32 m_iTargetVolume;
+	bool m_bDisableMovementSounds;
 	Vector m_vecSmoothedVelocity;
 };

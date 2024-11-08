@@ -15,6 +15,7 @@ class CPointCamera : public CBaseEntity
 	float32 m_flZFar;
 	float32 m_flZNear;
 	bool m_bCanHLTVUse;
+	bool m_bAlignWithParent;
 	float32 m_flOverrideShadowFarZ;
 	bool m_bDofEnabled;
 	float32 m_flDofNearBlurry;

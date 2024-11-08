@@ -1,6 +1,7 @@
 class CEnvVolumetricFogController : public CBaseEntity
 {
 	float32 m_flScattering;
+	Color m_TintColor;
 	float32 m_flAnisotropy;
 	float32 m_flFadeSpeed;
 	float32 m_flDrawDistance;
@@ -33,5 +34,7 @@ class CEnvVolumetricFogController : public CBaseEntity
 	float32 m_fNoiseSpeed;
 	float32 m_fNoiseStrength;
 	Vector m_vNoiseScale;
+	float32 m_fWindSpeed;
+	Vector m_vWindDirection;
 	bool m_bFirstTime;
 };

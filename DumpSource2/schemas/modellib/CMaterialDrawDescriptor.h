@@ -3,8 +3,8 @@ class CMaterialDrawDescriptor
 	float32 m_flUvDensity;
 	Vector m_vTintColor;
 	float32 m_flAlpha;
-	uint32 m_nFirstMeshlet;
 	uint16 m_nNumMeshlets;
+	uint32 m_nFirstMeshlet;
 	RenderPrimitiveType_t m_nPrimitiveType;
 	int32 m_nBaseVertex;
 	int32 m_nVertexCount;

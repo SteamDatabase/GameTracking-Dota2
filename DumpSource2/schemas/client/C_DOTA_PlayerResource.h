@@ -12,7 +12,6 @@ class C_DOTA_PlayerResource : public C_BaseEntity
 	CUtlSymbolLarge[64] m_iszHTMLSafeName;
 	CUtlSymbolLarge[64] m_iszFilteredHTMLSafeName;
 	bool m_bDirtySuggestedItems;
-	bool m_bDirtyEstimatedMatchDuration;
 	bool m_bDirtySelection;
 	bool m_bHasWorldTreesChanged;
 	bool m_bWorldTreeModelsChanged;

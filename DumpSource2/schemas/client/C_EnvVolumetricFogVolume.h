@@ -12,6 +12,8 @@ class C_EnvVolumetricFogVolume : public C_BaseEntity
 	float32 m_fIndirectLightStrength;
 	float32 m_fSunLightStrength;
 	float32 m_fNoiseStrength;
+	Color m_TintColor;
+	bool m_bOverrideTintColor;
 	bool m_bOverrideIndirectLightStrength;
 	bool m_bOverrideSunLightStrength;
 	bool m_bOverrideNoiseStrength;

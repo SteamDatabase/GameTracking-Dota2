@@ -49,6 +49,9 @@
 @VisGroupFilter { filter_type = "entityTag"		tag = "Overlay"			group = "Dynamic Overlays"	parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "PostProcessing"	group = "Post Processing"	parent_group = "Entities" }
 @VisGroupFilter { filter_type = "entityTag"		tag = "PlayerPosition"	group = "Player Positions"	parent_group = "Entities" }
+@VisGroupFilter { filter_type = "entityTag"		tag = "PathVisible"		group = "Visible Paths"		parent_group = "Paths" }
+@VisGroupFilter { filter_type = "entityTag"		tag = "PathLogical"		group = "Logical Paths"		parent_group = "Paths" }
+
 
 
 //-------------------------------------------------------------------------
@@ -639,20 +642,6 @@
 	]
 	maxpropscreenwidth(float) : "Start Fade Pixels" : -1 : "Number of pixels wide at which all props in the level start to fade (<0 = use fademaxdist). This number is ignored if the prop has a specific fade distance specified."
 	minpropscreenwidth(float) : "End Fade Pixels" : 0 : "Minimum number of pixels wide at which the prop is visible (0 = don't fade out). This number is ignored if the prop has a specific fade distance specified."
-
-	vrchaperone(choices) : "VR Chaperone" : 0 : "" = 
-	[
-		0 : "Chaperone"
-		1 : "Chaperone + Safe Zone"
-		2 : "No Chaperone"
-	]
-
-	vrmovement(choices) : "VR Movement" : 0 : "" = 
-	[
-		0 : "None"
-		1 : "Teleport"
-		2 : "Teleport (w/non-up floor)"
-	]
 ]
 
 @PointClass base(Targetname, Parentname) tags( Sound ) iconsprite("editor/ambient_generic.vmat") sphere() = ambient_generic : "Universal ambient sound. Use it to play and control a single sound."
@@ -1130,23 +1119,19 @@
 	"An entity to control the number of ragdolls in the world, for performance reasons." 
 [
 	MaxRagdollCount(integer) : "Max Ragdoll Count" : -1 : "Sets the max number of ragdolls that can be in the world at a time (if they are flagged to fade). Set to -1 if you want to use the default value (g_ragdoll_maxcount)."
-	MaxRagdollCountDX8(integer) : "Max Ragdoll Count DX8" : -1 : "Sets the max number of ragdolls that can be in the world at a time on DX8 hardware (if they are flagged to fade). Set to -1 if you want to use the 'Max Ragdoll Count' value."
-
 	SaveImportant(boolean) : "Save Important Ragdolls" : 0 : "Should the ragdoll manager make sure ally ragdolls aren't deleted?"
+	CanTakeDamage(boolean) : "Ragdolls Take Damage" : 0 : "Can ragdolls be damaged and eventually destroyed if they have health?"
 	
 	// Inputs
 	input SetMaxRagdollCount(integer) : "Set the Max Ragdoll Count."
-	input SetMaxRagdollCountDX8(integer) : "Set the Max Ragdoll Count on DX8 hardware."
 ]
 
 @PointClass base(Targetname) = game_gib_manager : "An entity to control the number of gibs in the world, for performance reasons." 
 [
 	maxpieces(integer)	: "Max Gib Count" : -1 : "Sets the max number of gib that can be spawned at a time. (-1=no limit)"
-	maxpiecesdx8(integer)	: "Max Gib Count On DX8" : -1 : "Sets the max number of gib that can be spawned at a time under DX8. (-1=use Max Gib Count setting)"
 	allownewgibs(boolean)	: "Allow New Gibs To Spawn" : 0 : "If true, when the max gib count is reached, oldest gibs are removed as new gibs spawn. If false, new gibs will not be spawned once the gib limit is reached."
 	
 	input SetMaxPieces(integer)	: "Set the max gib count."
-	input SetMaxPiecesDX8(integer)	: "Set the max gib count under DX8."
 ]
 
 @PointClass base(Parentname, Targetname) tags( Particles ) color(255 128 0) editormodel("models/editor/axis_helper_thick") = env_lightglow : 
@@ -2559,6 +2544,7 @@
 	"Entities will transition to the next level at the same relative offset from the info_landmark entity.<br><br>"+
 	"Note that only entities in same the PVS as the info_landmark are considered for transitioning, so it should generally be placed inside the transition space."
 [
+	input SetPosition(vector) : "Set position of landmark."
 ]
 
 @PointClass tags( Info ) base(Targetname) color(0 255 0) iconsprite("editor/info_target.vmat") = info_spawngroup_load_unload : "Logical entity that starts async loading or unloading a level."
@@ -3267,7 +3253,7 @@
 		8: "Passable" : 0
 		32: "Toggle" : 0
 		256:"Use Opens" : 0
-		512: "NPCs Can't" : 0
+		512: "NPCs Can't Use" : 0
 		1024: "Touch Opens" : 1
 		2048: "Starts locked" : 0
 		4096:	"Door Silent" : 0
@@ -3293,6 +3279,7 @@
 	input Lock(void) : "Lock the door."
 	input Unlock(void) : "Unlock the door."
 	input SetSpeed(float) : "Set the door speed."
+	input SetNoNPCs(boolean) : "Set whether NPCs can use this door or not."
 ]
 
 @SolidClass base(Door) drawangles_local{ angles_key = "movedir" } = func_door : 
@@ -3380,7 +3367,7 @@
 	spawnflags(flags) =
 	[
 		1 : "Starts Open" : 0
-		//512: "NPCs Can't" : 0
+		512: "NPCs Can't Use" : 0
 		2048: "Starts locked" : 0
 		4096: "Door silent (No sound, and does not alert NPCs)" : 0
 		8192: "Use closes" : 1
@@ -3416,6 +3403,7 @@
 	input Unlock(void) : "Unlock the door."
 	input SetRotationDistance(float) : "Set the distance (in degrees) between Open and Closed."
 	input SetSpeed(float) : "Set the speed at which the door rotates. 100 is default."
+	input SetNoNPCs(boolean) : "Set whether NPCs can use this door or not."
 ]
 
 
@@ -5143,6 +5131,13 @@
 	spawnflags(flags) =
 	[
 	]
+
+	enablelinearconstraint(boolean) : "Enable Lateral Constraint" : 1
+	enableverticalconstraint(boolean) : "Enable Vertical Constraint" : 1
+	enableangularconstraint(boolean) : "Enable Angular Constraint" : 1
+
+	linearfrequency(float) : "Linear Frequency" : "0" : "Linear spring frequency (stiffness)."
+	lineardampingratio(float) : "Linear Damping Ratio" : "0" : "Linear spring damping ratio."
 ]
 
 @PointClass editormodel("models/editor/axis_helper") arc_range{ is_local_axis = true align_pie_to_local_forward = true is_enabled_key = "enable_steering_limit" min_angle_key = "min_steering_angle" max_angle_key = "max_steering_angle" } axis_range{ is_local_axis = true is_enabled_key = "enable_suspension_limit" min_limit_key = "min_suspension_offset" max_limit_key = "max_suspension_offset" } base(TwoObjectPhysics) tags( Physics ) = phys_wheelconstraint : 
@@ -5166,6 +5161,8 @@
 
 	steering_axis_friction(float) : "Steering Axis Friction" : "0.01" : "Friction that resists rotation around the steering axis"
 	spin_axis_friction(float) : "Spin Axis Friction" : "0.01" : "Friction that resists rotation around the spin axis"
+
+	input SetSteeringMimicsEntity(string) : "Pass an entity name here, and our steering angle will follow the yaw of the given entity"
 ]
 
 @BaseClass base(Targetname, BasePhysicsNoSettleAttached) = ForceController
@@ -5418,6 +5415,7 @@
 		6: "Use VPhysics"
 	]
 
+	collision_override(collision_property) { group="Collision" enabled={ variable="solid" value="6" } } : "Override Collision Property" : "" : "If a value is selected, it will be applied as the collision property to all of the phsyics shapes generated by this instance of the model, overriding any values specified in the model."
 
 	// Lighting	
 	bakelighting(choices) [ group="Lighting" ] : "Lighting Type" : -1 : "Selects whether to use lightmapping or lightprobes for this mesh. Note: Selecting light probes will disable mesh merging/batching, creating extra draw calls. To merge lightprobed meshes, enable the Bake to World parameter."=
@@ -5537,6 +5535,7 @@
 	auto_convert_back_from_debris(boolean) [ group="Physics Properties" ] : "Auto Convert back from Debris" : "1" : "If set, this prop will automatically convert back to interactive debris after coming to rest as Debris."
 	updatenavwhenmoving(boolean) [ group="Physics Properties" ] : "Update Nav When Moving" : "0" : "If set, nav mesh will be constantly updated while this obstacle is moving, and not just when this obstacle is settled."
 	forcenavcut(boolean) [ group = "Physics Properties" ] : "Force Nav Cut " : "0" : "If set, this obstacle will cut the mesh causing NPC's to avoid it regardless of its mass."
+	allowobstacleconvexhullmerging(boolean) [ group = "Physics Properties" ] : "Allow Obstacle Merging" : "1" : "If set, this obstacle will be merged with nearby obstacles to improve performance."
 
 	ammobalancing_removable(choices) [ group="Break Contents" ] : "Removal Allowed for Ammo Balancing" : "0" =
 	[
@@ -6481,12 +6480,17 @@
 [
 	target(target_destination) : "Remote Destination" : : "The entity specifying the point to which entities should be teleported."
 	landmark(target_destination) : "Local Destination Landmark" : : "If specified, then teleported entities are offset from the target by their initial offset from the landmark."
-
 	use_landmark_angles(boolean) : "Use Landmark Orientations" : 0 : "Rotate around landmark by relative landmark orientations"
 	mirror_player(boolean) : "Mirror Player" : 0 : "Mirror the player teleport position through the plane defined by the trigger's origin and up vector"
+	check_if_dest_clear_for_player(boolean) : "Only Spawn-Valid Destinations" : 0 : "Only teleport if there is a clear teleport destination."
 ]
 
-@SolidClass base(Targetname) tags( Trigger ) = trigger_transition : 
+@SolidClass base(Targetname) tags( Trigger ) 
+	metadata
+	{
+		auto_apply_material = "materials/tools/toolstrigger.vmat"
+	}
+= trigger_transition : 
 	"A volume that's used to control which entities go through the level transition. Create one or more trigger_transitions and "+
 	"give them the same name as the changelevel landmark. Any entities within the trigger_transition(s) will go to the next map."+
 	"See trigger_changelevel for more info."
@@ -6554,6 +6558,41 @@
 	input SetDOFFarCrisp(float) : "Set DOF Far Crisp Range."
 	input SetDOFFarBlurry(float) : "Set DOF Far Blurry Range."
 	input SetDOFTiltToGround(float) : "Set DOF Tilt to Ground Amount (0..1)."
+]
+
+//-------------------------------------------------------------------------
+// Camera entity
+//-------------------------------------------------------------------------
+@PointClass base(Parentname, Targetname, CanBeClientOnly) editormodel("models/editor/axis_helper_thick") = point_orient : "Orient Towards"
+[
+	orient_towards(target_destination) : "Orient Towards" : : "Which entity should I orient towards?"
+
+	goal_direction_type(choices) : "Goal Direction Type" : "eAbsOrigin" : "How to determine what the goal forward direction is" =
+	[
+		"eAbsOrigin" : "Point At Origin"
+		"eCenter" : "Point At Center"
+		"eHead" : "Point At Head"
+		"eForward" : "Align To Forward Direction"
+		"eEyesForward" : "Align To Look Direction"
+	]
+
+	constraint_type(choices) : "Orientation Constraints" : "eNone" : "Should the orientation be constrained?" =
+	[
+		"eNone" : "No constraints"
+		"ePreserveUpAxis" : "Preserve Up Axis"
+	]
+
+	max_turn_rate(float) : "Maximum Turn Rate" : 0 : "Max turn rate, 0 means instantaneously point toward the target"
+
+	start_active(choices) : "Initial State" : 1 = 
+	[
+		0 : "Inactive"
+		1 : "Active"
+	]
+
+	// Inputs
+	input SetActive( bool ) : "Activates / deactivates orientation toward the target"
+	input SetTarget( target_destination ) : "Sets the target to orient toward"
 ]
 
 //-------------------------------------------------------------------------
@@ -6999,7 +7038,7 @@
 	message(text_block) : "Message"
 	enabled(boolean) : "Start Enabled" : "1"
 	fullbright(boolean) : "Draw Fullbright" : "0"
-	color(color255) : "Color" : "0 0 0 255"
+	color(color255alpha) : "Color" : "0 0 0 255"
 	world_units_per_pixel(float) : "World Units Per Pixel" : "0.25"
 	font_size(float) : "Font Size" : "20"
 	font_name(string) : "Font Name" : "Arial Black"
@@ -7330,6 +7369,7 @@
 	IsMaster( bool )  : "Master Fog Controller" : "0" : "Use this as the active fog if there are more than one"
 	
 	FogStrength( float ) : "Fog strength" : "1.0" : "Technically the scattering value. Higher values make denser fog."
+    TintColor( color255 ) : "Tint Color" : "255 255 255" : "Tint color for fog."
 	DrawDistance( float ) : "Draw distance" : "600.0" : "Maximum distance to draw fog - WARNING! Changing from default will make fog blockier." 
 
     volume_depth_override( int ) { group="Resolution" min="0" max="256" } : "Volume Depth" : "0" : "Sets the number of slices in the fog volume.  Increasing from default (128) will increase resolution at the expense of GPU time and memory"
@@ -7359,6 +7399,9 @@
 	NoiseSpeed( float ) { group="Noise" min="0.0" } : "Noise Speed" : "0.0" : "Speed of noise function change"
 	NoiseStrength( float ) { group="Noise" min="0.0" max="1.0" } : "Noise Strength" : "0.0" : "How much noise to add to fog density"
 	NoiseScale( vector ) { group="Noise" } : "Noise Scale" : ".01 .01 .01" : "Scale of noise (smaller - smoother, larger - more detailed)"
+
+    WindSpeed( float ) { group="Wind" min="-1.0" max="1.0" } : "Wind Speed" : "0.0"
+    WindDirection( vector ) { group="Wind" } : "Wind Direction" : "0.0 0.0 0.0"
 
 	input SetToDefaults(void) : "Resets scattering and anisotropy to default values"
 	input SetFogStrength(float) : "Set overall fog strength"
@@ -7391,6 +7434,9 @@
 		"1" : "Radial (Sphere) Falloff"
 		"2" : "Height (Box) Falloff"
 	]
+
+    OverrideTintColor(bool) : "Override Tint Color" : "0" : "Override the global tint color in this fog volume."
+    TintColor( color255 ) { enabled={variable="OverrideTintColor" value="1" } } : "Tint Color" : "255 255 255" : "Tint color for fog."
 
 	HeightFogDepth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Vertical Depth" : 48 : "Vertical depth before height fog is maximum intensity"
 	HeightFogEdgeWidth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Edge Width" : 96 : "Horizonal fade width of height fog"
@@ -7474,7 +7520,7 @@ centered_box_oriented
 ]
 
 
-@PathClass 
+@PathClass tags( PathLogical )
 	metadata
 	{
 		editor_only = true
@@ -7486,7 +7532,7 @@ centered_box_oriented
 ]
 
 
-@PathClass base(Targetname)
+@PathClass base(Targetname) tags( PathLogical )
 	metadata
 	{
 		path_node_class = "path_node_generic"
@@ -7531,7 +7577,7 @@ centered_box_oriented
 ]
 
 
-@PathClass base(PathParticleRopeBase) particle_rope() = path_particle_rope
+@PathClass base(PathParticleRopeBase) tags( PathVisible ) particle_rope() = path_particle_rope
 [
 	// Inputs
 	input Start(void) : "Tell the particle system to start emitting."
@@ -7544,7 +7590,7 @@ centered_box_oriented
 ]
 
 
-@PathClass base(PathParticleRopeBase) particle_rope() 
+@PathClass base(PathParticleRopeBase) tags( PathVisible ) particle_rope() 
 	metadata
 	{
 		class_game_keys =

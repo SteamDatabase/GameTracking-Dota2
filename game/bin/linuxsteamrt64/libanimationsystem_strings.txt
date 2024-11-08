@@ -34,10 +34,10 @@
  : syntax error...\n
  : syntax not recognized...\n
  : unexpected input...\n  expected one of : 
- @Overlay Blend
  Aconst char* Reflection::Internal::GetFuncName() [with T = CWayPointHelperUpdateNode]
  LinePos:
  \t\n\r@()[]{}=&,:*|;'!
+"Forward And Backward Reaching Inverse Kinematics" solver - A solver that can handle any number of bones and works by iteratively solving for the position of each bone in the chain.
 #################################\n
 #Angle
 #Position
@@ -72,8 +72,10 @@
 %s (%.2f, %.2f, %.2f)
 %s (Color)
 %s (Material)
+%s - (%.2f) %s
 %s : param %s %s : %f\n
 %s Target
+%s allocation count overflow( %llu > %llu )\n
 %s_color
 %s_matgrp
 'Play reversed' has no effect when used with time synchronization!
@@ -322,6 +324,7 @@
 19CModelConfigElement
 19CMotionNodeSequence
 19CNMGraphTypeManager
+19CNMIkRigTypeManager
 19CNmCachedTargetNode
 19CNmCachedVectorNode
 19CNmClipSelectorNode
@@ -336,6 +339,7 @@
 19CUnregisterReceipt2I9CSmartPtrI23CAnimTagManagerInstance17CRefCountAccessorEMS1_FvN10Reflection6TypeIDEP16IAnimTagListenerES5_S7_E
 19CZeroPoseUpdateNode
 1:1: Tokens : ( T__39 | T__40 | T__41 | T__42 | T__43 | T__44 | T__45 | T__46 | T__47 | T__48 | T__49 | T__50 | T__51 | TOK_COLON | OPEN_BRACE | CLOSE_BRACE | OPEN_PAREN | CLOSE_PAREN | OPEN_BRACKET | CLOSE_BRACKET | SEMICOLON | OP_EQUAL | COMMA | DOUBLE_AND | NEGATIVE_TOK | DOUBLE_OR | LITERAL_TRUE | LITERAL_FALSE | POS_INTLITERAL | POS_FLOATLITERAL | ID | DOUBLE_QUOTED_STRING | SINGLE_QUOTED_STRING | SINGLE_LINE_COMMENT | ML_COMMENT | WS | UNRECOGNIZED );
+2-bone solver that does not have singularities that Perlin does, and should be used as a default starting point for 2 bone solves.
 20CAimCameraUpdateNode
 20CAimMatrixUpdateNode
 20CChoreoPoseOperation
@@ -367,6 +371,7 @@
 20CVectorAnimParameter
 20IResourceTypeManager
 20IStateChangeListener
+20ITargetWarpInputNode
 21CAnimComponentUpdater
 21CAnimGraphDebugReplay
 21CAnimMotorUpdaterBase
@@ -394,6 +399,7 @@
 21CPathHelperUpdateNode
 21CSpeedScaleUpdateNode
 21CStopAtGoalUpdateNode
+21CTargetWarpUpdateNode
 21CTaskHandshakeAnimTag
 21CTurnHelperUpdateNode
 21CVirtualAnimParameter
@@ -461,6 +467,7 @@
 23CKV3ResourceTypeManagerILy125762924277366EE
 23CKV3ResourceTypeManagerILy30510809657208438EE
 23CKV3ResourceTypeManagerILy31641111637094006EE
+23CKV3ResourceTypeManagerILy461330280054EE
 23CKV3ResourceTypeManagerILy7525622121325489782EE
 23CKV3ResourceTypeManagerILy7525640765879247222EE
 23CNmBoneMaskSelectorNode
@@ -532,6 +539,7 @@
 25CSequenceAnimNodeInstance
 25CSingleFramePoseOperation
 25CStanceOverrideUpdateNode
+25CTargetSelectorUpdateNode
 25CWayPointHelperUpdateNode
 25IAnimGraphSettingsManager
 25IAnimStateMachineInstance
@@ -552,6 +560,7 @@
 26CMovementComponentInstance
 26CNmFixedWeightBoneMaskNode
 26CNmStateEventConditionNode
+26COrientationWarpUpdateNode
 26CSetParameterActionUpdater
 26CSolveIKChainPoseOperation
 26CSpaceAgnosticBoneAccessor
@@ -678,6 +687,7 @@
 38CAnimationGraphVisualizerPrimitiveBase
 38CDefaultKV3TransferResourceTypeManagerILy125762924277366EE
 38CDefaultKV3TransferResourceTypeManagerILy31641111637094006EE
+38CDefaultKV3TransferResourceTypeManagerILy461330280054EE
 38CDefaultKV3TransferResourceTypeManagerILy7525622121325489782EE
 39CCurrentRotationVelocityMetricEvaluator
 40CNmCurrentSyncEventPercentageThroughNode
@@ -703,6 +713,7 @@
 :NetworkedCycle:CyclesPerSecond
 :NetworkedCycle:ResetCount
 :m_currentChoice
+:m_currentIndex
 :m_currentIndexStartTime
 :m_currentStateStartTime
 :m_currentTransitionIndex
@@ -716,6 +727,7 @@
 <Invalid State>
 <Unknown>
 <invalid>
+<m_CtrlHash
 <map_key>
 <map_value>
 <missing 
@@ -732,10 +744,12 @@
 @Failed to select a valid option!
 @V@const char* Reflection::Internal::GetFuncName() [with T = CMovementComponentInstance]
 @const char* Reflection::Internal::GetFuncName() [with T = IPairedSequenceComponentInstance]
+A 3-bone solver that uses two 2-bone solves under the hood to emulate a dog leg.
 AE_ACTION_ALLOW_COMBO
 AE_ACTION_PREVENT_COMBO
 AE_ALYX_EMPTOOL_ATTACHMENT
 AE_ALYX_EMPTOOL_SEQUENCE
+AE_ANIMGRAPH_WARP_SECTION_BEGIN
 AE_CL_FOOTSTEP_LEFT
 AE_CL_FOOTSTEP_RIGHT
 AE_CL_MFOOTSTEP_LEFT
@@ -855,6 +869,7 @@ BC5_SNORM
 BC5_TYPELESS
 BC5_UNORM
 BLEND_PREALIGNED|
+BWrite Cached Pose
 Bad FLC data for resource '%s': %s\n
 Bad KV3 data for resource '%s': %s\n
 Bad KV3 data in control block for '%s': %s\n
@@ -1009,14 +1024,17 @@ Capture All Bones
 Capture Selected Bones
 Child 1
 Child 2
+Child graph resource failed to load or is invalid: %s
 ChoiceNode
 ChoreoNode
 Class does not allow allocation from its schema binding
 Class does not allow construction from its schema binding
+Classic perlin 2-bone solver
 Client Simulate
 Cloth Settings Tag
 Conditionally Allowed
 Configuration
+Considered Option
 Couldn't find bone mask with ID: %s
 Couldn't load KV3 for resource: %s
 Current LOD
@@ -1024,6 +1042,7 @@ Current Rotation Velocity
 Current Velocity
 CurrentStateID
 CycleControlClipNode
+Cyclic Coordinate Descent solver - A solver that can handle any number of bones and works by iteratively solving for the rotation of each bone in the chain.
 D16_UNORM
 D24_UNORM_S8_UINT
 D32_FLOAT
@@ -1064,7 +1083,6 @@ Disables Handshake
 Disallowed variable name: %s
 Distance Remaining
 Dividing by zero in CNmFloatMathNode
-Dog Leg (3 Bone)
 Dog Leg (3-Bone)
 Dpad Down
 Dpad Left
@@ -1079,6 +1097,7 @@ Enable Networking
 Enable Replication
 End Bone
 End Effector Post Solve
+End Effector Rotation Behaviour
 Ending
 Entity_Facing_Mode_Use_Path
 Enum Parameter
@@ -1185,6 +1204,7 @@ HELPER_BONE
 Hinge Axis
 HitReact:m_hitCount
 HitReact:m_resetCount
+However the end effector ends up after the solve, it's rotation will remain unchanged.
 I could not work out what I was expecting, like so many of us these days!\n
 ID_CHAR
 IK Chains
@@ -1212,11 +1232,13 @@ Invalid target detected for warp node!
 Invalid uuid string detected
 IsSet()
 IsTagActive
+IsTagActiveThisFrame
 JIGGLE_BONE
 JiggleBone:m_resetCount
+KNegative duration is not supported!
 KV3 save transfer failed: %s
 KeyValues3
-L>PerTickSettings
+L>Overlay Blend
 L?animgraph_footlock_ground_roll
 LINE_CONTINUATION
 LITERAL_FALSE
@@ -1237,18 +1259,19 @@ Linking WeightLists To Data Channels :: %s\n
 List of animations to choose from
 LoadKV3Object error: %s\n
 Local Space
+Look At Target Forward
 Look Component
 Look Direction
 Look Distance
 Look Heading
 Look Heading (World)
+Look Heading Normalized
 Look Pitch
 Look Pitch (World)
 Look Target World Space
 LookAtList
 LookData
 MAtomicTransfersAsPlainString
-MGetKV3ClassDefaults
 MKV3TransferName
 ML_COMMENT
 MPropertyArrayElementNameKey
@@ -1259,24 +1282,24 @@ MPropertyAttributeChoiceName
 MPropertyAttributeEditor
 MPropertyAttributeRange
 MPropertyAutoRebuildOnChange
-MPropertyDescription
 MPropertyEditClassAsString
 MPropertyElementNameFn
-MPropertyFriendlyName
 MPropertyGroupName
 MPropertyHideField
 MPropertyReadOnly
 MPropertySortPriority
-MPropertySuppressEnumerator
 MPropertySuppressField
 MVDataOverlayType
 MVDataRoot
 Magnitude Only
+Maintain Parent Orientation
 Managers
 Manual Direction
 Manual Facing Direction
 Manual Position
 Manual Target World Space
+Match Target Forward Only
+Match Target Orientation
 Material Attribute Tag
 Max IK Rotation Error
 Max IK Translation Error
@@ -1289,6 +1312,7 @@ Mirror
 Mismatch parameter type for child graph '%s', parent type: '%s', child type: '%s'
 Mismatched Token Exception
 Mismatched set
+Mismatched skeleton detected for specified clip (%s), this will be ignored.
 Missing required transfer interface: %s
 Missing token
 Missing token %s
@@ -1390,6 +1414,7 @@ N10Reflection6Detail14CTypeInfoMakerI16CBlendUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI16CFootFallAnimTagEE
 N10Reflection6Detail14CTypeInfoMakerI16CMoverUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI16CParticleAnimTagEE
+N10Reflection6Detail14CTypeInfoMakerI16CUnaryUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI16IFootFallAnimTagEE
 N10Reflection6Detail14CTypeInfoMakerI16IParticleAnimTagEE
 N10Reflection6Detail14CTypeInfoMakerI16ResetCycleOptionEE
@@ -1451,6 +1476,7 @@ N10Reflection6Detail14CTypeInfoMakerI21CMotionMetricInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI21CPathHelperUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI21CSpeedScaleUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI21CStopAtGoalUpdateNodeEE
+N10Reflection6Detail14CTypeInfoMakerI21CTargetWarpUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI21CTaskHandshakeAnimTagEE
 N10Reflection6Detail14CTypeInfoMakerI21CTurnHelperUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI21CVirtualAnimParameterEE
@@ -1526,6 +1552,7 @@ N10Reflection6Detail14CTypeInfoMakerI25CRagdollComponentInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI25CSequenceAnimNodeInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI25CSingleFramePoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI25CStanceOverrideUpdateNodeEE
+N10Reflection6Detail14CTypeInfoMakerI25CTargetSelectorUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI25CWayPointHelperUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI25IAnimStateMachineInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI25IFootLockAnimNodeInstanceEE
@@ -1538,6 +1565,7 @@ N10Reflection6Detail14CTypeInfoMakerI26CEnumAnimParameterInstanceEE
 N10Reflection6Detail14CTypeInfoMakerI26CFollowTargetPoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI26CFootStepTriggerUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI26CMovementComponentInstanceEE
+N10Reflection6Detail14CTypeInfoMakerI26COrientationWarpUpdateNodeEE
 N10Reflection6Detail14CTypeInfoMakerI26CSetParameterActionUpdaterEE
 N10Reflection6Detail14CTypeInfoMakerI26CSolveIKChainPoseOperationEE
 N10Reflection6Detail14CTypeInfoMakerI26IAnimParameterListInstanceEE
@@ -1612,10 +1640,12 @@ N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI11EditTextBoxEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI12EditCheckBoxEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI12EditComboBoxEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI12SortPriorityEEE
+N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI15NoTabNavigationEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI16EditBinaryChoiceEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI20EditMultilineTextBoxEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI20HideAddRemoveButtonsEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI21RefreshObjectOnChangeEEE
+N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI28ChainValueChangesToSelectionEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI4EditEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI4FontEEE
 N10Reflection6Detail14CTypeInfoMakerIN9Attribute2UI5EmbedEEE
@@ -1877,7 +1907,6 @@ NEGATIVE_TOK
 NEWLINE
 Name of the animation
 Name of the layer
-Negative duration is not supported!
 Negative speed scale is not supported!
 NetVarConfigIndex
 Never Network
@@ -1905,6 +1934,7 @@ One Bone + Translate
 Only wrote %d (of %d) values when saving map!
 Orientation Warp failed since there is not enough time left to warp or we're past the warp event!
 Orientation warp failed since there wasnt a valid target direction set!
+OrientationWarpNodeInstanceData_t
 Original
 Original Foot 
 Original Joint
@@ -1931,6 +1961,7 @@ Parser encountered %d error(s)
 Particle System
 Particle Tag
 Per-Choice Blend Times
+PerTickSettings
 PerTickSettings_t
 PerVertexLighting
 Plane normal
@@ -2012,6 +2043,7 @@ RESOURCE_TYPE_ANIMGRAPH
 RESOURCE_TYPE_NM_CLIP
 RESOURCE_TYPE_NM_GRAPH
 RESOURCE_TYPE_NM_GRAPH_VARIATION
+RESOURCE_TYPE_NM_IKRIG
 RESOURCE_TYPE_NM_SKELETON
 RESOURCE_TYPE_SEQUENCE_GROUP_INTERNAL
 Ragdoll Component
@@ -2041,8 +2073,7 @@ SINGLE_QUOTE_CHAR
 STRING_CHAR
 Scale Animation Motion
 Scale Error Range
-SelectorInstanceData_t
-SelectorNode
+Selected Option
 Sequence Finished Tag
 Sequence out of range: %d
 Sequence( %s, %.3f ) : %.3f
@@ -2208,11 +2239,18 @@ Target Coords
 Target Move Heading
 Target Move Speed
 Target Parent
+Target Selector Move Direction
+Target Selector Target
 Target Source
+Target Warp Node
 Target warp exceed accurate sampling error threshold! Switching to inaccurate sampling!
+TargetSelectorInstanceData_t
+TargetSelectorNode
 Task Handshake Tag
 TernaryConditional
 TextBlock()
+The targets forward vector will be used to build a look orientation while preserving the rotation of the end effector after the solve as much as possible.
+The targets orientation will be stamped onto the end effector.
 Tilt bone after tilt.
 Tilt delta from up offset
 Time Remaining
@@ -2252,6 +2290,7 @@ Unwanted token '%s' %s
 UpdateContext
 Use Child1
 Use Child2
+Use the parent bone's orientation as the end effector's orientation.
 User Defined Values
 VDataModelAnim( m_sModelName; include_deltas )
 V_uuid_t
@@ -2281,7 +2320,6 @@ X (Red   / Forward)
 X24_TYPELESS_G8_UINT
 X32_TYPELESS_G8X24_UINT
 Y (Green / Left)
-Y?Write Cached Pose
 Z (Blue  / Up)
 Z18MakeNetVarCallbackI15CAnimationLayerfESt8functionIFvR18CAnimUpdateContextT0_EE17CPackedDataOffsetIT_EMS8_FvS3_S4_EEUlS3_fE_
 Z18MakeNetVarCallbackI15CAnimationLayeriESt8functionIFvR18CAnimUpdateContextT0_EE17CPackedDataOffsetIT_EMS8_FvS3_S4_EEUlS3_iE_
@@ -2305,6 +2343,7 @@ Z18MakeNetVarCallbackI25CDirectPlaybackUpdateNodeyESt8functionIFvR18CAnimUpdateC
 Z18MakeNetVarCallbackI25CMotionMatchingUpdateNodefESt8functionIFvR18CAnimUpdateContextT0_EEPKT_MS7_KFvS3_S4_EEUlS3_fE_
 Z18MakeNetVarCallbackI25CMotionMatchingUpdateNodehESt8functionIFvR18CAnimUpdateContextT0_EEPKT_MS7_KFvS3_S4_EEUlS3_hE_
 Z18MakeNetVarCallbackI25CMovementComponentUpdater5Vec3DIfEESt8functionIFvR18CAnimUpdateContextT0_EEPKT_MS9_KFvS5_S6_EEUlS5_S2_E_
+Z18MakeNetVarCallbackI25CTargetSelectorUpdateNodehESt8functionIFvR18CAnimUpdateContextT0_EEPKT_MS7_KFvS3_S4_EEUlS3_hE_
 Z18MakeNetVarCallbackI27CDirectionalBlendUpdateNodefESt8functionIFvR18CAnimUpdateContextT0_EEPKT_MS7_KFvS3_S4_EEUlS3_fE_
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy1902474102E18CSequenceGroupDataE15AllocateAndLoadER23CKV3TransferLoadContextPK21ResourceBindingBase_tP29IRD_RegisterResourceDataUtilsE15CAllocatorUtils
 ZN37CTypesafeIntrospectedToKV3TypeManagerILy1902474102E18CSequenceGroupDataE24DeallocateDestroyCleanupEPvP25IResourceDeallocatorUtilsE17CDeallocatorUtils
@@ -2325,7 +2364,6 @@ Zero input vector for info node!
 \t%d:%d - %s (skipped)\n
 \t%d:%d - %s\n
 \tError\n
-_RagdollPoseControl
 __ctype_toupper_loc
 _autoreset
 activity
@@ -2394,6 +2432,7 @@ const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::AnimGra
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::AnimGraph::EditParameterValue]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::AutoExpand]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::AutoRefresh]
+const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::ChainValueChangesToSelection]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::EditBinaryChoice]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::EditCheckBox]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::EditComboBox]
@@ -2407,6 +2446,7 @@ const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::Embed]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::Font]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::Hidden]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::HideAddRemoveButtons]
+const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::NoTabNavigation]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::ReadOnly]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::RefreshObjectOnChange]
 const char* Reflection::Internal::GetFuncName() [with T = Attribute::UI::SortPriority]
@@ -2536,6 +2576,7 @@ const char* Reflection::Internal::GetFuncName() [with T = CMotionNode]
 const char* Reflection::Internal::GetFuncName() [with T = CMovementComponentUpdater]
 const char* Reflection::Internal::GetFuncName() [with T = CMovementHandshakeAnimTag]
 const char* Reflection::Internal::GetFuncName() [with T = CMoverUpdateNode]
+const char* Reflection::Internal::GetFuncName() [with T = COrientationWarpUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CPairedSequenceComponentInstance]
 const char* Reflection::Internal::GetFuncName() [with T = CPairedSequenceComponentUpdater]
 const char* Reflection::Internal::GetFuncName() [with T = CPairedSequenceUpdateNode]
@@ -2578,6 +2619,8 @@ const char* Reflection::Internal::GetFuncName() [with T = CStringAnimTag]
 const char* Reflection::Internal::GetFuncName() [with T = CSubtractPoseOperation]
 const char* Reflection::Internal::GetFuncName() [with T = CSubtractUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CSymbolAnimParameter]
+const char* Reflection::Internal::GetFuncName() [with T = CTargetSelectorUpdateNode]
+const char* Reflection::Internal::GetFuncName() [with T = CTargetWarpUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CTaskHandshakeAnimTag]
 const char* Reflection::Internal::GetFuncName() [with T = CTaskStatusAnimTag]
 const char* Reflection::Internal::GetFuncName() [with T = CTimeRemainingMetricEvaluator]
@@ -2586,6 +2629,7 @@ const char* Reflection::Internal::GetFuncName() [with T = CTransitionUpdateData]
 const char* Reflection::Internal::GetFuncName() [with T = CTurnHelperUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CTwoBoneIKPoseOperation]
 const char* Reflection::Internal::GetFuncName() [with T = CTwoBoneIKUpdateNode]
+const char* Reflection::Internal::GetFuncName() [with T = CUnaryUpdateNode]
 const char* Reflection::Internal::GetFuncName() [with T = CUtlString]
 const char* Reflection::Internal::GetFuncName() [with T = CUtlVector<CGlobalSymbol>]
 const char* Reflection::Internal::GetFuncName() [with T = CUtlVector<CSmartPtr<CAnimComponentInstance> >]
@@ -2681,6 +2725,7 @@ game:tools/images/animgraph_editor/animgraph_icon_statemachine.png
 game:tools/images/animgraph_editor/animgraph_parameter_base.png
 game:tools/images/animgraph_editor/animgraph_parameter_virtual_base.png
 game:tools/images/animgraph_editor/animgraph_tag_base.png
+heatconductivity
 hsequence
 impactHardThreshold
 impacthard
@@ -2729,7 +2774,6 @@ m_bUseCompressedNormalTangent
 m_bUseNewPoleVectorForAxis
 m_bUseShadowFastPath
 m_choicePreviousCycle
-m_currentIndex
 m_currentSelection
 m_currentSequenceData
 m_currentSequenceIndex
@@ -2752,6 +2796,7 @@ m_flPredictionScale
 m_flPrevCycleUnclamped
 m_flSlopeIncoming
 m_flSlopeOutgoing
+m_flSmoothDampingSpeed
 m_flStartHeadingWS
 m_flTargetFacing
 m_flTimeInState
@@ -2794,6 +2839,7 @@ m_vMovement
 m_vPrevFacingPosition
 m_vSlopeNormal
 m_vTransitionVelocityDeltaWS
+m_vUpOverride
 m_vVelocityMS
 m_vVelocityWS
 m_vWaypointPosWS

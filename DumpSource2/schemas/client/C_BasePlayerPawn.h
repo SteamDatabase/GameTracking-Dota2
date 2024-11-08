@@ -25,5 +25,6 @@ class C_BasePlayerPawn : public C_BaseCombatCharacter
 	int32 m_nLastExecutedCommandNumber;
 	int32 m_nLastExecutedCommandTick;
 	CHandle< CBasePlayerController > m_hController;
+	CHandle< CBasePlayerController > m_hDefaultController;
 	bool m_bIsSwappingToPredictableController;
 };

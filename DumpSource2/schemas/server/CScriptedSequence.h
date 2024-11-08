@@ -34,6 +34,7 @@ class CScriptedSequence : public CBaseEntity
 	bool m_bDisableNPCCollisions;
 	bool m_bKeepAnimgraphLockedPost;
 	bool m_bDontAddModifiers;
+	bool m_bDisableAimingWhileMoving;
 	float32 m_flRadius;
 	float32 m_flRepeat;
 	float32 m_flPlayAnimFadeInTime;

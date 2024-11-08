@@ -8,4 +8,5 @@ enum EOverworldEncounterRewardStyle : uint32_t
 	k_eOverworldEncounterRewardStyle_Quest = 5,
 	k_eOverworldEncounterRewardStyle_ClaimCreditsRange = 6,
 	k_eOverworldEncounterRewardStyle_Custom = 10,
+	k_eOverworldEncounterRewardStyle_RepeatableChoice = 11,
 };

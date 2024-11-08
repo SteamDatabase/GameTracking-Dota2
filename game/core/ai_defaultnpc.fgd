@@ -16,6 +16,12 @@
 		2 : "Ragdoll and remain ragdoll"
 	]
 
+	spawn_hunting_nearest_player(choices) : "Spawn Hunting Nearest Player?" : 0 =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
 	// Outputs
 	output OnFoundPlayer(string) : "Fired when this NPC establishes line of sight to its enemy, and that enemy is a player (outputs player entity)."
 	output OnHearPlayer(void) : "Fired when this NPC hears the player."
@@ -128,6 +134,9 @@
 	input ClearAllOutputs(void) : "Obliterate every output that this NPC has."
 
 	input ReviveCompleted(void) : "Force the NPC to revive itself from an incapacitated state. "
+
+	input EnableStandoff(float) : "Enable the Standoff behavior. Can be given a radius that the NPC is allowed to move within."
+	input DisableStandoff(float) : "Disable the Standoff behavior. If given a duration, it will automatically re-enable after the time has passed."
 
 	output OnWeaponPickup(void) : "Fires when this NPC picks a weapon off the ground or a gun rack."
 ]
@@ -361,6 +370,7 @@
 	input MoveToPosition(void) : "Summons an NPC to the script location. They will play their scripted idle (or ACT_IDLE if none is specified) until BeginSequence is triggered."
 	input CancelSequence(void) : "Stops the scripted sequence. If fired after a sequence starts, this input will not take effect until the NPC finishes playing the scripted action animation."
 	input SetActionSequence(string) : "Sets the name of the action sequence that will play when the action sequence plays. Can be used for branching sequences."
+	input ForceTarget(string) : "Forces a particular NPC to be the target of the scripted sequence"
 
 	// Outputs
 	output OnBeginSequence(void) : "Fires when the scripted sequence begins playing."
@@ -400,7 +410,13 @@
 	output LeaveTarget(void) : "Fires when NPC leaves this target"
 ]
 
-@PointClass base(BaseScripted, DXLevelChoice) editormodel("models/editor/scripted_sequence.vmdl") tags( Choreo ) sphere(m_flRadius) sequenceList( entity, "m_iszEntity" ) = scripted_sequence :
+@PointClass 
+	base(BaseScripted, DXLevelChoice)
+	editormodel("models/editor/scripted_sequence.vmdl") 
+	tags( Choreo ) 
+	sphere(m_flRadius)
+	sequenceList( entity, "m_iszEntity" ) 
+	= scripted_sequence:
 	"Grabs an NPC and makes them play a specified set of animations. The NPC can be told to move to the scripted sequence position or can "+
 	"be told to play the script wherever they currently are. "+
 	"Multiple scripted sequences of the same name (or sync group, if specified) will frame-synchronize in the action animation once all the actors have moved to position. "+
@@ -528,5 +544,7 @@
 
 	move_while_using_target(target_destination) : "Move While Using Target" : "" : "An optional entity that marks where to move to while using the ability."
 
-	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optionnal per NPC override of the same parameter defined in the lock trigger."
+	npc_lock_delay(float) : "NPC Lock Delay" : "0" : "Optional per NPC override of the same parameter defined in the lock trigger."
+
+	m_bAddIfMissing(boolean) : "Add If Missing?" : "No" : "If yes, the ability will be temporarily added to the NPC so they can perform it. It will be removed after the ability has been performed."
 ]

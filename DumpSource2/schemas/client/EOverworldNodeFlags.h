@@ -7,4 +7,5 @@ enum EOverworldNodeFlags : uint32_t
 	Shortcut = 16,
 	InvisibleUntilNearby = 32,
 	Secret = 64,
+	FinalNode = 128,
 };

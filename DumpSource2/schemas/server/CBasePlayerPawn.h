@@ -19,6 +19,7 @@ class CBasePlayerPawn : public CBaseCombatCharacter
 	bool m_fInitHUD;
 	CAI_Expresser* m_pExpresser;
 	CHandle< CBasePlayerController > m_hController;
+	CHandle< CBasePlayerController > m_hDefaultController;
 	float32 m_fHltvReplayDelay;
 	float32 m_fHltvReplayEnd;
 	CEntityIndex m_iHltvReplayEntity;

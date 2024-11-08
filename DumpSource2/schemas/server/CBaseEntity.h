@@ -6,7 +6,7 @@ class CBaseEntity : public CEntityInstance
 	int32 m_iCurrentThinkContext;
 	GameTick_t m_nLastThinkTick;
 	bool m_bDisabledContextThinks;
-	CBitVec< 64 > m_isSteadyState;
+	CTypedBitVec< 64 > m_isSteadyState;
 	float32 m_lastNetworkChange;
 	CUtlVector< ResponseContext_t > m_ResponseContexts;
 	CUtlSymbolLarge m_iszResponseContext;

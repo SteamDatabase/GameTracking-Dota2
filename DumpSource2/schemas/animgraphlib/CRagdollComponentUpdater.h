@@ -1,6 +1,7 @@
 class CRagdollComponentUpdater : public CAnimComponentUpdater
 {
 	CUtlVector< CAnimNodePath > m_ragdollNodePaths;
+	CUtlVector< CAnimNodePath > m_followAttachmentNodePaths;
 	CUtlVector< int32 > m_boneIndices;
 	CUtlVector< CUtlString > m_boneNames;
 	CUtlVector< WeightList > m_weightLists;

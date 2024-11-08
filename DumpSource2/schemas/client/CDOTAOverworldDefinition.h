@@ -10,7 +10,7 @@ class CDOTAOverworldDefinition
 	uint32 m_unMapWidth;
 	uint32 m_unMapHeight;
 	CUtlString m_sMapVisualsXmlPath;
-	OverworldNodeID_t m_unStartNodeID;
+	CUtlVector< OverworldNodeID_t > m_vecStartNodeIds;
 	OverworldNodeID_t m_unEndNodeID;
 	CUtlString m_sVisualNovelName;
 	CUtlString m_sTokenLocStringPrefix;

@@ -30,6 +30,9 @@ class PhysFeModelDesc_t
 	CUtlVector< CTransform > m_InitPose;
 	CUtlVector< FeRodConstraint_t > m_Rods;
 	CUtlVector< FeTwistConstraint_t > m_Twists;
+	CUtlVector< FeHingeLimit_t > m_HingeLimits;
+	CUtlVector< FeAntiTunnelProbe_t > m_AntiTunnelProbes;
+	CUtlVector< uint16 > m_AntiTunnelTargetNodes;
 	CUtlVector< FeAxialEdgeBend_t > m_AxialEdges;
 	CUtlVector< float32 > m_NodeInvMasses;
 	CUtlVector< FeCtrlOffset_t > m_CtrlOffsets;
@@ -100,6 +103,7 @@ class PhysFeModelDesc_t
 	float32 m_flAddWorldCollisionRadius;
 	float32 m_flDefaultVolumetricSolveAmount;
 	float32 m_flMotionSmoothCDT;
+	float32 m_flLocalDrag1;
 	uint16 m_nRodVelocitySmoothIterations;
 	uint16 m_nQuadVelocitySmoothIterations;
 };

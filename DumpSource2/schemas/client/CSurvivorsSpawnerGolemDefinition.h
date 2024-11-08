@@ -1,0 +1,3 @@
+class CSurvivorsSpawnerGolemDefinition : public CSurvivorsSpawnerDefinition
+{
+};

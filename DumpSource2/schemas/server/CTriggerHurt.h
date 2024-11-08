@@ -5,7 +5,7 @@ class CTriggerHurt : public CBaseTrigger
 	float32 m_flDamageCap;
 	GameTime_t m_flLastDmgTime;
 	float32 m_flForgivenessDelay;
-	int32 m_bitsDamageInflict;
+	DamageTypes_t m_bitsDamageInflict;
 	int32 m_damageModel;
 	bool m_bNoDmgForce;
 	Vector m_vDamageForce;

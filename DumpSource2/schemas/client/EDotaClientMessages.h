@@ -108,4 +108,5 @@ enum EDotaClientMessages : uint32_t
 	DOTA_CM_SelectOverworldID = 812,
 	DOTA_CM_RerollNeutralItem = 813,
 	DOTA_CM_RoshanTimer = 814,
+	DOTA_CM_SuggestItemPreference = 815,
 };

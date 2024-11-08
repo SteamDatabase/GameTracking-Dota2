@@ -13,6 +13,7 @@ class C_BaseAnimatingController : public CSkeletonAnimationController
 	bool m_bNetworkedAnimationInputsChanged;
 	uint8 m_nPrevNewSequenceParity;
 	uint8 m_nPrevResetEventsParity;
+	bool m_bPlaybackRateLocked;
 	int32 m_nNewSequenceParity;
 	int32 m_nResetEventsParity;
 	AnimLoopMode_t m_nAnimLoopMode;

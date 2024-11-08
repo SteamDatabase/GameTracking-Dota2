@@ -44,6 +44,7 @@ class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 	CountdownTimer m_MultipleHeroKillTimer;
 	CountdownTimer m_MultipleLastHitTimer;
 	int32 m_iMultipleKillCount;
+	float32 m_flKillStreakStartTime;
 	bool m_bDisableWearables;
 	CHandle< CDOTAWearableItem >[102] m_hTogglableWearable;
 	CDOTA_BaseNPC_Hero::KillInfo_t m_KillInfo;

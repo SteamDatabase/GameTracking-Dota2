@@ -5,5 +5,5 @@ class C_PhysPropClientside : public C_BreakableProp
 	float32 m_inertiaScale;
 	Vector m_vecDamagePosition;
 	Vector m_vecDamageDirection;
-	int32 m_nDamageType;
+	DamageTypes_t m_nDamageType;
 };
