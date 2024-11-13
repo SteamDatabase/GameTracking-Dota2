@@ -1,7 +1,7 @@
 class CDOTA_Modifier_Luna_Eclipse : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hTarget;
-	int32 radius;
+	float32 radius;
 	int32 beams;
 	int32 hit_count;
 	int32 m_iBeamDamage;

@@ -5,7 +5,7 @@ class CDOTA_Modifier_Snapfire_FiresnapCookie_ShortHop : public CDOTA_Buff
 	int32 jump_horizontal_distance;
 	float32 pre_land_anim_time;
 	float32 landing_gesture_duration;
-	int32 impact_radius;
+	float32 impact_radius;
 	int32 impact_damage;
 	float32 impact_stun_duration;
 	float32 m_flStartZ;
