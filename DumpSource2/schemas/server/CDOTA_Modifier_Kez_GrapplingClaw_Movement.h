@@ -21,6 +21,7 @@ class CDOTA_Modifier_Kez_GrapplingClaw_Movement : public CDOTA_Buff
 	int32 bonus_flat_lifesteal;
 	int32 lifesteal_pct;
 	int32 creep_lifesteal_reduction_pct;
+	int32 max_distance_break;
 	CHandle< CBaseEntity > m_hTarget;
 	bool m_bDidAttack;
 	bool m_bStartedAnimation;
