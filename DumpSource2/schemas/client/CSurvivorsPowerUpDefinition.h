@@ -10,11 +10,8 @@ class CSurvivorsPowerUpDefinition
 	bool m_bIsInnate;
 	bool m_bIsGold;
 	bool m_bRollable;
-	CUtlVector< CSurvivorsUpgradeDefinition > m_vecMinorUpgradeChoices;
 	bool m_bIsShardUpgradeable;
 	bool m_bIsScepterUpgradeable;
-	CUtlVector< CSurvivorsUpgradeDefinition > m_vecAuthoredUpgradeChoices;
-	CSurvivorsUpgradeDefinition m_scepterUpgradeDefinition;
 	CPanoramaImageName m_sImage;
 	CUtlString m_sSource;
 	CPanoramaImageName m_sHeroImage;
@@ -23,6 +20,9 @@ class CSurvivorsPowerUpDefinition
 	CUtlString m_sLocShardAbilityDesc;
 	CUtlString m_sLocScepterAbilityDesc;
 	CUtlString m_sLocHeroName;
+	CUtlVector< CSurvivorsUpgradeDefinition > m_vecMinorUpgradeChoices;
+	CUtlVector< CSurvivorsUpgradeDefinition > m_vecAuthoredUpgradeChoices;
+	CSurvivorsUpgradeDefinition m_scepterUpgradeDefinition;
 	bool m_bModifierParticleUsesOverheadOffset;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sModifierParticle;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sStunParticle;
