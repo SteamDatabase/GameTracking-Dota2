@@ -14,6 +14,7 @@ class CSurvivorsHeroDefinition
 	float32 m_flCollisionHeight;
 	float32 m_flTriggerCollisionRadiusPadding;
 	CUtlString m_pszPlayerHitSoundEvent;
+	CUtlString m_sLocDisplayName;
 	CUtlVector< item_definition_index_t > m_vecEconItems;
 	style_index_t m_unStyleIndex;
 	CUtlVector< CSurvivorsAttributeValue > m_vecBaseAttributes;
