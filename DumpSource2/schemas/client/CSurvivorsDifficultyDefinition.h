@@ -18,4 +18,5 @@ class CSurvivorsDifficultyDefinition
 	CUtlVector< CSurvivorsSpawnerDefinition > m_vecAdditionalEnemySpawners;
 	CUtlVector< CSurvivorsEnemyEventDefinition > m_vecAdditionalEnemyEvents;
 	CUtlVector< SurvivorsPowerUpID_t > m_vecAdditionalStartingPowerUps;
+	CUtlVector< float32 > m_vecOverrideImperiaEnrageHealthThresholds;
 };
