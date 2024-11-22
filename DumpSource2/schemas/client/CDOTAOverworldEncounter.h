@@ -9,4 +9,5 @@ class CDOTAOverworldEncounter
 	CUtlVector< CDOTAOverworldEncounterReward > m_vecRewards;
 	CUtlString m_sDefaultDialogue;
 	KeyValues3 m_kvCustomData;
+	int32 m_nLeaderboardCount;
 };

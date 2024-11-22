@@ -9,7 +9,7 @@ enum EArtyOrderFlag : uint32_t
 	k_EArtyOrderFlag_PrevWeapon = 32,
 	k_EArtyOrderFlag_FireStart = 64,
 	k_EArtyOrderFlag_FireStop = 128,
-	k_EArtyOrderFlag_Turbo = 256,
+	k_EArtyOrderFlag_FineControl = 256,
 	k_EArtyOrderFlag_PowerUp = 512,
 	k_EArtyOrderFlag_PowerDown = 1024,
 	k_EArtyOrderFlag_MoveUp = 2048,
