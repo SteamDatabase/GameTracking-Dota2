@@ -1,6 +1,7 @@
 class DOTAAbilityDefinition_t
 {
 	char* m_pszAbilityName;
+	char* m_pszBaseAbilityName;
 	char* m_pszTextureName;
 	char* m_pszSharedCooldownName;
 	char* m_pszKeyOverride;
