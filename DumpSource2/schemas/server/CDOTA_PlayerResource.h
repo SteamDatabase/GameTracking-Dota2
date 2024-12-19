@@ -77,6 +77,7 @@ class CDOTA_PlayerResource : public CBaseEntity
 	int32[24] m_iObserverWardsDestroyed;
 	int32[24] m_iReliableGoldEarned;
 	int32[24] m_iGoldLossPrevented;
+	int32[24] m_iMaxHatStacks;
 	CUtlVector< CHandle< CDOTA_Unit_Courier > >[15] m_hTeamCouriers;
 	CUtlVector< CHandle< CDOTA_Unit_Courier > >[64] m_hPlayerCouriers;
 	float32[15] m_flAvailableLaneGold;

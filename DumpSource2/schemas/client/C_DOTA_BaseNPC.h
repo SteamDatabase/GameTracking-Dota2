@@ -44,7 +44,7 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	int32 m_iBotDebugData;
 	bool m_bIsIllusion;
 	bool m_bHasClientSeenIllusionModifier;
-	CHandle< C_BaseEntity >[35] m_hAbilities;
+	CHandle< C_BaseEntity >[40] m_hAbilities;
 	float32 m_flInvisibilityLevel;
 	float32 m_flHullRadius;
 	float32 m_flCollisionPadding;

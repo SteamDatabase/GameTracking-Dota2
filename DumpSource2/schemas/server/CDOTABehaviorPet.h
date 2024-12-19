@@ -19,6 +19,7 @@ class CDOTABehaviorPet : public CDOTABehaviorCompanion
 	CountdownTimer m_CarryItemTimer;
 	CountdownTimer m_PickupDelayTimer;
 	CountdownTimer m_LevelupCheckTimer;
+	CountdownTimer m_RareIdleTimer;
 	bool m_bIsEmoting;
 	CHandle< CDOTA_BaseNPC > m_hEmoteTarget;
 	CountdownTimer m_EmoteTimer;

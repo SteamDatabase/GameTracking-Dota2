@@ -101,7 +101,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	int32 m_iGoldBountyMax;
 	PlayerID_t m_nFarmClaimPlayerID;
 	PlayerID_t m_nPlayerOwnerID;
-	CUtlSymbolLarge[35] m_iszAbilityList;
+	CUtlSymbolLarge[40] m_iszAbilityList;
 	int32 m_iAttackDamageType;
 	bool m_bIsIdle;
 	bool m_bHold;
@@ -137,7 +137,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	uint64 m_iIsControllableByPlayer64;
 	PlayerID_t m_nControllingPlayerID;
 	bool m_bRunAIWhenControllableByPlayer;
-	CHandle< CBaseEntity >[35] m_hAbilities;
+	CHandle< CBaseEntity >[40] m_hAbilities;
 	CUtlVector< CHandle< CBaseEntity > > m_associatedEmptyAbilities;
 	CHandle< CBaseEntity > m_hActiveAbility;
 	Vector m_vCursorLocation;
