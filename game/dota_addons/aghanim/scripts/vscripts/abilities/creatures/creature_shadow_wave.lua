@@ -128,7 +128,7 @@ function creature_shadow_wave:DoHealAndDamage( hTarget )
 						attacker = self:GetCaster(), 
 						damage = self.damage,
 						damage_type = DAMAGE_TYPE_PHYSICAL,
-						damage_flags = DOTA_DAMAGE_FLAG_BYPASSES_BLOCK,
+						damage_flags = DOTA_DAMAGE_FLAG_BYPASSES_PHYSICAL_BLOCK,
 						ability = self
 					}
 					ApplyDamage( damage )
