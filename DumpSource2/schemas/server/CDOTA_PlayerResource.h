@@ -47,11 +47,14 @@ class CDOTA_PlayerResource : public CBaseEntity
 	int32[24] m_iTotalCreepDamageTaken;
 	int32[24] m_iTotalHeroDamageTaken;
 	int32[24] m_iRank;
+	int32[24] m_iRankUncertainty;
 	bool[24] m_bRankCalibrated;
 	bool[24] m_bLowPriority;
 	int32[24] m_nWins;
 	int32[24] m_nLosses;
 	int32[24] m_nSmurfCategory;
+	int32[24] m_nBehaviorScore;
+	int32[24] m_nCommScore;
 	bool[24] m_bWasHeroPickDotaPlusSuggestion;
 	GameTime_t[24] m_flLastActiveTime;
 	float32[24] m_flIdleTime;
