@@ -16,5 +16,6 @@ class CSurvivorsSpawnerDefinition
 	CUtlString m_sSpawnInfoTargetName;
 	CUtlString m_sMinimapIconClass;
 	float32 m_flPerpendicularWallSpacing;
+	bool m_bIgnoreDifficultySpawnMultiplier;
 	ESurvivorsEnemySpawnPositionsLayer m_eSpawnPositionsLayer;
 };
