@@ -1,4 +1,4 @@
-class CDotaSubquestAbilityCastCount : public CDotaSubquestBase
+class CDotaSubquestAbilityCastCount
 {
 	int32 m_sAbilityNameSymbol;
 	int32 m_nTargetCastCount;

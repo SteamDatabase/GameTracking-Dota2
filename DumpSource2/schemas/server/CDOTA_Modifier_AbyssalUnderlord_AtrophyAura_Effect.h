@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AbyssalUnderlord_AtrophyAura_Effect : public CDOTA_Buff
+class CDOTA_Modifier_AbyssalUnderlord_AtrophyAura_Effect
 {
 	int32 damage_reduction_pct;
 	float32 bonus_damage_duration;

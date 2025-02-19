@@ -1,4 +1,4 @@
-class CDOTA_Ability_Medusa_MysticSnake : public CDOTABaseAbility
+class CDOTA_Ability_Medusa_MysticSnake
 {
 	float32 radius;
 	int32 snake_jumps;

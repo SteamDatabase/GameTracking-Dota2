@@ -1,3 +1,3 @@
-class CDOTA_Ability_Furion_SpiritOfTheForest : public CDOTABaseAbility
+class CDOTA_Ability_Furion_SpiritOfTheForest
 {
 };

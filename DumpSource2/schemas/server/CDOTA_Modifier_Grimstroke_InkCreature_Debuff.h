@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Grimstroke_InkCreature_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Grimstroke_InkCreature_Debuff
 {
 	float32 m_flCurrentArmorReduction;
 	CHandle< CBaseEntity > m_hLatchedCreature;

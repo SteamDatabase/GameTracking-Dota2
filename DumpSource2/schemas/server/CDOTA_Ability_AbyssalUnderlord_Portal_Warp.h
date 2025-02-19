@@ -1,4 +1,4 @@
-class CDOTA_Ability_AbyssalUnderlord_Portal_Warp : public CDOTABaseAbility
+class CDOTA_Ability_AbyssalUnderlord_Portal_Warp
 {
 	CHandle< CBaseEntity > m_hTarget;
 	float32 m_flChannelTime;

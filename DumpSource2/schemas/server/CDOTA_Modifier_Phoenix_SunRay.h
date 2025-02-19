@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Phoenix_SunRay : public CDOTA_Buff
+class CDOTA_Modifier_Phoenix_SunRay
 {
 	int32 hp_cost_perc_per_second;
 	int32 beam_range;
@@ -17,9 +17,10 @@ class CDOTA_Modifier_Phoenix_SunRay : public CDOTA_Buff
 	float32 hp_perc_damage;
 	float32 hp_perc_heal;
 	float32 blind_duration;
-	int32 blind_per_second;
+	float32 blind_per_second;
 	int32 focal_point_max_multiplier;
 	int32 focal_point_start_length_pct;
+	int32 focal_point_blind_stack_multiplier;
 	ParticleIndex_t m_nBeamFXIndex;
 	CHandle< CBaseEntity >[8] m_hVisionThinkers;
 	CHandle< CBaseEntity > m_hBeamEnd;

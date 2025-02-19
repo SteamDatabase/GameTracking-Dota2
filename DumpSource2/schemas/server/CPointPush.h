@@ -1,4 +1,4 @@
-class CPointPush : public CPointEntity
+class CPointPush
 {
 	bool m_bEnabled;
 	float32 m_flMagnitude;

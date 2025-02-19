@@ -1,3 +1,3 @@
-class CDOTA_Ability_Oracle_Clairvoyant_Cure : public CDOTABaseAbility
+class CDOTA_Ability_Oracle_Clairvoyant_Cure
 {
 };

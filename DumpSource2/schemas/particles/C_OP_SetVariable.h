@@ -1,4 +1,4 @@
-class C_OP_SetVariable : public CParticleFunctionPreEmission
+class C_OP_SetVariable
 {
 	CParticleVariableRef m_variableReference;
 	CParticleTransformInput m_transformInput;

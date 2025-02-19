@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AlphaWolf_CommandAura_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_AlphaWolf_CommandAura_Bonus
 {
 	int32 bonus_damage_pct;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Necrolyte_Death_Pulse : public CDOTABaseAbility
+class CDOTA_Ability_Necrolyte_Death_Pulse
 {
 	bool m_bIsDeathSeekerCast;
 };

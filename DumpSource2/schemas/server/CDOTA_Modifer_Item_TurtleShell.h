@@ -1,4 +1,4 @@
-class CDOTA_Modifer_Item_TurtleShell : public CDOTA_Buff_Item
+class CDOTA_Modifer_Item_TurtleShell
 {
 	int32 armor;
 };

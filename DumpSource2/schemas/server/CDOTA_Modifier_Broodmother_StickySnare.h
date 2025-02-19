@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Broodmother_StickySnare : public CDOTA_Buff
+class CDOTA_Modifier_Broodmother_StickySnare
 {
 	Vector m_vOrigin;
 	Vector m_vWallDirection;

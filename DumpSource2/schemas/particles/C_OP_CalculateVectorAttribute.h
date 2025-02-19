@@ -1,4 +1,4 @@
-class C_OP_CalculateVectorAttribute : public CParticleFunctionOperator
+class C_OP_CalculateVectorAttribute
 {
 	Vector m_vStartValue;
 	ParticleAttributeIndex_t m_nFieldInput1;

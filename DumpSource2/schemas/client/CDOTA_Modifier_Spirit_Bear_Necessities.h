@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Spirit_Bear_Necessities : public CDOTA_Buff
+class CDOTA_Modifier_Spirit_Bear_Necessities
 {
 	float32 bonus_int;
 	float32 bonus_str;

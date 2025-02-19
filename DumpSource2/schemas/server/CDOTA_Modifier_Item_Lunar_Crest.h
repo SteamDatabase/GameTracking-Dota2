@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Lunar_Crest : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Lunar_Crest
 {
 	int32 bonus_health;
 	int32 movement_speed;

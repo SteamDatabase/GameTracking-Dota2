@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Ex_Machina : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Ex_Machina
 {
 	int32 bonus_armor;
 };

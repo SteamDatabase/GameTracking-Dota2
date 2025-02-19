@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Gold_Bag_Launch : public CDOTA_Modifier_Knockback
+class CDOTA_Modifier_Gold_Bag_Launch
 {
 	int32 gold_amount;
 };

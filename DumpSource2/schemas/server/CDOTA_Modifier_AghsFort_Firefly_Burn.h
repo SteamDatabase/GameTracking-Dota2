@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Firefly_Burn : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_Firefly_Burn
 {
 	int32 damage_pct_per_second;
 	int32 movement_speed;

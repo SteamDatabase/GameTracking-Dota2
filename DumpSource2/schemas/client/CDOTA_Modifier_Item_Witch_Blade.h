@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Witch_Blade : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Witch_Blade
 {
 	int32 bonus_intellect;
 	int32 bonus_attack_speed;

@@ -1,4 +1,4 @@
-class C_PathParticleRope : public C_BaseEntity
+class C_PathParticleRope
 {
 	bool m_bStartActive;
 	float32 m_flMaxSimulationTime;

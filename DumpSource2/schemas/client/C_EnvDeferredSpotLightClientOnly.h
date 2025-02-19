@@ -1,3 +1,3 @@
-class C_EnvDeferredSpotLightClientOnly : public C_EnvDeferredLight
+class C_EnvDeferredSpotLightClientOnly
 {
 };

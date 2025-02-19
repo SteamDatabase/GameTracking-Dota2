@@ -1,4 +1,4 @@
-class CDOTA_Ability_Windrunner_Shackleshot : public CDOTABaseAbility
+class CDOTA_Ability_Windrunner_Shackleshot
 {
 	int32 shackle_count;
 	Vector m_vArrowAvgPos;
@@ -6,4 +6,5 @@ class CDOTA_Ability_Windrunner_Shackleshot : public CDOTABaseAbility
 	Vector m_vArrowStartPos2;
 	Vector m_vArrowStartPos3;
 	CHandle< CBaseEntity > m_hTarget;
+	CUtlVector< CHandle< CDOTA_BaseNPC > > m_vecShackledUnits;
 };

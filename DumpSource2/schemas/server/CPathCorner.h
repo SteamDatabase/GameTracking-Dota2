@@ -1,4 +1,4 @@
-class CPathCorner : public CPointEntity
+class CPathCorner
 {
 	float32 m_flWait;
 	float32 m_flRadius;

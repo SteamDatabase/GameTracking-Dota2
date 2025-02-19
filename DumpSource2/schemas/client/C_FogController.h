@@ -1,4 +1,4 @@
-class C_FogController : public C_BaseEntity
+class C_FogController
 {
 	fogparams_t m_fog;
 	bool m_bUseAngles;

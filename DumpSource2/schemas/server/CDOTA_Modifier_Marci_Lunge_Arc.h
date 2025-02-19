@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Marci_Lunge_Arc : public CDOTA_Buff
+class CDOTA_Modifier_Marci_Lunge_Arc
 {
 	float32 m_flPredictedTotalTime;
 	Vector m_vStartPosition;
@@ -26,5 +26,7 @@ class CDOTA_Modifier_Marci_Lunge_Arc : public CDOTA_Buff
 	float32 max_acceleration;
 	float32 impact_damage;
 	int32 impact_position_offset;
+	int32 ally_impact_damage_pct;
 	float32 ally_buff_duration;
+	CHandle< CBaseEntity > m_hBounceEntity;
 };

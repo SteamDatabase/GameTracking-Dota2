@@ -1,4 +1,4 @@
-class C_INIT_CreateSpiralSphere : public CParticleFunctionInitializer
+class C_INIT_CreateSpiralSphere
 {
 	int32 m_nControlPointNumber;
 	int32 m_nOverrideCP;

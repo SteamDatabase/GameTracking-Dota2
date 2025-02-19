@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tutorial_ForceAnimation : public CDOTA_Buff
+class CDOTA_Modifier_Tutorial_ForceAnimation
 {
 	int32 m_nActivity;
 	bool m_bLoop;

@@ -1,4 +1,4 @@
-class CFuncElectrifiedVolume : public CFuncBrush
+class CFuncElectrifiedVolume
 {
 	CUtlSymbolLarge m_EffectName;
 	CUtlSymbolLarge m_EffectInterpenetrateName;

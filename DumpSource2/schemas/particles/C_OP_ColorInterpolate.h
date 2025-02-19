@@ -1,4 +1,4 @@
-class C_OP_ColorInterpolate : public CParticleFunctionOperator
+class C_OP_ColorInterpolate
 {
 	Color m_ColorFade;
 	float32 m_flFadeStartTime;

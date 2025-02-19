@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SandKing_SandStorm : public CDOTA_Buff
+class CDOTA_Modifier_SandKing_SandStorm
 {
 	float32 sand_storm_radius;
 	int32 sand_storm_damage;

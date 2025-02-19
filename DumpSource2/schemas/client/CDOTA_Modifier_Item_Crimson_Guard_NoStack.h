@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Item_Crimson_Guard_NoStack : public CDOTA_Buff
+class CDOTA_Modifier_Item_Crimson_Guard_NoStack
 {
 };

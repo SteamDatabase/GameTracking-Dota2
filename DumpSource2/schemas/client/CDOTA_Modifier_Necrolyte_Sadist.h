@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Necrolyte_Sadist : public CDOTA_Buff
+class CDOTA_Modifier_Necrolyte_Sadist
 {
 	float32 aura_radius;
 	bool m_bStackCountChanged;

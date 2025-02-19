@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Sand_King_Scorpion_Strike_Attack_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_Sand_King_Scorpion_Strike_Attack_Bonus
 {
 	int32 attack_damage;
 	int32 creep_damage_penalty;

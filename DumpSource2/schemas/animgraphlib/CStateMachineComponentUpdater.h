@@ -1,4 +1,4 @@
-class CStateMachineComponentUpdater : public CAnimComponentUpdater
+class CStateMachineComponentUpdater
 {
 	CAnimStateMachineUpdater m_stateMachine;
 };

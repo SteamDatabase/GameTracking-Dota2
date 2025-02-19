@@ -1,4 +1,4 @@
-class CSequenceUpdateNode : public CSequenceUpdateNodeBase
+class CSequenceUpdateNode
 {
 	HSequence m_hSequence;
 	float32 m_duration;

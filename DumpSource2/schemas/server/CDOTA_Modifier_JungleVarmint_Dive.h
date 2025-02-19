@@ -1,4 +1,4 @@
-class CDOTA_Modifier_JungleVarmint_Dive : public CDOTA_Buff
+class CDOTA_Modifier_JungleVarmint_Dive
 {
 	float32 m_flTotalTime;
 	float32 m_flInitialVelocity;

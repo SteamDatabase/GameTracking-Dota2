@@ -1,16 +1,13 @@
-class CDOTA_Modifier_ArcWarden_Flux : public CDOTA_Buff
+class CDOTA_Modifier_ArcWarden_Flux
 {
 	int32 m_nCasterTeam;
 	int32 damage_per_second;
-	int32 tempest_damage_per_second;
 	int32 search_radius;
 	int32 move_speed_slow_pct;
-	int32 tempest_move_speed_slow_pct;
 	int32 status_resist;
 	float32 think_interval;
 	int32 applies_silence;
 	int32 m_nCurrentMovementSlow;
 	int32 m_nCurrentStatusResistance;
 	ParticleIndex_t m_nFXIndex;
-	bool m_bIsTempestVersion;
 };

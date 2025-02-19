@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Illusion : public CDOTA_Buff
+class CDOTA_Modifier_Illusion
 {
 	int32 outgoing_damage;
 	int32 outgoing_damage_structure;

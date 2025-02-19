@@ -1,4 +1,4 @@
-class C_INIT_PositionPlaceOnGround : public CParticleFunctionInitializer
+class C_INIT_PositionPlaceOnGround
 {
 	CPerParticleFloatInput m_flOffset;
 	CPerParticleFloatInput m_flMaxTraceLength;

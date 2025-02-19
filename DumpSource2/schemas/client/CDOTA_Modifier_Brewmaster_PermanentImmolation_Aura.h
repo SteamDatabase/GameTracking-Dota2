@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_PermanentImmolation_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_PermanentImmolation_Aura
 {
 	float32 radius;
 };

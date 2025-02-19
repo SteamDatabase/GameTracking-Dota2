@@ -1,4 +1,4 @@
-class CFuncRotating : public CBaseModelEntity
+class CFuncRotating
 {
 	CEntityIOOutput m_OnStopped;
 	CEntityIOOutput m_OnStarted;

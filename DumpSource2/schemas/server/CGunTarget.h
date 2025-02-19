@@ -1,4 +1,4 @@
-class CGunTarget : public CBaseToggle
+class CGunTarget
 {
 	bool m_on;
 	CHandle< CBaseEntity > m_hTargetEnt;

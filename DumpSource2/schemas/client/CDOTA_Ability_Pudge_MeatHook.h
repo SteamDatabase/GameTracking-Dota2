@@ -1,4 +1,4 @@
-class CDOTA_Ability_Pudge_MeatHook : public C_DOTABaseAbility
+class CDOTA_Ability_Pudge_MeatHook
 {
 	Vector m_vEndpoint;
 	int32 m_nConsecutiveHits;

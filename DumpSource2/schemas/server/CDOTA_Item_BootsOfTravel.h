@@ -1,4 +1,4 @@
-class CDOTA_Item_BootsOfTravel : public CDOTA_Item
+class CDOTA_Item_BootsOfTravel
 {
 	float32 m_flTeleportTimeOverride;
 	bool m_bPendingSellExcessScrolls;

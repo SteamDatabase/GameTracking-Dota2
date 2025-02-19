@@ -1,4 +1,4 @@
-class C_DOTA_Ability_AbyssalUnderlord_Dark_Portal : public C_DOTABaseAbility
+class C_DOTA_Ability_AbyssalUnderlord_Dark_Portal
 {
 	float32 duration;
 	float32 distance_from_fountain;

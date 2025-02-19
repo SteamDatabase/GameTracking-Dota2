@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pugna_LifeDrain : public CDOTA_Buff
+class CDOTA_Modifier_Pugna_LifeDrain
 {
 	int32 health_drain;
 	int32 ally_healing;

@@ -35,4 +35,5 @@ class RnBodyDesc_t
 	bool m_bGravityDisabled;
 	bool m_bSpeculativeEnabled;
 	bool m_bHasShadowController;
+	DynamicContinuousContactBehavior_t m_nDynamicContinuousContactBehavior;
 };

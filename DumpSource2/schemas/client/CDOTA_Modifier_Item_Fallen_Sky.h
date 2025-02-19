@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Fallen_Sky : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Fallen_Sky
 {
 	int32 bonus_strength;
 	int32 bonus_intellect;

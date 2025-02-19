@@ -1,4 +1,4 @@
-class CDotaSubquestTutorialEvent : public CDotaSubquestBase
+class CDotaSubquestTutorialEvent
 {
 	CUtlSymbolLarge m_sTutorialEvent;
 };

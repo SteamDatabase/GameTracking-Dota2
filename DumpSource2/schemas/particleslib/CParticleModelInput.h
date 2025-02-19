@@ -1,4 +1,4 @@
-class CParticleModelInput : public CParticleInput
+class CParticleModelInput
 {
 	ParticleModelType_t m_nType;
 	CParticleNamedValueRef m_NamedValue;

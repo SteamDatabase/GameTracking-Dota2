@@ -1,3 +1,3 @@
-class C_DOTA_Item_Fluffy_Hat : public C_DOTA_Item
+class C_DOTA_Item_Fluffy_Hat
 {
 };

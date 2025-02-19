@@ -1,4 +1,4 @@
-class RnHullDesc_t : public RnShapeDesc_t
+class RnHullDesc_t
 {
 	RnHull_t m_Hull;
 };

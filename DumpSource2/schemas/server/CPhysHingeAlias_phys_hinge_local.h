@@ -1,3 +1,3 @@
-class CPhysHingeAlias_phys_hinge_local : public CPhysHinge
+class CPhysHingeAlias_phys_hinge_local
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Pugna_Oblivion_Savant : public CDOTABaseAbility
+class CDOTA_Ability_Pugna_Oblivion_Savant
 {
 };

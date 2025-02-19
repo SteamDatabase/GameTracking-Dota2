@@ -1,4 +1,4 @@
-class CSosGroupActionSoundeventClusterSchema : public CSosGroupActionSchema
+class CSosGroupActionSoundeventClusterSchema
 {
 	int32 m_nMinNearby;
 	float32 m_flClusterEpsilon;

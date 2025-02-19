@@ -1,4 +1,4 @@
-class C_INIT_PositionWarpScalar : public CParticleFunctionInitializer
+class C_INIT_PositionWarpScalar
 {
 	Vector m_vecWarpMin;
 	Vector m_vecWarpMax;

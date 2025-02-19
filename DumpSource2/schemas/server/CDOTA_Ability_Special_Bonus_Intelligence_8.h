@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Intelligence_8 : public CDOTABaseAbility
+class CDOTA_Ability_Special_Bonus_Intelligence_8
 {
 };

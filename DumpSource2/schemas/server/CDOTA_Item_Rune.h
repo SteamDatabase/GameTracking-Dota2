@@ -1,4 +1,4 @@
-class CDOTA_Item_Rune : public CBaseAnimatingActivity
+class CDOTA_Item_Rune
 {
 	CHandle< CBaseEntity > m_hRuneSpawner;
 	int32 m_iRuneType;

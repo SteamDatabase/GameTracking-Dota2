@@ -1,4 +1,4 @@
-class CPlayer_MovementServices : public CPlayerPawnComponent
+class CPlayer_MovementServices
 {
 	int32 m_nImpulse;
 	CInButtonState m_nButtons;
@@ -14,5 +14,6 @@ class CPlayer_MovementServices : public CPlayerPawnComponent
 	float32 m_flLeftMove;
 	float32 m_flUpMove;
 	Vector m_vecLastMovementImpulses;
+	QAngle m_vecLastFinishMoveViewAngles;
 	QAngle m_vecOldViewAngles;
 };

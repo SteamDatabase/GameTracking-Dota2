@@ -1,4 +1,4 @@
-class C_OP_DecayOffscreen : public CParticleFunctionOperator
+class C_OP_DecayOffscreen
 {
 	CParticleCollectionFloatInput m_flOffscreenTime;
 };

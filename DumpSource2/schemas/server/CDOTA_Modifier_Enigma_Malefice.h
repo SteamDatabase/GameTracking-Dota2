@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enigma_Malefice : public CDOTA_Buff
+class CDOTA_Modifier_Enigma_Malefice
 {
 	float32 tick_rate;
 	float32 stun_duration;

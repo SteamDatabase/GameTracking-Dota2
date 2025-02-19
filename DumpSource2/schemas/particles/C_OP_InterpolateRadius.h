@@ -1,4 +1,4 @@
-class C_OP_InterpolateRadius : public CParticleFunctionOperator
+class C_OP_InterpolateRadius
 {
 	float32 m_flStartTime;
 	float32 m_flEndTime;

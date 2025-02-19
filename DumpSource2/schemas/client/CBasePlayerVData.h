@@ -1,4 +1,4 @@
-class CBasePlayerVData : public CEntitySubclassVDataBase
+class CBasePlayerVData
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_sModelName;
 	CSkillFloat m_flHeadDamageMultiplier;

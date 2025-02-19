@@ -1,4 +1,4 @@
-class C_OP_RepeatedTriggerChildGroup : public CParticleFunctionPreEmission
+class C_OP_RepeatedTriggerChildGroup
 {
 	int32 m_nChildGroupID;
 	CParticleCollectionFloatInput m_flClusterRefireTime;

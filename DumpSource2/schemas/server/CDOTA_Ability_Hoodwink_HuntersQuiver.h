@@ -1,3 +1,3 @@
-class CDOTA_Ability_Hoodwink_HuntersQuiver : public CDOTABaseAbility
+class CDOTA_Ability_Hoodwink_HuntersQuiver
 {
 };

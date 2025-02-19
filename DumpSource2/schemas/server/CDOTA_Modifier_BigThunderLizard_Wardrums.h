@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BigThunderLizard_Wardrums : public CDOTA_Buff
+class CDOTA_Modifier_BigThunderLizard_Wardrums
 {
 	float32 radius;
 };

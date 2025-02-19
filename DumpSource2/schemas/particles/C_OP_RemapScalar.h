@@ -1,4 +1,4 @@
-class C_OP_RemapScalar : public CParticleFunctionOperator
+class C_OP_RemapScalar
 {
 	ParticleAttributeIndex_t m_nFieldInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

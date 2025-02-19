@@ -1,4 +1,4 @@
-class CPhysExplosion : public CPointEntity
+class CPhysExplosion
 {
 	bool m_bExplodeOnSpawn;
 	float32 m_flMagnitude;

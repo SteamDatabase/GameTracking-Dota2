@@ -1,4 +1,4 @@
-class C_INIT_CreationNoise : public CParticleFunctionInitializer
+class C_INIT_CreationNoise
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	bool m_bAbsVal;

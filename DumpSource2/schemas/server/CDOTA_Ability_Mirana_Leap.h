@@ -1,6 +1,3 @@
-class CDOTA_Ability_Mirana_Leap : public CDOTABaseAbility
+class CDOTA_Ability_Mirana_Leap
 {
-	bool m_bIsVectorTargeted;
-	Vector m_vEndpoint;
-	Vector m_vLandPosition;
 };

@@ -1,4 +1,4 @@
-class CSosGroupActionLimitSchema : public CSosGroupActionSchema
+class CSosGroupActionLimitSchema
 {
 	int32 m_nMaxCount;
 	SosActionStopType_t m_nStopType;

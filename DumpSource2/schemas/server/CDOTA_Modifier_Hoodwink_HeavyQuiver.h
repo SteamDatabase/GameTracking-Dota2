@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_HeavyQuiver : public CDOTA_Buff
+class CDOTA_Modifier_Hoodwink_HeavyQuiver
 {
 	int32 bonus_projectile_speed_pct;
 	int32 bonus_attack_range;

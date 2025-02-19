@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tusk_Drinking_Buddies : public C_DOTABaseAbility
+class CDOTA_Ability_Tusk_Drinking_Buddies
 {
 	float32 buff_duration;
 	float32 pull_duration;

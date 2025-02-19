@@ -1,4 +1,4 @@
-class C_DOTA_Hero_Recorder : public C_BaseEntity
+class C_DOTA_Hero_Recorder
 {
 	bool m_bStartRecording;
 	CHandle< C_DOTA_BaseNPC > m_hHero;

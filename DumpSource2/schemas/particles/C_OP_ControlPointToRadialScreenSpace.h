@@ -1,4 +1,4 @@
-class C_OP_ControlPointToRadialScreenSpace : public CParticleFunctionPreEmission
+class C_OP_ControlPointToRadialScreenSpace
 {
 	int32 m_nCPIn;
 	Vector m_vecCP1Pos;

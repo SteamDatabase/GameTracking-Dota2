@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Sniper_Assassinate : public C_DOTABaseAbility
+class C_DOTA_Ability_Sniper_Assassinate
 {
 	CHandle< C_BaseEntity > m_hTarget;
 	ParticleIndex_t m_iIndex;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Jakiro_Macropyre_Ice_EdgeThinker : public CDOTA_Buff
+class CDOTA_Modifier_Jakiro_Macropyre_Ice_EdgeThinker
 {
 	Vector m_vPathDir;
 	int32 ice_edge_path_radius;

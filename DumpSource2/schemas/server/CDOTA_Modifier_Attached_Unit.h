@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Attached_Unit : public CDOTA_Buff
+class CDOTA_Modifier_Attached_Unit
 {
 	CHandle< CBaseEntity > m_hAttachTarget;
 	bool m_bPhysicalImmune;

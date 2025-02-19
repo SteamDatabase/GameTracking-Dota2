@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Meepo_MegaMeepo_Self : public CDOTA_Buff
+class CDOTA_Modifier_Meepo_MegaMeepo_Self
 {
 	int32 base_strength;
 	int32 base_int;

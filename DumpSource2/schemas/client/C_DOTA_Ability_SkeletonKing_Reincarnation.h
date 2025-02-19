@@ -1,4 +1,4 @@
-class C_DOTA_Ability_SkeletonKing_Reincarnation : public C_DOTABaseAbility
+class C_DOTA_Ability_SkeletonKing_Reincarnation
 {
 	bool m_bShouldUseResources;
 };

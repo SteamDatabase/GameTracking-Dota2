@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_BouncePerch : public CDOTA_Buff
+class CDOTA_Modifier_MonkeyKing_BouncePerch
 {
 	CHandle< C_BaseEntity > m_hTree;
 	bool m_bGroundToTree;

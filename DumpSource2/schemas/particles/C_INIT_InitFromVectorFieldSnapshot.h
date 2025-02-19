@@ -1,4 +1,4 @@
-class C_INIT_InitFromVectorFieldSnapshot : public CParticleFunctionInitializer
+class C_INIT_InitFromVectorFieldSnapshot
 {
 	int32 m_nControlPointNumber;
 	int32 m_nLocalSpaceCP;

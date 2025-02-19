@@ -1,4 +1,4 @@
-class C_OP_RemapDistanceToLineSegmentBase : public CParticleFunctionOperator
+class C_OP_RemapDistanceToLineSegmentBase
 {
 	int32 m_nCP0;
 	int32 m_nCP1;

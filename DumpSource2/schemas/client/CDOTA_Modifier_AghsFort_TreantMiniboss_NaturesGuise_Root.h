@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_TreantMiniboss_NaturesGuise_Root : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_TreantMiniboss_NaturesGuise_Root
 {
 	float32 m_iEntangleDamage;
 };

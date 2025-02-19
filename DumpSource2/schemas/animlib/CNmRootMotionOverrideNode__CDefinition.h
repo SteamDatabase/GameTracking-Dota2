@@ -1,4 +1,4 @@
-class CNmRootMotionOverrideNode::CDefinition : public CNmPassthroughNode::CDefinition
+class CNmRootMotionOverrideNode::CDefinition
 {
 	int16 m_desiredMovingVelocityNodeIdx;
 	int16 m_desiredFacingDirectionNodeIdx;

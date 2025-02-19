@@ -1,4 +1,4 @@
-class C_INIT_CreateOnGrid : public CParticleFunctionInitializer
+class C_INIT_CreateOnGrid
 {
 	CParticleCollectionFloatInput m_nXCount;
 	CParticleCollectionFloatInput m_nYCount;

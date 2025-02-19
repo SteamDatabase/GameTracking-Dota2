@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SkeletonKing_MortalStrike : public CDOTA_Buff
+class CDOTA_Modifier_SkeletonKing_MortalStrike
 {
 	int32 crit_mult;
 	int32 wraith_crit_bonus;

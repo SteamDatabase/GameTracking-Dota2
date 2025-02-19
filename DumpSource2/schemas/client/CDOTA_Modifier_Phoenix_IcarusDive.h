@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Phoenix_IcarusDive : public CDOTA_Buff
+class CDOTA_Modifier_Phoenix_IcarusDive
 {
 	Vector m_vSource;
 	Vector m_vTarget;

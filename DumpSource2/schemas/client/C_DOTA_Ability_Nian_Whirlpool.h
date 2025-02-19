@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Nian_Whirlpool : public C_DOTABaseAbility
+class C_DOTA_Ability_Nian_Whirlpool
 {
 	int32 pool_count;
 	int32 min_distance;

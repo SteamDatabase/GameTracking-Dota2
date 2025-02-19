@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Kaya_And_Sange : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Kaya_And_Sange
 {
 	int32 bonus_strength;
 	int32 hp_regen_amp;

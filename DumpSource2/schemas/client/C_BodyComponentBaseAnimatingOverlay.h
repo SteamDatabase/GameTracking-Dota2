@@ -1,4 +1,4 @@
-class C_BodyComponentBaseAnimatingOverlay : public CBodyComponentSkeletonInstance
+class C_BodyComponentBaseAnimatingOverlay
 {
 	C_BaseAnimatingOverlayController m_animationController;
 };

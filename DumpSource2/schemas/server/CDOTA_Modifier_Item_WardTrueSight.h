@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_WardTrueSight : public CDOTA_Buff
+class CDOTA_Modifier_Item_WardTrueSight
 {
 	float32 true_sight_range;
 };

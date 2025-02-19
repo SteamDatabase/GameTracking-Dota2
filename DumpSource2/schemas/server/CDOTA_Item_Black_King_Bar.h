@@ -1,4 +1,4 @@
-class CDOTA_Item_Black_King_Bar : public CDOTA_Item
+class CDOTA_Item_Black_King_Bar
 {
 	bool m_bActive;
 };

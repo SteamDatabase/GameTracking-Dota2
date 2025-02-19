@@ -1,3 +1,3 @@
-class CDOTA_Ability_Visage_GraveChill : public CDOTABaseAbility
+class CDOTA_Ability_Visage_GraveChill
 {
 };

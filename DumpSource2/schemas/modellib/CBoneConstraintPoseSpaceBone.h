@@ -1,4 +1,4 @@
-class CBoneConstraintPoseSpaceBone : public CBaseConstraint
+class CBoneConstraintPoseSpaceBone
 {
 	CUtlVector< CBoneConstraintPoseSpaceBone::Input_t > m_inputList;
 };

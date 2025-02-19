@@ -1,4 +1,4 @@
-class C_DOTA_Ability_AghsFort_StonehallGeneral_OverwhelmingOdds : public C_DOTABaseAbility
+class C_DOTA_Ability_AghsFort_StonehallGeneral_OverwhelmingOdds
 {
 	int32 max_steps;
 	Vector m_vTarget;

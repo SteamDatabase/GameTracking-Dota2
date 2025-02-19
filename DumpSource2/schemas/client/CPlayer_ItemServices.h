@@ -1,3 +1,3 @@
-class CPlayer_ItemServices : public CPlayerPawnComponent
+class CPlayer_ItemServices
 {
 };

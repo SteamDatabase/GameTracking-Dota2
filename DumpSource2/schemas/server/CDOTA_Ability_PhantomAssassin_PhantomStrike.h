@@ -1,3 +1,3 @@
-class CDOTA_Ability_PhantomAssassin_PhantomStrike : public CDOTABaseAbility
+class CDOTA_Ability_PhantomAssassin_PhantomStrike
 {
 };

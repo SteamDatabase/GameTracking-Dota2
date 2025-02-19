@@ -1,3 +1,3 @@
-class CDOTA_Ability_Zombie_Berserk : public CDOTABaseAbility
+class CDOTA_Ability_Zombie_Berserk
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Item_WraithBand : public CDOTA_Item
+class CDOTA_Item_WraithBand
 {
 	int32 counter;
 };

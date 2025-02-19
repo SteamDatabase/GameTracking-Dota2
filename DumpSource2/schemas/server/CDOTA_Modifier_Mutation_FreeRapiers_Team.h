@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mutation_FreeRapiers_Team : public CDOTA_Buff
+class CDOTA_Modifier_Mutation_FreeRapiers_Team
 {
 	int32 m_nLastInterval;
 };

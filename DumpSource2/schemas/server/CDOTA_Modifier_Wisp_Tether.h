@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Wisp_Tether : public CDOTA_Buff
+class CDOTA_Modifier_Wisp_Tether
 {
 	bool m_bInManaGained;
 	CHandle< CBaseEntity > m_hTarget;

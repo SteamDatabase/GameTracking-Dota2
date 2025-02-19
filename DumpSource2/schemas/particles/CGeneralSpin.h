@@ -1,4 +1,4 @@
-class CGeneralSpin : public CParticleFunctionOperator
+class CGeneralSpin
 {
 	int32 m_nSpinRateDegrees;
 	int32 m_nSpinRateMinDegrees;

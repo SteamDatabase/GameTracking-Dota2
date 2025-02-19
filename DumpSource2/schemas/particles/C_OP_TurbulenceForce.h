@@ -1,4 +1,4 @@
-class C_OP_TurbulenceForce : public CParticleFunctionForce
+class C_OP_TurbulenceForce
 {
 	float32 m_flNoiseCoordScale0;
 	float32 m_flNoiseCoordScale1;

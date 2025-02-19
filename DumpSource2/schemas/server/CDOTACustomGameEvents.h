@@ -1,3 +1,3 @@
-class CDOTACustomGameEvents : public CDOTAGameEvents
+class CDOTACustomGameEvents
 {
 };

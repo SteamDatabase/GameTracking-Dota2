@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Magnataur_Horn_Toss : public CDOTA_Buff
+class CDOTA_Modifier_Magnataur_Horn_Toss
 {
 	float32 air_duration;
 	int32 air_height;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pangolier_ShieldCrash_Jump : public CDOTA_Buff
+class CDOTA_Modifier_Pangolier_ShieldCrash_Jump
 {
 	float32 jump_duration;
 	float32 jump_duration_gyroshell;

@@ -1,4 +1,4 @@
-class CSosGroupActionSetSoundeventParameterSchema : public CSosGroupActionSchema
+class CSosGroupActionSetSoundeventParameterSchema
 {
 	int32 m_nMaxCount;
 	float32 m_flMinValue;

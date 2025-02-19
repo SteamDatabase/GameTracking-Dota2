@@ -1,4 +1,4 @@
-class CSosGroupActionSoundeventMinMaxValuesSchema : public CSosGroupActionSchema
+class CSosGroupActionSoundeventMinMaxValuesSchema
 {
 	CUtlString m_strQueryPublicFieldName;
 	CUtlString m_strDelayPublicFieldName;

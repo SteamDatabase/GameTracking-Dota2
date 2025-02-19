@@ -1,4 +1,4 @@
-class C_EnvDetailController : public C_BaseEntity
+class C_EnvDetailController
 {
 	float32 m_flFadeStartDist;
 	float32 m_flFadeEndDist;

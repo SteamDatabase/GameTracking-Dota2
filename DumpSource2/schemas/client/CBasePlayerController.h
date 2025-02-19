@@ -1,4 +1,4 @@
-class CBasePlayerController : public C_BaseEntity
+class CBasePlayerController
 {
 	int32 m_nFinalPredictedTick;
 	C_CommandContext m_CommandContext;

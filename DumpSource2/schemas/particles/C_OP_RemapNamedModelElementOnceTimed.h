@@ -1,4 +1,4 @@
-class C_OP_RemapNamedModelElementOnceTimed : public CParticleFunctionOperator
+class C_OP_RemapNamedModelElementOnceTimed
 {
 	CStrongHandle< InfoForResourceTypeCModel > m_hModel;
 	CUtlVector< CUtlString > m_inNames;

@@ -1,4 +1,4 @@
-class C_ClientRagdoll : public CBaseAnimGraph
+class C_ClientRagdoll
 {
 	bool m_bFadeOut;
 	bool m_bImportant;

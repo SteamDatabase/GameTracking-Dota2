@@ -1,3 +1,3 @@
-class CSpinUpdateBase : public CParticleFunctionOperator
+class CSpinUpdateBase
 {
 };

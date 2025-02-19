@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Gold_lvl10_l : public C_DOTA_Ability_Special_Bonus_Gold_Ability_Draft
+class C_DOTA_Ability_Special_Bonus_Gold_lvl10_l
 {
 };

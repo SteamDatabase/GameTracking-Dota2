@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Solar_Crest : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Solar_Crest
 {
 	float32 bonus_mana;
 	int32 bonus_armor;

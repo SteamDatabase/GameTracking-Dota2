@@ -1,4 +1,4 @@
-class C_OP_InstantaneousEmitter : public CParticleFunctionEmitter
+class C_OP_InstantaneousEmitter
 {
 	CParticleCollectionFloatInput m_nParticlesToEmit;
 	CParticleCollectionFloatInput m_flStartTime;

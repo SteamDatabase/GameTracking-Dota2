@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_Pounce : public CDOTA_Buff
+class CDOTA_Modifier_Slark_Pounce
 {
 	float32 m_flTotalTime;
 	float32 m_flInitialVelocity;

@@ -1,4 +1,4 @@
-class CCitadelSoundOpvarSetOBB : public CBaseEntity
+class CCitadelSoundOpvarSetOBB
 {
 	CUtlSymbolLarge m_iszStackName;
 	CUtlSymbolLarge m_iszOperatorName;

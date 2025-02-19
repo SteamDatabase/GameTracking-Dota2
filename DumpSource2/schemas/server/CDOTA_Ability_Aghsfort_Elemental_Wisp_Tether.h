@@ -1,4 +1,4 @@
-class CDOTA_Ability_Aghsfort_Elemental_Wisp_Tether : public CDOTABaseAbility
+class CDOTA_Ability_Aghsfort_Elemental_Wisp_Tether
 {
 	CHandle< CBaseEntity > m_hTarget;
 	Vector m_vProjectileLocation;

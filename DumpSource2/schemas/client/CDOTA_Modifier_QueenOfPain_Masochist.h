@@ -1,4 +1,4 @@
-class CDOTA_Modifier_QueenOfPain_Masochist : public CDOTA_Buff
+class CDOTA_Modifier_QueenOfPain_Masochist
 {
 	float32 spell_amplification;
 	float32 spell_amplification_per_level;

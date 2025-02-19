@@ -1,4 +1,4 @@
-class C_EnvCubemap : public C_BaseEntity
+class C_EnvCubemap
 {
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hCubemapTexture;
 	bool m_Entity_bCustomCubemapTexture;

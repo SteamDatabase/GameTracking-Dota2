@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Building : public CDOTA_BaseNPC
+class CDOTA_BaseNPC_Building
 {
 	int32 m_iDamageLevel;
 	CStrongHandle< InfoForResourceTypeIParticleSystemDefinition > m_nFXIndex;

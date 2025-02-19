@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_StickyBombThrow : public CDOTA_Buff
+class CDOTA_Modifier_Techies_StickyBombThrow
 {
 	float32 radius;
 };

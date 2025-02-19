@@ -1,3 +1,3 @@
-class CDOTA_DataRadiant : public CDOTA_DataNonSpectator
+class CDOTA_DataRadiant
 {
 };

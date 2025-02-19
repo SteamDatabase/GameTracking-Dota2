@@ -1,4 +1,4 @@
-class CNmVectorCreateNode::CDefinition : public CNmVectorValueNode::CDefinition
+class CNmVectorCreateNode::CDefinition
 {
 	int16 m_inputVectorValueNodeIdx;
 	int16 m_inputValueXNodeIdx;

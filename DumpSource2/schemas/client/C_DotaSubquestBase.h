@@ -1,4 +1,4 @@
-class C_DotaSubquestBase : public C_BaseEntity
+class C_DotaSubquestBase
 {
 	char[256] m_pszSubquestText;
 	bool m_bHidden;

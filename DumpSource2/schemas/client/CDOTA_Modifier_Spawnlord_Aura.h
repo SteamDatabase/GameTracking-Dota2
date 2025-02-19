@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Spawnlord_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Spawnlord_Aura
 {
 	float32 radius;
 };

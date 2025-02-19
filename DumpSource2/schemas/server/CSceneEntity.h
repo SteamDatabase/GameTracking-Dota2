@@ -1,4 +1,4 @@
-class CSceneEntity : public CPointEntity
+class CSceneEntity
 {
 	CUtlSymbolLarge m_iszSceneFile;
 	CUtlSymbolLarge m_iszResumeSceneFile;

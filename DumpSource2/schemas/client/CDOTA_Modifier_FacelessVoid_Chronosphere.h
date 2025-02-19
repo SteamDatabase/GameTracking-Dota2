@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FacelessVoid_Chronosphere : public CDOTA_Buff
+class CDOTA_Modifier_FacelessVoid_Chronosphere
 {
 	float32 radius;
 };

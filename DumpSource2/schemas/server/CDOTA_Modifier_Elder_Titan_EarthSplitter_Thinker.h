@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Elder_Titan_EarthSplitter_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Elder_Titan_EarthSplitter_Thinker
 {
 	int32 crack_width;
 	int32 damage_pct;

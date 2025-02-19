@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Juggernaut : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Juggernaut
 {
 	uint32 m_unOmniKills;
 };

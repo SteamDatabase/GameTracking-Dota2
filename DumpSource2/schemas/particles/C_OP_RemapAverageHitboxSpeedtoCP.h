@@ -1,4 +1,4 @@
-class C_OP_RemapAverageHitboxSpeedtoCP : public CParticleFunctionPreEmission
+class C_OP_RemapAverageHitboxSpeedtoCP
 {
 	int32 m_nInControlPointNumber;
 	int32 m_nOutControlPointNumber;

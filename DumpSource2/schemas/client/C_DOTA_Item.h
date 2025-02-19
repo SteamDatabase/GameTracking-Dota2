@@ -1,4 +1,4 @@
-class C_DOTA_Item : public C_DOTABaseAbility
+class C_DOTA_Item
 {
 	int32 m_CastAnimation;
 	bool m_bCombinable;
@@ -20,7 +20,8 @@ class C_DOTA_Item : public C_DOTABaseAbility
 	bool m_bGloballyCombinable;
 	bool m_bDisassemblable;
 	bool m_bNeverDisassemble;
-	bool m_bIsNeutralDrop;
+	bool m_bIsNeutralActiveDrop;
+	bool m_bIsNeutralPassiveDrop;
 	int32 m_nNeutralDropTeam;
 	bool m_bAlertable;
 	int32 m_iInitialCharges;
@@ -33,6 +34,7 @@ class C_DOTA_Item : public C_DOTABaseAbility
 	int32 m_iSecondaryCharges;
 	int32 m_iMaxCharges;
 	bool m_bCombineLocked;
+	bool m_bMarkForSell;
 	GameTime_t m_flPurchaseTime;
 	GameTime_t m_flAssembledTime;
 	bool m_bPurchasedWhileDead;

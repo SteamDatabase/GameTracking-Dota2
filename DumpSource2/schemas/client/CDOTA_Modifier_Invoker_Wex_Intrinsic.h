@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_Wex_Intrinsic : public CDOTA_Buff
+class CDOTA_Modifier_Invoker_Wex_Intrinsic
 {
 	int32 cooldown_reduction;
 	int32 m_nTotalCDR;

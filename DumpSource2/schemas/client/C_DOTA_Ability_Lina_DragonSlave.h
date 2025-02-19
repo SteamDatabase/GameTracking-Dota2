@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Lina_DragonSlave : public C_DOTABaseAbility
+class C_DOTA_Ability_Lina_DragonSlave
 {
 	int32 dragon_slave_distance;
 	float32 dragon_slave_burn_duration;

@@ -1,4 +1,4 @@
-class CGenericConstraint : public CPhysConstraint
+class CGenericConstraint
 {
 	JointMotion_t m_nLinearMotionX;
 	JointMotion_t m_nLinearMotionY;

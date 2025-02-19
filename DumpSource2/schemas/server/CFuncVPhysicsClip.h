@@ -1,4 +1,4 @@
-class CFuncVPhysicsClip : public CBaseModelEntity
+class CFuncVPhysicsClip
 {
 	bool m_bDisabled;
 };

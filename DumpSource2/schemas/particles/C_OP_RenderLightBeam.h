@@ -1,4 +1,4 @@
-class C_OP_RenderLightBeam : public CParticleFunctionRenderer
+class C_OP_RenderLightBeam
 {
 	CParticleCollectionVecInput m_vColorBlend;
 	ParticleColorBlendType_t m_nColorBlendType;

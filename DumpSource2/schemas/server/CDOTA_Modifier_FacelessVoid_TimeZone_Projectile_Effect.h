@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FacelessVoid_TimeZone_Projectile_Effect : public CDOTA_Buff
+class CDOTA_Modifier_FacelessVoid_TimeZone_Projectile_Effect
 {
 	int32 bonus_projectile_speed;
 	float32 flRadius;

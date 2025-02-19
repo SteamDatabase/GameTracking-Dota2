@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Razor_StaticLink : public CDOTA_Buff
+class CDOTA_Modifier_Razor_StaticLink
 {
 	float32 flSmoothness;
 	float32 drain_duration;

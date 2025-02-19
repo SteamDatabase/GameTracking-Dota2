@@ -1,4 +1,4 @@
-class CNmCachedTargetNode::CDefinition : public CNmTargetValueNode::CDefinition
+class CNmCachedTargetNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	NmCachedValueMode_t m_mode;

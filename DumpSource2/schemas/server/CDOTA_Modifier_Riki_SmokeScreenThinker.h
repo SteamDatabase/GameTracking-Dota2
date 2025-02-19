@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Riki_SmokeScreenThinker : public CDOTA_Buff
+class CDOTA_Modifier_Riki_SmokeScreenThinker
 {
 	float32 radius;
 };

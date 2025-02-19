@@ -1,4 +1,4 @@
-class C_DOTA_Ability_DataDriven : public C_DOTABaseAbility
+class C_DOTA_Ability_DataDriven
 {
 	bool m_bProcsMagicStick;
 	bool m_bIsSharedWithTeammates;

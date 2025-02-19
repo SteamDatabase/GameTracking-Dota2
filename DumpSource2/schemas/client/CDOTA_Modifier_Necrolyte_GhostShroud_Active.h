@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Necrolyte_GhostShroud_Active : public CDOTA_Buff
+class CDOTA_Modifier_Necrolyte_GhostShroud_Active
 {
 	int32 heal_bonus;
 	int32 bonus_damage;

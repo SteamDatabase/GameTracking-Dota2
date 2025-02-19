@@ -1,4 +1,4 @@
-class CModelConfigElement_AttachedModel : public CModelConfigElement
+class CModelConfigElement_AttachedModel
 {
 	CUtlString m_InstanceName;
 	CUtlString m_EntityClass;

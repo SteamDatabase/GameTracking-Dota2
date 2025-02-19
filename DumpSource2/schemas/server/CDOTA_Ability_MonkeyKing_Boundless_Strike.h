@@ -1,4 +1,4 @@
-class CDOTA_Ability_MonkeyKing_Boundless_Strike : public CDOTABaseAbility
+class CDOTA_Ability_MonkeyKing_Boundless_Strike
 {
 	int32 strike_cast_range;
 	int32 strike_radius;

@@ -1,4 +1,4 @@
-class C_INIT_SetHitboxToModel : public CParticleFunctionInitializer
+class C_INIT_SetHitboxToModel
 {
 	int32 m_nControlPointNumber;
 	int32 m_nForceInModel;

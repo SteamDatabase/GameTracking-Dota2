@@ -1,4 +1,4 @@
-class C_OP_RenderModels : public CParticleFunctionRenderer
+class C_OP_RenderModels
 {
 	bool m_bOnlyRenderInEffectsBloomPass;
 	bool m_bOnlyRenderInEffectsWaterPass;

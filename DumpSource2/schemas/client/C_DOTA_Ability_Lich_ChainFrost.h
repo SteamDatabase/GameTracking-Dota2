@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Lich_ChainFrost : public C_DOTABaseAbility
+class C_DOTA_Ability_Lich_ChainFrost
 {
 	float32 jump_range;
 	int32 jumps;

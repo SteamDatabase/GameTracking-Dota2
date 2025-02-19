@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Courier : public C_DOTA_BaseNPC_Additive
+class C_DOTA_Unit_Courier
 {
 	bool m_bUnitRespawned;
 	bool m_bPreUpdateFlyingCourier;

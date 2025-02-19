@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SkeletonKing_SpectralBladeIntrinsic : public CDOTA_Buff
+class CDOTA_Modifier_SkeletonKing_SpectralBladeIntrinsic
 {
 	int32 vampiric_aura;
 	int32 creep_lifesteal_reduction_pct;

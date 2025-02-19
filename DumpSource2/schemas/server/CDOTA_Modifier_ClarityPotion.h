@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ClarityPotion : public CDOTA_Buff
+class CDOTA_Modifier_ClarityPotion
 {
 	float32 mana_regen;
 };

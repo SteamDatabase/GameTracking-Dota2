@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_BreakOfDawn : public CDOTA_Buff
+class CDOTA_Modifier_Dawnbreaker_BreakOfDawn
 {
 	float32 reveal_duration;
 	float32 conceal_duration;
@@ -10,4 +10,5 @@ class CDOTA_Modifier_Dawnbreaker_BreakOfDawn : public CDOTA_Buff
 	GameTime_t m_flFullRevealLinger;
 	GameTime_t m_flConcealTime;
 	bool m_bWasDayTime;
+	int32 m_nDaytimeCycles;
 };

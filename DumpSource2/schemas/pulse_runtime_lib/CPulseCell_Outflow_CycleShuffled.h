@@ -1,4 +1,4 @@
-class CPulseCell_Outflow_CycleShuffled : public CPulseCell_BaseFlow
+class CPulseCell_Outflow_CycleShuffled
 {
 	CUtlVector< CPulse_OutflowConnection > m_Outputs;
 };

@@ -1,4 +1,4 @@
-class C_OP_EndCapTimedFreeze : public CParticleFunctionOperator
+class C_OP_EndCapTimedFreeze
 {
 	CParticleCollectionFloatInput m_flFreezeTime;
 };

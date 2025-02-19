@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Batrider_Smoldering_Resin : public CDOTA_Buff
+class CDOTA_Modifier_Batrider_Smoldering_Resin
 {
 	int32 tick_attack_damage_pct;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VoidSpirit_ResonantPulse_PhysicalBuff : public CDOTA_Buff
+class CDOTA_Modifier_VoidSpirit_ResonantPulse_PhysicalBuff
 {
 	int32 base_absorb_amount;
 	int32 m_nAbsorbRemaining;

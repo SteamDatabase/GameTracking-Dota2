@@ -1,4 +1,4 @@
-class CAI_ChangeHintGroup : public CBaseEntity
+class CAI_ChangeHintGroup
 {
 	int32 m_iSearchType;
 	CUtlSymbolLarge m_strSearchName;

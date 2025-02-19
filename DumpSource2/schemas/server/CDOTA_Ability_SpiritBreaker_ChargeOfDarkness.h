@@ -1,4 +1,4 @@
-class CDOTA_Ability_SpiritBreaker_ChargeOfDarkness : public CDOTABaseAbility
+class CDOTA_Ability_SpiritBreaker_ChargeOfDarkness
 {
 	bool m_bFinished;
 	bool m_bInterrupted;

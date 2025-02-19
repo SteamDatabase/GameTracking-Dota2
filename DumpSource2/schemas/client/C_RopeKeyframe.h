@@ -1,4 +1,4 @@
-class C_RopeKeyframe : public C_BaseModelEntity
+class C_RopeKeyframe
 {
 	CBitVec< 10 > m_LinksTouchingSomething;
 	int32 m_nLinksTouchingSomething;

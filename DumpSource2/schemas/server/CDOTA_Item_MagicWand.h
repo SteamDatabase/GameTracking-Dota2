@@ -1,3 +1,5 @@
-class CDOTA_Item_MagicWand : public CDOTA_Item
+class CDOTA_Item_MagicWand
 {
+	float32 charge_radius;
+	int32 max_charges;
 };

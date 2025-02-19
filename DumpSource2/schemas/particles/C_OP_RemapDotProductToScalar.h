@@ -1,4 +1,4 @@
-class C_OP_RemapDotProductToScalar : public CParticleFunctionOperator
+class C_OP_RemapDotProductToScalar
 {
 	int32 m_nInputCP1;
 	int32 m_nInputCP2;

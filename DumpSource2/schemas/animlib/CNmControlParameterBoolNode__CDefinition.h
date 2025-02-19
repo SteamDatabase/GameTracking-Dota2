@@ -1,3 +1,3 @@
-class CNmControlParameterBoolNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmControlParameterBoolNode::CDefinition
 {
 };

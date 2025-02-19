@@ -1,4 +1,4 @@
-class CDOTA_Ability_Nyx_Assassin_Impale : public CDOTABaseAbility
+class CDOTA_Ability_Nyx_Assassin_Impale
 {
 	CUtlVector< CHandle< CBaseEntity > > hAlreadyHitList;
 	int32 width;

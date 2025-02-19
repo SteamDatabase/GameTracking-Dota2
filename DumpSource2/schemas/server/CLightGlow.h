@@ -1,4 +1,4 @@
-class CLightGlow : public CBaseModelEntity
+class CLightGlow
 {
 	uint32 m_nHorizontalSize;
 	uint32 m_nVerticalSize;

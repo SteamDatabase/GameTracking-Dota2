@@ -1,4 +1,4 @@
-class C_OP_LerpToOtherAttribute : public CParticleFunctionOperator
+class C_OP_LerpToOtherAttribute
 {
 	CPerParticleFloatInput m_flInterpolation;
 	ParticleAttributeIndex_t m_nFieldInputFrom;

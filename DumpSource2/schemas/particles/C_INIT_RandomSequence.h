@@ -1,4 +1,4 @@
-class C_INIT_RandomSequence : public CParticleFunctionInitializer
+class C_INIT_RandomSequence
 {
 	int32 m_nSequenceMin;
 	int32 m_nSequenceMax;

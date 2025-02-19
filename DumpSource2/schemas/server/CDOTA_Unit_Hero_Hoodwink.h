@@ -1,3 +1,3 @@
-class CDOTA_Unit_Hero_Hoodwink : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Hoodwink
 {
 };

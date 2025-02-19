@@ -1,4 +1,4 @@
-class C_RagdollProp : public CBaseAnimGraph
+class C_RagdollProp
 {
 	C_NetworkUtlVectorBase< Vector > m_ragPos;
 	C_NetworkUtlVectorBase< QAngle > m_ragAngles;

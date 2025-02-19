@@ -1,4 +1,4 @@
-class CDOTA_Hero_Recorder : public CBaseEntity
+class CDOTA_Hero_Recorder
 {
 	bool m_bStartRecording;
 	CHandle< CDOTA_BaseNPC > m_hHero;

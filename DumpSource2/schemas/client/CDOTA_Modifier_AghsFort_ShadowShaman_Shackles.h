@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_ShadowShaman_Shackles : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_ShadowShaman_Shackles
 {
 	float32 tick_interval;
 	float32 total_damage;

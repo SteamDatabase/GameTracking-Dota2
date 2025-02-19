@@ -1,8 +1,8 @@
 class C_DOTA_UnitInventory
 {
 	CUtlVector< sSharedCooldownInfo > m_SharedCooldownList;
-	CHandle< C_BaseEntity >[19] m_hItems;
-	bool[21] m_bItemQueried;
+	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_hItems;
+	bool[27] m_bItemQueried;
 	int32 m_iParity;
 	CHandle< C_BaseEntity > m_hInventoryParent;
 	bool m_bIsActive;

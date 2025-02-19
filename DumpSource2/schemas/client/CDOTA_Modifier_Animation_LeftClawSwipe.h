@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Animation_LeftClawSwipe : public CDOTA_Buff
+class CDOTA_Modifier_Animation_LeftClawSwipe
 {
 	int32 damage;
 	int32 damage_radius;

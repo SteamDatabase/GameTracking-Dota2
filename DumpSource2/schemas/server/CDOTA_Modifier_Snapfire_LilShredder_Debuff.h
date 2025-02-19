@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_LilShredder_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Snapfire_LilShredder_Debuff
 {
 	float32 armor_reduction_per_attack;
 };

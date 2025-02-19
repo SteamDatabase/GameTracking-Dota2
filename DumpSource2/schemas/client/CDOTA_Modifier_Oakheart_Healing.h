@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Oakheart_Healing : public CDOTA_Buff
+class CDOTA_Modifier_Oakheart_Healing
 {
 	int32 heal;
 	float32 duration;

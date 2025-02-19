@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_ShadowDance_Passive : public CDOTA_Buff
+class CDOTA_Modifier_Slark_ShadowDance_Passive
 {
 	float32 activation_delay;
 	float32 neutral_disable;

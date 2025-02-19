@@ -1,4 +1,4 @@
-class CDOTA_Unit_Aghsfort_Aziyog_Underlord_Portal : public CDOTA_BaseNPC_Additive
+class CDOTA_Unit_Aghsfort_Aziyog_Underlord_Portal
 {
 	CHandle< CBaseEntity > m_hOtherPortal;
 };

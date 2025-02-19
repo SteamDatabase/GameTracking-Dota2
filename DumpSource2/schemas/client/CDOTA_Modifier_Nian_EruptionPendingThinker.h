@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_EruptionPendingThinker : public CDOTA_Buff
+class CDOTA_Modifier_Nian_EruptionPendingThinker
 {
 	int32 tick_count;
 	int32 beam_radius;

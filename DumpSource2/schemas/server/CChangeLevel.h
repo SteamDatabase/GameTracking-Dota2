@@ -1,4 +1,4 @@
-class CChangeLevel : public CBaseTrigger
+class CChangeLevel
 {
 	CUtlString m_sMapName;
 	CUtlString m_sLandmarkName;

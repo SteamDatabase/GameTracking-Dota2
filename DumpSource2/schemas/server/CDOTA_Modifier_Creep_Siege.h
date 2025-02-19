@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Creep_Siege : public CDOTA_Buff
+class CDOTA_Modifier_Creep_Siege
 {
 	int32 bonus_building_damage;
 	int32 incoming_hero_damage_penalty;

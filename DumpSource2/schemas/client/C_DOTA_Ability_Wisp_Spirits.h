@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Wisp_Spirits : public C_DOTABaseAbility
+class C_DOTA_Ability_Wisp_Spirits
 {
 	CUtlVector< sSpiritDef > m_SpiritDefs;
 	int32 m_nWispDirection;

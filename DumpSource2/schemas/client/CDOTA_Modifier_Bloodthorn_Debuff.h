@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bloodthorn_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Bloodthorn_Debuff
 {
 	float32 target_crit_multiplier;
 	float32 silence_damage_percent;

@@ -1,4 +1,4 @@
-class CPointPrefab : public CServerOnlyPointEntity
+class CPointPrefab
 {
 	CUtlSymbolLarge m_targetMapName;
 	CUtlSymbolLarge m_forceWorldGroupID;

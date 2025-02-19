@@ -1,3 +1,3 @@
-class C_INIT_RemapParticleCountToNamedModelSequenceScalar : public C_INIT_RemapParticleCountToNamedModelElementScalar
+class C_INIT_RemapParticleCountToNamedModelSequenceScalar
 {
 };

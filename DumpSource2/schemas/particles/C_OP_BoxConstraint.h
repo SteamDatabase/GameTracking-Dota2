@@ -1,4 +1,4 @@
-class C_OP_BoxConstraint : public CParticleFunctionConstraint
+class C_OP_BoxConstraint
 {
 	CParticleCollectionVecInput m_vecMin;
 	CParticleCollectionVecInput m_vecMax;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Pugna_LifeDrain : public CDOTABaseAbility
+class CDOTA_Ability_Pugna_LifeDrain
 {
 	CHandle< CBaseEntity > m_hTarget;
 };

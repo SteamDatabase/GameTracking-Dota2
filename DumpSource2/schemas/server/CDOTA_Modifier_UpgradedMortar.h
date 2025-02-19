@@ -1,4 +1,4 @@
-class CDOTA_Modifier_UpgradedMortar : public CDOTA_Buff
+class CDOTA_Modifier_UpgradedMortar
 {
 	int32 bonus_per_upgrade;
 };

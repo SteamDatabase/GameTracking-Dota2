@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ForestTrollHighPriest_HealAmp : public CDOTA_Buff
+class CDOTA_Modifier_ForestTrollHighPriest_HealAmp
 {
 	float32 radius;
 };

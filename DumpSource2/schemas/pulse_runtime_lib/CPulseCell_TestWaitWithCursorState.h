@@ -1,4 +1,4 @@
-class CPulseCell_TestWaitWithCursorState : public CPulseCell_BaseYieldingInflow
+class CPulseCell_TestWaitWithCursorState
 {
 	CPulse_ResumePoint m_WakeResume;
 	CPulse_ResumePoint m_WakeCancel;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Enchantress_Untouchable : public CDOTABaseAbility
+class CDOTA_Ability_Enchantress_Untouchable
 {
 };

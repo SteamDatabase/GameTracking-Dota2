@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Hero_Terrorblade : public C_DOTA_BaseNPC_Hero
+class C_DOTA_Unit_Hero_Terrorblade
 {
 	ParticleIndex_t m_nFXDeath;
 	CUtlString m_szResponseCriteria;

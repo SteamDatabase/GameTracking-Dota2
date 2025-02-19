@@ -1,4 +1,4 @@
-class C_OP_RemapBoundingVolumetoCP : public CParticleFunctionPreEmission
+class C_OP_RemapBoundingVolumetoCP
 {
 	int32 m_nOutControlPointNumber;
 	float32 m_flInputMin;

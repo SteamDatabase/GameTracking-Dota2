@@ -1,4 +1,4 @@
-class CDOTA_ArcanaDataEntity_DrowRanger : public CDOTA_ArcanaDataEntity_Base
+class CDOTA_ArcanaDataEntity_DrowRanger
 {
 	int8[24] m_vecDrowRangerArcanaTargetPlayerID;
 	GameTime_t[24] m_vecDrowRangerArcanaDeathTime;

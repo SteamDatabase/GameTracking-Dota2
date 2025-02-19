@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_MP_Regen : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_MP_Regen
 {
 	float32 value;
 };

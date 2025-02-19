@@ -1,4 +1,4 @@
-class C_OP_MaintainEmitter : public CParticleFunctionEmitter
+class C_OP_MaintainEmitter
 {
 	CParticleCollectionFloatInput m_nParticlesToMaintain;
 	float32 m_flStartTime;

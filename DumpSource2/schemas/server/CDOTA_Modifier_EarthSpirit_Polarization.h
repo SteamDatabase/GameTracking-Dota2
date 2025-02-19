@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EarthSpirit_Polarization : public CDOTA_Buff
+class CDOTA_Modifier_EarthSpirit_Polarization
 {
 	float32 damage_per_second;
 	float32 damage_interval;

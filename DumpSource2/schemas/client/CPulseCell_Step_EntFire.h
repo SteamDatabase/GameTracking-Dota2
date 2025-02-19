@@ -1,4 +1,4 @@
-class CPulseCell_Step_EntFire : public CPulseCell_BaseFlow
+class CPulseCell_Step_EntFire
 {
 	CUtlString m_Input;
 };

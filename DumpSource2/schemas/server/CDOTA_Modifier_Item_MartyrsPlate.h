@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_MartyrsPlate : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_MartyrsPlate
 {
 	float32 duration;
 	int32 magic_resist;

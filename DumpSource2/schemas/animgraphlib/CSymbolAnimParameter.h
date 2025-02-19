@@ -1,4 +1,4 @@
-class CSymbolAnimParameter : public CConcreteAnimParameter
+class CSymbolAnimParameter
 {
 	CGlobalSymbol m_defaultValue;
 };

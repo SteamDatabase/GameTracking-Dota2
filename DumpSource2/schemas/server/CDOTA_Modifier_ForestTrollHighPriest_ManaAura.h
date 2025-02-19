@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ForestTrollHighPriest_ManaAura : public CDOTA_Buff
+class CDOTA_Modifier_ForestTrollHighPriest_ManaAura
 {
 	float32 radius;
 };

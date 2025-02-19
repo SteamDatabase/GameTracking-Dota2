@@ -1,4 +1,4 @@
-class C_DOTA_PlayerResource : public C_BaseEntity
+class C_DOTA_PlayerResource
 {
 	bool m_bWasDataUpdateCreated;
 	C_UtlVectorEmbeddedNetworkVar< PlayerResourcePlayerTeamData_t > m_vecPlayerTeamData;

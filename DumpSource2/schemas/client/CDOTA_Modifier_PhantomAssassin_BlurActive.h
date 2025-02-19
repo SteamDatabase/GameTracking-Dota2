@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomAssassin_BlurActive : public CDOTA_Buff
+class CDOTA_Modifier_PhantomAssassin_BlurActive
 {
 	int32 radius;
 	float32 fade_duration;

@@ -1,3 +1,3 @@
-class CDOTA_Modifier_FacelessVoid_Arcana : public CDOTA_Buff
+class CDOTA_Modifier_FacelessVoid_Arcana
 {
 };

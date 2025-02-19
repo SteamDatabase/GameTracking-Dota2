@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Alchemist_AcidSpray : public CDOTA_Buff
+class CDOTA_Modifier_Alchemist_AcidSpray
 {
 	int32 armor_reduction;
 };

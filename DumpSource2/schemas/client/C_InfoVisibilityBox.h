@@ -1,4 +1,4 @@
-class C_InfoVisibilityBox : public C_BaseEntity
+class C_InfoVisibilityBox
 {
 	int32 m_nMode;
 	Vector m_vBoxSize;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lycan_SummonWolves_BonusDamage : public CDOTA_Buff
+class CDOTA_Modifier_Lycan_SummonWolves_BonusDamage
 {
 	int32 bonus_damage;
 };

@@ -1,4 +1,4 @@
-class C_InfoPlayerStartDota : public C_PointEntity
+class C_InfoPlayerStartDota
 {
 	bool m_bDisabled;
 };

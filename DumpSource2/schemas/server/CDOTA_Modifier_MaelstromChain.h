@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MaelstromChain : public CDOTA_Buff
+class CDOTA_Modifier_MaelstromChain
 {
 	int32 chain_radius;
 	int32 chain_strikes;

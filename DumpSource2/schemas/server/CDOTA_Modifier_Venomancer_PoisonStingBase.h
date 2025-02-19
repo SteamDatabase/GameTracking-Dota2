@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Venomancer_PoisonStingBase : public CDOTA_Buff
+class CDOTA_Modifier_Venomancer_PoisonStingBase
 {
 	int32 m_iDamage;
 	int32 movement_speed;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Meepo_Earthbind : public CDOTABaseAbility
+class CDOTA_Ability_Meepo_Earthbind
 {
 };

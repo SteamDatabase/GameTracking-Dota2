@@ -1,4 +1,4 @@
-class C_OP_PlanarConstraint : public CParticleFunctionConstraint
+class C_OP_PlanarConstraint
 {
 	Vector m_PointOnPlane;
 	Vector m_PlaneNormal;

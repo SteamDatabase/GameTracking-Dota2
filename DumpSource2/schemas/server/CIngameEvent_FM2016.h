@@ -1,3 +1,3 @@
-class CIngameEvent_FM2016 : public CIngameEvent_Base
+class CIngameEvent_FM2016
 {
 };

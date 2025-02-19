@@ -1,4 +1,4 @@
-class C_Team : public C_BaseEntity
+class C_Team
 {
 	C_NetworkUtlVectorBase< CHandle< CBasePlayerController > > m_aPlayerControllers;
 	C_NetworkUtlVectorBase< CHandle< C_BasePlayerPawn > > m_aPlayers;

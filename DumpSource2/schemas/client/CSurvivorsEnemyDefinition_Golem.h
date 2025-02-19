@@ -1,3 +1,3 @@
-class CSurvivorsEnemyDefinition_Golem : public CSurvivorsEnemyDefinition
+class CSurvivorsEnemyDefinition_Golem
 {
 };

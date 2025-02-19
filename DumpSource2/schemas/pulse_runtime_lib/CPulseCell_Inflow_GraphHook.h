@@ -1,4 +1,4 @@
-class CPulseCell_Inflow_GraphHook : public CPulseCell_Inflow_BaseEntrypoint
+class CPulseCell_Inflow_GraphHook
 {
-	CUtlSymbolLarge m_HookName;
+	PulseSymbol_t m_HookName;
 };

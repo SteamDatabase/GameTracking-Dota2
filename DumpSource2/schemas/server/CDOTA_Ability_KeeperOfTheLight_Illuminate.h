@@ -1,4 +1,4 @@
-class CDOTA_Ability_KeeperOfTheLight_Illuminate : public CDOTABaseAbility
+class CDOTA_Ability_KeeperOfTheLight_Illuminate
 {
 	CHandle< CBaseEntity > m_hThinker;
 	GameTime_t m_fStartTime;

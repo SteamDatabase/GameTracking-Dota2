@@ -1,4 +1,4 @@
-class CDOTA_ArcanaDataEntity_Razor : public CDOTA_ArcanaDataEntity_Base
+class CDOTA_ArcanaDataEntity_Razor
 {
 	int32 m_nEmpoweredKills;
 };

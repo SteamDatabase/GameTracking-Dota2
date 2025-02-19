@@ -1,9 +1,8 @@
-class CDOTABaseAbility : public CBaseEntity
+class CDOTABaseAbility
 {
 	int32 m_iAbilityIndex;
 	int32 m_nStolenActivity;
 	bool m_bChanneling;
-	bool m_bReflection;
 	bool m_bRedirected;
 	bool m_bRefCountsModifiers;
 	int32 m_iModifierRefCount;
@@ -46,8 +45,9 @@ class CDOTABaseAbility : public CBaseEntity
 	HeroFacetKey_t m_nHeroFacetKey;
 	float32 m_flTotalExtendedChannelTime;
 	bool m_bGrantedByFacet;
-	CHandle< CBaseEntity > m_hReflectionCause;
+	bool m_bReflection;
 	CHandle< CBaseEntity > m_pReflectionSourceAbility;
+	CHandle< CBaseEntity > m_hReflectionCause;
 	item_definition_index_t m_nBackedByEconItemIndex;
 	bool m_bAltCastOrdered;
 };

@@ -1,4 +1,4 @@
-class CDOTASpectatorGraphManagerProxy : public CBaseEntity
+class CDOTASpectatorGraphManagerProxy
 {
 	CDOTASpectatorGraphManager* m_pGraphManager;
 };

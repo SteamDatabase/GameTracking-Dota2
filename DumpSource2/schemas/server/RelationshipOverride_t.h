@@ -1,4 +1,4 @@
-class RelationshipOverride_t : public Relationship_t
+class RelationshipOverride_t
 {
 	CHandle< CBaseEntity > entity;
 	Class_T classType;

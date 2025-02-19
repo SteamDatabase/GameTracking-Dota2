@@ -1,4 +1,4 @@
-class CDOTA_Ability_Aghsfort_Wildwing_Tornado_Blast : public CDOTABaseAbility
+class CDOTA_Ability_Aghsfort_Wildwing_Tornado_Blast
 {
 	float32 disable_duration;
 	float32 damage;

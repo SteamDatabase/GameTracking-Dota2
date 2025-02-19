@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pudge_Dismember : public CDOTA_Buff
+class CDOTA_Modifier_Pudge_Dismember
 {
 	int32 dismember_damage;
 	float32 strength_damage;

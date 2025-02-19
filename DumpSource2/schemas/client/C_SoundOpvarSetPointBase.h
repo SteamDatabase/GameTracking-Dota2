@@ -1,4 +1,4 @@
-class C_SoundOpvarSetPointBase : public C_BaseEntity
+class C_SoundOpvarSetPointBase
 {
 	CUtlSymbolLarge m_iszStackName;
 	CUtlSymbolLarge m_iszOperatorName;

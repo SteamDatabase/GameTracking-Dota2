@@ -1,4 +1,4 @@
-class C_OP_ReadFromNeighboringParticle : public CParticleFunctionOperator
+class C_OP_ReadFromNeighboringParticle
 {
 	ParticleAttributeIndex_t m_nFieldInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

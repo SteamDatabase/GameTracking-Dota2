@@ -1,4 +1,4 @@
-class C_OP_RemapDensityToVector : public CParticleFunctionOperator
+class C_OP_RemapDensityToVector
 {
 	float32 m_flRadiusScale;
 	ParticleAttributeIndex_t m_nFieldOutput;

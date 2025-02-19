@@ -1,4 +1,4 @@
-class CDOTA_Ability_EmberSpirit_SleightOfFist : public CDOTABaseAbility
+class CDOTA_Ability_EmberSpirit_SleightOfFist
 {
 	Vector m_vCastLoc;
 	int32 m_nHeroesKilled;

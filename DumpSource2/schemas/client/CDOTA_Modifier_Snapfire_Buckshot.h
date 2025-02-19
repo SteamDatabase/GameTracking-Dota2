@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_Buckshot : public CDOTA_Buff
+class CDOTA_Modifier_Snapfire_Buckshot
 {
 	int32 miss_chance;
 	int32 damage_amp;

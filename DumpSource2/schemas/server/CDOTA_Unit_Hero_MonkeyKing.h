@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_MonkeyKing : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_MonkeyKing
 {
 	uint32 m_nTreeDisguise;
 	uint32 m_nPerchedTree;

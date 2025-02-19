@@ -1,3 +1,3 @@
-class CDOTA_Ability_DragonKnight_ElderDragonForm : public CDOTABaseAbility
+class CDOTA_Ability_DragonKnight_ElderDragonForm
 {
 };

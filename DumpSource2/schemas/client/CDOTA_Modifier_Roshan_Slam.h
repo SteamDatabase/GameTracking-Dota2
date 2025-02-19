@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Roshan_Slam : public CDOTA_Buff
+class CDOTA_Modifier_Roshan_Slam
 {
 	int32 slow_amount;
 };

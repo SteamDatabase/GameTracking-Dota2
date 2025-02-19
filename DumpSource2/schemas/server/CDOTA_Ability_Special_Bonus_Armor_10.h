@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Armor_10 : public CDOTABaseAbility
+class CDOTA_Ability_Special_Bonus_Armor_10
 {
 };

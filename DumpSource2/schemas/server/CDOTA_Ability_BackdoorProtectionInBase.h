@@ -1,3 +1,3 @@
-class CDOTA_Ability_BackdoorProtectionInBase : public CDOTABaseAbility
+class CDOTA_Ability_BackdoorProtectionInBase
 {
 };

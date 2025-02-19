@@ -1,4 +1,4 @@
-class C_DOTAFogOfWarTempViewers : public C_BaseEntity
+class C_DOTAFogOfWarTempViewers
 {
 	uint32 m_FoWTempViewerVersion;
 	C_UtlVectorEmbeddedNetworkVar< TempViewerInfo_t > m_TempViewerInfo;

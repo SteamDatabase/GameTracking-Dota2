@@ -1,4 +1,4 @@
-class CDOTA_Modifier_CrystalMaiden_Frostbite : public CDOTA_Buff
+class CDOTA_Modifier_CrystalMaiden_Frostbite
 {
 	int32 max_ticks;
 	int32 damage_per_second;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Medusa_VenomedVolley_Slow : public CDOTA_Buff
+class CDOTA_Modifier_Medusa_VenomedVolley_Slow
 {
 	float32 move_slow;
 	float32 attack_slow;

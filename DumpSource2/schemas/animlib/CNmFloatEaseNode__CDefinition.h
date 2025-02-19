@@ -1,4 +1,4 @@
-class CNmFloatEaseNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFloatEaseNode::CDefinition
 {
 	float32 m_flEaseTime;
 	float32 m_flStartValue;

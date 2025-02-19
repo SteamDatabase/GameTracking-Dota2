@@ -1,4 +1,4 @@
-class C_DOTA_ArcanaDataEntity : public C_BaseEntity
+class C_DOTA_ArcanaDataEntity
 {
 	CDOTA_ArcanaDataEntity_DrowRanger* m_pArcanaData_CDOTA_ArcanaDataEntity_DrowRanger;
 	CDOTA_ArcanaDataEntity_FacelessVoid* m_pArcanaData_CDOTA_ArcanaDataEntity_FacelessVoid;

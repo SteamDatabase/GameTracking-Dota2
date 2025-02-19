@@ -1,4 +1,4 @@
-class CPulseCell_PlaySequence : public CPulseCell_BaseYieldingInflow
+class CPulseCell_PlaySequence
 {
 	CUtlString m_SequenceName;
 	PulseNodeDynamicOutflows_t m_PulseAnimEvents;

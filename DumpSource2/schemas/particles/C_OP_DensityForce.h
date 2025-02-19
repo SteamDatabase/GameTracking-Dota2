@@ -1,4 +1,4 @@
-class C_OP_DensityForce : public CParticleFunctionForce
+class C_OP_DensityForce
 {
 	float32 m_flRadiusScale;
 	float32 m_flForceScale;

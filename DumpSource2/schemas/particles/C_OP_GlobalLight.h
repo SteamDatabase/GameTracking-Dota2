@@ -1,4 +1,4 @@
-class C_OP_GlobalLight : public CParticleFunctionOperator
+class C_OP_GlobalLight
 {
 	float32 m_flScale;
 	bool m_bClampLowerRange;

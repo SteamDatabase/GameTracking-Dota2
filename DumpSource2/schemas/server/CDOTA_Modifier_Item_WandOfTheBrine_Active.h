@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_WandOfTheBrine_Active : public CDOTA_Buff
+class CDOTA_Modifier_Item_WandOfTheBrine_Active
 {
 	int32 movement_speed;
 	float32 interval;

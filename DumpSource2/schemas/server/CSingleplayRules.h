@@ -1,4 +1,4 @@
-class CSingleplayRules : public CGameRules
+class CSingleplayRules
 {
 	bool m_bSinglePlayerGameEnding;
 };

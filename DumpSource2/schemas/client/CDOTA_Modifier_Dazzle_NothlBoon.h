@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dazzle_NothlBoon : public CDOTA_Buff
+class CDOTA_Modifier_Dazzle_NothlBoon
 {
 	float32 duration;
 };

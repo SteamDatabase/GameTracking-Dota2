@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mars_Bulwark_Soldier_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_Mars_Bulwark_Soldier_Bonus
 {
 	int32 m_nPoseParameterWE;
 	int32 m_nPoseParameterNS;

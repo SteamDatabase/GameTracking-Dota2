@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Abaddon_BorrowedTime_ImmolationDamage : public CDOTA_Buff
+class CDOTA_Modifier_Abaddon_BorrowedTime_ImmolationDamage
 {
 	float32 immolate_damage;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KeeperOfTheLight_ManaLeak : public CDOTA_Buff
+class CDOTA_Modifier_KeeperOfTheLight_ManaLeak
 {
 	float32 mana_leak_pct;
 	Vector vLastPos;

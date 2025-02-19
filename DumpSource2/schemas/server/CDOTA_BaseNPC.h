@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC : public NextBotCombatCharacter
+class CDOTA_BaseNPC
 {
 	bool m_bPledgedOfrenda;
 	uint32 m_iUnitType;
@@ -137,7 +137,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	uint64 m_iIsControllableByPlayer64;
 	PlayerID_t m_nControllingPlayerID;
 	bool m_bRunAIWhenControllableByPlayer;
-	CHandle< CBaseEntity >[40] m_hAbilities;
+	CNetworkUtlVectorBase< CHandle< CBaseEntity > > m_vecAbilities;
 	CUtlVector< CHandle< CBaseEntity > > m_associatedEmptyAbilities;
 	CHandle< CBaseEntity > m_hActiveAbility;
 	Vector m_vCursorLocation;
@@ -164,7 +164,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	CUtlString m_strAnimationModifier;
 	CHandle< CBaseEntity > m_hOwnerNPC;
 	CLocomotionBase* m_locomotor;
-	IBody* m_body;
+	INextBotBody* m_body;
 	bool m_bNeverMoveToClearSpace;
 	CHandle< CBaseEntity > m_hGoalEntity;
 	bool m_bMustReachEachGoalEntity;
@@ -184,6 +184,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	float32 m_fMaxModelScaleMultiplier;
 	bool m_bIsCamped;
 	bool m_bIsReturningHome;
+	bool m_bIgnoreHome;
 	bool m_bWantsToFlee;
 	bool m_bWakesNeutrals;
 	bool m_bNeutralIgnore;
@@ -225,6 +226,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	GameTick_t[15] m_nFoWFadeStartTime;
 	int32 m_nFOWVisibilityRadius;
 	Vector m_vFOWOriginOverride;
+	int32 m_iTeamViewerID;
 	CUtlString m_strLastKillerAbility;
 	int32 m_anglediff;
 	int32 m_NetworkActivity;

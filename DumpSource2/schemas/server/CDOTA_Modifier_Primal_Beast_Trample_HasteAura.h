@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Primal_Beast_Trample_HasteAura : public CDOTA_Buff
+class CDOTA_Modifier_Primal_Beast_Trample_HasteAura
 {
 	float32 aura_radius;
 };

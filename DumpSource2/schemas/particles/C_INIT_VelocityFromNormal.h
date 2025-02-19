@@ -1,4 +1,4 @@
-class C_INIT_VelocityFromNormal : public CParticleFunctionInitializer
+class C_INIT_VelocityFromNormal
 {
 	float32 m_fSpeedMin;
 	float32 m_fSpeedMax;

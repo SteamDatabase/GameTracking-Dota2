@@ -1,3 +1,3 @@
-class CDOTA_Ability_Juggernaut_Duelist : public CDOTABaseAbility
+class CDOTA_Ability_Juggernaut_Duelist
 {
 };

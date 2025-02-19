@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_IceWall_SlowAura : public CDOTA_Buff
+class CDOTA_Modifier_Invoker_IceWall_SlowAura
 {
 	float32 radius;
 	int32 slow;

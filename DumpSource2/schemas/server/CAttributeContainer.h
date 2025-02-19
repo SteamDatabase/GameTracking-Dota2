@@ -1,4 +1,4 @@
-class CAttributeContainer : public CAttributeManager
+class CAttributeContainer
 {
 	CEconItemView m_Item;
 };

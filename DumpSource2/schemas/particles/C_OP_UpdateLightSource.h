@@ -1,4 +1,4 @@
-class C_OP_UpdateLightSource : public CParticleFunctionOperator
+class C_OP_UpdateLightSource
 {
 	Color m_vColorTint;
 	float32 m_flBrightnessScale;

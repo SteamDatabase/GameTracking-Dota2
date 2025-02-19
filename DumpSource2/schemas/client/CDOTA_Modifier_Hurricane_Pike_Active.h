@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hurricane_Pike_Active : public CDOTA_Buff
+class CDOTA_Modifier_Hurricane_Pike_Active
 {
 	float32 push_length;
 };

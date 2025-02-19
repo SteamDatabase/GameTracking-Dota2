@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_StasisTrap : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_Techies_StasisTrap
 {
 	float32 activation_radius;
 	float32 stun_radius;

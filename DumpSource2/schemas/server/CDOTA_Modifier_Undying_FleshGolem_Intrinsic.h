@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Undying_FleshGolem_Intrinsic : public CDOTA_Buff
+class CDOTA_Modifier_Undying_FleshGolem_Intrinsic
 {
 	CUtlVector< CHandle< CBaseEntity > > m_vZombies;
 };

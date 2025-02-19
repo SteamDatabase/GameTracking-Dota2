@@ -1,4 +1,4 @@
-class CDOTA_Ability_Mirana_Arrow : public CDOTABaseAbility
+class CDOTA_Ability_Mirana_Arrow
 {
 	CHandle< CDOTABaseAbility > m_hSourceAbility;
 	int32 scepter_radius;

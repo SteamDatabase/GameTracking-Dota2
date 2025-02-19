@@ -1,4 +1,4 @@
-class CNmBoneMaskBlendNode::CDefinition : public CNmBoneMaskValueNode::CDefinition
+class CNmBoneMaskBlendNode::CDefinition
 {
 	int16 m_nSourceMaskNodeIdx;
 	int16 m_nTargetMaskNodeIdx;

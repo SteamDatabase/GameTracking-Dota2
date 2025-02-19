@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AncientApparition_IceBlast : public CDOTA_Buff
+class CDOTA_Modifier_AncientApparition_IceBlast
 {
 	int32 frost_stacks;
 	float32 kill_pct;

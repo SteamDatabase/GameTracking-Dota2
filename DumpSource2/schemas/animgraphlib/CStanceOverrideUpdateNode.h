@@ -1,4 +1,4 @@
-class CStanceOverrideUpdateNode : public CUnaryUpdateNode
+class CStanceOverrideUpdateNode
 {
 	CUtlVector< StanceInfo_t > m_footStanceInfo;
 	CAnimUpdateNodeRef m_pStanceSourceNode;

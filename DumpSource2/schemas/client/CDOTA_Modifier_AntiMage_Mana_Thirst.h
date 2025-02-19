@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AntiMage_Mana_Thirst : public CDOTA_Buff
+class CDOTA_Modifier_AntiMage_Mana_Thirst
 {
 	int32 thirst_enabled;
 	int32 threshold_pct;

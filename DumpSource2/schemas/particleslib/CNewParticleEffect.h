@@ -1,4 +1,4 @@
-class CNewParticleEffect : public IParticleEffect
+class CNewParticleEffect
 {
 	CNewParticleEffect* m_pNext;
 	CNewParticleEffect* m_pPrev;
@@ -13,6 +13,7 @@ class CNewParticleEffect : public IParticleEffect
 	bitfield:1 m_bSimulate;
 	bitfield:1 m_bShouldPerformCullCheck;
 	bitfield:1 m_bForceNoDraw;
+	bitfield:1 m_bSuppressScreenSpaceEffect;
 	bitfield:1 m_bShouldSave;
 	bitfield:1 m_bDisableAggregation;
 	bitfield:1 m_bShouldSimulateDuringGamePaused;

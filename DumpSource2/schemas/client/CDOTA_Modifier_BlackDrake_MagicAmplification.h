@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BlackDrake_MagicAmplification : public CDOTA_Buff
+class CDOTA_Modifier_BlackDrake_MagicAmplification
 {
 	int32 spell_amp;
 };

@@ -1,4 +1,4 @@
-class C_INIT_RemapParticleCountToNamedModelElementScalar : public C_INIT_RemapParticleCountToScalar
+class C_INIT_RemapParticleCountToNamedModelElementScalar
 {
 	CStrongHandle< InfoForResourceTypeCModel > m_hModel;
 	CUtlString m_outputMinName;

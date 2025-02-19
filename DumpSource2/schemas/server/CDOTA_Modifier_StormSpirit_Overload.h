@@ -1,4 +1,4 @@
-class CDOTA_Modifier_StormSpirit_Overload : public CDOTA_Buff
+class CDOTA_Modifier_StormSpirit_Overload
 {
 	float32 overload_aoe;
 	float32 overload_cast_range;

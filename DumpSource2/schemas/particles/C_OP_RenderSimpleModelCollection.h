@@ -1,4 +1,4 @@
-class C_OP_RenderSimpleModelCollection : public CParticleFunctionRenderer
+class C_OP_RenderSimpleModelCollection
 {
 	bool m_bCenterOffset;
 	CStrongHandle< InfoForResourceTypeCModel > m_hModel;

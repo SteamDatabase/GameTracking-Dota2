@@ -1,4 +1,4 @@
-class C_OP_QuantizeCPComponent : public CParticleFunctionPreEmission
+class C_OP_QuantizeCPComponent
 {
 	CParticleCollectionFloatInput m_flInputValue;
 	int32 m_nCPOutput;

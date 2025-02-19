@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Courier_Passive_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_Courier_Passive_Bonus
 {
 	CUtlVector< CHandle< CBaseEntity > > m_vecTriggers;
 };

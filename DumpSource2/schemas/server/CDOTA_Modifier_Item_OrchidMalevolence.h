@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_OrchidMalevolence : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_OrchidMalevolence
 {
 	int32 bonus_intellect;
 	float32 bonus_mana_regen;

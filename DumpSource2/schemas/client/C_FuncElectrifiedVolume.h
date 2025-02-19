@@ -1,4 +1,4 @@
-class C_FuncElectrifiedVolume : public C_FuncBrush
+class C_FuncElectrifiedVolume
 {
 	ParticleIndex_t m_nAmbientEffect;
 	CUtlSymbolLarge m_EffectName;

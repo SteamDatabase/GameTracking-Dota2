@@ -1,4 +1,4 @@
-class C_DOTAGamerules : public C_MultiplayRules
+class C_DOTAGamerules
 {
 	int32 m_nRuneCycle;
 	int32 m_iMiscHeroPickCounter;
@@ -182,6 +182,7 @@ class C_DOTAGamerules : public C_MultiplayRules
 	ERoshanSpawnPhase m_nRoshanRespawnPhase;
 	GameTime_t m_flRoshanRespawnPhaseEndTime;
 	C_UtlVectorEmbeddedNetworkVar< CDOTA_AbilityDraftAbilityState > m_AbilityDraftAbilities;
+	C_UtlVectorEmbeddedNetworkVar< CDOTA_AbilityDraftHeroState > m_AbilityDraftHeroes;
 	bool m_bAbilityDraftCurrentPlayerHasPicked;
 	int32 m_nAbilityDraftPlayerTracker;
 	int32 m_nAbilityDraftRoundNumber;

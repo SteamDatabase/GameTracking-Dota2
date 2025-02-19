@@ -1,4 +1,4 @@
-class CDOTAPlayerController : public CBasePlayerController
+class CDOTAPlayerController
 {
 	int32 m_iMinimapMove;
 	int32[2] m_iCursor;

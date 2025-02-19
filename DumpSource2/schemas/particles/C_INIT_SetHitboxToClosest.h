@@ -1,4 +1,4 @@
-class C_INIT_SetHitboxToClosest : public CParticleFunctionInitializer
+class C_INIT_SetHitboxToClosest
 {
 	int32 m_nControlPointNumber;
 	int32 m_nDesiredHitbox;

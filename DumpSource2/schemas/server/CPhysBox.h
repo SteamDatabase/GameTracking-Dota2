@@ -1,4 +1,4 @@
-class CPhysBox : public CBreakable
+class CPhysBox
 {
 	int32 m_damageType;
 	int32 m_damageToEnableMotion;
@@ -6,7 +6,6 @@ class CPhysBox : public CBreakable
 	QAngle m_angPreferredCarryAngles;
 	bool m_bNotSolidToWorld;
 	bool m_bEnableUseOutput;
-	int32 m_iExploitableByPlayer;
 	float32 m_flTouchOutputPerEntityDelay;
 	CEntityIOOutput m_OnDamaged;
 	CEntityIOOutput m_OnAwakened;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_DragonPotion : public CDOTA_Buff_Item
+class CDOTA_Modifier_AghsFort_DragonPotion
 {
 	int32 m_iOriginalAttackCapabilities;
 	CUtlSymbolLarge m_iszRangedAttackEffect;

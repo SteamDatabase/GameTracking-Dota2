@@ -1,4 +1,4 @@
-class CEnvDeferredLight : public CModelPointEntity
+class CEnvDeferredLight
 {
 	CHandle< CBaseEntity > m_hTargetEntity;
 	Color m_LightColor;

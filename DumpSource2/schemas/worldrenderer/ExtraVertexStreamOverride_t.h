@@ -1,4 +1,4 @@
-class ExtraVertexStreamOverride_t : public BaseSceneObjectOverride_t
+class ExtraVertexStreamOverride_t
 {
 	uint32 m_nSubSceneObject;
 	uint32 m_nDrawCallIndex;

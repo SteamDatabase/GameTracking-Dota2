@@ -1,4 +1,4 @@
-class CPlayerInputAnimMotorUpdater : public CAnimMotorUpdaterBase
+class CPlayerInputAnimMotorUpdater
 {
 	CUtlVector< float32 > m_sampleTimes;
 	float32 m_flSpringConstant;

@@ -1,4 +1,4 @@
-class C_INIT_CreateOnModel : public CParticleFunctionInitializer
+class C_INIT_CreateOnModel
 {
 	CParticleModelInput m_modelInput;
 	CParticleTransformInput m_transformInput;

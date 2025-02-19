@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Techies : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Techies
 {
 	bool m_bLastDeathFromSuicide;
 };

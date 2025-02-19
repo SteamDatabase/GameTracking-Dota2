@@ -1,3 +1,3 @@
-class CDOTA_Ability_Courier_DequeuePickupFromStash : public CDOTABaseAbility
+class CDOTA_Ability_Courier_DequeuePickupFromStash
 {
 };

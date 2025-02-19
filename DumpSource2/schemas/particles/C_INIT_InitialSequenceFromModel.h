@@ -1,4 +1,4 @@
-class C_INIT_InitialSequenceFromModel : public CParticleFunctionInitializer
+class C_INIT_InitialSequenceFromModel
 {
 	int32 m_nControlPointNumber;
 	ParticleAttributeIndex_t m_nFieldOutput;

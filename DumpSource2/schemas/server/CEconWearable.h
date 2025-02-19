@@ -1,3 +1,3 @@
-class CEconWearable : public CEconEntity
+class CEconWearable
 {
 };

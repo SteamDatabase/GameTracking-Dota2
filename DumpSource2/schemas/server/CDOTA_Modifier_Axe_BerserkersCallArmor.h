@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Axe_BerserkersCallArmor : public CDOTA_Buff
+class CDOTA_Modifier_Axe_BerserkersCallArmor
 {
 	int32 bonus_armor;
 };

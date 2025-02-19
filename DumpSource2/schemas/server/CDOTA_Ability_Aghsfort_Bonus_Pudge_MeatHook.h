@@ -1,4 +1,4 @@
-class CDOTA_Ability_Aghsfort_Bonus_Pudge_MeatHook : public CDOTABaseAbility
+class CDOTA_Ability_Aghsfort_Bonus_Pudge_MeatHook
 {
 	Vector m_vProjectileLocation;
 	float32 hook_speed;

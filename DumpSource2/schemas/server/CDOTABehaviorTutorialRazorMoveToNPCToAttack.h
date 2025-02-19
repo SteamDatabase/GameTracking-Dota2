@@ -1,4 +1,4 @@
-class CDOTABehaviorTutorialRazorMoveToNPCToAttack : public CDOTABehaviorMoveToNPCToAttack
+class CDOTABehaviorTutorialRazorMoveToNPCToAttack
 {
 	CountdownTimer m_PlasmaFieldDelay;
 };

@@ -1,4 +1,4 @@
-class C_INIT_RtEnvCull : public CParticleFunctionInitializer
+class C_INIT_RtEnvCull
 {
 	Vector m_vecTestDir;
 	Vector m_vecTestNormal;

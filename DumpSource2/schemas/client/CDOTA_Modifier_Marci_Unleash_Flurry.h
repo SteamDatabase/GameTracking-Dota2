@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Marci_Unleash_Flurry : public CDOTA_Buff
+class CDOTA_Modifier_Marci_Unleash_Flurry
 {
 	int32 flurry_bonus_attack_speed;
 	float32 time_between_flurries;
@@ -9,4 +9,5 @@ class CDOTA_Modifier_Marci_Unleash_Flurry : public CDOTA_Buff
 	bool m_bIsDoingFlurryAttack;
 	bool m_bIsDoingFlurryPulseAttack;
 	GameTime_t m_fLastAttackTime;
+	bool m_bShouldConsiderSilence;
 };

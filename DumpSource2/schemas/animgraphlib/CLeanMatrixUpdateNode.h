@@ -1,4 +1,4 @@
-class CLeanMatrixUpdateNode : public CLeafUpdateNode
+class CLeanMatrixUpdateNode
 {
 	int32[3][3] m_frameCorners;
 	CPoseHandle[9] m_poses;

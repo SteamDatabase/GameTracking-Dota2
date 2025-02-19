@@ -1,4 +1,4 @@
-class C_OP_PercentageBetweenTransforms : public CParticleFunctionOperator
+class C_OP_PercentageBetweenTransforms
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	float32 m_flInputMin;

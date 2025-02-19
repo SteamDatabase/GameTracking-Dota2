@@ -1,4 +1,4 @@
-class C_ColorCorrection : public C_BaseEntity
+class C_ColorCorrection
 {
 	Vector m_vecOrigin;
 	float32 m_MinFalloff;

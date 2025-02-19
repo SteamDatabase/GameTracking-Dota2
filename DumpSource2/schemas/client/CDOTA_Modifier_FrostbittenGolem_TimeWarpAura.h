@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FrostbittenGolem_TimeWarpAura : public CDOTA_Buff
+class CDOTA_Modifier_FrostbittenGolem_TimeWarpAura
 {
 	float32 radius;
 };

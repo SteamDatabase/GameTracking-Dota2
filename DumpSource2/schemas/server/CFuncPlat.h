@@ -1,4 +1,4 @@
-class CFuncPlat : public CBasePlatTrain
+class CFuncPlat
 {
 	CUtlSymbolLarge m_sNoise;
 };

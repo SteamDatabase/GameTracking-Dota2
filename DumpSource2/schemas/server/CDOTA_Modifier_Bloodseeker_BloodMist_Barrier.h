@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bloodseeker_BloodMist_Barrier : public CDOTA_Buff
+class CDOTA_Modifier_Bloodseeker_BloodMist_Barrier
 {
 	GameTime_t flLastGameTime;
 	float32 m_flCurrentShield;

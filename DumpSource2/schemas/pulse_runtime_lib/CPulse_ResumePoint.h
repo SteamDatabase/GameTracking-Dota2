@@ -1,3 +1,3 @@
-class CPulse_ResumePoint : public CPulse_OutflowConnection
+class CPulse_ResumePoint
 {
 };

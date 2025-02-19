@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Fire_Wreath_Caster : public CDOTA_Buff
+class CDOTA_Modifier_Dawnbreaker_Fire_Wreath_Caster
 {
 	int32 movement_speed;
 	int32 shard_movement_penalty;
@@ -20,4 +20,9 @@ class CDOTA_Modifier_Dawnbreaker_Fire_Wreath_Caster : public CDOTA_Buff
 	float32 animation_rate;
 	float32 turn_rate;
 	float32 m_flFacingTarget;
+	int32 movespeed_bonus_self_max;
+	int32 movespeed_bonus_ally_max;
+	int32 movespeed_bonus_radius;
+	float32 movespeed_bonus_duration;
+	int32 m_iSuccessfulSwipesHittingHeroes;
 };

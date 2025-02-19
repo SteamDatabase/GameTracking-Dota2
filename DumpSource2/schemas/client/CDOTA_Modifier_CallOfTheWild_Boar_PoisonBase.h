@@ -1,4 +1,4 @@
-class CDOTA_Modifier_CallOfTheWild_Boar_PoisonBase : public CDOTA_Buff
+class CDOTA_Modifier_CallOfTheWild_Boar_PoisonBase
 {
 	float32 duration;
 };

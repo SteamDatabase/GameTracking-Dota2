@@ -1,3 +1,3 @@
-class CDOTA_Ability_KeeperOfTheLight_SpiritForm : public CDOTABaseAbility
+class CDOTA_Ability_KeeperOfTheLight_SpiritForm
 {
 };

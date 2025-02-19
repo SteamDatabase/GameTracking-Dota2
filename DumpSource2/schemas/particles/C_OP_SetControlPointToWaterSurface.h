@@ -1,4 +1,4 @@
-class C_OP_SetControlPointToWaterSurface : public CParticleFunctionPreEmission
+class C_OP_SetControlPointToWaterSurface
 {
 	int32 m_nSourceCP;
 	int32 m_nDestCP;

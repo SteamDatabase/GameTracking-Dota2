@@ -1,4 +1,4 @@
-class CPointClientUIWorldPanel : public CBaseClientUIEntity
+class CPointClientUIWorldPanel
 {
 	bool m_bIgnoreInput;
 	bool m_bLit;

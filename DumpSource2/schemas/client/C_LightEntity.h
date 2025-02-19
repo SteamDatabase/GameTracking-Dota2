@@ -1,4 +1,4 @@
-class C_LightEntity : public C_BaseModelEntity
+class C_LightEntity
 {
 	CLightComponent* m_CLightComponent;
 };

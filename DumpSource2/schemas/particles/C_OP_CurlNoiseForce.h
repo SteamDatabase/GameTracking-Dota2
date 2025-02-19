@@ -1,4 +1,4 @@
-class C_OP_CurlNoiseForce : public CParticleFunctionForce
+class C_OP_CurlNoiseForce
 {
 	ParticleDirectionNoiseType_t m_nNoiseType;
 	CPerParticleVecInput m_vecNoiseFreq;

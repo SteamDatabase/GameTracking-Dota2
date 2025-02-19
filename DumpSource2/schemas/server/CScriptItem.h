@@ -1,4 +1,4 @@
-class CScriptItem : public CItem
+class CScriptItem
 {
 	MoveType_t m_MoveTypeOverride;
 };

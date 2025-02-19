@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Meepo_Divided_We_Stand : public CDOTA_Buff
+class CDOTA_Modifier_Meepo_Divided_We_Stand
 {
 	float32 respawn;
 	float32 magic_resist;

@@ -1,4 +1,4 @@
-class CSosGroupMatchPattern : public CSosGroupBranchPattern
+class CSosGroupMatchPattern
 {
 	CUtlString m_matchSoundEventName;
 	CUtlString m_matchSoundEventSubString;

@@ -1,4 +1,4 @@
-class ArtyUnitDef_t : public ArtyGameObjectDef_t
+class ArtyUnitDef_t
 {
 	bool m_bRotateReloadBar;
 	float32 m_flMaxMana;

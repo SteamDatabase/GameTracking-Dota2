@@ -1,4 +1,4 @@
-class CDynamicProp : public CBreakableProp
+class CDynamicProp
 {
 	bool m_bRandomAnimator;
 	GameTime_t m_flNextRandAnim;

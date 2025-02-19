@@ -1,3 +1,3 @@
-class CIngameEvent_DotaPlus : public CIngameEvent_Base
+class CIngameEvent_DotaPlus
 {
 };

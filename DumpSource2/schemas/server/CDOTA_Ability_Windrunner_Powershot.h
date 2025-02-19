@@ -1,4 +1,4 @@
-class CDOTA_Ability_Windrunner_Powershot : public CDOTABaseAbility
+class CDOTA_Ability_Windrunner_Powershot
 {
 	GameTime_t m_fStartTime;
 	float32 m_fPower;
@@ -9,6 +9,8 @@ class CDOTA_Ability_Windrunner_Powershot : public CDOTABaseAbility
 	float32 tree_width;
 	float32 slow;
 	float32 slow_duration;
+	float32 min_execute_threshold;
+	float32 max_execute_threshold;
 	bool m_bAwardedKillEater;
 	int32 m_nHeroesHit;
 	ParticleIndex_t m_nFXIndex;

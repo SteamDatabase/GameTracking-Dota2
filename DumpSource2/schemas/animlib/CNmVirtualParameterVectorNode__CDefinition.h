@@ -1,4 +1,4 @@
-class CNmVirtualParameterVectorNode::CDefinition : public CNmVectorValueNode::CDefinition
+class CNmVirtualParameterVectorNode::CDefinition
 {
 	int16 m_nChildNodeIdx;
 };

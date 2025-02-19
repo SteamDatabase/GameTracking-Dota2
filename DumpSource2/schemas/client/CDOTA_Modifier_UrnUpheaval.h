@@ -1,4 +1,4 @@
-class CDOTA_Modifier_UrnUpheaval : public CDOTA_Buff
+class CDOTA_Modifier_UrnUpheaval
 {
 	int32 m_iSlow;
 };

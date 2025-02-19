@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EarthSpirit_StoneThinker : public CDOTA_Buff
+class CDOTA_Modifier_EarthSpirit_StoneThinker
 {
 	int32 vision_radius;
 	bool m_bHasBeenMagnetized;

@@ -1,3 +1,3 @@
-class CDOTA_Modifier_AghsFort_Ascension_Invis_Warning : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_Ascension_Invis_Warning
 {
 };

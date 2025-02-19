@@ -1,4 +1,4 @@
-class CDOTA_Item_ShadowAmulet : public CDOTA_Item
+class CDOTA_Item_ShadowAmulet
 {
 	GameTime_t m_flLastTimeCast;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Abyssal_Underling_Warrior_Sight : public CDOTA_Buff
+class CDOTA_Modifier_Abyssal_Underling_Warrior_Sight
 {
 	float32 radius;
 };

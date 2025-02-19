@@ -1,4 +1,4 @@
-class CEnvBeam : public CBeam
+class CEnvBeam
 {
 	int32 m_active;
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_spriteTexture;

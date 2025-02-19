@@ -1,3 +1,3 @@
-class CDOTA_Ability_Weaver_Rewoven : public CDOTABaseAbility
+class CDOTA_Ability_Weaver_Rewoven
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rune_Shield : public CDOTA_Buff
+class CDOTA_Modifier_Rune_Shield
 {
 	int32 damage_absorb;
 	bool m_bStartedTimer;

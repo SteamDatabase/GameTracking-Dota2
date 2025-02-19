@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ascension_AcidBlood : public CDOTA_Buff
+class CDOTA_Modifier_Ascension_AcidBlood
 {
 	int32 armor_reduction;
 };

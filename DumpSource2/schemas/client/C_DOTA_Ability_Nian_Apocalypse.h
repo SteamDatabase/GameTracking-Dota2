@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Nian_Apocalypse : public C_DOTABaseAbility
+class C_DOTA_Ability_Nian_Apocalypse
 {
 	int32 area_of_effect;
 	ParticleIndex_t m_nfxIndex_roar;

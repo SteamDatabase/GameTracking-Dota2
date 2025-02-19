@@ -1,4 +1,4 @@
-class CDOTA_Ability_DragonKnight_BreatheFire : public CDOTABaseAbility
+class CDOTA_Ability_DragonKnight_BreatheFire
 {
 	float32 start_radius;
 	float32 end_radius;

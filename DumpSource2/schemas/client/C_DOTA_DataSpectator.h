@@ -1,4 +1,4 @@
-class C_DOTA_DataSpectator : public C_DOTA_DataNonSpectator
+class C_DOTA_DataSpectator
 {
 	CHandle< C_BaseEntity > m_hPowerupRune_1;
 	CHandle< C_BaseEntity > m_hPowerupRune_2;

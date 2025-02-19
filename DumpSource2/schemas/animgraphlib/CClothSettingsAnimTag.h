@@ -1,4 +1,4 @@
-class CClothSettingsAnimTag : public CAnimTagBase
+class CClothSettingsAnimTag
 {
 	float32 m_flStiffness;
 	float32 m_flEaseIn;

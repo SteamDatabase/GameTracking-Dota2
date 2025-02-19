@@ -1,4 +1,4 @@
-class CScriptTriggerPush : public CTriggerPush
+class CScriptTriggerPush
 {
 	Vector m_vExtent;
 };

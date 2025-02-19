@@ -1,4 +1,4 @@
-class CFilterDotaEntities : public CBaseFilter
+class CFilterDotaEntities
 {
 	CDotaEntityFilterFlags m_FilterFlags;
 };

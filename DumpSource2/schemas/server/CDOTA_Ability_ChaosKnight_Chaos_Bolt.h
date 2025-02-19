@@ -1,4 +1,4 @@
-class CDOTA_Ability_ChaosKnight_Chaos_Bolt : public CDOTABaseAbility
+class CDOTA_Ability_ChaosKnight_Chaos_Bolt
 {
 	CUtlVector< CHandle< CBaseEntity > > hAlreadyHitList;
 };

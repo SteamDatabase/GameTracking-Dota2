@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Doubloon : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Doubloon
 {
 	float32 conversion_pct;
 	int32 bonus_health_regen;

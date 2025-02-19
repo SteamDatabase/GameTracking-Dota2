@@ -1,4 +1,4 @@
-class C_OP_RenderStatusEffect : public CParticleFunctionRenderer
+class C_OP_RenderStatusEffect
 {
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_pTextureColorWarp;
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_pTextureDetail2;

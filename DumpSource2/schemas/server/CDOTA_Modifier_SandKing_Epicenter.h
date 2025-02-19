@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SandKing_Epicenter : public CDOTA_Buff
+class CDOTA_Modifier_SandKing_Epicenter
 {
 	int32 epicenter_radius_base;
 	int32 epicenter_radius_increment;

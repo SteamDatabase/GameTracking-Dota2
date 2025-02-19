@@ -1,4 +1,4 @@
-class C_OP_TimeVaryingForce : public CParticleFunctionForce
+class C_OP_TimeVaryingForce
 {
 	float32 m_flStartLerpTime;
 	Vector m_StartingForce;

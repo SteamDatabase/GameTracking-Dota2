@@ -1,4 +1,4 @@
-class CDistanceRemainingMetricEvaluator : public CMotionMetricEvaluator
+class CDistanceRemainingMetricEvaluator
 {
 	float32 m_flMaxDistance;
 	float32 m_flMinDistance;

@@ -1,4 +1,4 @@
-class C_PlayerCosmeticPropClientside : public C_DynamicPropClientside
+class C_PlayerCosmeticPropClientside
 {
 	int32 m_iPlayerNum;
 	int32 m_iCosmeticType;

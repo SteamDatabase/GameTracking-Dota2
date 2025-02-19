@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Mana_Break : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Mana_Break
 {
 	int32 value;
 	int32 burn_illusions_ranged;

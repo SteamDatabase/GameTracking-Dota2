@@ -1,4 +1,4 @@
-class C_INIT_RandomVector : public CParticleFunctionInitializer
+class C_INIT_RandomVector
 {
 	Vector m_vecMin;
 	Vector m_vecMax;

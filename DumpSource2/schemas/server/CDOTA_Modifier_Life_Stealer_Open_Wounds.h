@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Life_Stealer_Open_Wounds : public CDOTA_Buff
+class CDOTA_Modifier_Life_Stealer_Open_Wounds
 {
 	int32[8] slow_steps;
 	int32 heal_percent;

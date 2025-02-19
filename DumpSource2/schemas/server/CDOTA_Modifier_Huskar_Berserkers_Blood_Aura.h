@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Huskar_Berserkers_Blood_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Huskar_Berserkers_Blood_Aura
 {
 	float32 aura_radius;
 };

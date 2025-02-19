@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Orb_Of_Revelations : public CDOTA_Buff_Item
+class CDOTA_Modifier_Orb_Of_Revelations
 {
 	int32 bonus_health;
 	int32 bonus_mana;

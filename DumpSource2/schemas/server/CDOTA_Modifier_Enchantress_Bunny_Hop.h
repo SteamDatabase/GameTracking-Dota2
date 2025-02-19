@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enchantress_Bunny_Hop : public CDOTA_Buff
+class CDOTA_Modifier_Enchantress_Bunny_Hop
 {
 	float32 hop_duration;
 	int32 hop_height;

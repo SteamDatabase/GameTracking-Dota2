@@ -1,4 +1,4 @@
-class CDOTA_Ability_Invoker_Invoke : public CDOTABaseAbility
+class CDOTA_Ability_Invoker_Invoke
 {
 	int32 max_invoked_spells;
 	CDOTA_Modifier_Invoker_Instance*[3] m_instances;

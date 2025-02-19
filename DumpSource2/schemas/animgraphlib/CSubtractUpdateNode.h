@@ -1,4 +1,4 @@
-class CSubtractUpdateNode : public CBinaryUpdateNode
+class CSubtractUpdateNode
 {
 	BinaryNodeChildOption m_footMotionTiming;
 	bool m_bApplyToFootMotion;

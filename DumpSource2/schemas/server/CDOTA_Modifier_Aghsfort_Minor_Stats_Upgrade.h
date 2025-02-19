@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Aghsfort_Minor_Stats_Upgrade : public CDOTA_Buff
+class CDOTA_Modifier_Aghsfort_Minor_Stats_Upgrade
 {
 	int32 bonus_all_stats;
 	int32 bonus_primary_stat;

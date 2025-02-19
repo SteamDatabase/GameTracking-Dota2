@@ -1,3 +1,3 @@
-class CInfoTargetServerOnly : public CServerOnlyPointEntity
+class CInfoTargetServerOnly
 {
 };

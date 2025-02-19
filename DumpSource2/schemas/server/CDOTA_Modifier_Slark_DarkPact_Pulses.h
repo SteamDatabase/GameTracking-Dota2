@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_DarkPact_Pulses : public CDOTA_Buff
+class CDOTA_Modifier_Slark_DarkPact_Pulses
 {
 	int32 m_iPulseCount;
 	int32 radius;

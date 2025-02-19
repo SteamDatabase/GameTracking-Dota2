@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Alchemist_AcidSpray_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Alchemist_AcidSpray_Thinker
 {
 	int32 damage;
 	int32 armor_allies;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Marci_Companion_Run : public CDOTABaseAbility
+class CDOTA_Ability_Marci_Companion_Run
 {
 	int32 m_nTrackingProjectileID;
 	ParticleIndex_t m_nFXIndex;
@@ -13,6 +13,7 @@ class CDOTA_Ability_Marci_Companion_Run : public CDOTABaseAbility
 	Vector m_vEndpoint;
 	ParticleIndex_t m_nToBounceFXIndex;
 	ParticleIndex_t m_nToTargetFXIndex;
+	bool m_bIsAltCastState;
 	Vector m_vDashPosition;
 	Vector m_vFacePosition;
 	Vector m_vTravelDir;

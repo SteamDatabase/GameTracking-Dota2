@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_CinderBrew_Animation : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_CinderBrew_Animation
 {
 	bool m_bIsBarrelCast;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KeeperOfTheLight_BlindingLight : public CDOTA_Buff
+class CDOTA_Modifier_KeeperOfTheLight_BlindingLight
 {
 	int32 miss_rate;
 };

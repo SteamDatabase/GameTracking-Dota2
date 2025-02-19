@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bristleback_Bristleback : public CDOTA_Buff
+class CDOTA_Modifier_Bristleback_Bristleback
 {
 	int32 side_damage_reduction;
 	int32 back_damage_reduction;

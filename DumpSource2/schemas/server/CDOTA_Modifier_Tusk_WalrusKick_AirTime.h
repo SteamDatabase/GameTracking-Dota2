@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tusk_WalrusKick_AirTime : public CDOTA_Buff
+class CDOTA_Modifier_Tusk_WalrusKick_AirTime
 {
 	int32 hp_threshold;
 	float32 m_flStartZ;

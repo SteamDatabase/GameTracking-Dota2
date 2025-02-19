@@ -1,4 +1,4 @@
-class CScriptNavBlocker : public CFuncNavBlocker
+class CScriptNavBlocker
 {
 	Vector m_vExtent;
 };

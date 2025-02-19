@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Twin_Gate_Warp_Channel : public CDOTA_Buff
+class CDOTA_Modifier_Twin_Gate_Warp_Channel
 {
 	ParticleIndex_t m_nfxTargetTp;
 	ParticleIndex_t m_nfxTargetTp2;

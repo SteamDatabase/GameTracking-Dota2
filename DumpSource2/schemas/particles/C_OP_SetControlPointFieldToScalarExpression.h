@@ -1,4 +1,4 @@
-class C_OP_SetControlPointFieldToScalarExpression : public CParticleFunctionPreEmission
+class C_OP_SetControlPointFieldToScalarExpression
 {
 	ScalarExpressionType_t m_nExpression;
 	CParticleCollectionFloatInput m_flInput1;

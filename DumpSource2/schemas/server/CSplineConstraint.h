@@ -1,4 +1,4 @@
-class CSplineConstraint : public CPhysConstraint
+class CSplineConstraint
 {
 	Vector m_vAnchorOffsetRestore;
 	bool m_bEnableLateralConstraint;

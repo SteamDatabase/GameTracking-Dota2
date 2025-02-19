@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Pangolier_Swashbuckle : public C_DOTABaseAbility
+class C_DOTA_Ability_Pangolier_Swashbuckle
 {
 	int32 dash_speed;
 	int32 start_radius;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dazzle_Poison_Touch : public CDOTA_Buff
+class CDOTA_Modifier_Dazzle_Poison_Touch
 {
 	int32 slow;
 	float32 bonus_slow;

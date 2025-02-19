@@ -1,4 +1,4 @@
-class CDOTA_Ability_Aghanim_Spear : public CDOTABaseAbility
+class CDOTA_Ability_Aghanim_Spear
 {
 	CUtlVector< CHandle< CBaseEntity > > hAlreadyHitList;
 	CUtlVector< int32 > m_vecProjectileHandles;

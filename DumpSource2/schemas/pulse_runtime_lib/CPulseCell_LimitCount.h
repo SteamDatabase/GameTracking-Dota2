@@ -1,4 +1,4 @@
-class CPulseCell_LimitCount : public CPulseCell_BaseRequirement
+class CPulseCell_LimitCount
 {
 	int32 m_nLimitCount;
 };

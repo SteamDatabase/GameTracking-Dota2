@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DoomBringer_InfernalBlade : public CDOTA_Buff
+class CDOTA_Modifier_DoomBringer_InfernalBlade
 {
 	bool m_bInfernalBladeAttack;
 	ParticleIndex_t m_nFXIndex;

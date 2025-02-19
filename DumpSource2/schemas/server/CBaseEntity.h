@@ -1,4 +1,4 @@
-class CBaseEntity : public CEntityInstance
+class CBaseEntity
 {
 	CBodyComponent* m_CBodyComponent;
 	CNetworkTransmitComponent m_NetworkTransmitComponent;
@@ -72,7 +72,6 @@ class CBaseEntity : public CEntityInstance
 	QAngle m_vecAngVelocity;
 	bool m_bNetworkQuantizeOriginAndAngles;
 	bool m_bLagCompensate;
-	float32 m_flOverriddenFriction;
 	CHandle< CBaseEntity > m_pBlocker;
 	float32 m_flLocalTime;
 	float32 m_flVPhysicsUpdateLocalTime;

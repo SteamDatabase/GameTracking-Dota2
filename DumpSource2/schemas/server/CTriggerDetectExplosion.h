@@ -1,4 +1,4 @@
-class CTriggerDetectExplosion : public CBaseTrigger
+class CTriggerDetectExplosion
 {
 	CEntityIOOutput m_OnDetectedExplosion;
 };

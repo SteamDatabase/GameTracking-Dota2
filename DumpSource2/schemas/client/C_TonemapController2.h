@@ -1,4 +1,4 @@
-class C_TonemapController2 : public C_BaseEntity
+class C_TonemapController2
 {
 	float32 m_flAutoExposureMin;
 	float32 m_flAutoExposureMax;

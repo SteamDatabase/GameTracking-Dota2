@@ -1,4 +1,4 @@
-class CDOTA_Ability_Grimstroke_DarkArtistry : public C_DOTABaseAbility
+class CDOTA_Ability_Grimstroke_DarkArtistry
 {
 	Vector m_vCastDir;
 	Vector m_vVectorTargetEndpoint;
@@ -31,4 +31,5 @@ class CDOTA_Ability_Grimstroke_DarkArtistry : public C_DOTABaseAbility
 	float32 bonus_damage_per_target;
 	float32 vector_deg_turn_divisor;
 	float32 vision_duration;
+	ParticleIndex_t m_nCurvePathPreviewFXIndex;
 };

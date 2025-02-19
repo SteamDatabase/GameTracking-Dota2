@@ -1,4 +1,4 @@
-class CDOTA_NPC_Lantern : public CDOTA_BaseNPC_Building
+class CDOTA_NPC_Lantern
 {
 	CUtlSymbolLarge m_szInteractAbilityName;
 };

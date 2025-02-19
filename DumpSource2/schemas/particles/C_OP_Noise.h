@@ -1,4 +1,4 @@
-class C_OP_Noise : public CParticleFunctionOperator
+class C_OP_Noise
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	float32 m_flOutputMin;

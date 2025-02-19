@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kunkka_Ghost_Ship_Fleet : public CDOTA_Buff
+class CDOTA_Modifier_Kunkka_Ghost_Ship_Fleet
 {
 	Vector vCasterOrigin;
 	Vector vEnd;

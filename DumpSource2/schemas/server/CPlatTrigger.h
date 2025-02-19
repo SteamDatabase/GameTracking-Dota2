@@ -1,4 +1,4 @@
-class CPlatTrigger : public CBaseModelEntity
+class CPlatTrigger
 {
 	CHandle< CFuncPlat > m_pPlatform;
 };

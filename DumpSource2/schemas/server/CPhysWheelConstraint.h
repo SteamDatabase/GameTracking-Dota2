@@ -1,4 +1,4 @@
-class CPhysWheelConstraint : public CPhysConstraint
+class CPhysWheelConstraint
 {
 	float32 m_flSuspensionFrequency;
 	float32 m_flSuspensionDampingRatio;

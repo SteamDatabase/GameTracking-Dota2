@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Windrunner_FocusFire : public CDOTA_Buff
+class CDOTA_Modifier_Windrunner_FocusFire
 {
 	CHandle< C_BaseEntity > m_hTarget;
 	int32 focusfire_damage_reduction;

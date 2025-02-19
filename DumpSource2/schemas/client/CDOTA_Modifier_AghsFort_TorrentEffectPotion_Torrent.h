@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_TorrentEffectPotion_Torrent : public CDOTA_Buff_Item
+class CDOTA_Modifier_AghsFort_TorrentEffectPotion_Torrent
 {
 	int32 m_nTorrentDamage;
 };

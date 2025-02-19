@@ -1,4 +1,4 @@
-class C_OP_RampScalarLinearSimple : public CParticleFunctionOperator
+class C_OP_RampScalarLinearSimple
 {
 	float32 m_Rate;
 	float32 m_flStartTime;

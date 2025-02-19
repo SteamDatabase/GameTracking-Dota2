@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Furion_WrathOfNature_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Furion_WrathOfNature_Thinker
 {
 	int32 damage;
 	int32 max_targets;

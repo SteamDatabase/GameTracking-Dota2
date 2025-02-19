@@ -1,4 +1,4 @@
-class C_DOTA_Item_Ancient_Janggo : public C_DOTA_Item
+class C_DOTA_Item_Ancient_Janggo
 {
 	float32 radius;
 };

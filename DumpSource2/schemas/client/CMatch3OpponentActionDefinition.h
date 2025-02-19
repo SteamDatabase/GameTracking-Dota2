@@ -1,4 +1,4 @@
-class CMatch3OpponentActionDefinition : public CMatch3AbilityBaseDefinition
+class CMatch3OpponentActionDefinition
 {
 	Match3OpponentActionID_t m_unOpponentActionID;
 };

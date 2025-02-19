@@ -1,4 +1,4 @@
-class CBoolAnimParameter : public CConcreteAnimParameter
+class CBoolAnimParameter
 {
 	bool m_bDefaultValue;
 };

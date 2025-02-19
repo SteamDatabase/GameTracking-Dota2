@@ -1,4 +1,4 @@
-class C_DOTA_Ability_LoneDruid_Rabid : public C_DOTABaseAbility
+class C_DOTA_Ability_LoneDruid_Rabid
 {
 	float32 rabid_duration;
 };

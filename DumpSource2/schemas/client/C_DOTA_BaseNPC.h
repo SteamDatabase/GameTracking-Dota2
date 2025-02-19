@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
+class C_DOTA_BaseNPC
 {
 	bool m_bIsPhantom;
 	uint32 m_iUnitType;
@@ -44,7 +44,7 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	int32 m_iBotDebugData;
 	bool m_bIsIllusion;
 	bool m_bHasClientSeenIllusionModifier;
-	CHandle< C_BaseEntity >[40] m_hAbilities;
+	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_vecAbilities;
 	float32 m_flInvisibilityLevel;
 	float32 m_flHullRadius;
 	float32 m_flCollisionPadding;
@@ -87,6 +87,7 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	bool m_bHasInventory;
 	int32 m_iAcquisitionRange;
 	int32 m_FoWViewID;
+	int32 m_iTeamViewerID;
 	int32 m_iPrevHealthPct;
 	int32 m_iPrevLifeState;
 	int32 m_iPrevTeam;

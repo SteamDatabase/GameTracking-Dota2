@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Harpoon_Pull : public CDOTA_Buff
+class CDOTA_Modifier_Item_Harpoon_Pull
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

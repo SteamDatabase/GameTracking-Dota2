@@ -109,4 +109,8 @@ enum EDotaClientMessages : uint32_t
 	DOTA_CM_RerollNeutralItem = 813,
 	DOTA_CM_RoshanTimer = 814,
 	DOTA_CM_SuggestItemPreference = 815,
+	DOTA_CM_CraftNeutralItem = 816,
+	DOTA_CM_ChooseCraftedNeutral = 817,
+	DOTA_CM_TimerAlert = 818,
+	DOTA_CM_MadstoneAlert = 819,
 };

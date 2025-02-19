@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Legion_Commander_OverwhelmingOdds : public CDOTA_Buff
+class CDOTA_Modifier_Legion_Commander_OverwhelmingOdds
 {
 	int32 bonus_attack_speed_creeps;
 	int32 bonus_attack_speed;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DrowRanger_ArcanaKill_Delay : public CDOTA_Buff
+class CDOTA_Modifier_DrowRanger_ArcanaKill_Delay
 {
 	PlayerID_t m_nPlayerID_Drow;
 };

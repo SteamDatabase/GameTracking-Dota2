@@ -1,4 +1,4 @@
-class CLightEntity : public CBaseModelEntity
+class CLightEntity
 {
 	CLightComponent* m_CLightComponent;
 };

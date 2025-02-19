@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Terrorblade : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Terrorblade
 {
 	ParticleIndex_t m_nFXDeath;
 	CUtlString m_szResponseCriteria;

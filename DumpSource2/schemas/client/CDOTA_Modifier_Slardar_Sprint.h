@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slardar_Sprint : public CDOTA_Buff
+class CDOTA_Modifier_Slardar_Sprint
 {
 	float32 bonus_speed;
 	int32 speed_burst_percent;

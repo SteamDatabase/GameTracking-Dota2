@@ -1,3 +1,3 @@
-class C_INIT_RandomRotationSpeed : public CGeneralRandomRotation
+class C_INIT_RandomRotationSpeed
 {
 };

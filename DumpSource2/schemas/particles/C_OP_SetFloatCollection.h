@@ -1,4 +1,4 @@
-class C_OP_SetFloatCollection : public CParticleFunctionOperator
+class C_OP_SetFloatCollection
 {
 	CParticleCollectionFloatInput m_InputValue;
 	ParticleAttributeIndex_t m_nOutputField;

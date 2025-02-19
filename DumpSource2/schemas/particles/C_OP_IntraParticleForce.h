@@ -1,4 +1,4 @@
-class C_OP_IntraParticleForce : public CParticleFunctionForce
+class C_OP_IntraParticleForce
 {
 	float32 m_flAttractionMinDistance;
 	float32 m_flAttractionMaxDistance;
@@ -7,5 +7,4 @@ class C_OP_IntraParticleForce : public CParticleFunctionForce
 	float32 m_flRepulsionMaxDistance;
 	float32 m_flRepulsionMaxStrength;
 	bool m_bUseAABB;
-	bool m_bThreadIt;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Venomancer_Plague_Carrier : public CDOTA_Buff
+class CDOTA_Modifier_Venomancer_Plague_Carrier
 {
 	CHandle< CDOTA_BaseNPC > m_hAttachTarget;
 	int32 m_nWardIndex;

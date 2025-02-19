@@ -1,4 +1,4 @@
-class CDOTA_Ability_Meepo_Megameepo_Fling : public CDOTABaseAbility
+class CDOTA_Ability_Meepo_Megameepo_Fling
 {
 	int32 vision_radius;
 };

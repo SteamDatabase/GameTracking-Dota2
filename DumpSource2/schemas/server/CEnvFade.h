@@ -1,4 +1,4 @@
-class CEnvFade : public CLogicalEntity
+class CEnvFade
 {
 	Color m_fadeColor;
 	float32 m_Duration;

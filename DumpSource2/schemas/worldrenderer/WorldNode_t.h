@@ -8,6 +8,7 @@ class WorldNode_t
 	CUtlVector< ExtraVertexStreamOverride_t > m_extraVertexStreamOverrides;
 	CUtlVector< MaterialOverride_t > m_materialOverrides;
 	CUtlVector< WorldNodeOnDiskBufferData_t > m_extraVertexStreams;
+	CUtlVector< AggregateInstanceStreamOnDiskData_t > m_aggregateInstanceStreams;
 	CUtlVector< CUtlString > m_layerNames;
 	CUtlVector< uint8 > m_sceneObjectLayerIndices;
 	CUtlVector< uint8 > m_overlayLayerIndices;

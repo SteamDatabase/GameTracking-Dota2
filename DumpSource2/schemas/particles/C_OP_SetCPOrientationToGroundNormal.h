@@ -1,4 +1,4 @@
-class C_OP_SetCPOrientationToGroundNormal : public CParticleFunctionOperator
+class C_OP_SetCPOrientationToGroundNormal
 {
 	float32 m_flInterpRate;
 	float32 m_flMaxTraceLength;

@@ -1,4 +1,4 @@
-class CDOTAPropCustomTexture : public CDynamicProp
+class CDOTAPropCustomTexture
 {
 	uint32 m_unTeamID;
 };

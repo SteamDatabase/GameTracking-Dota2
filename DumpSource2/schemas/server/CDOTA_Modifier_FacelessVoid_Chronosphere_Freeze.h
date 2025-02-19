@@ -1,4 +1,3 @@
-class CDOTA_Modifier_FacelessVoid_Chronosphere_Freeze : public CDOTA_Buff
+class CDOTA_Modifier_FacelessVoid_Chronosphere_Freeze
 {
-	CUtlVectorFixedGrowable< CHandle< CDOTABaseAbility >, 40 > m_vecAbilities;
 };

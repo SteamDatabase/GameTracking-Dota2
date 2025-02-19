@@ -1,4 +1,4 @@
-class CTriggerLerpObject : public CBaseTrigger
+class CTriggerLerpObject
 {
 	CUtlSymbolLarge m_iszLerpTarget;
 	CHandle< CBaseEntity > m_hLerpTarget;

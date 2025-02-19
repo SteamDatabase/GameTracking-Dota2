@@ -1,4 +1,4 @@
-class CDOTAPropPlusPlayerGuildBanner : public CDOTA_GuildBannerDynamic
+class CDOTAPropPlusPlayerGuildBanner
 {
 	int32 m_nPlayerID;
 };

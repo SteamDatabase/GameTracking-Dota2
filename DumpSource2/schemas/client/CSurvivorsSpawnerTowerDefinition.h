@@ -1,3 +1,3 @@
-class CSurvivorsSpawnerTowerDefinition : public CSurvivorsSpawnerDefinition
+class CSurvivorsSpawnerTowerDefinition
 {
 };

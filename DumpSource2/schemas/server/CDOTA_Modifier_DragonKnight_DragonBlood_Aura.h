@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DragonKnight_DragonBlood_Aura : public CDOTA_Buff
+class CDOTA_Modifier_DragonKnight_DragonBlood_Aura
 {
 	int32 aura_radius;
 	int32 is_green_dragon;

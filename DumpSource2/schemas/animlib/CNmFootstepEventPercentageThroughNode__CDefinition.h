@@ -1,4 +1,4 @@
-class CNmFootstepEventPercentageThroughNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFootstepEventPercentageThroughNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	NmFootPhaseCondition_t m_phaseCondition;

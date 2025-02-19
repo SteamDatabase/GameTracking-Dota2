@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pogo_Stick_Active : public CDOTA_Buff
+class CDOTA_Modifier_Pogo_Stick_Active
 {
 	int32 leap_distance;
 	float32 leap_speed;

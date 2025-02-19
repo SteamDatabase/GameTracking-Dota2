@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Activity_Modifier : public CDOTA_Buff
+class CDOTA_Modifier_Activity_Modifier
 {
 	CUtlSymbolLarge m_activityModifier;
 };

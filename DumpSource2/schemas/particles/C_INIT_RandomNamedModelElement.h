@@ -1,4 +1,4 @@
-class C_INIT_RandomNamedModelElement : public CParticleFunctionInitializer
+class C_INIT_RandomNamedModelElement
 {
 	CStrongHandle< InfoForResourceTypeCModel > m_hModel;
 	CUtlVector< CUtlString > m_names;

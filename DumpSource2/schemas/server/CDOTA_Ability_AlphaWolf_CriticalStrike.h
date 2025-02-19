@@ -1,3 +1,3 @@
-class CDOTA_Ability_AlphaWolf_CriticalStrike : public CDOTABaseAbility
+class CDOTA_Ability_AlphaWolf_CriticalStrike
 {
 };

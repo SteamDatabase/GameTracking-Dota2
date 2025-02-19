@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Corpselord_Revive : public CDOTA_Buff
+class CDOTA_Modifier_Corpselord_Revive
 {
 	int32 radius;
 	int32 ticks_to_revive;

@@ -1,4 +1,4 @@
-class C_OP_DampenToCP : public CParticleFunctionOperator
+class C_OP_DampenToCP
 {
 	int32 m_nControlPointNumber;
 	float32 m_flRange;

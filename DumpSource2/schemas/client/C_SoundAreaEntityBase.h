@@ -1,4 +1,4 @@
-class C_SoundAreaEntityBase : public C_BaseEntity
+class C_SoundAreaEntityBase
 {
 	bool m_bDisabled;
 	bool m_bWasEnabled;

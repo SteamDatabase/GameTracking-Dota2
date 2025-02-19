@@ -1,3 +1,3 @@
-class CSurvivorsEnemyDefinition_Pillar : public CSurvivorsEnemyDefinition
+class CSurvivorsEnemyDefinition_Pillar
 {
 };

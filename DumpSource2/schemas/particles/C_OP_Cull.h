@@ -1,4 +1,4 @@
-class C_OP_Cull : public CParticleFunctionOperator
+class C_OP_Cull
 {
 	float32 m_flCullPerc;
 	float32 m_flCullStart;

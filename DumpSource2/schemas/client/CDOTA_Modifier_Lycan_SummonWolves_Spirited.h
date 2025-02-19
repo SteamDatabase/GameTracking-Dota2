@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lycan_SummonWolves_Spirited : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_Lycan_SummonWolves_Spirited
 {
 	CHandle< C_BaseEntity > m_hOwner;
 	int32 wolf_index;

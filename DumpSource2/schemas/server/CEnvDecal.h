@@ -1,4 +1,4 @@
-class CEnvDecal : public CBaseModelEntity
+class CEnvDecal
 {
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hDecalMaterial;
 	float32 m_flWidth;

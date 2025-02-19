@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NightStalker_CripplingFear_Aura : public CDOTA_Buff
+class CDOTA_Modifier_NightStalker_CripplingFear_Aura
 {
 	float32 radius;
 	int32 death_refresh;

@@ -1,4 +1,4 @@
-class CFuncPlatRot : public CFuncPlat
+class CFuncPlatRot
 {
 	QAngle m_end;
 	QAngle m_start;

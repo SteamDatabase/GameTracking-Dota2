@@ -1,4 +1,4 @@
-class CBreakable : public CBaseModelEntity
+class CBreakable
 {
 	CPropDataComponent m_CPropDataComponent;
 	Materials m_Material;

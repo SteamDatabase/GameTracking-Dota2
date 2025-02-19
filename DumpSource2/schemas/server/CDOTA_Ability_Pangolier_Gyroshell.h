@@ -1,4 +1,4 @@
-class CDOTA_Ability_Pangolier_Gyroshell : public CDOTABaseAbility
+class CDOTA_Ability_Pangolier_Gyroshell
 {
 	ParticleIndex_t m_nFxIndex;
 };

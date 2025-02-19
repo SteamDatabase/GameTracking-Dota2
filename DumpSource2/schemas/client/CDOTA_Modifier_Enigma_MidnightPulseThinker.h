@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enigma_MidnightPulseThinker : public CDOTA_Buff
+class CDOTA_Modifier_Enigma_MidnightPulseThinker
 {
 	float32 radius;
 	ParticleIndex_t n_FXIndex;

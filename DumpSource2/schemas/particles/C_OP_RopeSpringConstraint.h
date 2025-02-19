@@ -1,4 +1,4 @@
-class C_OP_RopeSpringConstraint : public CParticleFunctionConstraint
+class C_OP_RopeSpringConstraint
 {
 	CParticleCollectionFloatInput m_flRestLength;
 	CParticleCollectionFloatInput m_flMinDistance;

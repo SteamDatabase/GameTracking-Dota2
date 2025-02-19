@@ -1,4 +1,4 @@
-class CDOTA_Modifier_StaffOfWizardry : public CDOTA_Buff_Item
+class CDOTA_Modifier_StaffOfWizardry
 {
 	int32 bonus_intellect;
 };

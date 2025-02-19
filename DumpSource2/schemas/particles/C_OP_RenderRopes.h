@@ -1,4 +1,4 @@
-class C_OP_RenderRopes : public CBaseRendererSource2
+class C_OP_RenderRopes
 {
 	bool m_bEnableFadingAndClamping;
 	float32 m_flMinSize;

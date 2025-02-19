@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Creature_Impale : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_Creature_Impale
 {
 	float32 m_flStartZ;
 	float32 m_flCurTime;

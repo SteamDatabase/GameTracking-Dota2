@@ -1,3 +1,3 @@
-class CDOTA_Ability_Omniknight_Pacify : public CDOTABaseAbility
+class CDOTA_Ability_Omniknight_Pacify
 {
 };

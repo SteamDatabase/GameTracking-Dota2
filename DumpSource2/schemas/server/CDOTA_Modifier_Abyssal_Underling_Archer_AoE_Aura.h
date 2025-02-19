@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Abyssal_Underling_Archer_AoE_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Abyssal_Underling_Archer_AoE_Aura
 {
 	int32 ms_bonus;
 };

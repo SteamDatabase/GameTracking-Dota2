@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Banana : public CDOTA_Buff
+class CDOTA_Modifier_Banana
 {
 	int32 slide_distance;
 	int32 radius;

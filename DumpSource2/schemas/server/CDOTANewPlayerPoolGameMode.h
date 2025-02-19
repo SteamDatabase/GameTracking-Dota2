@@ -1,4 +1,4 @@
-class CDOTANewPlayerPoolGameMode : public CDOTABaseGameMode
+class CDOTANewPlayerPoolGameMode
 {
 	int32 m_nHighestLevelInCurrentGame;
 	CUtlVector< float32 > m_ExtraMeleeCreepTimes;

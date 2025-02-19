@@ -1,3 +1,3 @@
-class CDOTA_HeroTrigger : public CTriggerMultiple
+class CDOTA_HeroTrigger
 {
 };

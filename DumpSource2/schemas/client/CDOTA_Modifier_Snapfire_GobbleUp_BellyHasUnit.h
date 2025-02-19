@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_GobbleUp_BellyHasUnit : public CDOTA_Buff
+class CDOTA_Modifier_Snapfire_GobbleUp_BellyHasUnit
 {
 	CHandle< C_BaseEntity > m_hGobbledUnit;
 	PlayerID_t m_nOriginalControllingUnit;

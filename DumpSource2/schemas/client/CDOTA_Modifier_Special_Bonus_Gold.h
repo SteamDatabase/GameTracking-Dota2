@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Gold : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Gold
 {
 	int32 value;
 };

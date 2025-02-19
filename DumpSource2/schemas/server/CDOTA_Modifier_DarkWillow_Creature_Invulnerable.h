@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkWillow_Creature_Invulnerable : public CDOTA_Buff
+class CDOTA_Modifier_DarkWillow_Creature_Invulnerable
 {
 	int32 m_nOverrideAnim;
 };

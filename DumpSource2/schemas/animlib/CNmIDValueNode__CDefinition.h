@@ -1,3 +1,3 @@
-class CNmIDValueNode::CDefinition : public CNmValueNode::CDefinition
+class CNmIDValueNode::CDefinition
 {
 };

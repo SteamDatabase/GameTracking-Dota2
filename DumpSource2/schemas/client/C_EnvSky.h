@@ -1,4 +1,4 @@
-class C_EnvSky : public C_BaseModelEntity
+class C_EnvSky
 {
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hSkyMaterial;
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hSkyMaterialLightingOnly;

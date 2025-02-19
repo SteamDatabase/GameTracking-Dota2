@@ -1,4 +1,4 @@
-class CDOTA_Ability_DoomBringer_Devour : public CDOTABaseAbility
+class CDOTA_Ability_DoomBringer_Devour
 {
 	int32 m_nDevourFirstSlot;
 	bool m_bIsAltCastState;

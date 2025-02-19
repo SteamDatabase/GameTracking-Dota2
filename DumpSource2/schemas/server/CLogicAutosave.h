@@ -1,4 +1,4 @@
-class CLogicAutosave : public CLogicalEntity
+class CLogicAutosave
 {
 	bool m_bForceNewLevelUnit;
 	int32 m_minHitPoints;

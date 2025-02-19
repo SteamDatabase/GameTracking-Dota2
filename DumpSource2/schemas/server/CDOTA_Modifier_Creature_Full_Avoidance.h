@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Creature_Full_Avoidance : public CDOTA_Buff
+class CDOTA_Modifier_Creature_Full_Avoidance
 {
 	float32 m_flOriginalAvoidance;
 };

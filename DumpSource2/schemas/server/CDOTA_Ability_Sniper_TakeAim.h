@@ -1,4 +1,4 @@
-class CDOTA_Ability_Sniper_TakeAim : public CDOTABaseAbility
+class CDOTA_Ability_Sniper_TakeAim
 {
 	CHandle< CBaseEntity > m_hTarget;
 };

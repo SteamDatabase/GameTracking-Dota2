@@ -1,4 +1,4 @@
-class CBlend2DUpdateNode : public CAnimUpdateNodeBase
+class CBlend2DUpdateNode
 {
 	CUtlVector< BlendItem_t > m_items;
 	CUtlVector< TagSpan_t > m_tags;

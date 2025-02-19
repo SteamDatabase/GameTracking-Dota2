@@ -1,3 +1,3 @@
-class CDOTA_Ability_Juggernaut_Innate_Mask_Spin_Crit : public CDOTABaseAbility
+class CDOTA_Ability_Juggernaut_Innate_Mask_Spin_Crit
 {
 };

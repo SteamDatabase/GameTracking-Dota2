@@ -1,4 +1,4 @@
-class CDOTA_Item_Trusty_Shovel : public C_DOTA_Item
+class CDOTA_Item_Trusty_Shovel
 {
 	Vector m_vChannelPos;
 	bool m_bIsUnderwater;

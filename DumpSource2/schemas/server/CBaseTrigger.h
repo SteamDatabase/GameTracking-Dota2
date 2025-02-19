@@ -1,8 +1,5 @@
-class CBaseTrigger : public CBaseToggle
+class CBaseTrigger
 {
-	bool m_bDisabled;
-	CUtlSymbolLarge m_iFilterName;
-	CHandle< CBaseFilter > m_hFilter;
 	CEntityIOOutput m_OnStartTouch;
 	CEntityIOOutput m_OnStartTouchAll;
 	CEntityIOOutput m_OnEndTouch;
@@ -11,5 +8,7 @@ class CBaseTrigger : public CBaseToggle
 	CEntityIOOutput m_OnTouchingEachEntity;
 	CEntityIOOutput m_OnNotTouching;
 	CUtlVector< CHandle< CBaseEntity > > m_hTouchingEntities;
-	bool m_bClientSidePredicted;
+	CUtlSymbolLarge m_iFilterName;
+	CHandle< CBaseFilter > m_hFilter;
+	bool m_bDisabled;
 };

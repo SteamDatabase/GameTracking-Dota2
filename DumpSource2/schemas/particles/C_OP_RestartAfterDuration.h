@@ -1,4 +1,4 @@
-class C_OP_RestartAfterDuration : public CParticleFunctionOperator
+class C_OP_RestartAfterDuration
 {
 	float32 m_flDurationMin;
 	float32 m_flDurationMax;

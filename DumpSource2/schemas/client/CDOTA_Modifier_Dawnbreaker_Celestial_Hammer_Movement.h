@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Celestial_Hammer_Movement : public CDOTA_Buff
+class CDOTA_Modifier_Dawnbreaker_Celestial_Hammer_Movement
 {
 	int32 m_nProjectileID;
 	int32 projectile_speed;
@@ -11,4 +11,5 @@ class CDOTA_Modifier_Dawnbreaker_Celestial_Hammer_Movement : public CDOTA_Buff
 	int32 flare_radius;
 	bool bHasStartedBurning;
 	float32 flare_debuff_duration;
+	float32 fire_trail_health_regen;
 };

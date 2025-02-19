@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_TimberChain : public CDOTA_Buff
+class CDOTA_Modifier_Shredder_TimberChain
 {
 	int32 speed;
 	int32 radius;

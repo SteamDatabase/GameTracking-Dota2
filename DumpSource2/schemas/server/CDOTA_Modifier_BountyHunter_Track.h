@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BountyHunter_Track : public CDOTA_Buff
+class CDOTA_Modifier_BountyHunter_Track
 {
 	int32 aura_radius;
 	int32 m_nParentGold;

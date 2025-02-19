@@ -1,4 +1,4 @@
-class C_BaseClientUIEntity : public C_BaseModelEntity
+class C_BaseClientUIEntity
 {
 	bool m_bEnabled;
 	CUtlSymbolLarge m_DialogXMLName;

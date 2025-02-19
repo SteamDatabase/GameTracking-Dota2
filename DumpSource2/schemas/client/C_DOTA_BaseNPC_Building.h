@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_Building : public C_DOTA_BaseNPC
+class C_DOTA_BaseNPC_Building
 {
 	int32 m_iDamageLevel;
 	ParticleIndex_t m_nAmbientFXIndex;

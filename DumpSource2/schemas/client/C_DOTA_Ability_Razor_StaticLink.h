@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Razor_StaticLink : public C_DOTABaseAbility
+class C_DOTA_Ability_Razor_StaticLink
 {
 	int32 m_iLinkIndex;
 	CountdownTimer m_ViewerTimer;

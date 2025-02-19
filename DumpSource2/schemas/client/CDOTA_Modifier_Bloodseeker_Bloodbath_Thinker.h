@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bloodseeker_Bloodbath_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Bloodseeker_Bloodbath_Thinker
 {
 	int32 radius;
 };

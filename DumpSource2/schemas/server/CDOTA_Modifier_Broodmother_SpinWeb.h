@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Broodmother_SpinWeb : public CDOTA_Buff
+class CDOTA_Modifier_Broodmother_SpinWeb
 {
 	int32 health_regen;
 	int32 bonus_movespeed;

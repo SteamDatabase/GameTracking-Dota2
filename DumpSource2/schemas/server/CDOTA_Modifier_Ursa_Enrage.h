@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ursa_Enrage : public CDOTA_Buff
+class CDOTA_Modifier_Ursa_Enrage
 {
 	int32 damage_reduction;
 	int32 status_resistance;

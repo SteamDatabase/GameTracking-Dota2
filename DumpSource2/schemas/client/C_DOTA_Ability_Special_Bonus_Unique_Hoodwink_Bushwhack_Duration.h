@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Hoodwink_Bushwhack_Duration : public C_DOTABaseAbility
+class C_DOTA_Ability_Special_Bonus_Unique_Hoodwink_Bushwhack_Duration
 {
 };

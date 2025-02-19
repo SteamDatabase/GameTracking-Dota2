@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Furion_Sprout_Healing_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Furion_Sprout_Healing_Aura
 {
 	ParticleIndex_t m_nFXIndex;
 };

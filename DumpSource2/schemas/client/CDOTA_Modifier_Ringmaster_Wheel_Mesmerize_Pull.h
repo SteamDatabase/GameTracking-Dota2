@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_Wheel_Mesmerize_Pull : public CDOTA_Buff
+class CDOTA_Modifier_Ringmaster_Wheel_Mesmerize_Pull
 {
 	float32 think_interval;
 	float32 mesmerize_radius;

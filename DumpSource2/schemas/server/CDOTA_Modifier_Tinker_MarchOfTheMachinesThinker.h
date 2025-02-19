@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tinker_MarchOfTheMachinesThinker : public CDOTA_Buff
+class CDOTA_Modifier_Tinker_MarchOfTheMachinesThinker
 {
 	int32 collision_radius;
 	int32 radius;

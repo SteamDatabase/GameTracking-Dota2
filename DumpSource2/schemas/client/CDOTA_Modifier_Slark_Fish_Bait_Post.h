@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_Fish_Bait_Post : public CDOTA_Buff
+class CDOTA_Modifier_Slark_Fish_Bait_Post
 {
 	int32 attack_speed;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Item_Vambrace : public CDOTA_Item
+class CDOTA_Item_Vambrace
 {
 	int32 m_iStat;
 };

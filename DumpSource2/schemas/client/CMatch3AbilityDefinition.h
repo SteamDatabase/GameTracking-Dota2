@@ -1,4 +1,4 @@
-class CMatch3AbilityDefinition : public CMatch3AbilityBaseDefinition
+class CMatch3AbilityDefinition
 {
 	Match3AbilityID_t m_unAbilityID;
 };

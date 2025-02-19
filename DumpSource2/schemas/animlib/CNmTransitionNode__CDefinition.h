@@ -1,4 +1,4 @@
-class CNmTransitionNode::CDefinition : public CNmPoseNode::CDefinition
+class CNmTransitionNode::CDefinition
 {
 	int16 m_nTargetStateNodeIdx;
 	int16 m_nDurationOverrideNodeIdx;

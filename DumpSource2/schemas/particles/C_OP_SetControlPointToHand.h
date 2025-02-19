@@ -1,4 +1,4 @@
-class C_OP_SetControlPointToHand : public CParticleFunctionPreEmission
+class C_OP_SetControlPointToHand
 {
 	int32 m_nCP1;
 	int32 m_nHand;

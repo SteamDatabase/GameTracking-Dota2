@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Meepo_Flung : public CDOTA_Buff
+class CDOTA_Modifier_Meepo_Flung
 {
 	int32 m_nHandle;
 };

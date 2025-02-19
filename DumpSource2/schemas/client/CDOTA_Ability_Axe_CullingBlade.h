@@ -1,4 +1,4 @@
-class CDOTA_Ability_Axe_CullingBlade : public C_DOTABaseAbility
+class CDOTA_Ability_Axe_CullingBlade
 {
 	bool m_bInterrupted;
 	Vector m_vProjectileLocation;

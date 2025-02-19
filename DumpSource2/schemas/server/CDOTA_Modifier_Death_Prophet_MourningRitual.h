@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Death_Prophet_MourningRitual : public CDOTA_Buff
+class CDOTA_Modifier_Death_Prophet_MourningRitual
 {
 	float32 delay_pct;
 	float32 delay_time;

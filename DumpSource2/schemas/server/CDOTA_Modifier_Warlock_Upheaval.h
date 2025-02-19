@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Warlock_Upheaval : public CDOTA_Buff
+class CDOTA_Modifier_Warlock_Upheaval
 {
 	int32 m_iSlow;
 };

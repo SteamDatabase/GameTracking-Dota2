@@ -1,4 +1,4 @@
-class C_PointClientUIHUD : public C_BaseClientUIEntity
+class C_PointClientUIHUD
 {
 	bool m_bCheckCSSClasses;
 	bool m_bIgnoreInput;

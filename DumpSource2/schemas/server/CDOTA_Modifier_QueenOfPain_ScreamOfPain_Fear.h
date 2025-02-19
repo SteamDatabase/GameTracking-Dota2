@@ -1,4 +1,4 @@
-class CDOTA_Modifier_QueenOfPain_ScreamOfPain_Fear : public CDOTA_Buff
+class CDOTA_Modifier_QueenOfPain_ScreamOfPain_Fear
 {
 	Vector m_vOriginal;
 };

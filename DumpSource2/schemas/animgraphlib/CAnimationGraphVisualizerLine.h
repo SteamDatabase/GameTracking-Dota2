@@ -1,4 +1,4 @@
-class CAnimationGraphVisualizerLine : public CAnimationGraphVisualizerPrimitiveBase
+class CAnimationGraphVisualizerLine
 {
 	VectorAligned m_vWsPositionStart;
 	VectorAligned m_vWsPositionEnd;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Lina_Combustion : public CDOTABaseAbility
+class CDOTA_Ability_Lina_Combustion
 {
 };

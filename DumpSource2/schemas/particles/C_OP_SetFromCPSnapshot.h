@@ -1,4 +1,4 @@
-class C_OP_SetFromCPSnapshot : public CParticleFunctionOperator
+class C_OP_SetFromCPSnapshot
 {
 	int32 m_nControlPointNumber;
 	ParticleAttributeIndex_t m_nAttributeToRead;

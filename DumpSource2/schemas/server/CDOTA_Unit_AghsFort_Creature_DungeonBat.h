@@ -1,4 +1,4 @@
-class CDOTA_Unit_AghsFort_Creature_DungeonBat : public CDOTA_BaseNPC_Creature
+class CDOTA_Unit_AghsFort_Creature_DungeonBat
 {
 	ParticleIndex_t m_nFXAmbient;
 };

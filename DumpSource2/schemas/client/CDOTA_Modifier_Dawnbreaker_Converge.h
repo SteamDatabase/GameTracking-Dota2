@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Converge : public CDOTA_Buff
+class CDOTA_Modifier_Dawnbreaker_Converge
 {
 	int32 move_slow;
 	int32 burn_damage;

@@ -1,4 +1,4 @@
-class CDampedPathAnimMotorUpdater : public CPathAnimMotorUpdaterBase
+class CDampedPathAnimMotorUpdater
 {
 	float32 m_flAnticipationTime;
 	float32 m_flMinSpeedScale;

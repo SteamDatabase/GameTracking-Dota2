@@ -1,3 +1,3 @@
-class CDOTA_Muerta_Revenant : public CDOTA_BaseNPC
+class CDOTA_Muerta_Revenant
 {
 };

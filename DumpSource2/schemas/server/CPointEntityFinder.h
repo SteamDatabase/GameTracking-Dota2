@@ -1,4 +1,4 @@
-class CPointEntityFinder : public CBaseEntity
+class CPointEntityFinder
 {
 	CHandle< CBaseEntity > m_hEntity;
 	CUtlSymbolLarge m_iFilterName;

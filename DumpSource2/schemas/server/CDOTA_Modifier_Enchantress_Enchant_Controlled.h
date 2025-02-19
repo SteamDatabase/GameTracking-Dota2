@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enchantress_Enchant_Controlled : public CDOTA_Buff
+class CDOTA_Modifier_Enchantress_Enchant_Controlled
 {
 	int32 bonus_movement_speed;
 	int32 enchant_health;

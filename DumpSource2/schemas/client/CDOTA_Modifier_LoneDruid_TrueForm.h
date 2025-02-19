@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_TrueForm : public CDOTA_Buff
+class CDOTA_Modifier_LoneDruid_TrueForm
 {
 	int32 bonus_armor;
 	int32 bonus_hp;

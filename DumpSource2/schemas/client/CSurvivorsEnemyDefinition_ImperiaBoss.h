@@ -1,4 +1,4 @@
-class CSurvivorsEnemyDefinition_ImperiaBoss : public CSurvivorsEnemyDefinition
+class CSurvivorsEnemyDefinition_ImperiaBoss
 {
 	float32 m_flBurningGroundImpactDamage;
 	float32 m_flBurningGroundImpactRadius;

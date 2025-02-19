@@ -1,4 +1,4 @@
-class C_OP_ClampScalar : public CParticleFunctionOperator
+class C_OP_ClampScalar
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleFloatInput m_flOutputMin;

@@ -1,4 +1,4 @@
-class CDOTA_GuildBannerDynamic : public CDynamicProp
+class CDOTA_GuildBannerDynamic
 {
 	bool m_bRespawnClientEntity;
 	bool m_bPlaySpawnAnimation;

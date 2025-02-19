@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_Creep_Lane : public C_DOTA_BaseNPC_Creep
+class C_DOTA_BaseNPC_Creep_Lane
 {
 	FowCustomTeams_t m_nFoWTeam;
 };

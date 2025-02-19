@@ -1,4 +1,4 @@
-class CWayPointHelperUpdateNode : public CUnaryUpdateNode
+class CWayPointHelperUpdateNode
 {
 	float32 m_flStartCycle;
 	float32 m_flEndCycle;

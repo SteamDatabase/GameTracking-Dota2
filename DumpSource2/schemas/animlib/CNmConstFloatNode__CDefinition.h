@@ -1,4 +1,4 @@
-class CNmConstFloatNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmConstFloatNode::CDefinition
 {
 	float32 m_flValue;
 };

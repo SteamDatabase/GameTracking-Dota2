@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ursa_Fury_Swipes_Damage_Increase : public CDOTA_Buff
+class CDOTA_Modifier_Ursa_Fury_Swipes_Damage_Increase
 {
 	int32 damage_per_stack;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_Ascension_Invis : public CDOTABaseAbility
+class CDOTA_Ability_AghsFort_Ascension_Invis
 {
 	float32 warning_duration;
 };

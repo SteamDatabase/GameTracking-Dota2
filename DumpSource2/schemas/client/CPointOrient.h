@@ -1,4 +1,4 @@
-class CPointOrient : public C_BaseEntity
+class CPointOrient
 {
 	CUtlSymbolLarge m_iszSpawnTargetName;
 	CHandle< C_BaseEntity > m_hTarget;

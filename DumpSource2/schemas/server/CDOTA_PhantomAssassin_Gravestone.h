@@ -1,4 +1,4 @@
-class CDOTA_PhantomAssassin_Gravestone : public CDOTA_BaseNPC_Additive
+class CDOTA_PhantomAssassin_Gravestone
 {
 	PlayerID_t m_nVictimPlayerID;
 };

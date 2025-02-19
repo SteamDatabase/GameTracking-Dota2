@@ -1,4 +1,4 @@
-class C_OP_QuantizeFloat : public CParticleFunctionOperator
+class C_OP_QuantizeFloat
 {
 	CPerParticleFloatInput m_InputValue;
 	ParticleAttributeIndex_t m_nOutputField;

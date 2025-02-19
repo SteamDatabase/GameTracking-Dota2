@@ -1,4 +1,4 @@
-class CTriggerLook : public CTriggerOnce
+class CTriggerLook
 {
 	CHandle< CBaseEntity > m_hLookTarget;
 	float32 m_flFieldOfView;

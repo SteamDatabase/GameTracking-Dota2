@@ -1,4 +1,4 @@
-class CUnaryUpdateNode : public CAnimUpdateNodeBase
+class CUnaryUpdateNode
 {
 	CAnimUpdateNodeRef m_pChildNode;
 };

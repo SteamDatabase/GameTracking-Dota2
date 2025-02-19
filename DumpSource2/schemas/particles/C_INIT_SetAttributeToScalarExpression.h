@@ -1,4 +1,4 @@
-class C_INIT_SetAttributeToScalarExpression : public CParticleFunctionInitializer
+class C_INIT_SetAttributeToScalarExpression
 {
 	ScalarExpressionType_t m_nExpression;
 	CPerParticleFloatInput m_flInput1;

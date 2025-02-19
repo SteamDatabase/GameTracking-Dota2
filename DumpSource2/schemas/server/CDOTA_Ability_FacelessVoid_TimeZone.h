@@ -1,3 +1,3 @@
-class CDOTA_Ability_FacelessVoid_TimeZone : public CDOTABaseAbility
+class CDOTA_Ability_FacelessVoid_TimeZone
 {
 };

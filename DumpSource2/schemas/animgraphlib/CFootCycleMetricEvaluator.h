@@ -1,4 +1,4 @@
-class CFootCycleMetricEvaluator : public CMotionMetricEvaluator
+class CFootCycleMetricEvaluator
 {
 	CUtlVector< int32 > m_footIndices;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifer_Item_Blitz_Knuckles : public CDOTA_Buff_Item
+class CDOTA_Modifer_Item_Blitz_Knuckles
 {
 	int32 bonus_attack_speed;
 };

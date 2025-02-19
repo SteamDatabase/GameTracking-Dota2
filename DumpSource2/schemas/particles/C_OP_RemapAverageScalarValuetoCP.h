@@ -1,4 +1,4 @@
-class C_OP_RemapAverageScalarValuetoCP : public CParticleFunctionPreEmission
+class C_OP_RemapAverageScalarValuetoCP
 {
 	int32 m_nOutControlPointNumber;
 	int32 m_nOutVectorField;

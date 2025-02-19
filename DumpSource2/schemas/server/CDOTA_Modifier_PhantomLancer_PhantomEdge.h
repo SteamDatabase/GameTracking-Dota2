@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomLancer_PhantomEdge : public CDOTA_Buff
+class CDOTA_Modifier_PhantomLancer_PhantomEdge
 {
 	int32 min_distance;
 	int32 max_distance;

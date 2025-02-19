@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Grimstroke_InkCreature : public CDOTA_Buff
+class CDOTA_Modifier_Grimstroke_InkCreature
 {
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nAmbientFXIndex;

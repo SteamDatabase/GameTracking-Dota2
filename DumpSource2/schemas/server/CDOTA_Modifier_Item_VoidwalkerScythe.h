@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_VoidwalkerScythe : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_VoidwalkerScythe
 {
 	int32 bonus_agility;
 	int32 attacks;

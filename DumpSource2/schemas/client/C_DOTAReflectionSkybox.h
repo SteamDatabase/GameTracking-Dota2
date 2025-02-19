@@ -1,3 +1,3 @@
-class C_DOTAReflectionSkybox : public C_BaseEntity
+class C_DOTAReflectionSkybox
 {
 };

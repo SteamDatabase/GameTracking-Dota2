@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Silver_Edge : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Silver_Edge
 {
 	int32 bonus_intellect;
 	float32 bonus_mana_regen;

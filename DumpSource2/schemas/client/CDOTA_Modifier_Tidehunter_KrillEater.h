@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tidehunter_KrillEater : public CDOTA_Buff
+class CDOTA_Modifier_Tidehunter_KrillEater
 {
 	int32 model_scale_base;
 	int32 model_scale_per_level;

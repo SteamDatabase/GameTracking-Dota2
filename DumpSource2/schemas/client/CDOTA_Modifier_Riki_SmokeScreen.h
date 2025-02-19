@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Riki_SmokeScreen : public CDOTA_Buff
+class CDOTA_Modifier_Riki_SmokeScreen
 {
 	int32 miss_rate;
 	int32 dodge_chance;

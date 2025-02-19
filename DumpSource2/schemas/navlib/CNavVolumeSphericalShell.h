@@ -1,4 +1,4 @@
-class CNavVolumeSphericalShell : public CNavVolumeSphere
+class CNavVolumeSphericalShell
 {
 	float32 m_flRadiusInner;
 };

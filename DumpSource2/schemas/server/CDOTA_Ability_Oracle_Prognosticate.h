@@ -1,3 +1,3 @@
-class CDOTA_Ability_Oracle_Prognosticate : public CDOTABaseAbility
+class CDOTA_Ability_Oracle_Prognosticate
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_SpitCreep_ArcingUnit : public CDOTA_Buff
+class CDOTA_Modifier_Snapfire_SpitCreep_ArcingUnit
 {
 	float32 m_flPredictedTotalTime;
 	Vector m_vStartPosition;

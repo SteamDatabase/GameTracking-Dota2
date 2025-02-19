@@ -1,4 +1,4 @@
-class CStateMachineUpdateNode : public CAnimUpdateNodeBase
+class CStateMachineUpdateNode
 {
 	CAnimStateMachineUpdater m_stateMachine;
 	CUtlVector< CStateNodeStateData > m_stateData;

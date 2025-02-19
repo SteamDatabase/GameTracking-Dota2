@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Beastmaster_DrumsOfSlom : public CDOTA_Buff
+class CDOTA_Modifier_Beastmaster_DrumsOfSlom
 {
 	float32 aura_radius;
 	int32 radius;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_Armor_Power : public CDOTA_Buff
+class CDOTA_Modifier_Rattletrap_Armor_Power
 {
 	float32 damage_per_armor;
 };

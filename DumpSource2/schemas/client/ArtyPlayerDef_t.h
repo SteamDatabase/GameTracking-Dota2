@@ -1,3 +1,3 @@
-class ArtyPlayerDef_t : public ArtyUnitDef_t
+class ArtyPlayerDef_t
 {
 };

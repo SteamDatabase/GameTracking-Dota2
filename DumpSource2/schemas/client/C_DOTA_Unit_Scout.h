@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Scout : public C_DOTA_BaseNPC_Additive
+class C_DOTA_Unit_Scout
 {
 	bool m_bUnitRespawned;
 	PlayerID_t m_nSoleControllingPlayer;

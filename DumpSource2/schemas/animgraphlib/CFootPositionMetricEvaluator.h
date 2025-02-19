@@ -1,4 +1,4 @@
-class CFootPositionMetricEvaluator : public CMotionMetricEvaluator
+class CFootPositionMetricEvaluator
 {
 	CUtlVector< int32 > m_footIndices;
 	bool m_bIgnoreSlope;

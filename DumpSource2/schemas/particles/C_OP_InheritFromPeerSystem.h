@@ -1,4 +1,4 @@
-class C_OP_InheritFromPeerSystem : public CParticleFunctionOperator
+class C_OP_InheritFromPeerSystem
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	ParticleAttributeIndex_t m_nFieldInput;

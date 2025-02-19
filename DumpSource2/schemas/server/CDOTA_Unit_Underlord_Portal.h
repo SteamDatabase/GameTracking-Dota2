@@ -1,4 +1,4 @@
-class CDOTA_Unit_Underlord_Portal : public CDOTA_BaseNPC_Building
+class CDOTA_Unit_Underlord_Portal
 {
 	CHandle< CBaseEntity > m_hOtherPortal;
 };

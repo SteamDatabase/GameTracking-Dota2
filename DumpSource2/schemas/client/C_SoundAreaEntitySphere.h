@@ -1,4 +1,4 @@
-class C_SoundAreaEntitySphere : public C_SoundAreaEntityBase
+class C_SoundAreaEntitySphere
 {
 	float32 m_flRadius;
 };

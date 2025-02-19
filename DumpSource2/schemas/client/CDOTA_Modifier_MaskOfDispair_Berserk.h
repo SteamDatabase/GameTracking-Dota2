@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MaskOfDispair_Berserk : public CDOTA_Buff
+class CDOTA_Modifier_MaskOfDispair_Berserk
 {
 	int32 berserk_spell_amp;
 	int32 berserk_manacost_reduction;

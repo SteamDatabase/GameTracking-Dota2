@@ -1,4 +1,4 @@
-class C_INIT_InitialRepulsionVelocity : public CParticleFunctionInitializer
+class C_INIT_InitialRepulsionVelocity
 {
 	char[128] m_CollisionGroupName;
 	ParticleTraceSet_t m_nTraceSet;

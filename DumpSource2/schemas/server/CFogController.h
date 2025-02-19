@@ -1,4 +1,4 @@
-class CFogController : public CBaseEntity
+class CFogController
 {
 	fogparams_t m_fog;
 	bool m_bUseAngles;

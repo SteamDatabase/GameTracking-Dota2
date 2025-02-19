@@ -1,4 +1,4 @@
-class C_INIT_RingWave : public CParticleFunctionInitializer
+class C_INIT_RingWave
 {
 	CParticleTransformInput m_TransformInput;
 	CParticleCollectionFloatInput m_flParticlesPerOrbit;

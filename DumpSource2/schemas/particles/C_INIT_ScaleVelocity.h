@@ -1,4 +1,4 @@
-class C_INIT_ScaleVelocity : public CParticleFunctionInitializer
+class C_INIT_ScaleVelocity
 {
 	CParticleCollectionVecInput m_vecScale;
 };

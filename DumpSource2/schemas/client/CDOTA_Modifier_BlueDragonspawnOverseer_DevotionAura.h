@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BlueDragonspawnOverseer_DevotionAura : public CDOTA_Buff
+class CDOTA_Modifier_BlueDragonspawnOverseer_DevotionAura
 {
 	float32 radius;
 };

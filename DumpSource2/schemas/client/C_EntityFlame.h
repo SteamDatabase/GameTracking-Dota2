@@ -1,4 +1,4 @@
-class C_EntityFlame : public C_BaseEntity
+class C_EntityFlame
 {
 	CHandle< C_BaseEntity > m_hEntAttached;
 	CHandle< C_BaseEntity > m_hOldAttached;

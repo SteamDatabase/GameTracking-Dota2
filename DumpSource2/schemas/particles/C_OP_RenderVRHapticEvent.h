@@ -1,4 +1,4 @@
-class C_OP_RenderVRHapticEvent : public CParticleFunctionRenderer
+class C_OP_RenderVRHapticEvent
 {
 	ParticleVRHandChoiceList_t m_nHand;
 	int32 m_nOutputHandCP;

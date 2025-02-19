@@ -1,4 +1,4 @@
-class C_DOTACheers : public C_BaseEntity
+class C_DOTACheers
 {
 	int16 m_nRadiantCheers;
 	int16 m_nDireCheers;

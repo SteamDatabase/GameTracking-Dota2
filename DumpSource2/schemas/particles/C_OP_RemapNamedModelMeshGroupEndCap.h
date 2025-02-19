@@ -1,3 +1,3 @@
-class C_OP_RemapNamedModelMeshGroupEndCap : public C_OP_RemapNamedModelElementEndCap
+class C_OP_RemapNamedModelMeshGroupEndCap
 {
 };

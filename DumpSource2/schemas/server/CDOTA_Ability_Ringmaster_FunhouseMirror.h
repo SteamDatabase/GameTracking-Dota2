@@ -1,3 +1,3 @@
-class CDOTA_Ability_Ringmaster_FunhouseMirror : public CDOTABaseAbility
+class CDOTA_Ability_Ringmaster_FunhouseMirror
 {
 };

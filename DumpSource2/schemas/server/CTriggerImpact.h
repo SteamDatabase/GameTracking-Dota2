@@ -1,4 +1,4 @@
-class CTriggerImpact : public CTriggerMultiple
+class CTriggerImpact
 {
 	float32 m_flMagnitude;
 	float32 m_flNoise;

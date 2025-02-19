@@ -1,3 +1,3 @@
-class CPulseGraphInstance_TurtleGraphics : public CBasePulseGraphInstance
+class CPulseGraphInstance_TurtleGraphics
 {
 };

@@ -1,4 +1,4 @@
-class C_Sprite : public C_BaseModelEntity
+class C_Sprite
 {
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hSpriteMaterial;
 	CHandle< C_BaseEntity > m_hAttachedToEntity;

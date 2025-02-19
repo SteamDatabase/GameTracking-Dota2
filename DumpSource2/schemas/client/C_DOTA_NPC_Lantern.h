@@ -1,4 +1,4 @@
-class C_DOTA_NPC_Lantern : public C_DOTA_BaseNPC_Building
+class C_DOTA_NPC_Lantern
 {
 	CUtlSymbolLarge m_szInteractAbilityName;
 	CNewParticleEffect* m_pVisionRangeFX;

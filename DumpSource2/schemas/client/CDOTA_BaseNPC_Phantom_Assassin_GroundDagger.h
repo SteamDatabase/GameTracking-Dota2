@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Phantom_Assassin_GroundDagger : public C_DOTA_BaseNPC_Additive
+class CDOTA_BaseNPC_Phantom_Assassin_GroundDagger
 {
 	ParticleIndex_t m_nFXIndex;
 };

@@ -1,4 +1,4 @@
-class C_BreakableProp : public CBaseProp
+class C_BreakableProp
 {
 	CPropDataComponent m_CPropDataComponent;
 	CEntityIOOutput m_OnBreak;
@@ -23,10 +23,9 @@ class C_BreakableProp : public CBaseProp
 	CUtlSymbolLarge m_explosionCustomEffect;
 	CUtlSymbolLarge m_explosionCustomSound;
 	CUtlSymbolLarge m_explosionModifier;
+	int32 m_explosionDangerSound;
 	CHandle< C_BasePlayerPawn > m_hPhysicsAttacker;
 	GameTime_t m_flLastPhysicsInfluenceTime;
 	float32 m_flDefaultFadeScale;
 	CHandle< C_BaseEntity > m_hLastAttacker;
-	CHandle< C_BaseEntity > m_hFlareEnt;
-	bool m_noGhostCollision;
 };

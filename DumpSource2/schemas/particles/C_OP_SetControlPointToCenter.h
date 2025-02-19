@@ -1,4 +1,4 @@
-class C_OP_SetControlPointToCenter : public CParticleFunctionPreEmission
+class C_OP_SetControlPointToCenter
 {
 	int32 m_nCP1;
 	Vector m_vecCP1Pos;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Ward_Dispenser : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Ward_Dispenser
 {
 	int32 bonus_health;
 };

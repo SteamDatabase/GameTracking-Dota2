@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Quicksilver_Amulet : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Quicksilver_Amulet
 {
 	int32 base_attack;
 	int32 bonus_attack;

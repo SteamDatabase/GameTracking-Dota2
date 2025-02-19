@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_ColdSnap : public CDOTA_Buff
+class CDOTA_Modifier_Invoker_ColdSnap
 {
 	float32 freeze_damage;
 	float32 freeze_duration;

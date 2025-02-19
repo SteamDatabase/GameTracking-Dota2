@@ -1,4 +1,4 @@
-class CBeam : public CBaseModelEntity
+class CBeam
 {
 	float32 m_flFrameRate;
 	float32 m_flHDRColorScale;

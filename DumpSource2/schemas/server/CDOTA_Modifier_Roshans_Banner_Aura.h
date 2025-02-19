@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Roshans_Banner_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Roshans_Banner_Aura
 {
 	float32 radius;
 	int32 hp_bonus;

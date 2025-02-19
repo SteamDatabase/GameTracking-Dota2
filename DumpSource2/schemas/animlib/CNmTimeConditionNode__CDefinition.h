@@ -1,4 +1,4 @@
-class CNmTimeConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmTimeConditionNode::CDefinition
 {
 	int16 m_sourceStateNodeIdx;
 	int16 m_nInputValueNodeIdx;

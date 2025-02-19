@@ -1,4 +1,4 @@
-class C_OP_RemapModelVolumetoCP : public CParticleFunctionPreEmission
+class C_OP_RemapModelVolumetoCP
 {
 	BBoxVolumeType_t m_nBBoxType;
 	int32 m_nInControlPointNumber;

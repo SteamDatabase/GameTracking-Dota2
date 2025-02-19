@@ -1,4 +1,4 @@
-class C_INIT_VelocityRandom : public CParticleFunctionInitializer
+class C_INIT_VelocityRandom
 {
 	int32 m_nControlPointNumber;
 	CPerParticleFloatInput m_fSpeedMin;

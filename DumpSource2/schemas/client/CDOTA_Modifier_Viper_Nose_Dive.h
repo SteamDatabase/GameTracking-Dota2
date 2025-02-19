@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Viper_Nose_Dive : public CDOTA_Buff
+class CDOTA_Modifier_Viper_Nose_Dive
 {
 	Vector m_vTargetPos;
 	Vector m_vStart;

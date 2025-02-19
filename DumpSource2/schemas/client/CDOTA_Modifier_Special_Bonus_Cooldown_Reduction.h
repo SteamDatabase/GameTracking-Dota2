@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Cooldown_Reduction : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Cooldown_Reduction
 {
 	int32 value;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EnragedWildkin_ToughnessAura : public CDOTA_Buff
+class CDOTA_Modifier_EnragedWildkin_ToughnessAura
 {
 	float32 radius;
 };

@@ -1,4 +1,4 @@
-class C_FuncTrackTrain : public C_BaseModelEntity
+class C_FuncTrackTrain
 {
 	int32 m_nLongAxis;
 	float32 m_flRadius;

@@ -1,4 +1,4 @@
-class CFollowTargetUpdateNode : public CUnaryUpdateNode
+class CFollowTargetUpdateNode
 {
 	FollowTargetOpFixedSettings_t m_opFixedData;
 	CAnimParamHandle m_hParameterPosition;

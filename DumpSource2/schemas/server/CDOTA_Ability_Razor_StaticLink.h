@@ -1,4 +1,4 @@
-class CDOTA_Ability_Razor_StaticLink : public CDOTABaseAbility
+class CDOTA_Ability_Razor_StaticLink
 {
 	int32 m_iLinkIndex;
 	CountdownTimer m_ViewerTimer;

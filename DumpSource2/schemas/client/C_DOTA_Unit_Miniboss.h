@@ -1,6 +1,8 @@
-class C_DOTA_Unit_Miniboss : public C_DOTA_BaseNPC_Additive
+class C_DOTA_Unit_Miniboss
 {
-	int32 m_nTimesSpawned;
+	int32 m_nVisualTeam;
+	GameTime_t m_flTransitionTimestamp;
 	int32 m_nTempViewer;
 	CUtlVector< CHandle< C_BaseEntity > > m_hAttackingHeroes;
+	ParticleIndex_t nShieldFX;
 };

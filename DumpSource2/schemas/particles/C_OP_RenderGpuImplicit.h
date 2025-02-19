@@ -1,4 +1,4 @@
-class C_OP_RenderGpuImplicit : public CParticleFunctionRenderer
+class C_OP_RenderGpuImplicit
 {
 	bool m_bUsePerParticleRadius;
 	uint32 m_nVertexCountKb;

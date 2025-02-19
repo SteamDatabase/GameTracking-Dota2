@@ -1,4 +1,4 @@
-class CSurvivorsSpawnerEliteTurret : public CSurvivorsSpawner
+class CSurvivorsSpawnerEliteTurret
 {
 	int32 m_nRoomIndex;
 	int32 m_nEnemiesSpawnedCount;

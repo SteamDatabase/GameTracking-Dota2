@@ -1,4 +1,4 @@
-class CDOTA_Modifier_CentaurKhan_EnduranceAura : public CDOTA_Buff
+class CDOTA_Modifier_CentaurKhan_EnduranceAura
 {
 	float32 radius;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_ArcingBoomerang : public CDOTA_Buff
+class CDOTA_Modifier_Hoodwink_ArcingBoomerang
 {
 	Vector m_vLeftControl;
 	Vector m_vRightControl;

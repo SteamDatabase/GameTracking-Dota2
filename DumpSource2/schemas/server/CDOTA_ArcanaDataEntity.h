@@ -1,4 +1,4 @@
-class CDOTA_ArcanaDataEntity : public CBaseEntity
+class CDOTA_ArcanaDataEntity
 {
 	CDOTA_ArcanaDataEntity_DrowRanger* m_pArcanaData_CDOTA_ArcanaDataEntity_DrowRanger;
 	CDOTA_ArcanaDataEntity_FacelessVoid* m_pArcanaData_CDOTA_ArcanaDataEntity_FacelessVoid;

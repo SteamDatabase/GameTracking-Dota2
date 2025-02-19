@@ -1,3 +1,3 @@
-class CDOTA_Ability_Gyrocopter_Mounting_Platform : public CDOTABaseAbility
+class CDOTA_Ability_Gyrocopter_Mounting_Platform
 {
 };

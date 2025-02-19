@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Undying_SoulRip : public C_DOTABaseAbility
+class C_DOTA_Ability_Undying_SoulRip
 {
 	int32 damage_per_unit;
 	float32 radius;

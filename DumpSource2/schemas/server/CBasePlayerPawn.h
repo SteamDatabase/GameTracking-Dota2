@@ -1,4 +1,4 @@
-class CBasePlayerPawn : public CBaseCombatCharacter
+class CBasePlayerPawn
 {
 	CPlayer_WeaponServices* m_pWeaponServices;
 	CPlayer_ItemServices* m_pItemServices;

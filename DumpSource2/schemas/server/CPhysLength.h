@@ -1,4 +1,4 @@
-class CPhysLength : public CPhysConstraint
+class CPhysLength
 {
 	Vector[2] m_offset;
 	Vector m_vecAttach;

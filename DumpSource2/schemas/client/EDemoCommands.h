@@ -19,6 +19,7 @@ enum EDemoCommands : uint32_t
 	DEM_SpawnGroups = 15,
 	DEM_AnimationData = 16,
 	DEM_AnimationHeader = 17,
-	DEM_Max = 18,
+	DEM_Recovery = 18,
+	DEM_Max = 19,
 	DEM_IsCompressed = 64,
 };

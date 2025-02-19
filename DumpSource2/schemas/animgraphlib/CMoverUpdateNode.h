@@ -1,4 +1,4 @@
-class CMoverUpdateNode : public CUnaryUpdateNode
+class CMoverUpdateNode
 {
 	CAnimInputDamping m_damping;
 	AnimValueSource m_facingTarget;

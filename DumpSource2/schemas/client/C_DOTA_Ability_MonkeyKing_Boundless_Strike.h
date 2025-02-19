@@ -1,4 +1,4 @@
-class C_DOTA_Ability_MonkeyKing_Boundless_Strike : public C_DOTABaseAbility
+class C_DOTA_Ability_MonkeyKing_Boundless_Strike
 {
 	int32 strike_cast_range;
 	int32 strike_radius;

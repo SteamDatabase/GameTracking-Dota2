@@ -1,4 +1,4 @@
-class C_OP_RemapTransformVisibilityToScalar : public CParticleFunctionOperator
+class C_OP_RemapTransformVisibilityToScalar
 {
 	ParticleSetMethod_t m_nSetMethod;
 	CParticleTransformInput m_TransformInput;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enchantress_Enchant_Intrinsic : public CDOTA_Buff
+class CDOTA_Modifier_Enchantress_Enchant_Intrinsic
 {
 	int32 attack_range_bonus;
 	int32 bonus_health;

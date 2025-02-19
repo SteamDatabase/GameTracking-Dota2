@@ -1,4 +1,4 @@
-class CDOTA_Ability_Snapfire_FiresnapCookie : public C_DOTABaseAbility
+class CDOTA_Ability_Snapfire_FiresnapCookie
 {
 	CHandle< C_BaseEntity > m_hTarget;
 	int32 projectile_speed;

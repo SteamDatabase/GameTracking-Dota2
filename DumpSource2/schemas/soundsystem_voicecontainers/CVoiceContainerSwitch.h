@@ -1,4 +1,4 @@
-class CVoiceContainerSwitch : public CVoiceContainerBase
+class CVoiceContainerSwitch
 {
 	CUtlVector< CSoundContainerReference > m_soundsToPlay;
 };

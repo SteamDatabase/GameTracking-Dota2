@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Ethereal_Blade : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Ethereal_Blade
 {
 	int32 bonus_strength;
 	int32 bonus_agility;

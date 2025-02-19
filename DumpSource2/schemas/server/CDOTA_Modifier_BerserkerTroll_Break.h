@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BerserkerTroll_Break : public CDOTA_Buff
+class CDOTA_Modifier_BerserkerTroll_Break
 {
 	float32 duration;
 };

@@ -1,4 +1,4 @@
-class CDOTA_BinaryObject : public CBaseEntity
+class CDOTA_BinaryObject
 {
 	bool m_bActive;
 	int32 m_nBinaryID;

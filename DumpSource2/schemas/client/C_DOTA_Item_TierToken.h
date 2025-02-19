@@ -1,4 +1,4 @@
-class C_DOTA_Item_TierToken : public C_DOTA_Item
+class C_DOTA_Item_TierToken
 {
-	AbilityID_t[6] m_vecChoices;
+	AbilityID_t[5] m_vecChoices;
 };

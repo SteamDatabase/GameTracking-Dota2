@@ -1,4 +1,4 @@
-class C_OP_NormalLock : public CParticleFunctionOperator
+class C_OP_NormalLock
 {
 	int32 m_nControlPointNumber;
 };

@@ -1,4 +1,4 @@
-class CSurvivorsPowerUpDefinition_AreaAttack_Line : public CSurvivorsPowerUpDefinition_AreaAttack
+class CSurvivorsPowerUpDefinition_AreaAttack_Line
 {
 	bool m_bUseFacingDirection;
 };

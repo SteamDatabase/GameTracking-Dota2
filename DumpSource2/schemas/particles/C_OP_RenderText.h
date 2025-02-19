@@ -1,4 +1,4 @@
-class C_OP_RenderText : public CParticleFunctionRenderer
+class C_OP_RenderText
 {
 	Color m_OutlineColor;
 	CUtlString m_DefaultText;

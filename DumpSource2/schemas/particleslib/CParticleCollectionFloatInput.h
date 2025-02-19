@@ -1,3 +1,3 @@
-class CParticleCollectionFloatInput : public CParticleFloatInput
+class CParticleCollectionFloatInput
 {
 };

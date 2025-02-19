@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Luna_Eclipse : public CDOTA_Buff
+class CDOTA_Modifier_Luna_Eclipse
 {
 	CHandle< CBaseEntity > m_hTarget;
 	float32 radius;

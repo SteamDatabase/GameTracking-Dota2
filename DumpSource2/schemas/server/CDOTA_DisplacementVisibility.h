@@ -1,4 +1,4 @@
-class CDOTA_DisplacementVisibility : public CBaseEntity
+class CDOTA_DisplacementVisibility
 {
 	int32 m_HiddenDisplacement;
 };

@@ -1,4 +1,4 @@
-class C_DOTA_Ability_DoomBringer_Devour : public C_DOTABaseAbility
+class C_DOTA_Ability_DoomBringer_Devour
 {
 	int32 m_nDevourFirstSlot;
 	bool m_bIsAltCastState;

@@ -1,4 +1,4 @@
-class C_OP_RenderLights : public C_OP_RenderPoints
+class C_OP_RenderLights
 {
 	float32 m_flAnimationRate;
 	AnimationType_t m_nAnimationType;

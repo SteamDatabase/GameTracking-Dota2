@@ -1,4 +1,4 @@
-class C_OP_SetControlPointPositions : public CParticleFunctionPreEmission
+class C_OP_SetControlPointPositions
 {
 	bool m_bUseWorldLocation;
 	bool m_bOrient;

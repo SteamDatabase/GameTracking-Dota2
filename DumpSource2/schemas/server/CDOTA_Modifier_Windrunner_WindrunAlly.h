@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Windrunner_WindrunAlly : public CDOTA_Buff
+class CDOTA_Modifier_Windrunner_WindrunAlly
 {
 	float32 radius;
 	bool m_bDispellable;

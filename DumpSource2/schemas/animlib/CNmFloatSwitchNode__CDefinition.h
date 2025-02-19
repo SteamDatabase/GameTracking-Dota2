@@ -1,4 +1,4 @@
-class CNmFloatSwitchNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFloatSwitchNode::CDefinition
 {
 	int16 m_nSwitchValueNodeIdx;
 	int16 m_nTrueValueNodeIdx;

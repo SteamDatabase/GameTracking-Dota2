@@ -1,4 +1,4 @@
-class CDOTA_Ability_Drow_Ranger_Glacier : public CDOTABaseAbility
+class CDOTA_Ability_Drow_Ranger_Glacier
 {
 	int32 shard_width;
 	int32 shard_count;

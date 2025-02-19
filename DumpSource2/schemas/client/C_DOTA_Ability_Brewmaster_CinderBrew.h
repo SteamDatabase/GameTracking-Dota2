@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Brewmaster_CinderBrew : public C_DOTABaseAbility
+class C_DOTA_Ability_Brewmaster_CinderBrew
 {
 	CUtlVector< CHandle< C_BaseEntity > > m_hUnitsHit;
 	float32 duration;

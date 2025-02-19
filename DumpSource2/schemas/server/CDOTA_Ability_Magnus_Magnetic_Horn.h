@@ -1,3 +1,3 @@
-class CDOTA_Ability_Magnus_Magnetic_Horn : public CDOTABaseAbility
+class CDOTA_Ability_Magnus_Magnetic_Horn
 {
 };

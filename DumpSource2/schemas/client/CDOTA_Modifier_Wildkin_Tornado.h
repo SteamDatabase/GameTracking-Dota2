@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Wildkin_Tornado : public CDOTA_Buff
+class CDOTA_Modifier_Wildkin_Tornado
 {
 	int32 radius;
 };

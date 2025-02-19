@@ -1,4 +1,4 @@
-class C_OP_RemapParticleCountToScalar : public CParticleFunctionOperator
+class C_OP_RemapParticleCountToScalar
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CParticleCollectionFloatInput m_nInputMin;

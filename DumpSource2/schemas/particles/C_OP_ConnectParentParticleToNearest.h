@@ -1,4 +1,4 @@
-class C_OP_ConnectParentParticleToNearest : public CParticleFunctionOperator
+class C_OP_ConnectParentParticleToNearest
 {
 	int32 m_nFirstControlPoint;
 	int32 m_nSecondControlPoint;

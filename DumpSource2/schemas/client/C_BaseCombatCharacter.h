@@ -1,4 +1,4 @@
-class C_BaseCombatCharacter : public C_BaseFlex
+class C_BaseCombatCharacter
 {
 	C_NetworkUtlVectorBase< CHandle< C_EconWearable > > m_hMyWearables;
 	AttachmentHandle_t m_leftFootAttachment;

@@ -1,4 +1,4 @@
-class C_BaseFlex : public C_BaseAnimatingOverlay
+class C_BaseFlex
 {
 	C_NetworkUtlVectorBase< float32 > m_flexWeight;
 	Vector m_vLookTargetPosition;

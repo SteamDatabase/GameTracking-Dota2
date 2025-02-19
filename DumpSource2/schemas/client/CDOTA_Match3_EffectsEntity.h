@@ -1,3 +1,3 @@
-class CDOTA_Match3_EffectsEntity : public C_BaseModelEntity
+class CDOTA_Match3_EffectsEntity
 {
 };

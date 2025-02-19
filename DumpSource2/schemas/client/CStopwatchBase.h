@@ -1,4 +1,4 @@
-class CStopwatchBase : public CSimpleSimTimer
+class CStopwatchBase
 {
 	bool m_fIsRunning;
 };

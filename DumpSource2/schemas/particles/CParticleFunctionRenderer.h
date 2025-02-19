@@ -1,4 +1,4 @@
-class CParticleFunctionRenderer : public CParticleFunction
+class CParticleFunctionRenderer
 {
 	CParticleVisibilityInputs VisibilityInputs;
 	bool m_bCannotBeRefracted;

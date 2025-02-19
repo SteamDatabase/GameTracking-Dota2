@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Mango_Tree : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Mango_Tree
 {
 	CHandle< C_BaseEntity > m_hTree;
 	CountdownTimer m_Timer;

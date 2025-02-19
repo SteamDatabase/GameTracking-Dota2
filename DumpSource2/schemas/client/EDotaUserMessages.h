@@ -160,4 +160,7 @@ enum EDotaUserMessages : uint32_t
 	DOTA_UM_FacetPing = 624,
 	DOTA_UM_InnatePing = 625,
 	DOTA_UM_RoshanTimer = 626,
+	DOTA_UM_NeutralCraftAvailable = 627,
+	DOTA_UM_TimerAlert = 628,
+	DOTA_UM_MadstoneAlert = 629,
 };

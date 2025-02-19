@@ -1,4 +1,4 @@
-class CDOTA_Ability_Centaur_DoubleEdge : public CDOTABaseAbility
+class CDOTA_Ability_Centaur_DoubleEdge
 {
 	ParticleIndex_t m_nFXIndex;
 };

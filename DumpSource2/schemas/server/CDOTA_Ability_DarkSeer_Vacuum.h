@@ -1,4 +1,4 @@
-class CDOTA_Ability_DarkSeer_Vacuum : public CDOTABaseAbility
+class CDOTA_Ability_DarkSeer_Vacuum
 {
 	Vector m_vPullLocation;
 };

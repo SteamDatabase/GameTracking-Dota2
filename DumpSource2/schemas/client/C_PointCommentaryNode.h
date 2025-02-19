@@ -1,4 +1,4 @@
-class C_PointCommentaryNode : public CBaseAnimatingActivity
+class C_PointCommentaryNode
 {
 	bool m_bActive;
 	bool m_bWasActive;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Axe_BerserkersCall : public CDOTA_Buff
+class CDOTA_Modifier_Axe_BerserkersCall
 {
 	CHandle< CBaseEntity > m_hZombieTarget;
 	bool m_bDidSetAttackTarget;

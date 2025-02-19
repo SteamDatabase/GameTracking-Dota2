@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Warhammer : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Warhammer
 {
 	int32 bonus_strength;
 };

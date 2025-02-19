@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Disruptor_Glimpse : public CDOTA_Buff
+class CDOTA_Modifier_Disruptor_Glimpse
 {
 	Vector[18] m_PositionIndex;
 };

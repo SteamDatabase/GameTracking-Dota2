@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BountyHunter_Lookout : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_BountyHunter_Lookout
 {
 	int32 radius;
 };

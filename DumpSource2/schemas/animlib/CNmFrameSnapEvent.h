@@ -1,4 +1,4 @@
-class CNmFrameSnapEvent : public CNmEvent
+class CNmFrameSnapEvent
 {
 	NmFrameSnapEventMode_t m_frameSnapMode;
 };

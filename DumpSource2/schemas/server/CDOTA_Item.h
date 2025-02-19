@@ -1,4 +1,4 @@
-class CDOTA_Item : public CDOTABaseAbility
+class CDOTA_Item
 {
 	int32 m_iState;
 	int32 m_CastAnimation;
@@ -20,7 +20,8 @@ class CDOTA_Item : public CDOTABaseAbility
 	bool m_bDisassemblable;
 	bool m_bNeverDisassemble;
 	bool m_bIsTempestDoubleClonable;
-	bool m_bIsNeutralDrop;
+	bool m_bIsNeutralActiveDrop;
+	bool m_bIsNeutralPassiveDrop;
 	int32 m_nNeutralDropTeam;
 	bool m_bAlertable;
 	int32 m_iInitialCharges;
@@ -53,6 +54,7 @@ class CDOTA_Item : public CDOTABaseAbility
 	int32 m_iValuelessCharges;
 	int32 m_iSecondaryCharges;
 	bool m_bCombineLocked;
+	bool m_bMarkForSell;
 	CHandle< CDOTA_Item_Physical > m_hContainer;
 	PlayerID_t m_iPlayerOwnerID;
 	bool m_bPurchasedWhileDead;

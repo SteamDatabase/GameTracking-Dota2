@@ -1,4 +1,4 @@
-class CDOTA_GameMechanic_AutoRecovery : public CServerOnlyEntity
+class CDOTA_GameMechanic_AutoRecovery
 {
 	float32 m_flRecoveryDelay;
 	float32 m_flHealthRegenPerSecond;

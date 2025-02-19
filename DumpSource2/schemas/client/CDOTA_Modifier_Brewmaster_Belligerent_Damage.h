@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_Belligerent_Damage : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_Belligerent_Damage
 {
 	int32 damage_pct;
 };

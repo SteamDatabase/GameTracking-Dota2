@@ -1,4 +1,4 @@
-class C_SoundEventEntity : public C_BaseEntity
+class C_SoundEventEntity
 {
 	bool m_bStartOnSpawn;
 	bool m_bToLocalPlayer;

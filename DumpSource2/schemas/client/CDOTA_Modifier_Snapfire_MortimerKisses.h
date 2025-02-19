@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_MortimerKisses : public CDOTA_Buff
+class CDOTA_Modifier_Snapfire_MortimerKisses
 {
 	float32 m_fIntervalPerRocket;
 	float32 m_flFacingTarget;

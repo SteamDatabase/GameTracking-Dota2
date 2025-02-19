@@ -1,3 +1,3 @@
-class CDOTA_Ability_Courier_Shield : public CDOTABaseAbility
+class CDOTA_Ability_Courier_Shield
 {
 };

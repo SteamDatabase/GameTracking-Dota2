@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_Chakram_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Shredder_Chakram_Thinker
 {
 	float32 damage_per_second;
 	float32 mana_per_second;

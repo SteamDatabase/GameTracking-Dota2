@@ -1,4 +1,4 @@
-class C_OP_FadeAndKill : public CParticleFunctionOperator
+class C_OP_FadeAndKill
 {
 	float32 m_flStartFadeInTime;
 	float32 m_flEndFadeInTime;

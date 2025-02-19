@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_TameTheBeasts_Fear : public CDOTA_Buff
+class CDOTA_Modifier_Ringmaster_TameTheBeasts_Fear
 {
 	Vector m_vFearDir;
 };

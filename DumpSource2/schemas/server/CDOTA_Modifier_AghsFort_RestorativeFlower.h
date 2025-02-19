@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_RestorativeFlower : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_RestorativeFlower
 {
 	int32 radius;
 	int32 heal;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Skeleton_King_Arcana : public CDOTA_Buff
+class CDOTA_Modifier_Skeleton_King_Arcana
 {
 	bool m_bHasCrit;
 };

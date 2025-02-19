@@ -1,4 +1,4 @@
-class CNmTargetOffsetNode::CDefinition : public CNmTargetValueNode::CDefinition
+class CNmTargetOffsetNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	bool m_bIsBoneSpaceOffset;

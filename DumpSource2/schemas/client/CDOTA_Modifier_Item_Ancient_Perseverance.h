@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Ancient_Perseverance : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Ancient_Perseverance
 {
 	int32 damage;
 	int32 hp_regen;

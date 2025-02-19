@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mars_Bulwark_Active : public CDOTA_Buff
+class CDOTA_Modifier_Mars_Bulwark_Active
 {
 	int32 redirect_chance;
 	int32 redirect_range;

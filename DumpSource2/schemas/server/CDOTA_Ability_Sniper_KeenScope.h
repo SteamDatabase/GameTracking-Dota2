@@ -1,3 +1,3 @@
-class CDOTA_Ability_Sniper_KeenScope : public CDOTABaseAbility
+class CDOTA_Ability_Sniper_KeenScope
 {
 };

@@ -1,4 +1,4 @@
-class CLogicMeasureMovement : public CLogicalEntity
+class CLogicMeasureMovement
 {
 	CUtlSymbolLarge m_strMeasureTarget;
 	CUtlSymbolLarge m_strMeasureReference;

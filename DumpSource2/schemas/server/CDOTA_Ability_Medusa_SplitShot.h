@@ -1,3 +1,3 @@
-class CDOTA_Ability_Medusa_SplitShot : public CDOTABaseAbility
+class CDOTA_Ability_Medusa_SplitShot
 {
 };

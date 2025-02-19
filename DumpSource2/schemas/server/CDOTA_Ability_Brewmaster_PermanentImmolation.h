@@ -1,3 +1,3 @@
-class CDOTA_Ability_Brewmaster_PermanentImmolation : public CDOTABaseAbility
+class CDOTA_Ability_Brewmaster_PermanentImmolation
 {
 };

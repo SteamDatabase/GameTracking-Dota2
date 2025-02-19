@@ -1,4 +1,4 @@
-class CMarkupVolumeTagged : public CMarkupVolume
+class CMarkupVolumeTagged
 {
 	CUtlVector< CGlobalSymbol > m_GroupNames;
 	CUtlVector< CGlobalSymbol > m_Tags;

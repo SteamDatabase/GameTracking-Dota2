@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kez_ShodoSai_Parry : public CDOTA_Buff
+class CDOTA_Modifier_Kez_ShodoSai_Parry
 {
 	int32 speed_penalty;
 	int32 forward_angle;

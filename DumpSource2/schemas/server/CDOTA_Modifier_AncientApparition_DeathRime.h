@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AncientApparition_DeathRime : public CDOTA_Buff
+class CDOTA_Modifier_AncientApparition_DeathRime
 {
 	float32 damage;
 	float32 slow;

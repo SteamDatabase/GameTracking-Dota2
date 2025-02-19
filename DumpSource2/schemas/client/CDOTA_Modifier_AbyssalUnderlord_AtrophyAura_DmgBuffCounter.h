@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AbyssalUnderlord_AtrophyAura_DmgBuffCounter : public CDOTA_Buff
+class CDOTA_Modifier_AbyssalUnderlord_AtrophyAura_DmgBuffCounter
 {
 	int32 cleave_damage_pct;
 	float32 cleave_starting_width;

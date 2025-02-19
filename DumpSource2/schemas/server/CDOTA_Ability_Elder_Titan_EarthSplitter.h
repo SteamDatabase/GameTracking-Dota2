@@ -1,4 +1,4 @@
-class CDOTA_Ability_Elder_Titan_EarthSplitter : public CDOTABaseAbility
+class CDOTA_Ability_Elder_Titan_EarthSplitter
 {
 	int32 crack_width;
 	int32 crack_distance;

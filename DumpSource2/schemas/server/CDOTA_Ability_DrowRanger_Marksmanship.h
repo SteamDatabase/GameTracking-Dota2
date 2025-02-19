@@ -1,3 +1,3 @@
-class CDOTA_Ability_DrowRanger_Marksmanship : public CDOTABaseAbility
+class CDOTA_Ability_DrowRanger_Marksmanship
 {
 };

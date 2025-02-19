@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Abaddon_Frostmourne : public CDOTA_Buff
+class CDOTA_Modifier_Abaddon_Frostmourne
 {
 	float32 slow_duration;
 	float32 curse_duration;

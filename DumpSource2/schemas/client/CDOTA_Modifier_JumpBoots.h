@@ -1,4 +1,4 @@
-class CDOTA_Modifier_JumpBoots : public CDOTA_Buff
+class CDOTA_Modifier_JumpBoots
 {
 	int32 push_length;
 };

@@ -1,4 +1,4 @@
-class C_DOTA_Item_RuneSpawner_Powerup : public CBaseAnimatingActivity
+class C_DOTA_Item_RuneSpawner_Powerup
 {
 	DOTA_RUNES m_nRuneType;
 	float32 m_flLastSpawnTime;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Leshrac_Decrepify_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Leshrac_Decrepify_Aura
 {
 	int32 magic_amp;
 	int32 slow;

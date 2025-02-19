@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Elder_Titan_NaturalOrder_MagicResistance : public CDOTA_Buff
+class CDOTA_Modifier_Elder_Titan_NaturalOrder_MagicResistance
 {
 	int32 magic_resistance_pct;
 	int32 magic_resistance_per_tick;

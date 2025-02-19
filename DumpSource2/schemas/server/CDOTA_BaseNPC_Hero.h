@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
+class CDOTA_BaseNPC_Hero
 {
 	float32 m_flStrength;
 	float32 m_flAgility;

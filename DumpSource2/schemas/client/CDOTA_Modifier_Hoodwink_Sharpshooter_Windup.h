@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_Sharpshooter_Windup : public CDOTA_Buff
+class CDOTA_Modifier_Hoodwink_Sharpshooter_Windup
 {
 	int32 arrow_vision;
 	float32 max_charge_time;

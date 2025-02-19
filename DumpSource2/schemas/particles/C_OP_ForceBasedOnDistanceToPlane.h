@@ -1,4 +1,4 @@
-class C_OP_ForceBasedOnDistanceToPlane : public CParticleFunctionForce
+class C_OP_ForceBasedOnDistanceToPlane
 {
 	float32 m_flMinDist;
 	Vector m_vecForceAtMinDist;

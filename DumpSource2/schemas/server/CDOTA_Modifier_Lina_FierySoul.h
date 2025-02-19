@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lina_FierySoul : public CDOTA_Buff
+class CDOTA_Modifier_Lina_FierySoul
 {
 	int32 fiery_soul_attack_speed_bonus;
 	int32 fiery_soul_magic_resist;

@@ -1,4 +1,4 @@
-class CBaseAnimGraph : public C_BaseModelEntity
+class CBaseAnimGraph
 {
 	bool m_bInitiallyPopulateInterpHistory;
 	bool m_bSuppressAnimEventSounds;
@@ -11,6 +11,10 @@ class CBaseAnimGraph : public C_BaseModelEntity
 	CBaseAnimGraph* m_pClientsideRagdoll;
 	bool m_bBuiltRagdoll;
 	PhysicsRagdollPose_t m_RagdollPose;
+	bool m_bRagdollEnabled;
 	bool m_bRagdollClientSide;
 	bool m_bHasAnimatedMaterialAttributes;
+	C_NetworkUtlVectorBase< uint8 > m_animGraph2SerializeData;
+	int32 m_nAnimGraph2SerializeDataSizeBytes;
+	int32 m_animGraph2ReloadCountSV;
 };

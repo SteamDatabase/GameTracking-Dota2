@@ -1,4 +1,4 @@
-class C_OP_Orient2DRelToCP : public CParticleFunctionOperator
+class C_OP_Orient2DRelToCP
 {
 	float32 m_flRotOffset;
 	float32 m_flSpinStrength;

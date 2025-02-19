@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BigThunderLizard_Frenzy : public CDOTA_Buff
+class CDOTA_Modifier_BigThunderLizard_Frenzy
 {
 	int32 attackspeed_bonus;
 };

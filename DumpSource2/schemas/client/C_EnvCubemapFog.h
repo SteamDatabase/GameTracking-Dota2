@@ -1,4 +1,4 @@
-class C_EnvCubemapFog : public C_BaseEntity
+class C_EnvCubemapFog
 {
 	float32 m_flEndDistance;
 	float32 m_flStartDistance;

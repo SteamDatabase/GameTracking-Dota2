@@ -1,4 +1,4 @@
-class C_OP_RemapNamedModelElementEndCap : public CParticleFunctionOperator
+class C_OP_RemapNamedModelElementEndCap
 {
 	CStrongHandle< InfoForResourceTypeCModel > m_hModel;
 	CUtlVector< CUtlString > m_inNames;

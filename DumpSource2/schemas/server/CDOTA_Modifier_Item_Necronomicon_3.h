@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Necronomicon_3 : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Necronomicon_3
 {
 	float32 bonus_mana_regen;
 	int32 bonus_strength;

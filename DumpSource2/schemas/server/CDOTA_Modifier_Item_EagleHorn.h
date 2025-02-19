@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_EagleHorn : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_EagleHorn
 {
 	int32 bonus_agility;
 };

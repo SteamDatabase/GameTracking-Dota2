@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_MeteorHammer_Burn : public CDOTA_Buff
+class CDOTA_Modifier_Item_MeteorHammer_Burn
 {
 	int32 burn_dps_buildings;
 	int32 burn_dps_units;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Cyclone : public CDOTA_Buff
+class CDOTA_Modifier_Cyclone
 {
 	GameTime_t m_flStartTime;
 	Vector m_vStartPos;

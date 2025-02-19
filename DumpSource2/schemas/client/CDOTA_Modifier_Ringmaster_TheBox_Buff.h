@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_TheBox_Buff : public CDOTA_Buff
+class CDOTA_Modifier_Ringmaster_TheBox_Buff
 {
 	int32 leash_radius;
 	Vector m_vLeashLocation;

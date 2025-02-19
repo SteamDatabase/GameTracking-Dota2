@@ -1,4 +1,4 @@
-class C_INIT_CreateWithinSphereTransform : public CParticleFunctionInitializer
+class C_INIT_CreateWithinSphereTransform
 {
 	CPerParticleFloatInput m_fRadiusMin;
 	CPerParticleFloatInput m_fRadiusMax;

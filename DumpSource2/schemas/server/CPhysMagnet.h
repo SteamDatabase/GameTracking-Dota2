@@ -1,4 +1,4 @@
-class CPhysMagnet : public CBaseAnimatingActivity
+class CPhysMagnet
 {
 	CEntityIOOutput m_OnMagnetAttach;
 	CEntityIOOutput m_OnMagnetDetach;

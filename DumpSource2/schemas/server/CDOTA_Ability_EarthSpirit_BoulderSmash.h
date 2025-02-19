@@ -1,4 +1,4 @@
-class CDOTA_Ability_EarthSpirit_BoulderSmash : public CDOTABaseAbility
+class CDOTA_Ability_EarthSpirit_BoulderSmash
 {
 	int32 speed;
 	int32 rock_damage;

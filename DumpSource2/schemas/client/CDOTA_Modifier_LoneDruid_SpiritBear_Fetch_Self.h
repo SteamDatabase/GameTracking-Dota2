@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_SpiritBear_Fetch_Self : public CDOTA_Buff
+class CDOTA_Modifier_LoneDruid_SpiritBear_Fetch_Self
 {
 	int32 self_slow;
 	ParticleIndex_t m_nFXIndex;

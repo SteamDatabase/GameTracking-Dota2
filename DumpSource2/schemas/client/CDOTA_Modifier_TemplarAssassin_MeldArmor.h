@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TemplarAssassin_MeldArmor : public CDOTA_Buff
+class CDOTA_Modifier_TemplarAssassin_MeldArmor
 {
 	int32 bonus_armor;
 };

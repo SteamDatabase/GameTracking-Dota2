@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tidehunter_DeadInTheWater : public CDOTABaseAbility
+class CDOTA_Ability_Tidehunter_DeadInTheWater
 {
 	int32 radius;
 	float32 duration;

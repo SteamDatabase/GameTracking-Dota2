@@ -1,4 +1,4 @@
-class C_DOTAAppCheers : public C_BaseEntity
+class C_DOTAAppCheers
 {
 	int16 m_nRadiantCheers;
 	int16 m_nRadiantBronzeCheers;

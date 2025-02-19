@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Warhammer_Armor : public CDOTA_Buff
+class CDOTA_Modifier_Item_Warhammer_Armor
 {
 	int32 armor_reduction;
 };

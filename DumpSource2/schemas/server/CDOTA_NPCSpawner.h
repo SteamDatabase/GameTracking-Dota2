@@ -1,4 +1,4 @@
-class CDOTA_NPCSpawner : public CPointEntity
+class CDOTA_NPCSpawner
 {
 	CUtlSymbolLarge m_szNPCScriptName;
 	CUtlSymbolLarge m_szNPCName;

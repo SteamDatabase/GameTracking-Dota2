@@ -1,4 +1,4 @@
-class C_OP_PerParticleForce : public CParticleFunctionForce
+class C_OP_PerParticleForce
 {
 	CPerParticleFloatInput m_flForceScale;
 	CPerParticleVecInput m_vForce;

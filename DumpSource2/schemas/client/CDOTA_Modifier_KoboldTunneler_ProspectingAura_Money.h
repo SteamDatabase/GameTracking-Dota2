@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KoboldTunneler_ProspectingAura_Money : public CDOTA_Buff
+class CDOTA_Modifier_KoboldTunneler_ProspectingAura_Money
 {
 	int32 gpm_aura;
 };

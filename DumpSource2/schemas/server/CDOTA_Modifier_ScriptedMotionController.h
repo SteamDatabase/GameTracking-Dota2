@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ScriptedMotionController : public CDOTA_Buff
+class CDOTA_Modifier_ScriptedMotionController
 {
 	HSCRIPT m_hHorizontalControlFunction;
 	HSCRIPT m_hVerticalControlFunction;

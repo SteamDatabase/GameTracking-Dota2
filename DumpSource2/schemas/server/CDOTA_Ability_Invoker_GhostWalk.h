@@ -1,3 +1,3 @@
-class CDOTA_Ability_Invoker_GhostWalk : public CDOTA_Ability_Invoker_InvokedBase
+class CDOTA_Ability_Invoker_GhostWalk
 {
 };

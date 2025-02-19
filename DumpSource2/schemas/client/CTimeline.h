@@ -1,4 +1,4 @@
-class CTimeline : public IntervalTimer
+class CTimeline
 {
 	float32[64] m_flValues;
 	int32[64] m_nValueCounts;

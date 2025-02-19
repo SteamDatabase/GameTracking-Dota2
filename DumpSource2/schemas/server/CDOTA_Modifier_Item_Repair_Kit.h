@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Repair_Kit : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Repair_Kit
 {
 	int32 hp_regen;
 };

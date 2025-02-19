@@ -1,4 +1,4 @@
-class CNmFootEventConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmFootEventConditionNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	NmFootPhaseCondition_t m_phaseCondition;

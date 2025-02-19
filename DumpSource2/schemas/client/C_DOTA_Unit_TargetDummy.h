@@ -1,4 +1,4 @@
-class C_DOTA_Unit_TargetDummy : public C_DOTA_BaseNPC_Hero
+class C_DOTA_Unit_TargetDummy
 {
 	float32 m_flDamageTaken;
 	float32 m_flLastHit;

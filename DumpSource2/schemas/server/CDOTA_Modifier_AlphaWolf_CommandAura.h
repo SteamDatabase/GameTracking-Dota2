@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AlphaWolf_CommandAura : public CDOTA_Buff
+class CDOTA_Modifier_AlphaWolf_CommandAura
 {
 	float32 radius;
 };

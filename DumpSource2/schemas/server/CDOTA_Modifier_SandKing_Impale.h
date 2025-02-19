@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SandKing_Impale : public CDOTA_Buff
+class CDOTA_Modifier_SandKing_Impale
 {
 	float32 m_flPower;
 	float32 m_flStartZ;

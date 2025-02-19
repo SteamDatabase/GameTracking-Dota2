@@ -1,4 +1,4 @@
-class CSpotlightEnd : public CBaseModelEntity
+class CSpotlightEnd
 {
 	float32 m_flLightScale;
 	float32 m_Radius;

@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Hero_Windrunner : public C_DOTA_BaseNPC_Hero
+class C_DOTA_Unit_Hero_Windrunner
 {
 	int32 m_nTargetAngle;
 	int32 m_iPoseParameterAim;

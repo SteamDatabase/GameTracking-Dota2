@@ -1,4 +1,4 @@
-class C_EconEntity : public C_BaseFlex
+class C_EconEntity
 {
 	CAttributeContainer m_AttributeManager;
 	bool m_bClientside;

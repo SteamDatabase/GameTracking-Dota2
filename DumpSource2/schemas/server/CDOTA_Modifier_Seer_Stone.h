@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seer_Stone : public CDOTA_Buff_Item
+class CDOTA_Modifier_Seer_Stone
 {
 	int32 cast_range_bonus;
 	int32 vision_bonus;

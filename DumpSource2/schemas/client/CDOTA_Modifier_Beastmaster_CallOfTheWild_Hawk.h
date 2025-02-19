@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Beastmaster_CallOfTheWild_Hawk : public CDOTA_Buff
+class CDOTA_Modifier_Beastmaster_CallOfTheWild_Hawk
 {
 	CHandle< C_BaseEntity > m_hOwner;
 	int32 attack_radius;

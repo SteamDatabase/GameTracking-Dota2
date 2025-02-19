@@ -1,3 +1,3 @@
-class C_DOTA_Ability_AntiMage_Counterspell_Ally : public C_DOTABaseAbility
+class C_DOTA_Ability_AntiMage_Counterspell_Ally
 {
 };

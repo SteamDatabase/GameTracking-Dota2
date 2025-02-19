@@ -1,4 +1,4 @@
-class CDOTA_Ability_Kez_Echo_Slash : public CDOTA_Ability_Kez_BaseAbility
+class CDOTA_Ability_Kez_Echo_Slash
 {
 	Vector m_vInitialDirection;
 	Vector m_vStartPos;
@@ -12,5 +12,6 @@ class CDOTA_Ability_Kez_Echo_Slash : public CDOTA_Ability_Kez_BaseAbility
 	float32 effect_duration;
 	int32 m_nStrikesLeft;
 	GameTime_t m_NextStrikeTime;
+	bool m_bFlutter;
 	ParticleIndex_t m_nFXCast;
 };

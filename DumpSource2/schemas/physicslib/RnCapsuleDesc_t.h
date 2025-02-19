@@ -1,4 +1,4 @@
-class RnCapsuleDesc_t : public RnShapeDesc_t
+class RnCapsuleDesc_t
 {
 	RnCapsule_t m_Capsule;
 };

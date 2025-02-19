@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Nevermore_Requiem : public C_DOTABaseAbility
+class C_DOTA_Ability_Nevermore_Requiem
 {
 	int32 requiem_line_width_start;
 	int32 requiem_line_width_end;

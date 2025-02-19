@@ -1,4 +1,4 @@
-class CDOTA_Ability_Hoodwink_Sharpshooter : public CDOTABaseAbility
+class CDOTA_Ability_Hoodwink_Sharpshooter
 {
 	float32 max_charge_time;
 	Vector m_vStartPos;

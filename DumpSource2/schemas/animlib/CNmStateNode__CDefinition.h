@@ -1,4 +1,4 @@
-class CNmStateNode::CDefinition : public CNmPoseNode::CDefinition
+class CNmStateNode::CDefinition
 {
 	int16 m_nChildNodeIdx;
 	CUtlLeanVectorFixedGrowable< CGlobalSymbol, 3 > m_entryEvents;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Grimstroke_SoulChain_ChannelCheck : public CDOTA_Buff
+class CDOTA_Modifier_Grimstroke_SoulChain_ChannelCheck
 {
 	CHandle< C_BaseEntity > m_hCurrentAbility;
 	CHandle< C_BaseEntity > m_hTarget;

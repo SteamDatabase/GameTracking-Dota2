@@ -1,4 +1,4 @@
-class C_INIT_RemapTransformOrientationToRotations : public CParticleFunctionInitializer
+class C_INIT_RemapTransformOrientationToRotations
 {
 	CParticleTransformInput m_TransformInput;
 	Vector m_vecRotation;

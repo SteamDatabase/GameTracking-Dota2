@@ -1,4 +1,4 @@
-class CParticleFunctionInitializer : public CParticleFunction
+class CParticleFunctionInitializer
 {
 	int32 m_nAssociatedEmitterIndex;
 };

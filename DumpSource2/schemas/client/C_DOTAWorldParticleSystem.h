@@ -1,4 +1,4 @@
-class C_DOTAWorldParticleSystem : public C_BaseModelEntity
+class C_DOTAWorldParticleSystem
 {
 	int32 m_nType;
 	ParticleIndex_t m_iClientEffectIndex;

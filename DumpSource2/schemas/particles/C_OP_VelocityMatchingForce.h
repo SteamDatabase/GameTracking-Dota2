@@ -1,4 +1,4 @@
-class C_OP_VelocityMatchingForce : public CParticleFunctionOperator
+class C_OP_VelocityMatchingForce
 {
 	float32 m_flDirScale;
 	float32 m_flSpdScale;

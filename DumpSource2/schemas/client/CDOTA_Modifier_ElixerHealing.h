@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ElixerHealing : public CDOTA_Buff
+class CDOTA_Modifier_ElixerHealing
 {
 	int32 health;
 	int32 mana;

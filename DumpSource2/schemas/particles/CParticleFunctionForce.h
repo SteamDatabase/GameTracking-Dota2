@@ -1,3 +1,3 @@
-class CParticleFunctionForce : public CParticleFunction
+class CParticleFunctionForce
 {
 };

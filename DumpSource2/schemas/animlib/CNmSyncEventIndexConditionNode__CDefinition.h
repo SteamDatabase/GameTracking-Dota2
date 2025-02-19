@@ -1,4 +1,4 @@
-class CNmSyncEventIndexConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmSyncEventIndexConditionNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	CNmSyncEventIndexConditionNode::TriggerMode_t m_triggerMode;

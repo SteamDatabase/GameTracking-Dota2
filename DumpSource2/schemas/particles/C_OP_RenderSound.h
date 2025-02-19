@@ -1,4 +1,4 @@
-class C_OP_RenderSound : public CParticleFunctionRenderer
+class C_OP_RenderSound
 {
 	float32 m_flDurationScale;
 	float32 m_flSndLvlScale;

@@ -1,3 +1,3 @@
-class CDOTA_NoWardTrigger : public CBaseTrigger
+class CDOTA_NoWardTrigger
 {
 };

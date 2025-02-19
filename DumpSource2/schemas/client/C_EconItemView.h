@@ -1,4 +1,4 @@
-class C_EconItemView : public IEconItemInterface
+class C_EconItemView
 {
 	item_definition_index_t m_iItemDefinitionIndex;
 	int32 m_iEntityQuality;

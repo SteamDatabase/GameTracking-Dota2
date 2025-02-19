@@ -1,4 +1,4 @@
-class C_INIT_DistanceToCPInit : public CParticleFunctionInitializer
+class C_INIT_DistanceToCPInit
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleFloatInput m_flInputMin;

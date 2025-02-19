@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Terrorblade_Demon_Zeal : public CDOTA_Buff
+class CDOTA_Modifier_Terrorblade_Demon_Zeal
 {
 	int32 berserk_bonus_attack_speed;
 	int32 berserk_bonus_movement_speed;

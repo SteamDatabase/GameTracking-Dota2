@@ -1,4 +1,4 @@
-class C_INIT_OffsetVectorToVector : public CParticleFunctionInitializer
+class C_INIT_OffsetVectorToVector
 {
 	ParticleAttributeIndex_t m_nFieldInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

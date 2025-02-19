@@ -1,4 +1,4 @@
-class CDOTA_Ability_Plus_GuildBanner : public CDOTABaseAbility
+class CDOTA_Ability_Plus_GuildBanner
 {
 	CUtlVectorFixedGrowable< CHandle< CBaseEntity >, 10 > m_vecBanners;
 };

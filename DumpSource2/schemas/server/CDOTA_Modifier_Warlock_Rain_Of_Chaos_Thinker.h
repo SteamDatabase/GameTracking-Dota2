@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Warlock_Rain_Of_Chaos_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Warlock_Rain_Of_Chaos_Thinker
 {
 	float32 stun_duration;
 	bool bHasScepter;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_Overclocking : public CDOTA_Buff
+class CDOTA_Modifier_Rattletrap_Overclocking
 {
 	ParticleIndex_t m_nOverclockFX;
 	int32 bonus_movement_speed;

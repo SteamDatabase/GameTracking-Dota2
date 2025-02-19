@@ -1,4 +1,4 @@
-class CEnvSoundscapeProxy : public CEnvSoundscape
+class CEnvSoundscapeProxy
 {
 	CUtlSymbolLarge m_MainSoundscapeName;
 };

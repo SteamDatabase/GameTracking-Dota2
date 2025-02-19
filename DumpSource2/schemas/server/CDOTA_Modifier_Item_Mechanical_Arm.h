@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Mechanical_Arm : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Mechanical_Arm
 {
 	bool m_bAppliesToCreeps;
 	float32 bat;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Faceless_Void_5 : public CDOTABaseAbility
+class CDOTA_Ability_Special_Bonus_Unique_Faceless_Void_5
 {
 };

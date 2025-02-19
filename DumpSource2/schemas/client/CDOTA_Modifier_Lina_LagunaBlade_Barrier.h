@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lina_LagunaBlade_Barrier : public CDOTA_Buff
+class CDOTA_Modifier_Lina_LagunaBlade_Barrier
 {
 	int32 m_nDamageAbsorbed;
 	int32 barrier_pct;

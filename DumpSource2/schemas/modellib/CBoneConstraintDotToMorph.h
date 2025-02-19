@@ -1,4 +1,4 @@
-class CBoneConstraintDotToMorph : public CBoneConstraintBase
+class CBoneConstraintDotToMorph
 {
 	CUtlString m_sBoneName;
 	CUtlString m_sTargetBoneName;

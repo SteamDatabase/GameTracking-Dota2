@@ -1,4 +1,4 @@
-class C_OP_NoiseEmitter : public CParticleFunctionEmitter
+class C_OP_NoiseEmitter
 {
 	float32 m_flEmissionDuration;
 	float32 m_flStartTime;

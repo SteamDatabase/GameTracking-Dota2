@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mars_Scepter_Damage : public CDOTA_Buff
+class CDOTA_Modifier_Mars_Scepter_Damage
 {
 	int32 scepter_bonus_damage;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Razor_EyeOfTheStorm : public CDOTA_Buff
+class CDOTA_Modifier_Razor_EyeOfTheStorm
 {
 	int32 radius;
 	int32 armor_reduction;

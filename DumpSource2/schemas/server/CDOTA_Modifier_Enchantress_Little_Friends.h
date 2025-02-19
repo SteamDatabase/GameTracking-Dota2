@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enchantress_Little_Friends : public CDOTA_Buff
+class CDOTA_Modifier_Enchantress_Little_Friends
 {
 	CHandle< CBaseEntity > m_hZombieTarget;
 	CHandle< CBaseEntity > m_hDesiredTarget;

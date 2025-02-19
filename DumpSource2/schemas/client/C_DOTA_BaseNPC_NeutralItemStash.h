@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_NeutralItemStash : public C_DOTA_BaseNPC_Building
+class C_DOTA_BaseNPC_NeutralItemStash
 {
 	CUtlVector< ParticleIndex_t > m_vecNewItemFX;
 	bool m_bHasFoundProps;

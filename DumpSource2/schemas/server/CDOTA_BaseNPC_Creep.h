@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Creep : public CDOTA_BaseNPC_Additive
+class CDOTA_BaseNPC_Creep
 {
 	CDOTA_CreepKillInfo m_KillInfo;
 	DOTA_LANE m_Lane;

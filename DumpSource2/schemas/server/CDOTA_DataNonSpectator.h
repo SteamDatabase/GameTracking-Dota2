@@ -1,4 +1,4 @@
-class CDOTA_DataNonSpectator : public CBaseEntity
+class CDOTA_DataNonSpectator
 {
 	CUtlVectorEmbeddedNetworkVar< DataTeamPlayer_t > m_vecDataTeam;
 	uint64[256] m_bWorldTreeState;
@@ -20,5 +20,6 @@ class CDOTA_DataNonSpectator : public CBaseEntity
 	Vector2D[100] m_vPossibleWardPlacement;
 	float32[100] m_vPossibleWardRadii;
 	CUtlVectorEmbeddedNetworkVar< DOTATeleportInfo_t > m_vecTrackedTeleports;
+	CRoshanPhaseInfo m_roshanSpawnInfo;
 	int32 m_iTowerKills;
 };

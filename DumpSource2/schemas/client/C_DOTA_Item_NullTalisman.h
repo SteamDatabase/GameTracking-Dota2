@@ -1,4 +1,4 @@
-class C_DOTA_Item_NullTalisman : public C_DOTA_Item
+class C_DOTA_Item_NullTalisman
 {
 	int32 counter;
 };

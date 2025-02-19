@@ -1,3 +1,3 @@
-class CSurvivorsPowerUp_Track : public CSurvivorsPowerUp_InstantAttack
+class CSurvivorsPowerUp_Track
 {
 };

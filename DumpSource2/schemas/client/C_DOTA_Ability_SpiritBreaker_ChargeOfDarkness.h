@@ -1,4 +1,4 @@
-class C_DOTA_Ability_SpiritBreaker_ChargeOfDarkness : public C_DOTABaseAbility
+class C_DOTA_Ability_SpiritBreaker_ChargeOfDarkness
 {
 	Vector m_vChargeStartPos;
 };

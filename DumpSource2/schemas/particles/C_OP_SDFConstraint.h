@@ -1,4 +1,4 @@
-class C_OP_SDFConstraint : public CParticleFunctionConstraint
+class C_OP_SDFConstraint
 {
 	CParticleCollectionFloatInput m_flMinDist;
 	CParticleCollectionFloatInput m_flMaxDist;

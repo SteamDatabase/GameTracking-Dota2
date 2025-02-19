@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Tower_BlastWave_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_Tower_BlastWave_Thinker
 {
 	float32 damage_pct;
 	float32 m_fCurRadius;

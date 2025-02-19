@@ -1,4 +1,4 @@
-class CDOTA_Ability_Dazzle_ShadowWave : public CDOTABaseAbility
+class CDOTA_Ability_Dazzle_ShadowWave
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hHitEntities;
 	int32 bounce_radius;

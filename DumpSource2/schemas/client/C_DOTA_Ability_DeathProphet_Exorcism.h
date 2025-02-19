@@ -1,4 +1,4 @@
-class C_DOTA_Ability_DeathProphet_Exorcism : public C_DOTABaseAbility
+class C_DOTA_Ability_DeathProphet_Exorcism
 {
 	CUtlVector< sSpiritInfo* > m_SpiritInfos;
 };

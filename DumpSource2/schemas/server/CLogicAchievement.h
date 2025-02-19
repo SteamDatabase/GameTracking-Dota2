@@ -1,4 +1,4 @@
-class CLogicAchievement : public CLogicalEntity
+class CLogicAchievement
 {
 	bool m_bDisabled;
 	CUtlSymbolLarge m_iszAchievementEventID;

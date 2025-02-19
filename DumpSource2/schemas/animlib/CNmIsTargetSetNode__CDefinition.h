@@ -1,4 +1,4 @@
-class CNmIsTargetSetNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmIsTargetSetNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 };

@@ -1,4 +1,4 @@
-class CGameGibManager : public CBaseEntity
+class CGameGibManager
 {
 	bool m_bAllowNewGibs;
 	int32 m_iCurrentMaxPieces;

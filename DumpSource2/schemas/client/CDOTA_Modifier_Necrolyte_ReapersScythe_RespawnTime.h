@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Necrolyte_ReapersScythe_RespawnTime : public CDOTA_Buff
+class CDOTA_Modifier_Necrolyte_ReapersScythe_RespawnTime
 {
 	float32 hp_per_kill;
 	float32 mana_per_kill;

@@ -1,4 +1,4 @@
-class C_OP_MovementMaintainOffset : public CParticleFunctionOperator
+class C_OP_MovementMaintainOffset
 {
 	Vector m_vecOffset;
 	int32 m_nCP;

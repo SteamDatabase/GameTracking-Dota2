@@ -1,4 +1,4 @@
-class CSoundEventParameter : public CBaseEntity
+class CSoundEventParameter
 {
 	CUtlSymbolLarge m_iszParamName;
 	float32 m_flFloatValue;

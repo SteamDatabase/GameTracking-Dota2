@@ -1,4 +1,4 @@
-class CNmIDEventConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmIDEventConditionNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	CNmBitFlags m_eventConditionRules;

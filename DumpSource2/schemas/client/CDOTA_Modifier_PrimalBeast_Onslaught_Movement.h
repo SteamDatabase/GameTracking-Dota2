@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PrimalBeast_Onslaught_Movement : public CDOTA_Buff
+class CDOTA_Modifier_PrimalBeast_Onslaught_Movement
 {
 	float32 tick_interval;
 	float32 charge_speed;

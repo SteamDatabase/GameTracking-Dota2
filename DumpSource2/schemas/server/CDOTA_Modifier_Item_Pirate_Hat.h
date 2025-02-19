@@ -1,5 +1,7 @@
-class CDOTA_Modifier_Item_Pirate_Hat : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Pirate_Hat
 {
-	int32 bonus_attack_speed;
-	int32 bonus_ms;
+	int32 gold_steal_base;
+	int32 gold_steal_kill;
+	float32 gold_steal_range;
+	float32 gold_loss_reduction;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enigma_Splitting_Image : public CDOTA_Buff
+class CDOTA_Modifier_Enigma_Splitting_Image
 {
 	int32 m_iDamageTaken;
 	int32 damage_threshold;

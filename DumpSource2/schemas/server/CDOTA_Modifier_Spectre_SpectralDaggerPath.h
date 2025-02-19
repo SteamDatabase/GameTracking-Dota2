@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Spectre_SpectralDaggerPath : public CDOTA_Buff
+class CDOTA_Modifier_Spectre_SpectralDaggerPath
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hUnitsInPath;
 	int32 path_radius;

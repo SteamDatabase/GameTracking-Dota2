@@ -1,4 +1,4 @@
-class CPointCamera : public CBaseEntity
+class CPointCamera
 {
 	float32 m_FOV;
 	float32 m_Resolution;

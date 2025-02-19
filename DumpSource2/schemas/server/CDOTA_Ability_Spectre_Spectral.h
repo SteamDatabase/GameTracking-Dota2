@@ -1,3 +1,3 @@
-class CDOTA_Ability_Spectre_Spectral : public CDOTABaseAbility
+class CDOTA_Ability_Spectre_Spectral
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Queen_Of_Pain_2 : public CDOTABaseAbility
+class CDOTA_Ability_Special_Bonus_Unique_Queen_Of_Pain_2
 {
 };

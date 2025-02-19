@@ -1,4 +1,4 @@
-class CAimCameraUpdateNode : public CUnaryUpdateNode
+class CAimCameraUpdateNode
 {
 	CAnimParamHandle m_hParameterPosition;
 	CAnimParamHandle m_hParameterOrientation;

@@ -1,4 +1,4 @@
-class C_OP_OscillateVectorSimple : public CParticleFunctionOperator
+class C_OP_OscillateVectorSimple
 {
 	Vector m_Rate;
 	Vector m_Frequency;

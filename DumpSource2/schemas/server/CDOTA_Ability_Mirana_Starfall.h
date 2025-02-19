@@ -1,4 +1,4 @@
-class CDOTA_Ability_Mirana_Starfall : public CDOTABaseAbility
+class CDOTA_Ability_Mirana_Starfall
 {
 	int32 damage;
 };

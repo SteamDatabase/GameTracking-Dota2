@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Beastmaster_WildAxes : public C_DOTABaseAbility
+class C_DOTA_Ability_Beastmaster_WildAxes
 {
 	int32 axe_damage;
 };

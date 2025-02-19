@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Sniper_Concussive_Grenade : public CDOTA_Buff
+class CDOTA_Modifier_Sniper_Concussive_Grenade
 {
 	int32 slow;
 };

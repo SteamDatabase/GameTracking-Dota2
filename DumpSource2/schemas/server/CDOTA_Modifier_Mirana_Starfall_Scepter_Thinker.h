@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mirana_Starfall_Scepter_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Mirana_Starfall_Scepter_Thinker
 {
 	float32 interval_scepter;
 	bool bInBufferTime;

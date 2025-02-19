@@ -1,4 +1,4 @@
-class CPulseCell_WaitForCursorsWithTagBase : public CPulseCell_BaseYieldingInflow
+class CPulseCell_WaitForCursorsWithTagBase
 {
 	int32 m_nCursorsAllowedToWait;
 	CPulse_ResumePoint m_WaitComplete;

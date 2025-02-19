@@ -1,4 +1,4 @@
-class CTriggerPush : public CBaseTrigger
+class CTriggerPush
 {
 	QAngle m_angPushEntitySpace;
 	Vector m_vecPushDirEntitySpace;

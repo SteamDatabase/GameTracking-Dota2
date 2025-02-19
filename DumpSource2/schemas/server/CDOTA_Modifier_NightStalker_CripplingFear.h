@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NightStalker_CripplingFear : public CDOTA_Buff
+class CDOTA_Modifier_NightStalker_CripplingFear
 {
 	int32 dps;
 	float32 tick_rate;

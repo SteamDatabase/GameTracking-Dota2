@@ -1,4 +1,4 @@
-class CBaseCombatCharacter : public CBaseFlex
+class CBaseCombatCharacter
 {
 	bool m_bForceServerRagdoll;
 	CNetworkUtlVectorBase< CHandle< CEconWearable > > m_hMyWearables;
@@ -10,4 +10,5 @@ class CBaseCombatCharacter : public CBaseFlex
 	CUtlSymbolLarge m_strRelationships;
 	Hull_t m_eHull;
 	uint32 m_nNavHullIdx;
+	CMovementStatsProperty m_movementStats;
 };

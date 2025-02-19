@@ -1,4 +1,4 @@
-class CMathColorBlend : public CLogicalEntity
+class CMathColorBlend
 {
 	float32 m_flInMin;
 	float32 m_flInMax;

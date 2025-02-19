@@ -1,4 +1,4 @@
-class CLookAtUpdateNode : public CUnaryUpdateNode
+class CLookAtUpdateNode
 {
 	LookAtOpFixedSettings_t m_opFixedSettings;
 	AnimVectorSource m_target;

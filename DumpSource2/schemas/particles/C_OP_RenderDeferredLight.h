@@ -1,4 +1,4 @@
-class C_OP_RenderDeferredLight : public CParticleFunctionRenderer
+class C_OP_RenderDeferredLight
 {
 	bool m_bUseAlphaTestWindow;
 	bool m_bUseTexture;

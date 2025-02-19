@@ -1,4 +1,4 @@
-class CLogicNavigation : public CLogicalEntity
+class CLogicNavigation
 {
 	bool m_isOn;
 	navproperties_t m_navProperty;

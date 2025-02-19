@@ -1,4 +1,4 @@
-class C_OP_SetControlPointToCPVelocity : public CParticleFunctionPreEmission
+class C_OP_SetControlPointToCPVelocity
 {
 	int32 m_nCPInput;
 	int32 m_nCPOutputVel;

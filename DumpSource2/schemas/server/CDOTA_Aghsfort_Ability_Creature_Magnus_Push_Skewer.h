@@ -1,4 +1,4 @@
-class CDOTA_Aghsfort_Ability_Creature_Magnus_Push_Skewer : public CDOTABaseAbility
+class CDOTA_Aghsfort_Ability_Creature_Magnus_Push_Skewer
 {
 	float32 skewer_radius;
 	float32 skewer_speed;

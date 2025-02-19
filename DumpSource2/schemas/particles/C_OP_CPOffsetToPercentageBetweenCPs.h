@@ -1,4 +1,4 @@
-class C_OP_CPOffsetToPercentageBetweenCPs : public CParticleFunctionOperator
+class C_OP_CPOffsetToPercentageBetweenCPs
 {
 	float32 m_flInputMin;
 	float32 m_flInputMax;

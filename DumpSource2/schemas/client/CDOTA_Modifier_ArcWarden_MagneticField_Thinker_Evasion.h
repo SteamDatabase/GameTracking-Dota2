@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ArcWarden_MagneticField_Thinker_Evasion : public CDOTA_Buff
+class CDOTA_Modifier_ArcWarden_MagneticField_Thinker_Evasion
 {
 	float32 radius;
 	Vector m_vPos;

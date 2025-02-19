@@ -1,3 +1,3 @@
-class CDOTA_Ability_Shredder_ReturnChakram : public CDOTABaseAbility
+class CDOTA_Ability_Shredder_ReturnChakram
 {
 };

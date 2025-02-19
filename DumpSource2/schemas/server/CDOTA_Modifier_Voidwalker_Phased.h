@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Voidwalker_Phased : public CDOTA_Buff
+class CDOTA_Modifier_Voidwalker_Phased
 {
 	int32 damage;
 	float32 max_damage_duration;

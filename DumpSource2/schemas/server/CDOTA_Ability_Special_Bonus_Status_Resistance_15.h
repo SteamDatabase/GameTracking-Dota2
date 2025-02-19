@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Status_Resistance_15 : public CDOTABaseAbility
+class CDOTA_Ability_Special_Bonus_Status_Resistance_15
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Clinkz_SearingArrows : public CDOTA_Buff
+class CDOTA_Modifier_Clinkz_SearingArrows
 {
 	int32 damage_bonus;
 	CUtlVector< int16 > m_InFlightAttackRecords;

@@ -1,4 +1,4 @@
-class C_OP_MovementRigidAttachToCP : public CParticleFunctionOperator
+class C_OP_MovementRigidAttachToCP
 {
 	int32 m_nControlPointNumber;
 	int32 m_nScaleControlPoint;

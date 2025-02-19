@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mutation_KillstreakPower : public CDOTA_Buff
+class CDOTA_Modifier_Mutation_KillstreakPower
 {
 	int32 m_iDamageDonePct;
 	int32 m_iDamageTakenPct;

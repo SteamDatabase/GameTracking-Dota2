@@ -1,4 +1,4 @@
-class C_OP_SetControlPointOrientation : public CParticleFunctionPreEmission
+class C_OP_SetControlPointOrientation
 {
 	bool m_bUseWorldLocation;
 	bool m_bRandomize;

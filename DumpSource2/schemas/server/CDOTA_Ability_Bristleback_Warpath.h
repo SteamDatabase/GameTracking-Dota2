@@ -1,3 +1,3 @@
-class CDOTA_Ability_Bristleback_Warpath : public CDOTABaseAbility
+class CDOTA_Ability_Bristleback_Warpath
 {
 };

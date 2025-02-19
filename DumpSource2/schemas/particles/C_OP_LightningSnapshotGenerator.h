@@ -1,4 +1,4 @@
-class C_OP_LightningSnapshotGenerator : public CParticleFunctionPreEmission
+class C_OP_LightningSnapshotGenerator
 {
 	int32 m_nCPSnapshot;
 	int32 m_nCPStartPnt;

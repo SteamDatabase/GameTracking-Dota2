@@ -1,4 +1,4 @@
-class CParticleFloatInput : public CParticleInput
+class CParticleFloatInput
 {
 	ParticleFloatType_t m_nType;
 	ParticleFloatMapType_t m_nMapType;

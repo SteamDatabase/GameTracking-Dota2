@@ -1,4 +1,4 @@
-class C_OP_SetControlPointToImpactPoint : public CParticleFunctionPreEmission
+class C_OP_SetControlPointToImpactPoint
 {
 	int32 m_nCPOut;
 	int32 m_nCPIn;

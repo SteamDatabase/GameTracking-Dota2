@@ -1,4 +1,4 @@
-class CDOTA_Ability_Creature_Ice_Breath : public CDOTABaseAbility
+class CDOTA_Ability_Creature_Ice_Breath
 {
 	int32 speed;
 	int32 projectile_count;

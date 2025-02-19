@@ -1,4 +1,4 @@
-class C_OP_PinParticleToCP : public CParticleFunctionOperator
+class C_OP_PinParticleToCP
 {
 	int32 m_nControlPointNumber;
 	CParticleCollectionVecInput m_vecOffset;

@@ -1,4 +1,4 @@
-class CNmOrientationWarpNode::CDefinition : public CNmPoseNode::CDefinition
+class CNmOrientationWarpNode::CDefinition
 {
 	int16 m_nClipReferenceNodeIdx;
 	int16 m_nTargetValueNodeIdx;

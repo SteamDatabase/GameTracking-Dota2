@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Undying_Tombstone_Bunker : public CDOTA_Buff
+class CDOTA_Modifier_Undying_Tombstone_Bunker
 {
 	float32 bunker_heal_pct;
 	float32 tombstone_grab_radius;

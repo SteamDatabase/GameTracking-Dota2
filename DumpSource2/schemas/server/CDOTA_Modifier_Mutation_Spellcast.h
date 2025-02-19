@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mutation_Spellcast : public CDOTA_Buff
+class CDOTA_Modifier_Mutation_Spellcast
 {
 	CUtlVector< CDOTABaseAbility* > m_vecAbilities;
 	float32 m_fNextCastTime;

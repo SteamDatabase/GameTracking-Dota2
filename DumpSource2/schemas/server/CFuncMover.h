@@ -1,8 +1,9 @@
-class CFuncMover : public CBaseModelEntity
+class CFuncMover
 {
 	CUtlSymbolLarge m_iszPathName;
 	CHandle< CPathMover > m_hPathMover;
 	CUtlSymbolLarge m_iszPathNodeStart;
+	CUtlSymbolLarge m_iszPathNodeEnd;
 	CFuncMover::Move_t m_eMoveType;
 	bool m_bIsReversing;
 	Vector m_vTarget;
@@ -29,6 +30,7 @@ class CFuncMover : public CBaseModelEntity
 	CUtlSymbolLarge m_iszStopReverseSound;
 	CUtlSymbolLarge m_iszArriveAtDestinationSound;
 	CEntityIOOutput m_OnMovementEnd;
+	bool m_bStartAtClosestPoint;
 	bool m_bStartAtEnd;
 	CFuncMover::OrientationUpdate_t m_eOrientationUpdate;
 	GameTime_t m_flTimeStartOrientationChange;
@@ -49,4 +51,9 @@ class CFuncMover : public CBaseModelEntity
 	CFuncMover::TransitionToPathNodeAction_t m_eTransitionedToPathNodeAction;
 	int32 m_nDelayedTeleportToNode;
 	bool m_bIsVerboseLogging;
+	CEntityIOOutput m_OnStart;
+	CEntityIOOutput m_OnStartForward;
+	CEntityIOOutput m_OnStartReverse;
+	CEntityIOOutput m_OnStop;
+	CEntityIOOutput m_OnStopped;
 };

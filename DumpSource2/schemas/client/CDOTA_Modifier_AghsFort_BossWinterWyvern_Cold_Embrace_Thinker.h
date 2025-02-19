@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_BossWinterWyvern_Cold_Embrace_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_BossWinterWyvern_Cold_Embrace_Thinker
 {
 	float32 freeze_radius;
 	int32 freeze_damage;

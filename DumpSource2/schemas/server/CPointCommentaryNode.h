@@ -1,4 +1,4 @@
-class CPointCommentaryNode : public CBaseAnimatingActivity
+class CPointCommentaryNode
 {
 	CUtlSymbolLarge m_iszPreCommands;
 	CUtlSymbolLarge m_iszPostCommands;

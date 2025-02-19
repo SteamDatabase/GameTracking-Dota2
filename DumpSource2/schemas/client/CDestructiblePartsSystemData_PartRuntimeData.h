@@ -4,4 +4,6 @@ class CDestructiblePartsSystemData_PartRuntimeData
 	EDestructiblePartDamagePassThroughType m_nDamagePassthroughType;
 	bool m_bKillEntityOnDestruction;
 	CGlobalSymbol m_sCustomDeathHandshake;
+	bool m_bShouldDestroyOnDeath;
+	CRangeFloat m_flDeathDestroyTime;
 };

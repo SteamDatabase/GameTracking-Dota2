@@ -1,4 +1,4 @@
-class CDOTAGameManagerProxy : public CBaseEntity
+class CDOTAGameManagerProxy
 {
 	CDOTAGameManager* m_pGameManager;
 };

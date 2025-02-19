@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_Void_Astral_Pull_Movement : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_Void_Astral_Pull_Movement
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

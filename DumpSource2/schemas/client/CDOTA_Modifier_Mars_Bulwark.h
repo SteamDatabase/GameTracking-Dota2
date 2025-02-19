@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mars_Bulwark : public CDOTA_Buff
+class CDOTA_Modifier_Mars_Bulwark
 {
 	float32 physical_damage_reduction;
 	float32 physical_damage_reduction_side;

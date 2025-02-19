@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bane_Nightmare : public CDOTA_Buff
+class CDOTA_Modifier_Bane_Nightmare
 {
 	int32 m_nSource;
 	float32 animation_rate;

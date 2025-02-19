@@ -1,4 +1,4 @@
-class CClientAlphaProperty : public IClientAlphaProperty
+class CClientAlphaProperty
 {
 	uint8 m_nRenderFX;
 	uint8 m_nRenderMode;

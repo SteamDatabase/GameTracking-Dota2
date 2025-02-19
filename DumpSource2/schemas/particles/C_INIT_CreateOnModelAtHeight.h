@@ -1,4 +1,4 @@
-class C_INIT_CreateOnModelAtHeight : public CParticleFunctionInitializer
+class C_INIT_CreateOnModelAtHeight
 {
 	bool m_bUseBones;
 	bool m_bForceZ;

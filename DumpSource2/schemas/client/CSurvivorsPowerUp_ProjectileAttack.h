@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_ProjectileAttack : public CSurvivorsPowerUp
+class CSurvivorsPowerUp_ProjectileAttack
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sParticle;
 	ESurvivorsAttackTargeting m_eTargeting;

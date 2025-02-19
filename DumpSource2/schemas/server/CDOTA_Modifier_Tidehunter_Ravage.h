@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tidehunter_Ravage : public CDOTA_Buff
+class CDOTA_Modifier_Tidehunter_Ravage
 {
 	float32 m_flStartZ;
 	float32 m_flCurTime;

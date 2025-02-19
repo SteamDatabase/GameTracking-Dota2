@@ -1,4 +1,4 @@
-class CInfoVisibilityBox : public CBaseEntity
+class CInfoVisibilityBox
 {
 	int32 m_nMode;
 	Vector m_vBoxSize;

@@ -1,4 +1,4 @@
-class CEnvCubemapFog : public CBaseEntity
+class CEnvCubemapFog
 {
 	float32 m_flEndDistance;
 	float32 m_flStartDistance;

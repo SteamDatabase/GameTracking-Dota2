@@ -1,3 +1,5 @@
-class CDOTA_Modifier_Windrunner_ShackleShot : public CDOTA_Modifier_Stunned
+class CDOTA_Modifier_Windrunner_ShackleShot
 {
+	float32 bounce_dmg;
+	float32 shackle_distance;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Javelin : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Javelin
 {
 	int32 bonus_chance;
 	int32 bonus_chance_damage;

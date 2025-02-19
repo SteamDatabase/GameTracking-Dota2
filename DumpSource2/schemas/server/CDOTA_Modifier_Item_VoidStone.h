@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_VoidStone : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_VoidStone
 {
 	float32 bonus_mana_regen;
 };

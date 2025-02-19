@@ -1,4 +1,4 @@
-class C_EnvLightProbeVolume : public C_BaseEntity
+class C_EnvLightProbeVolume
 {
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture;
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeDirectLightIndicesTexture;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tutorial_LastHittable : public CDOTA_Buff
+class CDOTA_Modifier_Tutorial_LastHittable
 {
 	bool m_bIsFriend;
 };

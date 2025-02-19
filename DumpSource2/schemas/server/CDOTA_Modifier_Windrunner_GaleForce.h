@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Windrunner_GaleForce : public CDOTA_Buff
+class CDOTA_Modifier_Windrunner_GaleForce
 {
 	Vector m_vEndpoint;
 	Vector m_vFlowPosition;

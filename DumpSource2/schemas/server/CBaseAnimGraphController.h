@@ -1,4 +1,4 @@
-class CBaseAnimGraphController : public CSkeletonAnimationController
+class CBaseAnimGraphController
 {
 	bool m_bSequenceFinished;
 	float32 m_flSoundSyncTime;

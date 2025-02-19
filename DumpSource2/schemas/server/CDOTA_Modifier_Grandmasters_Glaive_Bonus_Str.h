@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Grandmasters_Glaive_Bonus_Str : public CDOTA_Buff
+class CDOTA_Modifier_Grandmasters_Glaive_Bonus_Str
 {
 	int32 str_stance;
 };

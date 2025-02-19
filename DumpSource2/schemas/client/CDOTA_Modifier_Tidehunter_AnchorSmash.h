@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tidehunter_AnchorSmash : public CDOTA_Buff
+class CDOTA_Modifier_Tidehunter_AnchorSmash
 {
 	int32 damage_reduction;
 };

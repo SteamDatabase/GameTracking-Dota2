@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Nian_Hurricane : public C_DOTABaseAbility
+class C_DOTA_Ability_Nian_Hurricane
 {
 	int32 min_distance;
 	int32 max_distance;

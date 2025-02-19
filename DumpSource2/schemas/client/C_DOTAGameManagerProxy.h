@@ -1,4 +1,4 @@
-class C_DOTAGameManagerProxy : public C_BaseEntity
+class C_DOTAGameManagerProxy
 {
 	C_DOTAGameManager* m_pGameManager;
 };

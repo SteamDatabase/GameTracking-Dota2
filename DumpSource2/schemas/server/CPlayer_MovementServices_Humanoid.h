@@ -1,4 +1,4 @@
-class CPlayer_MovementServices_Humanoid : public CPlayer_MovementServices
+class CPlayer_MovementServices_Humanoid
 {
 	float32 m_flStepSoundTime;
 	float32 m_flFallVelocity;

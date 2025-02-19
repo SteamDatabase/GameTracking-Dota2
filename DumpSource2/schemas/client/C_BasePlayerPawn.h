@@ -1,4 +1,4 @@
-class C_BasePlayerPawn : public C_BaseCombatCharacter
+class C_BasePlayerPawn
 {
 	CPlayer_WeaponServices* m_pWeaponServices;
 	CPlayer_ItemServices* m_pItemServices;

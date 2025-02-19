@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Medusa_VenomedVolley : public CDOTA_Buff
+class CDOTA_Modifier_Medusa_VenomedVolley
 {
 	float32 duration;
 	int32 attack_count;

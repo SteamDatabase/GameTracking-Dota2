@@ -1,3 +1,3 @@
-class C_OP_EndCapDecay : public CParticleFunctionOperator
+class C_OP_EndCapDecay
 {
 };

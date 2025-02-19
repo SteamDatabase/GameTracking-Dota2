@@ -1,4 +1,4 @@
-class C_OP_RenderStandardLight : public CParticleFunctionRenderer
+class C_OP_RenderStandardLight
 {
 	ParticleLightTypeChoiceList_t m_nLightType;
 	CParticleCollectionVecInput m_vecColorScale;

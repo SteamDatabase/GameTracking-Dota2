@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AncientApparition_ChillingTouch : public CDOTA_Buff
+class CDOTA_Modifier_AncientApparition_ChillingTouch
 {
 	int32 damage;
 	float32 duration;

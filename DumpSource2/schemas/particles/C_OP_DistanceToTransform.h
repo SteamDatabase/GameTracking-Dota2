@@ -1,4 +1,4 @@
-class C_OP_DistanceToTransform : public CParticleFunctionOperator
+class C_OP_DistanceToTransform
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleFloatInput m_flInputMin;

@@ -1,5 +1,5 @@
-class CDOTA_Modifier_Treant_NaturesGuise_Tree_Walking : public CDOTA_Buff
+class CDOTA_Modifier_Treant_NaturesGuise_Tree_Walking
 {
-	int32 movement_bonus;
+	float32 movement_bonus;
 	int32 regen_amp;
 };

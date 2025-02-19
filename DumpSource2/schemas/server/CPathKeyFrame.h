@@ -1,4 +1,4 @@
-class CPathKeyFrame : public CLogicalEntity
+class CPathKeyFrame
 {
 	Vector m_Origin;
 	QAngle m_Angles;

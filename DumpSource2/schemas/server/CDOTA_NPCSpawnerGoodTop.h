@@ -1,3 +1,3 @@
-class CDOTA_NPCSpawnerGoodTop : public CDOTA_NPCSpawner
+class CDOTA_NPCSpawnerGoodTop
 {
 };

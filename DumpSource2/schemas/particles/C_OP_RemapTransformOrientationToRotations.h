@@ -1,4 +1,4 @@
-class C_OP_RemapTransformOrientationToRotations : public CParticleFunctionOperator
+class C_OP_RemapTransformOrientationToRotations
 {
 	CParticleTransformInput m_TransformInput;
 	Vector m_vecRotation;

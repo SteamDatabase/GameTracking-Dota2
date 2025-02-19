@@ -1,4 +1,4 @@
-class CNmIDToFloatNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmIDToFloatNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	float32 m_defaultValue;

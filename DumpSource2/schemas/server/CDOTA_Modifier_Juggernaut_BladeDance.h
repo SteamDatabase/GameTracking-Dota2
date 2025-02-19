@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Juggernaut_BladeDance : public CDOTA_Buff
+class CDOTA_Modifier_Juggernaut_BladeDance
 {
 	int32 blade_dance_crit_mult;
 	int32 blade_dance_crit_chance;

@@ -1,4 +1,4 @@
-class CConcreteAnimParameter : public CAnimParameterBase
+class CConcreteAnimParameter
 {
 	AnimParamButton_t m_previewButton;
 	AnimParamNetworkSetting m_eNetworkSetting;

@@ -1,6 +1,6 @@
-class CVoiceContainerEnvelopeAnalyzer : public CVoiceContainerAnalysisBase
+class CVoiceContainerEnvelopeAnalyzer
 {
 	EMode_t m_mode;
-	int32 m_nSamples;
+	float32 m_fAnalysisWindowMs;
 	float32 m_flThreshold;
 };

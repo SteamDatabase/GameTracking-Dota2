@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_Creep : public C_DOTA_BaseNPC_Additive
+class C_DOTA_BaseNPC_Creep
 {
 	float32 m_flAim;
 };

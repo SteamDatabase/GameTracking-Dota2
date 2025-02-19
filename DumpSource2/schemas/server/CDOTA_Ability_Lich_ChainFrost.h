@@ -1,4 +1,4 @@
-class CDOTA_Ability_Lich_ChainFrost : public CDOTABaseAbility
+class CDOTA_Ability_Lich_ChainFrost
 {
 	float32 jump_range;
 	int32 jumps;

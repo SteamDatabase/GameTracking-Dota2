@@ -1,4 +1,4 @@
-class CNmIDComparisonNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmIDComparisonNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	CNmIDComparisonNode::Comparison_t m_comparison;

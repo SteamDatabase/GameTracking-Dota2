@@ -1,4 +1,4 @@
-class C_OP_RemapTransformVisibilityToVector : public CParticleFunctionOperator
+class C_OP_RemapTransformVisibilityToVector
 {
 	ParticleSetMethod_t m_nSetMethod;
 	CParticleTransformInput m_TransformInput;

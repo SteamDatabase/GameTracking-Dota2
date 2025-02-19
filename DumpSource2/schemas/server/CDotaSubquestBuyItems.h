@@ -1,4 +1,4 @@
-class CDotaSubquestBuyItems : public CDotaSubquestBase
+class CDotaSubquestBuyItems
 {
 	CUtlVector< char* > m_itemList;
 };

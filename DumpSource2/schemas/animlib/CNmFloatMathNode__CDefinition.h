@@ -1,4 +1,4 @@
-class CNmFloatMathNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFloatMathNode::CDefinition
 {
 	int16 m_nInputValueNodeIdxA;
 	int16 m_nInputValueNodeIdxB;

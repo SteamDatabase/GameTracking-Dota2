@@ -1,4 +1,4 @@
-class C_DOTA_Unit_AghsFort_Creature_DungeonBat : public C_DOTA_BaseNPC_Creature
+class C_DOTA_Unit_AghsFort_Creature_DungeonBat
 {
 	ParticleIndex_t m_nFXAmbient;
 };

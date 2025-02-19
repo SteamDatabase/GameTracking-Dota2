@@ -1,4 +1,4 @@
-class CPlayerVisibility : public CBaseEntity
+class CPlayerVisibility
 {
 	float32 m_flVisibilityStrength;
 	float32 m_flFogDistanceMultiplier;

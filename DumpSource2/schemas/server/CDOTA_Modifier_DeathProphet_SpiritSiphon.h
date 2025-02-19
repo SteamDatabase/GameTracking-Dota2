@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DeathProphet_SpiritSiphon : public CDOTA_Buff
+class CDOTA_Modifier_DeathProphet_SpiritSiphon
 {
 	float32 flSmoothness;
 	float32 damage;

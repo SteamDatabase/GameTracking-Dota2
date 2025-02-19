@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Underlord_Portal_Fire_Effect : public CDOTA_Buff
+class CDOTA_Modifier_Underlord_Portal_Fire_Effect
 {
 	int32 dps;
 };

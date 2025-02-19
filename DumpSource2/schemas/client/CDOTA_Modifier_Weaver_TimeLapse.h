@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Weaver_TimeLapse : public CDOTA_Buff
+class CDOTA_Modifier_Weaver_TimeLapse
 {
 	Vector[11] m_PositionIndex;
 	float32[11] m_flLife;

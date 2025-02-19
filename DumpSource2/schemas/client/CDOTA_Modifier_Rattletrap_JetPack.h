@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_JetPack : public CDOTA_Buff
+class CDOTA_Modifier_Rattletrap_JetPack
 {
 	int32 m_nMovementSpeed;
 	int32 bonus_speed;

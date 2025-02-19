@@ -1,4 +1,4 @@
-class C_OP_PercentageBetweenTransformLerpCPs : public CParticleFunctionOperator
+class C_OP_PercentageBetweenTransformLerpCPs
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	float32 m_flInputMin;

@@ -1,4 +1,4 @@
-class C_OP_MaintainSequentialPath : public CParticleFunctionOperator
+class C_OP_MaintainSequentialPath
 {
 	float32 m_fMaxDistance;
 	float32 m_flNumToAssign;

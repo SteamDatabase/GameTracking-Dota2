@@ -1,4 +1,4 @@
-class CDOTA_Ability_Beastmaster_PrimalRoar : public CDOTABaseAbility
+class CDOTA_Ability_Beastmaster_PrimalRoar
 {
 	float32 duration;
 	float32 slow_duration;

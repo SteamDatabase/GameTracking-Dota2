@@ -1,4 +1,4 @@
-class C_OP_SetControlPointsToModelParticles : public CParticleFunctionOperator
+class C_OP_SetControlPointsToModelParticles
 {
 	char[128] m_HitboxSetName;
 	char[128] m_AttachmentName;

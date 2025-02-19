@@ -1,4 +1,4 @@
-class CNmFloatClampNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFloatClampNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	Range_t m_clampRange;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Stormcrafter_Slow : public CDOTA_Buff
+class CDOTA_Modifier_Stormcrafter_Slow
 {
 	int32 slow;
 };

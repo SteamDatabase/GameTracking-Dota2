@@ -1,4 +1,4 @@
-class C_INIT_CreateFromPlaneCache : public CParticleFunctionInitializer
+class C_INIT_CreateFromPlaneCache
 {
 	Vector m_vecOffsetMin;
 	Vector m_vecOffsetMax;

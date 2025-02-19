@@ -1,4 +1,4 @@
-class CIntAnimParameter : public CConcreteAnimParameter
+class CIntAnimParameter
 {
 	int32 m_defaultValue;
 	int32 m_minValue;

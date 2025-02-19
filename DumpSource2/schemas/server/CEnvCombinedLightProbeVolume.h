@@ -1,4 +1,4 @@
-class CEnvCombinedLightProbeVolume : public CBaseEntity
+class CEnvCombinedLightProbeVolume
 {
 	Color m_Entity_Color;
 	float32 m_Entity_flBrightness;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Infused_Raindrop : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Infused_Raindrop
 {
 	float32 mana_regen;
 	float32 bonus_armor;

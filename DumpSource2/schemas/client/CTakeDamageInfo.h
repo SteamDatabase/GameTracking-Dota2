@@ -22,6 +22,5 @@ class CTakeDamageInfo
 	int32 m_nDotaDamageCategory;
 	float32 m_flCombatLogCreditFactor;
 	int16 m_iRecord;
-	HSCRIPT m_hScriptInstance;
 	bool m_bInTakeDamageFlow;
 };

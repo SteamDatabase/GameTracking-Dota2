@@ -1,3 +1,3 @@
-class CDOTA_Ability_Riki_Backstab : public CDOTABaseAbility
+class CDOTA_Ability_Riki_Backstab
 {
 };

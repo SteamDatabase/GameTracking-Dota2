@@ -1,4 +1,4 @@
-class C_DOTA_Ability_WitchDoctor_ParalyzingCask : public C_DOTABaseAbility
+class C_DOTA_Ability_WitchDoctor_ParalyzingCask
 {
 	int32 m_iBounces;
 	int32 bounces;

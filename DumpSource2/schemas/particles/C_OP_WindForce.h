@@ -1,4 +1,4 @@
-class C_OP_WindForce : public CParticleFunctionForce
+class C_OP_WindForce
 {
 	Vector m_vForce;
 };

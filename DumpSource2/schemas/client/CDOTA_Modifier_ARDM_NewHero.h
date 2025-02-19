@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ARDM_NewHero : public CDOTA_Modifier_Tutorial_Sleep
+class CDOTA_Modifier_ARDM_NewHero
 {
 	CHandle< C_BaseEntity > m_hOldHero;
 };

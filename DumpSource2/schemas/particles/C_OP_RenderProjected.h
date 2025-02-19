@@ -1,4 +1,4 @@
-class C_OP_RenderProjected : public CParticleFunctionRenderer
+class C_OP_RenderProjected
 {
 	bool m_bProjectCharacter;
 	bool m_bProjectWorld;

@@ -1,4 +1,4 @@
-class CBoneMaskUpdateNode : public CBinaryUpdateNode
+class CBoneMaskUpdateNode
 {
 	int32 m_nWeightListIndex;
 	float32 m_flRootMotionBlend;

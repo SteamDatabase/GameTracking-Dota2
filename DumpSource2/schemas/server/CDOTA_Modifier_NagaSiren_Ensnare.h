@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NagaSiren_Ensnare : public CDOTA_Buff
+class CDOTA_Modifier_NagaSiren_Ensnare
 {
 	bool m_bDoesBreak;
 };

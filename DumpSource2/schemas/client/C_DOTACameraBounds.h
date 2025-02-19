@@ -1,4 +1,4 @@
-class C_DOTACameraBounds : public C_BaseEntity
+class C_DOTACameraBounds
 {
 	Vector m_vecBoundsMin;
 	Vector m_vecBoundsMax;

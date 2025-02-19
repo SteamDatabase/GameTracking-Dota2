@@ -1,0 +1,3 @@
+class CPulseFuncs_GameParticleManager
+{
+};

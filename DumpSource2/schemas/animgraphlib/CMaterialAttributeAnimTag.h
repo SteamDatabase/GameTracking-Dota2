@@ -1,4 +1,4 @@
-class CMaterialAttributeAnimTag : public CAnimTagBase
+class CMaterialAttributeAnimTag
 {
 	CUtlString m_AttributeName;
 	MatterialAttributeTagType_t m_AttributeType;

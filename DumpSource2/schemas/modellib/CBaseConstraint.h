@@ -1,4 +1,4 @@
-class CBaseConstraint : public CBoneConstraintBase
+class CBaseConstraint
 {
 	CUtlString m_name;
 	Vector m_vUpVector;

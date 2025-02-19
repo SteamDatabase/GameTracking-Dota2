@@ -1,4 +1,4 @@
-class CStanceScaleUpdateNode : public CUnaryUpdateNode
+class CStanceScaleUpdateNode
 {
 	CAnimParamHandle m_hParam;
 };

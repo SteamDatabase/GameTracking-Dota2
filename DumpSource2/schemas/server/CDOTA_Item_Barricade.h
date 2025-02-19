@@ -1,4 +1,4 @@
-class CDOTA_Item_Barricade : public CDOTA_Item
+class CDOTA_Item_Barricade
 {
 	CHandle< CBaseEntity > m_hScout;
 };

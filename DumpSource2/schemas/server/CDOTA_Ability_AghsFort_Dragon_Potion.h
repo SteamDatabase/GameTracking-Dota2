@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_Dragon_Potion : public CDOTA_Item
+class CDOTA_Ability_AghsFort_Dragon_Potion
 {
 	int32 bonus_movement_speed;
 	int32 bonus_attack_damage;

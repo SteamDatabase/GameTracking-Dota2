@@ -1,7 +1,6 @@
-class CDOTA_Modifier_Weaver_Swarm : public CDOTA_Buff
+class CDOTA_Modifier_Weaver_Swarm
 {
 	int32 m_iMaxDist;
-	int32 m_iAttackCount;
 	int32 destroy_attacks;
 	Vector m_vDirection;
 	Vector m_vStartLoc;

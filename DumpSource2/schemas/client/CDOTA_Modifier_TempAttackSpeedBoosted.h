@@ -1,3 +1,3 @@
-class CDOTA_Modifier_TempAttackSpeedBoosted : public CDOTA_Buff
+class CDOTA_Modifier_TempAttackSpeedBoosted
 {
 };

@@ -1,4 +1,4 @@
-class C_EnvVolumetricFogVolume : public C_BaseEntity
+class C_EnvVolumetricFogVolume
 {
 	bool m_bActive;
 	Vector m_vBoxMins;

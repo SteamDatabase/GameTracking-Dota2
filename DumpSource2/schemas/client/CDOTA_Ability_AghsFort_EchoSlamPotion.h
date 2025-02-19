@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_EchoSlamPotion : public C_DOTA_Item
+class CDOTA_Ability_AghsFort_EchoSlamPotion
 {
 	int32 echo_slam_damage_range;
 	int32 echo_slam_echo_search_range;

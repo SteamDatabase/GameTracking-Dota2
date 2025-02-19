@@ -1,4 +1,4 @@
-class C_INIT_MoveBetweenPoints : public CParticleFunctionInitializer
+class C_INIT_MoveBetweenPoints
 {
 	CPerParticleFloatInput m_flSpeedMin;
 	CPerParticleFloatInput m_flSpeedMax;

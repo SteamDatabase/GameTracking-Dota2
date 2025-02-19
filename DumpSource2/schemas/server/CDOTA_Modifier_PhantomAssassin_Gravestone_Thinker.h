@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomAssassin_Gravestone_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_PhantomAssassin_Gravestone_Thinker
 {
 	int32 m_nEpitaph;
 	PlayerID_t m_nVictimPlayerID;

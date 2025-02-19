@@ -1,4 +1,4 @@
-class CEnvParticleGlow : public CParticleSystem
+class CEnvParticleGlow
 {
 	float32 m_flAlphaScale;
 	float32 m_flRadiusScale;

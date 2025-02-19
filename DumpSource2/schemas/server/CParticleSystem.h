@@ -1,4 +1,4 @@
-class CParticleSystem : public CBaseModelEntity
+class CParticleSystem
 {
 	char[512] m_szSnapshotFileName;
 	bool m_bActive;

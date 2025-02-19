@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Hoodwink_AcornShot : public C_DOTABaseAbility
+class C_DOTA_Ability_Hoodwink_AcornShot
 {
 	uint32 m_nAcornTree;
 	float32 projectile_speed;

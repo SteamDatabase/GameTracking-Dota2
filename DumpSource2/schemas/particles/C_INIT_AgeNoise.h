@@ -1,4 +1,4 @@
-class C_INIT_AgeNoise : public CParticleFunctionInitializer
+class C_INIT_AgeNoise
 {
 	bool m_bAbsVal;
 	bool m_bAbsValInv;

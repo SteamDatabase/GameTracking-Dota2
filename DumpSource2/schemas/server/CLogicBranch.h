@@ -1,4 +1,4 @@
-class CLogicBranch : public CLogicalEntity
+class CLogicBranch
 {
 	bool m_bInValue;
 	CUtlVector< CHandle< CBaseEntity > > m_Listeners;

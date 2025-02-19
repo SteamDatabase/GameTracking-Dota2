@@ -1,3 +1,3 @@
-class C_SoundOpvarSetAABBEntity : public C_SoundOpvarSetPointEntity
+class C_SoundOpvarSetAABBEntity
 {
 };

@@ -1,9 +1,7 @@
-class CDOTA_Modifier_Orb_Of_Corrosion_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Orb_Of_Corrosion_Debuff
 {
-	int32 armor;
-	int32 slow_melee;
-	int32 slow_range;
+	int32 corruption_armor;
 	int32 heal_reduction;
-	bool bCasterRanged;
-	int32 damage;
+	int32 slow_melee;
+	int32 slow_ranged;
 };

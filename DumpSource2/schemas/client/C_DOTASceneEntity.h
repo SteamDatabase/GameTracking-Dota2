@@ -1,4 +1,4 @@
-class C_DOTASceneEntity : public C_SceneEntity
+class C_DOTASceneEntity
 {
 	int32 m_nCustomStackIndex;
 	float32 m_flVolume;

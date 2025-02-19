@@ -1,4 +1,4 @@
-class C_INIT_RandomModelSequence : public CParticleFunctionInitializer
+class C_INIT_RandomModelSequence
 {
 	char[256] m_ActivityName;
 	char[256] m_SequenceName;

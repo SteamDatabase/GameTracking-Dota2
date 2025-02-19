@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enchantress_Little_Friends_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Enchantress_Little_Friends_Aura
 {
 	CHandle< C_BaseEntity > m_hTarget;
 	int32 m_nAlliesTaunted;

@@ -1,4 +1,4 @@
-class C_OP_SequenceFromModel : public CParticleFunctionOperator
+class C_OP_SequenceFromModel
 {
 	int32 m_nControlPointNumber;
 	ParticleAttributeIndex_t m_nFieldOutput;

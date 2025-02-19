@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TemplarAssassin_Meld_Animation : public CDOTA_Buff
+class CDOTA_Modifier_TemplarAssassin_Meld_Animation
 {
 	bool launched_attack;
 };

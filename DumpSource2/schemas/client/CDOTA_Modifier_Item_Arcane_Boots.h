@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Arcane_Boots : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Arcane_Boots
 {
 	int32 bonus_movement;
 	int32 bonus_mana;

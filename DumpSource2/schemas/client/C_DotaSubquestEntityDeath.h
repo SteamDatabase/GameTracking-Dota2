@@ -1,3 +1,3 @@
-class C_DotaSubquestEntityDeath : public C_DotaSubquestBase
+class C_DotaSubquestEntityDeath
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AbyssalUnderlord_DarkRift : public CDOTA_Buff
+class CDOTA_Modifier_AbyssalUnderlord_DarkRift
 {
 	ParticleIndex_t m_nfxTargetTp;
 	float32 radius;

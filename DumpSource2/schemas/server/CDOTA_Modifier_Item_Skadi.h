@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Skadi : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Skadi
 {
 	int32 bonus_all_stats;
 	int32 bonus_health;

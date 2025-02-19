@@ -1,4 +1,4 @@
-class C_OP_RemapTransformOrientationToYaw : public CParticleFunctionOperator
+class C_OP_RemapTransformOrientationToYaw
 {
 	CParticleTransformInput m_TransformInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

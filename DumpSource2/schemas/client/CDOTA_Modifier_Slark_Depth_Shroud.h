@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_Depth_Shroud : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_Slark_Depth_Shroud
 {
 	ParticleIndex_t m_nFXIndex;
 	int32 bonus_movement_speed;

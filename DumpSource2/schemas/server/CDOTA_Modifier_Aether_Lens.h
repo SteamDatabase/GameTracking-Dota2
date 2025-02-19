@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Aether_Lens : public CDOTA_Buff_Item
+class CDOTA_Modifier_Aether_Lens
 {
 	int32 bonus_mana;
 	float32 bonus_mana_regen;

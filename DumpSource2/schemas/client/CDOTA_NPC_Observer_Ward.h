@@ -1,4 +1,4 @@
-class CDOTA_NPC_Observer_Ward : public C_DOTA_BaseNPC_Additive
+class CDOTA_NPC_Observer_Ward
 {
 	int32 m_iDuration;
 	CNewParticleEffect* m_pVisionRangeFX;

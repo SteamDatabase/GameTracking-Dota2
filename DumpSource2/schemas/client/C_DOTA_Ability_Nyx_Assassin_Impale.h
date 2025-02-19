@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Nyx_Assassin_Impale : public C_DOTABaseAbility
+class C_DOTA_Ability_Nyx_Assassin_Impale
 {
 	CUtlVector< CHandle< C_BaseEntity > > hAlreadyHitList;
 	int32 width;

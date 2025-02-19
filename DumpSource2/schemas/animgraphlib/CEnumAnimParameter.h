@@ -1,4 +1,4 @@
-class CEnumAnimParameter : public CConcreteAnimParameter
+class CEnumAnimParameter
 {
 	uint8 m_defaultValue;
 	CUtlVector< CUtlString > m_enumOptions;

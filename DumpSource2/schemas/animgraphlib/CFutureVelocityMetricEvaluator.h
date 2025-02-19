@@ -1,4 +1,4 @@
-class CFutureVelocityMetricEvaluator : public CMotionMetricEvaluator
+class CFutureVelocityMetricEvaluator
 {
 	float32 m_flDistance;
 	float32 m_flStoppingDistance;

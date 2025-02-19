@@ -1,4 +1,4 @@
-class CEconEntity : public CBaseFlex
+class CEconEntity
 {
 	CAttributeContainer m_AttributeManager;
 	CHandle< CBaseEntity > m_hOldProvidee;

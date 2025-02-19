@@ -1,4 +1,4 @@
-class C_OP_DecayMaintainCount : public CParticleFunctionOperator
+class C_OP_DecayMaintainCount
 {
 	int32 m_nParticlesToMaintain;
 	float32 m_flDecayDelay;

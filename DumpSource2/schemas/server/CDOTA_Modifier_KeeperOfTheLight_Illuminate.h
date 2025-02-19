@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KeeperOfTheLight_Illuminate : public CDOTA_Buff
+class CDOTA_Modifier_KeeperOfTheLight_Illuminate
 {
 	int32 range;
 	int32 total_damage;

@@ -1,6 +1,6 @@
 class CPulse_PublicOutput
 {
-	CUtlSymbolLarge m_Name;
+	PulseSymbol_t m_Name;
 	CUtlString m_Description;
-	CPulseValueFullType m_ParamType;
+	CUtlLeanVector< CPulseRuntimeMethodArg > m_Args;
 };

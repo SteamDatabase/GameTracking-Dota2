@@ -1,4 +1,4 @@
-class C_OP_OscillateScalar : public CParticleFunctionOperator
+class C_OP_OscillateScalar
 {
 	float32 m_RateMin;
 	float32 m_RateMax;

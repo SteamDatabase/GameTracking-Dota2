@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Undying_Decay : public C_DOTABaseAbility
+class C_DOTA_Ability_Undying_Decay
 {
 	int32 decay_damage;
 	float32 radius;

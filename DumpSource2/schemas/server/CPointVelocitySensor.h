@@ -1,4 +1,4 @@
-class CPointVelocitySensor : public CPointEntity
+class CPointVelocitySensor
 {
 	CHandle< CBaseEntity > m_hTargetEntity;
 	Vector m_vecAxis;

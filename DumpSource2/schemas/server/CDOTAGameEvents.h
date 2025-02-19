@@ -1,4 +1,4 @@
-class CDOTAGameEvents : public CBaseEntity
+class CDOTAGameEvents
 {
 	CEntityIOOutput m_OnDayStarted;
 	CEntityIOOutput m_OnNightStarted;

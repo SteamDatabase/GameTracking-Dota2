@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Windrunner_Windrun : public CDOTA_Buff
+class CDOTA_Modifier_Windrunner_Windrun
 {
 	float32 radius;
 	int32 scepter_radius;

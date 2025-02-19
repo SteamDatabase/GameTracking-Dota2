@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_ForceStaff : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_ForceStaff
 {
 	int32 bonus_health;
 	int32 bonus_intellect;

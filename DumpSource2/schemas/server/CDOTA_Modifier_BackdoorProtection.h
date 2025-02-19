@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BackdoorProtection : public CDOTA_Buff
+class CDOTA_Modifier_BackdoorProtection
 {
 	bool m_bActivated;
 	float32 m_flHealthToRestore;

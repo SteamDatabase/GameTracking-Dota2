@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_AghsFort_Watch_Tower : public C_DOTA_BaseNPC_Building
+class CDOTA_BaseNPC_AghsFort_Watch_Tower
 {
 	int32 m_nOptionNumber;
 	float32 m_flMovePlayersRadius;

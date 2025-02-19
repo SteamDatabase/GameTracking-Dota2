@@ -1,4 +1,4 @@
-class CVectorAnimParameter : public CConcreteAnimParameter
+class CVectorAnimParameter
 {
 	Vector m_defaultValue;
 	bool m_bInterpolate;

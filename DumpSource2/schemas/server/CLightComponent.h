@@ -1,4 +1,4 @@
-class CLightComponent : public CEntityComponent
+class CLightComponent
 {
 	CNetworkVarChainer __m_pChainEntity;
 	Color m_Color;

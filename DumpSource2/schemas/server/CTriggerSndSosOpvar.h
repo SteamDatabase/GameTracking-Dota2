@@ -1,4 +1,4 @@
-class CTriggerSndSosOpvar : public CBaseTrigger
+class CTriggerSndSosOpvar
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hTouchingPlayers;
 	Vector m_flPosition;

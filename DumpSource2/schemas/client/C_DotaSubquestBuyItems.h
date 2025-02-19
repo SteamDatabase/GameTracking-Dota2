@@ -1,3 +1,3 @@
-class C_DotaSubquestBuyItems : public C_DotaSubquestBase
+class C_DotaSubquestBuyItems
 {
 };

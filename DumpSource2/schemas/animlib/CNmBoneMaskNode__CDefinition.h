@@ -1,4 +1,4 @@
-class CNmBoneMaskNode::CDefinition : public CNmBoneMaskValueNode::CDefinition
+class CNmBoneMaskNode::CDefinition
 {
 	CGlobalSymbol m_boneMaskID;
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_FillerAbility : public CDOTABaseAbility
+class CDOTA_Ability_FillerAbility
 {
 };

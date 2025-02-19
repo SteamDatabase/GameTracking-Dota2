@@ -1,4 +1,4 @@
-class C_OP_PositionLock : public CParticleFunctionOperator
+class C_OP_PositionLock
 {
 	CParticleTransformInput m_TransformInput;
 	float32 m_flStartTime_min;

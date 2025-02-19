@@ -1,4 +1,4 @@
-class CDOTA_Ability_Ringmaster_TameTheBeasts : public CDOTABaseAbility
+class CDOTA_Ability_Ringmaster_TameTheBeasts
 {
 	Vector m_vCrackLocation;
 	CDOTA_BaseNPC* m_pTarget;

@@ -1,4 +1,4 @@
-class C_INIT_InitVec : public CParticleFunctionInitializer
+class C_INIT_InitVec
 {
 	CPerParticleVecInput m_InputValue;
 	ParticleAttributeIndex_t m_nOutputField;

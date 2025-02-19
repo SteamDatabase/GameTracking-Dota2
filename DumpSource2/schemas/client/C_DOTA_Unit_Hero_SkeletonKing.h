@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Hero_SkeletonKing : public C_DOTA_BaseNPC_Hero
+class C_DOTA_Unit_Hero_SkeletonKing
 {
 	int32 m_nSkeletonWarriors;
 	int32[5] m_vecInitialHeroKillBitmask;

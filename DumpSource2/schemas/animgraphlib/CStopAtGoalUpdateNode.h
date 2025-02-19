@@ -1,4 +1,4 @@
-class CStopAtGoalUpdateNode : public CUnaryUpdateNode
+class CStopAtGoalUpdateNode
 {
 	float32 m_flOuterRadius;
 	float32 m_flInnerRadius;

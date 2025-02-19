@@ -1,4 +1,4 @@
-class CPlayer_WeaponServices : public CPlayerPawnComponent
+class CPlayer_WeaponServices
 {
 	C_NetworkUtlVectorBase< CHandle< C_BasePlayerWeapon > > m_hMyWeapons;
 	CHandle< C_BasePlayerWeapon > m_hActiveWeapon;

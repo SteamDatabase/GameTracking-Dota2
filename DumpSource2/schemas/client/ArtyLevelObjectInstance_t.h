@@ -1,4 +1,4 @@
-class ArtyLevelObjectInstance_t : public ArtyGameObjectInstance_t
+class ArtyLevelObjectInstance_t
 {
 	CUtlString m_szLeftBorderObject;
 	float32 m_flLeftObjectOffset;

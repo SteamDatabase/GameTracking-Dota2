@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Blight_Stone_Corruption : public CDOTA_Buff
+class CDOTA_Modifier_Blight_Stone_Corruption
 {
 	int32 corruption_armor;
 };

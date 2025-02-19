@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mutation_StationaryDamageReduction : public CDOTA_Buff
+class CDOTA_Modifier_Mutation_StationaryDamageReduction
 {
 	int32 m_iReductionPct;
 };

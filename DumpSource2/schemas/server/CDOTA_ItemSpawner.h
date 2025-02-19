@@ -1,4 +1,4 @@
-class CDOTA_ItemSpawner : public CPointEntity
+class CDOTA_ItemSpawner
 {
 	CUtlSymbolLarge m_szItemName;
 };

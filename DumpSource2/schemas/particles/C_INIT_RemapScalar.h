@@ -1,4 +1,4 @@
-class C_INIT_RemapScalar : public CParticleFunctionInitializer
+class C_INIT_RemapScalar
 {
 	ParticleAttributeIndex_t m_nFieldInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

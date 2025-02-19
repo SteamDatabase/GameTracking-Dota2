@@ -1,4 +1,4 @@
-class CFootAdjustmentUpdateNode : public CUnaryUpdateNode
+class CFootAdjustmentUpdateNode
 {
 	CUtlVector< HSequence > m_clips;
 	CPoseHandle m_hBasePoseCacheHandle;

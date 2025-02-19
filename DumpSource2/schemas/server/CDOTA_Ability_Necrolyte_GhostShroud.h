@@ -1,3 +1,3 @@
-class CDOTA_Ability_Necrolyte_GhostShroud : public CDOTABaseAbility
+class CDOTA_Ability_Necrolyte_GhostShroud
 {
 };

@@ -1,12 +1,14 @@
-class COrientationWarpUpdateNode : public CUnaryUpdateNode
+class COrientationWarpUpdateNode
 {
-	AnimValueSource m_eTarget;
+	OrientationWarpMode_t m_eMode;
 	CAnimParamHandle m_hTargetParam;
 	CAnimParamHandle m_hTargetPositionParam;
+	CAnimParamHandle m_hFallbackTargetPositionParam;
+	OrientationWarpTargetOffsetMode_t m_eTargetOffsetMode;
 	float32 m_flTargetOffset;
+	CAnimParamHandle m_hTargetOffsetParam;
 	CAnimInputDamping m_damping;
-	float32 m_flSmoothDampingDuration;
-	bool m_bAddRootMotionIfNeeded;
+	OrientationWarpRootMotionSource_t m_eRootMotionSource;
 	float32 m_flMaxRootMotionScale;
 	bool m_bEnablePreferredRotationDirection;
 	AnimValueSource m_ePreferredRotationDirection;

@@ -1,4 +1,4 @@
-class C_OP_RenderPostProcessing : public CParticleFunctionRenderer
+class C_OP_RenderPostProcessing
 {
 	CPerParticleFloatInput m_flPostProcessStrength;
 	CStrongHandle< InfoForResourceTypeCPostProcessingResource > m_hPostTexture;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Spirit_Vessel : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Spirit_Vessel
 {
 	int32 bonus_health;
 	float32 bonus_mana_regen;

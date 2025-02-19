@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Grimstroke_InkCreature_Latched : public CDOTA_Buff
+class CDOTA_Modifier_Grimstroke_InkCreature_Latched
 {
 	CHandle< CBaseEntity > m_hAttachTarget;
 	float32 m_fZOffset;

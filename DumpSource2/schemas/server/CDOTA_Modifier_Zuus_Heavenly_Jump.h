@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Zuus_Heavenly_Jump : public CDOTA_Buff
+class CDOTA_Modifier_Zuus_Heavenly_Jump
 {
 	float32 hop_duration;
 	int32 hop_height;

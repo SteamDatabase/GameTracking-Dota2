@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_DragonKnight_BreatheFire : public CDOTABaseAbility
+class CDOTA_Ability_AghsFort_DragonKnight_BreatheFire
 {
 	ParticleIndex_t m_nPreviewFX;
 	int32 start_radius;

@@ -1,4 +1,4 @@
-class CScriptTriggerHurt : public CTriggerHurt
+class CScriptTriggerHurt
 {
 	Vector m_vExtent;
 };

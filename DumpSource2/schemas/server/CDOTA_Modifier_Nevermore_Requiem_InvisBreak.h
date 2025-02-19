@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nevermore_Requiem_InvisBreak : public CDOTA_Buff
+class CDOTA_Modifier_Nevermore_Requiem_InvisBreak
 {
 	bool bDisableInvis;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NPXBuff : public CDOTA_Buff
+class CDOTA_Modifier_NPXBuff
 {
 	int32 m_nCurReduction;
 };

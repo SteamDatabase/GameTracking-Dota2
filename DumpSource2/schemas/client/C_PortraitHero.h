@@ -1,4 +1,4 @@
-class C_PortraitHero : public C_DOTA_BaseNPC
+class C_PortraitHero
 {
 	HeroID_t m_nHeroID;
 	int32 m_actQueuedActivity;

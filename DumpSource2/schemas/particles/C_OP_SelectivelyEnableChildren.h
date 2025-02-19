@@ -1,4 +1,4 @@
-class C_OP_SelectivelyEnableChildren : public CParticleFunctionPreEmission
+class C_OP_SelectivelyEnableChildren
 {
 	CParticleCollectionFloatInput m_nChildGroupID;
 	CParticleCollectionFloatInput m_nFirstChild;

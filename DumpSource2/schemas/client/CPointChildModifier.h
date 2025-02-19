@@ -1,4 +1,4 @@
-class CPointChildModifier : public C_PointEntity
+class CPointChildModifier
 {
 	bool m_bOrphanInsteadOfDeletingChildrenOnRemove;
 };

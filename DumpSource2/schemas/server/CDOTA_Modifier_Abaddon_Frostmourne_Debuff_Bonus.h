@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Abaddon_Frostmourne_Debuff_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_Abaddon_Frostmourne_Debuff_Bonus
 {
 	float32 m_flDamage;
 	int32 curse_slow;

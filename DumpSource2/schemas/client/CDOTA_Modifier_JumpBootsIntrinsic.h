@@ -1,4 +1,4 @@
-class CDOTA_Modifier_JumpBootsIntrinsic : public CDOTA_Buff
+class CDOTA_Modifier_JumpBootsIntrinsic
 {
 	int32 bonus_movement_speed;
 };

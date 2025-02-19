@@ -1,4 +1,4 @@
-class C_OP_StopAfterCPDuration : public CParticleFunctionPreEmission
+class C_OP_StopAfterCPDuration
 {
 	CParticleCollectionFloatInput m_flDuration;
 	bool m_bDestroyImmediately;

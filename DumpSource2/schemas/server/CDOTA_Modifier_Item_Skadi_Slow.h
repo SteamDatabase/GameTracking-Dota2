@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Skadi_Slow : public CDOTA_Buff
+class CDOTA_Modifier_Item_Skadi_Slow
 {
 	int32 cold_slow_melee;
 	int32 cold_slow_ranged;

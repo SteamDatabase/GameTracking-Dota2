@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SpiritBreaker_ChargeOfDarknessVision : public CDOTA_Buff
+class CDOTA_Modifier_SpiritBreaker_ChargeOfDarknessVision
 {
 	int32 m_nFXIndex;
 };

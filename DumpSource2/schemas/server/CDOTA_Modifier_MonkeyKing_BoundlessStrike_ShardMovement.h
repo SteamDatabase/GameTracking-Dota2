@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_BoundlessStrike_ShardMovement : public CDOTA_Buff
+class CDOTA_Modifier_MonkeyKing_BoundlessStrike_ShardMovement
 {
 	float32 m_flPredictedTotalTime;
 	Vector m_vStartPosition;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_HelmOfTheDominator_BonusHealth : public CDOTA_Buff
+class CDOTA_Modifier_Item_HelmOfTheDominator_BonusHealth
 {
 	int32 health_min;
 	int32 new_max;

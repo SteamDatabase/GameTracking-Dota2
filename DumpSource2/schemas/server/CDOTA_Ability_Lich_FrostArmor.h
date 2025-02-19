@@ -1,3 +1,3 @@
-class CDOTA_Ability_Lich_FrostArmor : public CDOTABaseAbility
+class CDOTA_Ability_Lich_FrostArmor
 {
 };

@@ -1,4 +1,4 @@
-class CSprite : public CBaseModelEntity
+class CSprite
 {
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hSpriteMaterial;
 	CHandle< CBaseEntity > m_hAttachedToEntity;

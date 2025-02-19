@@ -1,4 +1,4 @@
-class CSequenceFinishedAnimTag : public CAnimTagBase
+class CSequenceFinishedAnimTag
 {
 	CUtlString m_sequenceName;
 };

@@ -1,4 +1,4 @@
-class C_INIT_RandomColor : public CParticleFunctionInitializer
+class C_INIT_RandomColor
 {
 	Color m_ColorMin;
 	Color m_ColorMax;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Grimstroke_SoulChain : public CDOTA_Buff
+class CDOTA_Modifier_Grimstroke_SoulChain
 {
 	CHandle< C_BaseEntity > m_hPartner;
 	bool m_bIsPrimary;

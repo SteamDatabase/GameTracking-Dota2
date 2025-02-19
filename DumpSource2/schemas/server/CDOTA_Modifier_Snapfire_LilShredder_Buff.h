@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_LilShredder_Buff : public CDOTA_Buff
+class CDOTA_Modifier_Snapfire_LilShredder_Buff
 {
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	int32 m_nIsActive;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shadow_Demon_Disruption : public CDOTA_Buff
+class CDOTA_Modifier_Shadow_Demon_Disruption
 {
 	float32 m_flHealth;
 	float32 m_flDisseminate_Duration;

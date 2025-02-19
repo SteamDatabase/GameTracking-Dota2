@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bloodseeker_Thirst : public CDOTA_Buff
+class CDOTA_Modifier_Bloodseeker_Thirst
 {
 	int32 half_bonus_aoe;
 	int32 visibility_threshold_pct;
@@ -8,5 +8,6 @@ class CDOTA_Modifier_Bloodseeker_Thirst : public CDOTA_Buff
 	int32 bonus_movement_speed;
 	int32 active_movement_speed;
 	float32 linger_duration;
+	float32 inactive_penalty_pct;
 	ParticleIndex_t m_nFXIndex;
 };

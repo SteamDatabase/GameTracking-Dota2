@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Phoenix_IcarusYoink : public CDOTA_Buff
+class CDOTA_Modifier_Phoenix_IcarusYoink
 {
 	Vector m_vSource;
 	Vector m_vTarget;

@@ -1,4 +1,4 @@
-class C_OP_RenderMaterialProxy : public CParticleFunctionRenderer
+class C_OP_RenderMaterialProxy
 {
 	int32 m_nMaterialControlPoint;
 	MaterialProxyType_t m_nProxyType;

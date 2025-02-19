@@ -1,4 +1,4 @@
-class CDOTA_Ability_PhantomLancer_Juxtapose : public CDOTABaseAbility
+class CDOTA_Ability_PhantomLancer_Juxtapose
 {
 	CHandle< CBaseEntity > m_hInvisIllusion;
 };

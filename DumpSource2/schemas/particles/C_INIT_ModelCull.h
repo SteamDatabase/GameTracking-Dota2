@@ -1,4 +1,4 @@
-class C_INIT_ModelCull : public CParticleFunctionInitializer
+class C_INIT_ModelCull
 {
 	int32 m_nControlPointNumber;
 	bool m_bBoundBox;

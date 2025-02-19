@@ -1,4 +1,4 @@
-class C_OP_ConstrainDistanceToUserSpecifiedPath : public CParticleFunctionConstraint
+class C_OP_ConstrainDistanceToUserSpecifiedPath
 {
 	float32 m_fMinDistance;
 	float32 m_flMaxDistance;

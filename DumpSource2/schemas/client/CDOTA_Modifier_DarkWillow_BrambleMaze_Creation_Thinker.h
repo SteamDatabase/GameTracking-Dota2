@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkWillow_BrambleMaze_Creation_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_DarkWillow_BrambleMaze_Creation_Thinker
 {
 	float32 latch_creation_interval;
 	float32 initial_creation_delay;

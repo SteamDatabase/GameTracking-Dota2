@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Filler_Heal : public CDOTA_Buff
+class CDOTA_Modifier_Filler_Heal
 {
 	int32 hp_heal;
 	int32 mp_heal;

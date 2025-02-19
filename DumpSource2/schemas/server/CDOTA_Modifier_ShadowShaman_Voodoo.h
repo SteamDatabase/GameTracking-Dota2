@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ShadowShaman_Voodoo : public CDOTA_Modifier_Hexed
+class CDOTA_Modifier_ShadowShaman_Voodoo
 {
 	int32 movespeed;
 	int32 damage_amp;

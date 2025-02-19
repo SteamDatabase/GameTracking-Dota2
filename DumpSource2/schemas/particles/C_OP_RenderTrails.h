@@ -1,4 +1,4 @@
-class C_OP_RenderTrails : public CBaseTrailRenderer
+class C_OP_RenderTrails
 {
 	bool m_bEnableFadingAndClamping;
 	float32 m_flStartFadeDot;

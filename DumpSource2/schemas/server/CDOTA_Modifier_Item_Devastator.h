@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Devastator : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Devastator
 {
 	int32 bonus_armor;
 	int32 projectile_speed;

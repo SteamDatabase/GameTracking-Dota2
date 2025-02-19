@@ -1,3 +1,3 @@
-class C_DotaSubquestTutorialEvent : public C_DotaSubquestBase
+class C_DotaSubquestTutorialEvent
 {
 };

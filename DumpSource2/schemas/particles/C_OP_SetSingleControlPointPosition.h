@@ -1,4 +1,4 @@
-class C_OP_SetSingleControlPointPosition : public CParticleFunctionPreEmission
+class C_OP_SetSingleControlPointPosition
 {
 	bool m_bSetOnce;
 	int32 m_nCP1;

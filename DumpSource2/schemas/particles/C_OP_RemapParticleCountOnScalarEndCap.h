@@ -1,4 +1,4 @@
-class C_OP_RemapParticleCountOnScalarEndCap : public CParticleFunctionOperator
+class C_OP_RemapParticleCountOnScalarEndCap
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	int32 m_nInputMin;

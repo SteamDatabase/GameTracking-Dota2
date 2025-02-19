@@ -1,4 +1,4 @@
-class CDotaSubquestBase : public CBaseEntity
+class CDotaSubquestBase
 {
 	char[256] m_pszSubquestText;
 	bool m_bHidden;

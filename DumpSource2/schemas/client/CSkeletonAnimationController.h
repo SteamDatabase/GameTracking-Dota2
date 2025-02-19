@@ -1,4 +1,4 @@
-class CSkeletonAnimationController : public ISkeletonAnimationController
+class CSkeletonAnimationController
 {
 	CSkeletonInstance* m_pSkeletonInstance;
 };

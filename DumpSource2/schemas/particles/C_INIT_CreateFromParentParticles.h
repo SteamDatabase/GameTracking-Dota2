@@ -1,4 +1,4 @@
-class C_INIT_CreateFromParentParticles : public CParticleFunctionInitializer
+class C_INIT_CreateFromParentParticles
 {
 	float32 m_flVelocityScale;
 	float32 m_flIncrement;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_MonkeyKing_FurArmy : public CDOTABaseAbility
+class CDOTA_Ability_MonkeyKing_FurArmy
 {
 	CHandle< CBaseEntity > m_hThinker;
 	ParticleIndex_t m_nFXIndex;

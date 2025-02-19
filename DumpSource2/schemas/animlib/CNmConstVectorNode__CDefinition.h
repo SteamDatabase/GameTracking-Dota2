@@ -1,4 +1,4 @@
-class CNmConstVectorNode::CDefinition : public CNmVectorValueNode::CDefinition
+class CNmConstVectorNode::CDefinition
 {
 	Vector m_value;
 };

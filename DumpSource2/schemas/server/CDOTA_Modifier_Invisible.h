@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invisible : public CDOTA_Buff
+class CDOTA_Modifier_Invisible
 {
 	bool m_bSubtle;
 	GameTime_t m_flFadeTime;

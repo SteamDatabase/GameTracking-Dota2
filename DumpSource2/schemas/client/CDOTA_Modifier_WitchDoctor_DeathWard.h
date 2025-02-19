@@ -1,4 +1,4 @@
-class CDOTA_Modifier_WitchDoctor_DeathWard : public CDOTA_Buff
+class CDOTA_Modifier_WitchDoctor_DeathWard
 {
 	int32 bonus_damage;
 	int32 m_iBounceRadius;

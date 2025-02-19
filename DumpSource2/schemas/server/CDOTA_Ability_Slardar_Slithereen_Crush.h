@@ -1,4 +1,4 @@
-class CDOTA_Ability_Slardar_Slithereen_Crush : public CDOTABaseAbility
+class CDOTA_Ability_Slardar_Slithereen_Crush
 {
 	CHandle< CDOTABaseAbility > m_hSourceAbility;
 };

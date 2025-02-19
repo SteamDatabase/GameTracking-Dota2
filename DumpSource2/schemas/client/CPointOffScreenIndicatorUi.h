@@ -1,4 +1,4 @@
-class CPointOffScreenIndicatorUi : public C_PointClientUIWorldPanel
+class CPointOffScreenIndicatorUi
 {
 	bool m_bBeenEnabled;
 	bool m_bHide;

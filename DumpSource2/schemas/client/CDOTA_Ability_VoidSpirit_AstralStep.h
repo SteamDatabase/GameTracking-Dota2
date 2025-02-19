@@ -1,4 +1,4 @@
-class CDOTA_Ability_VoidSpirit_AstralStep : public C_DOTABaseAbility
+class CDOTA_Ability_VoidSpirit_AstralStep
 {
 	Vector m_vStartPos;
 	Vector m_vDestination;

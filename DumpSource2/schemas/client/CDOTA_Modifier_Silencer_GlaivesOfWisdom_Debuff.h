@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Silencer_GlaivesOfWisdom_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Silencer_GlaivesOfWisdom_Debuff
 {
 	int32 int_steal;
 };

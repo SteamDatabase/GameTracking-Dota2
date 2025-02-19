@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Tidehunter_DeadInTheWater : public C_DOTABaseAbility
+class C_DOTA_Ability_Tidehunter_DeadInTheWater
 {
 	int32 radius;
 	float32 duration;

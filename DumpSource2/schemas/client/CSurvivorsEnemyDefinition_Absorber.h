@@ -1,4 +1,4 @@
-class CSurvivorsEnemyDefinition_Absorber : public CSurvivorsEnemyDefinition
+class CSurvivorsEnemyDefinition_Absorber
 {
 	float32 m_flModelScaleIncreasePerAbsorb;
 	float32 m_flMaxModelScale;

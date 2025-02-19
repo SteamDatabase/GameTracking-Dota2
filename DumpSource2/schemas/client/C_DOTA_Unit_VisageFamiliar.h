@@ -1,4 +1,4 @@
-class C_DOTA_Unit_VisageFamiliar : public C_DOTA_BaseNPC_Creep
+class C_DOTA_Unit_VisageFamiliar
 {
 	ParticleIndex_t m_nFXAmbient;
 };

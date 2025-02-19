@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Drow_Ranger_Glacier_Hilltop : public CDOTA_Buff
+class CDOTA_Modifier_Drow_Ranger_Glacier_Hilltop
 {
 	int32 multishot_arrow_bonus;
 	int32 end_height;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Disperser : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Disperser
 {
 	int32 bonus_agility;
 	int32 bonus_intellect;

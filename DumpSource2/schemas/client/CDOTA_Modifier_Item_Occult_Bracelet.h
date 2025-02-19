@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Occult_Bracelet : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Occult_Bracelet
 {
 	int32 bonus_all_stats;
 	int32 stack_limit;

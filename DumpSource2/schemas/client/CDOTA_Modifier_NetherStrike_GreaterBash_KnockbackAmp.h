@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NetherStrike_GreaterBash_KnockbackAmp : public CDOTA_Buff
+class CDOTA_Modifier_NetherStrike_GreaterBash_KnockbackAmp
 {
 	float32 knockback_amp;
 };

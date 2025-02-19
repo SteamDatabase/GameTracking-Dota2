@@ -1,4 +1,4 @@
-class CDOTA_ScriptedSpawner : public CPointEntity
+class CDOTA_ScriptedSpawner
 {
 	CUtlSymbolLarge m_szNPCFirstWaypoint;
 	int32 m_nNPCType;

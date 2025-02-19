@@ -1,4 +1,4 @@
-class CDOTA_Ability_Clinkz_BurningBarrage : public CDOTABaseAbility
+class CDOTA_Ability_Clinkz_BurningBarrage
 {
 	Vector m_vStartPos;
 	int32 m_iArrowProjectile;

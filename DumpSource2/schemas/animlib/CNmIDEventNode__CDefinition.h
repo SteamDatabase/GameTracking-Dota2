@@ -1,4 +1,4 @@
-class CNmIDEventNode::CDefinition : public CNmIDValueNode::CDefinition
+class CNmIDEventNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	CNmBitFlags m_eventConditionRules;

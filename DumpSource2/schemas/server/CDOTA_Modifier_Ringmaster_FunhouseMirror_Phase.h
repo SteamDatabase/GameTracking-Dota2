@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_FunhouseMirror_Phase : public CDOTA_Buff
+class CDOTA_Modifier_Ringmaster_FunhouseMirror_Phase
 {
 	float32 illusion_duration;
 	int32 images_do_damage_percent_ranged;

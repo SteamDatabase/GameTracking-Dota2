@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_RocketFlare : public CDOTA_Buff
+class CDOTA_Modifier_Rattletrap_RocketFlare
 {
 	int32 projectile_vision_radius;
 	float32 projectile_vision_duration;

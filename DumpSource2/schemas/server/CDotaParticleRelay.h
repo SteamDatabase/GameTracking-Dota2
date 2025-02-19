@@ -1,4 +1,4 @@
-class CDotaParticleRelay : public CBaseEntity
+class CDotaParticleRelay
 {
 	CUtlSymbolLarge m_particleSystemName;
 };

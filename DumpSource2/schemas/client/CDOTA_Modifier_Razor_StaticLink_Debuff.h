@@ -1,7 +1,8 @@
-class CDOTA_Modifier_Razor_StaticLink_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Razor_StaticLink_Debuff
 {
 	ParticleIndex_t m_nFXIndex;
 	int32 attack_speed_factor;
+	float32 move_speed_factor;
 	int32 drain_rate;
 	int32 drain_armor;
 };

@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Weaver_Shukuchi : public C_DOTABaseAbility
+class C_DOTA_Ability_Weaver_Shukuchi
 {
 	float32 duration;
 	float32 radius;

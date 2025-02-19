@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Terrorblade_Dark_Unity : public CDOTA_Buff
+class CDOTA_Modifier_Terrorblade_Dark_Unity
 {
 	bool m_bInsideRadius;
 	int32 radius;

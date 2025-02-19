@@ -1,4 +1,4 @@
-class CBaseRendererSource2 : public CParticleFunctionRenderer
+class CBaseRendererSource2
 {
 	CParticleCollectionRendererFloatInput m_flRadiusScale;
 	CParticleCollectionRendererFloatInput m_flAlphaScale;
@@ -12,7 +12,7 @@ class CBaseRendererSource2 : public CParticleFunctionRenderer
 	CParticleCollectionRendererFloatInput m_flCenterYOffset;
 	float32 m_flBumpStrength;
 	ParticleSequenceCropOverride_t m_nCropTextureOverride;
-	CUtlVector< TextureGroup_t > m_vecTexturesInput;
+	CUtlLeanVector< TextureGroup_t > m_vecTexturesInput;
 	float32 m_flAnimationRate;
 	AnimationType_t m_nAnimationType;
 	bool m_bAnimateInFPS;

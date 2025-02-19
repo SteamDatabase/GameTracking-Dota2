@@ -1,4 +1,4 @@
-class C_SceneEntity : public C_PointEntity
+class C_SceneEntity
 {
 	bool m_bIsPlayingBack;
 	bool m_bPaused;

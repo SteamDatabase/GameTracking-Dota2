@@ -1,4 +1,4 @@
-class C_DOTA_Unit_LoopingSound : public C_DOTA_BaseNPC_Additive
+class C_DOTA_Unit_LoopingSound
 {
 	int32 m_nPrevLoopingSoundParity;
 	char[256] m_pszNetworkedSoundLoop;

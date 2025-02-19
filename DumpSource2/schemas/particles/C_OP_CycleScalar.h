@@ -1,4 +1,4 @@
-class C_OP_CycleScalar : public CParticleFunctionOperator
+class C_OP_CycleScalar
 {
 	ParticleAttributeIndex_t m_nDestField;
 	float32 m_flStartValue;

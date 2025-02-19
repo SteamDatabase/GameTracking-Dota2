@@ -1,4 +1,4 @@
-class C_PortraitWorldLight : public C_EnvDeferredLight
+class C_PortraitWorldLight
 {
 	float32 m_flLatitude;
 	float32 m_flLongitude;

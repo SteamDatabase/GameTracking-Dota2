@@ -1,4 +1,4 @@
-class MaterialOverride_t : public BaseSceneObjectOverride_t
+class MaterialOverride_t
 {
 	uint32 m_nSubSceneObject;
 	uint32 m_nDrawCallIndex;

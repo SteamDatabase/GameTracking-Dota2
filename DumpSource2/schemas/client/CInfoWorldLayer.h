@@ -1,4 +1,4 @@
-class CInfoWorldLayer : public C_BaseEntity
+class CInfoWorldLayer
 {
 	CEntityIOOutput m_pOutputOnEntitiesSpawned;
 	CUtlSymbolLarge m_worldName;

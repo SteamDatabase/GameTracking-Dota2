@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Meepo_DividedWeStand : public C_DOTABaseAbility
+class C_DOTA_Ability_Meepo_DividedWeStand
 {
 	int32 m_nWhichDividedWeStand;
 	int32 m_nNumDividedWeStand;

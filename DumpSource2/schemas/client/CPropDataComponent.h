@@ -1,4 +1,4 @@
-class CPropDataComponent : public CEntityComponent
+class CPropDataComponent
 {
 	float32 m_flDmgModBullet;
 	float32 m_flDmgModClub;

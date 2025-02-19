@@ -1,4 +1,4 @@
-class C_LocalTempEntity : public CBaseAnimatingActivity
+class C_LocalTempEntity
 {
 	int32 flags;
 	GameTime_t die;

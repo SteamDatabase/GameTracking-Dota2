@@ -1,4 +1,4 @@
-class C_OP_DragRelativeToPlane : public CParticleFunctionOperator
+class C_OP_DragRelativeToPlane
 {
 	CParticleCollectionFloatInput m_flDragAtPlane;
 	CParticleCollectionFloatInput m_flFalloff;

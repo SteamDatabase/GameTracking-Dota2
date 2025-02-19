@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shadow_Demon_Disseminate : public CDOTA_Buff
+class CDOTA_Modifier_Shadow_Demon_Disseminate
 {
 	int32 damage_reflection_pct;
 	float32 radius;

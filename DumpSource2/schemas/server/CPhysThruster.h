@@ -1,4 +1,4 @@
-class CPhysThruster : public CPhysForce
+class CPhysThruster
 {
 	Vector m_localOrigin;
 };

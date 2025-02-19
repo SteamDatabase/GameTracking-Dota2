@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Razor : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Razor
 {
 	int32 m_nTargetAngle;
 	int32 m_nTargetRange;

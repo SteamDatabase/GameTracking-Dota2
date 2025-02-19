@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ForgedSpirit_Stats : public CDOTA_Buff
+class CDOTA_Modifier_ForgedSpirit_Stats
 {
 	int32 level;
 	int32 armor;

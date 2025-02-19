@@ -1,4 +1,4 @@
-class C_OP_ConstrainLineLength : public CParticleFunctionConstraint
+class C_OP_ConstrainLineLength
 {
 	float32 m_flMinDistance;
 	float32 m_flMaxDistance;

@@ -1,4 +1,4 @@
-class CPlayer_CameraServices : public CPlayerPawnComponent
+class CPlayer_CameraServices
 {
 	C_fogplayerparams_t m_PlayerFog;
 	CHandle< C_ColorCorrection > m_hColorCorrectionCtrl;

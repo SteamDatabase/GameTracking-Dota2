@@ -1,4 +1,4 @@
-class C_DOTA_Item_Rune : public CBaseAnimatingActivity
+class C_DOTA_Item_Rune
 {
 	int32 m_iRuneType;
 	float32 m_flRuneTime;

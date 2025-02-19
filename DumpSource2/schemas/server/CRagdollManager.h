@@ -1,4 +1,4 @@
-class CRagdollManager : public CBaseEntity
+class CRagdollManager
 {
 	int8 m_iCurrentMaxRagdollCount;
 	int32 m_iMaxRagdollCount;

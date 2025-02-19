@@ -1,4 +1,4 @@
-class C_OP_MovementLoopInsideSphere : public CParticleFunctionOperator
+class C_OP_MovementLoopInsideSphere
 {
 	int32 m_nCP;
 	CParticleCollectionFloatInput m_flDistance;

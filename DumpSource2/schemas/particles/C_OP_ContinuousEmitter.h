@@ -1,4 +1,4 @@
-class C_OP_ContinuousEmitter : public CParticleFunctionEmitter
+class C_OP_ContinuousEmitter
 {
 	CParticleCollectionFloatInput m_flEmissionDuration;
 	CParticleCollectionFloatInput m_flStartTime;

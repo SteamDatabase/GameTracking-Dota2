@@ -1,4 +1,4 @@
-class CPulseCell_Inflow_Yield : public CPulseCell_BaseYieldingInflow
+class CPulseCell_Inflow_Yield
 {
 	CPulse_ResumePoint m_UnyieldResume;
 };

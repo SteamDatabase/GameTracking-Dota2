@@ -1,4 +1,4 @@
-class CDOTA_Unit_TargetDummy : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_TargetDummy
 {
 	float32 m_flDamageTaken;
 	float32 m_flLastHit;

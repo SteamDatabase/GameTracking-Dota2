@@ -1,6 +1,7 @@
-class CPathMover : public CBaseEntity
+class CPathMover
 {
+	CPathQueryComponent m_CPathQueryComponent;
 	CUtlVector< CHandle< CMoverPathNode > > m_vecPathNodes;
-	float32 m_flPathLength;
+	CTransform m_xInitialPathWorldToLocal;
 	bool m_bClosedLoop;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_NianCharge : public CDOTABaseAbility
+class CDOTA_Ability_NianCharge
 {
 	bool m_bChargeFinished;
 	bool m_bPlayedChargeAnimation;

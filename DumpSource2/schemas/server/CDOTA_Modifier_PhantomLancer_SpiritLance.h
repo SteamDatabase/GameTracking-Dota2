@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomLancer_SpiritLance : public CDOTA_Buff
+class CDOTA_Modifier_PhantomLancer_SpiritLance
 {
 	int32 movement_speed_pct;
 };

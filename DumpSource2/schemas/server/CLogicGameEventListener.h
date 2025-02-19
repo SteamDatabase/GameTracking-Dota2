@@ -1,4 +1,4 @@
-class CLogicGameEventListener : public CLogicalEntity
+class CLogicGameEventListener
 {
 	CEntityIOOutput m_OnEventFired;
 	CUtlSymbolLarge m_iszGameEventName;

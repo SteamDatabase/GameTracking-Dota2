@@ -36,7 +36,6 @@ enum EBaseUserMessages : uint32_t
 	UM_AnimGraphUpdate = 149,
 	UM_HapticsManagerPulse = 150,
 	UM_HapticsManagerEffect = 151,
-	UM_CommandQueueState = 152,
 	UM_UpdateCssClasses = 153,
 	UM_ServerFrameTime = 154,
 	UM_LagCompensationError = 155,

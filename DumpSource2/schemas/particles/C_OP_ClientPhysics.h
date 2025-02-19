@@ -1,4 +1,4 @@
-class C_OP_ClientPhysics : public CParticleFunctionRenderer
+class C_OP_ClientPhysics
 {
 	CUtlString m_strPhysicsType;
 	bool m_bStartAsleep;

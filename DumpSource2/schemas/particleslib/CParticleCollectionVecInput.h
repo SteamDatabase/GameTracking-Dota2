@@ -1,3 +1,3 @@
-class CParticleCollectionVecInput : public CParticleVecInput
+class CParticleCollectionVecInput
 {
 };

@@ -1,4 +1,4 @@
-class C_INIT_InheritFromParentParticles : public CParticleFunctionInitializer
+class C_INIT_InheritFromParentParticles
 {
 	float32 m_flScale;
 	ParticleAttributeIndex_t m_nFieldOutput;

@@ -1,4 +1,4 @@
-class CLODComponentUpdater : public CAnimComponentUpdater
+class CLODComponentUpdater
 {
 	int32 m_nServerLOD;
 };

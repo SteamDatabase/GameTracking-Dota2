@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Drow_Ranger_Multishot : public CDOTA_Buff
+class CDOTA_Modifier_Drow_Ranger_Multishot
 {
 	int32 m_iArrowCount;
 	Vector m_vOriginalTarget;

@@ -1,4 +1,4 @@
-class CSkyCamera : public CBaseEntity
+class CSkyCamera
 {
 	sky3dparams_t m_skyboxData;
 	CUtlStringToken m_skyboxSlotToken;

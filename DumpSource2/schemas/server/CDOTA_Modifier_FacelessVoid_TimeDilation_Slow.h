@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FacelessVoid_TimeDilation_Slow : public CDOTA_Buff
+class CDOTA_Modifier_FacelessVoid_TimeDilation_Slow
 {
 	ParticleIndex_t m_nFXIndex;
 	int32 m_nAffectedAbilities;

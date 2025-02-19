@@ -1,4 +1,4 @@
-class CFootPinningUpdateNode : public CUnaryUpdateNode
+class CFootPinningUpdateNode
 {
 	FootPinningPoseOpFixedData_t m_poseOpFixedData;
 	FootPinningTimingSource m_eTimingSource;

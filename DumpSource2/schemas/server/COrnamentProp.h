@@ -1,4 +1,4 @@
-class COrnamentProp : public CDynamicProp
+class COrnamentProp
 {
 	CUtlSymbolLarge m_initialOwner;
 };

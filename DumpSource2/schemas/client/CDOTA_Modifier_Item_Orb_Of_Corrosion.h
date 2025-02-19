@@ -1,7 +1,6 @@
-class CDOTA_Modifier_Item_Orb_Of_Corrosion : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Orb_Of_Corrosion
 {
-	int32 armor;
-	int32 attack_speed;
+	int32 bonus_agility;
 	float32 duration;
 	CUtlVector< int16 > m_InFlightAttackRecords;
 };

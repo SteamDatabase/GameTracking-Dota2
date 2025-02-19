@@ -1,4 +1,4 @@
-class CNmStateCompletedConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmStateCompletedConditionNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	int16 m_nTransitionDurationOverrideNodeIdx;

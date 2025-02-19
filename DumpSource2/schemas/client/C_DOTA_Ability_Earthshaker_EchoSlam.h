@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Earthshaker_EchoSlam : public C_DOTABaseAbility
+class C_DOTA_Ability_Earthshaker_EchoSlam
 {
 	float32 echo_slam_damage_range;
 	int32 echo_slam_echo_search_range;

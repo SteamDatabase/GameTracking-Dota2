@@ -5,6 +5,8 @@ class CMaterialDrawDescriptor
 	float32 m_flAlpha;
 	uint16 m_nNumMeshlets;
 	uint32 m_nFirstMeshlet;
+	uint32 m_nAppliedIndexOffset;
+	uint8 m_nDepthVertexBufferIndex;
 	RenderPrimitiveType_t m_nPrimitiveType;
 	int32 m_nBaseVertex;
 	int32 m_nVertexCount;

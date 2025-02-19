@@ -1,4 +1,4 @@
-class CLogicLineToEntity : public CLogicalEntity
+class CLogicLineToEntity
 {
 	CEntityOutputTemplate< Vector > m_Line;
 	CUtlSymbolLarge m_SourceName;

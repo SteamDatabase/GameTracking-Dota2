@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SatyrSoulstealer_ManaBurn : public CDOTA_Buff
+class CDOTA_Modifier_SatyrSoulstealer_ManaBurn
 {
 	int32 radius;
 };

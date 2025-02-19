@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Yasha_And_Kaya_Maim : public CDOTA_Buff
+class CDOTA_Modifier_Yasha_And_Kaya_Maim
 {
 	int32 maim_slow_movement;
 	int32 maim_slow_attack;

@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Pugna : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Pugna
 {
 	int32 m_nAimAngle;
 };

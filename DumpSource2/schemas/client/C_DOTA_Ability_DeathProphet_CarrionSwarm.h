@@ -1,4 +1,4 @@
-class C_DOTA_Ability_DeathProphet_CarrionSwarm : public C_DOTABaseAbility
+class C_DOTA_Ability_DeathProphet_CarrionSwarm
 {
 	int32 start_radius;
 	int32 end_radius;

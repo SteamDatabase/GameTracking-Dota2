@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VengefulSpirit_Revenge : public CDOTA_Buff
+class CDOTA_Modifier_VengefulSpirit_Revenge
 {
 	int32 bonus_damage;
 };

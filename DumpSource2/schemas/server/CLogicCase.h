@@ -1,4 +1,4 @@
-class CLogicCase : public CLogicalEntity
+class CLogicCase
 {
 	CUtlSymbolLarge[32] m_nCase;
 	int32 m_nShuffleCases;

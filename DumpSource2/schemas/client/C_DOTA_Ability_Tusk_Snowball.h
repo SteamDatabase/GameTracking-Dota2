@@ -1,8 +1,8 @@
-class C_DOTA_Ability_Tusk_Snowball : public C_DOTABaseAbility
+class C_DOTA_Ability_Tusk_Snowball
 {
 	float32 snowball_windup_radius;
 	float32 snowball_radius;
-	int32 snowball_grow_rate;
+	float32 snowball_grow_rate;
 	int32 snowball_damage;
 	int32 snowball_damage_bonus;
 	float32 stun_duration;

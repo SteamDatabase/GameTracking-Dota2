@@ -1,7 +1,7 @@
-class CPulseCell_Inflow_EntOutputHandler : public CPulseCell_Inflow_BaseEntrypoint
+class CPulseCell_Inflow_EntOutputHandler
 {
-	CUtlSymbolLarge m_SourceEntity;
-	CUtlSymbolLarge m_SourceOutput;
-	CUtlSymbolLarge m_TargetInput;
+	PulseSymbol_t m_SourceEntity;
+	PulseSymbol_t m_SourceOutput;
+	PulseSymbol_t m_TargetInput;
 	CPulseValueFullType m_ExpectedParamType;
 };

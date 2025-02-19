@@ -1,6 +1,6 @@
-class CDOTA_Modifier_Furion_SpiritOfTheForest : public CDOTA_Buff
+class CDOTA_Modifier_Furion_SpiritOfTheForest
 {
-	int32 damage_per_tree_pct;
+	float32 damage_per_tree_pct;
 	int32 radius;
 	float32 multiplier;
 	int32 radius_treant;

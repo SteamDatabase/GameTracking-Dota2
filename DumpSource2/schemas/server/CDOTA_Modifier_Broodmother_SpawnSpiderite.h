@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Broodmother_SpawnSpiderite : public CDOTA_Buff
+class CDOTA_Modifier_Broodmother_SpawnSpiderite
 {
 	float32 buff_duration;
 };

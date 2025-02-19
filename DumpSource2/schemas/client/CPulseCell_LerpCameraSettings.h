@@ -1,4 +1,4 @@
-class CPulseCell_LerpCameraSettings : public CPulseCell_BaseLerp
+class CPulseCell_LerpCameraSettings
 {
 	float32 m_flSeconds;
 	PointCameraSettings_t m_Start;

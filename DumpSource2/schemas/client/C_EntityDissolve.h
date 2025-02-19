@@ -1,4 +1,4 @@
-class C_EntityDissolve : public C_BaseModelEntity
+class C_EntityDissolve
 {
 	GameTime_t m_flStartTime;
 	float32 m_flFadeInStart;

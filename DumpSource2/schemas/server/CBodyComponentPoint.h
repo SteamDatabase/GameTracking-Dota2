@@ -1,4 +1,4 @@
-class CBodyComponentPoint : public CBodyComponent
+class CBodyComponentPoint
 {
 	CGameSceneNode m_sceneNode;
 };

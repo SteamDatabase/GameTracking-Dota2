@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Venomancer_NoxiousPlague_Slow : public CDOTA_Buff
+class CDOTA_Modifier_Venomancer_NoxiousPlague_Slow
 {
 	float32 attack_slow;
 	float32 movement_slow_max;

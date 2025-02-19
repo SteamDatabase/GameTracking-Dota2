@@ -1,3 +1,3 @@
-class CDOTA_Ability_Rattletrap_Overclocking : public CDOTABaseAbility
+class CDOTA_Ability_Rattletrap_Overclocking
 {
 };

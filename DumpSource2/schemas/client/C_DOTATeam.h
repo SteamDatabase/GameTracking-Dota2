@@ -1,4 +1,4 @@
-class C_DOTATeam : public C_Team
+class C_DOTATeam
 {
 	int32 m_iHeroKills;
 	int32 m_iTowerKills;
@@ -9,7 +9,7 @@ class C_DOTATeam : public C_Team
 	uint64 m_ulTeamBannerLogo;
 	bool m_bTeamComplete;
 	bool m_bTeamIsHomeTeam;
-	bool m_bTeamCanSeeRoshanTimer;
+	bool m_bTeamCanSeeExactRoshanTimer;
 	bool m_bTeamCanSeeNextPowerRune;
 	Color m_CustomHealthbarColor;
 	char[33] m_szTag;

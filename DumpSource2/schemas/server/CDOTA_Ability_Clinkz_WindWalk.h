@@ -1,4 +1,4 @@
-class CDOTA_Ability_Clinkz_WindWalk : public CDOTABaseAbility
+class CDOTA_Ability_Clinkz_WindWalk
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hSkeletonSummons;
 };

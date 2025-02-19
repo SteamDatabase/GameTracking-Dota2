@@ -1,4 +1,4 @@
-class C_INIT_VelocityFromCP : public CParticleFunctionInitializer
+class C_INIT_VelocityFromCP
 {
 	CParticleCollectionVecInput m_velocityInput;
 	CParticleTransformInput m_transformInput;

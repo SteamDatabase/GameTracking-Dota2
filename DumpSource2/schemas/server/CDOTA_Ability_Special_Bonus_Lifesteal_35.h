@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Lifesteal_35 : public CDOTABaseAbility
+class CDOTA_Ability_Special_Bonus_Lifesteal_35
 {
 };

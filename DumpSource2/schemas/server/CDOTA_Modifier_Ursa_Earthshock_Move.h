@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ursa_Earthshock_Move : public CDOTA_Buff
+class CDOTA_Modifier_Ursa_Earthshock_Move
 {
 	float32 hop_duration;
 	int32 hop_height;

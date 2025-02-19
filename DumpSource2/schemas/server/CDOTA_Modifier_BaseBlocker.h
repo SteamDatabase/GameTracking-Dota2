@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BaseBlocker : public CDOTA_Buff
+class CDOTA_Modifier_BaseBlocker
 {
 	float32 radius;
 };

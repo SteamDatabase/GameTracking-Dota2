@@ -1,4 +1,4 @@
-class C_DOTA_Ability_AghsFort_Creature_Phoenix_FireSpirits : public C_DOTABaseAbility
+class C_DOTA_Ability_AghsFort_Creature_Phoenix_FireSpirits
 {
 	int32 hp_cost_perc;
 };

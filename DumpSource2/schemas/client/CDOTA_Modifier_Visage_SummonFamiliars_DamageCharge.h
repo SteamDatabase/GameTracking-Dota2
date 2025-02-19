@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Visage_SummonFamiliars_DamageCharge : public CDOTA_Buff
+class CDOTA_Modifier_Visage_SummonFamiliars_DamageCharge
 {
 	int32 familiar_speed;
 	int32 m_nFXIndex;

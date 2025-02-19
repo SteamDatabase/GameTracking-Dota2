@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enchantress_NaturesAttendants : public CDOTA_Buff
+class CDOTA_Modifier_Enchantress_NaturesAttendants
 {
 	float32 heal_interval;
 	float32 heal;

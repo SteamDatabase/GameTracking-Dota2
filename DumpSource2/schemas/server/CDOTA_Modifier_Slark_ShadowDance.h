@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_ShadowDance : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_Slark_ShadowDance
 {
 	CHandle< CBaseEntity > m_hVisibleEntity;
 	ParticleIndex_t m_nFXIndex;

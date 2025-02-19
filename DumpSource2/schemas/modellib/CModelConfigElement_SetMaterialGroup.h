@@ -1,4 +1,4 @@
-class CModelConfigElement_SetMaterialGroup : public CModelConfigElement
+class CModelConfigElement_SetMaterialGroup
 {
 	CUtlString m_MaterialGroupName;
 };

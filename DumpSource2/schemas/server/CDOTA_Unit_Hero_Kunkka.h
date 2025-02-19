@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Kunkka : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Kunkka
 {
 	int32 m_nFXIndex;
 };

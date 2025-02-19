@@ -1,4 +1,4 @@
-class C_OP_SetFloatAttributeToVectorExpression : public CParticleFunctionOperator
+class C_OP_SetFloatAttributeToVectorExpression
 {
 	VectorFloatExpressionType_t m_nExpression;
 	CPerParticleVecInput m_vInput1;

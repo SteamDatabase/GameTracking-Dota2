@@ -1,4 +1,4 @@
-class CCredits : public CPointEntity
+class CCredits
 {
 	CEntityIOOutput m_OnCreditsDone;
 	bool m_bRolledOutroCredits;

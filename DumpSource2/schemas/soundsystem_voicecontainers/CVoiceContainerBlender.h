@@ -1,4 +1,4 @@
-class CVoiceContainerBlender : public CVoiceContainerBase
+class CVoiceContainerBlender
 {
 	CSoundContainerReference m_firstSound;
 	CSoundContainerReference m_secondSound;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_BountyHunter_ShurikenToss : public CDOTABaseAbility
+class CDOTA_Ability_BountyHunter_ShurikenToss
 {
 	CHandle< CDOTABaseAbility > m_hSourceAbility;
 	CHandle< CBaseEntity > m_hSourceCaster;

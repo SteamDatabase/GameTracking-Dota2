@@ -1,4 +1,4 @@
-class C_OP_RemapCPtoVector : public CParticleFunctionOperator
+class C_OP_RemapCPtoVector
 {
 	int32 m_nCPInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

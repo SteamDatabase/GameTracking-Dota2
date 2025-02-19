@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Tidehunter_Anchor : public C_DOTA_BaseNPC_Additive
+class C_DOTA_Unit_Tidehunter_Anchor
 {
 	CHandle< C_BaseEntity > m_hTarget;
 	Vector m_vProjectilePosition;

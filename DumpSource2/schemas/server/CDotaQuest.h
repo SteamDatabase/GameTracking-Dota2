@@ -1,4 +1,4 @@
-class CDotaQuest : public CBaseEntity
+class CDotaQuest
 {
 	char[256] m_pszQuestTitle;
 	char[256] m_pszQuestText;

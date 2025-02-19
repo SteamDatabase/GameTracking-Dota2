@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lina_CritDebuff : public CDOTA_Buff
+class CDOTA_Modifier_Lina_CritDebuff
 {
 	float32 target_crit_multiplier;
 };

@@ -1,4 +1,4 @@
-class C_DOTA_Ability_VengefulSpirit_Nether_Swap : public C_DOTABaseAbility
+class C_DOTA_Ability_VengefulSpirit_Nether_Swap
 {
 	int32 m_nFXIndex;
 	int32 damage;

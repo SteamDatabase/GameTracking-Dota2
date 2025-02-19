@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Tiny_Avalanche : public C_DOTABaseAbility
+class C_DOTA_Ability_Tiny_Avalanche
 {
 	Vector m_vTargetLoc;
 };

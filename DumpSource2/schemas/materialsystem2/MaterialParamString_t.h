@@ -1,4 +1,4 @@
-class MaterialParamString_t : public MaterialParam_t
+class MaterialParamString_t
 {
 	CUtlString m_value;
 };

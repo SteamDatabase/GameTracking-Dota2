@@ -1,4 +1,4 @@
-class CDOTA_Item_TierToken : public CDOTA_Item
+class CDOTA_Item_TierToken
 {
-	AbilityID_t[6] m_vecChoices;
+	AbilityID_t[5] m_vecChoices;
 };

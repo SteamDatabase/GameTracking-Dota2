@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Battlefury : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Battlefury
 {
 	int32 bonus_damage;
 	float32 bonus_health_regen;

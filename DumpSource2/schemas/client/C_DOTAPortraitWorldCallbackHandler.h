@@ -1,3 +1,3 @@
-class C_DOTAPortraitWorldCallbackHandler : public C_BaseEntity
+class C_DOTAPortraitWorldCallbackHandler
 {
 };

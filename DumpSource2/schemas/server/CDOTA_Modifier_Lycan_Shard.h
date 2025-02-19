@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lycan_Shard : public CDOTA_Buff
+class CDOTA_Modifier_Lycan_Shard
 {
 	float32 m_flNextSpawn;
 };

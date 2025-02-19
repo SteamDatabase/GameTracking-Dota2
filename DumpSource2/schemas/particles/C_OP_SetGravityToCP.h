@@ -1,4 +1,4 @@
-class C_OP_SetGravityToCP : public CParticleFunctionPreEmission
+class C_OP_SetGravityToCP
 {
 	int32 m_nCPInput;
 	int32 m_nCPOutput;

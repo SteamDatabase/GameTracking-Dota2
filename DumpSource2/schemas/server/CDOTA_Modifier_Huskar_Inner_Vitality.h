@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Huskar_Inner_Vitality : public CDOTA_Buff
+class CDOTA_Modifier_Huskar_Inner_Vitality
 {
 	int32 heal;
 	float32 attrib_bonus;

@@ -1,4 +1,4 @@
-class CMarkupVolumeWithRef : public CMarkupVolumeTagged
+class CMarkupVolumeWithRef
 {
 	bool m_bUseRef;
 	Vector m_vRefPos;

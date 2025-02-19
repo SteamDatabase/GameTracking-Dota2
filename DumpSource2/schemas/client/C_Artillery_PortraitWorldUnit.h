@@ -1,3 +1,3 @@
-class C_Artillery_PortraitWorldUnit : public C_PortraitWorldUnit
+class C_Artillery_PortraitWorldUnit
 {
 };

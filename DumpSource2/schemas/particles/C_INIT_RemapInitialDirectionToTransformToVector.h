@@ -1,4 +1,4 @@
-class C_INIT_RemapInitialDirectionToTransformToVector : public CParticleFunctionInitializer
+class C_INIT_RemapInitialDirectionToTransformToVector
 {
 	CParticleTransformInput m_TransformInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

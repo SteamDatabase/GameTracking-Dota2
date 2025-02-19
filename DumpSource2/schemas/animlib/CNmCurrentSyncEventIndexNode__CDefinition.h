@@ -1,4 +1,5 @@
-class CNmCurrentSyncEventIndexNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmCurrentSyncEventIndexNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
+	bool m_bOnlyReturnPercentageThrough;
 };

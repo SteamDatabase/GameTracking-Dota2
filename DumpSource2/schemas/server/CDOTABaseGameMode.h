@@ -1,4 +1,4 @@
-class CDOTABaseGameMode : public CBaseEntity
+class CDOTABaseGameMode
 {
 	CUtlString m_ForcedHUDSkin;
 	HeroID_t m_nCustomGameForceHeroSelectionId;

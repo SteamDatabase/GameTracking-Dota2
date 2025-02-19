@@ -1,3 +1,3 @@
-class CDOTA_Ability_Snapfire_LilShredder : public CDOTABaseAbility
+class CDOTA_Ability_Snapfire_LilShredder
 {
 };

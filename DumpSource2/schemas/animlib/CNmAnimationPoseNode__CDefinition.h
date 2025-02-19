@@ -1,4 +1,4 @@
-class CNmAnimationPoseNode::CDefinition : public CNmPoseNode::CDefinition
+class CNmAnimationPoseNode::CDefinition
 {
 	int16 m_nPoseTimeValueNodeIdx;
 	int16 m_nDataSlotIdx;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Desolator_Corruption : public CDOTA_Buff
+class CDOTA_Modifier_Desolator_Corruption
 {
 	int32 corruption_armor;
 };

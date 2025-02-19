@@ -1,3 +1,3 @@
-class CInfoCourierSpawnRadiant5 : public CPointEntity
+class CInfoCourierSpawnRadiant5
 {
 };

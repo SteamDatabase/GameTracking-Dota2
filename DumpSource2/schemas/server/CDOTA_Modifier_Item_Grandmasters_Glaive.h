@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Grandmasters_Glaive : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Grandmasters_Glaive
 {
 	int32 sange_bonus_strength;
 	int32 sange_status_resistance;

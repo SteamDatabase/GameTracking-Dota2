@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lycan_Shapeshift_Speed : public CDOTA_Buff
+class CDOTA_Modifier_Lycan_Shapeshift_Speed
 {
 	int32 speed;
 	int32 crit_chance;

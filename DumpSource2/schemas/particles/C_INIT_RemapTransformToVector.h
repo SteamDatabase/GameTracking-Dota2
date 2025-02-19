@@ -1,4 +1,4 @@
-class C_INIT_RemapTransformToVector : public CParticleFunctionInitializer
+class C_INIT_RemapTransformToVector
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	Vector m_vInputMin;

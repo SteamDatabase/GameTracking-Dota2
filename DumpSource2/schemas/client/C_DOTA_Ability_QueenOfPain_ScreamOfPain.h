@@ -1,4 +1,4 @@
-class C_DOTA_Ability_QueenOfPain_ScreamOfPain : public C_DOTABaseAbility
+class C_DOTA_Ability_QueenOfPain_ScreamOfPain
 {
 	int32 damage;
 };

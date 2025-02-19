@@ -1,4 +1,4 @@
-class CDOTA_Ability_Venomancer_PoisonSting : public CDOTABaseAbility
+class CDOTA_Ability_Venomancer_PoisonSting
 {
 	int32 radius;
 };

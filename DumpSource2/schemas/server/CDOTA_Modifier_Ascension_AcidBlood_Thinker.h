@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ascension_AcidBlood_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Ascension_AcidBlood_Thinker
 {
 	int32 damage;
 	float32 radius;

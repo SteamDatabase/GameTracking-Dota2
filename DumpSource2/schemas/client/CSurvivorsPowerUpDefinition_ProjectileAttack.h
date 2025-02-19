@@ -1,4 +1,4 @@
-class CSurvivorsPowerUpDefinition_ProjectileAttack : public CSurvivorsPowerUpDefinition
+class CSurvivorsPowerUpDefinition_ProjectileAttack
 {
 	ESurvivorsAttackTargeting m_eTargeting;
 	ESurvivorsAttackTargeting m_eBounceTargeting;

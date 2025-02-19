@@ -1,4 +1,4 @@
-class C_INIT_RemapNamedModelElementToScalar : public CParticleFunctionInitializer
+class C_INIT_RemapNamedModelElementToScalar
 {
 	CStrongHandle< InfoForResourceTypeCModel > m_hModel;
 	CUtlVector< CUtlString > m_names;

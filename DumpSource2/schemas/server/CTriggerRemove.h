@@ -1,4 +1,4 @@
-class CTriggerRemove : public CBaseTrigger
+class CTriggerRemove
 {
 	CEntityIOOutput m_OnRemove;
 };

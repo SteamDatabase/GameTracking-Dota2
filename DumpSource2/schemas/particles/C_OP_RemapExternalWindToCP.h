@@ -1,4 +1,4 @@
-class C_OP_RemapExternalWindToCP : public CParticleFunctionPreEmission
+class C_OP_RemapExternalWindToCP
 {
 	int32 m_nCP;
 	int32 m_nCPOutput;

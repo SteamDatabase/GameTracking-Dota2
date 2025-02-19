@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Treant_EyesInTheForest_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Treant_EyesInTheForest_Thinker
 {
 	float32 vision_aoe;
 	CDOTA_Tree* m_Tree;

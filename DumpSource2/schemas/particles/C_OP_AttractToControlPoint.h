@@ -1,4 +1,4 @@
-class C_OP_AttractToControlPoint : public CParticleFunctionForce
+class C_OP_AttractToControlPoint
 {
 	Vector m_vecComponentScale;
 	CPerParticleFloatInput m_fForceAmount;

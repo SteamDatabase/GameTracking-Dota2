@@ -1,4 +1,4 @@
-class CDOTA_Ability_Clinkz_Burning_Army : public CDOTABaseAbility
+class CDOTA_Ability_Clinkz_Burning_Army
 {
 	int32 range;
 	Vector m_vEndpoint;

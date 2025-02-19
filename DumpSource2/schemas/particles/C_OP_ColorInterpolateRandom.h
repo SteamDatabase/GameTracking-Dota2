@@ -1,4 +1,4 @@
-class C_OP_ColorInterpolateRandom : public CParticleFunctionOperator
+class C_OP_ColorInterpolateRandom
 {
 	Color m_ColorFadeMin;
 	Color m_ColorFadeMax;

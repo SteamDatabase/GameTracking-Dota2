@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EarthSpirit_Petrify : public CDOTA_Buff
+class CDOTA_Modifier_EarthSpirit_Petrify
 {
 	ParticleIndex_t m_nFXIndex;
 	bool m_bHasBeenMagnetized;

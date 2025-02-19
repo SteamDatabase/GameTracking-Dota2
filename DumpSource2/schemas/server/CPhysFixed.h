@@ -1,4 +1,4 @@
-class CPhysFixed : public CPhysConstraint
+class CPhysFixed
 {
 	float32 m_flLinearFrequency;
 	float32 m_flLinearDampingRatio;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Creature_HybridFlyer : public CDOTA_Buff
+class CDOTA_Modifier_Creature_HybridFlyer
 {
 	CountdownTimer m_ctTimer;
 };

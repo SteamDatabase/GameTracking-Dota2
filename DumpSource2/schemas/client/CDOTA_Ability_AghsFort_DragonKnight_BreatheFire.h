@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_DragonKnight_BreatheFire : public C_DOTABaseAbility
+class CDOTA_Ability_AghsFort_DragonKnight_BreatheFire
 {
 	int32 start_radius;
 	int32 end_radius;

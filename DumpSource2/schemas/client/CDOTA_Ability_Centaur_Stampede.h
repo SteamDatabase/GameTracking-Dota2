@@ -1,4 +1,4 @@
-class CDOTA_Ability_Centaur_Stampede : public C_DOTABaseAbility
+class CDOTA_Ability_Centaur_Stampede
 {
 	float32 duration;
 	int32 base_damage;

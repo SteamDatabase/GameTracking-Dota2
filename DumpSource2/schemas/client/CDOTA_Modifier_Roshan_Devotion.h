@@ -1,3 +1,4 @@
-class CDOTA_Modifier_Roshan_Devotion : public CDOTA_Buff
+class CDOTA_Modifier_Roshan_Devotion
 {
+	int32 slow_resistance;
 };

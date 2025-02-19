@@ -1,4 +1,4 @@
-class CSoundEventPathCornerEntity : public CSoundEventEntity
+class CSoundEventPathCornerEntity
 {
 	CUtlSymbolLarge m_iszPathCorner;
 	int32 m_iCountMax;

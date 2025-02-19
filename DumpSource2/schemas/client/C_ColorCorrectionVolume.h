@@ -1,9 +1,9 @@
-class C_ColorCorrectionVolume : public C_BaseTrigger
+class C_ColorCorrectionVolume
 {
 	float32 m_LastEnterWeight;
-	float32 m_LastEnterTime;
+	GameTime_t m_LastEnterTime;
 	float32 m_LastExitWeight;
-	float32 m_LastExitTime;
+	GameTime_t m_LastExitTime;
 	bool m_bEnabled;
 	float32 m_MaxWeight;
 	float32 m_FadeDuration;

@@ -1,6 +1,6 @@
-class CDOTA_Ability_Magnataur_Skewer : public C_DOTABaseAbility
+class CDOTA_Ability_Magnataur_Skewer
 {
-	int32 skewer_radius;
+	float32 skewer_radius;
 	int32 skewer_speed;
 	int32 tree_radius;
 	int32 tree_hit_damage;

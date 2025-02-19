@@ -1,3 +1,3 @@
-class C_DOTA_PortraitBaseModel : public CBaseAnimatingActivity
+class C_DOTA_PortraitBaseModel
 {
 };

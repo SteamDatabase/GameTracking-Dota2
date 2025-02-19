@@ -1,4 +1,4 @@
-class C_BasePropDoor : public C_DynamicProp
+class C_BasePropDoor
 {
 	DoorState_t m_eDoorState;
 	bool m_modelChanged;

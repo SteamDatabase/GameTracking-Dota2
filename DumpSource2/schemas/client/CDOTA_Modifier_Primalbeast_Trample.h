@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Primalbeast_Trample : public CDOTA_Buff
+class CDOTA_Modifier_Primalbeast_Trample
 {
 	float32 effect_radius;
 	Vector vLastPos;

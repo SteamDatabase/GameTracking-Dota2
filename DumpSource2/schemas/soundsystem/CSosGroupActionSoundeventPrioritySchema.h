@@ -1,4 +1,4 @@
-class CSosGroupActionSoundeventPrioritySchema : public CSosGroupActionSchema
+class CSosGroupActionSoundeventPrioritySchema
 {
 	CUtlString m_priorityValue;
 	CUtlString m_priorityVolumeScalar;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Medusa_ManaShield : public CDOTA_Buff
+class CDOTA_Modifier_Medusa_ManaShield
 {
 	int32 bonus_mana;
 	float32 absorption_pct;

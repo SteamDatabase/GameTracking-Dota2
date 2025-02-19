@@ -1,4 +1,4 @@
-class CQuaternionAnimParameter : public CConcreteAnimParameter
+class CQuaternionAnimParameter
 {
 	Quaternion m_defaultValue;
 	bool m_bInterpolate;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Alchemist_ChemicalRage : public CDOTA_Buff
+class CDOTA_Modifier_Alchemist_ChemicalRage
 {
 	float32 base_attack_time;
 	int32 bonus_health;

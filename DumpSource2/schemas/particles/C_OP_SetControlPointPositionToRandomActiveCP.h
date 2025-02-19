@@ -1,4 +1,4 @@
-class C_OP_SetControlPointPositionToRandomActiveCP : public CParticleFunctionPreEmission
+class C_OP_SetControlPointPositionToRandomActiveCP
 {
 	int32 m_nCP1;
 	int32 m_nHeadLocationMin;

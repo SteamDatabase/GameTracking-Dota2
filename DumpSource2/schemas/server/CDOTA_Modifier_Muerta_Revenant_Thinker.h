@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Muerta_Revenant_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Muerta_Revenant_Thinker
 {
 	bool m_bSpiritsExplode;
 	float32 m_fDeadZoneDistance;

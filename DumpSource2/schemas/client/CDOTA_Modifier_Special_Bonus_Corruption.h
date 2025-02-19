@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Corruption : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Corruption
 {
 	float32 value;
 };

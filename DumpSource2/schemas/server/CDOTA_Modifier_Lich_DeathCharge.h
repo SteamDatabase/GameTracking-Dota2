@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lich_DeathCharge : public CDOTA_Buff
+class CDOTA_Modifier_Lich_DeathCharge
 {
 	float32 radius;
 	float32 mana_restore_pct_from_creep;

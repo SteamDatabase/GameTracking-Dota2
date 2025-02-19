@@ -1,4 +1,4 @@
-class C_INIT_RandomScalar : public CParticleFunctionInitializer
+class C_INIT_RandomScalar
 {
 	float32 m_flMin;
 	float32 m_flMax;

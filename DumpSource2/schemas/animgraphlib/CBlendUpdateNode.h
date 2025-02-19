@@ -1,4 +1,4 @@
-class CBlendUpdateNode : public CAnimUpdateNodeBase
+class CBlendUpdateNode
 {
 	CUtlVector< CAnimUpdateNodeRef > m_children;
 	CUtlVector< uint8 > m_sortedOrder;
@@ -11,4 +11,5 @@ class CBlendUpdateNode : public CAnimUpdateNodeBase
 	bool m_bSyncCycles;
 	bool m_bLoop;
 	bool m_bLockWhenWaning;
+	bool m_bIsAngle;
 };

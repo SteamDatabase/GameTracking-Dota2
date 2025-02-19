@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Sven_GreatCleave : public CDOTA_Buff
+class CDOTA_Modifier_Sven_GreatCleave
 {
 	int32 cleave_starting_width;
 	int32 cleave_ending_width;

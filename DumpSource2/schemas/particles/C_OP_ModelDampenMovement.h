@@ -1,4 +1,4 @@
-class C_OP_ModelDampenMovement : public CParticleFunctionOperator
+class C_OP_ModelDampenMovement
 {
 	int32 m_nControlPointNumber;
 	bool m_bBoundBox;

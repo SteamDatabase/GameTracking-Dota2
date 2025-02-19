@@ -1,4 +1,4 @@
-class C_INIT_CreateParticleImpulse : public CParticleFunctionInitializer
+class C_INIT_CreateParticleImpulse
 {
 	CPerParticleFloatInput m_InputRadius;
 	CPerParticleFloatInput m_InputMagnitude;

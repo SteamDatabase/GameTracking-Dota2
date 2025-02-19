@@ -1,4 +1,4 @@
-class C_Beam : public C_BaseModelEntity
+class C_Beam
 {
 	float32 m_flFrameRate;
 	float32 m_flHDRColorScale;

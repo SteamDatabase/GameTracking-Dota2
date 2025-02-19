@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Medusa_StoneGaze_Facing : public CDOTA_Buff
+class CDOTA_Modifier_Medusa_StoneGaze_Facing
 {
 	float32 face_duration;
 	float32 stone_duration;

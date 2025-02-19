@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Razor_StaticLink_Buff : public CDOTA_Buff
+class CDOTA_Modifier_Razor_StaticLink_Buff
 {
 	ParticleIndex_t m_nFXIndex;
 	int32 drain_rate;

@@ -1,10 +1,7 @@
-class CDOTA_Modifier_Item_Revenants_Brooch : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Revenants_Brooch
 {
-	bool m_bScepter;
-	int32 bonus_damage;
-	int32 spell_lifesteal;
-	int32 bonus_spell_lifesteal;
-	int32 manacost_per_hit;
-	bool m_bActive;
-	CUtlVector< int16 > m_InFlightAttackRecords;
+	float32 bonus_damage;
+	float32 spell_lifesteal;
+	int32 crit_chance;
+	float32 crit_multiplier;
 };

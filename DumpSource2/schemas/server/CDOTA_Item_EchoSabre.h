@@ -1,3 +1,3 @@
-class CDOTA_Item_EchoSabre : public CDOTA_Item
+class CDOTA_Item_EchoSabre
 {
 };

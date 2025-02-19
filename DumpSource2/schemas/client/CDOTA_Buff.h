@@ -1,4 +1,4 @@
-class CDOTA_Buff : public C_HorizontalMotionController
+class CDOTA_Buff
 {
 	CUtlSymbolLarge m_name;
 	CUtlSymbolLarge m_iszModifierAura;

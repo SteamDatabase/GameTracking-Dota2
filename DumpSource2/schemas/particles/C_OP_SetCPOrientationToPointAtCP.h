@@ -1,4 +1,4 @@
-class C_OP_SetCPOrientationToPointAtCP : public CParticleFunctionPreEmission
+class C_OP_SetCPOrientationToPointAtCP
 {
 	int32 m_nInputCP;
 	int32 m_nOutputCP;

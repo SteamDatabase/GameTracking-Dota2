@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Elder_Titan_AncestralSpirit : public C_DOTABaseAbility
+class C_DOTA_Ability_Elder_Titan_AncestralSpirit
 {
 	int32 speed;
 	int32 radius;

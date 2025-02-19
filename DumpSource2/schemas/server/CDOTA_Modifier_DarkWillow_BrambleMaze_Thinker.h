@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkWillow_BrambleMaze_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_DarkWillow_BrambleMaze_Thinker
 {
 	int32 latch_range;
 	int32 latch_vision;

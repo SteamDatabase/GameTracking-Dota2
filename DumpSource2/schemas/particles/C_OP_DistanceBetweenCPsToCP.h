@@ -1,4 +1,4 @@
-class C_OP_DistanceBetweenCPsToCP : public CParticleFunctionPreEmission
+class C_OP_DistanceBetweenCPsToCP
 {
 	int32 m_nStartCP;
 	int32 m_nEndCP;

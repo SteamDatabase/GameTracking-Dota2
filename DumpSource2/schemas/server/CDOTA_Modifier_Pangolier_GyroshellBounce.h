@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pangolier_GyroshellBounce : public CDOTA_Buff
+class CDOTA_Modifier_Pangolier_GyroshellBounce
 {
 	Vector m_vLoc;
 	float32 m_flPredictedTotalTime;

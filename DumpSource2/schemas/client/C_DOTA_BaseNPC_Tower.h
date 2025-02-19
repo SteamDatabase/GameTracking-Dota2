@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_Tower : public C_DOTA_BaseNPC_Building
+class C_DOTA_BaseNPC_Tower
 {
 	ParticleIndex_t m_nAltHeldRangeFX;
 	bool m_bWasInRange;

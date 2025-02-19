@@ -1,4 +1,4 @@
-class CDOTA_Item_Bottomless_Chalice : public CDOTA_Item
+class CDOTA_Item_Bottomless_Chalice
 {
 	int32 m_iStoredRuneType;
 	GameTime_t m_fStoredRuneTime;

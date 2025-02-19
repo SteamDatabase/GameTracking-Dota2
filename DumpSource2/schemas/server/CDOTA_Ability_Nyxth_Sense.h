@@ -1,3 +1,3 @@
-class CDOTA_Ability_Nyxth_Sense : public CDOTABaseAbility
+class CDOTA_Ability_Nyxth_Sense
 {
 };

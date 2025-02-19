@@ -1,4 +1,4 @@
-class CMarkupVolumeTagged_NavGame : public CMarkupVolumeWithRef
+class CMarkupVolumeTagged_NavGame
 {
 	bool m_bFloodFillAttribute;
 };

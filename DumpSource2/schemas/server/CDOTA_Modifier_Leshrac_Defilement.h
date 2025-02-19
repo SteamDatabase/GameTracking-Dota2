@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Leshrac_Defilement : public CDOTA_Buff
+class CDOTA_Modifier_Leshrac_Defilement
 {
 	float32 aoe_per_int;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TrollWarlord_Whirling_Axes_Melee : public CDOTA_Buff
+class CDOTA_Modifier_TrollWarlord_Whirling_Axes_Melee
 {
 	int32 damage;
 	int32 hit_radius;

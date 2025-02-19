@@ -1,3 +1,3 @@
-class CDOTA_Ability_Lich_FrostNova : public CDOTABaseAbility
+class CDOTA_Ability_Lich_FrostNova
 {
 };

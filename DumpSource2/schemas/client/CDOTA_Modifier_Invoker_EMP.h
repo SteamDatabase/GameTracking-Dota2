@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_EMP : public CDOTA_Buff
+class CDOTA_Modifier_Invoker_EMP
 {
 	int32 area_of_effect;
 	int32 mana_burned;

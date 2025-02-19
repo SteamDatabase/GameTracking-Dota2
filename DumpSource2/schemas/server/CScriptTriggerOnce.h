@@ -1,4 +1,4 @@
-class CScriptTriggerOnce : public CTriggerOnce
+class CScriptTriggerOnce
 {
 	Vector m_vExtent;
 };

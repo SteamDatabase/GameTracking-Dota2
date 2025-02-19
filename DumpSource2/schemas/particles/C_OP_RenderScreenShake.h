@@ -1,4 +1,4 @@
-class C_OP_RenderScreenShake : public CParticleFunctionRenderer
+class C_OP_RenderScreenShake
 {
 	float32 m_flDurationScale;
 	float32 m_flRadiusScale;

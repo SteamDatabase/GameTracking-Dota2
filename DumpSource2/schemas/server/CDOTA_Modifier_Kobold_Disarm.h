@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kobold_Disarm : public CDOTA_Buff
+class CDOTA_Modifier_Kobold_Disarm
 {
 	float32 duration;
 };

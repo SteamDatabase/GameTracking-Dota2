@@ -1,4 +1,4 @@
-class C_OP_RemapVelocityToVector : public CParticleFunctionOperator
+class C_OP_RemapVelocityToVector
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	float32 m_flScale;

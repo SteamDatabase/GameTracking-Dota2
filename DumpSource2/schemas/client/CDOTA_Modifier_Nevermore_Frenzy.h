@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nevermore_Frenzy : public CDOTA_Buff
+class CDOTA_Modifier_Nevermore_Frenzy
 {
 	int32 bonus_attack_speed;
 	float32 cast_speed_pct;

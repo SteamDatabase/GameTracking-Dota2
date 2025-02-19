@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Morty_Hop : public C_DOTABaseAbility
+class C_DOTA_Ability_Morty_Hop
 {
 	float32 max_distance;
 	Vector m_vTarget;

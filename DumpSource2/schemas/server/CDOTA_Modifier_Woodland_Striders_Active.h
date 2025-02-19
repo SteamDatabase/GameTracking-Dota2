@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Woodland_Striders_Active : public CDOTA_Buff
+class CDOTA_Modifier_Woodland_Striders_Active
 {
 	float32 tree_duration;
 };

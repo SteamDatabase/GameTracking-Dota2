@@ -1,4 +1,4 @@
-class CChoiceUpdateNode : public CAnimUpdateNodeBase
+class CChoiceUpdateNode
 {
 	CUtlVector< CAnimUpdateNodeRef > m_children;
 	CUtlVector< float32 > m_weights;

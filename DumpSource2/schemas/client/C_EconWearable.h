@@ -1,3 +1,3 @@
-class C_EconWearable : public C_EconEntity
+class C_EconWearable
 {
 };

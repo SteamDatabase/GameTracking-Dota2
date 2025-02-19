@@ -1,4 +1,4 @@
-class C_OP_DistanceCull : public CParticleFunctionOperator
+class C_OP_DistanceCull
 {
 	int32 m_nControlPoint;
 	Vector m_vecPointOffset;

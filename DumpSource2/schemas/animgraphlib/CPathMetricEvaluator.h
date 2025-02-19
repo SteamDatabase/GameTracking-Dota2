@@ -1,4 +1,4 @@
-class CPathMetricEvaluator : public CMotionMetricEvaluator
+class CPathMetricEvaluator
 {
 	CUtlVector< float32 > m_pathTimeSamples;
 	float32 m_flDistance;

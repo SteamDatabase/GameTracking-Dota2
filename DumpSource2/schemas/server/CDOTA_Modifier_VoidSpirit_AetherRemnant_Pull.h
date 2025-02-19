@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VoidSpirit_AetherRemnant_Pull : public CDOTA_Buff
+class CDOTA_Modifier_VoidSpirit_AetherRemnant_Pull
 {
 	ParticleIndex_t m_nFXIndex;
 	PlayerID_t m_nPlayerID;

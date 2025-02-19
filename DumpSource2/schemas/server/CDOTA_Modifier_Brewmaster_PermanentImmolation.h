@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_PermanentImmolation : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_PermanentImmolation
 {
 	int32 damage;
 };

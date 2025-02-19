@@ -1,4 +1,4 @@
-class CNmTransitionEventConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmTransitionEventConditionNode::CDefinition
 {
 	CGlobalSymbol m_requireRuleID;
 	CNmBitFlags m_eventConditionRules;

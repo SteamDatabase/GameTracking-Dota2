@@ -1,4 +1,4 @@
-class C_PointCamera : public C_BaseEntity
+class C_PointCamera
 {
 	float32 m_FOV;
 	float32 m_Resolution;

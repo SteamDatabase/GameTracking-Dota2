@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Gyrocopter_Homing_Missile : public CDOTA_Buff
+class CDOTA_Modifier_Gyrocopter_Homing_Missile
 {
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXIndex2;

@@ -1,4 +1,4 @@
-class CEnvVolumetricFogController : public CBaseEntity
+class CEnvVolumetricFogController
 {
 	float32 m_flScattering;
 	Color m_TintColor;

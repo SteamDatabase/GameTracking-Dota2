@@ -1,4 +1,4 @@
-class CHitboxComponent : public CEntityComponent
+class CHitboxComponent
 {
 	uint32[1] m_bvDisabledHitGroups;
 };

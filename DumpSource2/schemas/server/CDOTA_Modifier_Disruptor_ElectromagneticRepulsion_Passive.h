@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Disruptor_ElectromagneticRepulsion_Passive : public CDOTA_Buff
+class CDOTA_Modifier_Disruptor_ElectromagneticRepulsion_Passive
 {
 	float32 damage_threshold;
 	float32 effect_radius;

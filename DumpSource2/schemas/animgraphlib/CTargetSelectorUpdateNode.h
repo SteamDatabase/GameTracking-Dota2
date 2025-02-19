@@ -1,9 +1,10 @@
-class CTargetSelectorUpdateNode : public CAnimUpdateNodeBase
+class CTargetSelectorUpdateNode
 {
 	CUtlVector< CAnimUpdateNodeRef > m_children;
 	CAnimParamHandle m_hTargetPosition;
 	CAnimParamHandle m_hTargetFacePositionParameter;
-	CAnimParamHandle m_hForwardDirectionOverrideParameter;
 	bool m_bTargetPositionIsWorldSpace;
 	bool m_bTargetFacePositionIsWorldSpace;
+	bool m_bEnablePhaseMatching;
+	float32 m_flPhaseMatchingMaxRootMotionSkip;
 };

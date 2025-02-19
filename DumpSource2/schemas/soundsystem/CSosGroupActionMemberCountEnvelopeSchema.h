@@ -1,4 +1,4 @@
-class CSosGroupActionMemberCountEnvelopeSchema : public CSosGroupActionSchema
+class CSosGroupActionMemberCountEnvelopeSchema
 {
 	int32 m_nBaseCount;
 	int32 m_nTargetCount;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AbyssalUnderlord_Underling_Spawn_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_AbyssalUnderlord_Underling_Spawn_Thinker
 {
 	float32 underling_search_radius;
 	int32 warrior_health;

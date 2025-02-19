@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nemesis_Curse : public CDOTA_Buff_Item
+class CDOTA_Modifier_Nemesis_Curse
 {
 	int32 debuff_self;
 	float32 debuff_enemy;

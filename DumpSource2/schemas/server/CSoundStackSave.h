@@ -1,4 +1,4 @@
-class CSoundStackSave : public CLogicalEntity
+class CSoundStackSave
 {
 	CUtlSymbolLarge m_iszStackName;
 };

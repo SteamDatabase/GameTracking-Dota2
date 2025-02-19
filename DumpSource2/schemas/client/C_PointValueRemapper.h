@@ -1,4 +1,4 @@
-class C_PointValueRemapper : public C_BaseEntity
+class C_PointValueRemapper
 {
 	bool m_bDisabled;
 	bool m_bDisabledOld;

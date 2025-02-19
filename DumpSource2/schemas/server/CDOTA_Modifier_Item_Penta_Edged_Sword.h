@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Penta_Edged_Sword : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Penta_Edged_Sword
 {
 	int32 damage;
 	int32 maim_chance;

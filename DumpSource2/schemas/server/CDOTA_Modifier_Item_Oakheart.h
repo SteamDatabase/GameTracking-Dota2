@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Oakheart : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Oakheart
 {
 	int32 strength;
 };

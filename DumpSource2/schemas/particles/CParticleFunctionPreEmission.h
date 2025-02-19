@@ -1,4 +1,4 @@
-class CParticleFunctionPreEmission : public CParticleFunctionOperator
+class CParticleFunctionPreEmission
 {
 	bool m_bRunOnce;
 };

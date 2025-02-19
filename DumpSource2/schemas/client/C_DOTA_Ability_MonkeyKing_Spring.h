@@ -1,4 +1,4 @@
-class C_DOTA_Ability_MonkeyKing_Spring : public C_DOTABaseAbility
+class C_DOTA_Ability_MonkeyKing_Spring
 {
 	Vector m_vPos;
 	GameTime_t m_fStartChannelTime;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SpiritBreaker_ChargeOfDarkness_Linger : public CDOTA_Buff
+class CDOTA_Modifier_SpiritBreaker_ChargeOfDarkness_Linger
 {
 	float32 movement_speed;
 };

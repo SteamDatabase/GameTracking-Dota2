@@ -1,4 +1,4 @@
-class CDynamicLight : public CBaseModelEntity
+class CDynamicLight
 {
 	uint8 m_ActualFlags;
 	uint8 m_Flags;

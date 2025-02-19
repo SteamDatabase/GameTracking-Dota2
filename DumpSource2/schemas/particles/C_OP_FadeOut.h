@@ -1,4 +1,4 @@
-class C_OP_FadeOut : public CParticleFunctionOperator
+class C_OP_FadeOut
 {
 	float32 m_flFadeOutTimeMin;
 	float32 m_flFadeOutTimeMax;

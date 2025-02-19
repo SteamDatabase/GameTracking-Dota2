@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mutation_DeathExplosionDelayed : public CDOTA_Buff
+class CDOTA_Modifier_Mutation_DeathExplosionDelayed
 {
 	int32 m_iDamageBase;
 	int32 m_iDamagePerLevel;

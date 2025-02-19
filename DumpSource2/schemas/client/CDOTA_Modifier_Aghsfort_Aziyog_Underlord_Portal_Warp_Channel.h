@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Aghsfort_Aziyog_Underlord_Portal_Warp_Channel : public CDOTA_Buff
+class CDOTA_Modifier_Aghsfort_Aziyog_Underlord_Portal_Warp_Channel
 {
 	ParticleIndex_t m_nfxTargetTp;
 	ParticleIndex_t m_nfxTargetTp2;

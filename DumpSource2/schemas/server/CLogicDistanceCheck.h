@@ -1,4 +1,4 @@
-class CLogicDistanceCheck : public CLogicalEntity
+class CLogicDistanceCheck
 {
 	CUtlSymbolLarge m_iszEntityA;
 	CUtlSymbolLarge m_iszEntityB;

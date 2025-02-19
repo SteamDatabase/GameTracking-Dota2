@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_Tail_Swipe_AirTime : public CDOTA_Buff
+class CDOTA_Modifier_Nian_Tail_Swipe_AirTime
 {
 	float32 m_flStartZ;
 	float32 m_flCurTime;

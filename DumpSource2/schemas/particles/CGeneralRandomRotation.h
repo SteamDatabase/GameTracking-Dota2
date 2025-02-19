@@ -1,4 +1,4 @@
-class CGeneralRandomRotation : public CParticleFunctionInitializer
+class CGeneralRandomRotation
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	float32 m_flDegrees;

@@ -1,4 +1,4 @@
-class ArtySpawnerDef_t : public ArtyGameObjectDef_t
+class ArtySpawnerDef_t
 {
 	float32 m_flInitialDelay;
 	float32 m_flDelayBetween;

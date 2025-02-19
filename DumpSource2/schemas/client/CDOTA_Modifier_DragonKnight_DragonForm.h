@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DragonKnight_DragonForm : public CDOTA_Buff
+class CDOTA_Modifier_DragonKnight_DragonForm
 {
 	int32 bonus_movement_speed;
 	int32 bonus_attack_damage;
@@ -14,4 +14,6 @@ class CDOTA_Modifier_DragonKnight_DragonForm : public CDOTA_Buff
 	int32 is_red_dragon;
 	int32 is_blue_dragon;
 	int32 iAssetIndex;
+	float32 ranged_splash_radius;
+	float32 ranged_splash_damage_pct;
 };

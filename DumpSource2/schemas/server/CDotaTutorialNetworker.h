@@ -1,4 +1,4 @@
-class CDotaTutorialNetworker : public CBaseEntity
+class CDotaTutorialNetworker
 {
 	int32 m_nTutorialState;
 	int32 m_nTaskProgress;

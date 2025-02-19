@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_Ravage_Potion : public CDOTA_Item
+class CDOTA_Ability_AghsFort_Ravage_Potion
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hEntsHit;
 	int32 damage;

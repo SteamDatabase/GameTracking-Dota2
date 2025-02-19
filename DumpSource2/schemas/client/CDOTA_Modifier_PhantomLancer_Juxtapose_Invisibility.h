@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomLancer_Juxtapose_Invisibility : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_PhantomLancer_Juxtapose_Invisibility
 {
 	float32 invis_movespeed;
 };

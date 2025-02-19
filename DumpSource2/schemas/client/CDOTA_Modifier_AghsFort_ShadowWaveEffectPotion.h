@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_ShadowWaveEffectPotion : public CDOTA_Buff_Item
+class CDOTA_Modifier_AghsFort_ShadowWaveEffectPotion
 {
 	int32 m_iCurJumpCount;
 	Vector m_vCurTargetLoc;

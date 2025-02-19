@@ -1,4 +1,4 @@
-class C_INIT_SequenceFromCP : public CParticleFunctionInitializer
+class C_INIT_SequenceFromCP
 {
 	bool m_bKillUnused;
 	bool m_bRadiusScale;

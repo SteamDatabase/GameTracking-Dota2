@@ -1,4 +1,4 @@
-class CSoundOpvarSetEntity : public CBaseEntity
+class CSoundOpvarSetEntity
 {
 	CUtlSymbolLarge m_iszStackName;
 	CUtlSymbolLarge m_iszOperatorName;

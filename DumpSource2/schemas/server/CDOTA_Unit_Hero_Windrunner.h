@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Windrunner : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Windrunner
 {
 	int32 m_nTargetAngle;
 	ParticleIndex_t m_nFXDeath;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pudge_Dismember_Pull : public CDOTA_Buff
+class CDOTA_Modifier_Pudge_Dismember_Pull
 {
 	Vector m_vDestination;
 	int32 pull_units_per_second;

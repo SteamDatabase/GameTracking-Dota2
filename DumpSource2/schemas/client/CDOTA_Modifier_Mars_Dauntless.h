@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mars_Dauntless : public CDOTA_Buff
+class CDOTA_Modifier_Mars_Dauntless
 {
 	float32 radius;
 };

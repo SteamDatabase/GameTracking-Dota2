@@ -1,4 +1,4 @@
-class C_OP_RemapScalarOnceTimed : public CParticleFunctionOperator
+class C_OP_RemapScalarOnceTimed
 {
 	bool m_bProportional;
 	ParticleAttributeIndex_t m_nFieldInput;

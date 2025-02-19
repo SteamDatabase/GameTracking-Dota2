@@ -1,3 +1,3 @@
-class C_INIT_RandomNamedModelMeshGroup : public C_INIT_RandomNamedModelElement
+class C_INIT_RandomNamedModelMeshGroup
 {
 };

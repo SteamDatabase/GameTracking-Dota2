@@ -1,4 +1,4 @@
-class C_OP_BasicMovement : public CParticleFunctionOperator
+class C_OP_BasicMovement
 {
 	CParticleCollectionVecInput m_Gravity;
 	CParticleCollectionFloatInput m_fDrag;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Magnataur_ReversePolarity : public CDOTABaseAbility
+class CDOTA_Ability_Magnataur_ReversePolarity
 {
 	ParticleIndex_t m_nFXIndex;
 	Vector m_vPullLocation;

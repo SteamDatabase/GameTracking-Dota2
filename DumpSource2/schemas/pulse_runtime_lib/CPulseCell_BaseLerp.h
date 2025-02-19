@@ -1,4 +1,4 @@
-class CPulseCell_BaseLerp : public CPulseCell_BaseYieldingInflow
+class CPulseCell_BaseLerp
 {
 	CPulse_ResumePoint m_WakeResume;
 };

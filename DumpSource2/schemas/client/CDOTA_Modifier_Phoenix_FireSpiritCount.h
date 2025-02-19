@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Phoenix_FireSpiritCount : public CDOTA_Buff
+class CDOTA_Modifier_Phoenix_FireSpiritCount
 {
 	ParticleIndex_t m_nFXIndex;
 };

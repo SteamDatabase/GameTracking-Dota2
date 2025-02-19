@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_Hero : public C_DOTA_BaseNPC_Additive
+class C_DOTA_BaseNPC_Hero
 {
 	int32 m_iCurrentXP;
 	int32 m_iAbilityPoints;
@@ -32,7 +32,10 @@ class C_DOTA_BaseNPC_Hero : public C_DOTA_BaseNPC_Additive
 	float32 m_flHurtAmount;
 	GameTime_t m_flLastHurtTime;
 	float32 m_flHurtDecayRate;
+	float32 m_flHealAmount;
 	GameTime_t m_flLastHealTime;
+	float32 m_flHealDecayRate;
+	bool m_bIsFirstTimeHeal;
 	GameTime_t m_flLastTreeShakeTime;
 	CountdownTimer m_CenterOnHeroCooldownTimer;
 	CStrongHandle< InfoForResourceTypeCModel >[4] m_CombinedModels;

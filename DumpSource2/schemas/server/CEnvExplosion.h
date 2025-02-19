@@ -1,15 +1,13 @@
-class CEnvExplosion : public CModelPointEntity
+class CEnvExplosion
 {
 	int32 m_iMagnitude;
 	float32 m_flPlayerDamage;
 	int32 m_iRadiusOverride;
 	float32 m_flInnerRadius;
-	int32 m_spriteScale;
 	float32 m_flDamageForce;
 	CHandle< CBaseEntity > m_hInflictor;
 	DamageTypes_t m_iCustomDamageType;
 	bool m_bCreateDebris;
-	CUtlSymbolLarge m_iszExplosionType;
 	CUtlSymbolLarge m_iszCustomEffectName;
 	CUtlSymbolLarge m_iszCustomSoundName;
 	bool m_bSuppressParticleImpulse;

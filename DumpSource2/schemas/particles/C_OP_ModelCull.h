@@ -1,4 +1,4 @@
-class C_OP_ModelCull : public CParticleFunctionOperator
+class C_OP_ModelCull
 {
 	int32 m_nControlPointNumber;
 	bool m_bBoundBox;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_FiresnapCookie_ShortHop : public CDOTA_Buff
+class CDOTA_Modifier_Snapfire_FiresnapCookie_ShortHop
 {
 	float32 jump_duration;
 	int32 jump_height;

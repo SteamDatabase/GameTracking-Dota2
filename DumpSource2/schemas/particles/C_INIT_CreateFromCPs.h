@@ -1,4 +1,4 @@
-class C_INIT_CreateFromCPs : public CParticleFunctionInitializer
+class C_INIT_CreateFromCPs
 {
 	int32 m_nIncrement;
 	int32 m_nMinCP;

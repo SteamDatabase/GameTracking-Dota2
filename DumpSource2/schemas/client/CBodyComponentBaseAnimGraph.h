@@ -1,4 +1,4 @@
-class CBodyComponentBaseAnimGraph : public CBodyComponentSkeletonInstance
+class CBodyComponentBaseAnimGraph
 {
 	CBaseAnimGraphController m_animationController;
 };

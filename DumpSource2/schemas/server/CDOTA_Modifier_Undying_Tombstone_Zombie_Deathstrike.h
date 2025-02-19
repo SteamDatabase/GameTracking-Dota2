@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Undying_Tombstone_Zombie_Deathstrike : public CDOTA_Buff
+class CDOTA_Modifier_Undying_Tombstone_Zombie_Deathstrike
 {
 	float32 radius;
 	float32 health_threshold_pct;

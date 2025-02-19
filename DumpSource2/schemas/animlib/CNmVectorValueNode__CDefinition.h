@@ -1,3 +1,3 @@
-class CNmVectorValueNode::CDefinition : public CNmValueNode::CDefinition
+class CNmVectorValueNode::CDefinition
 {
 };

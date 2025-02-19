@@ -1,4 +1,4 @@
-class CVoiceContainerSelector : public CVoiceContainerBase
+class CVoiceContainerSelector
 {
 	PlayBackMode_t m_mode;
 	CSoundContainerReferenceArray m_soundsToPlay;

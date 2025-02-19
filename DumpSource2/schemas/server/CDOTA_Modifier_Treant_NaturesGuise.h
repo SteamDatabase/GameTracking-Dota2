@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Treant_NaturesGuise : public CDOTA_Buff
+class CDOTA_Modifier_Treant_NaturesGuise
 {
 	CountdownTimer m_RevealTimer;
 	CountdownTimer m_InvisAttackTimer;

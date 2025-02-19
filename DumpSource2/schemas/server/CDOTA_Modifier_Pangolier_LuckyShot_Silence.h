@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pangolier_LuckyShot_Silence : public CDOTA_Buff
+class CDOTA_Modifier_Pangolier_LuckyShot_Silence
 {
 	int32 slow;
 };

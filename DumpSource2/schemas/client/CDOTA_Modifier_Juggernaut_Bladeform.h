@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Juggernaut_Bladeform : public CDOTA_Buff
+class CDOTA_Modifier_Juggernaut_Bladeform
 {
 	int32 max_stacks;
 	float32 stack_gain_time;

@@ -1,4 +1,4 @@
-class C_OP_MovementRotateParticleAroundAxis : public CParticleFunctionOperator
+class C_OP_MovementRotateParticleAroundAxis
 {
 	CParticleCollectionVecInput m_vecRotAxis;
 	CParticleCollectionFloatInput m_flRotRate;

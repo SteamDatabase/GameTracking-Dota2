@@ -1,3 +1,3 @@
-class CDOTA_Ability_Healing_Campfire : public CDOTABaseAbility
+class CDOTA_Ability_Healing_Campfire
 {
 };

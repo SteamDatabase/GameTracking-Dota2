@@ -1,4 +1,4 @@
-class CDOTAFogOfWarTempViewers : public CBaseEntity
+class CDOTAFogOfWarTempViewers
 {
 	uint32 m_FoWTempViewerVersion;
 	CUtlVectorEmbeddedNetworkVar< TempViewerInfo_t > m_TempViewerInfo;

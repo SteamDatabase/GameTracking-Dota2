@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Disruptor_StaticStormThinker : public CDOTA_Buff
+class CDOTA_Modifier_Disruptor_StaticStormThinker
 {
 	int32 m_nCurrentPulse;
 	float32 radius;

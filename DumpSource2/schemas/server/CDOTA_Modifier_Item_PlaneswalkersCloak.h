@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_PlaneswalkersCloak : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_PlaneswalkersCloak
 {
 	int32 bonus_magical_armor;
 };

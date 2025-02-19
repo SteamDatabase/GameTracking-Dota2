@@ -1,4 +1,4 @@
-class CAmbientCreatures : public C_DOTAWorldParticleSystem
+class CAmbientCreatures
 {
 	CUtlString m_szAnimationName;
 };

@@ -1,4 +1,4 @@
-class C_OP_RenderSprites : public CBaseRendererSource2
+class C_OP_RenderSprites
 {
 	CParticleCollectionRendererFloatInput m_nSequenceOverride;
 	ParticleOrientationChoiceList_t m_nOrientationType;

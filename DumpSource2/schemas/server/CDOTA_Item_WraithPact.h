@@ -1,4 +1,4 @@
-class CDOTA_Item_WraithPact : public CDOTA_Item
+class CDOTA_Item_WraithPact
 {
 	CHandle< CBaseEntity > m_hWard;
 };

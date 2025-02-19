@@ -1,4 +1,4 @@
-class C_DynamicLight : public C_BaseModelEntity
+class C_DynamicLight
 {
 	uint8 m_Flags;
 	uint8 m_LightStyle;

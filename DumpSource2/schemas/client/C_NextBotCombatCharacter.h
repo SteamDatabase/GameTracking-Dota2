@@ -1,4 +1,4 @@
-class C_NextBotCombatCharacter : public C_BaseCombatCharacter
+class C_NextBotCombatCharacter
 {
 	CountdownTimer m_shadowTimer;
 	bool m_bInFrustum;

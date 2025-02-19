@@ -1,4 +1,4 @@
-class CEnvSpark : public CPointEntity
+class CEnvSpark
 {
 	float32 m_flDelay;
 	int32 m_nMagnitude;

@@ -1,4 +1,4 @@
-class C_EnvCombinedLightProbeVolume : public C_BaseEntity
+class C_EnvCombinedLightProbeVolume
 {
 	Color m_Entity_Color;
 	float32 m_Entity_flBrightness;

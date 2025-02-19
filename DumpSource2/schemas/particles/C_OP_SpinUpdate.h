@@ -1,3 +1,3 @@
-class C_OP_SpinUpdate : public CSpinUpdateBase
+class C_OP_SpinUpdate
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Brewmaster_PrimalSplit : public CDOTABaseAbility
+class CDOTA_Ability_Brewmaster_PrimalSplit
 {
 	CHandle< CBaseEntity > m_hPrimary;
 	CHandle< CBaseEntity > m_hSecondary;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Visage_SummonFamiliars_StoneForm_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Visage_SummonFamiliars_StoneForm_Thinker
 {
 	int32 stun_radius;
 	int32 stun_damage;

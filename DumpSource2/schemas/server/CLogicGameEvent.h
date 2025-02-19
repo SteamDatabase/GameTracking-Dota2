@@ -1,4 +1,4 @@
-class CLogicGameEvent : public CLogicalEntity
+class CLogicGameEvent
 {
 	CUtlSymbolLarge m_iszEventName;
 };

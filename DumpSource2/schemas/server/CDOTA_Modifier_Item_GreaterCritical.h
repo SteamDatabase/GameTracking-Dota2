@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_GreaterCritical : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_GreaterCritical
 {
 	int32 bonus_damage;
 	int32 crit_chance;

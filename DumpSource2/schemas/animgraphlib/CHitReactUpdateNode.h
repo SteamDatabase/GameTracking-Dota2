@@ -1,4 +1,4 @@
-class CHitReactUpdateNode : public CUnaryUpdateNode
+class CHitReactUpdateNode
 {
 	HitReactFixedSettings_t m_opFixedSettings;
 	CAnimParamHandle m_triggerParam;

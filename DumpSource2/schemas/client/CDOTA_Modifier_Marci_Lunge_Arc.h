@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Marci_Lunge_Arc : public CDOTA_Buff
+class CDOTA_Modifier_Marci_Lunge_Arc
 {
 	bool m_bTriggeredLandingAnim;
 	int32 m_nMaxJumpDistance;
@@ -14,5 +14,7 @@ class CDOTA_Modifier_Marci_Lunge_Arc : public CDOTA_Buff
 	float32 max_acceleration;
 	float32 impact_damage;
 	int32 impact_position_offset;
+	int32 ally_impact_damage_pct;
 	float32 ally_buff_duration;
+	CHandle< C_BaseEntity > m_hBounceEntity;
 };

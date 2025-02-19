@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Batrider_StickyNapalm_Application : public CDOTA_Buff
+class CDOTA_Modifier_Batrider_StickyNapalm_Application
 {
 	bool m_bShouldApply;
 };

@@ -1,4 +1,4 @@
-class CPrecipitationVData : public CEntitySubclassVDataBase
+class CPrecipitationVData
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szParticlePrecipitationEffect;
 	float32 m_flInnerDistance;

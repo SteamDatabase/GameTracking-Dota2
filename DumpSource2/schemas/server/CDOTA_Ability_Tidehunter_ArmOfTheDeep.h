@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tidehunter_ArmOfTheDeep : public CDOTABaseAbility
+class CDOTA_Ability_Tidehunter_ArmOfTheDeep
 {
 	CUtlVector< CHandle< CBaseEntity > > hAlreadyHitList;
 	float32 duration;

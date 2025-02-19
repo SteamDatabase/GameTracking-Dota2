@@ -1,4 +1,4 @@
-class C_OP_SnapshotSkinToBones : public CParticleFunctionOperator
+class C_OP_SnapshotSkinToBones
 {
 	bool m_bTransformNormals;
 	bool m_bTransformRadii;

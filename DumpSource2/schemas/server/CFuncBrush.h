@@ -1,4 +1,4 @@
-class CFuncBrush : public CBaseModelEntity
+class CFuncBrush
 {
 	BrushSolidities_e m_iSolidity;
 	int32 m_iDisabled;

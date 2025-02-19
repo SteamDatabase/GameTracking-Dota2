@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enigma_Black_Hole_Pull_Scepter : public CDOTA_Buff
+class CDOTA_Modifier_Enigma_Black_Hole_Pull_Scepter
 {
 	int32 scepter_drag_speed;
 	float32 scepter_pull_rotate_speed;

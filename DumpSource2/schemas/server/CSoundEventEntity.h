@@ -1,4 +1,4 @@
-class CSoundEventEntity : public CBaseEntity
+class CSoundEventEntity
 {
 	bool m_bStartOnSpawn;
 	bool m_bToLocalPlayer;

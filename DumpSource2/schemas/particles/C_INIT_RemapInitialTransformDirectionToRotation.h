@@ -1,4 +1,4 @@
-class C_INIT_RemapInitialTransformDirectionToRotation : public CParticleFunctionInitializer
+class C_INIT_RemapInitialTransformDirectionToRotation
 {
 	CParticleTransformInput m_TransformInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

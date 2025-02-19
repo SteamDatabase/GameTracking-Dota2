@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Juggernaut_Bladeform_Linger : public CDOTA_Buff
+class CDOTA_Modifier_Juggernaut_Bladeform_Linger
 {
 	float32 agi_bonus_pct_per_stack;
 	int32 max_stacks;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Zuus_Lightning_Hands : public CDOTA_Buff
+class CDOTA_Modifier_Zuus_Lightning_Hands
 {
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	ParticleIndex_t m_nFXIndex;

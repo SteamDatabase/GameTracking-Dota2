@@ -1,4 +1,4 @@
-class CParticleSystemDefinition : public IParticleSystemDefinition
+class CParticleSystemDefinition
 {
 	int32 m_nBehaviorVersion;
 	CUtlVector< CParticleFunctionPreEmission* > m_PreEmissionOperators;

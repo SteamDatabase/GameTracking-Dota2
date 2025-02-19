@@ -1,3 +1,3 @@
-class C_DotaSubquestPlayerStat : public C_DotaSubquestBase
+class C_DotaSubquestPlayerStat
 {
 };

@@ -1,4 +1,4 @@
-class CMessage : public CPointEntity
+class CMessage
 {
 	CUtlSymbolLarge m_iszMessage;
 	float32 m_MessageVolume;

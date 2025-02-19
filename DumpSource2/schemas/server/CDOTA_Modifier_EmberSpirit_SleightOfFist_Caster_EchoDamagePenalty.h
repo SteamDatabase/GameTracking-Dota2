@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EmberSpirit_SleightOfFist_Caster_EchoDamagePenalty : public CDOTA_Buff
+class CDOTA_Modifier_EmberSpirit_SleightOfFist_Caster_EchoDamagePenalty
 {
 	int32 second_attack_damage_penalty;
 };

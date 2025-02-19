@@ -1,4 +1,4 @@
-class C_DOTATurboHeroPickRules : public C_DOTABaseCustomHeroPickRules
+class C_DOTATurboHeroPickRules
 {
 	DOTACustomHeroPickRulesPhase_t m_Phase;
 };

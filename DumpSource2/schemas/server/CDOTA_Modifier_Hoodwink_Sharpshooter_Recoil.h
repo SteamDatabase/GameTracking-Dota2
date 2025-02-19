@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_Sharpshooter_Recoil : public CDOTA_Buff
+class CDOTA_Modifier_Hoodwink_Sharpshooter_Recoil
 {
 	float32 recoil_duration;
 	int32 recoil_height;

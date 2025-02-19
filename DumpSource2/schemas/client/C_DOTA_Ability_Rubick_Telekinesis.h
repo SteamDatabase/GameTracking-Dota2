@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Rubick_Telekinesis : public C_DOTABaseAbility
+class C_DOTA_Ability_Rubick_Telekinesis
 {
 	Vector m_vStartLocation;
 	Vector m_vLandLocation;

@@ -1,4 +1,4 @@
-class C_DOTA_GuildBannerDynamic : public C_DynamicProp
+class C_DOTA_GuildBannerDynamic
 {
 	bool m_bRespawnClientEntity;
 	bool m_bPlaySpawnAnimation;

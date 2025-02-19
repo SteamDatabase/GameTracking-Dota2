@@ -1,4 +1,4 @@
-class C_INIT_PositionOffset : public CParticleFunctionInitializer
+class C_INIT_PositionOffset
 {
 	CPerParticleVecInput m_OffsetMin;
 	CPerParticleVecInput m_OffsetMax;

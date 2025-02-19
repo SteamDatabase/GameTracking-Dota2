@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Magnataur_ReversePolarity_Stats : public CDOTA_Buff
+class CDOTA_Modifier_Magnataur_ReversePolarity_Stats
 {
 	int32 stats_per_stack;
 };

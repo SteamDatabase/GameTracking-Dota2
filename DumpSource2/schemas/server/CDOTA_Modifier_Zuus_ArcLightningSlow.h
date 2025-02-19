@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Zuus_ArcLightningSlow : public CDOTA_Buff
+class CDOTA_Modifier_Zuus_ArcLightningSlow
 {
 };

@@ -1,5 +1,4 @@
-class CDOTA_Modifier_Item_MaskOfDeath : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_MaskOfDeath
 {
-	int32 lifesteal_percent;
-	int32 creep_lifesteal_reduction_pct;
+	float32 lifesteal_percent;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_Pounce : public CDOTA_Buff
+class CDOTA_Modifier_Slark_Pounce
 {
 	int32 pounce_distance;
 	int32 pounce_distance_scepter;

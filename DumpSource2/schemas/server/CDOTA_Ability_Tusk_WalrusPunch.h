@@ -1,3 +1,3 @@
-class CDOTA_Ability_Tusk_WalrusPunch : public CDOTABaseAbility
+class CDOTA_Ability_Tusk_WalrusPunch
 {
 };

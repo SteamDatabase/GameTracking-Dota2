@@ -1,6 +1,10 @@
-class CDOTA_Modifier_Roshan_Moving : public CDOTA_Buff
+class CDOTA_Modifier_Roshan_Moving
 {
-	int32 movement_speed;
-	CHandle< C_BaseEntity > m_hTarget;
-	bool m_bFlipped;
+	int32 move_pits_bonus_speed_per_interrupt;
+	int32 move_pits_max_bonus_speed;
+	int32 move_pits_slow_resistance;
+	bool m_bReachedMidpoint;
+	int32 m_nInterruptCount;
+	float32 m_flGrabAttemptTime;
+	GameTime_t m_flLastInterrupted;
 };

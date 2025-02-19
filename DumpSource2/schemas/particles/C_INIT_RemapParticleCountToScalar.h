@@ -1,4 +1,4 @@
-class C_INIT_RemapParticleCountToScalar : public CParticleFunctionInitializer
+class C_INIT_RemapParticleCountToScalar
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	int32 m_nInputMin;

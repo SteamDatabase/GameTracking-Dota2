@@ -1,4 +1,4 @@
-class CDOTA_Modifier_GiantWolf_Intimidate : public CDOTA_Buff
+class CDOTA_Modifier_GiantWolf_Intimidate
 {
 	int32 damage_reduction;
 };

@@ -1,4 +1,4 @@
-class CInstancedSceneEntity : public CSceneEntity
+class CInstancedSceneEntity
 {
 	CHandle< CBaseEntity > m_hOwner;
 	bool m_bHadOwner;

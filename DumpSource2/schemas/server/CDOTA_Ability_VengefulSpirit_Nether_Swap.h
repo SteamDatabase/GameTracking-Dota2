@@ -1,4 +1,4 @@
-class CDOTA_Ability_VengefulSpirit_Nether_Swap : public CDOTABaseAbility
+class CDOTA_Ability_VengefulSpirit_Nether_Swap
 {
 	int32 m_nFXIndex;
 	int32 damage;

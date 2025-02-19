@@ -1,3 +1,3 @@
-class CDOTA_Ability_LoneDruid_SavageRoar : public CDOTABaseAbility
+class CDOTA_Ability_LoneDruid_SavageRoar
 {
 };

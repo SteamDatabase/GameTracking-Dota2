@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NianChargePinned : public CDOTA_Buff
+class CDOTA_Modifier_NianChargePinned
 {
 	float32 pinned_damage_amount;
 	float32 pinned_damage_interval;

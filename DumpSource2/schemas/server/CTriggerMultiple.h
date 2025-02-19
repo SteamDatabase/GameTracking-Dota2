@@ -1,4 +1,4 @@
-class CTriggerMultiple : public CBaseTrigger
+class CTriggerMultiple
 {
 	CEntityIOOutput m_OnTrigger;
 };

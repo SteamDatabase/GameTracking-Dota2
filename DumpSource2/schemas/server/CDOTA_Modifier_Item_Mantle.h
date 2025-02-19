@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Mantle : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Mantle
 {
 	int32 bonus_intellect;
 };

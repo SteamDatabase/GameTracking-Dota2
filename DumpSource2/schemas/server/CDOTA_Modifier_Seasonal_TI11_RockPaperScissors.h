@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seasonal_TI11_RockPaperScissors : public CDOTA_Buff
+class CDOTA_Modifier_Seasonal_TI11_RockPaperScissors
 {
 	float32 challenge_duration;
 	float32 reveal_duration;

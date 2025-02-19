@@ -1,3 +1,3 @@
-class CDOTA_Ability_Kunkka_Torrent : public CDOTABaseAbility
+class CDOTA_Ability_Kunkka_Torrent
 {
 };

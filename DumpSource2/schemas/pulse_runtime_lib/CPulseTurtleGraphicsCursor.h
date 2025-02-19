@@ -1,4 +1,4 @@
-class CPulseTurtleGraphicsCursor : public CPulseExecCursor
+class CPulseTurtleGraphicsCursor
 {
 	Color m_Color;
 	Vector2D m_vPos;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ForceStaff : public CDOTA_Buff
+class CDOTA_Modifier_ForceStaff
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

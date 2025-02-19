@@ -1,4 +1,4 @@
-class CSkyboxReference : public C_BaseEntity
+class CSkyboxReference
 {
 	WorldGroupId_t m_worldGroupId;
 	CHandle< C_SkyCamera > m_hSkyCamera;

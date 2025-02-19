@@ -1,4 +1,4 @@
-class C_INIT_CreateSequentialPath : public CParticleFunctionInitializer
+class C_INIT_CreateSequentialPath
 {
 	float32 m_fMaxDistance;
 	float32 m_flNumToAssign;

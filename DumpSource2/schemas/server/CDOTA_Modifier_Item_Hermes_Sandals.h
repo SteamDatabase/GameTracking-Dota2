@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Hermes_Sandals : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Hermes_Sandals
 {
 	int32 bonus_movement_speed;
 	int32 bonus_damage_melee;

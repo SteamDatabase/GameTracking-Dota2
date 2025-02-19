@@ -1,4 +1,4 @@
-class C_EnvScreenOverlay : public C_PointEntity
+class C_EnvScreenOverlay
 {
 	CUtlSymbolLarge[10] m_iszOverlayNames;
 	float32[10] m_flOverlayTimes;

@@ -1,4 +1,4 @@
-class C_INIT_CreateSequentialPathV2 : public CParticleFunctionInitializer
+class C_INIT_CreateSequentialPathV2
 {
 	CPerParticleFloatInput m_fMaxDistance;
 	CParticleCollectionFloatInput m_flNumToAssign;

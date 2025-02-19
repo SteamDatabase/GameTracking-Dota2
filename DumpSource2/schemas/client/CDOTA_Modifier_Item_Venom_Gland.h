@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Venom_Gland : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Venom_Gland
 {
 	int32 primary_attribute;
 	int32 debuff_amp;

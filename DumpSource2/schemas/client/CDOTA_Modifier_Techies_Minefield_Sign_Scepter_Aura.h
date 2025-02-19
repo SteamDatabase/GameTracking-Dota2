@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_Minefield_Sign_Scepter_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Techies_Minefield_Sign_Scepter_Aura
 {
 	float32 aura_radius;
 	float32 scepter_move_damage;

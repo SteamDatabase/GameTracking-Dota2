@@ -1,3 +1,3 @@
-class CDOTA_Ability_Windrunner_FocusFire_End : public CDOTABaseAbility
+class CDOTA_Ability_Windrunner_FocusFire_End
 {
 };

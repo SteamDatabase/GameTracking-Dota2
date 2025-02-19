@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Venomancer_NoxiousPlagueSecondary : public CDOTA_Buff
+class CDOTA_Modifier_Venomancer_NoxiousPlagueSecondary
 {
 	float32 health_damage;
 	float32 attack_slow;

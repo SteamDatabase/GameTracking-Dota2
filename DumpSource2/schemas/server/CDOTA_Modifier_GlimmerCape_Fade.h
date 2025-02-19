@@ -1,4 +1,4 @@
-class CDOTA_Modifier_GlimmerCape_Fade : public CDOTA_Buff
+class CDOTA_Modifier_GlimmerCape_Fade
 {
 	int32 active_movement_speed;
 	int32 barrier_block;

@@ -1,4 +1,4 @@
-class CNmFloatCurveNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFloatCurveNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	CPiecewiseCurve m_curve;

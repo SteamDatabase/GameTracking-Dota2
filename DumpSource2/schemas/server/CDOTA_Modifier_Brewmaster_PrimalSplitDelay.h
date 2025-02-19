@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_PrimalSplitDelay : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_PrimalSplitDelay
 {
 	ParticleIndex_t m_nFXIndex;
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_AghsFort_Creature_SpikedCarapace : public CDOTABaseAbility
+class CDOTA_Ability_AghsFort_Creature_SpikedCarapace
 {
 };

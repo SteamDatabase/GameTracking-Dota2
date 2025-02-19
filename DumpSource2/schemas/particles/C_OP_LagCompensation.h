@@ -1,4 +1,4 @@
-class C_OP_LagCompensation : public CParticleFunctionOperator
+class C_OP_LagCompensation
 {
 	int32 m_nDesiredVelocityCP;
 	int32 m_nLatencyCP;

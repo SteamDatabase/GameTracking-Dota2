@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tutorial_HideNPC : public CDOTA_Buff
+class CDOTA_Modifier_Tutorial_HideNPC
 {
 	bool m_bRemoveOnDeath;
 };

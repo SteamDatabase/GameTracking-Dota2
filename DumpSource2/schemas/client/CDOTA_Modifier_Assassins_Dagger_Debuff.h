@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Assassins_Dagger_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Assassins_Dagger_Debuff
 {
 	int32 armor_debuff;
 };

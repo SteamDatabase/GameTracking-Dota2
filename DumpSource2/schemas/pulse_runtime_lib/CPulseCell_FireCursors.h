@@ -1,4 +1,4 @@
-class CPulseCell_FireCursors : public CPulseCell_BaseYieldingInflow
+class CPulseCell_FireCursors
 {
 	CUtlVector< CPulse_OutflowConnection > m_Outflows;
 	bool m_bWaitForChildOutflows;

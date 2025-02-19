@@ -1,4 +1,4 @@
-class C_INIT_InitialVelocityNoise : public CParticleFunctionInitializer
+class C_INIT_InitialVelocityNoise
 {
 	Vector m_vecAbsVal;
 	Vector m_vecAbsValInv;

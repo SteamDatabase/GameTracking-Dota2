@@ -1,3 +1,3 @@
-class CPulseCell_BaseFlow : public CPulseCell_Base
+class CPulseCell_BaseFlow
 {
 };

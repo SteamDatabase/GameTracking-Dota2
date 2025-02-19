@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_QuadrupleTap_Bonuses : public CDOTA_Buff
+class CDOTA_Modifier_MonkeyKing_QuadrupleTap_Bonuses
 {
 	int32 charges;
 	int32 bonus_damage;

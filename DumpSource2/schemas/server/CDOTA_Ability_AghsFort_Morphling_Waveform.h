@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_Morphling_Waveform : public CDOTABaseAbility
+class CDOTA_Ability_AghsFort_Morphling_Waveform
 {
 	int32 m_nProjectileID;
 	Vector m_vProjectileLocation;

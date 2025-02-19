@@ -1,4 +1,4 @@
-class C_OP_LockToPointList : public CParticleFunctionOperator
+class C_OP_LockToPointList
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CUtlVector< PointDefinition_t > m_pointList;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_Camouflage : public CDOTA_Buff
+class CDOTA_Modifier_Hoodwink_Camouflage
 {
 	float32 fade_time;
 	GameTime_t m_flFadeTime;

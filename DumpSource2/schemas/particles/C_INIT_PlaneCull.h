@@ -1,4 +1,4 @@
-class C_INIT_PlaneCull : public CParticleFunctionInitializer
+class C_INIT_PlaneCull
 {
 	int32 m_nControlPoint;
 	CParticleCollectionFloatInput m_flDistance;

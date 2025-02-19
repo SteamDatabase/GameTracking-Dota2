@@ -1,4 +1,4 @@
-class CTeamTrackedStatsEntity : public CBaseTrackedStatsEntity
+class CTeamTrackedStatsEntity
 {
 	DOTATeam_t m_nTeam;
 };

@@ -1,4 +1,4 @@
-class CJiggleBoneUpdateNode : public CUnaryUpdateNode
+class CJiggleBoneUpdateNode
 {
 	JiggleBoneSettingsList_t m_opFixedData;
 };

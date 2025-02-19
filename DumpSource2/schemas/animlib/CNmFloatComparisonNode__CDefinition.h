@@ -1,4 +1,4 @@
-class CNmFloatComparisonNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmFloatComparisonNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	int16 m_nComparandValueNodeIdx;

@@ -1,4 +1,4 @@
-class C_OP_RemapDotProductToCP : public CParticleFunctionPreEmission
+class C_OP_RemapDotProductToCP
 {
 	int32 m_nInputCP1;
 	int32 m_nInputCP2;

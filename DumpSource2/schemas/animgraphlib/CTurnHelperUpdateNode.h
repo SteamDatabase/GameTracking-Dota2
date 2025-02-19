@@ -1,4 +1,4 @@
-class CTurnHelperUpdateNode : public CUnaryUpdateNode
+class CTurnHelperUpdateNode
 {
 	AnimValueSource m_facingTarget;
 	float32 m_turnStartTimeOffset;

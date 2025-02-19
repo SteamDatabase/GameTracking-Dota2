@@ -1,4 +1,4 @@
-class CPathTrack : public CPointEntity
+class CPathTrack
 {
 	CPathTrack* m_pnext;
 	CPathTrack* m_pprevious;

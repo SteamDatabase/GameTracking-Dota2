@@ -1,4 +1,4 @@
-class C_INIT_RandomRadius : public CParticleFunctionInitializer
+class C_INIT_RandomRadius
 {
 	float32 m_flRadiusMin;
 	float32 m_flRadiusMax;

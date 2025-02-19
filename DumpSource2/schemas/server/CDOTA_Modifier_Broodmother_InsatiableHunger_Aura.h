@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Broodmother_InsatiableHunger_Aura : public CDOTA_Buff
+class CDOTA_Modifier_Broodmother_InsatiableHunger_Aura
 {
 	float32 aura_radius;
 };

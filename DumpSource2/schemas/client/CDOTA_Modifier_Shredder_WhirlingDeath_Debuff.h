@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_WhirlingDeath_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Shredder_WhirlingDeath_Debuff
 {
 	float32 stat_loss_pct;
 	int32 stat_loss_univ;

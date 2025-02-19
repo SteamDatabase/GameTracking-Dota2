@@ -1,4 +1,4 @@
-class CDOTA_NPC_Treant_EyesInTheForest : public CDOTA_BaseNPC_Additive
+class CDOTA_NPC_Treant_EyesInTheForest
 {
 	bool m_bIsBlind;
 };

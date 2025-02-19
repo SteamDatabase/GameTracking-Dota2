@@ -1,4 +1,4 @@
-class CDotaSubquestPlayerStat : public CDotaSubquestBase
+class CDotaSubquestPlayerStat
 {
 	subquest_player_stat_types_t m_ePlayerStatType;
 	int32 m_nPlayerStatValue;

@@ -1,4 +1,4 @@
-class CDOTA_Item_Boots_Of_Bearing : public CDOTA_Item
+class CDOTA_Item_Boots_Of_Bearing
 {
 	float32 radius;
 };

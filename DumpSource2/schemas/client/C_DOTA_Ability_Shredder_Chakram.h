@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Shredder_Chakram : public C_DOTABaseAbility
+class C_DOTA_Ability_Shredder_Chakram
 {
 	float32 radius;
 	float32 speed;

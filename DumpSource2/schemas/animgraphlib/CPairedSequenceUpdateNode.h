@@ -1,4 +1,4 @@
-class CPairedSequenceUpdateNode : public CSequenceUpdateNodeBase
+class CPairedSequenceUpdateNode
 {
 	CGlobalSymbol m_sPairedSequenceRole;
 };

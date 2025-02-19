@@ -1,4 +1,4 @@
-class CAnimGraphNetworkSettings : public CAnimGraphSettingsGroup
+class CAnimGraphNetworkSettings
 {
 	bool m_bNetworkingEnabled;
 };

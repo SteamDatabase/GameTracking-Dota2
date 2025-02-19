@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_AbyssalUnderlord : public C_DOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_AbyssalUnderlord
 {
 	ParticleIndex_t m_iRangeFX;
 };

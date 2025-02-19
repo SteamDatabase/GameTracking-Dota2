@@ -1,4 +1,4 @@
-class CDOTA_Modifier_QueenOfPain_Arcana : public CDOTA_Buff
+class CDOTA_Modifier_QueenOfPain_Arcana
 {
 	bool m_bIsMeleeAttack;
 };

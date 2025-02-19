@@ -1,4 +1,4 @@
-class C_OP_LockToSavedSequentialPath : public CParticleFunctionOperator
+class C_OP_LockToSavedSequentialPath
 {
 	float32 m_flFadeStart;
 	float32 m_flFadeEnd;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bristleback_Active_ConicalQuillSpray : public CDOTA_Buff
+class CDOTA_Modifier_Bristleback_Active_ConicalQuillSpray
 {
 	int32 activation_num_quill_sprays;
 	float32 activation_spray_interval;

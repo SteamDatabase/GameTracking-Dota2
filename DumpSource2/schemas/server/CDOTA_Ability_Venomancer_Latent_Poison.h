@@ -1,4 +1,4 @@
-class CDOTA_Ability_Venomancer_Latent_Poison : public CDOTABaseAbility
+class CDOTA_Ability_Venomancer_Latent_Poison
 {
 	Vector projectile_speed;
 };

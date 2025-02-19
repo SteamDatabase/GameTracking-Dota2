@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Plus_HighFiveRequested : public CDOTA_Buff
+class CDOTA_Modifier_Plus_HighFiveRequested
 {
 	int32 acknowledge_range;
 	float32 think_interval;

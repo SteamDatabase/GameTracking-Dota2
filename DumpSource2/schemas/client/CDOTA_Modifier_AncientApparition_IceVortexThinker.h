@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AncientApparition_IceVortexThinker : public CDOTA_Buff
+class CDOTA_Modifier_AncientApparition_IceVortexThinker
 {
 	float32 radius;
 	int32 movement_speed_pct;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Ringmaster_Wheel : public CDOTABaseAbility
+class CDOTA_Ability_Ringmaster_Wheel
 {
 	Vector m_vStartPos;
 	int32 min_range;

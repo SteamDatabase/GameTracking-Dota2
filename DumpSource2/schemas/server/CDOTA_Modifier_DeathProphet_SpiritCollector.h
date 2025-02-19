@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DeathProphet_SpiritCollector : public CDOTA_Buff
+class CDOTA_Modifier_DeathProphet_SpiritCollector
 {
 	CUtlVector< CHandle< CBaseEntity > > m_vecDeadHeroes;
 };

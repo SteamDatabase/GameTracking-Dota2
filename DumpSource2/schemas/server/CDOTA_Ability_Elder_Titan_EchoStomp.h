@@ -1,4 +1,4 @@
-class CDOTA_Ability_Elder_Titan_EchoStomp : public CDOTABaseAbility
+class CDOTA_Ability_Elder_Titan_EchoStomp
 {
 	ParticleIndex_t m_nFXIndexTitan;
 	ParticleIndex_t m_nFXIndexSpirit;

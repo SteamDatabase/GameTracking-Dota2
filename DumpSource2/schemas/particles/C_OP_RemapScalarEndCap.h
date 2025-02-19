@@ -1,4 +1,4 @@
-class C_OP_RemapScalarEndCap : public CParticleFunctionOperator
+class C_OP_RemapScalarEndCap
 {
 	ParticleAttributeIndex_t m_nFieldInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

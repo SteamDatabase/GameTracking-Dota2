@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Aghsfort_Reward_ArmorAura : public CDOTA_Buff
+class CDOTA_Modifier_Aghsfort_Reward_ArmorAura
 {
 	float32 radius;
 };

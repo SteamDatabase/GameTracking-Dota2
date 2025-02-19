@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FacelessVoid_TimeLock : public CDOTA_Buff
+class CDOTA_Modifier_FacelessVoid_TimeLock
 {
 	float32 duration;
 	float32 duration_creep;

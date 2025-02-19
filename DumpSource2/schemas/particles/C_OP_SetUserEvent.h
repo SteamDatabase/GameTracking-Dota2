@@ -1,4 +1,4 @@
-class C_OP_SetUserEvent : public CParticleFunctionOperator
+class C_OP_SetUserEvent
 {
 	CPerParticleFloatInput m_flInput;
 	CPerParticleFloatInput m_flRisingEdge;

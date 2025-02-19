@@ -1,4 +1,4 @@
-class CHandshakeAnimTagBase : public CAnimTagBase
+class CHandshakeAnimTagBase
 {
 	bool m_bIsDisableTag;
 };

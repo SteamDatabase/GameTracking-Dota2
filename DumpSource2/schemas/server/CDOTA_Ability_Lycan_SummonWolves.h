@@ -1,4 +1,4 @@
-class CDOTA_Ability_Lycan_SummonWolves : public CDOTABaseAbility
+class CDOTA_Ability_Lycan_SummonWolves
 {
 	char[4096] szUnitName;
 	int32 wolf_index;

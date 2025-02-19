@@ -64,6 +64,8 @@ class DataTeamPlayer_t
 	WeightedAbilitySuggestion_t[15] m_iSuggestedWeightedItems;
 	WeightedAbilitySuggestion_t[3] m_iSuggestedTopNItems;
 	WeightedAbilitySuggestion_t[30] m_iSuggestedNeutralItems;
+	WeightedAbilitySuggestion_t[5] m_iSuggestedNeutralTrinkets;
+	WeightedAbilitySuggestion_t[5] m_iSuggestedNeutralEnhancements;
 	HeroID_t[10] m_iSuggestedHeroes;
 	float32[10] m_flSuggestedHeroesWeights;
 	int32[3] m_iDamageByTypeReceivedPreReduction;
@@ -86,4 +88,7 @@ class DataTeamPlayer_t
 	int32 m_iLotusesTaken;
 	int32 m_iTormentorKills;
 	int32 m_iCourierKills;
+	int32 m_nAcquiredMadstone;
+	int32 m_nCurrentMadstone;
+	PlayerNeutralChoices_t m_NeutralChoices;
 };

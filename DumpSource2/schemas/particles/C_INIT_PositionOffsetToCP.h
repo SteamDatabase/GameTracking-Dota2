@@ -1,4 +1,4 @@
-class C_INIT_PositionOffsetToCP : public CParticleFunctionInitializer
+class C_INIT_PositionOffsetToCP
 {
 	int32 m_nControlPointNumberStart;
 	int32 m_nControlPointNumberEnd;

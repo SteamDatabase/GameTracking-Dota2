@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Cast_Speed_30 : public CDOTABaseAbility
+class CDOTA_Ability_Special_Bonus_Cast_Speed_30
 {
 };

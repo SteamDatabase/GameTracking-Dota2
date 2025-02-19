@@ -1,4 +1,4 @@
-class CDOTACustomGameHeroPickRules : public CDOTABaseCustomHeroPickRules
+class CDOTACustomGameHeroPickRules
 {
 	DOTACustomHeroPickRulesPhase_t m_Phase;
 	int32 m_nNumBansPerTeam;

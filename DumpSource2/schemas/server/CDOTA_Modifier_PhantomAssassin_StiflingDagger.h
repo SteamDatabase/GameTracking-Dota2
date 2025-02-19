@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomAssassin_StiflingDagger : public CDOTA_Buff
+class CDOTA_Modifier_PhantomAssassin_StiflingDagger
 {
 	int32 move_slow;
 };

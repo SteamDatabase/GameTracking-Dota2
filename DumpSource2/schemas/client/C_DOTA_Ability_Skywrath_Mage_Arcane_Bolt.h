@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Skywrath_Mage_Arcane_Bolt : public C_DOTABaseAbility
+class C_DOTA_Ability_Skywrath_Mage_Arcane_Bolt
 {
 	int32 bolt_vision;
 	float32 vision_duration;

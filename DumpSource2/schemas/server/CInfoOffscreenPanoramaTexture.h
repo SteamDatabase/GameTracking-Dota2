@@ -1,4 +1,4 @@
-class CInfoOffscreenPanoramaTexture : public CPointEntity
+class CInfoOffscreenPanoramaTexture
 {
 	bool m_bDisabled;
 	int32 m_nResolutionX;

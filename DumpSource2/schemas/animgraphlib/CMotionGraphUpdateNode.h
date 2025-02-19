@@ -1,4 +1,4 @@
-class CMotionGraphUpdateNode : public CLeafUpdateNode
+class CMotionGraphUpdateNode
 {
 	CSmartPtr< CMotionGraph > m_pMotionGraph;
 };

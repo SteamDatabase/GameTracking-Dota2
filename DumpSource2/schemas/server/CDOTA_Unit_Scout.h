@@ -1,4 +1,4 @@
-class CDOTA_Unit_Scout : public CDOTA_BaseNPC_Additive
+class CDOTA_Unit_Scout
 {
 	bool m_bUnitRespawned;
 	PlayerID_t m_nSoleControllingPlayer;

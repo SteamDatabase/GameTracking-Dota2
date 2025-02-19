@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VoidSpirit_AetherRemnantThinker : public CDOTA_Buff
+class CDOTA_Modifier_VoidSpirit_AetherRemnantThinker
 {
 	int32 radius;
 	Vector m_vFacingDir;

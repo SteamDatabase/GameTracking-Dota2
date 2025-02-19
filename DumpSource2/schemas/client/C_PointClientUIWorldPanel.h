@@ -1,4 +1,4 @@
-class C_PointClientUIWorldPanel : public C_BaseClientUIEntity
+class C_PointClientUIWorldPanel
 {
 	bool m_bForceRecreateNextUpdate;
 	bool m_bMoveViewToPlayerNextThink;

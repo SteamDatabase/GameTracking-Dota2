@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Necrolyte_Heartstopper_Aura_Effect : public CDOTA_Buff
+class CDOTA_Modifier_Necrolyte_Heartstopper_Aura_Effect
 {
 	float32 aura_damage;
 	int32 heal_reduction_pct;

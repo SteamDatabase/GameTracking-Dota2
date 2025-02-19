@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Batrider_Firefly : public CDOTA_Buff
+class CDOTA_Modifier_Batrider_Firefly
 {
 	bool m_bActive;
 	int32 radius;

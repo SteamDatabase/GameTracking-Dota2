@@ -1,3 +1,3 @@
-class CDOTA_Ability_FacelessVoid_TimeDilation : public CDOTABaseAbility
+class CDOTA_Ability_FacelessVoid_TimeDilation
 {
 };

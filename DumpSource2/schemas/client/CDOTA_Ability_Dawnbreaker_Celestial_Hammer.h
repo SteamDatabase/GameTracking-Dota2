@@ -1,4 +1,4 @@
-class CDOTA_Ability_Dawnbreaker_Celestial_Hammer : public C_DOTABaseAbility
+class CDOTA_Ability_Dawnbreaker_Celestial_Hammer
 {
 	int32 m_nProjectileIndex;
 	int32 m_nReturnProjectileID;
@@ -21,6 +21,7 @@ class CDOTA_Ability_Dawnbreaker_Celestial_Hammer : public C_DOTABaseAbility
 	int32 hammer_damage;
 	int32 hammer_aoe_radius;
 	int32 flare_radius;
+	float32 fire_trail_health_regen;
 	bool bHasStartedBurning;
 	float32 flare_debuff_duration;
 	int32 return_anim_distance_threshold;

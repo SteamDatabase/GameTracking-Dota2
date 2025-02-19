@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Kez_SwitchWeapons : public C_DOTABaseAbility
+class C_DOTA_Ability_Kez_SwitchWeapons
 {
 	bool m_bSai;
 };

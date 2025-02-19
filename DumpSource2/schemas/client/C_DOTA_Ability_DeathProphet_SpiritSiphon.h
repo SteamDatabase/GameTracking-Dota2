@@ -1,4 +1,4 @@
-class C_DOTA_Ability_DeathProphet_SpiritSiphon : public C_DOTABaseAbility
+class C_DOTA_Ability_DeathProphet_SpiritSiphon
 {
 	Vector m_vStartPos;
 	int32 m_iArrowProjectile;

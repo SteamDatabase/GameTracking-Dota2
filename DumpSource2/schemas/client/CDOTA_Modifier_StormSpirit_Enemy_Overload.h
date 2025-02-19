@@ -1,4 +1,4 @@
-class CDOTA_Modifier_StormSpirit_Enemy_Overload : public CDOTA_Buff
+class CDOTA_Modifier_StormSpirit_Enemy_Overload
 {
 	float32 overload_aoe;
 	CUtlVector< CHandle< C_BaseEntity > > m_vecHitUnits;

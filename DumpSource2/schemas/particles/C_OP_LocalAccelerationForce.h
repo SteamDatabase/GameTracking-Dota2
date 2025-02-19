@@ -1,4 +1,4 @@
-class C_OP_LocalAccelerationForce : public CParticleFunctionForce
+class C_OP_LocalAccelerationForce
 {
 	int32 m_nCP;
 	int32 m_nScaleCP;

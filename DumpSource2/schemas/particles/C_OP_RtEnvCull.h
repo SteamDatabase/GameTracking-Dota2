@@ -1,4 +1,4 @@
-class C_OP_RtEnvCull : public CParticleFunctionOperator
+class C_OP_RtEnvCull
 {
 	Vector m_vecTestDir;
 	Vector m_vecTestNormal;

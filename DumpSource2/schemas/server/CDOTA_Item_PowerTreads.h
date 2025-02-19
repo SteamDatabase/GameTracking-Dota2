@@ -1,4 +1,4 @@
-class CDOTA_Item_PowerTreads : public CDOTA_Item
+class CDOTA_Item_PowerTreads
 {
 	int32 m_iStat;
 };

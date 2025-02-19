@@ -1,4 +1,4 @@
-class C_DOTA_Ability_QueenOfPain_SonicWave : public C_DOTABaseAbility
+class C_DOTA_Ability_QueenOfPain_SonicWave
 {
 	GameTime_t m_fStartTime;
 	float32 m_fTotalTime;

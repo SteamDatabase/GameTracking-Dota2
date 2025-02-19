@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lina_Fiery_Cloak : public CDOTA_Buff
+class CDOTA_Modifier_Lina_Fiery_Cloak
 {
 	int32 magic_resistance;
 	int32 spell_amp;

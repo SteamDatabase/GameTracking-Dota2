@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kunkka_Torrent : public CDOTA_Buff
+class CDOTA_Modifier_Kunkka_Torrent
 {
 	int32 torrent_damage;
 	float32 damage_tick_interval;

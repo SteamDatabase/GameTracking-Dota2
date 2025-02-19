@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Generic_Hidden : public CDOTA_Buff
+class CDOTA_Modifier_Generic_Hidden
 {
 };

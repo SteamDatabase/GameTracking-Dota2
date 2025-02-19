@@ -1,4 +1,4 @@
-class C_OP_RenderStatusEffectCitadel : public CParticleFunctionRenderer
+class C_OP_RenderStatusEffectCitadel
 {
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_pTextureColorWarp;
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_pTextureNormal;

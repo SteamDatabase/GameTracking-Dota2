@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Warlock_Rain_of_Chaos_Leash : public CDOTA_Buff
+class CDOTA_Modifier_Warlock_Rain_of_Chaos_Leash
 {
 	float32 m_flMaxMovespeed;
 	float32 leash_start_radius;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Seasonal_TI9_Shovel : public CDOTABaseAbility
+class CDOTA_Ability_Seasonal_TI9_Shovel
 {
 	Vector m_vChannelPos;
 	bool m_bIsUnderwater;

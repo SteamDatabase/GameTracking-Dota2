@@ -1,3 +1,3 @@
-class CLocomotionBase : public INextBotComponent
+class CLocomotionBase
 {
 };

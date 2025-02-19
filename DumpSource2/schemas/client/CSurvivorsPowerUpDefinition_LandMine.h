@@ -1,4 +1,4 @@
-class CSurvivorsPowerUpDefinition_LandMine : public CSurvivorsPowerUpDefinition
+class CSurvivorsPowerUpDefinition_LandMine
 {
 	float32 m_flScepterVacuumRadius;
 	float32 m_flScepterVacuumDistance;

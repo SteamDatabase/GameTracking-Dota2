@@ -1,4 +1,4 @@
-class C_DOTA_Ability_EarthSpirit_Magnetize : public C_DOTABaseAbility
+class C_DOTA_Ability_EarthSpirit_Magnetize
 {
 	int32 cast_radius;
 	int32 rock_explosion_radius;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_SpiritBear_AttackCheck : public CDOTA_Buff
+class CDOTA_Modifier_LoneDruid_SpiritBear_AttackCheck
 {
 	bool m_bCanBeResummoned;
 	bool m_bCanAttack;

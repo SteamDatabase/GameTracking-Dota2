@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Intelligence : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Intelligence
 {
 	int32 value;
 };

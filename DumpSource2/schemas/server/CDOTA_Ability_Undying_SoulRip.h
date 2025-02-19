@@ -1,4 +1,4 @@
-class CDOTA_Ability_Undying_SoulRip : public CDOTABaseAbility
+class CDOTA_Ability_Undying_SoulRip
 {
 	int32 damage_per_unit;
 	float32 radius;

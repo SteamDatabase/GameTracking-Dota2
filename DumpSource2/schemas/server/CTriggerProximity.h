@@ -1,4 +1,4 @@
-class CTriggerProximity : public CBaseTrigger
+class CTriggerProximity
 {
 	CHandle< CBaseEntity > m_hMeasureTarget;
 	CUtlSymbolLarge m_iszMeasureTarget;

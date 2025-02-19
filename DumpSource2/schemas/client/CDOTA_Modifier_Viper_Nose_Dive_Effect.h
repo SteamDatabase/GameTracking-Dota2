@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Viper_Nose_Dive_Effect : public CDOTA_Buff
+class CDOTA_Modifier_Viper_Nose_Dive_Effect
 {
 	int32 movespeed_slow;
 };

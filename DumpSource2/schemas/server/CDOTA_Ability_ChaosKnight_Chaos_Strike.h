@@ -1,3 +1,3 @@
-class CDOTA_Ability_ChaosKnight_Chaos_Strike : public CDOTABaseAbility
+class CDOTA_Ability_ChaosKnight_Chaos_Strike
 {
 };

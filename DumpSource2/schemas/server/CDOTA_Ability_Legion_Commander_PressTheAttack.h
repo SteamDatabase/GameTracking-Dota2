@@ -1,3 +1,3 @@
-class CDOTA_Ability_Legion_Commander_PressTheAttack : public CDOTABaseAbility
+class CDOTA_Ability_Legion_Commander_PressTheAttack
 {
 };

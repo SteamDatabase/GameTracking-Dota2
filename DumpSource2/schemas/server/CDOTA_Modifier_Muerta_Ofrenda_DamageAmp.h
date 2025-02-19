@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Muerta_Ofrenda_DamageAmp : public CDOTA_Buff
+class CDOTA_Modifier_Muerta_Ofrenda_DamageAmp
 {
 	float32 attackspeed_bonus;
 };

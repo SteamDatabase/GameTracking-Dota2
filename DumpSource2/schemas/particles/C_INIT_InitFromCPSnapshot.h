@@ -1,4 +1,4 @@
-class C_INIT_InitFromCPSnapshot : public CParticleFunctionInitializer
+class C_INIT_InitFromCPSnapshot
 {
 	int32 m_nControlPointNumber;
 	ParticleAttributeIndex_t m_nAttributeToRead;

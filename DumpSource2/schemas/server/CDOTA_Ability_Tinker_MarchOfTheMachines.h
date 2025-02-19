@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tinker_MarchOfTheMachines : public CDOTABaseAbility
+class CDOTA_Ability_Tinker_MarchOfTheMachines
 {
 	int32 splash_radius;
 	int32 damage;

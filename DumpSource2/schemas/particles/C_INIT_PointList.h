@@ -1,4 +1,4 @@
-class C_INIT_PointList : public CParticleFunctionInitializer
+class C_INIT_PointList
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CUtlVector< PointDefinition_t > m_pointList;

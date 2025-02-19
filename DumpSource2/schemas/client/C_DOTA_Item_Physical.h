@@ -1,4 +1,4 @@
-class C_DOTA_Item_Physical : public CBaseAnimatingActivity
+class C_DOTA_Item_Physical
 {
 	CHandle< C_DOTA_Item > m_hItem;
 	bool m_bIsLowPriorityHoverItem;

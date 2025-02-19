@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_StonehallGeneral_OverwhelmingOdds : public CDOTABaseAbility
+class CDOTA_Ability_AghsFort_StonehallGeneral_OverwhelmingOdds
 {
 	int32 max_steps;
 	Vector m_vTarget;

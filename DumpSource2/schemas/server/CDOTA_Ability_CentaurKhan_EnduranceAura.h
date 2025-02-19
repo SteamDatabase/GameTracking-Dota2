@@ -1,3 +1,3 @@
-class CDOTA_Ability_CentaurKhan_EnduranceAura : public CDOTABaseAbility
+class CDOTA_Ability_CentaurKhan_EnduranceAura
 {
 };

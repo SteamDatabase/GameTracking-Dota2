@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seasonal_TI11_BubbleGun : public CDOTA_Buff
+class CDOTA_Modifier_Seasonal_TI11_BubbleGun
 {
 	float32 think_interval;
 	int32 max_charges;

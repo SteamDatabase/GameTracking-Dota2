@@ -1,3 +1,3 @@
-class CNmControlParameterFloatNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmControlParameterFloatNode::CDefinition
 {
 };

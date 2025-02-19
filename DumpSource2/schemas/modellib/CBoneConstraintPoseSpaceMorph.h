@@ -1,4 +1,4 @@
-class CBoneConstraintPoseSpaceMorph : public CBoneConstraintBase
+class CBoneConstraintPoseSpaceMorph
 {
 	CUtlString m_sBoneName;
 	CUtlString m_sAttachmentName;

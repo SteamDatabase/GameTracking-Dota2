@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LootDrop_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_LootDrop_Thinker
 {
 	bool m_bAutoPickup;
 	bool m_bOnlyPlayerHeroPickup;

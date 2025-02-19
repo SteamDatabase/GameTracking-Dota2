@@ -1,4 +1,4 @@
-class CInfoSpawnGroupLoadUnload : public CLogicalEntity
+class CInfoSpawnGroupLoadUnload
 {
 	CEntityIOOutput m_OnSpawnGroupLoadStarted;
 	CEntityIOOutput m_OnSpawnGroupLoadFinished;

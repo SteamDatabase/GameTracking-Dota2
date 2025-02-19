@@ -1,4 +1,4 @@
-class C_TextureBasedAnimatable : public C_BaseModelEntity
+class C_TextureBasedAnimatable
 {
 	bool m_bLoop;
 	float32 m_flFPS;

@@ -1,4 +1,4 @@
-class CVoiceContainerSet : public CVoiceContainerBase
+class CVoiceContainerSet
 {
 	CUtlVector< CVoiceContainerSetElement > m_soundsToPlay;
 };

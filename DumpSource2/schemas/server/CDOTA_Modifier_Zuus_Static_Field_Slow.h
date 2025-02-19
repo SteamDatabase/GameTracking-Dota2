@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Zuus_Static_Field_Slow : public CDOTA_Buff
+class CDOTA_Modifier_Zuus_Static_Field_Slow
 {
 	int32 move_slow;
 	int32 aspd_slow;

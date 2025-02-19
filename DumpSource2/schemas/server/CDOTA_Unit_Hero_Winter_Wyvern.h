@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Winter_Wyvern : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Winter_Wyvern
 {
 	ParticleIndex_t m_nFXDeath;
 };

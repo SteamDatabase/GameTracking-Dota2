@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_SpiritBear_Entangle : public CDOTA_Buff
+class CDOTA_Modifier_LoneDruid_SpiritBear_Entangle
 {
 	int32 entangle_chance;
 	int32 hero_entangle_chance;

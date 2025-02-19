@@ -1,4 +1,4 @@
-class CExpressionActionUpdater : public CAnimActionUpdater
+class CExpressionActionUpdater
 {
 	CAnimParamHandle m_hParam;
 	AnimParamType_t m_eParamType;

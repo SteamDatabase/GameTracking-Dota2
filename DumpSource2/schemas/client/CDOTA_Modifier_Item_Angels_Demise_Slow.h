@@ -1,6 +1,5 @@
-class CDOTA_Modifier_Item_Angels_Demise_Slow : public CDOTA_Buff
+class CDOTA_Modifier_Item_Angels_Demise_Slow
 {
 	int32 slow;
-	int32 spell_crit_multiplier;
-	int32 spell_crit_flat;
+	float32 bonus_spell_damage;
 };

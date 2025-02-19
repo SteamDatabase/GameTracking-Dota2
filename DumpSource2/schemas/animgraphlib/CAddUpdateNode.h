@@ -1,4 +1,4 @@
-class CAddUpdateNode : public CBinaryUpdateNode
+class CAddUpdateNode
 {
 	BinaryNodeChildOption m_footMotionTiming;
 	bool m_bApplyToFootMotion;

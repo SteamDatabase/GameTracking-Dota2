@@ -1,4 +1,4 @@
-class C_PointClientUIWorldTextPanel : public C_PointClientUIWorldPanel
+class C_PointClientUIWorldTextPanel
 {
 	char[512] m_messageText;
 };

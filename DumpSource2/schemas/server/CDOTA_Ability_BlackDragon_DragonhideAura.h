@@ -1,3 +1,3 @@
-class CDOTA_Ability_BlackDragon_DragonhideAura : public CDOTABaseAbility
+class CDOTA_Ability_BlackDragon_DragonhideAura
 {
 };

@@ -1,4 +1,4 @@
-class C_DOTA_Item_PowerTreads : public C_DOTA_Item
+class C_DOTA_Item_PowerTreads
 {
 	int32 m_iStat;
 };

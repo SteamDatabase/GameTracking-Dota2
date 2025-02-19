@@ -1,4 +1,4 @@
-class CDOTA_Ability_Shredder_TimberChain : public CDOTABaseAbility
+class CDOTA_Ability_Shredder_TimberChain
 {
 	int32 chain_radius;
 	ParticleIndex_t m_nFXIndex;

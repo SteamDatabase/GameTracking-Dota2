@@ -1,4 +1,4 @@
-class C_OP_LerpEndCapScalar : public CParticleFunctionOperator
+class C_OP_LerpEndCapScalar
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	float32 m_flOutput;

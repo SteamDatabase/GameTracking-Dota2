@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bristleback_ViscousNasalGoo : public CDOTA_Buff
+class CDOTA_Modifier_Bristleback_ViscousNasalGoo
 {
 	float32 base_armor;
 	float32 armor_per_stack;

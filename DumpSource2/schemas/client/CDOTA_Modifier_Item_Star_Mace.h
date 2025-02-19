@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Star_Mace : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Star_Mace
 {
 	int32 movement_speed_pct;
 	float32 bonus_mana_regen;

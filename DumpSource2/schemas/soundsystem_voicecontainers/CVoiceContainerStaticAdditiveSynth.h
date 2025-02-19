@@ -1,4 +1,4 @@
-class CVoiceContainerStaticAdditiveSynth : public CVoiceContainerBase
+class CVoiceContainerStaticAdditiveSynth
 {
 	CUtlVector< CVoiceContainerStaticAdditiveSynth::CTone > m_tones;
 };

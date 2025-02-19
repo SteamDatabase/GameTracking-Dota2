@@ -1,4 +1,4 @@
-class CSurvivorsUnit : public CSurvivorsEntity
+class CSurvivorsUnit
 {
 	SurvivorsUnitID_t m_id;
 	float32 m_flHealth;

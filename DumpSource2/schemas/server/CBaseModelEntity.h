@@ -1,4 +1,4 @@
-class CBaseModelEntity : public CBaseEntity
+class CBaseModelEntity
 {
 	CRenderComponent* m_CRenderComponent;
 	CHitboxComponent m_CHitboxComponent;

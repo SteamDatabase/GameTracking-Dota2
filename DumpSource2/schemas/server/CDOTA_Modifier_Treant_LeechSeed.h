@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Treant_LeechSeed : public CDOTA_Buff
+class CDOTA_Modifier_Treant_LeechSeed
 {
 	float32 damage_interval;
 	int32 leech_damage;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_DeathProphet_CarrionSwarm : public CDOTABaseAbility
+class CDOTA_Ability_DeathProphet_CarrionSwarm
 {
 	int32 start_radius;
 	int32 end_radius;

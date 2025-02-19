@@ -1,4 +1,4 @@
-class C_OP_SetAttributeToScalarExpression : public CParticleFunctionOperator
+class C_OP_SetAttributeToScalarExpression
 {
 	ScalarExpressionType_t m_nExpression;
 	CPerParticleFloatInput m_flInput1;

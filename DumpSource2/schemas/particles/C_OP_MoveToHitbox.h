@@ -1,4 +1,4 @@
-class C_OP_MoveToHitbox : public CParticleFunctionOperator
+class C_OP_MoveToHitbox
 {
 	CParticleModelInput m_modelInput;
 	CParticleTransformInput m_transformInput;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dazzle_NothlBoon_Shield : public CDOTA_Buff
+class CDOTA_Modifier_Dazzle_NothlBoon_Shield
 {
 	int32 m_nDamageAbsorbed;
 	int32 m_nShield;

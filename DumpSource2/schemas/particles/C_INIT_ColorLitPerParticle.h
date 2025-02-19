@@ -1,4 +1,4 @@
-class C_INIT_ColorLitPerParticle : public CParticleFunctionInitializer
+class C_INIT_ColorLitPerParticle
 {
 	Color m_ColorMin;
 	Color m_ColorMax;

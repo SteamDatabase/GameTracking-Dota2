@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Venomancer_PoisonSting : public C_DOTABaseAbility
+class C_DOTA_Ability_Venomancer_PoisonSting
 {
 	int32 radius;
 };

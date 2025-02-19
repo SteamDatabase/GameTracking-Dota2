@@ -1,4 +1,4 @@
-class C_DOTA_Item_Vambrace : public C_DOTA_Item
+class C_DOTA_Item_Vambrace
 {
 	int32 m_iStat;
 };

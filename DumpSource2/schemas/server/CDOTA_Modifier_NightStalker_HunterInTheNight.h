@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NightStalker_HunterInTheNight : public CDOTA_Buff
+class CDOTA_Modifier_NightStalker_HunterInTheNight
 {
 	int32 bonus_movement_speed_pct_night;
 	int32 bonus_attack_speed_night;

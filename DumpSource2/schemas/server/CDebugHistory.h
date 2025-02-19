@@ -1,4 +1,4 @@
-class CDebugHistory : public CBaseEntity
+class CDebugHistory
 {
 	int32 m_nNpcEvents;
 };

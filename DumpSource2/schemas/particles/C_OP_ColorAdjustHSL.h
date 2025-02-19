@@ -1,4 +1,4 @@
-class C_OP_ColorAdjustHSL : public CParticleFunctionOperator
+class C_OP_ColorAdjustHSL
 {
 	CPerParticleFloatInput m_flHueAdjust;
 	CPerParticleFloatInput m_flSaturationAdjust;

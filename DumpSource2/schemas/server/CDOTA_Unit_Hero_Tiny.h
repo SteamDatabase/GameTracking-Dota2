@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Tiny : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Tiny
 {
 	CHandle< CBaseEntity > m_hTreeWearable;
 	ParticleIndex_t m_nFXIndexScepterAmbient;

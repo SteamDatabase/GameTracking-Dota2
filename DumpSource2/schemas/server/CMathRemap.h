@@ -1,4 +1,4 @@
-class CMathRemap : public CLogicalEntity
+class CMathRemap
 {
 	float32 m_flInMin;
 	float32 m_flInMax;

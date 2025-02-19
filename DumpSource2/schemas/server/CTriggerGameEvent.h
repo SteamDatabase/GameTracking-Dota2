@@ -1,4 +1,4 @@
-class CTriggerGameEvent : public CBaseTrigger
+class CTriggerGameEvent
 {
 	CUtlString m_strStartTouchEventName;
 	CUtlString m_strEndTouchEventName;

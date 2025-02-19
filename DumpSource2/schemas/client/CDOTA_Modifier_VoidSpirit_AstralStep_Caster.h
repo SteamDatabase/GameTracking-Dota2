@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VoidSpirit_AstralStep_Caster : public CDOTA_Buff
+class CDOTA_Modifier_VoidSpirit_AstralStep_Caster
 {
 	int32 bonus_damage;
 };

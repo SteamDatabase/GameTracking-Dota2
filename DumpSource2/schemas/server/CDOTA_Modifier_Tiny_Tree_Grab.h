@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tiny_Tree_Grab : public CDOTA_Buff
+class CDOTA_Modifier_Tiny_Tree_Grab
 {
 	int32 attack_count;
 	int32 bonus_damage;

@@ -1,4 +1,4 @@
-class C_OP_InheritFromParentParticles : public CParticleFunctionOperator
+class C_OP_InheritFromParentParticles
 {
 	float32 m_flScale;
 	ParticleAttributeIndex_t m_nFieldOutput;

@@ -1,4 +1,4 @@
-class CDOTAGamerulesProxy : public CGameRulesProxy
+class CDOTAGamerulesProxy
 {
 	CDOTAGameRules* m_pGameRules;
 };

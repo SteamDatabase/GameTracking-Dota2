@@ -1,4 +1,4 @@
-class CPulseGraphInstance_TestDomain_Derived : public CPulseGraphInstance_TestDomain
+class CPulseGraphInstance_TestDomain_Derived
 {
 	int32 m_nInstanceValueX;
 };

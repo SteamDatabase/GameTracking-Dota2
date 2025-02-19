@@ -1,4 +1,4 @@
-class C_OP_LerpToInitialPosition : public CParticleFunctionOperator
+class C_OP_LerpToInitialPosition
 {
 	int32 m_nControlPointNumber;
 	CPerParticleFloatInput m_flInterpolation;

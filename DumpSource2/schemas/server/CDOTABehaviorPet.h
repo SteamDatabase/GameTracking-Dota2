@@ -1,4 +1,4 @@
-class CDOTABehaviorPet : public CDOTABehaviorCompanion
+class CDOTABehaviorPet
 {
 	float32 m_flThreatLevel;
 	CountdownTimer m_ThreatTimer;

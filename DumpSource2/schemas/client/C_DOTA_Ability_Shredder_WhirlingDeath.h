@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Shredder_WhirlingDeath : public C_DOTABaseAbility
+class C_DOTA_Ability_Shredder_WhirlingDeath
 {
 	int32 whirling_radius;
 	int32 whirling_damage;

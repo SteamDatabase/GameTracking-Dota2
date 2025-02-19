@@ -1,4 +1,4 @@
-class CBaseAnimatingController : public CSkeletonAnimationController
+class CBaseAnimatingController
 {
 	CNetworkedSequenceOperation m_baseLayer;
 	bool m_bSequenceFinished;

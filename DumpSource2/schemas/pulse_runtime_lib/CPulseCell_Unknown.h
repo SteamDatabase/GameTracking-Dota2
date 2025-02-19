@@ -1,4 +1,4 @@
-class CPulseCell_Unknown : public CPulseCell_Base
+class CPulseCell_Unknown
 {
 	KeyValues3 m_UnknownKeys;
 };

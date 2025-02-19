@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Medusa_StoneGaze_Tracker : public CDOTA_Buff
+class CDOTA_Modifier_Medusa_StoneGaze_Tracker
 {
 	int32 m_nNumStoned;
 	bool m_bAnyInvisible;

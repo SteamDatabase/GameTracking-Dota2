@@ -1,4 +1,4 @@
-class CNmIDEvent : public CNmEvent
+class CNmIDEvent
 {
 	CGlobalSymbol m_ID;
 };

@@ -1,4 +1,4 @@
-class CPhysicsPropRespawnable : public CPhysicsProp
+class CPhysicsPropRespawnable
 {
 	Vector m_vOriginalSpawnOrigin;
 	QAngle m_vOriginalSpawnAngles;

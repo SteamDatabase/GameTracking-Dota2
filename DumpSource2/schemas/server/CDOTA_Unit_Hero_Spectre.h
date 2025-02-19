@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Spectre : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Spectre
 {
 	bool m_bArcanaKillstreakCompleted;
 	uint8 m_unCurrentArcanaKillStreak;

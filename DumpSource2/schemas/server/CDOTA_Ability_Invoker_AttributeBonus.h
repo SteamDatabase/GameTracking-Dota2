@@ -1,3 +1,3 @@
-class CDOTA_Ability_Invoker_AttributeBonus : public CDOTABaseAbility
+class CDOTA_Ability_Invoker_AttributeBonus
 {
 };

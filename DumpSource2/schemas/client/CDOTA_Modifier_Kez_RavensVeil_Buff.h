@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kez_RavensVeil_Buff : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_Kez_RavensVeil_Buff
 {
 	float32 fade_time;
 	float32 buff_duration;

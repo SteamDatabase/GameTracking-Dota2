@@ -1,3 +1,3 @@
-class C_MultiplayRules : public C_GameRules
+class C_MultiplayRules
 {
 };

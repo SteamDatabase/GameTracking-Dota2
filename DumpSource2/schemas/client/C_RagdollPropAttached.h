@@ -1,4 +1,4 @@
-class C_RagdollPropAttached : public C_RagdollProp
+class C_RagdollPropAttached
 {
 	uint32 m_boneIndexAttached;
 	uint32 m_ragdollAttachedObjectIndex;

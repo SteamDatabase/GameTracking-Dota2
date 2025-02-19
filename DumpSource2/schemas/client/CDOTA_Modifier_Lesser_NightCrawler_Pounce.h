@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lesser_NightCrawler_Pounce : public CDOTA_Buff
+class CDOTA_Modifier_Lesser_NightCrawler_Pounce
 {
 	int32 pounce_distance;
 	float32 pounce_speed;

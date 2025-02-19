@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AbyssalUnderlord_Firestorm_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_AbyssalUnderlord_Firestorm_Thinker
 {
 	int32 wave_damage;
 	int32 wave_count;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Treant_Lifebomb_Explode : public CDOTA_Buff
+class CDOTA_Modifier_Treant_Lifebomb_Explode
 {
 	GameTime_t flStartTime;
 };

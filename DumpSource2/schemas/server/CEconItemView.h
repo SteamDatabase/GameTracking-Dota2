@@ -1,4 +1,4 @@
-class CEconItemView : public IEconItemInterface
+class CEconItemView
 {
 	item_definition_index_t m_iItemDefinitionIndex;
 	int32 m_iEntityQuality;

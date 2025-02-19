@@ -1,4 +1,4 @@
-class C_INIT_InitSkinnedPositionFromCPSnapshot : public CParticleFunctionInitializer
+class C_INIT_InitSkinnedPositionFromCPSnapshot
 {
 	int32 m_nSnapshotControlPointNumber;
 	int32 m_nControlPointNumber;

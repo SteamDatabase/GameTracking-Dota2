@@ -1,4 +1,4 @@
-class CNmRootMotionEvent : public CNmEvent
+class CNmRootMotionEvent
 {
 	float32 m_flBlendTimeSeconds;
 };

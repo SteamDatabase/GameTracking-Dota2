@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Magnataur_Skewer_Impact : public CDOTA_Buff
+class CDOTA_Modifier_Magnataur_Skewer_Impact
 {
 	float32 slow_duration;
 	int32 skewer_damage;

@@ -1,4 +1,4 @@
-class C_OP_DriveCPFromGlobalSoundFloat : public CParticleFunctionPreEmission
+class C_OP_DriveCPFromGlobalSoundFloat
 {
 	int32 m_nOutputControlPoint;
 	int32 m_nOutputField;

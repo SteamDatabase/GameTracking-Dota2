@@ -1,4 +1,4 @@
-class CDOTAPropConsumableBanner : public CDynamicProp
+class CDOTAPropConsumableBanner
 {
 	bool m_bUseAvatar;
 };

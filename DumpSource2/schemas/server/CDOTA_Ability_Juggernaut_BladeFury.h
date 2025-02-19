@@ -1,4 +1,4 @@
-class CDOTA_Ability_Juggernaut_BladeFury : public CDOTABaseAbility
+class CDOTA_Ability_Juggernaut_BladeFury
 {
 	int32 blade_fury_damage_per_tick;
 };

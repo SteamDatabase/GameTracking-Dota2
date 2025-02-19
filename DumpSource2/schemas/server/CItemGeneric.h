@@ -1,4 +1,4 @@
-class CItemGeneric : public CItem
+class CItemGeneric
 {
 	bool m_bHasTriggerRadius;
 	bool m_bHasPickupRadius;

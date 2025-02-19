@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SpiritBreaker_EmpoweringHaste : public CDOTA_Buff
+class CDOTA_Modifier_SpiritBreaker_EmpoweringHaste
 {
 	int32 bonus_movespeed_pct_self;
 	int32 bonus_movespeed_pct_allies;

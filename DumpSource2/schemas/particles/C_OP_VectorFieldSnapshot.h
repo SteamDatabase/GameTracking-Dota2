@@ -1,4 +1,4 @@
-class C_OP_VectorFieldSnapshot : public CParticleFunctionOperator
+class C_OP_VectorFieldSnapshot
 {
 	int32 m_nControlPointNumber;
 	ParticleAttributeIndex_t m_nAttributeToWrite;

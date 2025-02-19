@@ -1,4 +1,4 @@
-class C_ParticleSystem : public C_BaseModelEntity
+class C_ParticleSystem
 {
 	char[512] m_szSnapshotFileName;
 	bool m_bActive;

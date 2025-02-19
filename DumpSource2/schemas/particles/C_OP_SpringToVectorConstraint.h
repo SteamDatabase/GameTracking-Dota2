@@ -1,4 +1,4 @@
-class C_OP_SpringToVectorConstraint : public CParticleFunctionConstraint
+class C_OP_SpringToVectorConstraint
 {
 	CPerParticleFloatInput m_flRestLength;
 	CPerParticleFloatInput m_flMinDistance;

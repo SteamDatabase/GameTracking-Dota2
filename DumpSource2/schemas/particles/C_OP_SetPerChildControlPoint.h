@@ -1,4 +1,4 @@
-class C_OP_SetPerChildControlPoint : public CParticleFunctionOperator
+class C_OP_SetPerChildControlPoint
 {
 	int32 m_nChildGroupID;
 	int32 m_nFirstControlPoint;

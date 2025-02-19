@@ -1,4 +1,4 @@
-class CNmVirtualParameterIDNode::CDefinition : public CNmIDValueNode::CDefinition
+class CNmVirtualParameterIDNode::CDefinition
 {
 	int16 m_nChildNodeIdx;
 };

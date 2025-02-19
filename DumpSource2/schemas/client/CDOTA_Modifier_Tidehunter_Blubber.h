@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tidehunter_Blubber : public CDOTA_Buff
+class CDOTA_Modifier_Tidehunter_Blubber
 {
 	int32 m_iDamageTaken;
 	int32 damage_cleanse;

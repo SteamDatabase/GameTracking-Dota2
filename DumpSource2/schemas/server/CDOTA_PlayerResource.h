@@ -1,4 +1,4 @@
-class CDOTA_PlayerResource : public CBaseEntity
+class CDOTA_PlayerResource
 {
 	CUtlVectorEmbeddedNetworkVar< PlayerResourcePlayerTeamData_t > m_vecPlayerTeamData;
 	CUtlVectorEmbeddedNetworkVar< PlayerResourcePlayerData_t > m_vecPlayerData;

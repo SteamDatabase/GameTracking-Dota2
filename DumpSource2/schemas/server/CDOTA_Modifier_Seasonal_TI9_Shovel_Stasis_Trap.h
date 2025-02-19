@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seasonal_TI9_Shovel_Stasis_Trap : public CDOTA_Modifier_Seasonal_Summon_Common_Thinker
+class CDOTA_Modifier_Seasonal_TI9_Shovel_Stasis_Trap
 {
 	CHandle< CBaseEntity > m_hHero;
 };

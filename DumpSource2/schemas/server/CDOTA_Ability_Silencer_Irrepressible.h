@@ -1,3 +1,3 @@
-class CDOTA_Ability_Silencer_Irrepressible : public CDOTABaseAbility
+class CDOTA_Ability_Silencer_Irrepressible
 {
 };

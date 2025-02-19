@@ -1,4 +1,4 @@
-class C_OP_TwistAroundAxis : public CParticleFunctionForce
+class C_OP_TwistAroundAxis
 {
 	float32 m_fForceAmount;
 	Vector m_TwistAxis;

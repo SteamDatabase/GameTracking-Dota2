@@ -1,3 +1,3 @@
-class CDOTA_Ability_VengefulSpirit_SoulStrike : public CDOTABaseAbility
+class CDOTA_Ability_VengefulSpirit_SoulStrike
 {
 };

@@ -1,4 +1,4 @@
-class C_OP_DifferencePreviousParticle : public CParticleFunctionOperator
+class C_OP_DifferencePreviousParticle
 {
 	ParticleAttributeIndex_t m_nFieldInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

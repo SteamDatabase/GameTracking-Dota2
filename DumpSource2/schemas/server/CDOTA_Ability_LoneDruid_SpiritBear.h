@@ -1,4 +1,4 @@
-class CDOTA_Ability_LoneDruid_SpiritBear : public CDOTABaseAbility
+class CDOTA_Ability_LoneDruid_SpiritBear
 {
 	bool m_bLevelChanged;
 	CHandle< CBaseEntity > m_hBear;

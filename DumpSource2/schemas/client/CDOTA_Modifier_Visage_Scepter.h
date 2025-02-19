@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Visage_Scepter : public CDOTA_Buff
+class CDOTA_Modifier_Visage_Scepter
 {
 	GameTime_t m_flReadyTime;
 };

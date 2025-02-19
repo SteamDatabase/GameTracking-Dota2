@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_Reactive_Armor : public CDOTA_Buff
+class CDOTA_Modifier_Shredder_Reactive_Armor
 {
 	int32 stack_limit;
 	float32 stack_duration;

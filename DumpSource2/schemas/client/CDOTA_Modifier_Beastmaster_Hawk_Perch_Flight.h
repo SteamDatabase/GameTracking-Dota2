@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Beastmaster_Hawk_Perch_Flight : public CDOTA_Buff
+class CDOTA_Modifier_Beastmaster_Hawk_Perch_Flight
 {
 	int32 perch_flight_height;
 	int32 perch_tree_height;

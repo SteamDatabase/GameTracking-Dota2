@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Yasha_And_Kaya : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Yasha_And_Kaya
 {
 	int32 bonus_agility;
 	int32 bonus_attack_speed;

@@ -1,4 +1,4 @@
-class CRagdollAnimTag : public CAnimTagBase
+class CRagdollAnimTag
 {
 	AnimPoseControl m_nPoseControl;
 	float32 m_flFrequency;

@@ -1,4 +1,4 @@
-class CFollowAttachmentUpdateNode : public CUnaryUpdateNode
+class CFollowAttachmentUpdateNode
 {
 	FollowAttachmentSettings_t m_opFixedData;
 };

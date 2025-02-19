@@ -1,3 +1,3 @@
-class CParticleCollectionBindingInstance : public CBasePulseGraphInstance
+class CParticleCollectionBindingInstance
 {
 };

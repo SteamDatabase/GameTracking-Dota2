@@ -1,4 +1,4 @@
-class PointDefinitionWithTimeValues_t : public PointDefinition_t
+class PointDefinitionWithTimeValues_t
 {
 	float32 m_flTimeDuration;
 };

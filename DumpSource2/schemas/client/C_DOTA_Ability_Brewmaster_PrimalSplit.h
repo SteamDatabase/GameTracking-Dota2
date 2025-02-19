@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Brewmaster_PrimalSplit : public C_DOTABaseAbility
+class C_DOTA_Ability_Brewmaster_PrimalSplit
 {
 	CHandle< C_BaseEntity > m_hPrimary;
 	CHandle< C_BaseEntity > m_hSecondary;

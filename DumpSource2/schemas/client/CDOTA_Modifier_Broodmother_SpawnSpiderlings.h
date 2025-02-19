@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Broodmother_SpawnSpiderlings : public CDOTA_Buff
+class CDOTA_Modifier_Broodmother_SpawnSpiderlings
 {
 	int32 count;
 };

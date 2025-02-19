@@ -1,4 +1,4 @@
-class C_DOTA_Ability_PrimalBeast_Onslaught : public C_DOTABaseAbility
+class C_DOTA_Ability_PrimalBeast_Onslaught
 {
 	float32 max_charge_time;
 	float32 knockback_distance;

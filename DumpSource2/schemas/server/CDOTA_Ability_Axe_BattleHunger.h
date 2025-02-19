@@ -1,4 +1,4 @@
-class CDOTA_Ability_Axe_BattleHunger : public CDOTABaseAbility
+class CDOTA_Ability_Axe_BattleHunger
 {
 	int32 damage_per_second;
 };

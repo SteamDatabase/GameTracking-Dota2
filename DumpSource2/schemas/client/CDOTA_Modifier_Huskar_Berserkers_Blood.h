@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Huskar_Berserkers_Blood : public CDOTA_Buff
+class CDOTA_Modifier_Huskar_Berserkers_Blood
 {
 	int32 maximum_health_regen;
 	int32 maximum_attack_speed;

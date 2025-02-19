@@ -1,4 +1,4 @@
-class CParticleAnimTag : public CAnimTagBase
+class CParticleAnimTag
 {
 	CStrongHandle< InfoForResourceTypeIParticleSystemDefinition > m_hParticleSystem;
 	CUtlString m_particleSystemName;

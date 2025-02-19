@@ -1,4 +1,4 @@
-class CDOTA_Ability_Grimstroke_DarkArtistry : public CDOTABaseAbility
+class CDOTA_Ability_Grimstroke_DarkArtistry
 {
 	Vector m_vCastDir;
 	Vector m_vVectorTargetEndpoint;

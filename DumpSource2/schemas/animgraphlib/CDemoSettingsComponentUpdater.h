@@ -1,4 +1,4 @@
-class CDemoSettingsComponentUpdater : public CAnimComponentUpdater
+class CDemoSettingsComponentUpdater
 {
 	CAnimDemoCaptureSettings m_settings;
 };

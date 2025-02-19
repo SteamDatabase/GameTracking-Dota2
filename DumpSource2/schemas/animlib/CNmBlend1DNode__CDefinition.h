@@ -1,4 +1,4 @@
-class CNmBlend1DNode::CDefinition : public CNmParameterizedBlendNode::CDefinition
+class CNmBlend1DNode::CDefinition
 {
 	CNmParameterizedBlendNode::Parameterization_t m_parameterization;
 };

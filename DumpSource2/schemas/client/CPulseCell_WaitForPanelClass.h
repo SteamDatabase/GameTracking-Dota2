@@ -1,4 +1,4 @@
-class CPulseCell_WaitForPanelClass : public CPulseCell_BaseYieldingInflow
+class CPulseCell_WaitForPanelClass
 {
 	CPulse_ResumePoint m_WakeResume;
 };

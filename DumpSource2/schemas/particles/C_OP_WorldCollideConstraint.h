@@ -1,3 +1,3 @@
-class C_OP_WorldCollideConstraint : public CParticleFunctionConstraint
+class C_OP_WorldCollideConstraint
 {
 };

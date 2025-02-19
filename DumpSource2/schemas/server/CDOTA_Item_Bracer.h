@@ -1,4 +1,4 @@
-class CDOTA_Item_Bracer : public CDOTA_Item
+class CDOTA_Item_Bracer
 {
 	int32 counter;
 };

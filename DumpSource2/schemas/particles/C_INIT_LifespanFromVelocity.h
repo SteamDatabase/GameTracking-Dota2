@@ -1,4 +1,4 @@
-class C_INIT_LifespanFromVelocity : public CParticleFunctionInitializer
+class C_INIT_LifespanFromVelocity
 {
 	Vector m_vecComponentScale;
 	float32 m_flTraceOffset;

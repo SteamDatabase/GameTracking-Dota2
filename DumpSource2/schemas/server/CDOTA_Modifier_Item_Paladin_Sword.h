@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Paladin_Sword : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Paladin_Sword
 {
 	int32 bonus_damage;
 	int32 bonus_lifesteal;

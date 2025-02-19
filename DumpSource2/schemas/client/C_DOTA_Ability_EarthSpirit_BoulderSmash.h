@@ -1,4 +1,4 @@
-class C_DOTA_Ability_EarthSpirit_BoulderSmash : public C_DOTABaseAbility
+class C_DOTA_Ability_EarthSpirit_BoulderSmash
 {
 	int32 speed;
 	int32 rock_damage;

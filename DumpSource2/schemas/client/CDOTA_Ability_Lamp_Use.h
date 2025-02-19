@@ -1,4 +1,4 @@
-class CDOTA_Ability_Lamp_Use : public C_DOTABaseAbility
+class CDOTA_Ability_Lamp_Use
 {
 	GameTime_t m_flLastCaptureTime;
 	CHandle< C_DOTA_BaseNPC > m_hTarget;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rubick_FadeBolt : public CDOTA_Buff
+class CDOTA_Modifier_Rubick_FadeBolt
 {
 	float32 radius;
 	int32 damage;

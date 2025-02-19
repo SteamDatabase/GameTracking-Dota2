@@ -1,4 +1,4 @@
-class CDOTA_Modifier_IceSlide : public CDOTA_Buff
+class CDOTA_Modifier_IceSlide
 {
 	GameTime_t m_fLastUpdateTime;
 	Vector m_vVelocity;

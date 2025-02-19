@@ -1,4 +1,4 @@
-class CDOTA_Ability_ArcWarden_SparkWraith : public CDOTABaseAbility
+class CDOTA_Ability_ArcWarden_SparkWraith
 {
 	float32 duration;
 	float32 activation_delay;

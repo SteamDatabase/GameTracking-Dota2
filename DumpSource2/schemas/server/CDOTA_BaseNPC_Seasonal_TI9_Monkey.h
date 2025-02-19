@@ -1,3 +1,3 @@
-class CDOTA_BaseNPC_Seasonal_TI9_Monkey : public CDOTA_BaseNPC_Additive
+class CDOTA_BaseNPC_Seasonal_TI9_Monkey
 {
 };

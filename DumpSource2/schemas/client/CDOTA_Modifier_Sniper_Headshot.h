@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Sniper_Headshot : public CDOTA_Buff
+class CDOTA_Modifier_Sniper_Headshot
 {
 	int32 proc_chance;
 	float32 slow_duration;

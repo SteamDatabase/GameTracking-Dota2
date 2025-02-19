@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Spell_Immunity : public C_DOTABaseAbility
+class C_DOTA_Ability_Special_Bonus_Spell_Immunity
 {
 };

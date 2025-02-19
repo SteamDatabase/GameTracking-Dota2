@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VoidSpirit_Dissimilate_Phase : public CDOTA_Buff
+class CDOTA_Modifier_VoidSpirit_Dissimilate_Phase
 {
 	Vector m_vFirstPortalPos;
 	CUtlVector< Vector > m_vecDestinations;

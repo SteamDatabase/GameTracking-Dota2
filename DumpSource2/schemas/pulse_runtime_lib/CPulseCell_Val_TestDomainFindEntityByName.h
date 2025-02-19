@@ -1,3 +1,3 @@
-class CPulseCell_Val_TestDomainFindEntityByName : public CPulseCell_BaseValue
+class CPulseCell_Val_TestDomainFindEntityByName
 {
 };

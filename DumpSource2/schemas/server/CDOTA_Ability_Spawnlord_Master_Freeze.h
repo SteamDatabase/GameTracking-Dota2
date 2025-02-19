@@ -1,3 +1,3 @@
-class CDOTA_Ability_Spawnlord_Master_Freeze : public CDOTABaseAbility
+class CDOTA_Ability_Spawnlord_Master_Freeze
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Filler_Buff_Icon : public CDOTA_Buff
+class CDOTA_Modifier_Filler_Buff_Icon
 {
 };

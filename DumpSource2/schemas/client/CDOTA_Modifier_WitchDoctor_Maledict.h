@@ -1,4 +1,4 @@
-class CDOTA_Modifier_WitchDoctor_Maledict : public CDOTA_Buff
+class CDOTA_Modifier_WitchDoctor_Maledict
 {
 	int32 m_iStartHealth;
 	int32 bonus_damage;

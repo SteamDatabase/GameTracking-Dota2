@@ -1,4 +1,4 @@
-class C_OP_MovementMoveAlongSkinnedCPSnapshot : public CParticleFunctionOperator
+class C_OP_MovementMoveAlongSkinnedCPSnapshot
 {
 	int32 m_nControlPointNumber;
 	int32 m_nSnapshotControlPointNumber;

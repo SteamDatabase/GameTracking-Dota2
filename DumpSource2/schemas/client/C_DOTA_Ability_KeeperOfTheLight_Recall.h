@@ -1,4 +1,4 @@
-class C_DOTA_Ability_KeeperOfTheLight_Recall : public C_DOTABaseAbility
+class C_DOTA_Ability_KeeperOfTheLight_Recall
 {
 	bool m_bIsAltCastState;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Primal_Companion : public CDOTABaseAbility
+class CDOTA_Ability_Primal_Companion
 {
 	CHandle< CDOTA_BaseNPC > m_hCurrentBrewling;
 };

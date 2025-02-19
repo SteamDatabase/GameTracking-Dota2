@@ -1,4 +1,4 @@
-class CFuncNavObstruction : public CBaseModelEntity
+class CFuncNavObstruction
 {
 	bool m_bDisabled;
 };

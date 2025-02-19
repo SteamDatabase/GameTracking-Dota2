@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tiny_CraggyExterior : public CDOTA_Buff
+class CDOTA_Modifier_Tiny_CraggyExterior
 {
 	float32 debuff_duration;
 	int32 damage;

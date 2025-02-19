@@ -1,3 +1,3 @@
-class CDOTA_Ability_BigThunderLizard_Wardrums : public CDOTABaseAbility
+class CDOTA_Ability_BigThunderLizard_Wardrums
 {
 };

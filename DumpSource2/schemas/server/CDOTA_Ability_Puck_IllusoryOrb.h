@@ -1,4 +1,4 @@
-class CDOTA_Ability_Puck_IllusoryOrb : public CDOTABaseAbility
+class CDOTA_Ability_Puck_IllusoryOrb
 {
 	int32 m_iProjectile;
 	CountdownTimer m_ViewerTimer;

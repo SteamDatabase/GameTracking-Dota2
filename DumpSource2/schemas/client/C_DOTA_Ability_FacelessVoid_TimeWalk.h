@@ -1,6 +1,6 @@
-class C_DOTA_Ability_FacelessVoid_TimeWalk : public C_DOTABaseAbility
+class C_DOTA_Ability_FacelessVoid_TimeWalk
 {
 	int32 speed;
 	int32 range;
-	int32 radius;
+	float32 radius;
 };

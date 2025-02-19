@@ -1,4 +1,4 @@
-class CDirectionalBlendUpdateNode : public CLeafUpdateNode
+class CDirectionalBlendUpdateNode
 {
 	HSequence[8] m_hSequences;
 	CAnimInputDamping m_damping;

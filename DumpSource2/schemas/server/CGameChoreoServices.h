@@ -1,4 +1,4 @@
-class CGameChoreoServices : public IChoreoServices
+class CGameChoreoServices
 {
 	CHandle< CBaseAnimGraph > m_hOwner;
 	CHandle< CScriptedSequence > m_hScriptedSequence;

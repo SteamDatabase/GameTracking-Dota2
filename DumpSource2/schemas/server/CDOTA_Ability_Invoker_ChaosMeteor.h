@@ -1,4 +1,4 @@
-class CDOTA_Ability_Invoker_ChaosMeteor : public CDOTA_Ability_Invoker_InvokedBase
+class CDOTA_Ability_Invoker_ChaosMeteor
 {
 	int32 area_of_effect;
 	float32 damage_interval;

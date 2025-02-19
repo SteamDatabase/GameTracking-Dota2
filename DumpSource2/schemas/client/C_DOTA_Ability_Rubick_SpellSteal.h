@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Rubick_SpellSteal : public C_DOTABaseAbility
+class C_DOTA_Ability_Rubick_SpellSteal
 {
 	char[256] m_ActivityModifier;
 	float32 m_fStolenCastPoint;

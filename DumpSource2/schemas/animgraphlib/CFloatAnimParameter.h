@@ -1,4 +1,4 @@
-class CFloatAnimParameter : public CConcreteAnimParameter
+class CFloatAnimParameter
 {
 	float32 m_fDefaultValue;
 	float32 m_fMinValue;

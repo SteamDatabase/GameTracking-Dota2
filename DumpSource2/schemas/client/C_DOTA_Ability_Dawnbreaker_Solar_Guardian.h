@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Dawnbreaker_Solar_Guardian : public C_DOTABaseAbility
+class C_DOTA_Ability_Dawnbreaker_Solar_Guardian
 {
 	CHandle< C_BaseEntity > m_hThinker;
 	bool m_bJumping;

@@ -1,4 +1,4 @@
-class C_INIT_RandomAlpha : public CParticleFunctionInitializer
+class C_INIT_RandomAlpha
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	int32 m_nAlphaMin;

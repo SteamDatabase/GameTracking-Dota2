@@ -1,4 +1,4 @@
-class C_OP_SetControlPointToHMD : public CParticleFunctionPreEmission
+class C_OP_SetControlPointToHMD
 {
 	int32 m_nCP1;
 	Vector m_vecCP1Pos;

@@ -1,4 +1,4 @@
-class C_OP_RenderTonemapController : public CParticleFunctionRenderer
+class C_OP_RenderTonemapController
 {
 	float32 m_flTonemapLevel;
 	float32 m_flTonemapWeight;

@@ -1,4 +1,4 @@
-class C_INIT_GlobalScale : public CParticleFunctionInitializer
+class C_INIT_GlobalScale
 {
 	float32 m_flScale;
 	int32 m_nScaleControlPointNumber;

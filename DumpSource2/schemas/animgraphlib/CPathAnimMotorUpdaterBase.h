@@ -1,4 +1,4 @@
-class CPathAnimMotorUpdaterBase : public CAnimMotorUpdaterBase
+class CPathAnimMotorUpdaterBase
 {
 	bool m_bLockToPath;
 };

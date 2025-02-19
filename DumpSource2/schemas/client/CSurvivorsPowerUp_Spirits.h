@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_Spirits : public CSurvivorsPowerUp
+class CSurvivorsPowerUp_Spirits
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sParticle;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sExplosionParticle;

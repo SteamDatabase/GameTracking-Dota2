@@ -1,5 +1,0 @@
-class CDestructiblePartsSystemData_PartDataProxy
-{
-	CDestructiblePartsSystemData_PartData* m_pModelAndDefaultRuntimeData;
-	CDestructiblePartsSystemData_PartRuntimeData* m_pOverrideRuntimeData;
-};

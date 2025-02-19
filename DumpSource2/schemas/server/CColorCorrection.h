@@ -1,4 +1,4 @@
-class CColorCorrection : public CBaseEntity
+class CColorCorrection
 {
 	float32 m_flFadeInDuration;
 	float32 m_flFadeOutDuration;

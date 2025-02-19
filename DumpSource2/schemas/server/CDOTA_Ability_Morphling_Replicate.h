@@ -1,4 +1,4 @@
-class CDOTA_Ability_Morphling_Replicate : public CDOTABaseAbility
+class CDOTA_Ability_Morphling_Replicate
 {
 	CHandle< CBaseEntity > m_hTarget;
 	CHandle< CBaseEntity > m_hScepterIllusion;

@@ -1,4 +1,4 @@
-class C_OP_SetControlPointRotation : public CParticleFunctionPreEmission
+class C_OP_SetControlPointRotation
 {
 	CParticleCollectionVecInput m_vecRotAxis;
 	CParticleCollectionFloatInput m_flRotRate;

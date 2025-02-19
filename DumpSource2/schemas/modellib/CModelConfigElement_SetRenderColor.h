@@ -1,4 +1,4 @@
-class CModelConfigElement_SetRenderColor : public CModelConfigElement
+class CModelConfigElement_SetRenderColor
 {
 	Color m_Color;
 };

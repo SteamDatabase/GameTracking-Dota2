@@ -1,3 +1,3 @@
-class CDOTA_Ability_PolarFurbolgUrsaWarrior_ThunderClap : public CDOTABaseAbility
+class CDOTA_Ability_PolarFurbolgUrsaWarrior_ThunderClap
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Unit_Announcer : public CDOTA_BaseNPC
+class CDOTA_Unit_Announcer
 {
 	int32 m_iAudienceTeam;
 };

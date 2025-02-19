@@ -1,3 +1,3 @@
-class CDOTA_Ability_Ghost_FrostAttack : public CDOTABaseAbility
+class CDOTA_Ability_Ghost_FrostAttack
 {
 };

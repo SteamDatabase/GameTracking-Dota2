@@ -1,4 +1,4 @@
-class CTriggerDota : public CTriggerMultiple
+class CTriggerDota
 {
 	CDotaEntityFilterFlags m_FilterFlags;
 };

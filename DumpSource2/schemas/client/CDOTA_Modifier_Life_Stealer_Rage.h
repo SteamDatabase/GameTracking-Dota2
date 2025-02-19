@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Life_Stealer_Rage : public CDOTA_Buff
+class CDOTA_Modifier_Life_Stealer_Rage
 {
 	int32 bonus_armor;
 	int32 magic_resist;

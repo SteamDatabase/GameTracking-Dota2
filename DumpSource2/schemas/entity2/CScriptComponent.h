@@ -1,4 +1,4 @@
-class CScriptComponent : public CEntityComponent
+class CScriptComponent
 {
 	CUtlSymbolLarge m_scriptClassName;
 };

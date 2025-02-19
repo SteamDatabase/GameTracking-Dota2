@@ -1,4 +1,4 @@
-class CLookComponentUpdater : public CAnimComponentUpdater
+class CLookComponentUpdater
 {
 	CAnimParamHandle m_hLookHeading;
 	CAnimParamHandle m_hLookHeadingNormalized;

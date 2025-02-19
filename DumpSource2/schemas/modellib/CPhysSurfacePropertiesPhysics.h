@@ -7,7 +7,4 @@ class CPhysSurfacePropertiesPhysics
 	float32 m_softContactFrequency;
 	float32 m_softContactDampingRatio;
 	float32 m_wheelDrag;
-	float32 m_heatConductivity;
-	float32 m_flashpoint;
-	float32 m_burnfuel;
 };

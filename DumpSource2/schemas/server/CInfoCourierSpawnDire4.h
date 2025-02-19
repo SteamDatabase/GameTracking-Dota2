@@ -1,3 +1,3 @@
-class CInfoCourierSpawnDire4 : public CPointEntity
+class CInfoCourierSpawnDire4
 {
 };

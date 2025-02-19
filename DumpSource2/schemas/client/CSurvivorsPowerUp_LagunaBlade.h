@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_LagunaBlade : public CSurvivorsPowerUp_InstantAttack
+class CSurvivorsPowerUp_LagunaBlade
 {
 	int32 m_nEliteExtraHit;
 };

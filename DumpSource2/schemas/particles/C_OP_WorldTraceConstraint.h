@@ -1,4 +1,4 @@
-class C_OP_WorldTraceConstraint : public CParticleFunctionConstraint
+class C_OP_WorldTraceConstraint
 {
 	int32 m_nCP;
 	Vector m_vecCpOffset;

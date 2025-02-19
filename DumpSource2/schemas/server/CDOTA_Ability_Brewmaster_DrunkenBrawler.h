@@ -1,4 +1,4 @@
-class CDOTA_Ability_Brewmaster_DrunkenBrawler : public CDOTABaseAbility
+class CDOTA_Ability_Brewmaster_DrunkenBrawler
 {
 	int32 m_iBrawlActive;
 	bool m_bUpdateIcons;

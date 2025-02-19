@@ -1,3 +1,3 @@
-class CDOTA_Ability_Puck_Puckish : public CDOTABaseAbility
+class CDOTA_Ability_Puck_Puckish
 {
 };

@@ -1,4 +1,4 @@
-class C_DOTA_Ability_EarthSpirit_RollingBoulder : public C_DOTABaseAbility
+class C_DOTA_Ability_EarthSpirit_RollingBoulder
 {
 	int32 radius;
 	int32 speed;

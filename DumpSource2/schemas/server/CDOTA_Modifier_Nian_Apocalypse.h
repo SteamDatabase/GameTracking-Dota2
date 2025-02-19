@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_Apocalypse : public CDOTA_Buff
+class CDOTA_Modifier_Nian_Apocalypse
 {
 	int32 area_of_effect;
 	float32 damage;

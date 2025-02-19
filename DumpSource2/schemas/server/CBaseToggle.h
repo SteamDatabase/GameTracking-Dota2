@@ -1,4 +1,4 @@
-class CBaseToggle : public CBaseModelEntity
+class CBaseToggle
 {
 	TOGGLE_STATE m_toggle_state;
 	float32 m_flMoveDistance;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Lion_Impale : public CDOTABaseAbility
+class CDOTA_Ability_Lion_Impale
 {
 	float32 width;
 	float32 duration;

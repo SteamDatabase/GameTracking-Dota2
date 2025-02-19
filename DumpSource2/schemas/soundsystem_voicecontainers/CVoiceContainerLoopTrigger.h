@@ -1,4 +1,4 @@
-class CVoiceContainerLoopTrigger : public CVoiceContainerBase
+class CVoiceContainerLoopTrigger
 {
 	CSoundContainerReference m_sound;
 	float32 m_flRetriggerTimeMin;

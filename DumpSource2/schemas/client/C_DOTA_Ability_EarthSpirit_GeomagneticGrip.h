@@ -1,4 +1,4 @@
-class C_DOTA_Ability_EarthSpirit_GeomagneticGrip : public C_DOTABaseAbility
+class C_DOTA_Ability_EarthSpirit_GeomagneticGrip
 {
 	CHandle< C_BaseEntity > m_hTarget;
 };

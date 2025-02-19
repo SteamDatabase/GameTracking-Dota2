@@ -1,3 +1,0 @@
-class IBody : public INextBotComponent
-{
-};

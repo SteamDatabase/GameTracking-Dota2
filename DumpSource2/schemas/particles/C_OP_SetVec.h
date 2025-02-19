@@ -1,4 +1,4 @@
-class C_OP_SetVec : public CParticleFunctionOperator
+class C_OP_SetVec
 {
 	CPerParticleVecInput m_InputValue;
 	ParticleAttributeIndex_t m_nOutputField;

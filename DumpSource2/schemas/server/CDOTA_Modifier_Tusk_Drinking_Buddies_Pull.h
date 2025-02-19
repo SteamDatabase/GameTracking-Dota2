@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tusk_Drinking_Buddies_Pull : public CDOTA_Buff
+class CDOTA_Modifier_Tusk_Drinking_Buddies_Pull
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

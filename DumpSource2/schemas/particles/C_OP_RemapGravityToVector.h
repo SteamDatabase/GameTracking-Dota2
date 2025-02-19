@@ -1,4 +1,4 @@
-class C_OP_RemapGravityToVector : public CParticleFunctionOperator
+class C_OP_RemapGravityToVector
 {
 	CPerParticleVecInput m_vInput1;
 	ParticleAttributeIndex_t m_nOutputField;

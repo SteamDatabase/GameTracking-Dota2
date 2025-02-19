@@ -1,4 +1,4 @@
-class C_OP_RotateVector : public CParticleFunctionOperator
+class C_OP_RotateVector
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	Vector m_vecRotAxisMin;

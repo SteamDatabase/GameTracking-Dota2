@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Rubick : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Rubick
 {
 	Vector m_stolenAbilityColorHSV1;
 	Vector m_stolenAbilityColorHSV2;

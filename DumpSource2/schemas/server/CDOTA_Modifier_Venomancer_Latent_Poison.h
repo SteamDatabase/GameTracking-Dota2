@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Venomancer_Latent_Poison : public CDOTA_Buff
+class CDOTA_Modifier_Venomancer_Latent_Poison
 {
 	int32 duration_damage;
 	int32 movement_slow;

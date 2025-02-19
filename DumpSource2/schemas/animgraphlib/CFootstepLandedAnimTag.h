@@ -1,4 +1,4 @@
-class CFootstepLandedAnimTag : public CAnimTagBase
+class CFootstepLandedAnimTag
 {
 	FootstepLandedFootSoundType_t m_FootstepType;
 	CUtlString m_OverrideSoundName;

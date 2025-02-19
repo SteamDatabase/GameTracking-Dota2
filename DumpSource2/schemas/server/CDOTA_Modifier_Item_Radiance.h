@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Radiance : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Radiance
 {
 	int32 bonus_damage;
 	int32 evasion;

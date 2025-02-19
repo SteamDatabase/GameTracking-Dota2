@@ -1,4 +1,4 @@
-class CAnimScriptComponentUpdater : public CAnimComponentUpdater
+class CAnimScriptComponentUpdater
 {
 	AnimScriptHandle m_hScript;
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Greevil_Miniboss_Black_Nightmare : public CDOTABaseAbility
+class CDOTA_Ability_Greevil_Miniboss_Black_Nightmare
 {
 };

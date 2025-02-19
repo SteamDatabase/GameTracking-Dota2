@@ -1,4 +1,4 @@
-class CVoiceContainerGranulator : public CVoiceContainerBase
+class CVoiceContainerGranulator
 {
 	float32 m_flGrainLength;
 	float32 m_flGrainCrossfadeAmount;

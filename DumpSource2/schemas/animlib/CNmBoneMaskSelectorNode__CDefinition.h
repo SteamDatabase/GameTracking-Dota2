@@ -1,4 +1,4 @@
-class CNmBoneMaskSelectorNode::CDefinition : public CNmBoneMaskValueNode::CDefinition
+class CNmBoneMaskSelectorNode::CDefinition
 {
 	int16 m_defaultMaskNodeIdx;
 	int16 m_parameterValueNodeIdx;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ArcaneBoots_ManaRegen : public CDOTA_Buff
+class CDOTA_Modifier_ArcaneBoots_ManaRegen
 {
 	float32 value;
 };

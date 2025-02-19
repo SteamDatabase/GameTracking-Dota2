@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Earthshaker_EnchantTotem_Leap : public CDOTA_Buff
+class CDOTA_Modifier_Earthshaker_EnchantTotem_Leap
 {
 	Vector m_vLoc;
 	float32 m_flPredictedTotalTime;

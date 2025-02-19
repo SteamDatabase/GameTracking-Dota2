@@ -1,4 +1,4 @@
-class CDOTA_Ability_Meepo_DividedWeStand : public CDOTABaseAbility
+class CDOTA_Ability_Meepo_DividedWeStand
 {
 	int32 m_nWhichDividedWeStand;
 	int32 m_nNumDividedWeStand;

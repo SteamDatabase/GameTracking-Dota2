@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_PlayerTransform : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_PlayerTransform
 {
 	itemid_t m_nCourierItemId;
 	CUtlString m_ModelNameOfDisguise;

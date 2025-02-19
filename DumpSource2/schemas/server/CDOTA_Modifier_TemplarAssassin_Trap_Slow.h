@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TemplarAssassin_Trap_Slow : public CDOTA_Buff
+class CDOTA_Modifier_TemplarAssassin_Trap_Slow
 {
 	int32 movement_speed_min;
 	int32 movement_speed_max;

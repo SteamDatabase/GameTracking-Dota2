@@ -27,4 +27,5 @@ class VPhysXJoint_t
 	float32 m_flElasticity;
 	float32 m_flElasticDamping;
 	float32 m_flPlasticity;
+	CUtlString m_Tag;
 };

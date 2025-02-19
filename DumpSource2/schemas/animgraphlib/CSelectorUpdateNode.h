@@ -1,4 +1,4 @@
-class CSelectorUpdateNode : public CAnimUpdateNodeBase
+class CSelectorUpdateNode
 {
 	CUtlVector< CAnimUpdateNodeRef > m_children;
 	CUtlVector< int8 > m_tags;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_SunStrike : public CDOTA_Buff
+class CDOTA_Modifier_Invoker_SunStrike
 {
 	int32 area_of_effect;
 	float32 damage;

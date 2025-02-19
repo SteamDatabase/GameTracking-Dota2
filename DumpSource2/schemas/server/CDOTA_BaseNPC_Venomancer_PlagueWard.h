@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Venomancer_PlagueWard : public CDOTA_BaseNPC_Additive
+class CDOTA_BaseNPC_Venomancer_PlagueWard
 {
 	bool m_bIsMovable;
 	QAngle m_angle;

@@ -1,4 +1,4 @@
-class CSurvivorsEnemyDefinition_Resurrector : public CSurvivorsEnemyDefinition
+class CSurvivorsEnemyDefinition_Resurrector
 {
 	int32 m_nNumResurrectionTimes;
 	float32 m_flMovementSpeedMultiplierPerDeath;

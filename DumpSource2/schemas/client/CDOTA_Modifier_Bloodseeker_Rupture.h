@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bloodseeker_Rupture : public CDOTA_Buff
+class CDOTA_Modifier_Bloodseeker_Rupture
 {
 	int32 movement_damage_pct;
 	float32 hp_pct;

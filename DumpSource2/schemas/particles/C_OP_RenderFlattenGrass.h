@@ -1,4 +1,4 @@
-class C_OP_RenderFlattenGrass : public CParticleFunctionRenderer
+class C_OP_RenderFlattenGrass
 {
 	float32 m_flFlattenStrength;
 	ParticleAttributeIndex_t m_nStrengthFieldOverride;

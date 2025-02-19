@@ -1,3 +1,3 @@
-class EventServerAdvanceTick_t : public EventAdvanceTick_t
+class EventServerAdvanceTick_t
 {
 };

@@ -1,4 +1,4 @@
-class C_OP_SetToCP : public CParticleFunctionOperator
+class C_OP_SetToCP
 {
 	int32 m_nControlPointNumber;
 	Vector m_vecOffset;

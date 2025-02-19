@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_EchoSabre : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_EchoSabre
 {
 	int32 bonus_intellect;
 	int32 bonus_attack_speed;

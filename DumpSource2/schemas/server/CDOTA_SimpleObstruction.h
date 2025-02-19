@@ -1,4 +1,4 @@
-class CDOTA_SimpleObstruction : public CBaseEntity
+class CDOTA_SimpleObstruction
 {
 	bool m_bEnabled;
 	bool m_bBlockFoW;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PineCone_ShieldBash_Slow : public CDOTA_Buff
+class CDOTA_Modifier_PineCone_ShieldBash_Slow
 {
 	int32 knockback_slow;
 };

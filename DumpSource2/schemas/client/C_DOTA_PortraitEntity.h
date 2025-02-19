@@ -1,4 +1,4 @@
-class C_DOTA_PortraitEntity : public C_DOTA_BaseNPC
+class C_DOTA_PortraitEntity
 {
 	CountdownTimer m_PetIdleTimer;
 	ParticleIndex_t m_nMouthFX;

@@ -1,6 +1,6 @@
 class sPlayerSnapshot
 {
-	AbilityID_t[10] m_nItemAbilityID;
+	AbilityID_t[11] m_nItemAbilityID;
 	float32 m_fGameTime;
 	uint8 unKills;
 	uint8 unDeaths;

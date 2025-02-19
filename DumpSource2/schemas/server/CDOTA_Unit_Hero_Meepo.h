@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Meepo : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Meepo
 {
 	int32 m_nWhichMeepo;
 };

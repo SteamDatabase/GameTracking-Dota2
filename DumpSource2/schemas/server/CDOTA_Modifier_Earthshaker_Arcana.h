@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Earthshaker_Arcana : public CDOTA_Buff
+class CDOTA_Modifier_Earthshaker_Arcana
 {
 	int32 m_nComboCount;
 	float32 m_flComboWindow;

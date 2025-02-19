@@ -1,4 +1,4 @@
-class C_INIT_InitialVelocityFromHitbox : public CParticleFunctionInitializer
+class C_INIT_InitialVelocityFromHitbox
 {
 	float32 m_flVelocityMin;
 	float32 m_flVelocityMax;

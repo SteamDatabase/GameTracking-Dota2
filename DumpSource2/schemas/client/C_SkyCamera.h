@@ -1,4 +1,4 @@
-class C_SkyCamera : public C_BaseEntity
+class C_SkyCamera
 {
 	sky3dparams_t m_skyboxData;
 	CUtlStringToken m_skyboxSlotToken;

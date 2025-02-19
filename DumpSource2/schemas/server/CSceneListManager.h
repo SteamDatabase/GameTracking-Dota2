@@ -1,4 +1,4 @@
-class CSceneListManager : public CLogicalEntity
+class CSceneListManager
 {
 	CUtlVector< CHandle< CSceneListManager > > m_hListManagers;
 	CUtlSymbolLarge[16] m_iszScenes;

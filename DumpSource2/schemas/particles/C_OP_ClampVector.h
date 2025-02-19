@@ -1,4 +1,4 @@
-class C_OP_ClampVector : public CParticleFunctionOperator
+class C_OP_ClampVector
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleVecInput m_vecOutputMin;

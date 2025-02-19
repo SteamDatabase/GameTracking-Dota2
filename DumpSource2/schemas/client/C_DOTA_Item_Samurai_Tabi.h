@@ -1,4 +1,4 @@
-class C_DOTA_Item_Samurai_Tabi : public C_DOTA_Item
+class C_DOTA_Item_Samurai_Tabi
 {
 	int32 m_iStat;
 };

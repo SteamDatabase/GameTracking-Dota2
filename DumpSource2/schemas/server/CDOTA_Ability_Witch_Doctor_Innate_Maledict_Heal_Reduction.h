@@ -1,3 +1,3 @@
-class CDOTA_Ability_Witch_Doctor_Innate_Maledict_Heal_Reduction : public CDOTABaseAbility
+class CDOTA_Ability_Witch_Doctor_Innate_Maledict_Heal_Reduction
 {
 };

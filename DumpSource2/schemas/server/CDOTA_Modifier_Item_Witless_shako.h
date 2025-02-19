@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Witless_shako : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Witless_shako
 {
 	int32 max_health;
 	int32 max_mana;

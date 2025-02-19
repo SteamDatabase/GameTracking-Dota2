@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lycan_SummonWolves_GeistForm : public CDOTA_Buff
+class CDOTA_Modifier_Lycan_SummonWolves_GeistForm
 {
 	float32 evasion;
 	float32 min_movespeed;

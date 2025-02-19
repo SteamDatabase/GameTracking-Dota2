@@ -1,4 +1,4 @@
-class CNmCurrentSyncEventIDNode::CDefinition : public CNmIDValueNode::CDefinition
+class CNmCurrentSyncEventIDNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 };

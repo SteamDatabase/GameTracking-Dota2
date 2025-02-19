@@ -1,4 +1,4 @@
-class CFuncMoveLinear : public CBaseToggle
+class CFuncMoveLinear
 {
 	MoveLinearAuthoredPos_t m_authoredPosition;
 	QAngle m_angMoveEntitySpace;

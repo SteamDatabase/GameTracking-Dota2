@@ -1,4 +1,4 @@
-class RnSphereDesc_t : public RnShapeDesc_t
+class RnSphereDesc_t
 {
 	SphereBase_t< float32 > m_Sphere;
 };

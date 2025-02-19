@@ -1,4 +1,4 @@
-class C_INIT_RandomYawFlip : public CParticleFunctionInitializer
+class C_INIT_RandomYawFlip
 {
 	float32 m_flPercent;
 };

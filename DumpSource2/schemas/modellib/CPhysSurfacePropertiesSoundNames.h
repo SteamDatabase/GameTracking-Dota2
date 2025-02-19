@@ -11,4 +11,5 @@ class CPhysSurfacePropertiesSoundNames
 	CUtlString m_meleeImpact;
 	CUtlString m_pushOff;
 	CUtlString m_skidStop;
+	CUtlString m_resonant;
 };

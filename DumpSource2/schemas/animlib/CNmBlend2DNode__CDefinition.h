@@ -1,4 +1,4 @@
-class CNmBlend2DNode::CDefinition : public CNmPoseNode::CDefinition
+class CNmBlend2DNode::CDefinition
 {
 	CUtlVectorFixedGrowable< int16, 5 > m_sourceNodeIndices;
 	int16 m_nInputParameterNodeIdx0;

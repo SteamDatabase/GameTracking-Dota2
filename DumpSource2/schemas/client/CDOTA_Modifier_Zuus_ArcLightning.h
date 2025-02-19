@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Zuus_ArcLightning : public CDOTA_Buff
+class CDOTA_Modifier_Zuus_ArcLightning
 {
 	float32 radius;
 	int32 jump_count;

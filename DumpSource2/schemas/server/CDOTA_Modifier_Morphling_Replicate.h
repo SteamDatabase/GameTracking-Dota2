@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Morphling_Replicate : public CDOTA_Buff
+class CDOTA_Modifier_Morphling_Replicate
 {
 	CHandle< CBaseEntity > m_hTinyTreeWearable;
 	float32 m_flBaseAttackRange;

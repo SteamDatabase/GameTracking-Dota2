@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Creature : public CDOTA_BaseNPC_Creep
+class CDOTA_BaseNPC_Creature
 {
 	bool m_bInitialized;
 	bool m_bCreatureCanRespawn;

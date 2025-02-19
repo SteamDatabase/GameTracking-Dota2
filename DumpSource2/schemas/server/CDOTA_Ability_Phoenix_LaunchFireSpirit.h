@@ -1,4 +1,4 @@
-class CDOTA_Ability_Phoenix_LaunchFireSpirit : public CDOTABaseAbility
+class CDOTA_Ability_Phoenix_LaunchFireSpirit
 {
 	int32 spirit_speed;
 	float32 duration;

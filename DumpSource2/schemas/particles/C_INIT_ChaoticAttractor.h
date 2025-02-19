@@ -1,4 +1,4 @@
-class C_INIT_ChaoticAttractor : public CParticleFunctionInitializer
+class C_INIT_ChaoticAttractor
 {
 	float32 m_flAParm;
 	float32 m_flBParm;

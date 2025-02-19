@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_AreaAttack_CircleConstant : public CSurvivorsPowerUp_AreaAttack_Circle
+class CSurvivorsPowerUp_AreaAttack_CircleConstant
 {
 	CUtlOrderedMap< SurvivorsUnitID_t, float32 > m_mapEnemyDamagedTimers;
 	CNewParticleEffect* m_pParticleEffect;

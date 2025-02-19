@@ -1,4 +1,4 @@
-class CNmFloatAbsNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFloatAbsNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 };

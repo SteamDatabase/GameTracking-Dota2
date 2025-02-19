@@ -1,4 +1,4 @@
-class CEnvProjectedTexture : public CModelPointEntity
+class CEnvProjectedTexture
 {
 	CHandle< CBaseEntity > m_hTargetEntity;
 	bool m_bState;

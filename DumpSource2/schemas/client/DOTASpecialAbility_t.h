@@ -16,8 +16,8 @@ class DOTASpecialAbility_t
 	CUtlStringToken m_strRequiredFacet;
 	int32 m_nDamageTypeField;
 	bool m_bSpellDamageField;
-	bool m_bScepterField;
-	bool m_bShardField;
+	bool m_bRequiresScepterField;
+	bool m_bRequiresShardField;
 	bool m_bAffectedByAoEIncrease;
 	bool m_bDynamicValue;
 	EDOTASpecialBonusOperation m_eSpecialBonusOperation;

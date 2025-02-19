@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Aghsfort_Reward_CritAura : public CDOTA_Buff
+class CDOTA_Modifier_Aghsfort_Reward_CritAura
 {
 	int32 radius;
 };

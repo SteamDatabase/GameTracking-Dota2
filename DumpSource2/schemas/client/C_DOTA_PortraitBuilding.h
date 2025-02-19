@@ -1,4 +1,4 @@
-class C_DOTA_PortraitBuilding : public CBaseAnimatingActivity
+class C_DOTA_PortraitBuilding
 {
 	ParticleIndex_t m_nAmbientFXIndex;
 	CStrongHandle< InfoForResourceTypeIParticleSystemDefinition > m_nFXIndex;

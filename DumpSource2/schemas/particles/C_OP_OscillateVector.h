@@ -1,4 +1,4 @@
-class C_OP_OscillateVector : public CParticleFunctionOperator
+class C_OP_OscillateVector
 {
 	Vector m_RateMin;
 	Vector m_RateMax;

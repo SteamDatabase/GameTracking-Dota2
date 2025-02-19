@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Creature_Flamestrike : public CDOTA_Buff
+class CDOTA_Modifier_Creature_Flamestrike
 {
 	int32 impact_radius;
 	float32 ground_burn_duration;

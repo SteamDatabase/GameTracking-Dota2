@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VengefulSpirit_WaveOfTerror : public CDOTA_Buff
+class CDOTA_Modifier_VengefulSpirit_WaveOfTerror
 {
 	int32 armor_reduction;
 	int32 attack_reduction;

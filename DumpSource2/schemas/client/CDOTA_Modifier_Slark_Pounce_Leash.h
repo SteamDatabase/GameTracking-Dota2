@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_Pounce_Leash : public CDOTA_Buff
+class CDOTA_Modifier_Slark_Pounce_Leash
 {
 	int32 leash_radius;
 	Vector vLeashLocation;

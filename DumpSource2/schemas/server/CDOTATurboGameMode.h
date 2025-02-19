@@ -1,4 +1,4 @@
-class CDOTATurboGameMode : public CDOTABaseGameMode
+class CDOTATurboGameMode
 {
 	int32 m_nHighestLevelInCurrentGame;
 	CUtlVector< float32 > m_ExtraMeleeCreepTimes;
@@ -8,7 +8,6 @@ class CDOTATurboGameMode : public CDOTABaseGameMode
 	int32 m_nExtraXPPerWave;
 	float32 m_flNextRewardDistributionTime;
 	float32 m_flNextWaveRecalculationTime;
-	float32 m_flNextNeutralItemDistributionTime;
 	bool m_bInOvertime;
 	bool m_bDistributingPassiveGoldAndXp;
 };

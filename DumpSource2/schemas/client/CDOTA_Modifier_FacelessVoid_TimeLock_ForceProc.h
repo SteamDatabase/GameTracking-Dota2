@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FacelessVoid_TimeLock_ForceProc : public CDOTA_Buff
+class CDOTA_Modifier_FacelessVoid_TimeLock_ForceProc
 {
 	float32 duration;
 	float32 duration_creep;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_DarkSeer_Surge : public C_DOTABaseAbility
+class CDOTA_Ability_DarkSeer_Surge
 {
 	bool m_bIsAltCastState;
 };

@@ -1,4 +1,4 @@
-class C_OP_HSVShiftToCP : public CParticleFunctionPreEmission
+class C_OP_HSVShiftToCP
 {
 	int32 m_nColorCP;
 	int32 m_nColorGemEnableCP;

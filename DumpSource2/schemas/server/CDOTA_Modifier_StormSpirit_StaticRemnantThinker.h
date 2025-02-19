@@ -1,4 +1,4 @@
-class CDOTA_Modifier_StormSpirit_StaticRemnantThinker : public CDOTA_Buff
+class CDOTA_Modifier_StormSpirit_StaticRemnantThinker
 {
 	int32 static_remnant_radius;
 	int32 static_remnant_damage_radius;

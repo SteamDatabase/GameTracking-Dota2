@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Chen_Divine_Favor_Teleport : public CDOTA_Buff
+class CDOTA_Modifier_Chen_Divine_Favor_Teleport
 {
 	bool bToChen;
 };

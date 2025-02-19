@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Cleave : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Cleave
 {
 	float32 value;
 };

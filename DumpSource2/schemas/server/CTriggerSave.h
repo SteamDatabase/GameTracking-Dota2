@@ -1,4 +1,4 @@
-class CTriggerSave : public CBaseTrigger
+class CTriggerSave
 {
 	bool m_bForceNewLevelUnit;
 	float32 m_fDangerousTimer;

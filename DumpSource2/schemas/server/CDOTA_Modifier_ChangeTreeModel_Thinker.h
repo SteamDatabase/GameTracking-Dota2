@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ChangeTreeModel_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_ChangeTreeModel_Thinker
 {
 	CHandle< CBaseEntity > m_hTree;
 	CUtlString m_strModel;

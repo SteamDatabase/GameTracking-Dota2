@@ -1,4 +1,4 @@
-class CModelConfigElement_UserPick : public CModelConfigElement
+class CModelConfigElement_UserPick
 {
 	CUtlVector< CUtlString > m_Choices;
 };

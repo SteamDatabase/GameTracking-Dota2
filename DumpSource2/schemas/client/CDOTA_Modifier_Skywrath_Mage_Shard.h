@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Skywrath_Mage_Shard : public CDOTA_Buff
+class CDOTA_Modifier_Skywrath_Mage_Shard
 {
 	float32 stack_duration;
 	int32 damage_barrier_base;

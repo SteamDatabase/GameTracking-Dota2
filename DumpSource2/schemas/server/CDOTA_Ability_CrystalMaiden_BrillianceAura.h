@@ -1,3 +1,4 @@
-class CDOTA_Ability_CrystalMaiden_BrillianceAura : public CDOTABaseAbility
+class CDOTA_Ability_CrystalMaiden_BrillianceAura
 {
+	bool activatable;
 };

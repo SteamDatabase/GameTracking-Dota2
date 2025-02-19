@@ -1,4 +1,4 @@
-class CDOTA_Item_Armlet : public CDOTA_Item
+class CDOTA_Item_Armlet
 {
 	float32 toggle_cooldown;
 	GameTime_t m_flLastActivateTime;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Jakiro_DoubleTrouble : public CDOTABaseAbility
+class CDOTA_Ability_Jakiro_DoubleTrouble
 {
 };

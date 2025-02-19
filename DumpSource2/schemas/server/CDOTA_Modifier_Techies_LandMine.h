@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_LandMine : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_Techies_LandMine
 {
 	float32 radius;
 	float32 proximity_threshold;

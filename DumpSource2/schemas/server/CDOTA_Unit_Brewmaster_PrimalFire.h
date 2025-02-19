@@ -1,4 +1,4 @@
-class CDOTA_Unit_Brewmaster_PrimalFire : public CDOTA_BaseNPC_Creep
+class CDOTA_Unit_Brewmaster_PrimalFire
 {
 	ParticleIndex_t m_nFXAmbient;
 };

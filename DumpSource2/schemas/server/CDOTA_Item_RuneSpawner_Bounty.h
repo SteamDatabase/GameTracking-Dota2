@@ -1,4 +1,4 @@
-class CDOTA_Item_RuneSpawner_Bounty : public CBaseAnimatingActivity
+class CDOTA_Item_RuneSpawner_Bounty
 {
 	CUtlSymbolLarge m_szPosition;
 	int32 m_nDotaTeam;

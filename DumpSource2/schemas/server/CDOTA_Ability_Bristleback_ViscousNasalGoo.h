@@ -1,3 +1,3 @@
-class CDOTA_Ability_Bristleback_ViscousNasalGoo : public CDOTABaseAbility
+class CDOTA_Ability_Bristleback_ViscousNasalGoo
 {
 };

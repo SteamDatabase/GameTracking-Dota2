@@ -1,4 +1,4 @@
-class C_OP_MovementPlaceOnGround : public CParticleFunctionOperator
+class C_OP_MovementPlaceOnGround
 {
 	CPerParticleFloatInput m_flOffset;
 	float32 m_flMaxTraceLength;

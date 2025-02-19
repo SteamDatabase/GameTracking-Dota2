@@ -1,4 +1,4 @@
-class ArtyProgressBarDef_t : public ArtyGameObjectDef_t
+class ArtyProgressBarDef_t
 {
 	float32 m_flNotchSize;
 };

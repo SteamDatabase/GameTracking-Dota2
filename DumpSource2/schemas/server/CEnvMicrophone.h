@@ -1,4 +1,4 @@
-class CEnvMicrophone : public CPointEntity
+class CEnvMicrophone
 {
 	bool m_bDisabled;
 	CHandle< CBaseEntity > m_hMeasureTarget;

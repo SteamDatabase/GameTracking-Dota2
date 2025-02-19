@@ -1,4 +1,4 @@
-class CInfoPlayerStartDota : public CPointEntity
+class CInfoPlayerStartDota
 {
 	bool m_bDisabled;
 	CEntityIOOutput m_OnEnabled;

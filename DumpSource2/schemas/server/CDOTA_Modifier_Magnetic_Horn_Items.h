@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Magnetic_Horn_Items : public CDOTA_Buff
+class CDOTA_Modifier_Magnetic_Horn_Items
 {
 	CUtlVector< CDOTABaseAbility* > vecActivatedAbilities;
 };

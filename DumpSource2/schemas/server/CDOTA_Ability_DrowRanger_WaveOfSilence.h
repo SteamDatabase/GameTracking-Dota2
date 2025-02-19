@@ -1,4 +1,4 @@
-class CDOTA_Ability_DrowRanger_WaveOfSilence : public CDOTABaseAbility
+class CDOTA_Ability_DrowRanger_WaveOfSilence
 {
 	Vector m_vStartPosition;
 	Vector m_vEndPosition;

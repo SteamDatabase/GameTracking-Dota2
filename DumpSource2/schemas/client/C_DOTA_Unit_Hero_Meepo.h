@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Hero_Meepo : public C_DOTA_BaseNPC_Hero
+class C_DOTA_Unit_Hero_Meepo
 {
 	int32 m_nWhichMeepo;
 };

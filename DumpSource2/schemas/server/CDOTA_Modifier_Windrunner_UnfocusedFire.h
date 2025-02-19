@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Windrunner_UnfocusedFire : public CDOTA_Buff
+class CDOTA_Modifier_Windrunner_UnfocusedFire
 {
 	int32 nQuadrant;
 	int32 focusfire_damage_reduction;

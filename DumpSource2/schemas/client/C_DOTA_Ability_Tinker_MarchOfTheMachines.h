@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Tinker_MarchOfTheMachines : public C_DOTABaseAbility
+class C_DOTA_Ability_Tinker_MarchOfTheMachines
 {
 	int32 splash_radius;
 	int32 damage;

@@ -1,4 +1,4 @@
-class CPhysicsSpring : public CBaseEntity
+class CPhysicsSpring
 {
 	float32 m_flFrequency;
 	float32 m_flDampingRatio;

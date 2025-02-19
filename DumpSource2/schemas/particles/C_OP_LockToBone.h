@@ -1,4 +1,4 @@
-class C_OP_LockToBone : public CParticleFunctionOperator
+class C_OP_LockToBone
 {
 	CParticleModelInput m_modelInput;
 	CParticleTransformInput m_transformInput;

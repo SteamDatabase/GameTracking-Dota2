@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tinker_Defensive_Matrix : public CDOTA_Buff
+class CDOTA_Modifier_Tinker_Defensive_Matrix
 {
 	int32 damage_absorb;
 	int32 status_resistance;

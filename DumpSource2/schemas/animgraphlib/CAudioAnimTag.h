@@ -1,4 +1,4 @@
-class CAudioAnimTag : public CAnimTagBase
+class CAudioAnimTag
 {
 	CUtlString m_clipName;
 	CUtlString m_attachmentName;

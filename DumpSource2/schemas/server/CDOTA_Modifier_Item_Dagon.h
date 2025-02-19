@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Dagon : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Dagon
 {
 	int32 bonus_int;
 	int32 bonus_str;

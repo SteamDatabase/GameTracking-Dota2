@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_ExplosiveBarrel : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_ExplosiveBarrel
 {
 	ParticleIndex_t m_nPreviewFX;
 	int32 radius;

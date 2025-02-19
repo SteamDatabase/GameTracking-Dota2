@@ -1,4 +1,4 @@
-class CNmCachedBoolNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmCachedBoolNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	NmCachedValueMode_t m_mode;

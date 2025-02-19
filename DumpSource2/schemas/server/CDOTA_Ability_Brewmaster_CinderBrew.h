@@ -1,4 +1,4 @@
-class CDOTA_Ability_Brewmaster_CinderBrew : public CDOTABaseAbility
+class CDOTA_Ability_Brewmaster_CinderBrew
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hUnitsHit;
 	float32 duration;

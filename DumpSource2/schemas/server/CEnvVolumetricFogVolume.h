@@ -1,4 +1,4 @@
-class CEnvVolumetricFogVolume : public CBaseEntity
+class CEnvVolumetricFogVolume
 {
 	bool m_bActive;
 	Vector m_vBoxMins;

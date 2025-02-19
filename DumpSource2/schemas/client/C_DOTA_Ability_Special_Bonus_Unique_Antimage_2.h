@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Antimage_2 : public C_DOTABaseAbility
+class C_DOTA_Ability_Special_Bonus_Unique_Antimage_2
 {
 };

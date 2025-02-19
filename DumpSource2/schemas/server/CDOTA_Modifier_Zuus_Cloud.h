@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Zuus_Cloud : public CDOTA_Buff
+class CDOTA_Modifier_Zuus_Cloud
 {
 	CountdownTimer m_CloudBoltTimer;
 	float32 cloud_bolt_interval;

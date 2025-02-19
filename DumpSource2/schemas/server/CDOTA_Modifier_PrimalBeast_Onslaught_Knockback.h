@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PrimalBeast_Onslaught_Knockback : public CDOTA_Buff
+class CDOTA_Modifier_PrimalBeast_Onslaught_Knockback
 {
 	Vector m_vLoc;
 	float32 m_flPredictedTotalTime;

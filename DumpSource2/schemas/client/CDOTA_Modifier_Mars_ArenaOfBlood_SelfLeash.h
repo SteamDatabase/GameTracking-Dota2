@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mars_ArenaOfBlood_SelfLeash : public CDOTA_Buff
+class CDOTA_Modifier_Mars_ArenaOfBlood_SelfLeash
 {
 	int32 radius;
 	float32 width;

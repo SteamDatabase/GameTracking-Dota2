@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_VengefulSpirit : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_VengefulSpirit
 {
 	bool m_bArcanaEquipped;
 };

@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Hero_PhantomLancer : public C_DOTA_BaseNPC_Hero
+class C_DOTA_Unit_Hero_PhantomLancer
 {
 	bool m_bInventoryEnabled;
 };

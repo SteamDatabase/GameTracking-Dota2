@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_TameTheBeasts : public CDOTA_Buff
+class CDOTA_Modifier_Ringmaster_TameTheBeasts
 {
 	float32 m_flPreviousMult;
 	float32 m_fChannelTime;

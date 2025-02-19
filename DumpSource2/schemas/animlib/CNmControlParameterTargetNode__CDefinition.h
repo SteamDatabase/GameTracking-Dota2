@@ -1,3 +1,3 @@
-class CNmControlParameterTargetNode::CDefinition : public CNmTargetValueNode::CDefinition
+class CNmControlParameterTargetNode::CDefinition
 {
 };

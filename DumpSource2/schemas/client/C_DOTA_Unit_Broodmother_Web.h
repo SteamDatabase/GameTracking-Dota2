@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Broodmother_Web : public C_DOTA_BaseNPC_Additive
+class C_DOTA_Unit_Broodmother_Web
 {
 	ParticleIndex_t m_nFXIndex;
 	Vector m_vecOrigin;

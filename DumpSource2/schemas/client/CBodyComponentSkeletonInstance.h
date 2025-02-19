@@ -1,4 +1,4 @@
-class CBodyComponentSkeletonInstance : public CBodyComponent
+class CBodyComponentSkeletonInstance
 {
 	CSkeletonInstance m_skeletonInstance;
 };

@@ -1,4 +1,4 @@
-class CJumpHelperUpdateNode : public CSequenceUpdateNode
+class CJumpHelperUpdateNode
 {
 	CAnimParamHandle m_hTargetParam;
 	Vector m_flOriginalJumpMovement;

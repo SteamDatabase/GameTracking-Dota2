@@ -1,4 +1,4 @@
-class CDOTAPropArenaOfBloodWarrior : public C_DynamicProp
+class CDOTAPropArenaOfBloodWarrior
 {
 	bool m_bDying;
 };

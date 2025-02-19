@@ -1,4 +1,4 @@
-class CDOTA_Ability_OgreBruiser_OgreSmash : public CDOTABaseAbility
+class CDOTA_Ability_OgreBruiser_OgreSmash
 {
 	int32 radius;
 	float32 hero_stun_duration;

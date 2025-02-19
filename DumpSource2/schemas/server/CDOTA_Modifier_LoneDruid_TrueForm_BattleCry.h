@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_TrueForm_BattleCry : public CDOTA_Buff
+class CDOTA_Modifier_LoneDruid_TrueForm_BattleCry
 {
 	int32 bonus_damage;
 	int32 bonus_armor;

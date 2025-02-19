@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_TranquilBoots : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_TranquilBoots
 {
 	int32 bonus_movement_speed;
 	int32 broken_movement_speed;

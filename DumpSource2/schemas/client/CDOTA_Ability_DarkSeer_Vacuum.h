@@ -1,4 +1,4 @@
-class CDOTA_Ability_DarkSeer_Vacuum : public C_DOTABaseAbility
+class CDOTA_Ability_DarkSeer_Vacuum
 {
 	Vector m_vPullLocation;
 };

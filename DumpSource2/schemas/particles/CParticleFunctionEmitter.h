@@ -1,4 +1,4 @@
-class CParticleFunctionEmitter : public CParticleFunction
+class CParticleFunctionEmitter
 {
 	int32 m_nEmitterIndex;
 };

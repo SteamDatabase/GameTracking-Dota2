@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BlueDragonspawnOverseer_DevotionAura_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_BlueDragonspawnOverseer_DevotionAura_Bonus
 {
 	int32 bonus_armor;
 };

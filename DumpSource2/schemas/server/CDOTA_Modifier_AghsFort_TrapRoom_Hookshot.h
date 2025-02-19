@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_TrapRoom_Hookshot : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_TrapRoom_Hookshot
 {
 	CHandle< CBaseEntity > m_hTarget;
 	Vector m_vStartPosition;

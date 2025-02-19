@@ -1,4 +1,4 @@
-class CPhysForce : public CPointEntity
+class CPhysForce
 {
 	CUtlSymbolLarge m_nameAttach;
 	float32 m_force;

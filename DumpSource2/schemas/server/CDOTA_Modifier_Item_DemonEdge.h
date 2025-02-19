@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_DemonEdge : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_DemonEdge
 {
 	int32 bonus_damage;
 };

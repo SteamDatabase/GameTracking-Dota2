@@ -1,4 +1,4 @@
-class CDOTA_Ability_Wisp_Spirits : public CDOTABaseAbility
+class CDOTA_Ability_Wisp_Spirits
 {
 	CUtlVector< sSpiritDef > m_SpiritDefs;
 	int32 m_nWispDirection;

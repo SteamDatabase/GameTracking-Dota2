@@ -1,4 +1,4 @@
-class CDOTA_Ability_Furion_Teleportation : public CDOTABaseAbility
+class CDOTA_Ability_Furion_Teleportation
 {
 	ParticleIndex_t m_nFXIndexStart;
 	ParticleIndex_t m_nFXIndexEnd;

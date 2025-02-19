@@ -1,4 +1,4 @@
-class C_DotaQuest : public C_BaseEntity
+class C_DotaQuest
 {
 	char[256] m_pszQuestTitle;
 	char[256] m_pszQuestText;

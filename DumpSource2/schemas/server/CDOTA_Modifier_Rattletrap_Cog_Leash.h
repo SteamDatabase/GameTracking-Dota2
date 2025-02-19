@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_Cog_Leash : public CDOTA_Buff
+class CDOTA_Modifier_Rattletrap_Cog_Leash
 {
 	int32 leash;
 };

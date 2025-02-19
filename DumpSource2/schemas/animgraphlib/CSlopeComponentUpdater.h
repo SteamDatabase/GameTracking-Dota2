@@ -1,4 +1,4 @@
-class CSlopeComponentUpdater : public CAnimComponentUpdater
+class CSlopeComponentUpdater
 {
 	float32 m_flTraceDistance;
 	CAnimParamHandle m_hSlopeAngle;

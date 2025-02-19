@@ -1,4 +1,4 @@
-class CBaseTrailRenderer : public CBaseRendererSource2
+class CBaseTrailRenderer
 {
 	ParticleOrientationChoiceList_t m_nOrientationType;
 	int32 m_nOrientationControlPoint;

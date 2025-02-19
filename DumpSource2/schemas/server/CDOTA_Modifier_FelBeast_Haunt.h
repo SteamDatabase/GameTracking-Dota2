@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FelBeast_Haunt : public CDOTA_Buff
+class CDOTA_Modifier_FelBeast_Haunt
 {
 	int32 damage_per_second;
 };

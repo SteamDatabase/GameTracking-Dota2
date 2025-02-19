@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BountyHunter_Jinada : public CDOTA_Buff
+class CDOTA_Modifier_BountyHunter_Jinada
 {
 	int32 bonus_damage;
 	int32 gold_steal;

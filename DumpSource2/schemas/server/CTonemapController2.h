@@ -1,4 +1,4 @@
-class CTonemapController2 : public CBaseEntity
+class CTonemapController2
 {
 	float32 m_flAutoExposureMin;
 	float32 m_flAutoExposureMax;

@@ -1,4 +1,4 @@
-class CSpeedScaleUpdateNode : public CUnaryUpdateNode
+class CSpeedScaleUpdateNode
 {
 	CAnimParamHandle m_paramIndex;
 };

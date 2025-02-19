@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Skywrath_Mage_Arcane_Bolt_Lifesteal : public CDOTA_Buff
+class CDOTA_Modifier_Skywrath_Mage_Arcane_Bolt_Lifesteal
 {
 	float32 lifesteal_amt;
 };

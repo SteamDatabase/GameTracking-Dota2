@@ -1,4 +1,4 @@
-class CEnvGlobal : public CLogicalEntity
+class CEnvGlobal
 {
 	CEntityOutputTemplate< int32 > m_outCounter;
 	CUtlSymbolLarge m_globalstate;

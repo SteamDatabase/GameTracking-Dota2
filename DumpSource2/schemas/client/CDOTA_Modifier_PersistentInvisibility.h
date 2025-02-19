@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PersistentInvisibility : public CDOTA_Buff
+class CDOTA_Modifier_PersistentInvisibility
 {
 	float32 fade_delay;
 	float32 m_flFadeTime;

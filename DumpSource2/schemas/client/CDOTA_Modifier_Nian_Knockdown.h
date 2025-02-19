@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_Knockdown : public CDOTA_Buff
+class CDOTA_Modifier_Nian_Knockdown
 {
 	float32 m_flStandUpDuration;
 	float32 m_flKnockDownDuration;

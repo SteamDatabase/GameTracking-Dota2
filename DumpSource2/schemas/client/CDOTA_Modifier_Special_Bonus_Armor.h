@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Armor : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Armor
 {
 	int32 value;
 };

@@ -1,4 +1,4 @@
-class C_DOTABaseGameMode : public C_BaseEntity
+class C_DOTABaseGameMode
 {
 	CUtlString m_ForcedHUDSkin;
 	HeroID_t m_nCustomGameForceHeroSelectionId;

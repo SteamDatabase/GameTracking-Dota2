@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Creature_Ice_Breath : public C_DOTABaseAbility
+class C_DOTA_Ability_Creature_Ice_Breath
 {
 	int32 speed;
 	int32 projectile_count;

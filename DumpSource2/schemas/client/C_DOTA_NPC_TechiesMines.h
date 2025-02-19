@@ -1,4 +1,4 @@
-class C_DOTA_NPC_TechiesMines : public C_DOTA_BaseNPC_Additive
+class C_DOTA_NPC_TechiesMines
 {
 	ParticleIndex_t m_iRangeFX;
 };

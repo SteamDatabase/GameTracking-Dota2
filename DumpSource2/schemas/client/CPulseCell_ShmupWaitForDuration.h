@@ -1,4 +1,4 @@
-class CPulseCell_ShmupWaitForDuration : public CPulseCell_BaseYieldingInflow
+class CPulseCell_ShmupWaitForDuration
 {
 	CPulse_ResumePoint m_WakeResume;
 };

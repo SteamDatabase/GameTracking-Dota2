@@ -1,4 +1,4 @@
-class CNmLayerBlendNode::CDefinition : public CNmPoseNode::CDefinition
+class CNmLayerBlendNode::CDefinition
 {
 	int16 m_nBaseNodeIdx;
 	bool m_bOnlySampleBaseRootMotion;

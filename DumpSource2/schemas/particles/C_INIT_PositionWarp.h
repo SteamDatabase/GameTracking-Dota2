@@ -1,4 +1,4 @@
-class C_INIT_PositionWarp : public CParticleFunctionInitializer
+class C_INIT_PositionWarp
 {
 	CParticleCollectionVecInput m_vecWarpMin;
 	CParticleCollectionVecInput m_vecWarpMax;

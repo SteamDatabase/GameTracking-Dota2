@@ -1,4 +1,4 @@
-class CDOTA_Ability_Spectre_SpectralDagger : public CDOTABaseAbility
+class CDOTA_Ability_Spectre_SpectralDagger
 {
 	float32 dagger_path_duration;
 	float32 hero_path_duration;

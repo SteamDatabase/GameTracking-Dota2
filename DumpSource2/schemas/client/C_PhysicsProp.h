@@ -1,4 +1,4 @@
-class C_PhysicsProp : public C_BreakableProp
+class C_PhysicsProp
 {
 	bool m_bAwake;
 };

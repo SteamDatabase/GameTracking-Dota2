@@ -1,4 +1,4 @@
-class C_EnvDecal : public C_BaseModelEntity
+class C_EnvDecal
 {
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hDecalMaterial;
 	float32 m_flWidth;

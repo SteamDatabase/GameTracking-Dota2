@@ -1,4 +1,4 @@
-class C_OP_RenderOmni2Light : public CParticleFunctionRenderer
+class C_OP_RenderOmni2Light
 {
 	ParticleOmni2LightTypeChoiceList_t m_nLightType;
 	CParticleCollectionVecInput m_vColorBlend;

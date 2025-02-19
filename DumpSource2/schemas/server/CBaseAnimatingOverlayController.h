@@ -1,4 +1,4 @@
-class CBaseAnimatingOverlayController : public CBaseAnimatingController
+class CBaseAnimatingOverlayController
 {
 	CUtlVectorEmbeddedNetworkVar< CAnimationLayer > m_AnimOverlay;
 };

@@ -1,4 +1,4 @@
-class C_OP_LerpVector : public CParticleFunctionOperator
+class C_OP_LerpVector
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	Vector m_vecOutput;

@@ -1,4 +1,4 @@
-class C_OP_CylindricalDistanceToTransform : public CParticleFunctionOperator
+class C_OP_CylindricalDistanceToTransform
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleFloatInput m_flInputMin;

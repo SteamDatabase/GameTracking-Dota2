@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_Capture : public C_DOTABaseAbility
+class CDOTA_Ability_AghsFort_Capture
 {
 	CHandle< C_DOTA_BaseNPC > m_hTarget;
 };

@@ -1,3 +1,3 @@
-class C_OP_RemapNamedModelMeshGroupOnceTimed : public C_OP_RemapNamedModelElementOnceTimed
+class C_OP_RemapNamedModelMeshGroupOnceTimed
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Necrolyte_ReapersScythe : public CDOTA_Modifier_Stunned
+class CDOTA_Modifier_Necrolyte_ReapersScythe
 {
 	float32 stun_duration;
 	bool m_bIllusion;

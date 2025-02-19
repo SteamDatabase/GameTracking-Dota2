@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Grimstroke_SpiritWalk_Buff : public CDOTA_Buff
+class CDOTA_Modifier_Grimstroke_SpiritWalk_Buff
 {
 	GameTime_t m_fStartTime;
 	int32 m_nHeroTickDamageApplied;

@@ -1,3 +1,3 @@
-class C_DOTA_PortraitTree : public CBaseAnimatingActivity
+class C_DOTA_PortraitTree
 {
 };

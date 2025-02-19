@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Weaver_Shukuchi_GeminateAttackManager : public CDOTA_Buff
+class CDOTA_Modifier_Weaver_Shukuchi_GeminateAttackManager
 {
 	int32 m_iAttacksRemaining;
 };

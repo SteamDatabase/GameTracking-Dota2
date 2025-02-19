@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_Frenzy : public CDOTA_Buff
+class CDOTA_Modifier_Nian_Frenzy
 {
 	int32 damage;
 	int32 damage_radius;

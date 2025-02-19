@@ -1,8 +1,6 @@
-class CDOTA_Ability_Muerta_DeadShot : public CDOTABaseAbility
+class CDOTA_Ability_Muerta_DeadShot
 {
 	int32 radius;
-	int32 ricochet_radius_start;
-	int32 ricochet_radius_end;
 	int32 speed;
 	Vector m_vTargetPos;
 	Vector m_vEndpoint;

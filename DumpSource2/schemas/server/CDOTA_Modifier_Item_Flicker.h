@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Flicker : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Flicker
 {
 	int32 bonus_movement_speed;
 };

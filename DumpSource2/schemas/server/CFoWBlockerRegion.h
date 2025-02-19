@@ -1,4 +1,4 @@
-class CFoWBlockerRegion : public CBaseEntity
+class CFoWBlockerRegion
 {
 	CUtlVectorEmbeddedNetworkVar< FowBlocker_t > m_vecFowBlockers;
 	float32 m_flMinX;

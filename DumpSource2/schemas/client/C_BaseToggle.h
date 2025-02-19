@@ -1,3 +1,3 @@
-class C_BaseToggle : public C_BaseModelEntity
+class C_BaseToggle
 {
 };

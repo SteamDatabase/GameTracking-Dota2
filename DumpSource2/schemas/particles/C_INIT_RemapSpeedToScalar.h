@@ -1,4 +1,4 @@
-class C_INIT_RemapSpeedToScalar : public CParticleFunctionInitializer
+class C_INIT_RemapSpeedToScalar
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	int32 m_nControlPointNumber;

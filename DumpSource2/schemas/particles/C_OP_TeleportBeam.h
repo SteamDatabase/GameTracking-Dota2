@@ -1,4 +1,4 @@
-class C_OP_TeleportBeam : public CParticleFunctionOperator
+class C_OP_TeleportBeam
 {
 	int32 m_nCPPosition;
 	int32 m_nCPVelocity;

@@ -1,4 +1,4 @@
-class CSoundAreaEntityBase : public CBaseEntity
+class CSoundAreaEntityBase
 {
 	bool m_bDisabled;
 	CUtlSymbolLarge m_iszSoundAreaType;

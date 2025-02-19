@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SatyrHellcaller_UnholyAura : public CDOTA_Buff
+class CDOTA_Modifier_SatyrHellcaller_UnholyAura
 {
 	float32 radius;
 };

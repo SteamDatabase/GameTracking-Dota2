@@ -1,4 +1,4 @@
-class CDOTAWearableItem : public CEconWearable
+class CDOTAWearableItem
 {
 	bool m_bOwnerModelChanged;
 	bool m_bIsGeneratingEconItem;

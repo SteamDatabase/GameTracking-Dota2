@@ -1,4 +1,4 @@
-class CDOTA_DataSpectator : public CDOTA_DataNonSpectator
+class CDOTA_DataSpectator
 {
 	CHandle< CBaseEntity > m_hPowerupRune_1;
 	CHandle< CBaseEntity > m_hPowerupRune_2;

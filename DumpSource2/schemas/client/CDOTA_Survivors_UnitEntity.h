@@ -1,3 +1,3 @@
-class CDOTA_Survivors_UnitEntity : public C_PortraitWorldUnit
+class CDOTA_Survivors_UnitEntity
 {
 };

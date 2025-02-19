@@ -1,3 +1,3 @@
-class CPulseCell_Value_RandomInt : public CPulseCell_BaseValue
+class CPulseCell_Value_RandomInt
 {
 };

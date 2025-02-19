@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_Magma_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Snapfire_Magma_Thinker
 {
 	float32 burn_interval;
 	int32 impact_radius;

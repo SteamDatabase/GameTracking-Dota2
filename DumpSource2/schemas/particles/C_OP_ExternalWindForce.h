@@ -1,4 +1,4 @@
-class C_OP_ExternalWindForce : public CParticleFunctionForce
+class C_OP_ExternalWindForce
 {
 	CPerParticleVecInput m_vecSamplePosition;
 	CPerParticleVecInput m_vecScale;

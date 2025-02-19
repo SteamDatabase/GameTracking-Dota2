@@ -1,4 +1,4 @@
-class C_OP_RemapSDFGradientToVectorAttribute : public CParticleFunctionOperator
+class C_OP_RemapSDFGradientToVectorAttribute
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 };

@@ -1,4 +1,4 @@
-class CSoundOpvarSetAABBEntity : public CSoundOpvarSetPointEntity
+class CSoundOpvarSetAABBEntity
 {
 	Vector m_vDistanceInnerMins;
 	Vector m_vDistanceInnerMaxs;

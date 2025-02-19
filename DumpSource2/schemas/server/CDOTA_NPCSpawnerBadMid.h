@@ -1,3 +1,3 @@
-class CDOTA_NPCSpawnerBadMid : public CDOTA_NPCSpawner
+class CDOTA_NPCSpawnerBadMid
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Weaver_Swarm_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Weaver_Swarm_Debuff
 {
 	float32 armor_reduction;
 	int32 damage;

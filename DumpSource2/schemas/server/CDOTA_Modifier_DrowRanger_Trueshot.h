@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DrowRanger_Trueshot : public CDOTA_Buff
+class CDOTA_Modifier_DrowRanger_Trueshot
 {
 	float32 radius;
 };

@@ -1,3 +1,3 @@
-class CSurvivorsEnemyDefinition_Snotty : public CSurvivorsEnemyDefinition
+class CSurvivorsEnemyDefinition_Snotty
 {
 };

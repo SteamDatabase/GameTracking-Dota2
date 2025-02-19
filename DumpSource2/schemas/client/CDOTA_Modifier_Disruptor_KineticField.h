@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Disruptor_KineticField : public CDOTA_Buff
+class CDOTA_Modifier_Disruptor_KineticField
 {
 	float32 radius;
 	Vector m_vOriginLoc;

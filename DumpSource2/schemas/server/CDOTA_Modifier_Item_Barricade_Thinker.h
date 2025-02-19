@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Barricade_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Item_Barricade_Thinker
 {
 	int32 length;
 	int32 width;

@@ -1,4 +1,4 @@
-class C_INIT_AddVectorToVector : public CParticleFunctionInitializer
+class C_INIT_AddVectorToVector
 {
 	Vector m_vecScale;
 	ParticleAttributeIndex_t m_nFieldOutput;

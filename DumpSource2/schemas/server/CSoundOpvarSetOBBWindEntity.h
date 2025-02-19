@@ -1,4 +1,4 @@
-class CSoundOpvarSetOBBWindEntity : public CSoundOpvarSetPointBase
+class CSoundOpvarSetOBBWindEntity
 {
 	Vector m_vMins;
 	Vector m_vMaxs;

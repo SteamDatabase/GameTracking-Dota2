@@ -1,4 +1,4 @@
-class C_DynamicPropClientside : public C_DynamicProp
+class C_DynamicPropClientside
 {
 	bool m_bSetupMaterialProxy;
 };

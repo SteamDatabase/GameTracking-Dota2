@@ -1,4 +1,4 @@
-class CDOTA_TempTree : public CBaseAnimatingActivity
+class CDOTA_TempTree
 {
 	GameTime_t m_fExpireTime;
 	Vector m_vecTreeCircleCenter;

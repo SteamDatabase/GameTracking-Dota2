@@ -1,4 +1,4 @@
-class CIngameEvent_MuertaReleaseSpring2023 : public C_IngameEvent_Base
+class CIngameEvent_MuertaReleaseSpring2023
 {
 	bool m_bMiniGameActive;
 	int8[10] m_vecTargetAssignments;

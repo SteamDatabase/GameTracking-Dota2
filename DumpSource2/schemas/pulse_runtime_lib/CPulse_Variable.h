@@ -1,6 +1,6 @@
 class CPulse_Variable
 {
-	CUtlSymbolLarge m_Name;
+	PulseSymbol_t m_Name;
 	CUtlString m_Description;
 	CPulseValueFullType m_Type;
 	KeyValues3 m_DefaultValue;

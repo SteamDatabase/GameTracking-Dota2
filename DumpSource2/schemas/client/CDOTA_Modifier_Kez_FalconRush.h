@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kez_FalconRush : public CDOTA_Buff
+class CDOTA_Modifier_Kez_FalconRush
 {
 	int32 buff_evasion_pct;
 	int32 rush_speed;

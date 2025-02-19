@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Razor_EyeOfTheStorm_Passive : public CDOTA_Buff
+class CDOTA_Modifier_Razor_EyeOfTheStorm_Passive
 {
 	int32 passive_area_damage;
 	float32 passive_area_interval;

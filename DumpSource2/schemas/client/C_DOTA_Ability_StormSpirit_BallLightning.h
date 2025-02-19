@@ -1,4 +1,4 @@
-class C_DOTA_Ability_StormSpirit_BallLightning : public C_DOTABaseAbility
+class C_DOTA_Ability_StormSpirit_BallLightning
 {
 	bool m_bHasAutoRemnantTalent;
 	float32 m_fAutoRemnantInterval;

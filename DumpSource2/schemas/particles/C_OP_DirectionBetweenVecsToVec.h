@@ -1,4 +1,4 @@
-class C_OP_DirectionBetweenVecsToVec : public CParticleFunctionOperator
+class C_OP_DirectionBetweenVecsToVec
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleVecInput m_vecPoint1;

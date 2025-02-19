@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkSeer_Normal_Punch_Illusion_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_DarkSeer_Normal_Punch_Illusion_Thinker
 {
 	Vector m_vecIllusionSpawnPosition;
 	int32 speed;

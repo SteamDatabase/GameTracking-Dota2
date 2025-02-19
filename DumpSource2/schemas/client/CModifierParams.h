@@ -51,7 +51,6 @@ class CModifierParams
 	bool bProjectileIsFromIllusion;
 	bool bHasMagicComponent;
 	bool bIsSpellLifesteal;
-	CEntityIndex[64] pnMagicStickProcEntityIndices;
 	bool bBloodstoneRegenApplied;
 	bool bShroudManaRestoreApplied;
 	bool bPhylacteryApplied;

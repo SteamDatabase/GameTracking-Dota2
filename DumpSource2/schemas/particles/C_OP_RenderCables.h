@@ -1,4 +1,4 @@
-class C_OP_RenderCables : public CParticleFunctionRenderer
+class C_OP_RenderCables
 {
 	CParticleCollectionFloatInput m_flRadiusScale;
 	CParticleCollectionFloatInput m_flAlphaScale;
@@ -20,6 +20,6 @@ class C_OP_RenderCables : public CParticleFunctionRenderer
 	int32 m_nMaxTesselation;
 	int32 m_nRoundness;
 	CParticleTransformInput m_LightingTransform;
-	CUtlVector< FloatInputMaterialVariable_t > m_MaterialFloatVars;
-	CUtlVector< VecInputMaterialVariable_t > m_MaterialVecVars;
+	CUtlLeanVector< FloatInputMaterialVariable_t > m_MaterialFloatVars;
+	CUtlLeanVector< VecInputMaterialVariable_t > m_MaterialVecVars;
 };

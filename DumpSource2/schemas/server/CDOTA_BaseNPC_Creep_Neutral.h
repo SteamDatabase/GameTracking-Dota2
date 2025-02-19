@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Creep_Neutral : public CDOTA_BaseNPC_Creep
+class CDOTA_BaseNPC_Creep_Neutral
 {
 	CountdownTimer m_ThinkTimer;
 };

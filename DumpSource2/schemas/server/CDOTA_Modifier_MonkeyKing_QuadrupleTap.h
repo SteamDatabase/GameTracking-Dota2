@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_QuadrupleTap : public CDOTA_Buff
+class CDOTA_Modifier_MonkeyKing_QuadrupleTap
 {
 	int32 counter_duration;
 	int32 required_hits;

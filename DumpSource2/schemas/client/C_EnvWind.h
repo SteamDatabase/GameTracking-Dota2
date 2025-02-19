@@ -1,4 +1,4 @@
-class C_EnvWind : public C_BaseEntity
+class C_EnvWind
 {
 	C_EnvWindShared m_EnvWindShared;
 };

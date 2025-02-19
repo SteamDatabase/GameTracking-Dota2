@@ -1,4 +1,4 @@
-class CPulseCell_Outflow_CycleOrdered : public CPulseCell_BaseFlow
+class CPulseCell_Outflow_CycleOrdered
 {
 	CUtlVector< CPulse_OutflowConnection > m_Outputs;
 };

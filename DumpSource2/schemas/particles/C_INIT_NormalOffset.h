@@ -1,4 +1,4 @@
-class C_INIT_NormalOffset : public CParticleFunctionInitializer
+class C_INIT_NormalOffset
 {
 	Vector m_OffsetMin;
 	Vector m_OffsetMax;

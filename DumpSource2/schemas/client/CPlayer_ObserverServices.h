@@ -1,4 +1,4 @@
-class CPlayer_ObserverServices : public CPlayerPawnComponent
+class CPlayer_ObserverServices
 {
 	uint8 m_iObserverMode;
 	CHandle< C_BaseEntity > m_hObserverTarget;

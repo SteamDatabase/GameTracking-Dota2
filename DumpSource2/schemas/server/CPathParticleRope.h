@@ -1,4 +1,4 @@
-class CPathParticleRope : public CBaseEntity
+class CPathParticleRope
 {
 	bool m_bStartActive;
 	float32 m_flMaxSimulationTime;

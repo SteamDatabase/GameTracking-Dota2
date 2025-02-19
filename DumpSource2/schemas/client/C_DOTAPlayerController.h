@@ -1,4 +1,4 @@
-class C_DOTAPlayerController : public CBasePlayerController
+class C_DOTAPlayerController
 {
 	int32 m_iMinimapMove;
 	KeyValues* m_pClickBehaviorKeys;
@@ -47,7 +47,6 @@ class C_DOTAPlayerController : public CBasePlayerController
 	CUtlVector< CUnitOrders > m_unitorders;
 	int32 m_nOutgoingOrderSequenceNumber;
 	int32 m_nServerOrderSequenceNumber;
-	int32 m_nLastSentOutgoingOrderSequenceNumber;
 	CUtlVector< CEntityIndex > m_nSelectedUnits;
 	CUtlVector< ParticleIndex_t > m_nWaypoints;
 	int32 m_iActions;
@@ -69,6 +68,7 @@ class C_DOTAPlayerController : public CBasePlayerController
 	CUtlVector< ParticleIndex_t > m_vecSuggestedWardLocationEffects;
 	C_DOTA_BaseNPC* m_pSmartCastNPC;
 	ParticleIndex_t m_nTeamSprayParticleIndex;
+	ParticleIndex_t m_nScanCastIndicatorParticleIndex;
 	bool m_bIsNextCastOrderFromMouseClick;
 	int32[2] m_iCursor;
 	int32 m_iSpectatorClickBehavior;

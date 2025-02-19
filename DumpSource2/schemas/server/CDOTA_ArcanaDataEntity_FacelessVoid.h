@@ -1,4 +1,4 @@
-class CDOTA_ArcanaDataEntity_FacelessVoid : public CDOTA_ArcanaDataEntity_Base
+class CDOTA_ArcanaDataEntity_FacelessVoid
 {
 	int32 m_nNumPoints;
 	GameTime_t m_flShowPopupTime;

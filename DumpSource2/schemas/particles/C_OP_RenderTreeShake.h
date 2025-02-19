@@ -1,4 +1,4 @@
-class C_OP_RenderTreeShake : public CParticleFunctionRenderer
+class C_OP_RenderTreeShake
 {
 	float32 m_flPeakStrength;
 	ParticleAttributeIndex_t m_nPeakStrengthFieldOverride;

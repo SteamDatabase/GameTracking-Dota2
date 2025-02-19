@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DragonKnight_Inherited_Vigor : public CDOTA_Buff
+class CDOTA_Modifier_DragonKnight_Inherited_Vigor
 {
 	float32 base_health_regen;
 	float32 base_armor;

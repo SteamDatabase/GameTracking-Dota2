@@ -1,4 +1,4 @@
-class CEntityDissolve : public CBaseModelEntity
+class CEntityDissolve
 {
 	float32 m_flFadeInStart;
 	float32 m_flFadeInLength;

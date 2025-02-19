@@ -1,4 +1,4 @@
-class MaterialParamInt_t : public MaterialParam_t
+class MaterialParamInt_t
 {
 	int32 m_nValue;
 };

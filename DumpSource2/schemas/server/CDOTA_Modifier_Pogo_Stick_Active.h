@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pogo_Stick_Active : public CDOTA_Buff
+class CDOTA_Modifier_Pogo_Stick_Active
 {
 	float32 m_flTotalTime;
 	float32 m_flInitialVelocity;

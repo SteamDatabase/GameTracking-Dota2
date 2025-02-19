@@ -1,4 +1,4 @@
-class CDOTA_Ability_SandKing_BurrowStrike : public CDOTABaseAbility
+class CDOTA_Ability_SandKing_BurrowStrike
 {
 	float32 burrow_width;
 	int32 burrow_speed;

@@ -1,4 +1,4 @@
-class C_INIT_StatusEffectCitadel : public CParticleFunctionInitializer
+class C_INIT_StatusEffectCitadel
 {
 	float32 m_flSFXColorWarpAmount;
 	float32 m_flSFXNormalAmount;

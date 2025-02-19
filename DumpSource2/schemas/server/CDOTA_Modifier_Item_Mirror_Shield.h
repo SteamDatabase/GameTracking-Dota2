@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Mirror_Shield : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Mirror_Shield
 {
 	CModifierParams m_LastParams;
 	int32 all_stats;

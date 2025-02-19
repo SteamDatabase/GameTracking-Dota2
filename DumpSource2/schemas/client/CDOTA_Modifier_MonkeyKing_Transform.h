@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_Transform : public CDOTA_Buff
+class CDOTA_Modifier_MonkeyKing_Transform
 {
 	CUtlString m_strDisguise;
 	int32 movespeed;

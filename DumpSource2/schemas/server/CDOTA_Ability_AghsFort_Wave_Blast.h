@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_Wave_Blast : public CDOTABaseAbility
+class CDOTA_Ability_AghsFort_Wave_Blast
 {
 	int32 damage;
 	float32 knockback_duration;

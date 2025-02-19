@@ -1,4 +1,4 @@
-class CLogicCollisionPair : public CLogicalEntity
+class CLogicCollisionPair
 {
 	CUtlSymbolLarge m_nameAttach1;
 	CUtlSymbolLarge m_nameAttach2;

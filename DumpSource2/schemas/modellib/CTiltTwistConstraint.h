@@ -1,4 +1,4 @@
-class CTiltTwistConstraint : public CBaseConstraint
+class CTiltTwistConstraint
 {
 	int32 m_nTargetAxis;
 	int32 m_nSlaveAxis;

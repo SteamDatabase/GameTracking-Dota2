@@ -1,4 +1,4 @@
-class C_OP_SetParentControlPointsToChildCP : public CParticleFunctionPreEmission
+class C_OP_SetParentControlPointsToChildCP
 {
 	int32 m_nChildGroupID;
 	int32 m_nChildControlPoint;

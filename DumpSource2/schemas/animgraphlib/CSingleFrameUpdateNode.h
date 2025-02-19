@@ -1,4 +1,4 @@
-class CSingleFrameUpdateNode : public CLeafUpdateNode
+class CSingleFrameUpdateNode
 {
 	CUtlVector< CSmartPtr< CAnimActionUpdater > > m_actions;
 	CPoseHandle m_hPoseCacheHandle;

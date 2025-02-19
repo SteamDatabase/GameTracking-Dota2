@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tower_Aura_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_Tower_Aura_Bonus
 {
 	int32 bonus_armor;
 	float32 hp_regen;

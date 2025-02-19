@@ -1,4 +1,4 @@
-class CDOTA_Ability_AncientApparition_IceBlast : public C_DOTABaseAbility
+class CDOTA_Ability_AncientApparition_IceBlast
 {
 	CountdownTimer m_PathTimer;
 	Vector m_vTarget;

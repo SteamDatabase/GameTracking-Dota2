@@ -1,4 +1,4 @@
-class C_EnvVolumetricFogController : public C_BaseEntity
+class C_EnvVolumetricFogController
 {
 	float32 m_flScattering;
 	Color m_TintColor;

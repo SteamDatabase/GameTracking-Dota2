@@ -1,6 +1,6 @@
-class CDOTA_Modifier_DrowRanger_Marksmanship_Aura_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_DrowRanger_Marksmanship_Aura_Bonus
 {
-	int32 trueshot_agi_bonus_self;
-	int32 trueshot_agi_bonus_allies;
-	int32 trueshot_aspd_bonus_creeps;
+	int32 trueshot_agi_bonus_base;
+	int32 trueshot_agi_bonus_per_level;
+	float32 trueshot_agi_bonus_allies_pct;
 };

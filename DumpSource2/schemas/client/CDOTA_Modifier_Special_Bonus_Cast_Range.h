@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Cast_Range : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Cast_Range
 {
 	int32 value;
 };

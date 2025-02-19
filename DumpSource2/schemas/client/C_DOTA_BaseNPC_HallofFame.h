@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_HallofFame : public C_DOTA_BaseNPC_Building
+class C_DOTA_BaseNPC_HallofFame
 {
 	int32 m_HallofFame;
 };

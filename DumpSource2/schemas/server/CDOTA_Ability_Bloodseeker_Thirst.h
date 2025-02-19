@@ -1,3 +1,3 @@
-class CDOTA_Ability_Bloodseeker_Thirst : public CDOTABaseAbility
+class CDOTA_Ability_Bloodseeker_Thirst
 {
 };

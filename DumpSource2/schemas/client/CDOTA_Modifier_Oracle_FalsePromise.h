@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Oracle_FalsePromise : public CDOTA_Buff
+class CDOTA_Modifier_Oracle_FalsePromise
 {
 	bool m_bWaitingForInvulnerability;
 	bool m_bDisableHealing;

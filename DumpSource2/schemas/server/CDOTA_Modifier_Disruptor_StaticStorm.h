@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Disruptor_StaticStorm : public CDOTA_Buff
+class CDOTA_Modifier_Disruptor_StaticStorm
 {
 	int32 miss_rate;
 	int32 movement_speed_reduction;

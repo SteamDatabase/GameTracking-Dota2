@@ -1,4 +1,4 @@
-class C_OP_EnableChildrenFromParentParticleCount : public CParticleFunctionPreEmission
+class C_OP_EnableChildrenFromParentParticleCount
 {
 	int32 m_nChildGroupID;
 	int32 m_nFirstChild;

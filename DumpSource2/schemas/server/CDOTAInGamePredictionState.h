@@ -1,4 +1,4 @@
-class CDOTAInGamePredictionState : public CBaseEntity
+class CDOTAInGamePredictionState
 {
 	bool m_bVotingClosed;
 	bool m_bAllPredictionsFinished;

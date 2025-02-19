@@ -1,4 +1,4 @@
-class CDOTAAppCheers : public CBaseEntity
+class CDOTAAppCheers
 {
 	int16 m_nRadiantCheers;
 	int16 m_nRadiantBronzeCheers;

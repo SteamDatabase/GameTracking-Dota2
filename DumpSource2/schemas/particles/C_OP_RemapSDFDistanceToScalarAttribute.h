@@ -1,4 +1,4 @@
-class C_OP_RemapSDFDistanceToScalarAttribute : public CParticleFunctionOperator
+class C_OP_RemapSDFDistanceToScalarAttribute
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	ParticleAttributeIndex_t m_nVectorFieldInput;

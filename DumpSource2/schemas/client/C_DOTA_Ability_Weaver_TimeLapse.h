@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Weaver_TimeLapse : public C_DOTABaseAbility
+class C_DOTA_Ability_Weaver_TimeLapse
 {
 	int32 m_nNPCSpawnedID;
 };

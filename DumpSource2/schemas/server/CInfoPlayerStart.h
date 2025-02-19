@@ -1,4 +1,4 @@
-class CInfoPlayerStart : public CPointEntity
+class CInfoPlayerStart
 {
 	bool m_bDisabled;
 	bool m_bIsMaster;

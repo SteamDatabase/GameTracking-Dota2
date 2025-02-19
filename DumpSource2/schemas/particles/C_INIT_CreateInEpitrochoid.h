@@ -1,4 +1,4 @@
-class C_INIT_CreateInEpitrochoid : public CParticleFunctionInitializer
+class C_INIT_CreateInEpitrochoid
 {
 	int32 m_nComponent1;
 	int32 m_nComponent2;

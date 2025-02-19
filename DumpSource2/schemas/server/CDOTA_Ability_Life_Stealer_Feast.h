@@ -1,3 +1,3 @@
-class CDOTA_Ability_Life_Stealer_Feast : public CDOTABaseAbility
+class CDOTA_Ability_Life_Stealer_Feast
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Hoodwink_AcornShot : public CDOTABaseAbility
+class CDOTA_Ability_Hoodwink_AcornShot
 {
 	uint32 m_nAcornTree;
 	float32 projectile_speed;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pugna_LifeDrain_SpellAmp : public CDOTA_Buff
+class CDOTA_Modifier_Pugna_LifeDrain_SpellAmp
 {
 	bool m_bIsFriendly;
 };

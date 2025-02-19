@@ -1,4 +1,4 @@
-class CDOTA_Ability_Undying_Tombstone : public CDOTABaseAbility
+class CDOTA_Ability_Undying_Tombstone
 {
 	CUtlVector< CHandle< CBaseEntity > > m_vZombies;
 	CHandle< CBaseEntity > hTombstone;

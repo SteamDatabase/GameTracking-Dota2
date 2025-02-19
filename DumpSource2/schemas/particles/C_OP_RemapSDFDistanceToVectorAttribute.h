@@ -1,4 +1,4 @@
-class C_OP_RemapSDFDistanceToVectorAttribute : public CParticleFunctionOperator
+class C_OP_RemapSDFDistanceToVectorAttribute
 {
 	ParticleAttributeIndex_t m_nVectorFieldOutput;
 	ParticleAttributeIndex_t m_nVectorFieldInput;

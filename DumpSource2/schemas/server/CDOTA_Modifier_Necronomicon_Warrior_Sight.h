@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Necronomicon_Warrior_Sight : public CDOTA_Buff
+class CDOTA_Modifier_Necronomicon_Warrior_Sight
 {
 	float32 radius;
 };

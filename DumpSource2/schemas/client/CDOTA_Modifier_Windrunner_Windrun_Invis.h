@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Windrunner_Windrun_Invis : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_Windrunner_Windrun_Invis
 {
 	bool m_bDispellable;
 };

@@ -1,4 +1,4 @@
-class C_OP_RemapSpeedtoCP : public CParticleFunctionPreEmission
+class C_OP_RemapSpeedtoCP
 {
 	int32 m_nInControlPointNumber;
 	int32 m_nOutControlPointNumber;

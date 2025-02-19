@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Lifestealer_Enraged_Pulse : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_Lifestealer_Enraged_Pulse
 {
 	int32 slow;
 };

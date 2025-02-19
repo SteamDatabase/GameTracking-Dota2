@@ -1,4 +1,6 @@
-class CDOTA_Ability_Huskar_Berserkers_Blood : public CDOTABaseAbility
+class CDOTA_Ability_Huskar_Berserkers_Blood
 {
-	int32 activatable;
+	bool activatable;
+	int32 m_nHealthCost;
+	int32 m_nDebuffCount;
 };

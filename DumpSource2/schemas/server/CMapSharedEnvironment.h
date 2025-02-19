@@ -1,4 +1,4 @@
-class CMapSharedEnvironment : public CLogicalEntity
+class CMapSharedEnvironment
 {
 	CUtlSymbolLarge m_targetMapName;
 };

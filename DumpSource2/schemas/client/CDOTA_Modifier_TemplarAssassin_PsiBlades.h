@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TemplarAssassin_PsiBlades : public CDOTA_Buff
+class CDOTA_Modifier_TemplarAssassin_PsiBlades
 {
 	int32 bonus_attack_range;
 	float32 attack_spill_range;

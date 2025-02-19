@@ -1,4 +1,4 @@
-class CSkeletonInstance : public CGameSceneNode
+class CSkeletonInstance
 {
 	CModelState m_modelState;
 	bool m_bIsAnimationEnabled;

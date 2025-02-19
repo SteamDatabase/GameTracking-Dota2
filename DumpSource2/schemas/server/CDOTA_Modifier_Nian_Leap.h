@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_Leap : public CDOTA_Buff
+class CDOTA_Modifier_Nian_Leap
 {
 	float32 m_flTotalTimeInAir;
 	float32 m_flInitialVelocity;

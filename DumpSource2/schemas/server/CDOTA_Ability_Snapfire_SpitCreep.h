@@ -1,4 +1,4 @@
-class CDOTA_Ability_Snapfire_SpitCreep : public CDOTABaseAbility
+class CDOTA_Ability_Snapfire_SpitCreep
 {
 	int32 m_nDamagePerProjectile;
 	CHandle< CBaseEntity > m_hGobbledUnit;

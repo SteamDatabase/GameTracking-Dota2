@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dark_Seer_Innate_MasterTactician : public CDOTA_Buff
+class CDOTA_Modifier_Dark_Seer_Innate_MasterTactician
 {
 	int32 radius;
 	int32 movement_speed_pct;

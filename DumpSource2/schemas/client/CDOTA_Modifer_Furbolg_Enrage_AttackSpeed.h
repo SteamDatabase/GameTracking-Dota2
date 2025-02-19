@@ -1,4 +1,4 @@
-class CDOTA_Modifer_Furbolg_Enrage_AttackSpeed : public CDOTA_Buff
+class CDOTA_Modifer_Furbolg_Enrage_AttackSpeed
 {
 	int32 bonus_aspd;
 };

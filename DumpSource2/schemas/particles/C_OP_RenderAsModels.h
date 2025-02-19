@@ -1,4 +1,4 @@
-class C_OP_RenderAsModels : public CParticleFunctionRenderer
+class C_OP_RenderAsModels
 {
 	CUtlVector< ModelReference_t > m_ModelList;
 	float32 m_flModelScale;

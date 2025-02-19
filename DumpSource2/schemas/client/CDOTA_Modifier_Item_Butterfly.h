@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Butterfly : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Butterfly
 {
 	int32 bonus_damage;
 	int32 bonus_agility;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Jacket_Blind : public CDOTA_Buff
+class CDOTA_Modifier_Jacket_Blind
 {
 	float32 blind_pct;
 };

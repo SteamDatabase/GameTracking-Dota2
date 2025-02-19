@@ -1,4 +1,4 @@
-class C_DOTA_Ability_DrowRanger_Multishot : public C_DOTABaseAbility
+class C_DOTA_Ability_DrowRanger_Multishot
 {
 	Vector m_vStartPos;
 	int32 m_iArrowProjectile;

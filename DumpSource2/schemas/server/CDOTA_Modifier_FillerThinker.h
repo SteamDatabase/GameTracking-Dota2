@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FillerThinker : public CDOTA_Buff
+class CDOTA_Modifier_FillerThinker
 {
 	CUtlVector< CHandle< CBaseEntity > > hCasterList;
 	bool bStarted;

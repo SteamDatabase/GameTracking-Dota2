@@ -1,4 +1,4 @@
-class C_INIT_InitFloat : public CParticleFunctionInitializer
+class C_INIT_InitFloat
 {
 	CPerParticleFloatInput m_InputValue;
 	ParticleAttributeIndex_t m_nOutputField;

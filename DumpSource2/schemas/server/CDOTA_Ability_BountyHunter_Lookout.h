@@ -1,3 +1,3 @@
-class CDOTA_Ability_BountyHunter_Lookout : public CDOTABaseAbility
+class CDOTA_Ability_BountyHunter_Lookout
 {
 };

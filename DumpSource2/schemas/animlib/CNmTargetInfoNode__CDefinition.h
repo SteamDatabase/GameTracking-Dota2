@@ -1,4 +1,4 @@
-class CNmTargetInfoNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmTargetInfoNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	CNmTargetInfoNode::Info_t m_infoType;

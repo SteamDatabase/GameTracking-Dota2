@@ -1,4 +1,4 @@
-class CFootLockUpdateNode : public CUnaryUpdateNode
+class CFootLockUpdateNode
 {
 	FootLockPoseOpFixedSettings m_opFixedSettings;
 	CUtlVector< FootFixedSettings > m_footSettings;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seasonal_Penguin : public CDOTA_Buff
+class CDOTA_Modifier_Seasonal_Penguin
 {
 	float32 m_fLifetimeGained;
 	Vector m_vTargetPos;

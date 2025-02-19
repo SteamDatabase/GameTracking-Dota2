@@ -1,4 +1,4 @@
-class CIngameEvent_Base : public CBaseEntity
+class CIngameEvent_Base
 {
 	bool m_bInitialized;
 	int32[24] m_CompendiumChallengeEventID;

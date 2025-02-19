@@ -1,4 +1,4 @@
-class CVoiceContainerRandomSampler : public CVoiceContainerBase
+class CVoiceContainerRandomSampler
 {
 	float32 m_flAmplitude;
 	float32 m_flAmplitudeJitter;

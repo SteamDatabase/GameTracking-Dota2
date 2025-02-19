@@ -1,4 +1,4 @@
-class CDOTA_Ability_DarkSeer_WallOfReplica : public CDOTABaseAbility
+class CDOTA_Ability_DarkSeer_WallOfReplica
 {
 	int32 width;
 	Vector m_vEndpoint;

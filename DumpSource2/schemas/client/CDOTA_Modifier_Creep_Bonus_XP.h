@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Creep_Bonus_XP : public CDOTA_Buff
+class CDOTA_Modifier_Creep_Bonus_XP
 {
 	int32 radius;
 	int32 hero_damage_penalty;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Warlock_4 : public CDOTABaseAbility
+class CDOTA_Ability_Special_Bonus_Unique_Warlock_4
 {
 };

@@ -1,4 +1,4 @@
-class CPulseCell_Inflow_EventHandler : public CPulseCell_Inflow_BaseEntrypoint
+class CPulseCell_Inflow_EventHandler
 {
-	CUtlSymbolLarge m_EventName;
+	PulseSymbol_t m_EventName;
 };

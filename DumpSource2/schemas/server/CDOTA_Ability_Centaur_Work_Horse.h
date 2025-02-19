@@ -1,4 +1,4 @@
-class CDOTA_Ability_Centaur_Work_Horse : public CDOTABaseAbility
+class CDOTA_Ability_Centaur_Work_Horse
 {
 	CHandle< CBaseEntity > m_hCart;
 };

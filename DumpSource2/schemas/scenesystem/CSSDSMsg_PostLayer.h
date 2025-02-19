@@ -1,3 +1,3 @@
-class CSSDSMsg_PostLayer : public CSSDSMsg_LayerBase
+class CSSDSMsg_PostLayer
 {
 };

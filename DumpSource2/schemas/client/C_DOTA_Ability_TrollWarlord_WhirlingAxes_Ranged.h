@@ -1,4 +1,4 @@
-class C_DOTA_Ability_TrollWarlord_WhirlingAxes_Ranged : public C_DOTABaseAbility
+class C_DOTA_Ability_TrollWarlord_WhirlingAxes_Ranged
 {
 	Vector m_vStartPos;
 	int32 m_iArrowProjectile;

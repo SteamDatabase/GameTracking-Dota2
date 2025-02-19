@@ -1,3 +1,3 @@
-class CDOTA_Ability_Rattletrap_Armor_Power : public CDOTABaseAbility
+class CDOTA_Ability_Rattletrap_Armor_Power
 {
 };

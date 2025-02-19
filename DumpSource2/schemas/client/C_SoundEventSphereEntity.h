@@ -1,4 +1,4 @@
-class C_SoundEventSphereEntity : public C_SoundEventEntity
+class C_SoundEventSphereEntity
 {
 	float32 m_flRadius;
 };

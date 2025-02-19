@@ -1,4 +1,4 @@
-class CDOTA_Ability_Kez_SwitchWeapons : public CDOTABaseAbility
+class CDOTA_Ability_Kez_SwitchWeapons
 {
 	bool m_bSai;
 };

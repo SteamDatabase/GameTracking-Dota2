@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Clinkz_DeathPact : public C_DOTABaseAbility
+class C_DOTA_Ability_Clinkz_DeathPact
 {
 	int32 m_nDevourFirstSlot;
 };

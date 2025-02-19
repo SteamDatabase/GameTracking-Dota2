@@ -1,4 +1,4 @@
-class CAimMatrixUpdateNode : public CUnaryUpdateNode
+class CAimMatrixUpdateNode
 {
 	AimMatrixOpFixedSettings_t m_opFixedSettings;
 	AnimVectorSource m_target;

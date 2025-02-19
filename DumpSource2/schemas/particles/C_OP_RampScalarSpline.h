@@ -1,4 +1,4 @@
-class C_OP_RampScalarSpline : public CParticleFunctionOperator
+class C_OP_RampScalarSpline
 {
 	float32 m_RateMin;
 	float32 m_RateMax;

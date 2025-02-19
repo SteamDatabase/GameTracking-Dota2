@@ -1,4 +1,4 @@
-class CDOTA_Ability_Shadow_Demon_Shadow_Poison : public CDOTABaseAbility
+class CDOTA_Ability_Shadow_Demon_Shadow_Poison
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hPoisonedUnits;
 	bool m_bHitDisruptedUnit;

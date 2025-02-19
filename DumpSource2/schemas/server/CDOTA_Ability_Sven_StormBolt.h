@@ -1,4 +1,4 @@
-class CDOTA_Ability_Sven_StormBolt : public CDOTABaseAbility
+class CDOTA_Ability_Sven_StormBolt
 {
 	float32 vision_radius;
 	bool m_bIsAltCastState;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Legion_Commander_PressTheAttack : public CDOTA_Buff
+class CDOTA_Modifier_Legion_Commander_PressTheAttack
 {
 	int32 move_speed;
 	int32 hp_regen;

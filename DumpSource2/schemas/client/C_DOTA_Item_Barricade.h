@@ -1,4 +1,4 @@
-class C_DOTA_Item_Barricade : public C_DOTA_Item
+class C_DOTA_Item_Barricade
 {
 	CHandle< C_BaseEntity > m_hScout;
 };

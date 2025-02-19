@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Radiance_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Item_Radiance_Debuff
 {
 	int32 aura_damage;
 	int32 aura_damage_upgrade_bonus;

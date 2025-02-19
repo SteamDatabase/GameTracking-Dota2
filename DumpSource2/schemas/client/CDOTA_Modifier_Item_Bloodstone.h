@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Bloodstone : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Bloodstone
 {
 	int32 bonus_health;
 	int32 bonus_mana;

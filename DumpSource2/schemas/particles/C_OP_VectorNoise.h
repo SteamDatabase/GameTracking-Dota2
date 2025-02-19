@@ -1,4 +1,4 @@
-class C_OP_VectorNoise : public CParticleFunctionOperator
+class C_OP_VectorNoise
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	Vector m_vecOutputMin;

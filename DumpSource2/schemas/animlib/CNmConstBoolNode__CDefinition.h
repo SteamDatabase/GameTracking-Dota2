@@ -1,4 +1,4 @@
-class CNmConstBoolNode::CDefinition : public CNmBoolValueNode::CDefinition
+class CNmConstBoolNode::CDefinition
 {
 	bool m_bValue;
 };

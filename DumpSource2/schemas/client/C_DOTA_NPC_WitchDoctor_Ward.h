@@ -1,4 +1,4 @@
-class C_DOTA_NPC_WitchDoctor_Ward : public C_DOTA_BaseNPC_Additive
+class C_DOTA_NPC_WitchDoctor_Ward
 {
 	ParticleIndex_t m_nFXSkullIndex;
 	int32 m_nTargetType;

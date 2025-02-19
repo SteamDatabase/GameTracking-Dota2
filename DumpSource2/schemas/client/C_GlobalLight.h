@@ -1,4 +1,4 @@
-class C_GlobalLight : public C_BaseEntity
+class C_GlobalLight
 {
 	uint16 m_WindClothForceHandle;
 };

@@ -1,4 +1,4 @@
-class C_OP_ForceControlPointStub : public CParticleFunctionPreEmission
+class C_OP_ForceControlPointStub
 {
 	int32 m_ControlPoint;
 };

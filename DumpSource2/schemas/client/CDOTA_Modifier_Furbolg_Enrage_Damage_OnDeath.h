@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Furbolg_Enrage_Damage_OnDeath : public CDOTA_Buff
+class CDOTA_Modifier_Furbolg_Enrage_Damage_OnDeath
 {
 	float32 duration;
 	int32 radius;

@@ -1,4 +1,4 @@
-class C_DOTABaseAbility : public C_BaseEntity
+class C_DOTABaseAbility
 {
 	bool m_bAuxCastState;
 	int32 m_iEnemyLevel;
@@ -44,5 +44,7 @@ class C_DOTABaseAbility : public C_BaseEntity
 	HeroFacetKey_t m_nHeroFacetKey;
 	float32 m_flTotalExtendedChannelTime;
 	bool m_bGrantedByFacet;
+	bool m_bReflection;
+	CHandle< C_BaseEntity > m_pReflectionSourceAbility;
 	float32 m_flLastCastClickTime;
 };

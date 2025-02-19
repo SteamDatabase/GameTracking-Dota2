@@ -1,4 +1,4 @@
-class C_EnvParticleGlow : public C_ParticleSystem
+class C_EnvParticleGlow
 {
 	float32 m_flAlphaScale;
 	float32 m_flRadiusScale;

@@ -1,4 +1,4 @@
-class CMarkupVolume : public CBaseModelEntity
+class CMarkupVolume
 {
 	bool m_bDisabled;
 };

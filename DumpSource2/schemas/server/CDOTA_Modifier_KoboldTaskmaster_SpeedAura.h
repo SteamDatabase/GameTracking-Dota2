@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KoboldTaskmaster_SpeedAura : public CDOTA_Buff
+class CDOTA_Modifier_KoboldTaskmaster_SpeedAura
 {
 	float32 radius;
 };

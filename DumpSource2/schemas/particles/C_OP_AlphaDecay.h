@@ -1,4 +1,4 @@
-class C_OP_AlphaDecay : public CParticleFunctionOperator
+class C_OP_AlphaDecay
 {
 	float32 m_flMinAlpha;
 };

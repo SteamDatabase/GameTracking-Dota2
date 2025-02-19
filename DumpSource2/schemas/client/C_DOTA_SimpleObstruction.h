@@ -1,4 +1,4 @@
-class C_DOTA_SimpleObstruction : public C_BaseEntity
+class C_DOTA_SimpleObstruction
 {
 	bool m_bEnabled;
 	bool m_bBlockFoW;

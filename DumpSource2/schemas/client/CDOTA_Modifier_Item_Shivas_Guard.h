@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Shivas_Guard : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Shivas_Guard
 {
 	int32 bonus_intellect;
 	int32 bonus_armor;

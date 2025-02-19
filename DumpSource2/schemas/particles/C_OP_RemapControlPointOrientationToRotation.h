@@ -1,4 +1,4 @@
-class C_OP_RemapControlPointOrientationToRotation : public CParticleFunctionOperator
+class C_OP_RemapControlPointOrientationToRotation
 {
 	int32 m_nCP;
 	ParticleAttributeIndex_t m_nFieldOutput;

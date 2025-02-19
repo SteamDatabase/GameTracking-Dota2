@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Effigy_AghsFort : public C_DOTA_BaseNPC_Building
+class CDOTA_BaseNPC_Effigy_AghsFort
 {
 	uint32 m_unStatusEffectIndex;
 };

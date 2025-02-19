@@ -1,4 +1,4 @@
-class CDOTA_Ability_Axe_One_Man_Army : public CDOTABaseAbility
+class CDOTA_Ability_Axe_One_Man_Army
 {
 	float32 radius;
 	float32 bonus_linger_duration;

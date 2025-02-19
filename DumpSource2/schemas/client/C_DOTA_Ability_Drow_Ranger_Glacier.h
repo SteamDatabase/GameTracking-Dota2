@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Drow_Ranger_Glacier : public C_DOTABaseAbility
+class C_DOTA_Ability_Drow_Ranger_Glacier
 {
 	int32 shard_width;
 	int32 shard_count;

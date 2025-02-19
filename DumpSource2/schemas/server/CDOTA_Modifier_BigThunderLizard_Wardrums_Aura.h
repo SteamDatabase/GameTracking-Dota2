@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BigThunderLizard_Wardrums_Aura : public CDOTA_Buff
+class CDOTA_Modifier_BigThunderLizard_Wardrums_Aura
 {
 	int32 speed_bonus;
 	int32 accuracy;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Kez_RaptorDance : public CDOTA_Ability_Kez_BaseAbility
+class CDOTA_Ability_Kez_RaptorDance
 {
 	int32 radius;
 	int32 invulnerable;
@@ -6,6 +6,7 @@ class CDOTA_Ability_Kez_RaptorDance : public CDOTA_Ability_Kez_BaseAbility
 	float32 strike_interval;
 	int32 m_nStrikesLeft;
 	bool m_bChannelFinished;
+	bool m_bHitAnyTarget;
 	GameTime_t m_NextStrikeTime;
 	ParticleIndex_t m_nChannelParticle;
 };

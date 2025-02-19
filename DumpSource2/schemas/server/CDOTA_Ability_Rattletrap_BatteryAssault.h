@@ -1,3 +1,3 @@
-class CDOTA_Ability_Rattletrap_BatteryAssault : public CDOTABaseAbility
+class CDOTA_Ability_Rattletrap_BatteryAssault
 {
 };

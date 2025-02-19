@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Vanguard : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Vanguard
 {
 	int32 bonus_health;
 	float32 bonus_health_regen;

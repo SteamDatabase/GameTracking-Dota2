@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lich_Chain_Frost_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Lich_Chain_Frost_Thinker
 {
 	int32 m_nDamageToHeroes;
 	int32 m_nHeroesKilled;

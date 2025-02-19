@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Guardian_Shell : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Guardian_Shell
 {
 	int32 all_stats;
 	int32 bonus_armor;

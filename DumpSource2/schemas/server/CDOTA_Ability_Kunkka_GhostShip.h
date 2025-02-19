@@ -1,4 +1,4 @@
-class CDOTA_Ability_Kunkka_GhostShip : public CDOTABaseAbility
+class CDOTA_Ability_Kunkka_GhostShip
 {
 	float32 buff_duration;
 	float32 stun_duration;

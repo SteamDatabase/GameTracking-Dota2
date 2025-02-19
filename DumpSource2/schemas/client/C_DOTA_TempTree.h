@@ -1,4 +1,4 @@
-class C_DOTA_TempTree : public CBaseAnimatingActivity
+class C_DOTA_TempTree
 {
 	GameTime_t m_fExpireTime;
 	Vector m_vecTreeCircleCenter;

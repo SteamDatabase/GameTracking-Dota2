@@ -1,5 +1,5 @@
-class CBaseAnimGraphAnimGraphController : public CAnimGraphControllerBase
+class CBaseAnimGraphAnimGraphController
 {
-	CAnimGraph1ParamOptionalRef< char* > m_sDestructiblePartDestroyedHitGroup;
-	CAnimGraph1ParamOptionalRef< int32 > m_nDestructiblePartDestroyedPartIndex;
+	CAnimGraphParamOptionalRef< CGlobalSymbol > m_sDestructiblePartDestroyedHitGroup;
+	CAnimGraphParamOptionalRef< int32 > m_nDestructiblePartDestroyedPartIndex;
 };

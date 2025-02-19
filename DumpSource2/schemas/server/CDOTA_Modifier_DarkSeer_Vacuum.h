@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkSeer_Vacuum : public CDOTA_Buff
+class CDOTA_Modifier_DarkSeer_Vacuum
 {
 	float32 pull_speed;
 };

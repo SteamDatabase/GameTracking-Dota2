@@ -1,4 +1,4 @@
-class C_INIT_CreatePhyllotaxis : public CParticleFunctionInitializer
+class C_INIT_CreatePhyllotaxis
 {
 	int32 m_nControlPointNumber;
 	int32 m_nScaleCP;

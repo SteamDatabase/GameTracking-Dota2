@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Magnataur_Shockwave_Erupt : public CDOTA_Buff
+class CDOTA_Modifier_Magnataur_Shockwave_Erupt
 {
 	int32 scepter_width;
 	float32 scepter_duration;

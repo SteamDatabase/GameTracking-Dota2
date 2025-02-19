@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NagaSiren_RipTide : public CDOTA_Buff
+class CDOTA_Modifier_NagaSiren_RipTide
 {
 	int32 armor_reduction;
 };

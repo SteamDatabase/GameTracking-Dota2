@@ -1,3 +1,3 @@
-class CDOTA_Ability_NagaSiren_Eelskin : public CDOTABaseAbility
+class CDOTA_Ability_NagaSiren_Eelskin
 {
 };

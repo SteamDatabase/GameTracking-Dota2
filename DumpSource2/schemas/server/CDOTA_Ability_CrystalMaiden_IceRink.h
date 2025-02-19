@@ -1,4 +1,4 @@
-class CDOTA_Ability_CrystalMaiden_IceRink : public CDOTABaseAbility
+class CDOTA_Ability_CrystalMaiden_IceRink
 {
 	ParticleIndex_t m_nFXIndex;
 };

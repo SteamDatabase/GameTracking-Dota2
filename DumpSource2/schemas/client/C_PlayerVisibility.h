@@ -1,4 +1,4 @@
-class C_PlayerVisibility : public C_BaseEntity
+class C_PlayerVisibility
 {
 	float32 m_flVisibilityStrength;
 	float32 m_flFogDistanceMultiplier;

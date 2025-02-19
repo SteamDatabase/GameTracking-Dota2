@@ -1,3 +1,3 @@
-class C_OP_SpinYaw : public CGeneralSpin
+class C_OP_SpinYaw
 {
 };

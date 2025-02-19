@@ -1,4 +1,4 @@
-class CDOTA_Ability_Weaver_Shukuchi : public CDOTABaseAbility
+class CDOTA_Ability_Weaver_Shukuchi
 {
 	float32 duration;
 	float32 radius;

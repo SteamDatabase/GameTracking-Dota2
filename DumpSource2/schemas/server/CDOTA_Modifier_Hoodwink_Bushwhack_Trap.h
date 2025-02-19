@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_Bushwhack_Trap : public CDOTA_Buff
+class CDOTA_Modifier_Hoodwink_Bushwhack_Trap
 {
 	int32 visual_height;
 	float32 animation_rate;

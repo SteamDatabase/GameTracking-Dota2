@@ -1,4 +1,4 @@
-class CNmConstIDNode::CDefinition : public CNmIDValueNode::CDefinition
+class CNmConstIDNode::CDefinition
 {
 	CGlobalSymbol m_value;
 };

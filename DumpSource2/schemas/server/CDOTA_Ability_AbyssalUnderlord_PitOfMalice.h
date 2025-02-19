@@ -1,4 +1,4 @@
-class CDOTA_Ability_AbyssalUnderlord_PitOfMalice : public CDOTABaseAbility
+class CDOTA_Ability_AbyssalUnderlord_PitOfMalice
 {
 	ParticleIndex_t m_nFXIndex;
 };

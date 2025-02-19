@@ -1,4 +1,4 @@
-class C_OP_DecayClampCount : public CParticleFunctionOperator
+class C_OP_DecayClampCount
 {
 	CParticleCollectionFloatInput m_nCount;
 };

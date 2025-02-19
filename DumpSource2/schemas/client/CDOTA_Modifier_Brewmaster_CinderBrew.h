@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_CinderBrew : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_CinderBrew
 {
 	int32 movement_slow;
 	bool m_bIgniteActive;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_OgreMagi_FrostArmor : public CDOTABaseAbility
+class CDOTA_Ability_OgreMagi_FrostArmor
 {
 };

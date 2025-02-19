@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Roshan_InherentBuffs : public CDOTA_Buff
+class CDOTA_Modifier_Roshan_InherentBuffs
 {
 };

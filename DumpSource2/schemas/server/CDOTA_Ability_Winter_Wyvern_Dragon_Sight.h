@@ -1,3 +1,3 @@
-class CDOTA_Ability_Winter_Wyvern_Dragon_Sight : public CDOTABaseAbility
+class CDOTA_Ability_Winter_Wyvern_Dragon_Sight
 {
 };

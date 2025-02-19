@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_ArcWarden : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_ArcWarden
 {
 	ParticleIndex_t m_nTalkFXIndex;
 	ParticleIndex_t m_nFXDeath;

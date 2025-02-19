@@ -11,14 +11,14 @@ class DOTAAbilityDefinition_t
 	DotaGestureSlot_t m_castActivityGestureSlot;
 	KeyValues* m_pKVData;
 	AbilityID_t m_iAbilityID;
-	int32 m_iAbilityType;
-	uint64 m_iAbilityBehavior;
-	int32 m_iAbilityTargetTeam;
-	int32 m_iAbilityTargetType;
-	int32 m_iAbilityTargetFlags;
-	int32 m_iAbilityDamageType;
-	int32 m_iAbilityImmunityType;
-	int32 m_iAbilityDispellableType;
+	ABILITY_TYPES m_iAbilityType;
+	DOTA_ABILITY_BEHAVIOR m_iAbilityBehavior;
+	DOTA_UNIT_TARGET_TEAM m_iAbilityTargetTeam;
+	DOTA_UNIT_TARGET_TYPE m_iAbilityTargetType;
+	DOTA_UNIT_TARGET_FLAGS m_iAbilityTargetFlags;
+	DAMAGE_TYPES m_iAbilityDamageType;
+	SPELL_IMMUNITY_TYPES m_iAbilityImmunityType;
+	SPELL_DISPELLABLE_TYPES m_iAbilityDispellableType;
 	int32 m_iFightRecapLevel;
 	int32 m_iTokenTier;
 	item_definition_index_t m_iAssociatedConsumableItemDef;
@@ -43,6 +43,8 @@ class DOTAAbilityDefinition_t
 	CUtlVector< CUtlString > m_InvalidHeroes;
 	bool m_bHasScepterUpgrade;
 	bool m_bHasShardUpgrade;
+	CUtlStringToken m_strScepterRequiredFacet;
+	CUtlStringToken m_strShardRequiredFacet;
 	bool m_bSharedWithTeammates;
 	int32 m_nCastRangeBuffer;
 	int32 m_nSpecialAbilities;
@@ -98,4 +100,6 @@ class DOTAAbilityDefinition_t
 	bitfield:1 m_bRestrictToMaxLevel;
 	bitfield:1 m_bHasDynamicValue;
 	bitfield:1 m_bBreakable;
+	bitfield:1 m_bActiveNeutral;
+	bitfield:1 m_bPassiveNeutral;
 };

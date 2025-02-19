@@ -1,4 +1,4 @@
-class C_DOTA_Ability_WitchDoctor_DeathWard : public C_DOTABaseAbility
+class C_DOTA_Ability_WitchDoctor_DeathWard
 {
 	CHandle< C_BaseEntity > m_hWard;
 	int32 m_iDamage;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Teleporting : public CDOTA_Buff
+class CDOTA_Modifier_Teleporting
 {
 	float32 m_fChannelTime;
 	Vector m_vStart;

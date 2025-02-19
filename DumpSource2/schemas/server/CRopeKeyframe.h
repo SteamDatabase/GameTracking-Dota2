@@ -1,4 +1,4 @@
-class CRopeKeyframe : public CBaseModelEntity
+class CRopeKeyframe
 {
 	uint16 m_RopeFlags;
 	CUtlSymbolLarge m_iNextLinkName;

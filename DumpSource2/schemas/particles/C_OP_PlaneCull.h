@@ -1,4 +1,4 @@
-class C_OP_PlaneCull : public CParticleFunctionOperator
+class C_OP_PlaneCull
 {
 	int32 m_nPlaneControlPoint;
 	Vector m_vecPlaneDirection;

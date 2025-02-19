@@ -1,4 +1,4 @@
-class CDirectPlaybackUpdateNode : public CUnaryUpdateNode
+class CDirectPlaybackUpdateNode
 {
 	bool m_bFinishEarly;
 	bool m_bResetOnFinish;

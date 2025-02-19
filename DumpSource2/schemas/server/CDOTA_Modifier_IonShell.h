@@ -1,4 +1,4 @@
-class CDOTA_Modifier_IonShell : public CDOTA_Buff
+class CDOTA_Modifier_IonShell
 {
 	int32 radius;
 	int32 damage_per_second;

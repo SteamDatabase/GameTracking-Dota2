@@ -1,4 +1,4 @@
-class CDOTA_Modifier_HillTroll_Rally : public CDOTA_Buff
+class CDOTA_Modifier_HillTroll_Rally
 {
 	int32 damage_bonus;
 };

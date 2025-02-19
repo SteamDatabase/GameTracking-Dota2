@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_Chakram_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_Shredder_Chakram_Debuff
 {
 	int32 slow;
 	int32 slow_health_percentage;

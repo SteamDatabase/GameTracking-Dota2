@@ -1,4 +1,4 @@
-class CSoundOpvarSetPointEntity : public CSoundOpvarSetPointBase
+class CSoundOpvarSetPointEntity
 {
 	CEntityIOOutput m_OnEnter;
 	CEntityIOOutput m_OnExit;

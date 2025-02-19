@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hurricane_Pike_Range : public CDOTA_Buff
+class CDOTA_Modifier_Hurricane_Pike_Range
 {
 	CHandle< CBaseEntity > m_hTarget;
 	int32 max_attacks;

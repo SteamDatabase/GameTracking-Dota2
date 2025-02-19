@@ -1,4 +1,4 @@
-class CNavSpaceInfo : public CPointEntity
+class CNavSpaceInfo
 {
 	bool m_bCreateFlightSpace;
 };

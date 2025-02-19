@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lycan_SummonWolves_Health : public CDOTA_Buff
+class CDOTA_Modifier_Lycan_SummonWolves_Health
 {
 	int32 bonus_health;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_NightStalker_Darkness : public CDOTA_Buff
+class CDOTA_Modifier_NightStalker_Darkness
 {
 	int32 bonus_damage;
 	int32 status_resistance;

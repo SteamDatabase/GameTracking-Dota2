@@ -1,4 +1,4 @@
-class CTriggerPhysics : public CBaseTrigger
+class CTriggerPhysics
 {
 	float32 m_gravityScale;
 	float32 m_linearLimit;

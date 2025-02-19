@@ -1,4 +1,4 @@
-class CFuncWall : public CBaseModelEntity
+class CFuncWall
 {
 	int32 m_nState;
 };

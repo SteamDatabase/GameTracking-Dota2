@@ -1,4 +1,4 @@
-class CAnimationGraphVisualizerPie : public CAnimationGraphVisualizerPrimitiveBase
+class CAnimationGraphVisualizerPie
 {
 	VectorAligned m_vWsCenter;
 	VectorAligned m_vWsStart;

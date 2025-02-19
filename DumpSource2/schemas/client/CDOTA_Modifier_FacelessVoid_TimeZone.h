@@ -1,4 +1,4 @@
-class CDOTA_Modifier_FacelessVoid_TimeZone : public CDOTA_Buff
+class CDOTA_Modifier_FacelessVoid_TimeZone
 {
 	float32 radius;
 };

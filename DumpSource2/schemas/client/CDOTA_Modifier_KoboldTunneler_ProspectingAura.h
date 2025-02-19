@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KoboldTunneler_ProspectingAura : public CDOTA_Buff
+class CDOTA_Modifier_KoboldTunneler_ProspectingAura
 {
 	float32 radius;
 };

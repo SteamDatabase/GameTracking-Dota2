@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BlueDragonspawnSorcerer_Evasion : public CDOTA_Buff
+class CDOTA_Modifier_BlueDragonspawnSorcerer_Evasion
 {
 	int32 evasion_chance_pct;
 };

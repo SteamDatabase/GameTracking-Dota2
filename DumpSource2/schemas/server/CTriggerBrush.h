@@ -1,4 +1,4 @@
-class CTriggerBrush : public CBaseModelEntity
+class CTriggerBrush
 {
 	CEntityIOOutput m_OnStartTouch;
 	CEntityIOOutput m_OnEndTouch;

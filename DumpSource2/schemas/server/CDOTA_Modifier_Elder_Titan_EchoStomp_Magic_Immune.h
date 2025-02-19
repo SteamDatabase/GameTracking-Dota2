@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Elder_Titan_EchoStomp_Magic_Immune : public CDOTA_Modifier_DebuffImmune
+class CDOTA_Modifier_Elder_Titan_EchoStomp_Magic_Immune
 {
 	int32 model_scale;
 };

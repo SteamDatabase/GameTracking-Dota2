@@ -1,4 +1,4 @@
-class CDOTAGameRules : public CMultiplayRules
+class CDOTAGameRules
 {
 	int32 m_nRuneCycle;
 	int32 m_nNextPowerRuneSpawnIndex;
@@ -202,6 +202,7 @@ class CDOTAGameRules : public CMultiplayRules
 	ERoshanSpawnPhase m_nRoshanRespawnPhase;
 	GameTime_t m_flRoshanRespawnPhaseEndTime;
 	CUtlVectorEmbeddedNetworkVar< CDOTA_AbilityDraftAbilityState > m_AbilityDraftAbilities;
+	CUtlVectorEmbeddedNetworkVar< CDOTA_AbilityDraftHeroState > m_AbilityDraftHeroes;
 	bool m_bAbilityDraftCurrentPlayerHasPicked;
 	int32 m_nAbilityDraftPlayerTracker;
 	int32 m_nAbilityDraftRoundNumber;

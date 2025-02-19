@@ -1,4 +1,4 @@
-class CTextureBasedAnimatable : public CBaseModelEntity
+class CTextureBasedAnimatable
 {
 	bool m_bLoop;
 	float32 m_flFPS;

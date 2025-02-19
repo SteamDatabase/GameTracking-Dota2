@@ -1,4 +1,4 @@
-class CFuncTrackChange : public CFuncPlatRot
+class CFuncTrackChange
 {
 	CPathTrack* m_trackTop;
 	CPathTrack* m_trackBottom;

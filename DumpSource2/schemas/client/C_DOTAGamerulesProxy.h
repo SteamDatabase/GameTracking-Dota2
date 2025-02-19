@@ -1,4 +1,4 @@
-class C_DOTAGamerulesProxy : public C_GameRulesProxy
+class C_DOTAGamerulesProxy
 {
 	C_DOTAGamerules* m_pGameRules;
 };

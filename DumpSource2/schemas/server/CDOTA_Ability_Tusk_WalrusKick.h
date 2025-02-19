@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tusk_WalrusKick : public CDOTABaseAbility
+class CDOTA_Ability_Tusk_WalrusKick
 {
 	ParticleIndex_t m_nTargetFXIndex;
 	Vector m_vEndpoint;

@@ -1,4 +1,4 @@
-class C_INIT_RandomLifeTime : public CParticleFunctionInitializer
+class C_INIT_RandomLifeTime
 {
 	float32 m_fLifetimeMin;
 	float32 m_fLifetimeMax;

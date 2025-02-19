@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_FacelessVoid : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_FacelessVoid
 {
 	Vector m_vecStanceDestinationPoint;
 };

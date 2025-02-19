@@ -1,4 +1,4 @@
-class CBasePlayerWeapon : public CBaseAnimatingActivity
+class CBasePlayerWeapon
 {
 	GameTick_t m_nNextPrimaryAttackTick;
 	float32 m_flNextPrimaryAttackTickRatio;

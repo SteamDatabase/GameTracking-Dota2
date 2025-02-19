@@ -1,4 +1,4 @@
-class CDotaSubquestEntityDeath : public CDotaSubquestBase
+class CDotaSubquestEntityDeath
 {
 	CUtlVector< CUtlSymbolLarge > m_entityNameList;
 };

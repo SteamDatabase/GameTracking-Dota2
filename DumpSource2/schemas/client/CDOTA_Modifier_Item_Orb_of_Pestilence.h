@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Orb_of_Pestilence : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Orb_of_Pestilence
 {
 	int32 poison_movement_speed_melee;
 	int32 poison_movement_speed_range;

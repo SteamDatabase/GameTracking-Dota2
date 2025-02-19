@@ -1,4 +1,4 @@
-class CDOTA_Modifier_HeavensHalberd_Debuff : public CDOTA_Buff
+class CDOTA_Modifier_HeavensHalberd_Debuff
 {
 	bool m_bPierceDebuffImmunity;
 };

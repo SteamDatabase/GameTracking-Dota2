@@ -1,4 +1,4 @@
-class CDOTA_Ability_Nyx_Assassin_ManaBurn : public C_DOTABaseAbility
+class CDOTA_Ability_Nyx_Assassin_ManaBurn
 {
 	float32 aoe;
 };

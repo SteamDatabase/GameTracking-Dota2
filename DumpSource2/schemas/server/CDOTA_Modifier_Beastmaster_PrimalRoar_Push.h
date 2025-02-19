@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Beastmaster_PrimalRoar_Push : public CDOTA_Buff
+class CDOTA_Modifier_Beastmaster_PrimalRoar_Push
 {
 	Vector m_vVelocity;
 };

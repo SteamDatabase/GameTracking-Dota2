@@ -1,4 +1,4 @@
-class CDOTA_Item_TranquilBoots : public CDOTA_Item
+class CDOTA_Item_TranquilBoots
 {
 	int32 break_count;
 	CUtlVector< GameTime_t > m_DamageList;

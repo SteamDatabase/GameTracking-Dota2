@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nullifier : public CDOTA_Buff_Item
+class CDOTA_Modifier_Nullifier
 {
 	int32 bonus_armor;
 	int32 bonus_regen;

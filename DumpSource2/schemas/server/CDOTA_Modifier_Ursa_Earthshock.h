@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ursa_Earthshock : public CDOTA_Buff
+class CDOTA_Modifier_Ursa_Earthshock
 {
 	int32 movement_slow;
 };

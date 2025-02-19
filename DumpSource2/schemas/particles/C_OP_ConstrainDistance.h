@@ -1,4 +1,4 @@
-class C_OP_ConstrainDistance : public CParticleFunctionConstraint
+class C_OP_ConstrainDistance
 {
 	CParticleCollectionFloatInput m_fMinDistance;
 	CParticleCollectionFloatInput m_fMaxDistance;

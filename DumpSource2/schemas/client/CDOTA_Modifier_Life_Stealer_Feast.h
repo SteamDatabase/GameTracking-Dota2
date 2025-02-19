@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Life_Stealer_Feast : public CDOTA_Buff
+class CDOTA_Modifier_Life_Stealer_Feast
 {
 	float32 hp_leech_percent;
 	float32 hp_damage_percent;

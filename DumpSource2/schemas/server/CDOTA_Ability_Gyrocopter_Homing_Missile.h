@@ -1,4 +1,4 @@
-class CDOTA_Ability_Gyrocopter_Homing_Missile : public CDOTABaseAbility
+class CDOTA_Ability_Gyrocopter_Homing_Missile
 {
 	CHandle< CDOTABaseAbility > m_hSourceAbility;
 };

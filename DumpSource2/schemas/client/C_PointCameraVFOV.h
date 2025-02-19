@@ -1,4 +1,4 @@
-class C_PointCameraVFOV : public C_PointCamera
+class C_PointCameraVFOV
 {
 	float32 m_flVerticalFOV;
 };

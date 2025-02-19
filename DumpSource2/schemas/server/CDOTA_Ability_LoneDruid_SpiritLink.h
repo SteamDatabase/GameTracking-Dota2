@@ -1,3 +1,3 @@
-class CDOTA_Ability_LoneDruid_SpiritLink : public CDOTABaseAbility
+class CDOTA_Ability_LoneDruid_SpiritLink
 {
 };

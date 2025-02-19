@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_PoisonNova_Creature_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_PoisonNova_Creature_Thinker
 {
 	float32 m_fCurRadius;
 	GameTime_t m_fLastThink;

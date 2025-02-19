@@ -1,4 +1,4 @@
-class CExampleSchemaVData_PolymorphicDerivedA : public CExampleSchemaVData_PolymorphicBase
+class CExampleSchemaVData_PolymorphicDerivedA
 {
 	int32 m_nDerivedA;
 };

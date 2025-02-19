@@ -1,4 +1,4 @@
-class CEnvSky : public CBaseModelEntity
+class CEnvSky
 {
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hSkyMaterial;
 	CStrongHandle< InfoForResourceTypeIMaterial2 > m_hSkyMaterialLightingOnly;

@@ -1,4 +1,4 @@
-class CAttributeContainer : public CAttributeManager
+class CAttributeContainer
 {
 	C_EconItemView m_Item;
 };

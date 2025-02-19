@@ -1,4 +1,4 @@
-class CNmFloatRemapNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFloatRemapNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	CNmFloatRemapNode::RemapRange_t m_inputRange;

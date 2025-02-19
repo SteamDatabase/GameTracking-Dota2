@@ -1,4 +1,4 @@
-class CMorphConstraint : public CBaseConstraint
+class CMorphConstraint
 {
 	CUtlString m_sTargetMorph;
 	int32 m_nSlaveChannel;

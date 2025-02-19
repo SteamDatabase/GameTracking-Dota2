@@ -1,3 +1,3 @@
-class CSSDSMsg_PreLayer : public CSSDSMsg_LayerBase
+class CSSDSMsg_PreLayer
 {
 };

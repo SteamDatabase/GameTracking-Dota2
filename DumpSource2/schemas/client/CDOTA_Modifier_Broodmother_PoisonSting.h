@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Broodmother_PoisonSting : public CDOTA_Buff
+class CDOTA_Modifier_Broodmother_PoisonSting
 {
 	float32 duration;
 	float32 duration_hero;

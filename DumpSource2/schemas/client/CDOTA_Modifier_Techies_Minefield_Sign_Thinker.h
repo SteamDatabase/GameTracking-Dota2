@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_Minefield_Sign_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Techies_Minefield_Sign_Thinker
 {
 	float32 aura_radius;
 	float32 trigger_radius;

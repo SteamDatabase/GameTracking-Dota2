@@ -1,4 +1,4 @@
-class CTriggerHurt : public CBaseTrigger
+class CTriggerHurt
 {
 	float32 m_flOriginalDamage;
 	float32 m_flDamage;

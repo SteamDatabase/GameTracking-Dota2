@@ -1,4 +1,4 @@
-class CVoiceContainerRealtimeFMSineWave : public CVoiceContainerBase
+class CVoiceContainerRealtimeFMSineWave
 {
 	float32 m_flCarrierFrequency;
 	float32 m_flModulatorFrequency;

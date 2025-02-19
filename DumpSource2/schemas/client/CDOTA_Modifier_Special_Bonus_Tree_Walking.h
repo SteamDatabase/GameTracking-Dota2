@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Special_Bonus_Tree_Walking : public CDOTA_Buff
+class CDOTA_Modifier_Special_Bonus_Tree_Walking
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Minesweeper_EffectsEntity : public C_BaseModelEntity
+class CDOTA_Minesweeper_EffectsEntity
 {
 };

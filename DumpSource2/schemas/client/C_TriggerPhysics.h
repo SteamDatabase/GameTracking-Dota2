@@ -1,4 +1,4 @@
-class C_TriggerPhysics : public C_BaseTrigger
+class C_TriggerPhysics
 {
 	float32 m_gravityScale;
 	float32 m_linearLimit;

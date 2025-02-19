@@ -1,4 +1,4 @@
-class CDOTA_Ability_Hoodwink_Decoy : public CDOTABaseAbility
+class CDOTA_Ability_Hoodwink_Decoy
 {
 	CUtlVector< CHandle< CBaseEntity > > hIllusion;
 	float32 decoy_stun_duration;

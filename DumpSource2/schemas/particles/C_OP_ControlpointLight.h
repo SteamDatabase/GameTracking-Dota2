@@ -1,4 +1,4 @@
-class C_OP_ControlpointLight : public CParticleFunctionOperator
+class C_OP_ControlpointLight
 {
 	float32 m_flScale;
 	int32 m_nControlPoint1;

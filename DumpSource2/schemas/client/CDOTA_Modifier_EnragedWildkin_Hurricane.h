@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EnragedWildkin_Hurricane : public CDOTA_Buff
+class CDOTA_Modifier_EnragedWildkin_Hurricane
 {
 	ParticleIndex_t m_FX;
 	int32 distance;

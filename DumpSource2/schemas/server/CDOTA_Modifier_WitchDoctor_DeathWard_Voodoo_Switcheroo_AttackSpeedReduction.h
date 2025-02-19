@@ -1,4 +1,4 @@
-class CDOTA_Modifier_WitchDoctor_DeathWard_Voodoo_Switcheroo_AttackSpeedReduction : public CDOTA_Buff
+class CDOTA_Modifier_WitchDoctor_DeathWard_Voodoo_Switcheroo_AttackSpeedReduction
 {
 	int32 attack_speed_reduction;
 };

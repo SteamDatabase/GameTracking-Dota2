@@ -1,4 +1,4 @@
-class CPulseCell_Inflow_ObservableVariableListener : public CPulseCell_Inflow_BaseEntrypoint
+class CPulseCell_Inflow_ObservableVariableListener
 {
 	CPulse_BlackboardReference m_BlackboardReference;
 	bool m_bSelfReference;

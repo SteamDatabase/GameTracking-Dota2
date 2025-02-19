@@ -1,4 +1,4 @@
-class C_INIT_RandomVectorComponent : public CParticleFunctionInitializer
+class C_INIT_RandomVectorComponent
 {
 	float32 m_flMin;
 	float32 m_flMax;

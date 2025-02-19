@@ -1,4 +1,4 @@
-class C_DOTA_Item_WraithBand : public C_DOTA_Item
+class C_DOTA_Item_WraithBand
 {
 	int32 counter;
 };

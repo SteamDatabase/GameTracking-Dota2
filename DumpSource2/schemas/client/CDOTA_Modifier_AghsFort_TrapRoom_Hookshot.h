@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_TrapRoom_Hookshot : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_TrapRoom_Hookshot
 {
 	int32 speed;
 	float32 duration;

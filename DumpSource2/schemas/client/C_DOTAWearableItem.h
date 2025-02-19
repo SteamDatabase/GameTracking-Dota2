@@ -1,4 +1,4 @@
-class C_DOTAWearableItem : public C_EconWearable
+class C_DOTAWearableItem
 {
 	bool m_bOwnerModelChanged;
 	bool m_bIsGeneratingEconItem;

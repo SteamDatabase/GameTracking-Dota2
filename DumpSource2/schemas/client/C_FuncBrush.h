@@ -1,3 +1,3 @@
-class C_FuncBrush : public C_BaseModelEntity
+class C_FuncBrush
 {
 };

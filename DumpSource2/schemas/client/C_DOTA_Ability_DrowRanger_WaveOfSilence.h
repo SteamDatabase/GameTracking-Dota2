@@ -1,4 +1,4 @@
-class C_DOTA_Ability_DrowRanger_WaveOfSilence : public C_DOTABaseAbility
+class C_DOTA_Ability_DrowRanger_WaveOfSilence
 {
 	int32 wave_width;
 	float32 wave_speed;

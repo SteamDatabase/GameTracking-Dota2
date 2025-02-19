@@ -1,4 +1,4 @@
-class C_OP_DistanceBetweenVecs : public CParticleFunctionOperator
+class C_OP_DistanceBetweenVecs
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleVecInput m_vecPoint1;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_HillTroll_RallyAura : public CDOTA_Buff
+class CDOTA_Modifier_HillTroll_RallyAura
 {
 	float32 radius;
 };

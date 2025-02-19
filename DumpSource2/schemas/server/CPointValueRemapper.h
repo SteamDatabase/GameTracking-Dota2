@@ -1,4 +1,4 @@
-class CPointValueRemapper : public CBaseEntity
+class CPointValueRemapper
 {
 	bool m_bDisabled;
 	bool m_bUpdateOnClient;

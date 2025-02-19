@@ -1,4 +1,4 @@
-class C_DOTA_Unit_SpiritBear : public C_DOTA_BaseNPC_Hero
+class C_DOTA_Unit_SpiritBear
 {
 	bool m_bShouldRespawn;
 	bool m_bStolen;

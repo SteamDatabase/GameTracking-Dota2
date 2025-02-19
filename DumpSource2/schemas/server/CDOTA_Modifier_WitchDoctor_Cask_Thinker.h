@@ -1,4 +1,4 @@
-class CDOTA_Modifier_WitchDoctor_Cask_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_WitchDoctor_Cask_Thinker
 {
 	CHandle< CBaseEntity > m_hTarget;
 };

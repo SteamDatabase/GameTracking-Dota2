@@ -1,4 +1,4 @@
-class CRagdollProp : public CBaseAnimGraph
+class CRagdollProp
 {
 	ragdoll_t m_ragdoll;
 	bool m_bStartDisabled;
@@ -21,6 +21,7 @@ class CRagdollProp : public CBaseAnimGraph
 	CUtlSymbolLarge m_strSourceClassName;
 	bool m_bHasBeenPhysgunned;
 	bool m_bShouldTeleportPhysics;
+	bool m_bAllowStretch;
 	float32 m_flBlendWeight;
 	float32 m_flDefaultFadeScale;
 	CUtlVector< Vector > m_ragdollMins;

@@ -1,7 +1,7 @@
-class CDOTA_Modifier_Item_Vampire_Fangs : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Vampire_Fangs
 {
 	int32 attack_lifesteal;
 	int32 spell_lifesteal;
-	int32 night_vision;
-	int32 creep_lifesteal_reduction_pct;
+	int32 attack_damage;
+	float32 vision_loss;
 };

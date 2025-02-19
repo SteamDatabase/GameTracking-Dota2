@@ -1,4 +1,4 @@
-class C_OP_RemapCrossProductOfTwoVectorsToVector : public CParticleFunctionOperator
+class C_OP_RemapCrossProductOfTwoVectorsToVector
 {
 	CPerParticleVecInput m_InputVec1;
 	CPerParticleVecInput m_InputVec2;

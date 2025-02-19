@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Greevil_Miniboss_Black_Nightmare : public CDOTA_Buff
+class CDOTA_Modifier_Greevil_Miniboss_Black_Nightmare
 {
 	float32 animation_rate;
 };

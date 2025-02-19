@@ -1,4 +1,4 @@
-class C_OP_RemapSpeed : public CParticleFunctionOperator
+class C_OP_RemapSpeed
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	float32 m_flInputMin;

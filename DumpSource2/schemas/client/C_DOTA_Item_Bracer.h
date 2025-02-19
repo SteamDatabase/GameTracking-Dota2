@@ -1,4 +1,4 @@
-class C_DOTA_Item_Bracer : public C_DOTA_Item
+class C_DOTA_Item_Bracer
 {
 	int32 counter;
 };

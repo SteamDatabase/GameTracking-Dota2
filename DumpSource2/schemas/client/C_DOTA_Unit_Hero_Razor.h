@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Hero_Razor : public C_DOTA_BaseNPC_Hero
+class C_DOTA_Unit_Hero_Razor
 {
 	int32 m_iPoseParameterAim;
 	int32 m_iPoseParameterRange;

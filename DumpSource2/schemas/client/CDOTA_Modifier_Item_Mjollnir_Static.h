@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Mjollnir_Static : public CDOTA_Buff
+class CDOTA_Modifier_Item_Mjollnir_Static
 {
 	int32 static_chance;
 	int32 static_strikes;

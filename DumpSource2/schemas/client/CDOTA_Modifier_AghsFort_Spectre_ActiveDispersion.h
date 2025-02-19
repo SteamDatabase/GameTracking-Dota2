@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Spectre_ActiveDispersion : public CDOTA_Buff
+class CDOTA_Modifier_AghsFort_Spectre_ActiveDispersion
 {
 	int32 damage_reflection_pct;
 };

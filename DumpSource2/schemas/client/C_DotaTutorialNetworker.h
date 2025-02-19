@@ -1,4 +1,4 @@
-class C_DotaTutorialNetworker : public C_BaseEntity
+class C_DotaTutorialNetworker
 {
 	int32 m_nTutorialState;
 	int32 m_nTaskProgress;

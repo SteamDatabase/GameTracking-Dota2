@@ -1,4 +1,4 @@
-class CDOTA_Ability_Seasonal_TI11_Balloon : public C_DOTABaseAbility
+class CDOTA_Ability_Seasonal_TI11_Balloon
 {
 	float32 charge_use_interval;
 	float32 max_usable_charges;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Necronomicon_Warrior_Sight : public CDOTABaseAbility
+class CDOTA_Ability_Necronomicon_Warrior_Sight
 {
 };

@@ -1,4 +1,4 @@
-class C_OP_RemapVisibilityScalar : public CParticleFunctionOperator
+class C_OP_RemapVisibilityScalar
 {
 	ParticleAttributeIndex_t m_nFieldInput;
 	ParticleAttributeIndex_t m_nFieldOutput;

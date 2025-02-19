@@ -1,4 +1,4 @@
-class CVoiceContainerShapedNoise : public CVoiceContainerBase
+class CVoiceContainerShapedNoise
 {
 	bool m_bUseCurveForFrequency;
 	float32 m_flFrequency;

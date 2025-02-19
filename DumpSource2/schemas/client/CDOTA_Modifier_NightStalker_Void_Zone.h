@@ -1,3 +1,3 @@
-class CDOTA_Modifier_NightStalker_Void_Zone : public CDOTA_Buff
+class CDOTA_Modifier_NightStalker_Void_Zone
 {
 };

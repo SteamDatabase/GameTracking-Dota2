@@ -1,3 +1,3 @@
-class C_LightDirectionalEntity : public C_LightEntity
+class C_LightDirectionalEntity
 {
 };

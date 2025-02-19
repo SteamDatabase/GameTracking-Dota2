@@ -1,4 +1,4 @@
-class CDOTA_Modifier_StormSpirit_Galvanized : public CDOTA_Buff
+class CDOTA_Modifier_StormSpirit_Galvanized
 {
 	float32 perma_mp_per_kill;
 	float32 mp_per_kill;

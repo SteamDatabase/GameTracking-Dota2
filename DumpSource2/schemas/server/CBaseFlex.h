@@ -1,4 +1,4 @@
-class CBaseFlex : public CBaseAnimatingOverlay
+class CBaseFlex
 {
 	CNetworkUtlVectorBase< float32 > m_flexWeight;
 	Vector m_vLookTargetPosition;

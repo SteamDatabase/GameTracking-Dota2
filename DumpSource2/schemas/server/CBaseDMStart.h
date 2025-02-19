@@ -1,4 +1,4 @@
-class CBaseDMStart : public CPointEntity
+class CBaseDMStart
 {
 	CUtlSymbolLarge m_Master;
 };

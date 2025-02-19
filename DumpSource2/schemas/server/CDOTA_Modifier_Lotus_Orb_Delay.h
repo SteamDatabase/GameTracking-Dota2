@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Lotus_Orb_Delay : public CDOTA_Buff
+class CDOTA_Modifier_Lotus_Orb_Delay
 {
 };

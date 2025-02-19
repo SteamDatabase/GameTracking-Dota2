@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Gyrocopter_Flak_Cannon : public CDOTA_Buff
+class CDOTA_Modifier_Gyrocopter_Flak_Cannon
 {
 	int32 max_attacks;
 	int32 bonus_damage;

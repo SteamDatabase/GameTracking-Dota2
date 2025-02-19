@@ -1,4 +1,4 @@
-class CNmFloatSelectorNode::CDefinition : public CNmFloatValueNode::CDefinition
+class CNmFloatSelectorNode::CDefinition
 {
 	CUtlVectorFixedGrowable< int16, 5 > m_conditionNodeIndices;
 	CUtlVectorFixedGrowable< float32, 5 > m_values;

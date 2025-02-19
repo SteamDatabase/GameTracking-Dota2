@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Desolator : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Desolator
 {
 	int32 bonus_damage;
 	int32 bonus_damage_per_kill;

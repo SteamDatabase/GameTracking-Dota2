@@ -1,4 +1,4 @@
-class CDOTA_Item_SheepStick : public CDOTA_Item
+class CDOTA_Item_SheepStick
 {
 	int32 upgrade_radius;
 };

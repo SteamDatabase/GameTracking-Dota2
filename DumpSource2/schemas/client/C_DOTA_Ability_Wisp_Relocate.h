@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Wisp_Relocate : public C_DOTABaseAbility
+class C_DOTA_Ability_Wisp_Relocate
 {
 	ParticleIndex_t m_nFXIndexEndTeam;
 	ParticleIndex_t m_nFXIndexChannel;

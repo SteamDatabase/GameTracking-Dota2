@@ -1,4 +1,4 @@
-class C_DOTA_Item_EmptyBottle : public C_DOTA_Item
+class C_DOTA_Item_EmptyBottle
 {
 	int32 m_iStoredRuneType;
 	GameTime_t m_fStoredRuneTime;

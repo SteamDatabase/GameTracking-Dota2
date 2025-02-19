@@ -1,4 +1,4 @@
-class CDOTAPropConsumableBanner : public C_DynamicProp
+class CDOTAPropConsumableBanner
 {
 	PlayerID_t m_nPlayerID;
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_hAvatarTexture;

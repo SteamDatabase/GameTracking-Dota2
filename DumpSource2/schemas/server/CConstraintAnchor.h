@@ -1,4 +1,4 @@
-class CConstraintAnchor : public CBaseAnimatingActivity
+class CConstraintAnchor
 {
 	float32 m_massScale;
 };

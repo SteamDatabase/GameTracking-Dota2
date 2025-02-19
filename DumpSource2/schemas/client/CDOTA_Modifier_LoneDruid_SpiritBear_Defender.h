@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_SpiritBear_Defender : public CDOTA_Buff
+class CDOTA_Modifier_LoneDruid_SpiritBear_Defender
 {
 	int32 damage_share;
 };

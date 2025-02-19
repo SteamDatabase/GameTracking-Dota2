@@ -1,4 +1,4 @@
-class CRagdollManager : public C_BaseEntity
+class CRagdollManager
 {
 	int8 m_iCurrentMaxRagdollCount;
 };

@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Undying_CeaselessDirge : public CDOTA_Buff
+class CDOTA_Modifier_Undying_CeaselessDirge
 {
 };

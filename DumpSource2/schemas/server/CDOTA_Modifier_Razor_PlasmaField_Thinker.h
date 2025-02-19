@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Razor_PlasmaField_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Razor_PlasmaField_Thinker
 {
 	float32 m_fLastRadius;
 	float32 m_fCurRadius;

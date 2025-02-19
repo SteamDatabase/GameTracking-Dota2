@@ -1,4 +1,4 @@
-class CBonePositionMetricEvaluator : public CMotionMetricEvaluator
+class CBonePositionMetricEvaluator
 {
 	int32 m_nBoneIndex;
 };

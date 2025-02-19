@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_DrunkenBrawler_Slow : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_DrunkenBrawler_Slow
 {
 	int32 movespeed;
 };

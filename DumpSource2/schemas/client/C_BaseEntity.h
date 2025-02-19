@@ -1,4 +1,4 @@
-class C_BaseEntity : public CEntityInstance
+class C_BaseEntity
 {
 	CBodyComponent* m_CBodyComponent;
 	CNetworkTransmitComponent m_NetworkTransmitComponent;
@@ -66,14 +66,11 @@ class C_BaseEntity : public CEntityInstance
 	uint8 m_fBBoxVisFlags;
 	bool m_bPredictable;
 	bool m_bRenderWithViewModels;
-	CSplitScreenSlot m_nSplitUserPlayerPredictionSlot;
+	CPlayerSlot m_nPlayerPredictionSlot;
 	int32 m_nFirstPredictableCommand;
 	int32 m_nLastPredictableCommand;
 	CHandle< C_BaseEntity > m_hOldMoveParent;
 	CParticleProperty m_Particles;
-	CUtlVector< float32 > m_vecPredictedScriptFloats;
-	CUtlVector< int32 > m_vecPredictedScriptFloatIDs;
-	int32 m_nNextScriptVarRecordID;
 	QAngle m_vecAngVelocity;
 	int32 m_DataChangeEventRef;
 	CUtlVector< CEntityHandle > m_dependencies;

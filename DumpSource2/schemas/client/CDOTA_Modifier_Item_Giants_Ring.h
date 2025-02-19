@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Giants_Ring : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Giants_Ring
 {
 	int32 bonus_strength;
 	int32 movement_speed;

@@ -1,4 +1,4 @@
-class CNmConstTargetNode::CDefinition : public CNmTargetValueNode::CDefinition
+class CNmConstTargetNode::CDefinition
 {
 	CNmTarget m_value;
 };

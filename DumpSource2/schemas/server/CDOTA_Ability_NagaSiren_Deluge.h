@@ -1,3 +1,3 @@
-class CDOTA_Ability_NagaSiren_Deluge : public CDOTABaseAbility
+class CDOTA_Ability_NagaSiren_Deluge
 {
 };

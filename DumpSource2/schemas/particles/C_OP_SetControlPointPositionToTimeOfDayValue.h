@@ -1,4 +1,4 @@
-class C_OP_SetControlPointPositionToTimeOfDayValue : public CParticleFunctionPreEmission
+class C_OP_SetControlPointPositionToTimeOfDayValue
 {
 	int32 m_nControlPointNumber;
 	char[128] m_pszTimeOfDayParameter;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Greevil_Miniboss_Blue_IceVortexThinker : public CDOTA_Buff
+class CDOTA_Modifier_Greevil_Miniboss_Blue_IceVortexThinker
 {
 	float32 radius;
 	int32 movement_speed_pct;

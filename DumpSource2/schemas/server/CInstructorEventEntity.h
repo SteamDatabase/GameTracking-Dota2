@@ -1,4 +1,4 @@
-class CInstructorEventEntity : public CPointEntity
+class CInstructorEventEntity
 {
 	CUtlSymbolLarge m_iszName;
 	CUtlSymbolLarge m_iszHintTargetEntity;

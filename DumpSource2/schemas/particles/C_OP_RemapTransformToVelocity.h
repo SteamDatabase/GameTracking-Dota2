@@ -1,4 +1,4 @@
-class C_OP_RemapTransformToVelocity : public CParticleFunctionOperator
+class C_OP_RemapTransformToVelocity
 {
 	CParticleTransformInput m_TransformInput;
 };

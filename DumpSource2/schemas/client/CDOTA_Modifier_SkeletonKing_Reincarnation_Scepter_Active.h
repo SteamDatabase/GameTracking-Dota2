@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SkeletonKing_Reincarnation_Scepter_Active : public CDOTA_Buff
+class CDOTA_Modifier_SkeletonKing_Reincarnation_Scepter_Active
 {
 	int32 scepter_move_speed_pct;
 	int32 scepter_attack_speed;

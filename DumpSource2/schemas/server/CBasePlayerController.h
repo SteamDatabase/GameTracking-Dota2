@@ -1,4 +1,4 @@
-class CBasePlayerController : public CBaseEntity
+class CBasePlayerController
 {
 	uint64 m_nInButtonsWhichAreToggles;
 	uint32 m_nTickBase;
@@ -14,7 +14,6 @@ class CBasePlayerController : public CBaseEntity
 	float32 m_fLerpTime;
 	bool m_bLagCompensation;
 	bool m_bPredict;
-	bool m_bAutoKickDisabled;
 	bool m_bIsLowViolence;
 	bool m_bGamePaused;
 	ChatIgnoreType_t m_iIgnoreGlobalChat;

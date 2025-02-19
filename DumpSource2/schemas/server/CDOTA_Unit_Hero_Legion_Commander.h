@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Legion_Commander : public CDOTA_BaseNPC_Hero
+class CDOTA_Unit_Hero_Legion_Commander
 {
 	uint32 m_unDuelsWon;
 };

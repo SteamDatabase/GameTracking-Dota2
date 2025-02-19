@@ -1,4 +1,4 @@
-class C_OP_RenderClientPhysicsImpulse : public CParticleFunctionRenderer
+class C_OP_RenderClientPhysicsImpulse
 {
 	CPerParticleFloatInput m_flRadius;
 	CPerParticleFloatInput m_flMagnitude;

@@ -1,4 +1,4 @@
-class CSurvivorsPowerUpDefinition_AreaAttack : public CSurvivorsPowerUpDefinition
+class CSurvivorsPowerUpDefinition_AreaAttack
 {
 	ESurvivorsAreaAttackOrigin m_eOrigin;
 	float32 m_flRemoveParticleTimeDelay;

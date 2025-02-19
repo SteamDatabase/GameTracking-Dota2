@@ -1,4 +1,4 @@
-class CDOTA_Ability_PrimalBeast_Onslaught : public CDOTABaseAbility
+class CDOTA_Ability_PrimalBeast_Onslaught
 {
 	float32 max_charge_time;
 	float32 knockback_distance;

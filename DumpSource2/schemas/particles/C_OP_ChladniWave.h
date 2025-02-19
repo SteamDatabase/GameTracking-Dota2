@@ -1,4 +1,4 @@
-class C_OP_ChladniWave : public CParticleFunctionOperator
+class C_OP_ChladniWave
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleFloatInput m_flInputMin;

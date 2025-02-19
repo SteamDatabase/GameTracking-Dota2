@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_RockGolem_Smash : public CDOTABaseAbility
+class CDOTA_Ability_AghsFort_RockGolem_Smash
 {
 	ParticleIndex_t m_nPreviewFX;
 	Vector m_vTargetLoc;

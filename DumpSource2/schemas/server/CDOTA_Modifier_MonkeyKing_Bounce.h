@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_Bounce : public CDOTA_Buff
+class CDOTA_Modifier_MonkeyKing_Bounce
 {
 	float32 jump_damage_cooldown;
 };

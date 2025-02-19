@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_StickyBomb_Chase : public CDOTA_Buff
+class CDOTA_Modifier_Techies_StickyBomb_Chase
 {
 	int32 acceleration;
 	int32 m_nTeamNumber;

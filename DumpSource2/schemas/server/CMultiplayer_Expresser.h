@@ -1,4 +1,4 @@
-class CMultiplayer_Expresser : public CAI_ExpresserWithFollowup
+class CMultiplayer_Expresser
 {
 	bool m_bAllowMultipleScenes;
 };

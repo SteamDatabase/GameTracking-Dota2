@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Abaddon_TheQuickening : public CDOTA_Buff
+class CDOTA_Modifier_Abaddon_TheQuickening
 {
 	float32 cooldown_reduction_creeps;
 	float32 cooldown_reduction_heroes;

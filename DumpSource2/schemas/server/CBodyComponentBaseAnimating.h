@@ -1,4 +1,4 @@
-class CBodyComponentBaseAnimating : public CBodyComponentSkeletonInstance
+class CBodyComponentBaseAnimating
 {
 	CBaseAnimatingController m_animationController;
 };

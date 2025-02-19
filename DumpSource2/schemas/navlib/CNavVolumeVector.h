@@ -1,4 +1,4 @@
-class CNavVolumeVector : public CNavVolume
+class CNavVolumeVector
 {
 	bool m_bHasBeenPreFiltered;
 };

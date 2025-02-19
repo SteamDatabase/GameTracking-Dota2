@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kill : public CDOTA_Buff
+class CDOTA_Modifier_Kill
 {
 	bool m_bHideOnKill;
 };

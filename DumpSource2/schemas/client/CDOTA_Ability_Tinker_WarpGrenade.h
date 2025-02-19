@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tinker_WarpGrenade : public C_DOTABaseAbility
+class CDOTA_Ability_Tinker_WarpGrenade
 {
 	float32 debuff_duration;
 	float32 bonus_distance;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ModelScaleAnimateTime : public CDOTA_Buff
+class CDOTA_Modifier_ModelScaleAnimateTime
 {
 	float32 model_scale_animate_time;
 };

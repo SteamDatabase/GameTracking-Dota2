@@ -1,4 +1,4 @@
-class CDOTA_Ability_Invoker_InvokedBase : public C_DOTABaseAbility
+class CDOTA_Ability_Invoker_InvokedBase
 {
 	int32 m_nQuasLevel;
 	int32 m_nWexLevel;

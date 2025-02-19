@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Morphling_Adaptive_Strike : public CDOTA_Modifier_Stunned
+class CDOTA_Modifier_Morphling_Adaptive_Strike
 {
 	Vector m_vStartPos;
 	Vector m_vDirection;

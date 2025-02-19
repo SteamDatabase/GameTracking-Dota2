@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Axe_CounterHelix_DamageReduction : public CDOTA_Buff
+class CDOTA_Modifier_Axe_CounterHelix_DamageReduction
 {
 	int32 damage_reduction;
 };

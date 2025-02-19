@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_TimberChain : public CDOTA_Buff
+class CDOTA_Modifier_Shredder_TimberChain
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hDamaged;
 	CHandle< CBaseEntity > m_hTarget;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Spectre_Haunt : public CDOTA_Buff
+class CDOTA_Modifier_Spectre_Haunt
 {
 	bool m_bRealityApplied;
 	int32 destroy_if_target_is_dead;

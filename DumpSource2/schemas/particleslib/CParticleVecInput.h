@@ -1,4 +1,4 @@
-class CParticleVecInput : public CParticleInput
+class CParticleVecInput
 {
 	ParticleVecType_t m_nType;
 	Vector m_vLiteralValue;

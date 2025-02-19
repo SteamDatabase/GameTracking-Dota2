@@ -1,4 +1,4 @@
-class CBaseAnimatingActivity : public CBaseModelEntity
+class CBaseAnimatingActivity
 {
 	bool m_bShouldAnimateDuringGameplayPause;
 	bool m_bInitiallyPopulateInterpHistory;

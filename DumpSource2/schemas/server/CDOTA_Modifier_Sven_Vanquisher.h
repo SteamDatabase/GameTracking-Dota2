@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Sven_Vanquisher : public CDOTA_Buff
+class CDOTA_Modifier_Sven_Vanquisher
 {
 	int32 bonus_damage_pct;
 };

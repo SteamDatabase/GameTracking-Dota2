@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Gyrocopter_Call_Down : public CDOTA_Buff
+class CDOTA_Modifier_Gyrocopter_Call_Down
 {
 	int32 slow_duration;
 	int32 damage;

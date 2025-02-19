@@ -1,4 +1,4 @@
-class CAnimationGraphVisualizerSphere : public CAnimationGraphVisualizerPrimitiveBase
+class CAnimationGraphVisualizerSphere
 {
 	VectorAligned m_vWsPosition;
 	float32 m_flRadius;

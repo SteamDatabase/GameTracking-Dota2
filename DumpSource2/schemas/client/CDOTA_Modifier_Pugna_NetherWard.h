@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pugna_NetherWard : public CDOTA_Buff
+class CDOTA_Modifier_Pugna_NetherWard
 {
 	float32 radius;
 	float32 mana_multiplier;

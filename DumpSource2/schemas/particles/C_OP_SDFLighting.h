@@ -1,4 +1,4 @@
-class C_OP_SDFLighting : public CParticleFunctionOperator
+class C_OP_SDFLighting
 {
 	Vector m_vLightingDir;
 	Vector m_vTint_0;

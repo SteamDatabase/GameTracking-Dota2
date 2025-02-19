@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_DrunkenBrawler : public CDOTA_Buff
+class CDOTA_Modifier_Brewmaster_DrunkenBrawler
 {
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXIndexB;

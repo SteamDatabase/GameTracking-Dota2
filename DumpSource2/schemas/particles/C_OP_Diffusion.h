@@ -1,4 +1,4 @@
-class C_OP_Diffusion : public CParticleFunctionOperator
+class C_OP_Diffusion
 {
 	float32 m_flRadiusScale;
 	ParticleAttributeIndex_t m_nFieldOutput;

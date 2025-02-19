@@ -1,4 +1,4 @@
-class CDOTA_Unit_Courier : public CDOTA_BaseNPC_Additive
+class CDOTA_Unit_Courier
 {
 	bool m_bUnitRespawned;
 	bool m_bPreUpdateFlyingCourier;

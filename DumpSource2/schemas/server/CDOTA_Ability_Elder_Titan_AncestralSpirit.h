@@ -1,4 +1,4 @@
-class CDOTA_Ability_Elder_Titan_AncestralSpirit : public CDOTABaseAbility
+class CDOTA_Ability_Elder_Titan_AncestralSpirit
 {
 	int32 speed;
 	int32 radius;

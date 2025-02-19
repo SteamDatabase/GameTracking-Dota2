@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bristleback_QuillSpray : public CDOTA_Buff
+class CDOTA_Modifier_Bristleback_QuillSpray
 {
 	ParticleIndex_t m_nFXIndex;
 };

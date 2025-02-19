@@ -1,4 +1,4 @@
-class C_OP_PointVectorAtNextParticle : public CParticleFunctionOperator
+class C_OP_PointVectorAtNextParticle
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CPerParticleFloatInput m_flInterpolation;

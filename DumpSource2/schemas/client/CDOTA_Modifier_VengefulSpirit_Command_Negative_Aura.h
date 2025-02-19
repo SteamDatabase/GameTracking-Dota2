@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VengefulSpirit_Command_Negative_Aura : public CDOTA_Buff
+class CDOTA_Modifier_VengefulSpirit_Command_Negative_Aura
 {
 	float32 aura_radius;
 };

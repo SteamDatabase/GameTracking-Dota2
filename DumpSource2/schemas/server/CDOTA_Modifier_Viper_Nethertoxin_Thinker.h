@@ -1,5 +1,6 @@
-class CDOTA_Modifier_Viper_Nethertoxin_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Viper_Nethertoxin_Thinker
 {
-	float32 radius;
-	ParticleIndex_t m_nFXIndex;
+	float32 radius_increase;
+	float32 m_flCurrentRadius;
+	CUtlVector< ParticleIndex_t > m_vParticleList;
 };

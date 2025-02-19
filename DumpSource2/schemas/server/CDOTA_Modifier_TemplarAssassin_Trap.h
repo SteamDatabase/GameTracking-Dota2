@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TemplarAssassin_Trap : public CDOTA_Modifier_Invisible
+class CDOTA_Modifier_TemplarAssassin_Trap
 {
 	CUtlVector< CHandle< CBaseEntity > > m_vecTriggers;
 	int32 bonus_vision;

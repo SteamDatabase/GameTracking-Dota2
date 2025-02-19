@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_Tusk_Sigil : public C_DOTA_BaseNPC_Additive
+class C_DOTA_BaseNPC_Tusk_Sigil
 {
 	QAngle m_angInitialAngles;
 };

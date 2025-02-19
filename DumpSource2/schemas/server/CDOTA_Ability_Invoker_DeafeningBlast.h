@@ -1,4 +1,4 @@
-class CDOTA_Ability_Invoker_DeafeningBlast : public CDOTA_Ability_Invoker_InvokedBase
+class CDOTA_Ability_Invoker_DeafeningBlast
 {
 	float32 end_vision_duration;
 	float32 damage;

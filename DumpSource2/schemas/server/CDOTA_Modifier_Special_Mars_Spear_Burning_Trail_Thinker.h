@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Mars_Spear_Burning_Trail_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Special_Mars_Spear_Burning_Trail_Thinker
 {
 	Vector m_vPathDir;
 	int32 shard_trail_radius;

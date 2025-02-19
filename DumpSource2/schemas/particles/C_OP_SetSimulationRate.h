@@ -1,4 +1,4 @@
-class C_OP_SetSimulationRate : public CParticleFunctionPreEmission
+class C_OP_SetSimulationRate
 {
 	CParticleCollectionFloatInput m_flSimulationScale;
 };

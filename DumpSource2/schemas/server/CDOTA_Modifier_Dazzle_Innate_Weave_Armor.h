@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dazzle_Innate_Weave_Armor : public CDOTA_Buff
+class CDOTA_Modifier_Dazzle_Innate_Weave_Armor
 {
 	float32 armor_change;
 	float32 heal_reduction;

@@ -1,4 +1,4 @@
-class C_OP_LockPoints : public CParticleFunctionOperator
+class C_OP_LockPoints
 {
 	int32 m_nMinCol;
 	int32 m_nMaxCol;

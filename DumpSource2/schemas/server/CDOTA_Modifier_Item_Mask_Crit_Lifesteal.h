@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Mask_Crit_Lifesteal : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_Mask_Crit_Lifesteal
 {
 	int32 lifesteal_flat;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Oracle_Prognosticate : public CDOTA_Buff
+class CDOTA_Modifier_Oracle_Prognosticate
 {
 	int32 current_rune_location;
 	int32 next_rune_location;

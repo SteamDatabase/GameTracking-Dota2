@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_SavageRoar : public CDOTA_Modifier_Fear
+class CDOTA_Modifier_LoneDruid_SavageRoar
 {
 	int32 bonus_speed;
 };

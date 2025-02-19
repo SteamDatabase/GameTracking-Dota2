@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Terrorblade_Fear : public CDOTA_Buff
+class CDOTA_Modifier_Terrorblade_Fear
 {
 	Vector m_vOriginal;
 };

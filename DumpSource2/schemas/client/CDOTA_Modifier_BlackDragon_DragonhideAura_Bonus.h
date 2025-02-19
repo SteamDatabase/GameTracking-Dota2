@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BlackDragon_DragonhideAura_Bonus : public CDOTA_Buff
+class CDOTA_Modifier_BlackDragon_DragonhideAura_Bonus
 {
 	int32 bonus_armor;
 };

@@ -1,4 +1,4 @@
-class C_DOTA_Item_TeleportScroll : public C_DOTA_Item
+class C_DOTA_Item_TeleportScroll
 {
 	CHandle< C_BaseEntity > m_hTeleportTarget;
 	ParticleIndex_t m_nFXOrigin;

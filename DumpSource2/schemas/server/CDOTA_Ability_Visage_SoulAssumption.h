@@ -1,4 +1,4 @@
-class CDOTA_Ability_Visage_SoulAssumption : public CDOTABaseAbility
+class CDOTA_Ability_Visage_SoulAssumption
 {
 	float32 m_fDamage;
 	ParticleIndex_t m_nFXIndex;

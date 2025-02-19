@@ -1,3 +1,3 @@
-class CDOTA_Ability_Wisp_SightSeer : public CDOTABaseAbility
+class CDOTA_Ability_Wisp_SightSeer
 {
 };

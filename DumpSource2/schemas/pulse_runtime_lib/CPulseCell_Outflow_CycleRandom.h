@@ -1,4 +1,4 @@
-class CPulseCell_Outflow_CycleRandom : public CPulseCell_BaseFlow
+class CPulseCell_Outflow_CycleRandom
 {
 	CUtlVector< CPulse_OutflowConnection > m_Outputs;
 };

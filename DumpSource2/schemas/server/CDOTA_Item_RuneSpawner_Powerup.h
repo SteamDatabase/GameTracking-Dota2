@@ -1,4 +1,4 @@
-class CDOTA_Item_RuneSpawner_Powerup : public CBaseAnimatingActivity
+class CDOTA_Item_RuneSpawner_Powerup
 {
 	CUtlSymbolLarge m_szPosition;
 	float32 m_flLastSpawnTime;

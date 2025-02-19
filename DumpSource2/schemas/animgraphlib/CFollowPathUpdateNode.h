@@ -1,4 +1,4 @@
-class CFollowPathUpdateNode : public CUnaryUpdateNode
+class CFollowPathUpdateNode
 {
 	float32 m_flBlendOutTime;
 	bool m_bBlockNonPathMovement;
@@ -13,5 +13,4 @@ class CFollowPathUpdateNode : public CUnaryUpdateNode
 	CAnimParamHandle m_hParam;
 	float32 m_flTurnToFaceOffset;
 	bool m_bTurnToFace;
-	bool m_bAlignRootMotionWithMoveDirection;
 };

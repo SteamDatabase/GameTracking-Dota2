@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Zuus_ThundergodsWrathThinker : public CDOTA_Buff
+class CDOTA_Modifier_Zuus_ThundergodsWrathThinker
 {
 	int32 damage;
 	float32 damage_pct;

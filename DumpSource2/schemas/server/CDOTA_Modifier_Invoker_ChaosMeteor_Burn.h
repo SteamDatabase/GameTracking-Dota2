@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_ChaosMeteor_Burn : public CDOTA_Buff
+class CDOTA_Modifier_Invoker_ChaosMeteor_Burn
 {
 	float32 spell_amp;
 	float32 spell_lifesteal;

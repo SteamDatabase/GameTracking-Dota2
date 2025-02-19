@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_WhoopeeCushion_Active : public CDOTA_Buff
+class CDOTA_Modifier_Ringmaster_WhoopeeCushion_Active
 {
 	int32 leap_distance;
 	float32 leap_speed;

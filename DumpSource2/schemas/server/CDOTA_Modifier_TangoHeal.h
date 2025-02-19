@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TangoHeal : public CDOTA_Buff
+class CDOTA_Modifier_TangoHeal
 {
 	float32 health_regen;
 	bool superheal;

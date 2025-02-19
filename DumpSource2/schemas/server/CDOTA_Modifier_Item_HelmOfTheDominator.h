@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_HelmOfTheDominator : public CDOTA_Buff_Item
+class CDOTA_Modifier_Item_HelmOfTheDominator
 {
 	int32 bonus_stats;
 	int32 bonus_armor;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Treant_NaturesGrasp_Creation_Thinker : public CDOTA_Buff
+class CDOTA_Modifier_Treant_NaturesGrasp_Creation_Thinker
 {
 	float32 creation_interval;
 	float32 vines_duration;

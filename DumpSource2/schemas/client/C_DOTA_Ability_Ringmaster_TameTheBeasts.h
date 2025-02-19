@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Ringmaster_TameTheBeasts : public C_DOTABaseAbility
+class C_DOTA_Ability_Ringmaster_TameTheBeasts
 {
 	Vector m_vCrackLocation;
 	C_DOTA_BaseNPC* m_pTarget;

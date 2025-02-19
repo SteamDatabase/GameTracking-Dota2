@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Primal_Beast_Trample_Haste : public CDOTA_Buff
+class CDOTA_Modifier_Primal_Beast_Trample_Haste
 {
 	int32 bonus_movespeed_pct_self;
 	int32 bonus_movespeed_pct_allies;

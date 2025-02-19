@@ -1,4 +1,4 @@
-class CSoundOpvarSetPointBase : public CBaseEntity
+class CSoundOpvarSetPointBase
 {
 	bool m_bDisabled;
 	CEntityHandle m_hSource;

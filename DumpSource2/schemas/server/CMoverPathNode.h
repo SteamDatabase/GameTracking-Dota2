@@ -1,4 +1,4 @@
-class CMoverPathNode : public CPointEntity
+class CMoverPathNode
 {
 	Vector m_vInTangentLocal;
 	Vector m_vOutTangentLocal;

@@ -1,4 +1,4 @@
-class CSurvivorsPowerUpDefinition_MortimerKisses : public CSurvivorsPowerUpDefinition_AreaAttack_Circle
+class CSurvivorsPowerUpDefinition_MortimerKisses
 {
 	float32 m_flMinRange;
 	float32 m_flLaunchDistance;

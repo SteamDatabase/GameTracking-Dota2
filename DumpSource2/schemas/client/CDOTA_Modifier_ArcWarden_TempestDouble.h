@@ -1,4 +1,3 @@
-class CDOTA_Modifier_ArcWarden_TempestDouble : public CDOTA_Buff
+class CDOTA_Modifier_ArcWarden_TempestDouble
 {
-	int32 penalty_distance;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DeathProphet_Scepter : public CDOTA_Buff
+class CDOTA_Modifier_DeathProphet_Scepter
 {
 	int32 radius;
 	int32 spirit_speed;

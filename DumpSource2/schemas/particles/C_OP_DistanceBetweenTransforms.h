@@ -1,4 +1,4 @@
-class C_OP_DistanceBetweenTransforms : public CParticleFunctionOperator
+class C_OP_DistanceBetweenTransforms
 {
 	ParticleAttributeIndex_t m_nFieldOutput;
 	CParticleTransformInput m_TransformStart;

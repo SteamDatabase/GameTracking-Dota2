@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_ShadowShaman_SerpentWard : public C_DOTA_BaseNPC_Additive
+class C_DOTA_BaseNPC_ShadowShaman_SerpentWard
 {
 	QAngle m_angle;
 	int32 m_iPoseParameterAim;

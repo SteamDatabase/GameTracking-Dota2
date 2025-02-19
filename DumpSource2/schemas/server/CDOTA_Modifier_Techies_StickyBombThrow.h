@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_StickyBombThrow : public CDOTA_Buff
+class CDOTA_Modifier_Techies_StickyBombThrow
 {
 	CHandle< CBaseEntity > m_hTarget;
 	float32 m_flPredictedTotalTime;

@@ -1,4 +1,4 @@
-class CStopwatch : public CStopwatchBase
+class CStopwatch
 {
 	float32 m_flInterval;
 };

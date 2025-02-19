@@ -1,4 +1,4 @@
-class C_OP_RenderBlobs : public CParticleFunctionRenderer
+class C_OP_RenderBlobs
 {
 	CParticleCollectionRendererFloatInput m_cubeWidth;
 	CParticleCollectionRendererFloatInput m_cutoffRadius;

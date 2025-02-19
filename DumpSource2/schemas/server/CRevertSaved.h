@@ -1,4 +1,4 @@
-class CRevertSaved : public CModelPointEntity
+class CRevertSaved
 {
 	float32 m_loadTime;
 	float32 m_Duration;

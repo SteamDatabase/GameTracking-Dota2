@@ -1,4 +1,4 @@
-class CAnimationGraphVisualizerText : public CAnimationGraphVisualizerPrimitiveBase
+class CAnimationGraphVisualizerText
 {
 	VectorAligned m_vWsPosition;
 	Color m_Color;

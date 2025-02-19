@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AncientApparition_IceAge : public CDOTA_Buff
+class CDOTA_Modifier_AncientApparition_IceAge
 {
 	float32 damage;
 };

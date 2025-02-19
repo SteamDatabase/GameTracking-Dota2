@@ -1,4 +1,4 @@
-class CDOTA_Ability_WitchDoctor_DeathWard : public CDOTABaseAbility
+class CDOTA_Ability_WitchDoctor_DeathWard
 {
 	CHandle< CBaseEntity > m_hWard;
 	int32 m_iDamage;

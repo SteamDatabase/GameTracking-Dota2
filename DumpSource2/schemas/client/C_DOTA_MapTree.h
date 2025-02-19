@@ -1,4 +1,4 @@
-class C_DOTA_MapTree : public C_DOTA_BinaryObject
+class C_DOTA_MapTree
 {
 	bool m_bInitialized;
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_Creature_Impale : public C_DOTABaseAbility
+class CDOTA_Ability_AghsFort_Creature_Impale
 {
 	ParticleIndex_t m_nPreviewFX;
 	int32 width;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SpiritBreaker_SpecialAttack : public CDOTA_Buff
+class CDOTA_Modifier_SpiritBreaker_SpecialAttack
 {
 	CHandle< CBaseEntity > m_hTarget;
 };

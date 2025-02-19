@@ -1,3 +1,3 @@
-class CDOTA_Modifier_OgreSmash_Swing : public CDOTA_Buff
+class CDOTA_Modifier_OgreSmash_Swing
 {
 };

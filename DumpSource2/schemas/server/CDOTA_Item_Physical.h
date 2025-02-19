@@ -1,4 +1,4 @@
-class CDOTA_Item_Physical : public CBaseAnimatingActivity
+class CDOTA_Item_Physical
 {
 	int32 m_nFlags;
 	int32 m_nRevealedInFoWForTeam;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_IceShaman_IncendiaryBomb : public CDOTABaseAbility
+class CDOTA_Ability_IceShaman_IncendiaryBomb
 {
 	ParticleIndex_t m_nFXIndex;
 };

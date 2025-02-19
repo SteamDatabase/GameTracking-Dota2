@@ -1,4 +1,4 @@
-class CMotionMatchingUpdateNode : public CLeafUpdateNode
+class CMotionMatchingUpdateNode
 {
 	CMotionDataSet m_dataSet;
 	CUtlVector< CSmartPtr< CMotionMetricEvaluator > > m_metrics;

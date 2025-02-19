@@ -1,3 +1,3 @@
-class CDOTA_Item_SangeAndYasha : public CDOTA_Item
+class CDOTA_Item_SangeAndYasha
 {
 };

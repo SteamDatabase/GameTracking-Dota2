@@ -1,4 +1,4 @@
-class CPostProcessingVolume : public CBaseTrigger
+class CPostProcessingVolume
 {
 	CStrongHandle< InfoForResourceTypeCPostProcessingResource > m_hPostSettings;
 	float32 m_flFadeDuration;

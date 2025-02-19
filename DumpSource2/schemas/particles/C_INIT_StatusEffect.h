@@ -1,4 +1,4 @@
-class C_INIT_StatusEffect : public CParticleFunctionInitializer
+class C_INIT_StatusEffect
 {
 	Detail2Combo_t m_nDetail2Combo;
 	float32 m_flDetail2Rotation;

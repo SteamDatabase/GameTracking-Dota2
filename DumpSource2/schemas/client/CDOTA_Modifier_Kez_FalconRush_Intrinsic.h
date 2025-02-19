@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kez_FalconRush_Intrinsic : public CDOTA_Buff
+class CDOTA_Modifier_Kez_FalconRush_Intrinsic
 {
 	float32 base_attack_rate_katana;
 	float32 base_attack_rate_sai;
