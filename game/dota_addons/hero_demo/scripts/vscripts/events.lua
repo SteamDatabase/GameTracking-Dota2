@@ -323,7 +323,8 @@ function CHeroDemo:OnRequestInitialSpawnHeroID( eventSourceIndex, data )
 	local event_data =
 	{
 		hero_id = nHeroID,
-		hero_name = sHeroToSpawn
+		hero_name = sHeroToSpawn,
+		initial_spawn = true
 	}
 	CustomGameEventManager:Send_ServerToAllClients( "set_spawn_hero_id", event_data )
 end

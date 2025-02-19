@@ -109,8 +109,13 @@
 ]	
 
 @PointClass base(Targetname) = npc_dota_miniboss_spawner: 
-	"Spawns Roshan, the big boss in the standard Dota2 PvP map."
+	"Spawns Tormentor, the small side lane boss in the standard Dota2 PvP map."
 [
+	VisualTeam(choices) : "Rune Team" : 2 =
+	[
+		2: "DOTA_TEAM_GOODGUYS"
+		3: "DOTA_TEAM_BADGUYS"
+	]
 ]	
 
 @PointClass base(Targetname) = ent_sugar_rush: 
@@ -334,9 +339,34 @@
 		1: "Kobolds (E), Ogres (M), Centaurs (H), Drakes (A)"
 		2: "Gnolls (E), Wolves (M), Troll Warlord (H), Rock Golems (A)"
 		3: "Troll Priest (E), Mud Golems (M), Ursa (H), Lizards (A)"
-		4: "Trolls & Kobold (E), Satyrs (M), Satyrs (H)"
-		5: "Ghosts (E), Centaurs (M), Wildkin (H)"
-		6: "Harpies (E)"
+		4: "Trolls & Kobold (E), Satyrs (M), Satyrs (H), Frostbitten Golems (A)"
+		5: "Ghosts (E), Centaurs (M), Wildkin (H), Prowlers (A)"
+		6: "Harpies (E), Warpine (H)"
+		7: "Tadpoles (E), Froglets (M), Grown Frog (H), Ancient Frogs (A)"
+	]
+
+	MaxUpgradeCount(integer): "Max Upgrade Count" : 0 : "Amount of times a camp can upgrade if it is upgradable"
+
+	MinSpawnType(choices) : "Min Spawn Type" : 1 = 
+	[
+		1: "Kobolds (E), Ogres (M), Centaurs (H), Drakes (A) - (Normal Gamerules)"
+		2: "Gnolls (E), Wolves (M), Troll Warlord (H), Rock Golems (A)"
+		3: "Troll Priest (E), Mud Golems (M), Ursa (H), Lizards (A)"
+		4: "Trolls & Kobold (E), Satyrs (M), Satyrs (H), Frostbitten Golems (A)"
+		5: "Ghosts (E), Centaurs (M), Wildkin (H), Prowlers (A)"
+		6: "Harpies (E), Warpine (H)"
+		7: "Tadpoles (E), Froglets (M), Grown Frog (H), Ancient Frogs (A)"
+	]
+	
+	MaxSpawnType(choices) : "Max Spawn Type" : 6 = 
+	[
+		1: "Kobolds (E), Ogres (M), Centaurs (H), Drakes (A)"
+		2: "Gnolls (E), Wolves (M), Troll Warlord (H), Rock Golems (A)"
+		3: "Troll Priest (E), Mud Golems (M), Ursa (H), Lizards (A)"
+		4: "Trolls & Kobold (E), Satyrs (M), Satyrs (H), Frostbitten Golems (A)"
+		5: "Ghosts (E), Centaurs (M), Wildkin (H), Prowlers (A)"
+		6: "Harpies (E), Warpine (H)"
+		7: "Tadpoles (E), Froglets (M), Grown Frog (H), Ancient Frogs (A)"
 	]
 
 	BatchLimit(integer) : "Spawn Limit" : 0 : "The max number of times this spawner is allowed to spawn its creeps. If 0, will spawn infinitely."
@@ -760,8 +790,8 @@
 [
 ]
 
-@PointClass base(prop_dynamic_base, Targetname, dota_building) studioprop() = npc_dota_mango_tree: 
-	"Creates a mango tree that spews mangos every now and then."
+@PointClass base(prop_dynamic_base, Targetname, dota_building) studioprop() = npc_dota_lotus_pool: 
+	"Creates a lotus pool that creates lotuses every now and then."
 [
 ]
 
@@ -784,6 +814,24 @@
 @PointClass base(prop_dynamic_base, Targetname, dota_building) studioprop() = npc_dota_lantern:
 	"A lantern that can be lit by either team."
 [
+]
+
+
+@PointClass base(prop_dynamic_base, Targetname, dota_building) studioprop() = npc_dota_xp_fountain:
+	"An XP fountain that grants experience to a unit that stands near it for long enough."
+[
+]
+
+
+@PointClass base(prop_dynamic_base, Targetname, dota_building) line(255 255 255, Targetname, link) studioprop() = npc_dota_launchpad:
+	"Launches the hero to the paired landing pad."
+[
+	CurrentStrength(choices) :"Current Strength" : 2 :"The movement speed bonus that the unit receives." =
+	[
+		0: "Slow"
+		1: "Moderate"
+		2: "Fast"
+	]
 ]
 
 @PointClass base( dota_building ) studioprop() = ent_dota_shop: 
@@ -865,7 +913,7 @@
 	{
 		auto_apply_material = "materials/tools/tools_no_wards.vmat"
 	}
-= trigger_no_wards : 
+	= trigger_no_wards : 
 	"Wards disallowed here."
 [
 ]
@@ -1258,7 +1306,12 @@
 ]
 
 // NOTE: We don't inherit directly from trigger_multiple here because we don't want the confusing spawnflags
-@SolidClass base(Targetname, Parentname, EnableDisable,dota_entity_filter_flags) = trigger_dota : "Dota-specific Trigger."
+@SolidClass base(Targetname, Parentname, EnableDisable, dota_entity_filter_flags) 
+	metadata
+	{
+		physics_only_model = true
+	}
+	= trigger_dota : "Dota-specific Trigger."
 [
 	wait(integer) : "Delay Before Reset" : 1 : "Amount of time, in seconds, after the trigger_multiple has triggered before it can be triggered again. If set to -1, it will never trigger again."
 	filtername(filterclass) : "Filter Name" : : "Filter to use to see if activator triggers me. See filter_activator_name for more explanation."
@@ -1339,4 +1392,33 @@
 	"Crownfall shmup enemy."
 [
 	target(target_destination) : "Follow Path" : : "The path this enemy will follow through the level"
+]
+
+@PathNodeClass
+	metadata
+	{
+		editor_only = true
+	}
+= dota_movespeed_path_node
+[
+	radius_scale(float) : "Radius" : "50.0" : "Radius"
+	MoveSpeedType(choices) { write_to_path_key = "pathNodeMoveSpeedTypes" } : "Move Speed Type" : 2 :"The movement speed bonus that the unit receives." =
+	[
+		1: "Moderate"
+		2: "Fast"
+	]
+]
+
+@PathClass base(Targetname) tags( PathLogical )
+	metadata
+	{
+		path_node_class = "dota_movespeed_path_node"
+		entity_tool_name = "Dota Move Speed Path"
+		entity_tool_tip = "Specifies a path along which applies move speed modifier to NPCs"
+		entity_tool_group = "DotaMoveSpeedPath"
+		default_interpolation = "linear"
+		hide_interpolation_type = true
+	}
+	accompany() = dota_movespeed_modifier_path
+[
 ]

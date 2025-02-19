@@ -55,7 +55,7 @@ class AnimateTowerSurvival extends RunSequentialActions
 
 	start()
 	{
-		var towerPanel = $.GetContextPanel().FindPanelInLayoutFile( this.panelName );
+		var towerPanel = $.GetContextPanel().FindChildInLayoutFile( this.panelName );
 
 		this.seq.actions.push( new WaitForClassAction( fxPanel, "SceneLoaded" ) );
 		this.seq.actions.push( new RunFunctionAction( function()
@@ -81,7 +81,7 @@ class AnimateTowerDestroyed extends RunSequentialActions
 
 	start()
 	{
-		var towerPanel = $.GetContextPanel().FindPanelInLayoutFile( this.panelName );
+		var towerPanel = $.GetContextPanel().FindChildInLayoutFile( this.panelName );
 
 		var fxPanel = towerPanel.FindChildInLayoutFile( "DestroyTowerFX" );
 
@@ -112,7 +112,7 @@ function InitNemesticeTowerReplay( towersData )
 	if ( typeof towersData === 'object' && towersData !== null && Array.isArray( towersData.towers ) )
 	{
 		var vTowersArray = towersData.towers;
-		var minimapOverlay = $.GetContextPanel().FindPanelInLayoutFile( "NemesticeTowerReplayOverlay" );
+		var minimapOverlay = $.GetContextPanel().FindChildInLayoutFile( "NemesticeTowerReplayOverlay" );
 		minimapOverlay.RemoveClass( "FadeOff" );
 		minimapOverlay.RemoveAndDeleteChildren();
 		var seq = new RunSequentialActions();

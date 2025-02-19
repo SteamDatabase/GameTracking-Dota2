@@ -96,7 +96,6 @@
 		"ReserveWarnMB" "64"
 
 		"DefaultRenderSystem"					"-vulkan" [ $LINUX || $OSX ] // macOS/Linux default to Vulkan
-		"SupportsVulkanParticleOptimizations"	"1"
 
 		"RenderingPipeline"
 		{
@@ -139,6 +138,12 @@
 	{
 		"SteamAudioEnabled" "0"
 		"snd_event_browser_default_stack" "dota_update_default"
+	}
+
+	NetworkSystem
+	{
+		// Experimental, only enabled for Dota right now:
+		"SkipRedundantChangeCallbacks"	"1"
 	}
 
 	ToolsEnvironment

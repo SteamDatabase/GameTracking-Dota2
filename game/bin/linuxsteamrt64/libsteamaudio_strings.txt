@@ -5,26 +5,33 @@
 %5lu file=%s, line=%d, 
 %ld bytes leaked in %d chunks\n
 %lli
-%llu
 %s%s%s crc=0x%x metadatasz=%d
 %s(%d): OpenSSL internal error, assertion failed: %s\n
+%s: Unable to create energy field [%d]\n
+%s: Unable to create hybrid reverb estimator [%d]\n
+%s: Unable to create impulse response [%d]\n
+%s: Unable to create partitioned impulse response [%d]\n
+%s: Unable to create partitioner [%d]\n
 %s: Unable to create probe array (%d)\n
 %s: Unable to create probe batch(%d)\n
+%s: Unable to create probe lookup [%d]\n
+%s: Unable to create probe neighborhood [%d]\n
+%s: Unable to create reconstructor [%d]\n
+%s: Unable to create reverb estimator [%d]\n
 %s: Unable to create serialized object (%d)\n
 %s: Unable to find serialized probe batch data\n
 %s: Unable to load data: %s\n
 %s: Unable to load probe batch (%d)\n
+%s: Unable to load probe batch.\n
 %s: Unable to save data: %s\n
 %s_%03d.vpk
-*.vpk
 ../../public/tier0/utlrbtree.h
 .custom.dimensions
 .custom.materials
 .custom.occlusion
 .sapaths
 .sareverb
-0123456789
-0Ces-8R
+0 = use biquad instead of svf, 1 = use vectorized svf, 2 = use scalar svf
 11CSteamAudio
 11ISteamAudio
 14CBaseAppSystemI11ISteamAudioE
@@ -45,11 +52,13 @@
 18CSource3DProcessor
 21CSurfacePropDataTableI19CSteamAudioMaterialE
 22CHybridReverbProcessor
+22CSteamAudioPartitioner
 22IHybridReverbProcessor
 23CSteamAudioMaterialList
 25CSteamAudioSimulationData
-25CSurfacePropDataTableBase
 25ISteamAudioSimulationData
+26CSteamAudioReverbSimulator
+27CSteamAudioPartitioningTask
 2RD\n2
 30CSchemaRegistration_steamaudio
 5a\v6;
@@ -57,9 +66,8 @@
 81Pl\v1
 <<ERROR>>
 <INVALID>
-=CImpulseResponse
-?UUUUUU
-@@basic_string::_M_create
+?0]T30i
+@@25CSurfacePropDataTableBase
 AD Time Stamping
 AD_DVCS
 AES-128-CBC
@@ -102,7 +110,6 @@ Any Extended Key Usage
 Any language
 Authority Information Access
 B?33
-BEnable SIMD code path for shoebox reverb processor.
 BF-CBC
 BF-CFB
 BF-ECB
@@ -113,10 +120,13 @@ BN lib
 BUF lib
 BakeDimensions
 BakeDimensions: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakeDimensions: No probes generated. Bake cancelled.\n
 BakeMaterials
 BakeMaterials: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakeMaterials: No probes generated. Bake cancelled.\n
 BakeOcclusion
 BakeOcclusion: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakeOcclusion: No probes generated. Bake cancelled.\n
 BakeOcclusion: Unable to create impulse response. (%d)\n
 BakeOcclusion: Unable to create probe batch. [%d]\n
 BakeOcclusion: Unable to create simulator. (%d)\n
@@ -124,16 +134,17 @@ BakeOcclusion: Unable to create source. (%d)\n
 BakePathData
 BakePathData: Cancelled\n
 BakePathData: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakePathData: No probes generated. Bake cancelled.\n
 BakePathData: Unable to create probe batch. [%d]\n
 BakeReverb
 BakeReverb: Cancelled\n
 BakeReverb: Max probes (%u) limit exceeded (%d). Bake cancelled.\n
+BakeReverb: No probes generated. Bake cancelled.\n
 BakeReverb: Unable to create compressed probe batch. (%d)\n
 BakeReverb: Unable to create probe array. (%d)\n
 BakeReverb: Unable to create probe batch. (%d)\n
 Basic OCSP Response
 Big Number part of OpenSSL 1.0.2j  26 Sep 2016
-Binvalid_hitbox
 Biometric Info
 CA Issuers
 CA Repository
@@ -161,6 +172,7 @@ CAST5-ECB
 CAST5-OFB
 CDirectProcessor
 CHybridReverbProcessor
+CImpulseResponse
 CMAC
 CMS routines
 CONF lib
@@ -172,7 +184,11 @@ CSteamAudioBakedMaterialsData
 CSteamAudioBakedOcclusionData
 CSteamAudioBakedPathingData
 CSteamAudioBakedReverbData
+CSteamAudioPartitioner
+CSteamAudioPartitioningTask
 CSteamAudioProbeData
+CSteamAudioReverbSimulator
+CSteamAudioSource
 CT Certificate SCTs
 CT Precertificate Poison
 CT Precertificate SCTs
@@ -189,7 +205,8 @@ Content file %s is corrupt; signature couldn't be verified. Verify integrity of 
 Continue using previous prrobes if probe lookup for reverb fails.
 Could not load custom hrtf properties file. %s
 CrlID
-D40]T30L
+D40L
+DES-CBC
 DES-CDMF
 DES-CFB
 DES-CFB1
@@ -215,7 +232,7 @@ DSA-SHA1-old
 DSA-old
 DSO lib
 DSO support routines
-Default
+DVCS
 Diffie-Hellman based MAC
 Diffie-Hellman routines
 Dimensions: Cannot find baked data file: %s.\n
@@ -226,11 +243,13 @@ Dimensions: Loaded baked data file (%s).\n
 Dimensions: Unable to load baked data file (%s).\n
 Directory
 Display baked data stats for the current mod.
+Domain
 E-mail Protection
 EC lib
 ENGINE lib
 EV?V
 EVP lib
+Enable SIMD code path for shoebox reverb processor.
 Enable caching listener probe neighborhood for pathing.
 Enable custom HRTF loading.
 Enable perspective correction for 3D audio.
@@ -241,6 +260,7 @@ Experimental
 Exported scene as OBJ to %s.\n
 Exported scene as PHONONSCENE to %s.\n
 Extended OCSP Status
+Extension Request
 FILE pointer
 FIPS routines
 Failed to allocate an instance of a class
@@ -264,12 +284,15 @@ GOST R 34.11-94 with GOST R 34.10-2001 Cryptocom
 GOST R 34.11-94 with GOST R 34.10-94
 GOST R 34.11-94 with GOST R 34.10-94 Cryptocom
 GOST R 3410-2001 Parameter Set Cryptocom
+GUUUUUU
 Generate Halton Sequence for a given order and number of samples.
 Generated %d probes with %.2f spacing and %.2f height.\n
 Generating Halton Sequence of %d order for %d samples.\n
 HMAC
 HMAC GOST 34.11-94
 HMAC routines
+HMAC-MD5
+HMAC-SHA1
 Hold Instruction Call Issuer
 Hold Instruction Code
 Hold Instruction None
@@ -280,12 +303,21 @@ IDEA-CBC
 IDEA-CFB
 IDEA-ECB
 IDEA-OFB
+IPLProbeBatch
 IPSec End System
 IPSec Tunnel
 IPSec User
 ISO Member Body
 ISO US Member Body
 ISO-US
+ITEM_FLAG_DOHITLOCATIONDMG
+ITEM_FLAG_EXHAUSTIBLE
+ITEM_FLAG_LIMITINWORLD
+ITEM_FLAG_NOAMMOPICKUPS
+ITEM_FLAG_NOAUTORELOAD
+ITEM_FLAG_NOAUTOSWITCHEMPTY
+ITEM_FLAG_NOITEMPICKUP
+ITU-T
 If set, all the probes near a source withing probe range are used to find paths instead of nearest probe.
 If set, baked dimensions data is loaded.
 If set, baked materials data is loaded.
@@ -314,7 +346,9 @@ LoadKV3Object error: %s\n
 Loaded custom HRTF [%s] with volume [%.2f dB] and normaliztion [%d]\n
 LocalKeySet
 MD5-SHA1
+MDC2
 MGF1
+MGetKV3ClassDefaults
 MIME MHS
 Mail
 Management
@@ -353,6 +387,7 @@ Netscape Revocation Url
 Netscape SSL Server Name
 Netscape Server Gated Crypto
 No PHONONSCENE found for export to %s.\n
+Nonce
 Normalize volume of default HRTF dataset across all directions.
 Not safe to 'new' this class due to alignment requirements
 OBJ lib
@@ -410,7 +445,6 @@ Pathing: Cannot find baked paths file: %s.\n
 Pathing: Filesystem not initialized.\n
 Pathing: Imported %d probes from baked pathing file (%s).\n
 Pathing: Loaded baked data file (%s).\n
-Pathing: Loaded baked data file.\n
 Pathing: No baked pathing found in baked data file.\n
 Pathing: No baked pathing found in baked data file: %s.\n
 Pathing: No probes found in baked data file. Pathing disabled.\n
@@ -429,14 +463,17 @@ Q8??5
 RAND lib
 RC2-40-CBC
 RC2-64-CBC
+RC2-CBC
 RC2-CFB
 RC2-ECB
 RC2-OFB
+RC4-40
 RC4-HMAC-MD5
 RC5-CBC
 RC5-CFB
 RC5-ECB
 RC5-OFB
+RIPEMD160
 RSA Data Security, Inc.
 RSA Data Security, Inc. PKCS
 RSA lib
@@ -511,11 +548,16 @@ Reverb: Unable to load baked data file (%s).\n
 Reverb: Unable to load probe batch. (%d)\n
 S/MIME
 S/MIME Capabilities
-SABD\n
+SABD
 SEED-CBC
 SEED-CFB
 SEED-ECB
 SEED-OFB
+SHA1
+SHA224
+SHA256
+SHA384
+SHA512
 SMIME
 SMIME-CAPS
 SNMPv2
@@ -553,6 +595,7 @@ The number of directions considered for ray bounce by Steam Audio.
 The number of rays to trace for reflection modeling by Steam Audio.
 The time delay between a sound being emitted and the last audible reflection in Steam Audio.
 This variable is checked by soundstack to globally enabling pathing for audio processing.
+Time Stamping
 Toggles the speculative fix for low-frequency issues when using spatial blend.
 Trust Root
 UNDEF
@@ -569,7 +612,6 @@ Unknown version %d for vpk %s
 Usage: snd_steamaudio_halton_sequence <order> <numsamples>.\n
 Use compressed reverb data if available.
 VPK directory for '%s' corrupt
-W1rGP1
 X500
 X500algorithms
 X509
@@ -605,7 +647,8 @@ X9.42 DH
 X9.57
 X9.57 CM ?
 X9cm
-Y?N10__cxxabiv117__class_type_infoE
+Y?not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugsrg/bugs/):\n    
+Y@VUUUUU
 ZLIB
 [%02d:%02d:%02d] 
 [%3d] [ Pathing %6.2f MB %6d %4.1f %4.1f %7.1f ] %s\n
@@ -615,11 +658,13 @@ ZLIB
 \n------- Steam Audio Baked Pathing Statistics ------\n
 \n------- Steam Audio Baked Reverb Statistics ------\n
 \n09N
-]y0Z
-_IPLProbeBatch
+\r0zX
+__ctype_tolower_loc
+__fxstat
 __memset_chk
+__strcat_chk
 __vfprintf_chk
-_dir.vpk
+__xstat
 _flt.vpk
 aRecord
 a_object.c
@@ -679,6 +724,7 @@ asn1 length mismatch
 asn1_lib.c
 associatedDomain
 associatedName
+audio
 authorityInfoAccess
 authorityKeyIdentifier
 authorityRevocationList
@@ -780,8 +826,8 @@ cmac
 codeSigning
 common libcrypto routines
 commonName
+comp
 configuration file routines
-content
 content types
 contentType
 countersignature
@@ -801,6 +847,7 @@ custom_hrtfs
 dITRedirect
 dNSDomain
 dSAQuality
+data
 dcObject
 dcobject
 debug_malloc
@@ -842,7 +889,6 @@ dhSinglePass-stdDH-sha384kdf-scheme
 dhSinglePass-stdDH-sha512kdf-scheme
 dhpublicnumber
 digital envelope routines
-directory
 directory services (X.500)
 directory services - algorithms
 distinguishedName
@@ -868,6 +914,7 @@ dsaWithSHA1
 dsaWithSHA1-old
 dsa_with_SHA224
 dsa_with_SHA256
+dvcs
 dynamic
 dynlock
 ec_pre_comp
@@ -904,38 +951,31 @@ extendedStatus
 facsimileTelephoneNumber
 fatal
 favouriteDrink
-fclose
-feof
-ferror
-fflush
 fips
 fips2
-fopen
 fopen('
-free
 freshestCRL
 friendlyCountry
 friendlyCountryName
 friendlyName
-fseek
-ftell
 func(%lu)
-fwrite
 generate cryptogram
 generationQualifier
 generic cryptogram
 getservbyname
-gettext
 givenName
 gost-mac
 gost2001
 gost2001cc
 gost89
 gost89-cnt
+gost94
 gost94cc
 highFreqAbsorption
 highFreqTransmission
 hmac
+hmac-md5
+hmac-sha1
 hmacWithMD5
 hmacWithSHA1
 hmacWithSHA224
@@ -948,9 +988,7 @@ holdInstructionNone
 holdInstructionReject
 homePostalAddress
 homeTelephoneNumber
-host
 houseIdentifier
-i2t<f2
 iA5StringSyntax
 iana
 id-DHBasedMac
@@ -1194,6 +1232,7 @@ idea-cfb
 idea-ecb
 idea-ofb
 identified-organization
+info
 inhibitAnyPolicy
 initials
 int_err_get (err.c)
@@ -1219,20 +1258,34 @@ iplDirectivityCalculate
 iplDistanceAttenuationCalculate
 iplEmbreeDeviceCreate
 iplEmbreeDeviceRelease
+iplEnergyFieldCreate
+iplEnergyFieldRelease
 iplHRTFCreate
 iplHRTFRelease
-iplImpulseResponse2AddChannel
-iplImpulseResponse2AddSample
+iplHRTFRetain
+iplHybridReverbEffectApply
+iplHybridReverbEffectCreate
+iplHybridReverbEstimatorCreate
+iplHybridReverbEstimatorEstimate
+iplHybridReverbEstimatorRelease
 iplImpulseResponse2Create
 iplImpulseResponse2GetChannel
 iplImpulseResponse2GetNumSamples
 iplImpulseResponse2Release
 iplImpulseResponse2Reset
-iplImpulseResponse2SetChannel
-iplImpulseResponse2SetChannelDelayed
-iplImpulseResponse2SetSample
-iplImpulseResponse2Swap
 iplImpulseResponse2SwapSource
+iplImpulseResponseCreate
+iplImpulseResponseGetChannel
+iplImpulseResponseGetNumChannels
+iplImpulseResponseGetNumSamples
+iplImpulseResponseRelease
+iplImpulseResponseReset
+iplImpulseResponseSwap
+iplOverlapSaveFIRCreate
+iplOverlapSaveFIRRelease
+iplPartitionerCreate
+iplPartitionerPartition
+iplPartitionerRelease
 iplPathBakerBake
 iplPathBakerCancelBake
 iplPathEffectApply
@@ -1260,6 +1313,9 @@ iplProbeBatchGetProbeArray
 iplProbeBatchLoad
 iplProbeBatchLoadCompressed
 iplProbeBatchLoadNonUniform
+iplProbeBatchLookupBakedReflections
+iplProbeBatchLookupCreate
+iplProbeBatchLookupRelease
 iplProbeBatchRelease
 iplProbeBatchSave
 iplProbeNeighborhoodCalculateWeights
@@ -1271,21 +1327,14 @@ iplProbeNeighborhoodGetProbe
 iplProbeNeighborhoodRelease
 iplProbeNeighborhoodReset
 iplProbeNeighborhoodResize
+iplReconstructorCreate
+iplReconstructorReconstruct
+iplReconstructorRelease
 iplReflectionsBakerBake
 iplReflectionsBakerCancelBake
-iplReflectionsEffect2Apply
-iplReflectionsEffect2Create
-iplReflectionsEffect2Release
-iplReflectionsEffect2SetBuffer
-iplReflectionsEffect2SetFloat
-iplReflectionsEffect2SetInt32
-iplReflectionsPartitioner2AddTask
-iplReflectionsPartitioner2Commit
-iplReflectionsPartitioner2Create
-iplReflectionsPartitioner2Release
-iplReflectionsPartitioner2RemoveTask
-iplReflectionsPartitioner2Retain
-iplReflectionsPartitioner2RunTasks
+iplReverbEstimatorApplyScale
+iplReverbEstimatorCreate
+iplReverbEstimatorRelease
 iplSceneCommit
 iplSceneCreate
 iplSceneRelease
@@ -1327,6 +1376,7 @@ ipsecUser
 issuer capabilities
 issuerAltName
 issuingDistributionPoint
+itu-t
 janetMailbox
 joint-iso-itu-t
 jurisdictionC
@@ -1338,7 +1388,7 @@ jurisdictionStateOrProvinceName
 keyBag
 keyUsage
 kisa
-l0\f$f0 
+l0\f$f0
 lastModifiedBy
 lastModifiedTime
 lg?o
@@ -1351,7 +1401,7 @@ localityName
 localtime
 lowFreqAbsorption
 lowFreqTransmission
-m1-x]1
+m1rGP1K
 mXRecord
 m_bEnableClustering
 m_bEnableCompression
@@ -1372,7 +1422,9 @@ m_reverbCompressionSettings
 m_reverbSettings
 m_vecInOut
 m_vecMaterialTokens
+m_vecMaterialWeights
 m_vecOcclusion
+m_vecSize
 mail
 mailPreferenceOption
 malloc failure
@@ -1390,12 +1442,7 @@ mem.c
 mem_dbg.c
 member
 member-body
-memchr
-memcmp
-memcpy
-memmove
 memory buffer routines
-memset
 merchant initiated auth
 message extensions
 messageDigest
@@ -1422,7 +1469,6 @@ nested asn1 error
 noCheck
 noRevAvail
 normalization
-not enough space for format expansion (Please submit full bug report at https://gcc.gnu.org/bugsstd::bad_alloc
 nsBaseUrl
 nsCaPolicyUrl
 nsCaRevocationUrl
@@ -1435,7 +1481,6 @@ nsRenewalUrl
 nsRevocationUrl
 nsSGC
 nsSslServerName
-null
 number=%d, address=%08lX\n
 obj_dat.c
 obj_lib.c
@@ -1515,9 +1560,11 @@ privateKeyUsagePeriod
 protocolInformation
 proxyCertInfo
 pseudonym
+qa1-x]1
 qcStatements
 qualityLabelledData
 rFC822localPart
+rand
 rand2
 random number generator
 rc2-40-cbc
@@ -1538,6 +1585,7 @@ registeredAddress
 rfc822Mailbox
 ripemd160
 ripemd160WithRSA
+role
 roleOccupant
 room
 roomNumber
@@ -1554,6 +1602,7 @@ safeContentsBag
 sbgp-autonomousSysNum
 sbgp-ipAddrBlock
 sbgp-routerIdentifier
+scattering
 scripts/custom_hrtfs.txt
 scripts/surfaceproperties_steamaudio.txt
 sdsiCertificate
@@ -1732,10 +1781,12 @@ setext-miAuth
 setext-pinAny
 setext-pinSecure
 setext-track2
+sha1
 sha1WithRSA
 sha1WithRSAEncryption
 sha224
 sha224WithRSAEncryption
+sha256
 sha256WithRSAEncryption
 sha384
 sha384WithRSAEncryption
@@ -1746,6 +1797,9 @@ signingTime
 simpleSecurityObject
 simulation
 singleLevelQuality
+snd_boxverb_simd
+snd_boxverb_simd_svf
+snd_hrtf_distance_behind
 snd_steamaudio_active_hrtf
 snd_steamaudio_baked_data_stats
 snd_steamaudio_default_hrtf_volume_gain
@@ -1833,10 +1887,9 @@ steamaudio_reverb_ir_duration
 steamaudio_reverb_rays
 steamaudio_reverb_rebake_option
 steamaudioscene.cpp
-strcmp
+store
 street
 streetAddress
-strrchr
 subjectAltName
 subjectDirectoryAttributes
 subjectInfoAccess
@@ -1849,7 +1902,6 @@ surfacePropertyName
 surname
 system lib
 system library
-table
 targetInformation
 telephoneNumber
 teletexTerminalIdentifier
@@ -1862,7 +1914,7 @@ timeStamping
 title
 tpBasis
 trustRoot
-u0+!n0
+u0+!n0 
 undefined
 uniqueMember
 unknown library
@@ -1872,6 +1924,8 @@ userCertificate
 userClass
 userId
 userPassword
+valid
+volume
 wap-wsg
 wap-wsg-idm-ecid-wtls1
 wap-wsg-idm-ecid-wtls10
@@ -1897,3 +1951,4 @@ x509_pkey
 x509_req
 x509_store
 zlib compression
+{2t<f2R

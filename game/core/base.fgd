@@ -29,6 +29,7 @@
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsskip.vmat"				group =	"Skip"				parent_group = "Tool Brushes" }
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsoccluder.vmat"			group =	"Occluder"			parent_group = "Tool Brushes" }
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsprecipitation.vmat"	group =	"Precipitation"		parent_group = "Tool Brushes" }
+@VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsblock_los.vmat"		group =	"Block LOS"			parent_group = "Tool Brushes" }
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsblockbullets.vmat"		group =	"Bullets"			parent_group = "Clip" }
 @VisGroupFilter { filter_type = "toolsMaterial"		material = "toolsnavspaceclip.vmat"		group =	"Nav Space Clip"	parent_group = "Clip" }
 
@@ -386,8 +387,6 @@
 	[
 		"PM_NORMAL" : "Normal"
 		"PM_NO_GIBS" : "No Gibs"
-		"PM_FULL_GIBS" : "Full Gibs on All Platforms"
-		"PM_REDUCED_GIBS" : "Reduced gibs"
 	]
 
 	NoInterpolate(boolean) [ group="Misc" ] : "Disable Client-Side Interpolation" : 0
@@ -586,6 +585,8 @@
 	metadata
 	{
 		auto_apply_material = "materials/tools/toolstrigger.vmat"
+		collision_group = "trigger"
+		physics_only_model = true
 	}
 = TriggerOnce
 [
@@ -613,7 +614,7 @@
 	output OnStartTouch(void) { is_activator_important = true } : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
 ]
 
-@BaseClass base(Targetname, Parentname, EnableDisable, TriggerOnce) = Trigger
+@BaseClass base(Targetname, Parentname, EnableDisable, TriggerOnce)	= Trigger
 [
 	output OnStartTouchAll(void) { is_activator_important = true } : "Fired when an entity starts touching this trigger, and no other entities are touching it. Only entities that passed this trigger's filters are considered."
 	output OnEndTouch(void) { is_activator_important = true } : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
@@ -896,7 +897,7 @@
 	input SetSourceEntity(string) : "Set the name of the entity to check distance/occlusion from. This check will follow the entity as it moves."
 ]
 
-@PointClass base( Targetname, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBaseAddition2, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) = snd_opvar_set_point :
+@PointClass base( Targetname, Parentname, SndOpvarSetPointBaseAddition1, SndOpvarSetPointBaseAddition2, SndOpvarSetPointBase ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") sphere(distanceMin) sphere(distanceMax) vecline_local( dynamicProxyPoint, 200, 255, 200 ) sphere(occlusionRadius, 255, 255, 0) = snd_opvar_set_point :
 	"Sets an opvar value on a library stack"
 [
 	dynamicEntityName(target_destination) : "Dynamic Entity Name" : "" : "Name of the dynamic prop_door_rotating_physics entity to check for dynamic factor calculation."
@@ -920,7 +921,7 @@
 	box_outer_mins(vector) : "Box Outer Mins" : "-64 -64 -64"
 	box_outer_maxs(vector) : "Box Outer Maxs" : "64 64 64"	
 ]
-@PointClass base( Targetname, snd_opvar_set_aabb ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented{ box_min = "box_inner_mins" box_max = "box_inner_maxs" draw_unselected_box = false} box_oriented{ box_min = "box_outer_mins" box_max = "box_outer_maxs" draw_unselected_box = false} = snd_opvar_set_obb :
+@PointClass base( Targetname, Parentname, snd_opvar_set_aabb ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented{ box_min = "box_inner_mins" box_max = "box_inner_maxs" draw_unselected_box = false} box_oriented{ box_min = "box_outer_mins" box_max = "box_outer_maxs" draw_unselected_box = false} = snd_opvar_set_obb :
 [
 ]
 
@@ -940,7 +941,7 @@
 [
 ]
 
-@PointClass base( Targetname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb:
+@PointClass base( Targetname, Parentname ) tags( Sound ) iconsprite("editor/snd_opvar_set.vmat") box_oriented( box_mins, box_maxs ) = snd_opvar_set_wind_obb:
 [
 	stackName(string) : "Stack Name" : "" : "The name of the stack the operator is in"
 	operatorName(string) : "Operator Name" : "" : "The name of the operator the OpVar is in"
@@ -1257,7 +1258,7 @@
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 ]
 
-@SolidClass base(Targetname, EnableDisable) = func_clip_interaction_layer : 
+@SolidClass base(Targetname, Parentname, EnableDisable) = func_clip_interaction_layer : 
 	"A brush entity that is conditionally solid based on the interaction layer specified." 
 [
 	InteractsAs(string) : "Interacts As" : "Default" : "Set the interacts as layer"
@@ -1380,6 +1381,7 @@
 	metadata
 	{
 		model_archetypes = [  "animated_model" ]
+		input_output_cpp = [ "ai_base_actor" ]
 	}
 = func_orator : 
 	"A very simple model entity that has animations and response rules."
@@ -1391,7 +1393,7 @@
 	
 	maxThenAnyDispatchDist(float) : "Max Followup Dist" : 0 : "A 'then ANY' followup on a response from this orator will dispatch to characters up to this many units away. Leave 0 to mean that even an infinitely distant character may respond."
 
-	input SpeakResponseConcept(string) : "Speak the specified response concept"
+	input SpeakResponseConcept(cpp)
 ]
 
 
@@ -1581,6 +1583,7 @@
 		64: "No Sound" : 0
 		8192: "Damage above water surface only" : 0
 		16384: "Generic damage" : 0
+		32768: "Use Orientation for Custom Explosion" : 0
 	]
 
 	explosion_type(choices) : "Explosion Type" : "" : "" =
@@ -2685,6 +2688,8 @@
 	// Inputs
 	input Start(void) : "Tell the particle system to start emitting."
 	input Stop(void) : "Tell the particle system to stop emitting."
+	input Freeze(float) : "Tell the particle system to freeze, with optional transition time."
+	input Thaw(float) : "Tell the frozen particle system to unfreeze, with optional transition time."
 	input StopPlayEndCap(void) : "Tell the particle system to stop emitting and play its End Cap Effect."
 	input DestroyImmediately(void) : "Destroy the particle system and remove all particles immediately."
 	input SetControlPoint(string) : "Set a Control Point via format - CP: X Y Z"
@@ -3835,15 +3840,13 @@
 	PassthroughCaller(boolean) : "Pass through caller" : 0 : "If set, this logic_relay will be ignored by !caller in downstream IO connections. Instead, the previous caller in the IO chain will be found by !caller."
 	
 	// Inputs
-	input Trigger(void) : "Trigger the relay, causing its OnTrigger output to fire if it is enabled."
-	input Toggle(void) : "Toggle the relay between enabled and disabled."
-	input CancelPending(void) : "Cancel any events fired by this relay that are currently pending in the I/O event queue."
+	input Trigger( cpp )
+	input Toggle( cpp )
+	input CancelPending( cpp )
 	
 	// Outputs
-	output OnSpawn(void) : "Fired when the relay is spawned. If the relay is set to only trigger once, it will "+
-		"delete itself after firing this output."
-	output OnTrigger(void) : "Fired when the relay is triggered. If the relay is set to only trigger once, it will "+
-		"delete itself after firing this output."
+	output OnSpawn( cpp )
+	output OnTrigger( cpp )
 ]
 
 
@@ -4151,7 +4154,7 @@
 	output OnEntitiesSpawned(void) : "Fired when the entities associated with the layer have been spawned."
 ]
 
-@PointClass base( Targetname, CanBeClientOnly ) tags( Logic ) 
+@PointClass base( Targetname, Parentname, CanBeClientOnly ) tags( Logic ) 
 	selected_line( 255 255 255, targetname, Template01 )
 	selected_line( 255 255 255, targetname, Template02 )
 	selected_line( 255 255 255, targetname, Template03 )
@@ -4329,11 +4332,11 @@
 	Template64(target_destination) : "Template 64"
 
 	// Inputs
-	input ForceSpawn(void) : "Spawn an instance of the template at the original position."
-	input DeleteCreatedSpawnGroups(void) : "Deletes all spawn groups created by the template. Only works if you use asynchronous spawn and INSERT_INTO_NEWLY_CREATED_SPAWN_GROUP."
+	input ForceSpawn(cpp)
+	input DeleteCreatedSpawnGroups(cpp)
 
 	// Outputs
-	output OnEntitySpawned(void) : "Fired after spawning an instance of this template."
+	output OnEntitySpawned(cpp)
 ]
 
 @PointClass base(Targetname,Parentname) = env_entity_maker : 
@@ -4372,7 +4375,7 @@
 //
 //-------------------------------------------------------------------------
 
-@BaseClass base(Targetname) = BaseFilter
+@BaseClass base(Targetname, CanBeClientOnly) = BaseFilter
 [
 	Negated(choices) : "Filter mode" : 0 : "If set to Allow, only entities who match the criteria will pass the filter. "+
 		"If set to Disallow, only entities who do NOT match the criteria will pass the filter." =
@@ -4417,6 +4420,9 @@
 	Filter08(filterclass) : "Filter 8" : : "Activator filter to test."
 	Filter09(filterclass) : "Filter 9" : : "Activator filter to test."
 	Filter10(filterclass) : "Filter 10" : : "Activator filter to test."
+
+	input AddFilter(cpp)
+	input RemoveFilter(cpp)
 ]
 
 @FilterClass base(BaseFilter) iconsprite("editor/filter_name.vmat") = filter_activator_name :
@@ -4637,13 +4643,11 @@
 	teleport_use_current_angle(boolean) : "Teleport Uses Current Rotation" : "0"
 
 	// Inputs
-	input Teleport(void) : "Teleport the target entity."
-	input TeleportToCurrentPos(void) : "Teleport the target entity to wherever the point_teleport entity is currently. "+
-		"The Teleport input teleports to the initial position of the point_teleport, so this input was added to avoid breaking old content."
+	input Teleport(cpp)
+	input TeleportToCurrentPos(cpp)
 
-	input TeleportEntity(target_destination) : "Teleport the entity specified by the parameter override. Use this to teleport an entity other than the one specified in the Entity To Teleport field."
-	input TeleportEntityToCurrentPos(void) : "Teleport the entity specified by the parameter override to wherever the point_teleport entity is currently. "+
-		"The Teleport input teleports to the current position of the point_teleport"
+	input TeleportEntity(cpp)
+	input TeleportEntityToCurrentPos(cpp)
 
 ]
 
@@ -4731,7 +4735,10 @@
 		1: "Sharp"
 	]
 	
-	massScale(float) : "Mass Scale" : "0" : "A scale multiplier for the object's mass."
+	massScale(float) [ group = "Physics Properties" ] : "Mass Scale" : "0" : "A scale multiplier for the object's mass. 0 = use auto-calculated mass based on the object's size / shape and material"
+	gamemass(integer) [ group = "Physics Properties" ] : "Mass Override" : 0 : "Override the mass of the object instead of calculating it based on the size / shape and material."
+	buoyancyscale(float) [ group = "Physics Properties" ] : "Buoyancy Scale" : "1" : "Scale on the buoyancy / fluid forces applied to this object"
+	
 	damagetoenablemotion(integer) : "Health Level to Override Motion" : 0 : "If specified, this object will start motion disabled. Once its health has dropped below this specified amount, it will enable motion."
 	forcetoenablemotion(float) : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
 	enableuseoutput(boolean) : "Enable +Use Output" : 0 : "Enables OnPlayerUse output being fired when this object is used"
@@ -4743,12 +4750,6 @@
 		1: "Passes through World"
 	]
 	
-	ExploitableByPlayer(choices) : "Exploitable by Player" : 0 =
-	[
-		0: "Default"
-		1: "Explosive"
-	]
-
 	touchoutputperentitydelay(float) : "Start Touch Per Entity Refire Delay" : 0 : "When set to 0 OnStartTouch events are never sent. Otherwise it's a delay in seconds before another OnStartTouch is sent for the same entity."
 
 	// Inputs
@@ -4757,7 +4758,6 @@
 	input EnableMotion(void) : "Enable physics motion/collision response."
 	input DisableMotion(void) : "Disable physics motion/collision response."
 	input ForceDrop(void) : "If this object is being carried by a player, with the physgun or +USE, force it to be dropped."
-	input DisableFloating(void) : "Turn off floating simulation (and cost)."
 	
 	// Outputs
 	output OnDamaged(void) : "Fired when this entity is damaged."
@@ -5119,6 +5119,26 @@
 	angular_damping_ratio_z(float) : "Spring damping ratio" : "0" : "0 for no damping and 1 for critical damping"
 	torquelimit_z(float) : "Angular Impulse Limit to Break (kg * distance)" : "0" : "The amount of angular impulse required to break the constraint. A way of calculating this is to multiply any reference mass by the resting distance (from the center of mass of the object) needed to break the constraint."
 
+	input SetLinearMotionLockedX(boolean) : ""
+	input SetLinearMotionLockedY(boolean) : ""
+	input SetLinearMotionLockedZ(boolean) : ""
+	input SetLinearFrequencyX(float) : ""
+	input SetLinearFrequencyY(float) : ""
+	input SetLinearFrequencyZ(float) : ""
+	input SetLinearDampingRatioX(float) : ""
+	input SetLinearDampingRatioY(float) : ""
+	input SetLinearDampingRatioZ(float) : ""
+
+	input SetAngularMotionLockedX(boolean) : ""
+	input SetAngularMotionLockedY(boolean) : ""
+	input SetAngularMotionLockedZ(boolean) : ""
+	input SetAngularFrequencyX(float) : ""
+	input SetAngularFrequencyY(float) : ""
+	input SetAngularFrequencyZ(float) : ""
+	input SetAngularDampingRatioX(float) : ""
+	input SetAngularDampingRatioY(float) : ""
+	input SetAngularDampingRatioZ(float) : ""
+
 	// Outputs
 	output NotifyForceReachedX(void) : "The requested force has been reached on the X axis.  Won't fire if force min time is zero."
 	output NotifyForceReachedY(void) : "The requested force has been reached on the Y axis.  Won't fire if force min time is zero."
@@ -5216,7 +5236,9 @@
 	"An entity that tries to spin a target entity at a particular speed."
 [
 	speed(string) : "Rotation Speed" : "0" : "Angular speed (units are degress/second)"
+	friction(float) : "Friction" : "0" : "Friction that slows the object's rotation when the motor is disabled. Start with a very small value between 0 and 1, and tune from there."
 	spinup(string) : "Spin up time" : "1" : "spin up time in seconds (also affects the rate at which speed changes happen)"
+	spindown(string) : "Spin down time" : "1" : "spin down time in seconds (also affects the rate at which speed changes happen)"
 	inertiafactor(float) : "System Interia Scale" : "1.0" : "Make this larger if the object being driven is constrained to a set of heavier objects."
 	axis(vecline) : "Rotation Axis" : ""
 
@@ -5232,9 +5254,14 @@
 //		8: "Orient Locally" : 1
 	]
 	attach1(target_destination) : "Attached Object" : "" : "Object to apply the force to"
+	attach2(target_destination) : "Anchor Object" : "" : "Object the other side of the motor joint is attached to. If blank, the motor is anchored to the world."
 
 	// Inputs
 	input SetSpeed(float) : "Sets target speed"
+	input SetSpinUpTime(cpp)
+	input SetSpinDownTime(cpp)
+	input SetFriction(float) : "Sets friction -- only applies when the motor is off"
+	input SetSystemInertiaScale(cpp)
 	input TurnOn(void) : "Turns motor on"
 	input TurnOff(void) : "Turns motor off"
 ]
@@ -5443,7 +5470,6 @@
 		2 : "Scale up by 4"
 		3 : "Scale up by 8"
 	]
-	lightingorigin(target_destination) [ group="Lighting" ]: "Explicit Light Probe/Cubemap Volume" : "" : "Used to manually assign a named env_cubemap, env_cubemap_box or env_combined_light_probe_volume to a mesh. Note: this disables mesh merging and forces it into a slower rendering path, use with caution."
 	bakelightdoublesided(boolean) [ group = "Lighting" ] : "Bake As Double-Sided" : 0 : "Bakes the mesh as if it were double-sided geometry in the lightmapper. Useful on geometry with 'Render Backfaces' enabled via it's material (such as foliage). When the lightmapper sees many and/or large backfaces it will invalidate lightmap samples as an optimization, which can lead to lightmap errors/reduced quality in some circumstances."
 
 	// Vis
@@ -5523,6 +5549,12 @@
 	buoyancyScale(float) [ group="Physics Properties" ] : "Buoyancy Scale" : "1.0" : "Scales how water forces affect this object."
 	damagetoenablemotion(integer) [ group="Physics Properties" ] : "Health Level to Override Motion" : 0 : "If specified, this object will start motion disabled. Once its health has dropped below this specified amount, it will enable motion."
 	forcetoenablemotion(float) [ group="Physics Properties" ] : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
+	dynamiccontinuouscontactbehavior(choices) [ group="Physics Properties" ] : "Dynamic Continuous Contact Behavior" : 0 =
+	[
+		0 : "Allow if requested by other body"
+		1 : "Always (request continuous contact against other dynamic bodies)"
+		2 : "Never (don't use continuous contact against other dynamic bodies even if another body requests it)"
+	]
 
 	enableuseoutput(boolean) : "Enable +Use Output" : 0 : "Enables OnPlayerUse output being fired when this object is used"
 	puntsound(sound) [ group="Physics Properties" ] : "Sound to make when punted"
@@ -5557,7 +5589,6 @@
 	input Sleep(void) : "Put this physics object to sleep. It will wake if given the Wake input, or if force is applied to it. Note that physics objects go to sleep automatically after coming to rest for a while, so you don't really need to use this."
 	input EnableMotion(void) : "Enable physics motion/collision response."
 	input DisableMotion(void) : "Disable physics motion/collision response."
-	input DisableFloating(void) : "Disable fluid/floating simulation to reduce cost."
 	input EnableGravity(void) : "Enable gravity on physics object"
 	input DisableGravity(void) : "Disable gravity on physics object"
 	input SetBodyGroup(string) : "Sets bodygroup. Format is <BodygroupName,index> "
@@ -5601,15 +5632,6 @@
 	"If the model used by the prop is configured to be used as a prop_dynamic (i.e. it should not be physically simulated) then it CANNOT be "+
 	"used as a prop_physics. Upon level load it will display a warning in the console and remove itself. Use a prop_dynamic instead."
 [
-	// FGDFIXME: this is an Ep3 only feature
-	ExploitableByPlayer(choices) [ group="Misc" ] : "Exploitable by Player" : 0 =
-	[
-		0: "Default"
-		1: "Explosive"
-	]
-
-	SilentToZombies(boolean) : "Silent To Zombies" : 0 : "Should this prop generate sounds that blind zombies can hear."
-
 	// Inputs
 	input Ignite(void) : "Ignite, burst into flames."
 	input IgniteLifetime(float) : "Ignite, with a parameter lifetime."
@@ -5642,13 +5664,14 @@
 [
 	spawnflags(flags) = 
 	[
-		4 : "Debris - Don't collide with the player or other debris" : 1
+		4 : "Debris - Don't collide with the player or other debris" : 0
 		8192 : "Allow Dissolve" : 0
 		16384 : "Motion Disabled" : 0
-		32768 : "Allow stretch" : 0
+		32768 : "Unused" : 0
 		65536 : "Start asleep" : 0
 		131072 : "Don't force sleep" : 0
 	]
+    allowStretch(bool) : "Allow Stretch" : "0" : "Disables rendering fixup on bones that become separated"
 	angleOverride(string) : "Override Animation" : "" : "Filled in by the engine via wc_update_entity, do not edit by hand except to clear."
 	lightingorigin(target_destination) : "Lighting Origin" : "" : "Select an entity to specify a location to sample lighting from, instead of using this entity's origin."
 
@@ -6443,7 +6466,12 @@
 	input SetSpeed(integer) : "Set the baseline for how hard the wind blows."
 ]
 
-@SolidClass base(Targetname) = trigger_impact : 
+@SolidClass base(Targetname) 
+	metadata
+	{
+		physics_only_model = true
+	}
+	= trigger_impact : 
 	"A trigger volume that can be told to push all physics objects that are inside of it in the direction specified by this trigger's angles.<br>"+
 	"Also outputs the force at the time of impact for anyone else that wants to use it."
 [
@@ -6498,7 +6526,12 @@
 	filtername(filterclass) : "Filter Name" : : "Filter to use to see if activator triggers me. See filter_activator_name for more explanation."
 ]
 
-@SolidClass base(Targetname) = trigger_serverragdoll : 
+@SolidClass base(Targetname)
+	metadata
+	{
+		physics_only_model = true
+	}
+	= trigger_serverragdoll : 
 	"A volume that forces any NPC inside it to create a server side ragdoll instead of a client one."
 [
 ]
@@ -7087,7 +7120,7 @@
 	editor_only(boolean) : "Editor only" : 1
 ]
 
-@PointClass base(Targetname) size(16 16 16) line(255 255 255, targetname, target) drawangles{} color(247 181 82) = path_corner : "Generic path point"
+@PointClass base(Targetname, Parentname) size(16 16 16) line(255 255 255, targetname, target) drawangles{} color(247 181 82) = path_corner : "Generic path point"
 [
 	spawnflags(Flags) =
 	[
@@ -7553,7 +7586,7 @@ centered_box_oriented
 	node_name(string) : "Node Name" : "" : "A name to assign to the node that can be used to refer to the node on the path to toggle pinning on specific path nodes via entity I/O."
 	radius_scale(float) : "Radius Scale" : "1.0" : "Radius multiplier value"
 	color_tint(color255) : "Color Tint" : "255 255 255"
-	pin_enabled(bool) : "Pin Enabled" : "1" : "If enabled, the rope simulation treats this node a locaiton to which the rope is attached."
+	pin_enabled(bool) { write_to_path_key = "pathNodePinsEnabled" } : "Pin Enabled" : "1" : "If enabled, the rope simulation treats this node a locaiton to which the rope is attached."
 ]
 
 @BaseClass base(Targetname) tags( Particles )
