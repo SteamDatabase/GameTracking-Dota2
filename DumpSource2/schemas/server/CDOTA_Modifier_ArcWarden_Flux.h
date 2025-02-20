@@ -1,7 +1,7 @@
 class CDOTA_Modifier_ArcWarden_Flux
 {
 	int32 m_nCasterTeam;
-	int32 damage_per_second;
+	float32 damage_per_second;
 	int32 search_radius;
 	int32 move_speed_slow_pct;
 	int32 status_resist;
