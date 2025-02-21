@@ -6,4 +6,5 @@ class CDOTA_Modifier_Silencer_CurseOfTheSilent
 	float32 penalty_multiplier;
 	int32 movespeed;
 	int32 undispellable;
+	bool from_global_silence;
 };

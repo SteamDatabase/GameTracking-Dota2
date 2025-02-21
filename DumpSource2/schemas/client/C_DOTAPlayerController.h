@@ -47,6 +47,7 @@ class C_DOTAPlayerController
 	CUtlVector< CUnitOrders > m_unitorders;
 	int32 m_nOutgoingOrderSequenceNumber;
 	int32 m_nServerOrderSequenceNumber;
+	int32 m_nLastSentOutgoingOrderSequenceNumber;
 	CUtlVector< CEntityIndex > m_nSelectedUnits;
 	CUtlVector< ParticleIndex_t > m_nWaypoints;
 	int32 m_iActions;
