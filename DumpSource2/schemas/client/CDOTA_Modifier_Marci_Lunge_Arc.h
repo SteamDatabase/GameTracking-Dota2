@@ -6,7 +6,7 @@ class CDOTA_Modifier_Marci_Lunge_Arc
 	int32 max_jump_distance;
 	float32 min_lob_travel_time;
 	float32 max_lob_travel_time;
-	int32 landing_radius;
+	float32 landing_radius;
 	float32 debuff_duration;
 	float32 min_height_above_lowest;
 	float32 min_height_above_highest;

@@ -3,7 +3,7 @@ class CDOTA_Ability_Marci_Companion_Run
 	int32 m_nTrackingProjectileID;
 	ParticleIndex_t m_nFXIndex;
 	int32 m_nMaxJumpDistance;
-	int32 landing_radius;
+	float32 landing_radius;
 	int32 move_speed;
 	float32 ally_buff_duration;
 	int32 min_jump_distance;

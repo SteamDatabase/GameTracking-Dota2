@@ -1,6 +1,6 @@
 class CDOTA_Modifier_Visage_SoulAssumption
 {
-	int32 radius;
+	float32 radius;
 	int32 stack_limit;
 	int32 damage_limit;
 	float32 stack_duration;

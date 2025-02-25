@@ -8,7 +8,7 @@ class CDOTA_Modifier_Razor_PlasmaField_Thinker
 	ParticleIndex_t m_nFXIndex;
 	CUtlVector< CHandle< C_BaseEntity > > m_EntitiesHit;
 	int32 speed;
-	int32 radius;
+	float32 radius;
 	float32 damage_min;
 	float32 damage_max;
 	int32 slow_min;

@@ -4,7 +4,7 @@ class CDOTA_Modifier_Razor_StormSurge
 	int32 strike_pct_chance;
 	float32 strike_damage;
 	int32 strike_move_slow_pct;
-	int32 strike_search_radius;
+	float32 strike_search_radius;
 	int32 strike_target_count;
 	float32 strike_slow_duration;
 	float32 strike_internal_cd;

@@ -1,18 +1,18 @@
 class CDOTA_Modifier_Wisp_Spirits
 {
 	bool m_bSpiritsExplode;
-	int32 creep_damage;
-	int32 hero_damage;
-	int32 hit_radius;
-	int32 hero_hit_radius;
-	int32 explode_radius;
-	int32 min_range;
-	int32 max_range;
-	int32 default_radius;
+	float32 creep_damage;
+	float32 hero_damage;
+	float32 hit_radius;
+	float32 hero_hit_radius;
+	float32 explode_radius;
+	float32 min_range;
+	float32 max_range;
+	float32 default_radius;
 	int32 spirit_amount;
 	float32 m_flRotation;
 	float32 m_flSpiritRadius;
-	int32 spirit_movement_rate;
+	float32 spirit_movement_rate;
 	GameTime_t m_flNextSpawn;
 	CUtlString m_strSpiritsOutSwapAbility;
 };

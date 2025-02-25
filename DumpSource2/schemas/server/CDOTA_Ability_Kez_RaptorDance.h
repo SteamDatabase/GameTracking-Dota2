@@ -1,6 +1,6 @@
 class CDOTA_Ability_Kez_RaptorDance
 {
-	int32 radius;
+	float32 radius;
 	int32 invulnerable;
 	int32 strikes;
 	float32 strike_interval;

@@ -1,14 +1,14 @@
 class CDOTA_Modifier_KeeperOfTheLight_Illuminate
 {
-	int32 range;
-	int32 total_damage;
-	int32 radius;
+	float32 range;
+	float32 total_damage;
+	float32 radius;
 	float32 max_channel_time;
-	int32 speed;
-	int32 channel_vision_radius;
+	float32 speed;
+	float32 channel_vision_radius;
 	float32 channel_vision_interval;
 	float32 channel_vision_duration;
-	int32 channel_vision_step;
+	float32 channel_vision_step;
 	GameTime_t m_flLastChantTime;
 	Vector m_vNextVisionLocation;
 	Vector m_vCastDirection;

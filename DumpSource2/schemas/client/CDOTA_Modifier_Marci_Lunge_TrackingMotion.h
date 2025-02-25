@@ -2,7 +2,7 @@ class CDOTA_Modifier_Marci_Lunge_TrackingMotion
 {
 	int32 m_nProjectileID;
 	int32 m_nMaxJumpDistance;
-	int32 landing_radius;
+	float32 landing_radius;
 	int32 max_jump_distance;
 	int32 min_jump_distance;
 	int32 target_abort_distance;

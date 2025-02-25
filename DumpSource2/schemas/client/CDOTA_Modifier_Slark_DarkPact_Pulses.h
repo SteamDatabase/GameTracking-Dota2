@@ -1,6 +1,6 @@
 class CDOTA_Modifier_Slark_DarkPact_Pulses
 {
-	int32 radius;
+	float32 radius;
 	int32 total_damage;
 	int32 total_pulses;
 	int32 self_damage_pct;

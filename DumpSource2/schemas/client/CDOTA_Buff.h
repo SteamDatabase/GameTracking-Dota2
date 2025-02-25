@@ -18,7 +18,7 @@ class CDOTA_Buff
 	int16 m_iAuraSearchTeam;
 	int16 m_iAuraSearchType;
 	int32 m_iAuraSearchFlags;
-	int32 m_iAuraRadius;
+	float32 m_flAuraRadius;
 	int32 m_iTeam;
 	int32 m_iAttributes;
 	int16 m_iTooltipParity;

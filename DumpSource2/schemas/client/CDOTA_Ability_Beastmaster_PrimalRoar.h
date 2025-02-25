@@ -3,7 +3,7 @@ class CDOTA_Ability_Beastmaster_PrimalRoar
 	float32 duration;
 	float32 slow_duration;
 	int32 side_damage;
-	int32 damage_radius;
+	float32 damage_radius;
 	int32 path_width;
 	float32 push_duration;
 	float32 push_distance;

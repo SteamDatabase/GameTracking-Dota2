@@ -23,11 +23,11 @@ class CDOTA_Ability_Grimstroke_DarkArtistry
 	int32 m_nHeroesHit;
 	int32 m_nVisibleHeroesHit;
 	float32 m_fDmgMultiplierTalent;
-	int32 projectile_speed;
+	float32 projectile_speed;
 	float32 slow_duration;
-	int32 start_radius;
-	int32 end_radius;
-	int32 damage;
+	float32 start_radius;
+	float32 end_radius;
+	float32 damage;
 	float32 bonus_damage_per_target;
 	float32 vector_deg_turn_divisor;
 	float32 vision_duration;

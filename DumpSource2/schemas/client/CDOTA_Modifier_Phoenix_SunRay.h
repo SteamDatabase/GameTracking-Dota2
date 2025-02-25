@@ -8,7 +8,7 @@ class CDOTA_Modifier_Phoenix_SunRay
 	float32 forward_move_speed;
 	float32 turn_rate_initial;
 	float32 turn_rate;
-	int32 radius;
+	float32 radius;
 	float32 m_flCurrentTime;
 	float32 m_flAccumulatedSelfDamage;
 	bool m_bMovingForward;

@@ -5,9 +5,9 @@ class CDOTA_Modifier_Phoenix_IcarusDive
 	Vector m_vDirection;
 	QAngle m_angDirection;
 	float32 m_flCurrentTime;
-	int32 dash_length;
-	int32 dash_width;
-	int32 hit_radius;
+	float32 dash_length;
+	float32 dash_width;
+	float32 hit_radius;
 	float32 burn_duration;
 	float32 dive_duration;
 	float32 impact_damage;

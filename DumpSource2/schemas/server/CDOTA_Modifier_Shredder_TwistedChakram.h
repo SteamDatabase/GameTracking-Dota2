@@ -19,8 +19,8 @@ class CDOTA_Modifier_Shredder_TwistedChakram
 	ParticleIndex_t m_nOldChakramFXindex;
 	CUtlVector< CHandle< CBaseEntity > > m_vecUniqueHitList;
 	float32 radius;
-	int32 spread;
-	int32 damage;
+	float32 spread;
+	float32 damage;
 	float32 pass_slow_duration;
 	float32 min_throw_duration;
 	float32 max_throw_duration;

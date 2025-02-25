@@ -4,6 +4,7 @@ class CDOTA_AttackRecord
 	CHandle< C_DOTABaseAbility > m_hInflictor;
 	CHandle< C_BaseEntity > m_hTarget;
 	CHandle< C_BaseEntity > m_hProjectileSource;
+	CHandle< C_BaseEntity > m_hKillCreditOverride;
 	float32 m_flDamage;
 	float32 m_flOriginalDamage;
 	float32 m_flDamagePhysical;

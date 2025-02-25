@@ -2,11 +2,11 @@ class CDOTA_Modifier_Magnataur_Empower
 {
 	int32 bonus_damage_pct;
 	float32 cleave_damage_pct;
-	int32 cleave_starting_width;
-	int32 cleave_ending_width;
-	int32 cleave_distance;
+	float32 cleave_starting_width;
+	float32 cleave_ending_width;
+	float32 cleave_distance;
 	float32 self_multiplier;
-	int32 secondary_cleave_distance;
+	float32 secondary_cleave_distance;
 	float32 self_multiplier_bonus_stack_duration;
 	int32 self_multiplier_bonus_max_stacks;
 	int32 self_multiplier_bonus_per_stack;

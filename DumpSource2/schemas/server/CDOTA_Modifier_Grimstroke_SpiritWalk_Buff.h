@@ -3,7 +3,7 @@ class CDOTA_Modifier_Grimstroke_SpiritWalk_Buff
 	GameTime_t m_fStartTime;
 	int32 m_nHeroTickDamageApplied;
 	GameTime_t m_fLastEffectsTime;
-	int32 radius;
+	float32 radius;
 	float32 buff_duration;
 	float32 debuff_duration;
 	int32 max_damage;
