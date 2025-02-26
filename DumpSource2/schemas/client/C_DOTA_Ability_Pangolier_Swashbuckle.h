@@ -1,10 +1,10 @@
 class C_DOTA_Ability_Pangolier_Swashbuckle
 {
-	int32 dash_speed;
-	int32 start_radius;
-	int32 end_radius;
-	int32 range;
-	int32 damage;
-	int32 attack_damage;
+	float32 dash_speed;
+	float32 start_radius;
+	float32 end_radius;
+	float32 range;
+	float32 damage;
+	float32 attack_damage;
 	int32 procs_onhit_effects;
 };

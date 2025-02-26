@@ -1,7 +1,7 @@
 class C_DOTA_Ability_Elder_Titan_AncestralSpirit
 {
-	int32 speed;
-	int32 radius;
+	float32 speed;
+	float32 radius;
 	float32 buff_duration;
 	float32 spirit_duration;
 	int32 m_nCreepsHit;

@@ -17,9 +17,9 @@ class CDOTA_Modifier_Hoodwink_ArcingBoomerang
 	ParticleIndex_t m_nBoomerangFXIndex;
 	ParticleIndex_t m_nOldBoomerangFXindex;
 	CUtlVector< CHandle< CBaseEntity > > m_vecUniqueHitList;
-	int32 radius;
-	int32 spread;
-	int32 damage;
+	float32 radius;
+	float32 spread;
+	float32 damage;
 	float32 mark_duration;
 	float32 min_throw_duration;
 	float32 max_throw_duration;

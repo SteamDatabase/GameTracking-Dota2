@@ -7,8 +7,8 @@ class CDOTA_Modifier_Wisp_Tether
 	int32 movespeed;
 	int32 self_bonus;
 	bool m_bIsInRange;
-	int32 radius;
-	int32 latch_distance;
+	float32 radius;
+	float32 latch_distance;
 	int32 damage_absorb;
 	float32 m_flHealthHealed;
 	float32 m_flManaHealed;

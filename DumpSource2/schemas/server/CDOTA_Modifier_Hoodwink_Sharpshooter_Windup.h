@@ -6,7 +6,7 @@ class CDOTA_Modifier_Hoodwink_Sharpshooter_Windup
 	Vector m_vAimTarget;
 	ParticleIndex_t m_nCrosshairFX;
 	CUtlVector< CHandle< CBaseEntity > > m_vecVisionThinkers;
-	int32 arrow_vision;
+	float32 arrow_vision;
 	float32 max_charge_time;
 	float32 turn_rate;
 	float32 base_power;

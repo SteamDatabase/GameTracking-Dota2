@@ -1,9 +1,9 @@
 class CDOTA_Ability_VoidSpirit_AetherRemnant
 {
-	int32 start_radius;
-	int32 end_radius;
-	int32 remnant_watch_distance;
-	int32 projectile_speed;
+	float32 start_radius;
+	float32 end_radius;
+	float32 remnant_watch_distance;
+	float32 projectile_speed;
 	Vector m_vDashPosition;
 	Vector m_vFacePosition;
 	Vector m_vEndpoint;

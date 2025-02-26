@@ -1,6 +1,6 @@
 class CDOTA_Modifier_DeathProphet_Exorcism
 {
-	int32 radius;
+	float32 radius;
 	int32 spirit_speed;
 	int32 max_distance;
 	int32 give_up_distance;

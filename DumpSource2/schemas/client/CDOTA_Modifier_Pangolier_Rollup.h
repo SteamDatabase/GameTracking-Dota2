@@ -5,8 +5,8 @@ class CDOTA_Modifier_Pangolier_Rollup
 	float32 forward_move_speed;
 	float32 turn_rate_boosted;
 	float32 turn_rate;
-	int32 hit_radius;
-	int32 knockback_radius;
+	float32 hit_radius;
+	float32 knockback_radius;
 	bool m_bHitFirstUpdate;
 	GameTime_t m_flHitEndTime;
 	float32 hit_recover_time;
