@@ -1,12 +1,12 @@
 class CDOTA_Modifier_EarthSpirit_Magnetize
 {
-	int32 rock_search_radius;
+	float32 rock_search_radius;
 	float32 damage_per_second;
 	float32 damage_interval;
 	float32 rock_explosion_delay;
 	float32 damage_duration;
-	int32 cast_radius;
-	int32 rock_explosion_radius;
+	float32 cast_radius;
+	float32 rock_explosion_radius;
 	bool magnetized_rocks_buff_self;
 	int32 magnetized_rocks_buff_self_duration;
 	CUtlVector< CHandle< CBaseEntity > > m_hExplodedRocks;

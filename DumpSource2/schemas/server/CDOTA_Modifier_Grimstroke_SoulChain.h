@@ -11,8 +11,8 @@ class CDOTA_Modifier_Grimstroke_SoulChain
 	float32 m_fLeashDistance;
 	GameTime_t m_fOriginalStartTime;
 	ParticleIndex_t m_nOverheadFXIndex;
-	int32 chain_latch_radius;
-	int32 chain_break_distance;
+	float32 chain_latch_radius;
+	float32 chain_break_distance;
 	float32 leash_limit_multiplier;
 	float32 chain_duration;
 	float32 creep_duration_pct;

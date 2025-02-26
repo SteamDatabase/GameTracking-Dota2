@@ -1,11 +1,11 @@
 class CDOTA_Modifier_Batrider_Firefly
 {
 	bool m_bActive;
-	int32 radius;
+	float32 radius;
 	int32 m_ifirefly_Active;
-	int32 tree_radius;
-	int32 damage_per_second;
-	int32 movement_speed;
+	float32 tree_radius;
+	float32 damage_per_second;
+	float32 movement_speed;
 	int32 bonus_slow_resistance;
 	float32 tick_interval;
 	ParticleIndex_t m_nFXIndex;

@@ -17,7 +17,7 @@ class CDOTA_Modifier_VoidSpirit_Dissimilate_Phase
 	float32 damage_radius;
 	int32 portals_per_ring;
 	int32 angle_per_ring_portal;
-	int32 first_ring_distance_offset;
+	float32 first_ring_distance_offset;
 	float32 debuff_duration;
 	int32 aether_remnant_count;
 	float32 artifice_extra_offset;

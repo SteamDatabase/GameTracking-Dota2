@@ -1,7 +1,7 @@
 class CDOTA_Modifier_Elder_Titan_EarthSplitter_Caster
 {
 	CUtlVector< CHandle< C_BaseEntity > > m_hHitUnits;
-	int32 vision_width;
+	float32 vision_width;
 	float32 vision_interval;
 	float32 vision_duration;
 	int32 vision_step;

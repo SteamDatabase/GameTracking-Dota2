@@ -2,6 +2,6 @@ class CDOTA_Ability_Snapfire_MortimerKisses
 {
 	int32 m_nDamagePerProjectile;
 	int32 damage_per_impact;
-	int32 impact_radius;
-	int32 projectile_vision;
+	float32 impact_radius;
+	float32 projectile_vision;
 };
