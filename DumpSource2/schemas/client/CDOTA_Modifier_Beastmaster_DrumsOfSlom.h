@@ -1,7 +1,7 @@
 class CDOTA_Modifier_Beastmaster_DrumsOfSlom
 {
 	float32 aura_radius;
-	int32 radius;
+	float32 radius;
 	int32 max_stacks;
 	float32 base_damage;
 	int32 heal_pct;

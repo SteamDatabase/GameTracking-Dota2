@@ -12,12 +12,12 @@ class CDOTA_Modifier_Snapfire_MortimerKisses
 	int32 m_nProjectilesToLaunch;
 	bool m_bHasProjectileTalent;
 	int32 projectile_count;
-	int32 projectile_speed;
-	int32 projectile_width;
-	int32 projectile_vision;
+	float32 projectile_speed;
+	float32 projectile_width;
+	float32 projectile_vision;
 	float32 turn_rate;
-	int32 min_range;
-	int32 impact_radius;
+	float32 min_range;
+	float32 impact_radius;
 	float32 min_lob_travel_time;
 	float32 max_lob_travel_time;
 	float32 delay_after_last_projectile;

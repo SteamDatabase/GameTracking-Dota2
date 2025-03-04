@@ -1,6 +1,6 @@
 class CDOTA_Modifier_KeeperOfTheLight_Will_O_Wisp_Aura
 {
-	int32 radius;
+	float32 radius;
 	float32 wisp_damage;
 	float32 off_duration;
 	float32 off_duration_initial;

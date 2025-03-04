@@ -3,13 +3,13 @@ class CDOTA_Modifier_Muerta_Revenant_Thinker
 	bool m_bSpiritsExplode;
 	float32 m_fDeadZoneDistance;
 	float32 m_fDesiredDeadZoneDistance;
-	int32 damage;
-	int32 hit_radius;
+	float32 damage;
+	float32 hit_radius;
 	float32 speed_initial;
 	float32 speed_max;
 	float32 acceleration;
-	int32 kill_check_radius;
-	int32 kill_radius_expansion;
+	float32 kill_check_radius;
+	float32 kill_radius_expansion;
 	float32 kill_radius_expansion_speed;
 	int32 num_revenants;
 	int32 rotation_direction;

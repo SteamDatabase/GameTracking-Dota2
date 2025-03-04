@@ -1,9 +1,9 @@
 class CDOTA_Modifier_SandKing_Epicenter
 {
-	int32 epicenter_radius_base;
-	int32 epicenter_radius_increment;
+	float32 epicenter_radius_base;
+	float32 epicenter_radius_increment;
 	int32 epicenter_pulses;
-	int32[30] epicenter_radius;
+	float32[30] epicenter_radius;
 	int32 m_iMaxPulses;
 	int32 m_iPulseCount;
 	float32 m_flPulseTickRate;

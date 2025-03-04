@@ -16,11 +16,11 @@ class CDOTA_Ability_Dawnbreaker_Celestial_Hammer
 	ParticleIndex_t m_nFXHammerProjectileIndex;
 	ParticleIndex_t m_nFXHeroSolarGuardianTrailIndex;
 	CHandle< CBaseEntity > m_hThinker;
-	int32 projectile_speed;
-	int32 projectile_radius;
-	int32 hammer_damage;
-	int32 hammer_aoe_radius;
-	int32 flare_radius;
+	float32 projectile_speed;
+	float32 projectile_radius;
+	float32 hammer_damage;
+	float32 hammer_aoe_radius;
+	float32 flare_radius;
 	float32 fire_trail_health_regen;
 	bool bHasStartedBurning;
 	float32 flare_debuff_duration;

@@ -23,6 +23,7 @@ class C_DOTAPlayerController
 	int32 m_nRareLinesPlayed;
 	int32 m_nRareLineGroup;
 	float32 m_flLastRareLinePlayTime;
+	float32 m_flUnitOrdersSendTime;
 	float32 m_flLastUnitOrdersSendTime;
 	bool m_bTeleportRequiresHalt;
 	bool m_bChannelRequiresHalt;
@@ -45,9 +46,9 @@ class C_DOTAPlayerController
 	int32 m_nCachedCoachedTeam;
 	CHandle< C_DOTABaseAbility > m_hActiveAbility;
 	CUtlVector< CUnitOrders > m_unitorders;
-	int32 m_nOutgoingOrderSequenceNumber;
+	int32 m_nNextOutgoingOrderSequenceNumber;
 	int32 m_nServerOrderSequenceNumber;
-	int32 m_nLastSentOutgoingOrderSequenceNumber;
+	int32 m_nMaxSentOutgoingOrderSequenceNumber;
 	CUtlVector< CEntityIndex > m_nSelectedUnits;
 	CUtlVector< ParticleIndex_t > m_nWaypoints;
 	int32 m_iActions;

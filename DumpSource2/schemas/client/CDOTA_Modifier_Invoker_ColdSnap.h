@@ -7,6 +7,7 @@ class CDOTA_Modifier_Invoker_ColdSnap
 	float32 spell_lifesteal;
 	float32 spell_amp;
 	float32 freeze_heal;
+	float32 freeze_mana;
 	int32 nQuasApplications;
 	int32 nExortApplications;
 };
