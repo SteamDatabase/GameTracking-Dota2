@@ -30,7 +30,6 @@
  LinePos:
  Vector b
  [*OBSERVABLE*]
-!g_pPulseSystem->GetWeakHandleTable()->AnyHandlesAllocated()
 "Limit Count: " + m_nLimitCount
 %d CallInfos:\n
 %d Cells:\n
@@ -48,6 +47,7 @@
 %s [%u] - %s\n
 %s allocation count overflow
 %s allocation count overflow( add %llu + current %llu > max %llu )\n
+%s: Can't switch allocator type after memory has been allocated\n
 %s: invalid nBeforeIndex %d\n
 %s: invalid nSize %d\n
 %s::%s (%u)
@@ -56,7 +56,6 @@
 (channel = 
 (debug)
 (end of input).\n\t This indicates a poorly specified lexer RULE\n\t or unterminated input element such as: "STRING["]\n
-(null)
 *MOVE=>
 *N28GapBindingSchemaEnumTraits_tI20PulseTestEnumColor_tEUlvE0_E
 *N28GapBindingSchemaEnumTraits_tI20PulseTestEnumShape_tEUlvE1_E
@@ -65,8 +64,11 @@
 , near %s
 - Graph Def '
 -Stop: 
+-avx
 -end of input-(
--memory-
+-sse2
+-sse3
+-sse4
 -unknown source-
 -unknown source-(
 . Req FAIL
@@ -83,7 +85,6 @@
 12CPulseSystem
 12FakeEntity_t
 12IPulseSystem
-13IPulseExecLog
 14CBaseAppSystemI12IPulseSystemE
 14CPulseGraphDef
 14IPulseGraphDef
@@ -92,10 +93,7 @@
 15CTier1AppSystemI12IPulseSystemLx0EE
 15CTier2AppSystemI12IPulseSystemLx0EE
 15CTier3AppSystemI12IPulseSystemLx0EE
-15IGapHost_Cursor
 16CGenericExprPart
-16CPulseExecCursor
-16IGapHost_Unknown
 17CPulseTypeManager
 18CGenericExpr_Unary
 18CPulseCell_Unknown
@@ -121,7 +119,6 @@
 23CKV3ResourceTypeManagerILy111546415280246EE
 23CPulseCell_Inflow_Yield
 23CPulseTestHandleService
-23IGapHost_YieldingCursor
 23IGapTypeQueriesForScope
 24CGenericExpr_BoolLiteral
 24CPulseCell_Inflow_Method
@@ -193,8 +190,8 @@
 488:1: POS_FLOATLITERAL : ( ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )? | '.' ( DIGIT )+ ( EXPONENT )? | ( DIGIT )+ EXPONENT );
 48CPulseCell_Test_MultiOutflow_WithParams_Yielding
 48CPulseRuntimeLibModuleLocalTypeQueryRegistration
-5a\v6;
 8SourceTS
+8x`L
 9ISourceTS
 : lexer error %d :\n\t%s at offset %d, 
 <DOWN>
@@ -294,6 +291,7 @@ Boolean
 Breakpoint Log [%u]
 Breakpoint Log [%u] - %s
 CBufferString
+CGlobalSymbol
 CGlobalSymbolCaseSensitive
 CKV3MemberNameSet
 CKV3MemberNameWithStorage
@@ -423,6 +421,7 @@ CTestDomainDerived_Cursor!SetCursorValueA
 CTestDomainDerived_Cursor!SetCursorValueB
 CUtlLeanVector
 CUtlOrderedMap
+CUtlString
 CUtlVectorFixedGrowable
 CWeakHandle
 Call C%d:I%d (%s)
@@ -468,13 +467,11 @@ Cross Product of Vector a x Vector b
 Cursor Has Tag
 Cursor Queue
 Cursor [%s] @ %.2f. Cell: %u => %s: %s
-Cursor[ ptr:%p | id:%d | graph:%p ]: CPulseExecCursor()\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: Completed with result:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: Observer notifying cell ptr:%p id:%d of result:%d from Subject:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: Register observer:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: Resumed from cell ptr:%p id:%d\n
 Cursor[ ptr:%p | id:%d | graph:%p ]: Yielded at cell ptr:%p id:%d\n
-Cursor[ ptr:%p | id:%d | graph:%p ]: ~CPulseExecCursor()\n
 DIGIT
 DOUBLE_AND
 DOUBLE_OR
@@ -496,7 +493,6 @@ Description of Beta
 Description of Gamma
 Destroy Fake Entity
 Destroy a fake entity from a static library function.
-DestroyAll
 DestroyFakeEntity( handle %d)\n
 Destroying SourceTSInstance[%d]\n
 Detach R%d
@@ -534,7 +530,6 @@ Fail Immediately
 FailImmediately
 Failed to allocate a lexer for '%s'. (Out of memory?)
 Failed to allocate a parser for '%s'. (Out of memory?)
-Failed to allocate a token stream for '%s'. (Out of memory?)
 Failed to allocate an instance of a class
 Failed to allocate an instance of class '%s'
 Failed to apply FLC data to resource '%s': %s\n
@@ -545,7 +540,6 @@ FailedReload
 Fake Ent-Fire
 FakeEntityDerivedA_tAPI!DerivedFuncA
 FakeEntityDerivedB_tAPI!DerivedFuncB
-FakeEntity_t::s_InstanceCount == 0
 FakeEntity_t::s_InstanceCount > 0
 FakeEntity_tAPI!BasicFunction
 FakeEntity_tAPI!GetFloatValue
@@ -621,7 +615,6 @@ IKV3TransferInterface_Worldspace_Load
 IKV3TransferInterface_Worldspace_Save
 IPulseInstanceLoadAPI
 IPulseInstanceSaveAPI
-IPulseReloadListener
 If (R%d) Jump to Instr I%d
 If (R%d) Leap to Chunk C%d
 If this cursor spawns other work via Fire And Forget, should this Tag be inherited?
@@ -648,7 +641,6 @@ Is In Test Mode
 IsValidIndex( i )
 Jump to Instr I%d
 JumpOrLeap( C%d:I%d )
-KV3 save transfer failed: %s
 Keep a history of all instructions run on a per graph basis.
 Keep running normally.
 KeyValues3
@@ -821,14 +813,12 @@ PublicMethod '%s' defined with invalid function as second paramter.
 PublicMethod invoked with unrecognized 'this' value.
 PublicMethod requires two arguments, (string, function).
 Pulse test failure: %s
-PulseDebugLog 
 PulseDebugLog: Calling external method on non-existent entity or game blackboard
 PulseDebugLog: Calling external method on non-existent entity or game blackboard\n
 PulseSymbol_t
 PulseSystemEventCursorResult_t
 PulseSystemEventObservableVariableChanged_t
 PulseSystemEventYieldResume_t
-PulseWarningLog 
 R%d%s%s
 RESOURCE_TYPE_PULSE_GRAPH_DEF
 Raise pen.
@@ -977,9 +967,6 @@ Used to flag a test as having failed.
 Vector To World Vector
 Vector2D
 Void
-WARNING: Pulse failed to restore yielded cursor - error with cell state (%d:%s)\n
-WARNING: Pulse failed to restore yielded cursor - no yielding cell or landing pad (%d:%s)\n
-WARNING: Pulse failed to save yielded cursor - no yielding cell or landing pad (C%d:I%d)\n
 Wait
 Wait For Completion
 Wait For Cursors With Tag
@@ -1013,7 +1000,6 @@ __ctype_toupper_loc
 __test_graph_%d.vpulse
 a:fulltype
 a:typeparam
-active_frame
 arg1
 arg2
 arg3
@@ -1021,10 +1007,7 @@ arg4
 bInAutoWakeList
 bInherit
 bValue
-cell_info
-control_storage
 cspointscript
-cursor_id
 element
 expr
 fakeEnt.m_nHandle.WeakHandle() == GAP_WEAK_HANDLE_INVALID
@@ -1068,10 +1051,8 @@ m_Inargs
 m_MissingRetvalDefault
 m_ParamType
 m_PreparedHook
-m_Results
 m_ResumePoint
 m_TagValue
-m_bChildCursorsShouldInherit
 m_bInvokedOrScheduled
 m_externalMethodTargetGraph
 m_flWakeTime
@@ -1085,7 +1066,6 @@ m_nCursorID
 m_nGraphID
 m_nResult
 m_nSubject
-m_nSubjectID
 m_nVarDocNodeID
 m_nYieldToken
 m_prevValue
@@ -1102,9 +1082,7 @@ nWhichOutflowB
 nYieldArg1
 near '%c' :\n
 near char(%#02X) :\n
-node_id
 number
-observer_cursors
 open_asset %s
 pAsyncRet2
 pCheckpointName
@@ -1119,10 +1097,8 @@ pTraceStringA
 pTraceStringB
 pValue
 pYieldArg2
-parent_cursor_id
 pending_events
 polymorphic_arg
-port_name
 previous_value
 publicMethods
 pulse_debug_print
@@ -1131,17 +1107,13 @@ pulse_graph_def.cpp
 pulse_list_graphs
 pulse_open_graph_id
 pulse_open_graph_id %u
-pulse_open_graph_id %u %u
 pulse_print_graph_execution_history
 pulse_runtime_lib
 pulse_save_execution_history
 pulse_save_execution_history_limit
 pulse_test_example_suggestion
-registers
 remap
-requested_cancel
 resourcesystem
-result_set
 scheduled_hooks
 schemasystem
 self
@@ -1149,10 +1121,7 @@ serverpointentity
 shape
 show_vpulse_file
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
-std::_Sp_make_shared_tag::_S_ti()::__tag
-system_state
 tagValue
-tags
 testRef
 test_pulse
 tools/images/pulse_editor/cursor_kill.png
@@ -1161,17 +1130,11 @@ tools/images/pulse_editor/cursor_wait_zone.png
 tools/images/pulse_editor/exit_cycle_random.png
 tools/images/pulse_editor/inflow_wait.png
 tools/images/pulse_editor/kill_cursor_with_tag.png
-typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
-typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
-typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
-typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
-typeinfo name for std::_Sp_make_shared_tag
 v8::Array::Length() const
 v8::Array::New(v8::Isolate*, int)
 v8::Context::Enter()
 v8::Context::Exit()
 v8::Context::GetIsolate()
-v8::Context::Global()
 v8::Context::New(v8::Isolate*, v8::ExtensionConfiguration*, v8::MaybeLocal<v8::ObjectTemplate>, v8::MaybeLocal<v8::Value>, v8::DeserializeInternalFieldsCallback, v8::MicrotaskQueue*)
 v8::External::New(v8::Isolate*, void*)
 v8::External::Value() const
@@ -1184,7 +1147,6 @@ v8::Integer::New(v8::Isolate*, int)
 v8::Isolate::Enter()
 v8::Isolate::Exit()
 v8::Isolate::GetCurrent()
-v8::Isolate::GetCurrentContext()
 v8::Isolate::ThrowException(v8::Local<v8::Value>)
 v8::Message::Get() const
 v8::Module::CreateSyntheticModule(v8::Isolate*, v8::Local<v8::String>, v8::MemorySpan<v8::Local<v8::String> const> const&, v8::MaybeLocal<v8::Value> (*)(v8::Local<v8::Context>, v8::Local<v8::Module>))
@@ -1193,12 +1155,8 @@ v8::Module::InstantiateModule(v8::Local<v8::Context>, v8::MaybeLocal<v8::Module>
 v8::Module::SetSyntheticModuleExport(v8::Isolate*, v8::Local<v8::String>, v8::Local<v8::Value>)
 v8::Number::New(v8::Isolate*, double)
 v8::Object::Get(v8::Local<v8::Context>, unsigned int)
-v8::Object::Get(v8::Local<v8::Context>, v8::Local<v8::Value>)
-v8::Object::GetPropertyNames(v8::Local<v8::Context>)
 v8::Object::InternalFieldCount() const
-v8::Object::New(v8::Isolate*)
 v8::Object::Set(v8::Local<v8::Context>, unsigned int, v8::Local<v8::Value>)
-v8::Object::Set(v8::Local<v8::Context>, v8::Local<v8::Value>, v8::Local<v8::Value>)
 v8::Object::SetInternalField(int, v8::Local<v8::Data>)
 v8::Object::SlowGetInternalField(int)
 v8::ObjectTemplate::New(v8::Isolate*, v8::Local<v8::FunctionTemplate>)
@@ -1207,8 +1165,6 @@ v8::ObjectTemplate::SetInternalFieldCount(int)
 v8::Promise::Resolver::GetPromise()
 v8::Promise::Resolver::New(v8::Local<v8::Context>)
 v8::Promise::Resolver::Resolve(v8::Local<v8::Context>, v8::Local<v8::Value>)
-v8::Script::Compile(v8::Local<v8::Context>, v8::Local<v8::String>, v8::ScriptOrigin*)
-v8::Script::Run(v8::Local<v8::Context>)
 v8::ScriptCompiler::CachedData::~CachedData()
 v8::ScriptCompiler::CompileModule(v8::Isolate*, v8::ScriptCompiler::Source*, v8::ScriptCompiler::CompileOptions, v8::ScriptCompiler::NoCacheReason)
 v8::ScriptCompiler::ConsumeCodeCacheTask::~ConsumeCodeCacheTask()
@@ -1216,8 +1172,6 @@ v8::ScriptOrigin::VerifyHostDefinedOptions() const
 v8::String::NewFromUtf8(v8::Isolate*, char const*, v8::NewStringType, int)
 v8::String::NewFromUtf8Literal(v8::Isolate*, char const*, v8::NewStringType, int)
 v8::String::Utf8Length(v8::Isolate*) const
-v8::String::Utf8Value::Utf8Value(v8::Isolate*, v8::Local<v8::Value>)
-v8::String::Utf8Value::~Utf8Value()
 v8::String::WriteUtf8(v8::Isolate*, char*, int, int*, int) const
 v8::Symbol::New(v8::Isolate*, v8::Local<v8::String>)
 v8::Template::Set(v8::Local<v8::Name>, v8::Local<v8::Data>, v8::PropertyAttribute)
@@ -1229,26 +1183,19 @@ v8::TryCatch::~TryCatch()
 v8::Value::BooleanValue(v8::Isolate*) const
 v8::Value::Int32Value(v8::Local<v8::Context>) const
 v8::Value::IsArray() const
-v8::Value::IsBoolean() const
 v8::Value::IsExternal() const
 v8::Value::IsFunction() const
-v8::Value::IsInt32() const
-v8::Value::IsNumber() const
 v8::Value::IsObject() const
-v8::Value::IsUint32() const
 v8::Value::NumberValue(v8::Local<v8::Context>) const
 v8::Value::ToObject(v8::Local<v8::Context>) const
 v8::Value::ToString(v8::Local<v8::Context>) const
-v8::Value::TypeOf(v8::Isolate*)
 v8::Value::Uint32Value(v8::Local<v8::Context>) const
 v8::api_internal::DisposeGlobal(unsigned long*)
-v8::api_internal::FromJustIsNothing()
 v8::api_internal::GlobalizeReference(v8::internal::Isolate*, unsigned long)
 v8::api_internal::MakeWeak(unsigned long*, void*, void (*)(v8::WeakCallbackInfo<void> const&), v8::WeakCallbackType)
 v8::api_internal::ToLocalEmpty()
 v8::internal::IsolateFromNeverReadOnlySpaceObject(unsigned long)
 v8system
 vecValue
-yield_token
 { className = 'IsControlFlowNode' }
 { className = 'IsWaitNode IsControlFlowNode' }
