@@ -36,6 +36,7 @@ class CDOTAPlayerController
 	int32 m_nServerOrderSequenceNumber;
 	float32 m_flLastOrderTime;
 	float32 m_flLastKnownActiveTime;
+	uint32 m_nLastOrderLatency;
 	GameTime_t m_flLastReconnectTime;
 	GameTime_t m_fLastSuggestionTime;
 	bool m_bWantsRandomHero;

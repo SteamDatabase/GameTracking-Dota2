@@ -25,6 +25,7 @@ class C_DOTAPlayerController
 	float32 m_flLastRareLinePlayTime;
 	float32 m_flUnitOrdersSendTime;
 	float32 m_flLastUnitOrdersSendTime;
+	float32 m_flLastUnitOrdersTotalLatency;
 	bool m_bTeleportRequiresHalt;
 	bool m_bChannelRequiresHalt;
 	bool m_bAutoPurchaseItems;
