@@ -271,6 +271,7 @@
 		"cl_usesocketsforloopback" "1"
 		"sv_early_network_message_processing" "1"
 		"disable_source_soundscape_trace" "1"
+		"cl_buffer_incoming_net_messages" "0"
 	}
 
 	pulse
