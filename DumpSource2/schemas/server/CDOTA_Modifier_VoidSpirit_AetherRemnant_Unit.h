@@ -5,8 +5,8 @@ class CDOTA_Modifier_VoidSpirit_AetherRemnant_Unit
 	ParticleIndex_t m_nBeamFXIndex;
 	CUtlVector< int32 > m_nViewerIDs;
 	int32 m_nViewerTeam;
-	int32 remnant_watch_distance;
-	int32 remnant_watch_radius;
+	float32 remnant_watch_distance;
+	float32 remnant_watch_radius;
 	float32 duration;
 	int32 watch_path_vision_radius;
 	int32 impact_damage;

@@ -8,7 +8,7 @@ class CDOTA_Modifier_Dawnbreaker_Celestial_Hammer_Movement
 	Vector m_vLastTrailThinkerLocation;
 	Vector m_vEndPointShard;
 	ParticleIndex_t m_nStatusFXIndex;
-	int32 flare_radius;
+	float32 flare_radius;
 	bool bHasStartedBurning;
 	float32 flare_debuff_duration;
 	float32 fire_trail_health_regen;
