@@ -66,8 +66,6 @@ class CDOTA_BaseNPC_Hero
 	sLoadoutItem m_Gem;
 	sLoadoutItem m_SentryWard;
 	sLoadoutItem m_ObserverWard;
-	sLoadoutItem m_Courier;
-	sLoadoutItem m_FlyingCourier;
 	bool m_bAutoPurchaseItems;
 	bool m_bBuybackDisabled;
 	CUtlVector< CHandle< CDOTA_BaseNPC_Pet > > m_hPets;

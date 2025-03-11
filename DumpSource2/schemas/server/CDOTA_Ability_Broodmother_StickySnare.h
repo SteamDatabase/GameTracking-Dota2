@@ -2,7 +2,7 @@ class CDOTA_Ability_Broodmother_StickySnare
 {
 	Vector m_vEndpoint;
 	float32 duration;
-	int32 width;
+	float32 width;
 	bool m_bStolenSnareCheck;
 	CUtlVector< CHandle< CBaseEntity > > m_vecSnares;
 };
