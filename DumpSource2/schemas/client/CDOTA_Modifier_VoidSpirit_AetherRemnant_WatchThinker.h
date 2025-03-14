@@ -1,6 +1,6 @@
 class CDOTA_Modifier_VoidSpirit_AetherRemnant_WatchThinker
 {
-	int32 remnant_watch_radius;
+	float32 remnant_watch_radius;
 	GameTime_t m_flLastDamageTick;
 	float32 damage_tick_rate;
 	float32 flDamage;

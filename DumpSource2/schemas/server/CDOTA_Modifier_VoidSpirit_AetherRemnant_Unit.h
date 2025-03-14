@@ -8,8 +8,8 @@ class CDOTA_Modifier_VoidSpirit_AetherRemnant_Unit
 	float32 remnant_watch_distance;
 	float32 remnant_watch_radius;
 	float32 duration;
-	int32 watch_path_vision_radius;
-	int32 impact_damage;
+	float32 watch_path_vision_radius;
+	float32 impact_damage;
 	float32 pull_duration;
 	float32 activation_delay;
 	bool m_bPiercesCreeps;

@@ -3,7 +3,7 @@ class CDOTA_Modifier_Broodmother_StickySnare
 	Vector m_vOrigin;
 	Vector m_vWallDirection;
 	Vector m_vWallRight;
-	int32 width;
+	float32 width;
 	float32 root_duration;
 	float32 formation_delay;
 	bool m_bTouching;
