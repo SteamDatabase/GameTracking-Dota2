@@ -1,7 +1,7 @@
 class CDOTA_Modifier_EarthSpirit_GeomagneticGrip
 {
-	int32 radius;
-	int32 rock_damage;
+	float32 radius;
+	float32 rock_damage;
 	float32 pull_units_per_second;
 	float32 pull_units_per_second_heroes;
 	float32 total_pull_distance;
