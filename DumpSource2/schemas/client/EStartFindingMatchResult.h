@@ -39,4 +39,6 @@ enum EStartFindingMatchResult : uint32_t
 	k_EStartFindingMatchResult_SteamChinaBanned = 133,
 	k_EStartFindingMatchResult_SteamChinaInvalidMixedParty = 134,
 	k_EStartFindingMatchResult_RestrictedFromRanked = 135,
+	k_EStartFindingMatchResult_RankPreventsParties = 136,
+	k_EStartFindingMatchResult_RegisteredNameRequired = 137,
 };

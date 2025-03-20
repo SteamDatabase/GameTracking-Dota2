@@ -167,6 +167,8 @@ enum EDOTAGCMsg : uint32_t
 	k_EMsgServerToGCRequestBatchPlayerResources = 7450,
 	k_EMsgServerToGCRequestBatchPlayerResourcesResponse = 7451,
 	k_EMsgGCCompendiumSetSelectionResponse = 7453,
+	k_EMsgGCRankedPlayerInfoSubmit = 7454,
+	k_EMsgGCRankedPlayerInfoSubmitResponse = 7455,
 	k_EMsgGCPlayerInfoSubmit = 7456,
 	k_EMsgGCPlayerInfoSubmitResponse = 7457,
 	k_EMsgGCToGCGetAccountLevel = 7458,
