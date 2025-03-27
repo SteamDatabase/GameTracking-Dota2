@@ -10,5 +10,6 @@ class CDOTA_Modifier_Kez_Shodo_Sai_Mark
 	bool m_bFromParry;
 	bool m_bParryBonus;
 	bool m_bConsumed;
+	bool m_bForceInvisBonus;
 	ParticleIndex_t m_nOverheadFXIndex;
 };

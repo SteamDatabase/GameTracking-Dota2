@@ -7,6 +7,8 @@ class CDOTA_Modifier_Ringmaster_UnicycleMovement
 	float32 impact_radius;
 	float32 tree_impact_speed_divisor;
 	float32 knockback_distance;
+	float32 damage_threshold;
+	float32 damage_grace_period;
 	float32 m_flCurrentSpeed;
 	float32 m_bCrashScheduled;
 	float32 m_flDesiredYaw;

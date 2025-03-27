@@ -1,6 +1,7 @@
 class C_DOTA_Ability_WitchDoctor_DeathWard
 {
 	CHandle< C_BaseEntity > m_hWard;
+	int32 bonus_accuracy;
 	int32 m_iDamage;
 	int32 m_iBounceRadius;
 	int32 m_iProjectileSpeed;

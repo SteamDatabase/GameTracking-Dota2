@@ -10,6 +10,7 @@ class CDOTA_Modifier_Muerta_Revenant_Thinker
 	float32 kill_check_radius;
 	float32 kill_radius_expansion;
 	float32 kill_radius_expansion_speed;
+	float32 hp_regen_pct;
 	int32 num_revenants;
 	int32 rotation_direction;
 	float32 radius;
