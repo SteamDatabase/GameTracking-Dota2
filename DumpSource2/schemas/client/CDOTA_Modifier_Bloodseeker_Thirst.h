@@ -1,6 +1,6 @@
 class CDOTA_Modifier_Bloodseeker_Thirst
 {
-	int32 half_bonus_aoe;
+	float32 half_bonus_aoe;
 	int32 visibility_threshold_pct;
 	int32 invis_threshold_pct;
 	int32 min_bonus_pct;
