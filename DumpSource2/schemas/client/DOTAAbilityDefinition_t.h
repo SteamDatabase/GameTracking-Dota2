@@ -88,6 +88,7 @@ class DOTAAbilityDefinition_t
 	bitfield:1 m_bSuggestPregame;
 	bitfield:1 m_bSuggestEarlygame;
 	bitfield:1 m_bSuggestLategame;
+	bitfield:1 m_bSuggestNotMaingame;
 	bitfield:1 m_bIsAffectedByAoEIncrease;
 	bitfield:1 m_bHasCastAnimation;
 	bitfield:1 m_bItemHasPassive;
