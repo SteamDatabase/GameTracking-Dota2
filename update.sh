@@ -6,6 +6,7 @@ cd "${0%/*}"
 echo "Processing Dota 2..."
 
 ../tools/dump_source2.sh dota dota
+DUMPER_EXIT_CODE=$?
 
 ProcessDepot ".dll"
 ProcessDepot ".so"
@@ -17,3 +18,5 @@ ProcessToolAssetInfo
 FixUCS2
 
 CreateCommit "$(grep "ClientVersion=" game/dota/steam.inf | grep -o '[0-9\.]*')" "$1"
+
+exit $DUMPER_EXIT_CODE
