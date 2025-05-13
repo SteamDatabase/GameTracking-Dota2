@@ -1,12 +1,15 @@
 #!/bin/bash
+set -euo pipefail
 
 cd "${0%/*}"
 . ../common.sh
 
 echo "Processing Dota 2..."
 
+set +e
 ../tools/dump_source2.sh dota dota
 DUMPER_EXIT_CODE=$?
+set -e
 
 ProcessDepot ".dll"
 ProcessDepot ".so"
@@ -17,6 +20,8 @@ ProcessToolAssetInfo
 
 FixUCS2
 
-CreateCommit "$(grep "ClientVersion=" game/dota/steam.inf | grep -o '[0-9\.]*')" "$1"
+CreateCommit "$(grep "ClientVersion=" game/dota/steam.inf | grep -o '[0-9\.]*')" "${1:-}"
 
-exit $DUMPER_EXIT_CODE
+echo "Done"
+
+exit "$DUMPER_EXIT_CODE"
