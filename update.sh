@@ -7,7 +7,7 @@ cd "${0%/*}"
 echo "Processing Dota 2..."
 
 set +e
-../tools/dump_source2.sh dota dota
+../tools/dump_source2.sh dota DOTA
 DUMPER_EXIT_CODE=$?
 set -e
 
