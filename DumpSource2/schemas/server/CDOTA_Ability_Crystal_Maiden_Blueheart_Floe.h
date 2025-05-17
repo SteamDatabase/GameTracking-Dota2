@@ -1,3 +1,3 @@
-class CDOTA_Ability_Crystal_Maiden_Blueheart_Floe
+class CDOTA_Ability_Crystal_Maiden_Blueheart_Floe : public CDOTABaseAbility
 {
 };

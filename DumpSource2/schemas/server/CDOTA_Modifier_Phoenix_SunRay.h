@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Phoenix_SunRay
+class CDOTA_Modifier_Phoenix_SunRay : public CDOTA_Buff
 {
 	int32 hp_cost_perc_per_second;
 	int32 beam_range;

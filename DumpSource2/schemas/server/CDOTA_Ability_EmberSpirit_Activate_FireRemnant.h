@@ -1,4 +1,4 @@
-class CDOTA_Ability_EmberSpirit_Activate_FireRemnant
+class CDOTA_Ability_EmberSpirit_Activate_FireRemnant : public CDOTABaseAbility
 {
 	int32 m_nProjectileID;
 	Vector m_vStartLocation;

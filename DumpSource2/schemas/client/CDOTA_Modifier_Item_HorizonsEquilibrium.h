@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_HorizonsEquilibrium
+class CDOTA_Modifier_Item_HorizonsEquilibrium : public CDOTA_Buff_Item
 {
 	int32 distance;
 	int32 damage_reduction;

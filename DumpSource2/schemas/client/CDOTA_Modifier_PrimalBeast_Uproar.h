@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PrimalBeast_Uproar
+class CDOTA_Modifier_PrimalBeast_Uproar : public CDOTA_Modifier_Stacking_Base
 {
 	int32 stack_limit;
 	int32 damage_limit;

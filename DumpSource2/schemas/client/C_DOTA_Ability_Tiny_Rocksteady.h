@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Tiny_Rocksteady
+class C_DOTA_Ability_Tiny_Rocksteady : public C_DOTABaseAbility
 {
 };

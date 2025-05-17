@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Attributes
+class C_DOTA_Ability_Special_Bonus_Attributes : public C_DOTABaseAbility
 {
 };

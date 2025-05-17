@@ -1,3 +1,3 @@
-class CDOTA_Ability_Dawnbreaker_Land
+class CDOTA_Ability_Dawnbreaker_Land : public CDOTABaseAbility
 {
 };

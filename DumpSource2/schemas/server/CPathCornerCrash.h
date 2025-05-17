@@ -1,3 +1,3 @@
-class CPathCornerCrash
+class CPathCornerCrash : public CPathCorner
 {
 };

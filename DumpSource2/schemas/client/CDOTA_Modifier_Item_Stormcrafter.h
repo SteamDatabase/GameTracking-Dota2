@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Stormcrafter
+class CDOTA_Modifier_Item_Stormcrafter : public CDOTA_Buff_Item
 {
 	GameTime_t m_flNextHit;
 	int32 passive_movement_bonus;

@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Tusk_IceShards
+class C_DOTA_Ability_Tusk_IceShards : public C_DOTABaseAbility
 {
 	int32 m_iProjectile;
 	float32 shard_width;

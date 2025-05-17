@@ -1,4 +1,5 @@
-class CNmTargetOffsetNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmTargetOffsetNode::CDefinition : public CNmTargetValueNode::CDefinition
 {
 	int16 m_nInputValueNodeIdx;
 	bool m_bIsBoneSpaceOffset;

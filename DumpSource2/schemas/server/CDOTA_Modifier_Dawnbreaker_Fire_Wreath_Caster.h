@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Fire_Wreath_Caster
+class CDOTA_Modifier_Dawnbreaker_Fire_Wreath_Caster : public CDOTA_Buff
 {
 	float32 movement_speed;
 	int32 shard_movement_penalty;

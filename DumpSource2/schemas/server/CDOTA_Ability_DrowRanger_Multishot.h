@@ -1,4 +1,4 @@
-class CDOTA_Ability_DrowRanger_Multishot
+class CDOTA_Ability_DrowRanger_Multishot : public CDOTABaseAbility
 {
 	Vector m_vStartPos;
 	int32 m_iArrowProjectile;

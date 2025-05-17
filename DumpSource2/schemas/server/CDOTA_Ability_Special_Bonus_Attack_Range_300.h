@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Attack_Range_300
+class CDOTA_Ability_Special_Bonus_Attack_Range_300 : public CDOTABaseAbility
 {
 };

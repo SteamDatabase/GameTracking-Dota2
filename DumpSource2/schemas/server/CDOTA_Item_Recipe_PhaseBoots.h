@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_PhaseBoots
+class CDOTA_Item_Recipe_PhaseBoots : public CDOTA_Item
 {
 };

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmIKJoint
 {
 	int32 m_nParentIndex;

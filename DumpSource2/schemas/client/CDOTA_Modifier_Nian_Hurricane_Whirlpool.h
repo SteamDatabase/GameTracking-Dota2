@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_Hurricane_Whirlpool
+class CDOTA_Modifier_Nian_Hurricane_Whirlpool : public CDOTA_Buff
 {
 	float32 pull_switch_interval;
 	int32 pull_speed;

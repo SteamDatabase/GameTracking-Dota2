@@ -1,3 +1,3 @@
-class CDOTA_Ability_BlueDragonspawnOverseer_DevotionAura
+class CDOTA_Ability_BlueDragonspawnOverseer_DevotionAura : public CDOTABaseAbility
 {
 };

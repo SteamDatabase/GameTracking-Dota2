@@ -1,4 +1,5 @@
-class CLeanMatrixUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CLeanMatrixUpdateNode : public CLeafUpdateNode
 {
 	int32[3][3] m_frameCorners;
 	CPoseHandle[9] m_poses;

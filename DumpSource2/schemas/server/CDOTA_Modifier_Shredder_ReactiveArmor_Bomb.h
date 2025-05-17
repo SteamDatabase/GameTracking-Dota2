@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_ReactiveArmor_Bomb
+class CDOTA_Modifier_Shredder_ReactiveArmor_Bomb : public CDOTA_Buff
 {
 	float32 initial_shield;
 	float32 max_shield;

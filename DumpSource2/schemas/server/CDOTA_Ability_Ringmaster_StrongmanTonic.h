@@ -1,3 +1,3 @@
-class CDOTA_Ability_Ringmaster_StrongmanTonic
+class CDOTA_Ability_Ringmaster_StrongmanTonic : public CDOTABaseAbility
 {
 };

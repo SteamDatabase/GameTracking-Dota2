@@ -1,3 +1,3 @@
-class CDOTA_Ability_Chen_Penitence
+class CDOTA_Ability_Chen_Penitence : public CDOTABaseAbility
 {
 };

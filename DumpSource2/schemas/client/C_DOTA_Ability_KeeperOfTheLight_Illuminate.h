@@ -1,4 +1,4 @@
-class C_DOTA_Ability_KeeperOfTheLight_Illuminate
+class C_DOTA_Ability_KeeperOfTheLight_Illuminate : public C_DOTABaseAbility
 {
 	CHandle< C_BaseEntity > m_hThinker;
 	GameTime_t m_fStartTime;

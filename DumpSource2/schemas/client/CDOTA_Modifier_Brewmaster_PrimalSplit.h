@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_PrimalSplit
+class CDOTA_Modifier_Brewmaster_PrimalSplit : public CDOTA_Buff
 {
 	CHandle< C_BaseEntity > m_hTarget;
 	CHandle< C_BaseEntity > m_hSecondaryTarget;

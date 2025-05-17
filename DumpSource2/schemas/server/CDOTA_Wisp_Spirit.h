@@ -1,3 +1,3 @@
-class CDOTA_Wisp_Spirit
+class CDOTA_Wisp_Spirit : public CDOTA_BaseNPC
 {
 };

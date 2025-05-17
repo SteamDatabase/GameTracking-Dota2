@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_Wheel_Mesmerize_Facing
+class CDOTA_Modifier_Ringmaster_Wheel_Mesmerize_Facing : public CDOTA_Buff
 {
 	float32 face_duration;
 	float32 duration;

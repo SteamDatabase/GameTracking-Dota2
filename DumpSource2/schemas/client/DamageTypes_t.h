@@ -21,5 +21,7 @@ enum DamageTypes_t : uint32_t
 	DMG_PHYSGUN = 1048576,
 	DMG_DISSOLVE = 2097152,
 	DMG_BLAST_SURFACE = 4194304,
+	// MPropertySuppressEnumerator
+	// MEnumeratorIsNotAFlag
 	DMG_LASTGENERICFLAG = 4194304,
 };

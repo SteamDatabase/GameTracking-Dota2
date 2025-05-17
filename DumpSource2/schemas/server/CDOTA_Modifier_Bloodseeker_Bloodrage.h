@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bloodseeker_Bloodrage
+class CDOTA_Modifier_Bloodseeker_Bloodrage : public CDOTA_Buff
 {
 	int32 attack_speed;
 	int32 spell_amp;

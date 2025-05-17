@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_Caltrops
+class CDOTA_Modifier_Hoodwink_Caltrops : public CDOTA_Buff
 {
 	int32 effect_radius;
 	int32 caltrops_damage;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nevermore_Necromastery
+class CDOTA_Modifier_Nevermore_Necromastery : public CDOTA_Buff
 {
 	int32 necromastery_damage_per_soul;
 	int32 necromastery_max_souls;

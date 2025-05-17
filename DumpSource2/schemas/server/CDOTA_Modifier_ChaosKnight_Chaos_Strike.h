@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ChaosKnight_Chaos_Strike
+class CDOTA_Modifier_ChaosKnight_Chaos_Strike : public CDOTA_Buff
 {
 	float32 creep_multiplier;
 	int32 crit_min;

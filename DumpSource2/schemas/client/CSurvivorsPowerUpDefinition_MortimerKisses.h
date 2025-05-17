@@ -1,4 +1,6 @@
-class CSurvivorsPowerUpDefinition_MortimerKisses
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+class CSurvivorsPowerUpDefinition_MortimerKisses : public CSurvivorsPowerUpDefinition_AreaAttack_Circle
 {
 	float32 m_flMinRange;
 	float32 m_flLaunchDistance;

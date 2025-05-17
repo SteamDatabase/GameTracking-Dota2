@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Warlock_Upheaval
+class C_DOTA_Ability_Warlock_Upheaval : public C_DOTABaseAbility
 {
 	Vector m_vPosition;
 	float32 aoe;

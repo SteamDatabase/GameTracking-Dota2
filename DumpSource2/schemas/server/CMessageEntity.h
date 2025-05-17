@@ -1,4 +1,4 @@
-class CMessageEntity
+class CMessageEntity : public CPointEntity
 {
 	int32 m_radius;
 	CUtlSymbolLarge m_messageText;

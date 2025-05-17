@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Luna_LunarBlessingAura
+class CDOTA_Modifier_Luna_LunarBlessingAura : public CDOTA_Buff
 {
 	int32 bonus_damage_per_level;
 	int32 self_bonus_damage_per_level;

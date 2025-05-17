@@ -1,3 +1,3 @@
-class CDOTA_Ability_Corspselord_Revive
+class CDOTA_Ability_Corspselord_Revive : public CDOTABaseAbility
 {
 };

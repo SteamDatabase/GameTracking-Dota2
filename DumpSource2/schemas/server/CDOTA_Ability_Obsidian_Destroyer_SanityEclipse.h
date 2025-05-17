@@ -1,3 +1,3 @@
-class CDOTA_Ability_Obsidian_Destroyer_SanityEclipse
+class CDOTA_Ability_Obsidian_Destroyer_SanityEclipse : public CDOTABaseAbility
 {
 };

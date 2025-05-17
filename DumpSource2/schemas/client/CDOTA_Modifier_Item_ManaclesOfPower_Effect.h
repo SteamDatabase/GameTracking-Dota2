@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_ManaclesOfPower_Effect
+class CDOTA_Modifier_Item_ManaclesOfPower_Effect : public CDOTA_Buff
 {
 	CHandle< C_BaseEntity > m_hPartner;
 	ParticleIndex_t m_nFXIndex;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Jakiro_Macropyre_Thinker
+class CDOTA_Modifier_Jakiro_Macropyre_Thinker : public CDOTA_Buff
 {
 	Vector m_vPathDir;
 	float32 burn_interval;

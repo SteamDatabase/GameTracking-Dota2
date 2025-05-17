@@ -1,4 +1,4 @@
-class CDynamicNavConnectionsVolume
+class CDynamicNavConnectionsVolume : public CTriggerMultiple
 {
 	CUtlSymbolLarge m_iszConnectionTarget;
 	CUtlVector< DynamicVolumeDef_t > m_vecConnections;

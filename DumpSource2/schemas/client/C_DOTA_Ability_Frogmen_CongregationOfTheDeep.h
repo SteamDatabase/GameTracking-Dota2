@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Frogmen_CongregationOfTheDeep
+class C_DOTA_Ability_Frogmen_CongregationOfTheDeep : public C_DOTABaseAbility
 {
 	CUtlVector< CHandle< C_BaseEntity > > hAlreadyHitList;
 	float32 duration;

@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CDOTAMinesweeperStageDefinition
 {
 	int32 m_nBoardRows;

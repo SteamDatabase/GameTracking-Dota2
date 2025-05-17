@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Beastmaster_Hawk_Dive
+class CDOTA_Modifier_Beastmaster_Hawk_Dive : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hTarget;
 	float32 m_flPredictedTotalTime;

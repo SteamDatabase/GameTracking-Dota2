@@ -1,3 +1,3 @@
-class dota_minimap_boundary
+class dota_minimap_boundary : public CEmptyEntityInstance
 {
 };

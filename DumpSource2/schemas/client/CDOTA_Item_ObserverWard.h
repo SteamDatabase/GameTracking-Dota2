@@ -1,3 +1,3 @@
-class CDOTA_Item_ObserverWard
+class CDOTA_Item_ObserverWard : public C_DOTA_Item
 {
 };

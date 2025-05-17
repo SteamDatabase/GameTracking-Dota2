@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ShadowShaman_Shackles
+class CDOTA_Modifier_ShadowShaman_Shackles : public CDOTA_Buff
 {
 	ParticleIndex_t nShackleFXIndex;
 	float32 tick_interval;

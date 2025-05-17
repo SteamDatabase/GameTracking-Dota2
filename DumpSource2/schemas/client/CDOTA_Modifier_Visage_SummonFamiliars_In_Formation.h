@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Visage_SummonFamiliars_In_Formation
+class CDOTA_Modifier_Visage_SummonFamiliars_In_Formation : public CDOTA_Buff
 {
 	CHandle< C_BaseEntity > m_hOwner;
 	CHandle< C_BaseEntity > m_hCurrentTarget;

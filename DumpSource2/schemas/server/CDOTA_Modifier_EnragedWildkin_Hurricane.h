@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EnragedWildkin_Hurricane
+class CDOTA_Modifier_EnragedWildkin_Hurricane : public CDOTA_Buff
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

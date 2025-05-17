@@ -1,3 +1,3 @@
-class CDOTA_Item_GreaterClarity
+class CDOTA_Item_GreaterClarity : public CDOTA_Item
 {
 };

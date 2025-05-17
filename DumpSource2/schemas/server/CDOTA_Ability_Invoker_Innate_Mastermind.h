@@ -1,3 +1,3 @@
-class CDOTA_Ability_Invoker_Innate_Mastermind
+class CDOTA_Ability_Invoker_Innate_Mastermind : public CDOTABaseAbility
 {
 };

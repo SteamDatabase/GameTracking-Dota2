@@ -1,3 +1,3 @@
-class CDOTA_Item_Skadi
+class CDOTA_Item_Skadi : public CDOTA_Item
 {
 };

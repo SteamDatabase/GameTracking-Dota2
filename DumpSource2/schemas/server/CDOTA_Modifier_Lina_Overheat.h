@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lina_Overheat
+class CDOTA_Modifier_Lina_Overheat : public CDOTA_Buff
 {
 	float32 duration;
 	float32 damage_aoe;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Earthshaker_Fissure_Line_Thinker
+class CDOTA_Modifier_Earthshaker_Fissure_Line_Thinker : public CDOTA_Buff
 {
 	int32 fissure_radius;
 	float32 fissure_movement_speed;

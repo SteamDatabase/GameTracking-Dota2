@@ -1,4 +1,4 @@
-class CSurvivorsEnemyResurrector
+class CSurvivorsEnemyResurrector : public CSurvivorsEnemy
 {
 	int32 m_nTotalResurrections;
 	int32 m_nResurrectionsRemaining;

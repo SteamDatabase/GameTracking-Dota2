@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_GhostWalk_Self
+class CDOTA_Modifier_Invoker_GhostWalk_Self : public CDOTA_Modifier_Invisible
 {
 	int32 self_slow;
 	float32 area_of_effect;

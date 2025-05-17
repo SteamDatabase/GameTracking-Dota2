@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class ArtyConstants_t
 {
 	float32 m_flWindAccel;

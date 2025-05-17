@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kunkka_Tidebringer
+class CDOTA_Modifier_Kunkka_Tidebringer : public CDOTA_Buff
 {
 	bool m_bTidebringerAttack;
 	float32 cleave_starting_width;

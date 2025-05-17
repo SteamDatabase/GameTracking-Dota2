@@ -1,3 +1,3 @@
-class CDOTA_Item_GreatFamango
+class CDOTA_Item_GreatFamango : public CDOTA_Item_Famango
 {
 };

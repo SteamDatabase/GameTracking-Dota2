@@ -1,4 +1,4 @@
-class CFogVolume
+class CFogVolume : public CServerOnlyModelEntity
 {
 	CUtlSymbolLarge m_fogName;
 	CUtlSymbolLarge m_postProcessName;

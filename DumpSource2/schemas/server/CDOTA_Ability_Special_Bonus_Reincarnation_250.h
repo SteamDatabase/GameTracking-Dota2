@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Reincarnation_250
+class CDOTA_Ability_Special_Bonus_Reincarnation_250 : public CDOTABaseAbility
 {
 };

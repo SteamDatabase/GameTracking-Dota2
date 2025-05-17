@@ -1,3 +1,3 @@
-class CPlayer_UseServices
+class CPlayer_UseServices : public CPlayerPawnComponent
 {
 };

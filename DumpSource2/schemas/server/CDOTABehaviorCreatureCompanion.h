@@ -1,3 +1,3 @@
-class CDOTABehaviorCreatureCompanion
+class CDOTABehaviorCreatureCompanion : public CDOTABehaviorCompanion
 {
 };

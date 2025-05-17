@@ -1,4 +1,4 @@
-class C_DOTA_BaseNPC_XP_Fountain
+class C_DOTA_BaseNPC_XP_Fountain : public C_DOTA_BaseNPC_Building
 {
 	ParticleIndex_t m_nFxRing;
 	bool m_bActive;

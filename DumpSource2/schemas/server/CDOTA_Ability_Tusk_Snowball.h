@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tusk_Snowball
+class CDOTA_Ability_Tusk_Snowball : public CDOTABaseAbility
 {
 	float32 snowball_windup_radius;
 	float32 snowball_radius;

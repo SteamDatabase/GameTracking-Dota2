@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Furion_5
+class CDOTA_Ability_Special_Bonus_Unique_Furion_5 : public CDOTABaseAbility
 {
 };

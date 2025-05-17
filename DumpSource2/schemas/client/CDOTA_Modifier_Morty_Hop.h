@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Morty_Hop
+class CDOTA_Modifier_Morty_Hop : public CDOTA_Buff
 {
 	float32 duration;
 	int32 height;

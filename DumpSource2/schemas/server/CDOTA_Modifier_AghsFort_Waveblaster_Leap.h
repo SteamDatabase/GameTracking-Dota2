@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Waveblaster_Leap
+class CDOTA_Modifier_AghsFort_Waveblaster_Leap : public CDOTA_Buff
 {
 	float32 m_flTotalTime;
 	float32 m_flInitialVelocity;

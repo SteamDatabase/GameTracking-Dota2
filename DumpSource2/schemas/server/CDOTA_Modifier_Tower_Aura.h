@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tower_Aura
+class CDOTA_Modifier_Tower_Aura : public CDOTA_Buff
 {
 	int32 bonus_armor;
 	bool m_bOverrideArmor;

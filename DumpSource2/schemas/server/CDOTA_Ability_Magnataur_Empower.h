@@ -1,3 +1,3 @@
-class CDOTA_Ability_Magnataur_Empower
+class CDOTA_Ability_Magnataur_Empower : public CDOTABaseAbility
 {
 };

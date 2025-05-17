@@ -1,3 +1,3 @@
-class CDOTA_Ability_Lycan_Howl
+class CDOTA_Ability_Lycan_Howl : public CDOTABaseAbility
 {
 };

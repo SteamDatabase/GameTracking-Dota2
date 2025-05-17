@@ -1,4 +1,4 @@
-class CDOTA_Ability_Centaur_Stampede
+class CDOTA_Ability_Centaur_Stampede : public CDOTABaseAbility
 {
 	float32 duration;
 	int32 base_damage;

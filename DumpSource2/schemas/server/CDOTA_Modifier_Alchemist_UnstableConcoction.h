@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Alchemist_UnstableConcoction
+class CDOTA_Modifier_Alchemist_UnstableConcoction : public CDOTA_Buff
 {
 	float32 brew_time;
 	float32 brew_explosion;

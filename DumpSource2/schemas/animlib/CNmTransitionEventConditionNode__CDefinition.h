@@ -1,4 +1,5 @@
-class CNmTransitionEventConditionNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmTransitionEventConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
 {
 	CGlobalSymbol m_requireRuleID;
 	CNmBitFlags m_eventConditionRules;

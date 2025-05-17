@@ -1,4 +1,5 @@
-class CNmGraphEventConditionNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmGraphEventConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	CNmBitFlags m_eventConditionRules;

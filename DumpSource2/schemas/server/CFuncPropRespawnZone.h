@@ -1,3 +1,3 @@
-class CFuncPropRespawnZone
+class CFuncPropRespawnZone : public CBaseEntity
 {
 };

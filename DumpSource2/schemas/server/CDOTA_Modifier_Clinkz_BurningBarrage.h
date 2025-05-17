@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Clinkz_BurningBarrage
+class CDOTA_Modifier_Clinkz_BurningBarrage : public CDOTA_Buff
 {
 	int32 m_iArrowCount;
 	Vector m_vOriginalTarget;

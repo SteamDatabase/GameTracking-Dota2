@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_Spotlight_Thinker
+class CDOTA_Modifier_Ringmaster_Spotlight_Thinker : public CDOTA_Buff
 {
 	bool self_spotlight;
 	float32 radius;

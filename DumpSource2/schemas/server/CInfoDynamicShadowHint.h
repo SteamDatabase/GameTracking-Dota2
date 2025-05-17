@@ -1,4 +1,4 @@
-class CInfoDynamicShadowHint
+class CInfoDynamicShadowHint : public CPointEntity
 {
 	bool m_bDisabled;
 	float32 m_flRange;

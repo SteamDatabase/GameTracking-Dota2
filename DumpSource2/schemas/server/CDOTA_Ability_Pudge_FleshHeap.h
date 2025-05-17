@@ -1,3 +1,3 @@
-class CDOTA_Ability_Pudge_FleshHeap
+class CDOTA_Ability_Pudge_FleshHeap : public CDOTABaseAbility
 {
 };

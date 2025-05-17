@@ -1,3 +1,3 @@
-class CDOTA_DataDire
+class CDOTA_DataDire : public CDOTA_DataNonSpectator
 {
 };

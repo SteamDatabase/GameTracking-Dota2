@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pangolier_Swashbuckle
+class CDOTA_Modifier_Pangolier_Swashbuckle : public CDOTA_Buff
 {
 	int32 m_nStrikesLeft;
 	float32 attack_interval;

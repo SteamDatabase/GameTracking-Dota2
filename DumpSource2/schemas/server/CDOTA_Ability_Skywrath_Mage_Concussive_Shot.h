@@ -1,4 +1,4 @@
-class CDOTA_Ability_Skywrath_Mage_Concussive_Shot
+class CDOTA_Ability_Skywrath_Mage_Concussive_Shot : public CDOTABaseAbility
 {
 	float32 speed;
 	float32 slow_radius;

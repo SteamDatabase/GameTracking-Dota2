@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CMatch3GameModeDefinition
 {
 	Match3GameModeID_t m_unGameModeID;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Ringmaster_CrystalBall
+class CDOTA_Ability_Ringmaster_CrystalBall : public CDOTABaseAbility
 {
 };

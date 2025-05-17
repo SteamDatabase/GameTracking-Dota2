@@ -1,3 +1,3 @@
-class CDOTA_Ability_Spawnlord_Aura
+class CDOTA_Ability_Spawnlord_Aura : public CDOTABaseAbility
 {
 };

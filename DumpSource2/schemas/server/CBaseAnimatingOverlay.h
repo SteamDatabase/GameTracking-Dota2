@@ -1,3 +1,3 @@
-class CBaseAnimatingOverlay
+class CBaseAnimatingOverlay : public CBaseAnimatingActivity
 {
 };

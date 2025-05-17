@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_HeavensHalberd
+class CDOTA_Modifier_Item_HeavensHalberd : public CDOTA_Buff_Item
 {
 	int32 bonus_health;
 	float32 bonus_health_regen;

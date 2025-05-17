@@ -1,3 +1,3 @@
-class CDOTA_Ability_AghsFort_Ascension_PlasmaField
+class CDOTA_Ability_AghsFort_Ascension_PlasmaField : public CDOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Movement_Speed_30
+class CDOTA_Ability_Special_Bonus_Movement_Speed_30 : public CDOTABaseAbility
 {
 };

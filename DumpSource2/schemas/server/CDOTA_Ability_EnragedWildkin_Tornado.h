@@ -1,4 +1,4 @@
-class CDOTA_Ability_EnragedWildkin_Tornado
+class CDOTA_Ability_EnragedWildkin_Tornado : public CDOTABaseAbility
 {
 	CHandle< CBaseEntity > m_hTornado;
 	CHandle< CBaseEntity > m_hNeutralTarget;

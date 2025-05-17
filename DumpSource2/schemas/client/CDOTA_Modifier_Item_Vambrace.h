@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Vambrace
+class CDOTA_Modifier_Item_Vambrace : public CDOTA_Buff_Item
 {
 	int32 bonus_primary_stat;
 	int32 bonus_secondary_stat;

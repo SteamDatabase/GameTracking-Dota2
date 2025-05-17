@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Broodmother_Silken_Bola
+class CDOTA_Modifier_Broodmother_Silken_Bola : public CDOTA_Buff
 {
 	int32 attack_damage;
 	int32 movement_speed;

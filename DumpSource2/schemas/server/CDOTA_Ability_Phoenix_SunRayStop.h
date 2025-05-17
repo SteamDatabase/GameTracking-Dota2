@@ -1,3 +1,3 @@
-class CDOTA_Ability_Phoenix_SunRayStop
+class CDOTA_Ability_Phoenix_SunRayStop : public CDOTABaseAbility
 {
 };

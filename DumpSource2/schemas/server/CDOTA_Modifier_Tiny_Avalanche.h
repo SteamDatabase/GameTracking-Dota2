@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tiny_Avalanche
+class CDOTA_Modifier_Tiny_Avalanche : public CDOTA_Buff
 {
 	CUtlVector< CDOTA_BaseNPC* > m_pHeroesHit;
 	float32 radius;

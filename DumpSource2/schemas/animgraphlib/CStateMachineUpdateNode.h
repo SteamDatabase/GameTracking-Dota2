@@ -1,4 +1,5 @@
-class CStateMachineUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CStateMachineUpdateNode : public CAnimUpdateNodeBase
 {
 	CAnimStateMachineUpdater m_stateMachine;
 	CUtlVector< CStateNodeStateData > m_stateData;

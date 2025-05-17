@@ -1,3 +1,3 @@
-class C_DOTA_Ability_EmberSpirit_Immolation
+class C_DOTA_Ability_EmberSpirit_Immolation : public C_DOTABaseAbility
 {
 };

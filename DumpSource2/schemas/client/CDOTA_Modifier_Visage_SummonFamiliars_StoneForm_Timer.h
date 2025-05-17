@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Visage_SummonFamiliars_StoneForm_Timer
+class CDOTA_Modifier_Visage_SummonFamiliars_StoneForm_Timer : public CDOTA_Buff
 {
 	float32 stone_duration;
 	GameTime_t m_fStartTime;

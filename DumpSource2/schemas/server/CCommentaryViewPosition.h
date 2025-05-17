@@ -1,3 +1,3 @@
-class CCommentaryViewPosition
+class CCommentaryViewPosition : public CSprite
 {
 };

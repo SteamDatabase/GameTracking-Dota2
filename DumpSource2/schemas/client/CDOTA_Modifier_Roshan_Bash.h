@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Roshan_Bash
+class CDOTA_Modifier_Roshan_Bash : public CDOTA_Buff
 {
 	int32 bash_chance;
 	int32 bonus_damage;

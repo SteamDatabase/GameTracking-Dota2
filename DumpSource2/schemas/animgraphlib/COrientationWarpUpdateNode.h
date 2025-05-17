@@ -1,4 +1,5 @@
-class COrientationWarpUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class COrientationWarpUpdateNode : public CUnaryUpdateNode
 {
 	OrientationWarpMode_t m_eMode;
 	CAnimParamHandle m_hTargetParam;

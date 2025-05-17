@@ -1,3 +1,3 @@
-class CDOTA_Buff_Wards
+class CDOTA_Buff_Wards : public CDOTA_Buff
 {
 };

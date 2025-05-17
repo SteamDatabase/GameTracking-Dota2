@@ -1,4 +1,5 @@
-class CJumpHelperUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CJumpHelperUpdateNode : public CSequenceUpdateNode
 {
 	CAnimParamHandle m_hTargetParam;
 	Vector m_flOriginalJumpMovement;

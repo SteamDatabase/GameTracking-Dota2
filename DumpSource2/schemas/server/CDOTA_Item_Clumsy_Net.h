@@ -1,3 +1,3 @@
-class CDOTA_Item_Clumsy_Net
+class CDOTA_Item_Clumsy_Net : public CDOTA_Item
 {
 };

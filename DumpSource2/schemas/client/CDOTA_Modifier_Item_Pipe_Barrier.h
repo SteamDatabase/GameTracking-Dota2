@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Pipe_Barrier
+class CDOTA_Modifier_Item_Pipe_Barrier : public CDOTA_Buff
 {
 	int32 barrier_amount;
 	int32 barrier_block;

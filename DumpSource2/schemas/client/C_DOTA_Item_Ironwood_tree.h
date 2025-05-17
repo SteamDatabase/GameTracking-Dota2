@@ -1,3 +1,3 @@
-class C_DOTA_Item_Ironwood_tree
+class C_DOTA_Item_Ironwood_tree : public C_DOTA_Item
 {
 };

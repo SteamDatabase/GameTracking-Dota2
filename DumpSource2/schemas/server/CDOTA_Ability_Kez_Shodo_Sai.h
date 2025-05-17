@@ -1,3 +1,3 @@
-class CDOTA_Ability_Kez_Shodo_Sai
+class CDOTA_Ability_Kez_Shodo_Sai : public CDOTA_Ability_Kez_BaseAbility
 {
 };

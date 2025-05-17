@@ -1,3 +1,3 @@
-class CModelPointEntity
+class CModelPointEntity : public CBaseModelEntity
 {
 };

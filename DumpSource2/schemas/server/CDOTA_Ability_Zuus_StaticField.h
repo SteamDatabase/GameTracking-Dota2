@@ -1,3 +1,3 @@
-class CDOTA_Ability_Zuus_StaticField
+class CDOTA_Ability_Zuus_StaticField : public CDOTABaseAbility
 {
 };

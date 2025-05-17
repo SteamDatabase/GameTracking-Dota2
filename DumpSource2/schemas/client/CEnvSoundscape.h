@@ -1,4 +1,4 @@
-class CEnvSoundscape
+class CEnvSoundscape : public C_BaseEntity
 {
 	CEntityIOOutput m_OnPlay;
 	float32 m_flRadius;

@@ -1,4 +1,4 @@
-class CSurvivorsEnemyAbsorber
+class CSurvivorsEnemyAbsorber : public CSurvivorsEnemy
 {
 	float32 m_flPercentHealthAbsorbed;
 	float32 m_flBaseModelScale;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Death_Prophet_5
+class CDOTA_Ability_Special_Bonus_Unique_Death_Prophet_5 : public CDOTABaseAbility
 {
 };

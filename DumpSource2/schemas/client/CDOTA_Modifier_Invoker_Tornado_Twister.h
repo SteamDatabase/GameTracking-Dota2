@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_Tornado_Twister
+class CDOTA_Modifier_Invoker_Tornado_Twister : public CDOTA_Buff
 {
 	float32 twister_radius;
 	int32 twister_damage;

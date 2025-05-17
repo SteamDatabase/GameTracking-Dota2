@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Nian_Roar
+class C_DOTA_Ability_Nian_Roar : public C_DOTABaseAbility
 {
 	int32 base_projectiles;
 	int32 max_projectiles;

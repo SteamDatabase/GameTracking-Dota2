@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mirana_Leap
+class CDOTA_Modifier_Mirana_Leap : public CDOTA_Buff
 {
 	float32 m_flTotalTime;
 	float32 m_flInitialVelocity;

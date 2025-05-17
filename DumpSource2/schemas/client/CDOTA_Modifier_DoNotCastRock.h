@@ -1,3 +1,3 @@
-class CDOTA_Modifier_DoNotCastRock
+class CDOTA_Modifier_DoNotCastRock : public CDOTA_Buff
 {
 };

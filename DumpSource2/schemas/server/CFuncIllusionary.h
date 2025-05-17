@@ -1,3 +1,3 @@
-class CFuncIllusionary
+class CFuncIllusionary : public CBaseModelEntity
 {
 };

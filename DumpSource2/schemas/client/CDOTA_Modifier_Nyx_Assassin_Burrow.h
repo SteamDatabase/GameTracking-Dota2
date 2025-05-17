@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nyx_Assassin_Burrow
+class CDOTA_Modifier_Nyx_Assassin_Burrow : public CDOTA_Modifier_Invisible
 {
 	float32 health_regen_rate;
 	float32 mana_regen_rate;

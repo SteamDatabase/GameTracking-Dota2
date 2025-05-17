@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Silencer_CurseOfTheSilent
+class CDOTA_Modifier_Silencer_CurseOfTheSilent : public CDOTA_Buff
 {
 	int32 damage;
 	ParticleIndex_t nFxIndex;

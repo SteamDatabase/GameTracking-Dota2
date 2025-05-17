@@ -1,3 +1,3 @@
-class CDOTA_Ability_NightStalker_Void
+class CDOTA_Ability_NightStalker_Void : public CDOTABaseAbility
 {
 };

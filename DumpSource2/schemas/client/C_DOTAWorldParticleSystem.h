@@ -1,4 +1,5 @@
-class C_DOTAWorldParticleSystem
+// MEntityAllowsPortraitWorldSpawn
+class C_DOTAWorldParticleSystem : public C_BaseModelEntity
 {
 	int32 m_nType;
 	ParticleIndex_t m_iClientEffectIndex;

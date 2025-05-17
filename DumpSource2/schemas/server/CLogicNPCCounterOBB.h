@@ -1,3 +1,3 @@
-class CLogicNPCCounterOBB
+class CLogicNPCCounterOBB : public CLogicNPCCounterAABB
 {
 };

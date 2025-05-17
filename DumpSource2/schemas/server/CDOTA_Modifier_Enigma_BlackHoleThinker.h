@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enigma_BlackHoleThinker
+class CDOTA_Modifier_Enigma_BlackHoleThinker : public CDOTA_Buff
 {
 	float32 radius;
 	bool m_bFoundFive;

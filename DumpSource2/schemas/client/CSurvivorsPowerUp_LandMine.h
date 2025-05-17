@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_LandMine
+class CSurvivorsPowerUp_LandMine : public CSurvivorsPowerUp
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sParticle;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sExplosionParticle;

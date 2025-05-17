@@ -1,3 +1,4 @@
-class C_DOTA_PortraitBaseModel
+// MEntityAllowsPortraitWorldSpawn
+class C_DOTA_PortraitBaseModel : public CBaseAnimatingActivity
 {
 };

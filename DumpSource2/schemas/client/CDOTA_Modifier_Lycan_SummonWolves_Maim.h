@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lycan_SummonWolves_Maim
+class CDOTA_Modifier_Lycan_SummonWolves_Maim : public CDOTA_Buff
 {
 	int32 maim_movement_speed;
 	int32 maim_attack_speed;

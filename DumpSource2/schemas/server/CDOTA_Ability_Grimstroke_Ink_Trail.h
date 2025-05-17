@@ -1,3 +1,3 @@
-class CDOTA_Ability_Grimstroke_Ink_Trail
+class CDOTA_Ability_Grimstroke_Ink_Trail : public CDOTABaseAbility
 {
 };

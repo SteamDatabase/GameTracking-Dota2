@@ -1,3 +1,3 @@
-class CDOTA_Ability_Tusk_IceShards_Stop
+class CDOTA_Ability_Tusk_IceShards_Stop : public CDOTABaseAbility
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Batrider_StickyNapalm
+class CDOTA_Modifier_Batrider_StickyNapalm : public CDOTA_Modifier_Stacking_Base
 {
 	float32 movement_speed_pct;
 	int32 turn_rate_pct;

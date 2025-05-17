@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tusk_IceShards
+class CDOTA_Ability_Tusk_IceShards : public CDOTABaseAbility
 {
 	int32 m_iProjectile;
 	float32 shard_width;

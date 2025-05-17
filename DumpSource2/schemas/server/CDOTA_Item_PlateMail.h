@@ -1,3 +1,3 @@
-class CDOTA_Item_PlateMail
+class CDOTA_Item_PlateMail : public CDOTA_Item
 {
 };

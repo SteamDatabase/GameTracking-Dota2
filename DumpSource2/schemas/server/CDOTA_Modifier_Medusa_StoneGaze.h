@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Medusa_StoneGaze
+class CDOTA_Modifier_Medusa_StoneGaze : public CDOTA_Buff
 {
 	float32 radius;
 	float32 vision_cone;

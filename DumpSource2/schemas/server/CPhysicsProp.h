@@ -1,4 +1,12 @@
-class CPhysicsProp
+// MNetworkExcludeByName = "m_flAnimTime"
+// MNetworkExcludeByName = "m_flexWeight"
+// MNetworkExcludeByName = "m_blinktoggle"
+// MNetworkExcludeByUserGroup = "m_flPoseParameter"
+// MNetworkExcludeByName = "m_animationController.m_flPlaybackRate"
+// MNetworkExcludeByUserGroup = "overlay_vars"
+// MNetworkIncludeByName = "m_spawnflags"
+// MNetworkVarNames = "bool m_bAwake"
+class CPhysicsProp : public CBreakableProp
 {
 	CEntityIOOutput m_MotionEnabled;
 	CEntityIOOutput m_OnAwakened;
@@ -35,5 +43,6 @@ class CPhysicsProp
 	CUtlSymbolLarge[4] m_strItemClass;
 	int32[4] m_nItemCount;
 	bool m_bRemovableForAmmoBalancing;
+	// MNetworkEnable
 	bool m_bAwake;
 };

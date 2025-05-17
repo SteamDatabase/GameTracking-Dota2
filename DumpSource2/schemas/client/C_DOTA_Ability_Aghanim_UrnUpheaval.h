@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Aghanim_UrnUpheaval
+class C_DOTA_Ability_Aghanim_UrnUpheaval : public C_DOTABaseAbility
 {
 	Vector m_vPosition;
 	float32 aoe;

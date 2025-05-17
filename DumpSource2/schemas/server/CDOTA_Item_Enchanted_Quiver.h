@@ -1,3 +1,3 @@
-class CDOTA_Item_Enchanted_Quiver
+class CDOTA_Item_Enchanted_Quiver : public CDOTA_Item
 {
 };

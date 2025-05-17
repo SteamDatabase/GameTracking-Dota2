@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Bristleback_ViscousNasalGoo
+class C_DOTA_Ability_Bristleback_ViscousNasalGoo : public C_DOTABaseAbility
 {
 };

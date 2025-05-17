@@ -1,4 +1,4 @@
-class CDOTA_Ability_Dawnbreaker_Solar_Guardian
+class CDOTA_Ability_Dawnbreaker_Solar_Guardian : public CDOTABaseAbility
 {
 	CHandle< CBaseEntity > m_hThinker;
 	bool m_bJumping;

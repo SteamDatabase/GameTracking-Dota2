@@ -1,4 +1,4 @@
-class CAI_ExpresserWithFollowup
+class CAI_ExpresserWithFollowup : public CAI_Expresser
 {
 	ResponseFollowup* m_pPostponedFollowup;
 };

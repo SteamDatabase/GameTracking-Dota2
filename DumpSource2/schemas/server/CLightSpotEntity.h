@@ -1,3 +1,3 @@
-class CLightSpotEntity
+class CLightSpotEntity : public CLightEntity
 {
 };

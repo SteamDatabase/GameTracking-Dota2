@@ -1,4 +1,4 @@
-class CDOTA_Ability_Broodmother_StickySnare
+class CDOTA_Ability_Broodmother_StickySnare : public C_DOTABaseAbility
 {
 	Vector m_vEndpoint;
 	float32 duration;

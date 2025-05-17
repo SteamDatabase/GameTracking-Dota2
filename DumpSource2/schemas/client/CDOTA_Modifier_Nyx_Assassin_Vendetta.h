@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nyx_Assassin_Vendetta
+class CDOTA_Modifier_Nyx_Assassin_Vendetta : public CDOTA_Modifier_Invisible
 {
 	int32 bonus_damage;
 	int32 movement_speed;

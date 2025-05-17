@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Obsidian_Destroyer_Equilibrium
+class CDOTA_Modifier_Obsidian_Destroyer_Equilibrium : public CDOTA_Buff
 {
 	int32 proc_chance;
 	int32 mana_restore;

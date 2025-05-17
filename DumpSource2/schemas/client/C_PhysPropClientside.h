@@ -1,4 +1,4 @@
-class C_PhysPropClientside
+class C_PhysPropClientside : public C_BreakableProp
 {
 	GameTime_t m_flTouchDelta;
 	GameTime_t m_fDeathTime;

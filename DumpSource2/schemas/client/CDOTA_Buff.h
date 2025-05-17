@@ -1,8 +1,9 @@
-class CDOTA_Buff
+class CDOTA_Buff : public C_HorizontalMotionController
 {
 	CUtlSymbolLarge m_name;
 	CUtlSymbolLarge m_iszModifierAura;
 	int32 m_iSerialNumber;
+	// MFieldVerificationName = "m_iStringIndex"
 	int32 m_iPaddingToMakeSchemaHappy;
 	int32 m_iIndex;
 	GameTime_t m_flCreationTime;
@@ -21,6 +22,7 @@ class CDOTA_Buff
 	float32 m_flAuraRadius;
 	int32 m_iTeam;
 	int32 m_iAttributes;
+	// MFieldVerificationName = "m_iTooltipParity"
 	int16 m_iTooltipParity;
 	bitfield:1 m_bIsAura;
 	bitfield:1 m_bIsAuraActiveOnDeath;

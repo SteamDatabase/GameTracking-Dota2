@@ -1,3 +1,3 @@
-class CDOTA_Item_Silver_Edge
+class CDOTA_Item_Silver_Edge : public CDOTA_Item
 {
 };

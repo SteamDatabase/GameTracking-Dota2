@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Venomancer_VenomousGale
+class CDOTA_Modifier_Venomancer_VenomousGale : public CDOTA_Buff
 {
 	float32 explosion_stun_duration;
 	int32 explosion_damage;

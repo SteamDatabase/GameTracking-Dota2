@@ -1,4 +1,4 @@
-class CDOTA_Modifier_CrystalMaiden_Arcane_Overflow_Active
+class CDOTA_Modifier_CrystalMaiden_Arcane_Overflow_Active : public CDOTA_Buff
 {
 	float32 mana_battery_radius;
 	float32 mana_battery_mana_pct;

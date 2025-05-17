@@ -1,3 +1,3 @@
-class CDOTA_Item_Blitz_Knuckles
+class CDOTA_Item_Blitz_Knuckles : public CDOTA_Item
 {
 };

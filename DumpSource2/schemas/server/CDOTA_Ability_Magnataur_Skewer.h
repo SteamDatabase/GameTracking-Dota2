@@ -1,4 +1,4 @@
-class CDOTA_Ability_Magnataur_Skewer
+class CDOTA_Ability_Magnataur_Skewer : public CDOTABaseAbility
 {
 	float32 skewer_radius;
 	float32 skewer_speed;

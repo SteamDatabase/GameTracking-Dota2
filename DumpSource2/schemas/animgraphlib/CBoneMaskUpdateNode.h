@@ -1,4 +1,5 @@
-class CBoneMaskUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CBoneMaskUpdateNode : public CBinaryUpdateNode
 {
 	int32 m_nWeightListIndex;
 	float32 m_flRootMotionBlend;

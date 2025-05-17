@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Watch_Tower
+class CDOTA_Modifier_Watch_Tower : public CDOTA_Buff
 {
 	int32 m_iCapturingTeam;
 	float32 m_flCaptureProgress;

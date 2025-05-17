@@ -1,3 +1,3 @@
-class C_DOTABaseCustomHeroPickRules
+class C_DOTABaseCustomHeroPickRules : public C_BaseEntity
 {
 };

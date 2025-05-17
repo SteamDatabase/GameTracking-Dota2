@@ -1,4 +1,5 @@
-class CAimMatrixUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CAimMatrixUpdateNode : public CUnaryUpdateNode
 {
 	AimMatrixOpFixedSettings_t m_opFixedSettings;
 	AnimVectorSource m_target;

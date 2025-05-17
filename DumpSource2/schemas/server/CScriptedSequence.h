@@ -1,4 +1,4 @@
-class CScriptedSequence
+class CScriptedSequence : public CBaseEntity
 {
 	CUtlSymbolLarge m_iszEntry;
 	CUtlSymbolLarge m_iszPreIdle;

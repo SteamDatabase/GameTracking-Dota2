@@ -1,4 +1,6 @@
-class CSurvivorsEnemyDefinition_Resurrector
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+class CSurvivorsEnemyDefinition_Resurrector : public CSurvivorsEnemyDefinition
 {
 	int32 m_nNumResurrectionTimes;
 	float32 m_flMovementSpeedMultiplierPerDeath;

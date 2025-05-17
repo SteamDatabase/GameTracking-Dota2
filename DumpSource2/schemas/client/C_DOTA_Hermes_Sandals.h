@@ -1,3 +1,3 @@
-class C_DOTA_Hermes_Sandals
+class C_DOTA_Hermes_Sandals : public C_DOTA_Item
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tinker_Laser
+class CDOTA_Ability_Tinker_Laser : public CDOTABaseAbility
 {
 	Vector m_vProjectileLocation;
 	bool bBlocked;

@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Courier_Shield
+class CDOTA_Modifier_Courier_Shield : public CDOTA_Buff
 {
 };

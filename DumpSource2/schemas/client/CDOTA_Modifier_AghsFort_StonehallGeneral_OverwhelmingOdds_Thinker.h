@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_StonehallGeneral_OverwhelmingOdds_Thinker
+class CDOTA_Modifier_AghsFort_StonehallGeneral_OverwhelmingOdds_Thinker : public CDOTA_Buff
 {
 	int32 radius;
 	int32 max_steps;

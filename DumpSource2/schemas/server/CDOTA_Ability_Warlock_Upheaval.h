@@ -1,4 +1,4 @@
-class CDOTA_Ability_Warlock_Upheaval
+class CDOTA_Ability_Warlock_Upheaval : public CDOTABaseAbility
 {
 	Vector m_vPosition;
 	float32 aoe;

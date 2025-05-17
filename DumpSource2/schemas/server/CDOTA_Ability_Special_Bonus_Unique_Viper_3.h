@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Viper_3
+class CDOTA_Ability_Special_Bonus_Unique_Viper_3 : public CDOTABaseAbility
 {
 };

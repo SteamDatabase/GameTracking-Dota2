@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomLancer_PhantomEdge_Boost
+class CDOTA_Modifier_PhantomLancer_PhantomEdge_Boost : public CDOTA_Buff
 {
 	int32 bonus_speed;
 	float32 agility_duration;

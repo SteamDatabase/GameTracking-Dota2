@@ -1,3 +1,3 @@
-class CDOTA_Ability_Treant_LeechSeed
+class CDOTA_Ability_Treant_LeechSeed : public CDOTABaseAbility
 {
 };

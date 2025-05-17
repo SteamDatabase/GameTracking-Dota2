@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Knockback
+class CDOTA_Modifier_Knockback : public CDOTA_Buff
 {
 	float32 knockback_distance;
 	int32 knockback_height;

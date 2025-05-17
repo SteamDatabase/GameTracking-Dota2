@@ -1,3 +1,3 @@
-class CDOTA_Modifier_NagaSiren_RipTideCounter
+class CDOTA_Modifier_NagaSiren_RipTideCounter : public CDOTA_Buff
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seasonal_Summon_TI9_Balloon_Thinker
+class CDOTA_Modifier_Seasonal_Summon_TI9_Balloon_Thinker : public CDOTA_Buff
 {
 	float32 speed;
 	int32 min_distance_before_bounce;

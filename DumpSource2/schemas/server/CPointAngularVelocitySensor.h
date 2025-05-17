@@ -1,4 +1,4 @@
-class CPointAngularVelocitySensor
+class CPointAngularVelocitySensor : public CPointEntity
 {
 	CHandle< CBaseEntity > m_hTargetEntity;
 	float32 m_flThreshold;

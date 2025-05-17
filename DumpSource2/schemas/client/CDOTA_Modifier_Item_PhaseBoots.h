@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_PhaseBoots
+class CDOTA_Modifier_Item_PhaseBoots : public CDOTA_Buff_Item
 {
 	int32 bonus_movement_speed;
 	int32 bonus_damage_melee;

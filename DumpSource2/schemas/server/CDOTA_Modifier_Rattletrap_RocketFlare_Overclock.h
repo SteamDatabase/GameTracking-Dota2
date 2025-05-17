@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_RocketFlare_Overclock
+class CDOTA_Modifier_Rattletrap_RocketFlare_Overclock : public CDOTA_Buff
 {
 	float32 rocket_flare_interval;
 	int32 rocket_flare_offset_pct;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Silencer_GlobalSilence
+class CDOTA_Modifier_Silencer_GlobalSilence : public CDOTA_Buff
 {
 	bool undispellable;
 };

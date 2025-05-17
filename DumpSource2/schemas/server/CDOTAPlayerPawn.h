@@ -1,3 +1,27 @@
-class CDOTAPlayerPawn
+// MNetworkUserGroupProxy = "CDOTAPlayerPawn"
+// MNetworkExcludeByName = "m_angRotation"
+// MNetworkExcludeByName = "m_flAnimTime"
+// MNetworkExcludeByUserGroup = "m_flCycle"
+// MNetworkExcludeByName = "m_flPlaybackRate"
+// MNetworkExcludeByName = "m_flPoseParameter"
+// MNetworkExcludeByName = "m_flSimulationTime"
+// MNetworkExcludeByName = "m_baseLayer.m_hSequence"
+// MNetworkExcludeByName = "m_vecVelocity"
+// MNetworkExcludeByName = "m_flexWeight"
+// MNetworkExcludeByUserGroup = "overlay_vars"
+// MNetworkExcludeByName = "m_nTickBase"
+// MNetworkUserGroupProxy = "CDOTAPlayerPawn"
+// MNetworkOverride = "m_vecOrigin CGameSceneNode"
+// MNetworkOverride = "m_cellX CNetworkOriginCellCoordQuantizedVector"
+// MNetworkOverride = "m_cellY CNetworkOriginCellCoordQuantizedVector"
+// MNetworkOverride = "m_cellZ CNetworkOriginCellCoordQuantizedVector"
+// MNetworkOverride = "m_vecX CNetworkOriginCellCoordQuantizedVector"
+// MNetworkOverride = "m_vecY CNetworkOriginCellCoordQuantizedVector"
+// MNetworkOverride = "m_vecZ CNetworkOriginCellCoordQuantizedVector"
+// MNetworkVarTypeOverride = "CDOTAPlayer_CameraServices m_pCameraServices"
+// MNetworkIncludeByName = "m_pCameraServices"
+// MNetworkVarTypeOverride = "CDOTAPlayer_MovementServices m_pMovementServices"
+// MNetworkIncludeByName = "m_pMovementServices"
+class CDOTAPlayerPawn : public CBasePlayerPawn
 {
 };

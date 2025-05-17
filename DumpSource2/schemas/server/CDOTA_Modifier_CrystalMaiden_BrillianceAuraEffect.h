@@ -1,4 +1,4 @@
-class CDOTA_Modifier_CrystalMaiden_BrillianceAuraEffect
+class CDOTA_Modifier_CrystalMaiden_BrillianceAuraEffect : public CDOTA_Buff
 {
 	float32 base_mana_regen;
 	float32 proximity_bonus_factor;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ArcWarden_Flux
+class CDOTA_Modifier_ArcWarden_Flux : public CDOTA_Buff
 {
 	int32 m_nCasterTeam;
 	float32 damage_per_second;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_HP_100
+class CDOTA_Ability_Special_Bonus_HP_100 : public CDOTABaseAbility
 {
 };

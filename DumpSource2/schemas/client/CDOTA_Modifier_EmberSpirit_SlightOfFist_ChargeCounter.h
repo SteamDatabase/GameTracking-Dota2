@@ -1,3 +1,3 @@
-class CDOTA_Modifier_EmberSpirit_SlightOfFist_ChargeCounter
+class CDOTA_Modifier_EmberSpirit_SlightOfFist_ChargeCounter : public CDOTA_Modifier_LegacyChargeCounter
 {
 };

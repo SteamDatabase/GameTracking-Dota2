@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PrimalBeast_Pulverize_Self
+class CDOTA_Modifier_PrimalBeast_Pulverize_Self : public CDOTA_Buff
 {
 	CHandle< C_DOTA_BaseNPC > m_hTarget;
 	Vector m_vPulverizeCenter;

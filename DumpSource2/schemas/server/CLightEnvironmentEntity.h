@@ -1,3 +1,3 @@
-class CLightEnvironmentEntity
+class CLightEnvironmentEntity : public CLightDirectionalEntity
 {
 };

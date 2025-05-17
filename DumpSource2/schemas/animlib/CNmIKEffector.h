@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmIKEffector
 {
 	int32 m_nBodyIndex;

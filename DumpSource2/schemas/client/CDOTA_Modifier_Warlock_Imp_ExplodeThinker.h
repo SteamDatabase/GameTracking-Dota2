@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Warlock_Imp_ExplodeThinker
+class CDOTA_Modifier_Warlock_Imp_ExplodeThinker : public CDOTA_Buff
 {
 	float32 explosion_radius;
 	float32 explosion_dmg;

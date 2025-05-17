@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ContextualTips
+class CDOTA_Modifier_ContextualTips : public CDOTA_Buff
 {
 	bool m_bAllEnemiesBots;
 	GameTime_t m_flGloblLastTipSendTime;

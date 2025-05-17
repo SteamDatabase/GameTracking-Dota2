@@ -1,3 +1,3 @@
-class CDOTA_Ability_Phantom_Assassin_Immaterial
+class CDOTA_Ability_Phantom_Assassin_Immaterial : public CDOTABaseAbility
 {
 };

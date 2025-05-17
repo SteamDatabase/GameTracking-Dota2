@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Solar_Guardian_AirTime
+class CDOTA_Modifier_Dawnbreaker_Solar_Guardian_AirTime : public CDOTA_Buff
 {
 	float32 m_flStartZ;
 	float32 m_flCurTime;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Mana_Break_35
+class CDOTA_Ability_Special_Bonus_Mana_Break_35 : public CDOTABaseAbility
 {
 };

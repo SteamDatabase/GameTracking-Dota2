@@ -1,3 +1,3 @@
-class CDOTA_Ability_AntiMage_Scepter
+class CDOTA_Ability_AntiMage_Scepter : public CDOTABaseAbility
 {
 };

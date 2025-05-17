@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_MortimerKisses
+class CSurvivorsPowerUp_MortimerKisses : public CSurvivorsPowerUp_AreaAttack_Circle
 {
 	CUtlVector< float32 > m_vecQueuedAttackTimers;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sArtilleryParticle;

@@ -1,3 +1,3 @@
-class CDOTA_Item_JumpBoots
+class CDOTA_Item_JumpBoots : public CDOTA_Item
 {
 };

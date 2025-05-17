@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MudGolem_RockDestroy
+class CDOTA_Modifier_MudGolem_RockDestroy : public CDOTA_Buff
 {
 	int32 radius;
 	float32 duration;

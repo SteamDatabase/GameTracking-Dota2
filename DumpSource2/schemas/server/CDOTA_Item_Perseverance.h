@@ -1,3 +1,3 @@
-class CDOTA_Item_Perseverance
+class CDOTA_Item_Perseverance : public CDOTA_Item
 {
 };

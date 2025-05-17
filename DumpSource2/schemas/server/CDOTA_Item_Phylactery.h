@@ -1,3 +1,3 @@
-class CDOTA_Item_Phylactery
+class CDOTA_Item_Phylactery : public CDOTA_Item
 {
 };

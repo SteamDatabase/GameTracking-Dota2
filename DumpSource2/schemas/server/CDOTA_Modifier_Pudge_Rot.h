@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pudge_Rot
+class CDOTA_Modifier_Pudge_Rot : public CDOTA_Buff
 {
 	int32 rot_damage;
 	int32 rot_slow;

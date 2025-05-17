@@ -14,5 +14,7 @@ enum TakeDamageFlags_t : uint64_t
 	DFLAG_RADIUS_DMG = 1024,
 	DFLAG_FORCEREDUCEARMOR_DMG = 2048,
 	DFLAG_SUPPRESS_INTERRUPT_FLINCH = 4096,
+	// MPropertySuppressEnumerator
+	// MEnumeratorIsNotAFlag
 	DMG_LASTDFLAG = 4096,
 };

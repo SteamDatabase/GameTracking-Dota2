@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kunkka_Torrent_Thinker
+class CDOTA_Modifier_Kunkka_Torrent_Thinker : public CDOTA_Buff
 {
 	bool m_bShowEnemies;
 	bool m_bTorrentStorm;

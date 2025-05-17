@@ -1,4 +1,4 @@
-class CItem
+class CItem : public CBaseAnimatingActivity
 {
 	CEntityIOOutput m_OnPlayerTouch;
 	CEntityIOOutput m_OnPlayerPickup;

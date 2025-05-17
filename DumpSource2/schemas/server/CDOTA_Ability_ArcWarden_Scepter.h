@@ -1,3 +1,3 @@
-class CDOTA_Ability_ArcWarden_Scepter
+class CDOTA_Ability_ArcWarden_Scepter : public CDOTABaseAbility
 {
 };

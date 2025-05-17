@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_UltimateScepter
+class CDOTA_Item_Recipe_UltimateScepter : public CDOTA_Item
 {
 };

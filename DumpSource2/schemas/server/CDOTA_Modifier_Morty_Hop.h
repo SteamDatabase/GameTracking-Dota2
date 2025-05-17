@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Morty_Hop
+class CDOTA_Modifier_Morty_Hop : public CDOTA_Buff
 {
 	Vector m_vStartPosition;
 	Vector m_vTargetPosition;

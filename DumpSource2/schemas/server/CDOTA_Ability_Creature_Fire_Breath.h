@@ -1,4 +1,4 @@
-class CDOTA_Ability_Creature_Fire_Breath
+class CDOTA_Ability_Creature_Fire_Breath : public CDOTABaseAbility
 {
 	int32 speed;
 	int32 projectile_count;

@@ -1,4 +1,4 @@
-class CDOTA_Modifer_Item_DandelionAmulet
+class CDOTA_Modifer_Item_DandelionAmulet : public CDOTA_Buff_Item
 {
 	int32 move_speed;
 	int32 mana;

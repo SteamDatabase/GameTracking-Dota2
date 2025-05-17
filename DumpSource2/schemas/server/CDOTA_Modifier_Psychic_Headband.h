@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Psychic_Headband
+class CDOTA_Modifier_Psychic_Headband : public CDOTA_Buff
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

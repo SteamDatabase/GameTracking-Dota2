@@ -1,4 +1,4 @@
-class CRagdollConstraint
+class CRagdollConstraint : public CPhysConstraint
 {
 	float32 m_xmin;
 	float32 m_xmax;

@@ -1,4 +1,4 @@
-class CRagdollMagnet
+class CRagdollMagnet : public CPointEntity
 {
 	bool m_bDisabled;
 	float32 m_radius;

@@ -1,3 +1,3 @@
-class C_DOTA_Item_HellbearTotem
+class C_DOTA_Item_HellbearTotem : public C_DOTA_Item
 {
 };

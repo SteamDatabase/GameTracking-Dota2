@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Samurai_Tabi_Int
+class CDOTA_Modifier_Item_Samurai_Tabi_Int : public CDOTA_Buff_Item
 {
 	int32 stat_per_tick;
 	float32 base_interval;

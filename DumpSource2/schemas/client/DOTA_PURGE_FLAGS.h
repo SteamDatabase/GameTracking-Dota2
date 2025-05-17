@@ -1,3 +1,4 @@
+// MEnumFlagsWithOverlappingBits
 enum DOTA_PURGE_FLAGS : uint32_t
 {
 	DOTA_PURGE_FLAG_NONE = 0,

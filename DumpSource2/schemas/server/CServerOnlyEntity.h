@@ -1,3 +1,3 @@
-class CServerOnlyEntity
+class CServerOnlyEntity : public CBaseEntity
 {
 };

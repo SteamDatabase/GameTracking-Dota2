@@ -1,3 +1,3 @@
-class CDOTA_Ability_Sven_Vanquisher
+class CDOTA_Ability_Sven_Vanquisher : public CDOTABaseAbility
 {
 };

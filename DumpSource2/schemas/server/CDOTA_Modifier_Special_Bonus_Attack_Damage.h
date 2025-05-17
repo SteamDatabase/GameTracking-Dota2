@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Special_Bonus_Attack_Damage
+class CDOTA_Modifier_Special_Bonus_Attack_Damage : public CDOTA_Buff
 {
 	int32 value;
 };

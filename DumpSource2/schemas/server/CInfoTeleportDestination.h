@@ -1,3 +1,3 @@
-class CInfoTeleportDestination
+class CInfoTeleportDestination : public CPointEntity
 {
 };

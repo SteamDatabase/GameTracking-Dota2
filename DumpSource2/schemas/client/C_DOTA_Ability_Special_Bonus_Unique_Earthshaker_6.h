@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Earthshaker_6
+class C_DOTA_Ability_Special_Bonus_Unique_Earthshaker_6 : public C_DOTABaseAbility
 {
 };

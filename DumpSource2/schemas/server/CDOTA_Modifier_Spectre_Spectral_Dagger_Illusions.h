@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Spectre_Spectral_Dagger_Illusions
+class CDOTA_Modifier_Spectre_Spectral_Dagger_Illusions : public CDOTA_Buff
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_SpiritLink
+class CDOTA_Modifier_LoneDruid_SpiritLink : public CDOTA_Buff
 {
 	int32 bonus_attack_speed;
 	int32 lifesteal_percent;

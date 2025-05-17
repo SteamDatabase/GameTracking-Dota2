@@ -1,3 +1,3 @@
-class C_DOTA_Ability_KoboldTaskmaster_SpeedAura
+class C_DOTA_Ability_KoboldTaskmaster_SpeedAura : public C_DOTABaseAbility
 {
 };

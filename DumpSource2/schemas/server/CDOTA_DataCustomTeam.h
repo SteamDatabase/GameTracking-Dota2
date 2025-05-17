@@ -1,3 +1,3 @@
-class CDOTA_DataCustomTeam
+class CDOTA_DataCustomTeam : public CDOTA_DataNonSpectator
 {
 };

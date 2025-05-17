@@ -1,4 +1,5 @@
-class CDOTA_Ability_Pudge_MeatHook
+// MNetworkVarNames = "int m_nConsecutiveHits"
+class CDOTA_Ability_Pudge_MeatHook : public CDOTABaseAbility
 {
 	Vector m_vProjectileLocation;
 	float32 hook_speed;
@@ -17,6 +18,7 @@ class CDOTA_Ability_Pudge_MeatHook
 	CHandle< CBaseEntity > m_hSourceCaster;
 	int32 m_nNextConsecutiveHitCount;
 	Vector m_vEndpoint;
+	// MNetworkEnable
 	int32 m_nConsecutiveHits;
 	bool m_bIsVectorTargeted;
 	Vector m_vTurnLocation;

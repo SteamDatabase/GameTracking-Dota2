@@ -1,3 +1,3 @@
-class CDOTA_Ability_TemplarAssassin_SelfTrap
+class CDOTA_Ability_TemplarAssassin_SelfTrap : public CDOTABaseAbility
 {
 };

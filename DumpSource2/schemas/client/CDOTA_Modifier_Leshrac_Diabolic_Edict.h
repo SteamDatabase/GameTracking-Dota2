@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Leshrac_Diabolic_Edict
+class CDOTA_Modifier_Leshrac_Diabolic_Edict : public CDOTA_Buff
 {
 	int32 num_explosions;
 	float32 radius;

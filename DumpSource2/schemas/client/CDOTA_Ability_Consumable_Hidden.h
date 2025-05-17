@@ -1,3 +1,3 @@
-class CDOTA_Ability_Consumable_Hidden
+class CDOTA_Ability_Consumable_Hidden : public C_DOTABaseAbility
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LegionCommander_OverwhelmingOdds_Shield
+class CDOTA_Modifier_LegionCommander_OverwhelmingOdds_Shield : public CDOTA_Buff
 {
 	int32 m_nDamageAbsorbed;
 	bool m_bStartedTimer;

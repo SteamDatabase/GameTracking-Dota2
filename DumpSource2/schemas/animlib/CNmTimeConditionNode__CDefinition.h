@@ -1,4 +1,5 @@
-class CNmTimeConditionNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmTimeConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
 {
 	int16 m_sourceStateNodeIdx;
 	int16 m_nInputValueNodeIdx;

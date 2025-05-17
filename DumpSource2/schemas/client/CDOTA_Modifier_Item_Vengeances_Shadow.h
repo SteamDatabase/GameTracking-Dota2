@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Vengeances_Shadow
+class CDOTA_Modifier_Item_Vengeances_Shadow : public CDOTA_Buff_Item
 {
 	int32 bonus_health;
 	int32 damage_return;

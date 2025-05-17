@@ -1,4 +1,4 @@
-class CDOTA_Ability_VoidSpirit_ResonantPulse
+class CDOTA_Ability_VoidSpirit_ResonantPulse : public CDOTABaseAbility
 {
 	bool m_bGrantedScepterCharges;
 	float32 buff_duration;

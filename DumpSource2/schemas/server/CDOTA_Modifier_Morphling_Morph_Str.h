@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Morphling_Morph_Str
+class CDOTA_Modifier_Morphling_Morph_Str : public CDOTA_Buff
 {
 	float32 mana_cost;
 	int32 points_per_tick;

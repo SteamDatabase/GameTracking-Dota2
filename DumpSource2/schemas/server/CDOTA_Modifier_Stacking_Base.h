@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Stacking_Base
+class CDOTA_Modifier_Stacking_Base : public CDOTA_Buff
 {
 	int32 max_stacks;
 	bool destroy_on_zero_stacks;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Miniboss_Minion_Deflecting_Shield_Buff
+class CDOTA_Modifier_Miniboss_Minion_Deflecting_Shield_Buff : public CDOTA_Buff
 {
 	float32 max_barrier_pct_max_health;
 	float32 owner_max_barrier_pct_max_health;

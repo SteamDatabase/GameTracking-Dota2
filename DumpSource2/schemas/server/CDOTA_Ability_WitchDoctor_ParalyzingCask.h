@@ -1,4 +1,4 @@
-class CDOTA_Ability_WitchDoctor_ParalyzingCask
+class CDOTA_Ability_WitchDoctor_ParalyzingCask : public CDOTABaseAbility
 {
 	int32 m_iBounces;
 	int32 bounces;

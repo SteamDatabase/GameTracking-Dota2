@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Juggernaut_BladeFury
+class CDOTA_Modifier_Juggernaut_BladeFury : public CDOTA_Buff
 {
 	float32 blade_fury_radius;
 	int32 blade_fury_damage_per_tick;

@@ -1,4 +1,4 @@
-class CFilterEnemy
+class CFilterEnemy : public CBaseFilter
 {
 	CUtlSymbolLarge m_iszEnemyName;
 	float32 m_flRadius;

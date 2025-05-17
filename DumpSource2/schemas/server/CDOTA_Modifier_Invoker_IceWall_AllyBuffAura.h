@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_IceWall_AllyBuffAura
+class CDOTA_Modifier_Invoker_IceWall_AllyBuffAura : public CDOTA_Buff
 {
 	float32 radius;
 	int32 ally_speed;

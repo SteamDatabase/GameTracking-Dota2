@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KeeperOfTheLight_Radiant_Bind
+class CDOTA_Modifier_KeeperOfTheLight_Radiant_Bind : public CDOTA_Buff
 {
 	float32 slow;
 	int32 magic_resistance;

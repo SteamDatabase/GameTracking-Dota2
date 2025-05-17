@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Magic_Resistance_100
+class CDOTA_Ability_Special_Bonus_Magic_Resistance_100 : public CDOTABaseAbility
 {
 };

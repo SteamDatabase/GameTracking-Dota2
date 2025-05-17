@@ -1,3 +1,3 @@
-class CDOTA_Ability_ForgedSpirit_MeltingStrike
+class CDOTA_Ability_ForgedSpirit_MeltingStrike : public CDOTABaseAbility
 {
 };

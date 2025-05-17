@@ -1,3 +1,3 @@
-class CDOTA_Item_CraniumBasher
+class CDOTA_Item_CraniumBasher : public CDOTA_Item
 {
 };

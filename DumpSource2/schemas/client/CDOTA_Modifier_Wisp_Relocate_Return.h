@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Wisp_Relocate_Return
+class CDOTA_Modifier_Wisp_Relocate_Return : public CDOTA_Buff
 {
 	CHandle< C_BaseEntity > m_hTarget;
 	Vector m_vecReturnPosition;

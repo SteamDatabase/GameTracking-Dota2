@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Winter_Wyvern_Winters_Curse_Aura
+class CDOTA_Modifier_Winter_Wyvern_Winters_Curse_Aura : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hTarget;
 	int32 m_nAlliesTaunted;

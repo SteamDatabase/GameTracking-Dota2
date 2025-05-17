@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Cast_Range_125
+class CDOTA_Ability_Special_Bonus_Cast_Range_125 : public CDOTABaseAbility
 {
 };

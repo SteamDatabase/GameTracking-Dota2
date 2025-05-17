@@ -1,4 +1,4 @@
-class CDOTA_Ability_Huskar_Berserkers_Blood
+class CDOTA_Ability_Huskar_Berserkers_Blood : public CDOTABaseAbility
 {
 	bool activatable;
 	int32 m_nHealthCost;

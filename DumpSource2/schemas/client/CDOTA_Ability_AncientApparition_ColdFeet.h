@@ -1,3 +1,3 @@
-class CDOTA_Ability_AncientApparition_ColdFeet
+class CDOTA_Ability_AncientApparition_ColdFeet : public C_DOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class CNmValueNode::CDefinition
+class CNmValueNode::CDefinition : public CNmGraphNode::CDefinition
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Item_InvisibilityEdge
+class CDOTA_Item_InvisibilityEdge : public CDOTA_Item
 {
 };

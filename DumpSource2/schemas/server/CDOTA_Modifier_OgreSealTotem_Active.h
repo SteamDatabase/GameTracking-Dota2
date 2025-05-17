@@ -1,4 +1,4 @@
-class CDOTA_Modifier_OgreSealTotem_Active
+class CDOTA_Modifier_OgreSealTotem_Active : public CDOTA_Buff
 {
 	float32 m_flTotalTime;
 	float32 m_flInitialVelocity;

@@ -1,4 +1,4 @@
-class CLogicRelay
+class CLogicRelay : public CLogicalEntity
 {
 	bool m_bDisabled;
 	bool m_bWaitForRefire;

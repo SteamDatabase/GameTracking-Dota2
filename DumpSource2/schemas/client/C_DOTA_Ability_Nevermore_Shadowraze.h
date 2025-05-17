@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Nevermore_Shadowraze
+class C_DOTA_Ability_Nevermore_Shadowraze : public C_DOTABaseAbility
 {
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXIndexB;

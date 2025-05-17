@@ -1,3 +1,3 @@
-class CDOTA_Modifier_BookOfIntelligence
+class CDOTA_Modifier_BookOfIntelligence : public CDOTA_Buff
 {
 };

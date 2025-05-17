@@ -1,4 +1,4 @@
-class CDOTA_Item_TeleportScroll
+class CDOTA_Item_TeleportScroll : public CDOTA_Item
 {
 	CHandle< CBaseEntity > m_hTeleportTarget;
 	ParticleIndex_t m_nFXOrigin;

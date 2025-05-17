@@ -1,4 +1,5 @@
-class C_PortraitWorldUnit
+// MEntityAllowsPortraitWorldSpawn
+class C_PortraitWorldUnit : public C_DOTA_BaseNPC
 {
 	CEntityIOOutput m_OutputAnimOver;
 	bool m_bSuppressIntroEffects;

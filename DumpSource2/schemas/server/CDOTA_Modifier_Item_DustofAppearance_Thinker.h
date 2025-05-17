@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_DustofAppearance_Thinker
+class CDOTA_Modifier_Item_DustofAppearance_Thinker : public CDOTA_Buff
 {
 	float32 radius;
 	float32 duration;

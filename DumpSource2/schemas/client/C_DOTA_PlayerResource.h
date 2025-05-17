@@ -1,11 +1,25 @@
-class C_DOTA_PlayerResource
+// MNetworkVarNames = "PlayerResourcePlayerTeamData_t m_vecPlayerTeamData"
+// MNetworkVarNames = "PlayerResourcePlayerData_t m_vecPlayerData"
+// MNetworkVarNames = "PlayerResourceBroadcasterData_t m_vecBrodcasterData"
+// MNetworkVarNames = "uint32 m_vecEventsForDisplay"
+// MNetworkVarNames = "int8 m_nPrimaryEventIndex"
+// MNetworkVarNames = "uint32 m_nObsoleteEventIDAssociatedWithEventData"
+class C_DOTA_PlayerResource : public C_BaseEntity
 {
 	bool m_bWasDataUpdateCreated;
+	// MNetworkEnable
 	C_UtlVectorEmbeddedNetworkVar< PlayerResourcePlayerTeamData_t > m_vecPlayerTeamData;
+	// MNetworkEnable
 	C_UtlVectorEmbeddedNetworkVar< PlayerResourcePlayerData_t > m_vecPlayerData;
+	// MNetworkEnable
 	C_UtlVectorEmbeddedNetworkVar< PlayerResourceBroadcasterData_t > m_vecBrodcasterData;
+	// MNetworkEnable
 	C_NetworkUtlVectorBase< uint32 > m_vecEventsForDisplay;
+	// MNetworkEnable
 	int8 m_nPrimaryEventIndex;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnObsoletePrimaryEventChanged"
+	// MNetworkAlias = "m_nEventIDAssociatedWithEventData"
 	uint32 m_nObsoleteEventIDAssociatedWithEventData;
 	CHandle< C_BaseEntity >[64] m_playerIDToPlayer;
 	CUtlSymbolLarge[64] m_iszName;

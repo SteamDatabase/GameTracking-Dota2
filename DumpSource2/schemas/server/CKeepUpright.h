@@ -1,4 +1,4 @@
-class CKeepUpright
+class CKeepUpright : public CPointEntity
 {
 	Vector m_worldGoalAxis;
 	Vector m_localTestAxis;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_FurArmyThinker
+class CDOTA_Modifier_MonkeyKing_FurArmyThinker : public CDOTA_Buff
 {
 	float32 m_fDuration;
 	GameTime_t m_fTimeThinkerCreated;

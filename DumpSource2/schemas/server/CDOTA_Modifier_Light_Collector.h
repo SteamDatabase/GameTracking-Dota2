@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Light_Collector
+class CDOTA_Modifier_Light_Collector : public CDOTA_Buff_Item
 {
 	bool m_bActive;
 	int32 health_regen;

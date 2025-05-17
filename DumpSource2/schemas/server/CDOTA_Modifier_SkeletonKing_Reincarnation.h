@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SkeletonKing_Reincarnation
+class CDOTA_Modifier_SkeletonKing_Reincarnation : public CDOTA_Buff
 {
 	float32 reincarnate_time;
 	int32 scepter_aura_radius;

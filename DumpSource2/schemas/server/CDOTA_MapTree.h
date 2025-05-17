@@ -1,3 +1,3 @@
-class CDOTA_MapTree
+class CDOTA_MapTree : public CDOTA_BinaryObject
 {
 };

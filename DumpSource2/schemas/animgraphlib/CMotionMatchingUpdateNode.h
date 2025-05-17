@@ -1,4 +1,5 @@
-class CMotionMatchingUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CMotionMatchingUpdateNode : public CLeafUpdateNode
 {
 	CMotionDataSet m_dataSet;
 	CUtlVector< CSmartPtr< CMotionMetricEvaluator > > m_metrics;

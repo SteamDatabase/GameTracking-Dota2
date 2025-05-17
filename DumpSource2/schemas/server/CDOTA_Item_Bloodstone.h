@@ -1,3 +1,3 @@
-class CDOTA_Item_Bloodstone
+class CDOTA_Item_Bloodstone : public CDOTA_Item
 {
 };

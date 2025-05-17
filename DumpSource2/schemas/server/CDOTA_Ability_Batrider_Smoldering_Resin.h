@@ -1,3 +1,3 @@
-class CDOTA_Ability_Batrider_Smoldering_Resin
+class CDOTA_Ability_Batrider_Smoldering_Resin : public CDOTABaseAbility
 {
 };

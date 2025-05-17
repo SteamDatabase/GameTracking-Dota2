@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Weaver_Shukuchi
+class CDOTA_Modifier_Weaver_Shukuchi : public CDOTA_Modifier_Invisible
 {
 	float32 radius;
 	int32 damage;

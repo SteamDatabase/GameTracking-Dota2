@@ -1,4 +1,5 @@
-class CPlayerInputAnimMotorUpdater
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CPlayerInputAnimMotorUpdater : public CAnimMotorUpdaterBase
 {
 	CUtlVector< float32 > m_sampleTimes;
 	float32 m_flSpringConstant;

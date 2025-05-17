@@ -1,3 +1,3 @@
-class CIngameEvent_Spring2021
+class CIngameEvent_Spring2021 : public CIngameEvent_Base
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Alchemist_Corrosive_Weaponry
+class CDOTA_Ability_Alchemist_Corrosive_Weaponry : public CDOTABaseAbility
 {
 };

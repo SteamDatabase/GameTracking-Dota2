@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pangolier_Gyroshell
+class CDOTA_Modifier_Pangolier_Gyroshell : public CDOTA_Modifier_DebuffImmune
 {
 	int32 mp_cost_per_second;
 	float32 tick_interval;

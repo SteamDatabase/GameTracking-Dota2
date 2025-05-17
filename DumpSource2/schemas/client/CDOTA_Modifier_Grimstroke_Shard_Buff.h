@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Grimstroke_Shard_Buff
+class CDOTA_Modifier_Grimstroke_Shard_Buff : public CDOTA_Buff
 {
 	int32 total_damage;
 	int32 attack_speed;

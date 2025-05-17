@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_SpitCreep_ArcingUnit
+class CDOTA_Modifier_Snapfire_SpitCreep_ArcingUnit : public CDOTA_Buff
 {
 	float32 min_range;
 	float32 min_lob_travel_time;

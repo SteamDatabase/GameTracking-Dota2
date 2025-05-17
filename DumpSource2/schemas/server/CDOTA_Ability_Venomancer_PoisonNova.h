@@ -1,3 +1,3 @@
-class CDOTA_Ability_Venomancer_PoisonNova
+class CDOTA_Ability_Venomancer_PoisonNova : public CDOTABaseAbility
 {
 };

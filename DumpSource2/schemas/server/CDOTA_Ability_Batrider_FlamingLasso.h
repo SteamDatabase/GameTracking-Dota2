@@ -1,3 +1,3 @@
-class CDOTA_Ability_Batrider_FlamingLasso
+class CDOTA_Ability_Batrider_FlamingLasso : public CDOTABaseAbility
 {
 };

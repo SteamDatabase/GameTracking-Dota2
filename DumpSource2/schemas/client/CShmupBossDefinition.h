@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CShmupBossDefinition
 {
 	CUtlVector< CShmupBossBodyPart > m_vecBodyParts;

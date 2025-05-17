@@ -1,3 +1,4 @@
-class C_CrownfallShmupCamera
+// MEntityAllowsPortraitWorldSpawn
+class C_CrownfallShmupCamera : public C_PointCamera
 {
 };

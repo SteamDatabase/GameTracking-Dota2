@@ -1,3 +1,3 @@
-class CNavVolumeAll
+class CNavVolumeAll : public CNavVolumeVector
 {
 };

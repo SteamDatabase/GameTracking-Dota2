@@ -1,4 +1,4 @@
-class CTriggerTeleport
+class CTriggerTeleport : public CBaseTrigger
 {
 	CUtlSymbolLarge m_iLandmark;
 	bool m_bUseLandmarkAngles;

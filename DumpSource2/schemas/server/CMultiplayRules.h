@@ -1,3 +1,3 @@
-class CMultiplayRules
+class CMultiplayRules : public CGameRules
 {
 };

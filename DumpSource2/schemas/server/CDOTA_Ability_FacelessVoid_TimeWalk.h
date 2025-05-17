@@ -1,4 +1,4 @@
-class CDOTA_Ability_FacelessVoid_TimeWalk
+class CDOTA_Ability_FacelessVoid_TimeWalk : public CDOTABaseAbility
 {
 	CHandle< CDOTABaseAbility > m_hSourceAbility;
 	int32 speed;

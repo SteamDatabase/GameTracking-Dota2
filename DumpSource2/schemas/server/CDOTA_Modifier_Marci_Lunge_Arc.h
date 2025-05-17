@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Marci_Lunge_Arc
+class CDOTA_Modifier_Marci_Lunge_Arc : public CDOTA_Buff
 {
 	float32 m_flPredictedTotalTime;
 	Vector m_vStartPosition;

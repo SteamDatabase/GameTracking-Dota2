@@ -1,4 +1,4 @@
-class CDOTA_Ability_Meepo_MegaMeepo
+class CDOTA_Ability_Meepo_MegaMeepo : public CDOTABaseAbility
 {
 	CHandle< CBaseEntity > hPreviousMeepo;
 	CHandle< CBaseEntity > hMegameepoFrame;

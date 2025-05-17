@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Jakiro_Macropyre
+class C_DOTA_Ability_Jakiro_Macropyre : public C_DOTABaseAbility
 {
 };

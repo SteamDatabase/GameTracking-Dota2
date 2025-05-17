@@ -1,4 +1,6 @@
-class CSurvivorsPowerUpDefinition_LandMine
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+class CSurvivorsPowerUpDefinition_LandMine : public CSurvivorsPowerUpDefinition
 {
 	float32 m_flScepterVacuumRadius;
 	float32 m_flScepterVacuumDistance;

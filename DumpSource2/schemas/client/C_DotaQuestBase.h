@@ -1,3 +1,3 @@
-class C_DotaQuestBase
+class C_DotaQuestBase : public C_BaseEntity
 {
 };

@@ -1,3 +1,3 @@
-class CDOTABaseCustomHeroPickRules
+class CDOTABaseCustomHeroPickRules : public CBaseEntity
 {
 };

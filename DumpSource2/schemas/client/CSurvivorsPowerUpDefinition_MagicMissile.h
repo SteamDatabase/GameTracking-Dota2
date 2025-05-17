@@ -1,4 +1,6 @@
-class CSurvivorsPowerUpDefinition_MagicMissile
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+class CSurvivorsPowerUpDefinition_MagicMissile : public CSurvivorsPowerUpDefinition_ProjectileAttack
 {
 	float32 m_flShardDamageMultiplier;
 	float32 m_flScepterDamageIncreasePerEnemyKilled;

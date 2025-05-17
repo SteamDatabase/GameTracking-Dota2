@@ -1,3 +1,3 @@
-class CDOTA_Item_Enhancement_Audacious
+class CDOTA_Item_Enhancement_Audacious : public CDOTA_Item
 {
 };

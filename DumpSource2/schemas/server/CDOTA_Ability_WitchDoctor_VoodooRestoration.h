@@ -1,3 +1,3 @@
-class CDOTA_Ability_WitchDoctor_VoodooRestoration
+class CDOTA_Ability_WitchDoctor_VoodooRestoration : public CDOTABaseAbility
 {
 };

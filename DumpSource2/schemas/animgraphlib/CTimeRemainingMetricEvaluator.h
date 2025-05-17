@@ -1,4 +1,5 @@
-class CTimeRemainingMetricEvaluator
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CTimeRemainingMetricEvaluator : public CMotionMetricEvaluator
 {
 	bool m_bMatchByTimeRemaining;
 	float32 m_flMaxTimeRemaining;

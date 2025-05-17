@@ -1,4 +1,5 @@
-class CDOTA_DB_Page_StickerEntity
+// MEntityAllowsPortraitWorldSpawn
+class CDOTA_DB_Page_StickerEntity : public C_BaseEntity
 {
 	bool m_bIsPlaced;
 	item_definition_index_t m_ItemDefinitionIndex;

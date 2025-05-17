@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TemplarAssassin_RefractionAbsorb
+class CDOTA_Modifier_TemplarAssassin_RefractionAbsorb : public CDOTA_Buff
 {
 	int32 m_nDamageAbsorbed;
 	int32 shield_per_instance;

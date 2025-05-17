@@ -1,4 +1,4 @@
-class CDOTA_Ability_Oracle_FortunesEnd
+class CDOTA_Ability_Oracle_FortunesEnd : public CDOTABaseAbility
 {
 	int32 damage;
 	float32 radius;

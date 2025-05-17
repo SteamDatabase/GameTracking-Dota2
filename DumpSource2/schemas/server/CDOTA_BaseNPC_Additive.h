@@ -1,3 +1,3 @@
-class CDOTA_BaseNPC_Additive
+class CDOTA_BaseNPC_Additive : public CDOTA_BaseNPC
 {
 };

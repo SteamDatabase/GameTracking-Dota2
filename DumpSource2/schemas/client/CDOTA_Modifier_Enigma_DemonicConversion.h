@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enigma_DemonicConversion
+class CDOTA_Modifier_Enigma_DemonicConversion : public CDOTA_Modifier_Kill
 {
 	int32 m_iAttackCount;
 	int32 split_attack_count;

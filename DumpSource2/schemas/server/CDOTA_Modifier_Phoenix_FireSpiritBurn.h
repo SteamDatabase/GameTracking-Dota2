@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Phoenix_FireSpiritBurn
+class CDOTA_Modifier_Phoenix_FireSpiritBurn : public CDOTA_Buff
 {
 	float32 tick_interval;
 	float32 blind_duration;

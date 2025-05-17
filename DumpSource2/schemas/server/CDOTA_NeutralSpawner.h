@@ -1,4 +1,5 @@
-class CDOTA_NeutralSpawner
+// MNetworkVarNames = "int m_Type"
+class CDOTA_NeutralSpawner : public CPointEntity
 {
 	bool m_bGameStarted;
 	bool m_bFirstSpawn;
@@ -26,6 +27,7 @@ class CDOTA_NeutralSpawner
 	CUtlSymbolLarge m_szVolumeName;
 	CUtlVector< CHandle< CBaseEntity > > m_hVolumes;
 	CEntityIOOutput m_OnSpawnerExhausted;
+	// MNetworkEnable
 	int32 m_Type;
 	int32 m_PullType;
 	int32 m_AggroType;

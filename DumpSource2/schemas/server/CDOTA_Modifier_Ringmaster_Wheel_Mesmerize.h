@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_Wheel_Mesmerize
+class CDOTA_Modifier_Ringmaster_Wheel_Mesmerize : public CDOTA_Buff
 {
 	float32 wheel_stun;
 	float32 mesmerize_radius;

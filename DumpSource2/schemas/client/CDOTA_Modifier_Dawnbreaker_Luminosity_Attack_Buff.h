@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Luminosity_Attack_Buff
+class CDOTA_Modifier_Dawnbreaker_Luminosity_Attack_Buff : public CDOTA_Buff
 {
 	bool m_bIsBuffedAttack;
 	int32 heal_pct;

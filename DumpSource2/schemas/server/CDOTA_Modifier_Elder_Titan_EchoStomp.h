@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Elder_Titan_EchoStomp
+class CDOTA_Modifier_Elder_Titan_EchoStomp : public CDOTA_Buff
 {
 	int32 wake_damage_limit;
 	float32 animation_rate;

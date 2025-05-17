@@ -1,3 +1,3 @@
-class C_DOTA_Item_PyrrhicCloak
+class C_DOTA_Item_PyrrhicCloak : public C_DOTA_Item
 {
 };

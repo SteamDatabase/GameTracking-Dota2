@@ -1,4 +1,6 @@
-class CDOTA_BaseNPC_Creature
+// MNetworkVarNames = "bool m_bIsCurrentlyChanneling"
+// MNetworkVarNames = "float m_flChannelCycle"
+class CDOTA_BaseNPC_Creature : public CDOTA_BaseNPC_Creep
 {
 	bool m_bInitialized;
 	bool m_bCreatureCanRespawn;
@@ -46,6 +48,8 @@ class CDOTA_BaseNPC_Creature
 	CUtlVector< ItemDropData_t* > m_vItemDropData;
 	CUtlVector< WearableData_t > m_vecAttachWearableItemDefs;
 	GameTime_t m_flRespawnTime;
+	// MNetworkEnable
 	bool m_bIsCurrentlyChanneling;
+	// MNetworkEnable
 	float32 m_flChannelCycle;
 };

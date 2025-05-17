@@ -1,3 +1,3 @@
-class CDOTA_Ability_ShadowShamanVoodoo
+class CDOTA_Ability_ShadowShamanVoodoo : public CDOTABaseAbility
 {
 };

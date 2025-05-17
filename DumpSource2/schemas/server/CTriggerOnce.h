@@ -1,3 +1,3 @@
-class CTriggerOnce
+class CTriggerOnce : public CTriggerMultiple
 {
 };

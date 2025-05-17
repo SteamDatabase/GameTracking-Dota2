@@ -1,4 +1,4 @@
-class CScriptTriggerMultiple
+class CScriptTriggerMultiple : public CTriggerMultiple
 {
 	Vector m_vExtent;
 };

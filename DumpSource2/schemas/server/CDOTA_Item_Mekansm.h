@@ -1,3 +1,3 @@
-class CDOTA_Item_Mekansm
+class CDOTA_Item_Mekansm : public CDOTA_Item
 {
 };

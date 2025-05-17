@@ -1,4 +1,4 @@
-class C_DOTA_Unit_Hero_Wisp
+class C_DOTA_Unit_Hero_Wisp : public C_DOTA_BaseNPC_Hero
 {
 	ParticleIndex_t m_nAmbientFXIndex;
 	ParticleIndex_t m_nStunnedFXIndex;

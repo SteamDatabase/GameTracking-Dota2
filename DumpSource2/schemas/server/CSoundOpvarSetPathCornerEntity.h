@@ -1,4 +1,4 @@
-class CSoundOpvarSetPathCornerEntity
+class CSoundOpvarSetPathCornerEntity : public CSoundOpvarSetPointEntity
 {
 	float32 m_flDistMinSqr;
 	float32 m_flDistMaxSqr;

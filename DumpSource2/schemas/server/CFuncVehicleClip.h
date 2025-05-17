@@ -1,3 +1,3 @@
-class CFuncVehicleClip
+class CFuncVehicleClip : public CBaseModelEntity
 {
 };

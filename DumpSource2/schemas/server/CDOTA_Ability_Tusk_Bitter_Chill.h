@@ -1,3 +1,3 @@
-class CDOTA_Ability_Tusk_Bitter_Chill
+class CDOTA_Ability_Tusk_Bitter_Chill : public CDOTABaseAbility
 {
 };

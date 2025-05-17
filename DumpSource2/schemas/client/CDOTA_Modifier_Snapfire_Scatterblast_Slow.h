@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_Scatterblast_Slow
+class CDOTA_Modifier_Snapfire_Scatterblast_Slow : public CDOTA_Buff
 {
 	bool m_bIsPointBlank;
 	int32 movement_slow_pct;

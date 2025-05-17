@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Marci_Unleash
+class CDOTA_Modifier_Marci_Unleash : public CDOTA_Buff
 {
 	float32 time_between_flurries;
 	int32 charges_per_flurry;

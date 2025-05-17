@@ -1,3 +1,3 @@
-class C_PrecipitationBlocker
+class C_PrecipitationBlocker : public C_BaseModelEntity
 {
 };

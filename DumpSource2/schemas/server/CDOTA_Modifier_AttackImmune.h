@@ -1,3 +1,3 @@
-class CDOTA_Modifier_AttackImmune
+class CDOTA_Modifier_AttackImmune : public CDOTA_Buff
 {
 };

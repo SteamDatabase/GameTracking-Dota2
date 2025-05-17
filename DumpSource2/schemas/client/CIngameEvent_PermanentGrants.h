@@ -1,3 +1,3 @@
-class CIngameEvent_PermanentGrants
+class CIngameEvent_PermanentGrants : public C_IngameEvent_Base
 {
 };

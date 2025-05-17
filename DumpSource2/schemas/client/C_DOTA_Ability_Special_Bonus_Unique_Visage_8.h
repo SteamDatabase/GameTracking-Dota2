@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Visage_8
+class C_DOTA_Ability_Special_Bonus_Unique_Visage_8 : public C_DOTABaseAbility
 {
 };

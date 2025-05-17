@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_Suicide_Leap
+class CDOTA_Modifier_Techies_Suicide_Leap : public CDOTA_Buff
 {
 	Vector m_vLoc;
 	float32 m_flPredictedTotalTime;

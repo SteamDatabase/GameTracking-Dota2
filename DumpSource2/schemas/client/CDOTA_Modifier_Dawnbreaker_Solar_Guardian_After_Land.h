@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Dawnbreaker_Solar_Guardian_After_Land
+class CDOTA_Modifier_Dawnbreaker_Solar_Guardian_After_Land : public CDOTA_Buff
 {
 };

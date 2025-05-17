@@ -1,4 +1,4 @@
-class CDOTA_Ability_Morphling_Waveform
+class CDOTA_Ability_Morphling_Waveform : public CDOTABaseAbility
 {
 	int32 m_nProjectileID;
 	Vector m_vProjectileLocation;

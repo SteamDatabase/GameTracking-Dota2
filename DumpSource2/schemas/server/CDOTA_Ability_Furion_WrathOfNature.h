@@ -1,3 +1,3 @@
-class CDOTA_Ability_Furion_WrathOfNature
+class CDOTA_Ability_Furion_WrathOfNature : public CDOTABaseAbility
 {
 };

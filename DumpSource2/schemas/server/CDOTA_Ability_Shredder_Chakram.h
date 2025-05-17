@@ -1,4 +1,4 @@
-class CDOTA_Ability_Shredder_Chakram
+class CDOTA_Ability_Shredder_Chakram : public CDOTABaseAbility
 {
 	float32 radius;
 	float32 speed;

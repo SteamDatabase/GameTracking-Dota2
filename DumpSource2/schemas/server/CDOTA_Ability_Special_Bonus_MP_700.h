@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_MP_700
+class CDOTA_Ability_Special_Bonus_MP_700 : public CDOTABaseAbility
 {
 };

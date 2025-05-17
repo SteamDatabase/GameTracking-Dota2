@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_Primal_Companion
+class CDOTA_Modifier_Brewmaster_Primal_Companion : public CDOTA_Buff
 {
 	float32 cooldown_on_death;
 	float32 cooldown_on_take_damage;

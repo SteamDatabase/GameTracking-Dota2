@@ -1,3 +1,3 @@
-class CInfoSpawnGroupLandmark
+class CInfoSpawnGroupLandmark : public CPointEntity
 {
 };

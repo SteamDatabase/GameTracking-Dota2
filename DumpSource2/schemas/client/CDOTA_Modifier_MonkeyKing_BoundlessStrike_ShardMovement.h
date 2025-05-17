@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_BoundlessStrike_ShardMovement
+class CDOTA_Modifier_MonkeyKing_BoundlessStrike_ShardMovement : public CDOTA_Buff
 {
 	int32 acceleration_z;
 	int32 min_height_above_lowest;

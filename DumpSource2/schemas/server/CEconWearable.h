@@ -1,3 +1,4 @@
-class CEconWearable
+// MEntityAllowsPortraitWorldSpawn
+class CEconWearable : public CEconEntity
 {
 };

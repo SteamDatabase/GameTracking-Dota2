@@ -1,3 +1,3 @@
-class CIngameEvent_Crownfall
+class CIngameEvent_Crownfall : public C_IngameEvent_Base
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Snapfire_Scatterblast
+class CDOTA_Ability_Snapfire_Scatterblast : public CDOTABaseAbility
 {
 	int32 damage;
 	float32 debuff_duration;

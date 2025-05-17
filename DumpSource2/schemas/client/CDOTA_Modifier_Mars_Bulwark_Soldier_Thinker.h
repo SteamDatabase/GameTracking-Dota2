@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mars_Bulwark_Soldier_Thinker
+class CDOTA_Modifier_Mars_Bulwark_Soldier_Thinker : public CDOTA_Buff
 {
 	GameTime_t m_NextAttack;
 	int32 soldier_offset;

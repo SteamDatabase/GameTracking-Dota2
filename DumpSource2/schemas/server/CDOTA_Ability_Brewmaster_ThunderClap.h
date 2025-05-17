@@ -1,3 +1,3 @@
-class CDOTA_Ability_Brewmaster_ThunderClap
+class CDOTA_Ability_Brewmaster_ThunderClap : public CDOTABaseAbility
 {
 };

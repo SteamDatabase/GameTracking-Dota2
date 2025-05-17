@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MjollnirChain
+class CDOTA_Modifier_MjollnirChain : public CDOTA_Buff
 {
 	int32 chain_radius;
 	int32 chain_strikes;

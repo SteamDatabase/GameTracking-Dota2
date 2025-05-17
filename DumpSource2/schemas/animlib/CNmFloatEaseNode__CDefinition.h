@@ -1,4 +1,5 @@
-class CNmFloatEaseNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmFloatEaseNode::CDefinition : public CNmFloatValueNode::CDefinition
 {
 	float32 m_flEaseTime;
 	float32 m_flStartValue;

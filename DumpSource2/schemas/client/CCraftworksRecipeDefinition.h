@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CCraftworksRecipeDefinition
 {
 	CraftworksRecipeID_t m_unRecipeID;

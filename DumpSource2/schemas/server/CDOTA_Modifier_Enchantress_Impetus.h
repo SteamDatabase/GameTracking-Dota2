@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enchantress_Impetus
+class CDOTA_Modifier_Enchantress_Impetus : public CDOTA_Buff
 {
 	float32 distance_damage_pct;
 	int32 distance_cap;

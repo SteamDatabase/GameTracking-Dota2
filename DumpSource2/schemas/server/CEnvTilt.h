@@ -1,4 +1,4 @@
-class CEnvTilt
+class CEnvTilt : public CPointEntity
 {
 	float32 m_Duration;
 	float32 m_Radius;

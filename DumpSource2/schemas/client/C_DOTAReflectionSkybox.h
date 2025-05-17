@@ -1,3 +1,4 @@
-class C_DOTAReflectionSkybox
+// MEntityAllowsPortraitWorldSpawn
+class C_DOTAReflectionSkybox : public C_BaseEntity
 {
 };

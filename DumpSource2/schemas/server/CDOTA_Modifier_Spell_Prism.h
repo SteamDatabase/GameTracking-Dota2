@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Spell_Prism
+class CDOTA_Modifier_Spell_Prism : public CDOTA_Buff_Item
 {
 	int32 bonus_all_stats;
 	int32 bonus_cooldown;

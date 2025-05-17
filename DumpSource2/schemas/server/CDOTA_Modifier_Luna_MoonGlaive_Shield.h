@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Luna_MoonGlaive_Shield
+class CDOTA_Modifier_Luna_MoonGlaive_Shield : public CDOTA_Buff
 {
 	int32 rotating_glaives;
 	float32 rotating_glaives_hit_radius;

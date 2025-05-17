@@ -1,3 +1,3 @@
-class CDOTA_Item_AbyssalBlade
+class CDOTA_Item_AbyssalBlade : public CDOTA_Item
 {
 };

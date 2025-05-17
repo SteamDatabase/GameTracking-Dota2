@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Pirate_Hat
+class CDOTA_Modifier_Item_Pirate_Hat : public CDOTA_Buff_Item
 {
 	int32 gold_steal_base;
 	int32 gold_steal_kill;

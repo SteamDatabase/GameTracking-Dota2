@@ -1,3 +1,3 @@
-class CInfoData
+class CInfoData : public CServerOnlyEntity
 {
 };

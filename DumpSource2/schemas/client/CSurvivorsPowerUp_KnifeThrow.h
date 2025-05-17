@@ -1,3 +1,3 @@
-class CSurvivorsPowerUp_KnifeThrow
+class CSurvivorsPowerUp_KnifeThrow : public CSurvivorsPowerUp_ProjectileAttack
 {
 };

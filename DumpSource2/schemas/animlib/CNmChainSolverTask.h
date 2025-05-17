@@ -1,4 +1,4 @@
-class CNmChainSolverTask
+class CNmChainSolverTask : public CNmTask
 {
 	int32 m_nEffectorBoneIdx;
 	CTransform m_targetTransform;

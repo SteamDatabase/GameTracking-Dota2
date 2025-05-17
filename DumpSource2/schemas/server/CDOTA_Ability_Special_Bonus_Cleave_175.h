@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Cleave_175
+class CDOTA_Ability_Special_Bonus_Cleave_175 : public CDOTABaseAbility
 {
 };

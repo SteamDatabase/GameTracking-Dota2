@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Windranger_8
+class CDOTA_Ability_Special_Bonus_Unique_Windranger_8 : public CDOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Lycan_SummonWolves_PermanentInvisibility
+class CDOTA_Ability_Lycan_SummonWolves_PermanentInvisibility : public CDOTABaseAbility
 {
 };

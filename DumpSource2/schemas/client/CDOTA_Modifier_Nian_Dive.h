@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_Dive
+class CDOTA_Modifier_Nian_Dive : public CDOTA_Buff
 {
 	int32 pounce_distance;
 	float32 pounce_speed;

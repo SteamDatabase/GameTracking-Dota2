@@ -1,4 +1,5 @@
-class CPrecipitationVData
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CPrecipitationVData : public CEntitySubclassVDataBase
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szParticlePrecipitationEffect;
 	float32 m_flInnerDistance;

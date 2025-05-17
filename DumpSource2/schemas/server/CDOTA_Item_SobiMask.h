@@ -1,3 +1,3 @@
-class CDOTA_Item_SobiMask
+class CDOTA_Item_SobiMask : public CDOTA_Item
 {
 };

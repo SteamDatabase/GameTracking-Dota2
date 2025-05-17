@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Lion_11
+class CDOTA_Ability_Special_Bonus_Unique_Lion_11 : public CDOTABaseAbility
 {
 };

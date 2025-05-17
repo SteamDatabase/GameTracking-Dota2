@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DrowRanger_Marksmanship
+class CDOTA_Modifier_DrowRanger_Marksmanship : public CDOTA_Buff
 {
 	int32 chance;
 	ParticleIndex_t m_nFxIndex;

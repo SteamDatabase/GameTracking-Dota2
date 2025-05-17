@@ -1,3 +1,3 @@
-class CDOTA_Item_Tango
+class CDOTA_Item_Tango : public CDOTA_Item
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Leshrac_Lightning_Storm
+class CDOTA_Modifier_Leshrac_Lightning_Storm : public CDOTA_Buff
 {
 	int32 damage;
 	float32 radius;

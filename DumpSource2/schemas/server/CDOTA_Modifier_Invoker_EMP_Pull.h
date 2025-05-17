@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_EMP_Pull
+class CDOTA_Modifier_Invoker_EMP_Pull : public CDOTA_Buff
 {
 	int32 drag_speed;
 	float32 aura_origin_x;

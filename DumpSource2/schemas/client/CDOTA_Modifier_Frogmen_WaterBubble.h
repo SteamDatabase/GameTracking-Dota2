@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Frogmen_WaterBubble
+class CDOTA_Modifier_Frogmen_WaterBubble : public CDOTA_Buff
 {
 	float32 radius;
 	float32 damage_absorb;

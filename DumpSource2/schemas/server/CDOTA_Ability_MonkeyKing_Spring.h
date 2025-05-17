@@ -1,4 +1,4 @@
-class CDOTA_Ability_MonkeyKing_Spring
+class CDOTA_Ability_MonkeyKing_Spring : public CDOTABaseAbility
 {
 	Vector m_vPos;
 	GameTime_t m_fStartChannelTime;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Treant_NaturesGuise
+class CDOTA_Ability_Treant_NaturesGuise : public CDOTABaseAbility
 {
 };

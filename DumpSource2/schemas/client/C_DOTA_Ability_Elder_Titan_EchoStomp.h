@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Elder_Titan_EchoStomp
+class C_DOTA_Ability_Elder_Titan_EchoStomp : public C_DOTABaseAbility
 {
 	ParticleIndex_t m_nFXIndexTitan;
 	ParticleIndex_t m_nFXIndexSpirit;

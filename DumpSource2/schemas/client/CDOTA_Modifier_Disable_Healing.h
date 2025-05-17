@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Disable_Healing
+class CDOTA_Modifier_Disable_Healing : public CDOTA_Buff
 {
 };

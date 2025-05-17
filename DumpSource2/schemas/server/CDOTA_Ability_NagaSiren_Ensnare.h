@@ -1,3 +1,3 @@
-class CDOTA_Ability_NagaSiren_Ensnare
+class CDOTA_Ability_NagaSiren_Ensnare : public CDOTABaseAbility
 {
 };

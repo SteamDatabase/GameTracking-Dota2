@@ -1,3 +1,3 @@
-class CDOTA_Ability_AntiMage_Counterspell_Ally
+class CDOTA_Ability_AntiMage_Counterspell_Ally : public CDOTABaseAbility
 {
 };

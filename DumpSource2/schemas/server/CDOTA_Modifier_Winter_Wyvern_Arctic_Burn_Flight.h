@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Winter_Wyvern_Arctic_Burn_Flight
+class CDOTA_Modifier_Winter_Wyvern_Arctic_Burn_Flight : public CDOTA_Buff
 {
 	float32 attack_point;
 	int32 attack_range_bonus;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Naginata
+class CDOTA_Modifier_Item_Naginata : public CDOTA_Buff_Item
 {
 	int32 bonus_intellect;
 	int32 bonus_attack_speed;

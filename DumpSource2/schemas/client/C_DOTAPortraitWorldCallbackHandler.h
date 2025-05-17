@@ -1,3 +1,4 @@
-class C_DOTAPortraitWorldCallbackHandler
+// MEntityAllowsPortraitWorldSpawn
+class C_DOTAPortraitWorldCallbackHandler : public C_BaseEntity
 {
 };

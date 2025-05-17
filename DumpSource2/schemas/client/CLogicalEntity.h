@@ -1,3 +1,4 @@
-class CLogicalEntity
+// MEntityAllowsPortraitWorldSpawn
+class CLogicalEntity : public C_BaseEntity
 {
 };

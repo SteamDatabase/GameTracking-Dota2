@@ -1,3 +1,3 @@
-class CDOTA_Item_Flying_Courier
+class CDOTA_Item_Flying_Courier : public CDOTA_Item
 {
 };

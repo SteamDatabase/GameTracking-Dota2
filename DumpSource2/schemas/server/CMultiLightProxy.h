@@ -1,4 +1,4 @@
-class CMultiLightProxy
+class CMultiLightProxy : public CLogicalEntity
 {
 	CUtlSymbolLarge m_iszLightNameFilter;
 	CUtlSymbolLarge m_iszLightClassFilter;

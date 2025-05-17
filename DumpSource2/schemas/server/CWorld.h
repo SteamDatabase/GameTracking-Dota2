@@ -1,3 +1,3 @@
-class CWorld
+class CWorld : public CBaseModelEntity
 {
 };

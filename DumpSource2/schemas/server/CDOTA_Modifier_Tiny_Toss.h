@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tiny_Toss
+class CDOTA_Modifier_Tiny_Toss : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hTarget;
 	float32 m_flPredictedTotalTime;

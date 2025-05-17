@@ -1,3 +1,3 @@
-class CDOTA_Ability_PhantomLancer_Doppelwalk
+class CDOTA_Ability_PhantomLancer_Doppelwalk : public CDOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class C_DOTANewPlayerPoolGameMode
+class C_DOTANewPlayerPoolGameMode : public C_DOTABaseGameMode
 {
 };

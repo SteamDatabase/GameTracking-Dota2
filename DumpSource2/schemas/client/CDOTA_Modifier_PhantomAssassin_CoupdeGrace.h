@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomAssassin_CoupdeGrace
+class CDOTA_Modifier_PhantomAssassin_CoupdeGrace : public CDOTA_Buff
 {
 	int32 crit_bonus;
 	int32 crit_chance;

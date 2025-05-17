@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Terrorblade_Metamorphosis
+class CDOTA_Modifier_Terrorblade_Metamorphosis : public CDOTA_Buff
 {
 	float32 base_attack_time;
 	int32 bonus_range;

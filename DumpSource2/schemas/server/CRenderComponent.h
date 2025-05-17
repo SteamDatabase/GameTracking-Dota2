@@ -1,4 +1,4 @@
-class CRenderComponent
+class CRenderComponent : public CEntityComponent
 {
 	CNetworkVarChainer __m_pChainEntity;
 	bool m_bIsRenderingWithViewModels;

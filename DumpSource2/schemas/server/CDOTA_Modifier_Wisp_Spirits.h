@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Wisp_Spirits
+class CDOTA_Modifier_Wisp_Spirits : public CDOTA_Buff
 {
 	bool m_bSpiritsExplode;
 	float32 creep_damage;

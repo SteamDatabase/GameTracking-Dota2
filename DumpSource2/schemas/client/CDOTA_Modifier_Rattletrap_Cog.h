@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_Cog
+class CDOTA_Modifier_Rattletrap_Cog : public CDOTA_Buff
 {
 	bool m_bEnabled;
 	int32 trigger_distance;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Juggernaut_Omnislash
+class CDOTA_Modifier_Juggernaut_Omnislash : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hTarget;
 	CHandle< CBaseEntity > m_hLastTarget;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rubick_SpellSteal
+class CDOTA_Modifier_Rubick_SpellSteal : public CDOTA_Buff
 {
 	CUtlString m_strActivityModifier;
 	CUtlVector< CHandle< CBaseEntity > > m_vecAbilities;

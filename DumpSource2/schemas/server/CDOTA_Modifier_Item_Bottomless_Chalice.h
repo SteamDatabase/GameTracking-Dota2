@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Bottomless_Chalice
+class CDOTA_Modifier_Item_Bottomless_Chalice : public CDOTA_Buff_Item
 {
 	int32 max_charges_per_kill;
 	float32 recharge_time;

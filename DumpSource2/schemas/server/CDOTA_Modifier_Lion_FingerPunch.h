@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lion_FingerPunch
+class CDOTA_Modifier_Lion_FingerPunch : public CDOTA_Buff
 {
 	float32 punch_attack_range;
 	float32 punch_bonus_damage_base;

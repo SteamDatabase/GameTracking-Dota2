@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EarthSpirit_Magnetize
+class CDOTA_Modifier_EarthSpirit_Magnetize : public CDOTA_Buff
 {
 	float32 rock_search_radius;
 	float32 damage_per_second;

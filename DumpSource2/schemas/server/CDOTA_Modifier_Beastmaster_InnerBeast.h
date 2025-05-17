@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Beastmaster_InnerBeast
+class CDOTA_Modifier_Beastmaster_InnerBeast : public CDOTA_Buff
 {
 	int32 bonus_attack_speed;
 	int32 attack_speed_per_unit;

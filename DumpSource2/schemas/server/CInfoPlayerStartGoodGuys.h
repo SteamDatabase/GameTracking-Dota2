@@ -1,3 +1,3 @@
-class CInfoPlayerStartGoodGuys
+class CInfoPlayerStartGoodGuys : public CInfoPlayerStartDota
 {
 };

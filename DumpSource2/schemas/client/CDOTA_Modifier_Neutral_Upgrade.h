@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Neutral_Upgrade
+class CDOTA_Modifier_Neutral_Upgrade : public CDOTA_Buff
 {
 	float32 increase_time;
 	int32 increase_damage;

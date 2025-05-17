@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Solar_Guardian_Thinker
+class CDOTA_Modifier_Dawnbreaker_Solar_Guardian_Thinker : public CDOTA_Buff
 {
 	GameTime_t flTimeSinceLastPulse;
 	float32 pulse_interval;

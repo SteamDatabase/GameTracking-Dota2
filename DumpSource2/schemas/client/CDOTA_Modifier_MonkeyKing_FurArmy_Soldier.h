@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_FurArmy_Soldier
+class CDOTA_Modifier_MonkeyKing_FurArmy_Soldier : public CDOTA_Buff
 {
 	Vector m_vTargetPos;
 	Vector m_vDirection;

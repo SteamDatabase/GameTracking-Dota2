@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomAssassin_Blur
+class CDOTA_Modifier_PhantomAssassin_Blur : public CDOTA_Buff
 {
 	int32 bonus_evasion;
 };

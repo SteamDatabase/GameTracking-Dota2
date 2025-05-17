@@ -1,3 +1,3 @@
-class CGameRulesProxy
+class CGameRulesProxy : public CBaseEntity
 {
 };

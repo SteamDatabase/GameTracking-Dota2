@@ -1,3 +1,3 @@
-class CDOTA_MinibossSpawner
+class CDOTA_MinibossSpawner : public CPointEntity
 {
 };

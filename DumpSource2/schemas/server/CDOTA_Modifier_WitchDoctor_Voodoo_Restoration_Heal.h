@@ -1,4 +1,4 @@
-class CDOTA_Modifier_WitchDoctor_Voodoo_Restoration_Heal
+class CDOTA_Modifier_WitchDoctor_Voodoo_Restoration_Heal : public CDOTA_Buff
 {
 	int32 heal;
 	float32 mana_per_second;

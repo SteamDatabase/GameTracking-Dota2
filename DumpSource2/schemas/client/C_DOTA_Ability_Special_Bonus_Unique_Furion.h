@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Furion
+class C_DOTA_Ability_Special_Bonus_Unique_Furion : public C_DOTABaseAbility
 {
 };

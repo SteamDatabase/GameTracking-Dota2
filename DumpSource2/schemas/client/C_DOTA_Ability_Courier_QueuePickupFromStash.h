@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Courier_QueuePickupFromStash
+class C_DOTA_Ability_Courier_QueuePickupFromStash : public C_DOTABaseAbility
 {
 };

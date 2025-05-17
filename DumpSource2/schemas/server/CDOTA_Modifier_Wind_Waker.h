@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Wind_Waker
+class CDOTA_Modifier_Wind_Waker : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hBlocker;
 	GameTime_t m_flStartTime;

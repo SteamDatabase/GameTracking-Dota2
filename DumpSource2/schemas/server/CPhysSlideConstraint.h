@@ -1,4 +1,4 @@
-class CPhysSlideConstraint
+class CPhysSlideConstraint : public CPhysConstraint
 {
 	Vector m_axisEnd;
 	float32 m_slideFriction;

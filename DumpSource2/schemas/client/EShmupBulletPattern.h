@@ -1,5 +1,6 @@
 enum EShmupBulletPattern : uint32_t
 {
+	// MPropertySuppressEnumerator
 	k_eShmupBulletPattern_Invalid = -1,
 	k_eShmupBulletPattern_Radial = 0,
 	k_eShmupBulletPattern_HorizontalLeft = 1,

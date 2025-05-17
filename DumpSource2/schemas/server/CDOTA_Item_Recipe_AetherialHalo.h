@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_AetherialHalo
+class CDOTA_Item_Recipe_AetherialHalo : public CDOTA_Item
 {
 };

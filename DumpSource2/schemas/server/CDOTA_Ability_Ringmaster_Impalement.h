@@ -1,4 +1,4 @@
-class CDOTA_Ability_Ringmaster_Impalement
+class CDOTA_Ability_Ringmaster_Impalement : public CDOTABaseAbility
 {
 	Vector m_vStartPos;
 	int32 dagger_width;

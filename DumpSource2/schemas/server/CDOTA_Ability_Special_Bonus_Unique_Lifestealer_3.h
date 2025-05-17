@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Lifestealer_3
+class CDOTA_Ability_Special_Bonus_Unique_Lifestealer_3 : public CDOTABaseAbility
 {
 };

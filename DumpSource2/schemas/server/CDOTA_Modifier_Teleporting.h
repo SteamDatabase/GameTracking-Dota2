@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Teleporting
+class CDOTA_Modifier_Teleporting : public CDOTA_Buff
 {
 	float32 m_fStartTime;
 	char[4096] m_iszPortalLoopAppear;

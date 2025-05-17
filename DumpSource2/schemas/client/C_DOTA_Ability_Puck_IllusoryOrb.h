@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Puck_IllusoryOrb
+class C_DOTA_Ability_Puck_IllusoryOrb : public C_DOTABaseAbility
 {
 	int32 m_iProjectile;
 	CountdownTimer m_ViewerTimer;

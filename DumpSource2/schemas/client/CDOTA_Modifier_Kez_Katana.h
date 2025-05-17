@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kez_Katana
+class CDOTA_Modifier_Kez_Katana : public CDOTA_Buff
 {
 	int32 katana_attack_range;
 	float32 katana_base_attack_time;

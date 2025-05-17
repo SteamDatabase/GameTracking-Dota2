@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Jakiro_LiquidIce_Debuff
+class CDOTA_Modifier_Jakiro_LiquidIce_Debuff : public CDOTA_Buff
 {
 	int32 damage;
 	float32 pct_health_damage;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkSeer_Surge
+class CDOTA_Modifier_DarkSeer_Surge : public CDOTA_Buff
 {
 	int32 speed_boost;
 	float32 trail_radius;

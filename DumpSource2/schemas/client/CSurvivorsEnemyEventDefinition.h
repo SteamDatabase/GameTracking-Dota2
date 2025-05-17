@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CSurvivorsEnemyEventDefinition
 {
 	CUtlString m_sSpawnerName;

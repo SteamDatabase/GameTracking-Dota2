@@ -1,4 +1,5 @@
-class CNmStateNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmStateNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	int16 m_nChildNodeIdx;
 	CUtlLeanVectorFixedGrowable< CGlobalSymbol, 3 > m_entryEvents;

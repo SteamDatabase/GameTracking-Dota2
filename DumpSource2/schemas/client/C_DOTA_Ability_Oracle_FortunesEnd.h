@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Oracle_FortunesEnd
+class C_DOTA_Ability_Oracle_FortunesEnd : public C_DOTABaseAbility
 {
 	int32 damage;
 	float32 radius;

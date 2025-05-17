@@ -1,4 +1,4 @@
-class CDOTA_Item_EagleEye
+class CDOTA_Item_EagleEye : public CDOTA_Item
 {
 	int32 m_iTempViewer;
 	int32 m_iTeam;

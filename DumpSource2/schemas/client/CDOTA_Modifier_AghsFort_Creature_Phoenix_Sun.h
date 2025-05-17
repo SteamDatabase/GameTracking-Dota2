@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Creature_Phoenix_Sun
+class CDOTA_Modifier_AghsFort_Creature_Phoenix_Sun : public CDOTA_Buff
 {
 	float32 aura_radius;
 	float32 stun_duration;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Wisp_Spirits_Out
+class CDOTA_Ability_Wisp_Spirits_Out : public CDOTABaseAbility
 {
 };

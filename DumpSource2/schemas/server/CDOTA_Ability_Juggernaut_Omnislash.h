@@ -1,3 +1,3 @@
-class CDOTA_Ability_Juggernaut_Omnislash
+class CDOTA_Ability_Juggernaut_Omnislash : public CDOTABaseAbility
 {
 };

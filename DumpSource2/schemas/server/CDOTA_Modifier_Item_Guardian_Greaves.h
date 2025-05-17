@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Guardian_Greaves
+class CDOTA_Modifier_Item_Guardian_Greaves : public CDOTA_Buff_Item
 {
 	int32 bonus_movement;
 	int32 bonus_mana;

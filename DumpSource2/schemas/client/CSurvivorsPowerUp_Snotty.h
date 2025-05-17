@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_Snotty
+class CSurvivorsPowerUp_Snotty : public CSurvivorsPowerUp_AreaAttack_Circle
 {
 	CUtlVector< SurvivorsUnitID_t > m_vecSnotties;
 	float32 m_flRotationSpeedDeg;

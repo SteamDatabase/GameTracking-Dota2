@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_VoidwalkerScythe
+class CDOTA_Item_Recipe_VoidwalkerScythe : public CDOTA_Item
 {
 };

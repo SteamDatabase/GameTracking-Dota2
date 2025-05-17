@@ -1,3 +1,3 @@
-class CDOTA_Item_Headdress
+class CDOTA_Item_Headdress : public CDOTA_Item
 {
 };

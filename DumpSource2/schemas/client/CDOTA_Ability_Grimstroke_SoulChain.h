@@ -1,4 +1,4 @@
-class CDOTA_Ability_Grimstroke_SoulChain
+class CDOTA_Ability_Grimstroke_SoulChain : public C_DOTABaseAbility
 {
 	float32 chain_duration;
 	float32 chain_latch_radius;

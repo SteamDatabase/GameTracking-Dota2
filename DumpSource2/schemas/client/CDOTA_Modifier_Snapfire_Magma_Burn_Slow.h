@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Snapfire_Magma_Burn_Slow
+class CDOTA_Modifier_Snapfire_Magma_Burn_Slow : public CDOTA_Buff
 {
 	int32 m_nMoveSlowPct;
 	float32 m_fBurnDamagePerTick;

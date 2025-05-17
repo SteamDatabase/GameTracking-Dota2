@@ -1,3 +1,3 @@
-class CPlayer_AutoaimServices
+class CPlayer_AutoaimServices : public CPlayerPawnComponent
 {
 };

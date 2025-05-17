@@ -1,4 +1,5 @@
-class CNmFloatSelectorNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmFloatSelectorNode::CDefinition : public CNmFloatValueNode::CDefinition
 {
 	CUtlVectorFixedGrowable< int16, 5 > m_conditionNodeIndices;
 	CUtlVectorFixedGrowable< float32, 5 > m_values;

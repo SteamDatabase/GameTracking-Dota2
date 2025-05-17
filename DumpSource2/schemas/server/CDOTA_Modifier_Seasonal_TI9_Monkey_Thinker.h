@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seasonal_TI9_Monkey_Thinker
+class CDOTA_Modifier_Seasonal_TI9_Monkey_Thinker : public CDOTA_Buff
 {
 	float32 attack_range;
 	float32 attack_time;

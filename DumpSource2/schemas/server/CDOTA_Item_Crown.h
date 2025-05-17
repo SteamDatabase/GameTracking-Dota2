@@ -1,3 +1,3 @@
-class CDOTA_Item_Crown
+class CDOTA_Item_Crown : public CDOTA_Item
 {
 };

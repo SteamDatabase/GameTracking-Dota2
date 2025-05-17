@@ -1,3 +1,3 @@
-class CDOTA_Ability_Terrorblade_Sunder
+class CDOTA_Ability_Terrorblade_Sunder : public CDOTABaseAbility
 {
 };

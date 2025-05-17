@@ -1,3 +1,3 @@
-class CDOTA_Ability_ShadowShaman_MassSerpentWard
+class CDOTA_Ability_ShadowShaman_MassSerpentWard : public CDOTABaseAbility
 {
 };

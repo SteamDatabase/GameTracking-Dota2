@@ -1,4 +1,4 @@
-class CDOTA_Ability_EnragedWildkin_Hurricane
+class CDOTA_Ability_EnragedWildkin_Hurricane : public CDOTABaseAbility
 {
 	float32 distance;
 	Vector m_vEndpoint;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Viper_CorrosiveSkin
+class CDOTA_Modifier_Viper_CorrosiveSkin : public CDOTA_Buff
 {
 	int32 bonus_magic_resistance;
 	float32 max_range;

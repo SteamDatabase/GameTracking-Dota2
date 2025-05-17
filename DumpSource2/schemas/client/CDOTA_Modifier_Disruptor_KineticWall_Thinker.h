@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Disruptor_KineticWall_Thinker
+class CDOTA_Modifier_Disruptor_KineticWall_Thinker : public CDOTA_Buff
 {
 	Vector m_vWallDirection;
 	Vector m_vWallRight;

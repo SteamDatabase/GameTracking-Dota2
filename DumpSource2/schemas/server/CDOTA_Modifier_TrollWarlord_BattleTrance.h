@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TrollWarlord_BattleTrance
+class CDOTA_Modifier_TrollWarlord_BattleTrance : public CDOTA_Buff
 {
 	int32 movement_speed;
 	int32 slow_resistance;

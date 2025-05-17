@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Royale_With_Cheese
+class CDOTA_Modifier_Royale_With_Cheese : public CDOTA_Buff
 {
 	float32 shield;
 	float32 regen;

@@ -1,4 +1,4 @@
-class CAISound
+class CAISound : public CPointEntity
 {
 	SoundTypes_t m_iSoundType;
 	SoundFlags_t m_iSoundFlags;

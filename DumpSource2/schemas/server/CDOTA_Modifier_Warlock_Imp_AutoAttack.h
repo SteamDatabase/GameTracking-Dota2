@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Warlock_Imp_AutoAttack
+class CDOTA_Modifier_Warlock_Imp_AutoAttack : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hBestTarget;
 	float32 bonus_hp;

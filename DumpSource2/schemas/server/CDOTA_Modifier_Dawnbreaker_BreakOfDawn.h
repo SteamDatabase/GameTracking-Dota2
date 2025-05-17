@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_BreakOfDawn
+class CDOTA_Modifier_Dawnbreaker_BreakOfDawn : public CDOTA_Buff
 {
 	float32 reveal_duration;
 	float32 conceal_duration;

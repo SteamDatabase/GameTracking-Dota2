@@ -1,3 +1,3 @@
-class C_Breakable
+class C_Breakable : public C_BaseModelEntity
 {
 };

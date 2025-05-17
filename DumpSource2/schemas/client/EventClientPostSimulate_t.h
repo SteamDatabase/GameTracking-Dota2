@@ -1,3 +1,3 @@
-class EventClientPostSimulate_t
+class EventClientPostSimulate_t : public EventSimulate_t
 {
 };

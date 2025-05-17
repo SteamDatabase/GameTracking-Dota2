@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_AbyssalBlade
+class CDOTA_Modifier_Item_AbyssalBlade : public CDOTA_Buff_Item
 {
 	int32 bonus_strength;
 	int32 bash_chance_melee;

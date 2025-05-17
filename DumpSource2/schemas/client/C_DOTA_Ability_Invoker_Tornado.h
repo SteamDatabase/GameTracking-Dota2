@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Invoker_Tornado
+class C_DOTA_Ability_Invoker_Tornado : public CDOTA_Ability_Invoker_InvokedBase
 {
 	float32 vision_distance;
 	float32 end_vision_duration;

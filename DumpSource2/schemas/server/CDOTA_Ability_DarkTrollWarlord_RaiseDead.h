@@ -1,3 +1,3 @@
-class CDOTA_Ability_DarkTrollWarlord_RaiseDead
+class CDOTA_Ability_DarkTrollWarlord_RaiseDead : public CDOTABaseAbility
 {
 };

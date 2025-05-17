@@ -1,3 +1,3 @@
-class CDOTA_Ability_Disruptor_StaticStorm
+class CDOTA_Ability_Disruptor_StaticStorm : public CDOTABaseAbility
 {
 };

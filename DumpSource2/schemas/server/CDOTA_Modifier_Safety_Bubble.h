@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Safety_Bubble
+class CDOTA_Modifier_Safety_Bubble : public CDOTA_Buff_Item
 {
 	int32 m_nDamageAbsorbed;
 	GameTime_t m_timeLastDamage;

@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_Apex
+class CDOTA_Item_Recipe_Apex : public CDOTA_Item
 {
 };

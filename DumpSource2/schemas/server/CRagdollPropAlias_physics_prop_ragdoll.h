@@ -1,3 +1,3 @@
-class CRagdollPropAlias_physics_prop_ragdoll
+class CRagdollPropAlias_physics_prop_ragdoll : public CRagdollProp
 {
 };

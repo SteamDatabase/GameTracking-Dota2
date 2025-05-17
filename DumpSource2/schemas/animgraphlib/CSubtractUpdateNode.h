@@ -1,4 +1,5 @@
-class CSubtractUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CSubtractUpdateNode : public CBinaryUpdateNode
 {
 	BinaryNodeChildOption m_footMotionTiming;
 	bool m_bApplyToFootMotion;

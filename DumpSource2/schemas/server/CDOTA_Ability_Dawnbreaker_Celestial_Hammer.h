@@ -1,4 +1,4 @@
-class CDOTA_Ability_Dawnbreaker_Celestial_Hammer
+class CDOTA_Ability_Dawnbreaker_Celestial_Hammer : public CDOTABaseAbility
 {
 	int32 m_nProjectileIndex;
 	int32 m_nReturnProjectileID;

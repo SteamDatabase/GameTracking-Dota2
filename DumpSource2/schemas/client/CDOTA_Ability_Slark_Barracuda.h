@@ -1,3 +1,3 @@
-class CDOTA_Ability_Slark_Barracuda
+class CDOTA_Ability_Slark_Barracuda : public C_DOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Dawnbreaker_Fire_Wreath
+class CDOTA_Ability_Dawnbreaker_Fire_Wreath : public CDOTABaseAbility
 {
 };

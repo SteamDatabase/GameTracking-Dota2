@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Passive_Lotus_Pool
+class CDOTA_Modifier_Passive_Lotus_Pool : public CDOTA_Buff
 {
 	float32 first_lotus_pickup_time;
 	float32 pickup_time_reduction_pct;

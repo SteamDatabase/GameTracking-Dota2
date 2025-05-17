@@ -1,3 +1,3 @@
-class CDOTA_Ability_Slardar_Sprint
+class CDOTA_Ability_Slardar_Sprint : public CDOTABaseAbility
 {
 };

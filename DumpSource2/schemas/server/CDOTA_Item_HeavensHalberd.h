@@ -1,3 +1,3 @@
-class CDOTA_Item_HeavensHalberd
+class CDOTA_Item_HeavensHalberd : public CDOTA_Item
 {
 };

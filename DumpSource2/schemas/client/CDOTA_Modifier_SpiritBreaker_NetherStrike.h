@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SpiritBreaker_NetherStrike
+class CDOTA_Modifier_SpiritBreaker_NetherStrike : public CDOTA_Buff
 {
 	int32 damage;
 	bool m_bStrikeLanded;

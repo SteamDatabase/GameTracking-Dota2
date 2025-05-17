@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Razor_StormSurge
+class CDOTA_Modifier_Razor_StormSurge : public CDOTA_Buff
 {
 	int32 self_movement_speed_pct;
 	int32 strike_pct_chance;

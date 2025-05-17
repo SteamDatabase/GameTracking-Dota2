@@ -1,3 +1,3 @@
-class CDOTA_Ability_Slark_EssenceShift
+class CDOTA_Ability_Slark_EssenceShift : public CDOTABaseAbility
 {
 };

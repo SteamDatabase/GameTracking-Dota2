@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seasonal_Summon_TI11_Balloon_Visuals
+class CDOTA_Modifier_Seasonal_Summon_TI11_Balloon_Visuals : public CDOTA_Buff
 {
 	float32 model_scale_per_stack;
 	bool m_bIsRadiant;

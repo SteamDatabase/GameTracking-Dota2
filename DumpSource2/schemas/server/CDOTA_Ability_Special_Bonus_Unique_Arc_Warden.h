@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Arc_Warden
+class CDOTA_Ability_Special_Bonus_Unique_Arc_Warden : public CDOTABaseAbility
 {
 };

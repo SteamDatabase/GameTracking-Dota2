@@ -1,3 +1,3 @@
-class CDOTA_Item_Hyperstone
+class CDOTA_Item_Hyperstone : public CDOTA_Item
 {
 };

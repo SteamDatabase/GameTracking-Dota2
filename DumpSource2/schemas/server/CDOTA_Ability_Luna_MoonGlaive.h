@@ -1,4 +1,4 @@
-class CDOTA_Ability_Luna_MoonGlaive
+class CDOTA_Ability_Luna_MoonGlaive : public CDOTABaseAbility
 {
 	CUtlVector< CHandle< CBaseEntity > > m_vecMarkedUnits;
 	int32 m_iAttackIndex;

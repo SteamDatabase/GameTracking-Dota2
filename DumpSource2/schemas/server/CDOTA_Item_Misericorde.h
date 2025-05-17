@@ -1,3 +1,3 @@
-class CDOTA_Item_Misericorde
+class CDOTA_Item_Misericorde : public CDOTA_Item
 {
 };

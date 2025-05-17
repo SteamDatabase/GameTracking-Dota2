@@ -1,4 +1,5 @@
-class CSoundEventPathCornerEntity
+// MNetworkVarNames = "SoundeventPathCornerPairNetworked_t m_vecCornerPairsNetworked"
+class CSoundEventPathCornerEntity : public CSoundEventEntity
 {
 	CUtlSymbolLarge m_iszPathCorner;
 	int32 m_iCountMax;
@@ -6,5 +7,6 @@ class CSoundEventPathCornerEntity
 	float32 m_flDistMaxSqr;
 	float32 m_flDotProductMax;
 	bool m_bPlaying;
+	// MNetworkEnable
 	CNetworkUtlVectorBase< SoundeventPathCornerPairNetworked_t > m_vecCornerPairsNetworked;
 };

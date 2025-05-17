@@ -1,4 +1,5 @@
-class CNmBlend2DNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmBlend2DNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	CUtlVectorFixedGrowable< int16, 5 > m_sourceNodeIndices;
 	int16 m_nInputParameterNodeIdx0;

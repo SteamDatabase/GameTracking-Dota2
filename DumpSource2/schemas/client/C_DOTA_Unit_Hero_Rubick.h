@@ -1,7 +1,16 @@
-class C_DOTA_Unit_Hero_Rubick
+// MNetworkVarNames = "Vector m_stolenAbilityColorHSV1"
+// MNetworkVarNames = "Vector m_stolenAbilityColorHSV2"
+// MNetworkVarNames = "Vector m_stolenAbilityFXColorHSV"
+class C_DOTA_Unit_Hero_Rubick : public C_DOTA_BaseNPC_Hero
 {
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnAbilityColorChanged"
 	Vector m_stolenAbilityColorHSV1;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnAbilityColorChanged"
 	Vector m_stolenAbilityColorHSV2;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnAbilityColorChanged"
 	Vector m_stolenAbilityFXColorHSV;
 	bool m_bHasInitializedAbilityColors;
 	Vector m_startAbilityColorHSV1;

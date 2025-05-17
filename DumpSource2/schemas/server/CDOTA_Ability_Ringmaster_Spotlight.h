@@ -1,3 +1,3 @@
-class CDOTA_Ability_Ringmaster_Spotlight
+class CDOTA_Ability_Ringmaster_Spotlight : public CDOTABaseAbility
 {
 };

@@ -1,4 +1,8 @@
-class CParticleTransformInput
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MPropertyCustomEditor = "TransformInput()"
+// MClassIsParticleTransform
+// MParticleCustomFieldDefaultValue (UNKNOWN FOR PARSER)
+class CParticleTransformInput : public CParticleInput
 {
 	ParticleTransformType_t m_nType;
 	CParticleNamedValueRef m_NamedValue;

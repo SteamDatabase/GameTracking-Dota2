@@ -1,4 +1,4 @@
-class CDOTA_Ability_Tinker_Keen_Teleport
+class CDOTA_Ability_Tinker_Keen_Teleport : public CDOTABaseAbility
 {
 	int32 creep_teleport_level;
 	int32 hero_teleport_level;

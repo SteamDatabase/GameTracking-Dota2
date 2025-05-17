@@ -1,4 +1,5 @@
-class CWayPointHelperUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CWayPointHelperUpdateNode : public CUnaryUpdateNode
 {
 	float32 m_flStartCycle;
 	float32 m_flEndCycle;

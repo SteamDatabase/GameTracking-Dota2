@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_CrystalBall_Truesight
+class CDOTA_Modifier_Ringmaster_CrystalBall_Truesight : public CDOTA_Buff
 {
 	float32 radius;
 	float32 truesight_linger_duration;

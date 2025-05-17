@@ -1,3 +1,3 @@
-class CDOTA_Modifier_BackdoorProtection
+class CDOTA_Modifier_BackdoorProtection : public CDOTA_Buff
 {
 };

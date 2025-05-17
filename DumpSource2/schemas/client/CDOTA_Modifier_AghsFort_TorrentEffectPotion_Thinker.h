@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_TorrentEffectPotion_Thinker
+class CDOTA_Modifier_AghsFort_TorrentEffectPotion_Thinker : public CDOTA_Buff_Item
 {
 	float32 m_fProcChance;
 	int32 m_nRadius;

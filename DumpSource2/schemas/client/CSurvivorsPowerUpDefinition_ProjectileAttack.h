@@ -1,4 +1,6 @@
-class CSurvivorsPowerUpDefinition_ProjectileAttack
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+class CSurvivorsPowerUpDefinition_ProjectileAttack : public CSurvivorsPowerUpDefinition
 {
 	ESurvivorsAttackTargeting m_eTargeting;
 	ESurvivorsAttackTargeting m_eBounceTargeting;

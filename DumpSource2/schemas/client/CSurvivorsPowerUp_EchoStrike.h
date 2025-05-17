@@ -1,3 +1,3 @@
-class CSurvivorsPowerUp_EchoStrike
+class CSurvivorsPowerUp_EchoStrike : public CSurvivorsPowerUp_AreaAttack_Line
 {
 };

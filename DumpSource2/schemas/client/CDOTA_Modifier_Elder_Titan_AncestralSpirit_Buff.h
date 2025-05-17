@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Elder_Titan_AncestralSpirit_Buff
+class CDOTA_Modifier_Elder_Titan_AncestralSpirit_Buff : public CDOTA_Buff
 {
 	float32 move_pct_creeps;
 	float32 move_pct_heroes;

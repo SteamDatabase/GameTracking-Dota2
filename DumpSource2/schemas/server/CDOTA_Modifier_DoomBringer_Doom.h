@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DoomBringer_Doom
+class CDOTA_Modifier_DoomBringer_Doom : public CDOTA_Buff
 {
 	int32 damage;
 	float32 duration;

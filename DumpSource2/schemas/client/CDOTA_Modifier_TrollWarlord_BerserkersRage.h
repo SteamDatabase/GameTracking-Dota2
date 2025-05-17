@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TrollWarlord_BerserkersRage
+class CDOTA_Modifier_TrollWarlord_BerserkersRage : public CDOTA_Buff
 {
 	int32 bonus_move_speed;
 	int32 bonus_hp_pct;

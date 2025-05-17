@@ -1,3 +1,3 @@
-class CEnvDeferredSpotLight
+class CEnvDeferredSpotLight : public CEnvDeferredLight
 {
 };

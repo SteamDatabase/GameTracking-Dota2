@@ -1,4 +1,4 @@
-class CDOTA_Ability_StormSpirit_BallLightning
+class CDOTA_Ability_StormSpirit_BallLightning : public CDOTABaseAbility
 {
 	bool m_bHasAutoRemnantTalent;
 	float32 m_fAutoRemnantInterval;

@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CSurvivorsAttributeDefinition::MetaProgressionTierCost_t
 {
 	int32 m_nMinigameCurrency;

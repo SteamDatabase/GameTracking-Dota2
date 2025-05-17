@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Phantom_Assassin_GroundDagger
+class CDOTA_Modifier_Phantom_Assassin_GroundDagger : public CDOTA_Buff
 {
 };

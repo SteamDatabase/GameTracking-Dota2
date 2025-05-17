@@ -1,3 +1,3 @@
-class CDOTA_Ability_Riki_SmokeScreen
+class CDOTA_Ability_Riki_SmokeScreen : public CDOTABaseAbility
 {
 };

@@ -1,5 +1,7 @@
-class C_DOTA_Ability_Rubick_Telekinesis
+// MNetworkVarNames = "Vector m_vStartLocation"
+class C_DOTA_Ability_Rubick_Telekinesis : public C_DOTABaseAbility
 {
+	// MNetworkEnable
 	Vector m_vStartLocation;
 	Vector m_vLandLocation;
 	GameTime_t m_flStartTime;

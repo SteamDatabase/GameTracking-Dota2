@@ -1,3 +1,3 @@
-class CDynamicPropAlias_dynamic_prop
+class CDynamicPropAlias_dynamic_prop : public CDynamicProp
 {
 };

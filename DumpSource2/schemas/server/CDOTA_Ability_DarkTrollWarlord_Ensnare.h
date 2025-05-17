@@ -1,3 +1,3 @@
-class CDOTA_Ability_DarkTrollWarlord_Ensnare
+class CDOTA_Ability_DarkTrollWarlord_Ensnare : public CDOTABaseAbility
 {
 };

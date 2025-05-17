@@ -1,4 +1,4 @@
-class CFuncTrain
+class CFuncTrain : public CBasePlatTrain
 {
 	CHandle< CBaseEntity > m_hCurrentTarget;
 	bool m_activated;

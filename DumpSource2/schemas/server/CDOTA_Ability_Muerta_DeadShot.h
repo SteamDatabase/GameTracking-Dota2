@@ -1,4 +1,4 @@
-class CDOTA_Ability_Muerta_DeadShot
+class CDOTA_Ability_Muerta_DeadShot : public CDOTABaseAbility
 {
 	float32 radius;
 	float32 speed;

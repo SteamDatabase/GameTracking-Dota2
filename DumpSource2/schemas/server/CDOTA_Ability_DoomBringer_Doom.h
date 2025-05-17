@@ -1,3 +1,3 @@
-class CDOTA_Ability_DoomBringer_Doom
+class CDOTA_Ability_DoomBringer_Doom : public CDOTABaseAbility
 {
 };

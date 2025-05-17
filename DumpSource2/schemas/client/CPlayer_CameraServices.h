@@ -1,10 +1,25 @@
-class CPlayer_CameraServices
+// MNetworkVarNames = "fogplayerparams_t m_PlayerFog"
+// MNetworkVarNames = "CHandle< CColorCorrection> m_hColorCorrectionCtrl"
+// MNetworkVarNames = "CHandle< CBaseEntity> m_hViewEntity"
+// MNetworkVarNames = "CHandle< CTonemapController2> m_hTonemapController"
+// MNetworkVarNames = "audioparams_t m_audio"
+// MNetworkVarNames = "CHandle<C_PostProcessingVolume> m_PostProcessingVolumes"
+class CPlayer_CameraServices : public CPlayerPawnComponent
 {
+	// MNetworkEnable
 	C_fogplayerparams_t m_PlayerFog;
+	// MNetworkEnable
 	CHandle< C_ColorCorrection > m_hColorCorrectionCtrl;
+	// MNetworkEnable
 	CHandle< C_BaseEntity > m_hViewEntity;
+	// MNetworkEnable
+	// MNetworkUserGroup = "LocalPlayerAndObserversExclusive"
 	CHandle< C_TonemapController2 > m_hTonemapController;
+	// MNetworkEnable
+	// MNetworkUserGroup = "LocalPlayerAndObserversExclusive"
 	audioparams_t m_audio;
+	// MNetworkEnable
+	// MNetworkUserGroup = "LocalPlayerAndObserversExclusive"
 	C_NetworkUtlVectorBase< CHandle< C_PostProcessingVolume > > m_PostProcessingVolumes;
 	float32 m_flOldPlayerZ;
 	float32 m_flOldPlayerViewOffsetZ;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Visage_Lurker
+class CDOTA_Modifier_Visage_Lurker : public CDOTA_Buff
 {
 	int32 max_stacks;
 	float32 stack_gain_time;

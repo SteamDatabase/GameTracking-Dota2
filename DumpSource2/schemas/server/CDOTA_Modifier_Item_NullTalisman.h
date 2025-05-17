@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_NullTalisman
+class CDOTA_Modifier_Item_NullTalisman : public CDOTA_Buff_Item
 {
 	int32 bonus_strength;
 	int32 bonus_agility;

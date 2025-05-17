@@ -1,3 +1,3 @@
-class CDOTA_Ability_AntiMage_ManaVoid
+class CDOTA_Ability_AntiMage_ManaVoid : public CDOTABaseAbility
 {
 };

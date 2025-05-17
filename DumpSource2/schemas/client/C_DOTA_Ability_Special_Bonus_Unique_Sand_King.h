@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Sand_King
+class C_DOTA_Ability_Special_Bonus_Unique_Sand_King : public C_DOTABaseAbility
 {
 };

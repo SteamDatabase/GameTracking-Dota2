@@ -1,3 +1,3 @@
-class CNmFloatValueNode::CDefinition
+class CNmFloatValueNode::CDefinition : public CNmValueNode::CDefinition
 {
 };

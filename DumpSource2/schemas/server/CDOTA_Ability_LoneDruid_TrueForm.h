@@ -1,3 +1,3 @@
-class CDOTA_Ability_LoneDruid_TrueForm
+class CDOTA_Ability_LoneDruid_TrueForm : public CDOTABaseAbility
 {
 };

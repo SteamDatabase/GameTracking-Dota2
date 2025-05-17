@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_Flamethrower_Damage
+class CDOTA_Modifier_Shredder_Flamethrower_Damage : public CDOTA_Buff
 {
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nActiveFXIndex;

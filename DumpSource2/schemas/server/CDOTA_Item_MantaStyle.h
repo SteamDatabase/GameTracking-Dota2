@@ -1,3 +1,3 @@
-class CDOTA_Item_MantaStyle
+class CDOTA_Item_MantaStyle : public CDOTA_Item
 {
 };

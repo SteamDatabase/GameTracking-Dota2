@@ -1,3 +1,3 @@
-class CLightOrthoEntity
+class CLightOrthoEntity : public CLightEntity
 {
 };

@@ -1,4 +1,6 @@
-class CSurvivorsEnemyDefinition_Absorber
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+class CSurvivorsEnemyDefinition_Absorber : public CSurvivorsEnemyDefinition
 {
 	float32 m_flModelScaleIncreasePerAbsorb;
 	float32 m_flMaxModelScale;

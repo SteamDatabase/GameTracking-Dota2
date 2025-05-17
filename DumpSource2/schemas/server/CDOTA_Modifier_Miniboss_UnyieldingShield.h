@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Miniboss_UnyieldingShield
+class CDOTA_Modifier_Miniboss_UnyieldingShield : public CDOTA_Buff
 {
 	int32 damage_absorb;
 	float32 regen_per_second;

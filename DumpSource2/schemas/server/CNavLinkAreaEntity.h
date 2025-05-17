@@ -1,4 +1,4 @@
-class CNavLinkAreaEntity
+class CNavLinkAreaEntity : public CPointEntity
 {
 	float32 m_flWidth;
 	Vector m_vLocatorOffset;

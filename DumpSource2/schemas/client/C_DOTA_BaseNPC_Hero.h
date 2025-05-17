@@ -1,17 +1,60 @@
-class C_DOTA_BaseNPC_Hero
+// MNetworkVarNames = "int m_iCurrentXP"
+// MNetworkVarNames = "int m_iAbilityPoints"
+// MNetworkVarNames = "int m_iTotalAbilityPoints"
+// MNetworkVarNames = "GameTime_t m_flRespawnTime"
+// MNetworkVarNames = "float m_flRespawnTimePenalty"
+// MNetworkVarNames = "float m_flStrength"
+// MNetworkVarNames = "float m_flAgility"
+// MNetworkVarNames = "float m_flIntellect"
+// MNetworkVarNames = "float m_flStrengthTotal"
+// MNetworkVarNames = "float m_flAgilityTotal"
+// MNetworkVarNames = "float m_flIntellectTotal"
+// MNetworkVarNames = "EHANDLE m_hFacetAbilities"
+// MNetworkVarNames = "int m_iRecentDamage"
+// MNetworkVarNames = "PlayerID_t m_iPlayerID"
+// MNetworkVarNames = "HeroFacetID_t m_iHeroFacetID"
+// MNetworkVarNames = "CHandle<C_DOTA_BaseNPC_Hero> m_hReplicatingOtherHeroModel"
+// MNetworkVarNames = "bool m_bReincarnating"
+// MNetworkVarNames = "bool m_bCustomKillEffect"
+// MNetworkVarNames = "GameTime_t m_flSpawnedAt"
+// MNetworkVarNames = "bool m_bScriptDisableRespawns"
+// MNetworkVarNames = "int m_iPrimaryAttribute"
+// MNetworkIncludeByName = "m_flDeathTime"
+class C_DOTA_BaseNPC_Hero : public C_DOTA_BaseNPC_Additive
 {
+	// MNetworkEnable
+	// MNetworkPriority = 32
 	int32 m_iCurrentXP;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnAbilityPointsChanged"
 	int32 m_iAbilityPoints;
+	// MNetworkEnable
 	int32 m_iTotalAbilityPoints;
+	// MNetworkEnable
 	GameTime_t m_flRespawnTime;
+	// MNetworkEnable
 	float32 m_flRespawnTimePenalty;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnBaseStatChanged"
 	float32 m_flStrength;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnBaseStatChanged"
 	float32 m_flAgility;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnBaseStatChanged"
 	float32 m_flIntellect;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnBaseStatChanged"
 	float32 m_flStrengthTotal;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnBaseStatChanged"
 	float32 m_flAgilityTotal;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnBaseStatChanged"
 	float32 m_flIntellectTotal;
+	// MNetworkEnable
 	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_hFacetAbilities;
+	// MNetworkEnable
 	int32 m_iRecentDamage;
 	float32 m_fPainFactor;
 	float32 m_fTargetPainFactor;
@@ -20,13 +63,21 @@ class C_DOTA_BaseNPC_Hero
 	ParticleIndex_t m_nFXStunIndex;
 	ParticleIndex_t m_nFXSilenceIndex;
 	ParticleIndex_t m_nFXDeathIndex;
+	// MNetworkEnable
 	PlayerID_t m_iPlayerID;
+	// MNetworkEnable
 	HeroFacetID_t m_iHeroFacetID;
+	// MNetworkEnable
 	CHandle< C_DOTA_BaseNPC_Hero > m_hReplicatingOtherHeroModel;
+	// MNetworkEnable
 	bool m_bReincarnating;
+	// MNetworkEnable
 	bool m_bCustomKillEffect;
+	// MNetworkEnable
 	GameTime_t m_flSpawnedAt;
+	// MNetworkEnable
 	bool m_bScriptDisableRespawns;
+	// MNetworkEnable
 	int32 m_iPrimaryAttribute;
 	int32 m_nLastDrawnHealth;
 	float32 m_flHurtAmount;

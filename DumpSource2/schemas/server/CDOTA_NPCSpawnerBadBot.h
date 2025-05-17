@@ -1,3 +1,3 @@
-class CDOTA_NPCSpawnerBadBot
+class CDOTA_NPCSpawnerBadBot : public CDOTA_NPCSpawner
 {
 };

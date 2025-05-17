@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Caster_Rapier
+class CDOTA_Modifier_Item_Caster_Rapier : public CDOTA_Buff_Item
 {
 	int32 cast_range_limit;
 	int32 bonus_spell_amp;

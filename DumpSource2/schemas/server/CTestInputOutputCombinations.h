@@ -1,4 +1,4 @@
-class CTestInputOutputCombinations
+class CTestInputOutputCombinations : public CLogicalEntity
 {
 	CEntityIOOutput m_OnVariantVoid;
 	CEntityIOOutput m_OnVariantBool;

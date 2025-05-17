@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DataDriven
+class CDOTA_Modifier_DataDriven : public CDOTA_Buff
 {
 	AbilityID_t m_nAbilityID;
 	int32 m_nIndexInAbility;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Centaur_Stampede
+class CDOTA_Modifier_Centaur_Stampede : public CDOTA_Buff
 {
 	float32 radius;
 	int32 damage_reduction;

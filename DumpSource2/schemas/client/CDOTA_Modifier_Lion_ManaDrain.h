@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lion_ManaDrain
+class CDOTA_Modifier_Lion_ManaDrain : public CDOTA_Buff
 {
 	int32 mana_per_second;
 	int32 break_distance;

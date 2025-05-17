@@ -1,4 +1,4 @@
-class CFuncTrackTrain
+class CFuncTrackTrain : public CBaseModelEntity
 {
 	CHandle< CPathTrack > m_ppath;
 	float32 m_length;

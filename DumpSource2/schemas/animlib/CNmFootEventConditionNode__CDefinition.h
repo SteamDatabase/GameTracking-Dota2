@@ -1,4 +1,5 @@
-class CNmFootEventConditionNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmFootEventConditionNode::CDefinition : public CNmBoolValueNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	NmFootPhaseCondition_t m_phaseCondition;

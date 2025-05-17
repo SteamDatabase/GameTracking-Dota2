@@ -1,3 +1,3 @@
-class CDOTA_Ability_Pangolier_LuckyShot
+class CDOTA_Ability_Pangolier_LuckyShot : public CDOTABaseAbility
 {
 };

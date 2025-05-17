@@ -1,4 +1,5 @@
-class CNmIDSwitchNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmIDSwitchNode::CDefinition : public CNmIDValueNode::CDefinition
 {
 	int16 m_nSwitchValueNodeIdx;
 	int16 m_nTrueValueNodeIdx;

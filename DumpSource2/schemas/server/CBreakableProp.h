@@ -1,5 +1,10 @@
-class CBreakableProp
+// MNetworkVarNames = "CPropDataComponent::Storage_t m_CPropDataComponent"
+class CBreakableProp : public CBaseProp
 {
+	// MNetworkEnable
+	// MNetworkUserGroup = "CPropDataComponent"
+	// MNetworkAlias = "CPropDataComponent"
+	// MNetworkTypeAlias = "CPropDataComponent"
 	CPropDataComponent m_CPropDataComponent;
 	CEntityIOOutput m_OnBreak;
 	CEntityOutputTemplate< float32 > m_OnHealthChanged;

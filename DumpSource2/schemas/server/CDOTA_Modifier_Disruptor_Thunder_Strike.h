@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Disruptor_Thunder_Strike
+class CDOTA_Modifier_Disruptor_Thunder_Strike : public CDOTA_Buff
 {
 	float32 strike_interval;
 	float32 radius;

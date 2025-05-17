@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CSurvivorsDifficultyDefinition
 {
 	CUtlString m_sLocDifficultyName;

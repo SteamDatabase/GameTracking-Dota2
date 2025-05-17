@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Brewmaster_PermanentImmolation
+class C_DOTA_Ability_Brewmaster_PermanentImmolation : public C_DOTABaseAbility
 {
 };

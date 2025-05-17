@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Elder_Titan_EarthSplitter_Caster
+class CDOTA_Modifier_Elder_Titan_EarthSplitter_Caster : public CDOTA_Buff
 {
 	CUtlVector< CHandle< C_BaseEntity > > m_hHitUnits;
 	float32 vision_width;

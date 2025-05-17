@@ -1,3 +1,3 @@
-class CDOTA_Ability_Silencer_LastWord
+class CDOTA_Ability_Silencer_LastWord : public CDOTABaseAbility
 {
 };

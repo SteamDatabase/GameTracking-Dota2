@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulse_Variable
 {
 	PulseSymbol_t m_Name;

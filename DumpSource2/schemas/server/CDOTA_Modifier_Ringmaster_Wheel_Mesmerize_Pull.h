@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_Wheel_Mesmerize_Pull
+class CDOTA_Modifier_Ringmaster_Wheel_Mesmerize_Pull : public CDOTA_Buff
 {
 	float32 m_fMovementSpeed;
 	CHandle< CDOTA_BaseNPC > m_hPullTarget;

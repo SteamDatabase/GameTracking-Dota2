@@ -1,3 +1,3 @@
-class CDOTA_Ability_MonkeyKing_QuadrupleTap
+class CDOTA_Ability_MonkeyKing_QuadrupleTap : public CDOTABaseAbility
 {
 };

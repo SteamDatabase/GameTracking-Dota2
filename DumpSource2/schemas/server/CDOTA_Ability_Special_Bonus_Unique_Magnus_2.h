@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Magnus_2
+class CDOTA_Ability_Special_Bonus_Unique_Magnus_2 : public CDOTABaseAbility
 {
 };

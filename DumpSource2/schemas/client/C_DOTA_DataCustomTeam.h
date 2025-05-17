@@ -1,3 +1,3 @@
-class C_DOTA_DataCustomTeam
+class C_DOTA_DataCustomTeam : public C_DOTA_DataNonSpectator
 {
 };

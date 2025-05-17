@@ -1,4 +1,4 @@
-class CTriggerSoundscape
+class CTriggerSoundscape : public CBaseTrigger
 {
 	CHandle< CEnvSoundscapeTriggerable > m_hSoundscape;
 	CUtlSymbolLarge m_SoundscapeName;

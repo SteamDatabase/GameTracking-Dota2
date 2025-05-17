@@ -1,4 +1,4 @@
-class CPhysHinge
+class CPhysHinge : public CPhysConstraint
 {
 	ConstraintSoundInfo m_soundInfo;
 	CEntityIOOutput m_NotifyMinLimitReached;

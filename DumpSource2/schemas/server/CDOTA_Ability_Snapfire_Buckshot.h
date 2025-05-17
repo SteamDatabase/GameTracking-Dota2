@@ -1,3 +1,3 @@
-class CDOTA_Ability_Snapfire_Buckshot
+class CDOTA_Ability_Snapfire_Buckshot : public CDOTABaseAbility
 {
 };

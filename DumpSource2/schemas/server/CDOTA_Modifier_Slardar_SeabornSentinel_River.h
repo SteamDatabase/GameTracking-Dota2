@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slardar_SeabornSentinel_River
+class CDOTA_Modifier_Slardar_SeabornSentinel_River : public CDOTA_Buff
 {
 	int32 river_speed;
 	float32 puddle_regen;

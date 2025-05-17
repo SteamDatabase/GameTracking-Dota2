@@ -1,4 +1,4 @@
-class CDOTA_Modifier_BottleRegeneration
+class CDOTA_Modifier_BottleRegeneration : public CDOTA_Buff
 {
 	int32 health_restore;
 	int32 mana_restore;

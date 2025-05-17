@@ -1,4 +1,4 @@
-class CPhysMotor
+class CPhysMotor : public CLogicalEntity
 {
 	CUtlSymbolLarge m_nameAttach;
 	CUtlSymbolLarge m_nameAnchor;

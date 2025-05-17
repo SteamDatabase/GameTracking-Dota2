@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Undying_FleshGolem_PlagueAura
+class CDOTA_Modifier_Undying_FleshGolem_PlagueAura : public CDOTA_Buff
 {
 	int32 slow;
 	int32 damage;

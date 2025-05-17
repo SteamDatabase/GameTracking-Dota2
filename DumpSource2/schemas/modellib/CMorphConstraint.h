@@ -1,4 +1,5 @@
-class CMorphConstraint
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CMorphConstraint : public CBaseConstraint
 {
 	CUtlString m_sTargetMorph;
 	int32 m_nSlaveChannel;

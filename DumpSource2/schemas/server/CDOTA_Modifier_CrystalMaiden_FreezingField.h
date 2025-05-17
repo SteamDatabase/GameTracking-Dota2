@@ -1,4 +1,4 @@
-class CDOTA_Modifier_CrystalMaiden_FreezingField
+class CDOTA_Modifier_CrystalMaiden_FreezingField : public CDOTA_Buff
 {
 	float32 radius;
 	int32 damage;

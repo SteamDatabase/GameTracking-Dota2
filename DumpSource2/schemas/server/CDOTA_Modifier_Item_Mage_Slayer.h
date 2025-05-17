@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Mage_Slayer
+class CDOTA_Modifier_Item_Mage_Slayer : public CDOTA_Buff_Item
 {
 	int32 bonus_magical_armor;
 	int32 bonus_attack_speed;

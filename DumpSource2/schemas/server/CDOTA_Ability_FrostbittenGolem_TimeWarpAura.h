@@ -1,3 +1,3 @@
-class CDOTA_Ability_FrostbittenGolem_TimeWarpAura
+class CDOTA_Ability_FrostbittenGolem_TimeWarpAura : public CDOTABaseAbility
 {
 };

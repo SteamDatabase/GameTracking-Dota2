@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Phoenix_IcarusDiveBurn
+class CDOTA_Modifier_Phoenix_IcarusDiveBurn : public CDOTA_Buff
 {
 	float32 burn_tick_interval;
 	float32 blind_duration;

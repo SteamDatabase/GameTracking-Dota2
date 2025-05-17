@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DeathProphet_Exorcism
+class CDOTA_Modifier_DeathProphet_Exorcism : public CDOTA_Buff
 {
 	float32 radius;
 	int32 spirit_speed;

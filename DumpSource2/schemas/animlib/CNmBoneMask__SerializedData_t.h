@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CNmBoneMask::SerializedData_t
 {
 	CGlobalSymbol m_ID;

@@ -1,3 +1,3 @@
-class C_LightOrthoEntity
+class C_LightOrthoEntity : public C_LightEntity
 {
 };

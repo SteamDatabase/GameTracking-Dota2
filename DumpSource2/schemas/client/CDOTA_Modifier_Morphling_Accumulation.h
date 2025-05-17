@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Morphling_Accumulation
+class CDOTA_Modifier_Morphling_Accumulation : public CDOTA_Buff
 {
 	bool m_bActive;
 	float32 percent_to_increment;

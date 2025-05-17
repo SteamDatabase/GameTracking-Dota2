@@ -1,4 +1,4 @@
-class CDOTA_Ability_Nian_Roar
+class CDOTA_Ability_Nian_Roar : public CDOTABaseAbility
 {
 	int32 base_projectiles;
 	int32 max_projectiles;

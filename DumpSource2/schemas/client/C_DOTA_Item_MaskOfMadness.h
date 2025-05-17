@@ -1,3 +1,3 @@
-class C_DOTA_Item_MaskOfMadness
+class C_DOTA_Item_MaskOfMadness : public C_DOTA_Item
 {
 };

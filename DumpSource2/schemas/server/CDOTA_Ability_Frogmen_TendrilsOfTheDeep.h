@@ -1,4 +1,4 @@
-class CDOTA_Ability_Frogmen_TendrilsOfTheDeep
+class CDOTA_Ability_Frogmen_TendrilsOfTheDeep : public CDOTABaseAbility
 {
 	CUtlVector< CHandle< CBaseEntity > > hAlreadyHitList;
 	float32 duration;

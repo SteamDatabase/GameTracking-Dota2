@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lich_Sinister_Gaze
+class CDOTA_Modifier_Lich_Sinister_Gaze : public CDOTA_Buff
 {
 	int32 movement_speed;
 	int32 mana_drain;

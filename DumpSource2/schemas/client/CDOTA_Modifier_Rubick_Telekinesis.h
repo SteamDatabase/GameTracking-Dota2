@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rubick_Telekinesis
+class CDOTA_Modifier_Rubick_Telekinesis : public CDOTA_Buff
 {
 	GameTime_t m_fStartTime;
 	GameTime_t m_fEndTime;

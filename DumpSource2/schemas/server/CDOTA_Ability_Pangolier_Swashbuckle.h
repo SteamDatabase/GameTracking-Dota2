@@ -1,4 +1,4 @@
-class CDOTA_Ability_Pangolier_Swashbuckle
+class CDOTA_Ability_Pangolier_Swashbuckle : public CDOTABaseAbility
 {
 	float32 dash_speed;
 	float32 start_radius;

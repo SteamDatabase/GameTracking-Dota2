@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Antimage_Persectur
+class CDOTA_Modifier_Antimage_Persectur : public CDOTA_Buff
 {
 	float32 mana_threshold;
 	float32 move_slow_min;

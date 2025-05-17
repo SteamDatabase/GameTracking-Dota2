@@ -1,4 +1,4 @@
-class CLogicDistanceAutosave
+class CLogicDistanceAutosave : public CLogicalEntity
 {
 	CUtlSymbolLarge m_iszTargetEntity;
 	float32 m_flDistanceToPlayer;

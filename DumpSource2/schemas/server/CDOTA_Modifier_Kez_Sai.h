@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kez_Sai
+class CDOTA_Modifier_Kez_Sai : public CDOTA_Buff
 {
 	int32 sai_attack_range;
 	int32 sai_proc_vuln_chance;

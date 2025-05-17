@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Luminosity
+class CDOTA_Modifier_Dawnbreaker_Luminosity : public CDOTA_Buff
 {
 	bool m_bAppliesToCreeps;
 	int32 attack_count;

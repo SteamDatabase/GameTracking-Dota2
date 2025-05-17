@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ScoutBonuses
+class CDOTA_Modifier_ScoutBonuses : public CDOTA_Buff
 {
 	float32 reveal_radius;
 	float32 increase_health;

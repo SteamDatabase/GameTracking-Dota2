@@ -1,3 +1,3 @@
-class CDOTA_Ability_AntiMage_Puritan
+class CDOTA_Ability_AntiMage_Puritan : public CDOTABaseAbility
 {
 };

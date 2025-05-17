@@ -1,3 +1,3 @@
-class CDOTA_Ability_Tidehunter_Blubber
+class CDOTA_Ability_Tidehunter_Blubber : public CDOTABaseAbility
 {
 };

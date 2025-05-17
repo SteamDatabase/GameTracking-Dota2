@@ -1,4 +1,4 @@
-class CEnvExplosion
+class CEnvExplosion : public CModelPointEntity
 {
 	int32 m_iMagnitude;
 	float32 m_flPlayerDamage;

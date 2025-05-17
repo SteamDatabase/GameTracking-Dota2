@@ -1,4 +1,4 @@
-class CDOTA_Ability_Roshan_GrabThrow
+class CDOTA_Ability_Roshan_GrabThrow : public CDOTABaseAbility
 {
 	CDOTA_BaseNPC* m_hTarget;
 	int32 m_nComboCount;

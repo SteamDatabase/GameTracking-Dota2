@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Tinker_Laser
+class C_DOTA_Ability_Tinker_Laser : public C_DOTABaseAbility
 {
 	Vector m_vProjectileLocation;
 	bool bBlocked;

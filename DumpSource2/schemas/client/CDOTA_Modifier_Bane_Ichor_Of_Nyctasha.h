@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bane_Ichor_Of_Nyctasha
+class CDOTA_Modifier_Bane_Ichor_Of_Nyctasha : public CDOTA_Buff
 {
 	GameTime_t m_flLastCalculationTime;
 	float32 m_flTotalAttributes;

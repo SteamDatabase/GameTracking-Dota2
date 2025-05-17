@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Nian_Whirlpool_Pull
+class CDOTA_Modifier_Nian_Whirlpool_Pull : public CDOTA_Buff
 {
 	int32 pull_radius;
 	int32 pull_speed;

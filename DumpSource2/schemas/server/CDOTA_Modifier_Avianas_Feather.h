@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Avianas_Feather
+class CDOTA_Modifier_Avianas_Feather : public CDOTA_Buff_Item
 {
 	int32 evasion;
 	int32 move_speed;

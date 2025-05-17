@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_TrapRoom_MeatHook
+class CDOTA_Ability_AghsFort_TrapRoom_MeatHook : public CDOTABaseAbility
 {
 	Vector m_vProjectileLocation;
 	float32 hook_speed;

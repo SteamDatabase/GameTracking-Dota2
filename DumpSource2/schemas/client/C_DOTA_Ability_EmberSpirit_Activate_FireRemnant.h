@@ -1,4 +1,4 @@
-class C_DOTA_Ability_EmberSpirit_Activate_FireRemnant
+class C_DOTA_Ability_EmberSpirit_Activate_FireRemnant : public C_DOTABaseAbility
 {
 	int32 m_nProjectileID;
 	Vector m_vStartLocation;

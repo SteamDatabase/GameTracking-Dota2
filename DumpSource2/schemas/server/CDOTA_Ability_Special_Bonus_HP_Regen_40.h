@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_HP_Regen_40
+class CDOTA_Ability_Special_Bonus_HP_Regen_40 : public CDOTABaseAbility
 {
 };

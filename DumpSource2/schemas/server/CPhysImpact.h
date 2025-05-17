@@ -1,4 +1,4 @@
-class CPhysImpact
+class CPhysImpact : public CPointEntity
 {
 	float32 m_damage;
 	float32 m_distance;

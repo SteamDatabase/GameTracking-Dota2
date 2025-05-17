@@ -1,3 +1,3 @@
-class CSurvivorsEnemyGolem
+class CSurvivorsEnemyGolem : public CSurvivorsEnemy
 {
 };

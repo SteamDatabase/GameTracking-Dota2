@@ -1,3 +1,3 @@
-class CDOTA_Item_Javelin
+class CDOTA_Item_Javelin : public CDOTA_Item
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_Ward_Dispenser
+class CDOTA_Item_Recipe_Ward_Dispenser : public CDOTA_Item
 {
 };

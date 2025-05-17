@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Visage_SoulAssumption
+class CDOTA_Modifier_Visage_SoulAssumption : public CDOTA_Buff
 {
 	float32 radius;
 	int32 stack_limit;

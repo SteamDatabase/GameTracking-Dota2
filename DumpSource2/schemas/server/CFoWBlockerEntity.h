@@ -1,3 +1,3 @@
-class CFoWBlockerEntity
+class CFoWBlockerEntity : public CBaseEntity
 {
 };

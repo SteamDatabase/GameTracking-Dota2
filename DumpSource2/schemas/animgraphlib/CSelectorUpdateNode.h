@@ -1,4 +1,5 @@
-class CSelectorUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CSelectorUpdateNode : public CAnimUpdateNodeBase
 {
 	CUtlVector< CAnimUpdateNodeRef > m_children;
 	CUtlVector< int8 > m_tags;

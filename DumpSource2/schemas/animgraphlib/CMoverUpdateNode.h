@@ -1,4 +1,5 @@
-class CMoverUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CMoverUpdateNode : public CUnaryUpdateNode
 {
 	CAnimInputDamping m_damping;
 	AnimValueSource m_facingTarget;

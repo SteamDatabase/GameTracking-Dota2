@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_MP_Regen_Amp_10
+class C_DOTA_Ability_Special_Bonus_MP_Regen_Amp_10 : public C_DOTABaseAbility
 {
 };

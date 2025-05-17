@@ -1,3 +1,4 @@
+// MEnumFlagsWithOverlappingBits
 enum DOTA_UNIT_TARGET_TEAM : uint32_t
 {
 	DOTA_UNIT_TARGET_TEAM_NONE = 0,

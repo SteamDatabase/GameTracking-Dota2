@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Necrophos
+class CDOTA_Ability_Special_Bonus_Unique_Necrophos : public CDOTABaseAbility
 {
 };

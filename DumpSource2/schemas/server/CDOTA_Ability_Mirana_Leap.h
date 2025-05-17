@@ -1,3 +1,3 @@
-class CDOTA_Ability_Mirana_Leap
+class CDOTA_Ability_Mirana_Leap : public CDOTABaseAbility
 {
 };

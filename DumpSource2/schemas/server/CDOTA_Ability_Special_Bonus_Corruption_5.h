@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Corruption_5
+class CDOTA_Ability_Special_Bonus_Corruption_5 : public CDOTABaseAbility
 {
 };

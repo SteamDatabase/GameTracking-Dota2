@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Primal_Beast_Uproar_Projectile_Thinker
+class CDOTA_Modifier_Primal_Beast_Uproar_Projectile_Thinker : public CDOTA_Buff
 {
 	int32 projectiles_per_stack;
 	int32 projectile_speed;

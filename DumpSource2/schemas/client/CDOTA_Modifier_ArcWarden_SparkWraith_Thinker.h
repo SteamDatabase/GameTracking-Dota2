@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ArcWarden_SparkWraith_Thinker
+class CDOTA_Modifier_ArcWarden_SparkWraith_Thinker : public CDOTA_Buff
 {
 	float32 radius;
 	float32 wraith_vision_radius;

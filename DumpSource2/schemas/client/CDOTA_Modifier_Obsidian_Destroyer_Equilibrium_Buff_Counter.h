@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Obsidian_Destroyer_Equilibrium_Buff_Counter
+class CDOTA_Modifier_Obsidian_Destroyer_Equilibrium_Buff_Counter : public CDOTA_Buff
 {
 };

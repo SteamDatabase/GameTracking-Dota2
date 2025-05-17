@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ogre_Magi_Ignite_Multicast
+class CDOTA_Modifier_Ogre_Magi_Ignite_Multicast : public CDOTA_Buff
 {
 	CHandle< C_DOTA_BaseNPC > m_hTarget;
 	float32 multicast_delay;

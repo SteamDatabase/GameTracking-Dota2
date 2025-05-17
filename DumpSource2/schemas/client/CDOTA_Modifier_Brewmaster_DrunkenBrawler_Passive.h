@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Brewmaster_DrunkenBrawler_Passive
+class CDOTA_Modifier_Brewmaster_DrunkenBrawler_Passive : public CDOTA_Buff
 {
 	int32 dodge_chance;
 	int32 crit_chance;

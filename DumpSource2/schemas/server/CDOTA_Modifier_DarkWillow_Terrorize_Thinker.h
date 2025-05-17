@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkWillow_Terrorize_Thinker
+class CDOTA_Modifier_DarkWillow_Terrorize_Thinker : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hWisp;
 	float32 destination_travel_speed;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Rattlecage
+class CDOTA_Modifier_Item_Rattlecage : public CDOTA_Buff
 {
 	int32 m_iDamageTaken;
 	int32 damage_threshold;

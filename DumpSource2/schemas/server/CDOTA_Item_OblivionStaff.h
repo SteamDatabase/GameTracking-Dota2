@@ -1,3 +1,3 @@
-class CDOTA_Item_OblivionStaff
+class CDOTA_Item_OblivionStaff : public CDOTA_Item
 {
 };

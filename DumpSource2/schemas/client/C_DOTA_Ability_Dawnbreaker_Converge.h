@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Dawnbreaker_Converge
+class C_DOTA_Ability_Dawnbreaker_Converge : public C_DOTABaseAbility
 {
 };

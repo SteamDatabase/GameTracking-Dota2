@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Tinker_Keen_Teleport
+class C_DOTA_Ability_Tinker_Keen_Teleport : public C_DOTABaseAbility
 {
 	int32 creep_teleport_level;
 	int32 hero_teleport_level;

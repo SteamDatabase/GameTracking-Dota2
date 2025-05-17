@@ -1,3 +1,3 @@
-class CDOTA_Ability_Viper_Nose_Dive
+class CDOTA_Ability_Viper_Nose_Dive : public CDOTABaseAbility
 {
 };

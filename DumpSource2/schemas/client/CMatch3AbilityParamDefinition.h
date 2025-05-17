@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CMatch3AbilityParamDefinition
 {
 	CUtlString name;

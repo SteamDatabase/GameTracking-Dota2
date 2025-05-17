@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Legion_Commander_Duel
+class CDOTA_Modifier_Legion_Commander_Duel : public CDOTA_Buff
 {
 	int32 reward_damage;
 	int32 assist_reward_damage;

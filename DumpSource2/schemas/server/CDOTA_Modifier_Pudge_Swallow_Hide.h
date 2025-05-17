@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pudge_Swallow_Hide
+class CDOTA_Modifier_Pudge_Swallow_Hide : public CDOTA_Buff
 {
 	float32 order_lock_duration;
 	GameTime_t m_fOrderLockDone;

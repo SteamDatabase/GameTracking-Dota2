@@ -1,3 +1,3 @@
-class CDOTA_Ability_Life_Stealer_Consume
+class CDOTA_Ability_Life_Stealer_Consume : public CDOTABaseAbility
 {
 };

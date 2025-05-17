@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Obsidian_Destroyer_Sanity_Eclipse_Counter
+class CDOTA_Modifier_Obsidian_Destroyer_Sanity_Eclipse_Counter : public CDOTA_Buff
 {
 };

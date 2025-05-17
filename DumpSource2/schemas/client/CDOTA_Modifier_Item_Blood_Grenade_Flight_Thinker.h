@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Blood_Grenade_Flight_Thinker
+class CDOTA_Modifier_Item_Blood_Grenade_Flight_Thinker : public CDOTA_Buff
 {
 	int32 speed;
 	float32 radius;

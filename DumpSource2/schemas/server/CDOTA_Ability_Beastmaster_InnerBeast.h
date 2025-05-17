@@ -1,3 +1,3 @@
-class CDOTA_Ability_Beastmaster_InnerBeast
+class CDOTA_Ability_Beastmaster_InnerBeast : public CDOTABaseAbility
 {
 };

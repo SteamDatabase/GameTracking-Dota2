@@ -1,4 +1,4 @@
-class CLogicNPCCounter
+class CLogicNPCCounter : public CBaseEntity
 {
 	CEntityIOOutput m_OnMinCountAll;
 	CEntityIOOutput m_OnMaxCountAll;

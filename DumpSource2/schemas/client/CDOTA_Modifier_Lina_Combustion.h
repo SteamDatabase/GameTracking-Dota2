@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lina_Combustion
+class CDOTA_Modifier_Lina_Combustion : public CDOTA_Buff
 {
 	float32 damage_aoe;
 	float32 damage;

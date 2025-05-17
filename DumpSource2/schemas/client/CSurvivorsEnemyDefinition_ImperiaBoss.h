@@ -1,4 +1,6 @@
-class CSurvivorsEnemyDefinition_ImperiaBoss
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+class CSurvivorsEnemyDefinition_ImperiaBoss : public CSurvivorsEnemyDefinition
 {
 	float32 m_flBurningGroundImpactDamage;
 	float32 m_flBurningGroundImpactRadius;

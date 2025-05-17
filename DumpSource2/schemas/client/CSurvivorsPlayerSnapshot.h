@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CSurvivorsPlayerSnapshot
 {
 	SurvivorsHeroID_t m_heroID;

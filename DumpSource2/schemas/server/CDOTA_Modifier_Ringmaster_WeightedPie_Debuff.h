@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_WeightedPie_Debuff
+class CDOTA_Modifier_Ringmaster_WeightedPie_Debuff : public CDOTA_Buff
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

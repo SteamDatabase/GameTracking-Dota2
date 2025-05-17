@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dazzle_Shallow_Grave
+class CDOTA_Modifier_Dazzle_Shallow_Grave : public CDOTA_Buff
 {
 	bool m_bHasPostedEvent;
 	ParticleIndex_t m_nFXIndex;

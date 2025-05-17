@@ -1,3 +1,3 @@
-class CPushable
+class CPushable : public CBreakable
 {
 };

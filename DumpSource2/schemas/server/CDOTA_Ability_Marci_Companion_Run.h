@@ -1,4 +1,4 @@
-class CDOTA_Ability_Marci_Companion_Run
+class CDOTA_Ability_Marci_Companion_Run : public CDOTABaseAbility
 {
 	int32 m_nTrackingProjectileID;
 	ParticleIndex_t m_nFXIndex;

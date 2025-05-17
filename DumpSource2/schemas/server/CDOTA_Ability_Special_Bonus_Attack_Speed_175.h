@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Attack_Speed_175
+class CDOTA_Ability_Special_Bonus_Attack_Speed_175 : public CDOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class CTriggerGravity
+class CTriggerGravity : public CBaseTrigger
 {
 };

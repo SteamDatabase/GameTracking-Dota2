@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Bane_8
+class CDOTA_Ability_Special_Bonus_Unique_Bane_8 : public CDOTABaseAbility
 {
 };

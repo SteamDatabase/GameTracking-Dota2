@@ -1,3 +1,3 @@
-class CDOTA_Ability_BigThunderLizard_Frenzy
+class CDOTA_Ability_BigThunderLizard_Frenzy : public CDOTABaseAbility
 {
 };

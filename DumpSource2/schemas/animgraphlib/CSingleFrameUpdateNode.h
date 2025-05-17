@@ -1,4 +1,5 @@
-class CSingleFrameUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CSingleFrameUpdateNode : public CLeafUpdateNode
 {
 	CUtlVector< CSmartPtr< CAnimActionUpdater > > m_actions;
 	CPoseHandle m_hPoseCacheHandle;

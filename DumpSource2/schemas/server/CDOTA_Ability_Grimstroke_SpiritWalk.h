@@ -1,4 +1,4 @@
-class CDOTA_Ability_Grimstroke_SpiritWalk
+class CDOTA_Ability_Grimstroke_SpiritWalk : public CDOTABaseAbility
 {
 	float32 buff_duration;
 	CHandle< CBaseEntity > m_hTarget;

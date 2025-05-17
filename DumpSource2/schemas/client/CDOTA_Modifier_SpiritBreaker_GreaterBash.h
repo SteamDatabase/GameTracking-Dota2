@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SpiritBreaker_GreaterBash
+class CDOTA_Modifier_SpiritBreaker_GreaterBash : public CDOTA_Buff
 {
 	int32 chance_pct;
 	int32 bonus_chance_pct;

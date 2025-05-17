@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bristleback_Warpath
+class CDOTA_Modifier_Bristleback_Warpath : public CDOTA_Buff
 {
 	int32 damage_per_stack;
 	float32 move_speed_per_stack;

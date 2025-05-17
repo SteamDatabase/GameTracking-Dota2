@@ -1,3 +1,3 @@
-class CDOTAMutationGameMode
+class CDOTAMutationGameMode : public CDOTABaseGameMode
 {
 };

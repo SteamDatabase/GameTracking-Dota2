@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CDOTAFantasyDefinition
 {
 	CUtlVector< FantasyCraftSetupData_t > m_vecCraftingSetups;

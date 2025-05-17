@@ -1,3 +1,3 @@
-class CDOTA_Ability_StormSpirit_Galvanized
+class CDOTA_Ability_StormSpirit_Galvanized : public CDOTABaseAbility
 {
 };

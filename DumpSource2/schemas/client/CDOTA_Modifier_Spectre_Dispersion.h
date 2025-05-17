@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Spectre_Dispersion
+class CDOTA_Modifier_Spectre_Dispersion : public CDOTA_Buff
 {
 	int32 damage_reflection_pct;
 	float32 min_radius;

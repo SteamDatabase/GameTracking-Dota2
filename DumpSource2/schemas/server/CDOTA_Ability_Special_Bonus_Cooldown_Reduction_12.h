@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Cooldown_Reduction_12
+class CDOTA_Ability_Special_Bonus_Cooldown_Reduction_12 : public CDOTABaseAbility
 {
 };

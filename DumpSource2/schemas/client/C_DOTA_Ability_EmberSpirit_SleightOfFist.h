@@ -1,4 +1,4 @@
-class C_DOTA_Ability_EmberSpirit_SleightOfFist
+class C_DOTA_Ability_EmberSpirit_SleightOfFist : public C_DOTABaseAbility
 {
 	Vector m_vCastLoc;
 	int32 m_nHeroesKilled;

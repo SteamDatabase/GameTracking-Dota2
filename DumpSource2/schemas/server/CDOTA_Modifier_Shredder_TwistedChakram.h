@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_TwistedChakram
+class CDOTA_Modifier_Shredder_TwistedChakram : public CDOTA_Buff
 {
 	Vector m_vControlOne;
 	Vector m_vControlTwo;

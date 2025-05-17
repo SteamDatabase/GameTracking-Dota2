@@ -1,3 +1,3 @@
-class CDOTA_Ability_Roshan_Slam
+class CDOTA_Ability_Roshan_Slam : public C_DOTABaseAbility
 {
 };

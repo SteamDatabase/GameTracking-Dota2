@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EarthSpirit_GeomagneticGrip
+class CDOTA_Modifier_EarthSpirit_GeomagneticGrip : public CDOTA_Buff
 {
 	float32 radius;
 	float32 rock_damage;

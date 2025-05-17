@@ -1,3 +1,3 @@
-class CDOTA_Item_OrchidMalevolence
+class CDOTA_Item_OrchidMalevolence : public CDOTA_Item
 {
 };

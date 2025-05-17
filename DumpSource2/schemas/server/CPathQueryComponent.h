@@ -1,4 +1,4 @@
-class CPathQueryComponent
+class CPathQueryComponent : public CEntityComponent
 {
 	CTransform m_PathToEntityTransform;
 	CUtlVector< Vector > m_vecPathSamplePositions;

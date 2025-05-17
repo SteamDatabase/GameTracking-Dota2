@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bloodseeker_Sanguivore
+class CDOTA_Modifier_Bloodseeker_Sanguivore : public CDOTA_Buff
 {
 	int32 base_heal;
 	float32 half_bonus_aoe;

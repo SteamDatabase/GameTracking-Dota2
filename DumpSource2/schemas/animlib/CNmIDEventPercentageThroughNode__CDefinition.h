@@ -1,4 +1,5 @@
-class CNmIDEventPercentageThroughNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmIDEventPercentageThroughNode::CDefinition : public CNmBoolValueNode::CDefinition
 {
 	int16 m_nSourceStateNodeIdx;
 	CNmBitFlags m_eventConditionRules;

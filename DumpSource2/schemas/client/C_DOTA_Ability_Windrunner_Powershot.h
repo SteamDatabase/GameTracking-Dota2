@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Windrunner_Powershot
+class C_DOTA_Ability_Windrunner_Powershot : public C_DOTABaseAbility
 {
 	GameTime_t m_fStartTime;
 	float32 m_fPower;

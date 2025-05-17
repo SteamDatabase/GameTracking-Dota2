@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_ReactiveTazer
+class CDOTA_Modifier_Techies_ReactiveTazer : public CDOTA_Buff
 {
 	int32 bonus_ms;
 	float32 stun_radius;

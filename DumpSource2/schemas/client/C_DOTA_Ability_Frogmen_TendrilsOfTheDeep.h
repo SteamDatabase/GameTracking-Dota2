@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Frogmen_TendrilsOfTheDeep
+class C_DOTA_Ability_Frogmen_TendrilsOfTheDeep : public C_DOTABaseAbility
 {
 	CUtlVector< CHandle< C_BaseEntity > > hAlreadyHitList;
 	float32 duration;

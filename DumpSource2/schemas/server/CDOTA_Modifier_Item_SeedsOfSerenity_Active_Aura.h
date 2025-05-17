@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_SeedsOfSerenity_Active_Aura
+class CDOTA_Modifier_Item_SeedsOfSerenity_Active_Aura : public CDOTA_Buff
 {
 	float32 extra_regen;
 	float32 radius;

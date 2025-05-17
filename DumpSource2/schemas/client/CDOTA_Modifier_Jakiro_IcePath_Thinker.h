@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Jakiro_IcePath_Thinker
+class CDOTA_Modifier_Jakiro_IcePath_Thinker : public CDOTA_Buff
 {
 	float32 path_delay;
 	float32 path_radius;

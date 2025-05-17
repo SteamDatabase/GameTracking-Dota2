@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_CounterHelix
+class CSurvivorsPowerUp_CounterHelix : public CSurvivorsPowerUp_AreaAttack_Circle
 {
 	float32 m_flChanceToCounter;
 	float32 m_flDelayBetweenCounters;

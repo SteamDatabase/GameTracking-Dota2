@@ -1,3 +1,3 @@
-class CDOTA_Ability_Ringmaster_SummonUnicycle
+class CDOTA_Ability_Ringmaster_SummonUnicycle : public CDOTABaseAbility
 {
 };

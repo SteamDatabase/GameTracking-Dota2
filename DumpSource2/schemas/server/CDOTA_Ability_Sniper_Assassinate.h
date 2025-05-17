@@ -1,4 +1,4 @@
-class CDOTA_Ability_Sniper_Assassinate
+class CDOTA_Ability_Sniper_Assassinate : public CDOTABaseAbility
 {
 	CHandle< CBaseEntity > m_hTarget;
 	ParticleIndex_t m_iIndex;

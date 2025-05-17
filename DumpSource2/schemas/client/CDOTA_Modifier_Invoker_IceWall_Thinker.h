@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Invoker_IceWall_Thinker
+class CDOTA_Modifier_Invoker_IceWall_Thinker : public CDOTA_Buff
 {
 	float32 damage_per_second;
 	int32 num_wall_elements;

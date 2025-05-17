@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Centaur_Mount_Toss
+class CDOTA_Modifier_Centaur_Mount_Toss : public CDOTA_Buff
 {
 	float32 air_duration;
 	int32 air_height;

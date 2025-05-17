@@ -1,4 +1,4 @@
-class CPhysBox
+class CPhysBox : public CBreakable
 {
 	int32 m_damageType;
 	int32 m_damageToEnableMotion;

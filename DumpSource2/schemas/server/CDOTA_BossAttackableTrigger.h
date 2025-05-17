@@ -1,3 +1,3 @@
-class CDOTA_BossAttackableTrigger
+class CDOTA_BossAttackableTrigger : public CBaseTrigger
 {
 };

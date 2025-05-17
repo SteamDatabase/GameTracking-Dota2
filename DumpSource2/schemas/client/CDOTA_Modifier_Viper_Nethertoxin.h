@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Viper_Nethertoxin
+class CDOTA_Modifier_Viper_Nethertoxin : public CDOTA_Buff
 {
 	int32 min_damage;
 	int32 max_damage;

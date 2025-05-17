@@ -1,3 +1,3 @@
-class CDOTA_Ability_Bristleback_QuillSpray
+class CDOTA_Ability_Bristleback_QuillSpray : public CDOTABaseAbility
 {
 };

@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CSurvivorsAttributeDefinition
 {
 	CUtlString m_sLocName;

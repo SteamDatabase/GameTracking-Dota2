@@ -1,5 +1,6 @@
 enum EFightingGameButtonBit : uint32_t
 {
+	// MEnumeratorIsNotAFlag
 	kNONE_BIT = 0,
 	kBUTTON_FORWARD_BIT = 1,
 	kBUTTON_BACK_BIT = 2,

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Roshan_Moving
+class CDOTA_Modifier_Roshan_Moving : public CDOTA_Buff
 {
 	int32 move_pits_bonus_speed_per_interrupt;
 	int32 move_pits_max_bonus_speed;

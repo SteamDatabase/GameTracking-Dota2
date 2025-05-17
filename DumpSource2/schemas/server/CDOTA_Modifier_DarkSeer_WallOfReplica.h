@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkSeer_WallOfReplica
+class CDOTA_Modifier_DarkSeer_WallOfReplica : public CDOTA_Buff
 {
 	Vector m_vWallDirection;
 	Vector m_vWallRight;

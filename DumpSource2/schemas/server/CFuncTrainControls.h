@@ -1,3 +1,3 @@
-class CFuncTrainControls
+class CFuncTrainControls : public CBaseModelEntity
 {
 };

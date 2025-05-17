@@ -1,4 +1,4 @@
-class C_DOTA_Ability_ArcWarden_SparkWraith
+class C_DOTA_Ability_ArcWarden_SparkWraith : public C_DOTABaseAbility
 {
 	float32 duration;
 	float32 activation_delay;

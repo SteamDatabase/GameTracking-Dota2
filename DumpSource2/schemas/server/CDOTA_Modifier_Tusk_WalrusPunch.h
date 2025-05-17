@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tusk_WalrusPunch
+class CDOTA_Modifier_Tusk_WalrusPunch : public CDOTA_Buff
 {
 	int32 crit_multiplier;
 	int32 bonus_damage;

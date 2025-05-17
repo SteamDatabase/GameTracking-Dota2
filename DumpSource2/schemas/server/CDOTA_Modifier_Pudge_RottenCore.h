@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pudge_RottenCore
+class CDOTA_Modifier_Pudge_RottenCore : public CDOTA_Buff
 {
 	float32 attack_damage_per_stack;
 	int32 max_total_stacks;

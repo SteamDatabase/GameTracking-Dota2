@@ -1,4 +1,4 @@
-class CDOTA_Ability_Windrunner_Powershot
+class CDOTA_Ability_Windrunner_Powershot : public CDOTABaseAbility
 {
 	GameTime_t m_fStartTime;
 	float32 m_fPower;

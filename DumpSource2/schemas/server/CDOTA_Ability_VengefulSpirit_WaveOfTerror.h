@@ -1,4 +1,4 @@
-class CDOTA_Ability_VengefulSpirit_WaveOfTerror
+class CDOTA_Ability_VengefulSpirit_WaveOfTerror : public CDOTABaseAbility
 {
 	float32 wave_width;
 	float32 wave_speed;

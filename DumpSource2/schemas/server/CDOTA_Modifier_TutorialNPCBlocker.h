@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TutorialNPCBlocker
+class CDOTA_Modifier_TutorialNPCBlocker : public CDOTA_Buff
 {
 	Vector m_vecStart;
 	Vector m_vecEnd;

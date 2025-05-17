@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Underlord_8
+class CDOTA_Ability_Special_Bonus_Unique_Underlord_8 : public CDOTABaseAbility
 {
 };

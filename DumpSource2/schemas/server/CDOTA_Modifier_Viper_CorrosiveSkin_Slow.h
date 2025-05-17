@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Viper_CorrosiveSkin_Slow
+class CDOTA_Modifier_Viper_CorrosiveSkin_Slow : public CDOTA_Buff
 {
 	int32 bonus_attack_speed;
 	float32 damage;

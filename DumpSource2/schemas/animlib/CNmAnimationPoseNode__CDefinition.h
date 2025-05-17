@@ -1,4 +1,5 @@
-class CNmAnimationPoseNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmAnimationPoseNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	int16 m_nPoseTimeValueNodeIdx;
 	int16 m_nDataSlotIdx;

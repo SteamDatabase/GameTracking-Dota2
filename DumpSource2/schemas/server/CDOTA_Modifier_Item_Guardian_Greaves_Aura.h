@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Guardian_Greaves_Aura
+class CDOTA_Modifier_Item_Guardian_Greaves_Aura : public CDOTA_Buff
 {
 	float32 aura_health_regen;
 	float32 aura_armor;

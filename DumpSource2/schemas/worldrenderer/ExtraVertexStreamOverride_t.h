@@ -1,4 +1,5 @@
-class ExtraVertexStreamOverride_t
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class ExtraVertexStreamOverride_t : public BaseSceneObjectOverride_t
 {
 	uint32 m_nSubSceneObject;
 	uint32 m_nDrawCallIndex;

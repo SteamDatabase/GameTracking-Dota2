@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Shredder_ReturnChakramAlias_shredder_return_chakram_2
+class C_DOTA_Ability_Shredder_ReturnChakramAlias_shredder_return_chakram_2 : public C_DOTA_Ability_Shredder_ReturnChakram
 {
 };

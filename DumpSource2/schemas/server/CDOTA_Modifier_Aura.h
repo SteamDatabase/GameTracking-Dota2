@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Aura
+class CDOTA_Modifier_Aura : public CDOTA_Buff
 {
 };

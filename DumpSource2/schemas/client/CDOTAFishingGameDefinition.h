@@ -1,3 +1,6 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+// MVDataSingleton
 class CDOTAFishingGameDefinition
 {
 	CUtlString m_strID;

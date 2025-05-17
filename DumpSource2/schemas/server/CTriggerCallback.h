@@ -1,3 +1,3 @@
-class CTriggerCallback
+class CTriggerCallback : public CBaseTrigger
 {
 };

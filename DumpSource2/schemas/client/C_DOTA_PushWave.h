@@ -1,3 +1,3 @@
-class C_DOTA_PushWave
+class C_DOTA_PushWave : public CBaseAnimatingActivity
 {
 };

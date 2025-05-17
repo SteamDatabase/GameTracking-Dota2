@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Marci_Bodyguarded
+class CDOTA_Modifier_Marci_Bodyguarded : public CDOTA_Buff
 {
 	int32 bodyguard_attack_range_buffer;
 	float32 lifesteal_pct;

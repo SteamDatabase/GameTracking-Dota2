@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Shadow_Demon_Shadow_Poison
+class CDOTA_Modifier_AghsFort_Shadow_Demon_Shadow_Poison : public CDOTA_Buff
 {
 	float32 stack_damage;
 	float32 bonus_stack_damage;

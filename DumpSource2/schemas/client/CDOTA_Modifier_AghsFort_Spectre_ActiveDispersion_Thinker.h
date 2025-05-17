@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Spectre_ActiveDispersion_Thinker
+class CDOTA_Modifier_AghsFort_Spectre_ActiveDispersion_Thinker : public CDOTA_Buff
 {
 	float32 m_fDamage;
 	float32 m_fLastRadius;

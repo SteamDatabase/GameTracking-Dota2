@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Abaddon_AphoticShield
+class CDOTA_Modifier_Abaddon_AphoticShield : public CDOTA_Buff
 {
 	float32 radius;
 	float32 damage_absorb;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Hoodwink_SharpshooterPureDamage
+class CDOTA_Ability_Special_Bonus_Unique_Hoodwink_SharpshooterPureDamage : public CDOTABaseAbility
 {
 };

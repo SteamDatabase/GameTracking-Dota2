@@ -1,3 +1,3 @@
-class C_DOTA_Item_DuelistGloves
+class C_DOTA_Item_DuelistGloves : public C_DOTA_Item
 {
 };

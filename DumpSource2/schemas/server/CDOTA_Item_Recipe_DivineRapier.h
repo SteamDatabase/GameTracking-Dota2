@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_DivineRapier
+class CDOTA_Item_Recipe_DivineRapier : public CDOTA_Item
 {
 };

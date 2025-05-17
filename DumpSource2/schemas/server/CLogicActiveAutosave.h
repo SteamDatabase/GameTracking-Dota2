@@ -1,4 +1,4 @@
-class CLogicActiveAutosave
+class CLogicActiveAutosave : public CLogicAutosave
 {
 	int32 m_TriggerHitPoints;
 	float32 m_flTimeToTrigger;

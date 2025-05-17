@@ -1,4 +1,5 @@
-class CNmFloatMathNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmFloatMathNode::CDefinition : public CNmFloatValueNode::CDefinition
 {
 	int16 m_nInputValueNodeIdxA;
 	int16 m_nInputValueNodeIdxB;

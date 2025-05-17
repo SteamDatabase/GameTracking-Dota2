@@ -1,4 +1,4 @@
-class CDOTA_Modifier_WitchDoctor_DeathWard
+class CDOTA_Modifier_WitchDoctor_DeathWard : public CDOTA_Buff
 {
 	int32 bonus_damage;
 	int32 bonus_accuracy;

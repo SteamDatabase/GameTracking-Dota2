@@ -1,4 +1,4 @@
-class CDOTA_Ability_Nevermore_Requiem
+class CDOTA_Ability_Nevermore_Requiem : public CDOTABaseAbility
 {
 	float32 requiem_line_width_start;
 	float32 requiem_line_width_end;

@@ -1,4 +1,4 @@
-class CEnvEntityMaker
+class CEnvEntityMaker : public CPointEntity
 {
 	Vector m_vecEntityMins;
 	Vector m_vecEntityMaxs;

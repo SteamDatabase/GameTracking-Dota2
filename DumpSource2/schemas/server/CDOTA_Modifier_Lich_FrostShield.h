@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lich_FrostShield
+class CDOTA_Modifier_Lich_FrostShield : public CDOTA_Buff
 {
 	float32 radius;
 	float32 interval;

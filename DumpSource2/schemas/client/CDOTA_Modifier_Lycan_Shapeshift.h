@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lycan_Shapeshift
+class CDOTA_Modifier_Lycan_Shapeshift : public CDOTA_Buff
 {
 	int32 bonus_night_vision;
 	float32 kill_duration_extension;

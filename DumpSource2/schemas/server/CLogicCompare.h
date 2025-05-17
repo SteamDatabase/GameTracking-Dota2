@@ -1,4 +1,4 @@
-class CLogicCompare
+class CLogicCompare : public CLogicalEntity
 {
 	float32 m_flInValue;
 	float32 m_flCompareValue;

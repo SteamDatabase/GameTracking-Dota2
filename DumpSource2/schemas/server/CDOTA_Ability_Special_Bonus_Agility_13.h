@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Agility_13
+class CDOTA_Ability_Special_Bonus_Agility_13 : public CDOTABaseAbility
 {
 };

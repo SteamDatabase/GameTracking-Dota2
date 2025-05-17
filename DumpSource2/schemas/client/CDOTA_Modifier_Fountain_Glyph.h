@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Fountain_Glyph
+class CDOTA_Modifier_Fountain_Glyph : public CDOTA_Buff
 {
 };

@@ -1,4 +1,5 @@
-class CNmOrientationWarpNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmOrientationWarpNode::CDefinition : public CNmPoseNode::CDefinition
 {
 	int16 m_nClipReferenceNodeIdx;
 	int16 m_nTargetValueNodeIdx;

@@ -1,3 +1,3 @@
-class CDOTA_Item_Oakheart
+class CDOTA_Item_Oakheart : public CDOTA_Item
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Aghsfort_Aziyog_Underlord_Firestorm_Thinker
+class CDOTA_Modifier_Aghsfort_Aziyog_Underlord_Firestorm_Thinker : public CDOTA_Buff
 {
 	int32 wave_damage;
 	int32 wave_count;

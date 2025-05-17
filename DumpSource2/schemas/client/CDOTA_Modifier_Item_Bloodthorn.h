@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Bloodthorn
+class CDOTA_Modifier_Item_Bloodthorn : public CDOTA_Buff_Item
 {
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	int32 bonus_intellect;

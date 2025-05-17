@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkWillow_Bedlam
+class CDOTA_Modifier_DarkWillow_Bedlam : public CDOTA_Buff
 {
 	float32 m_flRotation;
 	CHandle< CBaseEntity > m_hWisp;

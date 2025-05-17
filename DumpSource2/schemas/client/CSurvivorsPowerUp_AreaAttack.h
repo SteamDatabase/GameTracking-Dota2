@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_AreaAttack
+class CSurvivorsPowerUp_AreaAttack : public CSurvivorsPowerUp
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sParticle;
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sHitImpactParticle;

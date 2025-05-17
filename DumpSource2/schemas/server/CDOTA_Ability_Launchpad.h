@@ -1,4 +1,4 @@
-class CDOTA_Ability_Launchpad
+class CDOTA_Ability_Launchpad : public CDOTABaseAbility
 {
 	char* pTargetName;
 };

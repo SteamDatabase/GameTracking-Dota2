@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Arc_Warden_Magnetic_Field_Thinker_Rune_Magnet
+class CDOTA_Modifier_Arc_Warden_Magnetic_Field_Thinker_Rune_Magnet : public CDOTA_Buff
 {
 	float32 radius;
 	float32 rune_pull_strength;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Radar_Thinker
+class CDOTA_Modifier_Radar_Thinker : public CDOTA_Buff
 {
 	int32 radius;
 	bool m_bEverFound;

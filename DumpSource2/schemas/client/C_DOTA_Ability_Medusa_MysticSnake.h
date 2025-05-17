@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Medusa_MysticSnake
+class C_DOTA_Ability_Medusa_MysticSnake : public C_DOTABaseAbility
 {
 	float32 radius;
 	int32 snake_jumps;

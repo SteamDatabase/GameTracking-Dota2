@@ -1,4 +1,5 @@
-class ArtyLevelObjectInstance_t
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class ArtyLevelObjectInstance_t : public ArtyGameObjectInstance_t
 {
 	CUtlString m_szLeftBorderObject;
 	float32 m_flLeftObjectOffset;

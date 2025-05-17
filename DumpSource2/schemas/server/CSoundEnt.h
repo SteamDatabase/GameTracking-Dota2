@@ -1,4 +1,4 @@
-class CSoundEnt
+class CSoundEnt : public CPointEntity
 {
 	int32 m_iFreeSound;
 	int32 m_iActiveSound;

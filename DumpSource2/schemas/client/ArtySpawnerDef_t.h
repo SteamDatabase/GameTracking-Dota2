@@ -1,4 +1,5 @@
-class ArtySpawnerDef_t
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class ArtySpawnerDef_t : public ArtyGameObjectDef_t
 {
 	float32 m_flInitialDelay;
 	float32 m_flDelayBetween;

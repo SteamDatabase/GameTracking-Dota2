@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CDOTAMinesweeperGameDefinition
 {
 	CDOTAMinesweeperPlayerDefinition m_player;

@@ -1,4 +1,4 @@
-class CPhysPulley
+class CPhysPulley : public CPhysConstraint
 {
 	Vector m_position2;
 	Vector[2] m_offset;

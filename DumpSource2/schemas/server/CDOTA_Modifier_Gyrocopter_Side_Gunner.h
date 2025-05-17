@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Gyrocopter_Side_Gunner
+class CDOTA_Modifier_Gyrocopter_Side_Gunner : public CDOTA_Buff
 {
 	float32 sidegunner_radius;
 	float32 sidegunner_fire_rate;

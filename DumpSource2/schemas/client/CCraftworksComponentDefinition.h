@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CCraftworksComponentDefinition
 {
 	CraftworksComponentID_t m_unComponentID;

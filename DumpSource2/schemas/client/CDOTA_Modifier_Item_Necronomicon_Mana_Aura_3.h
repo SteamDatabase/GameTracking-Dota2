@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Necronomicon_Mana_Aura_3
+class CDOTA_Modifier_Item_Necronomicon_Mana_Aura_3 : public CDOTA_Buff
 {
 	float32 aura_mana_regen;
 };

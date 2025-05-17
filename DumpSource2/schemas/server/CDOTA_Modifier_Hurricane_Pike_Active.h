@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hurricane_Pike_Active
+class CDOTA_Modifier_Hurricane_Pike_Active : public CDOTA_Buff
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

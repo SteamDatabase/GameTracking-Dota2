@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Broodmother_InsatiableHunger
+class CDOTA_Modifier_Broodmother_InsatiableHunger : public CDOTA_Buff
 {
 	int32 bonus_damage;
 	int32 lifesteal_pct;

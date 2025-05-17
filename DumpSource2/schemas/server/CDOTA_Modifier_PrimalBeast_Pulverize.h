@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PrimalBeast_Pulverize
+class CDOTA_Modifier_PrimalBeast_Pulverize : public CDOTA_Buff
 {
 	ParticleIndex_t m_nFXIndex;
 	float32 m_flOffset;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Riki_Backstab
+class CDOTA_Modifier_Riki_Backstab : public CDOTA_Modifier_PersistentInvisibility
 {
 	int32 cleave;
 	float32 bonus_health_regen;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_NagaSiren_SongOfTheSiren_Cancel
+class CDOTA_Ability_NagaSiren_SongOfTheSiren_Cancel : public CDOTABaseAbility
 {
 };

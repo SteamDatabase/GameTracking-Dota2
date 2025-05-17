@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EarthSpirit_StoneThinker
+class CDOTA_Modifier_EarthSpirit_StoneThinker : public CDOTA_Buff
 {
 	CNewParticleEffect* m_pVisionRangeFX;
 	int32 vision_radius;

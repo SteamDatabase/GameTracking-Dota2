@@ -1,3 +1,3 @@
-class CDOTA_Ability_Necronomicon_Archer_Purge
+class CDOTA_Ability_Necronomicon_Archer_Purge : public CDOTABaseAbility
 {
 };

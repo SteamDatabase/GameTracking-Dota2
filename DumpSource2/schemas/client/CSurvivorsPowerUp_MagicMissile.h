@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_MagicMissile
+class CSurvivorsPowerUp_MagicMissile : public CSurvivorsPowerUp_ProjectileAttack
 {
 	int32 m_nEnemiesKilled;
 	float32 m_flShardDamageMultiplier;

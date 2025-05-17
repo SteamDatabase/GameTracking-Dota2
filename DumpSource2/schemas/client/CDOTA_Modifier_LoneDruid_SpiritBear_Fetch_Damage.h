@@ -1,4 +1,4 @@
-class CDOTA_Modifier_LoneDruid_SpiritBear_Fetch_Damage
+class CDOTA_Modifier_LoneDruid_SpiritBear_Fetch_Damage : public CDOTA_Buff
 {
 	int32 max_ticks;
 	float32 damage;

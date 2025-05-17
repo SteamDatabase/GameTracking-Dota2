@@ -1,4 +1,6 @@
-class C_BaseTrigger
+// MNetworkIncludeByName = "m_spawnflags"
+// MNetworkVarNames = "bool m_bDisabled"
+class C_BaseTrigger : public C_BaseToggle
 {
 	CEntityIOOutput m_OnStartTouch;
 	CEntityIOOutput m_OnStartTouchAll;
@@ -10,5 +12,6 @@ class C_BaseTrigger
 	CUtlVector< CHandle< C_BaseEntity > > m_hTouchingEntities;
 	CUtlSymbolLarge m_iFilterName;
 	CHandle< CBaseFilter > m_hFilter;
+	// MNetworkEnable
 	bool m_bDisabled;
 };

@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Sven
+class C_DOTA_Ability_Special_Bonus_Unique_Sven : public C_DOTABaseAbility
 {
 };

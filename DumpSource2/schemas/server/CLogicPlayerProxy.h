@@ -1,4 +1,4 @@
-class CLogicPlayerProxy
+class CLogicPlayerProxy : public CLogicalEntity
 {
 	CHandle< CBaseEntity > m_hPlayer;
 	CEntityIOOutput m_PlayerHasAmmo;

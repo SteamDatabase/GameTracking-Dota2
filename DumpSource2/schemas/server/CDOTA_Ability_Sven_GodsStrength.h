@@ -1,3 +1,3 @@
-class CDOTA_Ability_Sven_GodsStrength
+class CDOTA_Ability_Sven_GodsStrength : public CDOTABaseAbility
 {
 };

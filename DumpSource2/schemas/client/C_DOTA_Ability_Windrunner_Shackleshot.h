@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Windrunner_Shackleshot
+class C_DOTA_Ability_Windrunner_Shackleshot : public C_DOTABaseAbility
 {
 	int32 shackle_count;
 	Vector m_vArrowAvgPos;

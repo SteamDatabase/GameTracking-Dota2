@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Treant_Overgrowth
+class CDOTA_Modifier_Treant_Overgrowth : public CDOTA_Buff
 {
 	float32 damage;
 	int32 mute;

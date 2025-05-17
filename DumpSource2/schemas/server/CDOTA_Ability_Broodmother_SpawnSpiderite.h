@@ -1,3 +1,3 @@
-class CDOTA_Ability_Broodmother_SpawnSpiderite
+class CDOTA_Ability_Broodmother_SpawnSpiderite : public CDOTABaseAbility
 {
 };

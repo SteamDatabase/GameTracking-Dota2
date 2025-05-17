@@ -1,3 +1,3 @@
-class CDOTA_Ability_MudGolem_CloakAura
+class CDOTA_Ability_MudGolem_CloakAura : public C_DOTABaseAbility
 {
 };

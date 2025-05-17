@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CPulseGraphDef
 {
 	PulseSymbol_t m_DomainIdentifier;

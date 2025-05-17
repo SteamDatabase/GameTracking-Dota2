@@ -1,4 +1,4 @@
-class CPhysicsEntitySolver
+class CPhysicsEntitySolver : public CLogicalEntity
 {
 	CHandle< CBaseEntity > m_hMovingEntity;
 	CHandle< CBaseEntity > m_hPhysicsBlocker;

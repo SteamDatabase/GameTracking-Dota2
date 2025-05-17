@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_LanceOfPursuit
+class CDOTA_Modifier_Item_LanceOfPursuit : public CDOTA_Buff_Item
 {
 	int32 bonus_mana;
 	int32 bonus_strength;

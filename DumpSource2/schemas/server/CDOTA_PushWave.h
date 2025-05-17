@@ -1,3 +1,3 @@
-class CDOTA_PushWave
+class CDOTA_PushWave : public CBaseAnimatingActivity
 {
 };

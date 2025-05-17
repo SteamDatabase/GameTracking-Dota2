@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Beastmaster_WildAxes
+class CDOTA_Modifier_Beastmaster_WildAxes : public CDOTA_Buff
 {
 	Vector m_vLeftControl;
 	Vector m_vRightControl;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_CrystalMaiden_IceRink_Movement
+class CDOTA_Modifier_CrystalMaiden_IceRink_Movement : public CDOTA_Buff
 {
 	bool m_bHitFirstUpdate;
 	float32 flMovementSpeed;

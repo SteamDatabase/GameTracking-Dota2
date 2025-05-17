@@ -1,3 +1,3 @@
-class C_NetTestBaseCombatCharacter
+class C_NetTestBaseCombatCharacter : public C_BaseCombatCharacter
 {
 };

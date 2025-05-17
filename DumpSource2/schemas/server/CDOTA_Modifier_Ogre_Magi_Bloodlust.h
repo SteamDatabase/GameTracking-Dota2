@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ogre_Magi_Bloodlust
+class CDOTA_Modifier_Ogre_Magi_Bloodlust : public CDOTA_Buff
 {
 	int32 bonus_attack_speed;
 	int32 bonus_movement_speed;

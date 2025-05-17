@@ -1,4 +1,4 @@
-class CSoundOpvarSetAutoRoomEntity
+class CSoundOpvarSetAutoRoomEntity : public CSoundOpvarSetPointEntity
 {
 	CUtlVector< SoundOpvarTraceResult_t > m_traceResults;
 	CUtlVector< AutoRoomDoorwayPairs_t > m_doorwayPairs;

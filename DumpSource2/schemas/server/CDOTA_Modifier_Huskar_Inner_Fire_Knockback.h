@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Huskar_Inner_Fire_Knockback
+class CDOTA_Modifier_Huskar_Inner_Fire_Knockback : public CDOTA_Buff
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

@@ -1,3 +1,3 @@
-class CDOTA_Beastmaster_Axe
+class CDOTA_Beastmaster_Axe : public CBaseAnimatingActivity
 {
 };

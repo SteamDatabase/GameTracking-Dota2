@@ -1,3 +1,3 @@
-class CNmBoneMaskValueNode::CDefinition
+class CNmBoneMaskValueNode::CDefinition : public CNmValueNode::CDefinition
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Pangolier_ShieldCrash_Buff
+class CDOTA_Modifier_Pangolier_ShieldCrash_Buff : public CDOTA_Buff
 {
 	ParticleIndex_t m_nFXIndex;
 	int32 m_nAbsorbRemaining;

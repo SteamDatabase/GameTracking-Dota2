@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Firefly
+class CDOTA_Modifier_AghsFort_Firefly : public CDOTA_Buff
 {
 	float32 pool_duration;
 	int32 radius;

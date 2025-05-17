@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Spectre_SpectralDagger
+class C_DOTA_Ability_Spectre_SpectralDagger : public C_DOTABaseAbility
 {
 	float32 dagger_path_duration;
 	float32 hero_path_duration;

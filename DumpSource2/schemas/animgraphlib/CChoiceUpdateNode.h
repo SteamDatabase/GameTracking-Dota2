@@ -1,4 +1,5 @@
-class CChoiceUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CChoiceUpdateNode : public CAnimUpdateNodeBase
 {
 	CUtlVector< CAnimUpdateNodeRef > m_children;
 	CUtlVector< float32 > m_weights;

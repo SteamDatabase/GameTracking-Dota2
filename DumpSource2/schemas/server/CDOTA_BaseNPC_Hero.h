@@ -1,13 +1,44 @@
-class CDOTA_BaseNPC_Hero
+// MNetworkVarNames = "float m_flStrength"
+// MNetworkVarNames = "float m_flAgility"
+// MNetworkVarNames = "float m_flIntellect"
+// MNetworkVarNames = "float m_flStrengthTotal"
+// MNetworkVarNames = "float m_flAgilityTotal"
+// MNetworkVarNames = "float m_flIntellectTotal"
+// MNetworkVarNames = "int m_iRecentDamage"
+// MNetworkVarNames = "int m_iPrimaryAttribute"
+// MNetworkVarNames = "GameTime_t m_flDeathTime"
+// MNetworkVarNames = "int m_iAbilityPoints"
+// MNetworkVarNames = "int m_iTotalAbilityPoints"
+// MNetworkVarNames = "int m_iCurrentXP"
+// MNetworkVarNames = "GameTime_t m_flRespawnTime"
+// MNetworkVarNames = "float m_flRespawnTimePenalty"
+// MNetworkVarNames = "bool m_bScriptDisableRespawns"
+// MNetworkVarNames = "PlayerID_t m_iPlayerID"
+// MNetworkVarNames = "HeroFacetID_t m_iHeroFacetID"
+// MNetworkVarNames = "CHandle< CDOTA_BaseNPC_Hero> m_hReplicatingOtherHeroModel"
+// MNetworkVarNames = "bool m_bReincarnating"
+// MNetworkVarNames = "bool m_bCustomKillEffect"
+// MNetworkVarNames = "GameTime_t m_flSpawnedAt"
+// MNetworkVarNames = "EHANDLE m_hFacetAbilities"
+class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 {
+	// MNetworkEnable
 	float32 m_flStrength;
+	// MNetworkEnable
 	float32 m_flAgility;
+	// MNetworkEnable
 	float32 m_flIntellect;
+	// MNetworkEnable
 	float32 m_flStrengthTotal;
+	// MNetworkEnable
 	float32 m_flAgilityTotal;
+	// MNetworkEnable
 	float32 m_flIntellectTotal;
+	// MNetworkEnable
 	int32 m_iRecentDamage;
+	// MNetworkEnable
 	int32 m_iPrimaryAttribute;
+	// MNetworkEnable
 	GameTime_t m_flDeathTime;
 	float32 m_flStrengthGain;
 	float32 m_flAgilityGain;
@@ -25,19 +56,29 @@ class CDOTA_BaseNPC_Hero
 	CUtlVector< CDOTA_BaseNPC_Hero::sHeroDamageInfo > m_HeroDamageInfoArray;
 	CUtlVector< CDOTA_BaseNPC_Hero::sHeroRecentModifierInfo > m_vecRecentModifiers;
 	GameTime_t m_fMostRecentDamageTime;
+	// MNetworkEnable
 	int32 m_iAbilityPoints;
+	// MNetworkEnable
 	int32 m_iTotalAbilityPoints;
+	// MNetworkEnable
+	// MNetworkPriority = 32
 	int32 m_iCurrentXP;
+	// MNetworkEnable
 	GameTime_t m_flRespawnTime;
+	// MNetworkEnable
 	float32 m_flRespawnTimePenalty;
 	float32 m_flTimeUntilRespawn;
 	float32 m_flScriptRespawnTime;
 	float32 m_flPendingRespawnTime;
+	// MNetworkEnable
 	bool m_bScriptDisableRespawns;
+	// MNetworkEnable
 	PlayerID_t m_iPlayerID;
+	// MNetworkEnable
 	HeroFacetID_t m_iHeroFacetID;
 	PlayerID_t m_iIllusionOriginalPlayerID;
 	HeroID_t m_iHeroID;
+	// MNetworkEnable
 	CHandle< CDOTA_BaseNPC_Hero > m_hReplicatingOtherHeroModel;
 	CountdownTimer m_RespawnMusicTimer;
 	CountdownTimer m_HeroKillTimer;
@@ -49,9 +90,13 @@ class CDOTA_BaseNPC_Hero
 	CHandle< CDOTAWearableItem >[102] m_hTogglableWearable;
 	CDOTA_BaseNPC_Hero::KillInfo_t m_KillInfo;
 	CountdownTimer m_DirectorAbilityActivity;
+	// MNetworkEnable
 	bool m_bReincarnating;
+	// MNetworkEnable
 	bool m_bCustomKillEffect;
+	// MNetworkEnable
 	GameTime_t m_flSpawnedAt;
+	// MNetworkEnable
 	CNetworkUtlVectorBase< CHandle< CBaseEntity > > m_hFacetAbilities;
 	CountdownTimer m_PurchaseItemTimer;
 	CountdownTimer m_NeutralItemTimer;

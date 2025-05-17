@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ArcWarden_MagneticField_Evasion
+class CDOTA_Modifier_ArcWarden_MagneticField_Evasion : public CDOTA_Buff
 {
 	int32 evasion_chance;
 	float32 radius;

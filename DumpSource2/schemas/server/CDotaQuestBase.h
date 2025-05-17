@@ -1,3 +1,3 @@
-class CDotaQuestBase
+class CDotaQuestBase : public CBaseEntity
 {
 };

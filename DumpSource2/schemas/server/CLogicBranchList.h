@@ -1,4 +1,4 @@
-class CLogicBranchList
+class CLogicBranchList : public CLogicalEntity
 {
 	CUtlSymbolLarge[16] m_nLogicBranchNames;
 	CUtlVector< CHandle< CBaseEntity > > m_LogicBranchList;

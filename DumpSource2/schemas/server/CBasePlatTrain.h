@@ -1,4 +1,4 @@
-class CBasePlatTrain
+class CBasePlatTrain : public CBaseToggle
 {
 	CUtlSymbolLarge m_NoiseMoving;
 	CUtlSymbolLarge m_NoiseArrived;

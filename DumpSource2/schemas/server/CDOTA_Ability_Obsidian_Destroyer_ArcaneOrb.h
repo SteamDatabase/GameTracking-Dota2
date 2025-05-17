@@ -1,3 +1,3 @@
-class CDOTA_Ability_Obsidian_Destroyer_ArcaneOrb
+class CDOTA_Ability_Obsidian_Destroyer_ArcaneOrb : public CDOTABaseAbility
 {
 };

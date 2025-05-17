@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomLancer_Juxtapose_Thinker
+class CDOTA_Modifier_PhantomLancer_Juxtapose_Thinker : public CDOTA_Buff
 {
 	int32 max_illusions;
 	int32 scepter_bonus_illusions;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_PudgeMiniboss_HatefulStrike
+class CDOTA_Ability_PudgeMiniboss_HatefulStrike : public CDOTABaseAbility
 {
 };

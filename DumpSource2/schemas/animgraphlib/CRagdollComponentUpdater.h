@@ -1,4 +1,5 @@
-class CRagdollComponentUpdater
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CRagdollComponentUpdater : public CAnimComponentUpdater
 {
 	CUtlVector< CAnimNodePath > m_ragdollNodePaths;
 	CUtlVector< CAnimNodePath > m_followAttachmentNodePaths;

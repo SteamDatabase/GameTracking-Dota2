@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VoidSpirit_ResonantPulse_Ring
+class CDOTA_Modifier_VoidSpirit_ResonantPulse_Ring : public CDOTA_Buff
 {
 	float32 m_fLastRadius;
 	float32 m_fCurRadius;

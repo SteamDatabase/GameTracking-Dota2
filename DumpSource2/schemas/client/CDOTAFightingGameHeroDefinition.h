@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CDOTAFightingGameHeroDefinition
 {
 	HeroID_t m_nHeroID;

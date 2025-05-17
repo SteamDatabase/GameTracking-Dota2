@@ -1,4 +1,4 @@
-class CFuncInteractionLayerClip
+class CFuncInteractionLayerClip : public CBaseModelEntity
 {
 	bool m_bDisabled;
 	CUtlSymbolLarge m_iszInteractsAs;

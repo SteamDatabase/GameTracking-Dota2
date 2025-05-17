@@ -1,3 +1,3 @@
-class CDOTA_Item_PoorMansShield
+class CDOTA_Item_PoorMansShield : public CDOTA_Item
 {
 };

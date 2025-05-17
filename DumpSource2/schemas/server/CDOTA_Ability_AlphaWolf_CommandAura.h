@@ -1,3 +1,3 @@
-class CDOTA_Ability_AlphaWolf_CommandAura
+class CDOTA_Ability_AlphaWolf_CommandAura : public CDOTABaseAbility
 {
 };

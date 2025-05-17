@@ -1,3 +1,3 @@
-class IIntention
+class IIntention : public INextBotComponent
 {
 };

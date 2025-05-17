@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Warlock_Shadow_Word
+class CDOTA_Modifier_Warlock_Shadow_Word : public CDOTA_Buff
 {
 	float32 tick_interval;
 	float32 damage;

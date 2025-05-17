@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Elder_Titan_AncestralSpirit
+class CDOTA_Modifier_Elder_Titan_AncestralSpirit : public CDOTA_Buff
 {
 	float32 pass_damage;
 	float32 radius;

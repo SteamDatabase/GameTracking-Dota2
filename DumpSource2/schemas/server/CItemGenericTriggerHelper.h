@@ -1,4 +1,4 @@
-class CItemGenericTriggerHelper
+class CItemGenericTriggerHelper : public CBaseModelEntity
 {
 	CHandle< CItemGeneric > m_hParentItem;
 };

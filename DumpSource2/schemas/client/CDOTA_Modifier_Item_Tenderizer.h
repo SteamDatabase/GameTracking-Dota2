@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Tenderizer
+class CDOTA_Modifier_Item_Tenderizer : public CDOTA_Buff_Item
 {
 	int32 bonus_strength;
 	int32 bonus_agility;

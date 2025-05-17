@@ -1,3 +1,3 @@
-class C_SingleplayRules
+class C_SingleplayRules : public C_GameRules
 {
 };

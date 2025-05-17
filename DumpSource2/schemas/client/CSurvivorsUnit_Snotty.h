@@ -1,4 +1,4 @@
-class CSurvivorsUnit_Snotty
+class CSurvivorsUnit_Snotty : public CSurvivorsEnemy
 {
 	float32 m_flRotationSpeedDeg;
 	float32 m_flRotationDist;

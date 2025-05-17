@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Morphling_Morph_Agi
+class CDOTA_Modifier_Morphling_Morph_Agi : public CDOTA_Buff
 {
 	float32 mana_cost;
 	int32 points_per_tick;

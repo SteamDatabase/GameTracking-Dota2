@@ -1,4 +1,4 @@
-class CBaseMoveBehavior
+class CBaseMoveBehavior : public CPathKeyFrame
 {
 	int32 m_iPositionInterpolator;
 	int32 m_iRotationInterpolator;

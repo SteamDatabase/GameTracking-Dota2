@@ -1,3 +1,3 @@
-class CDOTA_Ability_Centaur_Mount
+class CDOTA_Ability_Centaur_Mount : public CDOTABaseAbility
 {
 };

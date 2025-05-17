@@ -1,4 +1,4 @@
-class CDOTA_Ability_Rattletrap_Hookshot
+class CDOTA_Ability_Rattletrap_Hookshot : public CDOTABaseAbility
 {
 	ParticleIndex_t m_nFXIndex;
 	Vector m_vProjectileVelocity;

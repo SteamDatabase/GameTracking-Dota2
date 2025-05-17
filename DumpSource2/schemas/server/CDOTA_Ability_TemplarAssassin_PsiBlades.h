@@ -1,3 +1,3 @@
-class CDOTA_Ability_TemplarAssassin_PsiBlades
+class CDOTA_Ability_TemplarAssassin_PsiBlades : public CDOTABaseAbility
 {
 };

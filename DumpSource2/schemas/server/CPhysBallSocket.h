@@ -1,4 +1,4 @@
-class CPhysBallSocket
+class CPhysBallSocket : public CPhysConstraint
 {
 	float32 m_flJointFriction;
 	bool m_bEnableSwingLimit;

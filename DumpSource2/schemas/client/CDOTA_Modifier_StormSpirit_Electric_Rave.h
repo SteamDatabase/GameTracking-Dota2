@@ -1,4 +1,4 @@
-class CDOTA_Modifier_StormSpirit_Electric_Rave
+class CDOTA_Modifier_StormSpirit_Electric_Rave : public CDOTA_Buff
 {
 	float32 overload_aoe;
 	int32 overload_damage;

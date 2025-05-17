@@ -1,3 +1,3 @@
-class CDOTA_Ability_Crystal_Maiden_Crystal_Clone
+class CDOTA_Ability_Crystal_Maiden_Crystal_Clone : public CDOTABaseAbility
 {
 };

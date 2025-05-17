@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_WhoopeeCushion_Active
+class CDOTA_Modifier_Ringmaster_WhoopeeCushion_Active : public CDOTA_Buff
 {
 	float32 m_flTotalTime;
 	float32 m_flInitialVelocity;

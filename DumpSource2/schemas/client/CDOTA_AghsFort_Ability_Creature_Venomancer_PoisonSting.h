@@ -1,3 +1,3 @@
-class CDOTA_AghsFort_Ability_Creature_Venomancer_PoisonSting
+class CDOTA_AghsFort_Ability_Creature_Venomancer_PoisonSting : public C_DOTABaseAbility
 {
 };

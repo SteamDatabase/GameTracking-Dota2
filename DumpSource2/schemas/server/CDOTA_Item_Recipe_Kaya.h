@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_Kaya
+class CDOTA_Item_Recipe_Kaya : public CDOTA_Item
 {
 };

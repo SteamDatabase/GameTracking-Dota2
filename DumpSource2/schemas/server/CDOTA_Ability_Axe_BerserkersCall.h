@@ -1,3 +1,3 @@
-class CDOTA_Ability_Axe_BerserkersCall
+class CDOTA_Ability_Axe_BerserkersCall : public CDOTABaseAbility
 {
 };

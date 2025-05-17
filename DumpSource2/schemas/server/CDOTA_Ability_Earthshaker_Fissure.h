@@ -1,3 +1,3 @@
-class CDOTA_Ability_Earthshaker_Fissure
+class CDOTA_Ability_Earthshaker_Fissure : public CDOTABaseAbility
 {
 };

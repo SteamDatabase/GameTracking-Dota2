@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Meepo_MegaMeepo
+class CDOTA_Modifier_Meepo_MegaMeepo : public CDOTA_Buff
 {
 	ParticleIndex_t m_nFXIndex;
 	float32 m_flOffset;

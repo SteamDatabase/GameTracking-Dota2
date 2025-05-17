@@ -1,4 +1,8 @@
-class CPulseGraphInstance_TestDomain
+// MPulseInstanceDomainInfo (UNKNOWN FOR PARSER)
+// MPulseDomainHookInfo (UNKNOWN FOR PARSER)
+// MPulseLibraryBindings (UNKNOWN FOR PARSER)
+// MPulseDomainOptInFeatureTag (UNKNOWN FOR PARSER)
+class CPulseGraphInstance_TestDomain : public CBasePulseGraphInstance
 {
 	bool m_bIsRunningUnitTests;
 	bool m_bExplicitTimeStepping;

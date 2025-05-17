@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Veil_Of_Discord_Thinker
+class CDOTA_Modifier_Item_Veil_Of_Discord_Thinker : public CDOTA_Buff
 {
 	ParticleIndex_t m_nFXIndex;
 	float32 debuff_radius;

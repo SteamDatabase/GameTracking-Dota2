@@ -1,4 +1,4 @@
-class CDOTA_Ability_EarthSpirit_RollingBoulder
+class CDOTA_Ability_EarthSpirit_RollingBoulder : public CDOTABaseAbility
 {
 	int32 radius;
 	int32 speed;

@@ -1,4 +1,4 @@
-class CDOTA_Item_Tombstone
+class CDOTA_Item_Tombstone : public CDOTA_Item
 {
 	float32 m_flTimer;
 	CHandle< CDOTA_Item_Tombstone > m_hParent;

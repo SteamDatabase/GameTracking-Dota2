@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Slark_DarkPact_Pulses
+class CDOTA_Modifier_Slark_DarkPact_Pulses : public CDOTA_Buff
 {
 	float32 radius;
 	int32 total_damage;

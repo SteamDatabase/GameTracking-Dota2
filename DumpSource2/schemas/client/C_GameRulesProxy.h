@@ -1,3 +1,3 @@
-class C_GameRulesProxy
+class C_GameRulesProxy : public C_BaseEntity
 {
 };

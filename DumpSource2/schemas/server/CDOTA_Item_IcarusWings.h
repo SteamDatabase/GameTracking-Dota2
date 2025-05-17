@@ -1,3 +1,3 @@
-class CDOTA_Item_IcarusWings
+class CDOTA_Item_IcarusWings : public CDOTA_Item
 {
 };

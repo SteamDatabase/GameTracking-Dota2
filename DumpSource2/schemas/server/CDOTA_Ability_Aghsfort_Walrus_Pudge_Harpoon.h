@@ -1,4 +1,4 @@
-class CDOTA_Ability_Aghsfort_Walrus_Pudge_Harpoon
+class CDOTA_Ability_Aghsfort_Walrus_Pudge_Harpoon : public CDOTABaseAbility
 {
 	Vector m_vProjectileLocation;
 	float32 hook_speed;

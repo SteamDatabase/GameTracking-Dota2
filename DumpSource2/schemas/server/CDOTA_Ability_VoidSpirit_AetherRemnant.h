@@ -1,4 +1,4 @@
-class CDOTA_Ability_VoidSpirit_AetherRemnant
+class CDOTA_Ability_VoidSpirit_AetherRemnant : public CDOTABaseAbility
 {
 	float32 start_radius;
 	float32 end_radius;

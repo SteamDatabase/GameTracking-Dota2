@@ -1,7 +1,13 @@
-class C_DOTA_Hero_Recorder
+// MNetworkVarNames = "bool m_bStartRecording"
+// MNetworkVarNames = "CHandle< C_DOTA_BaseNPC> m_hHero"
+// MNetworkVarNames = "CHandle< C_DOTAPlayerController> m_hPlayer"
+class C_DOTA_Hero_Recorder : public C_BaseEntity
 {
+	// MNetworkEnable
 	bool m_bStartRecording;
+	// MNetworkEnable
 	CHandle< C_DOTA_BaseNPC > m_hHero;
+	// MNetworkEnable
 	CHandle< C_DOTAPlayerController > m_hPlayer;
 	bool m_bRecording;
 	bool m_bLastStartRecording;

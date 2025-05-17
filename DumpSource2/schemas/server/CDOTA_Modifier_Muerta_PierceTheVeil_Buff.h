@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Muerta_PierceTheVeil_Buff
+class CDOTA_Modifier_Muerta_PierceTheVeil_Buff : public CDOTA_Buff
 {
 	int32 modelscale;
 	int32 bonus_damage;

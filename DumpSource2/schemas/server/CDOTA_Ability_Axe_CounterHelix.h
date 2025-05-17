@@ -1,3 +1,3 @@
-class CDOTA_Ability_Axe_CounterHelix
+class CDOTA_Ability_Axe_CounterHelix : public CDOTABaseAbility
 {
 };

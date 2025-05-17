@@ -1,3 +1,3 @@
-class C_DOTA_Item_Recipe_Cyclone
+class C_DOTA_Item_Recipe_Cyclone : public C_DOTA_Item
 {
 };

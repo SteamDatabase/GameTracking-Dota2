@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Blade_Mail
+class CDOTA_Modifier_Item_Blade_Mail : public CDOTA_Buff_Item
 {
 	int32 bonus_damage;
 	int32 bonus_armor;

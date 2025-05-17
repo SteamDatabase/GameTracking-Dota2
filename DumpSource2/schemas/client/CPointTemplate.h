@@ -1,4 +1,4 @@
-class CPointTemplate
+class CPointTemplate : public CLogicalEntity
 {
 	CUtlSymbolLarge m_iszWorldName;
 	CUtlSymbolLarge m_iszSource2EntityLumpName;

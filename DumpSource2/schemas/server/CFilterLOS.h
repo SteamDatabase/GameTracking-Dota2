@@ -1,3 +1,3 @@
-class CFilterLOS
+class CFilterLOS : public CBaseFilter
 {
 };

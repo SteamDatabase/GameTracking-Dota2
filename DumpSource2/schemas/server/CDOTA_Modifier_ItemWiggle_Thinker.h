@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ItemWiggle_Thinker
+class CDOTA_Modifier_ItemWiggle_Thinker : public CDOTA_Buff
 {
 	Vector m_vOriginalPosition;
 	float32 m_flOriginalScale;

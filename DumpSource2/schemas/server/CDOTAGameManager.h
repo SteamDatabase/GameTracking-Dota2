@@ -1,3 +1,4 @@
+// MNetworkVarNames = "bool m_CurrentHeroAvailable"
 class CDOTAGameManager
 {
 	CNetworkVarChainer __m_pChainEntity;
@@ -17,5 +18,6 @@ class CDOTAGameManager
 	KeyValues* m_pSurveyQuestionData;
 	KeyValues3 m_AddonInfoKeyValues;
 	KeyValues* m_pCountryKeyValues;
+	// MNetworkEnable
 	bool[256] m_CurrentHeroAvailable;
 };

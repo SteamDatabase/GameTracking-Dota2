@@ -1,3 +1,3 @@
-class CNullEntity
+class CNullEntity : public CBaseEntity
 {
 };

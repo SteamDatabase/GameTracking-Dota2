@@ -1,4 +1,33 @@
-class C_DOTA_BaseNPC_Creep_Lane
+// MNetworkExcludeByName = "m_CollisionGroup"
+// MNetworkExcludeByName = "m_Inventory"
+// MNetworkExcludeByName = "m_MoveCollide"
+// MNetworkExcludeByName = "m_MoveType"
+// MNetworkExcludeByName = "m_anglediff"
+// MNetworkExcludeByName = "m_bIsAncient"
+// MNetworkExcludeByName = "m_bIsNeutralUnitType"
+// MNetworkExcludeByName = "m_bIsPhantom"
+// MNetworkExcludeByName = "m_bIsSummoned"
+// MNetworkExcludeByName = "m_blinktoggle"
+// MNetworkExcludeByName = "m_fadeMaxDist"
+// MNetworkExcludeByName = "m_fadeMinDist"
+// MNetworkExcludeByName = "m_flElasticity"
+// MNetworkExcludeByName = "m_flEncodedController"
+// MNetworkExcludeByName = "m_flFadeScale"
+// MNetworkExcludeByName = "m_flHealthThinkRegen"
+// MNetworkExcludeByName = "m_flManaThinkRegen"
+// MNetworkExcludeByName = "m_flPoseParameter"
+// MNetworkExcludeByName = "m_flexWeight"
+// MNetworkExcludeByName = "m_hActiveWeapon"
+// MNetworkExcludeByName = "m_hLightingOrigin"
+// MNetworkExcludeByName = "m_iCurShop"
+// MNetworkExcludeByName = "m_iDamageBonus"
+// MNetworkExcludeByName = "m_nForceBone"
+// MNetworkExcludeByName = "m_nRenderFX"
+// MNetworkExcludeByName = "m_nRenderMode"
+// MNetworkExcludeByName = "m_vecForce"
+// MNetworkExcludeByName = "m_vLookTargetPosition"
+class C_DOTA_BaseNPC_Creep_Lane : public C_DOTA_BaseNPC_Creep
 {
+	// MNetworkEnable
 	FowCustomTeams_t m_nFoWTeam;
 };

@@ -1,4 +1,4 @@
-class CEnvShake
+class CEnvShake : public CPointEntity
 {
 	CUtlSymbolLarge m_limitToEntity;
 	float32 m_Amplitude;

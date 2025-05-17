@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lina_LightStrikeArray_Thinker
+class CDOTA_Modifier_Lina_LightStrikeArray_Thinker : public CDOTA_Buff
 {
 	float32 m_flDamage;
 	float32 m_flStunDuration;

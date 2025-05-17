@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mirana_SolarFlare
+class CDOTA_Modifier_Mirana_SolarFlare : public CDOTA_Buff
 {
 	float32 duration;
 	float32 smoothness;

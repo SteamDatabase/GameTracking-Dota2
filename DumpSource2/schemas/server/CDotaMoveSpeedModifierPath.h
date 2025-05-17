@@ -1,4 +1,4 @@
-class CDotaMoveSpeedModifierPath
+class CDotaMoveSpeedModifierPath : public CBaseEntity
 {
 	float32 m_flPathLength;
 	CUtlVector< DotaModifierPathNode_t > m_vecNodes;

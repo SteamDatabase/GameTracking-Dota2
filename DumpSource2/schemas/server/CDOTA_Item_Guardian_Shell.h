@@ -1,3 +1,3 @@
-class CDOTA_Item_Guardian_Shell
+class CDOTA_Item_Guardian_Shell : public CDOTA_Item
 {
 };

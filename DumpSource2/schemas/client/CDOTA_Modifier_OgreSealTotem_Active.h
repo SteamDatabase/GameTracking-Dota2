@@ -1,4 +1,4 @@
-class CDOTA_Modifier_OgreSealTotem_Active
+class CDOTA_Modifier_OgreSealTotem_Active : public CDOTA_Buff
 {
 	int32 m_nCurrentBounce;
 	int32 leap_distance;

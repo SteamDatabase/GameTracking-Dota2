@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dazzle_Rain_Of_Vermin
+class CDOTA_Modifier_Dazzle_Rain_Of_Vermin : public CDOTA_Buff
 {
 	int32 radius;
 	float32 interval;

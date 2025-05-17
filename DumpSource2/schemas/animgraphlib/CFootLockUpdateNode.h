@@ -1,4 +1,5 @@
-class CFootLockUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CFootLockUpdateNode : public CUnaryUpdateNode
 {
 	FootLockPoseOpFixedSettings m_opFixedSettings;
 	CUtlVector< FootFixedSettings > m_footSettings;

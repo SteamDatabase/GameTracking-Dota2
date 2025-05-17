@@ -1,3 +1,4 @@
-class CInfoTarget
+// MEntityAllowsPortraitWorldSpawn
+class CInfoTarget : public CPointEntity
 {
 };

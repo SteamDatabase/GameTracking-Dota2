@@ -1,4 +1,5 @@
-class CDampedPathAnimMotorUpdater
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CDampedPathAnimMotorUpdater : public CPathAnimMotorUpdaterBase
 {
 	float32 m_flAnticipationTime;
 	float32 m_flMinSpeedScale;

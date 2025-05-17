@@ -1,4 +1,4 @@
-class CDOTA_Ability_Nyx_Assassin_Jolt
+class CDOTA_Ability_Nyx_Assassin_Jolt : public CDOTABaseAbility
 {
 	float32 aoe;
 	int32 damage;

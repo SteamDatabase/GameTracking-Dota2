@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Silencer_LastWord
+class CDOTA_Modifier_Silencer_LastWord : public CDOTA_Buff
 {
 	int32 duration;
 	bool spellcast;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Earthshaker_Fissure_Shard
+class CDOTA_Modifier_Earthshaker_Fissure_Shard : public CDOTA_Buff
 {
 	int32 shard_aftershock_stun_duration_pct;
 	float32 shard_free_pathing_linger_duration;

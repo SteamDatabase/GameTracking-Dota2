@@ -1,4 +1,5 @@
-class CNmVectorCreateNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmVectorCreateNode::CDefinition : public CNmVectorValueNode::CDefinition
 {
 	int16 m_inputVectorValueNodeIdx;
 	int16 m_inputValueXNodeIdx;

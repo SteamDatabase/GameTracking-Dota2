@@ -1,3 +1,3 @@
-class CNmFollowBoneTask
+class CNmFollowBoneTask : public CNmTask
 {
 };

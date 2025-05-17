@@ -1,4 +1,4 @@
-class CDOTA_Ability_Windrunner_GaleForce
+class CDOTA_Ability_Windrunner_GaleForce : public CDOTABaseAbility
 {
 	Vector m_vEndpoint;
 	Vector m_vFlowPosition;

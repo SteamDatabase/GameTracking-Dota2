@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CSurvivorsLevelDefinition
 {
 	SurvivorsLevelID_t m_unLevelID;

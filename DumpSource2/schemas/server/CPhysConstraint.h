@@ -1,4 +1,4 @@
-class CPhysConstraint
+class CPhysConstraint : public CLogicalEntity
 {
 	CUtlSymbolLarge m_nameAttach1;
 	CUtlSymbolLarge m_nameAttach2;

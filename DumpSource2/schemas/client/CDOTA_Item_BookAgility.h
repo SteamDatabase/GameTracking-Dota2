@@ -1,3 +1,3 @@
-class CDOTA_Item_BookAgility
+class CDOTA_Item_BookAgility : public CDOTA_Item_Book
 {
 };

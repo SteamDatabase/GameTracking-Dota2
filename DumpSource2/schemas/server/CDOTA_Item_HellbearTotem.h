@@ -1,3 +1,3 @@
-class CDOTA_Item_HellbearTotem
+class CDOTA_Item_HellbearTotem : public CDOTA_Item
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_QueenOfPain_ShadowStrike
+class CDOTA_Modifier_QueenOfPain_ShadowStrike : public CDOTA_Buff
 {
 	int32 duration_damage;
 	int32 duration_heal;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Windrunner_Shackleshot
+class CDOTA_Ability_Windrunner_Shackleshot : public CDOTABaseAbility
 {
 	int32 shackle_count;
 	Vector m_vArrowAvgPos;

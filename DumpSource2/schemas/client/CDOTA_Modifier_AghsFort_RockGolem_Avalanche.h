@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_RockGolem_Avalanche
+class CDOTA_Modifier_AghsFort_RockGolem_Avalanche : public CDOTA_Buff
 {
 	CUtlVector< C_DOTA_BaseNPC* > m_pHeroesHit;
 	int32 radius;

@@ -1,3 +1,3 @@
-class CDOTA_Item_Hurricane_Pike
+class CDOTA_Item_Hurricane_Pike : public CDOTA_Item
 {
 };

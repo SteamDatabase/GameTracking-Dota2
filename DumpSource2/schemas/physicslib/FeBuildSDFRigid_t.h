@@ -1,4 +1,5 @@
-class FeBuildSDFRigid_t
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class FeBuildSDFRigid_t : public FeSDFRigid_t
 {
 	int32 m_nPriority;
 	uint32 m_nVertexMapHash;

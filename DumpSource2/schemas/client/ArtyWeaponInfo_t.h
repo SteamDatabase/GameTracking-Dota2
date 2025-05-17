@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class ArtyWeaponInfo_t
 {
 	ArtyWeaponID_t m_unID;
@@ -7,6 +9,7 @@ class ArtyWeaponInfo_t
 	CUtlString m_sWeaponFireSound;
 	CPanoramaImageName m_sWeaponImage;
 	bool m_bIsPlayerWeapon;
+	// MPropertyCustomFGDType = "vdata_choice:scripts/events/crownfall/artillery_graphics.vdata"
 	CUtlString m_strGraphicInfoName;
 	GameActivity_t m_weaponAttackActivity;
 	float32 m_flShotCreationTime;

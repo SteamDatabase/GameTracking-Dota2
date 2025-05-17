@@ -1,3 +1,4 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 class CDOTACrownfallCreditsBlockDefinition
 {
 	CUtlVector< CDOTACrownfallCreditsCharacterDefinition > m_vecCharacters;

@@ -1,4 +1,5 @@
-class CNmBoneMaskBlendNode::CDefinition
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CNmBoneMaskBlendNode::CDefinition : public CNmBoneMaskValueNode::CDefinition
 {
 	int16 m_nSourceMaskNodeIdx;
 	int16 m_nTargetMaskNodeIdx;

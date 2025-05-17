@@ -1,3 +1,3 @@
-class CDOTA_Item_Flicker
+class CDOTA_Item_Flicker : public CDOTA_Item
 {
 };

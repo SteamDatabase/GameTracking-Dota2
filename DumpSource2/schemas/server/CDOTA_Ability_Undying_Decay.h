@@ -1,4 +1,4 @@
-class CDOTA_Ability_Undying_Decay
+class CDOTA_Ability_Undying_Decay : public CDOTABaseAbility
 {
 	int32 decay_damage;
 	float32 radius;

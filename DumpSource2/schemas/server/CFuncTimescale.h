@@ -1,4 +1,4 @@
-class CFuncTimescale
+class CFuncTimescale : public CBaseEntity
 {
 	float32 m_flDesiredTimescale;
 	float32 m_flAcceleration;

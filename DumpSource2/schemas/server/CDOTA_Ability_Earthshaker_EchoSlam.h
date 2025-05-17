@@ -1,4 +1,4 @@
-class CDOTA_Ability_Earthshaker_EchoSlam
+class CDOTA_Ability_Earthshaker_EchoSlam : public CDOTABaseAbility
 {
 	float32 echo_slam_damage_range;
 	float32 echo_slam_echo_search_range;

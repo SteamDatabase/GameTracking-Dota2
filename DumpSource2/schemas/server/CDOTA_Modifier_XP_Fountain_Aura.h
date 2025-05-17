@@ -1,4 +1,4 @@
-class CDOTA_Modifier_XP_Fountain_Aura
+class CDOTA_Modifier_XP_Fountain_Aura : public CDOTA_Buff
 {
 	bool m_bActive;
 	bool m_bIsGranting;

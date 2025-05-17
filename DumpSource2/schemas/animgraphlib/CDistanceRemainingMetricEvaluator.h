@@ -1,4 +1,5 @@
-class CDistanceRemainingMetricEvaluator
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CDistanceRemainingMetricEvaluator : public CMotionMetricEvaluator
 {
 	float32 m_flMaxDistance;
 	float32 m_flMinDistance;

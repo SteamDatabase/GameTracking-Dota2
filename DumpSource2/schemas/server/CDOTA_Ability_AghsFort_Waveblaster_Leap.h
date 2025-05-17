@@ -1,3 +1,3 @@
-class CDOTA_Ability_AghsFort_Waveblaster_Leap
+class CDOTA_Ability_AghsFort_Waveblaster_Leap : public CDOTABaseAbility
 {
 };

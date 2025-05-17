@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Marci_Guardian_Buff
+class CDOTA_Modifier_Marci_Guardian_Buff : public CDOTA_Buff
 {
 	float32 lifesteal_pct;
 	int32 bonus_damage;

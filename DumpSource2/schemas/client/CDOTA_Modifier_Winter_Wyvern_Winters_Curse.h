@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Winter_Wyvern_Winters_Curse
+class CDOTA_Modifier_Winter_Wyvern_Winters_Curse : public CDOTA_Buff
 {
 	CHandle< C_BaseEntity > m_hZombieTarget;
 	CHandle< C_BaseEntity > m_hDesiredTarget;

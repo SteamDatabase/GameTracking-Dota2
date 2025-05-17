@@ -1,3 +1,3 @@
-class CDOTA_Ability_Tidehunter_AnchorSmash
+class CDOTA_Ability_Tidehunter_AnchorSmash : public CDOTABaseAbility
 {
 };

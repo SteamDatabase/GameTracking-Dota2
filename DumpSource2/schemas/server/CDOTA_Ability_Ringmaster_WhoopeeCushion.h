@@ -1,3 +1,3 @@
-class CDOTA_Ability_Ringmaster_WhoopeeCushion
+class CDOTA_Ability_Ringmaster_WhoopeeCushion : public CDOTABaseAbility
 {
 };

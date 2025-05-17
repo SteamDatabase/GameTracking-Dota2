@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_Impalement_Bleed
+class CDOTA_Modifier_Ringmaster_Impalement_Bleed : public CDOTA_Buff
 {
 	float32 bleed_health_pct;
 	float32 tick_interval;

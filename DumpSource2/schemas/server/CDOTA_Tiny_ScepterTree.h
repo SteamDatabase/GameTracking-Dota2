@@ -1,3 +1,3 @@
-class CDOTA_Tiny_ScepterTree
+class CDOTA_Tiny_ScepterTree : public CDOTAWearableItem
 {
 };

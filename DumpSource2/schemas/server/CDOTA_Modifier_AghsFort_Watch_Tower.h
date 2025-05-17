@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AghsFort_Watch_Tower
+class CDOTA_Modifier_AghsFort_Watch_Tower : public CDOTA_Buff
 {
 	TowerState_t m_nState;
 	float32 m_flYaw;

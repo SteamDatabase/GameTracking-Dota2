@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dawnbreaker_Celestial_Hammer_Movement
+class CDOTA_Modifier_Dawnbreaker_Celestial_Hammer_Movement : public CDOTA_Buff
 {
 	int32 m_nProjectileID;
 	int32 projectile_speed;

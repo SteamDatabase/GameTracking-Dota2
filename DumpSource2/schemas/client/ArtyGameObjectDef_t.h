@@ -1,6 +1,10 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+// MVDataNodeType = 1
 class ArtyGameObjectDef_t
 {
 	ArtyGameObjectID_t m_unID;
+	// MPropertyCustomFGDType = "vdata_choice:scripts/events/crownfall/artillery_graphics.vdata"
 	CUtlString m_szGraphicsDef;
 	CUtlString m_szDeathSound;
 	EArtyHitboxType m_eHitboxType;

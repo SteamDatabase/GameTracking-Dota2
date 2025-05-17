@@ -1,3 +1,3 @@
-class CDOTA_Item_Enhancement_Vast
+class CDOTA_Item_Enhancement_Vast : public CDOTA_Item
 {
 };

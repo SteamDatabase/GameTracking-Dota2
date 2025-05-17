@@ -1,4 +1,4 @@
-class CDOTA_Modifier_DarkWillow_ShadowRealm_Buff
+class CDOTA_Modifier_DarkWillow_ShadowRealm_Buff : public CDOTA_Buff
 {
 	int32 damage;
 	float32 max_damage_duration;

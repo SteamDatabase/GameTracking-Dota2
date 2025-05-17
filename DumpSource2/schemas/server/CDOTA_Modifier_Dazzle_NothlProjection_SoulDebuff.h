@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dazzle_NothlProjection_SoulDebuff
+class CDOTA_Modifier_Dazzle_NothlProjection_SoulDebuff : public CDOTA_Buff
 {
 	int32 ethereal_damage_bonus;
 	int32 movement_slow;

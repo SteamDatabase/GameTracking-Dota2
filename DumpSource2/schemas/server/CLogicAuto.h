@@ -1,4 +1,4 @@
-class CLogicAuto
+class CLogicAuto : public CBaseEntity
 {
 	CEntityIOOutput m_OnMapSpawn;
 	CEntityIOOutput m_OnDemoMapSpawn;

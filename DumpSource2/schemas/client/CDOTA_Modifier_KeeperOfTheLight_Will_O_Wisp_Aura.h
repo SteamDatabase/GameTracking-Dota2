@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KeeperOfTheLight_Will_O_Wisp_Aura
+class CDOTA_Modifier_KeeperOfTheLight_Will_O_Wisp_Aura : public CDOTA_Buff
 {
 	float32 radius;
 	float32 wisp_damage;

@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_MP_Regen_14
+class C_DOTA_Ability_Special_Bonus_MP_Regen_14 : public C_DOTABaseAbility
 {
 };

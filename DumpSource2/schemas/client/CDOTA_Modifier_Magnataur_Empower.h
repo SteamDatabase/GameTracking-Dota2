@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Magnataur_Empower
+class CDOTA_Modifier_Magnataur_Empower : public CDOTA_Buff
 {
 	int32 bonus_damage_pct;
 	float32 cleave_damage_pct;

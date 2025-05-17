@@ -1,4 +1,4 @@
-class CDOTA_Ability_Marci_Unleash
+class CDOTA_Ability_Marci_Unleash : public CDOTABaseAbility
 {
 	float32 duration;
 	float32 pulse_radius;

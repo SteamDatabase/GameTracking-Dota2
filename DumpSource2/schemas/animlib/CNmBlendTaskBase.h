@@ -1,3 +1,3 @@
-class CNmBlendTaskBase
+class CNmBlendTaskBase : public CNmTask
 {
 };

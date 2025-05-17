@@ -1,4 +1,4 @@
-class CDotaTutorialNPCBlocker
+class CDotaTutorialNPCBlocker : public CBaseEntity
 {
 	CHandle< CDOTA_BaseNPC > m_hAura;
 	CUtlSymbolLarge m_iOtherBlockerName;

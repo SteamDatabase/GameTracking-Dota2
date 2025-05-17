@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Warlock_Golem_Permanent_Immolation
+class CDOTA_Modifier_Warlock_Golem_Permanent_Immolation : public CDOTA_Buff
 {
 	float32 aura_radius;
 	int32 share_damage;

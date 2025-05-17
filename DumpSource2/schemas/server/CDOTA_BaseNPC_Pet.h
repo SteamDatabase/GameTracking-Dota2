@@ -1,4 +1,4 @@
-class CDOTA_BaseNPC_Pet
+class CDOTA_BaseNPC_Pet : public CDOTA_BaseNPC
 {
 	CHandle< CDOTA_BaseNPC_Hero > m_hHeroHandle;
 	float32 m_flPetThreatLevel;

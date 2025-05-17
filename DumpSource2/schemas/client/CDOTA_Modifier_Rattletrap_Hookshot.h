@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_Hookshot
+class CDOTA_Modifier_Rattletrap_Hookshot : public CDOTA_Buff
 {
 	int32 speed;
 	float32 stun_radius;

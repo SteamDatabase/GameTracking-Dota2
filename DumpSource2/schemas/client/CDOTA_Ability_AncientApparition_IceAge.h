@@ -1,4 +1,4 @@
-class CDOTA_Ability_AncientApparition_IceAge
+class CDOTA_Ability_AncientApparition_IceAge : public C_DOTABaseAbility
 {
 	float32 radius;
 	int32 health_degen;

@@ -1,3 +1,3 @@
-class C_CaptureCallbackHandler
+class C_CaptureCallbackHandler : public C_BaseEntity
 {
 };

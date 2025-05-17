@@ -1,4 +1,5 @@
-class CBlendUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CBlendUpdateNode : public CAnimUpdateNodeBase
 {
 	CUtlVector< CAnimUpdateNodeRef > m_children;
 	CUtlVector< uint8 > m_sortedOrder;

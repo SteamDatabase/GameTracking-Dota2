@@ -1,4 +1,4 @@
-class CDOTA_Modifier_KeeperOfTheLight_SpiritForm
+class CDOTA_Modifier_KeeperOfTheLight_SpiritForm : public CDOTA_Buff
 {
 	ParticleIndex_t m_nFXIndexA;
 	int32 movement_speed;

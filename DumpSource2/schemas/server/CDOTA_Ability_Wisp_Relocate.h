@@ -1,4 +1,4 @@
-class CDOTA_Ability_Wisp_Relocate
+class CDOTA_Ability_Wisp_Relocate : public CDOTABaseAbility
 {
 	ParticleIndex_t m_nFXIndexEndTeam;
 	ParticleIndex_t m_nFXIndexChannel;

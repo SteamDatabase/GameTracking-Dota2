@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VoidSpirit_AetherRemnant_WatchThinker
+class CDOTA_Modifier_VoidSpirit_AetherRemnant_WatchThinker : public CDOTA_Buff
 {
 	float32 remnant_watch_radius;
 	GameTime_t m_flLastDamageTick;

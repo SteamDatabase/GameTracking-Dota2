@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Armlet_UnholyStrength
+class CDOTA_Modifier_Armlet_UnholyStrength : public CDOTA_Buff
 {
 	int32 unholy_bonus_damage;
 	int32 unholy_bonus_attack_speed;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Medusa_SplitShot
+class CDOTA_Modifier_Medusa_SplitShot : public CDOTA_Buff
 {
 	int32 damage_modifier;
 	int32 range;

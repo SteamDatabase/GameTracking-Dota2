@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_RebukeCooldown
+class CDOTA_Ability_Special_Bonus_Unique_RebukeCooldown : public CDOTABaseAbility
 {
 };

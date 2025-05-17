@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Oracle_9
+class C_DOTA_Ability_Special_Bonus_Unique_Oracle_9 : public C_DOTABaseAbility
 {
 };

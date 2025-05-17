@@ -1,4 +1,5 @@
-class C_DOTA_PortraitEntity
+// MEntityAllowsPortraitWorldSpawn
+class C_DOTA_PortraitEntity : public C_DOTA_BaseNPC
 {
 	CountdownTimer m_PetIdleTimer;
 	ParticleIndex_t m_nMouthFX;

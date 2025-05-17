@@ -1,4 +1,4 @@
-class CDOTA_Ability_Aghanim_UrnUpheaval
+class CDOTA_Ability_Aghanim_UrnUpheaval : public CDOTABaseAbility
 {
 	Vector m_vPosition;
 	float32 aoe;

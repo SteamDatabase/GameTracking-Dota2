@@ -1,4 +1,4 @@
-class CDOTA_Ability_Chen_Summon_Convert
+class CDOTA_Ability_Chen_Summon_Convert : public CDOTABaseAbility
 {
 	CHandle< CBaseEntity > m_hInnateUnit;
 	bool m_bDeterminedFacet;

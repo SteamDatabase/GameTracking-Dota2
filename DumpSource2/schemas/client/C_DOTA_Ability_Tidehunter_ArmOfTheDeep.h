@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Tidehunter_ArmOfTheDeep
+class C_DOTA_Ability_Tidehunter_ArmOfTheDeep : public C_DOTABaseAbility
 {
 	CUtlVector< CHandle< C_BaseEntity > > hAlreadyHitList;
 	float32 duration;

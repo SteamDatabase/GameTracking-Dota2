@@ -1,4 +1,4 @@
-class CDOTA_Modifier_MonkeyKing_FurArmy_SoldierInPosition
+class CDOTA_Modifier_MonkeyKing_FurArmy_SoldierInPosition : public CDOTA_Buff
 {
 	Vector m_vTargetPos;
 	CHandle< C_BaseEntity > m_hAttackTarget;

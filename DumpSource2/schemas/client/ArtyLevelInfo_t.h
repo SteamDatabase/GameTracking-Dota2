@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class ArtyLevelInfo_t
 {
 	ArtyLevelID_t m_unID;

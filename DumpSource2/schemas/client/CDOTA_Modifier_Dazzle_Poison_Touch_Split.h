@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Dazzle_Poison_Touch_Split
+class CDOTA_Modifier_Dazzle_Poison_Touch_Split : public CDOTA_Buff
 {
 	int32 m_nAttacksLanded;
 	int32 attacks_to_split;

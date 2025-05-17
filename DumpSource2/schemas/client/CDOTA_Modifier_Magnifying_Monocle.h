@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Magnifying_Monocle
+class CDOTA_Modifier_Magnifying_Monocle : public CDOTA_Buff_Item
 {
 	float32 bonus_attack_range;
 	float32 bonus_cast_range;

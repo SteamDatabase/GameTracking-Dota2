@@ -1,3 +1,3 @@
-class CDOTA_Ability_Shadow_Demon_Disseminate
+class CDOTA_Ability_Shadow_Demon_Disseminate : public CDOTABaseAbility
 {
 };

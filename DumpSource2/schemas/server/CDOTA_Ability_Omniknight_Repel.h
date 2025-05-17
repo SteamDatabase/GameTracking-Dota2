@@ -1,3 +1,3 @@
-class CDOTA_Ability_Omniknight_Repel
+class CDOTA_Ability_Omniknight_Repel : public CDOTABaseAbility
 {
 };

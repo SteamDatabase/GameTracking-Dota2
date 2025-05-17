@@ -1,3 +1,3 @@
-class CDOTA_Ability_Jakiro_Macropyre
+class CDOTA_Ability_Jakiro_Macropyre : public CDOTABaseAbility
 {
 };

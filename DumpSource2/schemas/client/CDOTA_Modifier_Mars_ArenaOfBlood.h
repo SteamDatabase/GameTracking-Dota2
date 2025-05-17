@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Mars_ArenaOfBlood
+class CDOTA_Modifier_Mars_ArenaOfBlood : public CDOTA_Buff
 {
 	float32 radius;
 	int32 width;

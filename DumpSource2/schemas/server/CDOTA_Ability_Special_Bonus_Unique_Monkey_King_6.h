@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_Monkey_King_6
+class CDOTA_Ability_Special_Bonus_Unique_Monkey_King_6 : public CDOTABaseAbility
 {
 };

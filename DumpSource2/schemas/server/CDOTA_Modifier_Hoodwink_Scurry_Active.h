@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_Scurry_Active
+class CDOTA_Modifier_Hoodwink_Scurry_Active : public CDOTA_Buff
 {
 	int32 movement_speed_pct;
 	int32 attack_range;

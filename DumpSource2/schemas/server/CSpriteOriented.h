@@ -1,3 +1,3 @@
-class CSpriteOriented
+class CSpriteOriented : public CSprite
 {
 };

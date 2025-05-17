@@ -1,4 +1,4 @@
-class C_DOTA_Ability_OgreBruiser_OgreSmash
+class C_DOTA_Ability_OgreBruiser_OgreSmash : public C_DOTABaseAbility
 {
 	int32 radius;
 	float32 hero_stun_duration;

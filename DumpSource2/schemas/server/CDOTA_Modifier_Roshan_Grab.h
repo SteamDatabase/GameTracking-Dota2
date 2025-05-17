@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Roshan_Grab
+class CDOTA_Modifier_Roshan_Grab : public CDOTA_Buff
 {
 	ParticleIndex_t m_nFXIndex;
 	float32 m_flOffset;

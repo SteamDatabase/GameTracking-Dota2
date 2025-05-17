@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Shredder_Flamethrower
+class CDOTA_Modifier_Shredder_Flamethrower : public CDOTA_Buff
 {
 	float32 length;
 	float32 width;

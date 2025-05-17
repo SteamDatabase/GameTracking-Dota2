@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CMatch3OpponentDefinition
 {
 	Match3OpponentID_t m_unOpponentID;

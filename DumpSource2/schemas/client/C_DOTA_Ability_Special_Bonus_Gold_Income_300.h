@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Gold_Income_300
+class C_DOTA_Ability_Special_Bonus_Gold_Income_300 : public C_DOTABaseAbility
 {
 };

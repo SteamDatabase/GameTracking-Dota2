@@ -764,7 +764,6 @@
 >fff?
 @UUUUUU
 A 3-bone solver that uses two 2-bone solves under the hood to emulate a dog leg.
-A master convar that effectively disables the entire footlock node.
 AE_ACTION_ALLOW_COMBO
 AE_ACTION_PREVENT_COMBO
 AE_ALYX_EMPTOOL_ATTACHMENT
@@ -868,8 +867,6 @@ Attachment (Control Point 1)
 Attachment Type
 Attachment Type (Control Point 1)
 Attachments
-Attempt to detect when the foot is on a stair and will stop it from tilting to reach the next step
-Attempt to detect when the foot is partially hanging off a ledge and stop it tilting to reach the bottom
 Attempting to perform a global blend without a bone mask! This is not supported so falling back to a local blend!
 Attribute Name
 Attribute Type
@@ -1051,7 +1048,6 @@ Comment
 Conditionally Allowed
 Configuration
 Considered Option
-Convar for toggling foot lock ground tracking.
 Couldn't find bone mask with ID: %s
 Couldn't load KV3 for resource: %s
 CreateAnimGraph2Instance: %s, definition invalid. It's loaded but dependencies may have failed to load.\n
@@ -1080,7 +1076,6 @@ Debug Name
 Debug X Axis Circle
 Debug Y Axis Circle
 Debug Z Axis Circle
-Debug bone name for interpolation spew of CAnimationState.
 Decay Bias
 Decay Duration
 Default Value
@@ -1118,7 +1113,6 @@ Early exit
 EaseIn
 EaseOut
 Effector: %s
-Enable IK.
 Enable Networking
 Enable Replication
 End Bone
@@ -1148,6 +1142,14 @@ FLAG_MESH|
 FLAG_PHYSICS|
 FLAG_PROCEDURAL|
 FLAG_RIGIDLENGTH|
+FOOT1
+FOOT2
+FOOT3
+FOOT4
+FOOT5
+FOOT6
+FOOT7
+FOOT8
 Face Down Path
 Face Look Target
 Facing Heading
@@ -1197,12 +1199,12 @@ FootAdjust:m_flTargetHeadingWS
 FootAdjust:m_nClipIndex
 FootAdjustmentNode
 FootFall Tag
+FootFallTagFoot_t
 FootLock:m_resetCount
 FootPinning:ResetCount
 Footstep Landed Tag
 Footstep Type
 FootstepLanded Tag
-Force BatchAnimationDecode to write transformations for all bones
 Force Facing
 Force Latest Value
 Forward Speed
@@ -2112,9 +2114,6 @@ SequenceData
 Server Authoritative
 Sets the mood's animation buckets to be active when the character is listening
 Sets the mood's animation buckets to be active when the character is talking
-Should we straighten face island if the displacement is this much? (inches)
-Should we try to straighten an island of faces deviating from their average normal (tangent)?
-Should we try to straighten two faces connected to this edge? (tangent)
 Single Blend Time
 Slope Angle
 Slope Angle (World)
@@ -2342,7 +2341,6 @@ Use the parent bone's orientation as the end effector's orientation.
 User Defined Values
 VDataModelAnim( m_sModelName; include_deltas )
 V_uuid_t
-Validates the animation group channel list against the animations on load for every animation
 Value Type
 Values
 Variable "%s" has %i components, a specific component must be specified, for example use: "%s.x"
@@ -2427,28 +2425,7 @@ _autoreset
 activity
 always_run
 anim_data_block
-anim_decode_forcewritealltransforms
-anim_resource_validate_on_load
 animgraph_debug_max_poseop_count
-animgraph_enable_dirty_netvar_optimization
-animgraph_footlock_auto_ledge_detection
-animgraph_footlock_auto_stair_detection
-animgraph_footlock_calculate_tilt
-animgraph_footlock_debug_foot_index
-animgraph_footlock_debug_type
-animgraph_footlock_draw_footbase
-animgraph_footlock_enabled
-animgraph_footlock_ground_roll
-animgraph_footlock_hip_offset_enable
-animgraph_footlock_ik_enable
-animgraph_footlock_tilt_mode
-animgraph_footlock_trace_ground_enabled
-animgraph_footlock_use_hip_shift
-animgraph_force_full_network_updates
-animgraph_ik_debug
-animgraph_motionmatching_print_compressionstats
-animgraph_slowdownonslopes_enabled
-animgraph_verify_dirty_netvar_optimization
 animgraphlib
 animlib
 animnetvar
@@ -2473,7 +2450,6 @@ bulletimpact
 ceil
 characters/models/shared/animsets/animset_ct.vmdl
 characters/models/shared/animsets/animset_t.vmdl
-cl_skel_constraints_enable
 class 
 comment
 components
@@ -2821,50 +2797,13 @@ game:tools/images/animgraph_editor/animgraph_parameter_virtual_base.png
 game:tools/images/animgraph_editor/animgraph_tag_base.png
 graph/animgraph_instance.cpp
 hsequence
-hullivr_edge_merge_tan
-hullivr_faceisland_merge_disp
-hullivr_faceisland_merge_tan
-hullivr_version
-ik_constraints_enabled
-ik_debug_all_chains_unique_color_per_chain
-ik_debug_ccd
-ik_debug_chain_to_filter_by
-ik_debug_constraints
-ik_debug_dogleg3bone
-ik_debug_dogleg3bone_enabled
-ik_debug_fabrik_backwards_enabled
-ik_debug_fabrik_backwards_iteration_toggle
-ik_debug_fabrik_backwards_iterations
-ik_debug_fabrik_forwards_enabled
-ik_debug_fabrik_forwards_iteration_toggle
-ik_debug_fabrik_forwards_iterations
-ik_debug_groundtraces
-ik_debug_perlin_solver
-ik_debug_planetilt
-ik_debug_planetilt_axis_length
-ik_debug_targets
-ik_enable
-ik_fabrik_align_chain
-ik_fabrik_backwards_enabled
-ik_fabrik_forwards_enabled
-ik_fabrik_override_num_iterations
-ik_final_fixup_enable
-ik_hinge_debug_bone_index
-ik_planetilt_enable
 impactHardThreshold
 impacthard
 impactsoft
 input
 instantly
 is also the end of the line, so you must check your lexer rules\n
-iv_debugbone
 keyvalues
-labelled_debug_helper_arc_segments
-labelled_debug_helper_enabled
-labelled_debug_helper_scale
-labelled_debug_helper_show_position
-labelled_debug_helper_show_text
-labelled_debug_helper_skeleton_show_bone_names
 length2d
 length3d
 lexer->mTokens(): Error: No lexer rules were added to the lexer yet!\n
@@ -2996,12 +2935,8 @@ matrix3x4a_t
 maxStretch
 medium
 meleeimpact
-mesh_calculate_curvature_smooth_invert
-mesh_calculate_curvature_smooth_pass_count
-mesh_calculate_curvature_smooth_weight
 missing all pose parameters\n
 model bone %d is out of bounds, probably attempting to use an animation from different model\n
-model_default_preview_sequence_name
 modellib
 models/hostage/v_hostage_arm.vmdl
 near '%c' :\n
@@ -3029,7 +2964,6 @@ scraperough
 scrapesmooth
 scriptsToRun
 sequence_tag_spans
-skel_constraints_enable
 skidstop
 smoothstep
 softcontactdampingratio
@@ -3044,7 +2978,6 @@ stop_on_seq_change_instantly
 strain
 struct 
 surfacePropertyName
-sv_skel_constraints_enable
 tags
 target
 thickness

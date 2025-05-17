@@ -1,5 +1,7 @@
-class C_DOTA_Ability_WitchDoctor_DeathWard
+// MNetworkVarNames = "CHandle< CBaseEntity> m_hWard"
+class C_DOTA_Ability_WitchDoctor_DeathWard : public C_DOTABaseAbility
 {
+	// MNetworkEnable
 	CHandle< C_BaseEntity > m_hWard;
 	int32 bonus_accuracy;
 	int32 m_iDamage;

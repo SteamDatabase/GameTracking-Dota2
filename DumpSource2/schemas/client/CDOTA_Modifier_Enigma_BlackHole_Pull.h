@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Enigma_BlackHole_Pull
+class CDOTA_Modifier_Enigma_BlackHole_Pull : public CDOTA_Buff
 {
 	int32 pull_speed;
 	float32 radius;

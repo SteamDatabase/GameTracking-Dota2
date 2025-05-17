@@ -1,3 +1,3 @@
-class C_DOTA_Ability_ShadowShamanVoodoo
+class C_DOTA_Ability_ShadowShamanVoodoo : public C_DOTABaseAbility
 {
 };

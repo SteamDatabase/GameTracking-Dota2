@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ManaDraught_Regeneration
+class CDOTA_Modifier_ManaDraught_Regeneration : public CDOTA_Buff
 {
 	float32 mana_restore;
 	float32 mana_restore_pct;

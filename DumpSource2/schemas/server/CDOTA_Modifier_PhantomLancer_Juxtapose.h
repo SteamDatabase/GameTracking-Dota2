@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PhantomLancer_Juxtapose
+class CDOTA_Modifier_PhantomLancer_Juxtapose : public CDOTA_Buff
 {
 	int32 proc_chance_pct;
 	int32 illusion_proc_chance_pct;

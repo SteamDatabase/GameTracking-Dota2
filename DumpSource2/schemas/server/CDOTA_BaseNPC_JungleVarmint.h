@@ -1,3 +1,3 @@
-class CDOTA_BaseNPC_JungleVarmint
+class CDOTA_BaseNPC_JungleVarmint : public CDOTA_BaseNPC_Additive
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Seasonal_TI11_CongaLine
+class CDOTA_Modifier_Seasonal_TI11_CongaLine : public CDOTA_Buff
 {
 	int32 NUM_SOUNDS;
 	float32 dance_interval;

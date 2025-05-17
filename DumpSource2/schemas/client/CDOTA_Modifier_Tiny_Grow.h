@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tiny_Grow
+class CDOTA_Modifier_Tiny_Grow : public CDOTA_Buff
 {
 	int32 bonus_armor;
 	int32 attack_speed_reduction;

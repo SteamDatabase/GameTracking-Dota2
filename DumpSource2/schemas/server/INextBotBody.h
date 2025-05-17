@@ -1,3 +1,3 @@
-class INextBotBody
+class INextBotBody : public INextBotComponent
 {
 };

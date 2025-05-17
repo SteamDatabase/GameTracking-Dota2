@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kez_Shodo_Sai_Mark
+class CDOTA_Modifier_Kez_Shodo_Sai_Mark : public CDOTA_Buff
 {
 	int32 vuln_slow;
 	int32 base_crit_pct;

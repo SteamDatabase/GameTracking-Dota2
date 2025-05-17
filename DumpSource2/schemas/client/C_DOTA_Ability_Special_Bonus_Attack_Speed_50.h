@@ -1,3 +1,3 @@
-class C_DOTA_Ability_Special_Bonus_Attack_Speed_50
+class C_DOTA_Ability_Special_Bonus_Attack_Speed_50 : public C_DOTABaseAbility
 {
 };

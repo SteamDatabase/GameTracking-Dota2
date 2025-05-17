@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Venomancer_PoisonStingWard
+class CDOTA_Modifier_Venomancer_PoisonStingWard : public CDOTA_Buff
 {
 	int32 m_iDamage;
 	int32 movement_speed;

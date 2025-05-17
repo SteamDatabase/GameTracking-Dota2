@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Bloodseeker_Thirst
+class CDOTA_Modifier_Bloodseeker_Thirst : public CDOTA_Buff
 {
 	float32 half_bonus_aoe;
 	int32 visibility_threshold_pct;

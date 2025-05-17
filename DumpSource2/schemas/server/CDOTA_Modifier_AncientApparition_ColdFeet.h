@@ -1,4 +1,4 @@
-class CDOTA_Modifier_AncientApparition_ColdFeet
+class CDOTA_Modifier_AncientApparition_ColdFeet : public CDOTA_Buff
 {
 	Vector m_vecStartPosition;
 	int32 m_nCurrentTick;

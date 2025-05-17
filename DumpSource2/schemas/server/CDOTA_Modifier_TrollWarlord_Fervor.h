@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TrollWarlord_Fervor
+class CDOTA_Modifier_TrollWarlord_Fervor : public CDOTA_Buff
 {
 	int32 max_stacks;
 	int32 stack_limit_during_battle_trance;

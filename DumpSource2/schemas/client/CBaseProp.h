@@ -1,4 +1,4 @@
-class CBaseProp
+class CBaseProp : public CBaseAnimatingActivity
 {
 	bool m_bModelOverrodeBlockLOS;
 	int32 m_iShapeType;

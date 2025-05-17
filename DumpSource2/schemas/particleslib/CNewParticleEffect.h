@@ -1,4 +1,4 @@
-class CNewParticleEffect
+class CNewParticleEffect : public IParticleEffect
 {
 	CNewParticleEffect* m_pNext;
 	CNewParticleEffect* m_pPrev;

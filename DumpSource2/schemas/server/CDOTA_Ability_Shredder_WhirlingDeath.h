@@ -1,4 +1,4 @@
-class CDOTA_Ability_Shredder_WhirlingDeath
+class CDOTA_Ability_Shredder_WhirlingDeath : public CDOTABaseAbility
 {
 	float32 whirling_radius;
 	int32 whirling_damage;

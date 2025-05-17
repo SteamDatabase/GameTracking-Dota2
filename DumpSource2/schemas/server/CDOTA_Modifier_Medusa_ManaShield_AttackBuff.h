@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Medusa_ManaShield_AttackBuff
+class CDOTA_Modifier_Medusa_ManaShield_AttackBuff : public CDOTA_Buff
 {
 	float32 aspd_increase_buff_duration;
 	float32 aspd_increase_smoothness;

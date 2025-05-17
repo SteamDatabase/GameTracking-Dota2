@@ -1,4 +1,4 @@
-class CFuncMover
+class CFuncMover : public CBaseModelEntity
 {
 	CUtlSymbolLarge m_iszPathName;
 	CHandle< CPathMover > m_hPathMover;

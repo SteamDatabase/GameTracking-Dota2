@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ringmaster_UnicycleMovement
+class CDOTA_Modifier_Ringmaster_UnicycleMovement : public CDOTA_Buff
 {
 	float32 max_speed;
 	float32 acceleration;

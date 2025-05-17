@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CSurvivorsPowerUpDefinition
 {
 	SurvivorsPowerUpID_t m_unPowerUpID;

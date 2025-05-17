@@ -1,3 +1,3 @@
-class CDOTA_Ability_Grimstroke_Scepter
+class CDOTA_Ability_Grimstroke_Scepter : public CDOTABaseAbility
 {
 };

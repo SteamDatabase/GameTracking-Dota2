@@ -1,3 +1,3 @@
-class CDOTA_Modifier_TrueSightFoW
+class CDOTA_Modifier_TrueSightFoW : public CDOTA_Buff
 {
 };

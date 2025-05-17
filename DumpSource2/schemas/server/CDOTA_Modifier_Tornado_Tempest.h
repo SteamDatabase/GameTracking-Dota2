@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Tornado_Tempest
+class CDOTA_Modifier_Tornado_Tempest : public CDOTA_Buff
 {
 	int32 near_radius;
 	int32 near_damage;

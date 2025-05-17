@@ -1,3 +1,3 @@
-class CDOTA_Ability_Sven_GreatCleave
+class CDOTA_Ability_Sven_GreatCleave : public CDOTABaseAbility
 {
 };

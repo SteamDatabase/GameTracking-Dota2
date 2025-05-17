@@ -1,3 +1,3 @@
-class CDOTA_Ability_Puck_PhaseShift
+class CDOTA_Ability_Puck_PhaseShift : public CDOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Centaur_HoofStomp
+class CDOTA_Ability_Centaur_HoofStomp : public CDOTABaseAbility
 {
 };

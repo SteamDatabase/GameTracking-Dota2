@@ -1,3 +1,3 @@
-class CDOTA_Item_PyrrhicCloak
+class CDOTA_Item_PyrrhicCloak : public CDOTA_Item
 {
 };

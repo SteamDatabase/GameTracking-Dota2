@@ -1,3 +1,3 @@
-class CDOTA_Ability_Nyx_Assassin_Vendetta
+class CDOTA_Ability_Nyx_Assassin_Vendetta : public CDOTABaseAbility
 {
 };

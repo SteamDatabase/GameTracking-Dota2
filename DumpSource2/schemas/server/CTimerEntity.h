@@ -1,4 +1,4 @@
-class CTimerEntity
+class CTimerEntity : public CLogicalEntity
 {
 	CEntityIOOutput m_OnTimer;
 	CEntityIOOutput m_OnTimerHigh;

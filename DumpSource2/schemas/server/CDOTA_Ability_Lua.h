@@ -1,3 +1,3 @@
-class CDOTA_Ability_Lua
+class CDOTA_Ability_Lua : public CDOTABaseAbility
 {
 };

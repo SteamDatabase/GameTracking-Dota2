@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Viper_PoisonAttack_Slow
+class CDOTA_Modifier_Viper_PoisonAttack_Slow : public CDOTA_Buff
 {
 	float32 damage;
 	int32 shard_armor_reduction;

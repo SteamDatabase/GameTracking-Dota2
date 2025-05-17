@@ -1,3 +1,3 @@
-class C_DOTA_Item_Rattlecage
+class C_DOTA_Item_Rattlecage : public C_DOTA_Item
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_CogPush
+class CDOTA_Modifier_Rattletrap_CogPush : public CDOTA_Buff
 {
 	GameTime_t m_flStartTime;
 	Vector m_vDirection;

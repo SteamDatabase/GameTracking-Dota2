@@ -1,4 +1,4 @@
-class C_DOTA_Ability_MonkeyKing_FurArmy
+class C_DOTA_Ability_MonkeyKing_FurArmy : public C_DOTABaseAbility
 {
 	CHandle< C_BaseEntity > m_hThinker;
 	ParticleIndex_t m_nFXIndex;

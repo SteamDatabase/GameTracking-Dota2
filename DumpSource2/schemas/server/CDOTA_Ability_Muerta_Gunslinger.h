@@ -1,3 +1,3 @@
-class CDOTA_Ability_Muerta_Gunslinger
+class CDOTA_Ability_Muerta_Gunslinger : public CDOTABaseAbility
 {
 };

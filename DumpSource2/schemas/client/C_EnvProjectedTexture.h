@@ -1,3 +1,3 @@
-class C_EnvProjectedTexture
+class C_EnvProjectedTexture : public C_ModelPointEntity
 {
 };

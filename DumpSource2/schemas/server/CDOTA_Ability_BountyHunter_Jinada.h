@@ -1,3 +1,3 @@
-class CDOTA_Ability_BountyHunter_Jinada
+class CDOTA_Ability_BountyHunter_Jinada : public CDOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class CEnvSoundscapeAlias_snd_soundscape
+class CEnvSoundscapeAlias_snd_soundscape : public CEnvSoundscape
 {
 };

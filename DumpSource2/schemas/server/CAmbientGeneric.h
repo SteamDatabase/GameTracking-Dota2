@@ -1,4 +1,4 @@
-class CAmbientGeneric
+class CAmbientGeneric : public CPointEntity
 {
 	float32 m_radius;
 	float32 m_flMaxRadius;

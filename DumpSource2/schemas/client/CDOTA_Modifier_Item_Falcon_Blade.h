@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Falcon_Blade
+class CDOTA_Modifier_Item_Falcon_Blade : public CDOTA_Buff_Item
 {
 	int32 bonus_damage;
 	int32 bonus_damage_per_kill;

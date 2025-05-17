@@ -1,4 +1,4 @@
-class CEnvInstructorVRHint
+class CEnvInstructorVRHint : public CPointEntity
 {
 	CUtlSymbolLarge m_iszName;
 	CUtlSymbolLarge m_iszHintTargetEntity;

@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CSurvivorsPickupDefinition
 {
 	SurvivorsPickupID_t m_unPickupID;

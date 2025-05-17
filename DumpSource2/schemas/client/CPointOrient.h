@@ -1,4 +1,5 @@
-class CPointOrient
+// MEntityAllowsPortraitWorldSpawn
+class CPointOrient : public C_BaseEntity
 {
 	CUtlSymbolLarge m_iszSpawnTargetName;
 	CHandle< C_BaseEntity > m_hTarget;

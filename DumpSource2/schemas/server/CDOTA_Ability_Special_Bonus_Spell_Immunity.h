@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Spell_Immunity
+class CDOTA_Ability_Special_Bonus_Spell_Immunity : public CDOTABaseAbility
 {
 };

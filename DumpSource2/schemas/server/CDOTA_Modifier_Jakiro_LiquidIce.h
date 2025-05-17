@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Jakiro_LiquidIce
+class CDOTA_Modifier_Jakiro_LiquidIce : public CDOTA_Buff
 {
 	float32 duration;
 	CUtlVector< int16 > m_InFlightAttackRecords;

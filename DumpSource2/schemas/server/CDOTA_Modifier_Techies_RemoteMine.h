@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Techies_RemoteMine
+class CDOTA_Modifier_Techies_RemoteMine : public CDOTA_Modifier_Invisible
 {
 	int32 radius;
 	int32 damage;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_QueenOfPain_Innate_Seduction
+class CDOTA_Modifier_QueenOfPain_Innate_Seduction : public CDOTA_Buff
 {
 	float32 spell_lifesteal;
 	float32 close_radius;

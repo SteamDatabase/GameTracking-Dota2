@@ -1,4 +1,4 @@
-class CSurvivorsPowerUp_Swashbuckle
+class CSurvivorsPowerUp_Swashbuckle : public CSurvivorsPowerUp
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sParticle;
 };

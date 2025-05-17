@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CMatch3HeroDefinition
 {
 	HeroID_t m_nHeroID;

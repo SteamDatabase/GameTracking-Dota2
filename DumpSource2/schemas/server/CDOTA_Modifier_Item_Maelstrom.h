@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Maelstrom
+class CDOTA_Modifier_Item_Maelstrom : public CDOTA_Buff_Item
 {
 	int32 bonus_damage;
 	int32 bonus_attack_speed;

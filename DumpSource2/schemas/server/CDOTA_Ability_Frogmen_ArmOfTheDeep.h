@@ -1,4 +1,4 @@
-class CDOTA_Ability_Frogmen_ArmOfTheDeep
+class CDOTA_Ability_Frogmen_ArmOfTheDeep : public CDOTABaseAbility
 {
 	CUtlVector< CHandle< CBaseEntity > > hAlreadyHitList;
 	float32 duration;

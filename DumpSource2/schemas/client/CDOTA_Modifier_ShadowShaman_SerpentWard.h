@@ -1,4 +1,4 @@
-class CDOTA_Modifier_ShadowShaman_SerpentWard
+class CDOTA_Modifier_ShadowShaman_SerpentWard : public CDOTA_Buff
 {
 	int32 bonus_attack_range;
 	int32 bonus_damage;

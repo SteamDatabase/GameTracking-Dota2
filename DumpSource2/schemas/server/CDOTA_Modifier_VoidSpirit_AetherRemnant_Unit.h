@@ -1,4 +1,4 @@
-class CDOTA_Modifier_VoidSpirit_AetherRemnant_Unit
+class CDOTA_Modifier_VoidSpirit_AetherRemnant_Unit : public CDOTA_Buff
 {
 	Vector m_vFacingDir;
 	CUtlVector< CHandle< CBaseEntity > > m_hWatchPathThinkers;

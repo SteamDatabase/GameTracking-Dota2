@@ -1,3 +1,4 @@
+// MEnumFlagsWithOverlappingBits
 enum DAMAGE_TYPES : uint32_t
 {
 	DAMAGE_TYPE_NONE = 0,

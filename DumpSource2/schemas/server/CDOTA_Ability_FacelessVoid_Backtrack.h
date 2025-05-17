@@ -1,3 +1,3 @@
-class CDOTA_Ability_FacelessVoid_Backtrack
+class CDOTA_Ability_FacelessVoid_Backtrack : public CDOTABaseAbility
 {
 };

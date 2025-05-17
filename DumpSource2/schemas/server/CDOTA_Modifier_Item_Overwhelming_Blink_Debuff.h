@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Overwhelming_Blink_Debuff
+class CDOTA_Modifier_Item_Overwhelming_Blink_Debuff : public CDOTA_Buff
 {
 	float32 caster_strength;
 	int32 movement_slow;

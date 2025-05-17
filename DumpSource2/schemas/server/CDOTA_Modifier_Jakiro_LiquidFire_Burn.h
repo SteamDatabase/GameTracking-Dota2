@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Jakiro_LiquidFire_Burn
+class CDOTA_Modifier_Jakiro_LiquidFire_Burn : public CDOTA_Buff
 {
 	int32 slow_attack_speed_pct;
 	float32 damage;

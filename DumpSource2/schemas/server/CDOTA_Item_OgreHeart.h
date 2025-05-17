@@ -1,3 +1,3 @@
-class CDOTA_Item_OgreHeart
+class CDOTA_Item_OgreHeart : public CDOTA_Item
 {
 };

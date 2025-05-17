@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Banana_Knockback
+class CDOTA_Modifier_Banana_Knockback : public CDOTA_Buff
 {
 	Vector m_vCenter;
 	int32 knockback_distance;

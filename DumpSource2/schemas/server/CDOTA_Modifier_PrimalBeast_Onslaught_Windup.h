@@ -1,4 +1,4 @@
-class CDOTA_Modifier_PrimalBeast_Onslaught_Windup
+class CDOTA_Modifier_PrimalBeast_Onslaught_Windup : public CDOTA_Buff
 {
 	bool m_bReachedMax;
 	bool m_bShouldCharge;

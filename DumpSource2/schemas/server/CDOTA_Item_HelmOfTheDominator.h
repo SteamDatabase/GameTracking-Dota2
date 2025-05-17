@@ -1,3 +1,3 @@
-class CDOTA_Item_HelmOfTheDominator
+class CDOTA_Item_HelmOfTheDominator : public CDOTA_Item
 {
 };

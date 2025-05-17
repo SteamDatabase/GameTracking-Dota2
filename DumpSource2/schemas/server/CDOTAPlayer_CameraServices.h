@@ -1,3 +1,3 @@
-class CDOTAPlayer_CameraServices
+class CDOTAPlayer_CameraServices : public CPlayer_CameraServices
 {
 };

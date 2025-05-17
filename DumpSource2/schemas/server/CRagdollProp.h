@@ -1,9 +1,19 @@
-class CRagdollProp
+// MNetworkVarNames = "Vector m_ragPos"
+// MNetworkVarNames = "QAngle m_ragAngles"
+// MNetworkVarNames = "EHANDLE m_hRagdollSource"
+// MNetworkVarNames = "float32 m_flBlendWeight"
+class CRagdollProp : public CBaseAnimGraph
 {
 	ragdoll_t m_ragdoll;
 	bool m_bStartDisabled;
+	// MNetworkEnable
+	// MNetworkEncoder = "coord"
 	CNetworkUtlVectorBase< Vector > m_ragPos;
+	// MNetworkEnable
+	// MNetworkEncoder = "qangle"
+	// MNetworkBitCount = 13
 	CNetworkUtlVectorBase< QAngle > m_ragAngles;
+	// MNetworkEnable
 	CHandle< CBaseEntity > m_hRagdollSource;
 	uint32 m_lastUpdateTickCount;
 	bool m_allAsleep;
@@ -22,6 +32,11 @@ class CRagdollProp
 	bool m_bHasBeenPhysgunned;
 	bool m_bShouldTeleportPhysics;
 	bool m_bAllowStretch;
+	// MNetworkEnable
+	// MNetworkBitCount = 8
+	// MNetworkMinValue = 0.000000
+	// MNetworkMaxValue = 1.000000
+	// MNetworkEncodeFlags = 1
 	float32 m_flBlendWeight;
 	float32 m_flDefaultFadeScale;
 	CUtlVector< Vector > m_ragdollMins;

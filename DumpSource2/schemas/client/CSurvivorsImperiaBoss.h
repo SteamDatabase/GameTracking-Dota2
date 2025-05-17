@@ -1,4 +1,4 @@
-class CSurvivorsImperiaBoss
+class CSurvivorsImperiaBoss : public CSurvivorsEnemy
 {
 	float32 m_flBurningGroundImpactDamage;
 	float32 m_flBurningGroundImpactRadius;

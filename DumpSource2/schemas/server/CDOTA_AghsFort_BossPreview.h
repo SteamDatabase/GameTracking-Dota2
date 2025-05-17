@@ -1,4 +1,4 @@
-class CDOTA_AghsFort_BossPreview
+class CDOTA_AghsFort_BossPreview : public CBaseEntity
 {
 	CUtlSymbolLarge m_strBossUnit;
 	CUtlSymbolLarge m_strModelName;

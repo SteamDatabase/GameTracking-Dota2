@@ -1,3 +1,3 @@
-class CDOTA_Ability_ArcWarden_MagneticField
+class CDOTA_Ability_ArcWarden_MagneticField : public CDOTABaseAbility
 {
 };

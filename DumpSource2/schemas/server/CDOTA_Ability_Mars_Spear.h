@@ -1,4 +1,4 @@
-class CDOTA_Ability_Mars_Spear
+class CDOTA_Ability_Mars_Spear : public CDOTABaseAbility
 {
 	CUtlVector< CHandle< CBaseEntity > > hAlreadyHitList;
 	int32 damage;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Enigma_MidnightPulse
+class CDOTA_Ability_Enigma_MidnightPulse : public CDOTABaseAbility
 {
 };

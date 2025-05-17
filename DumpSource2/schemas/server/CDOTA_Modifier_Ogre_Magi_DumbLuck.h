@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Ogre_Magi_DumbLuck
+class CDOTA_Modifier_Ogre_Magi_DumbLuck : public CDOTA_Buff
 {
 	float32 mana_per_str;
 	float32 mana_regen_per_str;

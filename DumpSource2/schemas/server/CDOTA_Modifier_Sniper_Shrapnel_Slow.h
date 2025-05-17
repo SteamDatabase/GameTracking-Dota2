@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Sniper_Shrapnel_Slow
+class CDOTA_Modifier_Sniper_Shrapnel_Slow : public CDOTA_Buff
 {
 	int32 slow_movement_speed;
 	float32 shrapnel_damage;

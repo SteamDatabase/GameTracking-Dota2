@@ -1,3 +1,3 @@
-class CDOTA_Modifier_Lone_Druid_Spirit_Bear_Self_Item_Restrictions
+class CDOTA_Modifier_Lone_Druid_Spirit_Bear_Self_Item_Restrictions : public CDOTA_Buff
 {
 };

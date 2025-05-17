@@ -1,4 +1,4 @@
-class CDOTA_Modifier_HarpyStorm_ChainLightning
+class CDOTA_Modifier_HarpyStorm_ChainLightning : public CDOTA_Buff
 {
 	int32 jump_range;
 	int32 max_targets;

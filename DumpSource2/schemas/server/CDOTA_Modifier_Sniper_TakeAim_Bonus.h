@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Sniper_TakeAim_Bonus
+class CDOTA_Modifier_Sniper_TakeAim_Bonus : public CDOTA_Buff
 {
 	int32 slow;
 	int32 active_attack_range_bonus;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_EmberSpirit_FlameGuard
+class CDOTA_Modifier_EmberSpirit_FlameGuard : public CDOTA_Buff
 {
 	int32 absorb_amount;
 	int32 damage_per_second;

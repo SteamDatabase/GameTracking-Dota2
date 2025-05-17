@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Skywrath_Mage_Concussive_Shot
+class C_DOTA_Ability_Skywrath_Mage_Concussive_Shot : public C_DOTABaseAbility
 {
 	float32 speed;
 	float32 slow_radius;

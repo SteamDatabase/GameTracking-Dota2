@@ -1,3 +1,3 @@
-class C_PhysBox
+class C_PhysBox : public C_Breakable
 {
 };

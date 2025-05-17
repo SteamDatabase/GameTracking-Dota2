@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_Eternal_Shroud
+class CDOTA_Modifier_Item_Eternal_Shroud : public CDOTA_Buff_Item
 {
 	int32 bonus_spell_resist;
 	int32 bonus_strength;

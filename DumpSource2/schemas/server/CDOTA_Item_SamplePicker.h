@@ -1,3 +1,3 @@
-class CDOTA_Item_SamplePicker
+class CDOTA_Item_SamplePicker : public CDOTA_Item
 {
 };

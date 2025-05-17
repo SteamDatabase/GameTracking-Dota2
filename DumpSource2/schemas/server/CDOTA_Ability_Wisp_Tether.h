@@ -1,5 +1,7 @@
-class CDOTA_Ability_Wisp_Tether
+// MNetworkVarNames = "CHandle< CBaseEntity> m_hTarget"
+class CDOTA_Ability_Wisp_Tether : public CDOTABaseAbility
 {
+	// MNetworkEnable
 	CHandle< CBaseEntity > m_hTarget;
 	Vector m_vProjectileLocation;
 	bool m_bProjectileActive;

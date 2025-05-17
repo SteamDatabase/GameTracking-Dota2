@@ -1,3 +1,3 @@
-class CDOTA_Ability_Seasonal_Festive_Firework
+class CDOTA_Ability_Seasonal_Festive_Firework : public CDOTABaseAbility
 {
 };

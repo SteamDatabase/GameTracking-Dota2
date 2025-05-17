@@ -1,3 +1,3 @@
-class CDOTA_Ability_DoomBringer_InfernalBlade
+class CDOTA_Ability_DoomBringer_InfernalBlade : public CDOTABaseAbility
 {
 };

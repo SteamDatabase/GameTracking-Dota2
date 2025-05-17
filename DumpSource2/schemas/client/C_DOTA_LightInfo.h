@@ -1,3 +1,4 @@
-class C_DOTA_LightInfo
+// MEntityAllowsPortraitWorldSpawn
+class C_DOTA_LightInfo : public C_BaseEntity
 {
 };

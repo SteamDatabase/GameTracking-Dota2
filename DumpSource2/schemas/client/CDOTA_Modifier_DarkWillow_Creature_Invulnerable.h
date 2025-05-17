@@ -1,3 +1,3 @@
-class CDOTA_Modifier_DarkWillow_Creature_Invulnerable
+class CDOTA_Modifier_DarkWillow_Creature_Invulnerable : public CDOTA_Buff
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Kunkka_Ghost_Ship_Fire_Cannons
+class CDOTA_Modifier_Kunkka_Ghost_Ship_Fire_Cannons : public CDOTA_Buff
 {
 	float32 m_flDistance;
 	float32 m_flSpeed;

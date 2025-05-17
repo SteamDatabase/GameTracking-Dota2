@@ -1,4 +1,4 @@
-class CSurvivorsEnemy
+class CSurvivorsEnemy : public CSurvivorsUnit
 {
 	GameActivity_t m_activity;
 	CSurvivorsSpawner* m_pSpawner;

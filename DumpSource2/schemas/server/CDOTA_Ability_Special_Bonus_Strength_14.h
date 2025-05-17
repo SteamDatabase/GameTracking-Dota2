@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Strength_14
+class CDOTA_Ability_Special_Bonus_Strength_14 : public CDOTABaseAbility
 {
 };

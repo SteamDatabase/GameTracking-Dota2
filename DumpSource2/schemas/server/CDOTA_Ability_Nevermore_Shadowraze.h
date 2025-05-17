@@ -1,4 +1,4 @@
-class CDOTA_Ability_Nevermore_Shadowraze
+class CDOTA_Ability_Nevermore_Shadowraze : public CDOTABaseAbility
 {
 	ParticleIndex_t m_nFXIndex;
 	ParticleIndex_t m_nFXIndexB;

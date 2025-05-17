@@ -1,3 +1,3 @@
-class CDOTA_Modifier_AntiMage_Mana_Thirst_Vision
+class CDOTA_Modifier_AntiMage_Mana_Thirst_Vision : public CDOTA_Buff
 {
 };

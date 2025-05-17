@@ -1,3 +1,3 @@
-class CDOTAPlayer_MovementServices
+class CDOTAPlayer_MovementServices : public CPlayer_MovementServices
 {
 };

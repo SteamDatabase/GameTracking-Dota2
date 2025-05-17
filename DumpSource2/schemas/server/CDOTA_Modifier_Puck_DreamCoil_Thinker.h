@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Puck_DreamCoil_Thinker
+class CDOTA_Modifier_Puck_DreamCoil_Thinker : public CDOTA_Buff
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hLinkedEntities;
 	float32 coil_radius;

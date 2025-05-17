@@ -1,4 +1,4 @@
-class CDOTA_Item_GemOfTrueSight
+class CDOTA_Item_GemOfTrueSight : public CDOTA_Item
 {
 	int32 m_iTempViewer;
 	int32 m_iTeam;

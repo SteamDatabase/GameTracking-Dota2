@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Rattletrap_Hookshot
+class CDOTA_Modifier_Rattletrap_Hookshot : public CDOTA_Buff
 {
 	CUtlVector< CHandle< CBaseEntity > > m_hDamaged;
 	CHandle< CBaseEntity > m_hTarget;

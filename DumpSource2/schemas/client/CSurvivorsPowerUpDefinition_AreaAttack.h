@@ -1,4 +1,6 @@
-class CSurvivorsPowerUpDefinition_AreaAttack
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
+class CSurvivorsPowerUpDefinition_AreaAttack : public CSurvivorsPowerUpDefinition
 {
 	ESurvivorsAreaAttackOrigin m_eOrigin;
 	float32 m_flRemoveParticleTimeDelay;

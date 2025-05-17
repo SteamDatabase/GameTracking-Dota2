@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_GaleGuard
+class CDOTA_Modifier_Item_GaleGuard : public CDOTA_Buff
 {
 	float32 barrier_amount;
 	float32 barrier_pct;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Magnataur_Shockwave_Pull
+class CDOTA_Modifier_Magnataur_Shockwave_Pull : public CDOTA_Buff
 {
 	Vector m_vDirection;
 	float32 m_flEndTime;

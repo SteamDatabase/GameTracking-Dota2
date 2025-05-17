@@ -1,10 +1,15 @@
-class C_DynamicProp
+// MEntityAllowsPortraitWorldSpawn
+// MNetworkVarNames = "bool m_bUseHitboxesForRenderBox"
+// MNetworkVarNames = "bool m_bUseAnimGraph"
+class C_DynamicProp : public C_BreakableProp
 {
 	bool m_bRandomAnimator;
 	GameTime_t m_flNextRandAnim;
 	float32 m_flMinRandAnimDuration;
 	float32 m_flMaxRandAnimDuration;
+	// MNetworkEnable
 	bool m_bUseHitboxesForRenderBox;
+	// MNetworkEnable
 	bool m_bUseAnimGraph;
 	CEntityIOOutput m_pOutputAnimBegun;
 	CEntityIOOutput m_pOutputAnimOver;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_Snapfire_MortimerKisses
+class CDOTA_Ability_Snapfire_MortimerKisses : public CDOTABaseAbility
 {
 	int32 m_nDamagePerProjectile;
 	int32 damage_per_impact;

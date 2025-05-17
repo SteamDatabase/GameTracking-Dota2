@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_SangeAndYasha
+class CDOTA_Modifier_Item_SangeAndYasha : public CDOTA_Buff_Item
 {
 	int32 bonus_agility;
 	int32 bonus_attack_speed;

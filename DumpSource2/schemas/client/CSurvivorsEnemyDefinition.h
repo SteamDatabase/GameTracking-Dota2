@@ -1,3 +1,5 @@
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MVDataRoot
 class CSurvivorsEnemyDefinition
 {
 	SurvivorsEnemyID_t m_unEnemyID;

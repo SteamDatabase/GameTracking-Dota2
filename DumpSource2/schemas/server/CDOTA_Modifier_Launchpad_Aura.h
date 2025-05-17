@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Launchpad_Aura
+class CDOTA_Modifier_Launchpad_Aura : public CDOTA_Buff
 {
 	CHandle< CBaseEntity > m_hNextNode;
 	Vector m_vDirection;

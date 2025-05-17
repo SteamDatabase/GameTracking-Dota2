@@ -1,3 +1,3 @@
-class CDOTA_Item_Terror_Mask
+class CDOTA_Item_Terror_Mask : public CDOTA_Item
 {
 };

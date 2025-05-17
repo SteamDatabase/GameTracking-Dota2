@@ -1,3 +1,3 @@
-class CDOTA_Ability_Alchemist_GoblinsGreed
+class CDOTA_Ability_Alchemist_GoblinsGreed : public CDOTABaseAbility
 {
 };

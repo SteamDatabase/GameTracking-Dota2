@@ -1,3 +1,3 @@
-class C_DOTA_Ability_LoneDruid_SavageRoar
+class C_DOTA_Ability_LoneDruid_SavageRoar : public C_DOTABaseAbility
 {
 };

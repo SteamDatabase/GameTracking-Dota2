@@ -1,4 +1,4 @@
-class CDOTA_Unit_Hero_Wisp
+class CDOTA_Unit_Hero_Wisp : public CDOTA_BaseNPC_Hero
 {
 	ParticleIndex_t m_nAmbientFXIndex;
 	ParticleIndex_t m_nStunnedFXIndex;

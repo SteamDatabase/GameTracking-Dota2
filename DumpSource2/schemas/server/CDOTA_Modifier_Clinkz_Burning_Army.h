@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Clinkz_Burning_Army
+class CDOTA_Modifier_Clinkz_Burning_Army : public CDOTA_Buff
 {
 	float32 attack_rate;
 	int32 damage_percent;

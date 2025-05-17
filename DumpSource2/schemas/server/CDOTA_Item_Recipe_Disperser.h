@@ -1,3 +1,3 @@
-class CDOTA_Item_Recipe_Disperser
+class CDOTA_Item_Recipe_Disperser : public CDOTA_Item
 {
 };

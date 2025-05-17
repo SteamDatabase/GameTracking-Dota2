@@ -1,4 +1,4 @@
-class CDOTA_Modifier_TemplarAssassin_Meld
+class CDOTA_Modifier_TemplarAssassin_Meld : public CDOTA_Buff
 {
 	int32 bonus_damage;
 	bool launched_attack;

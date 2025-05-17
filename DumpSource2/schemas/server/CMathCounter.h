@@ -1,4 +1,4 @@
-class CMathCounter
+class CMathCounter : public CLogicalEntity
 {
 	float32 m_flMin;
 	float32 m_flMax;

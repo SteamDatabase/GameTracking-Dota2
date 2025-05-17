@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Respawn_Reduction_35
+class CDOTA_Ability_Special_Bonus_Respawn_Reduction_35 : public CDOTABaseAbility
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Visage_GravekeepersCloak
+class CDOTA_Modifier_Visage_GravekeepersCloak : public CDOTA_Buff
 {
 	int32 damage_reduction;
 	int32 max_layers;

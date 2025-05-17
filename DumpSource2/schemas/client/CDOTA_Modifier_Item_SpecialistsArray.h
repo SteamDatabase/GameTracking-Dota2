@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Item_SpecialistsArray
+class CDOTA_Modifier_Item_SpecialistsArray : public CDOTA_Buff_Item
 {
 	int32 all_stats;
 	int32 bonus_damage;

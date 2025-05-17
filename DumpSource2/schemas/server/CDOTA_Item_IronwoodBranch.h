@@ -1,3 +1,3 @@
-class CDOTA_Item_IronwoodBranch
+class CDOTA_Item_IronwoodBranch : public CDOTA_Item
 {
 };

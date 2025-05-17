@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Hoodwink_Sharpshooter_Windup
+class CDOTA_Modifier_Hoodwink_Sharpshooter_Windup : public CDOTA_Buff
 {
 	bool m_bReachedMax;
 	float32 m_flLastOverheadTime;

@@ -1,5 +1,9 @@
-class C_BaseCombatCharacter
+// MNetworkExcludeByUserGroup = "LocalPlayerExclusive"
+// MNetworkVarNames = "CHandle<C_EconWearable > m_hMyWearables"
+class C_BaseCombatCharacter : public C_BaseFlex
 {
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnWearablesChanged"
 	C_NetworkUtlVectorBase< CHandle< C_EconWearable > > m_hMyWearables;
 	AttachmentHandle_t m_leftFootAttachment;
 	AttachmentHandle_t m_rightFootAttachment;

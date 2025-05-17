@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Luna_MoonGlaive
+class CDOTA_Modifier_Luna_MoonGlaive : public CDOTA_Buff
 {
 	float32 range;
 	int32 bounces;

@@ -1,4 +1,4 @@
-class EventAdvanceTick_t
+class EventAdvanceTick_t : public EventSimulate_t
 {
 	int32 m_nCurrentTick;
 	int32 m_nCurrentTickThisFrame;

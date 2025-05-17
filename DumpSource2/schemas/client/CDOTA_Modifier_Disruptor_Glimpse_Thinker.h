@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Disruptor_Glimpse_Thinker
+class CDOTA_Modifier_Disruptor_Glimpse_Thinker : public CDOTA_Buff
 {
 	Vector m_vStartLoc;
 	CHandle< C_BaseEntity > m_hEntity;

@@ -1,4 +1,4 @@
-class CDOTA_Modifier_SkeletonKing_BoneGuard_Summon
+class CDOTA_Modifier_SkeletonKing_BoneGuard_Summon : public CDOTA_Buff
 {
 	CHandle< C_BaseEntity > m_hTarget;
 	int32 talent_skeleton_damage;

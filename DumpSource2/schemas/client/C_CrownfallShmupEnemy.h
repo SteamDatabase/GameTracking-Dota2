@@ -1,3 +1,4 @@
-class C_CrownfallShmupEnemy
+// MEntityAllowsPortraitWorldSpawn
+class C_CrownfallShmupEnemy : public C_PortraitWorldUnit
 {
 };

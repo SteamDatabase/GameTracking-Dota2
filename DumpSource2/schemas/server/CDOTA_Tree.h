@@ -1,4 +1,4 @@
-class CDOTA_Tree
+class CDOTA_Tree : public CObstructionObject
 {
 	bool m_bStanding;
 	bool m_bSpecialConsume;

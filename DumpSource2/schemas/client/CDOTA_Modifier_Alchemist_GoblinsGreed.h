@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Alchemist_GoblinsGreed
+class CDOTA_Modifier_Alchemist_GoblinsGreed : public CDOTA_Buff
 {
 	CUtlVector< GameTime_t > m_DeathList;
 	float32 damage;

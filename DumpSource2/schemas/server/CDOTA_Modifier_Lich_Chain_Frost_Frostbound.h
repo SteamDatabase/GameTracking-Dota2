@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Lich_Chain_Frost_Frostbound
+class CDOTA_Modifier_Lich_Chain_Frost_Frostbound : public CDOTA_Buff
 {
 	float32 jump_range;
 	int32 jumps_remaining;

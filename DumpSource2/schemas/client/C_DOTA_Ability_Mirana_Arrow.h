@@ -1,4 +1,4 @@
-class C_DOTA_Ability_Mirana_Arrow
+class C_DOTA_Ability_Mirana_Arrow : public C_DOTABaseAbility
 {
 	float32 scepter_radius;
 	Vector m_vStartPos;

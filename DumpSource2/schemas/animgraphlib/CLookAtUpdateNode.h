@@ -1,4 +1,5 @@
-class CLookAtUpdateNode
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CLookAtUpdateNode : public CUnaryUpdateNode
 {
 	LookAtOpFixedSettings_t m_opFixedSettings;
 	AnimVectorSource m_target;

@@ -1,3 +1,3 @@
-class CDOTA_Ability_Special_Bonus_Unique_ArenaOfBloodHPRegen
+class CDOTA_Ability_Special_Bonus_Unique_ArenaOfBloodHPRegen : public C_DOTABaseAbility
 {
 };

@@ -1,3 +1,3 @@
-class CDOTA_Item_Ninja_Gear
+class CDOTA_Item_Ninja_Gear : public CDOTA_Item
 {
 };

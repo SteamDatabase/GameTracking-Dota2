@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Riki_TricksOfTheTrade_Phase
+class CDOTA_Modifier_Riki_TricksOfTheTrade_Phase : public CDOTA_Buff
 {
 	ParticleIndex_t m_nFxIndex;
 	CHandle< C_BaseEntity > m_hTarget;

@@ -1,4 +1,5 @@
-class CSlopeComponentUpdater
+// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+class CSlopeComponentUpdater : public CAnimComponentUpdater
 {
 	float32 m_flTraceDistance;
 	CAnimParamHandle m_hSlopeAngle;

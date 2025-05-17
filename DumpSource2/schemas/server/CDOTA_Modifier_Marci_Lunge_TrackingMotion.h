@@ -1,4 +1,4 @@
-class CDOTA_Modifier_Marci_Lunge_TrackingMotion
+class CDOTA_Modifier_Marci_Lunge_TrackingMotion : public CDOTA_Buff
 {
 	int32 m_nProjectileID;
 	int32 m_nMaxJumpDistance;
