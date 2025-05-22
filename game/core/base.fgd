@@ -139,12 +139,33 @@
 
 @BaseClass = Parentname
 [ 
-	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
-	parentAttachmentName(parentAttachment) [ group="Hierarchy" ] : "Parent Model Bone/Attachment Name" : : "The name of the bone or attachment to attach to on the entity's parent in the movement hierarchy. Use !bonemerge to use bone-merge style attachment."
-	local.origin(vector) [ group="Hierarchy" ] : "Model Attachment position offset" : : "Offset in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
-	local.angles(angle) [ group="Hierarchy" ] : "Model Attachment angular offset" : : "Angular offset in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
-	local.scales(vector) [ group="Hierarchy" ] : "Model Attachment scale" : : "Scale in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
-	useLocalOffset(boolean) [ group="Hierarchy" ] : "Use Model Attachment Offset" : 0 : "Whether to respect the specified local offset when doing the initial hierarchical attachment to its parent."
+	parentname(target_destination) { group="Hierarchy" } : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	parentAttachmentName(parentAttachment) { group="Hierarchy" } : "Parent Bone/Attachment Name" : : "The name of the bone or attachment to attach to on the entity's parent in the movement hierarchy. Use !bonemerge to use bone-merge style attachment. NOTE: If this is specified the Hammer transform will be disregarded, even if 'Use Local Transform' is NOT specified (in that case local transform will be identity)"
+	
+	useLocalOffset(boolean)
+	{
+		group="Hierarchy"
+		bindable_command_buttons =
+		[
+			{
+				target = "ToolSelection"
+				command = "RepositionToMatchLocalOffset"
+				icon = "tools/images/hammer/reposition_to_match_local_offset.png"
+				desc = "Reposition the entity's Hammer transform to match its local offset hierarchy keys"
+			},
+			{
+				target = "ToolSelection"
+				command = "UpdateLocalOffset"
+				icon = "tools/images/hammer/update_local_offset.png"
+				desc = "Update the local offset hierarchy keys based on the entity's current Hammer transform"
+			},
+		]
+	}
+	: "Use Local Transform" : 0 : "Whether to respect the specified local offset when doing the initial hierarchical attachment to its parent."
+
+	local.origin(vector) { group="Hierarchy" enabled={ variable="useLocalOffset" value="1" } } : "Local Origin" : : "Offset in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
+	local.angles(angle)  { group="Hierarchy" enabled={ variable="useLocalOffset" value="1" } } : "Local Angles" : : "Angular offset in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
+	local.scales(vector) { group="Hierarchy" enabled={ variable="useLocalOffset" value="1" } } : "Local Scale" : : "Scale in the local space of the parent model's attachment/bone to use in hierarchy. Not used if you are not using parent attachment."
 
 	// Inputs
 	input SetParent(target_destination) : "Changes the entity's parent in the movement hierarchy."
@@ -399,6 +420,7 @@
 	input SetMass(float) : "Set mass of this object."
 
 	// Outputs	
+	output OnStartDeath(void) : "Fired when this prop has begun dying (breaking) before other death-related callbacks." 
 	output OnBreak(void) : "Fired when this breakable breaks."
 	output OnHealthChanged(float) : "Fired when the health of this breakable changes, passing the new value of health as a percentage of max health, from [0..1]."
 ]
@@ -849,11 +871,11 @@
 	opvarName(string) : "OpVar Name" : "" : "The name of the OpVar to change"
 	opvarUseAutoCompare(bool) : "Use Auto Compare" : "0" : "All entities that point to the same opvar and have this selected will automatically have their values compared and the largest set to the opvar value"
 	opvarArrayIndex(integer){ enabled={ variable="opvarUseAutoCompare" value="0" } } : "OpVar Index" : "" : "Index of the OpVar array to set"
-	distanceMapMin(float) : "Distance Map Minimum" : "" : "Minimum value to map distance to"
-	distanceMapMax(float) : "Distance Map Maximum" : "" : "Maximum value to map distance to"
-	occlusionRadius(float) : "Occlusion Radius" : "" : "Size of the occlusion sphere"
-	occlusionMin(float) : "Minimum Occlusion" : "" : "Occlusion value when fully occluded"
-	occlusionMax(float) : "Maximum Occlusion" : "" : "Occlusion value when un-occluded"
+	distanceMapMin(float) : "Distance Map Minimum" : "0.0" : "Minimum value to map distance to"
+	distanceMapMax(float) : "Distance Map Maximum" : "1.0" : "Maximum value to map distance to"
+	occlusionRadius(float) : "Occlusion Radius" : "1.0" : "Size of the occlusion sphere"
+	occlusionMin(float) : "Minimum Occlusion" : "1.0" : "Occlusion value when fully occluded"
+	occlusionMax(float) : "Maximum Occlusion" : "1.0" : "Occlusion value when un-occluded"
 
 	simulationMode(choices) : "Simulation Mode" : "0" : "Simulation Mode for occlusion check." =
 	[
@@ -879,6 +901,8 @@
 	input Enable(void) : "Enable the entity"
 	input Disable(void) : "Disable the entity"
 	input SetDisabledValue(void) : "Set the on-disable value for the player that causes this input"
+	input SetDistanceMapMin(float) : "Set the min distance map value"
+	input SetDistanceMapMax(float) : "Set the max distance map value"
 
 	
 	//Outputs
@@ -987,36 +1011,6 @@
 	areaMax(vector) : "Sound Area Max" : "32 32 32"	
 ]
 
-@PointClass base(Targetname) = env_screenoverlay: 
-	"An entity that can display and control a set of screen overlays, to be displayed over the player's view. Useful for view effects like drunkenness, or teleporter afterimages, etc."
-[
-	OverlayName1(string) : "Overlay Name 1" : "" : "Name of the first overlay material to display."
-	OverlayTime1(float) : "Overlay Duration 1" : "1.0" : "Amount of time that the first overlay should be displayed for, after which it will begin showing the second overlay."
-	OverlayName2(string) : "Overlay Name 2" : "" : "Name of the second overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime2(float) : "Overlay Duration 2" : "1.0" : "Amount of time that the second overlay should be displayed for, after which it will begin showing the third overlay."
-	OverlayName3(string) : "Overlay Name 3" : "" : "Name of the third overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime3(float) : "Overlay Duration 3" : "1.0" : "Amount of time that the third overlay should be displayed for, after which it will begin showing the fourth overlay."
-	OverlayName4(string) : "Overlay Name 4" : "" : "Name of the fourth overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime4(float) : "Overlay Duration 4" : "1.0" : "Amount of time that the fourth overlay should be displayed for, after which it will begin showing the fifth overlay."
-	OverlayName5(string) : "Overlay Name 5" : "" : "Name of the fifth overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime5(float) : "Overlay Duration 5" : "1.0" : "Amount of time that the fifth overlay should be displayed for, after which it will begin showing the sixth overlay."
-	OverlayName6(string) : "Overlay Name 6" : "" : "Name of the sixth overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime6(float) : "Overlay Duration 6" : "1.0" : "Amount of time that the sixth overlay should be displayed for, after which it will begin showing the seventh overlay."
-	OverlayName7(string) : "Overlay Name 7" : "" : "Name of the seventh overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime7(float) : "Overlay Duration 7" : "1.0" : "Amount of time that the seventh overlay should be displayed for, after which it will begin showing the eighth overlay."
-	OverlayName8(string) : "Overlay Name 8" : "" : "Name of the eighth overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime8(float) : "Overlay Duration 8" : "1.0" : "Amount of time that the eighth overlay should be displayed for, after which it will begin showing the ninth overlay."
-	OverlayName9(string) : "Overlay Name 9" : "" : "Name of the ninth overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime9(float) : "Overlay Duration 9" : "1.0" : "Amount of time that the ninth overlay should be displayed for, after which it will begin showing the tenth overlay."
-	OverlayName10(string) : "Overlay Name 10" : "" : "Name of the tenth overlay material to display. If left blank, overlay displaying will finish, and this entity will consider itself done."
-	OverlayTime10(float) : "Overlay Duration 10" : "1.0" : "Amount of time that the tenth overlay should be displayed for, after which this entity will stop displaying overlays."
-
-	// Inputs
-	input	StartOverlays(void) : "Start displaying the first overlay."
-	input	StopOverlays(void) : "Stop displaying any overlays."
-	input	SwitchOverlay(float) : "Switch to displaying a specific overlay. Pass in the desired overlay number in the parameter."
-]
-
 @PointClass base(Targetname) iconsprite("editor/env_texturetoggle.vmat") = env_texturetoggle : 
 	"An entity that allows you to change the textures on other brush-built entities."
 [
@@ -1063,37 +1057,6 @@
 	]
 ]
 
-@PointClass base(Targetname) color(255 255 255) 
-	editormodel( "models/editor/light_environment", lightModeTint2, "124 255 157", "255 196 64", "255 64 64" )
-	iconsprite
-	{
-		image = "materials/editor/env_sun.vmat"
-		tintKey = "color"
-	}	
-	helper_env_sun() = env_sun : 
-	"An entity to control & draw a sun effect in the sky."
-[
-	 effect_name(particlesystem) [report] : "Particle Sun flare" : "particles/environment/env_sun_clear.vpcf"
-	 effect_namess(particlesystem) [report] : "Sceenspace effect (addition)" : "" : ""
-	 full_luminositycolorvalue(boolean) : "Remap to Max Luminosity" : 1 : "Regardless of color Value set to max luminocity. This is mainly for additive things like the sun"
-	 colortint(color255) : "Sun Color (R G B)" : "100 80 80"
-	 scale(float) : "Size" : "4.0" : "Increased control on scaling the sun in the particle system. This read into control point 17 which should drive the system."
-	 selfillumscale(float) : "HDR color scale (0-10)" : 4 : "float value to multiply sprite color by when running in HDR mode. Cp 17 y."
-	 hazescale(float) : "Haze Scale (0-10)" : 4 : "additional control for creating things like haze. Treat this like another float input on cp 17 z."
-	 rotation(float) [ group="Advanced Properties" ] : "Sprite Rotation" : "0.0" : "Rotate the sprite. passed to Particle through Control point 15"
-	 alphascale(float) [ group="Advanced Properties" ] : "Core Alpha" : "1.0" : "Rotate the sprite. passed to Particle through Control point 18 x"
-	 alphahdr(float) [ group="Advanced Properties" ] : "Hdr Alpha" : "1.0" : "Rotate the sprite. passed to Particle through Control point 18 y"
-	 alphahaze(float) [ group="Advanced Properties" ] : "Haze Alpha" : "1.0" : "Alpha sprite. passed to Particle through Control point 18 z"
-	 mapfarz(integer) [ group="Advanced Properties" ] : "Map Farz" : 10000 : "The farz set in the map's env_fog_controller. this is to help preview for size in hammer only. Not used in game. "
-	 farzscale(float) [ group="Advanced Properties" ] : "FarZ Scale" : ".95" : "Default is .9, it will let you scale the distance of the sun to the player incase of fog fading out the sun.  "
-
-	// Inputs
-	input TurnOn(void) : "Enable sun rendering."
-	input TurnOff(void) : "Disable sun rendering."
-	input SetColor(color255) : "Change the sun's color. Format: <Red 0-255> <Green 0-255> <Blue 0-255>"
-]
-
-
 @PointClass base(Targetname) global( tonemap ) tonemap() iconsprite("materials/editor/env_tonemap_controller.vmat") = env_tonemap_controller :
 	"An entity that controls the HDR tonemapping for the player. Think of it as a method of controlling the exposure of the player's eyes."
 [
@@ -1133,27 +1096,6 @@
 	allownewgibs(boolean)	: "Allow New Gibs To Spawn" : 0 : "If true, when the max gib count is reached, oldest gibs are removed as new gibs spawn. If false, new gibs will not be spawned once the gib limit is reached."
 	
 	input SetMaxPieces(integer)	: "Set the max gib count."
-]
-
-@PointClass base(Parentname, Targetname) tags( Particles ) color(255 128 0) editormodel("models/editor/axis_helper_thick") = env_lightglow : 
-	"An entity that puts an additive glow in the world, mostly used over light sources."
-[
-	rendercolor(color255) : "Color (R G B)" : "255 255 255"
-	VerticalGlowSize(integer) : "Vertical Size" : 30
-	HorizontalGlowSize(integer) : "Horizontal Size" : 30
-	MinDist(integer) : "Minimum Distance" : 500 : "The distance at which this effect will be fully translucent."
-	MaxDist(integer) : "Maximum Distance" : 2000 : "The distance at which this effect will be at full intensity."
-	OuterMaxDist(integer) : "Outer Maximum Distance" : 0 : "If larger than the maximum distance, this is the length at which the glow will fade completely out, between the span of the maximum distance and this length."
-	GlowProxySize(float) : "Glow Proxy Geometry Size" : "2.0" : "Size of the glow to be rendered for visibility testing. Must be larger than the distance from the sprite center to empty space. So if this glow is inside geometry (like a light bulb), set this value to be bigger than the bulb's radius. Any time a sphere of this radius would be visible (poking through any nearby geometry), the glow will be rendered."
-	HDRColorScale(float) : "HDR color scale." : "1.0" : "float value to multiply sprite color by when running in HDR mode."
-
-	// Inputs
-	input Color(color255) : "Change the render color of the glow. Format: <Red 0-255> <Green 0-255> <Blue 0-255>"
-
-	spawnflags(flags) =
-	[
-		1: "Visible only from front" : 0
-	]
 ]
 
 @PointClass base(Parentname) tags( Particles ) color(255 255 255) = env_smokestack : 
@@ -1272,6 +1214,8 @@
 	[
 		2: "Ignore player +USE" : 1
 	]
+
+	add_attribute(string) : "Add Attribute" : "" : "Will add an additional attribute that AI/player entities can query when checking props for information (ex: 'DogToy' or 'GrabbableResource')"
 
 	_minlight(string) : "Minimum Light Level" : : "The minimum level of ambient light that hits this brush."
 	Solidity(choices) : "Solidity" : 1 : "Used to control the solidity/collision of these brushes." =
@@ -1514,15 +1458,6 @@
 	input Activate(void) : "Enable this dispenser."
 ]
 
-@PointClass base(Targetname, Parentname) size(-16 -16 -16, 16 16 16) = env_funnel : 
-	"HL1 Legacy: Large Portal Funnel" 
-[
-	spawnflags(flags) =
-	[
-		1: "Reverse" : 0
-	]
-]
-
 @PointClass base(Targetname, Parentname) size(-16 -16 -16, 16 16 16) color(255 0 0) = env_blood : 
 	"An entity used to spawn blood effects." 
 [
@@ -1547,26 +1482,6 @@
 
 	// Inputs
 	input EmitBlood(void) : "Triggers the blood effect."
-]
-
-@SolidClass base(Targetname, Parentname) = env_bubbles : 
-	"An entity used to create a volume in which to spawn bubbles." 
-[
-	density(integer) : "Bubble density" : 2
-	frequency(integer) : "Bubble frequency" : 2
-	current(integer) : "Speed of Current" : 0 : "The speed of the water current in the volume, used to move the bubbles."
-	spawnflags(Flags) = 
-	[
-		1 : "Start Off"  : 0
-	]
-
-	// Inputs
-	input Activate(void) : "Activates the bubbles."
-	input Deactivate(void) :  "Deactivates the bubbles."
-	input Toggle(void) :  "Toggles the bubbles on and off."
-	input SetDensity(integer) : "Sets the bubble density."
-	input SetFrequency(integer) : "Sets bubble emission rate in bubbles per second."
-	input SetCurrent(integer) : "Sets current speed in inches per second."
 ]
 
 @PointClass base(Targetname, Parentname, RenderModeChoices) iconsprite("editor/env_explosion.vmat") = env_explosion : 
@@ -1663,6 +1578,8 @@
 		"0" : "No"
 		"1" : "Yes"
 	]
+
+	AffectInvulnerableEnts(boolean) : "Affect Invulnerable Ents" : "1" : "If true, also push entities that do not take damage (like func_physbox)"
 
 	// Inputs
 	input Explode(void) : "Trigger the explosion."
@@ -1944,7 +1861,6 @@
 	spawnflags(flags) =
 	[
 		1: "GlobalShake" : 0
-		//2: "Disrupt player control" : 0 // doesn't work
 		4: "In Air" : 0		// shakes objects even if they are not onground
 		8: "Physics" : 0	// shakes physically as well as the camera
 		16: "Ropes" : 0		// shakes ropes too.
@@ -2896,6 +2812,7 @@
 	stopsound(sound) : "Sound played when the brush stops moving."
 	CreateNavObstacle(boolean) : "Create Nav Obstacle" : "0" : "Create a navigation obstacle to assist NPC pathfinding"
 	CreateMovableNavMesh(boolean) : "Create Movable Nav Mesh" : "0" : "Create a navigation mesh that moves with the brush."
+	AllowMovableNavMeshDockingOnEntireEntity(boolean) : "Movable Nav Mesh, Allow Docking on Full Entity" : "0" : "If this entity creates a movable nav mesh, then allow docking test across the entire entity."
 	// Inputs
 	input Open(void) : "Move the brush to the end position (starting position + (move direction * move distance))."
 	input Close(void) : "Move the brush to the starting position."
@@ -3328,13 +3245,6 @@
 @BaseClass base(Targetname, Parentname, Global, Studiomodel, BaseFadeProp, Glow) = BasePropDoorRotating
 [
 	slavename(target_destination) : "Slave Name" : : "The name of any doors that should be slaved to this door (i.e. should open when this one opens, and close when this one closes)."
-	hardware(choices) : "Hardware Type" : 1 =
-	[
-		0 : "<None>"
-		1 : "Lever"
-		2 : "Push bar"
-		3 : "Keypad"
-	]
 	
 	ajarangle(float) : "Ajar Angle" : "0" : "If the door 'Spawn Position' is set to Ajar, this is the angle to spawn at, relative to the closed position."
 	ajardoorshouldntalwaysopen(boolean) : "Ajar Shouldn't Always Open" : "0" : "By default, Ajar doors always open fully when +USEd. If this is set to true, Ajar doors will stop opening if they cross the close position."
@@ -4722,7 +4632,6 @@
 	[
 		16384 : "Debris - Don't collide with the player or other debris" : 0
 		32768 : "Motion Disabled" : 0
-		65536 : "Use Preferred Carry Angles" : 0
 		1048576 : "Start Asleep" : 0
 		8388608 : "Prevent motion enable on player bump" : 0
 		16777216: "Force nav-ignore" : 0
@@ -4743,7 +4652,13 @@
 	forcetoenablemotion(float) : "Physics Impact Force to Override Motion" : 0 : "If specified, this object will start motion disabled. Any impact that imparts a force greater than this value on the physbox will enable motion."
 	enableuseoutput(boolean) : "Enable +Use Output" : 0 : "Enables OnPlayerUse output being fired when this object is used"
 	health(integer) : "Strength" : 0 : "Number of points of damage to take before breaking.  0 means don't break."
-	preferredcarryangles(vector) : "Preferred Player-carry Angles" : "0 0 0" : "If the 'Use Preferred Carry Angles' spawnflag is set, this angle is the angle which the object should orient to when the player picks it up, with the physgun or +USE."
+	hoverposeflags(flags) =
+	[
+		1: "Position" : 0
+		2: "Angles" : 0
+	]
+	hoverposeposition(vector) : "Player-carry Hover Position" : "0 0 0" : "If the hoverposeflags Position flag is set, this position is the position which the object should move when the player picks it up, with the physgun or +USE."
+	hoverposeangles(vector) : "Player-carry Hover Angles" : "0 0 0" : "If the hoverposeflags Angles flag is set, this angle is the angle which the object should orient to when the player picks it up, with the physgun or +USE."
 	notsolid(choices) : "Not solid to world" : 0 =
 	[
 		0: "Solid to World"
@@ -4956,6 +4871,8 @@
 @PointClass base(TwoObjectPhysics) editormodel("models/editor/axis_helper_thick") tags( Physics ) = phys_constraint :
 	"Constrain an entity to the world or another entity at a fixed relative position."
 [
+	bonename1(string) : "Entity 1 Bone Name" : "" : "If set, search for a physics body that corresponds with the given bone."
+	bonename2(string) : "Entity 2 Bone Name" : "" : "If set, search for a physics body that corresponds with the given bone."
 	linearfrequency(float) : "Linear Frequency" : "0" : "Linear spring frequency (stiffness)."
 	lineardampingratio(float) : "Linear Damping Ratio" : "0" : "Linear spring damping ratio."
 	angularfrequency(float) : "Angular Frequency" : "0" : "Angular spring frequency (stiffness)."
@@ -5158,31 +5075,8 @@
 
 	linearfrequency(float) : "Linear Frequency" : "0" : "Linear spring frequency (stiffness)."
 	lineardampingratio(float) : "Linear Damping Ratio" : "0" : "Linear spring damping ratio."
-]
 
-@PointClass editormodel("models/editor/axis_helper") arc_range{ is_local_axis = true align_pie_to_local_forward = true is_enabled_key = "enable_steering_limit" min_angle_key = "min_steering_angle" max_angle_key = "max_steering_angle" } axis_range{ is_local_axis = true is_enabled_key = "enable_suspension_limit" min_limit_key = "min_suspension_offset" max_limit_key = "max_suspension_offset" } base(TwoObjectPhysics) tags( Physics ) = phys_wheelconstraint : 
-	"Constraint to represent the suspension linkage for a wheel. Constrains steering angle and movement along the suspension axis (Z). Wheel spins about the Y axis."
-[
-	spawnflags(flags) =
-	[
-	]
-
-	suspension_frequency(float) : "Suspension Frequency" : "5" : "Oscillation frequency (stiffness) of the suspension spring"
-	suspension_damping_ratio(float) : "Suspension Damping Ratio" : "1" : "How heavily damped is the suspension? (Value should be roughly between 0 and 2)"
-	suspension_height_offset(float) : "Suspension Height Offset" : "0" : "Offset applied to raise or lower the vehicle's ride height. Can be used to compensate for soft suspension if your vehicle is sinking too much on its springs."
-
-	enable_suspension_limit(boolean) : "Enable Suspension Limit" : 1 : "Limit relative motion along the suspension axis"
-	min_suspension_offset(float) : "Min Suspension Offset" : "-10" : "Minimum limit on the suspension travel"
-	max_suspension_offset(float) : "Max Suspension Offset" : "10" : "Maximum limit on the suspension travel"
-
-	enable_steering_limit(boolean) : "Enable Steering Limit" : 1 : "Limit relative rotation around the steering axis"
-	min_steering_angle(float) : "Min Steering Angle" : "-45" : "Minimum angular limit about the steering axis"
-	max_steering_angle(float) : "Max Steering Angle" : "45" : "Maximum angular limit about the steering axis"
-
-	steering_axis_friction(float) : "Steering Axis Friction" : "0.01" : "Friction that resists rotation around the steering axis"
-	spin_axis_friction(float) : "Spin Axis Friction" : "0.01" : "Friction that resists rotation around the spin axis"
-
-	input SetSteeringMimicsEntity(string) : "Pass an entity name here, and our steering angle will follow the yaw of the given entity"
+	input SetSplineEntity(string) : "Set the spline to a new entity"
 ]
 
 @BaseClass base(Targetname, BasePhysicsNoSettleAttached) = ForceController
@@ -5394,6 +5288,7 @@
 	input DisableCollision(void) : "Disable collision on the prop."
 	input SetNavIgnore(boolean) : "Enable and disable NAVIgnore on the prop."
 	input SetAnimGraphParameter(string) : "Set an animation graph parameter Format: <name=value>"
+	input SetRagdollProfile(string) : "Sets the active ragdoll profile."
 
 	// Outputs
 	output OnAnimationBegun(void) : "Fired whenever a new animation has begun playing."
@@ -7413,7 +7308,6 @@
 	FadeSpeed( float ) : "Fade time" : "2.0" : "Sets fade in or out time (in seconds)."
 
 	IndirectEnabled( bool ) [ group="Indirect Lighting" ] : "Enable indirect lighting" : "0"
-	IndirectUseLPVs( bool ) [ group="Indirect Lighting" ] : "Indirect lighting uses LPVs" : "0"
 	IndirectStrength( float ) [ group="Indirect Lighting" ] : "Indirect light strength" : "1.0" 
 	IndirectVoxelDim(choices) [ group="Indirect Lighting" ] : "Indirect Lighting Dimension" : "256.0" : "" = 
 	[
@@ -7474,7 +7368,7 @@
 	HeightFogDepth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Vertical Depth" : 48 : "Vertical depth before height fog is maximum intensity"
 	HeightFogEdgeWidth(float) { min="12.0" enabled={ variable="Shape" value="2" } } : "Height Fog Edge Width" : 96 : "Horizonal fade width of height fog"
 
-    AllowLPVIndirect(bool) : "Allow LPV Indirect" : "1" : "Allow using LPVs for indirect lighting: higher resolution, but will not honor fog lighting enable/disable on lights"
+	IndirectUseLPVs(bool) : "Indirect lighting uses LPVs" : "0" : "Use LPVs for indirect lighting: higher resolution, but will not honor fog lighting enable/disable on lights"
 	OverrideFogIndirectStrength(bool) : "Override Fog Indirect Lighting Strength" : "0"
 	FogIndirectStrength(float) { min="0.0" enabled={ variable="OverrideFogIndirectStrength" value="1" } } : "Fog Indirect Lighting Strength" : "1.0" : "Volume-local scalar for indirect lighting strength"
 

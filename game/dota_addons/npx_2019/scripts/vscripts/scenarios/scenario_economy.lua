@@ -289,7 +289,7 @@ function CDOTANPXScenario_Economy:SetupTask_CompleteEchoSabre()
 
 	buyTPTask.StartTask = function( task )
 		CDotaNPXTask_BuyItem.StartTask( task )
-		task:GetScenario():ShowUIHint( "QuickBuySlot8" )
+		task:GetScenario():ShowUIHint( "StickySlot" )
 	end
 
 	buyTPTask.CompleteTask = function( task )

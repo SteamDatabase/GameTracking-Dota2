@@ -116,6 +116,13 @@ enum EDotaClientMessages {
 	DOTA_CM_ChooseCraftedNeutral = 817;
 	DOTA_CM_TimerAlert = 818;
 	DOTA_CM_MadstoneAlert = 819;
+	DOTA_CM_UpdateAutoCourierSettings = 820;
+	DOTA_CM_AutoCourierExecute = 821;
+	DOTA_CM_QuickBuyAction = 822;
+	DOTA_CM_InteractionChannelsRequireHalt = 823;
+	DOTA_CM_SuggestItemRefresh = 824;
+	DOTA_CM_SuggestItemVariantRequest = 825;
+	DOTA_CM_SuggestItemVariantSelect = 826;
 }
 
 message CDOTAClientMsg_MapPing {
@@ -202,6 +209,10 @@ message CDOTAClientMsg_ChannelRequiresHalt {
 	optional bool enabled = 1;
 }
 
+message CDOTAClientMsg_InteractionChannelsRequireHalt {
+	optional bool enabled = 1;
+}
+
 message CDOTAClientMsg_SearchString {
 	optional string search = 1;
 }
@@ -256,10 +267,37 @@ message CDOTAClientMsg_BeginLastHitChallenge {
 message CDOTAClientMsg_UpdateQuickBuyItem {
 	optional int32 item_ability_id = 1 [default = -1];
 	optional bool purchasable = 2 [default = false];
+	optional int32 top_level_item_ability_id = 3 [default = -1];
 }
 
 message CDOTAClientMsg_UpdateQuickBuy {
 	repeated .CDOTAClientMsg_UpdateQuickBuyItem items = 1;
+	repeated int32 goal_item_ability_ids = 2;
+}
+
+message CDOTAClientMsg_QuickBuyAction {
+	enum EActionType {
+		INVALID = -1;
+		PURCHASE = 0;
+		QUEUE = 1;
+		REMOVE = 2;
+		CLEAR = 3;
+		CLEAR_AND_QUEUE = 4;
+		MARK_FOR_BUY = 5;
+		CLEAR_MARK_FOR_BUY = 6;
+		ENABLE_BUYBACK_PROTECTION = 7;
+		DISABLE_BUYBACK_PROTECTION = 8;
+		QUEUE_FIRST_AND_MARK_FOR_BUY = 9;
+		CHANGE_SLOT = 10;
+	}
+
+	optional .CDOTAClientMsg_QuickBuyAction.EActionType action = 1 [default = INVALID];
+	optional int32 item_ability_id = 2 [default = -1];
+	optional int32 slot_index = 3;
+	optional int32 purchaser_entindex = 4 [default = -1];
+	optional int32 new_slot_index = 5;
+	optional bool top_level_item = 6;
+	repeated int32 old_slot_ability_ids = 7;
 }
 
 message CDOTAClientMsg_RecordVote {
@@ -436,6 +474,16 @@ message CDOTAClientMsg_SuggestItemPreference {
 	repeated .CDOTAClientMsg_SuggestItemPreference.ItemPreference item_preferences = 1;
 }
 
+message CDOTAClientMsg_SuggestItemRefresh {
+}
+
+message CDOTAClientMsg_SuggestItemGetVariants {
+}
+
+message CDOTAClientMsg_SuggestItemSelectVariant {
+	optional uint32 variant = 1;
+}
+
 message CDOTAClientMsg_MakeTeamCaptain {
 	optional int32 player_id = 1 [default = -1];
 }
@@ -455,6 +503,7 @@ message CDOTAClientMsg_AbilityDraftRequestAbility {
 	optional int32 requested_ability_id = 1 [default = -1];
 	optional bool ctrl_is_down = 2;
 	optional int32 requested_hero_id = 3;
+	optional uint64 requested_facet_key = 4;
 }
 
 message CDOTAClientMsg_GuideSelectOption {
@@ -658,4 +707,11 @@ message CDOTAClientMsg_TimerAlert {
 
 message CDOTAClientMsg_MadstoneAlert {
 	optional int32 target_entindex = 1 [default = -1];
+}
+
+message CDOTAClientMsg_UpdateAutoCourierSettings {
+	optional bool auto_deliver = 1;
+}
+
+message CDOTAClientMsg_AutoCourierExecute {
 }

@@ -1818,3 +1818,113 @@ message CDotaMsg_PredictionResult {
 	optional bool correct = 3;
 	repeated .CDotaMsg_PredictionResult.Prediction predictions = 4;
 }
+
+message CDotaMsgStructuredTooltipProperties {
+	message AttributeValueValue {
+		optional float value = 1;
+		optional bool is_active_value = 2;
+	}
+
+	message AttributeValue_Single {
+		optional .CDotaMsgStructuredTooltipProperties.AttributeValueValue single_value = 1;
+	}
+
+	message AttributeValue_Variable {
+		repeated .CDotaMsgStructuredTooltipProperties.AttributeValueValue values = 1;
+	}
+
+	message AttributeValue_Delta {
+		optional .CDotaMsgStructuredTooltipProperties.AttributeValueValue prev = 1;
+		optional .CDotaMsgStructuredTooltipProperties.AttributeValueValue next = 2;
+	}
+
+	message AttributeValue {
+		oneof attr_value {
+			.CDotaMsgStructuredTooltipProperties.AttributeValue_Single single = 1;
+			.CDotaMsgStructuredTooltipProperties.AttributeValue_Variable variable = 2;
+			.CDotaMsgStructuredTooltipProperties.AttributeValue_Delta delta = 3;
+		}
+	}
+
+	message FacetDisplayProperties {
+		optional string facet_name_loc_token = 1;
+		optional string facet_desc_loc_token = 2;
+		optional string facet_icon_style_name = 3;
+		optional string facet_color_style_name = 4;
+		optional string facet_gradient_style_name = 5;
+	}
+
+	message Attribute {
+		optional string name_loc_token = 1;
+		optional .CDotaMsgStructuredTooltipProperties.EAttributeType type = 2 [default = kUnknown];
+		optional .CDotaMsgStructuredTooltipProperties.AttributeValue value = 3;
+		optional .CDotaMsgStructuredTooltipProperties.FacetDisplayProperties facet = 4;
+	}
+
+	message AttributeGroupDesc_Basic {
+	}
+
+	message AttributeGroupDesc_Specific {
+		optional string title_loc_token = 1;
+		optional string desc_loc_token = 2;
+	}
+
+	message AttributeGroupDesc_Facet {
+		optional .CDotaMsgStructuredTooltipProperties.FacetDisplayProperties facet = 1;
+	}
+
+	message AttributeGroupDescription {
+		oneof attr_group_desc {
+			.CDotaMsgStructuredTooltipProperties.AttributeGroupDesc_Basic basic = 1;
+			.CDotaMsgStructuredTooltipProperties.AttributeGroupDesc_Specific specific = 2;
+			.CDotaMsgStructuredTooltipProperties.AttributeGroupDesc_Facet facet = 3;
+		}
+	}
+
+	message AttributeGroup {
+		optional .CDotaMsgStructuredTooltipProperties.AttributeGroupDescription desc = 1;
+		repeated .CDotaMsgStructuredTooltipProperties.Attribute attributes = 2;
+	}
+
+	message ContentChunk_AttributeGroup {
+		repeated .CDotaMsgStructuredTooltipProperties.AttributeGroup groups = 1;
+	}
+
+	message TooltipContentChunk {
+		oneof content_chunk {
+			.CDotaMsgStructuredTooltipProperties.ContentChunk_AttributeGroup attribute_group = 1;
+		}
+	}
+
+	message SummaryDescriptionEmbedValue {
+		optional string name = 1;
+		optional .CDotaMsgStructuredTooltipProperties.EAttributeType type = 2 [default = kUnknown];
+		optional .CDotaMsgStructuredTooltipProperties.AttributeValue value = 3;
+	}
+
+	enum EAttributeType {
+		kUnknown = 0;
+		kDuration = 1;
+		kManaCost = 2;
+		kHealthCost = 3;
+		kCastRange = 4;
+		kAreaOfEffectRadius = 5;
+		kPhysicalDamage = 6;
+		kMagicalDamage = 7;
+		kPureDamage = 8;
+		kCooldown = 9;
+		kDebuffPercentage = 10;
+	}
+
+	optional string ability_name_loc_token = 1;
+	optional string ability_category_loc_token = 2;
+	optional int32 ability_level = 3;
+	optional int32 current_mana_cost = 4;
+	optional int32 current_health_cost = 5;
+	optional float current_cooldown = 6;
+	optional string summary_description_loc_token = 7;
+	optional string summary_description_level_up_loc_token = 8;
+	repeated .CDotaMsgStructuredTooltipProperties.SummaryDescriptionEmbedValue summary_description_embed_values = 9;
+	optional .CDotaMsgStructuredTooltipProperties.FacetDisplayProperties summary_description_facet = 10;
+	repeated .CDotaMsgStructuredTooltipProperties.TooltipContentChunk chunks = 20;
+}

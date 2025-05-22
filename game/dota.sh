@@ -73,11 +73,6 @@ if [ "$UNAME" == "Linux" ]; then
 	export ENABLE_PATHMATCH=1
 fi
 
-# Remove when Source 2 supports Wayland
-if [ "$UNAME" == "Linux" ]; then
-   export SDL_VIDEO_DRIVER=x11
-fi
-
 # Do the following for strace:
 # 	GAME_DEBUGGER="strace -f -o strace.log"
 

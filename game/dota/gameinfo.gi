@@ -142,7 +142,6 @@
 
 	NetworkSystem
 	{
-		// Experimental, only enabled for Dota right now:
 		"SkipRedundantChangeCallbacks"	"1"
 	}
 
@@ -228,8 +227,6 @@
 		}
 		SoundStackScripts
 		{
-			CompilerVersion "1"
-		//	CompileForCompare "1"
 		}
 
 		ExperimentalVDataLocalization
@@ -272,6 +269,7 @@
 		"sv_early_network_message_processing" "1"
 		"disable_source_soundscape_trace" "1"
 		"cl_buffer_incoming_net_messages" "0"
+		"voice_in_process"				"1"
 	}
 
 	pulse
