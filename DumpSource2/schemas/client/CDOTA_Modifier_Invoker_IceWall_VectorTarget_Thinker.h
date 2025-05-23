@@ -6,8 +6,8 @@ class CDOTA_Modifier_Invoker_IceWall_VectorTarget_Thinker : public CDOTA_Buff
 	float32 damage_per_second;
 	float32 root_damage;
 	float32 tick_interval;
-	int32 wall_total_length;
-	int32 wall_width;
+	float32 wall_total_length;
+	float32 wall_width;
 	Vector m_vWallCenter;
 	Vector m_vWallDirection;
 	Vector m_vWallRight;
