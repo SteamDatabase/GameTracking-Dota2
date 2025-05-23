@@ -1,4 +1,4 @@
 class CFilterAttributeInt : public CBaseFilter
 {
-	CUtlStringToken m_sAttributeName;
+	CUtlSymbolLarge m_sAttributeName;
 };

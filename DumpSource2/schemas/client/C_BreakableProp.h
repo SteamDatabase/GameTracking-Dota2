@@ -6,6 +6,7 @@ class C_BreakableProp : public CBaseProp
 	// MNetworkAlias = "CPropDataComponent"
 	// MNetworkTypeAlias = "CPropDataComponent"
 	CPropDataComponent m_CPropDataComponent;
+	CEntityIOOutput m_OnStartDeath;
 	CEntityIOOutput m_OnBreak;
 	CEntityOutputTemplate< float32 > m_OnHealthChanged;
 	CEntityIOOutput m_OnTakeDamage;

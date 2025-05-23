@@ -5,4 +5,5 @@ class CDOTA_Modifier_PhantomLancer_PhantomEdge_Boost : public CDOTA_Buff
 	bool m_bGiveAgility;
 	CHandle< C_BaseEntity > m_hTarget;
 	int32 bonus_agility;
+	float32 illusion_spawn_radius;
 };

@@ -1,13 +1,15 @@
 class CDOTA_Modifier_Invoker_IceWall_Thinker : public CDOTA_Buff
 {
 	float32 damage_per_second;
-	int32 num_wall_elements;
-	float32 wall_element_spacing;
-	float32 wall_element_radius;
-	float32 bonus_wall_radius;
-	float32 spell_amp;
-	float32 spell_lifesteal;
-	Vector m_vWallDir;
+	Vector m_vWallDirection;
+	Vector m_vWallStart;
+	int32 wall_total_length;
+	int32 wall_width;
+	float32 slow_duration;
+	int32 slow;
+	float32 root_damage;
+	float32 root_duration;
+	float32 tick_interval;
 	bool m_bGrantedGem;
 	ParticleIndex_t m_nParticleIndex;
 	ParticleIndex_t m_nParticleIndex2;

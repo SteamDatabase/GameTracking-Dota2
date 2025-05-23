@@ -6,6 +6,7 @@ class CBreakableProp : public CBaseProp
 	// MNetworkAlias = "CPropDataComponent"
 	// MNetworkTypeAlias = "CPropDataComponent"
 	CPropDataComponent m_CPropDataComponent;
+	CEntityIOOutput m_OnStartDeath;
 	CEntityIOOutput m_OnBreak;
 	CEntityOutputTemplate< float32 > m_OnHealthChanged;
 	CEntityIOOutput m_OnTakeDamage;
@@ -32,9 +33,9 @@ class CBreakableProp : public CBaseProp
 	int32 m_explosionDangerSound;
 	CHandle< CBasePlayerPawn > m_hPhysicsAttacker;
 	GameTime_t m_flLastPhysicsInfluenceTime;
-	bool m_bOriginalBlockLOS;
 	float32 m_flDefaultFadeScale;
 	CHandle< CBaseEntity > m_hLastAttacker;
-	bool m_bUsePuntSound;
 	CUtlSymbolLarge m_iszPuntSound;
+	bool m_bUsePuntSound;
+	bool m_bOriginalBlockLOS;
 };

@@ -31,7 +31,7 @@
 // MNetworkVarNames = "int m_iClaimedMissCount"
 // MNetworkVarNames = "int m_iMissCount"
 // MNetworkVarNames = "HeroID_t m_nPossibleHeroSelection"
-// MNetworkVarNames = "HeroFacetID_t m_nPossibleHeroFacetSelection"
+// MNetworkVarNames = "HeroFacetKey_t m_nPossibleHeroFacetSelection"
 // MNetworkVarNames = "GameTime_t m_flBuybackCooldownTime"
 // MNetworkVarNames = "GameTime_t m_flBuybackGoldLimitTime"
 // MNetworkVarNames = "float m_flBuybackCostTime"
@@ -58,10 +58,9 @@
 // MNetworkVarNames = "AbilityID_t m_iSuggestedAbilities"
 // MNetworkVarNames = "float m_fSuggestedAbilityWeights"
 // MNetworkVarNames = "AbilityID_t m_iSuggestedPregameItems"
-// MNetworkVarNames = "AbilityID_t m_iSuggestedItemSequences"
-// MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedWeightedItems"
-// MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedTopNItems"
-// MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedNeutralItems"
+// MNetworkVarNames = "AbilityID_t m_iSuggestedItemSequence"
+// MNetworkVarNames = "AbilityID_t m_iSuggestedItemSequenceVariants"
+// MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedItemOptions"
 // MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedNeutralTrinkets"
 // MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedNeutralEnhancements"
 // MNetworkVarNames = "HeroID_t m_iSuggestedHeroes"
@@ -89,6 +88,7 @@
 // MNetworkVarNames = "int m_nAcquiredMadstone"
 // MNetworkVarNames = "int m_nCurrentMadstone"
 // MNetworkVarNames = "PlayerNeutralChoices_t m_NeutralChoices"
+// MNetworkVarNames = "CDOTACourierController m_CourierController"
 class DataTeamPlayer_t
 {
 	// MNetworkEnable
@@ -163,7 +163,7 @@ class DataTeamPlayer_t
 	HeroID_t m_nPossibleHeroSelection;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnDataTeamPlayerSelectionDirty"
-	HeroFacetID_t m_nPossibleHeroFacetSelection;
+	HeroFacetKey_t m_nPossibleHeroFacetSelection;
 	// MNetworkEnable
 	GameTime_t m_flBuybackCooldownTime;
 	// MNetworkEnable
@@ -215,25 +215,22 @@ class DataTeamPlayer_t
 	// MNetworkEnable
 	float32[5] m_fSuggestedAbilityWeights;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemsChanged"
+	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedPregameItemsChanged"
 	AbilityID_t[15] m_iSuggestedPregameItems;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemSequencesChanged"
-	AbilityID_t[30] m_iSuggestedItemSequences;
+	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemSequenceChanged"
+	AbilityID_t[50] m_iSuggestedItemSequence;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemsChanged"
-	WeightedAbilitySuggestion_t[15] m_iSuggestedWeightedItems;
+	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemSequenceVariantsChanged"
+	AbilityID_t[150] m_iSuggestedItemSequenceVariants;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemsChanged"
-	WeightedAbilitySuggestion_t[3] m_iSuggestedTopNItems;
+	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemOptionsChanged"
+	WeightedAbilitySuggestion_t[250] m_iSuggestedItemOptions;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemsChanged"
-	WeightedAbilitySuggestion_t[30] m_iSuggestedNeutralItems;
-	// MNetworkEnable
-	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemsChanged"
+	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedNeutralChanged"
 	WeightedAbilitySuggestion_t[5] m_iSuggestedNeutralTrinkets;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemsChanged"
+	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedNeutralsChanged"
 	WeightedAbilitySuggestion_t[5] m_iSuggestedNeutralEnhancements;
 	// MNetworkEnable
 	HeroID_t[10] m_iSuggestedHeroes;
@@ -287,4 +284,6 @@ class DataTeamPlayer_t
 	int32 m_nCurrentMadstone;
 	// MNetworkEnable
 	PlayerNeutralChoices_t m_NeutralChoices;
+	// MNetworkEnable
+	CDOTACourierController m_CourierController;
 };

@@ -32,7 +32,8 @@ class DOTAAbilityDefinition_t
 	int32 m_iItemNeutralTierIndex;
 	int32 m_iItemStockMax;
 	float32 m_fItemStockTime;
-	int32* m_pItemShopTagKeys;
+	uint32* m_pItemShopTagKeys;
+	int32 m_nNumShopTagKeys;
 	AbilityID_t m_nRecipeResultAbilityID;
 	CUtlVector< AbilityID_t > m_vecItemCombinesInto;
 	CUtlVector< ItemRecipe_t > m_vecItemRecipes;
@@ -40,7 +41,6 @@ class DOTAAbilityDefinition_t
 	ItemQuality_t m_ItemQuality;
 	float32 m_flModifierValue;
 	float32 m_flModifierValueBonus;
-	CUtlVector< CUtlString > m_InvalidHeroes;
 	bool m_bHasScepterUpgrade;
 	bool m_bHasShardUpgrade;
 	CUtlStringToken m_strScepterRequiredFacet;
@@ -50,6 +50,7 @@ class DOTAAbilityDefinition_t
 	int32 m_nSpecialAbilities;
 	DOTASpecialAbility_t* m_pSpecialAbilities;
 	CUtlVector< DOTAOutgoingBonus_t > m_OutgoingBonuses;
+	CUtlOrderedMap< CUtlStringToken, DotaAbilityRelationship_t > m_mapRelationships;
 	char* m_pModelName;
 	char* m_pModelAlternateName;
 	char* m_pEffectName;

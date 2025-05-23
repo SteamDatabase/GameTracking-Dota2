@@ -12,7 +12,7 @@
 // MNetworkVarNames = "EHANDLE m_hFacetAbilities"
 // MNetworkVarNames = "int m_iRecentDamage"
 // MNetworkVarNames = "PlayerID_t m_iPlayerID"
-// MNetworkVarNames = "HeroFacetID_t m_iHeroFacetID"
+// MNetworkVarNames = "HeroFacetKey_t m_iHeroFacetKey"
 // MNetworkVarNames = "CHandle<C_DOTA_BaseNPC_Hero> m_hReplicatingOtherHeroModel"
 // MNetworkVarNames = "bool m_bReincarnating"
 // MNetworkVarNames = "bool m_bCustomKillEffect"
@@ -66,7 +66,7 @@ class C_DOTA_BaseNPC_Hero : public C_DOTA_BaseNPC_Additive
 	// MNetworkEnable
 	PlayerID_t m_iPlayerID;
 	// MNetworkEnable
-	HeroFacetID_t m_iHeroFacetID;
+	HeroFacetKey_t m_iHeroFacetKey;
 	// MNetworkEnable
 	CHandle< C_DOTA_BaseNPC_Hero > m_hReplicatingOtherHeroModel;
 	// MNetworkEnable

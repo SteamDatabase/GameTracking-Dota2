@@ -6,6 +6,8 @@ class SPingWheelMessageDefinition
 	// MVDataUniqueMonotonicInt = "_editor/next_ping_wheel_id"
 	// MPropertyAttributeEditor = "locked_int()"
 	PingWheelMessageID_t nID;
+	// MPropertyDescription = "optional ID of associated message, like enemy/friendly wards"
+	PingWheelMessageID_t nAssociatedID;
 	// MPropertyDescription = "localization string ID for name of ping"
 	CUtlString sLocName;
 	// MPropertyDescription = "Particle system of ping effect"
@@ -22,12 +24,20 @@ class SPingWheelMessageDefinition
 	CUtlString sSound;
 	// MPropertyDescription = "localization string ID for chat message when pinging"
 	CUtlString sChat;
-	// MPropertyDescription = "Multiplier to apply to 3 second base duration (dota_minimap_ping_duration)"
-	float32 fDurationMultiplier;
+	// MPropertyDescription = "localization string ID for chat message when pinging a target entity"
+	CUtlString sChatWithTarget;
 	// MPropertyDescription = "Event for tracking expiration. See EEvent enum"
 	EEvent eUnlockEvent;
 	// MPropertyDescription = "Action of the unlock event which awards this ping wheel"
 	uint32 nUnlockEventActionID;
-	// MPropertyDescription = "ID of icon to show on minimap. See scripts/minimap_icons.txt"
-	int32 nMinimapIcon;
+	// MPropertyDescription = "Duration to show a ping on the the minimap."
+	float32 m_flMinimapDuration;
+	// MPropertyDescription = "Whether or not to flash the pinged unit's icon."
+	bool m_bFlashTargetIcon;
+	PingMinimapIconInfo_t m_minimapIconInfo;
+	// MPropertyDescription = "Optional additional layers."
+	CUtlVector< PingMinimapIconLayerInfo_t > m_vecAdditionalMinimapLayers;
+	PingParticleInfo_t m_particleInfo;
+	bool m_bRequiresDotaPlus;
+	bool m_bIsBindable;
 };

@@ -42,6 +42,7 @@ class CModifierParams
 	bool bYashaAndKayaApplied;
 	bool bStoutConsidered;
 	bool bAegisUsed;
+	bool bRaindropUsed;
 	bool bInterrupted;
 	bool bDiffusalApplied;
 	bool bChainLightningConsidered;
@@ -67,7 +68,6 @@ class CModifierParams
 	bool bIgnoreTemporaryAttackSpeedModifiers;
 	char* pszAbilitySpecialName;
 	int32 nAbilitySpecialLevel;
-	bool bIsRegen;
 	CHandle< C_BaseEntity > hattacker;
 	CHandle< C_BaseEntity > htarget;
 	CHandle< C_BaseEntity > hunit;

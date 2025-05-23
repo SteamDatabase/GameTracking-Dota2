@@ -1,7 +1,7 @@
 class CDOTA_Modifier_Item_Misericorde : public CDOTA_Buff_Item
 {
-	int32 bonus_damage;
+	float32 bonus_damage;
 	int32 missing_hp;
-	int32 damage;
+	float32 damage;
 	int32 aspd;
 };

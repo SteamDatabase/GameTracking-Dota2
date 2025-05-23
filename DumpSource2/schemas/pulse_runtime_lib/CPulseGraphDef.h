@@ -2,9 +2,9 @@
 class CPulseGraphDef
 {
 	PulseSymbol_t m_DomainIdentifier;
+	CPulseValueFullType m_DomainSubType;
 	PulseSymbol_t m_ParentMapName;
 	PulseSymbol_t m_ParentXmlName;
-	CUtlVector< PulseSymbol_t > m_vecGameBlackboards;
 	CUtlVector< CPulse_Chunk* > m_Chunks;
 	CUtlVector< CPulseCell_Base* > m_Cells;
 	CUtlVector< CPulse_Variable > m_Vars;

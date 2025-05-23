@@ -13,5 +13,4 @@ class VPhysXBodyPart_t
 	float32 m_flAngularDrag;
 	bool m_bOverrideMassCenter;
 	Vector m_vMassCenterOverride;
-	CUtlString m_Tag;
 };

@@ -26,6 +26,7 @@
 // MNetworkOverride = "m_angRotation CGameSceneNode"
 // MNetworkOverride = "m_angRotation CGameSceneNode"
 // MNetworkVarNames = "bool m_bIsPhantom"
+// MNetworkVarNames = "uint32 m_iUnitType"
 // MNetworkVarNames = "bool m_bSelectionRingVisible"
 // MNetworkVarNames = "int m_iCurrentLevel"
 // MNetworkVarNames = "bool m_bIsAncient"
@@ -108,6 +109,7 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 {
 	// MNetworkEnable
 	bool m_bIsPhantom;
+	// MNetworkEnable
 	uint32 m_iUnitType;
 	// MNetworkEnable
 	bool m_bSelectionRingVisible;
@@ -266,6 +268,8 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	int32 m_iPrevHealthPct;
 	int32 m_iPrevLifeState;
 	int32 m_iPrevTeam;
+	bool m_bLastShardState;
+	bool m_bLastScepterState;
 	bool m_bPrevProvidesVision;
 	uint64 m_nPrevControllableMask;
 	CountdownTimer m_TagTime;
@@ -384,6 +388,7 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	bool m_bHasBuiltWearableSpawnList;
 	bool m_bHasCostume;
 	bool m_bRecreateParticleSystemsOnModifiersChange;
+	bool m_bWasRevealedFromFOWAsDead;
 	float32 m_flAdditionalSinkDelay;
 	// MNetworkEnable
 	// MNetworkPriority = 32

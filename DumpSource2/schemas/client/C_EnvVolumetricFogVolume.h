@@ -3,6 +3,7 @@
 // MNetworkVarNames = "Vector m_vBoxMins"
 // MNetworkVarNames = "Vector m_vBoxMaxs"
 // MNetworkVarNames = "bool m_bStartDisabled"
+// MNetworkVarNames = "bool m_bIndirectUseLPVs"
 // MNetworkVarNames = "float m_flStrength"
 // MNetworkVarNames = "int m_nFalloffShape"
 // MNetworkVarNames = "float m_flFalloffExponent"
@@ -16,7 +17,6 @@
 // MNetworkVarNames = "bool m_bOverrideIndirectLightStrength"
 // MNetworkVarNames = "bool m_bOverrideSunLightStrength"
 // MNetworkVarNames = "bool m_bOverrideNoiseStrength"
-// MNetworkVarNames = "bool m_bAllowLPVIndirect"
 class C_EnvVolumetricFogVolume : public C_BaseEntity
 {
 	// MNetworkEnable
@@ -27,6 +27,8 @@ class C_EnvVolumetricFogVolume : public C_BaseEntity
 	Vector m_vBoxMaxs;
 	// MNetworkEnable
 	bool m_bStartDisabled;
+	// MNetworkEnable
+	bool m_bIndirectUseLPVs;
 	// MNetworkEnable
 	float32 m_flStrength;
 	// MNetworkEnable
@@ -53,6 +55,4 @@ class C_EnvVolumetricFogVolume : public C_BaseEntity
 	bool m_bOverrideSunLightStrength;
 	// MNetworkEnable
 	bool m_bOverrideNoiseStrength;
-	// MNetworkEnable
-	bool m_bAllowLPVIndirect;
 };

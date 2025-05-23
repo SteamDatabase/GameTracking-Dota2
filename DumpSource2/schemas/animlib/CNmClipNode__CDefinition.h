@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
-class CNmClipNode::CDefinition : public CNmPoseNode::CDefinition
+class CNmClipNode::CDefinition : public CNmClipReferenceNode::CDefinition
 {
 	int16 m_nPlayInReverseValueNodeIdx;
 	int16 m_nResetTimeValueNodeIdx;

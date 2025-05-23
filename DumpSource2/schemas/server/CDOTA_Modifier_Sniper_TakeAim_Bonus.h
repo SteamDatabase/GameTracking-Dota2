@@ -6,4 +6,6 @@ class CDOTA_Modifier_Sniper_TakeAim_Bonus : public CDOTA_Buff
 	bool no_reveal;
 	int32 bonus_armor;
 	int32 attack_speed;
+	float32 bonus_vision;
+	float32 view_restrict;
 };

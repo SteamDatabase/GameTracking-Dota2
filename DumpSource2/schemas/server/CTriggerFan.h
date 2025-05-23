@@ -3,7 +3,8 @@
 // MNetworkVarNames = "Vector m_vFanEnd"
 // MNetworkVarNames = "Vector m_vNoiseDirectionTarget"
 // MNetworkVarNames = "Vector m_vDirection"
-// MNetworkVarNames = "bool m_bPushTowardsEntity"
+// MNetworkVarNames = "bool m_bPushTowardsInfoTarget"
+// MNetworkVarNames = "bool m_bPushAwayFromInfoTarget"
 // MNetworkVarNames = "Quaternion m_qNoiseDelta"
 // MNetworkVarNames = "CHandle< CInfoFan> m_hInfoFan"
 // MNetworkVarNames = "float m_flForce"
@@ -22,7 +23,9 @@ class CTriggerFan : public CBaseTrigger
 	// MNetworkEnable
 	Vector m_vDirection;
 	// MNetworkEnable
-	bool m_bPushTowardsEntity;
+	bool m_bPushTowardsInfoTarget;
+	// MNetworkEnable
+	bool m_bPushAwayFromInfoTarget;
 	// MNetworkEnable
 	Quaternion m_qNoiseDelta;
 	// MNetworkEnable

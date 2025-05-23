@@ -26,7 +26,6 @@
 // MNetworkVarNames = "float m_flDefaultDrawDistance"
 // MNetworkVarNames = "bool m_bStartDisabled"
 // MNetworkVarNames = "bool m_bEnableIndirect"
-// MNetworkVarNames = "bool m_bIndirectUseLPVs"
 // MNetworkVarNames = "bool m_bIsMaster"
 // MNetworkVarNames = "HRenderTextureStrong m_hFogIndirectTexture"
 // MNetworkVarNames = "int m_nForceRefreshCount"
@@ -91,8 +90,6 @@ class C_EnvVolumetricFogController : public C_BaseEntity
 	bool m_bStartDisabled;
 	// MNetworkEnable
 	bool m_bEnableIndirect;
-	// MNetworkEnable
-	bool m_bIndirectUseLPVs;
 	// MNetworkEnable
 	bool m_bIsMaster;
 	// MNetworkEnable

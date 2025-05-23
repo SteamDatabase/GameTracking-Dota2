@@ -113,4 +113,11 @@ enum EDotaClientMessages : uint32_t
 	DOTA_CM_ChooseCraftedNeutral = 817,
 	DOTA_CM_TimerAlert = 818,
 	DOTA_CM_MadstoneAlert = 819,
+	DOTA_CM_UpdateAutoCourierSettings = 820,
+	DOTA_CM_AutoCourierExecute = 821,
+	DOTA_CM_QuickBuyAction = 822,
+	DOTA_CM_InteractionChannelsRequireHalt = 823,
+	DOTA_CM_SuggestItemRefresh = 824,
+	DOTA_CM_SuggestItemVariantRequest = 825,
+	DOTA_CM_SuggestItemVariantSelect = 826,
 };

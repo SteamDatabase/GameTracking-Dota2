@@ -39,6 +39,7 @@
 // MNetworkVarNames = "float32 m_flGravityScale"
 // MNetworkVarNames = "float32 m_flTimeScale"
 // MNetworkVarNames = "float m_flWaterLevel"
+// MNetworkVarNames = "bool m_bGravityDisabled"
 // MNetworkVarNames = "bool m_bAnimatedEveryTick"
 // MNetworkVarNames = "GameTime_t m_flNavIgnoreUntilTime"
 // MNetworkVarNames = "BloodType m_nBloodType"
@@ -163,7 +164,6 @@ class CBaseEntity : public CEntityInstance
 	// MNetworkEncoder = "coord"
 	float32 m_flElasticity;
 	// MNetworkEnable
-	// MNetworkUserGroup = "LocalPlayerExclusive"
 	float32 m_flGravityScale;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
@@ -176,7 +176,10 @@ class CBaseEntity : public CEntityInstance
 	// MNetworkEncodeFlags = 8
 	float32 m_flWaterLevel;
 	// MNetworkEnable
+	bool m_bGravityDisabled;
+	// MNetworkEnable
 	bool m_bAnimatedEveryTick;
+	bool m_bGravityActuallyDisabled;
 	bool m_bDisableLowViolence;
 	uint8 m_nWaterType;
 	int32 m_iEFlags;

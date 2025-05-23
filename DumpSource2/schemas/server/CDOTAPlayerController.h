@@ -25,8 +25,6 @@
 // MNetworkVarNames = "bool m_bInShowCaseMode"
 // MNetworkVarNames = "float m_flCameraZoomAmount"
 // MNetworkVarNames = "int m_iHighPriorityScore"
-// MNetworkVarNames = "AbilityID_t m_quickBuyItems"
-// MNetworkVarNames = "bool m_quickBuyIsPurchasable"
 // MNetworkVarNames = "float m_flUnfilteredFrameTime"
 // MNetworkVarNames = "bool m_bUsingAssistedCameraOperator"
 // MNetworkVarNames = "bool m_bUsingCameraMan"
@@ -84,12 +82,6 @@ class CDOTAPlayerController : public CBasePlayerController
 	// MNetworkUserGroup = "DOTACommentatorTable"
 	int32 m_iHighPriorityScore;
 	// MNetworkEnable
-	// MNetworkUserGroup = "DOTATeamMatesAndCommentatorTable"
-	AbilityID_t[9] m_quickBuyItems;
-	// MNetworkEnable
-	// MNetworkUserGroup = "DOTATeamMatesAndCommentatorTable"
-	bool[9] m_quickBuyIsPurchasable;
-	// MNetworkEnable
 	// MNetworkUserGroup = "DOTACommentatorTable"
 	float32 m_flUnfilteredFrameTime;
 	// MNetworkEnable
@@ -117,6 +109,7 @@ class CDOTAPlayerController : public CBasePlayerController
 	CHandle< CBaseEntity > m_hAssignedHero;
 	bool m_bTeleportRequiresHalt;
 	bool m_bChannelRequiresHalt;
+	bool m_bInteractionChannelsRequiresHalt;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
 	int32 m_nServerOrderSequenceNumber;
@@ -141,6 +134,8 @@ class CDOTAPlayerController : public CBasePlayerController
 	float32 m_flPingAllowance;
 	float32 m_flLastMapLineTime;
 	float32 m_flMapLineAllowance;
+	float32 m_flLastWaypointPathPingTime;
+	float32 m_flWaypointPathPingAllowance;
 	float32 m_flLastVersusBehaviorTime;
 	float32 m_flVersusBehaviorAllowance;
 	uint8[10] m_pOrderRetirementHistory;

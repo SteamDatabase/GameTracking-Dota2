@@ -3,7 +3,7 @@ class CDOTA_Modifier_MonkeyKing_FurArmy_SoldierInPosition : public CDOTA_Buff
 	Vector m_vTargetPos;
 	CHandle< CBaseEntity > m_hAttackTarget;
 	float32 attack_speed;
-	float32 second_radius;
+	float32 final_radius;
 	int32 outer_attack_buffer;
 	CHandle< CBaseEntity > m_hThinker;
 	bool m_bDisarmed;

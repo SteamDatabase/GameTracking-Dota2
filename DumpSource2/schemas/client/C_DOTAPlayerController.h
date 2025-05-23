@@ -31,8 +31,6 @@
 // MNetworkVarNames = "bool m_bInShowCaseMode"
 // MNetworkVarNames = "float m_flCameraZoomAmount"
 // MNetworkVarNames = "int m_iHighPriorityScore"
-// MNetworkVarNames = "AbilityID_t m_quickBuyItems"
-// MNetworkVarNames = "bool m_quickBuyIsPurchasable"
 // MNetworkVarNames = "float m_flUnfilteredFrameTime"
 // MNetworkVarNames = "int m_iMusicStatus"
 // MNetworkVarNames = "float m_flMusicOperatorVals"
@@ -74,8 +72,11 @@ class C_DOTAPlayerController : public CBasePlayerController
 	float32 m_flUnitOrdersSendTime;
 	float32 m_flLastUnitOrdersSendTime;
 	float32 m_flLastUnitOrdersTotalLatency;
+	float32 m_flLastPingTime;
+	float32 m_flPingAllowance;
 	bool m_bTeleportRequiresHalt;
 	bool m_bChannelRequiresHalt;
+	bool m_bInteractionChannelsRequireHalt;
 	bool m_bAutoPurchaseItems;
 	bool m_bDisableHUDErrorMessages;
 	int32 m_iMouseDragStartX;
@@ -112,6 +113,7 @@ class C_DOTAPlayerController : public CBasePlayerController
 	CUtlVector< CHandle< C_BaseEntity > > m_ActiveRingOwners;
 	bool m_bOverridingQuery;
 	float32 m_flLastAutoRepeatTime;
+	bool m_bNextDoubleclickIsOnlyAClick;
 	float32 m_flConsumeDoubleclickTime;
 	CUtlString m_LightInfoWeatherEffect;
 	bool m_bPreviousWasLightInfoWeather;
@@ -166,12 +168,6 @@ class C_DOTAPlayerController : public CBasePlayerController
 	// MNetworkEnable
 	// MNetworkUserGroup = "DOTACommentatorTable"
 	int32 m_iHighPriorityScore;
-	// MNetworkEnable
-	// MNetworkUserGroup = "DOTACommentatorTable"
-	AbilityID_t[9] m_quickBuyItems;
-	// MNetworkEnable
-	// MNetworkUserGroup = "DOTACommentatorTable"
-	bool[9] m_quickBuyIsPurchasable;
 	// MNetworkEnable
 	// MNetworkUserGroup = "DOTACommentatorTable"
 	float32 m_flUnfilteredFrameTime;

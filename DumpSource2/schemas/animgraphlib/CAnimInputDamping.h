@@ -6,4 +6,6 @@ class CAnimInputDamping
 	DampingSpeedFunction m_speedFunction;
 	// MPropertyFriendlyName = "Speed Scale"
 	float32 m_fSpeedScale;
+	// MPropertyFriendlyName = "Falling Speed Scale"
+	float32 m_fFallingSpeedScale;
 };

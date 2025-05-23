@@ -6,6 +6,7 @@ class CDOTA_Modifier_Beastmaster_DrumsOfSlom : public CDOTA_Buff
 	float32 base_damage;
 	int32 heal_pct;
 	int32 creep_heal_pct;
+	int32 creep_damage_pct;
 	int32 iCurrentAttacksAtMinInterval;
 	float32 stack_decay_time;
 	float32 max_drum_hit_interval;

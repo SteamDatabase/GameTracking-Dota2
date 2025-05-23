@@ -3,6 +3,7 @@ class CPhysMotor : public CLogicalEntity
 	CUtlSymbolLarge m_nameAttach;
 	CUtlSymbolLarge m_nameAnchor;
 	CHandle< CBaseEntity > m_hAttachedObject;
+	CHandle< CBaseEntity > m_hAnchorObject;
 	float32 m_spinUp;
 	float32 m_spinDown;
 	float32 m_flMotorFriction;

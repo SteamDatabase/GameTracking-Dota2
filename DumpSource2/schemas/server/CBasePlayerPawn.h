@@ -1,5 +1,4 @@
 // MNetworkUserGroupProxy = "CBasePlayerPawn"
-// MNetworkUserGroupProxy = "CBasePlayerPawn"
 // MNetworkExcludeByUserGroup = "FogController"
 // MNetworkIncludeByUserGroup = "Player"
 // MNetworkIncludeByUserGroup = "Water"

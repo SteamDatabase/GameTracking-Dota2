@@ -74,6 +74,7 @@ class CDOTABaseAbility : public CBaseEntity
 	bool m_bIsDefaultHeroAbility;
 	bool m_bConsiderOvershootInGetCastRange;
 	float32 m_flExtendChannelTime;
+	bool m_bDisableSharedCooldown;
 	// MNetworkEnable
 	bool m_bHidden;
 	// MNetworkEnable

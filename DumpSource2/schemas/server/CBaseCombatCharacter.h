@@ -6,6 +6,7 @@ class CBaseCombatCharacter : public CBaseFlex
 	// MNetworkEnable
 	CNetworkUtlVectorBase< CHandle< CEconWearable > > m_hMyWearables;
 	float32 m_impactEnergyScale;
+	int32 m_nMinVehicleDamageToTempRagdoll;
 	bool m_bApplyStressDamage;
 	bool m_bDeathEventsDispatched;
 	int32 m_iDamageCount;

@@ -11,5 +11,6 @@ class AggregateMeshInfo_t
 	ObjectTypeFlags_t m_objectFlags;
 	int32 m_nLightProbeVolumePrecomputedHandshake;
 	uint32 m_nInstanceStreamOffset;
+	uint32 m_nVertexAlbedoStreamOffset;
 	AggregateInstanceStream_t m_instanceStreams;
 };

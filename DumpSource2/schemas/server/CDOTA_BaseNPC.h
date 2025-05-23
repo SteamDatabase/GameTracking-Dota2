@@ -26,6 +26,7 @@
 // MNetworkOverride = "m_angRotation CGameSceneNode"
 // MNetworkUserGroupProxy = "CDOTA_BaseNPC"
 // MNetworkUserGroupProxy = "CDOTA_BaseNPC"
+// MNetworkVarNames = "uint32 m_iUnitType"
 // MNetworkVarNames = "bool m_bSelectionRingVisible"
 // MNetworkVarNames = "int m_iCurrentLevel"
 // MNetworkVarNames = "float m_flMana"
@@ -107,6 +108,7 @@
 class CDOTA_BaseNPC : public NextBotCombatCharacter
 {
 	bool m_bPledgedOfrenda;
+	// MNetworkEnable
 	uint32 m_iUnitType;
 	Color m_colorGemColor;
 	bool m_bHasColorGem;
@@ -299,6 +301,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	uint64 m_nUnitState64;
 	GameTime_t[15] m_vLastVisibilityChange;
 	bool m_bFirstSpawn;
+	bool m_bForceTransmit;
 	CHandle< CBaseEntity > m_hAttackTarget;
 	CHandle< CBaseEntity > m_hAggroTarget;
 	CHandle< CBaseEntity > m_hCommandAttackTarget;

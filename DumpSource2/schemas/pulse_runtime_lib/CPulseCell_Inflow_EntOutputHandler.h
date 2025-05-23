@@ -7,6 +7,5 @@ class CPulseCell_Inflow_EntOutputHandler : public CPulseCell_Inflow_BaseEntrypoi
 {
 	PulseSymbol_t m_SourceEntity;
 	PulseSymbol_t m_SourceOutput;
-	PulseSymbol_t m_TargetInput;
 	CPulseValueFullType m_ExpectedParamType;
 };

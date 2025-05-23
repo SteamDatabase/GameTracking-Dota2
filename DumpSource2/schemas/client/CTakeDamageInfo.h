@@ -9,7 +9,6 @@ class CTakeDamageInfo
 	CHandle< C_BaseEntity > m_hAbility;
 	float32 m_flDamage;
 	float32 m_flTotalledDamage;
-	float32 m_flTotalledDamageAbsorbed;
 	DamageTypes_t m_bitsDamageType;
 	int32 m_iDamageCustom;
 	AmmoIndex_t m_iAmmoType;
@@ -18,9 +17,11 @@ class CTakeDamageInfo
 	bool m_bShouldSpark;
 	float32 m_flDamageAbsorbed;
 	TakeDamageFlags_t m_nDamageFlags;
+	CGlobalSymbol m_sDamageSourceName;
 	int32 m_bitsDotaDamageType;
 	int32 m_nDotaDamageCategory;
 	float32 m_flCombatLogCreditFactor;
 	int16 m_iRecord;
+	HitGroup_t m_iHitGroupId;
 	bool m_bInTakeDamageFlow;
 };

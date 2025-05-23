@@ -5,7 +5,8 @@ class CPulse_Variable
 	CUtlString m_Description;
 	CPulseValueFullType m_Type;
 	KeyValues3 m_DefaultValue;
-	bool m_bIsPublic;
+	PulseVariableKeysSource_t m_nKeysSource;
+	bool m_bIsPublicBlackboardVariable;
 	bool m_bIsObservable;
 	PulseDocNodeID_t m_nEditorNodeID;
 };

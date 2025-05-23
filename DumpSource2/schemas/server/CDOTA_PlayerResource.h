@@ -16,6 +16,7 @@ class CDOTA_PlayerResource : public CBaseEntity
 	// MNetworkEnable
 	int8 m_nPrimaryEventIndex;
 	CHandle< CBaseEntity >[64] m_playerIDToPlayer;
+	CHandle< CBaseEntity >[64] m_playerIDToPawn;
 	CUtlVector< sPendingTreeRemoval > m_vecPendingTreeRemovals;
 	CUtlVector< sPendingTreeModelChange > m_vecPendingTreeModelChanges;
 	float32[24] m_flClaimedFarm;

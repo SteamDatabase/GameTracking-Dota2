@@ -1,7 +1,7 @@
-// MPulseProvideFeatureTag (UNKNOWN FOR PARSER)
 // MPulseLibraryBindings (UNKNOWN FOR PARSER)
-// MParticleDomainTag = "C_DOTA_LinearProjectileInfoParticleAPI Linear Projectile"
+// MPulseProvideFeatureTag (UNKNOWN FOR PARSER)
 // MPulseDomainHookInfo (UNKNOWN FOR PARSER)
+// MParticleDomainTag = "C_DOTA_LinearProjectileInfoParticleAPI Linear Projectile"
 class C_DOTA_LinearProjectileInfoParticleAPI
 {
 };

@@ -15,6 +15,7 @@ class CDOTA_Ability_Warlock_Upheaval : public CDOTABaseAbility
 	GameTime_t m_flElapsedTime;
 	float32 m_flCurrentSlow;
 	ParticleIndex_t m_nFXIndex;
+	ParticleIndex_t m_nCastFXIndex;
 	bool m_bTargetCast;
 	CHandle< CBaseEntity > m_hTarget;
 };

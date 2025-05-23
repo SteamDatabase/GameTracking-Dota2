@@ -8,6 +8,7 @@ class CNavLinkAreaEntity : public CPointEntity
 	int32 m_nNavLinkIdForward;
 	int32 m_nNavLinkIdReverse;
 	bool m_bEnabled;
+	bool m_bAllowCrossMovableConnections;
 	CUtlSymbolLarge m_strFilterName;
 	CHandle< CBaseFilter > m_hFilter;
 	CEntityIOOutput m_OnNavLinkStart;

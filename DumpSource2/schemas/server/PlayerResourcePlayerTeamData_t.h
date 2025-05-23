@@ -1,6 +1,6 @@
 // MNetworkVarNames = "DOTAThreatLevelInfo_t m_ThreatLevelInfos"
 // MNetworkVarNames = "HeroID_t m_nSelectedHeroID"
-// MNetworkVarNames = "HeroFacetID_t m_nSelectedHeroVariant"
+// MNetworkVarNames = "HeroFacetKey_t m_nSelectedHeroFacet"
 // MNetworkVarNames = "int m_iKills"
 // MNetworkVarNames = "int m_iAssists"
 // MNetworkVarNames = "int m_iDeaths"
@@ -69,7 +69,7 @@ class PlayerResourcePlayerTeamData_t
 	// MNetworkChangeCallback = "OnPlayerTeamDataSelectionDirty"
 	HeroID_t m_nSelectedHeroID;
 	// MNetworkEnable
-	HeroFacetID_t m_nSelectedHeroVariant;
+	HeroFacetKey_t m_nSelectedHeroFacet;
 	// MNetworkEnable
 	int32 m_iKills;
 	// MNetworkEnable

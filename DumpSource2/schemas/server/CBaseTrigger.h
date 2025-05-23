@@ -14,4 +14,5 @@ class CBaseTrigger : public CBaseToggle
 	CHandle< CBaseFilter > m_hFilter;
 	// MNetworkEnable
 	bool m_bDisabled;
+	bool m_bUseAsyncQueries;
 };

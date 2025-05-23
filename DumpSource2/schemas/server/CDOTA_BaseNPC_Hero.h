@@ -14,7 +14,7 @@
 // MNetworkVarNames = "float m_flRespawnTimePenalty"
 // MNetworkVarNames = "bool m_bScriptDisableRespawns"
 // MNetworkVarNames = "PlayerID_t m_iPlayerID"
-// MNetworkVarNames = "HeroFacetID_t m_iHeroFacetID"
+// MNetworkVarNames = "HeroFacetKey_t m_iHeroFacetKey"
 // MNetworkVarNames = "CHandle< CDOTA_BaseNPC_Hero> m_hReplicatingOtherHeroModel"
 // MNetworkVarNames = "bool m_bReincarnating"
 // MNetworkVarNames = "bool m_bCustomKillEffect"
@@ -75,7 +75,7 @@ class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 	// MNetworkEnable
 	PlayerID_t m_iPlayerID;
 	// MNetworkEnable
-	HeroFacetID_t m_iHeroFacetID;
+	HeroFacetKey_t m_iHeroFacetKey;
 	PlayerID_t m_iIllusionOriginalPlayerID;
 	HeroID_t m_iHeroID;
 	// MNetworkEnable

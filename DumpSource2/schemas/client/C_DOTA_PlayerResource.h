@@ -22,10 +22,10 @@ class C_DOTA_PlayerResource : public C_BaseEntity
 	// MNetworkAlias = "m_nEventIDAssociatedWithEventData"
 	uint32 m_nObsoleteEventIDAssociatedWithEventData;
 	CHandle< C_BaseEntity >[64] m_playerIDToPlayer;
+	CHandle< C_BaseEntity >[64] m_playerIDToPawn;
 	CUtlSymbolLarge[64] m_iszName;
 	CUtlSymbolLarge[64] m_iszHTMLSafeName;
 	CUtlSymbolLarge[64] m_iszFilteredHTMLSafeName;
-	bool m_bDirtySuggestedItems;
 	bool m_bDirtySelection;
 	bool m_bHasWorldTreesChanged;
 	bool m_bWorldTreeModelsChanged;

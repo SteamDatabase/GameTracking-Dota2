@@ -11,4 +11,6 @@ class CNmClip
 	CNmSyncTrack m_syncTrack;
 	CNmRootMotionData m_rootMotion;
 	bool m_bIsAdditive;
+	CUtlVector< CNmClip::ModelSpaceSamplingChainLink_t > m_modelSpaceSamplingChain;
+	CUtlVector< int32 > m_modelSpaceBoneSamplingIndices;
 };

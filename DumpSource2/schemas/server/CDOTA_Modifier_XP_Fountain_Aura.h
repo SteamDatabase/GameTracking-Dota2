@@ -9,5 +9,6 @@ class CDOTA_Modifier_XP_Fountain_Aura : public CDOTA_Buff
 	float32 think_interval;
 	float32 m_flRemainingCountDownTime;
 	float32 radius;
+	float32 m_flPauseDuration;
 	ParticleIndex_t m_nFxProgress;
 };

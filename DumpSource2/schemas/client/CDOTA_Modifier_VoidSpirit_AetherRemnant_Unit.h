@@ -2,7 +2,10 @@ class CDOTA_Modifier_VoidSpirit_AetherRemnant_Unit : public CDOTA_Buff
 {
 	Vector m_vFacingDir;
 	CUtlVector< CHandle< C_BaseEntity > > m_hWatchPathThinkers;
+	CUtlVector< CHandle< C_BaseEntity > > m_hShardWatchPathThinkers;
 	ParticleIndex_t m_nBeamFXIndex;
+	ParticleIndex_t m_nShardBeamFXIndex;
+	ParticleIndex_t m_nHeroFXIndex;
 	CUtlVector< int32 > m_nViewerIDs;
 	int32 m_nViewerTeam;
 	float32 remnant_watch_distance;
@@ -17,4 +20,7 @@ class CDOTA_Modifier_VoidSpirit_AetherRemnant_Unit : public CDOTA_Buff
 	bool bIsArtifice;
 	float32 artifice_duration_override;
 	float32 artifice_pct_effectiveness;
+	bool m_bActivated;
+	float32 m_flRotation;
+	CHandle< C_BaseEntity > m_hPartnerRemnant;
 };

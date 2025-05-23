@@ -1,3 +1,4 @@
+// MNetworkVarNames = "bool m_ragEnabled"
 // MNetworkVarNames = "Vector m_ragPos"
 // MNetworkVarNames = "QAngle m_ragAngles"
 // MNetworkVarNames = "EHANDLE m_hRagdollSource"
@@ -6,6 +7,8 @@ class CRagdollProp : public CBaseAnimGraph
 {
 	ragdoll_t m_ragdoll;
 	bool m_bStartDisabled;
+	// MNetworkEnable
+	CNetworkUtlVectorBase< bool > m_ragEnabled;
 	// MNetworkEnable
 	// MNetworkEncoder = "coord"
 	CNetworkUtlVectorBase< Vector > m_ragPos;

@@ -4,7 +4,7 @@
 class CMoodVData
 {
 	// MPropertyDescription = "Model to get the animation list from"
-	// MPropertyAutoRebuildOnChange
+	// MPropertyProvidesEditContextString (UNKNOWN FOR PARSER)
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_sModelName;
 	// MPropertyDescription = "Type of mood"
 	MoodType_t m_nMoodType;

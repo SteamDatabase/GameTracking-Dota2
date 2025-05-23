@@ -5,6 +5,7 @@ class CBasePlayerWeaponVData
 	CUtlString m_szClassName;
 	// MPropertyStartGroup = "Visuals"
 	// MPropertyDescription = "Model used on the ground or held by an entity"
+	// MPropertyProvidesEditContextString (UNKNOWN FOR PARSER)
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_szWorldModel;
 	// MPropertyDescription = "Model used by the tools only to populate comboboxes for things like animgraph parameter pickers"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_sToolsOnlyOwnerModelName;
@@ -13,7 +14,6 @@ class CBasePlayerWeaponVData
 	// MPropertyDescription = "Allows flipping the model, regardless of whether it is built left or right handed"
 	bool m_bAllowFlipping;
 	// MPropertyDescription = "Attachment to fire bullets from"
-	// MPropertyAttributeEditor = "VDataModelAttachment( m_szWorldModel )"
 	CAttachmentNameSymbolWithStorage m_sMuzzleAttachment;
 	// MPropertyDescription = "Effect when firing this weapon"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szMuzzleFlashParticle;
@@ -53,6 +53,7 @@ class CBasePlayerWeaponVData
 	// MPropertyFriendlyName = "Safe To Auto-Switch Away From"
 	bool m_bAutoSwitchFrom;
 	RumbleEffect_t m_iRumbleEffect;
+	float32 m_flDropSpeed;
 	// MPropertyFriendlyName = "HUD Bucket"
 	// MPropertyDescription = "Which 'column' to display this weapon in the HUD"
 	int32 m_iSlot;

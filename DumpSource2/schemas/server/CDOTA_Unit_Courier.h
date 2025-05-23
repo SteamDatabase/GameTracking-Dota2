@@ -20,4 +20,5 @@ class CDOTA_Unit_Courier : public CDOTA_BaseNPC_Additive
 	CUtlString m_strCourierModel;
 	CUtlString m_strFlyingCourierModel;
 	Vector m_vSpawnLocation;
+	GameTime_t m_flLastLeavingFountainToastTime;
 };

@@ -7,5 +7,4 @@ class RnShapeDesc_t
 	bool m_bUserFriendlyNameSealed;
 	bool m_bUserFriendlyNameLong;
 	uint32 m_nToolMaterialHash;
-	CGlobalSymbol m_sHitGroupName;
 };

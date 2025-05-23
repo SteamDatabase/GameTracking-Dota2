@@ -1,4 +1,4 @@
-// MGapTypeQueriesForScopeSingleton (UNKNOWN FOR PARSER)
+// MPulseTypeQueriesForScopeSingleton (UNKNOWN FOR PARSER)
 class CPulseRuntimeLibModuleLocalTypeQueryRegistration
 {
 };

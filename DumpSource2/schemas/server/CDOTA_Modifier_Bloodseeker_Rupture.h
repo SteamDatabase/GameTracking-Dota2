@@ -7,4 +7,5 @@ class CDOTA_Modifier_Bloodseeker_Rupture : public CDOTA_Buff
 	float32 knockback;
 	float32 knockback_duration;
 	float32 m_fAccumulatedDamage;
+	ParticleIndex_t m_nDurationEffect;
 };

@@ -8,4 +8,5 @@ class CDOTA_Ability_Invoker_Tornado : public CDOTA_Ability_Invoker_InvokedBase
 	float32 wex_damage;
 	float32 twister_duration;
 	float32 twister_distance_interval;
+	float32 twister_damage;
 };

@@ -15,6 +15,7 @@ class C_DOTA_Ability_Warlock_Upheaval : public C_DOTABaseAbility
 	GameTime_t m_flElapsedTime;
 	float32 m_flCurrentSlow;
 	ParticleIndex_t m_nFXIndex;
+	ParticleIndex_t m_nCastFXIndex;
 	bool m_bTargetCast;
 	CHandle< C_BaseEntity > m_hTarget;
 };

@@ -740,6 +740,23 @@ enum modifierfunction : uint32_t
 	MODIFIER_PROPERTY_MOVESPEED_MAX_BONUS_CONSTANT = 368,
 	// MScriptDescription = "GetModifierMoveSpeedPostMultiplierBonus_Constant "
 	MODIFIER_PROPERTY_MOVESPEED_POST_MULTIPLIER_BONUS_CONSTANT = 369,
-	MODIFIER_FUNCTION_LAST = 370,
+	// MScriptDescription = "GetModifierPropertyForbidIllusions"
+	MODIFIER_PROPERTY_FORBID_ILLUSIONS = 370,
+	// MScriptDescription = "GetModifierPropertyManacostOverride"
+	MODIFIER_PROPERTY_MANACOST_OVERRIDE = 371,
+	// MScriptDescription = "GetModifierPropertyRestorationAmplification"
+	MODIFIER_PROPERTY_RESTORATION_AMPLIFICATION = 372,
+	// MScriptDescription = "GetModifierPropertyRestorationAmplificationUnique"
+	MODIFIER_PROPERTY_RESTORATION_AMPLIFICATION_UNIQUE = 373,
+	// MScriptDescription = "GetModifierPropertyHealingAmplificationUnique"
+	MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_SOURCE_UNIQUE = 374,
+	// MScriptDescription = "GetSuppressIncomingCrit"
+	MODIFIER_PROPERTY_SUPPRESS_INCOMING_CRIT = 375,
+	// MScriptDescription = "GetModifierPropertyUpgradeNeutralArtifacts"
+	MODIFIER_PROPERTY_UPGRADE_NEUTRAL_ARTIFACTS = 376,
+	// MScriptDescription = "GetModifierPropertyConsumableUseSpeed"
+	MODIFIER_PROPERTY_CONSUMABLE_USE_SPEED = 377,
+	MODIFIER_PROPERTY_FORCE_NETWORK_TRANSMIT = 378,
+	MODIFIER_FUNCTION_LAST = 379,
 	MODIFIER_FUNCTION_INVALID = 65535,
 };

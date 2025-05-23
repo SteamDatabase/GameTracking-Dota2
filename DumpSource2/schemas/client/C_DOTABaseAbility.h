@@ -107,6 +107,8 @@ class C_DOTABaseAbility : public C_BaseEntity
 	// MNetworkEnable
 	// MNetworkPriority = 32
 	bool m_bAltCastState;
+	bool m_bLocalAltCastState;
+	int32 m_nLocalAltCastChangeSequenceNumber;
 	// MNetworkEnable
 	GameTime_t m_flChannelStartTime;
 	// MNetworkEnable

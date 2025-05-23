@@ -8,4 +8,5 @@ class CDOTA_Modifier_Gyrocopter_Side_Gunner : public CDOTA_Buff
 	float32 m_flLastFireTime;
 	CHandle< CBaseEntity > m_hOwnerNPC;
 	CHandle< CBaseEntity > m_hOwningAbility;
+	int32 m_iAttackRecord;
 };

@@ -120,7 +120,6 @@ enum EDotaUserMessages : uint32_t
 	DOTA_UM_HighFiveLeftHanging = 583,
 	DOTA_UM_HighFiveCompleted = 584,
 	DOTA_UM_ShovelUnearth = 585,
-	DOTA_EM_InvokerSpellCast = 586,
 	DOTA_UM_RadarAlert = 587,
 	DOTA_UM_AllStarEvent = 588,
 	DOTA_UM_TalentTreeAlert = 589,
@@ -163,4 +162,5 @@ enum EDotaUserMessages : uint32_t
 	DOTA_UM_NeutralCraftAvailable = 627,
 	DOTA_UM_TimerAlert = 628,
 	DOTA_UM_MadstoneAlert = 629,
+	DOTA_UM_CourierLeftFountainAlert = 630,
 };
