@@ -2,6 +2,7 @@
 // MNetworkVarNames = "InventoryQuickBuyState_t m_quickBuyState"
 // MNetworkVarNames = "bool m_bBuybackProtectionEnabled"
 // MNetworkVarNames = "bool m_bAutoMarkForBuy"
+// MNetworkVarNames = "EHANDLE m_vecControlledUnits"
 class CQuickBuyController
 {
 	// MNetworkEnable
@@ -14,6 +15,8 @@ class CQuickBuyController
 	bool m_bBuybackProtectionEnabled;
 	// MNetworkEnable
 	bool m_bAutoMarkForBuy;
+	// MNetworkEnable
+	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_vecControlledUnits;
 	bool m_bQuickBuyIgnoredStateDirty;
 	int32 m_nSuggestItemIdx;
 	bool m_bIsLocalPlayer;
