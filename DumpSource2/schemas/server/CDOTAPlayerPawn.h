@@ -32,4 +32,7 @@ class CDOTAPlayerPawn : public CBasePlayerPawn
 	CQuickBuyController m_quickBuyController;
 	// MNetworkEnable
 	PlayerID_t m_nPlayerID;
+	bool m_bIsHLTV;
+	bool m_bIsTeamRestricted;
+	int32 m_nTeamRestrictedTeamNum;
 };
