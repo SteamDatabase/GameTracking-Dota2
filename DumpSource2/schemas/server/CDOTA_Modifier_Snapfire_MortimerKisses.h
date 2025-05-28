@@ -10,7 +10,7 @@ class CDOTA_Modifier_Snapfire_MortimerKisses : public CDOTA_Buff
 	int32 m_nProjectilesLaunched;
 	bool m_bDestroyOnNextThink;
 	int32 m_nProjectilesToLaunch;
-	bool m_bHasProjectileTalent;
+	bool has_bonus_projectile;
 	int32 projectile_count;
 	float32 projectile_speed;
 	float32 projectile_width;
