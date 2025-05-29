@@ -14,13 +14,9 @@
 // MNetworkIncludeByName = "m_pCameraServices"
 // MNetworkVarTypeOverride = "CDOTAPlayer_MovementServices m_pMovementServices"
 // MNetworkIncludeByName = "m_pMovementServices"
-// MNetworkVarNames = "CQuickBuyController m_quickBuyController"
 // MNetworkVarNames = "PlayerID_t m_nPlayerID"
 class CDOTAPlayerPawn : public C_BasePlayerPawn
 {
-	// MNetworkEnable
-	// MNetworkUserGroup = "DOTATeamMatesAndCommentatorTable"
-	CQuickBuyController m_quickBuyController;
 	// MNetworkEnable
 	PlayerID_t m_nPlayerID;
 };

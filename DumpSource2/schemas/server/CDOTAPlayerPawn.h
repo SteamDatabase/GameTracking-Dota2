@@ -11,7 +11,6 @@
 // MNetworkExcludeByUserGroup = "overlay_vars"
 // MNetworkExcludeByName = "m_nTickBase"
 // MNetworkUserGroupProxy = "CDOTAPlayerPawn"
-// MNetworkUserGroupProxy = "CDOTAPlayerPawn"
 // MNetworkOverride = "m_vecOrigin CGameSceneNode"
 // MNetworkOverride = "m_cellX CNetworkOriginCellCoordQuantizedVector"
 // MNetworkOverride = "m_cellY CNetworkOriginCellCoordQuantizedVector"
@@ -23,16 +22,9 @@
 // MNetworkIncludeByName = "m_pCameraServices"
 // MNetworkVarTypeOverride = "CDOTAPlayer_MovementServices m_pMovementServices"
 // MNetworkIncludeByName = "m_pMovementServices"
-// MNetworkVarNames = "CQuickBuyController m_quickBuyController"
 // MNetworkVarNames = "PlayerID_t m_nPlayerID"
 class CDOTAPlayerPawn : public CBasePlayerPawn
 {
 	// MNetworkEnable
-	// MNetworkUserGroup = "DOTATeamMatesAndCommentatorTable"
-	CQuickBuyController m_quickBuyController;
-	// MNetworkEnable
 	PlayerID_t m_nPlayerID;
-	bool m_bIsHLTV;
-	bool m_bIsTeamRestricted;
-	int32 m_nTeamRestrictedTeamNum;
 };

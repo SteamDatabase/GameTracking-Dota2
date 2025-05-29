@@ -89,6 +89,7 @@
 // MNetworkVarNames = "int m_nCurrentMadstone"
 // MNetworkVarNames = "PlayerNeutralChoices_t m_NeutralChoices"
 // MNetworkVarNames = "CDOTACourierController m_CourierController"
+// MNetworkVarNames = "CQuickBuyController m_quickBuyController"
 class DataTeamPlayer_t
 {
 	// MNetworkEnable
@@ -286,4 +287,6 @@ class DataTeamPlayer_t
 	PlayerNeutralChoices_t m_NeutralChoices;
 	// MNetworkEnable
 	CDOTACourierController m_CourierController;
+	// MNetworkEnable
+	CQuickBuyController m_quickBuyController;
 };
