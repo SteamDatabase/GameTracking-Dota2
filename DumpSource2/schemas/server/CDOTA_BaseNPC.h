@@ -301,7 +301,6 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	uint64 m_nUnitState64;
 	GameTime_t[15] m_vLastVisibilityChange;
 	bool m_bFirstSpawn;
-	bool m_bForceTransmit;
 	CHandle< CBaseEntity > m_hAttackTarget;
 	CHandle< CBaseEntity > m_hAggroTarget;
 	CHandle< CBaseEntity > m_hCommandAttackTarget;
