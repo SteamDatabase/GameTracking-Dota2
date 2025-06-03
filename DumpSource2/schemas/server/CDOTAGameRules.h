@@ -646,6 +646,7 @@ class CDOTAGameRules : public CMultiplayRules
 	float32 m_flLobbyWaitTime;
 	bool m_bGameWasLoaded;
 	int32 m_nLoadPauseFrameCount;
+	float64 m_flDemoModeStartTime;
 	float64 m_flStateFallbackTransitionTime;
 	EngineCountdownTimer m_timerFinishReplay;
 	CUtlVector< GameChatLogEntry_t > m_vecChatLog;
