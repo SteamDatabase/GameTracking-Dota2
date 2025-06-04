@@ -7,7 +7,6 @@
 // MNetworkVarNames = "DOTA_SHOP_TYPE m_eFSMShop"
 // MNetworkVarNames = "EHANDLE m_hFSMUnit"
 // MNetworkVarNames = "ECourierState m_eFSMState"
-// MNetworkVarNames = "bool m_bFSMTransferAfter"
 // MNetworkVarNames = "bool m_bFSMStashAfter"
 // MNetworkVarNames = "bool m_bManualRequest"
 class CDOTACourierController
@@ -30,8 +29,6 @@ class CDOTACourierController
 	CHandle< C_BaseEntity > m_hFSMUnit;
 	// MNetworkEnable
 	ECourierState m_eFSMState;
-	// MNetworkEnable
-	bool m_bFSMTransferAfter;
 	// MNetworkEnable
 	bool m_bFSMStashAfter;
 	// MNetworkEnable

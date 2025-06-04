@@ -7,7 +7,6 @@
 // MNetworkVarNames = "DOTA_SHOP_TYPE m_eFSMShop"
 // MNetworkVarNames = "EHANDLE m_hFSMUnit"
 // MNetworkVarNames = "ECourierState m_eFSMState"
-// MNetworkVarNames = "bool m_bFSMTransferAfter"
 // MNetworkVarNames = "bool m_bFSMStashAfter"
 // MNetworkVarNames = "bool m_bManualRequest"
 class CDOTACourierController
@@ -31,14 +30,12 @@ class CDOTACourierController
 	// MNetworkEnable
 	ECourierState m_eFSMState;
 	// MNetworkEnable
-	bool m_bFSMTransferAfter;
-	// MNetworkEnable
 	bool m_bFSMStashAfter;
 	// MNetworkEnable
 	bool m_bManualRequest;
 	bool m_bIgnoreNextPlayerInteraction;
 	bool m_bWasAlive;
-	bool m_bOwnerWasAlive;
+	bool m_bTargetWasAlive;
 	CountdownTimer m_TransitionTimer;
 	CountdownTimer m_ManualTimer;
 	float32 m_flCourier_wait_time_item_purchase;
