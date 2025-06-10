@@ -136,7 +136,7 @@
 
 	SoundSystem
 	{
-		"SteamAudioEnabled" "0"
+		"SteamAudioEnabled" "1"
 		"snd_event_browser_default_stack" "dota_update_default"
 	}
 
@@ -263,6 +263,9 @@
 
 	ConVars
 	{
+		"dota_enable_spatial_audio"						"1"
+		"snd_steamaudio_enable_perspective_correction"	"1"
+		"snd_steamaudio_perspective_correction_factor"	"0.8"
 		"r_size_cull_threshold"		"0.4"
 		"cl_predict"				"0"
 		"cl_usesocketsforloopback" "1"
