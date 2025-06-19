@@ -1,3 +1,0 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Undying : public C_DOTABaseAbility
-{
-};

@@ -61,6 +61,7 @@
 // MNetworkVarNames = "AbilityID_t m_iSuggestedItemSequence"
 // MNetworkVarNames = "AbilityID_t m_iSuggestedItemSequenceVariants"
 // MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedItemOptions"
+// MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedGeneralItems"
 // MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedNeutralTrinkets"
 // MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedNeutralEnhancements"
 // MNetworkVarNames = "HeroID_t m_iSuggestedHeroes"
@@ -227,6 +228,9 @@ class DataTeamPlayer_t
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedItemOptionsChanged"
 	WeightedAbilitySuggestion_t[250] m_iSuggestedItemOptions;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedGeneralItemsChanged"
+	WeightedAbilitySuggestion_t[30] m_iSuggestedGeneralItems;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedNeutralChanged"
 	WeightedAbilitySuggestion_t[5] m_iSuggestedNeutralTrinkets;

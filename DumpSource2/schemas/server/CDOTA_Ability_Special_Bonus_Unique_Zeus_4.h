@@ -1,3 +1,0 @@
-class CDOTA_Ability_Special_Bonus_Unique_Zeus_4 : public CDOTABaseAbility
-{
-};
