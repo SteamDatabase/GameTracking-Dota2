@@ -3,8 +3,8 @@
 // MPulseCellMethodBindings (UNKNOWN FOR PARSER)
 // MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPulseFunctionHiddenInTool
-// MPulseSelectorAllowRequirementCriteria (UNKNOWN FOR PARSER)
-// MPulseSelectorAllowRequirementCriteria (UNKNOWN FOR PARSER)
+// MPulseSelectorAllowRequirementCriteria = "CPulseCell_IsRequirementValid"
+// MPulseSelectorAllowRequirementCriteria = "CPulseCell_LimitCount"
 class CPulseCell_InlineNodeSkipSelector : public CPulseCell_BaseFlow
 {
 	PulseDocNodeID_t m_nFlowNodeID;

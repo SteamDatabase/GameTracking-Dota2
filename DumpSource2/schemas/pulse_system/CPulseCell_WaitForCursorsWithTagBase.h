@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
-// MPulseEditorCanvasItemSpecKV3 (UNKNOWN FOR PARSER)
+// MPulseEditorCanvasItemSpecKV3 = "{ className = 'IsControlFlowNode' }"
 class CPulseCell_WaitForCursorsWithTagBase : public CPulseCell_BaseYieldingInflow
 {
 	// MPropertyDescription = "Any extra waiting cursors will be terminated. -1 for infinite cursors."

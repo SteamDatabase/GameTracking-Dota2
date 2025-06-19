@@ -5,7 +5,7 @@ class CBasePlayerWeaponVData
 	CUtlString m_szClassName;
 	// MPropertyStartGroup = "Visuals"
 	// MPropertyDescription = "Model used on the ground or held by an entity"
-	// MPropertyProvidesEditContextString (UNKNOWN FOR PARSER)
+	// MPropertyProvidesEditContextString = "ToolEditContext_ID_VMDL"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_szWorldModel;
 	// MPropertyDescription = "Model used by the tools only to populate comboboxes for things like animgraph parameter pickers"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeCModel > > m_sToolsOnlyOwnerModelName;

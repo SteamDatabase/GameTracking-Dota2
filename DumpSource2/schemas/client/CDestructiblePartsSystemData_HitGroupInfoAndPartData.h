@@ -1,6 +1,6 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MModelGameData
-// MFgdHelper (UNKNOWN FOR PARSER)
+// MFgdHelper = "game_data_list{ key = 'CDestructiblePartsSystemData_HitGroupInfoAndPartData' }"
 class CDestructiblePartsSystemData_HitGroupInfoAndPartData
 {
 	// MPropertySuppressField

@@ -1,7 +1,7 @@
 // MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
 // MModelGameData
-// MFgdHelper (UNKNOWN FOR PARSER)
-// MFgdHelper (UNKNOWN FOR PARSER)
+// MFgdHelper = "game_data_list{ key = 'CNPCPhysicsHull' }"
+// MFgdHelper = "npcphysicshull{}"
 class CNPCPhysicsHull
 {
 	// MPropertyFriendlyName = "Name"

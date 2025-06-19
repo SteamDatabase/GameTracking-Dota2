@@ -1,182 +1,182 @@
 enum EDOTAFacetIcon : uint8_t
 {
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "aghs"
 	FACET_ICON_AGHANIMS_SCEPTER = 0,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "agility"
 	FACET_ICON_AGILITY = 1,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "area_of_effect"
 	FACET_ICON_AREA_OF_EFFECT = 2,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "arc_warden"
 	FACET_ICON_ARC_WARDEN = 3,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "arc_warden_alt"
 	FACET_ICON_ARC_WARDEN_ALT = 4,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "armor"
 	FACET_ICON_ARMOR = 5,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "armor_broken"
 	FACET_ICON_ARMOR_BROKEN = 6,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "barrier"
 	FACET_ICON_BARRIER = 7,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "broken_chain"
 	FACET_ICON_BROKEN_CHAIN = 8,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "brush"
 	FACET_ICON_BRUSH = 9,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "bubbles"
 	FACET_ICON_BUBBLES = 10,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "chen"
 	FACET_ICON_CHEN = 11,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "chicken"
 	FACET_ICON_CHICKEN = 12,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "chrono_cube"
 	FACET_ICON_CHRONO_CUBE = 13,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "cooldown"
 	FACET_ICON_COOLDOWN = 14,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "creep"
 	FACET_ICON_CREEP = 15,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "curve_ball"
 	FACET_ICON_CURVE_BALL = 16,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "damage"
 	FACET_ICON_DAMAGE = 17,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "dawnbreaker_hammer"
 	FACET_ICON_DAWNBREAKER_HAMMER = 18,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "death_ward"
 	FACET_ICON_DEATH_WARD = 19,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "debuff"
 	FACET_ICON_DEBUFF = 20,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "double_bounce"
 	FACET_ICON_DOUBLE_BOUNCE = 21,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "dragon_fire"
 	FACET_ICON_DRAGON_FIRE = 22,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "dragon_frost"
 	FACET_ICON_DRAGON_FROST = 23,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "dragon_poison"
 	FACET_ICON_DRAGON_POISON = 24,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "empower"
 	FACET_ICON_EMPOWER = 25,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "execute"
 	FACET_ICON_EXECUTE = 26,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "fence"
 	FACET_ICON_FENCE = 27,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "full_heart"
 	FACET_ICON_FULL_HEART = 28,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "fist"
 	FACET_ICON_FIST = 29,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "focus_fire"
 	FACET_ICON_FOCUS_FIRE = 30,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "gold"
 	FACET_ICON_GOLD = 31,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "healing"
 	FACET_ICON_HEALING = 32,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "illusion"
 	FACET_ICON_ILLUSION = 33,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "intelligence"
 	FACET_ICON_INTELLIGENCE = 34,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "invoker_quas"
 	FACET_ICON_INVOKER_QUAS = 35,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "invoker_wex"
 	FACET_ICON_INVOKER_WEX = 36,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "invoker_exort"
 	FACET_ICON_INVOKER_EXORT = 37,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "invoker_active"
 	FACET_ICON_INVOKER_ACTIVE = 38,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "invoker_passive"
 	FACET_ICON_INVOKER_PASSIVE = 39,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "item"
 	FACET_ICON_ITEM = 40,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "kez"
 	FACET_ICON_KEZ = 41,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "kez_flutter"
 	FACET_ICON_KEZ_FLUTTER = 42,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "kez_shadowhawk"
 	FACET_ICON_KEZ_SHADOWHAWK = 43,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "lifestealer_rage"
 	FACET_ICON_LIFESTEALER_RAGE = 44,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "mana"
 	FACET_ICON_MANA = 45,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "meat"
 	FACET_ICON_MOON = 46,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "moon"
 	FACET_ICON_MEAT = 47,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "movement"
 	FACET_ICON_MOVEMENT = 48,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "multi_arrow"
 	FACET_ICON_MULTI_ARROW = 49,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "no_vision"
 	FACET_ICON_NO_VISION = 50,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "nuke"
 	FACET_ICON_NUKE = 51,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "ogre"
 	FACET_ICON_OGRE = 52,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "overshadow"
 	FACET_ICON_OVERSHADOW = 53,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "phantom_ass_dagger"
 	FACET_ICON_PHANTOM_ASS_DAGGER = 54,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "phantom_lance"
 	FACET_ICON_PHANTOM_LANCE = 55,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "pie"
 	FACET_ICON_PIE = 56,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "pudge_hook"
 	FACET_ICON_PUDGE_HOOK = 57,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "range"
 	FACET_ICON_RANGE = 58,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "ricochet"
 	FACET_ICON_RICOCHET = 59,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "rng"
 	FACET_ICON_RNG = 60,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "rune"
 	FACET_ICON_RUNE = 61,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "siege"
 	FACET_ICON_SIEGE = 62,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "silencer"
 	FACET_ICON_SILENCER = 63,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "skull"
 	FACET_ICON_SKULL = 64,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "slow"
 	FACET_ICON_SLOW = 65,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "snake"
 	FACET_ICON_SNAKE = 66,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "snot"
 	FACET_ICON_SNOT = 67,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "snowflake"
 	FACET_ICON_SNOWFLAKE = 68,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "spectre"
 	FACET_ICON_SPECTRE = 69,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "speed"
 	FACET_ICON_SPEED = 70,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "spinning"
 	FACET_ICON_SPINNING = 71,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "spirit"
 	FACET_ICON_SPIRIT = 72,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "strength"
 	FACET_ICON_STRENGTH = 73,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "summons"
 	FACET_ICON_SUMMONS = 74,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "sun"
 	FACET_ICON_SUN = 75,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "teleport"
 	FACET_ICON_TELEPORT = 76,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "tree"
 	FACET_ICON_TREE = 77,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "tower"
 	FACET_ICON_TOWER = 78,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "twin_hearts"
 	FACET_ICON_TWIN_HEARTS = 79,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "unique"
 	FACET_ICON_UNIQUE = 80,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "vision"
 	FACET_ICON_VISION = 81,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "vortex_in"
 	FACET_ICON_VORTEX_IN = 82,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "vortex_out"
 	FACET_ICON_VORTEX_OUT = 83,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "web"
 	FACET_ICON_WEB = 84,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "whoopee_cushion"
 	FACET_ICON_WHOOPEE_CUSHION = 85,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "wolf"
 	FACET_ICON_WOLF = 86,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "xp"
 	FACET_ICON_XP = 87,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "no_facet"
 	FACET_ICON_NONE = 88,
 	FACET_ICON_COUNT = 89,
 	FACET_ICON_INVALID = 90,

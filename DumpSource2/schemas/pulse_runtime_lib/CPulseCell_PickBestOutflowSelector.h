@@ -6,10 +6,10 @@
 // MPropertyDescription = "Evaluate the requirements of each connected node"
 // MPulseCell_WithNoDefaultOutflow
 // MPulseEditorHeaderIcon = "tools/images/pulse_editor/requirements.png"
-// MPulseEditorCanvasItemSpecKV3 (UNKNOWN FOR PARSER)
+// MPulseEditorCanvasItemSpecKV3 = "{ className='IsControlFlowNode AllOutflowsInSpecialSection IsSelectorNode' create_special_outflows_section=true }"
 // MPulseSelectorHasSpecificity
-// MPulseSelectorAllowRequirementCriteria (UNKNOWN FOR PARSER)
-// MPulseSelectorAllowRequirementCriteria (UNKNOWN FOR PARSER)
+// MPulseSelectorAllowRequirementCriteria = "CPulseCell_IsRequirementValid"
+// MPulseSelectorAllowRequirementCriteria = "CPulseCell_LimitCount"
 class CPulseCell_PickBestOutflowSelector : public CPulseCell_BaseFlow
 {
 	PulseBestOutflowRules_t m_nCheckType;

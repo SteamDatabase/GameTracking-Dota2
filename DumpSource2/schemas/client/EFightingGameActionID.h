@@ -1,84 +1,84 @@
 enum EFightingGameActionID : uint32_t
 {
 	INVALID_ACTION_DEFINITION = -1,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "idle"
 	IDLE_ACTION_DEFINITION = 0,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "block stun"
 	BLOCKSTUN_ACTION_DEFINITION = 1,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "hit stun"
 	HITSTUN_ACTION_DEFINITION = 2,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "knocked down"
 	KNOCKED_DOWN_ACTION_DEFINITION = 3,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "dash"
 	DASH_ACTION_DEFINITION = 4,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "back dash"
 	BACKDASH_ACTION_DEFINITION = 5,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "guard break"
 	GUARDBREAK_ACTION_DEFINITION = 6,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "victory"
 	VICTORY_ACTION_DEFINITION = 7,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "defeat"
 	DEFEAT_ACTION_DEFINITION = 8,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "jab"
 	JAB_ACTION_DEFINITION = 9,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "jab 2"
 	JAB_2_ACTION_DEFINITION = 10,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "jab 3"
 	JAB_3_ACTION_DEFINITION = 11,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "jab 4"
 	JAB_4_ACTION_DEFINITION = 12,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "cross"
 	CROSS_ACTION_DEFINITION = 13,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "cross 2"
 	CROSS_2_ACTION_DEFINITION = 14,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "cross 3"
 	CROSS_3_ACTION_DEFINITION = 15,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "heavy"
 	HEAVY_ACTION_DEFINITION = 16,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "sweep"
 	SWEEP_ACTION_DEFINITION = 17,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "sweep 2"
 	SWEEP_2_ACTION_DEFINITION = 18,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "kick 1"
 	KICK_1_ACTION_DEFINITION = 19,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "kick 2"
 	KICK_2_ACTION_DEFINITION = 20,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "kick 3"
 	KICK_3_ACTION_DEFINITION = 21,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "finisher"
 	FINISHER_ACTION_DEFINITION = 22,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "finisher 2"
 	FINISHER_2_ACTION_DEFINITION = 23,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "projectile"
 	PROJECTILE_ACTION_DEFINITION = 24,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "walrus punch"
 	WALRUS_PUNCH_ACTION_DEFINITION = 25,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "swap"
 	SWAP_ACTION_DEFINITION = 26,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "swap recovery"
 	SWAP_RECOVERY_ACTION_DEFINITION = 27,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "quill start"
 	QUILLSPRAY_START_ACTION_DEFINITION = 28,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "quill 2"
 	QUILLSPRAY_2_ACTION_DEFINITION = 29,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "quill 3"
 	QUILLSPRAY_3_ACTION_DEFINITION = 30,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "quill 4"
 	QUILLSPRAY_4_ACTION_DEFINITION = 31,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "quill finish"
 	QUILLSPRAY_FINISH_ACTION_DEFINITION = 32,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "unleash"
 	UNLEASH_ACTION_DEFINITION = 33,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "dash strike"
 	DASH_STRIKE_ACTION_DEFINITION = 34,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "dash strike 2"
 	DASH_STRIKE_2_ACTION_DEFINITION = 35,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "starbreaker 1"
 	STARBREAKER_1_ACTION_DEFINITION = 36,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "starbreaker 2"
 	STARBREAKER_2_ACTION_DEFINITION = 37,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "starbreaker 3"
 	STARBREAKER_3_ACTION_DEFINITION = 38,
-	// MAlternateSemanticName (UNKNOWN FOR PARSER)
+	// MAlternateSemanticName = "luminosity"
 	LUMINOSITY_ACTION_DEFINITION = 39,
 };
