@@ -49,4 +49,9 @@ class CDOTACourierController
 	float32 m_flCourier_divert_near_shop_dist;
 	CUtlVector< bool > m_vecAutoState;
 	int32 m_nLastSecondCaptured;
+	int32 m_nMoveCount;
+	Vector m_vLastPos;
+	bool m_bDebugging;
+	bool m_bTriggerDebug;
+	DebugOverlayBits_t m_eDebugBits;
 };
