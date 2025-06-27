@@ -20,6 +20,8 @@
 // MNetworkVarNames = "float m_vPossibleWardRadii"
 // MNetworkVarNames = "DOTATeleportInfo_t m_vecTrackedTeleports"
 // MNetworkVarNames = "CRoshanPhaseInfo m_roshanSpawnInfo"
+// MNetworkVarNames = "int m_nNextPowerRuneType"
+// MNetworkVarNames = "int m_nNextPowerRuneSpawnIndex"
 class CDOTA_DataNonSpectator : public CBaseEntity
 {
 	// MNetworkEnable
@@ -65,5 +67,9 @@ class CDOTA_DataNonSpectator : public CBaseEntity
 	CUtlVectorEmbeddedNetworkVar< DOTATeleportInfo_t > m_vecTrackedTeleports;
 	// MNetworkEnable
 	CRoshanPhaseInfo m_roshanSpawnInfo;
+	// MNetworkEnable
+	int32 m_nNextPowerRuneType;
+	// MNetworkEnable
+	int32 m_nNextPowerRuneSpawnIndex;
 	int32 m_iTowerKills;
 };

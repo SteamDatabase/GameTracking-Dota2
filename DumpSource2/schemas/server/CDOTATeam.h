@@ -38,6 +38,7 @@ class CDOTATeam : public CTeam
 	bool m_bTeamCanSeeExactRoshanTimer;
 	// MNetworkEnable
 	bool m_bTeamCanSeeNextPowerRune;
+	int32 m_nTeamCanSeeNextPowerRuneRefs;
 	// MNetworkEnable
 	Color m_CustomHealthbarColor;
 	// MNetworkEnable

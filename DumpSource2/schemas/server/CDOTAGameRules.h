@@ -1,5 +1,4 @@
 // MNetworkVarNames = "int m_nRuneCycle"
-// MNetworkVarNames = "int m_nNextPowerRuneType"
 // MNetworkVarNames = "int m_iMiscHeroPickCounter"
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hEndGameCinematicEntity"
 // MNetworkVarNames = "CHandle< CDOTA_BaseNPC> m_hOverlayHealthBarUnit"
@@ -179,7 +178,6 @@ class CDOTAGameRules : public CMultiplayRules
 {
 	// MNetworkEnable
 	int32 m_nRuneCycle;
-	// MNetworkEnable
 	int32 m_nNextPowerRuneType;
 	int32 m_nNextPowerRuneSpawnIndex;
 	float64 m_flPauseTime;

@@ -1,5 +1,4 @@
 // MNetworkVarNames = "int m_nRuneCycle"
-// MNetworkVarNames = "int m_nNextPowerRuneType"
 // MNetworkReplayCompatField = "m_fGameTime"
 // MNetworkVarNames = "int m_iMiscHeroPickCounter"
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hEndGameCinematicEntity"
@@ -180,8 +179,6 @@ class C_DOTAGamerules : public C_MultiplayRules
 {
 	// MNetworkEnable
 	int32 m_nRuneCycle;
-	// MNetworkEnable
-	int32 m_nNextPowerRuneType;
 	// MNetworkEnable
 	int32 m_iMiscHeroPickCounter;
 	// MNetworkEnable
