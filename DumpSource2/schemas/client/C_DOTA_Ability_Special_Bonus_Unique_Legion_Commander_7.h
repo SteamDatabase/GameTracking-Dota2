@@ -1,3 +1,0 @@
-class C_DOTA_Ability_Special_Bonus_Unique_Legion_Commander_7 : public C_DOTABaseAbility
-{
-};
