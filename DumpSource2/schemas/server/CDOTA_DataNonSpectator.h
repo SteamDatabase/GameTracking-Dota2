@@ -1,6 +1,7 @@
 // MNetworkIncludeByName = "m_iTeamNum"
 // MNetworkVarNames = "DataTeamPlayer_t m_vecDataTeam"
 // MNetworkVarNames = "uint64 m_bWorldTreeState"
+// MNetworkVarNames = "uint64 m_bNPCVisibleState"
 // MNetworkVarNames = "TreeModelReplacement_t m_vecWorldTreeModelReplacements"
 // MNetworkVarNames = "Vector2D m_vDesiredWardPlacement"
 // MNetworkVarNames = "int m_nEnemyStartingPosition"
@@ -29,6 +30,9 @@ class CDOTA_DataNonSpectator : public CBaseEntity
 	// MNetworkEnable
 	// MNetworkEncoder = "fixed64"
 	uint64[256] m_bWorldTreeState;
+	// MNetworkEnable
+	// MNetworkEncoder = "fixed64"
+	uint64[256] m_bNPCVisibleState;
 	// MNetworkEnable
 	CUtlVectorEmbeddedNetworkVar< TreeModelReplacement_t > m_vecWorldTreeModelReplacements;
 	// MNetworkEnable

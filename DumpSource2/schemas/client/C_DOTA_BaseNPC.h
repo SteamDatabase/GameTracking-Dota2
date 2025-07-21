@@ -70,7 +70,7 @@
 // MNetworkVarNames = "int m_iDamageBonus"
 // MNetworkVarNames = "int m_iBaseDamageMin"
 // MNetworkVarNames = "int m_iBaseDamageMax"
-// MNetworkVarNames = "int m_iTaggedAsVisibleByTeam"
+// MNetworkReplayCompatField = "m_iTaggedAsVisibleByTeam"
 // MNetworkVarNames = "CDOTA_ModifierManager m_ModifierManager"
 // MNetworkVarNames = "CDOTA_UnitInventory m_Inventory"
 // MNetworkVarNames = "uint64 m_nUnitState64"
@@ -249,9 +249,6 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	int32 m_iBaseDamageMin;
 	// MNetworkEnable
 	int32 m_iBaseDamageMax;
-	// MNetworkEnable
-	// MNetworkPriority = 32
-	int32 m_iTaggedAsVisibleByTeam;
 	// MNetworkEnable
 	CDOTA_ModifierManager m_ModifierManager;
 	// MNetworkEnable

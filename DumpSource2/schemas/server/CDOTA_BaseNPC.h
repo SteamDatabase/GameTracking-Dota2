@@ -79,7 +79,6 @@
 // MNetworkVarNames = "GameTime_t m_flLastAttackTime"
 // MNetworkVarNames = "uint64 m_nUnitState64"
 // MNetworkVarNames = "int8 m_nUnitModelVariant"
-// MNetworkVarNames = "int m_iTaggedAsVisibleByTeam"
 // MNetworkVarNames = "uint64 m_iIsControllableByPlayer64"
 // MNetworkVarNames = "EHANDLE m_vecAbilities"
 // MNetworkVarNames = "CDOTA_ModifierManager m_ModifierManager"
@@ -315,8 +314,6 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	GameTime_t m_fAttackPhaseEndTime;
 	GameTime_t m_flPositionUpdateTime;
 	Vector m_vLastPositionSent;
-	// MNetworkEnable
-	// MNetworkPriority = 32
 	int32 m_iTaggedAsVisibleByTeam;
 	// MNetworkEnable
 	uint64 m_iIsControllableByPlayer64;
