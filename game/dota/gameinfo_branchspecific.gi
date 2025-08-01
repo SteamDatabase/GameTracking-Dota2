@@ -14,8 +14,4 @@
 		BreakpadAppId			373300	// Report crashes under beta DLC, not the S1 game.  Delete this when all clients are switched to S2
 		BreakpadAppId_Tools		375360  // Use a separate bucket of buckets for "-tools" crashes so that they don't get drowned out by game crashes. Falls back to BreakpadAppId/SteamAppId if missing
 	}
-	Panorama
-	{
-		"PreprocessResources"	  "1"			// Removes comments/devonly sections/devmsg etc.. from css,xml,js,ts
-	}
 }
