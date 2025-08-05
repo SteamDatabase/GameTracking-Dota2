@@ -16,6 +16,7 @@ class CDOTA_Modifier_Kez_ShodoSai_Parry : public CDOTA_Buff
 	Vector m_vFacing;
 	float32 m_flFacingTarget;
 	float32 m_flLastOverheadTime;
+	float32 m_flOldPitch;
 	ParticleIndex_t m_nFXIndex;
 	CHandle< C_BaseEntity > m_hVulnAttackTarget;
 	bool m_bAttackingVuln;

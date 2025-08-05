@@ -60,6 +60,7 @@ class CDOTA_BaseNPC_Building : public CDOTA_BaseNPC
 	int32 m_iUpgradeIdentifier;
 	int32 m_iInvulnCount;
 	int32 m_iPlayerOwner;
+	bool m_bIsDireSide;
 	DOTA_LANE m_Lane;
 	float32[2] m_fAmountAlongLane;
 	Vector m_vOverrideInitialAngles;

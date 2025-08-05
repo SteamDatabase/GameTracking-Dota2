@@ -76,4 +76,5 @@ class CScriptedSequence : public CBaseEntity
 	CTransform m_matOtherToMain;
 	CHandle< CBaseEntity > m_hInteractionMainEntity;
 	int32 m_iPlayerDeathBehavior;
+	bool m_bSkipFadeIn;
 };

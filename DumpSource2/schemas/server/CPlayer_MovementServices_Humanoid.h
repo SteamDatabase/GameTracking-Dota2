@@ -9,7 +9,6 @@ class CPlayer_MovementServices_Humanoid : public CPlayer_MovementServices
 {
 	float32 m_flStepSoundTime;
 	// MNetworkEnable
-	// MNetworkUserGroup = "LocalPlayerExclusive"
 	// MNetworkBitCount = 17
 	// MNetworkMinValue = -4096.000000
 	// MNetworkMaxValue = 4096.000000
@@ -37,7 +36,5 @@ class CPlayer_MovementServices_Humanoid : public CPlayer_MovementServices
 	float32 m_flSurfaceFriction;
 	CUtlStringToken m_surfaceProps;
 	int32 m_nStepside;
-	int32 m_iTargetVolume;
-	bool m_bDisableMovementSounds;
 	Vector m_vecSmoothedVelocity;
 };

@@ -57,6 +57,8 @@ class CFuncMover : public CBaseModelEntity
 	float32 m_flFollowMinimumSpeed;
 	float32 m_flCurFollowEntityT;
 	float32 m_flCurFollowSpeed;
+	CUtlSymbolLarge m_strOrientationFaceEntityName;
+	CHandle< CBaseEntity > m_hOrientationFaceEntity;
 	CEntityIOOutput m_OnStart;
 	CEntityIOOutput m_OnStartForward;
 	CEntityIOOutput m_OnStartReverse;
@@ -64,4 +66,5 @@ class CFuncMover : public CBaseModelEntity
 	CEntityIOOutput m_OnStopped;
 	bool m_bNextNodeReturnsCurrent;
 	bool m_bStartedMoving;
+	CFuncMover::FollowEntityDirection_t m_eFollowEntityDirection;
 };

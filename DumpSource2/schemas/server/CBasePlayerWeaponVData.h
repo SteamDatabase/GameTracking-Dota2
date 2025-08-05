@@ -17,6 +17,16 @@ class CBasePlayerWeaponVData
 	CAttachmentNameSymbolWithStorage m_sMuzzleAttachment;
 	// MPropertyDescription = "Effect when firing this weapon"
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szMuzzleFlashParticle;
+	// MPropertyDescription = "Effect Config for Muzzle Flash - if set, will use this config specified in the particle effect, using whatever CP configuration is specified there, vdata muzzleflash attachment will be ignored"
+	CUtlString m_szMuzzleFlashParticleConfig;
+	// MPropertyDescription = "Barrel smoke after firing this weapon"
+	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_szBarrelSmokeParticle;
+	// MPropertyDescription = "Barrel smoke shot threshold to create smoke"
+	uint8 m_nMuzzleSmokeShotThreshold;
+	// MPropertyDescription = "Barrel smoke shot timeout"
+	float32 m_flMuzzleSmokeTimeout;
+	// MPropertyDescription = "Barrel smoke decrement rate when not firing"
+	float32 m_flMuzzleSmokeDecrementRate;
 	// MPropertyStartGroup = "Behavior"
 	// MPropertyDescription = "Should both primary and secondary attacks be cooled down together (so cooling down primary attack would cooldown both primary + secondary attacks)?"
 	bool m_bLinkedCooldowns;
@@ -44,6 +54,8 @@ class CBasePlayerWeaponVData
 	int32 m_iDefaultClip2;
 	// MPropertyDescription = "Indicates whether to treat reserve ammo as clips (reloads) instead of raw bullets"
 	bool m_bReserveAmmoAsClips;
+	// MPropertyDescription = "Regardless of ammo position, we'll always use clip1 as where our bullets come from"
+	bool m_bTreatAsSingleClip;
 	// MPropertyStartGroup = "UI"
 	// MPropertyDescription = "This value used to determine this weapon's importance in autoselection"
 	int32 m_iWeight;

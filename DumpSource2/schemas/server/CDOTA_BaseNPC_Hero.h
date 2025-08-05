@@ -87,7 +87,7 @@ class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 	int32 m_iMultipleKillCount;
 	float32 m_flKillStreakStartTime;
 	bool m_bDisableWearables;
-	CHandle< CDOTAWearableItem >[102] m_hTogglableWearable;
+	CHandle< CDOTAWearableItem >[103] m_hTogglableWearable;
 	CDOTA_BaseNPC_Hero::KillInfo_t m_KillInfo;
 	CountdownTimer m_DirectorAbilityActivity;
 	// MNetworkEnable
@@ -105,7 +105,7 @@ class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 	int32 m_iNextItemToPurchase;
 	bool m_bDoesNextItemCompleteRecipe;
 	CUtlVector< sLoadoutItem > m_Loadout;
-	CUtlVector< CUtlPair< AbilityID_t, bool > > m_BuildingOrBuilt;
+	CUtlVector< std::pair< AbilityID_t, bool > > m_BuildingOrBuilt;
 	sLoadoutItem m_TPScroll;
 	sLoadoutItem m_Dust;
 	sLoadoutItem m_Gem;

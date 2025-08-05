@@ -17,7 +17,6 @@ class CDOTAGameManager
 	KeyValues* m_pRegionKeyValues;
 	KeyValues* m_pSurveyQuestionData;
 	KeyValues3 m_AddonInfoKeyValues;
-	KeyValues* m_pCountryKeyValues;
 	// MNetworkEnable
 	bool[256] m_CurrentHeroAvailable;
 };

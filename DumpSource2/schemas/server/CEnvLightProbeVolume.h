@@ -1,4 +1,5 @@
 // MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_AmbientCube"
+// MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SDF"
 // MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SH2_DC"
 // MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SH2_R"
 // MNetworkVarNames = "HRenderTextureStrong m_Entity_hLightProbeTexture_SH2_G"
@@ -23,6 +24,8 @@ class CEnvLightProbeVolume : public CBaseEntity
 {
 	// MNetworkEnable
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_AmbientCube;
+	// MNetworkEnable
+	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_SDF;
 	// MNetworkEnable
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_Entity_hLightProbeTexture_SH2_DC;
 	// MNetworkEnable

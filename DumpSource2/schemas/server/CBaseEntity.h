@@ -179,6 +179,7 @@ class CBaseEntity : public CEntityInstance
 	bool m_bGravityDisabled;
 	// MNetworkEnable
 	bool m_bAnimatedEveryTick;
+	float32 m_flActualGravityScale;
 	bool m_bGravityActuallyDisabled;
 	bool m_bDisableLowViolence;
 	uint8 m_nWaterType;

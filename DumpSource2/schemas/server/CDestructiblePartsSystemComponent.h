@@ -5,6 +5,7 @@ class CDestructiblePartsSystemComponent
 {
 	CNetworkVarChainer __m_pChainEntity;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "OnDamageLevelTakenByHitGroupChanged"
 	CNetworkUtlVectorBase< uint16 > m_DamageLevelTakenByHitGroup;
 	// MNetworkEnable
 	CHandle< CBaseModelEntity > m_hOwner;

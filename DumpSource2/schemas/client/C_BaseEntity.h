@@ -180,6 +180,7 @@ class C_BaseEntity : public CEntityInstance
 	// MNetworkEncoder = "coord"
 	float32 m_flElasticity;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "OnGravityUpdated"
 	float32 m_flGravityScale;
 	// MNetworkEnable
 	// MNetworkUserGroup = "LocalPlayerExclusive"
@@ -188,13 +189,14 @@ class C_BaseEntity : public CEntityInstance
 	// MNetworkChangeCallback = "OnInterpolationAmountChanged"
 	bool m_bAnimatedEveryTick;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnGravityDisableUpdated"
+	// MNetworkChangeCallback = "OnGravityUpdated"
 	bool m_bGravityDisabled;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnNavIgnoreChanged"
 	GameTime_t m_flNavIgnoreUntilTime;
 	uint16 m_hThink;
 	uint8 m_fBBoxVisFlags;
+	float32 m_flActualGravityScale;
 	bool m_bGravityActuallyDisabled;
 	bool m_bPredictable;
 	bool m_bRenderWithViewModels;

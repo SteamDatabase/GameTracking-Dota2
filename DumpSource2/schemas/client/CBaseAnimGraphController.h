@@ -2,6 +2,12 @@
 // MNetworkVarNames = "GameTime_t m_flSeqStartTime"
 // MNetworkVarNames = "float m_flSeqFixedCycle"
 // MNetworkVarNames = "AnimLoopMode_t m_nAnimLoopMode"
+// MNetworkVarNames = "HNmGraphDefinitionStrong m_hGraphDefinitionAG2"
+// MNetworkVarNames = "bool m_bIsUsingAG2"
+// MNetworkVarNames = "uint8 m_serializedPoseRecipeAG2"
+// MNetworkVarNames = "int m_nSerializePoseRecipeSizeAG2"
+// MNetworkVarNames = "uint8 m_nGraphCreationFlagsAG2"
+// MNetworkVarNames = "int m_nServerGraphDefReloadCountAG2"
 class CBaseAnimGraphController : public CSkeletonAnimationController
 {
 	bool m_bSequenceFinished;
@@ -37,4 +43,18 @@ class CBaseAnimGraphController : public CSkeletonAnimationController
 	bool m_bNetworkedSequenceChanged;
 	bool m_bLastUpdateSkipped;
 	GameTime_t m_flPrevAnimUpdateTime;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "AG2_OnAnimGraphDefinitionOrModeChanged"
+	CStrongHandle< InfoForResourceTypeCNmGraphDefinition > m_hGraphDefinitionAG2;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "AG2_OnAnimGraphDefinitionOrModeChanged"
+	bool m_bIsUsingAG2;
+	// MNetworkEnable
+	C_NetworkUtlVectorBase< uint8 > m_serializedPoseRecipeAG2;
+	// MNetworkEnable
+	int32 m_nSerializePoseRecipeSizeAG2;
+	// MNetworkEnable
+	uint8 m_nGraphCreationFlagsAG2;
+	// MNetworkEnable
+	int32 m_nServerGraphDefReloadCountAG2;
 };

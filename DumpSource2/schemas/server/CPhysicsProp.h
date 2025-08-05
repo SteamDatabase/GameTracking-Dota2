@@ -29,6 +29,7 @@ class CPhysicsProp : public CBreakableProp
 	bool m_bFirstCollisionAfterLaunch;
 	bool m_bHasBeenAwakened;
 	bool m_bIsOverrideProp;
+	GameTime_t m_flLastBurn;
 	DynamicContinuousContactBehavior_t m_nDynamicContinuousContactBehavior;
 	GameTime_t m_fNextCheckDisableMotionContactsTime;
 	int32 m_iInitialGlowState;
@@ -45,4 +46,5 @@ class CPhysicsProp : public CBreakableProp
 	bool m_bRemovableForAmmoBalancing;
 	// MNetworkEnable
 	bool m_bAwake;
+	bool m_bAttachedToReferenceFrame;
 };

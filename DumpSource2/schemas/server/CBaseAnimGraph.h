@@ -6,11 +6,6 @@
 // MNetworkVarNames = "PhysicsRagdollPose_t m_RagdollPose"
 // MNetworkVarNames = "bool m_bRagdollEnabled"
 // MNetworkVarNames = "bool m_bRagdollClientSide"
-// MNetworkVarNames = "HNmGraphDefinitionStrong m_hAnimGraph2DefinitionNetVar"
-// MNetworkVarNames = "uint8 m_animGraph2FlagsNetVar"
-// MNetworkVarNames = "uint8 m_animGraph2SerializeData"
-// MNetworkVarNames = "int m_nAnimGraph2SerializeDataSizeBytes"
-// MNetworkVarNames = "int m_animGraph2ReloadCountSV"
 class CBaseAnimGraph : public CBaseModelEntity
 {
 	// MNetworkEnable
@@ -33,15 +28,4 @@ class CBaseAnimGraph : public CBaseModelEntity
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnClientRagdollChanged"
 	bool m_bRagdollClientSide;
-	// MNetworkEnable
-	// MNetworkChangeCallback = "animGraph2DefinitionChanged"
-	CStrongHandle< InfoForResourceTypeCNmGraphDefinition > m_hAnimGraph2DefinitionNetVar;
-	// MNetworkEnable
-	uint8 m_animGraph2FlagsNetVar;
-	// MNetworkEnable
-	CNetworkUtlVectorBase< uint8 > m_animGraph2SerializeData;
-	// MNetworkEnable
-	int32 m_nAnimGraph2SerializeDataSizeBytes;
-	// MNetworkEnable
-	int32 m_animGraph2ReloadCountSV;
 };

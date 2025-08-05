@@ -18,7 +18,6 @@
  !"#$%&'()*+,-./0123
  %%-%d.%ds 
  %02u:%02u:%02u
- ( def. "%s" )
  (%i core%s
  (including user space up to 63 bits)
  + %u header stack frames
@@ -62,7 +61,6 @@
 !  warning : selected content significantly smaller than requested (%u < %u) \n
 !AxU
 !link
-"%s" = "%s"
 "%s","%s",%s,"%s"\n
 "0x%llX"
 "[ARRAY]"
@@ -150,8 +148,6 @@ $xmm6
 $xmm7
 $xmm8
 $xmm9
-%-120s - %s\n
-%-120s\n
 %-4d    %-32s    %-10s    
 %-4s    %-32s    %-10s    %-10s    %-32s    %-32s\n
 %-80s : %-16s : %-32s : %s\n
@@ -200,6 +196,9 @@ $xmm9
 %s (before "%s")
 %s (tweaked to NOT wait for child outflows)
 %s + 0x%llx
+%s allocation count overflow
+%s allocation count overflow( %llu + %llu > %llu )\n
+%s allocation count overflow( %llu > %llu )\n
 %s bytes used out of %s bytes available (%.2f%%)
 %s is out of range for KeyValues, which doesn't support signed 64-bit numbers
 %s not expected here.  A valid JSON document should be a single object, which begins with '{' and ends with '}'
@@ -227,6 +226,7 @@ $xmm9
 %s: Unable to progress %d jobs to finished state (%llums elapsed)\n
 %s: __pos (which is %zu) > this->size() (which is %zu)
 %s: added string size %d overflows (added to %d)\n
+%s: allocation of %u too large, max %u\n
 %s: capacity request for %d can't be satisfied (max %d)\n
 %s: different number of names and flags\n
 %s: different number of names and pointers\n
@@ -248,12 +248,14 @@ $xmm9
 %s: invalid string pointer (string chars %d)\n
 %s: max element overflow, cur count %u + %u\n
 %s: member count overflow (%u)\n
+%s: no space for allocation of %u\n
 %s: out of memory, falling back to regular allocators\n
 %s: requested conversion of %d chars\n
 %s: string format requested %d chars\n
 %s: string length overflows (is %d, adding %d)\n
 %s: string length overflows (is %d, need %d unused)\n
 %s: unable to find %s in '%s'\n
+%s: unable to grow count by %u (currently %u)\n
 %s: unable to load '%s', error %d\n
 %u CPU%s
 &AElig;
@@ -448,12 +450,14 @@ $xmm9
 -. +0123456789.
 -0123456789
 -RestartSelfFromAlternateLocation_RelaunchTime
+-assertbreak
 -attachtodebugger
 -breakimmediately
 -clearassertstate
 -debug_exitprocess
 -debugbreak
 -dedicated
+-emaildumps
 -emaildumps_notes
 -etwprofile
 -force_battery_level
@@ -466,13 +470,15 @@ $xmm9
 -inset_left
 -inset_right
 -inset_top
+-lmvmax
+-lmvmemgb
+-lmvmemmb
+-lmvmin
+-lmvnoguard
 -load_string_token_database
 -memstackstats_disable_pools
 -memstacktraceframes
--memstd_force_passthrough
 -memstd_force_tracking
--minidump_file_prefix
--no_assert_dialog
 -noassert
 -noautoargs
 -nocustomermachine
@@ -484,6 +490,7 @@ $xmm9
 -testscript
 -testscript_inline
 -tools
+-uselmv
 .%0*llu
 .%x.%x.copy_tmp
 ............| 
@@ -497,6 +504,7 @@ $xmm9
 ../public/tier0/tslist.h
 ../public/tier0/utldict.h
 ../public/tier0/utlrbtree.h
+../public/tier0/utlsymboltablelarge.h
 ../public/tier0/utltshash.h
 .DZP(7'
 .Ncp
@@ -597,7 +605,6 @@ $xmm9
 15CTier0AppSystemI14ITestScriptMgrLx0EE
 15CTier0AppSystemI21IUtlStringTokenSystemLx0EE
 15CTier0AppSystemI5ICvarLx0EE
-15IPerfTraceDepot
 16CKeyValuesSystem
 16CLoadKV3FromText
 16CProcessPipeRead
@@ -673,7 +680,6 @@ $xmm9
 31CBufferStringFormatOutputStream
 31CParallelProcessorAbstract_Base
 31CTier0MasterMobileEventListener
-31IForceSignalNumberIntoCallStack
 35CKeyValuesDumpContextToBufferString
 37CKeyValuesDumpContextToLoggingChannel
 3Pzr)
@@ -683,7 +689,6 @@ $xmm9
 40CVProfileOutputColumn_AverageTimePerCall
 41CVProfileOutputColumn_AverageTimePerFrame
 4JpI?=
-4R:6?
 4^K\fOI
 5(Hf;
 5+WJ
@@ -815,8 +820,9 @@ $xmm9
 >5PJ>
 >ZF9
 >vf,U
-?22CPerfTraceDepotDefault
+?31IForceSignalNumberIntoCallStack
 ?456789:;<=
+?\tt\nn\rr""\\
 @aQY
 AA40J6
 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
@@ -876,9 +882,11 @@ Acceleration_Heading
 Acceleration_Magnitude
 Acceleration_Sideways
 AddLayer
+AddPage
 Address range refers to non-existent CU at 0x%llx\n
 Align
 AlignedByteArray not properly aligned\n
+Alloc
 AllocUnlocked
 Allocated: %zu, active: %zu, metadata: %zu (n_thp %zu), resident: %zu, mapped: %zu, retained: %zu\n
 Allocation error : not enough memory
@@ -1408,7 +1416,7 @@ CCommandBuffer::LimitArgumentBufferSize(int)
 CCommandBuffer::LockCommandBuffer(bool)
 CCommandBuffer::SetRequiredFlags(unsigned long long)
 CCommandBuffer::SetWaitDelayTime(int)
-CCommandBuffer::SplitCommands(char const*, int, CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int, 0ul>>*)
+CCommandBuffer::SplitCommands(char const*, int, CUtlVector<CUtlString, int, CUtlVectorMemory_Growable<CUtlString, int, 0ul>>*)
 CCommandBuffer::~CCommandBuffer()
 CCommentAnimNode
 CConditionBase
@@ -1421,9 +1429,9 @@ CCountedStringPool_CI::CCountedStringPool_CI()
 CCountedStringPool_CI::DereferenceString(char const*)
 CCountedStringPool_CI::FindString(char const*) const
 CCountedStringPool_CI::FindStringHandle(char const*) const
-CCountedStringPool_CI::FreeAll()
 CCountedStringPool_CI::HandleToString(unsigned short) const
 CCountedStringPool_CI::Hash(char const*) const
+CCountedStringPool_CI::Purge()
 CCountedStringPool_CI::ReferenceString(char const*)
 CCountedStringPool_CI::ReferenceStringHandle(char const*)
 CCountedStringPool_CI::RestoreFromBuffer(CUtlBuffer&)
@@ -1460,7 +1468,7 @@ CDirTreeWatchManager::~CDirTreeWatchManager()
 CDirWatcher::AddFileToChangeList(char const*)
 CDirWatcher::CDirWatcher()
 CDirWatcher::GetChangedFile(CBufferString*)
-CDirWatcher::GetChangedFiles(CUtlBuffer*, CUtlVector<char*, int, CUtlMemory<char*, int, 0ul>>*)
+CDirWatcher::GetChangedFiles(CUtlBuffer*, CUtlVector<char*, int, CUtlVectorMemory_Growable<char*, int, 0ul>>*)
 CDirWatcher::SetDirToWatch(char const*, unsigned int, bool, void*, unsigned long)
 CDirWatcher::Stop()
 CDirectPlaybackAnimNode
@@ -1483,13 +1491,13 @@ CEnvironmentBlock::Remove(char const*)
 CEnvironmentBlock::Set(char const*, char const*)
 CEnvironmentBlock::ValidateStorage()
 CEventDispatcher_Base::CEventDispatcher_Base()
-CEventDispatcher_Base::FindInsertionPoint(CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int, 0ul>> const&, int)
-CEventDispatcher_Base::GetListenerNames_Base(CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int, 0ul>> const&, CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int, 0ul>>*)
+CEventDispatcher_Base::FindInsertionPoint(CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlVectorMemory_Growable<CEventDispatcher_Base::EventListenerInfo_t, int, 0ul>> const&, int)
+CEventDispatcher_Base::GetListenerNames_Base(CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlVectorMemory_Growable<CEventDispatcher_Base::EventListenerInfo_t, int, 0ul>> const&, CUtlVector<CUtlString, int, CUtlVectorMemory_Growable<CUtlString, int, 0ul>>*)
 CEventDispatcher_Base::IterateListener(CEventDispatcher_Base::DelegateIterator_Base_t&)
 CEventDispatcher_Base::IterateListeners_End(CEventDispatcher_Base::DelegateIterator_Base_t&)
 CEventDispatcher_Base::IterateListeners_Start(CEventDispatcher_Base::DelegateIterator_Base_t&, bool)
-CEventDispatcher_Base::RegisterEventListener_Base(CUtlAbstractDelegate const&, unsigned int, bool, CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int, 0ul>>&, int, char const*)
-CEventDispatcher_Base::UnregisterEventListener_Base(CUtlAbstractDelegate const&, CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlMemory<CEventDispatcher_Base::EventListenerInfo_t, int, 0ul>>&)
+CEventDispatcher_Base::RegisterEventListener_Base(CUtlAbstractDelegate const&, unsigned int, bool, CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlVectorMemory_Growable<CEventDispatcher_Base::EventListenerInfo_t, int, 0ul>>&, int, char const*)
+CEventDispatcher_Base::UnregisterEventListener_Base(CUtlAbstractDelegate const&, CUtlVector<CEventDispatcher_Base::EventListenerInfo_t, int, CUtlVectorMemory_Growable<CEventDispatcher_Base::EventListenerInfo_t, int, 0ul>>&)
 CEventListNode::AllocTempNode()
 CEventListNode::FreeTempNode(CEventListNode*)
 CEventRWLock::DuplicateReadLock()
@@ -1562,7 +1570,7 @@ CGridStringPrinter::Clear()
 CGridStringPrinter::GetColumnHeader(int) const
 CGridStringPrinter::GetHeader(int)
 CGridStringPrinter::GetHeader(int) const
-CGridStringPrinter::GetLines(CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int, 0ul>>&, bool) const
+CGridStringPrinter::GetLines(CUtlVector<CUtlString, int, CUtlVectorMemory_Growable<CUtlString, int, 0ul>>&, bool) const
 CGridStringPrinter::GetString(int, int) const
 CGridStringPrinter::NumColumns() const
 CGridStringPrinter::NumRows() const
@@ -1661,12 +1669,12 @@ CMemoryStack %s\n
 CMemoryStack::Access(void**, unsigned int*)
 CMemoryStack::CMemoryStack()
 CMemoryStack::CommitTo(unsigned char*)
-CMemoryStack::FreeAll(bool)
 CMemoryStack::FreeToAllocPoint(unsigned int, bool)
 CMemoryStack::GetSize() const
 CMemoryStack::Init(char const*, unsigned int, unsigned int, unsigned int, unsigned int)
 CMemoryStack::MaybeCommitTo(unsigned char*)
 CMemoryStack::PrintContents() const
+CMemoryStack::Purge(bool)
 CMemoryStack::Term()
 CMemoryStack::~CMemoryStack()
 CMiniDumpComment::AppendComment(char const*)
@@ -1777,7 +1785,7 @@ CPathString::~CPathString()
 CPlayerInputAnimMotor
 CPoolAllocator::Allocate(unsigned int, unsigned int)
 CPoolAllocator::CPoolAllocator(unsigned int)
-CPoolAllocator::Debug_GetAllocationsSnapshot(CUtlVector<CPoolAllocator::Handle_t, int, CUtlMemory<CPoolAllocator::Handle_t, int, 0ul>>*) const
+CPoolAllocator::Debug_GetAllocationsSnapshot(CUtlVector<CPoolAllocator::Handle_t, int, CUtlVectorMemory_Growable<CPoolAllocator::Handle_t, int, 0ul>>*) const
 CPoolAllocator::Free(CPoolAllocator::Handle_t)
 CPoolAllocator::GrowPool(unsigned int)
 CPoolAllocator::~CPoolAllocator()
@@ -1941,7 +1949,7 @@ CStringPool_CI::Allocate(char const*)
 CStringPool_CI::CStringPool_CI()
 CStringPool_CI::Count() const
 CStringPool_CI::Find(char const*)
-CStringPool_CI::FreeAll()
+CStringPool_CI::Purge()
 CStringPool_CI::~CStringPool_CI()
 CSubGraphAnimNode
 CSubGraphManager
@@ -2092,6 +2100,7 @@ CUniformRandomStreamImpl<CThreadNullMutex>::RandomFloat(float, float)
 CUniformRandomStreamImpl<CThreadNullMutex>::RandomFloatExp(float, float, float)
 CUniformRandomStreamImpl<CThreadNullMutex>::RandomGaussianFloat(float, float)
 CUniformRandomStreamImpl<CThreadNullMutex>::RandomInt(int, int)
+CUniformRandomStreamImpl<CThreadNullMutex>::RandomizeBits(void*, unsigned long)
 CUniformRandomStreamImpl<CThreadNullMutex>::SetSeed(int)
 CUniformRandomStreamImpl<CThreadNullMutex>::SetSeed_Locked(int)
 CUniformRandomStreamImpl<CThreadNullVerificationMutex>::CUniformRandomStreamImpl()
@@ -2101,6 +2110,7 @@ CUniformRandomStreamImpl<CThreadNullVerificationMutex>::RandomFloat(float, float
 CUniformRandomStreamImpl<CThreadNullVerificationMutex>::RandomFloatExp(float, float, float)
 CUniformRandomStreamImpl<CThreadNullVerificationMutex>::RandomGaussianFloat(float, float)
 CUniformRandomStreamImpl<CThreadNullVerificationMutex>::RandomInt(int, int)
+CUniformRandomStreamImpl<CThreadNullVerificationMutex>::RandomizeBits(void*, unsigned long)
 CUniformRandomStreamImpl<CThreadNullVerificationMutex>::SetSeed(int)
 CUniformRandomStreamImpl<CThreadNullVerificationMutex>::SetSeed_Locked(int)
 CUniformRandomStreamImpl<CThreadSpinMutex>::CUniformRandomStreamImpl()
@@ -2110,6 +2120,7 @@ CUniformRandomStreamImpl<CThreadSpinMutex>::RandomFloat(float, float)
 CUniformRandomStreamImpl<CThreadSpinMutex>::RandomFloatExp(float, float, float)
 CUniformRandomStreamImpl<CThreadSpinMutex>::RandomGaussianFloat(float, float)
 CUniformRandomStreamImpl<CThreadSpinMutex>::RandomInt(int, int)
+CUniformRandomStreamImpl<CThreadSpinMutex>::RandomizeBits(void*, unsigned long)
 CUniformRandomStreamImpl<CThreadSpinMutex>::SetSeed(int)
 CUniformRandomStreamImpl<CThreadSpinMutex>::SetSeed_Locked(int)
 CUtl3DAllocator2::Allocate3D(int, int, int, Rect3D_t*)
@@ -2124,15 +2135,14 @@ CUtlBinaryBlock::SetLength(int)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock const&)
 CUtlBinaryBlock::operator=(CUtlBinaryBlock&&)
 CUtlBinaryBlock::operator==(CUtlBinaryBlock const&) const
-CUtlBlockMemory overflow!\n
 CUtlBuffer::AccessGet(int)
 CUtlBuffer::AccessPut(int)
 CUtlBuffer::ActivateByteSwapping(bool)
 CUtlBuffer::AddNullTermination()
 CUtlBuffer::AlignBuffer(int)
-CUtlBuffer::AssumeMemory(void*, int, int, int)
-CUtlBuffer::CUtlBuffer(int, int, int)
-CUtlBuffer::CUtlBuffer(void const*, int, int)
+CUtlBuffer::AssumeMemory(void*, int, int, CUtlBuffer::BufferFlags_t)
+CUtlBuffer::CUtlBuffer(int, int, CUtlBuffer::BufferFlags_t)
+CUtlBuffer::CUtlBuffer(void const*, int, CUtlBuffer::BufferFlags_t)
 CUtlBuffer::CheckArbitraryPeekGet(int, int&)
 CUtlBuffer::CheckGet(int)
 CUtlBuffer::CheckPeekGet(int, int)
@@ -2182,10 +2192,10 @@ CUtlBuffer::SeekGet(CUtlBuffer::SeekType_t, int)
 CUtlBuffer::SeekPut(CUtlBuffer::SeekType_t, int)
 CUtlBuffer::SetBigEndian(bool)
 CUtlBuffer::SetBufferType(bool, bool)
-CUtlBuffer::SetExternalBuffer(void*, int, int, int)
+CUtlBuffer::SetExternalBuffer(void*, int, int, CUtlBuffer::BufferFlags_t)
 CUtlBuffer::SetOverflowFuncs(bool (CUtlBuffer::*)(int), bool (CUtlBuffer::*)(int))
 CUtlBuffer::Swap(CUtlBuffer&)
-CUtlBuffer::Swap(CUtlMemory<unsigned char, int, 0ul>&)
+CUtlBuffer::Swap(CUtlLeanVector<unsigned char, int, CMemAllocAllocator>&)
 CUtlBuffer::VaPrintf(char const*, __va_list_tag*)
 CUtlBuffer::VaScanf(char const*, __va_list_tag*)
 CUtlBuffer::WriteToFile(char const*, bool)
@@ -2201,8 +2211,7 @@ CUtlFilenameSymbolTable::SaveToBuffer(CUtlBuffer&)
 CUtlFilenameSymbolTable::SpewStrings()
 CUtlFilenameSymbolTable::String(unsigned int const&, CBufferString*)
 CUtlFilenameSymbolTable::String(unsigned int const&, char*, int)
-CUtlFixedMemory overflow!\n
-CUtlInplaceBuffer::CUtlInplaceBuffer(int, int, int)
+CUtlInplaceBuffer::CUtlInplaceBuffer(CUtlBuffer::BufferFlags_t)
 CUtlInplaceBuffer::InplaceGetLinePtr()
 CUtlInplaceBuffer::InplaceGetLinePtr(char**, int*)
 CUtlLRUCacheBase::Flush(char const*)
@@ -2210,7 +2219,6 @@ CUtlLRUCacheBase::ResetCacheStats(char const*)
 CUtlLRUCacheBase::SetCacheSize(char const*, int)
 CUtlLRUCacheBase::SpewStats()
 CUtlLinkedList overflow! (exhausted index range)\n
-CUtlLinkedList overflow! (exhausted memory allocator)\n
 CUtlMemoryArena
 CUtlMemoryArena::Alloc(unsigned int)
 CUtlMemoryArena::CUtlMemoryArena(unsigned int, bool)
@@ -2232,17 +2240,16 @@ CUtlMemoryPoolBase::IsAllocationWithinPool(void*) const
 CUtlMemoryPoolBase::IterateAllocationsUnsafe(void (*)(void*, void*), void*)
 CUtlMemoryPoolBase::ResetAllocationCounts()
 CUtlMemoryPoolBase::~CUtlMemoryPoolBase()
-CUtlRBTree overflow with %u elements!\n
 CUtlScratchMemoryPool::AddNewBlock(int)
 CUtlScratchMemoryPool::AllocAligned(int, int)
 CUtlScratchMemoryPool::AllocSize() const
 CUtlScratchMemoryPool::AllocationCount() const
 CUtlScratchMemoryPool::CUtlScratchMemoryPool()
 CUtlScratchMemoryPool::CUtlScratchMemoryPool(unsigned int, unsigned int, void*, bool)
-CUtlScratchMemoryPool::FreeAll()
 CUtlScratchMemoryPool::FreeToAllocPoint(UtlScratchMemoryPoolMark_t)
 CUtlScratchMemoryPool::GetCurrentAllocPoint() const
 CUtlScratchMemoryPool::Init(unsigned int, unsigned int, void*, bool)
+CUtlScratchMemoryPool::Purge()
 CUtlScratchMemoryPool::TotalMemFree() const
 CUtlScratchMemoryPool::~CUtlScratchMemoryPool()
 CUtlString::AbsPath(char const*) const
@@ -2325,11 +2332,11 @@ CUtlStringTokenSystem: Encountered string token collision: "%s" and "%s" both ha
 CUtlSymbol::FormatTo(IFormatOutputStream*, CFormatStringElement) const
 CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::AddString(char const*, int, bool*)
+CUtlSymbolTable::AllocSize() const
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
 CUtlSymbolTable::Find(char const*) const
 CUtlSymbolTable::Find(char const*, int) const
 CUtlSymbolTable::GetElements(int, int, CUtlSymbol*) const
-CUtlSymbolTable::GetMemoryUsage() const
 CUtlSymbolTable::Purge()
 CUtlSymbolTable::RemoveAll()
 CUtlSymbolTable::RestoreFromBuffer(CUtlBuffer&)
@@ -2372,7 +2379,7 @@ CVProfile::FindBudgetGroupName(char const*)
 CVProfile::FindNode(CVProfNode*, char const*)
 CVProfile::FindOrCreateCounter(char const*, CounterGroup_t)
 CVProfile::FreeNodes_R(CVProfNode*)
-CVProfile::GenerateDataReport(CUtlVector<VProfDataReportItem_t, int, CUtlMemory<VProfDataReportItem_t, int, 0ul>>*)
+CVProfile::GenerateDataReport(CUtlVector<VProfDataReportItem_t, int, CUtlVectorMemory_Growable<VProfDataReportItem_t, int, 0ul>>*)
 CVProfile::GetBudgetGroupColor(int, int&, int&, int&, int&)
 CVProfile::GetBudgetGroupFlags(int)
 CVProfile::GetBudgetGroupName(int)
@@ -2856,6 +2863,7 @@ EnsureAddedCapacity
 EnsureCapacity
 EnsureElementCapacity
 EnsureMemberCapacity
+EnsureUnusedCapacity
 Entry '%s' already has a name (ignoring update to '%s')\n
 Error
 Error (generic)
@@ -2974,8 +2982,6 @@ FindDiffsForLargeFiles
 FindDiffsLowMemory
 FindEntByClassNameWithin
 FindEntByName
-FindGlobalSymbol
-FindGlobalSymbolByHash
 FindOrCreateQuantizedFloatEncoder
 FindRegisteredGlobalObjectInternal
 Finger_Curl_Index
@@ -3102,6 +3108,7 @@ GameResourceServiceClientV001
 GameResourceServiceServerV001
 GameUIService_001
 General
+GenerateHashFromUniqueId
 GenericGameData
 GenuineIntel
 GetAddressInlineCallData
@@ -3147,6 +3154,7 @@ GlobPool
 Goal_Distance
 Group
 GrowByChunks
+GrowCount
 H$6t
 H$BQ
 H(VVH
@@ -3401,6 +3409,7 @@ Invalid Mach-O header\n
 Invalid Mach-O segment %d\n
 Invalid abbrev children setting %d\n
 Invalid alignment value %llu, must be a power of two\n
+Invalid alignment value %llu\n
 Invalid arange debug info offset\n
 Invalid arange header address size\n
 Invalid arange header segment size\n
@@ -3689,7 +3698,7 @@ LoggingSystem_GetChannelVerbosity
 LoggingSystem_GetFirstChannelID
 LoggingSystem_GetLastChannelLineComplete
 LoggingSystem_GetLogCapture(CMiniDumpComment*, bool)
-LoggingSystem_GetLogCapture(CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int, 0ul>>*, bool)
+LoggingSystem_GetLogCapture(CUtlVector<CUtlString, int, CUtlVectorMemory_Growable<CUtlString, int, 0ul>>*, bool)
 LoggingSystem_GetLogCaptureForMiniDump(CMiniDumpComment*, bool, char const*)
 LoggingSystem_GetMaxLogCaptureLines
 LoggingSystem_GetNextChannelID
@@ -3700,21 +3709,21 @@ LoggingSystem_IsChannelEnabled
 LoggingSystem_IsChannelEnabled(int, LoggingVerbosity_t)
 LoggingSystem_Log
 LoggingSystem_Log(int, LoggingSeverity_t, Color, char const*, ...)
-LoggingSystem_Log(int, LoggingSeverity_t, LeafCodeInfo_t const&, Color, char const*, ...)
-LoggingSystem_Log(int, LoggingSeverity_t, LeafCodeInfo_t const&, LoggingMetaData_t const*, Color, char const*, ...)
-LoggingSystem_Log(int, LoggingSeverity_t, LeafCodeInfo_t const&, LoggingMetaData_t const*, char const*, ...)
-LoggingSystem_Log(int, LoggingSeverity_t, LeafCodeInfo_t const&, char const*, ...)
 LoggingSystem_Log(int, LoggingSeverity_t, LoggingMetaData_t const*, Color, char const*, ...)
 LoggingSystem_Log(int, LoggingSeverity_t, LoggingMetaData_t const*, char const*, ...)
+LoggingSystem_Log(int, LoggingSeverity_t, LoggingRareOptions_t const&, Color, char const*, ...)
+LoggingSystem_Log(int, LoggingSeverity_t, LoggingRareOptions_t const&, LoggingMetaData_t const*, Color, char const*, ...)
+LoggingSystem_Log(int, LoggingSeverity_t, LoggingRareOptions_t const&, LoggingMetaData_t const*, char const*, ...)
+LoggingSystem_Log(int, LoggingSeverity_t, LoggingRareOptions_t const&, char const*, ...)
 LoggingSystem_LogAssert
 LoggingSystem_LogDirect
 LoggingSystem_LogDirect(int, LoggingSeverity_t, Color, LoggingMetaData_t const*, char const*)
 LoggingSystem_LogDirect(int, LoggingSeverity_t, Color, char const*)
-LoggingSystem_LogDirect(int, LoggingSeverity_t, LeafCodeInfo_t const&, Color, LoggingMetaData_t const*, char const*)
-LoggingSystem_LogDirect(int, LoggingSeverity_t, LeafCodeInfo_t const&, Color, char const*)
-LoggingSystem_LogDirect(int, LoggingSeverity_t, LeafCodeInfo_t const&, LoggingMetaData_t const*, char const*)
-LoggingSystem_LogDirect(int, LoggingSeverity_t, LeafCodeInfo_t const&, char const*)
 LoggingSystem_LogDirect(int, LoggingSeverity_t, LoggingMetaData_t const*, char const*)
+LoggingSystem_LogDirect(int, LoggingSeverity_t, LoggingRareOptions_t const&, Color, LoggingMetaData_t const*, char const*)
+LoggingSystem_LogDirect(int, LoggingSeverity_t, LoggingRareOptions_t const&, Color, char const*)
+LoggingSystem_LogDirect(int, LoggingSeverity_t, LoggingRareOptions_t const&, LoggingMetaData_t const*, char const*)
+LoggingSystem_LogDirect(int, LoggingSeverity_t, LoggingRareOptions_t const&, char const*)
 LoggingSystem_LogLines
 LoggingSystem_NextTag
 LoggingSystem_PopLoggingState
@@ -3745,6 +3754,7 @@ LooksLikeOldSchemaText(void const*, int, KV3ID_t*)
 Low PC attr without addr value\n
 Low-level allocator: jemalloc\n
 Lowest-level allocator stats:\n
+M+iD3
 M15I?
 M8MF
 MATCHFRAMEWORK_001
@@ -3792,8 +3802,6 @@ Mach-O DWARF symbols
 Mach-O fallback symbols
 MagnitudeOnly
 MailMiniDump
-MakeGlobalSymbol
-MakeGlobalSymbolCaseSensitive
 Malformed attribute list terminator\n
 MapListService_001
 March
@@ -3858,7 +3866,6 @@ Multiple sibling attrs\n
 Multiple specific types given, '%s' and also '%s'
 Multiple specification attrs\n
 Multiple statement lists\n
-MurmurHash3_32
 N10__cxxabiv115__forced_unwindE
 N10__cxxabiv117__class_type_infoE
 N10__cxxabiv119__foreign_exceptionE
@@ -4228,6 +4235,7 @@ Plat_GetShellWindow
 Plat_GetSteamLoginWithAccessCode
 Plat_GetSystemLoad
 Plat_GetTempDirectory
+Plat_GetThisProcessStdioRedirectFlags
 Plat_GetTime
 Plat_GetTimeString
 Plat_GetUserName
@@ -4295,6 +4303,7 @@ Plat_OsSpecificHandleToPlatWindow
 Plat_Printf
 Plat_QueueSteamLoginWithAccessCode
 Plat_ReconfigureWindow
+Plat_RedirectThisProcessStdioToFile(int, unsigned int)
 Plat_RefreshDPI
 Plat_RegisterModule
 Plat_RegisterSignalHandler
@@ -4370,6 +4379,7 @@ Plat_UUIDFromString
 Plat_UUIDToString
 Plat_UnloadModule
 Plat_UnloadSDL
+Plat_UpdateThisProcessStdioRedirect(int, int)
 Plat_VirtualAccessFlags
 Plat_VirtualAlloc
 Plat_VirtualFree
@@ -4419,6 +4429,7 @@ RandomFloatExp
 RandomGaussianFloat
 RandomInt
 RandomSeed
+RandomizeBits
 Range end value 0x%llx out of virtual bound 0x%x\n
 Range length overflows\n
 Range list entry without a default base address\n
@@ -5319,10 +5330,10 @@ Usage:  findflags <string>\n
 Usage:  help <cvarname>\n
 Usage: lrucache_flush [name]\n
 Usage: lrucache_set_size [name] [size]\n
-UtlMemory_Alloc
-UtlMemory_AllocAligned
-UtlMemory_CalcNewAllocationCount
-UtlMemory_FailedAllocation
+UtlVectorMemory_Alloc
+UtlVectorMemory_AllocAligned
+UtlVectorMemory_CalcNewAllocationCount
+UtlVectorMemory_FailedAllocation
 VALVE_CLOCK_SPEED_CALCULATION
 VALVE_TESTMODE
 VALVE_TEST_MONITOR_PROCESS
@@ -5453,12 +5464,12 @@ V_IsFakePath
 V_IsMeanSpaceW
 V_IsValidDomainNameCharacter
 V_IsValidURLCharacter
-V_JoinNumbers(char, CUtlVector<double, int, CUtlMemory<double, int, 0ul>> const&, CUtlString*)
-V_JoinNumbers(char, CUtlVector<float, int, CUtlMemory<float, int, 0ul>> const&, CUtlString*)
-V_JoinNumbers(char, CUtlVector<int, int, CUtlMemory<int, int, 0ul>> const&, CUtlString*)
-V_JoinNumbers(char, CUtlVector<long long, int, CUtlMemory<long long, int, 0ul>> const&, CUtlString*)
-V_JoinNumbers(char, CUtlVector<unsigned int, int, CUtlMemory<unsigned int, int, 0ul>> const&, CUtlString*)
-V_JoinNumbers(char, CUtlVector<unsigned long long, int, CUtlMemory<unsigned long long, int, 0ul>> const&, CUtlString*)
+V_JoinNumbers(char, CUtlVector<double, int, CUtlVectorMemory_Growable<double, int, 0ul>> const&, CUtlString*)
+V_JoinNumbers(char, CUtlVector<float, int, CUtlVectorMemory_Growable<float, int, 0ul>> const&, CUtlString*)
+V_JoinNumbers(char, CUtlVector<int, int, CUtlVectorMemory_Growable<int, int, 0ul>> const&, CUtlString*)
+V_JoinNumbers(char, CUtlVector<long long, int, CUtlVectorMemory_Growable<long long, int, 0ul>> const&, CUtlString*)
+V_JoinNumbers(char, CUtlVector<unsigned int, int, CUtlVectorMemory_Growable<unsigned int, int, 0ul>> const&, CUtlString*)
+V_JoinNumbers(char, CUtlVector<unsigned long long, int, CUtlVectorMemory_Growable<unsigned long long, int, 0ul>> const&, CUtlString*)
 V_LZ4_attach_HC_dictionary
 V_LZ4_attach_dictionary
 V_LZ4_compressBound
@@ -5499,14 +5510,14 @@ V_RemoveDotSlashes
 V_RemoveFormatSpecifications
 V_SanitizeTextForCommandLine(char const*, CBufferString*, bool)
 V_SetErrno
-V_SplitNumbers(char const*, char, CUtlVector<double, int, CUtlMemory<double, int, 0ul>>&)
-V_SplitNumbers(char const*, char, CUtlVector<float, int, CUtlMemory<float, int, 0ul>>&)
-V_SplitNumbers(char const*, char, CUtlVector<int, int, CUtlMemory<int, int, 0ul>>&)
-V_SplitNumbers(char const*, char, CUtlVector<long long, int, CUtlMemory<long long, int, 0ul>>&)
-V_SplitNumbers(char const*, char, CUtlVector<unsigned int, int, CUtlMemory<unsigned int, int, 0ul>>&)
-V_SplitNumbers(char const*, char, CUtlVector<unsigned long long, int, CUtlMemory<unsigned long long, int, 0ul>>&)
-V_SplitString(char const*, char const*, CUtlVector<CUtlString, int, CUtlMemory<CUtlString, int, 0ul>>&, bool)
-V_SplitStringInPlace(char*, char const*, CUtlVector<char const*, int, CUtlMemory<char const*, int, 0ul>>&)
+V_SplitNumbers(char const*, char, CUtlVector<double, int, CUtlVectorMemory_Growable<double, int, 0ul>>&)
+V_SplitNumbers(char const*, char, CUtlVector<float, int, CUtlVectorMemory_Growable<float, int, 0ul>>&)
+V_SplitNumbers(char const*, char, CUtlVector<int, int, CUtlVectorMemory_Growable<int, int, 0ul>>&)
+V_SplitNumbers(char const*, char, CUtlVector<long long, int, CUtlVectorMemory_Growable<long long, int, 0ul>>&)
+V_SplitNumbers(char const*, char, CUtlVector<unsigned int, int, CUtlVectorMemory_Growable<unsigned int, int, 0ul>>&)
+V_SplitNumbers(char const*, char, CUtlVector<unsigned long long, int, CUtlVectorMemory_Growable<unsigned long long, int, 0ul>>&)
+V_SplitString(char const*, char const*, CUtlVector<CUtlString, int, CUtlVectorMemory_Growable<CUtlString, int, 0ul>>&, bool)
+V_SplitStringInPlace(char*, char const*, CUtlLeanVector<char const*, int, CMemAllocAllocator>&)
 V_StrTrim
 V_StringParseError
 V_StringToBool
@@ -6157,6 +6168,8 @@ _CCallStackStatsGatherer_Internal_DumpStatsToFile
 _CCallStackStatsGatherer_ReleaseSharedGlobalInstance
 _Error_AlwaysSpewCallStack_Enable
 _Error_AlwaysSpewCallStack_Length
+_FindGlobalSymbol
+_FindGlobalSymbolByHash
 _Float
 _GLOBAL_
 _H^zvd
@@ -6167,6 +6180,8 @@ _ITM_deregisterTMCloneTable
 _ITM_memcpyRnWt
 _ITM_memcpyRtWn
 _ITM_registerTMCloneTable
+_MakeGlobalSymbol
+_MakeGlobalSymbolCaseSensitive
 _V_AppendSlash
 _V_ComposeFileName
 _V_DefaultExtension
@@ -6419,6 +6434,7 @@ asctime_r
 asin
 asinf
 assert
+assert_dialog.cpp
 assigned threads
 atan
 atan2
@@ -6684,6 +6700,7 @@ decltype (
 decltype(auto)
 decltype(nullptr)
 default
+default %s
 delay
 delete
 delete 
@@ -6890,7 +6907,6 @@ g_bUpdateStringTokenDatabase
 g_flConfigMaxCoord
 g_pFiberJobPool
 g_pMemAlloc
-g_pPerfTraceDepot
 g_pScheduledFunctions
 g_pThreadPool
 game
@@ -7034,7 +7050,6 @@ incremental_shapes
 inherit_owner_joints
 initialized
 initializer for module 
-inity
 install
 int std::__facet_shims::__collate_compare<char>(std::integral_constant<bool, false>, std::locale::facet const*, char const*, char const*, char const*, char const*)
 int std::__facet_shims::__collate_compare<char>(std::integral_constant<bool, true>, std::locale::facet const*, char const*, char const*, char const*, char const*)
@@ -7089,7 +7104,6 @@ iswpunct
 iswspace
 iswupper
 izc}
-j1>j
 java Class for 
 java resource 
 je_aligned_alloc
@@ -7118,7 +7132,6 @@ jemalloc
 jemalloc_bg_thd
 jointWeightWeight
 junk
-justify_spacer
 jwK\v\n
 k*WBjL
 keyvalues3_kv1textwriter.cpp
@@ -7774,6 +7787,7 @@ material
 materials/particle/base_projected.vmat
 materials/particle/base_sprite.vtex
 matrix3x4
+max %s
 maxHullVertices
 maxMeshVertices
 maxVerticesPerHull
@@ -7808,6 +7822,7 @@ message
 metadata
 metadata_thp
 metadata_thp:
+min %s
 min_angle
 minimum ratio : %u \n
 mkdir
@@ -11043,10 +11058,10 @@ userinfo
 usleep
 util
 utilization
-utlmemory.cpp
 utlmemoryarena.cpp
 utlobjectregistry.cpp
 utlstringtokensystem.cpp
+utlvectormemory.cpp
 utrace
 uu\T
 uuid_generate

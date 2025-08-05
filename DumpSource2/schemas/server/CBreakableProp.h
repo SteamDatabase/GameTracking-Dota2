@@ -30,7 +30,6 @@ class CBreakableProp : public CBaseProp
 	CUtlSymbolLarge m_explosionCustomEffect;
 	CUtlSymbolLarge m_explosionCustomSound;
 	CUtlSymbolLarge m_explosionModifier;
-	int32 m_explosionDangerSound;
 	CHandle< CBasePlayerPawn > m_hPhysicsAttacker;
 	GameTime_t m_flLastPhysicsInfluenceTime;
 	float32 m_flDefaultFadeScale;
