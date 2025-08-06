@@ -136,7 +136,7 @@
 
 	SoundSystem
 	{
-		"SteamAudioEnabled" "1"
+		"SteamAudioEnabled" "1" [!$OSX] // Disable SteamAudio on OSX until crash can be solved.
 		"snd_event_browser_default_stack" "dota_update_default"
 	}
 
