@@ -1,4 +1,51 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"nID": 0,
+//	"nAssociatedID": 4294967295,
+//	"sLocName": "",
+//	"sParticle": "",
+//	"sParticleTarget": "",
+//	"color":
+//	[
+//		0,
+//		0,
+//		0,
+//		0
+//	],
+//	"sImage": "",
+//	"sSound": "",
+//	"sChat": "",
+//	"sChatWithTarget": "",
+//	"eUnlockEvent": "EVENT_ID_NONE",
+//	"nUnlockEventActionID": 0,
+//	"m_flMinimapDuration": 3.000000,
+//	"m_bFlashTargetIcon": false,
+//	"m_minimapIconInfo":
+//	{
+//		"m_nIconID": 0,
+//		"m_flSize": 800.000000,
+//		"m_bAlignBottom": false,
+//		"m_bForceBaseIconWhite": false,
+//		"m_flAnimStartSize": 10000.000000,
+//		"m_flAnimThrobSize": 300.000000,
+//		"m_flAnimThrobRate": 6.000000,
+//		"m_flAnimIntroDuration": 0.300000,
+//		"m_flAnimOutroDuration": 0.500000,
+//		"m_eDrawCondition": "k_ePingMinimapDrawCondition_Always"
+//	},
+//	"m_vecAdditionalMinimapLayers":
+//	[
+//	],
+//	"m_particleInfo":
+//	{
+//		"m_flDuration": 3.000000,
+//		"m_flRadius": 1.000000,
+//		"m_flVerticalOffset": 240.000000,
+//		"m_flBonusVerticalOffsetFromTargetEntity": 0.000000,
+//		"m_bShowDotaPlusBadge": false
+//	},
+//	"m_bRequiresDotaPlus": false,
+//	"m_bIsBindable": true
+//}
 // MVDataRoot
 class SPingWheelMessageDefinition
 {

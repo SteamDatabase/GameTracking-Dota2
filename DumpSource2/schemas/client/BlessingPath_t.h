@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"Node1": "",
+//	"Node2": "",
+//	"bOneWay": false,
+//	"flCircleInvRadius": 0.000000,
+//	"color":
+//	[
+//		255,
+//		255,
+//		255
+//	]
+//}
 // MVDataOutlinerIconExpr = "'tools/images/common/icon_edge_generic.png'"
 // MVDataAnonymousNode
 class BlessingPath_t

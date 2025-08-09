@@ -1,4 +1,18 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strID": "",
+//	"m_bBurrowedFish": false,
+//	"m_strMapName": "",
+//	"m_strBurrowedFishParticle": "",
+//	"m_vecFishTypes":
+//	[
+//	],
+//	"m_mapFishNameToVecIndex":
+//	{
+//	},
+//	"m_mapCategoryToDifficulty":
+//	{
+//	}
+//}
 // MVDataRoot
 // MVDataSingleton
 class CDOTAFishingGameDefinition

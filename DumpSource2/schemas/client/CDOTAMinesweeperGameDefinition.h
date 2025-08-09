@@ -1,4 +1,37 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_player":
+//	{
+//		"m_nInitialHealth": 1,
+//		"m_nInitialMana": 0
+//	},
+//	"m_vecStages":
+//	[
+//	],
+//	"m_flTimeLimit": 134091136.000000,
+//	"m_nIllusionManaCost": 32767,
+//	"m_nStageProgressionTimerIncrease": -82862299,
+//	"m_dustEffect": "",
+//	"m_grassEffect": "",
+//	"m_explosionEffect": "",
+//	"m_manaPotEffect": "",
+//	"m_timerIncreaseEffect": "",
+//	"m_illusionEffect": "",
+//	"m_lostManaPotEffect": "",
+//	"m_lostTimerIncreaseEffect": "",
+//	"m_nManaPotRestoration": 0,
+//	"m_nMaxConcurrentManaPots": 0,
+//	"m_nManaPotExpireClicks": 0,
+//	"m_nManaPotChance": 0,
+//	"m_flTimeExtension": 0.000000,
+//	"m_nMaxConcurrentTimerIncreases": 0,
+//	"m_nTimerIncreaseExpireClicks": 218836480,
+//	"m_nTimerIncreaseChance": 997817449,
+//	"m_nScorePerCellRevealed": 0,
+//	"m_nScorePerStageCleared": 0,
+//	"m_nScorePerSecondsRemaining": -232,
+//	"m_nFailedChordClickTimes": -1,
+//	"m_flFailedChordClickCooldown": 2
+//}
 // MVDataRoot
 class CDOTAMinesweeperGameDefinition
 {

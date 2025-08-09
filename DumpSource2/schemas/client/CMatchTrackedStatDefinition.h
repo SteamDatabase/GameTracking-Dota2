@@ -1,4 +1,16 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unStatID": 0,
+//	"m_eStatImpl": "k_eMatchTrackedStatImpl_Invalid",
+//	"m_expressionData":
+//	{
+//		"strExpression": ""
+//	},
+//	"m_aggregateData":
+//	{
+//		"m_strIndividualStat": "",
+//		"m_eAggregate": "k_eTrackedStatAggregate_Invalid"
+//	}
+//}
 // MVDataRoot
 class CMatchTrackedStatDefinition
 {

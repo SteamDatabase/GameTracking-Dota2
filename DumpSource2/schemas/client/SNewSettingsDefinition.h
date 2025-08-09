@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"nID": 0,
+//	"m_sTitle": "",
+//	"m_sDescription": "",
+//	"sIcon": "",
+//	"m_sCreationDate": "",
+//	"m_eNewSettingsBadge": "eNewSettingsBadge_New"
+//}
 // MVDataRoot
 class SNewSettingsDefinition
 {

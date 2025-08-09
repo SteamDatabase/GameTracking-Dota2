@@ -1,4 +1,20 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sParticleName": "",
+//	"m_flDamage": 1.000000,
+//	"m_flAttackCooldown": 1.000000,
+//	"m_flSpeed": 50.000000,
+//	"m_flRange": 1000.000000,
+//	"m_flMaxDistance": 0.000000,
+//	"m_flLifeTime": 0.000000,
+//	"m_flAttackOffsetUp": 0.000000,
+//	"m_flAttackOffsetForward": 0.000000,
+//	"m_flRadius": 0.000000,
+//	"m_activity": "ACT_DOTA_ATTACK",
+//	"m_flAttackPoint": 0.000000,
+//	"m_bHasIndicator": false,
+//	"m_flSpawnDelay": 0.000000,
+//	"m_eIndicatorShape": "k_eSurvivorsShape_Undefined"
+//}
 class CSurvivorsEnemyDefinition::Attack
 {
 	CResourceNameTyped< CWeakHandle< InfoForResourceTypeIParticleSystemDefinition > > m_sParticleName;

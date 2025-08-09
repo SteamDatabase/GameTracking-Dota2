@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sMapClassToAdd": "",
+//	"m_vecGrantAndClaimActionPairs":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTAEventActionGrantAndClaimPairTrigger
 {

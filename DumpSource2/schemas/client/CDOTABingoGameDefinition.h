@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eEvent": "EVENT_ID_NONE",
+//	"m_unLeagueID": 0,
+//	"m_nShuffleCardCost": 1,
+//	"m_nRerollSquareCost": 1,
+//	"m_nUpgradeSquareCost": 1,
+//	"m_nMaxSquareUpgrades": 1,
+//	"m_vecExpectedMatchCountsPerPhase":
+//	[
+//	],
+//	"m_vecLeaguePhases":
+//	[
+//	],
+//	"m_vecValidStatRangesPerPhase":
+//	[
+//	],
+//	"m_mapBingoStatsByName":
+//	{
+//	}
+//}
 // MVDataRoot
 class CDOTABingoGameDefinition
 {

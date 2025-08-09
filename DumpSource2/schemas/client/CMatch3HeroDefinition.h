@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nHeroID": 0,
+//	"m_sPieceModel": "",
+//	"m_sAttackParticleEffect": "",
+//	"m_sSuperAbility": "",
+//	"m_sUltraAbility": ""
+//}
 // MVDataRoot
 class CMatch3HeroDefinition
 {

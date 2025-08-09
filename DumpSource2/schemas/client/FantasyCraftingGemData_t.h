@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eType": "FANTASY_GEM_TYPE_RUBY",
+//	"m_sLocName": "",
+//	"m_eStats":
+//	[
+//	]
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftingGemData_t
 {

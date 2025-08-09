@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unGemSlot": 0,
+//	"m_eGemType": "FANTASY_GEM_TYPE_RUBY",
+//	"m_nRequiredTabletLevel": -1
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftingGemSlotData_t
 {

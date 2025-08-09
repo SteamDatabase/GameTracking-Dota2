@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"x": 0,
+//	"y": 0,
+//	"w": -1,
+//	"h": -1
+//}
 class CrownfallCreditsAABB_t
 {
 	int32 x;

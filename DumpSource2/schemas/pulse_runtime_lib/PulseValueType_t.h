@@ -1,7 +1,7 @@
 enum PulseValueType_t : uint32_t
 {
 	// MPropertyFriendlyName = "Void"
-	PVAL_INVALID = -1,
+	PVAL_VOID = -1,
 	// MPropertyFriendlyName = "Boolean"
 	PVAL_BOOL = 0,
 	// MPropertyFriendlyName = "Integer"
@@ -10,46 +10,60 @@ enum PulseValueType_t : uint32_t
 	PVAL_FLOAT = 2,
 	// MPropertyFriendlyName = "String"
 	PVAL_STRING = 3,
+	// MPropertyFriendlyName = "Vector2D"
+	PVAL_VEC2 = 4,
 	// MPropertyFriendlyName = "Vector"
-	PVAL_VEC3 = 4,
+	PVAL_VEC3 = 5,
 	// MPropertyFriendlyName = "Angle"
-	PVAL_QANGLE = 5,
+	PVAL_QANGLE = 6,
 	// MPropertyFriendlyName = "World Vector"
-	PVAL_VEC3_WORLDSPACE = 6,
+	PVAL_VEC3_WORLDSPACE = 7,
+	// MPropertyFriendlyName = "Vector4D"
+	PVAL_VEC4 = 8,
 	// MPropertyFriendlyName = "Transform"
-	PVAL_TRANSFORM = 7,
+	PVAL_TRANSFORM = 9,
 	// MPropertyFriendlyName = "World Transform"
-	PVAL_TRANSFORM_WORLDSPACE = 8,
+	PVAL_TRANSFORM_WORLDSPACE = 10,
 	// MPropertyFriendlyName = "Color"
-	PVAL_COLOR_RGB = 9,
+	PVAL_COLOR_RGB = 11,
 	// MPropertyFriendlyName = "Game Time"
-	PVAL_GAMETIME = 10,
+	PVAL_GAMETIME = 12,
 	// MPropertyFriendlyName = "Entity Handle"
-	PVAL_EHANDLE = 11,
+	PVAL_EHANDLE = 13,
 	// MPropertyFriendlyName = "Resource"
-	PVAL_RESOURCE = 12,
+	PVAL_RESOURCE = 14,
+	// MPropertyFriendlyName = "Resource Name"
+	PVAL_RESOURCE_NAME = 15,
 	// MPropertyFriendlyName = "SoundEvent Instance Handle"
-	PVAL_SNDEVT_GUID = 13,
+	PVAL_SNDEVT_GUID = 16,
 	// MPropertyFriendlyName = "SoundEvent"
-	PVAL_SNDEVT_NAME = 14,
+	PVAL_SNDEVT_NAME = 17,
 	// MPropertyFriendlyName = "Entity Name"
-	PVAL_ENTITY_NAME = 15,
+	PVAL_ENTITY_NAME = 18,
 	// MPropertyFriendlyName = "Opaque Handle"
-	PVAL_OPAQUE_HANDLE = 16,
+	PVAL_OPAQUE_HANDLE = 19,
 	// MPropertyFriendlyName = "Typesafe Int"
-	PVAL_TYPESAFE_INT = 17,
+	PVAL_TYPESAFE_INT = 20,
+	// MPropertyFriendlyName = "Material Group"
+	PVAL_MODEL_MATERIAL_GROUP = 21,
 	// MPropertySuppressEnumerator
-	PVAL_CURSOR_FLOW = 18,
-	// MPropertyFriendlyName = "Any"
-	PVAL_ANY = 19,
+	PVAL_CURSOR_FLOW = 22,
+	// MPropertyFriendlyName = "Variant"
+	// MPropertySuppressEnumerator
+	PVAL_VARIANT = 23,
+	// MPropertyFriendlyName = "Unknown"
+	// MPropertySuppressEnumerator
+	PVAL_UNKNOWN = 24,
 	// MPropertyFriendlyName = "Schema Enum"
-	PVAL_SCHEMA_ENUM = 20,
+	PVAL_SCHEMA_ENUM = 25,
 	// MPropertyFriendlyName = "Panorama Panel Handle"
-	PVAL_PANORAMA_PANEL_HANDLE = 21,
+	PVAL_PANORAMA_PANEL_HANDLE = 26,
 	// MPropertyFriendlyName = "Test Handle"
-	PVAL_TEST_HANDLE = 22,
+	PVAL_TEST_HANDLE = 27,
 	// MPropertyFriendlyName = "Array"
-	PVAL_ARRAY = 23,
+	PVAL_ARRAY = 28,
+	// MPropertyFriendlyName = "Typesafe Int64"
+	PVAL_TYPESAFE_INT64 = 29,
 	// MPropertySuppressEnumerator
-	PVAL_COUNT = 24,
+	PVAL_COUNT = 30,
 };

@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unTitle": 0,
+//	"m_sLocName": "",
+//	"m_sLocNameIndividual": "",
+//	"m_sLocExplanation": "",
+//	"m_sLocExplanationMouseOver": "",
+//	"m_eMode": "k_FantasyStatMatchMode_All",
+//	"m_vecStats":
+//	[
+//	],
+//	"m_nBonus": 0
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftingTitleData_t
 {

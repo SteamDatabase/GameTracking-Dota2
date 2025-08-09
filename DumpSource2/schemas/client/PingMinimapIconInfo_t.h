@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nIconID": 0,
+//	"m_flSize": 800.000000,
+//	"m_bAlignBottom": false,
+//	"m_bForceBaseIconWhite": false,
+//	"m_flAnimStartSize": 10000.000000,
+//	"m_flAnimThrobSize": 300.000000,
+//	"m_flAnimThrobRate": 6.000000,
+//	"m_flAnimIntroDuration": 0.300000,
+//	"m_flAnimOutroDuration": 0.500000,
+//	"m_eDrawCondition": "k_ePingMinimapDrawCondition_Always"
+//}
 class PingMinimapIconInfo_t
 {
 	// MPropertyDescription = "ID of icon to show on minimap. See scripts/minimap_icons.txt and mod_textures.txt"

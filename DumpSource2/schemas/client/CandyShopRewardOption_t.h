@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unRewardOptionID": 0,
+//	"m_sRewardClass": ""
+//}
 // MPropertyAutoExpandSelf
 class CandyShopRewardOption_t
 {

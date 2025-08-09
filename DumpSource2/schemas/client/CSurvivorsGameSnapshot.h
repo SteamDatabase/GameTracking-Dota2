@@ -1,4 +1,30 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_gameModeID": 0,
+//	"m_playerSnapshot":
+//	{
+//		"m_heroID": 0,
+//		"m_nCurrentLevel": 1,
+//		"m_flCurrentExp": 0.000000,
+//		"m_nRerollsRemaining": 0,
+//		"m_vecPowerUps":
+//		[
+//		],
+//		"m_vOrigin":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_enemiesSnapshot":
+//	[
+//	],
+//	"m_pickupsSnapshot":
+//	[
+//	],
+//	"m_flGameTime": 0.000000,
+//	"m_nCurrentLevelEvent": 0
+//}
 // MVDataRoot
 class CSurvivorsGameSnapshot
 {

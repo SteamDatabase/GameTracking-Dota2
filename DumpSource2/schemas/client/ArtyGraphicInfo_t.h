@@ -1,4 +1,33 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unID": 0,
+//	"m_szSnippet": "",
+//	"m_szUnit": "",
+//	"m_szModel": "",
+//	"m_szParticle": "",
+//	"m_eType": "k_eSprite",
+//	"m_vAngles":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vPosition":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vCameraOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_nWidth": 32,
+//	"m_nHeight": 32,
+//	"m_bPlayEndcap": true,
+//	"m_flDefaultScale": -1.000000
+//}
 // MVDataRoot
 class ArtyGraphicInfo_t
 {

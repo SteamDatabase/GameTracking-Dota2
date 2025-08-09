@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"eAction": "Jump",
+//	"vecButtons":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTAFlappySkywrathInputAction
 {

@@ -9,4 +9,6 @@ enum ETeamFanContentAssetType : uint32_t
 	k_eFanContentAssetType_Emoticons = 7,
 	k_eFanContentAssetType_VoiceLines = 8,
 	k_eFanContentAssetType_Localization = 9,
+	k_eFanContentAssetType_Banner = 10,
+	k_eFanContentAssetType_BaseLogo = 11,
 };

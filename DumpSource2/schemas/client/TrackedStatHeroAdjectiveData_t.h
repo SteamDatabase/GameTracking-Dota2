@@ -1,4 +1,6 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strAdjective": ""
+//}
 // MPropertyAutoExpandSelf
 class TrackedStatHeroAdjectiveData_t
 {

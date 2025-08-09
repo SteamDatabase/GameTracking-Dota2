@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_vecCraftingSetups":
+//	[
+//	],
+//	"m_vecLeagues":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTAFantasyDefinition
 {

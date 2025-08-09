@@ -77,6 +77,7 @@ enum EGCItemMsg : uint32_t
 	k_EMsgGCToGCRefreshSOCache = 2549,
 	k_EMsgGCToGCGrantAccountRolledItems = 2554,
 	k_EMsgGCToGCGrantSelfMadeItemToAccount = 2555,
+	k_EMsgGCToGCUnlockCrate = 2556,
 	k_EMsgGCStatueCraft = 2561,
 	k_EMsgGCRedeemCode = 2562,
 	k_EMsgGCRedeemCodeResponse = 2563,

@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unRarity": "RARITY_INVALID",
+//	"m_vecUpgradeAttributes":
+//	[
+//	],
+//	"m_vecGlobalUpgradeAttributes":
+//	[
+//	]
+//}
 // MVDataRoot
 class CSurvivorsUpgradeDefinition
 {

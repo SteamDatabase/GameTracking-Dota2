@@ -1,4 +1,20 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flWindAccel": 50.000000,
+//	"m_flG0": 1320.000000,
+//	"m_flDragCoeff": 0.003000,
+//	"m_bPuzzle": false,
+//	"m_flMinVelocityForFallDamage": 50.000000,
+//	"m_flFallDamageMult": 0.100000,
+//	"m_flMinAirTimeForDamage": 0.100000,
+//	"m_bRefillAmmoEachLevel": true,
+//	"m_flMaxClimbHeight": 3.000000,
+//	"m_bShowPathProjection": false,
+//	"m_bShowTrails": true,
+//	"m_bClearOldTrailsOnFire": true,
+//	"m_flTrailLingerSeconds": 30.000000,
+//	"m_flVelocityPerChargeSecond": 90.000000,
+//	"m_flMinimumGameObjectY": 0.000000
+//}
 // MVDataRoot
 class ArtyConstants_t
 {

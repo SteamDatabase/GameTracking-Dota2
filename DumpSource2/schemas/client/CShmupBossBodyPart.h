@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strAttachName": "",
+//	"m_flRadius": 1.000000,
+//	"m_nHitRegionIndex": 0,
+//	"m_nDamageMultiplier": 1
+//}
 // MVDataRoot
 class CShmupBossBodyPart
 {

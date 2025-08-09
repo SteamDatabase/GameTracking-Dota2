@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_bUseDefault": false,
+//	"m_bUseEquipped": false,
+//	"m_unStyleIndex": 255,
+//	"m_strLocName": "",
+//	"m_vecItems":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTAFightingGameHeroStyleDefinition
 {

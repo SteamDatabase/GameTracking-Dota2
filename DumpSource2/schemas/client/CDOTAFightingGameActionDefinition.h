@@ -1,4 +1,88 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nActionID": -523923264,
+//	"m_strCustomActionName": "",
+//	"m_pszSequenceName": "",
+//	"m_pszIconFile": "",
+//	"m_pszSwingSound": "",
+//	"m_pszHitSound": "",
+//	"m_nDuration": -1,
+//	"m_HurtBox":
+//	{
+//		"m_vMinBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vMaxBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_HitBox":
+//	{
+//		"m_vMinBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vMaxBounds":
+//		[
+//			0.000000,
+//			0.000000,
+//			0.000000
+//		]
+//	},
+//	"m_nHitBoxStart": -1,
+//	"m_nHitBoxDuration": -1,
+//	"m_nOnHitFrames": 0,
+//	"m_nOnBlockFrames": 0,
+//	"m_flGuardDamage": 0.000000,
+//	"m_flChipDamage": 0.000000,
+//	"m_flHitDamage": 0.000000,
+//	"m_flHealOnDamage": 0.000000,
+//	"m_healOnDamageParticle": "",
+//	"m_nDashStart": -1,
+//	"m_nDashDuration": -1,
+//	"m_nDamageAmpFrames": 0,
+//	"m_fDamageAmpPercent": 0.000000,
+//	"m_damageAmpParticle": "",
+//	"m_flPushbackOnHit": 0.000000,
+//	"m_flPushbackOnBlock": 0.000000,
+//	"m_projectileParticle": "",
+//	"m_flProjectileSpeed": 0.000000,
+//	"m_flProjectileRange": 0.000000,
+//	"m_flDashSpeedMultiplier": 1.000000,
+//	"m_installParticle": "",
+//	"m_nInstallStart": 0,
+//	"m_nInstallFrames": -1,
+//	"m_actionParticle": "",
+//	"m_vActionParticleOffset":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_nActionParticleStart": -1,
+//	"m_nHitStop": 0,
+//	"m_nBlockStop": 0,
+//	"m_nInvulnerabilityFlags": "",
+//	"m_nInvulnerabilityStart": -1,
+//	"m_nInvulnerabilityDuration": -1,
+//	"m_vCameraShakeScale":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_bSingleUse": false,
+//	"m_bNoAttackerPushback": false,
+//	"m_bIsSpecialMove": false,
+//	"m_vecCancelOptions":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTAFightingGameActionDefinition
 {

@@ -1,4 +1,43 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_vecCharacters":
+//	[
+//	],
+//	"m_scene":
+//	{
+//		"m_strImage": "",
+//		"m_strImageMask": "",
+//		"m_vViewStart":
+//		[
+//			0.000000,
+//			0.000000
+//		],
+//		"m_vViewEnd":
+//		[
+//			0.000000,
+//			0.000000
+//		],
+//		"m_bounds":
+//		{
+//			"x": 0,
+//			"y": 0,
+//			"w": -1,
+//			"h": -1
+//		},
+//		"m_nAnimOffsetX": 0,
+//		"m_nAnimOffsetY": 0,
+//		"m_vecAnimations":
+//		[
+//		],
+//		"m_bScale": false
+//	},
+//	"m_strCustomPanoramaClass": "",
+//	"m_nMarginBottom": 10,
+//	"m_nMarginTop": -1,
+//	"m_bSpecialThanksBlock": false,
+//	"m_strLocText": "",
+//	"m_bJustText": false,
+//	"m_nStopOffset": -1
+//}
 class CDOTACrownfallCreditsBlockDefinition
 {
 	CUtlVector< CDOTACrownfallCreditsCharacterDefinition > m_vecCharacters;

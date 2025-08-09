@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unRewardData": 0,
+//	"m_sEventAction": "",
+//	"m_kvRewardExtraData": null
+//}
 // MVDataRoot
 class CDOTAOverworldEncounterReward
 {

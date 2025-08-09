@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strName": "",
+//	"m_flChargeTime": 0.000000,
+//	"m_flDuration": 0.000000,
+//	"m_vPosition":
+//	[
+//		0.000000,
+//		0.000000
+//	]
+//}
 // MVDataRoot
 class CShmupBossPhase
 {

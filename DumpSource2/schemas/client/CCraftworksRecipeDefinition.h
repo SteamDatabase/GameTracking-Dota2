@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unRecipeID": 0,
+//	"m_unRecipeTierID": 0,
+//	"m_strLocName": "",
+//	"m_strRewardAction": "",
+//	"m_bSeasonalReward": false,
+//	"m_vecComponents":
+//	[
+//	]
+//}
 class CCraftworksRecipeDefinition
 {
 	CraftworksRecipeID_t m_unRecipeID;

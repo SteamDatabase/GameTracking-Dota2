@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eConditionFlags": "CompleteNode|ActiveNode",
+//	"m_vecNodes":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTAOverworldCharacterConditional
 {

@@ -1,4 +1,16 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eEvent": "EVENT_ID_NONE",
+//	"m_unTotalQuestPeriods": 0,
+//	"m_unHeroesPerQuest": 0,
+//	"m_vecQuestPattern":
+//	[
+//	],
+//	"m_unCullingBladeItemDef": 0,
+//	"m_unRerollItemDef": 0,
+//	"m_vecQuests":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTARoadToTIChallengeDefinition
 {

@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unOperationID": 0,
+//	"m_nRollWeight": 0,
+//	"m_eTarget": "k_eFantasyOperationTarget_None",
+//	"m_sLocDescription": "",
+//	"m_vecOperations":
+//	[
+//	]
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftOperation_t
 {

@@ -1,4 +1,32 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_appearance":
+//	{
+//		"m_sImage": "",
+//		"m_sClassName": "",
+//		"m_vSize":
+//		[
+//			0.000000,
+//			0.000000
+//		],
+//		"m_unFrameWidth": 0,
+//		"m_unFrameTime": 100
+//	},
+//	"m_conditions":
+//	{
+//		"m_eConditionFlags": "CompleteNode|ActiveNode",
+//		"m_vecNodes":
+//		[
+//		]
+//	},
+//	"m_unHeroPartyID": 0,
+//	"m_partyConditions":
+//	{
+//		"m_eConditionFlags": "CompleteNode|ActiveNode",
+//		"m_vecNodes":
+//		[
+//		]
+//	}
+//}
 // MVDataRoot
 class CDOTAOverworldCharacter
 {

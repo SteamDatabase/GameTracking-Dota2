@@ -1,11 +1,18 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_parentBoneName": "",
+//	"m_eMode": "TwoBone",
+//	"m_ikChainName": "",
+//	"m_oneBoneStart": "",
+//	"m_oneBoneEnd": ""
+//}
+// M_LEGACY_OptInToSchemaPropertyDomain
 class IKDemoCaptureSettings_t
 {
 	// MPropertyFriendlyName = "Target Parent"
 	// MPropertyAttributeChoiceName = "Bone"
 	CUtlString m_parentBoneName;
 	// MPropertyFriendlyName = "Solver Mode"
-	// MPropertyAttrChangeCallback (UNKNOWN FOR PARSER)
+	// MPropertyAutoRebuildOnChange
 	IKChannelMode m_eMode;
 	// MPropertyFriendlyName = "IK Chain"
 	// MPropertyAttributeChoiceName = "IKChain"

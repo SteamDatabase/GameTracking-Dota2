@@ -1,4 +1,21 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nID": 0,
+//	"m_bObtainable": true,
+//	"m_bShowProgressBar": false,
+//	"m_bShowInitialEarn": true,
+//	"m_sCreationDate": "",
+//	"m_nBadgePointsPerUnit": 0,
+//	"m_nUnitsPerBadgePoint": 1,
+//	"m_nMaxUnitsForBadgePoints": 0,
+//	"m_nSortTier": 0,
+//	"m_sLocCategory": "",
+//	"m_sLocName": "",
+//	"m_sLocDescription": "",
+//	"m_sLocUnitsPluralizable": "",
+//	"m_vecLevels":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTATrophyDefinition
 {

@@ -4,7 +4,7 @@ enum EBaseGameEvents : uint32_t
 	GE_PlaceDecalEvent = 201,
 	GE_ClearWorldDecalsEvent = 202,
 	GE_ClearEntityDecalsEvent = 203,
-	GE_ClearDecalsForSkeletonInstanceEvent = 204,
+	GE_ClearDecalsForEntityEvent = 204,
 	GE_Source1LegacyGameEventList = 205,
 	GE_Source1LegacyListenEvents = 206,
 	GE_Source1LegacyGameEvent = 207,

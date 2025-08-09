@@ -1,4 +1,22 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nID": 0,
+//	"m_bEnabled": true,
+//	"m_eHighlightType": "k_eGameWinrate",
+//	"m_eHighlightCategory": "k_eHighlightGeneral",
+//	"m_sHeroName": "",
+//	"m_eHighlightRarity": "k_eHighlightCommon",
+//	"m_sNameToken": "",
+//	"m_sFlavorToken": "",
+//	"m_bTooltip": false,
+//	"m_sTooltipLocString": "",
+//	"m_eFormat": "k_eFloat",
+//	"m_vecRoles":
+//	[
+//	],
+//	"m_vecTiers":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTABattleReportHighlight
 {
@@ -13,6 +31,9 @@ class CDOTABattleReportHighlight
 	CMsgBattleReport_HighlightType m_eHighlightType;
 	// MPropertyDescription = "Battle Report Highlight Category"
 	CMsgBattleReport_HighlightCategory m_eHighlightCategory;
+	// MPropertyDescription = "Hero Specific"
+	// MPropertySuppressExpr = "m_eHighlightCategory == k_eHighlightHero"
+	CUtlString m_sHeroName;
 	// MPropertyDescription = "Battle Report Highlight Rarity"
 	CMsgBattleReport_HighlightRarity m_eHighlightRarity;
 	// MPropertyDescription = "Localized name for this highlight"

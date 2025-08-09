@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strLocName": "",
+//	"m_strID": "",
+//	"m_eCategory": "k_eFishingGameFishCategory_Invalid",
+//	"m_flAverageWeight": 0.000000,
+//	"m_flBaseModelScale": 0.000000,
+//	"m_flBonusDifficulty": 0.000000,
+//	"m_nSceneModelBodyIndex": 0,
+//	"m_strFlatSceneModel": ""
+//}
 // MVDataRoot
 class CDOTAFishingGameFish
 {

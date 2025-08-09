@@ -1,4 +1,18 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strExclusiveString": "",
+//	"m_fStatAverage": 0.000000,
+//	"m_fStatStdDev": 0.000000,
+//	"m_strHeroAdjective": "",
+//	"m_bNegativeHeroAdjective": false,
+//	"m_nMinLeaguePhase": 1,
+//	"m_nMaxLeaguePhase": 99,
+//	"m_fPlayoffsStatAverage": 0.000000,
+//	"m_fPlayoffsStatStdDev": 0.000000,
+//	"m_fMainEventStatAverage": 0.000000,
+//	"m_fMainEventStatStdDev": 0.000000,
+//	"m_sLocName": "",
+//	"m_sLocTooltip": ""
+//}
 // MVDataRoot
 class CDOTABingoStatDefinition
 {

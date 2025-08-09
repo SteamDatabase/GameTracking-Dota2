@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unComponentID": 0,
+//	"m_unQuantity": 0
+//}
 class CCraftworksRecipeComponentQuantity
 {
 	CraftworksComponentID_t m_unComponentID;

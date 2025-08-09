@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nScore": 0,
+//	"m_nBadgePoints": 0,
+//	"m_sImage": ""
+//}
 // MPropertyAutoExpandSelf
 class TrophyLevel_t
 {

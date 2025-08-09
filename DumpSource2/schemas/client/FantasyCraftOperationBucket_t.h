@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unOperationCount": 0,
+//	"m_vecOperations":
+//	[
+//	]
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftOperationBucket_t
 {

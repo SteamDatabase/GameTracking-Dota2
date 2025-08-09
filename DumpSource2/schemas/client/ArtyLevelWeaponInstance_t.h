@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_szName": "",
+//	"m_nReloads": 0,
+//	"m_nPointsPerShot": 0
+//}
 // MVDataRoot
 class ArtyLevelWeaponInstance_t
 {

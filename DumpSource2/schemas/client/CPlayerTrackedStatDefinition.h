@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unStatID": 0,
+//	"m_eStatImpl": "k_ePlayerTrackedStatImpl_Invalid",
+//	"m_killEaterData":
+//	{
+//		"unKillEaterEvent": 0
+//	},
+//	"m_combatQueryData":
+//	{
+//		"strCombatQueryPath": ""
+//	},
+//	"m_expressionData":
+//	{
+//		"strExpression": ""
+//	},
+//	"m_heroAdjectiveData":
+//	{
+//		"m_strAdjective": ""
+//	}
+//}
 // MVDataRoot
 class CPlayerTrackedStatDefinition
 {

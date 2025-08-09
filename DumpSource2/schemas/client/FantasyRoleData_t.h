@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eRole": "FANTASY_ROLE_UNDEFINED",
+//	"m_vecPlayers":
+//	[
+//	]
+//}
 // MPropertyAutoExpandSelf
 class FantasyRoleData_t
 {

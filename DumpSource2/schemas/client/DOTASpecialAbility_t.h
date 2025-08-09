@@ -5,6 +5,7 @@ class DOTASpecialAbility_t
 	char* m_pszLevelKey;
 	int32 m_nCount;
 	float32[11] m_Values;
+	uint8 m_eDisplayType;
 	int32 m_nBonusesCount;
 	DOTASpecialAbilityBonus_t[1] m_Bonuses;
 	DOTALevelingAbilityBonus_t m_ScepterBonus;

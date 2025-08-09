@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eCancelInput": "",
+//	"m_eCancelInput2": "",
+//	"m_eCancelInput3": "",
+//	"m_nCancelStart": -1,
+//	"m_nCancelDuration": -1,
+//	"m_nCancelInputBuffer": -1,
+//	"m_bRequiresInstall": false,
+//	"m_bAllowCancelOnWhiff": false,
+//	"m_nCancelActionID": "INVALID_ACTION_DEFINITION",
+//	"m_strCancelActionName": ""
+//}
 // MVDataRoot
 class CDOTAFightingGameCancelOptionDefinition
 {

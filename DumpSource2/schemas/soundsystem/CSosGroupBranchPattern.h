@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CSosGroupBranchPattern",
+//	"m_bMatchEventName": false,
+//	"m_bMatchEventSubString": false,
+//	"m_bMatchEntIndex": false,
+//	"m_bMatchOpvar": false,
+//	"m_bMatchString": false
+//}
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CSosGroupBranchPattern
 {
 	// MPropertyFriendlyName = "Event Name"

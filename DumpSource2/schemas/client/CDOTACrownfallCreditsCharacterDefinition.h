@@ -1,4 +1,30 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strImage": "",
+//	"m_strLocCharacterName": "",
+//	"m_strLocCharacterTitle": "",
+//	"m_nUniqueClickKey": -1,
+//	"m_strImageAlt": "",
+//	"m_strLocCharacterNameAlt": "",
+//	"m_strLocCharacterTitleAlt": "",
+//	"m_bFlipFacing": false,
+//	"m_bounds":
+//	{
+//		"x": 0,
+//		"y": 0,
+//		"w": -1,
+//		"h": -1
+//	},
+//	"m_strLocCharacterTitleAlt2": "",
+//	"m_strLocCharacterTitleAlt3": "",
+//	"m_strLocCharacterTitleAlt4": "",
+//	"m_strLocCharacterTitleAlt5": "",
+//	"m_strLocCharacterTitleAlt6": "",
+//	"m_nAltImageW": 0,
+//	"m_nAltImageH": 0,
+//	"m_nAltImageFrameTime": 100,
+//	"m_nYOffset": -1,
+//	"m_unFrameTime": 100
+//}
 class CDOTACrownfallCreditsCharacterDefinition
 {
 	CPanoramaImageName m_strImage;

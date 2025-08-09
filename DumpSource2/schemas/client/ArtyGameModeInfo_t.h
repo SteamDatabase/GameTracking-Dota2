@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_vecLevels":
+//	[
+//	]
+//}
 // MVDataRoot
 class ArtyGameModeInfo_t
 {

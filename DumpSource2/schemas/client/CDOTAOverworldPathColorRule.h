@@ -1,4 +1,22 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eNodeFlags": "",
+//	"m_cLockedColor":
+//	[
+//		0,
+//		0,
+//		0,
+//		0
+//	],
+//	"m_cCompleteColor":
+//	[
+//		0,
+//		0,
+//		0,
+//		0
+//	],
+//	"m_unLockedThickness": 7,
+//	"m_unCompleteThickness": 4
+//}
 // MVDataRoot
 class CDOTAOverworldPathColorRule
 {

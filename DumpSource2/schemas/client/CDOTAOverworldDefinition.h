@@ -1,4 +1,67 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"generic_data_type": "",
+//	"m_unID": 0,
+//	"m_sKey": "",
+//	"m_eAssociatedEvent": -31333192,
+//	"m_eProgressionType": "k_eOverworldProgressionType_NodesAndPaths",
+//	"m_sNodeUnlockEventAction": "",
+//	"m_vGridOffset":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_unGridSize": 64,
+//	"m_unMapWidth": 0,
+//	"m_unMapHeight": 0,
+//	"m_sMapVisualsXmlPath": "",
+//	"m_vecStartNodeIds":
+//	[
+//	],
+//	"m_unEndNodeID": 0,
+//	"m_sVisualNovelName": "",
+//	"m_sTokenLocStringPrefix": "",
+//	"m_sActNumberLocString": "",
+//	"m_sActTitleLocString": "",
+//	"m_unPremiumItemDef": 0,
+//	"m_unFullCompletionItemDef": 0,
+//	"m_unScrapTokenID": 0,
+//	"m_vecEventActionTriggers":
+//	[
+//	],
+//	"m_vecEventActionGrantAndClaimPairTriggers":
+//	[
+//	],
+//	"m_vecPathColorRules":
+//	[
+//	],
+//	"m_vecTokenTypes":
+//	[
+//	],
+//	"m_vecHeroRewards":
+//	[
+//	],
+//	"m_vecNodes":
+//	[
+//	],
+//	"m_vecPaths":
+//	[
+//	],
+//	"m_vecRooms":
+//	[
+//	],
+//	"m_vecEncounters":
+//	[
+//	],
+//	"m_vecHeroes":
+//	[
+//	],
+//	"m_vecCharacters":
+//	[
+//	],
+//	"m_vecClickables":
+//	[
+//	]
+//}
 // MVDataRoot
 // MVDataSingleton
 class CDOTAOverworldDefinition
@@ -10,6 +73,7 @@ class CDOTAOverworldDefinition
 	CUtlString m_sKey;
 	// MPropertyDescription = "The event related to this overworld. Used for rewards and expiration."
 	EEvent m_eAssociatedEvent;
+	EOverworldProgressionType m_eProgressionType;
 	// MPropertyDescription = "An event action to grant whenever a node is unlocked."
 	CUtlString m_sNodeUnlockEventAction;
 	Vector2D m_vGridOffset;
@@ -42,6 +106,7 @@ class CDOTAOverworldDefinition
 	CUtlVector< CDOTAOverworldHeroReward* > m_vecHeroRewards;
 	CUtlVector< CDOTAOverworldNode* > m_vecNodes;
 	CUtlVector< CDOTAOverworldPath* > m_vecPaths;
+	CUtlVector< CDOTAOverworldRoom* > m_vecRooms;
 	CUtlVector< CDOTAOverworldEncounter* > m_vecEncounters;
 	CUtlVector< CDOTAOverworldHero* > m_vecHeroes;
 	CUtlVector< CDOTAOverworldCharacter* > m_vecCharacters;

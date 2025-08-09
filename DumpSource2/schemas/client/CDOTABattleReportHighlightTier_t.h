@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eTier": "k_eHighlightTier1",
+//	"m_vecCompareContexts":
+//	[
+//	]
+//}
 // MPropertyAutoExpandSelf
 class CDOTABattleReportHighlightTier_t
 {

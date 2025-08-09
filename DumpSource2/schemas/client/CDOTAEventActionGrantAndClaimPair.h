@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sEventActionGrant": "",
+//	"m_sEventActionClaim": ""
+//}
 // MVDataRoot
 class CDOTAEventActionGrantAndClaimPair
 {

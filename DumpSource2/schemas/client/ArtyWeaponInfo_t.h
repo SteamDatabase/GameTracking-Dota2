@@ -1,4 +1,76 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unID": 0,
+//	"m_sWeaponLocName": "",
+//	"m_sWeaponLocDesc": "",
+//	"m_sWeaponSwapSound": "",
+//	"m_sWeaponFireSound": "",
+//	"m_sWeaponImage": "",
+//	"m_bIsPlayerWeapon": false,
+//	"m_strGraphicInfoName": "",
+//	"m_weaponAttackActivity": "ACT_DOTA_ATTACK",
+//	"m_flShotCreationTime": 0.000000,
+//	"m_flDamage": 1.000000,
+//	"m_flHitRadius": 8.000000,
+//	"m_flTerrainCarveRadius": 40.000000,
+//	"m_flDamageRadius": 0.000000,
+//	"m_flLockedAngle": -1.000000,
+//	"m_flLockedPower": -1.000000,
+//	"m_flReloadTime": 2.000000,
+//	"m_nSplitCount": 0,
+//	"m_flSplitTime": -1.000000,
+//	"m_flSplitRepeatTime": -1.000000,
+//	"m_flSplitDispersion": 0.000000,
+//	"m_bSplitAtTop": false,
+//	"m_bZeroXOnSplit": false,
+//	"m_bSplitRepeats": false,
+//	"m_szSplitWeapon": "",
+//	"m_flMaxSpeed": 1000.000000,
+//	"m_flDragMult": 1.000000,
+//	"m_flWindMult": 1.000000,
+//	"m_bIsRay": false,
+//	"m_flRangeMult": 1.000000,
+//	"m_nInitialShotCount": 1,
+//	"m_nInitialShotAngleDispersionPer": 0.000000,
+//	"m_flManaCost": 0.000000,
+//	"m_bDisabled": false,
+//	"m_bBounces": false,
+//	"m_bBounceOffTarget": true,
+//	"m_flFuseTime": 0.000000,
+//	"m_flBounceDrag": 0.700000,
+//	"m_nMaxReloads": -1,
+//	"m_flGravityMult": 1.000000,
+//	"m_bProximityFuse": false,
+//	"m_bUseHighArc": true,
+//	"m_bCollides": true,
+//	"m_bDirectAimAtTarget": false,
+//	"m_nWeaponPoints": 0,
+//	"m_nRayDigTimes": 0,
+//	"m_bNoShootingWhileInAir": false,
+//	"m_bListenForKeypress": false,
+//	"m_vVelocityMultOnKeypress":
+//	[
+//		1.000000,
+//		1.000000
+//	],
+//	"m_vVelocityOffsetOnKeypress":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_bShowTrajectory": false,
+//	"m_vVelocityMultOnExplode":
+//	[
+//		1.000000,
+//		1.000000
+//	],
+//	"m_vVelocityOffsetOnExplode":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_nExplodeTimes": 1,
+//	"m_flRadiusChangePerExplode": 0.000000
+//}
 // MVDataRoot
 class ArtyWeaponInfo_t
 {

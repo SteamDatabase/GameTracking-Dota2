@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_type": "k_eShmupPathEventType_Invalid",
+//	"m_nBulletPatternIndex": 0,
+//	"m_flTime": -1.000000,
+//	"m_flSpeed": 0.000000
+//}
 // MVDataRoot
 class CShmupPathEvent
 {

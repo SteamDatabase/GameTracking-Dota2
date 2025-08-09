@@ -1,4 +1,13 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_enemyID": 0,
+//	"m_flHealth": 0.000000,
+//	"m_vOrigin":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	]
+//}
 // MVDataRoot
 class CSurvivorsEnemySnapshot
 {

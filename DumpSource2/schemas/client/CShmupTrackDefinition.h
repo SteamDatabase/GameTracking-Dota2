@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strName": "",
+//	"m_vecEvents":
+//	[
+//	]
+//}
 // MVDataRoot
 class CShmupTrackDefinition
 {

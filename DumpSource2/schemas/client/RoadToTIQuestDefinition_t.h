@@ -1,4 +1,17 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unID": 4294967295,
+//	"m_eQuestType": "k_RoadToTIQuestType_Match",
+//	"m_unPeriod": 0,
+//	"m_unMatchID": 0,
+//	"m_unSeriesID": 0,
+//	"m_unLeagueID": 0,
+//	"m_unPlayerID": 0,
+//	"m_unTeamID": 0,
+//	"m_vecHeroes":
+//	[
+//	],
+//	"m_bDeveloper": false
+//}
 // MPropertyAutoExpandSelf
 class RoadToTIQuestDefinition_t
 {

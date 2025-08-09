@@ -1,4 +1,30 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strImage": "",
+//	"m_strImageMask": "",
+//	"m_vViewStart":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vViewEnd":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_bounds":
+//	{
+//		"x": 0,
+//		"y": 0,
+//		"w": -1,
+//		"h": -1
+//	},
+//	"m_nAnimOffsetX": 0,
+//	"m_nAnimOffsetY": 0,
+//	"m_vecAnimations":
+//	[
+//	],
+//	"m_bScale": false
+//}
 class CDOTACrownfallCreditsMapSceneDefinition
 {
 	CPanoramaImageName m_strImage;

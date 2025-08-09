@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sStatName": "",
+//	"m_eStatType": "k_eFantasyStatType_Player",
+//	"m_unThresholdValue": 0,
+//	"m_bThresholdIsMin": true
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftingTrackedStat_t
 {

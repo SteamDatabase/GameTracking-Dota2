@@ -1,4 +1,6 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"unKillEaterEvent": 0
+//}
 // MPropertyAutoExpandSelf
 class TrackedStatKillEaterData_t
 {

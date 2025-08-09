@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eCompareContext": "k_eAbsoluteValue",
+//	"m_eComparisonType": "k_eScoreGreaterThanOrEqual",
+//	"m_flCompareValue": 0.000000
+//}
 // MPropertyAutoExpandSelf
 class CDOTABattleReportHighlightCompareContext_t
 {

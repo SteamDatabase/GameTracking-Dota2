@@ -1,4 +1,22 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"nID": -1,
+//	"BlessingType": "",
+//	"nCost": 0,
+//	"nValue": 0,
+//	"bStartNode": false,
+//	"vecPos":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"flSize": 1.000000,
+//	"color":
+//	[
+//		255,
+//		255,
+//		255
+//	]
+//}
 // MVDataOutlinerIconExpr = "'tools/images/common/icon_node_generic.png'"
 class Blessing_t
 {

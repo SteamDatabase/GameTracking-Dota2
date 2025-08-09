@@ -12,4 +12,6 @@ enum ParticleAttrBoxFlags_t : uint32_t
 	PARTICLE_ATTR_BOX_FLAGS_ASLEEP = 8,
 	// MPropertyFriendlyName = "Frozen"
 	PARTICLE_ATTR_BOX_FLAGS_FROZEN = 16,
+	// MPropertyFriendlyName = "Timed Decay"
+	PARTICLE_ATTR_BOX_FLAGS_TIMED_DECAY = 32,
 };

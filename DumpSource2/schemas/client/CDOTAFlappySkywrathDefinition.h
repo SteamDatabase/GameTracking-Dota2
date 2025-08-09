@@ -1,4 +1,62 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"strID": "",
+//	"sLayoutPath": "",
+//	"sMapFile": "",
+//	"sMapLoopingFile": "",
+//	"sMapBGFile": "",
+//	"vecDifficulties":
+//	[
+//	],
+//	"flMinimumSpeed": 100.000000,
+//	"flGravity": -2000.000000,
+//	"flJumpPower": 600.000000,
+//	"flGlideAcceleration": -20.000000,
+//	"flGlideFallSpeed": 0.250000,
+//	"flDashDuration": 1.000000,
+//	"flDashBoost": 50.000000,
+//	"flDashSpeed": 200.000000,
+//	"flDiveDuration": 0.500000,
+//	"flDiveSpeed": 100.000000,
+//	"flTrackDistance": 5120.000000,
+//	"flCameraDistance": 3672.000000,
+//	"vCameraOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		500.000000
+//	],
+//	"vCameraEdgeThresholds":
+//	[
+//		-400.000000,
+//		0.000000
+//	],
+//	"flCameraAcceleration": 50.000000,
+//	"vPlayerSize":
+//	[
+//		100.000000,
+//		100.000000
+//	],
+//	"vPlayerVerticalBounds":
+//	[
+//		30.000000,
+//		650.000000
+//	],
+//	"vObstacleVerticalBounds":
+//	[
+//		30.000000,
+//		900.000000
+//	],
+//	"vObstacleHorizontalBounds":
+//	[
+//		-900.000000,
+//		900.000000
+//	],
+//	"flTopOffsetToTip": -1060.000000,
+//	"flBottomOffsetToTip": 764.000000,
+//	"vecInputActions":
+//	[
+//	]
+//}
 // MVDataRoot
 // MVDataSingleton
 class CDOTAFlappySkywrathDefinition

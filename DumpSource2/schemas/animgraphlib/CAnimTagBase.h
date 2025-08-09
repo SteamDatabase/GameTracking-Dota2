@@ -1,4 +1,15 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"_class": "CAnimTagBase",
+//	"m_name": "Unnamed Tag",
+//	"m_sComment": "",
+//	"m_group": "",
+//	"m_tagID":
+//	{
+//		"m_id": 4294967295
+//	},
+//	"m_bIsReferenced": false
+//}
+// M_LEGACY_OptInToSchemaPropertyDomain
 class CAnimTagBase
 {
 	// MPropertyFriendlyName = "Name"
@@ -8,10 +19,10 @@ class CAnimTagBase
 	// MPropertyAttributeEditor = "TextBlock()"
 	// MPropertySortPriority = -100
 	CUtlString m_sComment;
-	// MPropertyHideField
+	// MPropertySuppressField
 	CGlobalSymbol m_group;
-	// MPropertyHideField
+	// MPropertySuppressField
 	AnimTagID m_tagID;
-	// MPropertyHideField
+	// MPropertySuppressField
 	bool m_bIsReferenced;
 };

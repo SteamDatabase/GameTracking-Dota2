@@ -1,4 +1,16 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sLocName": "",
+//	"m_sLocTooltip": "",
+//	"m_sLocDescription": "",
+//	"m_sLocMetaUpgradesTooltip": "",
+//	"m_sImage": "",
+//	"m_bPrimary": false,
+//	"m_bPercentage": false,
+//	"m_bShouldUpgradeProgressionText": true,
+//	"m_vecMetaProgressionTiers":
+//	[
+//	]
+//}
 // MVDataRoot
 class CSurvivorsAttributeDefinition
 {

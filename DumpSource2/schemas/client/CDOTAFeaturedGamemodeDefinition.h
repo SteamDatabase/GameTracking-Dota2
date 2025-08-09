@@ -1,4 +1,12 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nID": 0,
+//	"m_eGameMode": "DOTA_GAMEMODE_NONE",
+//	"m_sCustomGame": "",
+//	"m_nShardsPerWin": 100,
+//	"m_nShardsPerLoss": 50,
+//	"m_sStartTime": "",
+//	"m_sEndTime": ""
+//}
 // MVDataRoot
 class CDOTAFeaturedGamemodeDefinition
 {

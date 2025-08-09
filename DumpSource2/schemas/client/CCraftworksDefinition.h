@@ -1,4 +1,20 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sName": "",
+//	"m_unCraftworksID": 0,
+//	"m_eAssociatedEvent": "EVENT_ID_NONE",
+//	"m_vecComponents":
+//	[
+//	],
+//	"m_vecRecipeTiers":
+//	[
+//	],
+//	"m_vecRecipes":
+//	[
+//	],
+//	"m_vecQuests":
+//	[
+//	]
+//}
 // MVDataRoot
 class CCraftworksDefinition
 {

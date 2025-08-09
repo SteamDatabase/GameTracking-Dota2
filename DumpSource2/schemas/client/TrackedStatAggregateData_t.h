@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_strIndividualStat": "",
+//	"m_eAggregate": "k_eTrackedStatAggregate_Invalid"
+//}
 // MPropertyAutoExpandSelf
 class TrackedStatAggregateData_t
 {

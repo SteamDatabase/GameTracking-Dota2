@@ -1,4 +1,23 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nId": 0,
+//	"m_Name": "",
+//	"m_strNameToken": "",
+//	"m_CoverImage": "",
+//	"m_nNumberOfImages": 0,
+//	"m_URLForImages": "https://cdn.beta.steampowered.com/apps/dota2/images/crownfall/comic_part1/english",
+//	"m_nNumDigitsInFilename": 3,
+//	"m_ImageFileExtension": "jpg",
+//	"m_AllowedLanguages":
+//	[
+//	],
+//	"m_LanguageOverrideMap":
+//	{
+//	},
+//	"m_StartPages":
+//	[
+//	],
+//	"m_nCacheBustingVersion": 0
+//}
 // MVDataRoot
 class CComicBook
 {

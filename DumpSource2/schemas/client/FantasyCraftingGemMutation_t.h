@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eTarget": "",
+//	"m_eOperation": "k_eFantasyMutationOperation_RollEverything"
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftingGemMutation_t
 {

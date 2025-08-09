@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nInitialHealth": 1,
+//	"m_nInitialMana": 0
+//}
 // MVDataRoot
 class CDOTAMinesweeperPlayerDefinition
 {

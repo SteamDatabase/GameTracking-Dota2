@@ -1,4 +1,22 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unLevelID": 0,
+//	"m_vecEvents":
+//	[
+//	],
+//	"m_vecBossEvents":
+//	[
+//	],
+//	"m_vMapBounds":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vEntityBounds":
+//	[
+//		0.000000,
+//		0.000000
+//	]
+//}
 // MVDataRoot
 class CSurvivorsLevelDefinition
 {

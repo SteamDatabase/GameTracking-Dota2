@@ -1,4 +1,8 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_vecLootEntryCollections":
+//	[
+//	]
+//}
 class CSurvivorsLootTable
 {
 	CUtlVector< CSurvivorsLootTable::CLootEntryCollection > m_vecLootEntryCollections;

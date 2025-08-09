@@ -1,4 +1,32 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sLocDifficultyName": "",
+//	"m_sLocDifficultyDescription": "",
+//	"m_sLocDifficultyUpgradeText": "",
+//	"m_flPlayerMaxHPMultiplier": 0.000000,
+//	"m_flPlayerHPRegenerationMultiplier": 0.000000,
+//	"m_flEnemyHealthMultiplier": 0.000000,
+//	"m_flEnemyDamageMultiplier": 0.000000,
+//	"m_flEnemyMovementSpeedMultiplier": 0.000000,
+//	"m_flEnemyTurnRateMultiplier": 0.000000,
+//	"m_flEnemySpawnCountMuliplier": 0.000000,
+//	"m_flEnemyTouchMovementSlowDuration": 0.000000,
+//	"m_flXPDropChanceMultiplier": 0.000000,
+//	"m_flXPLevelUpRequirementMultiplier": 0.000000,
+//	"m_flAdditionalFirstFloorTime": 0.000000,
+//	"m_bEnableMeteorModifier": false,
+//	"m_vecAdditionalEnemySpawners":
+//	[
+//	],
+//	"m_vecAdditionalEnemyEvents":
+//	[
+//	],
+//	"m_vecAdditionalStartingPowerUps":
+//	[
+//	],
+//	"m_vecOverrideImperiaEnrageHealthThresholds":
+//	[
+//	]
+//}
 // MVDataRoot
 class CSurvivorsDifficultyDefinition
 {

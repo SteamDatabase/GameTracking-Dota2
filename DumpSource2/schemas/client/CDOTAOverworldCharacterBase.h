@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_sImage": "",
+//	"m_sClassName": "",
+//	"m_vSize":
+//	[
+//		0.000000,
+//		0.000000
+//	],
+//	"m_unFrameWidth": 0,
+//	"m_unFrameTime": 100
+//}
 // MVDataRoot
 class CDOTAOverworldCharacterBase
 {

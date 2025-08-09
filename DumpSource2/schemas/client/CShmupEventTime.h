@@ -1,4 +1,26 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_flDelay": 0.000000,
+//	"m_strEventName": "",
+//	"m_bPathFlipped": false,
+//	"m_bInvertColors": false,
+//	"m_nCount": 1,
+//	"m_flRepeatInterval": 0.000000,
+//	"m_vOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vRepeatOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_children":
+//	[
+//	]
+//}
 // MVDataRoot
 class CShmupEventTime
 {

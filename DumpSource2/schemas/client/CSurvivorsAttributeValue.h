@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_eType": "k_eSurvivorsAttribute_Invalid",
+//	"m_flValue": 0.000000
+//}
 // MVDataRoot
 class CSurvivorsAttributeValue
 {

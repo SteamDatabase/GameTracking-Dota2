@@ -1,4 +1,7 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unPeriod": 4294967295,
+//	"m_nTabletLevel": 1
+//}
 // MPropertyAutoExpandSelf
 class FantasyPeriodData_t
 {

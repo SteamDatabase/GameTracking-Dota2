@@ -1,4 +1,9 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unShapeID": 0,
+//	"m_eShapeBehavior": "k_eFantasyShapeBehavior_Invalid",
+//	"m_sLocName": "",
+//	"m_sLocExplanation": ""
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftingShapeData_t
 {

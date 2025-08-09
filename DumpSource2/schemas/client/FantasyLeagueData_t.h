@@ -1,4 +1,17 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_nFantasyLeagueID": 0,
+//	"m_eEvent": "EVENT_ID_NONE",
+//	"m_nCraftingID": 0,
+//	"m_nLeagues":
+//	[
+//	],
+//	"m_vecPlayers":
+//	[
+//	],
+//	"m_vecPeriods":
+//	[
+//	]
+//}
 // MPropertyAutoExpandSelf
 class FantasyLeagueData_t
 {

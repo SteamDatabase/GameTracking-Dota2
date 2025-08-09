@@ -1,4 +1,11 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unComponentID": 0,
+//	"m_strComponentLocName": "",
+//	"m_strComponentLocDesc": "",
+//	"m_strComponentImageSmall": "",
+//	"m_strComponentImageMedium": "",
+//	"m_strSound": ""
+//}
 class CCraftworksComponentDefinition
 {
 	CraftworksComponentID_t m_unComponentID;

@@ -1,4 +1,6 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"strCombatQueryPath": ""
+//}
 // MPropertyAutoExpandSelf
 class TrackedStatCombatQueryData_t
 {

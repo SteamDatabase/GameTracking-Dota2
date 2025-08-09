@@ -1,4 +1,14 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unID": 0,
+//	"m_unNodeStart": 0,
+//	"m_unNodeEnd": 0,
+//	"m_strPathHiddenUntilEventAction": "",
+//	"m_unCost": 0,
+//	"m_flCircleInvRadius": 0.000000,
+//	"m_vecRequiredTokenNames":
+//	[
+//	]
+//}
 // MVDataRoot
 class CDOTAOverworldPath
 {

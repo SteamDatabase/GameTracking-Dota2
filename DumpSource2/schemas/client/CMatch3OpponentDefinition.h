@@ -1,4 +1,36 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unOpponentID": 0,
+//	"m_sLocName": "",
+//	"m_sLocFlavor": "",
+//	"m_sUnitName": "",
+//	"m_sModelName": "",
+//	"m_nHeroID": 0,
+//	"m_vecHeroItems":
+//	[
+//	],
+//	"m_nHeroPrimarySlotIndex": -1,
+//	"m_nHeroModelIndex": 0,
+//	"m_nHeroSkinOverride": -1,
+//	"m_vModelOffset":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_flModelScale": -1.000000,
+//	"m_flMaxHealth": 0.000000,
+//	"m_sAttackParticleEffect": "",
+//	"m_sAttackImpactSound": "",
+//	"m_vecIntroActions":
+//	[
+//	],
+//	"m_vecRepeatingActions":
+//	[
+//	],
+//	"m_vecOutroActions":
+//	[
+//	]
+//}
 // MVDataRoot
 class CMatch3OpponentDefinition
 {

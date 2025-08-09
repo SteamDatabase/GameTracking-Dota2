@@ -1,4 +1,10 @@
-// MGetKV3ClassDefaults (UNKNOWN FOR PARSER)
+// MGetKV3ClassDefaults = {
+//	"m_unID": 0,
+//	"m_eRole": "FANTASY_ROLE_UNDEFINED",
+//	"m_vecGemSlots":
+//	[
+//	]
+//}
 // MPropertyAutoExpandSelf
 class FantasyCraftingTabletData_t
 {
