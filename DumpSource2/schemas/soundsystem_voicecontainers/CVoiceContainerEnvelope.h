@@ -2,11 +2,11 @@
 //	"_class": "CVoiceContainerEnvelope",
 //	"m_vSound":
 //	{
-//		"m_nRate": -71773228,
-//		"m_nFormat": 250,
+//		"m_nRate": 1087951828,
+//		"m_nFormat": 25,
 //		"m_nChannels": 7,
 //		"m_nLoopStart": 0,
-//		"m_nSampleCount": 4263585032,
+//		"m_nSampleCount": 781254952,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[
@@ -15,7 +15,7 @@
 //		"m_nSeekTable":
 //		[
 //		],
-//		"m_nLoopEnd": 1291832200,
+//		"m_nLoopEnd": -1147044344,
 //		"m_encodedHeader": "[BINARY BLOB]"
 //	},
 //	"m_pEnvelopeAnalyzer": null,
