@@ -100,7 +100,7 @@
 //	"m_flBlendTime": 0.000000,
 //	"m_flMaxRootHeightOffset": 0.000000,
 //	"m_flMinRootHeightOffset": 0.000000,
-//	"m_flTiltPlanePitchSpringStrength": -1417193756973903338704517411635200.000000,
+//	"m_flTiltPlanePitchSpringStrength": 223455947136172032.000000,
 //	"m_flTiltPlaneRollSpringStrength": -0.000000,
 //	"m_bApplyFootRotationLimits": false,
 //	"m_bApplyHipShift": false,

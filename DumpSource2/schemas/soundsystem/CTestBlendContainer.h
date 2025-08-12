@@ -6,12 +6,12 @@
 //		"m_nFormat": "PCM16",
 //		"m_nChannels": 0,
 //		"m_nLoopStart": 0,
-//		"m_nSampleCount": 3221627824,
+//		"m_nSampleCount": 3898223552,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[
 //		],
-//		"m_nStreamingSize": 1017200640,
+//		"m_nStreamingSize": 683753472,
 //		"m_nSeekTable":
 //		[
 //		],
