@@ -2,16 +2,16 @@
 //	"_class": "CVoiceContainerStaticAdditiveSynth",
 //	"m_vSound":
 //	{
-//		"m_nRate": -674895407,
-//		"m_nFormat": 162,
-//		"m_nChannels": 3898223952,
-//		"m_nLoopStart": 32765,
-//		"m_nSampleCount": 778328436,
+//		"m_nRate": -1415484975,
+//		"m_nFormat": 185,
+//		"m_nChannels": 3611080656,
+//		"m_nLoopStart": 32766,
+//		"m_nSampleCount": 3181664628,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[
 //		],
-//		"m_nStreamingSize": 13732280,
+//		"m_nStreamingSize": 3005619512,
 //		"m_nSeekTable":
 //		[
 //		],
