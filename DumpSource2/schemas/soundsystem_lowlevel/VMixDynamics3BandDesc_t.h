@@ -1,11 +1,11 @@
 // MGetKV3ClassDefaults = {
 //	"m_fldbGainOutput": 0.000000,
 //	"m_flRMSTimeMS": 0.000000,
-//	"m_fldbKneeWidth": -0.000077,
+//	"m_fldbKneeWidth": -0.000000,
 //	"m_flDepth": 0.000000,
 //	"m_flWetMix": 0.000000,
 //	"m_flTimeScale": 0.000000,
-//	"m_flLowCutoffFreq": -0.617826,
+//	"m_flLowCutoffFreq": -24803008.000000,
 //	"m_flHighCutoffFreq": 0.000000,
 //	"m_bPeakMode": true,
 //	"m_bandDesc":
