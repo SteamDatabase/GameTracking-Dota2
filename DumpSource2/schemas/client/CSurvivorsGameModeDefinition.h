@@ -186,14 +186,14 @@
 //	"m_sCollisionIndicatorEffect": "",
 //	"m_vCollisionIndicatorColorPlayer":
 //	[
-//		-2142350222557184.000000,
+//		0.000035,
 //		0.000000,
-//		-207491749117952.000000
+//		-0.617713
 //	],
 //	"m_vCollisionIndicatorColorEnemy":
 //	[
 //		0.000000,
-//		-207515371438080.000000,
+//		-0.617797,
 //		0.000000
 //	],
 //	"m_sPhysicalWeaknessEffect": "",
