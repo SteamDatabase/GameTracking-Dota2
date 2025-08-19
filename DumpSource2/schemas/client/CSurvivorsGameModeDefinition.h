@@ -113,7 +113,7 @@
 //				0.000000
 //			],
 //			"flGlobalLightScale": 0.000000,
-//			"flPointLightScale": -nan,
+//			"flPointLightScale": 0.000000,
 //			"cLightColor":
 //			[
 //				0,
@@ -184,18 +184,8 @@
 //	"m_sDamageNumbersEffectPlayer": "",
 //	"m_sDamageNumbersEffectCriticalStrike": "",
 //	"m_sCollisionIndicatorEffect": "",
-//	"m_vCollisionIndicatorColorPlayer":
-//	[
-//		-718.228088,
-//		0.000000,
-//		-0.000000
-//	],
-//	"m_vCollisionIndicatorColorEnemy":
-//	[
-//		0.000000,
-//		-0.000000,
-//		0.000000
-//	],
+//	"m_vCollisionIndicatorColorPlayer": <HIDDEN FOR DIFF>,
+//	"m_vCollisionIndicatorColorEnemy": <HIDDEN FOR DIFF>,
 //	"m_sPhysicalWeaknessEffect": "",
 //	"m_sGenericStunEffect": "",
 //	"m_cEliteGlowColor":

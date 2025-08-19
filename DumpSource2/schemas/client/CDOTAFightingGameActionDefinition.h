@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_nActionID": -1455058752,
+//	"m_nActionID": <HIDDEN FOR DIFF>,
 //	"m_strCustomActionName": "",
 //	"m_pszSequenceName": "",
 //	"m_pszIconFile": "",

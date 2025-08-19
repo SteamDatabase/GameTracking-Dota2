@@ -10,7 +10,7 @@
 //	},
 //	"m_bPhaseInvert": true,
 //	"m_flGlideTime": 0.000000,
-//	"m_flDelay": 0.000000,
+//	"m_flDelay": -59427572689141760.000000,
 //	"m_flOutputGain": 0.000000,
 //	"m_flFeedbackGain": 0.000000,
 //	"m_flModRate": 0.000000,

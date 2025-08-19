@@ -51,12 +51,7 @@
 //	"m_sFreezeParticle": "",
 //	"m_sHitStatusEffectParticle": "",
 //	"m_sWarmupEffectParticle": "",
-//	"m_vWarmupEffectColor":
-//	[
-//		-0.000000,
-//		0.000000,
-//		0.000000
-//	],
+//	"m_vWarmupEffectColor": <HIDDEN FOR DIFF>,
 //	"m_flWarmupEffectTime": -1.000000,
 //	"m_flSpawnPickupOnKillPercent": 0.000000,
 //	"m_unSpawnPickupOnKillID": 0

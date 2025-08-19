@@ -367,6 +367,7 @@ enum EDOTAGCMsg : uint32_t
 	k_EMsgClientToGCGetProfileTicketsResponse = 8074,
 	k_EMsgGCToClientMatchGroupsVersion = 8075,
 	k_EMsgClientToGCH264Unsupported = 8076,
+	k_EMsgClientToGCWatchingBroadcast = 8077,
 	k_EMsgClientToGCGetQuestProgress = 8078,
 	k_EMsgClientToGCGetQuestProgressResponse = 8079,
 	k_EMsgSignOutXPCoins = 8080,
@@ -962,4 +963,6 @@ enum EDOTAGCMsg : uint32_t
 	k_EMsgSignOutCraftworks = 9022,
 	k_EMsgClientToGCClaimGatedEvent = 9043,
 	k_EMsgClientToGCClaimGatedEventResponse = 9044,
+	k_EMsgClientToGCGetEventRanking = 9107,
+	k_EMsgClientToGCGetEventRankingResponse = 9108,
 };

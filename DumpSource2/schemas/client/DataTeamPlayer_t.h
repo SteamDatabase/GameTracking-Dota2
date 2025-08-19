@@ -232,7 +232,7 @@ class DataTeamPlayer_t
 	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedGeneralItemsChanged"
 	WeightedAbilitySuggestion_t[30] m_iSuggestedGeneralItems;
 	// MNetworkEnable
-	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedNeutralChanged"
+	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedNeutralsChanged"
 	WeightedAbilitySuggestion_t[5] m_iSuggestedNeutralTrinkets;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnDataTeamPlayerSuggestedNeutralsChanged"
