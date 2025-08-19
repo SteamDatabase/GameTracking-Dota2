@@ -2,7 +2,7 @@
 //	"generic_data_type": "",
 //	"m_unID": 0,
 //	"m_sKey": "",
-//	"m_eAssociatedEvent": -2007256136,
+//	"m_eAssociatedEvent": -802917448,
 //	"m_eProgressionType": "k_eOverworldProgressionType_NodesAndPaths",
 //	"m_sNodeUnlockEventAction": "",
 //	"m_vGridOffset":

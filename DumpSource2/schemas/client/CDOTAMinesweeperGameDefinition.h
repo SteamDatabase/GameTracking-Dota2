@@ -7,9 +7,9 @@
 //	"m_vecStages":
 //	[
 //	],
-//	"m_flTimeLimit": -24798240.000000,
-//	"m_nIllusionManaCost": 32766,
-//	"m_nStageProgressionTimerIncrease": -598761691,
+//	"m_flTimeLimit": -0.000000,
+//	"m_nIllusionManaCost": 32767,
+//	"m_nStageProgressionTimerIncrease": -1003512027,
 //	"m_dustEffect": "",
 //	"m_grassEffect": "",
 //	"m_explosionEffect": "",
@@ -24,8 +24,8 @@
 //	"m_nManaPotChance": 0,
 //	"m_flTimeExtension": 0.000000,
 //	"m_nMaxConcurrentTimerIncreases": 0,
-//	"m_nTimerIncreaseExpireClicks": 140506112,
-//	"m_nTimerIncreaseChance": -1738512549,
+//	"m_nTimerIncreaseExpireClicks": -1818316800,
+//	"m_nTimerIncreaseChance": 416473277,
 //	"m_nScorePerCellRevealed": 0,
 //	"m_nScorePerStageCleared": 0,
 //	"m_nScorePerSecondsRemaining": -232,
