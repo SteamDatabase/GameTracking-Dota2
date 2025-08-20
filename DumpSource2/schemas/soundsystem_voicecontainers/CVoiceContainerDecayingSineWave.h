@@ -2,8 +2,8 @@
 //	"_class": "CVoiceContainerDecayingSineWave",
 //	"m_vSound":
 //	{
-//		"m_nRate": 973358664,
-//		"m_nFormat": 160,
+//		"m_nRate": -1963338168,
+//		"m_nFormat": 203,
 //		"m_nChannels": 3,
 //		"m_nLoopStart": 0,
 //		"m_nSampleCount": 0,
