@@ -44,7 +44,7 @@
 //	"m_nVisBlocks":
 //	{
 //		"m_nOffset": <HIDDEN FOR DIFF>,
-//		"m_nElementCount": 533154488
+//		"m_nElementCount": 394738360
 //	}
 //}
 class CVoxelVisibility

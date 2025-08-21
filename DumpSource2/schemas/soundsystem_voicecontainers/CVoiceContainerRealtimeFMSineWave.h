@@ -2,11 +2,11 @@
 //	"_class": "CVoiceContainerRealtimeFMSineWave",
 //	"m_vSound":
 //	{
-//		"m_nRate": -929881840,
-//		"m_nFormat": 176,
+//		"m_nRate": -409788144,
+//		"m_nFormat": 153,
 //		"m_nChannels": 2,
 //		"m_nLoopStart": 0,
-//		"m_nSampleCount": 541894008,
+//		"m_nSampleCount": 403477784,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[
