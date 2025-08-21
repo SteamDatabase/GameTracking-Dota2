@@ -2,11 +2,11 @@
 //	"_class": "CVoiceContainerLoopTrigger",
 //	"m_vSound":
 //	{
-//		"m_nRate": 1085574408,
-//		"m_nFormat": 255,
-//		"m_nChannels": 2322901696,
-//		"m_nLoopStart": 21963,
-//		"m_nSampleCount": 1702035712,
+//		"m_nRate": 971850728,
+//		"m_nFormat": 252,
+//		"m_nChannels": 533154496,
+//		"m_nLoopStart": 22003,
+//		"m_nSampleCount": 3365077248,
 //		"m_flDuration": 0.000000,
 //		"m_Sentences":
 //		[
