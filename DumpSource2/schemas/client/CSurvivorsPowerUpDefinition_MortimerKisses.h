@@ -53,7 +53,7 @@
 //	"m_sWarmupEffectParticle": "",
 //	"m_vWarmupEffectColor":
 //	[
-//		0.000000,
+//		-0.400410,
 //		0.000000,
 //		0.000000
 //	],

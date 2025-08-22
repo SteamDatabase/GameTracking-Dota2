@@ -8,7 +8,7 @@
 //	[
 //	],
 //	"m_flTimeLimit": <HIDDEN FOR DIFF>,
-//	"m_nIllusionManaCost": 32766,
+//	"m_nIllusionManaCost": 32765,
 //	"m_nStageProgressionTimerIncrease": <HIDDEN FOR DIFF>,
 //	"m_dustEffect": "",
 //	"m_grassEffect": "",

@@ -2,8 +2,8 @@
 //	"_class": "CVoiceContainerNull",
 //	"m_vSound":
 //	{
-//		"m_nRate": 403461448,
-//		"m_nFormat": 205,
+//		"m_nRate": -1093962424,
+//		"m_nFormat": 112,
 //		"m_nChannels": 3,
 //		"m_nLoopStart": 0,
 //		"m_nSampleCount": 0,
