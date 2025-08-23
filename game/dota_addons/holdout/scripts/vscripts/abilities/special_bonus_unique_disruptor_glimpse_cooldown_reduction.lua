@@ -1,5 +1,0 @@
-special_bonus_unique_disruptor_glimpse_cooldown_reduction = class({})
-
-function special_bonus_unique_disruptor_glimpse_cooldown_reduction:IsAttributeBonus()
-	return true
-end

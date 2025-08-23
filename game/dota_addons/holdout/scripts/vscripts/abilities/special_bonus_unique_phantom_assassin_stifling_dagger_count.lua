@@ -1,5 +1,0 @@
-special_bonus_unique_phantom_assassin_stifling_dagger_count = class({})
-
-function special_bonus_unique_phantom_assassin_stifling_dagger_count:IsAttributeBonus()
-	return true
-end

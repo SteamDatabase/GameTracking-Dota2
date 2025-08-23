@@ -1,1 +1,0 @@
-modifier_amoeba_blob_launch_thinker = class({})

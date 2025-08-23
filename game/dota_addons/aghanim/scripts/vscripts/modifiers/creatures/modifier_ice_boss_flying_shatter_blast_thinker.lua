@@ -1,1 +1,0 @@
-modifier_ice_boss_flying_shatter_blast_thinker = class({})

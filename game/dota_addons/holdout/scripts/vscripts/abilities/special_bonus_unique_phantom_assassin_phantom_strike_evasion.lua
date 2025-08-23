@@ -1,5 +1,0 @@
-special_bonus_unique_phantom_assassin_phantom_strike_evasion = class({})
-
-function special_bonus_unique_phantom_assassin_phantom_strike_evasion:IsAttributeBonus()
-	return true
-end

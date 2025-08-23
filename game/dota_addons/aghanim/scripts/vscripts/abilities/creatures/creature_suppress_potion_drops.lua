@@ -1,1 +1,0 @@
-creature_suppress_potion_drops = class({})
