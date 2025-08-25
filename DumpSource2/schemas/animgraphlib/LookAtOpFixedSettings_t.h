@@ -1,14 +1,7 @@
 // MGetKV3ClassDefaults = {
 //	"m_attachment":
 //	{
-//		"m_influenceRotations":
-//		[
-//			[
-//				-0.000000,
-//				0.000000,
-//				-0.000096,
-//				0.000000
-//			],
+//		"m_influenceRotations": <HIDDEN FOR DIFF>,
 //			[
 //				0.000000,
 //				0.000000,

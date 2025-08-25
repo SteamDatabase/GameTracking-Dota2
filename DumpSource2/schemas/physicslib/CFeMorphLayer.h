@@ -1,6 +1,6 @@
 // MGetKV3ClassDefaults = {
 //	"m_Name": "",
-//	"m_nNameHash": 2928151576,
+//	"m_nNameHash": <HIDDEN FOR DIFF>,
 //	"m_Nodes":
 //	[
 //	],

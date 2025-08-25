@@ -1,7 +1,7 @@
 // MGetKV3ClassDefaults = {
-//	"m_eEvent": -1375663424,
-//	"m_unTotalQuestPeriods": 22092,
-//	"m_unHeroesPerQuest": 831717632,
+//	"m_eEvent": <HIDDEN FOR DIFF>,
+//	"m_unTotalQuestPeriods": <HIDDEN FOR DIFF>,
+//	"m_unHeroesPerQuest": <HIDDEN FOR DIFF>,
 //	"m_vecQuestPattern":
 //	[
 //	],
