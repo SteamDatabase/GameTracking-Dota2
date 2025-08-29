@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_flTime": 0.000000,
+//	"m_flTime": 2997.332031,
 //	"m_Stamp":
 //	{
 //		"m_flTime": 0.000000,
