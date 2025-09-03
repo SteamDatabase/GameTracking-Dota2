@@ -1,5 +1,7 @@
 class CDOTA_Modifier_Viper_Nose_Dive : public CDOTA_Buff
 {
+	float32 m_flPredictedTotalTime;
+	float32 m_flCurrentTimeVert;
 	Vector m_vTargetPos;
 	Vector m_vStart;
 	float32 m_flZDelta;
