@@ -19,7 +19,7 @@
 //	],
 //	"m_sSpawnInfoTargetName": "",
 //	"m_sMinimapIconClass": "",
-//	"m_flPerpendicularWallSpacing": 0.000000,
+//	"m_flPerpendicularWallSpacing": 563123313616273713152393216.000000,
 //	"m_bIgnoreDifficultySpawnMultiplier": false,
 //	"m_eSpawnPositionsLayer": "ENEMY_MAIN"
 //}
