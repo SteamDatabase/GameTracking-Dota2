@@ -411,6 +411,8 @@ $lZT
 %-32s: %6.3f ms (+/- %6.3f) ms\n
 %.1f%% %s missed due to network (%d dropped, %d late)   Good:%d   BadOther:%d    Fixed: %d dropped, %d late\n
 %.2f GB
+%.2f, STREAM_DELTAFRAMES Failed to get fragment %d, stopping playback. Server tick: %d\n\n
+%.2f, Tick: %d. playcast: Play delta Fragment %d\n
 %.2f. Broadcast IO error. Please try again later.\n
 %.2f. Broadcast Streaming error %d %s\n
 %.2f. Broadcast failed to start: cannot retrieve startup packet data\n
@@ -429,8 +431,7 @@ $lZT
 %.2f. Broadcast: Synchronizing stream\n
 %.2f. Could not get http response body (size %d bytes)\n
 %.2f. Failed to retrieve %s fragment %d, status %d\n
-%.2f. Playcast cannot retrieve fragment %d, retrying\n
-%.2f. Playcast failed to retrieve fragment %d (succ=%d, %.1f sec)\n
+%.2f. Playcast failed to retrieve fragment %d (succ=%d, %.1f sec), http response: %d\n
 %.2f. Received signup fragment %d\n
 %.2f. Releasing fragment %d (older than %d)\n
 %.2f. Requesting sync from GC, start fragment %d match id %llu instance %d\n
@@ -494,7 +495,6 @@ $lZT
 %d. parsing tick %d; %d bytes\n
 %d. playcast: Adjusting fragment %d->%d, tick %d->%d\n
 %d. playcast: Fragment %d keyframe and delta frames ready, delayed precache took %.2f sec\n
-%d. playcast: Play delta Fragment %d\n
 %d. playcast: Play keyframe Fragment %d\n
 %d.%d.%d.%d
 %d/%d [%.3f msec]
@@ -3973,7 +3973,6 @@ Client::ResendGameDetailsRequest
 ClientActive
 ClientCommand, 0 length string supplied.\n
 ClientCommandTick
-ClientFrame
 ClientPredictionPostNetupdate
 ClientPutInServer
 ClientPutInServer - no player in save game
@@ -5519,7 +5518,6 @@ LOG_DEVELOPER_VERBOSE
 LOG_GENERAL
 LOG_VPROF
 Language
-Last
 Last received command number going in reverse from server!  (Out of order delivery?)  %d -> (%d+%d=%d)
 LastGameNameUsed
 Late registration of demo custom data callback.\n
@@ -6367,6 +6365,7 @@ OnClientProcessNetworking
 OnClientSceneSystemThreadStateChange
 OnClientSimulate
 OnDemoFileEndReached
+OnDemoStreamStop()\n
 OnEngineClientSignonStateChange
 OnEngineDisconnectReason
 OnEngineLevelLoadingFinished
@@ -7129,6 +7128,7 @@ Resume
 Resumes demo playback.
 Resumes instant replay.
 Retrying connection to %s, server requires lobby reservation but is unreserved.\n
+Retrying request for fragment %d\n
 Retrying sync\n
 ReturnJobManualEventToPool
 RevisionVersion
@@ -7219,7 +7219,6 @@ STEAMVIDEO_INTERFACE_V002
 STEAM_
 STEAM_ID_LAN
 STEAM_ID_PENDING
-STREAM_DELTAFRAMES Failed to get fragment %d, stopping...\n
 STRING_CHAR
 SUNLIGHT/SHADOW ATLAS IN FULL USE HERE.
 SV:  % 3d %40.40s not resolved\n
@@ -7550,6 +7549,7 @@ SendSpawnGroupManifestUpdateCall_t
 SendVprofLiteProfileToServer
 Sending A2S_RESERVE_CHECK [%u protocol] %08X:%08X [%llu] to %s\n
 Sending C2S_CONNECT [%u protocol %u auth %d] to %s\n
+Sending Get Request (pending:%d): %s\n
 Sending S2A_RESERVE_CHECK_RESPONSE %08X:%08X [%d/%d] to %s @ %s\n
 Sending S2A_RESERVE_CHECK_RESPONSE to all [%d/%d] (%d clients)\n
 Sending S2C_CHALLENGE [%u auth %d] to %s\n
@@ -15179,6 +15179,7 @@ tv_password1
 tv_playcast_delay_prediction
 tv_playcast_delay_resync
 tv_playcast_fragment_cache_history_length
+tv_playcast_http_delta_fragment_timeout_s
 tv_playcast_max_rcvage
 tv_playcast_max_rtdelay
 tv_playcast_origin_auth

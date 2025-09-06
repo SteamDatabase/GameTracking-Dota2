@@ -113,6 +113,9 @@
 // MNetworkVarNames = "EHANDLE m_hTeamFountains"
 // MNetworkVarNames = "EHANDLE m_hTeamForts"
 // MNetworkVarNames = "EHANDLE m_hTeamShops"
+// MNetworkVarNames = "EHANDLE m_hWatchers"
+// MNetworkVarNames = "EHANDLE m_hWisdomShrines"
+// MNetworkVarNames = "EHANDLE m_hLotusPools"
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hAnnouncerGood"
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hAnnouncerBad"
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hAnnouncerSpectator"
@@ -135,6 +138,7 @@
 // MNetworkVarNames = "int m_iMinimapDebugGridState"
 // MNetworkVarNames = "int m_iFoWFrameNumber"
 // MNetworkVarNames = "Vector m_vWeatherWindDirection"
+// MNetworkVarNames = "CTormentorSpawnPhase m_tormentorSpawnPhase"
 // MNetworkVarNames = "HeroID_t m_vecRequiredPlaytestHeroesStorage"
 // MNetworkVarNames = "HeroID_t m_vecRecommendedPlaytestHeroesStorage"
 // MNetworkVarNames = "bool m_bAllRequiredPlaytestHeroesPicked"
@@ -457,6 +461,12 @@ class CDOTAGameRules : public CMultiplayRules
 	// MNetworkEnable
 	CHandle< CBaseEntity >[15] m_hTeamShops;
 	// MNetworkEnable
+	CNetworkUtlVectorBase< CHandle< CBaseEntity > > m_hWatchers;
+	// MNetworkEnable
+	CHandle< CBaseEntity >[15] m_hWisdomShrines;
+	// MNetworkEnable
+	CHandle< CBaseEntity >[15] m_hLotusPools;
+	// MNetworkEnable
 	CHandle< CBaseEntity > m_hAnnouncerGood;
 	// MNetworkEnable
 	CHandle< CBaseEntity > m_hAnnouncerBad;
@@ -503,6 +513,8 @@ class CDOTAGameRules : public CMultiplayRules
 	int32 m_iFoWFrameNumber;
 	// MNetworkEnable
 	Vector m_vWeatherWindDirection;
+	// MNetworkEnable
+	CTormentorSpawnPhase m_tormentorSpawnPhase;
 	KeyValues* m_pKVPostGameTable;
 	KeyValues* m_pKVEventMatchMetadata;
 	KeyValues* m_pKVEventSignout;

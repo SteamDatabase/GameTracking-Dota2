@@ -114,6 +114,9 @@
 // MNetworkVarNames = "EHANDLE m_hTeamFountains"
 // MNetworkVarNames = "EHANDLE m_hTeamForts"
 // MNetworkVarNames = "EHANDLE m_hTeamShops"
+// MNetworkVarNames = "EHANDLE m_hWatchers"
+// MNetworkVarNames = "EHANDLE m_hWisdomShrines"
+// MNetworkVarNames = "EHANDLE m_hLotusPools"
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hAnnouncerGood"
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hAnnouncerBad"
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hAnnouncerSpectator"
@@ -136,6 +139,7 @@
 // MNetworkVarNames = "int m_iMinimapDebugGridState"
 // MNetworkVarNames = "int m_iFoWFrameNumber"
 // MNetworkVarNames = "Vector m_vWeatherWindDirection"
+// MNetworkVarNames = "CTormentorSpawnPhase m_tormentorSpawnPhase"
 // MNetworkVarNames = "HeroID_t m_vecRequiredPlaytestHeroesStorage"
 // MNetworkVarNames = "HeroID_t m_vecRecommendedPlaytestHeroesStorage"
 // MNetworkVarNames = "bool m_bAllRequiredPlaytestHeroesPicked"
@@ -442,6 +446,12 @@ class C_DOTAGamerules : public C_MultiplayRules
 	// MNetworkEnable
 	CHandle< C_BaseEntity >[15] m_hTeamShops;
 	// MNetworkEnable
+	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_hWatchers;
+	// MNetworkEnable
+	CHandle< C_BaseEntity >[15] m_hWisdomShrines;
+	// MNetworkEnable
+	CHandle< C_BaseEntity >[15] m_hLotusPools;
+	// MNetworkEnable
 	CHandle< C_BaseEntity > m_hAnnouncerGood;
 	// MNetworkEnable
 	CHandle< C_BaseEntity > m_hAnnouncerBad;
@@ -488,6 +498,8 @@ class C_DOTAGamerules : public C_MultiplayRules
 	int32 m_iFoWFrameNumber;
 	// MNetworkEnable
 	Vector m_vWeatherWindDirection;
+	// MNetworkEnable
+	CTormentorSpawnPhase m_tormentorSpawnPhase;
 	// MNetworkEnable
 	HeroID_t[24] m_vecRequiredPlaytestHeroesStorage;
 	// MNetworkEnable
