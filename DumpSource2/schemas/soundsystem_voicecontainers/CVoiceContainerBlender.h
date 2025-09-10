@@ -31,7 +31,7 @@
 //		"m_sound": "",
 //		"m_pSound": null
 //	},
-//	"m_flBlendFactor": -217.458130
+//	"m_flBlendFactor": -12.087227
 //}
 // MPropertyFriendlyName = "Blender"
 // MPropertyDescription = "Blends two containers."
