@@ -64,8 +64,8 @@
 //	"m_flRemoveParticleTimeDelay": 0.000000,
 //	"m_sParticle": "",
 //	"m_sHitImpactParticle": "",
-//	"m_flRotationSpeedDeg": -nan,
-//	"m_flRotationDist": -nan
+//	"m_flRotationSpeedDeg": 0.000000,
+//	"m_flRotationDist": 0.000000
 //}
 // MVDataRoot
 class CSurvivorsPowerUpDefinition_Snotty : public CSurvivorsPowerUpDefinition_AreaAttack_Circle

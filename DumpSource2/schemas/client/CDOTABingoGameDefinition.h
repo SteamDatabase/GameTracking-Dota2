@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_eEvent": "EVENT_ID_SPRING_FESTIVAL",
+//	"m_eEvent": -532737000,
 //	"m_unLeagueID": 0,
 //	"m_nShuffleCardCost": 1,
 //	"m_nRerollSquareCost": 1,

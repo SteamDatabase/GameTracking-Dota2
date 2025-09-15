@@ -28,9 +28,9 @@
 //	"m_nTimerIncreaseChance": <HIDDEN FOR DIFF>,
 //	"m_nScorePerCellRevealed": 0,
 //	"m_nScorePerStageCleared": 0,
-//	"m_nScorePerSecondsRemaining": -232,
-//	"m_nFailedChordClickTimes": -1,
-//	"m_flFailedChordClickCooldown": 2
+//	"m_nScorePerSecondsRemaining": 0,
+//	"m_nFailedChordClickTimes": 0,
+//	"m_flFailedChordClickCooldown": 45
 //}
 // MVDataRoot
 class CDOTAMinesweeperGameDefinition
