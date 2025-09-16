@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_eEvent": -334276152,
+//	"m_eEvent": 1610725832,
 //	"m_unLeagueID": 0,
 //	"m_nShuffleCardCost": 1,
 //	"m_nRerollSquareCost": 1,
