@@ -14,7 +14,7 @@
 //	"m_unVariableExchangeInputCandyCount": <HIDDEN FOR DIFF>,
 //	"m_unVariableExchangeOutputCandyCount": <HIDDEN FOR DIFF>,
 //	"m_eExpireEvent": <HIDDEN FOR DIFF>,
-//	"m_unRewardSlotsDefaultCount": 80,
+//	"m_unRewardSlotsDefaultCount": 240,
 //	"m_sAttrLootList": "",
 //	"m_sViewPageEvent": "",
 //	"m_vecCandyTypes":
