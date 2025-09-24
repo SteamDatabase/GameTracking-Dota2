@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_fldbGainOutput": 21205616.000000,
+//	"m_fldbGainOutput": 25209257879775575215626518528.000000,
 //	"m_flRMSTimeMS": 0.000000,
 //	"m_fldbKneeWidth": <HIDDEN FOR DIFF>,
 //	"m_flDepth": 0.000000,
