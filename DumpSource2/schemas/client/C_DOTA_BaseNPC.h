@@ -50,6 +50,7 @@
 // MNetworkVarNames = "float m_flManaThinkRegen"
 // MNetworkVarNames = "int m_iBKBChargesUsed"
 // MNetworkVarNames = "int m_iAeonChargesUsed"
+// MNetworkVarNames = "int m_iRefresherChargesUsed"
 // MNetworkVarNames = "GameTime_t m_flRefresherUseTime"
 // MNetworkVarNames = "float m_flRefresherLastCooldown"
 // MNetworkVarNames = "GameTime_t m_flLastDealtDamageTime"
@@ -184,6 +185,8 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	int32 m_iBKBChargesUsed;
 	// MNetworkEnable
 	int32 m_iAeonChargesUsed;
+	// MNetworkEnable
+	int32 m_iRefresherChargesUsed;
 	// MNetworkEnable
 	GameTime_t m_flRefresherUseTime;
 	// MNetworkEnable

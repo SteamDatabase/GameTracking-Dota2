@@ -8,4 +8,5 @@ class CDOTA_Modifier_Item_HelmOfTheDominator_BonusHealth : public CDOTA_Buff
 	int32 creep_bonus_hp_regen;
 	int32 creep_bonus_mp_regen;
 	int32 creep_bonus_armor;
+	float32 creep_damage_taken_cooldown;
 };
