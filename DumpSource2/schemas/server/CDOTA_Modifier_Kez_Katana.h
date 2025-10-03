@@ -10,5 +10,6 @@ class CDOTA_Modifier_Kez_Katana : public CDOTA_Buff
 	int32 bleed_as_rupture_pct;
 	int32 m_nBonusPreAttackDamage;
 	bool m_bBackstab;
+	float32 m_flStacksForLifesteal;
 	bool m_bShardAttack;
 };
