@@ -1,4 +1,4 @@
-class CDOTA_Ability_FacelessVoid_TimeWalk : public CDOTABaseAbility
+class CDOTA_Ability_FacelessVoid_TimeWalk : public CDOTABaseAbility, public CHorizontalMotionController
 {
 	CHandle< CDOTABaseAbility > m_hSourceAbility;
 	int32 speed;

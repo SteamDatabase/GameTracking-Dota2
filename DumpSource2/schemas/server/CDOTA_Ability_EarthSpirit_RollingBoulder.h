@@ -1,4 +1,4 @@
-class CDOTA_Ability_EarthSpirit_RollingBoulder : public CDOTABaseAbility
+class CDOTA_Ability_EarthSpirit_RollingBoulder : public CDOTABaseAbility, public CHorizontalMotionController
 {
 	int32 radius;
 	int32 speed;

@@ -1,5 +1,5 @@
 // MNetworkVarNames = "CHandle< CBaseEntity> m_hTarget"
-class CDOTA_Ability_Wisp_Tether : public CDOTABaseAbility
+class CDOTA_Ability_Wisp_Tether : public CDOTABaseAbility, public CHorizontalMotionController
 {
 	// MNetworkEnable
 	CHandle< CBaseEntity > m_hTarget;

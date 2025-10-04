@@ -1,4 +1,4 @@
 // MEntityAllowsPortraitWorldSpawn
-class C_EnvDeferredLight : public C_ModelPointEntity
+class C_EnvDeferredLight : public C_ModelPointEntity, public CDeferredLightBase
 {
 };

@@ -1,4 +1,4 @@
-class CDOTA_Ability_DataDriven : public CDOTABaseAbility
+class CDOTA_Ability_DataDriven : public CDOTABaseAbility, public CDOTA_ActionRunner
 {
 	bool m_bProcsMagicStick;
 	bool m_bIsSharedWithTeammates;

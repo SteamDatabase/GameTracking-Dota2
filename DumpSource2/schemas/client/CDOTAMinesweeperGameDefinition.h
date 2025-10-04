@@ -7,9 +7,9 @@
 //	"m_vecStages":
 //	[
 //	],
-//	"m_flTimeLimit": <HIDDEN FOR DIFF>,
-//	"m_nIllusionManaCost": <HIDDEN FOR DIFF>,
-//	"m_nStageProgressionTimerIncrease": <HIDDEN FOR DIFF>,
+//	"m_flTimeLimit": 0.000000,
+//	"m_nIllusionManaCost": 0,
+//	"m_nStageProgressionTimerIncrease": 0,
 //	"m_dustEffect": "",
 //	"m_grassEffect": "",
 //	"m_explosionEffect": "",
@@ -24,13 +24,13 @@
 //	"m_nManaPotChance": 0,
 //	"m_flTimeExtension": 0.000000,
 //	"m_nMaxConcurrentTimerIncreases": 0,
-//	"m_nTimerIncreaseExpireClicks": <HIDDEN FOR DIFF>,
-//	"m_nTimerIncreaseChance": <HIDDEN FOR DIFF>,
+//	"m_nTimerIncreaseExpireClicks": 0,
+//	"m_nTimerIncreaseChance": 0,
 //	"m_nScorePerCellRevealed": 0,
 //	"m_nScorePerStageCleared": 0,
 //	"m_nScorePerSecondsRemaining": 0,
 //	"m_nFailedChordClickTimes": 0,
-//	"m_flFailedChordClickCooldown": 45
+//	"m_flFailedChordClickCooldown": 0
 //}
 // MVDataRoot
 class CDOTAMinesweeperGameDefinition

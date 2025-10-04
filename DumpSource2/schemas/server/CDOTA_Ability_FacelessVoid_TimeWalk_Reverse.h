@@ -1,4 +1,4 @@
-class CDOTA_Ability_FacelessVoid_TimeWalk_Reverse : public CDOTABaseAbility
+class CDOTA_Ability_FacelessVoid_TimeWalk_Reverse : public CDOTABaseAbility, public CHorizontalMotionController
 {
 	int32 speed;
 	int32 m_nProjectileID;

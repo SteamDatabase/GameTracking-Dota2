@@ -1,5 +1,5 @@
 // MNetworkVarNames = "CAttributeContainer m_AttributeManager"
-class CEconEntity : public CBaseFlex
+class CEconEntity : public CBaseFlex, public IHasAttributes
 {
 	// MNetworkEnable
 	CAttributeContainer m_AttributeManager;

@@ -1,4 +1,4 @@
-class CDOTA_Ability_AghsFort_TrapRoom_MeatHook : public CDOTABaseAbility
+class CDOTA_Ability_AghsFort_TrapRoom_MeatHook : public CDOTABaseAbility, public CHorizontalMotionController
 {
 	Vector m_vProjectileLocation;
 	float32 hook_speed;

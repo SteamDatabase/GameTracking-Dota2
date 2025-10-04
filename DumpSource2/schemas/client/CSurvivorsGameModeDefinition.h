@@ -12,57 +12,12 @@
 //	"m_flEnemyDespawnTime": 1.000000,
 //	"m_sLevelName": "",
 //	"m_flRequiredExperienceBase": 0.000000,
-//	"m_flRequiredExperienceExponent": -nan,
+//	"m_flRequiredExperienceExponent": 0.000000,
 //	"m_TimeBasedLightingEnvironments":
 //	[
 //		{
 //			"vecLightDirection":
 //			[
-//				-nan,
-//				0.000000,
-//				0.000000
-//			],
-//			"flGlobalLightScale": 0.000000,
-//			"flPointLightScale": 0.000000,
-//			"cLightColor":
-//			[
-//				0,
-//				0,
-//				0,
-//				0
-//			],
-//			"cAmbientColor":
-//			[
-//				0,
-//				0,
-//				0,
-//				0
-//			],
-//			"cShadowColor":
-//			[
-//				0,
-//				0,
-//				0,
-//				0
-//			],
-//			"cShadowSecondaryColor":
-//			[
-//				0,
-//				0,
-//				0,
-//				0
-//			],
-//			"cSpecularColor":
-//			[
-//				0,
-//				0,
-//				0,
-//				0
-//			]
-//		},
-//		{
-//			"vecLightDirection":
-//			[
 //				0.000000,
 //				0.000000,
 //				0.000000
@@ -108,7 +63,52 @@
 //		{
 //			"vecLightDirection":
 //			[
-//				-0.000000,
+//				0.000000,
+//				0.000000,
+//				0.000000
+//			],
+//			"flGlobalLightScale": 0.000000,
+//			"flPointLightScale": 0.000000,
+//			"cLightColor":
+//			[
+//				0,
+//				0,
+//				0,
+//				0
+//			],
+//			"cAmbientColor":
+//			[
+//				0,
+//				0,
+//				0,
+//				0
+//			],
+//			"cShadowColor":
+//			[
+//				0,
+//				0,
+//				0,
+//				0
+//			],
+//			"cShadowSecondaryColor":
+//			[
+//				0,
+//				0,
+//				0,
+//				0
+//			],
+//			"cSpecularColor":
+//			[
+//				0,
+//				0,
+//				0,
+//				0
+//			]
+//		},
+//		{
+//			"vecLightDirection":
+//			[
+//				0.000000,
 //				0.000000,
 //				0.000000
 //			],
@@ -184,8 +184,18 @@
 //	"m_sDamageNumbersEffectPlayer": "",
 //	"m_sDamageNumbersEffectCriticalStrike": "",
 //	"m_sCollisionIndicatorEffect": "",
-//	"m_vCollisionIndicatorColorPlayer": <HIDDEN FOR DIFF>,
-//	"m_vCollisionIndicatorColorEnemy": <HIDDEN FOR DIFF>,
+//	"m_vCollisionIndicatorColorPlayer":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
+//	"m_vCollisionIndicatorColorEnemy":
+//	[
+//		0.000000,
+//		0.000000,
+//		0.000000
+//	],
 //	"m_sPhysicalWeaknessEffect": "",
 //	"m_sGenericStunEffect": "",
 //	"m_cEliteGlowColor":

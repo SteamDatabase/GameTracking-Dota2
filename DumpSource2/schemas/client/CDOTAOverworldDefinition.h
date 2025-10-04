@@ -2,7 +2,7 @@
 //	"generic_data_type": "",
 //	"m_unID": 0,
 //	"m_sKey": "",
-//	"m_eAssociatedEvent": <HIDDEN FOR DIFF>,
+//	"m_eAssociatedEvent": "EVENT_ID_NONE",
 //	"m_eProgressionType": "k_eOverworldProgressionType_NodesAndPaths",
 //	"m_sNodeUnlockEventAction": "",
 //	"m_vGridOffset":
@@ -11,7 +11,7 @@
 //		0.000000
 //	],
 //	"m_unGridSize": 64,
-//	"m_unMapWidth": 12,
+//	"m_unMapWidth": 0,
 //	"m_unMapHeight": 0,
 //	"m_sMapVisualsXmlPath": "",
 //	"m_vecStartNodeIds":

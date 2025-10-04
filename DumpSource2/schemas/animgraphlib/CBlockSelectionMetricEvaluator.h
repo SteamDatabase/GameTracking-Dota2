@@ -1,7 +1,13 @@
 // MGetKV3ClassDefaults = {
 //	"_class": "CBlockSelectionMetricEvaluator",
-//	"m_means": <HIDDEN FOR DIFF>,
-//	"m_standardDeviations": <HIDDEN FOR DIFF>,
+//	"m_means":
+//	[
+//		0.000000
+//	],
+//	"m_standardDeviations":
+//	[
+//		0.000000
+//	],
 //	"m_flWeight": 0.000000,
 //	"m_nDimensionStartIndex": -1
 //}

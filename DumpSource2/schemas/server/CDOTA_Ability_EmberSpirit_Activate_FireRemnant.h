@@ -1,4 +1,4 @@
-class CDOTA_Ability_EmberSpirit_Activate_FireRemnant : public CDOTABaseAbility
+class CDOTA_Ability_EmberSpirit_Activate_FireRemnant : public CDOTABaseAbility, public CHorizontalMotionController
 {
 	int32 m_nProjectileID;
 	Vector m_vStartLocation;
