@@ -53,6 +53,7 @@
 !expected_len || s->s3->previous_server_finished_len
 !fUY\n
 !hcK+dbF&
+!m_nPackFileNumber
 !s8p
 "!"%"+"1"9"K"O"c"g"s"u"
 "2MR
@@ -189,6 +190,7 @@ $hRh
 'pSN.F
 'prB2
 'sp3s
+( m_nChunkHashesSize % sizeof( ChunkHashFraction_t ) ) == 0
 (!(1(=(?(I(Q([(](a(g(u(
 ((long)msg_hdr->msg_len) > 0
 ()*+,-./*(((
@@ -197,10 +199,8 @@ $hRh
 (5jP
 (BZq
 (D4D
-(Duplicate): [%s]\%s
 (NONE)
 (U1h
-(Unique   ): [%s]\%s
 (ZdOt\n&
 (d4t8
 (fS{ggRcjh
@@ -272,16 +272,15 @@ $hRh
 -DBF
 -U`5K
 -\6G5
--disable_auto_vpk_loading
--fake_workshop_dir
 -l34
 -mB:t
--no_hierarchical_vpk_memory_mapping
 -~T\viMOb
 .%.-.3.7.9.?.W.[.o.y.
 ....................
 ../common/crypto.cpp
 ../common/opensslwrapper.cpp
+../public/tier0/check_cast.h
+../public/vpklib/packedstore.h
 ..uR5&m
 .4bb
 .97yY
@@ -298,7 +297,6 @@ $hRh
 /5dJ
 /RIv
 /dev/egd-pool
-/dev/random
 /dev/srandom
 /dev/tty
 /etc/egd-pool
@@ -373,7 +371,6 @@ $hRh
 20t\f
 24CMemoryMappedFileSection
 24U\n
-25CFileSystemReloadFileList
 27;C
 27d7
 28CFioReadOnlyMemoryMappedFile
@@ -821,13 +818,14 @@ Alignment
 Any Extended Key Usage
 Any Purpose
 Any language
+AssertFatalCast
 AsyncCopyFile %s -> %s failed: %s
 AsyncFileSystem2: io threads changed %i -> %i
 AsyncFilesystem Callback
 AsyncFilesystem CopyFile
 AsyncFilesystem Read
 AsyncFilesystem Write
-AsyncIOService
+AsyncIOService/%u
 Attempted to mount UGC VPK "%s" but the UGC it lives inside (%llu) must be mounted first!\n
 Attempted to mount VPK "%s" but the VPK it lives inside ("%s") must be mounted first!\n
 Attempting to read UGC %llu but Steam isn't available!\n
@@ -1025,7 +1023,6 @@ CAST5-OFB
 CAsyncFilesystem2::Shutdown wasn't called before destructor!
 CBI]6
 CBaseFileSystem::Close
-CBaseFileSystem::EnableWhitelistFileTracking called more than once.
 CBaseFileSystem::FPrintf
 CBaseFileSystem::FileExists
 CBaseFileSystem::FindFileAbsoluteList
@@ -1188,6 +1185,7 @@ COPY_ISSUER
 COpenSSLConnection
 COpenSSLContext
 CPBQ
+CPackedStore
 CR&C
 CRL Sign
 CRL has expired
@@ -1219,6 +1217,7 @@ Camellia(128)
 Camellia(256)
 Cannot rename file "%s" that exists in a VPK or UGC file!\n
 Cannot rename file "%s" that exists in a read only search path!\n
+Cast of %s loses value information (returning %s) in %s on %s:%u\n
 Certificate Hold
 Certificate Sign
 Certificate:\n
@@ -1227,6 +1226,7 @@ ChGg
 Char=
 Chunk hash not found.
 ClQ(|
+Close
 Code Signing
 Code=
 Cofactor: 
@@ -1729,7 +1729,6 @@ Ee{5
 EhQ,[3
 EjNG
 Email address mismatch
-EnableWhitelistFileTracking
 Encipher Only
 Encryption
 Enter PEM pass phrase:
@@ -1815,7 +1814,6 @@ FindNext
 Flush
 Fm{#t
 Fop]
-From Steam: [%s]\%s\n
 F|w)a]c
 G0Tv~:
 G1b1
@@ -1885,7 +1883,12 @@ GenerateSHA256Digest
 Generator (compressed):
 Generator (hybrid):
 Generator (uncompressed):
+GetBLAKE3HashContents
 GetFileTime
+GetHashType() == ChunkHashFraction_t::EHashType::BLAKE3
+GetHashType() == ChunkHashFraction_t::EHashType::MD5
+GetMD5HashContents
+GetPackFileNumber
 GetPathTime
 Gew}
 GoJJw
@@ -2899,6 +2902,7 @@ Signature failed for %s (reason: %d)\n
 Signature verification failed.
 Signature verified for %s.\n
 Sn^G
+SortKey_t
 Sr89[
 St23_Sp_counted_ptr_inplaceIN17CAsyncFileSystem215CBarrierRequestESaIvELN9__gnu_cxx12_Lock_policyE2EE
 St23_Sp_counted_ptr_inplaceIN17CAsyncFileSystem215CCopyFileHandleESaIvELN9__gnu_cxx12_Lock_policyE2EE
@@ -3043,6 +3047,7 @@ Unable to rename "%s" to "%s"!\n
 Unknown read error %d\n
 Unknown version %d for vpk %s
 Unprocessed type %d\n
+Unrecognized EHashType found: %d
 Unspecified
 Unsupported extension feature
 UnzipFile
@@ -3088,7 +3093,9 @@ Vcsc
 Vemn\t
 Verify error:
 Verify failure\n
+VerifySingleChunk
 Verifying - %s
+Version
 Vg3LE
 VggjeK uO5n
 Vp>u
@@ -3133,10 +3140,6 @@ W\noB
 Wcr"
 We_A0
 WfMD{
-Whitelist -       reload %s\n
-Whitelist -       reload (absolute path) %s\n
-Whitelist - don't reload %s\n
-Whitelist - don't reload (unheard-of-file) %s\n
 Wmn|CH
 Wn4'
 WrgoI
@@ -3585,6 +3588,7 @@ algor
 algorithm
 algorithm mismatch
 algorithms
+always
 ameth_lib.c
 ansi-X9-62
 anyExtendedKeyUsage
@@ -3725,6 +3729,7 @@ bad value
 bad version number
 bad write retry
 bad x509 filetype
+base
 base64 decode error
 base64 encoding
 basefilesystem.cpp
@@ -4525,6 +4530,7 @@ expecting an object
 expecting an rsa key
 expecting private key blob
 expecting public key blob
+experimental
 explicit
 explicit length mismatch
 explicit tag not constructed
@@ -4593,8 +4599,6 @@ freshestCRL
 friendlyCountry
 friendlyCountryName
 friendlyName
-fs_debug
-fs_debug: 
 fullname
 func(%lu)
 functionality not supported
@@ -5324,8 +5328,6 @@ manager
 maskGenAlgorithm
 maskGenFunc
 master secret
-materials/overviews/
-materials/vgui/hud/
 maxsize=
 md bio init error
 md2WithRSAEncryption
@@ -6010,9 +6012,6 @@ requestorName
 requireExplicitPolicy
 required cipher missing
 required compresssion algorithm missing
-resource/cursor/
-resource/flash3/images/
-resource/flash3/videos/
 responderId
 response
 response contains no revocation data
@@ -6127,10 +6126,6 @@ sao5
 sbgp-autonomousSysNum
 sbgp-ipAddrBlock
 sbgp-routerIdentifier
-scripts/game_sounds_heroes/
-scripts/music/
-scripts/talker/
-scripts/voscripts/
 scsv received when renegotiating
 sdsiCertificate
 searchGuide
@@ -6387,7 +6382,6 @@ sm{c
 sn_d.
 snmpv2
 so=H*m
-sound/
 spkac
 srtp could not allocate profiles
 srtp protection profile list too long
@@ -6555,6 +6549,7 @@ string too short
 string=
 string_to_hex
 strlen(objstr) + 23 + 2 * enc->iv_len + 13 <= sizeof buf
+strncpy
 subdirectory
 subgroup factor:
 subgroup order:

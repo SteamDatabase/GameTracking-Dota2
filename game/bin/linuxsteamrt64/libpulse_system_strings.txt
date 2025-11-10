@@ -25,22 +25,17 @@
 %d instruction(s)\n
 %d register(s) %d byte(s)\n
 %s '%s' (%s)
+%s (uid=%d)
 %s [%u] - %s\n
 %s::%s (%u)
 %s::%s (Entity Output Handler)
 (null)
 *** Test failure: "%s"
-*N12FakeEntity_tUlP28PulseDomainWithSubTypeInfo_tE_E
 *N30PulseBindingSchemaEnumTraits_tI20PulseTestEnumColor_tEUlvE1_E
 *N30PulseBindingSchemaEnumTraits_tI20PulseTestEnumColor_tEUlvE2_E
 *N30PulseBindingSchemaEnumTraits_tI20PulseTestEnumShape_tEUlvE3_E
 *N30PulseBindingSchemaEnumTraits_tI20PulseTestEnumShape_tEUlvE4_E
-*ZN14SourceTSDomain27BuildReachableTypeTemplatesEvEUlRK19CPulseTypeWithScopePK24PulseMethodBindingInfo_tE_
 - Graph Def '
--avx
--sse2
--sse3
--sse4
 . Req FAIL
 . Req PASS
 . Retired
@@ -48,8 +43,6 @@
 . Tag Removed: '%s'
 ../../_build_/pulse_system/_vpc_pulse_system/default/linuxsteamrt64/_schema_/release/../../../../../../../src/pulse_system/pulse_test_domain.cpp
 ../public/tier0/check_cast.h
-.vjs_c
-.vts_c
 12CPulseSystem
 12FakeEntity_t
 12IPulseSystem
@@ -67,10 +60,9 @@
 20CPulseCell_BaseValue
 20FakeEntityDerivedA_t
 20FakeEntityDerivedB_t
-20IPulseSystemListener
+20IPulseBlackboardView
 20IResourceTypeManager
 21CPulseCell_LimitCount
-21ISourceTSInstanceHost
 22CPulseCell_CursorQueue
 22CPulseCell_FireCursors
 22CPulseCell_Inflow_Wait
@@ -82,6 +74,7 @@
 23CPulseCell_Inflow_Yield
 23CPulseDomainScopeLoader
 23CPulseTestHandleService
+23CReadOnlyBlackboardView
 24CPulseCell_IntervalTimer
 24CPulseCell_Step_DebugLog
 24CPulseCell_Test_NoInflow
@@ -93,7 +86,6 @@
 26CPulseCell_Value_RandomInt
 26CPulseTurtleGraphicsCursor
 27CPulseCell_Inflow_GraphHook
-28CPulseCell_Outflow_IntSwitch
 28CPulseCell_Step_PublicOutput
 28CPulseCell_Value_RandomFloat
 28CPulseCell_Value_TestValue50
@@ -109,7 +101,6 @@
 30IPulseGraphInstance_TestDomain
 30PulseSystemEventCursorResult_t
 31CPulseCell_Outflow_CycleOrdered
-31CPulseCell_Outflow_StringSwitch
 32CPulseCell_Outflow_CycleShuffled
 32CPulseCell_WaitForCursorsWithTag
 32CSchemaRegistration_pulse_system
@@ -123,10 +114,10 @@
 34CPulseCell_TestWaitWithCursorState
 34CPulseGraphInstance_TurtleGraphics
 34IPulseGraphInstance_TurtleGraphics
-35IPulseTypeQueryRegistrationForScope
 36CPulseCell_Outflow_TestExplicitYesNo
 36CPulseCell_Step_TestDomainTracepoint
 36CPulseCell_WaitForCursorsWithTagBase
+37CPulseBlackboardViewFromGraphInstance
 37CPulseCell_Test_MultiInflow_NoDefault
 37CSchemaRegistration_pulse_runtime_lib
 38CPulseCell_Val_TestDomainGetEntityName
@@ -136,12 +127,11 @@
 41CPulseCell_Val_TestDomainFindEntityByName
 42CPulseCell_Step_TestDomainCreateFakeEntity
 43CPulseCell_Step_TestDomainDestroyFakeEntity
-43PulseSystemEventObservableVariableChanged_t
 44CPulseCell_Inflow_ObservableVariableListener
 48CPulseCell_Test_MultiOutflow_WithParams_Yielding
-48CPulseRuntimeLibModuleLocalTypeQueryRegistration
-8SourceTS
-9ISourceTS
+49PulseSystemEventObservableVariableSourceChanged_t
+50PulseSystemEventObservableVariableListenerNotify_t
+56CPulseGraphInstance_TestDomain_UseReadOnlyBlackboardView
 <No Cell>
 <map_key>
 <map_value>
@@ -152,6 +142,12 @@ A string associated with this Cursor, to use later for remote Kill or Wait reque
 A testing-only domain for target-owned graphs.
 A testing-only domain that doesn't correspond to any in-engine use case.
 A testing-only domain that draws on a 2D canvas with a LOGO-like 'turtle' cursor.
+AF_ENTITIES
+AF_FAKE_ENTITIES
+AF_NONE
+AF_PANORAMA
+AF_PARTICLES
+AF_SELECTORS_WITHOUT_REQUIREMENTS
 AGreaterThan5
 AValueChanged
 AZeroed
@@ -166,11 +162,13 @@ Adjust heading (positive = right, negative = left)
 And R%d <- R%d && R%d
 Any Other Cursors Have Tag
 Arc Cos
-Arc Cosine of angle, in degrees (0 -> 0, 90 -> 1)
+Arc Cosine of input value. Input must be -1.0, 1.0 range. Output in radians, from 0 to 
 Arc Sin
-Arc Sine of angle, in degrees (0 -> 0, 90 -> 1)
+Arc Sine of input value. Input must be -1.0, 1.0 range. Output in radians, from -
 Arc Tan
-Arc Tangent of angle, in degrees (0 -> 0, 90 -> 1)
+Arc Tangent of input value. Input can be any real number. Output in radians, from -
+ArcCos input out of range (-1, 1)
+ArcSin input out of range (-1, 1)
 Are we currently running unit tests?
 Array Append
 Array Concatenate
@@ -192,7 +190,8 @@ Bad max in ArrayFirstNElements (%d)
 Bad reinterpret on ArrayAppend
 Bad reinterpret on ArrayInsert
 Bad reinterpret on ArrayRemoveElementMatching
-BaseInstance%d
+Base-10 logarithm
+Base-2 logarithm
 Basic Function
 Begin testing a condition composed of Observable values. Continues checking until canceled.
 Begin testing a condition composed of Observable variable references. Continues checking until true.
@@ -219,12 +218,34 @@ CPulseArraylib::ArrayRemoveIndex
 CPulseArraylib::ArrayRemoveInvalidElements
 CPulseArraylib::ArraySetCount
 CPulseArraylib::ArrayShuffle
+CPulseCell_BooleanSwitchState::Activate
+CPulseCell_CursorQueue::Wait
+CPulseCell_ExampleCriteria::CheckRequirement
+CPulseCell_ExampleSelector::ProcessSelector
+CPulseCell_FireCursors::Cancel
+CPulseCell_FireCursors::Start
 CPulseCell_Inflow_EntOutputHandler '%s'.'%s' --> Chunk%d: %s
 CPulseCell_Inflow_EventHandler '%s' --> Chunk%d: %s
 CPulseCell_Inflow_GraphHook '%s' --> Chunk%d: %s
 CPulseCell_Inflow_ObservableVariableListener '%s'.'%s (%u)' --> Chunk%d: %s
 CPulseCell_IntervalTimer::OnInterval
+CPulseCell_IntervalTimer::Start
+CPulseCell_IntervalTimer::StopTimer
+CPulseCell_Outflow_TestExplicitYesNo::Run
+CPulseCell_Outflow_TestRandomYesNo::Run
 CPulseCell_Step_CallExternalMethod '%s'
+CPulseCell_Step_TestDomainCreateFakeEntity::Run
+CPulseCell_Step_TestDomainDestroyFakeEntity::Run
+CPulseCell_Step_TestDomainEntFire::Run
+CPulseCell_Step_TestDomainTracepoint::Run
+CPulseCell_TestWaitWithCursorState::FailImmediately
+CPulseCell_TestWaitWithCursorState::Wait
+CPulseCell_Test_MultiInflow_NoDefault::InflowA
+CPulseCell_Test_MultiInflow_NoDefault::InflowB
+CPulseCell_Test_MultiInflow_WithDefault::InflowA
+CPulseCell_Test_MultiInflow_WithDefault::InflowB
+CPulseCell_Test_MultiOutflow_WithParams::InflowA
+CPulseCell_Test_MultiOutflow_WithParams::InflowB
 CPulseCell_Test_MultiOutflow_WithParams::OnOut1
 CPulseCell_Test_MultiOutflow_WithParams::OnOut2
 CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnAsyncChild1
@@ -232,6 +253,18 @@ CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnAsyncChild2
 CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnOut1
 CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnYieldResume1
 CPulseCell_Test_MultiOutflow_WithParams_Yielding::OnYieldResume2
+CPulseCell_Test_MultiOutflow_WithParams_Yielding::Start
+CPulseCell_Test_MultiOutflow_WithParams_Yielding::Stop
+CPulseCell_Timeline::Start
+CPulseCell_Timeline::Stop
+CPulseCell_Val_TestDomainFindEntityByName::Eval
+CPulseCell_Val_TestDomainGetEntityName::Eval
+CPulseCell_Value_Curve::Eval
+CPulseCell_Value_Gradient::Eval
+CPulseCell_Value_TestValue50::Eval
+CPulseCell_WaitForCursorsWithTag::Wait
+CPulseCell_WaitForObservable::Cancel
+CPulseCell_WaitForObservable::Start
 CPulseCursorFuncs::AnyOtherCursorsHaveTag
 CPulseCursorFuncs::CursorHasTag
 CPulseCursorFuncs::KillAllOtherCursors
@@ -247,27 +280,39 @@ CPulseGraphInstance_TestDomain::HandleInt
 CPulseGraphInstance_TestDomain_Derived::GetInstanceValueX
 CPulseGraphInstance_TestDomain_Derived::HandleIntDerived
 CPulseGraphInstance_TestDomain_Derived::SetInstanceValueX
+CPulseGraphInstance_TestDomain_UseReadOnlyBlackboardView
 CPulseGraphInstance_TurtleGraphics::Go
 CPulseMathlib::AbsFloat
 CPulseMathlib::AbsInt
 CPulseMathlib::ArcCos
 CPulseMathlib::ArcSin
 CPulseMathlib::ArcTan
+CPulseMathlib::CeilingFloat
 CPulseMathlib::ClampFloat
 CPulseMathlib::ClampInt
 CPulseMathlib::Cos
 CPulseMathlib::CrossProductVector
+CPulseMathlib::Deg2Rad
 CPulseMathlib::DotProductVector
+CPulseMathlib::Exp
+CPulseMathlib::Exp2
 CPulseMathlib::FloatToGameTime
+CPulseMathlib::FloorFloat
+CPulseMathlib::Frac
 CPulseMathlib::GameTimeToFloat
 CPulseMathlib::IntegerDivide
 CPulseMathlib::IsValidVector
 CPulseMathlib::IsValidWorldVector
 CPulseMathlib::LengthVector
+CPulseMathlib::LengthVector2D
 CPulseMathlib::LerpFloat
 CPulseMathlib::LerpVector
 CPulseMathlib::LerpWorldVector
+CPulseMathlib::Log
+CPulseMathlib::Log10
+CPulseMathlib::Log2
 CPulseMathlib::MakeAngle
+CPulseMathlib::MakeAngleFromForwardVector
 CPulseMathlib::MakeColor
 CPulseMathlib::MakeTransform
 CPulseMathlib::MakeVector
@@ -280,8 +325,15 @@ CPulseMathlib::MaxInt
 CPulseMathlib::MinFloat
 CPulseMathlib::MinInt
 CPulseMathlib::NormalizeVector
+CPulseMathlib::Pi
 CPulseMathlib::Pow
+CPulseMathlib::RSqrt
+CPulseMathlib::Rad2Deg
 CPulseMathlib::RemapClampedFloat
+CPulseMathlib::RoundFloat
+CPulseMathlib::Saturate
+CPulseMathlib::SignFloat
+CPulseMathlib::SignInt
 CPulseMathlib::Sin
 CPulseMathlib::SplitAngle
 CPulseMathlib::SplitColor
@@ -291,6 +343,9 @@ CPulseMathlib::SplitVector2D
 CPulseMathlib::SplitVector4D
 CPulseMathlib::SplitWorldTransform
 CPulseMathlib::SplitWorldVector
+CPulseMathlib::SqrFloat
+CPulseMathlib::SqrInt
+CPulseMathlib::Sqrt
 CPulseMathlib::Tan
 CPulseMathlib::VectorToWorldVector
 CPulseMathlib::WorldVectorToVector
@@ -347,7 +402,6 @@ CPulseTurtleGraphicsCursor::Turn
 CPulseTypeManager::Allocate( %s )\n
 CPulseTypeManager::Deallocate( %s, %p )\n
 CPulseTypeManager::DeallocateResource( %s, %s, dealloc=%p live=%p )\n
-CS_POINT_SCRIPT
 CStrongHandle
 CTestDomainDerived_Cursor::GetCursorValueA
 CTestDomainDerived_Cursor::GetCursorValueB
@@ -366,6 +420,8 @@ Cancel
 Cancel observing.
 Cannot allocate abstract class
 Cast of %s loses value information (returning %s) in %s on %s:%u\n
+Ceiling - round float up to nearest integer)
+Ceiling Float
 Check if any yielded cursors on the graph already have the given tag.
 Check if the cursor already has the given tag.
 Clamp Float
@@ -373,27 +429,29 @@ Clamp Int
 Clamp value to range (float)
 Clamp value to range (int)
 Class does not allow allocation from its schema binding
+Computes 2 ( 2.71...) raised to a power
+Computes e ( 2.71...) raised to a power
 Convert %s R%d <- %s R%d
+Convert degrees (0-180) to radians (0-pi)
 Convert from a Game Time a raw floating-point time that will NOT fixed up - use with caution!
 Convert from a local-space to a world-space vector
 Convert from a raw floating-point time to a Game Time that will be saved/loaded appropriately
 Convert from a world-space to local-space vector
+Convert radians (0-pi) to degrees (0-180)
 Copy 'element' to the end of 'a', increasing its count by one.
 Copy R%d <- R%d
-Cosine of angle, in degrees (0 -> 1, 90 -> 0)
+Cosine of angle. Input in radians, output in radians
 Could not find enumeration '%s'
 Couldn't load KV3 for resource: %s
 CreateFakeEntity
 CreateFakeEntity( "%s", "%s" ) -> idx %d (handle %d)\n
-Creating SourceTSDomain for domain %s\n
-Creating SourceTSInstance[%d] in Domain %s\n
 Cross Product Vector
 Cross Product of Vector a x Vector b
 Cursor Has Tag
 Cursor [%s] @ %.2f. Cell: %u => %s: %s
 Cursor[ ptr:%p | id:%d | graph:%p ]: CPulseExecCursor()\n
 Default echo string.
-Deprecated use of 'serverpointentity'. Prefer 'cspointscript'.\n
+Deg2 Rad
 Derived
 Derived Func A
 Derived Func B
@@ -405,13 +463,11 @@ Description of Gamma
 Destroy a fake entity from a static library function.
 DestroyAll
 DestroyFakeEntity( handle %d)\n
-Destroying SourceTSInstance[%d]\n
 Detach R%d
 Div R%d <- R%d / R%d
 Domain: %s\n
 Dot Product Vector
 Dot Product of Vector a 
-ENTITIES
 Element Access R%d <- R%d[R%d]
 EntFire,%s,%s,%s
 EntityName
@@ -419,24 +475,18 @@ Enumeration '%s' does not have a value '%s'
 Eq R%d <- R%d == R%d
 Evaluate the curve at the specified input position
 Evaluate the gradient at a position between 0 and 1
-Exception during CompileModule\n%s\n
-Exception during Evaluate\n%s\n
-Exception during InstantiateModule\n%s\n
+Exp2
 External system providing an int for the test graph to consume
 External system requesting a vector from the test graph
 External system requesting an int from the test graph
 External system requesting an int from the test graph (variant)
-FAKE_ENTITIES
 Fail Immediately
-FailImmediately
 Failed to allocate an instance of a class
 Failed to allocate an instance of class '%s'
 Failed to apply FLC data to resource '%s': %s\n
-Failed to compile module: %s\n
 Failed to load %s: %s
 Failed to load: '%s' graph not found\n
 FailedReload
-Fake Entity
 FakeEntityDerivedA_tAPI::DerivedFuncA
 FakeEntityDerivedB_tAPI::DerivedFuncB
 FakeEntity_t::s_InstanceCount == 0
@@ -455,6 +505,10 @@ Fired when A becomes 0 from any other number.
 Fired when A exceeds 5.
 Fired whenever the global A value changes.
 Float To Game Time
+Floor - round float down to nearest integer
+Floor Float
+Frac
+Fractional component (ie. returns 0.34 for 12.34)
 Function signature which has been replaced after compilation.
 Function signature which will be replaced after compilation.
 Game Blackboards: 
@@ -493,9 +547,6 @@ GetVar R%d <- V%d (%s)
 GetVar R%d <=MOVE*V%d (%s)
 HandleInt
 HandleIntDerived
-Hook register '%s' invoked with invalid function as first paramter.
-Hook register '%s' invoked with unrecognized 'this' value.
-IPulseInstanceSaveAPI
 If (R%d) Jump to Instr I%d
 If (R%d) Leap to Chunk C%d
 If -1 timer will continue forever
@@ -510,10 +561,9 @@ Inflow B
 InflowA
 InflowB
 Insert 'element' in the given index in 'a', increasing its count by one and moving the elements after index.
-Instance
 Integer Divide
 Integer division - unlike the divide (/) node, this will truncate any remainder (floor) and return an integer.
-Invoke Cell%d [eid=%d] %s::%s
+Invoke Cell%d [eid=%d] %s%s
 Invoke Lib %s
 Invoke binding %d (%s) not found, converting to NOP\n
 Is In Test Mode
@@ -528,8 +578,10 @@ Kill This Cursor And Cancel
 Kill This Cursor And Fail
 LayoutAndAllocateConstantStorage
 Leap to Chunk C%d
-Length (magnitude) of Vector a
+Length (magnitude) of Vector
+Length (magnitude) of Vector2D
 Length Vector
+Length Vector2 D
 Lerp Float
 Lerp Vector
 Lerp World Vector
@@ -539,42 +591,25 @@ Library Destroy Fake Entity
 Library Find Fake Entity By Name
 Library Spawn Fake Entity
 LoadKV3ObjectInPlace error: %s\n
+Log10
+Log2
 Lower pen.
 MAtomicTransfersAsPlainString
 MPropertyAttributeSuggestionName
 MPropertyFlattenIntoParentRow
-MPropertyGroupName
 MPropertyLeafSuggestionProviderFn
-MPropertyProvidesEditContextString
-MPropertyReadonlyExpr
-MPropertySuppressExpr
 MPulseAdvanced
-MPulseCellOutflow_IsDefault
-MPulseCell_WithNoDefaultOutflow
-MPulseDomainDebuggerCanCreateInstance
-MPulseDomainHiddenInTool
-MPulseDomainHookInfo
-MPulseDomainOptInFeatureTag
-MPulseDomainOptInVariableKeysSource
-MPulseDomainScopeInfo
 MPulseEditorCanvasItemSpecKV3
 MPulseEditorHeaderIcon
 MPulseEditorHeaderText
 MPulseExpressionAlias
 MPulseFunctionHiddenInTool
-MPulseInstanceDomainInfo
 MPulseLegacyName
-MPulseLibraryBindings
 MPulsePolymorphicDependentArg
 MPulsePolymorphicDependentReturn
-MPulseProvideFeatureTag
-MPulseRequirementPass
-MPulseRequirementSummaryExpr
-MPulseSelectorAllowRequirementCriteria
-MPulseSelectorHasSpecificity
 MPulseSignatureForOutflow
-MPulseTypeQueriesForScopeSingleton
 Make Angle
+Make Angle From Forward Vector
 Make Color
 Make Transform
 Make Vector
@@ -587,18 +622,12 @@ Make a Transform from component parts.
 Make a Vector from component parts.
 Make a Vector2D from component parts.
 Make a World Vector from component parts.
+Make an Angle from a Forward Vector
 Make an Angle from component parts
 Max Float
 Max Int
 Maximum of two values (float)
 Maximum of two values (int)
-Method failed for unknown reason.
-Method invoked with bad 'this' value.
-Method invoked with incompatible 'this' value.
-Method invoked with malformed 'this' value.
-Method invoked with missing '%s' parameter.
-Method invoked with unrecognized 'this' value.
-Method invoked with wrong type for '%s' parameter.
 Min Float
 Min Int
 Minimum of two values (float)
@@ -607,21 +636,15 @@ Mirror
 Missing cell schema '%s', replacing with 'CPulseCell_Unknown'\n
 Mod R%d <- R%d %% R%d
 Move forward in the facing direction
-Msg invoked with unrecognized 'this' value.
 Mul R%d <- R%d * R%d
 Multiple Return Test
 Multiple pointer returns
-N13V8HelpersImpl13V8WeakWrapperI12SourceTSHookEE
-N13V8HelpersImpl13V8WeakWrapperI14SourceTSMethodEE
-N13V8HelpersImpl13V8WeakWrapperI14SourceTSObjectEE
-N13V8HelpersImpl17V8WeakWrapperBaseE
-NULL CELL
+NULL CELL 
 NULL_ENT
+Natural logarithm (base e)
 Neg R%d <- -R%d
 Neq R%d <- R%d != R%d
 No DATA block for resource\n
-No cell method binding list for %s\n
-No class for cell binding %s index %d\n
 NodeID %d port '%s' called from C%d:I%d
 Normalize Vector
 Normalize Vector a
@@ -640,8 +663,7 @@ Optional. After taking an OnCanceled outflow, signal to any observers that this 
 Optional. After taking an OnFailed outflow, signal to any observers that this cursor is now failed. Equivalent to not handling the original fail outflow. If you don't use this, handling OnFailed will be treated as success.
 Optional. Type 'Any'. An associated value, e.g. the Entity Handle which is responsible for this Cursor. The Tag is defined by the unique combination of Name and Value.
 Or R%d <- R%d || R%d
-PANORAMA
-PARTICLES
+POISONED 
 PanelID
 Parent Map: %s\n
 Pen Down
@@ -652,19 +674,22 @@ Print string with suggestions from editor code.
 Print string with suggestions from leaf code.
 PrintStringWithEditorSuggestions: %s\n
 PrintStringWithLeafSuggestions: %s\n
-Probable infinite loop detected! Terminating pulse cursor after %d consecutive instructions (%s)\n
-PublicMethod
-PublicMethod '%s' defined with invalid function as second paramter.
-PublicMethod invoked with unrecognized 'this' value.
-PublicMethod requires two arguments, (string, function).
+Probable infinite loop detected! Terminating pulse cursor after %d consecutive instructions (%s)
+Probable runaway cursor creation detected! Permanently disabling this graph instance (%s)
+PulseApiFeature_t
 PulseSystemEventCursorResult_t
-PulseSystemEventObservableVariableChanged_t
+PulseSystemEventObservableVariableListenerNotify_t
+PulseSystemEventObservableVariableSourceChanged_t
 PulseSystemEventYieldResume_t
+R Sqrt
 RESOURCE_TYPE_PULSE_GRAPH_DEF
+Rad2 Deg
 Raise pen.
 Randomizes the order of items in the array (Knuth/Fisher-Yates Shuffle)
+Reciprocoal square root (1/sqrt)
 Record that the function was called
 Register Test Checkpoint
+RegisterChoice_CPulseTestFuncs_LibraryA_PrintStringWithLeafSuggestions
 Regular
 Reinterpret Instance %s R%d <- %s R%d
 Reloading
@@ -677,13 +702,19 @@ Remove the element at the given index in 'a', decreasing its count by one and mo
 Remove the given tag from this cursor. If other cursors are waiting on us, they will resume.
 Return the input string, use the code default if none was supplied.
 Return the number of elements in the array.
+Returns -1 or 0 or 1 based on the sign of the argument
+Returns -1.0 or 0.0 or 1.0 based on the sign of the argument
 Returns interpolated value between A and B based on frac 0.0 - 1.0 (float)
 Returns interpolated value between A and B based on frac 0.0 - 1.0 (vector)
 Returns interpolated value between A and B based on frac 0.0 - 1.0 (world vector)
+Returns the constant pi (3.14...)
 Returns true if the Vector is valid
 Returns true if the World Vector is valid
 Returns up to the maximum requested elements. Never grows the array (unlike SetCount).
-SELECTORS_WITHOUT_REQUIREMENTS
+Round - round float up or down to integer
+Round Float
+Saturate
+Saturate (clamps float between 0 and 1)
 Save a named value of any type on the cursor.
 Scale INV R%d <- R%d / R%d
 Scale R%d <- R%d * R%d
@@ -714,6 +745,8 @@ Set the test value as an int
 SetBlackboardReference BR%d (%s) <- R%d 
 SetVar V%d (%s) <- R%d
 SetVarArrayElement1D V%d (%s) [ R%d ] <- R%d R%d
+Sign Float
+Sign Int
 Signature hook to fill out arguments for OnAsyncChild1
 Signature hook to fill out arguments for OnAsyncChild2
 Signature hook to fill out arguments for OnInterval
@@ -721,15 +754,7 @@ Signature hook to fill out arguments for OnOut1
 Signature hook to fill out arguments for OnOut2
 Signature hook to fill out arguments for OnYieldResume1
 Signature hook to fill out arguments for OnYieldResume2
-Sine of angle, in degrees (0 -> 0, 90 -> 1)
-SourceTS
-SourceTS Exception during %s
-SourceTSInstance[%d]::CallHook(%s)\n
-SourceTSInstance[%d]::CallPublicMethod(%s)\n
-SourceTSInstance[%d]::DefinePublicMethod(%s)\n
-SourceTSInstance[%d]::RegisterHook(%s)\n
-SourceTSMethod::FunctionCallback[%d](%s)\n
-SourceTSObject
+Sine of angle. Input in radians, output in radians
 Spawn a fake entity from a static library function.
 Spline
 Split Angle
@@ -746,13 +771,16 @@ Split a Vector into component parts.
 Split a Vector2D into component parts.
 Split a World Vector into component parts.
 Split an Angle into component parts.
+Sqr Float
+Sqr Int
+Sqrt
+Square root
 Start a timer with the specified duration, fire the OnInterval output 
 Stop Timer
 Stop any active timers - the completed outflow will still fire
-StopTimer
 Sub R%d <- R%d - R%d
 Tag Cursor
-Tangent of angle, in degrees (0 -> 0, 90 -> 1)
+Tangent of angle. Input in radians, output in radians
 Terminate()
 Test Array Array Access
 Test Array Int Shuffle
@@ -776,13 +804,14 @@ TestClock_AutoRun
 TestClock_ExplicitStepped
 TestDomain Tracepoint: %s\n
 TestDomainEntity
+TestDomainReadOnlyBlackboardConsumer
 TestDomain_Derived
+TestDomain_UseReadOnlyBlackboardView
 TestFunctionRenamed_New
 TestFunctionRenamed_Old
 TestFunctionRenamed_WithArgs_New
 TestFunctionRenamed_WithArgs_Old
 Test_ValidateCursorValues
-This is the description of the fake entity sub-domain
 Time since the start of the timer
 TracePoint: %s
 Tried to load a polymorphic pointer with no '%s' key
@@ -790,8 +819,6 @@ Tried to load resource reference '%s' from a value without a resource reference 
 Turn
 Turtle Graphics Domain
 TurtleGraphics
-Unrecognized hook register.
-Unrecognized method.
 Unsupported version %d for resource '%s' (Expected %d)\n
 Used to flag a test as having failed.
 Value 0-1 how far along duration (always 0 if duration is -1)
@@ -808,6 +835,7 @@ Yield, Resume=%s
 [NOP]
 [RETURN R%d]
 [RETURN]
+\vH0B
 __CursorQueue__
 __FireCursorsParent__
 __State_Child_Condition__
@@ -817,7 +845,6 @@ __test_graph_%d.vpulse
 _cells
 a:fulltype
 a:typeparam
-advanced_view
 arg1
 arg2
 arg3
@@ -825,21 +852,18 @@ arg4
 bInAutoWakeList
 bInherit
 bValue
-bindable_name
+ceil
 client.dll
-cspointscript
 current_value
 cursors
 cursors[ 0 ]->DomainCursorAssertCast< CPulseGraphInstance_TestDomain_Derived >()->m_nCursorValueA == values[ 0 ]
 cursors[ 1 ]->DomainCursorAssertCast< CPulseGraphInstance_TestDomain_Derived >()->m_nCursorValueA == values[ 1 ]
-default_value
-domain_name
+deg2rad
 element
 execution_history
 fakeEnt.m_nHandle.WeakHandle() == PULSE_WEAK_HANDLE_INVALID
 fake_derived_a
 fake_derived_b
-features
 flDegrees
 flDistance
 flDuration
@@ -853,6 +877,7 @@ flOutputA
 flOutputB
 flPercentage
 flPitch
+flRadians
 flRoll
 flScale
 flTime
@@ -869,22 +894,18 @@ flc_count
 flc_file_ids
 flc_file_list
 flc_lines
-friendly_name
+frac
 gamma
 hInstance
-hidden_in_tool
 highlight_instance_id
 highlight_node_id
 idiv
 instances
-is_cell
-legacy_names
-lib:
+length2d
+length3d
 libpulse_system.so
-libraries
-library_name
-libv8.so
 listeners
+m_BlackboardResourceName
 m_ClockScopeID
 m_Inargs
 m_MissingRetvalDefault
@@ -893,13 +914,9 @@ m_PreparedHook
 m_ResumePoint
 m_Stops
 m_TagValue
-m_bArg0IsTarget
 m_bConditionValue
 m_bFirstEvaluate
 m_bInvokedOrScheduled
-m_bIsStatic
-m_bIsStep
-m_bRawInargs
 m_curValue
 m_externalMethodTargetGraph
 m_flSlopeIncoming
@@ -909,12 +926,12 @@ m_hCursor
 m_hDef
 m_hGraphInstance
 m_hInstance
+m_hListenerInstance
 m_hObserver
 m_nCurrentWakeIndex
 m_nSubject
 m_nVarDocNodeID
 m_prevValue
-methods
 nAsyncRet1
 nDenominator
 nHandle
@@ -929,7 +946,6 @@ nWhichOutflowA
 nWhichOutflowB
 nYieldArg1
 next_cursor_id
-number
 observable_listeners
 open_asset %s
 pAsyncRet2
@@ -948,115 +964,41 @@ pYieldArg2
 pending_events
 polymorphic_arg
 previous_value
-publicMethods
 public_output::%s
 public_output::%s::%s
-pulse_bindings
 pulse_editor
-pulse_fingerprints
 pulse_graph_def.cpp
-pulse_inparams
 pulse_open_graph_id %u
-pulse_outparams
 pulse_runtime_lib
 pulse_system.dll
 pulse_test_example_suggestion
-readonly_expr
-rebuild_propertyeditor_on_change
+rad2deg
 remap
 resourcecompiler.dll
 resourcesystem
+rsqrt
+saturate
 scheduled_hooks
 schemasystem
-scope_name
 self
 self_handle
 server.dll
-serverpointentity
 shape
 show_vpulse_file
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
 std::_Sp_make_shared_tag::_S_ti()::__tag
-suppress_expr
+std::__shared_count<(__gnu_cxx::_Lock_policy)2>::operator=(std::__shared_count<(__gnu_cxx::_Lock_policy)2> const&)
+suggestion_name
 tagValue
-target_arg_name
-target_type_to_library_name
 testRef
 test_pulse
 tools/images/pulse_editor/cursor_kill.png
 tools/images/pulse_editor/kill_cursor_with_tag.png
-type:
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo name for std::_Sp_make_shared_tag
-v8::Array::Length() const
-v8::Array::New(v8::Isolate*, int)
-v8::Context::Enter()
-v8::Context::Exit()
-v8::Context::GetIsolate()
-v8::Context::New(v8::Isolate*, v8::ExtensionConfiguration*, v8::MaybeLocal<v8::ObjectTemplate>, v8::MaybeLocal<v8::Value>, v8::DeserializeInternalFieldsCallback, v8::MicrotaskQueue*)
-v8::External::New(v8::Isolate*, void*)
-v8::External::Value() const
-v8::Function::Call(v8::Local<v8::Context>, v8::Local<v8::Value>, int, v8::Local<v8::Value>*)
-v8::FunctionTemplate::New(v8::Isolate*, void (*)(v8::FunctionCallbackInfo<v8::Value> const&), v8::Local<v8::Value>, v8::Local<v8::Signature>, int, v8::ConstructorBehavior, v8::SideEffectType, v8::CFunction const*, unsigned short, unsigned short, unsigned short)
-v8::HandleScope::CreateHandle(v8::internal::Isolate*, unsigned long)
-v8::HandleScope::HandleScope(v8::Isolate*)
-v8::HandleScope::~HandleScope()
-v8::Integer::New(v8::Isolate*, int)
-v8::Isolate::Enter()
-v8::Isolate::Exit()
-v8::Isolate::GetCurrent()
-v8::Isolate::ThrowException(v8::Local<v8::Value>)
-v8::Message::Get() const
-v8::Module::CreateSyntheticModule(v8::Isolate*, v8::Local<v8::String>, v8::MemorySpan<v8::Local<v8::String> const> const&, v8::MaybeLocal<v8::Value> (*)(v8::Local<v8::Context>, v8::Local<v8::Module>))
-v8::Module::Evaluate(v8::Local<v8::Context>)
-v8::Module::InstantiateModule(v8::Local<v8::Context>, v8::MaybeLocal<v8::Module> (*)(v8::Local<v8::Context>, v8::Local<v8::String>, v8::Local<v8::FixedArray>, v8::Local<v8::Module>))
-v8::Module::SetSyntheticModuleExport(v8::Isolate*, v8::Local<v8::String>, v8::Local<v8::Value>)
-v8::Number::New(v8::Isolate*, double)
-v8::Object::Get(v8::Local<v8::Context>, unsigned int)
-v8::Object::InternalFieldCount() const
-v8::Object::Set(v8::Local<v8::Context>, unsigned int, v8::Local<v8::Value>)
-v8::Object::SetInternalField(int, v8::Local<v8::Data>)
-v8::Object::SlowGetInternalField(int)
-v8::ObjectTemplate::New(v8::Isolate*, v8::Local<v8::FunctionTemplate>)
-v8::ObjectTemplate::NewInstance(v8::Local<v8::Context>)
-v8::ObjectTemplate::SetInternalFieldCount(int)
-v8::Promise::Resolver::GetPromise()
-v8::Promise::Resolver::New(v8::Local<v8::Context>)
-v8::Promise::Resolver::Resolve(v8::Local<v8::Context>, v8::Local<v8::Value>)
-v8::ScriptCompiler::CachedData::~CachedData()
-v8::ScriptCompiler::CompileModule(v8::Isolate*, v8::ScriptCompiler::Source*, v8::ScriptCompiler::CompileOptions, v8::ScriptCompiler::NoCacheReason)
-v8::ScriptCompiler::ConsumeCodeCacheTask::~ConsumeCodeCacheTask()
-v8::ScriptOrigin::VerifyHostDefinedOptions() const
-v8::String::NewFromUtf8(v8::Isolate*, char const*, v8::NewStringType, int)
-v8::String::NewFromUtf8Literal(v8::Isolate*, char const*, v8::NewStringType, int)
-v8::String::Utf8Length(v8::Isolate*) const
-v8::String::WriteUtf8(v8::Isolate*, char*, int, int*, int) const
-v8::Symbol::New(v8::Isolate*, v8::Local<v8::String>)
-v8::Template::Set(v8::Local<v8::Name>, v8::Local<v8::Data>, v8::PropertyAttribute)
-v8::TryCatch::Exception() const
-v8::TryCatch::HasCaught() const
-v8::TryCatch::Message() const
-v8::TryCatch::TryCatch(v8::Isolate*)
-v8::TryCatch::~TryCatch()
-v8::Value::BooleanValue(v8::Isolate*) const
-v8::Value::Int32Value(v8::Local<v8::Context>) const
-v8::Value::IsArray() const
-v8::Value::IsExternal() const
-v8::Value::IsFunction() const
-v8::Value::IsObject() const
-v8::Value::NumberValue(v8::Local<v8::Context>) const
-v8::Value::ToObject(v8::Local<v8::Context>) const
-v8::Value::ToString(v8::Local<v8::Context>) const
-v8::Value::Uint32Value(v8::Local<v8::Context>) const
-v8::api_internal::DisposeGlobal(unsigned long*)
-v8::api_internal::GlobalizeReference(v8::internal::Isolate*, unsigned long)
-v8::api_internal::MakeWeak(unsigned long*, void*, void (*)(v8::WeakCallbackInfo<void> const&), v8::WeakCallbackType)
-v8::api_internal::ToLocalEmpty()
-v8::internal::IsolateFromNeverReadOnlySpaceObject(unsigned long)
-v8system
 vecValue
 vecValueA
 vecValueB

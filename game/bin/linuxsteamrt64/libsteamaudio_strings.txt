@@ -1,10 +1,12 @@
  offset=
  thread=%lu, file=%s, line=%d, info="
+!m_nPackFileNumber
 %019lu
 %5lu file=%s, line=%d, 
 %ld bytes leaked in %d chunks\n
 %lli
 %s(%d): OpenSSL internal error, assertion failed: %s\n
+%s: Too many bands (%d) to pack an energy field into an impulse response!\n
 %s: Unable to create energy field [%d]\n
 %s: Unable to create hybrid reverb estimator [%d]\n
 %s: Unable to create impulse response [%d]\n
@@ -23,15 +25,14 @@
 %s: Unable to load probe batch (%d)\n
 %s: Unable to load probe batch.\n
 %s: Unable to save data: %s\n
+%s: pathing data was baked with a different number of bands (expected %d, found %d), please re-bake\n
+%s: reverb data was baked with a different number of bands (expected %d, found %d), please re-bake\n
 %s_%03d.vpk
+( m_nChunkHashesSize % sizeof( ChunkHashFraction_t ) ) == 0
 *ZN16CSteamAudioScene14BakeDimensionsEP15IVPhysics2WorldR10CUtlVectorI5Vec3DIfEi25CUtlVectorMemory_GrowableIS4_iLm0EEERS2_IfiS5_IfiLm0EEER40SteamAudioCustomDataDimensionsSettings_tiR10CUtlBufferPFvfPvESG_EUliiE_
--avx
--no_hierarchical_vpk_memory_mapping
--sse2
--sse3
--sse4
--steamaudio_validation
 ../../public/tier0/utlrbtree.h
+../public/tier0/check_cast.h
+../public/vpklib/packedstore.h
 .custom.dimensions
 .custom.materials
 .custom.occlusion
@@ -70,7 +71,7 @@
 30CSchemaRegistration_steamaudio
 <<ERROR>>
 <INVALID>
-=14IErrorListener
+=23CKV3TransferLoadContext
 AD Time Stamping
 AD_DVCS
 AES-128-CBC
@@ -111,6 +112,7 @@ Ambisonics order to use for convolution reverb. 0th order = 1 channel, 1st order
 Ambisonics order to use for simulating reverb.
 Any Extended Key Usage
 Any language
+AssertFatalCast
 Authority Information Access
 B?33
 BF-CBC
@@ -188,6 +190,7 @@ CImpulseResponse
 CMAC
 CMS routines
 CONF lib
+CPackedStore
 CRLReason
 CRYPTO lib
 CSPName
@@ -201,6 +204,8 @@ CSteamAudioCompressedReverb
 CSteamAudioPartitioner
 CSteamAudioPartitioningTask
 CSteamAudioProbeData
+CSteamAudioProbeGrid
+CSteamAudioProbeLineSegment
 CSteamAudioReverbSimulator
 CSteamAudioSource
 CT Certificate SCTs
@@ -210,6 +215,7 @@ CT Precertificate Signer
 CUtlString
 CUtlStringToken
 Cannot allocate abstract class
+Cast of %s loses value information (returning %s) in %s on %s:%u\n
 Chunk hash not found.
 Class does not allow allocation from its schema binding
 Code Signing
@@ -277,6 +283,7 @@ Exported scene as OBJ to %s.\n
 Exported scene as PHONONSCENE to %s.\n
 Extended OCSP Status
 Extension Request
+ExtractDirectionalityFromEnergyField
 FILE pointer
 FIPS routines
 Failed to allocate an instance of a class
@@ -303,6 +310,11 @@ GOST R 3410-2001 Parameter Set Cryptocom
 Generate Halton Sequence for a given order and number of samples.
 Generated %d probes with %.2f spacing and %.2f height.\n
 Generating Halton Sequence of %d order for %d samples.\n
+GetBLAKE3HashContents
+GetHashType() == ChunkHashFraction_t::EHashType::BLAKE3
+GetHashType() == ChunkHashFraction_t::EHashType::MD5
+GetMD5HashContents
+GetPackFileNumber
 HMAC
 HMAC GOST 34.11-94
 HMAC routines
@@ -380,6 +392,7 @@ Microsoft Server Gated Crypto
 Microsoft Smartcardlogin
 Microsoft Trust List Signing
 Microsoft Universal Principal Name
+Minimum distance (in meters) of a source from a surface for the purposes of energy calculations.
 Missing custom_hrtfs key field in custom hrtf properties file. Cannot load!
 Netscape
 Netscape Base Url
@@ -592,6 +605,7 @@ SetProbes
 SetSerializedData
 Sets the number of threads used for realtime reflection by Steam Audio.
 Signature verification failed.
+SortKey_t
 SoundSystemLowLevel
 St12bad_weak_ptr
 SteamAudio
@@ -629,9 +643,11 @@ Unable to create serialized object for scene export.\n
 Unable to create static mesh: %d.\n
 Unable to load custom HRTF [%s]\n
 Unknown version %d for vpk %s
+Unrecognized EHashType found: %d
 Usage: snd_steamaudio_halton_sequence <order> <numsamples>.\n
 Use compressed reverb data if available.
 VPK directory for '%s' corrupt
+VerifySingleChunk
 X500
 X500algorithms
 X509
@@ -684,6 +700,7 @@ _flt.vpk
 aRecord
 a_object.c
 aaControls
+absorptionCoefficients
 ac-auditEntity
 ac-proxying
 ac-targeting
@@ -959,6 +976,7 @@ evp_pkey
 ex_data
 ex_data.c
 expecting an asn1 sequence
+experimental
 extReq
 extendedCertificateAttributes
 extendedKeyUsage
@@ -986,8 +1004,6 @@ gost89
 gost89-cnt
 gost94
 gost94cc
-highFreqAbsorption
-highFreqTransmission
 hmac
 hmac-md5
 hmac-sha1
@@ -1355,11 +1371,13 @@ iplProbeNeighborhoodGetNumProbes
 iplProbeNeighborhoodGetNumValidProbes
 iplProbeNeighborhoodGetProbe
 iplProbeNeighborhoodGetProbeIndex
+iplProbeNeighborhoodNormalizeWeights
 iplProbeNeighborhoodRelease
 iplProbeNeighborhoodReset
 iplProbeNeighborhoodResize
 iplProbeNeighborhoodSetProbeBatch
 iplProbeNeighborhoodSetProbeIndex
+iplProbeNeighborhoodSetProbeWeight
 iplReconstructorCreate
 iplReconstructorReconstruct
 iplReconstructorRelease
@@ -1367,6 +1385,7 @@ iplReflectionsBakerBake
 iplReverbEstimatorApplyScale
 iplReverbEstimatorCreate
 iplReverbEstimatorRelease
+iplSceneClosestHit
 iplSceneCommit
 iplSceneCreate
 iplSceneRelease
@@ -1430,9 +1449,8 @@ libsteamaudio.so
 localKeyID
 localityName
 localtime
-lowFreqAbsorption
-lowFreqTransmission
 mXRecord
+m_aabb
 m_bEnableClustering
 m_bEnableCompression
 m_bEnablePathing
@@ -1449,6 +1467,8 @@ m_flProbePathRange
 m_flProbeVisRadius
 m_flProbeVisThreshold
 m_flSizeThreshold
+m_flSpacing
+m_grid
 m_nAmbisonicsOrder
 m_nAmbisonicsOrderInsideSizeField
 m_nAmbisonicsOrderOutsideField
@@ -1461,6 +1481,9 @@ m_nNumVisSamples
 m_nProbes
 m_nReflectionBounces
 m_nReflectionRays
+m_nx
+m_ny
+m_nz
 m_pClusteredProbeBatch
 m_pCompressedData
 m_pProbeBatch
@@ -1473,6 +1496,8 @@ m_vecCompressedData
 m_vecDictionary
 m_vecInOut
 m_vecInsideSmallSizeField
+m_vecIntervals
+m_vecLineSegments
 m_vecMaterialTokens
 m_vecMaterialWeights
 m_vecMovableReverbAABBs
@@ -1486,6 +1511,8 @@ m_vecNumSingularValues
 m_vecOutsideField
 m_vecPathingDeviation
 m_vecPathingRatio
+m_vecProbeIndices
+m_vecProbes
 m_vecReflectionRatio
 mail
 mailPreferenceOption
@@ -1511,8 +1538,6 @@ message extensions
 messageDigest
 mgf1
 mgmt
-midFreqAbsorption
-midFreqTransmission
 mime-mhs
 mime-mhs-bodies
 mime-mhs-headings
@@ -1665,6 +1690,7 @@ safeContentsBag
 sbgp-autonomousSysNum
 sbgp-ipAddrBlock
 sbgp-routerIdentifier
+scatteringCoefficients
 scripts/custom_hrtfs.txt
 scripts/surfaceproperties_steamaudio.txt
 sdsiCertificate
@@ -1875,6 +1901,7 @@ snd_steamaudio_hybrid_reverb_overlap
 snd_steamaudio_hybrid_reverb_transition_time
 snd_steamaudio_invalid_path_length
 snd_steamaudio_ir_duration
+snd_steamaudio_irradiancemindistance_reverb
 snd_steamaudio_load_dimensions_data
 snd_steamaudio_load_materials_data
 snd_steamaudio_load_occlusion_data
@@ -1908,6 +1935,7 @@ ssl_sess_cert
 ssl_session
 stack.c
 stateOrProvinceName
+std::_Hash_impl::hash(void const*, unsigned long, unsigned long)
 std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
 std::_Sp_locker::_Sp_locker(void const*)
 std::_Sp_locker::_Sp_locker(void const*, void const*)
@@ -1916,6 +1944,7 @@ std::_Sp_make_shared_tag::_S_eq(std::type_info const&)
 std::_Sp_make_shared_tag::_S_ti()::__tag
 std::bad_weak_ptr::what() const
 std::bad_weak_ptr::~bad_weak_ptr()
+std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(char const*, std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&)
 std::basic_string<char, std::char_traits<char>, std::allocator<char>> std::operator+<char, std::char_traits<char>, std::allocator<char>>(std::basic_string<char, std::char_traits<char>, std::allocator<char>>&&, char const*)
 std::vector<std::string, std::allocator<std::string>>::~vector()
 steamaudio.cpp
@@ -1966,6 +1995,7 @@ steamaudioscene.cpp
 store
 street
 streetAddress
+strncpy
 subjectAltName
 subjectDirectoryAttributes
 subjectInfoAccess
@@ -1988,6 +2018,7 @@ time stamp routines
 timeStamping
 title
 tpBasis
+transmissionCoefficients
 trustRoot
 typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>
 typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>
@@ -1999,6 +2030,7 @@ typeinfo name for std::bad_weak_ptr
 undefined
 uniqueMember
 unknown library
+unsigned long std::_Hash_impl::hash<void const*>(void const* const&)
 unstructuredAddress
 unstructuredName
 userCertificate
@@ -2006,6 +2038,7 @@ userClass
 userId
 userPassword
 valid
+void std::__detail::__to_chars_10_impl<unsigned int>(char*, unsigned int, unsigned int)
 vtable for std::bad_weak_ptr
 wap-wsg
 wap-wsg-idm-ecid-wtls1
