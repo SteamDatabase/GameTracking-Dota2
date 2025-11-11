@@ -59,6 +59,13 @@ end
 
 if CBaseEntity ~= nil then
 	CBaseEntity.IsBaseNPC = function ( self ) return false end
+
+	CBaseEntity.GetAbsOrigin_Engine = CBaseEntity.GetAbsOrigin
+	CBaseEntity.GetAbsOrigin = CBaseEntity.GetOrigin 
+	CBaseEntity.SetAbsOrigin_Engine = CBaseEntity.SetAbsOrigin
+	CBaseEntity.SetAbsOrigin = function( self, v )
+		self.SetOrigin( self, v )
+	end
 end
 
 if CDOTA_BaseNPC ~= nil then
