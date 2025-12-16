@@ -5,7 +5,7 @@ print( "Hero Demo game mode loaded." )
 
 _G.NEUTRAL_TEAM = 4 -- global const for neutral team int
 _G.DOTA_MAX_ABILITIES = 16
-_G.HERO_MAX_LEVEL = 25
+_G.HERO_MAX_LEVEL = 30
 
 -- "demo_hero_name" is a magic term, "default_value" means no string was passed, so we'd probably want to put them in hero selection
 sHeroSelection = GameRules:GetGameSessionConfigValue( "demo_hero_name", "default_value" )

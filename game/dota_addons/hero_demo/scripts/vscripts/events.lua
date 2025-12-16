@@ -195,7 +195,7 @@ end
 -- ButtonEvent: OnRefreshSpellsButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnRefreshSpellsButtonPressed( eventSourceIndex )
-	SendToServerConsole( "dota_dev hero_refresh_spells" )
+	SendToServerConsole( "dota_dev refresh_spells" )
 
 	EmitGlobalSound( "UI.Button.Pressed" )
 
@@ -206,7 +206,7 @@ end
 -- ButtonEvent: OnRefreshHealthButtonPressed
 --------------------------------------------------------------------------------
 function CHeroDemo:OnRefreshHealthButtonPressed( eventSourceIndex )
-	SendToServerConsole( "dota_dev hero_refresh_health" )
+	SendToServerConsole( "dota_dev refresh_health" )
 
 	EmitGlobalSound( "UI.Button.Pressed" )
 
@@ -495,8 +495,10 @@ function CHeroDemo:OnMaxLevelUpHero( eventSourceIndex, data )
 	if ( hHero ~= nil and hHero:IsNull() == false ) then
 		--print( 'OnMaxLevelUpHero! - found hero with ent index = ' .. nHeroEntIndex )
 
-		if hHero.AddExperience then
-			hHero:AddExperience( 64400, false, false ) -- for some reason maxing your level this way fixes the bad interaction with OnHeroReplaced
+		if hHero.HeroLevelUp then
+			for i = 0, HERO_MAX_LEVEL do
+				hHero:HeroLevelUp( true )
+			end
 
 			for i = 0, DOTA_MAX_ABILITIES - 1 do
 				local hAbility = hHero:GetAbilityByIndex( i )
