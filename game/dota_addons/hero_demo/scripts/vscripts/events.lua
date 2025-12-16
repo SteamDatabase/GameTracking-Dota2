@@ -448,22 +448,20 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnRemoveHeroButtonPressed( eventSourceIndex, data )
 	local nHeroEntIndex = tonumber( data.str )
-	local hHero = EntIndexToHScript( nHeroEntIndex )
+	local hUnit = EntIndexToHScript( nHeroEntIndex )
 	
-	if ( hHero ~= nil and hHero:IsNull() == false and hHero ~= PlayerResource:GetSelectedHeroEntity( 0 ) ) then
+	if ( hUnit ~= nil and hUnit:IsNull() == false ) then
 
-		if not PlayerResource:IsFakeClient( hHero:GetPlayerID() ) then
-			return
-		end
+		if hUnit:IsHero() and hUnit:GetPlayerOwner() ~= nil and hUnit:GetPlayerOwnerID() ~= 0 then
+			if not PlayerResource:IsFakeClient( hUnit:GetPlayerID() ) then
+				return;
+			end
 
-		--print( 'OnRemoveHeroButtonPressed! - found hero with ent index = ' .. nHeroEntIndex )
-		if hHero:IsHero() and hHero:GetPlayerOwner() ~= nil and hHero:GetPlayerOwnerID() ~= 0 then
-			local nPlayerID = hHero:GetPlayerID()
-			-- TODO - kill all clones that are attached
+			local nPlayerID = hUnit:GetPlayerID()
 			GameRules:ResetPlayer( nPlayerID )
 			DisconnectClient( nPlayerID, true )
 		else
-			hHero:Destroy()
+			hUnit:Destroy()
 		end
 
 		local event_data =
