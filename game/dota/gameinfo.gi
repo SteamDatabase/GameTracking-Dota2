@@ -229,7 +229,7 @@
 		{
 		}
 
-		ExperimentalVDataLocalization
+		VDataLocalization
 		{
 			GameOutputPath	"resource/localization/vdata"
 			TokenPrefix		"DOTA_VData_"

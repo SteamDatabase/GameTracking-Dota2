@@ -1,6 +1,7 @@
                                          N=0 to disable.  Default detail level is 'summary'\n
                             %12s peak, %s block\n
                   %d delta frames, +%11s bytes\n
+                  %d stashed,       +%11s bytes\n
             %s\n
            bytes class                            entind Packed\n
         %3d %3d %3d %3d %3d %3d %3d %3d
@@ -132,9 +133,10 @@
  $8O[lv
  %02x
  %4d frame cache   = %12s bytes\n
+ %4u  client frames = %12s bytes\n
  %4u Delta Frames  = %12s bytes\n
  %4u Hltv Frames   = %12s bytes\n
- %4u client frames = %12s bytes\n
+ %4u stashed frames = %12s bytes
  %i refs\n
  (Start: 
  (Texture)
@@ -181,9 +183,11 @@
  Can't back up over more bytes than were returned by the last call to Next().
  Driver %s (vendorid %x, deviceid %x DXSupport Level %d)\n
  LinePos:
+ Not all fragments ready [+%d][tick+%d]. %d, %d.\n
  OVERFLOW range [%5d->%5d = %5d cmds]
  Outdent() without matching Indent().
  Parameter to BackUp() can't be negative.
+ String table memory      : %12s bytes\n
  Tokenizer::ParseFloat() passed text that could not have been tokenized as a float: 
  Tokenizer::ParseStringAppend() passed text that could not have been tokenized as a string: 
  [%s] %d:%s 
@@ -215,6 +219,7 @@
  const
  contains invalid UTF-8 data when 
  cpu_fast = favors encoding speed over quality when encoding without hardware acceleration\n
+ d9g
  definition file imports the proto which defines the option.
  delay %.1fs
  details: 
@@ -430,7 +435,7 @@ $lZT
 %.2f. Broadcast live resync: malformed response: %s\n
 %.2f. Broadcast m_SyncResponse: unexpected response. fragment %d must be at/after start fragment %d\n
 %.2f. Broadcast playback failed to retrieve %s frame of fragment %d\n
-%.2f. Broadcast playback requesting fragment %d/%s\n
+%.2f. Broadcast playback requesting fragment %d/%s (%d failures)\n
 %.2f. Broadcast resync %d: the stream seems to have stopped (rcvage %.1f, rtdelay %.1f)\n
 %.2f. Broadcast resync failed: Client not connected to Stream\n
 %.2f. Broadcast streaming: unexpected failure getting %s\n
@@ -442,6 +447,7 @@ $lZT
 %.2f. Broadcast: Synchronizing stream\n
 %.2f. Could not get http response body (size %d bytes)\n
 %.2f. Failed to retrieve %s fragment %d, status %d\n
+%.2f. GetStreamStartReference: Compensating for delay of %f seconds.\n
 %.2f. Playcast failed to retrieve fragment %d (succ=%d, %.1f sec), http response: %d\n
 %.2f. Received signup fragment %d\n
 %.2f. Releasing fragment %d (older than %d)\n
@@ -451,6 +457,7 @@ $lZT
 %.2f. Resynced live. Max tick updated: %d -> %d\n
 %.2f. Retrying sync in %.2f sec\n
 %.2f. Set playcast URL %s\n
+%.2f. Successfully retrieved fragment %d that previously failed %d times.\n
 %.2f. Waiting %.2f seconds\n
 %.2f. stream %s/sync (%d) failed. Error %d %s\n
 %.3f min
@@ -503,7 +510,7 @@ $lZT
 %d. Skipping %d ticks, jumping from fragment %d to %d. Ticks per fragment: (%f * %f )\n
 %d. Stream State %s -> %s, fragment %d\n
 %d. parsing tick %d; %d bytes\n
-%d. playcast: Adjusting fragment %d->%d, tick %d->%d\n
+%d. playcast: Adjusting start ref: fragment %d->%d, tick %d->%d\n
 %d. playcast: Fragment %d keyframe and delta frames ready, delayed precache took %.2f sec\n
 %d. playcast: Play keyframe Fragment %d\n
 %d.%d.%d.%d
@@ -576,7 +583,7 @@ $lZT
 %s allocation count overflow( %llu > %llu )\n
 %s allocation count overflow( add %llu + current %llu > max %llu )\n
 %s appended
-%s called on a pool context (no root available)\n
+%s called on a pool arena (no root available)\n
 %s client
 %s code, bind name '%s' (%u), scan code '%s' (%u)\n
 %s completed in %.3f msec\n
@@ -749,7 +756,6 @@ $lZT
 (anonymous namespace)
 (cannot determine missing fields for lite message)
 (channel = 
-(debug)
 (dst_width % 2 == 0) && (dst_width >= 0)
 (dst_width % 3 == 0) && (dst_width > 0)
 (dump took %.1fms)\n
@@ -827,6 +833,7 @@ $lZT
 *ZL17force_fatal_errorRK15CCommandContextRK8CCommandEUlvE_
 *ZN11IThreadPool17QueueJobWithFlagsIZN14CRenderService33LaunchAsyncBeginRenderingViewsJobERK22EventClientPreOutput_tbEUlvE0_EE9CSmartPtrI12CThreadedJob17CRefCountAccessorEPKc13JobPriority_tjOT_E10CLambdaJob
 *ZN11IThreadPool17QueueJobWithFlagsIZN14CRenderService33LaunchAsyncBeginRenderingViewsJobERK22EventClientPreOutput_tbEUlvE_EE9CSmartPtrI12CThreadedJob17CRefCountAccessorEPKc13JobPriority_tjOT_E10CLambdaJob
+*ZN11IThreadPool17QueueJobWithFlagsIZN22CNetworkGameServerBase19ServerBeginSimulateERK26EventServerBeginSimulate_tEUlvE_EE9CSmartPtrI12CThreadedJob17CRefCountAccessorEPKc13JobPriority_tjOT_E10CLambdaJob
 *ZN13CInputService15SaveConvarStateEvEUlPKvE_
 *ZN13CSOAContainer8FillAttrEifEUlvE_
 *ZN13CSoundService19StartCapturingVoiceEvEUlP17IAudioInputStreamiE_
@@ -836,7 +843,6 @@ $lZT
 *ZN18CScreenshotService15OnFrameBoundaryERK20EventFrameBoundary_tEUlvE_
 *ZN18CScreenshotService21WriteScreenshotToFileEPKcS1_R10CUtlBufferbbbEUlPKvE_
 *ZN22CPanoramaEngineHandler21LayoutAndPaintWindowsEvEUlvE_
-*ZN22CRenderingWorldSession39AddViewsToSceneSystemForSplitScreenSlotERKNS_23SplitscreenViewParams_tEEUlP10ISceneViewRK16RenderViewport_tP24HSceneViewRenderTarget__S9_E_
 *ZN27CAsyncSpawnGroupFileRequest5StartEvEUlP18IAsyncReadRequest220AsyncRequestStatus_tE_
 *ZN29CMaterialSystem2AppSystemDict19SetupMaterialSystemEvEUlvE_
 *ZN3Etc13EncodeMipmapsEPfjjNS_5Image6FormatENS_11ErrorMetricEfjjjjPNS_8RawImageEPibEUlPhE_
@@ -926,7 +932,6 @@ $lZT
 ../../public/tier0/tslist.h
 ../common/protobuf_helpers.cpp
 ../public/appframework/tier2app.h
-../public/engine2/isource2server.h
 ../public/tier0/eventdispatcher.h
 ../public/tier0/quantizedfloatencoder.h
 ../public/tier0/threadtoolstypes.h
@@ -934,7 +939,6 @@ $lZT
 ../public/tier0/utldict.h
 ../public/tier0/utlmap.h
 ../public/tier0/utlrbtree.h
-../public/tier0/utlsignalslot.h
 ../public/tier0/utlsortvector.h
 ../public/tier0/utlsymboltablelarge.h
 ../src/shaders
@@ -1215,6 +1219,7 @@ $lZT
 13CNetMessagePBILi74E25CSVCMsg_Broadcast_CommandL13SignonGroup_t17EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi75E29CCLCMsg_HltvFixupOperatorTickL13SignonGroup_t17EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi76E20CSVCMsg_UserCommandsL13SignonGroup_t17EL19NetChannelBufType_t1ELb0EE
+13CNetMessagePBILi77E24CSVCMsg_NextMsgPredictedL13SignonGroup_t17EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi7E19CNETMsg_SignonStateL13SignonGroup_t10EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi8E23CNETMsg_SpawnGroup_LoadL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE
 13CNetMessagePBILi9E33CNETMsg_SpawnGroup_ManifestUpdateL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE
@@ -1329,6 +1334,7 @@ $lZT
 15CMsg_CVars_CVar
 15CNetSupportImpl
 15CNetworkService
+15CNetworkVarBaseIiN15CEntityIdentity32NetworkVar_m_nameStringableIndexEE
 15CPulseCell_Base
 15CSVCMsg_Print_t
 15CSVCMsg_SetView
@@ -1722,7 +1728,7 @@ $lZT
 22IServerConsoleRedirect
 22ISocketCreatorListener
 22IToolsResourceListener
-23:04:41
+23:17:53
 23CBaseGameUIInputHandler
 23CCLCMsg_LoadingProgress
 23CClientOnlyServerConfig
@@ -1755,6 +1761,7 @@ $lZT
 24CPanoramaProceduralLayer
 24CPulseCell_Inflow_Method
 24CSVCMsg_FullFrameSplit_t
+24CSVCMsg_NextMsgPredicted
 24CSVCMsg_PacketEntities_t
 24CSVCMsg_PacketReliable_t
 24CSpawnServerPrerequisite
@@ -1810,6 +1817,7 @@ $lZT
 26CPulseCell_BaseRequirement
 26CPulseInstanceLoadAPI_NoOp
 26CPulseInstanceSaveAPI_NoOp
+26CSVCMsg_NextMsgPredicted_t
 26CSVCMsg_Sounds_sounddata_t
 26GameSessionConfiguration_t
 26ICommandCompletionCallback
@@ -2133,6 +2141,8 @@ $lZT
 >wcv
 >wcv?uj
 >zUz
+?*ZN22CRenderingWorldSession39AddViewsToSceneSystemForSplitScreenSlotERKNS_23SplitscreenViewParams_tEEUlP10ISceneViewRK16RenderViewport_tP24HSceneViewRenderTarget__S9_E_
+?15CEntityIdentity
 ?456789:;<=
 ???\f???????\n???\r?\t?\v
 ?KxO
@@ -2540,6 +2550,7 @@ At marker 0x%02x, recovery action %d
 Attempted to play VOIP with no sound name- please specify voiceDescription.m_pszSoundNameOverride.
 Attempted to post a message to a NULL entity!\n
 Attempted to switch to unknown loop "%s"!\n
+Attribute_t
 Attributes
 Audio
 AudioLanguage
@@ -2621,6 +2632,7 @@ Base_CmdKeyValues
 Batak
 Before Delta Frames
 BeginDebuggerInspect
+BeginServerTick
 Being asked to use steam authentication, but we are running in anonymous testing mode\n
 BenchmarkService001
 Bengali
@@ -2692,7 +2704,7 @@ BroadcastMessage: Init message being created after signon buffer has been transm
 BroadcastMessage: Init message would overflow signon buffer!\n
 BroadcastMessage: Reliable broadcast message overflow for client %s\n
 BroadcastMessage: Reliable filter message overflow for client %s\n
-Broadcast[%d] IO Failure, Http code %d on %s\n
+Broadcast[%d] %s, Http code %d on %s\n
 Broadcast[%d] Re-sending signon data\n
 Broadcast[%d] Recording started at %s\n
 Broadcast[%d] Relay returned Http code %d on %s\n
@@ -2746,9 +2758,12 @@ CAppSystemDict:Unable to create interface %s from %s (Dependency of %s)\n
 CAppSystemDict:Unable to load interface factory %s from %s (Dependency of %s), error %d\n
 CAppSystemDict:Unable to load module %s (Dependency of %s), error %d\n
 CAsyncShaderCompilePrerequisite
+CAtomicMutex::AcquireLock(unsigned long long)
 CBasePulseGraphInstance
 CBenchmarkService
 CBroadcastPlayer
+CBroadcastPlayer got DEM_Stop, server tick %d\n
+CBroadcastPlayer::SetDemoBuffer - bogus demo buffer?
 CBroadcastPlayer::SkipToTick( %d, %u )\n
 CBufferString::AppendConcat(int, char const* const*, int const*, bool)
 CBufferString::AppendFormat(char const*, ...)
@@ -2880,6 +2895,7 @@ CEngineServer::PrecacheGeneric: '%s' overflow, too many decals
 CEngineServiceMgr::Activating loop ( %s, %u )\n
 CEngineServiceMgr::_MainLoop
 CEngineSoundServicesDebugVisualizerRel
+CEntityAttributeTable
 CEntityComponent
 CEntityComponentHelper
 CEntityHandle
@@ -3270,6 +3286,7 @@ CHLTVServer::SendClientMessages client %s is inactive.\n
 CHLTVServer::SendClientMessages skipping client %s updating to %d from %d: CanPacket()? %s\n
 CHLTVServer::SendClientMessages skipping on relay -- not connected to remote server\n
 CHLTVServer::ServerPostSimulate
+CHLTVServer::Shutdown
 CHLTVServer::Shutdown:  Calling Plat_ExitProcess as tv_relay_hard_shutdown is set and this is a relay server.\n
 CHLTVServer::Shutdown\n
 CHLTVServer::StartRelay: WriteSendTables %s.\n
@@ -3319,8 +3336,6 @@ CL:  Connection to '%s' failed\n
 CL:  Connection to server '%s' timed out, disconnecting\n
 CL:  Deferring SIGNONSTATE_SPAWN (spawn count %d) message\n
 CL:  Disconnected - Client delta ticks out of order!\n
-CL:  Disconnecting from server: %s\n
-CL:  Disconnecting from server: changelevel\n
 CL:  FCVAR_CHEAT and FCVAR_REPLICATED cvars reverted to defaults (remote connection).\n
 CL:  Finished logging most recent client ticks.\n
 CL:  Forcing %s to blocking load during demo playback due to having incomplete/updateable manifest\n
@@ -3431,6 +3446,7 @@ CNetworkP2PService
 CNetworkP2PService::InternalBroadcastP2PNetMessage: SerializeAbstract for message %s failed!\n
 CNetworkP2PService::InternalBroadcastP2PNetMessage: SerializeAbstract for message %s overflowed!\n
 CNetworkP2PService::UpdatePeerConnectionStatus
+CNetworkSerializerClassInfo::Get( %s ) failed!\n
 CNetworkServerCreatePrerequisites
 CNetworkServerService
 CNetworkServerService::OnWriteNetworkingMetaFile
@@ -3547,6 +3563,7 @@ CRenderingWorldSession::OnFrameBoundary
 CRenderingWorldSession::OnLoopActivate
 CResourceManifestPrerequisite
 CSOAContainer::SetAttributeType - ERROR, trying to change type of previously-defined attribute %d!\n
+CSVCMsg_NextMsgPredicted with no type id?\n
 CScreenshotService
 CScriptComponent
 CScriptComponent::Storage_t
@@ -3569,6 +3586,7 @@ CServerSideClientBase::SpawnPlayer
 CSoundService
 CSoundService::OnAppShutdown
 CSoundService::OnClientOutput
+CSoundService::OnClientPreOutput
 CSoundService::OnFrameBoundary
 CSource2SaveRestore::OnLoad:  no such save file '%s'\n
 CSpawnServerPrerequisite
@@ -3607,14 +3625,12 @@ CThreadEvent::Set()
 CThreadFiber::CThreadFiber(unsigned long)
 CThreadLocalScope::CThreadLocalScope(ThreadHandle_t__*, bool)
 CThreadLocalScope::~CThreadLocalScope()
-CThreadMutex::TryLock(char const*, int)
 CThreadRWLock_FastRead::CThreadRWLock_FastRead()
 CThreadRWLock_FastRead::EncounteredComplexReadLockOperation(unsigned int, bool, char const*, int)
 CThreadRWLock_FastRead::HaveWriteLock_BlockReadsNow(bool)
 CThreadRWLock_FastRead::UnlockReadAccounting(char const*, int, unsigned int)
 CThreadRWLock_FastRead::UnlockWrite(char const*, int)
 CThreadSemaphore::~CThreadSemaphore()
-CThreadSpinMutex::Lock(char const*, int, unsigned long long, unsigned int) volatile
 CThreadSyncObject::Wait(unsigned int)
 CThreadSyncObject::WaitImpl(unsigned int)
 CThreadSyncObject::~CThreadSyncObject()
@@ -3653,10 +3669,12 @@ CUtlMemoryPoolBase::CUtlMemoryPoolBase(int, int, int, MemoryPoolGrowType_t, char
 CUtlMemoryPoolBase::ClearDestruct(void (*)(void*))
 CUtlMemoryPoolBase::Free(void*)
 CUtlMemoryPoolBase::~CUtlMemoryPoolBase()
+CUtlOrderedMap
 CUtlScratchMemoryPool::AllocAligned(int, int)
 CUtlScratchMemoryPool::AllocSize() const
 CUtlScratchMemoryPool::CUtlScratchMemoryPool(unsigned int, unsigned int, void*, bool)
 CUtlScratchMemoryPool::~CUtlScratchMemoryPool()
+CUtlString
 CUtlString::Acquire(CBufferString*, bool)
 CUtlString::Append(char const*)
 CUtlString::FixSlashes(char)
@@ -3674,6 +3692,7 @@ CUtlString::PathJoin(char const*, char const*)
 CUtlString::Purge()
 CUtlString::Remove(char const*, bool) const
 CUtlString::RemoveFromStart(char const*, bool) const
+CUtlString::Replace(char const*, char const*, bool) const
 CUtlString::Right(int) const
 CUtlString::Set(char const*)
 CUtlString::SetDirect(char const*, int)
@@ -3692,6 +3711,7 @@ CUtlString::operator=(CBufferString const&)
 CUtlString::operator==(CUtlString const&) const
 CUtlString::operator[](int) const
 CUtlStringList::SplitString(char const*, char const* const*, int)
+CUtlStringToken
 CUtlSymbolLarge
 CUtlSymbolTable::AddString(char const*, bool*)
 CUtlSymbolTable::CUtlSymbolTable(int, int, bool)
@@ -3856,6 +3876,7 @@ Clear the pause state of the server.
 Clear voice attachment data.
 ClearField
 ClearLayer
+ClearSecondaryMainThread
 Client
 Client "%s" SteamID %s userinfo ignored: "%s" = "%s"\n
 Client #%d "%s" connected @ %s\n
@@ -3934,7 +3955,7 @@ Connected [%s] [last packet %.3f sec ago]
 Connecting to %s\n
 Connection State: Connected=%s, Ever=%s\n
 Connection closed: %s.\n
-Connection lost: %s.\n
+Connection lost: %s\n
 Connection rejected by game\n
 Connection timeout detected at source engine layer after %i retries.
 Connection to Steam servers lost.\n
@@ -4000,7 +4021,7 @@ Could not find type "
 Could not get ILegacyGameUI interface from client %s\n
 Couldn't open %s\n
 Couldn't parse default value "
-Couldn't unserialize CCompressedResourceManifest\n
+Couldn't unserialize CCompressedResourceManifest
 Couldn't write to read-only file %s, using file _temp_mapcycle.txt instead.\n
 CpuId
 Crash
@@ -4091,8 +4112,10 @@ DebugInfo
 DebugUI
 DebugVisualizerMgr
 Debugger
+Dec 15 2025
 December
 DeclareCurrentThreadIsMainThread
+DeclareCurrentThreadIsSecondaryMainThread
 DecodeClassBaseline
 DecodeClassBaseline: NULL instance baseline table
 DecodeDemoNetMessage Failed to parse message\n
@@ -4168,7 +4191,9 @@ Disconnect: %s\n
 DisconnectAllClients
 Disconnected
 Disconnected from server: %s\n
-Disconnection during connection phase. Sign-on state: %d (%s). Disconnect reason: %d (%s).\n
+Disconnecting from server: %s\n
+Disconnecting from server: changelevel\n
+Disconnection during connection phase. Sign-on state: %d (%s). Disconnect reason: %s.\n
 Dispatch clients to relay proxies: 0=never, 1=if appropriate, 2=always
 DispatchEvent( %s ) took %f msecs
 Dispatching EventAppShutdown_t {\n
@@ -4282,6 +4307,7 @@ Encountered malformed map options "%s"\n
 Encountered unknown key name "%s"!\n
 End Of Image
 End-of-file inside block comment.
+EndServerTick
 Ends timedemo on given tick.
 Engine RenderingWorldSession
 Engine loading startup asset: '%s'\n
@@ -4412,12 +4438,13 @@ EventPreDataUpdate_t
 EventProfileStorageAvailable_t
 EventServerAdvanceTick_t
 EventServerBeginAsyncPostTickWork_t
+EventServerBeginSimulate_t
 EventServerEndAsyncPostTickWork_t
+EventServerEndSimulate_t
 EventServerPollNetworking_t
 EventServerPostAdvanceTick_t
 EventServerPostSimulate_t
 EventServerProcessNetworking_t
-EventServerSimulate_t
 EventSetTime_t
 EventSimpleLoopFrameUpdate_t
 EventSimulate_t
@@ -4444,6 +4471,7 @@ Expected identifier, got:
 Expected integer or identifier, got: 
 Expected integer, got: 
 Expected string, got: 
+Expecting to drop next net message to be of type %u, but next message was type %u!?  Not dropped\n
 Expensive Physics Objects
 Explicit default values are not allowed in proto3.
 Extended time in seconds before mmqueue reservation expires.
@@ -4520,6 +4548,7 @@ Failed to set network config: %s\n
 Failed to start recording movie: %s.*: %s\n
 Failed to successfully serialize connect message
 Failed to write file %s, configFileType %d, nSlot %d\n
+Failure
 False
 FastHexToBuffer() wants non-negative integers, not 
 Features
@@ -4747,6 +4776,7 @@ GetARGBBlend
 GetAddonsContentDirectory: Failed to find CONTENTADDONS search path.\n
 GetAddonsDirectory: Failed to find ADDONS search path.\n
 GetAppWindow() returned NULL\n
+GetAttributeDictSaveDataOps
 GetAuthSessionTicket failed
 GetAvailableAddonMaps failed to find any maps in the '%s' addon - trying fallback maps:
 GetBool
@@ -4791,6 +4821,7 @@ GetThreadLocalStackAllocator
 GetUInt32
 GetUInt64
 GetUserSetting: userinfo cvar '%s' unknown on player slot %d (%s).\n
+GetVariantSaveDataOps
 GetXCR0
 Gf95)1&!\ry9I
 Giz{~z
@@ -4877,9 +4908,11 @@ Highlight expensive physics objects
 Highlight expensive physics objects strength
 Hiragana
 Hltv Replay
+Hltv Replay Failure: cannot find stash %d\n
 Hltv Replay failure: HLTV frame is not ready\n
 Hltv Replay failure: Hltv replay is not enabled\n
 Hltv Replay failure: already in replay\n
+Hltv Replay failure: inconsistent parameters scheduling stashed replay in the future, ignoring\n
 Hltv Replay failure: requests are rate limited to no more than 1 per %g seconds\n
 Hltv replay delay %u cannot match the requested delay %u\n
 Host SourceTV[0] port
@@ -5121,8 +5154,10 @@ INCOMPLETE
 INETSUPPORT_001
 INFO
 INTERNAL
+INTERNAL ERROR: Cannot convert or reinterpret from %s to %s
 INVALID_ARGUMENT
 INVALID_CPPTYPE
+IO Failure
 IP filter list has %d entries\n
 IPulseInstanceLoadAPI
 IPulseInstanceSaveAPI
@@ -5555,6 +5590,7 @@ MNetworkEnable
 MNetworkPriority
 MNetworkSerializeAs
 MNetworkVarNames
+MNotSaved
 MOBILE_FPS_CONTROL: If true we increase framerate limit during HFR-tagged animations and transitions.
 MOBILE_FPS_CONTROL: If true we increase framerate limit during touch
 MOBILE_FPS_CONTROL: If true we increase framerate limit while charging
@@ -5569,6 +5605,7 @@ MPulseCursorTerminates
 MPulseRequirementCheck
 MPulseRequirementCommit
 MSAADefaultNonVR
+MSaveOpsForField
 Main 3D Window
 MainLoop
 MainLoop returning\n
@@ -5776,6 +5813,7 @@ Moves the camera position + orientation to the named entity
 Moves the camera position + orientation to the specified position
 Movie
 Movie recording failed! Missing expected pixels!\n
+Multiple NextMsgPredicted?\n
 Multiple extension registrations for type "
 Multiply requested rate by this value to adjust Dota TV send rate
 Multiply specified convar value.
@@ -5854,6 +5892,7 @@ N13CNetMessagePBILi74E18CSVCMsg_HltvReplayL13SignonGroup_t17EL19NetChannelBufTyp
 N13CNetMessagePBILi74E25CSVCMsg_Broadcast_CommandL13SignonGroup_t17EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi75E29CCLCMsg_HltvFixupOperatorTickL13SignonGroup_t17EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi76E20CSVCMsg_UserCommandsL13SignonGroup_t17EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
+N13CNetMessagePBILi77E24CSVCMsg_NextMsgPredictedL13SignonGroup_t17EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi7E19CNETMsg_SignonStateL13SignonGroup_t10EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi8E23CNETMsg_SpawnGroup_LoadL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
 N13CNetMessagePBILi9E33CNETMsg_SpawnGroup_ManifestUpdateL13SignonGroup_t15EL19NetChannelBufType_t1ELb0EE16CProtobufBindingE
@@ -6196,6 +6235,7 @@ Non-repeated field "
 None
 Not Connected
 Not a JPEG file: starts with 0x%02x 0x%02x
+Not a SourceTV proxy
 Not a key frame.
 Not creating socket NS_HLTV due to -nohltv command line option.\n
 Not implemented field number 
@@ -6206,8 +6246,6 @@ Not saving user configuration because host_readconfig_ignore_userconfig is set.\
 Not supported.
 Note that enum values use C++ scoping rules, meaning that enum values are siblings of their type, not children of it.  Therefore, "
 Note: should use "addip" instead of "banip".\n
-Nov 10 2025
-Nov 13 2025
 November
 Now recording to "%s", immediate mode, recorded length so far is %s.\n
 Now recording to "%s", recorded length so far is %s.\n
@@ -6282,12 +6320,13 @@ OnPreserveEntity: missing client entity %d.\n
 OnProfileStorageAvailable
 OnServerAdvanceTick
 OnServerBeginAsyncPostTickWork
+OnServerBeginSimulate
 OnServerEndAsyncPostTickWork
+OnServerEndSimulate
 OnServerPollNetworking
 OnServerPostAdvanceTick
 OnServerPostSimulate
 OnServerProcessNetworking
-OnServerSimulate
 OnShutdownChannel
 OnSimpleLoopFrameUpdate
 OnSpawnGroupActivateCall_t
@@ -6333,6 +6372,7 @@ Overrides the max players reported to prospective clients
 P010ToAR30Matrix
 P010ToARGBMatrix
 P010ToP410
+P15CEntityIdentity
 P210ToAR30Matrix
 P210ToAR30Row_AVX2
 P210ToAR30Row_Any_AVX2
@@ -6693,6 +6733,7 @@ ProcessClassInfo: invalid class index (%d).\n
 ProcessConVar
 ProcessPacketEntitiesWorkItem_Decode: DecodeClassBaseline(%d) failed for class %s.
 ProcessReadPacketEntitiesWorkItems
+ProcessServerInfo failed
 ProcessServerInfo( %s : %s : #%d ) - client requesting connection abort!\n
 ProcessServerInfo: Failed to initialize the game client!\n
 ProcessServerInfo: Failed to parse the game session manifest!\n
@@ -6716,8 +6757,8 @@ Protocol Buffer map usage error:\n
 Protocol Buffer reflection usage error:\n  Method      : google::protobuf::Reflection::
 Public :  %s\n
 Pulse
+Pulse: %s 
 PulseCursorCancelPriority_t
-PulseDebugLog 
 PulseDebugLog: Calling external method on non-existent entity or game blackboard
 PulseDebugLog: Calling external method on non-existent entity or game blackboard\n
 PulseDocNodeID_t
@@ -6725,7 +6766,6 @@ PulseRegisterMap_t
 PulseRuntimeChunkIndex_t
 PulseSymbol_t
 PulseValueType_t
-PulseWarningLog 
 Push
 Puts the server into extremely low CPU usage mode when no clients connected
 Q%llx,
@@ -6739,6 +6779,7 @@ Quantizing to %d = %d*%d*%d colors
 Quantizing to %d colors
 QueryPort
 QueueMatchPlayer overwriting connection from client [U:1:%d] %08X:%08X %s -> %s\n
+Queuing NextMsgPredicted [%s]: %s\n
 Quit after a game has been relayed, do not hibernate
 Quit after recording requested, quitting now.\n
 Quit the game
@@ -6795,6 +6836,8 @@ RENDER_SYSTEM_DLL_NONE
 RENDER_SYSTEM_DLL_VULKAN
 REPLAY
 RESOURCE_EXHAUSTED
+RESOURCE_TYPE_PANORAMA_LAYOUT
+RESOURCE_TYPE_PANORAMA_STYLE
 RESOURCE_TYPE_POST_PROCESSING
 RES_FATALIFMISSING
 RES_PRELOAD
@@ -6931,6 +6974,7 @@ Rejecting connection request from %s (reservation cookie 0x%llx), server is rese
 Rejecting reservation because sv_shutdown was requested.\n
 Relay "%s", connect to %s (GSID:%s)\n
 Relay "%s", not connected.\n
+Relay connecting to a different upstream server
 Relay proxies retry connection after network timeout
 Relay server is hibernating\n
 Relay server waking up from hibernation\n
@@ -6966,8 +7010,6 @@ RenderService::OnClientOutput
 RenderService_001
 RenderSystem/VulkanOnly
 RenderSystem/VulkanOnlyTestProbability
-RenderSystem/VulkanRequestSM6
-RenderSystem/VulkanRequireSM6
 RenderSystemOldDriver_Title
 RenderSystemOptionFlags
 RenderSystemOptionRecommendationGen
@@ -7043,6 +7085,7 @@ RunPrediction
 Runic
 Running SteamAPI_RunCallbacks for first time\n
 Running [%s]
+Runs the final server tick of the frame in parallel with client work
 S3: Client SteamID %s doesn't match SteamID %s from auth blob\n
 S3: Client connected with expired ticket: UserID: %x\n
 S3: Client connected with invalid ticket ( old version ): UserID: %x\n
@@ -7104,14 +7147,13 @@ STEAMHEADLESS_INTERFACE_VERSION001
 STEAMHTMLSURFACE_INTERFACE_VERSION_005
 STEAMHTTP_INTERFACE_VERSION003
 STEAMINVENTORY_INTERFACE_V003
-STEAMMUSICREMOTE_INTERFACE_VERSION001
 STEAMMUSIC_INTERFACE_VERSION001
 STEAMPARENTALSETTINGS_INTERFACE_VERSION001
 STEAMREMOTEPLAY_INTERFACE_VERSION003
 STEAMREMOTESTORAGE_INTERFACE_VERSION016
 STEAMSCREENSHOTS_INTERFACE_VERSION003
 STEAMUGC_INTERFACE_VERSION019
-STEAMUSERSTATS_INTERFACE_VERSION012
+STEAMUSERSTATS_INTERFACE_VERSION013
 STEAMVIDEO_INTERFACE_V002
 STEAM_
 STEAM_ID_LAN
@@ -7516,9 +7558,9 @@ Server:  %s\n
 Server::CmdKeyValues
 ServerAppID
 ServerCmd called with %d bytes, cropping to %d\n
+ServerGameFrame
 ServerLog
 ServerPostSimulate
-ServerSimulateTick
 ServerToClient
 ServerToolsInfo_001
 ServerVersion
@@ -7999,7 +8041,7 @@ SteamAPI_UseBreakpadCrashHandler
 SteamAPI_WriteMiniDump
 SteamAppId
 SteamAudio001
-SteamClient021
+SteamClient023
 SteamController008
 SteamDatagram_SetNetworkConfig
 SteamFriends017
@@ -8020,7 +8062,6 @@ SteamInternal_FindOrCreateGameServerInterface
 SteamInternal_FindOrCreateUserInterface
 SteamInternal_GameServer_Init_V2
 SteamInternal_SteamAPI_Init
-SteamMatchGameSearch001
 SteamMatchMaking009
 SteamMatchMakingServers002
 SteamNetworking006
@@ -8068,7 +8109,6 @@ Summary of %d frames.  (%d frames excluded from analysis.)\n
 Sundanese
 Sunday
 SupportedLanguages
-SupportsRayTracing
 Suspension not allowed here
 Swap
 SwapUVPlane
@@ -8149,6 +8189,7 @@ The frequency, in seconds, of sending keyframes and delta fragments to the broad
 The frequency, in seconds, of sending keyframes and delta fragments to the broadcast1 relay server
 The interval, in seconds, of re-sending startup data to the broadcast relay server (useful in case relay crashes, restarts or startup data http request fails)
 The number of frames to render when a
+The preceding flow should have branched away from this!
 The region of the world to report this server in.
 The replay group that this server will be uploading files to
 The server operator has added you to the banned list.\n
@@ -8171,12 +8212,14 @@ This shouldn't be called if all the sizes are equal.
 This soundevent is called to stop the desired soundevents when the game is disconnected.
 This value, multiplied by the tick interval, is added to cl_tickpacket_recvmargin_desired to obtain the effective desired recv margin.
 Thread pool option
+ThreadAtomicNotifyOne(unsigned int*)
 ThreadGetCurrentId
 ThreadGetCurrentProcessHandle
 ThreadGetCurrentProcessId
 ThreadGetMainThreadId
 ThreadGetProcessPriority
 ThreadInMainThread
+ThreadInPrimaryOrSecondaryMainThread
 ThreadNanoSleep
 ThreadSetPriority
 ThreadSetProcessPriority
@@ -8316,6 +8359,9 @@ UV88
 UVScale
 UVScale_16
 UVWQ8888
+UWT1  %s\n
+UWT2  %s\n
+UWT3  %s\n
 UYVYToARGB
 UYVYToARGBRow_AVX2
 UYVYToARGBRow_Any_AVX2
@@ -8769,6 +8815,7 @@ When upstream packet jitter in a frame exceeds this threshold (ms), the frame is
 Whether dedicated server is pausable when running -dev and playing solo against bots
 Whether diagnostic logging is enabled when clients ack delta ticks out of order. Policy: 2 = log all out of order acks, 1 = log only when disconnect is triggered, 0 = do not log.
 Whether listen server is pausable when running -dev and playing solo against bots
+Whether or not we slow playback rate if we start running out of buffered stream fragments.
 Whether server supports banid command
 Whether we should ignore the user config file for reading/writing.
 While doing stats_display, collect GPU perf counters. Used for stats_print_gpu.
@@ -8869,6 +8916,7 @@ Zjz\v
 Zmbw
 Zq",9\fB
 [%d] Changing player name to Steam name '%s'\n
+[%d] Stream buffered fragments falling behind, adjusting target playback rate to %.2f. ( buffered: %fs, %d ticks)\n
 [%s] %d - %s (refcount %d)\n
 [A:%u:%u:%u]
 [BUG - how?]
@@ -8885,6 +8933,7 @@ Zq",9\fB
 [Voice payload]
 [abi:
 [client]
+[demoscrub]
 [friend]
 [h1R
 [joy %d]%s is unbound.\n
@@ -8898,9 +8947,7 @@ Zq",9\fB
 [s%5d c%5d t%6.3f] Rendering  rendertime %.3f [dt %.2fms]\n
 [s%5d c%5d t%6.3f] SentTickAsync   cmds %d...%d   seqnum %d   delay %.2fms\n
 [s%5d c%5d t%6.3f] SentTickSync   cmds %d...%d   seqnum %d\n
-[scratch]
 [server]
-[test]
 [unknown]
 \ at end of pattern
 \%03o
@@ -8974,9 +9021,10 @@ Zq",9\fB
 \t3l0
 \t?\tZ\tZ\tZ\tZ\t?\tg\t\n\t
 \t?\tZ\tt\tt\tt\t
+\t[%d]Demo playback max rate capped at %f.\n
 \t\t\n\n\v\v\f\f\f\f\r\r\r\r
 \t\t\t\t\t\t\t\t\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\v\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\f\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r
-\tnTargetServerTick:%d\n\tm_nStreamStartTick:%d\n\tm_nStartHostTick:%d\n\tg_pNetworkClientService->GetTotalTicks():%d\n
+\tnTargetServerTick:%d\n\tm_streamStartRef.nTick:%d\n\tm_nStartHostTick:%d\n\tg_pNetworkClientService->GetTotalTicks():%d\n
 \u00
 \v%\v%\v%\v%\v%\v%\v%\v%\v%\v%\v%\v%\v%\v%\v%\v%
 \v9?Gw8?Q
@@ -9557,6 +9605,7 @@ bugvoice_save
 build
 build_source_revision
 build_version
+built-in, 
 built_from_cl
 built_from_cl.txt
 button_info
@@ -9740,6 +9789,7 @@ client_command_tick
 client_connected
 client_disconnected
 client_frame_simulate
+client_valve
 clientframe.cpp
 clientport
 clients
@@ -9758,6 +9808,7 @@ cntrl
 co_await 
 code
 code %d bits %d->%d\n
+codegen, 
 color
 colorCorrectionParams
 comb_filter
@@ -10068,6 +10119,7 @@ execute_command_every_frame
 exists
 exit
 exp_rotation
+expecting to re-create serializers from server serializers
 expr
 extend .$0 {\n
 f == nullptr || dynamic_cast<To>(f) != nullptr
@@ -10105,6 +10157,7 @@ file://{resources}/
 filename
 fileno
 filesystem_stdio
+final %s\n
 finish
 first
 firstspawngroup
@@ -10121,7 +10174,7 @@ float Etc::Block4x4Encoding::CalcPixelError(Etc::ColorFloatRGBA, float, Etc::Col
 float Etc::Block4x4Encoding::GetError()
 float32
 float64
-floatbitmap.cpp(986): Unsupported color format "%s", skipping!\n
+floatbitmap.cpp(989): Unsupported color format "%s", skipping!\n
 floor
 floorf
 fog_enable
@@ -10169,6 +10222,7 @@ fread
 free
 fs_report_sync_opens
 fseeko64
+ft: %-60s %-40s : %-80.80s raw:%s
 ftLh!b
 ftello64
 fu`z
@@ -10425,7 +10479,8 @@ hltvclientstate.cpp
 hltvdemo.cpp
 hltvserver.cpp
 hltvserver_async.cpp
-hltvserver_async.cpp:1101
+hltvserver_async.cpp:1107
+hltvserver_stash.cpp
 host
 host_force_frametime_to_equal_tick_interval
 host_force_max_frametime_to_tick_interval
@@ -10762,6 +10817,7 @@ l|)9lC
 m?@Zl?~\vk?k
 m\vm\vm\vm\vm\vm\vm\vm\vm\vm\vm\v
 m_Args
+m_Attributes
 m_CScriptComponent
 m_Description
 m_EntryChunk
@@ -10773,6 +10829,7 @@ m_IntValue
 m_LoopState
 m_MethodName
 m_Name
+m_Names
 m_Outparams
 m_PathIndex
 m_RegisterMap
@@ -10784,9 +10841,11 @@ m_Value
 m_VecValue
 m_bChildCursorsShouldInherit
 m_bFirstTick
+m_bIsOncePerFrameAsyncWorkPhase
 m_bIsPublic
 m_bIsValid
 m_bLastTick
+m_bLastTickBeforeClientUpdate
 m_bLimitCountPasses
 m_bMarkedForRemoval
 m_bRemoveWhenOutOfScope
@@ -11144,6 +11203,7 @@ operator new[](unsigned long, std::align_val_t, std::nothrow_t const&)
 operator new[](unsigned long, std::nothrow_t const&)
 operator new[](unsigned long, void*)
 operator"" 
+operator()
 opqMU
 option json_name is not allowed on extension fields.
 optional
@@ -11267,7 +11327,6 @@ pitch_filter
 pitch_search
 playcast
 playcast: %d dem_consolecmd [%s]\n
-playcast: %d dem_stop\n
 playcast: Demo message, tick %i, %i bytes\n
 playcast: Packet tick %d size %u\n
 playdemo
@@ -11292,6 +11351,7 @@ please implement MergeFrom for your type.
 pm"U
 png 
 png_screenshot
+pointer, 
 poll
 pop_var_values
 port_name
@@ -11325,12 +11385,8 @@ pthread_getspecific
 pthread_join
 pthread_key_create
 pthread_key_delete
-pthread_mutex_destroy
-pthread_mutex_init
 pthread_mutex_lock
 pthread_mutex_unlock
-pthread_mutexattr_init
-pthread_mutexattr_settype
 pthread_once
 pthread_rwlock_rdlock
 pthread_rwlock_unlock
@@ -11596,7 +11652,7 @@ screenshot resampling failed (error code %d)\n
 screenshot.jpg
 screenshot_height
 screenshot_prefix
-screenshot_service.cpp(406): 
+screenshot_service.cpp(434): 
 screenshot_subdir
 screenshot_width
 screenshots
@@ -11882,6 +11938,7 @@ sound,
 sound_state.txt
 sounds
 sounds/VOIP_Loopback.vsnd
+soundservice.cpp
 soundsystem
 soundsystem_update_async
 source   : %s\n
@@ -15538,6 +15595,7 @@ sv_showtags
 sv_shutdown
 sv_shutdown console command received.\n
 sv_shutdown_immediately_on_request
+sv_simulate_in_job
 sv_skyname
 sv_snapshot_unlimited
 sv_spewmeta
@@ -15551,6 +15609,7 @@ sv_steamgroup_exclusive
 sv_stressbots
 sv_tags
 sv_temp_baseline_string_table_buffer_size
+sv_tick_parallel_with_client
 sv_tick_snapshot_sort_entities
 sv_timeout
 sv_unlockedchapters
@@ -15609,7 +15668,6 @@ thread initialization failed.
 thread-local initialization routine for CEntitySpawnHelper::tm_pCurEntityPtr
 thread-local initialization routine for g_pThreadLocalStackAllocator
 thread_pool_option
-threaded_logger.cpp
 throw
 throw 
 tick
@@ -15750,6 +15808,7 @@ tv_playcast_max_rtdelay
 tv_playcast_origin_auth
 tv_playcast_retry_timeout
 tv_playcast_showerrors
+tv_playcast_slow_playback_when_fragment_requests_fail
 tv_port
 tv_port1
 tv_rate_multiplier

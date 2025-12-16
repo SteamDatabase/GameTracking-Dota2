@@ -151,6 +151,7 @@ function CHeroDemo:Think_InitializeNeutralCaster( neutralCaster )
 
 	--print( "neutralCaster:AddAbility( \"la_spawn_enemy_at_target\" )" )
 	neutralCaster:AddAbility( "la_spawn_enemy_at_target" )
+	LinkLuaModifier( "lm_take_no_damage", 'lm_take_no_damage.lua', LUA_MODIFIER_MOTION_NONE )
 	return
 end
 
@@ -184,6 +185,28 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnRefreshButtonPressed( eventSourceIndex )
 	SendToServerConsole( "dota_dev hero_refresh" )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+
+	--self:BroadcastMsg( "#Refresh_Msg" )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnRefreshSpellsButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnRefreshSpellsButtonPressed( eventSourceIndex )
+	SendToServerConsole( "dota_dev hero_refresh_spells" )
+
+	EmitGlobalSound( "UI.Button.Pressed" )
+
+	--self:BroadcastMsg( "#Refresh_Msg" )
+end
+
+--------------------------------------------------------------------------------
+-- ButtonEvent: OnRefreshHealthButtonPressed
+--------------------------------------------------------------------------------
+function CHeroDemo:OnRefreshHealthButtonPressed( eventSourceIndex )
+	SendToServerConsole( "dota_dev hero_refresh_health" )
 
 	EmitGlobalSound( "UI.Button.Pressed" )
 
@@ -242,6 +265,7 @@ function CHeroDemo:OnFreeSpellsButtonPressed( eventSourceIndex )
 		self:BroadcastMsg( "#FreeSpellsOff_Msg" )
 	end
 
+	self:BroadcastGlobalSettings()
 	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
@@ -297,12 +321,23 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 
 	local hPlayer = PlayerResource:GetPlayer( data.PlayerID )
 
-	local sHeroToSpawn = Convars:GetStr( "dota_hero_demo_default_enemy" )
-	local nHeroVariant = Convars:GetInt( "dota_hero_demo_default_enemy_variant" );
+	local sep, fields = ":", {}
+    local pattern = string.format("([^%s]+)", sep)
+    data.str:gsub(pattern, function(c) fields[#fields+1] = c end)
 
-	DebugCreateHeroWithVariant( hPlayer, sHeroToSpawn, nHeroVariant, self.m_nENEMIES_TEAM, false,
+	local sHeroToSpawn = DOTAGameManager:GetHeroUnitNameByID( tonumber( fields[1] ) )
+	local nHeroVariant = tonumber(fields[2])
+
+	local nTeamNumber = self.m_nALLIES_TEAM
+	if PlayerResource:GetTeam( data.PlayerID ) == self.m_nALLIES_TEAM then
+		nTeamNumber = self.m_nENEMIES_TEAM
+	else
+		nTeamNumber = self.m_nALLIES_TEAM
+	end
+
+	DebugCreateHeroWithVariant( hPlayer, sHeroToSpawn, nHeroVariant, nTeamNumber, false,
 		function( hEnemy )
-			hEnemy:SetControllableByPlayer( self.m_nPlayerID, false )
+			hEnemy:SetControllableByAllPlayers( true )
 			hEnemy:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
 			FindClearSpaceForUnit( hEnemy, hPlayerHero:GetAbsOrigin(), false )
 			hEnemy:Hold()
@@ -338,6 +373,25 @@ function CHeroDemo:OnToggleDayNight( eventSourceIndex, data )
 	else
 		GameRules:SetTimeOfDay( 0.251 )
 	end
+	self:BroadcastGlobalSettings()
+end
+
+function CHeroDemo:OnAllVisionButtonPressed( eventSourceIndex, data )
+	local bAllVision = Convars:GetBool( "dota_all_vision" )
+	Convars:SetBool("dota_all_vision", not bAllVision)
+	self:BroadcastGlobalSettings()
+end
+
+function CHeroDemo:OnEnableXPGainButtonPressed( eventSourceIndex, data )
+	local bEnableXPGain = Convars:GetBool( "dota_enable_xp_gain" )
+	Convars:SetBool("dota_enable_xp_gain", not bEnableXPGain)
+	self:BroadcastGlobalSettings()
+end
+
+function CHeroDemo:OnEnableRegenButtonPressed( eventSourceIndex, data )
+	local bEnableRegen = Convars:GetBool( "dota_enable_regeneration" )
+	Convars:SetBool("dota_enable_regeneration", not bEnableRegen)
+	self:BroadcastGlobalSettings()
 end
 
 --------------------------------------------------------------------------------
@@ -397,6 +451,11 @@ function CHeroDemo:OnRemoveHeroButtonPressed( eventSourceIndex, data )
 	local hHero = EntIndexToHScript( nHeroEntIndex )
 	
 	if ( hHero ~= nil and hHero:IsNull() == false and hHero ~= PlayerResource:GetSelectedHeroEntity( 0 ) ) then
+
+		if not PlayerResource:IsFakeClient( hHero:GetPlayerID() ) then
+			return
+		end
+
 		--print( 'OnRemoveHeroButtonPressed! - found hero with ent index = ' .. nHeroEntIndex )
 		if hHero:IsHero() and hHero:GetPlayerOwner() ~= nil and hHero:GetPlayerOwnerID() ~= 0 then
 			local nPlayerID = hHero:GetPlayerID()
@@ -515,12 +574,23 @@ function CHeroDemo:OnSpawnAllyButtonPressed( eventSourceIndex, data )
 
 	local hPlayer = PlayerResource:GetPlayer( data.PlayerID )
 
-	local sHeroToSpawn = Convars:GetStr( "dota_hero_demo_default_enemy" )
-	local nHeroVariant = Convars:GetInt( "dota_hero_demo_default_enemy_variant" );
+	local sep, fields = ":", {}
+    local pattern = string.format("([^%s]+)", sep)
+    data.str:gsub(pattern, function(c) fields[#fields+1] = c end)
 
-	DebugCreateHeroWithVariant( hPlayer, sHeroToSpawn, nHeroVariant, self.m_nALLIES_TEAM, false,
+	local sHeroToSpawn = DOTAGameManager:GetHeroUnitNameByID( tonumber( fields[1] ) )
+	local nHeroVariant = tonumber(fields[2])
+
+	local nTeamNumber = self.m_nALLIES_TEAM
+	if PlayerResource:GetTeam( data.PlayerID ) == self.m_nALLIES_TEAM then
+		nTeamNumber = self.m_nALLIES_TEAM
+	else
+		nTeamNumber = self.m_nENEMIES_TEAM
+	end
+
+	DebugCreateHeroWithVariant( hPlayer, sHeroToSpawn, nHeroVariant, nTeamNumber, false,
 		function( hAlly )
-			hAlly:SetControllableByPlayer( self.m_nPlayerID, false )
+			hAlly:SetControllableByAllPlayers( true )
 			hAlly:SetRespawnPosition( hPlayerHero:GetAbsOrigin() )
 			FindClearSpaceForUnit( hAlly, hPlayerHero:GetAbsOrigin(), false )
 			hAlly:Hold()
@@ -532,6 +602,12 @@ function CHeroDemo:OnSpawnAllyButtonPressed( eventSourceIndex, data )
 	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
+function CHeroDemo:OnChangeTeamButtonPressed( eventSourceIndex, data )
+	local hHero = EntIndexToHScript(tonumber( data.str ))
+	DebugChangeTeam(hHero)
+	PlayerResource:ModifyGold(hHero:GetPlayerID(), 99999, true, 0)
+end
+
 --------------------------------------------------------------------------------
 -- ButtonEvent: OnDummyTargetButtonPressed
 --------------------------------------------------------------------------------
@@ -541,9 +617,9 @@ function CHeroDemo:OnDummyTargetButtonPressed( eventSourceIndex, data )
 		return
 	end
 	
-	local hDummy = CreateUnitByName( "npc_dota_hero_target_dummy", hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nENEMIES_TEAM )
+	local hDummy = CreateUnitByName( "npc_dota_hero_target_dummy", hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nNEUTRALS_TEAM )
 	hDummy:SetAbilityPoints( 0 )
-	hDummy:SetControllableByPlayer( self.m_nPlayerID, false )
+	hDummy:SetControllableByAllPlayers( true )
 	hDummy:Hold()
 	hDummy:SetIdleAcquire( false )
 	hDummy:SetAcquisitionRange( 0 )
@@ -572,6 +648,7 @@ function CHeroDemo:OnTowersEnabledButtonPressed( eventSourceIndex )
 		self:BroadcastMsg( "#TowersEnabledOff_Msg" )
 	end
 
+	self:BroadcastGlobalSettings()
 	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
@@ -644,6 +721,7 @@ function CHeroDemo:OnSpawnCreepsButtonPressed( eventSourceIndex )
 		self:BroadcastMsg( "#SpawnCreepsOff_Msg" )
 	end
 
+	self:BroadcastGlobalSettings()
 	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
@@ -815,6 +893,19 @@ function CHeroDemo:OnSpawnRuneShieldPressed( eventSourceIndex, data )
 	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
+function CHeroDemo:OnSpawnUnitButtonPressed( eventSourceIndex, data )
+	local hPlayerHero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+	if hPlayerHero == nil then
+		return
+	end
+
+	local hUnit = CreateUnitByName( data.str, hPlayerHero:GetAbsOrigin(), true, nil, nil, self.m_nNEUTRALS_TEAM )
+	hUnit:SetControllableByAllPlayers( true )
+	hUnit:Hold()
+	hUnit:SetIdleAcquire( false )
+	hUnit:SetAcquisitionRange( 0 )
+end
+
 --------------------------------------------------------------------------------
 -- ButtonEvent: OnChangeSpeedStep
 --------------------------------------------------------------------------------
@@ -871,6 +962,7 @@ end
 function CHeroDemo:OnLeaveButtonPressed( eventSourceIndex )
 	EmitGlobalSound( "UI.Button.Pressed" )
 
+	CustomGameEventManager:Send_ServerToAllClients( "disconnect", nil )
 	SendToServerConsole( "disconnect" )
 end
 
@@ -905,4 +997,23 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnRestoreState( eventSourceIndex )
 	SendToServerConsole( "dota_load_demo_mode_scenario demo_mode" )
+end
+
+function CHeroDemo:BroadcastGlobalSettings()
+	local event_data =
+	{
+		free_spells_enabled = self.m_bFreeSpellsEnabled,
+		creeps_enabled = Convars:GetInt("dota_hero_demo_spawn_creeps_enabled"),
+		towers_enabled = Convars:GetInt("dota_hero_demo_towers_enabled"),
+		night_time = not GameRules:IsDaytime(),
+		all_vision = Convars:GetBool("dota_all_vision"),
+		enable_xp_gain = Convars:GetBool("dota_enable_xp_gain"),
+		enable_regeneration = Convars:GetBool("dota_enable_regeneration"),
+	}
+
+	CustomGameEventManager:Send_ServerToAllClients( "update_global_settings", event_data )
+end
+
+function CHeroDemo:OnPlayerConnected()
+	self:BroadcastGlobalSettings()
 end

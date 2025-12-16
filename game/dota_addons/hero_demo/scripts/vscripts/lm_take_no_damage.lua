@@ -25,3 +25,17 @@ end
 function lm_take_no_damage:GetAbsoluteNoDamagePure( params )
 	return 1
 end
+
+--------------------------------------------------------------------------------
+
+function lm_take_no_damage:IsPurgable()
+	return false
+end
+
+function lm_take_no_damage:GetEffectName()
+	return "particles/items_fx/glyph_creeps.vpcf"
+end
+
+-- function lm_take_no_damage:GetStatusEffectName()
+-- 	return "particles/items_fx/glyph_creeps.vpcf"
+-- end

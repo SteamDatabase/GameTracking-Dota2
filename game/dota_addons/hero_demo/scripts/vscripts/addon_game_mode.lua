@@ -7,8 +7,6 @@ _G.NEUTRAL_TEAM = 4 -- global const for neutral team int
 _G.DOTA_MAX_ABILITIES = 16
 _G.HERO_MAX_LEVEL = 25
 
-LinkLuaModifier( "lm_take_no_damage", LUA_MODIFIER_MOTION_NONE )
-
 -- "demo_hero_name" is a magic term, "default_value" means no string was passed, so we'd probably want to put them in hero selection
 sHeroSelection = GameRules:GetGameSessionConfigValue( "demo_hero_name", "default_value" )
 -- If it hasn't been set there, check the command line
@@ -41,6 +39,8 @@ function Precache( context )
 	PrecacheUnitByNameSync( "npc_dota_hero_target_dummy", context )
 
 	PrecacheResource( "soundfile", "soundevents/game_sounds_hero_demo.vsndevts", context )
+	PrecacheResource( "particle", "particles/units/heroes/hero_chen/chen_hand_of_god_aura_body.vpcf", context )
+	PrecacheResource( "particle", "particles/status_fx/status_effect_chen_handofgod_buff.vpcf", context )
 end
 
 --------------------------------------------------------------------------------
@@ -84,20 +84,26 @@ function CHeroDemo:InitGameMode()
 	ListenToGameEvent( "npc_replaced", Dynamic_Wrap( CHeroDemo, "OnNPCReplaced" ), self )
 
 	CustomGameEventManager:RegisterListener( "RequestInitialSpawnHeroID", function(...) return self:OnRequestInitialSpawnHeroID( ... ) end )
+	CustomGameEventManager:RegisterListener( "PlayerConnected", function(...) return self:OnPlayerConnected( ... ) end )
 
 	CustomGameEventManager:RegisterListener( "ToggleDayNight", function(...) return self:OnToggleDayNight( ... ) end )
 
 	CustomGameEventManager:RegisterListener( "WelcomePanelDismissed", function(...) return self:OnWelcomePanelDismissed( ... ) end )
-	CustomGameEventManager:RegisterListener( "RefreshButtonPressed", function(...) return self:OnRefreshButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "RefreshSpellsButtonPressed", function(...) return self:OnRefreshSpellsButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "RefreshHealthButtonPressed", function(...) return self:OnRefreshHealthButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "LevelUpButtonPressed", function(...) return self:OnLevelUpButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "UltraMaxLevelButtonPressed", function(...) return self:OnUltraMaxLevelButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "FreeSpellsButtonPressed", function(...) return self:OnFreeSpellsButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "AllVisionButtonPressed", function(...) return self:OnAllVisionButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "EnableXPButtonPressed", function(...) return self:OnEnableXPGainButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "EnableRegenButtonPressed", function(...) return self:OnEnableRegenButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "CombatLogButtonPressed", function(...) return self:CombatLogButtonPressed( ... ) end )
 
 	CustomGameEventManager:RegisterListener( "SelectMainHeroButtonPressed", function(...) return self:OnSelectMainHeroButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SelectSpawnHeroButtonPressed", function(...) return self:OnSelectSpawnHeroButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnEnemyButtonPressed", function(...) return self:OnSpawnEnemyButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnAllyButtonPressed", function(...) return self:OnSpawnAllyButtonPressed( ... ) end )
+	CustomGameEventManager:RegisterListener( "ChangeTeamButtonPressed", function(...) return self:OnChangeTeamButtonPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "RemoveHeroButtonPressed", function(...) return self:OnRemoveHeroButtonPressed( ... ) end )	
 
 	CustomGameEventManager:RegisterListener( "LevelUpHero", function(...) return self:OnLevelUpHero( ... ) end )
@@ -132,6 +138,8 @@ function CHeroDemo:InitGameMode()
 	CustomGameEventManager:RegisterListener( "SpawnRuneRegenerationPressed", function(...) return self:OnSpawnRuneRegenerationPressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnRuneArcanePressed", function(...) return self:OnSpawnRuneArcanePressed( ... ) end )
 	CustomGameEventManager:RegisterListener( "SpawnRuneShieldPressed", function(...) return self:OnSpawnRuneShieldPressed( ... ) end )
+
+	CustomGameEventManager:RegisterListener( "SpawnUnitButtonPressed", function(...) return self:OnSpawnUnitButtonPressed( ... ) end )
 
 	CustomGameEventManager:RegisterListener( "ChangeSpeedStep", function(...) return self:OnChangeSpeedStep( ... ) end )
 	
@@ -171,8 +179,8 @@ function CHeroDemo:InitGameMode()
 	self.m_nPlayerEntIndex = -1
 	
 	self.m_nALLIES_TEAM = 2
-
 	self.m_nENEMIES_TEAM = 3
+	self.m_nNEUTRALS_TEAM = 6 -- first custom team, couldn't use the actual neutrals team due to an assert
 
 	self.m_bFreeSpellsEnabled = false
 	self.m_bInvulnerabilityEnabled = false
