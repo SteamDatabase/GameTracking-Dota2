@@ -185,9 +185,6 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnRefreshButtonPressed( eventSourceIndex )
 	SendToServerConsole( "dota_dev hero_refresh" )
-
-	EmitGlobalSound( "UI.Button.Pressed" )
-
 	--self:BroadcastMsg( "#Refresh_Msg" )
 end
 
@@ -196,8 +193,6 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnRefreshSpellsButtonPressed( eventSourceIndex )
 	SendToServerConsole( "dota_dev refresh_spells" )
-
-	EmitGlobalSound( "UI.Button.Pressed" )
 
 	--self:BroadcastMsg( "#Refresh_Msg" )
 end
@@ -208,8 +203,6 @@ end
 function CHeroDemo:OnRefreshHealthButtonPressed( eventSourceIndex )
 	SendToServerConsole( "dota_dev refresh_health" )
 
-	EmitGlobalSound( "UI.Button.Pressed" )
-
 	--self:BroadcastMsg( "#Refresh_Msg" )
 end
 
@@ -218,8 +211,6 @@ end
 --------------------------------------------------------------------------------
 function CHeroDemo:OnLevelUpButtonPressed( eventSourceIndex )
 	SendToServerConsole( "dota_dev hero_level 1" )
-
-	EmitGlobalSound( "UI.Button.Pressed" )
 
 	--self:BroadcastMsg( "#LevelUp_Msg" )
 end
@@ -245,8 +236,6 @@ function CHeroDemo:OnUltraMaxLevelButtonPressed( eventSourceIndex, data )
 	if not hPlayerHero:FindModifierByName( "modifier_item_ultimate_scepter_consumed" ) then
 		hPlayerHero:AddItemByName( "item_ultimate_scepter_2" )
 	end
-
-	EmitGlobalSound( "UI.Button.Pressed" )
 
 	--self:BroadcastMsg( "#MaxLevel_Msg" )
 end
@@ -345,8 +334,6 @@ function CHeroDemo:OnSpawnEnemyButtonPressed( eventSourceIndex, data )
 			hEnemy:SetAcquisitionRange( 0 )
 			self:BroadcastMsg( "#SpawnEnemy_Msg" )
 		end )
-
-	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 --------------------------------------------------------------------------------
@@ -598,8 +585,6 @@ function CHeroDemo:OnSpawnAllyButtonPressed( eventSourceIndex, data )
 			hAlly:SetAcquisitionRange( 0 )
 			self:BroadcastMsg( "#SpawnAlly_Msg" )
 		end )
-
-	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 function CHeroDemo:OnChangeTeamButtonPressed( eventSourceIndex, data )
@@ -623,9 +608,6 @@ function CHeroDemo:OnDummyTargetButtonPressed( eventSourceIndex, data )
 	hDummy:Hold()
 	hDummy:SetIdleAcquire( false )
 	hDummy:SetAcquisitionRange( 0 )
-
-	EmitGlobalSound( "UI.Button.Pressed" )
-
 	--self:BroadcastMsg( "#SpawnDummyTarget_Msg" )
 end
 
@@ -922,8 +904,6 @@ function CHeroDemo:OnChangeSpeedStep( eventSourceIndex, data )
 	elseif ( nData == -1 ) then
 		SendToServerConsole( "host_timescale_dec" )
 	end
-	
-	EmitGlobalSound( "UI.Button.Pressed" )
 end
 
 --------------------------------------------------------------------------------
