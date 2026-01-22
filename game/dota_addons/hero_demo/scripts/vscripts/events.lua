@@ -886,6 +886,7 @@ function CHeroDemo:OnSpawnUnitButtonPressed( eventSourceIndex, data )
 	hUnit:Hold()
 	hUnit:SetIdleAcquire( false )
 	hUnit:SetAcquisitionRange( 0 )
+	FindClearSpaceForUnit( hUnit, hPlayerHero:GetAbsOrigin(), true )
 end
 
 --------------------------------------------------------------------------------
