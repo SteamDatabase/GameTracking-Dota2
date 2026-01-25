@@ -3,7 +3,6 @@
 // MNetworkExcludeByName = "m_cellX"
 // MNetworkExcludeByName = "m_cellY"
 // MNetworkExcludeByName = "m_cellZ"
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByUserGroup = "m_flCycle"
 // MNetworkExcludeByName = "m_flEncodedController"
 // MNetworkExcludeByName = "m_flPoseParameter"
@@ -57,6 +56,7 @@
 // MNetworkVarNames = "bool m_bGrantedByFacet"
 // MNetworkVarNames = "bool m_bReflection"
 // MNetworkVarNames = "EHANDLE m_pReflectionSourceAbility"
+// MNetworkVarNames = "EHANDLE m_hHiddenAbilityForDisplay"
 class CDOTABaseAbility : public CBaseEntity
 {
 	int32 m_iAbilityIndex;
@@ -150,6 +150,8 @@ class CDOTABaseAbility : public CBaseEntity
 	bool m_bReflection;
 	// MNetworkEnable
 	CHandle< CBaseEntity > m_pReflectionSourceAbility;
+	// MNetworkEnable
+	CHandle< CBaseEntity > m_hHiddenAbilityForDisplay;
 	CHandle< CBaseEntity > m_hReflectionCause;
 	item_definition_index_t m_nBackedByEconItemIndex;
 	bool m_bAltCastOrdered;

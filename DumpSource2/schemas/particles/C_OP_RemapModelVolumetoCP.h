@@ -10,11 +10,13 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -114,19 +116,19 @@ class C_OP_RemapModelVolumetoCP : public CParticleFunctionPreEmission
 	int32 m_nOutControlPointMaxNumber;
 	// MPropertyFriendlyName = "output CP component"
 	// MPropertyAttributeChoiceName = "vector_component"
-	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME"
+	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME && m_nBBoxType != BBOX_RADIUS"
 	int32 m_nField;
-	// MPropertyFriendlyName = "input volume minimum in cubic units"
-	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME"
+	// MPropertyFriendlyName = "input volume minimum"
+	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME && m_nBBoxType != BBOX_RADIUS"
 	float32 m_flInputMin;
-	// MPropertyFriendlyName = "input volume maximum in cubic units"
-	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME"
+	// MPropertyFriendlyName = "input volume maximum"
+	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME && m_nBBoxType != BBOX_RADIUS"
 	float32 m_flInputMax;
 	// MPropertyFriendlyName = "output minimum"
-	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME"
+	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME && m_nBBoxType != BBOX_RADIUS"
 	float32 m_flOutputMin;
 	// MPropertyFriendlyName = "output maximum"
-	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME"
+	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME && m_nBBoxType != BBOX_RADIUS"
 	float32 m_flOutputMax;
 	// MPropertyFriendlyName = "check full bbox only"
 	// MPropertySuppressExpr = "m_nBBoxType != BBOX_VOLUME"

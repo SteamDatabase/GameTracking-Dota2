@@ -44,6 +44,5 @@ class CBaseAnimatingController : public CSkeletonAnimationController
 	float32 m_flCachedSequenceCycleRate;
 	float32 m_flCachedGroundSpeed;
 	SequenceFinishNotifyState_t m_nNotifyState;
-	bool m_bHasEverDispatchedAnimEvents;
 	CSequenceTransitioner2 m_SequenceTransitioner;
 };

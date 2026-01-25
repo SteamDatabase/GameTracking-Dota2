@@ -9,10 +9,6 @@
 //	},
 //	"m_HookName": ""
 //}
-// MCellForDomain = "BaseDomain"
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
-// MPulseCellWithCustomDocNode
 class CPulseCell_Inflow_GraphHook : public CPulseCell_Inflow_BaseEntrypoint
 {
 	PulseSymbol_t m_HookName;

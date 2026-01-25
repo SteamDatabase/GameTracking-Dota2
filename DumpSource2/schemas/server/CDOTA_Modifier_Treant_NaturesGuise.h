@@ -1,6 +1,6 @@
 class CDOTA_Modifier_Treant_NaturesGuise : public CDOTA_Buff
 {
-	CountdownTimer m_RevealTimer;
-	CountdownTimer m_InvisAttackTimer;
-	CountdownTimer m_CooldownTimer;
+	float32 grace_time;
+	float32 cooldown_time;
+	float32 radius;
 };

@@ -12,5 +12,7 @@ class CNavLinkAreaEntity : public CPointEntity
 	CEntityIOOutput m_OnNavLinkStart;
 	CEntityIOOutput m_OnNavLinkFinish;
 	bool m_bIsTerminus;
+	CUtlVector< CNavLinkConnectionSave > m_vecSavedConnections;
+	int32 m_nProcessOrder;
 	int32 m_nSplits;
 };

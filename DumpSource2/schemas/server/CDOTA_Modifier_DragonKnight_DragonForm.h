@@ -16,4 +16,5 @@ class CDOTA_Modifier_DragonKnight_DragonForm : public CDOTA_Buff
 	int32 iAssetIndex;
 	float32 ranged_splash_radius;
 	float32 ranged_splash_damage_pct;
+	ParticleIndex_t m_nAmbientParticleFX;
 };

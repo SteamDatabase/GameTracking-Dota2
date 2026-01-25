@@ -49,8 +49,10 @@
 // MNetworkVarNames = "int m_iCampsStacked"
 // MNetworkVarNames = "int m_iRunePickups"
 // MNetworkVarNames = "int m_iGoldSpentOnSupport"
-// MNetworkVarNames = "int m_iHeroDamage"
-// MNetworkVarNames = "int m_iTowerDamage"
+// MNetworkReplayCompatField = "m_iHeroDamage"
+// MNetworkVarNames = "float m_flHeroDamage"
+// MNetworkReplayCompatField = "m_iTowerDamage"
+// MNetworkVarNames = "float m_flTowerDamage"
 // MNetworkVarNames = "int m_iWardsPurchased"
 // MNetworkVarNames = "int m_iWardsDestroyed"
 // MNetworkVarNames = "CDOTA_UnitInventory m_PreGameInventory"
@@ -66,10 +68,14 @@
 // MNetworkVarNames = "WeightedAbilitySuggestion_t m_iSuggestedNeutralEnhancements"
 // MNetworkVarNames = "HeroID_t m_iSuggestedHeroes"
 // MNetworkVarNames = "float m_flSuggestedHeroesWeights"
-// MNetworkVarNames = "int m_iDamageByTypeReceivedPreReduction"
-// MNetworkVarNames = "int m_iDamageByTypeReceivedPostReduction"
-// MNetworkVarNames = "int m_iOutgoingDamageByTypePreReduction"
-// MNetworkVarNames = "int m_iOutgoingDamageByTypePostReduction"
+// MNetworkReplayCompatField = "m_iDamageByTypeReceivedPreReduction"
+// MNetworkVarNames = "float m_flDamageByTypeReceivedPreReduction"
+// MNetworkReplayCompatField = "m_iDamageByTypeReceivedPostReduction"
+// MNetworkVarNames = "float m_flDamageByTypeReceivedPostReduction"
+// MNetworkReplayCompatField = "m_iOutgoingDamageByTypePreReduction"
+// MNetworkVarNames = "float m_flOutgoingDamageByTypePreReduction"
+// MNetworkReplayCompatField = "m_iOutgoingDamageByTypePostReduction"
+// MNetworkVarNames = "float m_flOutgoingDamageByTypePostReduction"
 // MNetworkVarNames = "OverworldID_t m_uSelectedOverworldID"
 // MNetworkVarNames = "OverworldTokenID_t m_uSelectedOverworldTokenRewards"
 // MNetworkVarNames = "int m_iCommandsIssued"
@@ -201,9 +207,9 @@ class DataTeamPlayer_t
 	// MNetworkEnable
 	int32 m_iGoldSpentOnSupport;
 	// MNetworkEnable
-	int32 m_iHeroDamage;
+	float32 m_flHeroDamage;
 	// MNetworkEnable
-	int32 m_iTowerDamage;
+	float32 m_flTowerDamage;
 	// MNetworkEnable
 	int32 m_iWardsPurchased;
 	// MNetworkEnable
@@ -242,13 +248,13 @@ class DataTeamPlayer_t
 	// MNetworkEnable
 	float32[10] m_flSuggestedHeroesWeights;
 	// MNetworkEnable
-	int32[3] m_iDamageByTypeReceivedPreReduction;
+	float32[3] m_flDamageByTypeReceivedPreReduction;
 	// MNetworkEnable
-	int32[3] m_iDamageByTypeReceivedPostReduction;
+	float32[3] m_flDamageByTypeReceivedPostReduction;
 	// MNetworkEnable
-	int32[3] m_iOutgoingDamageByTypePreReduction;
+	float32[3] m_flOutgoingDamageByTypePreReduction;
 	// MNetworkEnable
-	int32[3] m_iOutgoingDamageByTypePostReduction;
+	float32[3] m_flOutgoingDamageByTypePostReduction;
 	// MNetworkEnable
 	OverworldID_t m_uSelectedOverworldID;
 	// MNetworkEnable

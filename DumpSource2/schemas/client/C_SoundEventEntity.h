@@ -14,5 +14,6 @@ class C_SoundEventEntity : public C_BaseEntity
 	CUtlSymbolLarge m_iszSoundName;
 	CEntityHandle m_hSource;
 	int32 m_nEntityIndexSelection;
+	// MNotSaved
 	bitfield:1 m_bClientSideOnly;
 };

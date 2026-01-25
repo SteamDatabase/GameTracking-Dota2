@@ -1,6 +1,4 @@
 // MNetworkExcludeByName = "m_bIsIllusion"
-// MNetworkExcludeByName = "m_blinktoggle"
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByUserGroup = "m_flCycle"
 // MNetworkExcludeByName = "m_flEncodedController"
 // MNetworkExcludeByName = "m_flPoseParameter"
@@ -321,6 +319,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	// MNetworkEnable
 	uint64 m_iIsControllableByPlayer64;
 	PlayerID_t m_nControllingPlayerID;
+	bool m_bControllableByAllPlayers;
 	bool m_bRunAIWhenControllableByPlayer;
 	// MNetworkEnable
 	// MNetworkUserGroup = "Abilities"
@@ -328,7 +327,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	CNetworkUtlVectorBase< CHandle< CBaseEntity > > m_vecAbilities;
 	CUtlVector< CHandle< CBaseEntity > > m_associatedEmptyAbilities;
 	CHandle< CBaseEntity > m_hActiveAbility;
-	Vector m_vCursorLocation;
+	VectorWS m_vCursorLocation;
 	CHandle< CBaseEntity > m_hCursorTarget;
 	CHandle< CBaseEntity > m_hOriginalCursorTarget;
 	bool m_bCursorTargetingNothing;
@@ -393,6 +392,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	bool m_bWakesNeutrals;
 	bool m_bNeutralIgnore;
 	bool m_bIdleAcquire;
+	bool m_bIdleAcquireForceSet;
 	bool m_bCanFollowUnseenUnits;
 	bool m_bExpired;
 	Vector m_vCurrentMovementOrderDestination;
@@ -430,7 +430,7 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	bool m_bHasBuiltWearableSpawnList;
 	GameTick_t[15] m_nFoWFadeStartTime;
 	int32 m_nFOWVisibilityRadius;
-	Vector m_vFOWOriginOverride;
+	VectorWS m_vFOWOriginOverride;
 	int32 m_iTeamViewerID;
 	CUtlString m_strLastKillerAbility;
 	// MNetworkEnable
@@ -471,4 +471,5 @@ class CDOTA_BaseNPC : public NextBotCombatCharacter
 	CHandle< CDOTA_BaseNPC > m_hDirectionalRangedFakeTarget;
 	bool m_bShouldComputeRemainingPathLength;
 	float32 m_flRemainingPathLength;
+	CUtlVector< CHandle< CBaseEntity > > m_AbilitiesPendingDelete;
 };

@@ -3,7 +3,7 @@
 //	"m_eStatImpl": "k_ePlayerTrackedStatImpl_Invalid",
 //	"m_killEaterData":
 //	{
-//		"unKillEaterEvent": 0
+//		"unKillEaterEvent": 4294967295
 //	},
 //	"m_combatQueryData":
 //	{

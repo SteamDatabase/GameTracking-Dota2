@@ -2,9 +2,9 @@ class CDOTA_Modifier_Hoodwink_ArcingBoomerang : public CDOTA_Buff
 {
 	Vector m_vLeftControl;
 	Vector m_vRightControl;
-	Vector m_vTargetLoc;
-	Vector m_vOriginalTargetLoc;
-	Vector m_vSourceLoc;
+	VectorWS m_vTargetLoc;
+	VectorWS m_vOriginalTargetLoc;
+	VectorWS m_vSourceLoc;
 	bool m_bGroundTargeted;
 	float32 m_flTravelDuration;
 	GameTime_t m_flBoomerangDieTime;

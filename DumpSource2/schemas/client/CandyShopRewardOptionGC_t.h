@@ -3,7 +3,7 @@
 //	"m_unRewardOptionMaxCount": 0,
 //	"m_unCandyPrice": 0,
 //	"m_unWeight": 0,
-//	"m_eOptionType": "k_eCandyShopRewardOptionType_SingleItem",
+//	"m_eOptionType": "k_eCandyShopRewardOptionType_Invalid",
 //	"m_unSingleItemDef": 0,
 //	"m_sLootList": "",
 //	"m_eEvent": "EVENT_ID_NONE",

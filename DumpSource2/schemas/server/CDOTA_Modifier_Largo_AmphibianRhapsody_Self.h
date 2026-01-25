@@ -1,0 +1,30 @@
+class CDOTA_Modifier_Largo_AmphibianRhapsody_Self : public CDOTA_Buff
+{
+	float32 radius;
+	float32 duration;
+	float32 rhythm_interval;
+	float32 rhythm_grace_period;
+	float32 armor_per_stack;
+	int32 max_stacks;
+	float32 stack_duration;
+	int32 double_song;
+	int32 stack_decrement_on_exit;
+	AmphibianRhapsodySong_t m_nCurrentSong;
+	AmphibianRhapsodySong_t m_nCurrentSecondSong;
+	int32 m_nCurrentSongMusicTrack;
+	float32 m_flAnticipatePoseTime;
+	bool m_bPlayFinishSongSound;
+	char*[3] arrOriginalQWEAbilityNames;
+	char*[3] arrCurrentQWEAbilityNames;
+	ParticleIndex_t m_nFXIndex;
+	CountdownTimer m_rhythmTimer;
+	int32 m_nCurrentRhythmWindow;
+	CUtlVector< int32 > m_vecSuccessfulBursts;
+	CUtlVector< int32 > m_vecMissedBursts;
+	float32 m_flLatencyAllowance;
+	bool m_bPlayedStopSound;
+	bool m_bCanceledByEnemy;
+	CountdownTimer m_doubleSongTimer;
+	int32 m_nConsecutiveBursts;
+	bool m_bSpokeConcept;
+};

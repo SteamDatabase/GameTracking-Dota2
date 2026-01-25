@@ -1,6 +1,7 @@
 // MNetworkVarNames = "bool m_CurrentHeroAvailable"
 class CDOTAGameManager
 {
+	// MNotSaved
 	CNetworkVarChainer __m_pChainEntity;
 	bool m_bCustomGame;
 	bool m_bEventGame;

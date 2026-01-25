@@ -62,7 +62,7 @@ class CDOTA_Bot
 	GameTime_t m_fRequestedBlinkExpire;
 	CUtlVector< CHandle< CBaseEntity > > m_hMinions;
 	CUtlVector< CDOTABaseAbility* > m_Build;
-	float32[27] m_fModeDesires;
+	float32[28] m_fModeDesires;
 	int32 m_iPreviousBotModeType;
 	GameTime_t m_fPendingActionExecuteTime;
 	bool m_bPendingActionBypass;

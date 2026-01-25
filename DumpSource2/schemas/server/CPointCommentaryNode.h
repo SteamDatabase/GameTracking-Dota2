@@ -30,7 +30,7 @@ class CPointCommentaryNode : public CBaseAnimatingActivity
 	QAngle m_vecFinishAngles;
 	bool m_bPreventChangesWhileMoving;
 	bool m_bDisabled;
-	Vector m_vecTeleportOrigin;
+	VectorWS m_vecTeleportOrigin;
 	GameTime_t m_flAbortedPlaybackAt;
 	CEntityIOOutput m_pOnCommentaryStarted;
 	CEntityIOOutput m_pOnCommentaryStopped;

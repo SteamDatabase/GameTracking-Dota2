@@ -15,6 +15,13 @@ class CFuncRotator : public CBaseModelEntity
 	Quaternion m_qLSOrientation;
 	CEntityIOOutput m_OnRotationStarted;
 	CEntityIOOutput m_OnRotationCompleted;
+	CEntityIOOutput m_OnOscillate;
+	CEntityIOOutput m_OnOscillateStartArrive;
+	CEntityIOOutput m_OnOscillateStartDepart;
+	CEntityIOOutput m_OnOscillateEndArrive;
+	CEntityIOOutput m_OnOscillateEndDepart;
+	bool m_bOscillateDepart;
+	int32 m_nOscillateCount;
 	CFuncRotator::Rotate_t m_eRotateType;
 	CFuncRotator::Rotate_t m_ePrevRotateType;
 	bool m_bHasTargetOverride;
@@ -28,4 +35,10 @@ class CFuncRotator : public CBaseModelEntity
 	bool m_bReturningToPreviousOrientation;
 	CUtlVector< RotatorQueueEntry_t > m_vecRotatorQueue;
 	CUtlVector< RotatorHistoryEntry_t > m_vecRotatorQueueHistory;
+	SolidType_t m_eSolidType;
+	CHandle< CFuncMover > m_hSpeedFromMover;
+	CUtlSymbolLarge m_iszSpeedFromMover;
+	float32 m_flSpeedScale;
+	float32 m_flMinYawRotation;
+	float32 m_flMaxYawRotation;
 };

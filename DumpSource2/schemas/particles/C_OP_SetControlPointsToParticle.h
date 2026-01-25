@@ -10,11 +10,13 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -92,6 +94,7 @@
 //	"m_nFirstControlPoint": 0,
 //	"m_nNumControlPoints": 1,
 //	"m_nFirstSourcePoint": 0,
+//	"m_bReverse": false,
 //	"m_bSetOrientation": false,
 //	"m_nOrientationMode": "PARTICLE_ORIENTATION_SET_FROM_VELOCITY",
 //	"m_nSetParent": "PARTICLE_SET_PARENT_NO"
@@ -106,6 +109,8 @@ class C_OP_SetControlPointsToParticle : public CParticleFunctionOperator
 	int32 m_nNumControlPoints;
 	// MPropertyFriendlyName = "first particle to copy"
 	int32 m_nFirstSourcePoint;
+	// MPropertyFriendlyName = "reverse order"
+	bool m_bReverse;
 	// MPropertyFriendlyName = "set orientation"
 	bool m_bSetOrientation;
 	// MPropertyFriendlyName = "orientation style"

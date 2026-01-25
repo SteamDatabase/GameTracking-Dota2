@@ -4,9 +4,12 @@
 class C_World : public C_BaseModelEntity
 {
 	// MNetworkEnable
+	// MNotSaved
 	CStrongHandle< InfoForResourceTypeIMaterial2 >[6] m_skyBoxFaces;
 	// MNetworkEnable
+	// MNotSaved
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_hHeightFogTexture;
 	// MNetworkEnable
+	// MNotSaved
 	CStrongHandle< InfoForResourceTypeCTextureBase > m_hHeightFogMaskTexture;
 };

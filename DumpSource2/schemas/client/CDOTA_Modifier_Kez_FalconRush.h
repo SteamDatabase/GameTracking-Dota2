@@ -1,5 +1,6 @@
 class CDOTA_Modifier_Kez_FalconRush : public CDOTA_Buff
 {
+	int32 bonus_attack_speed;
 	int32 slow_resist;
 	float32 rush_speed;
 	float32 rush_range;
@@ -7,4 +8,5 @@ class CDOTA_Modifier_Kez_FalconRush : public CDOTA_Buff
 	bool m_bInRush;
 	ParticleIndex_t m_nFXIndex;
 	CHandle< C_BaseEntity > m_hTarget;
+	ParticleIndex_t m_nFXStackIndex;
 };

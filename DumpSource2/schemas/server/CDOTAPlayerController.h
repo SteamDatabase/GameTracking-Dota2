@@ -1,6 +1,5 @@
 // MNetworkUserGroupProxy = "CDOTAPlayerController"
 // MNetworkExcludeByName = "m_angRotation"
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByUserGroup = "m_flCycle"
 // MNetworkExcludeByName = "m_flPlaybackRate"
 // MNetworkExcludeByName = "m_flPoseParameter"

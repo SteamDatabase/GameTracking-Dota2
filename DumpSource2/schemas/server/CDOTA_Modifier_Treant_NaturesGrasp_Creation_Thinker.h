@@ -7,5 +7,4 @@ class CDOTA_Modifier_Treant_NaturesGrasp_Creation_Thinker : public CDOTA_Buff
 	Vector m_vFinalLoc;
 	int32 m_iVineCount;
 	int32 m_iVinesIndex;
-	bool m_bFoundTree;
 };

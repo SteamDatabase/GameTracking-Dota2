@@ -5,7 +5,6 @@ class C_DOTA_Ability_Lion_Impale : public C_DOTABaseAbility
 	int32 speed;
 	float32 length_buffer;
 	float32 range;
-	int32 m_iDefaultCastRange;
 	int32 pierces_immunity;
 	CUtlVector< CHandle< C_BaseEntity > > m_hHitEntities;
 };

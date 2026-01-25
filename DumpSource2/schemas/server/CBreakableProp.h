@@ -25,6 +25,7 @@ class CBreakableProp : public CBaseProp
 	bool m_bHasBreakPiecesOrCommands;
 	float32 m_explodeDamage;
 	float32 m_explodeRadius;
+	BaseExplosionTypes_t m_nExplosionType;
 	float32 m_explosionDelay;
 	CUtlSymbolLarge m_explosionBuildupSound;
 	CUtlSymbolLarge m_explosionCustomEffect;

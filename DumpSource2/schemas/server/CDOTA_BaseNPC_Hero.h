@@ -7,6 +7,7 @@
 // MNetworkVarNames = "int m_iRecentDamage"
 // MNetworkVarNames = "int m_iPrimaryAttribute"
 // MNetworkVarNames = "GameTime_t m_flDeathTime"
+// MNetworkVarNames = "GameTime_t m_flLastDispellTime"
 // MNetworkVarNames = "int m_iAbilityPoints"
 // MNetworkVarNames = "int m_iTotalAbilityPoints"
 // MNetworkVarNames = "int m_iCurrentXP"
@@ -20,6 +21,7 @@
 // MNetworkVarNames = "bool m_bCustomKillEffect"
 // MNetworkVarNames = "GameTime_t m_flSpawnedAt"
 // MNetworkVarNames = "EHANDLE m_hFacetAbilities"
+// MNetworkVarNames = "int m_vecHiddenLoadoutSlots"
 class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 {
 	// MNetworkEnable
@@ -40,6 +42,8 @@ class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 	int32 m_iPrimaryAttribute;
 	// MNetworkEnable
 	GameTime_t m_flDeathTime;
+	// MNetworkEnable
+	GameTime_t m_flLastDispellTime;
 	float32 m_flStrengthGain;
 	float32 m_flAgilityGain;
 	float32 m_flIntellectGain;
@@ -98,6 +102,8 @@ class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 	GameTime_t m_flSpawnedAt;
 	// MNetworkEnable
 	CNetworkUtlVectorBase< CHandle< CBaseEntity > > m_hFacetAbilities;
+	// MNetworkEnable
+	CNetworkUtlVectorBase< int32 > m_vecHiddenLoadoutSlots;
 	CountdownTimer m_PurchaseItemTimer;
 	CountdownTimer m_NeutralItemTimer;
 	CountdownTimer m_RetrieveItemsFromStashTimer;
@@ -119,7 +125,6 @@ class CDOTA_BaseNPC_Hero : public CDOTA_BaseNPC_Additive
 	CUtlString m_strCustomKillEffect;
 	CUtlString m_strCustomHexModel;
 	ParticleIndex_t m_nKillStreakFX;
-	CUtlVector< CHandle< CBaseEntity > > m_AbilitiesPendingDelete;
 	CUtlVector< sAcquireHistory > m_vecItemPurchaseHistory;
 	CUtlVector< sAcquireHistory > m_vecAbilitySkillHistory;
 	CUtlVector< sAcquireHistory > m_vecNeutralItemEquippedHistory;

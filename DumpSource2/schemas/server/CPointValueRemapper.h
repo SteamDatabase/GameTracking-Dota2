@@ -44,6 +44,7 @@ class CPointValueRemapper : public CBaseEntity
 	CUtlSymbolLarge m_iszOutputEntity3Name;
 	CUtlSymbolLarge m_iszOutputEntity4Name;
 	// MNetworkEnable
+	// MNotSaved
 	CNetworkUtlVectorBase< CHandle< CBaseEntity > > m_hOutputEntities;
 	// MNetworkEnable
 	ValueRemapperHapticsType_t m_nHapticsType;

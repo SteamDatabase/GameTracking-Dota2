@@ -1,5 +1,3 @@
-// MNetworkExcludeByName = "m_blinktoggle"
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByUserGroup = "m_flCycle"
 // MNetworkExcludeByName = "m_flEncodedController"
 // MNetworkExcludeByName = "m_flPoseParameter"
@@ -156,6 +154,7 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	Color m_colorGemColor;
 	bool m_bHasColorGem;
 	ParticleIndex_t m_nFXDeniableIndex;
+	int32 m_nCustomHealthbarStyle;
 	// MNetworkEnable
 	int32 m_iMoveSpeed;
 	int32 m_iBaseAttackSpeed;
@@ -202,6 +201,8 @@ class C_DOTA_BaseNPC : public C_NextBotCombatCharacter
 	// MNetworkChangeCallback = "OnAbilitiesChanged"
 	// MNetworkPriority = 32
 	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_vecAbilities;
+	CUtlVector< CHandle< C_BaseEntity > > m_vecAbilitiesClientPrediction;
+	int32 m_nLocalAbilityBarSequenceNumber;
 	float32 m_flInvisibilityLevel;
 	float32 m_flHullRadius;
 	float32 m_flCollisionPadding;

@@ -8,24 +8,33 @@
 // MNetworkVarNames = "float m_flGlowStartTime"
 class CGlowProperty
 {
+	// MNotSaved
 	Vector m_fGlowColor;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnGlowTypeChanged"
 	int32 m_iGlowType;
 	// MNetworkEnable
+	// MNotSaved
 	int32 m_iGlowTeam;
 	// MNetworkEnable
+	// MNotSaved
 	int32 m_nGlowRange;
 	// MNetworkEnable
+	// MNotSaved
 	int32 m_nGlowRangeMin;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "OnGlowColorChanged"
+	// MNotSaved
 	Color m_glowColorOverride;
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bFlashing;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flGlowTime;
 	// MNetworkEnable
+	// MNotSaved
 	float32 m_flGlowStartTime;
+	// MNotSaved
 	bool m_bGlowing;
 };

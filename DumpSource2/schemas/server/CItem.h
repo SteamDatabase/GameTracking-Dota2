@@ -5,7 +5,8 @@ class CItem : public CBaseAnimatingActivity
 	bool m_bActivateWhenAtRest;
 	CEntityIOOutput m_OnCacheInteraction;
 	CEntityIOOutput m_OnGlovePulled;
-	Vector m_vOriginalSpawnOrigin;
+	VectorWS m_vOriginalSpawnOrigin;
 	QAngle m_vOriginalSpawnAngles;
+	// MNotSaved
 	bool m_bPhysStartAsleep;
 };

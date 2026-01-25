@@ -26,11 +26,12 @@ class CModifierParams
 	int32 nCost;
 	int32 nHealthCost;
 	int32 nOrdertype;
-	Vector vOldLoc;
-	Vector vNewLoc;
-	Vector vCastLocation;
+	VectorWS vOldLoc;
+	VectorWS vNewLoc;
+	VectorWS vCastLocation;
 	bool bCraniumBasherTested;
 	bool bMKBTested;
+	bool bSpecialistTested;
 	bool bOctarineTested;
 	bool bHeartRegenApplied;
 	bool bSangeAmpApplied;
@@ -68,9 +69,11 @@ class CModifierParams
 	bool bIgnoreTemporaryAttackSpeedModifiers;
 	char* pszAbilitySpecialName;
 	int32 nAbilitySpecialLevel;
+	bool bAllowCopy;
 	CHandle< C_BaseEntity > hattacker;
 	CHandle< C_BaseEntity > htarget;
 	CHandle< C_BaseEntity > hunit;
 	CHandle< C_DOTABaseAbility > inflictor;
+	CHandle< C_DOTABaseAbility > inflictor2;
 	CDOTA_Buff* pAddedBuff;
 };

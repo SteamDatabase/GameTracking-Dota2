@@ -6,10 +6,15 @@
 // MNetworkVarNames = "CUtlStringToken m_hierarchyAttachName"
 class CGameSceneNode
 {
-	CTransform m_nodeToWorld;
+	// MNotSaved
+	CTransformWS m_nodeToWorld;
+	// MNotSaved
 	CEntityInstance* m_pOwner;
+	// MNotSaved
 	CGameSceneNode* m_pParent;
+	// MNotSaved
 	CGameSceneNode* m_pChild;
+	// MNotSaved
 	CGameSceneNode* m_pNextSibling;
 	// MNetworkEnable
 	// MNetworkSerializer = "gameSceneNode"
@@ -31,24 +36,44 @@ class CGameSceneNode
 	// MNetworkChangeCallback = "gameSceneNodeLocalScaleChanged"
 	// MNetworkPriority = 32
 	float32 m_flScale;
-	Vector m_vecAbsOrigin;
+	VectorWS m_vecAbsOrigin;
 	QAngle m_angAbsRotation;
 	float32 m_flAbsScale;
+	// MNotSaved
+	Vector m_vecWrappedLocalOrigin;
+	// MNotSaved
+	QAngle m_angWrappedLocalRotation;
+	// MNotSaved
+	float32 m_flWrappedScale;
+	// MNotSaved
 	int16 m_nParentAttachmentOrBone;
+	// MNotSaved
 	bool m_bDebugAbsOriginChanges;
 	bool m_bDormant;
 	bool m_bForceParentToBeNetworked;
+	// MNotSaved
 	bitfield:1 m_bDirtyHierarchy;
+	// MNotSaved
 	bitfield:1 m_bDirtyBoneMergeInfo;
+	// MNotSaved
 	bitfield:1 m_bNetworkedPositionChanged;
+	// MNotSaved
 	bitfield:1 m_bNetworkedAnglesChanged;
+	// MNotSaved
 	bitfield:1 m_bNetworkedScaleChanged;
+	// MNotSaved
 	bitfield:1 m_bWillBeCallingPostDataUpdate;
+	// MNotSaved
 	bitfield:1 m_bBoneMergeFlex;
+	// MNotSaved
 	bitfield:2 m_nLatchAbsOrigin;
+	// MNotSaved
 	bitfield:1 m_bDirtyBoneMergeBoneToRoot;
+	// MNotSaved
 	uint8 m_nHierarchicalDepth;
+	// MNotSaved
 	uint8 m_nHierarchyType;
+	// MNotSaved
 	uint8 m_nDoNotSetAnimTimeInInvalidatePhysicsCount;
 	// MNetworkEnable
 	CUtlStringToken m_name;

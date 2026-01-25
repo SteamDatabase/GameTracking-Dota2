@@ -133,4 +133,6 @@ enum EGCItemMsg : uint32_t
 	k_EMsgClientToGCPurchaseChargeCostItemsResponse = 2616,
 	k_EMsgClientToGCCancelUnfinalizedTransactions = 2617,
 	k_EMsgClientToGCCancelUnfinalizedTransactionsResponse = 2618,
+	k_EMsgClientToGCRecycleMultipleItems = 2619,
+	k_EMsgClientToGCRecycleMultipleItemsResponse = 2620,
 };

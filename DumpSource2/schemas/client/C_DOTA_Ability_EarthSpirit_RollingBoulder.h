@@ -11,9 +11,7 @@ class C_DOTA_Ability_EarthSpirit_RollingBoulder : public C_DOTABaseAbility
 	float32 slow_duration;
 	int32 destroy_stone;
 	bool can_roll_over_allied_heroes;
-	float32 allied_hero_multiplier;
 	float32 allied_hero_distance;
-	float32 allied_hero_speed;
 	ParticleIndex_t m_nFXIndex;
 	bool m_boulderSetposBool;
 	int32 m_nProjectileID;

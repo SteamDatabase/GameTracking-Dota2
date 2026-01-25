@@ -13,8 +13,15 @@
 //			0.000000,
 //			0.000000
 //		],
+//		"m_vOffset":
+//		[
+//			0.000000,
+//			0.000000
+//		],
 //		"m_unFrameWidth": 0,
-//		"m_unFrameTime": 100
+//		"m_unFrameTime": 100,
+//		"bUse3dPreview": false,
+//		"m_nPreviewHeroID": 0
 //	},
 //	"m_vecOverrides":
 //	[

@@ -68,6 +68,7 @@
 // MNetworkVarNames = "float m_flMinRoughness"
 class CLightComponent : public CEntityComponent
 {
+	// MNotSaved
 	CNetworkVarChainer __m_pChainEntity;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "LightRenderingChanged"
@@ -247,6 +248,7 @@ class CLightComponent : public CEntityComponent
 	bool m_bUseSecondaryColor;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "MixedShadowsChanged"
+	// MNotSaved
 	bool m_bMixedShadows;
 	// MNetworkEnable
 	// MNetworkChangeCallback = "LightRenderingChanged"

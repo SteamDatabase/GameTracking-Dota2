@@ -7,4 +7,7 @@ class CDOTA_Modifier_Enchantress_NaturesAttendants_DamageTracker : public CDOTA_
 	int32 overprotective_wisp_count;
 	float32 heal_interval;
 	int32 overprotective_max_wisps;
+	int32 heal;
+	float32 heal_duration;
+	int32 wisp_count;
 };

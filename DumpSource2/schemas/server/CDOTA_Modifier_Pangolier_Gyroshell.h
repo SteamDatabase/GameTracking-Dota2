@@ -3,6 +3,7 @@ class CDOTA_Modifier_Pangolier_Gyroshell : public CDOTA_Modifier_DebuffImmune
 	int32 mp_cost_per_second;
 	float32 tick_interval;
 	float32 forward_move_speed;
+	float32 move_speed_ramp_up_time;
 	float32 turn_rate_boosted;
 	float32 turn_rate;
 	float32 hit_radius;
@@ -15,6 +16,7 @@ class CDOTA_Modifier_Pangolier_Gyroshell : public CDOTA_Modifier_DebuffImmune
 	float32 jump_recover_time;
 	float32 m_flTurnBoostProgress;
 	float32 m_flFacingTarget;
+	int32 m_nInitialMovespeed;
 	bool m_bIsJumping;
 	ParticleIndex_t m_nFXIndex;
 	CUtlVector< float32 > m_flTurnHistory;

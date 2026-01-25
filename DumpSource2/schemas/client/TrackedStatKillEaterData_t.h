@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"unKillEaterEvent": 0
+//	"unKillEaterEvent": 4294967295
 //}
 // MPropertyAutoExpandSelf
 class TrackedStatKillEaterData_t

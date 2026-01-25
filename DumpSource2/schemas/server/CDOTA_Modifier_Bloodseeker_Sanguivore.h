@@ -2,7 +2,7 @@ class CDOTA_Modifier_Bloodseeker_Sanguivore : public CDOTA_Buff
 {
 	int32 base_heal;
 	float32 half_bonus_aoe;
-	float32 heal_hp_pct_per_level;
+	float32 heal_hp_pct;
 	int32 creep_lifesteal_reduction_pct;
 	int32 deny_lifesteal_reduction_pct;
 	int32 pure_damage_lifesteal_pct;

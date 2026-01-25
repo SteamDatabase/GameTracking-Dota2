@@ -8,6 +8,8 @@ enum ETEProtobufIds : uint32_t
 	TE_BeamRingId = 405,
 	TE_BubblesId = 408,
 	TE_BubbleTrailId = 409,
+	TE_DecalId = 410,
+	TE_WorldDecalId = 411,
 	TE_EnergySplashId = 412,
 	TE_FizzId = 413,
 	TE_ShatterSurfaceId = 414,

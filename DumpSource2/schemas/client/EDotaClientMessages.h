@@ -120,4 +120,8 @@ enum EDotaClientMessages : uint32_t
 	DOTA_CM_SuggestItemRefresh = 824,
 	DOTA_CM_SuggestItemVariantRequest = 825,
 	DOTA_CM_SuggestItemVariantSelect = 826,
+	DOTA_CM_MonsterHunter_SelectInvestigation = 827,
+	DOTA_CM_MonsterHunter_HuntAlert = 828,
+	DOTA_CM_AbilitySpecificChannelRequiresHalt = 829,
+	DOTA_CM_TormentorTimer = 830,
 };

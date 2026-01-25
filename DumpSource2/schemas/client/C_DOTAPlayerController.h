@@ -1,5 +1,4 @@
 // MNetworkExcludeByName = "m_angRotation"
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByUserGroup = "m_flCycle"
 // MNetworkExcludeByName = "m_flPlaybackRate"
 // MNetworkExcludeByName = "m_flPoseParameter"
@@ -79,8 +78,8 @@ class C_DOTAPlayerController : public CBasePlayerController
 	bool m_bInteractionChannelsRequireHalt;
 	bool m_bAutoPurchaseItems;
 	bool m_bDisableHUDErrorMessages;
-	int32 m_iMouseDragStartX;
-	int32 m_iMouseDragStartY;
+	float32 m_flMouseDragStartX;
+	float32 m_flMouseDragStartY;
 	int32 m_nWeatherType;
 	bool m_bDynamicWeatherSystemActive;
 	bool m_bDynamicSoundHandled;
@@ -121,7 +120,7 @@ class C_DOTAPlayerController : public CBasePlayerController
 	bool m_bMapUsesDynamicWeather;
 	int32 m_nCastRangeEffectCreationRadius;
 	CUtlVector< ParticleIndex_t > m_vecSuggestedWardLocationEffects;
-	C_DOTA_BaseNPC* m_pSmartCastNPC;
+	CHandle< C_DOTA_BaseNPC > m_hSmartCastNPC;
 	ParticleIndex_t m_nTeamSprayParticleIndex;
 	ParticleIndex_t m_nScanCastIndicatorParticleIndex;
 	bool m_bIsNextCastOrderFromMouseClick;

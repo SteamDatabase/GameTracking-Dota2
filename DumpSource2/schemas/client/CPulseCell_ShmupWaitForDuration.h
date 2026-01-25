@@ -8,9 +8,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MCellForDomain = "PanoramaPanel"
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Shmup Wait For Duration"
 class CPulseCell_ShmupWaitForDuration : public CPulseCell_BaseYieldingInflow
 {

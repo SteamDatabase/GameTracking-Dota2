@@ -1,7 +1,4 @@
-// MPulseLibraryBindings (UNKNOWN FOR PARSER)
-// MPulseProvideFeatureTag (UNKNOWN FOR PARSER)
-// MPulseDomainHookInfo (UNKNOWN FOR PARSER)
-// MParticleDomainTag = "C_DOTA_TrackingProjectileInfoParticleAPI Tracking Projectile"
+// MCustomFGDMetadata = "{ particle_domain_ui_name = 'Tracking Projectile' particle_domain_internal_name = 'C_DOTA_TrackingProjectileInfoParticleAPI'  }"
 class C_DOTA_TrackingProjectileInfoParticleAPI
 {
 };

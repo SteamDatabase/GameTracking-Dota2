@@ -10,6 +10,7 @@
 // MNetworkVarNames = "float m_flAgilityTotal"
 // MNetworkVarNames = "float m_flIntellectTotal"
 // MNetworkVarNames = "EHANDLE m_hFacetAbilities"
+// MNetworkVarNames = "int m_vecHiddenLoadoutSlots"
 // MNetworkVarNames = "int m_iRecentDamage"
 // MNetworkVarNames = "PlayerID_t m_iPlayerID"
 // MNetworkVarNames = "HeroFacetKey_t m_iHeroFacetKey"
@@ -19,6 +20,7 @@
 // MNetworkVarNames = "GameTime_t m_flSpawnedAt"
 // MNetworkVarNames = "bool m_bScriptDisableRespawns"
 // MNetworkVarNames = "int m_iPrimaryAttribute"
+// MNetworkVarNames = "GameTime_t m_flLastDispellTime"
 // MNetworkIncludeByName = "m_flDeathTime"
 class C_DOTA_BaseNPC_Hero : public C_DOTA_BaseNPC_Additive
 {
@@ -55,6 +57,9 @@ class C_DOTA_BaseNPC_Hero : public C_DOTA_BaseNPC_Additive
 	// MNetworkEnable
 	C_NetworkUtlVectorBase< CHandle< C_BaseEntity > > m_hFacetAbilities;
 	// MNetworkEnable
+	// MNetworkChangeCallback = "OnHiddenLoadoutSlotsChanged"
+	C_NetworkUtlVectorBase< int32 > m_vecHiddenLoadoutSlots;
+	// MNetworkEnable
 	int32 m_iRecentDamage;
 	float32 m_fPainFactor;
 	float32 m_fTargetPainFactor;
@@ -87,6 +92,12 @@ class C_DOTA_BaseNPC_Hero : public C_DOTA_BaseNPC_Additive
 	GameTime_t m_flLastHealTime;
 	float32 m_flHealDecayRate;
 	bool m_bIsFirstTimeHeal;
+	// MNetworkEnable
+	// MNetworkChangeCallback = "OnLastDispellTimeChanged"
+	GameTime_t m_flLastDispellTime;
+	float32 m_flDispellAnimationAmount;
+	float32 m_flDeathAnimationAmount;
+	GameTime_t m_flLastDeathTime;
 	GameTime_t m_flLastTreeShakeTime;
 	CountdownTimer m_CenterOnHeroCooldownTimer;
 	CStrongHandle< InfoForResourceTypeCModel >[4] m_CombinedModels;

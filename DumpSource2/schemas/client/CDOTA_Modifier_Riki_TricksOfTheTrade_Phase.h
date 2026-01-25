@@ -5,9 +5,12 @@ class CDOTA_Modifier_Riki_TricksOfTheTrade_Phase : public CDOTA_Buff
 	CountdownTimer m_Timer;
 	CHandle< C_BaseEntity > m_hPreviousTarget;
 	int32 m_nSucceessiveHits;
-	int32 damage_pct;
+	float32 attack_damage;
 	int32 agility_pct;
-	float32 creep_agility_multiplier;
-	float32 m_flMultiplier;
 	float32 cooldown_reduction_per_creep_kill;
+	float32 speed_per_attack;
+	float32 radius;
+	int32 interval_targets;
+	bool pocket_riki_enabled;
+	float32 base_attack_damage_pct;
 };

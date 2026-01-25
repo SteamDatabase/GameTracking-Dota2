@@ -5,4 +5,5 @@ class CDOTA_Modifier_Pangolier_Swashbuckle : public CDOTA_Buff
 	Vector m_vSpawnPos;
 	Vector m_vStrikeDir;
 	Vector m_vDashDir;
+	bool m_bApplyDamagePenalty;
 };

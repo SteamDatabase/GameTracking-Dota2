@@ -1,7 +1,13 @@
 // MGetKV3ClassDefaults = {
 //	"_class": "CNmParticleEvent",
-//	"m_flStartTimeSeconds": 0.000000,
-//	"m_flDurationSeconds": 0.000000,
+//	"m_flStartTime":
+//	{
+//		"m_flValue": 0.000000
+//	},
+//	"m_flDuration":
+//	{
+//		"m_flValue": 0.000000
+//	},
 //	"m_syncID": "",
 //	"m_bClientOnly": false,
 //	"m_relevance": "ClientAndServer",
@@ -9,14 +15,14 @@
 //	"m_hParticleSystem": "",
 //	"m_tags": "",
 //	"m_bStopImmediately": false,
+//	"m_bDetachFromOwner": false,
+//	"m_bPlayEndCap": false,
 //	"m_attachmentPoint0": "",
 //	"m_attachmentType0": "PATTACH_ABSORIGIN",
 //	"m_attachmentPoint1": "",
 //	"m_attachmentType1": "PATTACH_ABSORIGIN",
 //	"m_config": "preview",
-//	"m_effectForConfig": "",
-//	"m_bDetachFromOwner": false,
-//	"m_bPlayEndCap": false
+//	"m_effectForConfig": ""
 //}
 class CNmParticleEvent : public CNmEvent
 {
@@ -25,12 +31,12 @@ class CNmParticleEvent : public CNmEvent
 	CStrongHandle< InfoForResourceTypeIParticleSystemDefinition > m_hParticleSystem;
 	CUtlString m_tags;
 	bool m_bStopImmediately;
+	bool m_bDetachFromOwner;
+	bool m_bPlayEndCap;
 	CUtlString m_attachmentPoint0;
 	ParticleAttachment_t m_attachmentType0;
 	CUtlString m_attachmentPoint1;
 	ParticleAttachment_t m_attachmentType1;
 	CUtlString m_config;
 	CUtlString m_effectForConfig;
-	bool m_bDetachFromOwner;
-	bool m_bPlayEndCap;
 };

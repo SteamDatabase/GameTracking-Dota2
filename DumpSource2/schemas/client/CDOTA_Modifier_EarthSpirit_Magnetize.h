@@ -9,6 +9,7 @@ class CDOTA_Modifier_EarthSpirit_Magnetize : public CDOTA_Buff
 	float32 rock_explosion_radius;
 	bool magnetized_rocks_buff_self;
 	int32 magnetized_rocks_buff_self_duration;
+	int32 magnetize_self;
 	CUtlVector< CHandle< C_BaseEntity > > m_hExplodedRocks;
 	float32 duration;
 	bool m_bShowOverhead;

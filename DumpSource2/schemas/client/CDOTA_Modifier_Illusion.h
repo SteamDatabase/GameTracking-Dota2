@@ -6,6 +6,8 @@ class CDOTA_Modifier_Illusion : public CDOTA_Buff
 	int32 incoming_damage;
 	int32 bounty_base;
 	int32 bounty_growth;
+	int32 fixed_day_vision;
+	int32 fixed_night_vision;
 	CUtlString m_strIllusionType;
 	char[64] m_szIllusionLabel;
 	bool m_bHidden;

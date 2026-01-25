@@ -47,6 +47,6 @@ enum eEconItemOrigin : uint32_t
 	kEconItemOrigin_CompendiumGift = 43,
 	kEconItemOrigin_CandyShopPurchase = 44,
 	kEconItemOrigin_Transmuted = 45,
-	kEconItemOrigin_PruchaseWithCharges = 46,
+	kEconItemOrigin_PurchaseWithCharges = 46,
 	kEconItemOrigin_Max = 47,
 };

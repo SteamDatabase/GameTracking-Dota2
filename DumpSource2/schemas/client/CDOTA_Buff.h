@@ -14,6 +14,7 @@ class CDOTA_Buff : public C_HorizontalMotionController, public C_VerticalMotionC
 	CHandle< C_BaseEntity > m_hCaster;
 	CHandle< C_BaseEntity > m_hAbility;
 	CHandle< C_BaseEntity > m_hParent;
+	CHandle< C_BaseEntity > m_hDuplicationSource;
 	CHandle< C_BaseEntity > m_hAuraOwner;
 	int32 m_iStackCount;
 	int16 m_iAuraSearchTeam;

@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_eSeparationLayer": 0,
+//	"m_eSeparationLayer": "SMALL",
 //	"m_flSeperationDistance": 0.000000
 //}
 class CSurvivorsGameModeDefinition::SeparationLayerData

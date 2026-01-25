@@ -7,6 +7,7 @@ class CDOTA_Modifier_Tusk_WalrusPunch : public CDOTA_Buff
 	CUtlSymbolLarge m_iszRangedAttackEffect;
 	CHandle< C_BaseEntity > m_hTarget;
 	bool m_bWalrusPunch;
+	bool m_bTalentProc;
 	CUtlVector< int16 > m_InFlightAttackRecords;
 	ParticleIndex_t m_nFXIndex;
 };

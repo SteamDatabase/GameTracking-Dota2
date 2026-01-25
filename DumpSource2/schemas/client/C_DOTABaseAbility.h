@@ -1,9 +1,7 @@
 // MNetworkExcludeByName = "m_angRotation"
-// MNetworkExcludeByName = "m_blinktoggle"
 // MNetworkExcludeByName = "m_cellX"
 // MNetworkExcludeByName = "m_cellY"
 // MNetworkExcludeByName = "m_cellZ"
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByUserGroup = "m_flCycle"
 // MNetworkExcludeByName = "m_flEncodedController"
 // MNetworkExcludeByName = "m_flPoseParameter"
@@ -53,6 +51,7 @@
 // MNetworkVarNames = "bool m_bGrantedByFacet"
 // MNetworkVarNames = "bool m_bReflection"
 // MNetworkVarNames = "EHANDLE m_pReflectionSourceAbility"
+// MNetworkVarNames = "EHANDLE m_hHiddenAbilityForDisplay"
 class C_DOTABaseAbility : public C_BaseEntity
 {
 	bool m_bAuxCastState;
@@ -148,5 +147,7 @@ class C_DOTABaseAbility : public C_BaseEntity
 	bool m_bReflection;
 	// MNetworkEnable
 	CHandle< C_BaseEntity > m_pReflectionSourceAbility;
+	// MNetworkEnable
+	CHandle< C_BaseEntity > m_hHiddenAbilityForDisplay;
 	float32 m_flLastCastClickTime;
 };

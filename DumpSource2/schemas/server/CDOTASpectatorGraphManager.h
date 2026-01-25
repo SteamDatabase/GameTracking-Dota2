@@ -10,6 +10,7 @@
 // MNetworkVarNames = "int m_rgRadiantWinChance"
 class CDOTASpectatorGraphManager
 {
+	// MNotSaved
 	CNetworkVarChainer __m_pChainEntity;
 	bool m_bTrackingTeamStats;
 	GameTime_t m_flStartTime;

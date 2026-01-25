@@ -2,6 +2,7 @@
 //	"_class": "CNmFloatCurveEventNode::CDefinition",
 //	"m_nNodeIdx": -1,
 //	"m_eventID": "",
+//	"m_nDefaultNodeIdx": -1,
 //	"m_flDefaultValue": 0.000000,
 //	"m_eventConditionRules":
 //	{
@@ -11,6 +12,7 @@
 class CNmFloatCurveEventNode::CDefinition : public CNmFloatValueNode::CDefinition
 {
 	CGlobalSymbol m_eventID;
+	int16 m_nDefaultNodeIdx;
 	float32 m_flDefaultValue;
 	CNmBitFlags m_eventConditionRules;
 };

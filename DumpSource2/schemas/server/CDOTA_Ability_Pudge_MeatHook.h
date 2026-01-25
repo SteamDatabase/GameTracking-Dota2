@@ -11,6 +11,7 @@ class CDOTA_Ability_Pudge_MeatHook : public CDOTABaseAbility, public CHorizontal
 	Vector m_vTargetPosition;
 	Vector m_vCasterPosition;
 	bool m_bChainDetached;
+	bool m_bForceSetToPudgePosition;
 	ParticleIndex_t m_iChainParticle;
 	ParticleIndex_t m_iSecondaryChainParticle;
 	int32 m_hHookProjectile;

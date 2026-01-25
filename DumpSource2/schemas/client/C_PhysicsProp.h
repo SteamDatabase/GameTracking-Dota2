@@ -1,6 +1,4 @@
-// MNetworkExcludeByName = "m_flAnimTime"
 // MNetworkExcludeByName = "m_flexWeight"
-// MNetworkExcludeByName = "m_blinktoggle"
 // MNetworkExcludeByUserGroup = "m_flPoseParameter"
 // MNetworkExcludeByName = "m_animationController.m_flPlaybackRate"
 // MNetworkExcludeByUserGroup = "overlay_vars"
@@ -9,5 +7,6 @@
 class C_PhysicsProp : public C_BreakableProp
 {
 	// MNetworkEnable
+	// MNotSaved
 	bool m_bAwake;
 };

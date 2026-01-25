@@ -1,7 +1,6 @@
 class CDOTA_Modifier_Spirit_Bear_Attack_Damage : public CDOTA_Buff
 {
 	float32 bear_bat;
-	int32 bear_magic_resistance;
 	int32 bonus_bear_hp;
 	int32 bear_movespeed;
 	int32 bonus_bear_armor;

@@ -10,11 +10,13 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -91,6 +93,7 @@
 //	"m_nParticlesToMaintain": 100,
 //	"m_flDecayDelay": 0.000000,
 //	"m_nSnapshotControlPoint": -1,
+//	"m_strSnapshotSubset": "",
 //	"m_bLifespanDecay": true,
 //	"m_flScale":
 //	{
@@ -102,11 +105,13 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -175,6 +180,9 @@ class C_OP_DecayMaintainCount : public CParticleFunctionOperator
 	float32 m_flDecayDelay;
 	// MPropertyFriendlyName = "snapshot control point for count"
 	int32 m_nSnapshotControlPoint;
+	// MPropertyFriendlyName = "snapshot subset"
+	// MPropertySuppressExpr = "m_nSnapshotControlPoint < 0"
+	CUtlString m_strSnapshotSubset;
 	// MPropertyFriendlyName = "decay on lifespan"
 	bool m_bLifespanDecay;
 	// MPropertyFriendlyName = "total count scale"

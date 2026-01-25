@@ -163,4 +163,9 @@ enum EDotaUserMessages : uint32_t
 	DOTA_UM_TimerAlert = 628,
 	DOTA_UM_MadstoneAlert = 629,
 	DOTA_UM_CourierLeftFountainAlert = 630,
+	DOTA_UM_MonsterHunter_InvestigationsAvailable = 631,
+	DOTA_UM_MonsterHunter_InvestigationGameState = 632,
+	DOTA_UM_MonsterHunter_HuntAlert = 633,
+	DOTA_UM_TormentorTimer = 634,
+	DOTA_UM_KillEffect = 635,
 };

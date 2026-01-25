@@ -10,11 +10,13 @@
 //		"m_nScalarAttribute": 3,
 //		"m_nVectorAttribute": 6,
 //		"m_nVectorComponent": 0,
+//		"m_bReverseOrder": false,
 //		"m_flRandomMin": 0.000000,
 //		"m_flRandomMax": 1.000000,
 //		"m_bHasRandomSignFlip": false,
 //		"m_nRandomSeed": -1,
 //		"m_nRandomMode": "PF_RANDOM_MODE_CONSTANT",
+//		"m_strSnapshotSubset": "",
 //		"m_flLOD0": 0.000000,
 //		"m_flLOD1": 0.000000,
 //		"m_flLOD2": 0.000000,
@@ -96,7 +98,8 @@
 //		0.000000,
 //		0.000000
 //	],
-//	"m_bOrientToEyes": false
+//	"m_bOrientToEyes": false,
+//	"m_nPosition": "PARTICLE_WORLDSPACE_CENTER"
 //}
 class C_OP_SetControlPointToPlayer : public CParticleFunctionPreEmission
 {
@@ -107,4 +110,6 @@ class C_OP_SetControlPointToPlayer : public CParticleFunctionPreEmission
 	Vector m_vecCP1Pos;
 	// MPropertyFriendlyName = "use eye orientation"
 	bool m_bOrientToEyes;
+	// MPropertyFriendlyName = "position to get"
+	ParticleEntityPos_t m_nPosition;
 };

@@ -45,6 +45,8 @@ class DOTAAbilityDefinition_t
 	bool m_bHasShardUpgrade;
 	CUtlStringToken m_strScepterRequiredFacet;
 	CUtlStringToken m_strShardRequiredFacet;
+	char* m_strSubAbilityNames;
+	bool m_bShowCooldownInTooltips;
 	bool m_bSharedWithTeammates;
 	int32 m_nCastRangeBuffer;
 	int32 m_nSpecialAbilities;

@@ -70,6 +70,9 @@
 //	"m_AntiTunnelTargetNodes":
 //	[
 //	],
+//	"m_NodeStrayBoxes":
+//	[
+//	],
 //	"m_AxialEdges":
 //	[
 //	],
@@ -277,6 +280,7 @@ class PhysFeModelDesc_t
 	CUtlVector< FeDynKinLink_t > m_DynKinLinks;
 	CUtlVector< FeAntiTunnelProbe_t > m_AntiTunnelProbes;
 	CUtlVector< uint16 > m_AntiTunnelTargetNodes;
+	CUtlVector< FeNodeStrayBox_t > m_NodeStrayBoxes;
 	CUtlVector< FeAxialEdgeBend_t > m_AxialEdges;
 	CUtlVector< float32 > m_NodeInvMasses;
 	CUtlVector< FeCtrlOffset_t > m_CtrlOffsets;

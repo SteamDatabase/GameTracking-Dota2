@@ -8,9 +8,6 @@
 //		"m_nInstruction": -1
 //	}
 //}
-// MCellForDomain = "PanoramaPanel"
-// MPulseCellMethodBindings (UNKNOWN FOR PARSER)
-// MPulseCellOutflowHookInfo (UNKNOWN FOR PARSER)
 // MPropertyFriendlyName = "Wait For Panel Class"
 class CPulseCell_WaitForPanelClass : public CPulseCell_BaseYieldingInflow
 {

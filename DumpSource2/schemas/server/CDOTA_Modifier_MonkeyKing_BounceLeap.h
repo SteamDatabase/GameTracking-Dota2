@@ -7,7 +7,7 @@ class CDOTA_Modifier_MonkeyKing_BounceLeap : public CDOTA_Buff
 	float32 perched_night_vision;
 	Vector m_vStart;
 	CHandle< CBaseEntity > m_hTarget;
-	Vector m_vTargetPos;
+	VectorWS m_vTargetPos;
 	float32 m_flSpeed;
 	bool m_bTargetingEntity;
 	bool m_bGroundToTree;

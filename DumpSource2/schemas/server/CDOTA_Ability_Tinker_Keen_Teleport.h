@@ -7,7 +7,7 @@ class CDOTA_Ability_Tinker_Keen_Teleport : public CDOTABaseAbility
 	CHandle< CBaseEntity > m_hTeleportTarget;
 	ParticleIndex_t m_nFXOrigin;
 	ParticleIndex_t m_nFXDestination;
-	Vector m_vDestination;
+	VectorWS m_vDestination;
 	int32 m_iMinDistance;
 	float32 m_flBaseTeleportTime;
 };

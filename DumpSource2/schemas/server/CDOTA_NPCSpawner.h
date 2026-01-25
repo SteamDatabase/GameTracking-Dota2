@@ -14,5 +14,6 @@ class CDOTA_NPCSpawner : public CPointEntity
 	int32 m_iWaves;
 	bool m_bFirstWave;
 	bool m_bShouldSpawnStrongCreep;
+	bool m_bEnabled;
 	CUtlVector< CHandle< CDOTA_BaseNPC > > m_Units;
 };

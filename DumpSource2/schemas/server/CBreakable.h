@@ -15,6 +15,7 @@ class CBreakable : public CBaseModelEntity
 	CUtlSymbolLarge m_iszPropData;
 	float32 m_impactEnergyScale;
 	EOverrideBlockLOS_t m_nOverrideBlockLOS;
+	CEntityIOOutput m_OnStartDeath;
 	CEntityIOOutput m_OnBreak;
 	CEntityOutputTemplate< float32 > m_OnHealthChanged;
 	PerformanceMode_t m_PerformanceMode;

@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"m_nActionID": "IDLE_ACTION_DEFINITION",
+//	"m_nActionID": "INVALID_ACTION_DEFINITION",
 //	"m_strCustomActionName": "",
 //	"m_pszSequenceName": "",
 //	"m_pszIconFile": "",

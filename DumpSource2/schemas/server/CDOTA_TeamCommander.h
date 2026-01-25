@@ -44,6 +44,7 @@ class CDOTA_TeamCommander
 	Vector m_vRoamTargetLoc;
 	float32[24] m_fHeroSelectionTimes;
 	Vector m_vBaseLocation;
+	Vector m_vPregameGatherLocation;
 	CUtlVector< CHandle< CBaseEntity > > m_AllUnits;
 	CUtlVector< CHandle< CBaseEntity > > m_AllAlliedUnits;
 	CUtlVector< CHandle< CBaseEntity > > m_AllAlliedHeroes;

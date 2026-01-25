@@ -7,6 +7,7 @@ class CDOTA_Modifier_PhantomLancer_PhantomEdge_Boost : public CDOTA_Buff
 	int32 bonus_agility;
 	float32 illusion_spawn_radius;
 	float32 illusion_spawn_travel_distance;
+	float32 evasion;
 	float32 m_flDistanceAccumulator;
 	Vector m_vPreviousLocation;
 };

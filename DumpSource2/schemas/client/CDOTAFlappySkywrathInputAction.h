@@ -1,5 +1,5 @@
 // MGetKV3ClassDefaults = {
-//	"eAction": "Jump",
+//	"eAction": "None",
 //	"vecButtons":
 //	[
 //	]

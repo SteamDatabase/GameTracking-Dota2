@@ -1,4 +1,3 @@
-// M_LEGACY_OptInToSchemaPropertyDomain
 // MGetKV3ClassDefaults = {
 //	"_class": "CVectorAnimParameter",
 //	"m_name": "Unnamed Parameter",
@@ -23,7 +22,8 @@
 //		0.000000,
 //		0.000000
 //	],
-//	"m_bInterpolate": false
+//	"m_bInterpolate": false,
+//	"m_vectorType": "ANIMPARAM_VECTOR_TYPE_NONE"
 //}
 // MPropertyFriendlyName = "Vector Parameter"
 class CVectorAnimParameter : public CConcreteAnimParameter
@@ -32,4 +32,6 @@ class CVectorAnimParameter : public CConcreteAnimParameter
 	Vector m_defaultValue;
 	// MPropertyFriendlyName = "Interpolate"
 	bool m_bInterpolate;
+	// MPropertyFriendlyName = "Vector Type"
+	AnimParamVectorType_t m_vectorType;
 };

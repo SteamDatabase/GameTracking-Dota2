@@ -7,5 +7,6 @@ class CDOTA_Modifier_Dawnbreaker_Solar_Guardian_Thinker : public CDOTA_Buff
 	int32 base_heal;
 	int32 effectiveness_pct;
 	ParticleIndex_t m_nThinkerFXIndex;
+	CDOTA_BuffParticle m_ThinkerFXBuffParticle;
 	bool bLanded;
 };

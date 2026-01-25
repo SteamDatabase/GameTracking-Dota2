@@ -1,7 +1,7 @@
 // MGetKV3ClassDefaults = {
 //	"m_nID": 0,
 //	"m_bEnabled": true,
-//	"m_eHighlightType": "k_eGameWinrate",
+//	"m_eHighlightType": "k_eHighlightTypeInvalid",
 //	"m_eHighlightCategory": "k_eHighlightGeneral",
 //	"m_sHeroName": "",
 //	"m_eHighlightRarity": "k_eHighlightCommon",

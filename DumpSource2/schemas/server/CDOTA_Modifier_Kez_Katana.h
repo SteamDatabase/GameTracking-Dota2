@@ -8,6 +8,7 @@ class CDOTA_Modifier_Kez_Katana : public CDOTA_Buff
 	int32 katana_swap_bonus_damage;
 	float32 impale_duration;
 	int32 bleed_as_rupture_pct;
+	int32 max_stacks;
 	int32 m_nBonusPreAttackDamage;
 	bool m_bBackstab;
 	float32 m_flStacksForLifesteal;

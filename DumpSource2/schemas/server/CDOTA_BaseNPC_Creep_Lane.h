@@ -7,7 +7,6 @@
 // MNetworkExcludeByName = "m_bIsNeutralUnitType"
 // MNetworkExcludeByName = "m_bIsPhantom"
 // MNetworkExcludeByName = "m_bIsSummoned"
-// MNetworkExcludeByName = "m_blinktoggle"
 // MNetworkExcludeByName = "m_fadeMaxDist"
 // MNetworkExcludeByName = "m_fadeMinDist"
 // MNetworkExcludeByName = "m_flElasticity"

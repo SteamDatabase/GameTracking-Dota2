@@ -46,6 +46,5 @@ class CDOTATeam : public CTeam
 	int32 m_event_lobby_updated;
 	int32 m_nKillStreak;
 	int32 m_iRecentKillCount;
-	int32 m_iRandomNumber;
 	CountdownTimer m_RecentHeroKillTimer;
 };
