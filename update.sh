@@ -12,7 +12,7 @@ DUMPER_EXIT_CODE=$?
 set -e
 
 ProcessDepot ".dll" ".exe"
-DeduplicateStringsFrom ".dll" ".exe" -- "game/bin/win64/engine2_strings.txt" "game/bin/win64/tier0_strings.txt" "DumpSource2/.stringsignore"
+DeduplicateStrings
 ProcessVPK
 ProcessToolAssetInfo
 
